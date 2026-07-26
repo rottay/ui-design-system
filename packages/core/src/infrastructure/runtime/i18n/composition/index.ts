@@ -1,6 +1,10 @@
 export { useLocale } from "@/infrastructure/runtime/i18n/composition/locale";
 export type { UseLocaleResult } from "@/infrastructure/runtime/i18n/composition/locale";
 export {
+  useDirection,
+  useOptionalDirection,
+} from "@/infrastructure/runtime/i18n/composition/direction";
+export {
   useOptionalTranslation,
   useTranslation,
 } from "@/infrastructure/runtime/i18n/composition/translation";

@@ -33,7 +33,7 @@
 import React from 'react';
 import type { SpinnerProps } from '../../contracts';
 import { SPINNER_DEFAULTS } from '../../contracts';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ============================================================================
 // Size Mapping
@@ -70,7 +70,15 @@ const SIZE_MAP: Record<string, { dimension: string; ringWidth: number }> = {
  * ```
  */
 export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
-  const { t } = useTranslation('common');
+  // Optional + English floor: the primitive must also render when composed
+  // bare (no I18nProvider above it, e.g. direct engine renders in tests and
+  // lightweight consumers) — a hard provider requirement would crash those
+  // compositions. Idiom matches Rate/ListToolbar modern.
+  const i18n = useOptionalTranslation('common');
+  const resolved = i18n?.t('loading');
+  const loadingLabel = resolved && resolved !== 'loading' && resolved !== 'common.loading'
+    ? resolved
+    : 'Loading';
   const {
     size = SPINNER_DEFAULTS.size,
     label,
@@ -79,6 +87,10 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
   } = props;
 
   const sizeConfig = SIZE_MAP[size!] || SIZE_MAP.md;
+  // P-79 caller-wins: a pattern composing the Spinner as one named part of
+  // its own anatomy (loading branches stamp `spinner`) overrides the
+  // default `root` stamp; standalone usage keeps `root`.
+  const dataPart = props['data-part'];
 
   // ============================================================================
   // Render
@@ -90,7 +102,7 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
   // reduced motion -- the ring then rests as a calm static arc.
   return (
     <div
-      data-part="root"
+      data-part={dataPart ?? 'root'}
       className={['rottay-spinner', 'rottay-spinner--modern', className].filter(Boolean).join(' ')}
       style={style}
     >
@@ -104,7 +116,7 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
           animation: `ds-spinner-modern-spin var(--ds-motion-slow) linear infinite`,
         } as React.CSSProperties}
         role="status"
-        aria-label={label || t('loading')}
+        aria-label={label || loadingLabel}
       />
       {label && (
         <span data-part="label" style={{ fontSize: 'var(--ds-font-size-sm, 14px)' }}>{label}</span>

@@ -9,19 +9,27 @@
  * - digest/verticalEnvelopeDigest move once because both registered envelopes
  *   deliberately gained `allowAnatomyVariants` + typeScale/radiusScale ranges;
  * - a document with a concrete primary seed additionally emits the ten
- *   compiler-owned `--ds-chart-series-*` variables;
+ *   compiler-owned `--ds-chart-series-*` variables and the readable
+ *   `--ds-color-text-on-primary` ink, both pure derivations of that seed;
  * - an explicit density mode emits `--ds-density-mode-factor`, keeping the
  *   semantic mode separate from the existing structural density scale.
+ *
+ * The font-family baselines additionally carry the DS-A007 Arabic-safe tail:
+ * emission — not the stored document — appends `"Noto Sans Arabic"` ahead of
+ * the trailing generic, so AR/RTL copy renders under every tenant stack.
+ * `normalizedAppearance` still records the authored families verbatim.
  */
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import type { TenantThemeArtifact } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
+  TENANT_THEME_COMPILER_VERSION,
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
   hydrateTenantThemeConfig,
 } from "..";
+import { TENANT_THEME_V1_COVERAGE } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 
 const FIXTURE_DIR = resolve(
   process.cwd(),
@@ -33,6 +41,7 @@ const readFixture = (name: string): TenantThemeArtifact =>
 
 const CHART_SERIES_TOKEN = /^--ds-chart-series-(?:[1-9]|10)$/;
 const DENSITY_MODE_FACTOR_TOKEN = "--ds-density-mode-factor";
+const ON_PRIMARY_INK_TOKEN = "--ds-color-text-on-primary";
 
 /** The artifact css minus its digest banner line. */
 const cssBody = (artifact: Pick<TenantThemeArtifact, "css">): string =>
@@ -64,7 +73,13 @@ function expectStableEmission(
     fixture.verticalEnvelopeDigest
   );
   expect(artifact.digest).not.toBe(fixture.digest);
-  expect(artifact.compilerVersion).toBe(fixture.compilerVersion);
+  // Provenance wave: the artifact now declares the channels it owns, so the
+  // compiler version moves exactly once alongside the digest while emission
+  // stays byte-stable. The fixtures remain frozen pre-change snapshots.
+  expect(artifact.compilerVersion).not.toBe(fixture.compilerVersion);
+  expect(artifact.compilerVersion).toBe(TENANT_THEME_COMPILER_VERSION);
+  expect(fixture.coverage).toBeUndefined();
+  expect(artifact.coverage).toEqual([...TENANT_THEME_V1_COVERAGE]);
   return additions;
 }
 
@@ -159,7 +174,21 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     const additions = expectStableEmission(artifact, fixture);
     expect(additions.filter((token) => CHART_SERIES_TOKEN.test(token))).toHaveLength(10);
     expect(additions).toContain(DENSITY_MODE_FACTOR_TOKEN);
-    expect(additions).toHaveLength(11);
+    expect([...additions].sort()).toEqual([
+      "--ds-chart-series-1",
+      "--ds-chart-series-10",
+      "--ds-chart-series-2",
+      "--ds-chart-series-3",
+      "--ds-chart-series-4",
+      "--ds-chart-series-5",
+      "--ds-chart-series-6",
+      "--ds-chart-series-7",
+      "--ds-chart-series-8",
+      "--ds-chart-series-9",
+      ON_PRIMARY_INK_TOKEN,
+      DENSITY_MODE_FACTOR_TOKEN,
+    ]);
+    expect(artifact.variables[ON_PRIMARY_INK_TOKEN]).toBe("#ffffff");
     expect(artifact.variables[DENSITY_MODE_FACTOR_TOKEN]).toBe("1");
   });
 
@@ -187,5 +216,22 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     );
     expect(keys).toEqual(codeUnitSorted);
     expect(keys.length).toBeGreaterThan(20);
+  });
+
+  it("keeps the DS-A007 Arabic-safe tail on tenant-authored stacks", () => {
+    const artifact = compileTenantThemeConfig(
+      hydrateTenantThemeConfig(POPULATED_SIMPLE_DOCUMENT, { ...IDENTITY })
+    );
+
+    expect(artifact.variables["--ds-font-family-base"]).toBe(
+      'Optima, Candara, \'Noto Sans\', "Noto Sans Arabic", sans-serif'
+    );
+    expect(artifact.variables["--ds-font-family-heading"]).toBe(
+      '\'Fraunces\', Georgia, \'Times New Roman\', "Noto Sans Arabic", serif'
+    );
+    expect(artifact.normalizedAppearance.general?.typography).toEqual({
+      fontFamilyBase: "Optima, Candara, 'Noto Sans', sans-serif",
+      fontFamilyHeading: "'Fraunces', Georgia, 'Times New Roman', serif",
+    });
   });
 });

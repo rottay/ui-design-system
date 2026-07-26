@@ -15,7 +15,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, renderHook, screen, waitFor } from '@testing-library/react';
 
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
-import { useVoiceInput } from '../../../../../infrastructure/runtime/application/automation/voice';
+import { useVoiceInput } from '../../../../../infrastructure/runtime/application/automation/voice/composition/react/input';
 
 import { VoiceInputButton } from '..';
 

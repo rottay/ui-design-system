@@ -176,6 +176,19 @@ export interface BrandSurfaces {
   overlays?: TenantOverlayTokens;
   densityScale?: number;
   /**
+   * Semantic density posture for a code-owned static vertical: the BrandTheme
+   * equivalent of `appearance.general.density`, resolved through the same
+   * canonical factor table and emitted on the same `--ds-density-mode-factor`
+   * channel. Without it a static vertical has a structural `densityScale` but
+   * no posture authority at all, so a root `data-density` boundary is its only
+   * semantic source.
+   *
+   * This is the semantic axis, NOT the structural one: `densityScale` remains
+   * the independent white-labelable brand multiplier and must never be
+   * reinterpreted as a posture — that would apply one brand decision twice.
+   */
+  density?: "compact" | "comfortable" | "normal" | "spacious";
+  /**
    * Premium effect-intensity dial. Emitted as `--ds-effect-intensity` and
    * multiplies the gradient/glass/glow layer (engines/modern spec section 5):
    * `1` = full Quiet Premium (DS/rottay default), `0` = flat/zero-decoration.

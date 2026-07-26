@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { DecisionComparisonEngine } from "../engines/shared";
+import { DecisionComparisonEngine } from "../engines/foundation";
 
 const subjects = [
   {

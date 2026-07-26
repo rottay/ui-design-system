@@ -400,7 +400,7 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
   [
     // Typography craft emits layout and type declarations only. Contrast paint
     // is selected by the engine skins through the stable `data-contrast` stamp.
-    "ui/primitives/display/Typography/runtime",
+    "ui/primitives/display/Typography/runtime/index",
     new Map([
       [
         "resolveTypographyCraftStyle",
@@ -463,7 +463,7 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
   [
     // Portal scoping transports already-resolved `--ds-*` custom properties
     // across a DOM portal. It owns no visual property of its own.
-    "ui/primitives/runtime/overlay/portal-theme/index",
+    "ui/primitives/runtime/overlay/foundation/portal-theme/index",
     new Map([
       [
         "readDsPortalVariables",

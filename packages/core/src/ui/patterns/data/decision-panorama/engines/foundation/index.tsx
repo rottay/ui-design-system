@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import type { DecisionPanoramaProps } from '../contracts';
+import type { DecisionPanoramaProps } from '../../contracts';
 
 export function DecisionPanoramaEngine({
   ariaLabel,

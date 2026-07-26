@@ -13,6 +13,7 @@ import type { MouseEvent, ReactNode } from 'react';
 import { Button, Card, Flex, Stack, Text } from '../../../../primitives';
 import type { CardProps } from '../../../../primitives/display/Card/contracts';
 import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
+import { SECTION_CARD_RECIPE_DEFINITION } from '@/infrastructure/runtime/foundation/recipes/contracts/families';
 import { useRecipeProfileDefaults } from '@/infrastructure/runtime/foundation/recipes/profiles';
 import { filterSurfaceActions, resolveSurfaceButtonVariant } from '..';
 import type { SurfaceAccessInput, SurfaceAction, SurfaceTabbedView } from '../../../foundation/contracts';
@@ -107,24 +108,7 @@ export interface SurfaceSectionCardProps {
 }
 
 /** Governed section-card anatomy exposed through the public recipe manifest. */
-export const surfaceSectionCardRecipe = defineRecipe({
-  name: 'sectionCard',
-  slots: {
-    root: ['ds-surface', 'ds-section-card'],
-    body: 'ds-section-card__body',
-    header: 'ds-section-card__header',
-    content: 'ds-section-card__content',
-  },
-  axes: {
-    variant: {
-      elevated: { root: 'ds-section-card--elevated' },
-      outlined: { root: 'ds-section-card--outlined' },
-      filled: { root: 'ds-section-card--filled' },
-      ghost: { root: 'ds-section-card--ghost' },
-    },
-  },
-  defaults: {},
-});
+export const surfaceSectionCardRecipe = defineRecipe(SECTION_CARD_RECIPE_DEFINITION);
 
 /** Shared card wrapper for sectioned surfaces with optional title, copy, and actions. */
 export function SurfaceSectionCard({

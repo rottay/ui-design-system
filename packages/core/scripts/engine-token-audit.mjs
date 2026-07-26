@@ -31,6 +31,15 @@
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync, renameSync } from 'node:fs';
 import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
+import {
+  collectEngineFiles,
+  modernEngineColorFiles,
+  modernEngineFiles,
+} from './lib/engine-corpus.mjs';
+import {
+  collectDaisyClassConsumers,
+  countDaisyClassConsumers,
+} from './lib/daisy-class-consumer-counter.mjs';
 import { countPremiumEffectConsumers } from './lib/effect-consumer-counter.mjs';
 import { countMotionRecipeConsumers } from './lib/motion-recipe-consumer-counter.mjs';
 import { countSkinExemptionBreaches } from './lib/skin-exemption-audit.mjs';
@@ -73,55 +82,14 @@ function argumentValue(name) {
 }
 
 /**
- * Collect every `engines/<engineName>.tsx` or `engines/<engineName>/*.tsx` component source
- * file under `dir`. Generalized (WO-GAT-02) from the modern-only file walk so the classic/
- * rustic dead-selector counters below can build their consumed-class sets from the SAME shared
- * scan helpers (`buildConsumedClassSet`, `auditEngineTheme`) that WO-ENG-08 built for modern --
- * one selector-scan implementation, three engine callers, per the ratchet law (never fork a
- * second scan).
+ * The engine-source corpus lives in `lib/engine-corpus.mjs` so this script and
+ * its guard test read the SAME walk. It is recursive (WO-GAT-02 generalized it
+ * from the modern-only walk so the classic/rustic dead-selector counters build
+ * their consumed-class sets from the same scan) and it excludes tests/stories
+ * declaratively; see that module for both rules and why they are there.
  */
-function collectEngineFiles(dir, engineName) {
-  const out = [];
-  const engineRe = new RegExp(`engines/${engineName}(/[^/]+)?\\.tsx?$`);
-  for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry);
-    const st = statSync(full);
-    if (st.isDirectory()) {
-      out.push(...collectEngineFiles(full, engineName));
-    } else if (engineRe.test(full.replace(/\\/g, '/'))) {
-      out.push(full);
-    }
-  }
-  return out;
-}
-
-/** Collect every modern-engine component source file (`engines/modern/index.tsx`). */
-function modernFiles(dir) {
-  return collectEngineFiles(dir, 'modern');
-}
-
-/**
- * Collect the color-purity file set (WO-ENG-06, spec section 6): every modern-engine
- * source file, `.tsx`/`.ts` OR `.css` -- the spec names the target as any `engines/modern*`
- * path ending in `.tsx`, `.ts`, or `.css`.
- * Today every modern-engine file is `.tsx` (one `.ts`); no `.css` sibling exists yet under an
- * `engines/modern/` path, so this currently returns the same set as modernFiles(), but the
- * `.css` branch is included so a future modern-engine stylesheet is covered automatically
- * instead of silently escaping the ratchet.
- */
-function modernColorFiles(dir) {
-  const out = [];
-  for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry);
-    const st = statSync(full);
-    if (st.isDirectory()) {
-      out.push(...modernColorFiles(full));
-    } else if (/engines\/modern(\/[^/]+)?\.(tsx?|css)$/.test(full.replace(/\\/g, '/'))) {
-      out.push(full);
-    }
-  }
-  return out;
-}
+const modernFiles = modernEngineFiles;
+const modernColorFiles = modernEngineColorFiles;
 
 /** Strips `/* ... *\/` block comments (replacing their content with spaces, so offsets/line
  * counts are unaffected) before color-literal counting. JSDoc `@example` blocks on several
@@ -176,97 +144,6 @@ function stripBlockComments(text) {
  */
 const CONTENT_ATTRIBUTE_RE =
   /\b(?:placeholder|aria-label|aria-placeholder|title|alt)\s*=\s*(?:"[^"]*"|'[^']*'|\{`[^`]*`\})/g;
-
-/**
- * Class names DaisyUI actually paints, verified against the `daisyui@5.5.19`
- * package source rather than this repo's theme.css, which can be stale.
- *
- * DaisyUI is TENANTED -- a bare `.alert` computes each tenant's own
- * `--color-base-200`, which every artifact declares unlayered -- so a class here
- * is not a white-label defect. It is residue: `modern` is documented as the
- * Rottay-native premium skin, and every one of these files makes that sentence
- * less true. Decrease-only, so the residue can only shrink.
- */
-const DAISY_PAINTED_CLASSES = [
-  'alert',
-  'skeleton',
-  'step',
-  'steps',
-  'link',
-  'breadcrumbs',
-  'rating',
-  'range',
-  'progress',
-  'radial-progress',
-  'stat-title',
-  'stat-value',
-  'carousel',
-  'carousel-item',
-  'timeline',
-  'timeline-middle',
-  'timeline-start',
-  'toast',
-  'toast-top',
-  'toast-bottom',
-  'modal',
-  'modal-open',
-  'modal-box',
-  'modal-backdrop',
-  'modal-action',
-];
-
-/**
- * Engine files that render at least one DaisyUI class.
- *
- * Branch 1: literal class strings assigned to `className` (never a doc comment
- * and never `Array.prototype.join`).
- * Branch 2 (Codex K2/K3 verdict: the counter missed classes held in MAPS —
- * Message emitted `.toast` via a placement map for months at count 0): ANY
- * string literal whose every whitespace token is either an exact Daisy class
- * or `<daisyClass>-<suffix>` (placement/variant maps are pure-Daisy strings,
- * while prose like "toast notification" contains non-prefixed tokens and is
- * excluded). Textual heuristic by design: it errs on the side of counting a
- * file that merely quotes a full Daisy string, which is exactly the class of
- * site the drain must review anyway.
- */
-function countDaisyClassConsumers(files) {
-  const painted = new Set(DAISY_PAINTED_CLASSES);
-  const paintedPrefixes = DAISY_PAINTED_CLASSES.map((c) => `${c}-`);
-  let consumers = 0;
-  for (const file of files) {
-    const text = stripBlockComments(readFileSync(file, 'utf8'));
-    const attrs = text.matchAll(/className=(?:\{?\s*)?(?:`([^`]*)`|"([^"]*)"|'([^']*)')/g);
-    let hit = false;
-    for (const m of attrs) {
-      const value = m[1] ?? m[2] ?? m[3] ?? '';
-      for (const token of value.split(/[\s${}]+/)) {
-        if (painted.has(token)) {
-          hit = true;
-          break;
-        }
-      }
-      if (hit) break;
-    }
-    if (!hit) {
-      const strings = text.matchAll(/"([^"]*)"|'([^']*)'|`([^`]*)`/g);
-      for (const m of strings) {
-        const value = m[1] ?? m[2] ?? m[3] ?? '';
-        const tokens = value.split(/\s+/).filter(Boolean);
-        if (
-          tokens.length > 0 &&
-          tokens.every(
-            (token) => painted.has(token) || paintedPrefixes.some((p) => token.startsWith(p)),
-          )
-        ) {
-          hit = true;
-          break;
-        }
-      }
-    }
-    if (hit) consumers += 1;
-  }
-  return consumers;
-}
 
 function countColorLiteralsInText(strippedText) {
   const withoutContentAttributes = strippedText.replace(CONTENT_ATTRIBUTE_RE, '');
@@ -1765,14 +1642,20 @@ function writeCoverageArtifacts(coverage) {
    followed to a concrete color.
 
    ── SKIP-WITH-COUNT ────────────────────────────────────────────────────────
-   A pairing whose text OR bg resolves to a non-static value — `color-mix()`, an
-   unresolved `var()` (no definition, no fallback), a non-opaque rgba()/#rrggbbaa
-   (APCA needs an opaque pair; compositing needs a known backdrop), or a keyword
-   we do not map — is SKIPPED and COUNTED (reported), never silently dropped. At
-   the WO-GAT-04 baseline every documented pairing resolves to opaque hex, so the
-   skip count is 0; a pairing that STARTS skipping later is a visible signal in
-   the report that a token was changed to a non-static form (which would also
-   quietly shrink the evaluated set), not an invisible hole in the gate.
+   Static `color-mix(in srgb, A p%, B)` is COMPOSITED by the resolver (both
+   endpoints statically opaque — see apcaResolveColorMix), so a tinted badge
+   ground is evaluated, not skipped. A pairing whose text OR bg still resolves
+   to a non-static value — a gradient endpoint, an unresolved `var()` (no
+   definition, no fallback), a non-opaque rgba()/#rrggbbaa (APCA needs an
+   opaque pair; compositing alpha needs a known backdrop), a non-srgb mix
+   space, or a keyword we do not map — is SKIPPED and COUNTED (reported),
+   never silently dropped. As of W8 (2026-07-25) exactly ONE documented
+   pairing skips: bithire `badge-secondary`, whose ground
+   `--ds-control-surface-raised` mixes `--ds-surface-panel`, a linear-gradient
+   — not statically compositable. Any pairing that STARTS skipping later is a
+   visible signal in the report that a token was changed to a non-static form
+   (which would also quietly shrink the evaluated set), not an invisible hole
+   in the gate.
    ============================================================================ */
 
 const APCA_BODY_MIN = 60; // body-text pairs
@@ -1985,8 +1868,9 @@ function apcaCollectDecls(cssText, matchSelector) {
 
 /** Parse a concrete CSS color literal to an OPAQUE color string calcAPCA
  * accepts (`#rrggbb` or `rgb(r, g, b)`), or null when it is not a static opaque
- * color (color-mix / gradient / non-opaque alpha / var-bearing / unmapped
- * keyword) — the "skip-with-count" cases. */
+ * color (gradient / non-opaque alpha / var-bearing / unmapped keyword) — the
+ * "skip-with-count" cases. Static `color-mix(in srgb, ...)` is NOT handled here;
+ * apcaResolveValue composites it before reaching this parser. */
 function apcaParseColor(raw) {
   const str = raw.trim().replace(/\s*!important\s*$/i, '');
   const kw = { white: '#ffffff', black: '#000000' };
@@ -2005,9 +1889,76 @@ function apcaParseColor(raw) {
   return null; // color-mix(), gradients, unresolved var(), unmapped keyword
 }
 
+/** Split a color-mix() argument list on its TOP-LEVEL comma only — endpoint
+ * expressions may be var(--x, fallback) with their own commas. Returns the two
+ * endpoint strings, or null when the shape is not `a, b`. */
+function apcaSplitMixEndpoints(args) {
+  let depth = 0;
+  for (let i = 0; i < args.length; i++) {
+    const c = args[i];
+    if (c === '(') depth += 1;
+    else if (c === ')') depth -= 1;
+    else if (c === ',' && depth === 0) {
+      return [args.slice(0, i).trim(), args.slice(i + 1).trim()];
+    }
+  }
+  return null;
+}
+
+/** Parse one color-mix endpoint: `<color>` or `<color> N%`. The color part may
+ * itself be a var() chain, so the percentage is stripped from the END. */
+function apcaParseMixEndpoint(raw) {
+  const m = /^([\s\S]*?)\s+([0-9.]+)%$/.exec(raw);
+  if (m) return { color: m[1], pct: parseFloat(m[2]) };
+  return { color: raw, pct: null };
+}
+
+/** Composite a STATIC `color-mix(in srgb, A p%, B [q%])` to an opaque
+ * `rgb(r, g, b)` string, or null when either endpoint is unresolvable or the
+ * mix space is not srgb. Per CSS Color 5, a missing percentage defaults to
+ * 100 - p; two given percentages are normalized when they sum under 100.
+ * Non-srgb spaces (oklch/oklab/...) stay skipped: compositing them needs the
+ * full polar-space math and none of the governed pairing paths uses them. */
+function apcaResolveColorMix(value, defs, seen) {
+  const m = /^color-mix\(\s*in\s+([a-z-]+)\s*,\s*([\s\S]+)\)$/.exec(value);
+  if (!m) return null;
+  if (m[1] !== 'srgb') return null;
+  const endpoints = apcaSplitMixEndpoints(m[2]);
+  if (!endpoints) return null;
+  const a = apcaParseMixEndpoint(endpoints[0]);
+  const b = apcaParseMixEndpoint(endpoints[1]);
+  let pA = a.pct;
+  let pB = b.pct;
+  if (pA === null && pB === null) return null;
+  if (pA === null) pA = 100 - pB;
+  if (pB === null) pB = 100 - pA;
+  if (pA + pB <= 0) return null;
+  const sum = pA + pB;
+  const colorA = apcaResolveValue(a.color, defs, new Set(seen));
+  const colorB = apcaResolveValue(b.color, defs, new Set(seen));
+  if (!colorA || !colorB) return null;
+  const toRgb = (c) => {
+    const s = c.trim();
+    if (s.startsWith('#')) {
+      const h = s.length === 4
+        ? s.slice(1).split('').map((x) => x + x).join('')
+        : s.slice(1);
+      return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
+    }
+    const rgbM = /^rgb\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\s*\)$/.exec(s);
+    return rgbM ? [+rgbM[1], +rgbM[2], +rgbM[3]] : null;
+  };
+  const rgbA = toRgb(colorA);
+  const rgbB = toRgb(colorB);
+  if (!rgbA || !rgbB) return null;
+  const mixed = rgbA.map((v, i) => Math.round((v * pA + rgbB[i] * pB) / sum));
+  return `rgb(${mixed[0]}, ${mixed[1]}, ${mixed[2]})`;
+}
+
 /** Resolve a `--ds-*` token to a concrete opaque color within `defs`, following
  * `var(--x, fallback)` chains; null when it bottoms out on an undefined name or
- * a non-static value (see apcaParseColor). */
+ * a non-static value (see apcaParseColor). Static `color-mix(in srgb, ...)` is
+ * composited (apcaResolveColorMix); gradients and non-opaque alpha stay skips. */
 function apcaResolveColor(name, defs, seen = new Set()) {
   if (seen.has(name)) return null;
   seen.add(name);
@@ -2024,6 +1975,7 @@ function apcaResolveValue(raw, defs, seen) {
     if (inner) return inner;
     return varM[2] !== undefined ? apcaResolveValue(varM[2].trim(), defs, seen) : null;
   }
+  if (/^color-mix\(/.test(value)) return apcaResolveColorMix(value, defs, seen);
   return apcaParseColor(value);
 }
 
@@ -2115,6 +2067,46 @@ function renderApcaMarkdown(apca) {
 }
 
 const files = modernFiles(componentsDir);
+
+// `DEBUG_DAISY_CONSUMERS=1` prints the per-file inventory behind
+// `daisy.classConsumers`: every counted file, the classes it renders, and the
+// exact site that renders each one -- the line, whether the string sat directly
+// in the `className` (`className`), was reached by resolving a binding or map in
+// the same file (`resolved`), or lives in another module entirely (`imported`).
+// An `imported` site also prints the file it really lives in and the provenance
+// chain: every declaration crossed to get there, which is the ONLY answer to
+// "why is this file counted when the class is not in it". It reads the same scan
+// the counter reads, so the inventory and the count cannot disagree, and
+// printing it moves nothing.
+if (process.env.DEBUG_DAISY_CONSUMERS) {
+  const inventory = collectDaisyClassConsumers(files);
+  console.error(
+    `[daisy-consumers] ${inventory.length} consumer(s) of ${new Set(files).size} modern file(s)`,
+  );
+  for (const { file, tokens, sites, modifiersWithoutBase } of inventory) {
+    console.error(`[daisy-consumers] ${relative(root, file)}  tokens=${tokens.join(' ')}`);
+    // A Daisy modifier with no base class in the same file. It still counts --
+    // the rule is a real standalone declaration and the base can come from a
+    // parent -- but it is the shape a drain can delete outright, so it is named
+    // rather than left for the reader to spot by diffing against the manifest.
+    for (const { token, base } of modifiersWithoutBase) {
+      console.error(
+        `[daisy-consumers]     ! ${token} renders without its base class '${base}'`,
+      );
+    }
+    for (const site of sites) {
+      const origin = site.file === file ? '' : `  in ${relative(root, site.file)}`;
+      console.error(
+        `[daisy-consumers]     L${site.line} ${site.kind} ${site.token}${origin}  ${site.text}`,
+      );
+      if (site.chain.length > 0) {
+        const chain = site.chain.map((link) => `${relative(root, link.file)}#${link.symbol}`);
+        console.error(`[daisy-consumers]         via ${[relative(root, file), ...chain].join(' -> ')}`);
+      }
+    }
+  }
+}
+
 const motion = countMotionLiterals(files);
 const effects = countEffectConsumers();
 const colorFiles = modernColorFiles(componentsDir);
@@ -2503,6 +2495,9 @@ const counters = {
   'effects.glassConsumers': effects.glass,
   'effects.glowConsumers': effects.glow,
   // WO-TOK-03 verdict 2026-07-10: DaisyUI stays; the residue is ratcheted.
+  // TypeScript-AST counter -- see lib/daisy-class-consumer-counter.mjs for why a
+  // regex cannot separate a rendered class from `data-part="skeleton"`,
+  // `role="alert"` or `kind: 'modal'`.
   'daisy.classConsumers': countDaisyClassConsumers(files),
   'color.modernHexLiterals': color.hex,
   'color.modernRgbaLiterals': color.rgba,

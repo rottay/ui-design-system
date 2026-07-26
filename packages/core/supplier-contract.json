@@ -132,6 +132,8 @@
         "CountUp",
         "DEFAULT_COLORS",
         "DEFAULT_COMPACT_CONFIG",
+        "DEFAULT_FALLBACK_LOCALE",
+        "DEFAULT_LOCALE",
         "DEFAULT_LOCALES",
         "DEFAULT_MARGIN",
         "DEFAULT_OPERATORS_BY_TYPE",
@@ -374,6 +376,7 @@
         "Popconfirm",
         "Popover",
         "Portal",
+        "PortalScope",
         "PremiumFormFactsCard",
         "PremiumFormSections",
         "Presence",
@@ -394,6 +397,7 @@
         "RECIPE_PROFILES",
         "RECIPE_PROFILE_SCHEMA_VERSION",
         "RECORD_MORPH_TRANSITION_CLASS",
+        "RESIZE_HANDLE_DEFAULTS",
         "RESPONSIVE_BREAKPOINTS",
         "RESPONSIVE_BREAKPOINT_ORDER",
         "RadarChart",
@@ -409,6 +413,7 @@
         "RecordSummaryStrip",
         "RecordWorkbenchSurface",
         "ReportSurface",
+        "ResizeHandle",
         "ResponsiveContext",
         "ResponsiveProvider",
         "ResponsiveSlot",
@@ -523,7 +528,9 @@
         "TENANT_THEME_REFERENCE_TOKENS",
         "TENANT_THEME_SCHEMA_VERSION",
         "TENANT_THEME_TYPE_SCALE_BOUNDS",
+        "TENANT_THEME_V1_COVERAGE",
         "TENANT_THEME_VERTICAL_ENVELOPES",
+        "TENANT_VISUAL_CHANNELS",
         "THICKNESS_MAP",
         "TONE_TO_AVATAR_VARIANT",
         "TONE_TO_BADGE_VARIANT",
@@ -593,6 +600,7 @@
         "acquireSkinPack",
         "actionsColumn",
         "apcaContrast",
+        "appearanceMatchesArtifact",
         "applySkinPack",
         "applyStreamCommit",
         "ar",
@@ -741,6 +749,8 @@
         "projectChartSummaryRows",
         "pt",
         "rankByFrecency",
+        "readLocaleContext",
+        "readPortalScope",
         "recordMorphStyle",
         "recordTransitionName",
         "recordUse",
@@ -749,10 +759,13 @@
         "registerHighlighter",
         "registerSkinPack",
         "renderVerticalArtifact",
+        "reportVisualAuthorityConflict",
+        "resetVisualAuthorityDiagnostics",
         "resolveAccessor",
         "resolveChartProjection",
         "resolveChartScaffoldState",
         "resolveColumnValue",
+        "resolveDocumentLocaleAttributes",
         "resolveEngine",
         "resolveFieldAccessForRow",
         "resolveFromDomain",
@@ -762,6 +775,7 @@
         "resolveGridRowKey",
         "resolveHeader",
         "resolveListCardMinWidth",
+        "resolveLocaleDirection",
         "resolvePersonalityPreset",
         "resolvePosture",
         "resolveRecipeProfile",
@@ -781,6 +795,7 @@
         "resolveSurfaceTabsType",
         "resolveTenant",
         "resolveValue",
+        "resolveVisualAuthority",
         "rottayBrandTheme",
         "sanitizeHref",
         "selectTenantThemeAdjustments",
@@ -835,6 +850,7 @@
         "useDataTable",
         "useDeferredPending",
         "useDensity",
+        "useDirection",
         "useDirectionalViewTransition",
         "useDraftSave",
         "useDsFocusMode",
@@ -876,11 +892,13 @@
         "useNotificationPreferences",
         "useOptimisticList",
         "useOptimisticUpdate",
+        "useOptionalDirection",
         "useOptionalTokens",
         "useOptionalTranslation",
         "useOverlayLayer",
         "usePdfExport",
         "usePortalContainer",
+        "usePortalScope",
         "usePresence",
         "useProductProfile",
         "useProductProfileContext",
@@ -1057,11 +1075,6 @@
           "@phosphor-icons/react",
           "antd"
         ],
-        "buildRecipeManifest": [
-          "@phosphor-icons/react",
-          "antd",
-          "motion"
-        ],
         "buildViewModes": [
           "@phosphor-icons/react",
           "antd",
@@ -1078,7 +1091,9 @@
           "motion"
         ],
         "Button": [
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "Calendar": [
           "antd"
@@ -1149,7 +1164,8 @@
         "CommandCenterSurface": [
           "@ant-design/icons",
           "@phosphor-icons/react",
-          "antd"
+          "antd",
+          "motion"
         ],
         "CompareSurface": [
           "@ant-design/icons",
@@ -1725,7 +1741,8 @@
         ],
         "PatternFormBuilder": [
           "@phosphor-icons/react",
-          "antd"
+          "antd",
+          "motion"
         ],
         "PatternGalleryView": [
           "@phosphor-icons/react",
@@ -1934,7 +1951,9 @@
           "motion"
         ],
         "RecordWorkbenchSurface": [
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "ReportSurface": [
           "@ant-design/icons",
@@ -2236,7 +2255,8 @@
         ],
         "TagInput": [
           "@phosphor-icons/react",
-          "antd"
+          "antd",
+          "motion"
         ],
         "TeamSurface": [
           "@ant-design/icons",
@@ -2315,7 +2335,9 @@
           "antd"
         ],
         "Upload": [
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "useAccentTokens": [
           "antd"
@@ -2523,6 +2545,8 @@
         "Container",
         "DEFAULT_COLORS",
         "DEFAULT_COMPACT_CONFIG",
+        "DEFAULT_FALLBACK_LOCALE",
+        "DEFAULT_LOCALE",
         "DEFAULT_LOCALES",
         "DEFAULT_MARGIN",
         "DEFAULT_OPERATORS_BY_TYPE",
@@ -2625,6 +2649,7 @@
         "PatternTenantPreview",
         "PatternVirtualList",
         "Portal",
+        "PortalScope",
         "ProductProfileContext",
         "ProductProfileProvider",
         "PulseValue",
@@ -2634,11 +2659,13 @@
         "RATIO_PRESETS",
         "RECIPE_PROFILES",
         "RECIPE_PROFILE_SCHEMA_VERSION",
+        "RESIZE_HANDLE_DEFAULTS",
         "RESPONSIVE_BREAKPOINTS",
         "RESPONSIVE_BREAKPOINT_ORDER",
         "RadioGroup",
         "RecipeProfileProvider",
         "RecordFacts",
+        "ResizeHandle",
         "ResponsiveContext",
         "ResponsiveProvider",
         "ResponsiveSlot",
@@ -2701,7 +2728,9 @@
         "TENANT_THEME_REFERENCE_TOKENS",
         "TENANT_THEME_SCHEMA_VERSION",
         "TENANT_THEME_TYPE_SCALE_BOUNDS",
+        "TENANT_THEME_V1_COVERAGE",
         "TENANT_THEME_VERTICAL_ENVELOPES",
+        "TENANT_VISUAL_CHANNELS",
         "THICKNESS_MAP",
         "TONE_TO_AVATAR_VARIANT",
         "TONE_TO_BADGE_VARIANT",
@@ -2729,6 +2758,7 @@
         "acquireSkinPack",
         "actionsColumn",
         "apcaContrast",
+        "appearanceMatchesArtifact",
         "applySkinPack",
         "applyStreamCommit",
         "ar",
@@ -2744,6 +2774,7 @@
         "buildHideMediaQuery",
         "buildMinWidthQuery",
         "buildRangeQuery",
+        "buildRecipeManifest",
         "buildShowMediaQuery",
         "buildTenantSelector",
         "buildTenantThemePreviewScope",
@@ -2868,16 +2899,21 @@
         "projectChartSummaryRows",
         "pt",
         "rankByFrecency",
+        "readLocaleContext",
+        "readPortalScope",
         "recordUse",
         "registerCustomComponent",
         "registerCustomComponents",
         "registerHighlighter",
         "registerSkinPack",
         "renderVerticalArtifact",
+        "reportVisualAuthorityConflict",
+        "resetVisualAuthorityDiagnostics",
         "resolveAccessor",
         "resolveChartProjection",
         "resolveChartScaffoldState",
         "resolveColumnValue",
+        "resolveDocumentLocaleAttributes",
         "resolveEngine",
         "resolveFieldAccessForRow",
         "resolveFromDomain",
@@ -2886,6 +2922,7 @@
         "resolveGalleryKey",
         "resolveGridRowKey",
         "resolveHeader",
+        "resolveLocaleDirection",
         "resolvePersonalityPreset",
         "resolvePosture",
         "resolveRecipeProfile",
@@ -2901,6 +2938,7 @@
         "resolveSurfacePermission",
         "resolveTenant",
         "resolveValue",
+        "resolveVisualAuthority",
         "rottayBrandTheme",
         "sanitizeHref",
         "selectTenantThemeAdjustments",
@@ -2944,6 +2982,7 @@
         "useCustomStatus",
         "useDataTable",
         "useDensity",
+        "useDirection",
         "useDraftSave",
         "useDsFocusMode",
         "useEngineContext",
@@ -2978,10 +3017,12 @@
         "useNotificationPreferences",
         "useOptimisticList",
         "useOptimisticUpdate",
+        "useOptionalDirection",
         "useOptionalTranslation",
         "useOverlayLayer",
         "usePdfExport",
         "usePortalContainer",
+        "usePortalScope",
         "useProductProfile",
         "useProductProfileContext",
         "usePulseOnChange",
@@ -3038,7 +3079,9 @@
         "TENANT_THEME_OVERRIDE_TOKENS",
         "TENANT_THEME_REFERENCE_TOKENS",
         "TENANT_THEME_SCHEMA_VERSION",
+        "TENANT_THEME_V1_COVERAGE",
         "TENANT_THEME_VERTICAL_ENVELOPES",
+        "TENANT_VISUAL_CHANNELS",
         "TenantThemeValidationError",
         "brandingContrastRatio",
         "canonicalizeTenantThemeValue",
@@ -3078,7 +3121,9 @@
         "TENANT_THEME_OVERRIDE_TOKENS",
         "TENANT_THEME_REFERENCE_TOKENS",
         "TENANT_THEME_SCHEMA_VERSION",
+        "TENANT_THEME_V1_COVERAGE",
         "TENANT_THEME_VERTICAL_ENVELOPES",
+        "TENANT_VISUAL_CHANNELS",
         "TenantThemeValidationError",
         "brandingContrastRatio",
         "canonicalizeTenantThemeValue",

@@ -245,7 +245,7 @@ export default function ModernFileManager(props: FileManagerProps) {
                             </span>
                           )}
                           {item.type === 'folder' ? (
-                            <a data-part="folder-link" data-action="navigate-folder" className="link link-hover cursor-pointer" onClick={() => onNavigate?.(item.id)}>
+                            <a data-part="folder-link" data-action="navigate-folder" className="ds-file-manager__folder-link" onClick={() => onNavigate?.(item.id)}>
                               {item.name}
                             </a>
                           ) : (

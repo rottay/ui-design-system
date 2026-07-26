@@ -7,6 +7,11 @@
  * `--ds-density-local-factor`. CSS projects the same canonical factor map for
  * local posture, while appearance compilation and useTokens call the canonical
  * resolver for global appearance.
+ *
+ * Which boundary writes which channel is itself the law: a NON-root
+ * `data-density` boundary writes only the local factor, and the root boundary
+ * writes only the semantic factor it already represents. Neither writes both,
+ * so the two channels can never multiply the same decision twice.
  */
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -38,6 +43,14 @@ function parseCssFactors(css: string): Record<string, number> {
   return factors;
 }
 
+function parseRootFactors(css: string): Record<string, number> {
+  const factors: Record<string, number> = {};
+  const rule =
+    /:root\[data-density=['"](compact|comfortable|spacious)['"]\]\s*\{[^}]*?--ds-density-mode-factor:\s*([\d.]+)\s*;?[^}]*\}/g;
+  for (const match of css.matchAll(rule)) factors[match[1]] = Number(match[2]);
+  return factors;
+}
+
 function spacingDeclarations(css: string): string[] {
   return [...css.matchAll(/--ds-spacing-(?!0\b)\d+\s*:\s*calc\([^;]+\);/g)]
     .map((match) => match[0]);
@@ -58,6 +71,7 @@ function localEffectiveScaleBounds(css: string): { min: number; max: number } | 
 }
 
 const cssFactors = parseCssFactors(densityCss);
+const rootFactors = parseRootFactors(densityCss);
 const LOCAL_PROJECTION_SELECTOR =
   ":where(\n  [data-density='compact']:not(:root),";
 const NUMERIC_SPACING_STEPS = [
@@ -113,14 +127,33 @@ describe('density authority contract', () => {
   it('keeps global appearance and local component posture on separate channels', () => {
     expect(densityCss).toContain('--ds-density-local-factor: 0.85');
     expect(densityCss).toContain("[data-density='compact']:not(:root)");
+    // The root must never contribute a LOCAL multiplier. :root already folds
+    // the mode factor into --ds-density-effective-scale, so a root local factor
+    // is exactly the double application this contract exists to prevent.
     expect(densityCss).not.toMatch(
       /\[data-density=['"]compact['"]\]\s*\{[^}]*--ds-density-local-factor:/,
     );
+    // ...and a non-root boundary must never claim the global semantic channel,
+    // which would erase the tenant posture for its whole subtree.
     expect(densityCss).not.toMatch(
-      /\[data-density=['"]compact['"]\](?:\:not\(\:root\))?\s*\{[^}]*--ds-density-mode-factor:/,
+      /\[data-density=['"]compact['"]\]:not\(:root\)\s*\{[^}]*--ds-density-mode-factor:/,
     );
     expect(appearanceSource).toContain('DENSITY_MODE_FACTOR_VARIABLE');
     expect(appearanceSource).not.toContain('DENSITY_LOCAL_FACTOR_VARIABLE');
+  });
+
+  it('paints the root posture through the semantic channel it represents', () => {
+    // Without this the root boundary is inert: every posture rule was scoped
+    // :not(:root) while RootDensityProvider stamps document.documentElement.
+    expect(rootFactors).toEqual({
+      compact: DENSITY_MODE_FACTORS.compact,
+      spacious: DENSITY_MODE_FACTORS.spacious,
+    });
+    // `comfortable` is the identity factor and is deliberately undeclared:
+    // RootDensityProvider stamps it whenever no preference exists, so writing
+    // `1` at :root[data-density] specificity would erase a static BrandTheme
+    // posture compiled into the lower-specificity html[data-tenant] artifact.
+    expect(densityCss).not.toMatch(/:root\[data-density=['"]comfortable['"]\]/);
   });
 
   it.each([

@@ -4,6 +4,7 @@
  * contracts apps should assemble before reaching for patterns or surfaces.
  */
 
+export * from './foundation';
 export * from './inputs';
 export * from './navigation';
 export * from './layout';

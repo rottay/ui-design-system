@@ -65,7 +65,7 @@ describe('PatternKanbanBoard advanced engine coverage', () => {
     if (engine === 'classic') {
       expect(container.querySelector('.ant-spin')).not.toBeNull();
     } else if (engine === 'modern') {
-      expect(container.querySelector('.loading-spinner')).not.toBeNull();
+      expect(container.querySelector('.rottay-spinner--modern')).not.toBeNull();
     } else {
       expect(screen.getByText('Loading...')).toBeInTheDocument();
     }

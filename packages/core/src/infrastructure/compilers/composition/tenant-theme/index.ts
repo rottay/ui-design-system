@@ -8,6 +8,11 @@
 
 import { type TenantAppearance } from "@/foundation/contracts/composition/tenants/themes";
 import { contrastRatio } from "@/foundation/kernel/accessibility/branding-contrast";
+import {
+  canonicalizeJsonValue as canonicalizeTenantThemeValue,
+  compareCodeUnits,
+  isCanonicalJsonObject as isPlainObject,
+} from "@/foundation/kernel/serialization";
 import { validateRecipeProfileSelection } from "@/foundation/tokens/ts/presentation/recipe-profiles";
 import type {
   NormalizedTenantThemeAppearance,
@@ -30,6 +35,7 @@ import {
   TENANT_THEME_REFERENCE_TOKENS,
   TENANT_THEME_SCHEMA_VERSION,
   TENANT_THEME_TYPE_SCALE_BOUNDS,
+  TENANT_THEME_V1_COVERAGE,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import {
   isHexColor,
@@ -45,7 +51,7 @@ import { compileAppearanceVariables } from "../../kernel/runtime/appearance";
 export { TENANT_THEME_CONFIG_SCHEMA } from "../../kernel/foundation/schemas/tenant-theme";
 export type { TenantThemeSchemaNode } from "../../kernel/foundation/schemas/tenant-theme";
 
-export const TENANT_THEME_COMPILER_VERSION = "tenant-theme-compiler@3" as const;
+export const TENANT_THEME_COMPILER_VERSION = "tenant-theme-compiler@4" as const;
 
 function deepFreezeTenantThemeValue<T>(value: T): Readonly<T> {
   if (value !== null && typeof value === "object") {
@@ -231,62 +237,12 @@ export function sha256TenantThemeValue(value: string): string {
     .join("");
 }
 
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  if (value === null || typeof value !== "object" || Array.isArray(value))
-    return false;
-  const prototype = Object.getPrototypeOf(value);
-  return prototype === Object.prototype || prototype === null;
-}
-
 /**
- * UTF-16 code-unit comparator. Canonical digests and emitted variable order
- * must not depend on host locale/ICU data, so every ordering in this module
- * routes through this single comparator.
+ * Canonical form is owned by `foundation/kernel/serialization`, which both this
+ * compiler and the theming runtime consume. The name is kept as the module's
+ * published alias; the implementation is the shared one.
  */
-const compareCodeUnits = (left: string, right: string): number =>
-  left < right ? -1 : left > right ? 1 : 0;
-
-function normalizeCanonicalValue(value: unknown): unknown {
-  if (
-    value === null ||
-    typeof value === "boolean" ||
-    typeof value === "string"
-  ) {
-    return typeof value === "string" ? value.trim() : value;
-  }
-  if (typeof value === "number") {
-    if (!Number.isFinite(value))
-      throw new TypeError(
-        "Canonical tenant theme values must contain finite numbers"
-      );
-    return Object.is(value, -0) ? 0 : value;
-  }
-  if (Array.isArray(value)) return value.map(normalizeCanonicalValue);
-  if (!isPlainObject(value))
-    throw new TypeError("Canonical tenant theme values must be JSON objects");
-
-  const result: Record<string, unknown> = {};
-  for (const key of Object.keys(value).sort(compareCodeUnits)) {
-    const child = value[key];
-    if (
-      child === undefined ||
-      typeof child === "function" ||
-      typeof child === "symbol" ||
-      typeof child === "bigint"
-    ) {
-      throw new TypeError(
-        `Canonical tenant theme value at ${key} is not JSON-serializable`
-      );
-    }
-    result[key] = normalizeCanonicalValue(child);
-  }
-  return result;
-}
-
-/** Stable JSON serialization with recursively sorted keys and normalized edge whitespace. */
-export function canonicalizeTenantThemeValue(value: unknown): string {
-  return JSON.stringify(normalizeCanonicalValue(value));
-}
+export { canonicalizeTenantThemeValue };
 
 const documentSchemaSource = {
   id: TENANT_THEME_CONFIG_SCHEMA.id,
@@ -1540,6 +1496,9 @@ export function compileTenantThemeConfig(
   const digestSource = {
     schemaVersion: TENANT_THEME_SCHEMA_VERSION,
     compilerVersion: TENANT_THEME_COMPILER_VERSION,
+    // Coverage is provenance, not decoration: the runtime resolver suppresses
+    // exactly these channels, so a coverage change must move the digest.
+    coverage: TENANT_THEME_V1_COVERAGE,
     tenantId: config.tenantId,
     slug: config.slug,
     verticalKey: config.verticalKey,
@@ -1565,6 +1524,7 @@ export function compileTenantThemeConfig(
     compilerVersion: TENANT_THEME_COMPILER_VERSION,
     verticalEnvelopeDigest,
     digest,
+    coverage: TENANT_THEME_V1_COVERAGE,
     normalizedAppearance,
     variables,
     ...(adjustments.length > 0 ? { adjustments } : {}),

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the AlertDialog overlay component.
+ * @fileoverview Modern engine for the AlertDialog overlay component.
  * Renders a native `<dialog>` promoted to the browser top layer via `showModal()`,
  * portaled through the shared overlay runtime so tenant scope, focus trapping,
  * background inertness, scroll-lock, Escape routing and focus restore are owned
@@ -24,6 +24,7 @@ import type { AlertDialogProps } from '../../contracts';
 import { ALERT_DIALOG_DEFAULTS } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
+import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 
@@ -91,6 +92,29 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
     }
   }, [open, dialogEl]);
 
+  // `showModal()` puts this dialog in the browser TOP LAYER, which paints
+  // above every normal-flow node regardless of z-index. A descendant overlay
+  // portaling to the shared `#rottay-portal-root` would land there as a
+  // SIBLING of this dialog and be occluded. Publishing a host INSIDE the
+  // dialog keeps those overlays in the same top-layer subtree; `display:
+  // contents` keeps it out of the dialog's flex layout so it adds no box.
+  const [topLayerHost, setTopLayerHost] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    if (!open || !dialogEl) {
+      setTopLayerHost(null);
+      return;
+    }
+    const host = document.createElement('div');
+    host.setAttribute('data-rottay-toplayer-host', 'true');
+    host.style.display = 'contents';
+    dialogEl.appendChild(host);
+    setTopLayerHost(host);
+    return () => {
+      host.remove();
+      setTopLayerHost(null);
+    };
+  }, [open, dialogEl]);
+
   // The dialog box spans the viewport; clicks landing on the dialog element
   // itself are backdrop clicks. Guarded by closeOnBackdropClick (default false).
   const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
@@ -110,11 +134,12 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
       {open ? (
         <Portal>
           <PortalScope snapshot={portalScope}>
+            <TopLayerHostProvider host={topLayerHost}>
             <dialog
               ref={setDialogEl}
               {...layerProps}
               data-part="root"
-              className={`modal modal-open rottay-alert-dialog--modern ${className}`}
+              className={`rottay-alert-dialog rottay-alert-dialog--modern ${className}`}
               style={{
                 /* Reset native dialog styling: full-viewport flex container */
                 position: 'fixed',
@@ -137,13 +162,12 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
             >
               <div
                 data-part="backdrop"
-                className="modal-backdrop"
                 style={{ position: 'fixed', inset: 0, pointerEvents: 'none' }}
               />
               <div
                 data-part="surface"
                 data-open="true"
-                className="modal-box max-w-sm"
+                className="max-w-sm"
                 role="alertdialog"
                 aria-modal="true"
                 style={{
@@ -169,8 +193,8 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
                     )}
                   </div>
                 </div>
-                {/* DaisyUI modal-action aligns buttons to the right by default */}
-                <div data-part="footer" className="modal-action">
+                {/* Footer alignment and rhythm are skin-owned (data-part='footer') */}
+                <div data-part="footer">
                   <button
                     type="button"
                     data-part="action"
@@ -189,6 +213,7 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
                 </div>
               </div>
             </dialog>
+          </TopLayerHostProvider>
           </PortalScope>
         </Portal>
       ) : null}

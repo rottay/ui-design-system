@@ -28,13 +28,43 @@
  * defensively: a dist that predates the anatomy contract simply omits those
  * channels rather than crashing.
  *
+ * ENGINE=MODERN VIEW (--modern)
+ * -----------------------------
+ * The global check above scans ALL of `src/`, so a channel read only by
+ * `engines/rustic/skin/tabs.css` counts as alive. Under the 2026-07-25 engine
+ * freeze that verdict is misleading: Classic and Rustic are read-only, all
+ * visual effort is Modern, and a dial whose only consumer is a frozen engine
+ * paints NOTHING for the engine anyone is shipping. The modern view scores the
+ * same inventory against modern-reachable consumers only, and reports four
+ * distinct states:
+ *
+ *   DECLARED — the tenant contract exposes the channel as a dial
+ *              (TENANT_THEME_OVERRIDE_TOKENS, the 10 chart-series slots, the
+ *              anatomy variant selectors). "A customer can set this."
+ *   EMITTED  — a compiler actually writes the channel (a key of
+ *              chromeToVariables against the populated chrome). "Something
+ *              produces a value for this."
+ *   CONSUMED — at least one scannable first-party source reads it via `var()`
+ *              or the anatomy attribute selector, in ANY engine. "Some source
+ *              reads it." (the global check's notion of alive)
+ *   PAINTED  — at least one CONSUMING file is modern-reachable, i.e. its path
+ *              is not under `engines/classic/` or `engines/rustic/`.
+ *              "It can change a pixel under the engine we ship."
+ *
+ * A channel that is CONSUMED but not PAINTED is dead-in-modern. The modern view
+ * REPORTS; it never deletes a channel, and it carries its own decrease-only
+ * baseline so it can ratchet later without failing today's build.
+ *
  * Usage:
- *   node scripts/tenant-channel-consumer-gate.mjs           # print the report
- *   node scripts/tenant-channel-consumer-gate.mjs --check   # exit 1 on a NEW dead channel
- *   node scripts/tenant-channel-consumer-gate.mjs --seed    # (re)author the baseline from the current dead set
+ *   node scripts/tenant-channel-consumer-gate.mjs                # print the report
+ *   node scripts/tenant-channel-consumer-gate.mjs --check        # exit 1 on a NEW dead channel
+ *   node scripts/tenant-channel-consumer-gate.mjs --seed         # (re)author the baseline from the current dead set
+ *   node scripts/tenant-channel-consumer-gate.mjs --modern       # print the engine=modern four-state report
+ *   node scripts/tenant-channel-consumer-gate.mjs --modern-check # exit 1 on a NEW dead-in-modern channel
+ *   node scripts/tenant-channel-consumer-gate.mjs --modern-seed  # (re)author the modern baseline
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from 'node:fs';
-import { resolve, dirname, join } from 'node:path';
+import { resolve, dirname, join, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -42,6 +72,7 @@ const root = resolve(here, '..');
 const srcDir = join(root, 'src');
 const distDir = join(root, 'dist');
 const baselinePath = join(here, 'tenant-channel-consumer-gate.baseline.json');
+const modernBaselinePath = join(here, 'tenant-channel-consumer-gate.modern.baseline.json');
 
 /**
  * Lowest plausible count of distinct emitted chrome variable names. The real
@@ -210,6 +241,131 @@ export function evaluateChannels({
   return { dead: dead.sort(), newDead, revived };
 }
 
+/* -------------------------------------------------------------------------- */
+/* engine=modern view                                                         */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The frozen engines (policy 2026-07-25). This restates the law owned by
+ * engine-freeze-gate.mjs (`FROZEN`); the two regexes are asserted equal by
+ * engine-freeze-gate.test.mjs rather than imported, so neither gate has to load
+ * the other's module graph.
+ */
+export const FROZEN_ENGINE_PATH = /(^|\/)engines\/(classic|rustic)\//;
+
+/**
+ * Sources that only exist for the Modern engine. `engines/modern/` covers the
+ * component implementations and the CSS skin tree
+ * (`foundation/tokens/css/runtime/engines/modern/`); `engine-styles/modern/`
+ * covers the pattern-level modern style owner.
+ */
+export const MODERN_ENGINE_PATH = /(^|\/)(engines|engine-styles)\/modern\//;
+
+/**
+ * Three scopes, because "not frozen" and "modern" are different claims:
+ *   frozen-engine — renders only under Classic/Rustic; paints nothing in Modern
+ *   modern-engine — the Modern engine's own implementation/skin
+ *   engine-neutral— shared component/token source that renders under EVERY
+ *                   engine, Modern included
+ * Modern-reachable = modern-engine ∪ engine-neutral.
+ */
+export function classifyConsumerScope(path) {
+  const posix = path.split(sep).join('/');
+  if (FROZEN_ENGINE_PATH.test(posix)) return 'frozen-engine';
+  if (MODERN_ENGINE_PATH.test(posix)) return 'modern-engine';
+  return 'engine-neutral';
+}
+
+/** An empty per-scope consumption record, the shape scanConsumers fills. */
+export function emptyScopeIndex() {
+  return {
+    'frozen-engine': new Set(),
+    'modern-engine': new Set(),
+    'engine-neutral': new Set(),
+  };
+}
+
+/**
+ * Pure evaluator for the modern view. `scopes` is the per-scope consumption
+ * index (var names and anatomy selectors share one namespace here — anatomy
+ * selectors are `[...]`-prefixed and cannot collide with `--ds-*` names).
+ *
+ * Returns, per channel, the four states plus the two dead-in-modern classes:
+ *   deadGlobal     — never consumed by any source (already the global gate's set)
+ *   frozenOnly     — CONSUMED, but every consumer is a frozen-engine file
+ * and the ratchet fields (newDead/revived) against the modern baseline.
+ */
+export function evaluateModernView({
+  channels,
+  declaredNames,
+  emittedNames,
+  scopes,
+  baseline,
+}) {
+  const declared = new Set(declaredNames);
+  const emitted = new Set(emittedNames);
+  const frozen = scopes['frozen-engine'];
+  const modern = scopes['modern-engine'];
+  const neutral = scopes['engine-neutral'];
+
+  const rows = [];
+  for (const name of channels) {
+    const byFrozen = frozen.has(name);
+    const byModern = modern.has(name);
+    const byNeutral = neutral.has(name);
+    rows.push({
+      name,
+      declared: declared.has(name),
+      emitted: emitted.has(name),
+      consumed: byFrozen || byModern || byNeutral,
+      painted: byModern || byNeutral,
+      modernEngineConsumer: byModern,
+    });
+  }
+
+  const deadGlobal = rows.filter((row) => !row.consumed).map((row) => row.name);
+  const frozenOnly = rows.filter((row) => row.consumed && !row.painted).map((row) => row.name);
+  const deadInModern = [...deadGlobal, ...frozenOnly].sort();
+  /* Diagnostic only, never a state: PAINTED channels whose only consumers are
+     engine-neutral. They DO paint in Modern (shared source renders under every
+     engine); they simply have no Modern-specific skin block. Counting these as
+     dead is the over-count that produces the "658 channels paint nothing in
+     modern" figure — the honest dead-in-modern number is deadInModern. */
+  const paintedWithoutModernBlock = rows
+    .filter((row) => row.painted && !row.modernEngineConsumer)
+    .map((row) => row.name);
+
+  const baselineNames = new Set(Object.keys(baseline?.channels ?? {}));
+  const deadSet = new Set(deadInModern);
+  const newDead = deadInModern.filter((name) => !baselineNames.has(name)).sort();
+  const revived = [...baselineNames].filter((name) => !deadSet.has(name)).sort();
+
+  return {
+    rows,
+    counts: {
+      inventoried: rows.length,
+      declared: rows.filter((row) => row.declared).length,
+      emitted: rows.filter((row) => row.emitted).length,
+      consumed: rows.filter((row) => row.consumed).length,
+      painted: rows.filter((row) => row.painted).length,
+    },
+    deadGlobal: deadGlobal.sort(),
+    frozenOnly: frozenOnly.sort(),
+    deadInModern,
+    paintedWithoutModernBlock: paintedWithoutModernBlock.sort(),
+    newDead,
+    revived,
+  };
+}
+
+/** Reason attached to a dead-in-modern channel when the modern baseline is authored. */
+export function modernReasonFor(name, frozenOnlySet) {
+  if (frozenOnlySet.has(name)) {
+    return `consumed ONLY by frozen Classic/Rustic sources; paints nothing under the Modern engine. Needs a modern skin/component consumer, or a contract removal — never a silent delete. (${reasonFor(name)})`;
+  }
+  return reasonFor(name);
+}
+
 const SKIP_DIR = new Set(['node_modules', 'tests', '__tests__', 'dist']);
 function isScannableFile(path) {
   if (/\.(test|spec)\.(ts|tsx|mjs|js)$/.test(path)) return false;
@@ -236,6 +392,45 @@ function loadBaseline() {
   return JSON.parse(readFileSync(baselinePath, 'utf8'));
 }
 
+function loadModernBaseline() {
+  if (!existsSync(modernBaselinePath)) return { channels: {} };
+  return JSON.parse(readFileSync(modernBaselinePath, 'utf8'));
+}
+
+/**
+ * One pass over the source tree that produces BOTH the union sets the global
+ * check has always used and the per-scope index the modern view needs. The
+ * union is derived from the scopes, so the two views can never disagree about
+ * what "consumed" means.
+ */
+export function scanConsumers(files, readFile = (path) => readFileSync(path, 'utf8')) {
+  const vars = emptyScopeIndex();
+  const anatomy = emptyScopeIndex();
+  const files_by_scope = { 'frozen-engine': 0, 'modern-engine': 0, 'engine-neutral': 0 };
+  for (const file of files) {
+    const scope = classifyConsumerScope(file);
+    files_by_scope[scope] += 1;
+    const text = readFile(file);
+    for (const name of extractConsumedVarNames(text)) vars[scope].add(name);
+    for (const selector of extractConsumedAnatomySelectors(text)) anatomy[scope].add(selector);
+  }
+  const union = (index) =>
+    new Set([...index['frozen-engine'], ...index['modern-engine'], ...index['engine-neutral']]);
+  return {
+    vars,
+    anatomy,
+    filesByScope: files_by_scope,
+    consumedVars: union(vars),
+    consumedAnatomy: union(anatomy),
+    /** var names and anatomy selectors merged per scope, for the modern evaluator. */
+    merged: {
+      'frozen-engine': new Set([...vars['frozen-engine'], ...anatomy['frozen-engine']]),
+      'modern-engine': new Set([...vars['modern-engine'], ...anatomy['modern-engine']]),
+      'engine-neutral': new Set([...vars['engine-neutral'], ...anatomy['engine-neutral']]),
+    },
+  };
+}
+
 async function importDist(relativePath) {
   const full = join(distDir, relativePath);
   if (!existsSync(full)) {
@@ -246,12 +441,141 @@ async function importDist(relativePath) {
   return import(pathToFileURL(full).href);
 }
 
+/**
+ * The engine=modern view: report the four states, and ratchet dead-in-modern
+ * against its own decrease-only baseline. It never mutates the global baseline
+ * and never deletes a channel — a dead-in-modern channel is a REPORT that a
+ * modern consumer (or a contract removal) is owed.
+ */
+function runModernView({
+  mode,
+  quiet,
+  overrideTokens,
+  emittedNames,
+  anatomyChannels,
+  anatomyVariants,
+  varChannels,
+  scan,
+}) {
+  const anatomySelectors = anatomyChannels.map((channel) => channel.selector);
+  const channels = [...varChannels, ...anatomySelectors];
+  const declaredNames = [...overrideTokens, ...CHART_SERIES_CHANNELS, ...anatomySelectors];
+  const baseline = loadModernBaseline();
+
+  const view = evaluateModernView({
+    channels,
+    declaredNames,
+    emittedNames,
+    scopes: scan.merged,
+    baseline,
+  });
+  const frozenOnlySet = new Set(view.frozenOnly);
+
+  if (mode === 'modern-seed') {
+    const ledger = {};
+    for (const name of view.deadInModern) {
+      ledger[name] = {
+        state: frozenOnlySet.has(name) ? 'consumed-frozen-only' : 'never-consumed',
+        reason: modernReasonFor(name, frozenOnlySet),
+      };
+    }
+    const payload = {
+      _comment:
+        'Decrease-only ledger of tenant visual channels that paint NOTHING under the Modern engine. ' +
+        'A channel is dead-in-modern when it is never consumed at all, or when every consumer that ' +
+        'reads it lives under engines/classic or engines/rustic (frozen since 2026-07-25). This view ' +
+        'REPORTS: it never deletes a channel. `--modern-check` fails only on a channel that is NOT ' +
+        'listed here, so the list can shrink and never grow.',
+      view: 'engine=modern',
+      states:
+        'DECLARED = the contract exposes the dial | EMITTED = a compiler writes it | ' +
+        'CONSUMED = some source reads it in any engine | PAINTED = a modern-reachable source reads it ' +
+        '(not under engines/classic|rustic). CONSUMED and not PAINTED = dead-in-modern.',
+      generatedFrom: {
+        channelsInventoried: view.counts.inventoried,
+        declared: view.counts.declared,
+        emitted: view.counts.emitted,
+        consumed: view.counts.consumed,
+        painted: view.counts.painted,
+        neverConsumed: view.deadGlobal.length,
+        consumedFrozenOnly: view.frozenOnly.length,
+        paintedWithoutModernBlock: view.paintedWithoutModernBlock.length,
+        sourceFilesByScope: scan.filesByScope,
+        anatomyContractPresent: Boolean(anatomyVariants),
+      },
+      channels: ledger,
+    };
+    writeFileSync(modernBaselinePath, `${JSON.stringify(payload, null, 2)}\n`);
+    console.log(
+      `[tenant-channel-consumer-gate] engine=modern: seeded ${view.deadInModern.length} dead-in-modern channels to ${modernBaselinePath}`,
+    );
+    return;
+  }
+
+  if (!quiet) {
+    console.log('[tenant-channel-consumer-gate] engine=modern view');
+    console.log(`  channels inventoried    : ${view.counts.inventoried}`);
+    console.log(`  DECLARED (contract dial): ${view.counts.declared}`);
+    console.log(`  EMITTED  (compiler writes): ${view.counts.emitted}`);
+    console.log(`  CONSUMED (read anywhere): ${view.counts.consumed}`);
+    console.log(`  PAINTED  (read by a modern-reachable source): ${view.counts.painted}`);
+    console.log(`  dead in modern          : ${view.deadInModern.length}`);
+    console.log(`    never consumed at all : ${view.deadGlobal.length}`);
+    console.log(`    consumed by frozen engines only : ${view.frozenOnly.length}`);
+    console.log(`  baselined debt          : ${Object.keys(baseline.channels ?? {}).length}`);
+    console.log(`  new dead in modern      : ${view.newDead.length}`);
+    console.log(`  revived (tighten)       : ${view.revived.length}`);
+    console.log(
+      `  diagnostic: PAINTED but with no modern-engine block (engine-neutral consumers only): ${view.paintedWithoutModernBlock.length}`,
+    );
+    console.log(
+      `  source files by scope   : frozen ${scan.filesByScope['frozen-engine']} | modern ${scan.filesByScope['modern-engine']} | engine-neutral ${scan.filesByScope['engine-neutral']}`,
+    );
+    if (view.frozenOnly.length > 0) {
+      console.log('  consumed ONLY by classic/rustic (paints nothing in modern):');
+      for (const name of view.frozenOnly.slice(0, 40)) console.log(`    - ${name}`);
+      if (view.frozenOnly.length > 40) {
+        console.log(`    ... and ${view.frozenOnly.length - 40} more`);
+      }
+    }
+  }
+
+  if (mode === 'modern-check') {
+    if (view.revived.length > 0) {
+      console.log(
+        `[tenant-channel-consumer-gate] engine=modern: ${view.revived.length} baselined channel(s) now paint in modern; run --modern-seed to tighten:`,
+      );
+      for (const name of view.revived.slice(0, 20)) console.log(`  + ${name}`);
+    }
+    if (view.newDead.length > 0) {
+      console.error(
+        `[tenant-channel-consumer-gate] engine=modern FAIL: ${view.newDead.length} new channel(s) that paint nothing under Modern:`,
+      );
+      for (const name of view.newDead) {
+        console.error(`  - ${name}  (${modernReasonFor(name, frozenOnlySet)})`);
+      }
+      console.error(
+        'Wire a modern-reachable consumer (modern skin/component or engine-neutral source), or record it ' +
+          'in the modern baseline with a reason. Never delete the channel to make this pass.',
+      );
+      process.exit(1);
+    }
+    console.log('[tenant-channel-consumer-gate] engine=modern OK — no new dead-in-modern channels.');
+  }
+}
+
 async function main() {
-  const mode = process.argv.includes('--check')
-    ? 'check'
-    : process.argv.includes('--seed')
-      ? 'seed'
-      : 'report';
+  const mode = process.argv.includes('--modern-check')
+    ? 'modern-check'
+    : process.argv.includes('--modern-seed')
+      ? 'modern-seed'
+      : process.argv.includes('--modern')
+        ? 'modern'
+        : process.argv.includes('--check')
+          ? 'check'
+          : process.argv.includes('--seed')
+            ? 'seed'
+            : 'report';
   const quiet = process.argv.includes('--quiet');
 
   const contract = await importDist(
@@ -281,12 +605,21 @@ async function main() {
   ]);
   const anatomyChannels = anatomyChannelsFrom(anatomyVariants);
 
-  const consumedVars = new Set();
-  const consumedAnatomy = new Set();
-  for (const file of collectSourceFiles(srcDir)) {
-    const text = readFileSync(file, 'utf8');
-    for (const name of extractConsumedVarNames(text)) consumedVars.add(name);
-    for (const selector of extractConsumedAnatomySelectors(text)) consumedAnatomy.add(selector);
+  const scan = scanConsumers(collectSourceFiles(srcDir));
+  const { consumedVars, consumedAnatomy } = scan;
+
+  if (mode === 'modern' || mode === 'modern-check' || mode === 'modern-seed') {
+    runModernView({
+      mode,
+      quiet,
+      overrideTokens,
+      emittedNames,
+      anatomyChannels,
+      anatomyVariants,
+      varChannels,
+      scan,
+    });
+    return;
   }
 
   const baseline = loadBaseline();

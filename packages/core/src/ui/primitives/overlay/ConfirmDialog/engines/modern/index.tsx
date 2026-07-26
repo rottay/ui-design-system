@@ -24,6 +24,7 @@ import type { ConfirmDialogProps } from '../../contracts';
 import { CONFIRM_DIALOG_DEFAULTS } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
+import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 
@@ -126,6 +127,29 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
     }
   }, [open, dialogEl]);
 
+  // `showModal()` puts this dialog in the browser TOP LAYER, which paints
+  // above every normal-flow node regardless of z-index. A descendant overlay
+  // portaling to the shared `#rottay-portal-root` would land there as a
+  // SIBLING of this dialog and be occluded. Publishing a host INSIDE the
+  // dialog keeps those overlays in the same top-layer subtree; `display:
+  // contents` keeps it out of the dialog's flex layout so it adds no box.
+  const [topLayerHost, setTopLayerHost] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    if (!open || !dialogEl) {
+      setTopLayerHost(null);
+      return;
+    }
+    const host = document.createElement('div');
+    host.setAttribute('data-rottay-toplayer-host', 'true');
+    host.style.display = 'contents';
+    dialogEl.appendChild(host);
+    setTopLayerHost(host);
+    return () => {
+      host.remove();
+      setTopLayerHost(null);
+    };
+  }, [open, dialogEl]);
+
   // The dialog box spans the viewport; clicks landing on the dialog element
   // itself are backdrop clicks and dismiss via onCancel (always allowed,
   // unlike AlertDialog).
@@ -146,6 +170,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
       {open ? (
         <Portal>
           <PortalScope snapshot={portalScope}>
+            <TopLayerHostProvider host={topLayerHost}>
             <dialog
               ref={setDialogEl}
               {...layerProps}
@@ -254,6 +279,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
                 </div>
               </div>
             </dialog>
+          </TopLayerHostProvider>
           </PortalScope>
         </Portal>
       ) : null}

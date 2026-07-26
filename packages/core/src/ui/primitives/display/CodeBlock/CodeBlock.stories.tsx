@@ -174,3 +174,58 @@ export const RtlGutter: Story = {
     </div>
   ),
 };
+
+/**
+ * W10 evidence idiom: the block living inside a real docs-like surface (card
+ * on the page canvas, prose caption above), not floating in isolation. All
+ * paint resolves through --ds-* tokens so tenant/theme axes carry it.
+ */
+export const WithinDocsSurface: Story = {
+  name: '🧱 Inside a docs surface',
+  render: () => (
+    <div
+      style={{
+        maxWidth: 640,
+        padding: 'var(--ds-spacing-6, 24px)',
+        borderRadius: 'var(--ds-radius-lg)',
+        border: '1px solid var(--ds-color-border)',
+        background: 'var(--ds-color-bg-primary, var(--ds-surface-inset))',
+        display: 'grid',
+        gap: 'var(--ds-spacing-3)',
+      }}
+    >
+      <div>
+        <div
+          style={{
+            fontSize: 'var(--ds-font-size-base)',
+            fontWeight: 600,
+            color: 'var(--ds-color-text-primary)',
+            marginBottom: 'var(--ds-spacing-1)',
+          }}
+        >
+          Hire rule
+        </div>
+        <div
+          style={{
+            fontSize: 'var(--ds-font-size-sm)',
+            lineHeight: 'var(--ds-line-height-normal)',
+            color: 'var(--ds-color-text-secondary)',
+          }}
+        >
+          A candidate is hired when their pipeline stage reaches the offer step.
+          The rule lives in one pure function so every surface evaluates it the
+          same way.
+        </div>
+      </div>
+      <CodeBlock
+        code={TS_SAMPLE}
+        language="ts"
+        showLineNumbers
+        highlightLines={[7]}
+        title="candidate.ts"
+        copyLabel="Copy"
+        copiedLabel="Copied"
+      />
+    </div>
+  ),
+};

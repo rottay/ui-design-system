@@ -55,6 +55,7 @@ const FIDELITY_MATRIX = [
   {
     component: 'Toggle',
     file: 'ui/primitives/inputs/Toggle/engines/modern/index.tsx',
+    skin: 'foundation/tokens/css/runtime/engines/modern/skin/toggle.css',
     prefix: '--ds-toggle-',
     minRefs: 3,
   },
@@ -67,6 +68,7 @@ const FIDELITY_MATRIX = [
   {
     component: 'Checkbox',
     file: 'ui/primitives/inputs/Checkbox/engines/modern/index.tsx',
+    skin: 'foundation/tokens/css/runtime/engines/modern/skin/checkbox.css',
     prefix: '--ds-checkbox-',
     minRefs: 3,
   },

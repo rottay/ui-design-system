@@ -42,3 +42,25 @@ export type {
 } from '../composition/react/tokens';
 
 export { SystemCssVariablesBridge } from '../presentation/adapters/react/css-variables-bridge';
+
+export {
+  resolveVisualAuthority,
+  reportVisualAuthorityConflict,
+  resetVisualAuthorityDiagnostics,
+  appearanceMatchesArtifact,
+} from '../foundation/visual-authority';
+export type {
+  CompiledArtifactDeclaration,
+  ProviderDeclaration,
+  RuntimeVisualPayloadCensus,
+  VisualAuthorityDeclaration,
+  VisualAuthorityInput,
+  VisualAuthorityOrigin,
+  VisualAuthorityResolution,
+} from '../foundation/visual-authority';
+
+export {
+  ROTTAY_CASCADE_LAYER_ORDER,
+  PERSONALITY_CASCADE_LAYER,
+  TENANT_CASCADE_LAYER,
+} from '../foundation/cascade-layers';

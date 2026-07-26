@@ -41,7 +41,9 @@ import {
   CheckIcon as Check,
   ChevronDownIcon,
   ChevronRightIcon,
+  EyeOffIcon,
   GripVerticalIcon as GripVertical,
+  PinIcon,
   Table2Icon,
   XIcon as X,
 } from "../../../../../../graphics/icons";
@@ -55,6 +57,36 @@ import { useVirtualScroll } from "../../../../runtime/virtualization/virtual-scr
 import { useGroupedData } from "../../runtime/grouping";
 import type { EditableConfig } from "../../../../../../foundation/contracts/runtime/components/patterns/core";
 import { InlineCellEditor } from "./cell-editor";
+
+/**
+ * Concrete width applied to a pinned column that declares no explicit width.
+ *
+ * Pinned columns ALWAYS resolve to a concrete width — `columnWidths` →
+ * `ColumnDef.width` → (`resizable` ? `ColumnDef.minWidth`) →
+ * `ColumnDef.minWidth` → this documented default — and the table switches to
+ * `table-layout: fixed` whenever any column is pinned
+ * (`data-has-pinned="true"`), so the sticky offset `calc()` sums (built from
+ * the same resolved widths) match the rendered geometry exactly. Without
+ * this, a width-less pinned column under auto layout sized to content while
+ * its siblings' offsets assumed 150px, producing gaps/overlaps on horizontal
+ * scroll (remediation W7 / blocking defect D3).
+ */
+const DEFAULT_PINNED_COLUMN_WIDTH = 150;
+
+/**
+ * Writing direction at a node. The `dir` attribute chain is read first (the
+ * common RTL channel — and the only one jsdom resolves); a CSS-only
+ * `direction: rtl` with no dir attribute falls back to the computed style.
+ * Same resolution strategy as the Splitter modern engine.
+ */
+function readDirectionAt(node: Element): "ltr" | "rtl" {
+  const dirAttr = node.closest("[dir]")?.getAttribute("dir");
+  if (dirAttr === "rtl" || dirAttr === "ltr") return dirAttr;
+  if (typeof getComputedStyle === "function") {
+    return getComputedStyle(node).direction === "rtl" ? "rtl" : "ltr";
+  }
+  return "ltr";
+}
 
 /**
  * Resolves the EditableConfig for a column.
@@ -111,6 +143,7 @@ export default function ModernDataTable<T extends object>(
     selectedKeys: controlledSelectedKeys,
     onSelectionChange,
     onRowClick,
+    onRowDoubleClick,
     sorting,
     onSortChange,
     pagination,
@@ -129,6 +162,7 @@ export default function ModernDataTable<T extends object>(
     columnVisibility,
     visibleColumns: visibleColumnKeys,
     lockedColumns,
+    onVisibleColumnsChange,
     // Column resizing
     resizable,
     columnWidths,
@@ -139,6 +173,7 @@ export default function ModernDataTable<T extends object>(
     onColumnReorder,
     // Column pinning
     pinnedColumns,
+    onPinChange,
     // Density
     density: densityProp,
     // Virtual scrolling
@@ -267,6 +302,14 @@ export default function ModernDataTable<T extends object>(
       col.width ??
       (resizable ? col.minWidth : undefined),
     [columnWidths, resizable]
+  );
+  // Pinned columns never fall back to content sizing: they always carry a
+  // concrete width (see DEFAULT_PINNED_COLUMN_WIDTH) so sticky offsets and
+  // rendered geometry agree under fixed layout.
+  const resolvePinnedColumnWidth = useCallback(
+    (col: NonNullable<DataTablePatternProps<T>["columns"]>[number]) =>
+      resolveColumnWidth(col) ?? col.minWidth ?? DEFAULT_PINNED_COLUMN_WIDTH,
+    [resolveColumnWidth]
   );
 
   // --- Process columns: visibility filter -> reorder sort ---
@@ -474,8 +517,7 @@ export default function ModernDataTable<T extends object>(
     ) => {
       e.preventDefault();
       e.stopPropagation();
-      const direction =
-        getComputedStyle(e.currentTarget).direction === "rtl" ? "rtl" : "ltr";
+      const direction = readDirectionAt(e.currentTarget);
       resizeRef.current = {
         key,
         startX: e.clientX,
@@ -635,7 +677,7 @@ export default function ModernDataTable<T extends object>(
           : processedColumns.map((column) => column.key);
       const sourceIndex = currentOrder.indexOf(key);
       if (sourceIndex < 0) return;
-      const isRtl = getComputedStyle(event.currentTarget).direction === "rtl";
+      const isRtl = readDirectionAt(event.currentTarget) === "rtl";
       const arrowDelta = event.key === "ArrowLeft" ? -1 : 1;
       const logicalArrowDelta = isRtl ? -arrowDelta : arrowDelta;
 
@@ -694,11 +736,11 @@ export default function ModernDataTable<T extends object>(
       const widthTerm = (
         column: (typeof visibleColumns)[number]
       ): string => {
-        const width = resolveColumnWidth(column) ?? column.minWidth ?? 150;
+        const width = resolvePinnedColumnWidth(column);
         if (typeof width === "number") return `${width}px`;
         return /^(?:\d+(?:\.\d+)?)(?:px|rem|em|ch|vw|%)$/.test(width)
           ? width
-          : "150px";
+          : `${DEFAULT_PINNED_COLUMN_WIDTH}px`;
       };
 
       const siblingColumns =
@@ -729,10 +771,76 @@ export default function ModernDataTable<T extends object>(
     [
       actions,
       getPinSide,
-      resolveColumnWidth,
+      resolvePinnedColumnWidth,
       resolvedActionsColumnWidth,
       visibleColumns,
     ]
+  );
+
+  /** True when any visible column is pinned — drives fixed table layout (D3). */
+  const hasPinnedColumns = visibleColumns.some(
+    (column) => getPinSide(column.key, column.pin) !== undefined
+  );
+
+  // ---------------------------------------------------------------------------
+  // Column pin / visibility emitters (W7: activates the contracted
+  // `onPinChange` / `onVisibleColumnsChange` channels, previously dead)
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Effective pin state across ALL columns: controlled `pinnedColumns` wins;
+   * otherwise derived from each `ColumnDef.pin`.
+   */
+  const currentPinned = useMemo(() => {
+    if (pinnedColumns) return pinnedColumns;
+    const left: string[] = [];
+    const right: string[] = [];
+    for (const col of columns) {
+      if (col.pin === "left") left.push(col.key);
+      else if (col.pin === "right") right.push(col.key);
+    }
+    return { left, right };
+  }, [pinnedColumns, columns]);
+
+  /**
+   * Cycle a column's pin state none → left → right → none and emit the full
+   * pinned configuration. A newly pinned column is appended to its side (it
+   * becomes the outermost pinned column on that side). Pin sides are logical:
+   * `left` maps to `inset-inline-start`, so a `left` pin sticks to the
+   * physical right edge under `dir="rtl"`.
+   */
+  const handlePinToggle = useCallback(
+    (colKey: string) => {
+      if (!onPinChange) return;
+      const side = currentPinned.left.includes(colKey)
+        ? "left"
+        : currentPinned.right.includes(colKey)
+        ? "right"
+        : undefined;
+      const left = currentPinned.left.filter((key) => key !== colKey);
+      const right = currentPinned.right.filter((key) => key !== colKey);
+      if (side === undefined) left.push(colKey);
+      else if (side === "left") right.push(colKey);
+      // side === "right" → unpinned: the column is already out of both lists.
+      onPinChange({ left, right });
+    },
+    [currentPinned, onPinChange]
+  );
+
+  /**
+   * Hide a column via the header affordance and emit the new visible-keys
+   * set. Baseline: the controlled `visibleColumns` prop, or every column not
+   * flagged `visible: false` when the prop is omitted.
+   */
+  const handleHideColumn = useCallback(
+    (colKey: string) => {
+      if (!onVisibleColumnsChange) return;
+      const current =
+        visibleColumnKeys ??
+        columns.filter((col) => col.visible !== false).map((col) => col.key);
+      onVisibleColumnsChange(current.filter((key) => key !== colKey));
+    },
+    [columns, onVisibleColumnsChange, visibleColumnKeys]
   );
 
   // ---------------------------------------------------------------------------
@@ -891,6 +999,20 @@ export default function ModernDataTable<T extends object>(
       editingCell,
       savingCell,
     ]
+  );
+
+  /**
+   * Row double-click: first runs the abandon-edit pass above, then emits the
+   * contracted `onRowDoubleClick` channel (W7 — previously dead in every
+   * engine). Double-clicks on editable cells stop propagation at the cell
+   * (they enter edit mode), so this never fires alongside an edit trigger.
+   */
+  const handleRowDoubleClick = useCallback(
+    (event: React.MouseEvent, row: T, index: number) => {
+      handleEditAbandonDoubleClick(event);
+      onRowDoubleClick?.(row, index);
+    },
+    [handleEditAbandonDoubleClick, onRowDoubleClick]
   );
 
   useEffect(() => clearPendingEditableRowClick, [clearPendingEditableRowClick]);
@@ -1129,6 +1251,7 @@ export default function ModernDataTable<T extends object>(
               aria-rowcount={data.length}
               data-part="table"
               data-resizable={resizable ? "true" : "false"}
+              data-has-pinned={hasPinnedColumns ? "true" : "false"}
             >
               {/* Table header: panel surface, uppercase labels */}
               <thead
@@ -1154,6 +1277,15 @@ export default function ModernDataTable<T extends object>(
                   {visibleColumns.map((col, columnIndex) => {
                     const pinSide = getPinSide(col.key, col.pin);
                     const resolvedWidth = resolveColumnWidth(col);
+                    // Pinned columns always carry a concrete width so the
+                    // sticky offsets match the rendered geometry (D3).
+                    const cellWidth = pinSide
+                      ? resolvePinnedColumnWidth(col)
+                      : resolvedWidth;
+                    const numericCellWidth =
+                      typeof cellWidth === "number"
+                        ? cellWidth
+                        : DEFAULT_PINNED_COLUMN_WIDTH;
                     const isLeadingDataColumn =
                       columnIndex === 0 && !expandedRow;
                     const columnLabel = resolveColumnLabel(
@@ -1170,6 +1302,22 @@ export default function ModernDataTable<T extends object>(
                     const resizeColumnLabel =
                       messages?.resizeColumn?.(columnLabel) ??
                       `Resize column ${columnLabel}`;
+                    const pinColumnLabel =
+                      pinSide === "left"
+                        ? messages?.pinColumn?.(columnLabel, "right") ??
+                          `Pin column ${columnLabel} to the right`
+                        : pinSide === "right"
+                        ? messages?.unpinColumn?.(columnLabel) ??
+                          `Unpin column ${columnLabel}`
+                        : messages?.pinColumn?.(columnLabel, "left") ??
+                          `Pin column ${columnLabel} to the left`;
+                    const hideColumnLabel =
+                      messages?.hideColumn?.(columnLabel) ??
+                      `Hide column ${columnLabel}`;
+                    const canHideColumn =
+                      columnVisibility === true &&
+                      Boolean(onVisibleColumnsChange) &&
+                      !(lockedColumns ?? []).includes(col.key);
 
                     return (
                       <th
@@ -1186,7 +1334,7 @@ export default function ModernDataTable<T extends object>(
                         }
                         tabIndex={col.sortable ? 0 : undefined}
                         style={{
-                          width: resolvedWidth,
+                          width: cellWidth,
                           minWidth: col.minWidth,
                           maxWidth: col.maxWidth,
                           ...getPinnedOffsetStyle(col.key, pinSide),
@@ -1279,6 +1427,79 @@ export default function ModernDataTable<T extends object>(
                               )}
                             </span>
                           )}
+                          {/* Pin toggle: cycles none → left → right → none and
+                              emits the contracted onPinChange channel (W7). */}
+                          {onPinChange && (
+                            <Tooltip
+                              className="ds-data-table__column-tooltip ds-data-table__column-tooltip--pin"
+                              content={pinColumnLabel}
+                              placement="top"
+                              recipe="inverse"
+                              showDelay={360}
+                            >
+                              <button
+                                type="button"
+                                data-part="pin-toggle"
+                                data-pin-side={pinSide}
+                                aria-label={pinColumnLabel}
+                                aria-pressed={pinSide !== undefined}
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  handlePinToggle(col.key);
+                                }}
+                                onKeyDown={(event) => {
+                                  // Plumbing only: shield the header-cell sort
+                                  // keydown; activation is the native click.
+                                  if (
+                                    event.key === "Enter" ||
+                                    event.key === " "
+                                  ) {
+                                    event.stopPropagation();
+                                  }
+                                }}
+                              >
+                                <PinIcon size={12} strokeWidth={2} aria-hidden />
+                              </button>
+                            </Tooltip>
+                          )}
+                          {/* Hide-column affordance: emits the contracted
+                              onVisibleColumnsChange channel (W7). Locked
+                              columns never render it. */}
+                          {canHideColumn && (
+                            <Tooltip
+                              className="ds-data-table__column-tooltip ds-data-table__column-tooltip--hide"
+                              content={hideColumnLabel}
+                              placement="top"
+                              recipe="inverse"
+                              showDelay={360}
+                            >
+                              <button
+                                type="button"
+                                data-part="hide-column-button"
+                                aria-label={hideColumnLabel}
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  handleHideColumn(col.key);
+                                }}
+                                onKeyDown={(event) => {
+                                  // Plumbing only: shield the header-cell sort
+                                  // keydown; activation is the native click.
+                                  if (
+                                    event.key === "Enter" ||
+                                    event.key === " "
+                                  ) {
+                                    event.stopPropagation();
+                                  }
+                                }}
+                              >
+                                <EyeOffIcon
+                                  size={12}
+                                  strokeWidth={2}
+                                  aria-hidden
+                                />
+                              </button>
+                            </Tooltip>
+                          )}
                           {/* Drop indicator line */}
                           {dragOverKey === col.key &&
                             dragSourceKey !== col.key && (
@@ -1302,11 +1523,7 @@ export default function ModernDataTable<T extends object>(
                               aria-orientation="vertical"
                               aria-valuemin={col.minWidth ?? 50}
                               aria-valuemax={col.maxWidth ?? 1000}
-                              aria-valuenow={
-                                typeof resolvedWidth === "number"
-                                  ? resolvedWidth
-                                  : 150
-                              }
+                              aria-valuenow={numericCellWidth}
                               aria-label={resizeColumnLabel}
                               tabIndex={0}
                               onPointerDown={(e) => {
@@ -1314,27 +1531,22 @@ export default function ModernDataTable<T extends object>(
                                 handleResizeStart(
                                   e,
                                   col.key,
-                                  typeof resolvedWidth === "number"
-                                    ? resolvedWidth
-                                    : 150,
+                                  numericCellWidth,
                                   col.minWidth ?? 50,
                                   col.maxWidth ?? 1000
                                 );
                               }}
                               onKeyDown={(e) => {
                                 if (!onColumnResize) return;
-                                const currentW =
-                                  typeof resolvedWidth === "number"
-                                    ? resolvedWidth
-                                    : 150;
+                                const currentW = numericCellWidth;
                                 if (
                                   e.key === "ArrowRight" ||
                                   e.key === "ArrowLeft"
                                 ) {
                                   e.preventDefault();
                                   const isRtl =
-                                    getComputedStyle(e.currentTarget)
-                                      .direction === "rtl";
+                                    readDirectionAt(e.currentTarget) ===
+                                    "rtl";
                                   const physicalDelta =
                                     e.key === "ArrowRight" ? 10 : -10;
                                   const logicalDelta = isRtl
@@ -1462,7 +1674,9 @@ export default function ModernDataTable<T extends object>(
                                         handleRowClick(event, row, index)
                                     : undefined
                                 }
-                                onDoubleClick={handleEditAbandonDoubleClick}
+                                onDoubleClick={(event) =>
+                                  handleRowDoubleClick(event, row, index)
+                                }
                                 onKeyDown={(e) =>
                                   handleRowKeyDown(e, row, index)
                                 }
@@ -1538,6 +1752,9 @@ export default function ModernDataTable<T extends object>(
                                 {visibleColumns.map((col, columnIndex) => {
                                   const pinSide = getPinSide(col.key, col.pin);
                                   const resolvedWidth = resolveColumnWidth(col);
+                                  const cellWidth = pinSide
+                                    ? resolvePinnedColumnWidth(col)
+                                    : resolvedWidth;
                                   const isLeadingDataColumn =
                                     columnIndex === 0 && !expandedRow;
 
@@ -1607,7 +1824,7 @@ export default function ModernDataTable<T extends object>(
                                           : undefined
                                       }
                                       style={{
-                                        width: resolvedWidth,
+                                        width: cellWidth,
                                         minWidth: col.minWidth,
                                         maxWidth: col.maxWidth,
                                         ...getPinnedOffsetStyle(
@@ -1861,7 +2078,9 @@ export default function ModernDataTable<T extends object>(
                                 ? (event) => handleRowClick(event, row, index)
                                 : undefined
                             }
-                            onDoubleClick={handleEditAbandonDoubleClick}
+                            onDoubleClick={(event) =>
+                              handleRowDoubleClick(event, row, index)
+                            }
                             onKeyDown={(e) => handleRowKeyDown(e, row, index)}
                             onFocus={() => setActiveRowIndex(index)}
                             style={
@@ -1935,6 +2154,9 @@ export default function ModernDataTable<T extends object>(
                             {visibleColumns.map((col, columnIndex) => {
                               const pinSide = getPinSide(col.key, col.pin);
                               const resolvedWidth = resolveColumnWidth(col);
+                              const cellWidth = pinSide
+                                ? resolvePinnedColumnWidth(col)
+                                : resolvedWidth;
                               const isLeadingDataColumn =
                                 columnIndex === 0 && !expandedRow;
 
@@ -2001,7 +2223,7 @@ export default function ModernDataTable<T extends object>(
                                       : undefined
                                   }
                                   style={{
-                                    width: resolvedWidth,
+                                    width: cellWidth,
                                     minWidth: col.minWidth,
                                     maxWidth: col.maxWidth,
                                     ...getPinnedOffsetStyle(

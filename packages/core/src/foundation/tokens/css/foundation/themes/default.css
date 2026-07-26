@@ -160,9 +160,13 @@
 
   --ds-color-success: var(--ds-color-success-500);
   --ds-color-warning: var(--ds-color-warning-500);
-  --ds-color-error: var(--ds-color-error-500);
+  /* Dark-first surface: status colors double as text on the page ground, so the
+     semantic channel sits on the 400 step (APCA |Lc| >= 45 on --ds-color-bg-primary;
+     the 500 step measured 37.6/37.7 — W8). Fills that need the deeper stop consume
+     the ramp directly. */
+  --ds-color-error: var(--ds-color-error-400);
   --ds-color-danger: var(--ds-color-error);
-  --ds-color-info: var(--ds-color-info-500);
+  --ds-color-info: var(--ds-color-info-400);
   --ds-color-neutral-0: var(--ds-color-white);
 
   --ds-color-accent: var(--ds-color-secondary);
@@ -199,8 +203,11 @@
 
   --ds-color-text-primary: #ECECEC;
   --ds-color-text-secondary: #A0A0A5;
-  --ds-color-text-tertiary: #8A8A90;
-  --ds-color-text-muted: #6B6B72;
+  /* Ladder re-leveled (W8): muted must clear APCA |Lc| 45 on the page ground
+     (#6B6B72 measured 25.3); tertiary rises with it so the
+     secondary > tertiary > muted ordering is preserved (50.9 > 47.9 > 45.8). */
+  --ds-color-text-tertiary: #9A9AA2;
+  --ds-color-text-muted: #96969E;
   --ds-color-text-disabled: #4A4A50;
   --ds-color-text-on-primary: #0C0C0E;
   --ds-color-text: var(--ds-color-text-primary);
@@ -676,7 +683,12 @@
 
   --ds-focus-ring-width: 2px;
   --ds-focus-ring-offset: 2px;
-  --ds-focus-ring-color: var(--ds-color-primary);
+  /* Tenant-less dark default: the fallback primary (#171717) reads dark on the
+     dark canvas (~1.2:1 — fails the >=3:1 ring law above), so the default
+     palette carries a light neutral ring (16.7:1 on --ds-color-bg-primary).
+     Every first-party tenant re-declares this as var(--ds-color-primary) in
+     its own artifact block (rottay dark/light, bithire, evnto — W8). */
+  --ds-focus-ring-color: #ECECEC;
   --ds-focus-ring:
     0 0 0 var(--ds-focus-ring-offset) var(--ds-color-bg-primary),
     0 0 0 calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width)) var(--ds-focus-ring-color);
@@ -937,7 +949,7 @@
   --ds-button-font-weight: 500;
   --ds-button-line-height: 1.25;
   --ds-button-transition: var(--ds-transition-fast);
-  --ds-button-focus-ring: var(--ds-shadow-focus-ring);
+  --ds-button-focus-ring: var(--ds-focus-ring);
   --ds-button-icon-gap: 0.5rem;
   --ds-button-icon-only-padding: 0;
 

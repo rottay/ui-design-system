@@ -11,8 +11,9 @@
  * style objects own the static parts (root surface, header, gutter, code) with
  * canonical `--ds-*` tokens and logical directional properties, while the
  * family skin (`presentation/components/skin/code-block.css`) owns the
- * interactive copy-button part and the scroll region's focus ring (inline
- * styles cannot express :hover/:focus-visible). The default renderer is honest
+ * interactive copy-button part, the scroll region's focus ring and the
+ * ::selection tint (inline styles cannot express :hover/:focus-visible or
+ * selection state). The default renderer is honest
  * and dependency-free: a `pre`/`code` block with an optional line-number
  * gutter, a line-highlight band, and a selection-safe copy control.
  *
@@ -212,14 +213,25 @@ export function CodeBlock({
           padding: 'var(--ds-spacing-2) var(--ds-spacing-3)',
           borderBottom: '1px solid var(--ds-color-border)',
           minHeight: '2.25rem',
+          // Header/body hierarchy: a whisper of the source's own text ink lifts
+          // the chrome off the inset code surface without stacking a second
+          // box (mode-adaptive, hue-faithful; tenant escape hatch first).
+          background:
+            'var(--ds-code-block-header-bg, color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent))',
         }}
       >
         <span
           data-part="title"
           style={{
-            fontSize: '0.8125rem',
+            fontSize: 'var(--ds-font-size-xs)',
             color: 'var(--ds-color-text-secondary)',
-            fontFamily: title ? undefined : MONO_FONT,
+            // The label is typed by role so the two cases never blur: an
+            // explicit title (a filename) reads as code in mono; the bare
+            // language tag reads as a tracked uppercase caption in sans.
+            fontFamily: title ? MONO_FONT : undefined,
+            fontWeight: title ? 500 : 600,
+            textTransform: title ? undefined : 'uppercase',
+            letterSpacing: title ? undefined : 'var(--ds-letter-spacing-wider)',
           }}
         >
           {title ?? language ?? ''}
@@ -265,7 +277,7 @@ export function CodeBlock({
             margin: 0,
             padding: 'var(--ds-spacing-3)',
             fontFamily: MONO_FONT,
-            fontSize: '0.85rem',
+            fontSize: 'var(--ds-font-size-sm)',
             lineHeight: 'var(--ds-line-height-body)',
             tabSize: 2,
           }}

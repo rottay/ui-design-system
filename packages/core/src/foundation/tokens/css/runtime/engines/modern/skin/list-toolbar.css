@@ -19,6 +19,17 @@
  * paint precedence) is unchanged while the rules actually match. The two icon
  * rules were re-keyed class-side for uniformity. Box/Flex/Stack/Tag forward
  * caller data-part and keep their part-keyed rules.
+ *
+ * W10 NOTE (second visual pass, 2026-07): the Codex verdict flagged the
+ * toolbar as "too many nested boxes, inconsistent radii and heights". The
+ * shell is the ONLY framed surface now: the controls cluster, the saved-views
+ * strip, the mobile actions group and the mobile filter rail lost their
+ * borders/backgrounds/blur (their --ds-toolbar-* channels remain and restore
+ * the framed treatment when a tenant declares them). Inner radii derive from
+ * the shell radius through the --ds-list-toolbar-radius-* ladder below, so a
+ * tenant shape change propagates coherently instead of stranding unrelated
+ * radii one level down. Portal-rendered parts (menus, panels) live outside
+ * the root and keep their literal fallbacks, which match the ladder defaults.
  */
 
 /* Root shell -------------------------------------------------------------- */
@@ -28,6 +39,16 @@
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  /* Radius ladder (W10): controls share the tenant's small-button radius so
+     pattern chrome and sibling Buttons round identically; inner frames sit
+     between the control radius and the shell radius. Portal-rendered parts
+     cannot see these aliases and keep matching literal fallbacks. */
+  --ds-list-toolbar-radius-shell: var(--ds-toolbar-radius, var(--ds-radius-lg, 12px));
+  --ds-list-toolbar-radius-control: var(--ds-button-sm-radius, var(--ds-radius-sm, 6px));
+  --ds-list-toolbar-radius-inner: max(
+    calc(var(--ds-list-toolbar-radius-shell) - 4px),
+    var(--ds-list-toolbar-radius-control)
+  );
   background: var(
     --ds-toolbar-header-gradient,
     linear-gradient(
@@ -68,7 +89,7 @@
       --ds-toolbar-border-bottom,
       var(--ds-toolbar-border, var(--ds-color-border))
     );
-  border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg, 12px));
+  border-radius: var(--ds-list-toolbar-radius-shell);
   color: var(
     --ds-toolbar-color,
     var(--ds-material-panel-foreground, var(--ds-color-text-primary))
@@ -151,7 +172,7 @@
     );
   border-radius: var(
     --ds-toolbar-control-radius,
-    var(--ds-radius-sm, 6px)
+    var(--ds-list-toolbar-radius-control, var(--ds-radius-sm, 6px))
   );
   background: var(--ds-toolbar-control-bg, transparent);
   color: var(--ds-toolbar-control-color, var(--ds-color-text-secondary));
@@ -171,6 +192,25 @@
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__icon-button.rottay-button[data-part="trigger"]:hover {
+  background: var(
+    --ds-filter-pill-hover-bg,
+    var(
+      --ds-surface-highlight,
+      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+    )
+  );
+  color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+  border-color: var(
+    --ds-filter-pill-hover-border,
+    var(--ds-toolbar-control-border, var(--ds-color-border))
+  );
+}
+
+/* An open popover keeps its trigger visibly engaged: the Popover clones
+   aria-expanded onto the IconButton, and the trigger reads as "pressed" for
+   as long as its panel lives. */
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__icon-button.rottay-button[data-part="trigger"][aria-expanded="true"] {
   background: var(
     --ds-filter-pill-hover-bg,
     var(
@@ -304,7 +344,10 @@
   .ds-list-toolbar__filter-trigger.rottay-button[data-part="trigger"] {
   flex: 0 0 auto;
   white-space: nowrap;
-  border-radius: var(--ds-filter-pill-radius, var(--ds-radius-sm, 6px));
+  border-radius: var(
+    --ds-filter-pill-radius,
+    var(--ds-list-toolbar-radius-control, var(--ds-radius-sm, 6px))
+  );
   border: 1px solid var(--ds-filter-pill-border, transparent);
   background: var(--ds-filter-pill-bg, transparent);
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
@@ -396,7 +439,7 @@
   border: none;
   border-radius: var(
     --ds-toolbar-menu-item-radius,
-    var(--ds-radius-sm, 6px)
+    var(--ds-button-sm-radius, var(--ds-radius-sm, 6px))
   );
   background: transparent;
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
@@ -437,7 +480,7 @@
   text-align: start;
   border-radius: var(
     --ds-toolbar-menu-item-radius,
-    var(--ds-radius-sm, 6px)
+    var(--ds-button-sm-radius, var(--ds-radius-sm, 6px))
   );
   border: 1px solid var(--ds-filter-pill-border, transparent);
   background: var(--ds-filter-pill-bg, transparent);
@@ -554,7 +597,10 @@
   block-size: var(--ds-toolbar-title-icon-size, 2rem);
   border: 1px solid
     var(--ds-toolbar-icon-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
-  border-radius: var(--ds-toolbar-icon-radius, var(--ds-radius-md, 8px));
+  border-radius: var(
+    --ds-toolbar-icon-radius,
+    var(--ds-list-toolbar-radius-inner, var(--ds-radius-md, 8px))
+  );
   background: var(
     --ds-toolbar-icon-bg,
     linear-gradient(
@@ -591,9 +637,6 @@
   min-inline-size: var(--ds-toolbar-search-min-width, 11.25rem);
   max-inline-size: var(--ds-toolbar-search-max-width, 20rem);
   min-width: 0;
-  filter: drop-shadow(
-    0 3px 8px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
-  );
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern[data-has-title="false"]
@@ -613,22 +656,26 @@
   max-inline-size: none;
 }
 
+/* W10: the controls cluster is flat by default — the shell already provides
+   the framed surface, and a second bordered/blurred panel around the toggles
+   read as a box inside a box. The --ds-toolbar-controls-* channels remain:
+   a tenant that declares them restores the framed treatment. */
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__controls[data-part="controls"][data-part="controls"] {
   flex: 0 0 auto;
-  gap: var(--ds-toolbar-control-gap, var(--ds-spacing-1, 0.25rem));
-  min-height: calc(var(--ds-button-sm-height, 2rem) + 0.5rem);
-  padding: var(--ds-toolbar-controls-padding, 0.25rem);
-  border: 1px solid
-    var(--ds-toolbar-controls-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
-  border-radius: var(--ds-toolbar-controls-radius, var(--ds-radius-md, 8px));
-  background: var(
-    --ds-toolbar-controls-bg,
-    color-mix(in srgb, var(--ds-surface-card) 76%, transparent)
+  gap: var(
+    --ds-toolbar-controls-gap,
+    var(--ds-toolbar-control-gap, var(--ds-spacing-2, 0.5rem))
   );
-  box-shadow: inset 0 1px 0
-    color-mix(in srgb, var(--ds-color-bg-elevated) 78%, transparent);
-  backdrop-filter: blur(var(--ds-toolbar-controls-blur, 10px));
+  padding: var(--ds-toolbar-controls-padding, 0);
+  border: 1px solid var(--ds-toolbar-controls-border, transparent);
+  border-radius: var(
+    --ds-toolbar-controls-radius,
+    var(--ds-list-toolbar-radius-inner, var(--ds-radius-md, 8px))
+  );
+  background: var(--ds-toolbar-controls-bg, transparent);
+  box-shadow: var(--ds-toolbar-controls-shadow, none);
+  backdrop-filter: blur(var(--ds-toolbar-controls-blur, 0px));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -677,12 +724,15 @@
   overflow-x: auto;
   overflow-y: hidden;
   padding: 0.25rem 0.5rem;
-  border: 1px solid
-    var(--ds-toolbar-saved-views-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
-  border-radius: var(--ds-toolbar-saved-views-radius, var(--ds-radius-md, 8px));
+  /* W10: hairline-free by default; the inset tint alone marks the region. */
+  border: 1px solid var(--ds-toolbar-saved-views-border, transparent);
+  border-radius: var(
+    --ds-toolbar-saved-views-radius,
+    var(--ds-list-toolbar-radius-inner, var(--ds-radius-md, 8px))
+  );
   background: var(
     --ds-toolbar-saved-views-bg,
-    color-mix(in srgb, var(--ds-surface-inset) 72%, transparent)
+    color-mix(in srgb, var(--ds-surface-inset) 45%, transparent)
   );
 }
 
@@ -724,16 +774,12 @@
       --ds-toolbar-border-bottom,
       var(--ds-toolbar-border, var(--ds-color-border))
     );
+  /* W10: a single quiet inset tint replaces the gradient + inset highlight;
+     the hairline border-top is the only separator the strip needs. */
   background: var(
     --ds-filter-pill-frame-bg,
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--ds-surface-inset) 82%, transparent),
-      color-mix(in srgb, var(--ds-surface-card) 92%, transparent)
-    )
+    color-mix(in srgb, var(--ds-surface-inset) 50%, transparent)
   );
-  box-shadow: inset 0 1px 0
-    color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent);
   animation: ds-list-toolbar-filter-enter
     var(--ds-motion-disclosure, var(--ds-motion-fast))
     var(--ds-motion-ease-enter, var(--ds-motion-ease-out, ease-out)) both;
@@ -771,10 +817,11 @@
   .ds-list-toolbar__filter-chip[data-part="filter-chip"][data-part="filter-chip"] {
   border: 1px solid
     var(--ds-filter-chip-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
-  border-radius: var(--ds-filter-chip-radius, var(--ds-radius-sm, 6px));
+  border-radius: var(
+    --ds-filter-chip-radius,
+    var(--ds-list-toolbar-radius-control, var(--ds-radius-sm, 6px))
+  );
   background: var(--ds-filter-chip-bg, var(--ds-surface-card));
-  box-shadow: inset 0 1px 0
-    color-mix(in srgb, var(--ds-color-bg-elevated) 78%, transparent);
   transition:
     transform var(--ds-motion-feedback, var(--ds-motion-fast))
       var(--ds-motion-ease-enter, ease-out),
@@ -811,13 +858,38 @@
     var(--ds-toolbar-control-border, var(--ds-toolbar-border, var(--ds-color-border)));
   border-radius: var(
     --ds-toolbar-control-radius,
-    var(--ds-radius-sm, 6px)
+    var(--ds-list-toolbar-radius-control, var(--ds-radius-sm, 6px))
   );
   background: var(--ds-toolbar-control-bg, var(--ds-surface-card));
   color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
   outline: none;
-  box-shadow: inset 0 1px 0
-    color-mix(in srgb, var(--ds-color-bg-elevated) 80%, transparent);
+  transition:
+    color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-enter, ease-out),
+    background-color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-enter, ease-out),
+    border-color var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-enter, ease-out),
+    box-shadow var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-enter, ease-out),
+    transform var(--ds-motion-feedback, var(--ds-motion-fast))
+      var(--ds-motion-ease-enter, ease-out);
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__clear-all.rottay-button[data-part="trigger"]:hover {
+  background: var(
+    --ds-filter-pill-hover-bg,
+    var(
+      --ds-surface-highlight,
+      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+    )
+  );
+  color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+  border-color: var(
+    --ds-filter-pill-hover-border,
+    var(--ds-toolbar-control-border, var(--ds-color-border))
+  );
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -862,23 +934,29 @@
     gap: var(--ds-toolbar-control-gap, var(--ds-spacing-1, 0.25rem));
   }
 
+  /* W10: the compact actions group and the filter rail are flat like their
+     desktop counterparts — no second framed panel inside the shell. */
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__mobile-actions[data-part="mobile-actions"][data-part="mobile-actions"] {
-    padding: 0.1875rem;
-    border: 1px solid
-      var(--ds-toolbar-controls-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
-    border-radius: var(--ds-toolbar-controls-radius, var(--ds-radius-md, 8px));
-    background: color-mix(in srgb, var(--ds-surface-card) 78%, transparent);
+    padding: var(--ds-toolbar-mobile-actions-padding, 0);
+    border: 1px solid var(--ds-toolbar-mobile-actions-border, transparent);
+    border-radius: var(
+      --ds-toolbar-mobile-actions-radius,
+      var(--ds-list-toolbar-radius-inner, var(--ds-radius-md, 8px))
+    );
+    background: var(--ds-toolbar-mobile-actions-bg, transparent);
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__filter-rail[data-part="filter-rail"][data-part="filter-rail"] {
-    margin-inline: calc(var(--ds-spacing-1, 0.25rem) * -1);
-    padding: 0.25rem;
-    border: 1px solid
-      var(--ds-toolbar-control-border, var(--ds-toolbar-border, var(--ds-color-border)));
-    border-radius: var(--ds-toolbar-controls-radius, var(--ds-radius-md, 8px));
-    background: color-mix(in srgb, var(--ds-surface-inset) 78%, transparent);
+    margin-inline: 0;
+    padding: var(--ds-toolbar-mobile-rail-padding, 0);
+    border: 1px solid var(--ds-toolbar-mobile-rail-border, transparent);
+    border-radius: var(
+      --ds-toolbar-mobile-rail-radius,
+      var(--ds-list-toolbar-radius-inner, var(--ds-radius-md, 8px))
+    );
+    background: var(--ds-toolbar-mobile-rail-bg, transparent);
   }
 }
 

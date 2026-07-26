@@ -1,5 +1,9 @@
 import assert from 'node:assert/strict';
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, resolve } from 'node:path';
 import test from 'node:test';
+import { fileURLToPath } from 'node:url';
 
 import {
   analyzeOwnershipSource,
@@ -7,11 +11,14 @@ import {
   buildBaseline,
   evaluateBaseline,
   isPresentationUtility,
+  runOwnershipGate,
   validateAllowlist,
   validateBaseline,
 } from './pattern-surface-ownership-gate.mjs';
 
 const path = 'src/ui/patterns/example/engines/modern/index.tsx';
+const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
+const WIDGET_BOARD_FOUNDATION = 'ui/patterns/data/widget-board/engines/foundation/index.tsx';
 
 test('detects native interactive HTML, local SVG, utility classes, and primitive reconstruction', () => {
   const source = `
@@ -130,6 +137,61 @@ test('baseline is a path-stable multiset and only additional copies regress', ()
   assert.equal(growth.regressions.length, 1);
   assert.equal(growth.regressions[0].occurrence, 2);
   assert.deepEqual(validateBaseline(baseline), []);
+});
+
+/**
+ * Negative drill. A census only earns trust when it is shown to bite, so this
+ * exercises the real widget-board engine in a throwaway source root: the file
+ * as it stands must be free of native-interactive debt, and re-introducing a
+ * single productive `<button>` must turn the gate red at that exact path. The
+ * real tree is never mutated and no baseline on disk is touched.
+ */
+test('gate reddens when a new native button appears in the widget-board engine', () => {
+  const realSource = readFileSync(
+    resolve(SCRIPT_DIR, '..', 'src', WIDGET_BOARD_FOUNDATION),
+    'utf8',
+  );
+  const sourceRoot = mkdtempSync(resolve(tmpdir(), 'ds-a002-drill-'));
+  const fixture = resolve(sourceRoot, WIDGET_BOARD_FOUNDATION);
+  const baselinePath = resolve(sourceRoot, 'baseline.json');
+  const allowlistPath = resolve(sourceRoot, 'allowlist.json');
+
+  try {
+    mkdirSync(dirname(fixture), { recursive: true });
+    writeFileSync(fixture, realSource);
+
+    // Freeze the file's current debt as the ceiling, then confirm the ceiling
+    // holds and that ownership of the interactive surfaces really did move to
+    // the primitives.
+    const census = runOwnershipGate({ sourceRoot, baselinePath, allowlistPath });
+    writeFileSync(baselinePath, `${JSON.stringify(buildBaseline(census.findings), null, 2)}\n`);
+
+    const clean = runOwnershipGate({ sourceRoot, baselinePath, allowlistPath });
+    assert.equal(clean.ok, true);
+    assert.deepEqual(
+      clean.findings.filter((finding) => (
+        finding.category === 'native-interactive'
+        || finding.category === 'primitive-reconstruction'
+      )),
+      [],
+    );
+
+    // The drill: one new productive native button in the same owner.
+    writeFileSync(
+      fixture,
+      `${realSource}\nexport function DrillControl() {\n  return <button type="button">Drill</button>;\n}\n`,
+    );
+
+    const regressed = runOwnershipGate({ sourceRoot, baselinePath, allowlistPath });
+    assert.equal(regressed.ok, false);
+    assert.equal(regressed.regressions.length, 1);
+    assert.equal(regressed.regressions[0].category, 'native-interactive');
+    assert.equal(regressed.regressions[0].rule, 'native-button');
+    assert.equal(regressed.regressions[0].path, `src/${WIDGET_BOARD_FOUNDATION}`);
+    assert.equal(regressed.regressions[0].ceiling, 0);
+  } finally {
+    rmSync(sourceRoot, { recursive: true, force: true });
+  }
 });
 
 test('allowlist needs justification and can target path/category/rule', () => {

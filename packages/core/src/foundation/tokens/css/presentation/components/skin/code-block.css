@@ -9,13 +9,16 @@
  * SCOPE ROOT is `.ds-code-block[data-part='root']`.
  *
  * OWNERSHIP (single owner PER PART): this skin owns ONLY
- *   (a) the copy-button part -- wholesale: geometry, static paint (transcribed
- *       verbatim from the old inline styles) and its interaction states; and
+ *   (a) the copy-button part -- wholesale: geometry, static paint (evolved
+ *       from the old inline styles) and its interaction states (hover,
+ *       active, focus-visible and the transient copied confirmation);
  *   (b) the scroll region's focus ring (the region became keyboard-focusable
- *       in the K4-B R4 remediation; the ring is its contract).
+ *       in the K4-B R4 remediation; the ring is its contract); and
+ *   (c) the ::selection tint inside the block (state paint the inline styles
+ *       cannot express -- same tier as (a)'s interaction states).
  * Every other part (root surface, header, gutter, code) keeps its inline
- * paint in `index.tsx`. Inline styles cannot express :hover/:focus-visible,
- * which is why the interactive part lives here.
+ * paint in `index.tsx`. Inline styles cannot express :hover/:focus-visible
+ * or selection state, which is why the interactive paint lives here.
  *
  * Hover grammar: the certified ghost-button law (same as Transfer's
  * move/pagination buttons and Calendar's header chrome) --
@@ -33,8 +36,13 @@
   background: transparent;
   color: var(--ds-color-text-secondary);
   font: inherit;
-  font-size: 0.8125rem;
+  font-size: var(--ds-font-size-xs);
+  font-weight: 500;
   cursor: pointer;
+  transition:
+    background var(--ds-code-block-motion-duration, var(--ds-duration-fast, 120ms)) ease,
+    color var(--ds-code-block-motion-duration, var(--ds-duration-fast, 120ms)) ease,
+    border-color var(--ds-code-block-motion-duration, var(--ds-duration-fast, 120ms)) ease;
 }
 
 .ds-code-block[data-part='root'] [data-part='copy-button']:not(:disabled):hover {
@@ -46,6 +54,32 @@
   background: var(
     --ds-code-block-copy-bg-pressed,
     color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)
+  );
+}
+
+/* Copied confirmation: the control flashes the success grammar (success ink,
+   success-tinted frame) for the reset window, then settles back. The ink is
+   pulled 30% toward the source's own primary text ink so it keeps reading on
+   light surfaces where a raw status-500 green would wash out (same law as the
+   gutter-ink mix in the engine). */
+.ds-code-block[data-part='root'] [data-part='copy-button'][data-copied='true'],
+.ds-code-block[data-part='root'] [data-part='copy-button'][data-copied='true']:not(:disabled):hover {
+  color: var(
+    --ds-code-block-copied-ink,
+    color-mix(in srgb, var(--ds-color-success) 70%, var(--ds-color-text-primary))
+  );
+  border-color: var(
+    --ds-code-block-copied-frame,
+    color-mix(in srgb, var(--ds-color-success) 40%, transparent)
+  );
+}
+
+/* Selection inside the block paints with the primary tint instead of the UA
+   default -- state paint the inline styles cannot express. */
+.ds-code-block[data-part='root'] ::selection {
+  background: var(
+    --ds-code-block-selection-bg,
+    color-mix(in srgb, var(--ds-color-primary) 28%, transparent)
   );
 }
 

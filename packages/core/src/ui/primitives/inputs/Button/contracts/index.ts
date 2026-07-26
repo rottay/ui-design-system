@@ -58,6 +58,7 @@ import type { ReactNode, MouseEvent, ButtonHTMLAttributes } from 'react';
 import type { BaseComponentProps, Variant, LoadableProps, DisableableProps } from '../../../../../foundation/contracts/kernel/common';
 import type { EngineAwareProps } from '../../../../../foundation/contracts/runtime/engine';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
+import type { ButtonRecipeSizeValue } from '@/infrastructure/runtime/foundation/recipes/contracts/families';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -452,6 +453,9 @@ export const BUTTON_DEFAULTS = {
  * Each size variant maps to height, padding, and font-size CSS variables
  * that are defined in the tenant's theme.
  *
+ * The key domain is the recipe's authored size axis, so the map and the
+ * public recipe manifest can never state different sizes.
+ *
  * @constant
  * @type {Record<string, { height: string; padding: string; fontSize: string }>}
  *
@@ -464,7 +468,10 @@ export const BUTTON_DEFAULTS = {
  * }
  * ```
  */
-export const SIZE_MAP = {
+export const SIZE_MAP: Record<
+  ButtonRecipeSizeValue,
+  { height: string; padding: string; fontSize: string }
+> = {
   xs: { height: 'var(--ds-button-xs-height)', padding: 'var(--ds-button-xs-padding)', fontSize: 'var(--ds-button-xs-font-size)' },
   sm: { height: 'var(--ds-button-sm-height)', padding: 'var(--ds-button-sm-padding)', fontSize: 'var(--ds-button-sm-font-size)' },
   md: { height: 'var(--ds-button-md-height)', padding: 'var(--ds-button-md-padding)', fontSize: 'var(--ds-button-md-font-size)' },

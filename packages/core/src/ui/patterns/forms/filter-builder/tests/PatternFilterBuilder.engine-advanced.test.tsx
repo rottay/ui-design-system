@@ -83,7 +83,7 @@ describe('PatternFilterBuilder advanced engine coverage', () => {
       if (engine === 'classic') {
         expect(document.querySelector('.ant-spin')).not.toBeNull();
       } else if (engine === 'modern') {
-        expect(document.querySelector('.loading-spinner')).not.toBeNull();
+        expect(document.querySelector('.rottay-spinner--modern')).not.toBeNull();
       } else {
         expect(screen.getByText('Loading...')).toBeInTheDocument();
       }

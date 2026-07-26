@@ -46,6 +46,15 @@ export {
 export { LOCALE_CONFIGS } from '@/foundation/i18n/runtime/catalog/configuration';
 export { ar, en, es, fr, pt } from '@/foundation/i18n/runtime/catalog/translations';
 export { toSupportedLocale } from '@/foundation/i18n/runtime/resolution/locale';
+export {
+  resolveDocumentLocaleAttributes,
+  resolveLocaleDirection,
+} from '@/foundation/i18n/runtime/resolution/document';
+export type { DocumentLocaleAttributes } from '@/foundation/i18n/runtime/resolution/document';
+export {
+  DEFAULT_FALLBACK_LOCALE,
+  DEFAULT_LOCALE,
+} from '@/foundation/i18n/kernel/contracts';
 export type {
   I18nContextValue,
   LocaleConfig,
@@ -53,6 +62,9 @@ export type {
   SupportedLocale,
   TextDirection,
   TranslateFunction,
+  TranslateOrFunction,
   TranslationDictionary,
   TranslationNamespace,
+  TranslationResolution,
+  TranslationTier,
 } from '@/foundation/i18n/kernel/contracts';

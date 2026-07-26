@@ -298,6 +298,16 @@
   table-layout: fixed;
 }
 
+/* Pinned columns always resolve to a concrete width (declared, or the
+   documented 150px default stamped inline by the engine). Fixed layout makes
+   the rendered geometry match the sticky-offset calc() sums exactly, so
+   width-less pinned columns cannot drift into gaps or overlaps on horizontal
+   scroll (remediation W7 / blocking defect D3). */
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="table"][data-has-pinned="true"] {
+  table-layout: fixed;
+}
+
 .ds-pattern-data-table.ds-engine-modern
   [data-part="table-head"][data-sticky="true"] {
   position: sticky;
@@ -468,11 +478,41 @@
   transform: scale(0.96);
 }
 
+/* Pin-toggle / hide-column affordances (W7) are native <button> elements
+   (W8 ownership-gate remediation: the gate rejects clickable non-interactive
+   hosts). The skin resets the UA button chrome so the parts stay skin-owned
+   and read like the neighboring drag-grip affordance. */
+.ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"],
+.ds-pattern-data-table.ds-engine-modern [data-part="hide-column-button"] {
+  appearance: none;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  line-height: 1;
+  cursor: pointer;
+  opacity: var(--ds-table-drag-grip-opacity, 0.58);
+  transition: opacity var(--ds-motion-feedback, var(--ds-motion-fast))
+    var(--ds-motion-ease-move, ease-out);
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"]:hover,
+.ds-pattern-data-table.ds-engine-modern [data-part="hide-column-button"]:hover,
+.ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"]:focus-visible,
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="hide-column-button"]:focus-visible {
+  opacity: 1;
+}
+
 .ds-pattern-data-table.ds-engine-modern [data-part="header-label"] {
   flex: 1;
   overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: inherit;
+  text-overflow: ellipsis;  text-align: inherit;
   white-space: nowrap;
 }
 

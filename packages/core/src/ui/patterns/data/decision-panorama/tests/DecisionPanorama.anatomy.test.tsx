@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-import { DecisionPanoramaEngine } from '../engines/shared';
+import { DecisionPanoramaEngine } from '../engines/foundation';
 
 describe('DecisionPanorama anatomy', () => {
   it('keeps context, identity, decision and actions inside one labelled instrument', () => {

@@ -8,8 +8,9 @@
  * Visual density is NOT a layout-view preference: table card/list view
  * vocabulary stays in application state; this contract governs coordinated
  * geometry (heights, padding, gap, type scale) only. The 44px coarse-pointer
- * touch floor is enforced in the skins with `min-*-size` and is deliberately
- * outside this scale.
+ * touch floor is deliberately outside this scale and never shrinks with it: it
+ * is enforced by the shared unlayered rule in `facade/entrypoints/base.css`
+ * plus per-component `min-*-size` floors where the role sits on an indicator.
  */
 'use client';
 
@@ -106,11 +107,13 @@ export interface RootDensityProviderProps {
  * Tenant-root density mount: publishes the semantic posture to JS consumers
  * and stamps it on the document element beside the tenant attributes.
  *
- * The root attribute is state metadata, not another scale multiplier:
- * `foundation/base/density.css` deliberately applies its local factor only to
- * non-root boundaries. Global visual density is already compiler-owned through
- * `--ds-density-mode-factor`; nested boundaries use `DensityScope` and apply
- * their own relative factor.
+ * The root attribute is not a second multiplier. `foundation/base/density.css`
+ * routes it to `--ds-density-mode-factor`, the same semantic channel the
+ * Appearance and BrandTheme compilers write, and applies the separate local
+ * factor only to non-root boundaries. Two writers of one channel resolve by
+ * cascade to a single value, so a compiled tenant posture and this attribute
+ * agree instead of composing; nested boundaries use `DensityScope`, whose
+ * factor stays relative to whatever the global plane resolved to.
  */
 export function RootDensityProvider({
   posture,

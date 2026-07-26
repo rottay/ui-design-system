@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type { FeatureWorkspaceFrameProps } from '../../contracts';
-import { FeatureWorkspaceFrameEngine } from '../shared';
+import { FeatureWorkspaceFrameEngine } from '../foundation';
 
 export default function ModernFeatureWorkspaceFrame(
   props: FeatureWorkspaceFrameProps,

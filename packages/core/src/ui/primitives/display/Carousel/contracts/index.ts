@@ -71,6 +71,22 @@ export interface CarouselProps extends BaseComponentProps, EngineAwareProps, Wit
   vertical?: boolean;
   dotsClass?: string;
   fade?: boolean;
+  /**
+   * Accessible name for the carousel landmark. When supplied (or
+   * `aria-labelledby`), the modern engine promotes the root to a named
+   * `role="region"` + `aria-roledescription="carousel"` landmark. Omit it for
+   * ordinary carousels: an unnamed carousel is NOT a landmark, so multiple
+   * instances on one page cannot collide (axe landmark-unique; W8
+   * remediation, mirror of the ScrollArea K3-C law). The name MUST be
+   * meaningful and unique within the page when supplied.
+   */
+  'aria-label'?: string;
+  /**
+   * ID of the element that names the carousel landmark. Same landmark
+   * promotion rule as `aria-label`; takes precedence in the accessible name
+   * computation when both are supplied.
+   */
+  'aria-labelledby'?: string;
 }
 
 export interface CarouselRef {

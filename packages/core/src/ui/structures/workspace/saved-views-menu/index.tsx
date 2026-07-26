@@ -24,7 +24,6 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 
 import {
   BookmarkIcon as Bookmark,
@@ -39,6 +38,8 @@ import {
 } from '../../../../graphics/icons';
 
 import { Box, Flex, Text } from '../../../primitives';
+import { Portal } from '../../../primitives/runtime/overlay/portal';
+import { PortalScope, usePortalScope } from '../../../primitives/runtime/overlay/portal-scope';
 
 /** Discriminator for saved view kinds. */
 export type SavedViewsMenuEntryKind = 'system' | 'persona' | 'custom';
@@ -193,6 +194,16 @@ export function SavedViewsMenu({
   const [shareState, setShareState] = useState<'idle' | 'copied'>('idle');
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const shareTimerRef = useRef<number | null>(null);
+  // The panel leaves the trigger's DOM ancestry when it portals, so the
+  // tenant/locale scope has to be re-stamped around it. `usePortalScope`
+  // needs the anchor as state (a ref would not re-render when it lands), so
+  // the trigger publishes to both.
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const setTriggerRef = useCallback((node: HTMLButtonElement | null) => {
+    triggerRef.current = node;
+    setAnchorEl(node);
+  }, []);
+  const portalScope = usePortalScope(anchorEl);
 
   const systemViews = useMemo(() => views.filter((view) => getViewKind(view) === 'system'), [views]);
   const personaViews = useMemo(() => views.filter((view) => getViewKind(view) === 'persona'), [views]);
@@ -327,7 +338,7 @@ export function SavedViewsMenu({
         data-part="trigger"
         data-open={isOpen}
         className="ds-structure ds-saved-views-menu"
-        ref={triggerRef}
+        ref={setTriggerRef}
         onClick={() => setIsOpen((prev) => !prev)}
         title={activeView ? `Views: ${activeView.label}` : 'Views'}
         aria-label={activeView ? `Views: ${activeView.label}` : 'Views'}
@@ -359,8 +370,14 @@ export function SavedViewsMenu({
         </Flex>
       </Box>
 
-      {isOpen && typeof document !== 'undefined' && createPortal(
-        <>
+      {/* Panel + backdrop go through the shared overlay substrate: the target
+          resolves as explicit container > active top-layer host > shared
+          `#rottay-portal-root`, so the menu stays visible when the workspace
+          is itself inside a `showModal()` dialog. `PortalScope` carries the
+          tenant/theme/direction lineage across the portal boundary. */}
+      {isOpen && (
+        <Portal>
+          <PortalScope snapshot={portalScope}>
           <Box data-part="backdrop" onClick={() => setIsOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 1990 }} />
 
           <Box
@@ -631,8 +648,8 @@ export function SavedViewsMenu({
               )}
             </Box>
           </Box>
-        </>,
-        document.body,
+          </PortalScope>
+        </Portal>
       )}
     </Box>
   );

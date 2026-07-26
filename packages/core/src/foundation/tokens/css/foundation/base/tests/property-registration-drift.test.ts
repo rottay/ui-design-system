@@ -15,6 +15,11 @@
  * registered initial-value; a var()-chain default (color-primary) is accounted
  * for by existence only, because an @property initial-value cannot hold a var().
  *
+ * A fourth source, presentation/components/skin/widget-board.css, is parsed for
+ * the widget-board spatial family. Those channels have no at-rest declaration at
+ * all: the registration itself supplies their at-rest value, so they are
+ * accounted for against their consumption site instead of a shipped literal.
+ *
  * No React render, no DOM: source parsing exactly like density-scale-parity and
  * the neutral-derivation contract test.
  */
@@ -38,6 +43,12 @@ const TRANSITIONS_CSS = readFileSync(
 );
 const PREMIUM_CSS = readFileSync(
   fromRoot("src/foundation/tokens/css/foundation/animations/premium.css"),
+  "utf8",
+);
+const WIDGET_BOARD_CSS = readFileSync(
+  fromRoot(
+    "src/foundation/tokens/css/presentation/components/skin/widget-board.css",
+  ),
   "utf8",
 );
 
@@ -106,6 +117,36 @@ const EXPECTED: Record<string, Registration> = {
     inherits: false,
     initialValue: "0",
   },
+  "--ds-widget-board-layout-x": {
+    syntax: "<length>",
+    inherits: false,
+    initialValue: "0px",
+  },
+  "--ds-widget-board-layout-y": {
+    syntax: "<length>",
+    inherits: false,
+    initialValue: "0px",
+  },
+  "--ds-widget-board-hover-lift": {
+    syntax: "<length>",
+    inherits: false,
+    initialValue: "0px",
+  },
+  "--ds-widget-board-entry-offset": {
+    syntax: "<length>",
+    inherits: false,
+    initialValue: "0px",
+  },
+  "--ds-widget-board-entry-scale": {
+    syntax: "<number>",
+    inherits: false,
+    initialValue: "1",
+  },
+  "--ds-widget-board-interaction-scale": {
+    syntax: "<number>",
+    inherits: false,
+    initialValue: "1",
+  },
   "--ds-color-primary": {
     syntax: "<color>",
     inherits: true,
@@ -118,6 +159,8 @@ const EXPECTED: Record<string, Registration> = {
  * source file that owns that literal. color-primary is excluded: its default is
  * a var() chain, checked by existence only. elevation-lift is excluded: it is a
  * forward token with no at-rest declaration yet (owned by the elevation lane).
+ * The widget-board family is excluded for the same reason and guarded instead by
+ * the identity/consumption assertions below.
  */
 const LITERAL_DEFAULTS: Record<string, string> = {
   "--ds-effect-intensity": PREMIUM_CSS,
@@ -134,6 +177,28 @@ const DEFERRED_UNREGISTERED = Array.from(
   { length: 10 },
   (_, i) => `--ds-chart-series-${i + 1}`,
 );
+
+/**
+ * The widget-board spatial channels, mapped to the at-rest identity of the
+ * transform operation each one feeds.
+ *
+ * All six are composed into ONE `transform` on `.ds-widget-board__cell` and none
+ * is declared at rest: the skin writes them only in state blocks (:hover,
+ * [data-dragging], [data-resizing]) and in the entry keyframes, while the FLIP
+ * runtime writes layout-x/y inline during rearrangement. Registration is
+ * therefore load-bearing rather than decorative — unregistered and unset, each
+ * `var()` in that chain is invalid at computed-value time and drops the entire
+ * transform declaration. The registered initial-value IS the at-rest value, so
+ * it must be the identity for its operation: 0px for a translate, 1 for a scale.
+ */
+const WIDGET_BOARD_IDENTITIES: Record<string, string> = {
+  "--ds-widget-board-layout-x": "0px",
+  "--ds-widget-board-layout-y": "0px",
+  "--ds-widget-board-hover-lift": "0px",
+  "--ds-widget-board-entry-offset": "0px",
+  "--ds-widget-board-entry-scale": "1",
+  "--ds-widget-board-interaction-scale": "1",
+};
 
 const registered = parseRegistrations(PROPERTIES_CSS);
 
@@ -182,6 +247,38 @@ describe("@property accountability", () => {
     "%s stays unregistered (var() fallback chain must keep resolving)",
     (name) => {
       expect(registered[name]).toBeUndefined();
+    },
+  );
+});
+
+describe("widget-board channels: registration is load-bearing", () => {
+  it.each(Object.keys(WIDGET_BOARD_IDENTITIES))(
+    "%s registers its transform identity and does not inherit",
+    (name) => {
+      expect(registered[name].initialValue).toBe(WIDGET_BOARD_IDENTITIES[name]);
+      // Geometry must not cascade: a lifted or dragged cell must move as one
+      // object, not re-offset the widget content nested inside it.
+      expect(registered[name].inherits).toBe(false);
+    },
+  );
+
+  it.each(Object.keys(WIDGET_BOARD_IDENTITIES))(
+    "%s is consumed with no var() fallback, so the registration owns its at-rest value",
+    (name) => {
+      // A fallback would make the registration optional. Its absence is exactly
+      // why an unregistered channel would invalidate the whole transform, and
+      // why the initial-value above must stay the identity.
+      expect(WIDGET_BOARD_CSS).toMatch(new RegExp(`var\\(\\s*${name}\\s*\\)`));
+      expect(WIDGET_BOARD_CSS).not.toMatch(new RegExp(`var\\(\\s*${name}\\s*,`));
+    },
+  );
+
+  it.each(Object.keys(WIDGET_BOARD_IDENTITIES))(
+    "%s stays undeclared in the named at-rest default sources",
+    (name) => {
+      for (const css of [DEFAULT_CSS, TRANSITIONS_CSS, PREMIUM_CSS]) {
+        expect(readDecl(css, name)).toBeNull();
+      }
     },
   );
 });

@@ -69,7 +69,7 @@ import { Portal } from "../../../../runtime/overlay/portal";
 import {
   readDsPortalVariables,
   type DsPortalVariableStyle,
-} from "../../../../runtime/overlay/portal-theme";
+} from "../../../../runtime/overlay/foundation/portal-theme";
 import { useOverlayLayer } from "../../../../runtime/overlay/layer-stack";
 import {
   OverlayPortalBoundary,

@@ -695,7 +695,31 @@
 /* Layer 6: Responsive overrides */
 @import "../../foundation/responsive/index.css" layer(rottay-responsive);
 
-/* Accessibility: touch targets (unlayered) */
+/* Accessibility: touch targets (unlayered)
+ *
+ * This is the ONE shared coarse-pointer floor. It stays unlayered on purpose:
+ * a layered rule would sit in `rottay-tokens`, below `rottay-engines`, and any
+ * skin declaring its own `min-block-size` would silently defeat it.
+ *
+ * The selector list is tag-based plus ARIA-role-based. Roles are the only hook
+ * that generalizes: DS controls are div/button compositions with per-render
+ * hashed classes, but they all publish a role, so `[role="combobox"]` reaches
+ * every Select/Autocomplete trigger without one per-component edit.
+ *
+ * Deliberately EXCLUDED, because a visual-size floor on them would redesign the
+ * control rather than enlarge its hit area — they own a per-component floor on
+ * their root row instead (see the Checkbox modern skin):
+ *   [role="checkbox"] / [role="radio"] / [role="switch"] — the role sits on the
+ *     small indicator, so 44px would inflate the glyph, not the row;
+ *   [role="slider"] — the role sits on the thumb, and a 44px thumb distorts the
+ *     track;
+ *   [role="option"] / [role="row"] — virtualized lists compute offsets from a
+ *     configured row height, which a CSS floor would desynchronize.
+ *
+ * The floor value must stay a PHYSICAL pixel length. The DS root font-size is
+ * fluid and resolves to 15px at narrow widths, so a rem-based floor erodes to
+ * 41.25px exactly where it matters (measured; see Checkbox.coarse-floor.test).
+ */
 @media (pointer: coarse) {
   button,
   [role="button"],
@@ -704,6 +728,12 @@
   input[type="checkbox"],
   input[type="radio"],
   select,
+  [role="combobox"],
+  [role="tab"],
+  [role="menuitem"],
+  [role="menuitemcheckbox"],
+  [role="menuitemradio"],
+  summary,
   .ant-btn,
   .ant-select-selector,
   .ant-tabs-tab,

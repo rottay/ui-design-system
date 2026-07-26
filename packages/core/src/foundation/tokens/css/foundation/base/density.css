@@ -26,10 +26,13 @@
  */
 
 /*
- * Root `data-density` is the observable semantic tenant posture already
- * represented visually by --ds-density-mode-factor. Only non-root boundaries
- * contribute a LOCAL multiplier; otherwise the global preference is applied
- * twice (mode factor × local factor).
+ * Root `data-density` is the observable semantic tenant posture. Only non-root
+ * boundaries contribute a LOCAL multiplier; a root local factor would apply the
+ * same global preference twice (mode factor × local factor), because :root
+ * already composes both channels into --ds-density-effective-scale.
+ *
+ * The root posture therefore writes the SEMANTIC channel it represents rather
+ * than a second multiplier — see the `:root` block after the local projection.
  */
 [data-density='compact']:not(:root) {
   --ds-density-local-factor: 0.85;
@@ -136,4 +139,43 @@
   --ds-spacing-component-margin: var(--ds-density-spacing-component-margin, var(--ds-spacing-4));
   --ds-spacing-component-margin-sm: var(--ds-density-spacing-component-margin-sm, var(--ds-spacing-2));
   --ds-spacing-component-margin-lg: var(--ds-density-spacing-component-margin-lg, var(--ds-spacing-8));
+}
+
+/*
+ * Root posture projection.
+ *
+ * A root `data-density` boundary writes the SEMANTIC tenant channel
+ * (--ds-density-mode-factor), never a second local multiplier. Three
+ * consequences, all deliberate:
+ *
+ * 1. It paints. :root declares --ds-density-global-effective-scale, the
+ *    effective scale and the whole public spacing ramp on this same element,
+ *    and every one of those declarations references the mode factor from the
+ *    same element — so redefining the factor here recomputes the root ramp
+ *    without redeclaring a single spacing step.
+ * 2. Double application is structurally impossible, not merely avoided. The DB
+ *    Appearance compiler resolves the identical factor from the identical
+ *    `appearance.general.density` field that feeds RootDensityProvider, and
+ *    publishes it as an inline custom property on this same element. Two
+ *    writers of ONE channel resolve by cascade to one value; they can never
+ *    multiply. The old `:not(:root)` local-factor route would have produced
+ *    scale × 0.85 × 0.85 whenever both were present.
+ * 3. Nested boundaries stay relative. The local projection above recomputes
+ *    the global channel from the inherited scale × mode factor, so a nested
+ *    `comfortable` surface still inherits a compact tenant posture instead of
+ *    erasing it.
+ *
+ * `comfortable` is the identity factor and is intentionally NOT declared here.
+ * RootDensityProvider stamps `comfortable` as its default whenever no semantic
+ * preference exists, so declaring `1` at this specificity would silently erase
+ * a static BrandTheme posture compiled into `html[data-tenant='…']`. Declaring
+ * nothing lets the lower-specificity authority stand, which is what "no
+ * semantic adjustment" means.
+ */
+:root[data-density='compact'] {
+  --ds-density-mode-factor: 0.85;
+}
+
+:root[data-density='spacious'] {
+  --ds-density-mode-factor: 1.15;
 }

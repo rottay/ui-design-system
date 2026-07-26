@@ -35,11 +35,24 @@
  *
  * EDGE: separation is carried by a structural hairline
  * (`--ds-action-dock-edge-color`, defaulting to the semantic border token) —
- * the elevation shadow alone cannot do it: `--ds-shadow-navbar` casts
- * DOWNWARD (correct for top navbars, invisible under a bottom dock), and
- * shadow + background collapse entirely under forced colors. The hairline is
- * logical, tokenized, and forced-colors mode inherits it (the UA forces the
- * border color to CanvasText), so no forced-colors retouch exists here.
+ * the elevation shadow alone cannot do it: shadow + background collapse
+ * entirely under forced colors. The hairline is logical, tokenized, and
+ * forced-colors mode inherits it (the UA forces the border color to
+ * CanvasText), so no forced-colors retouch exists here.
+ *
+ * SURFACE (W10 second pass): the dock reads as a frosted chrome sheet, not a
+ * flat fill — the background defaults to a translucent `bg-primary` mix and a
+ * tokenized backdrop blur (`--ds-glass-blur`, which collapses to 0 under the
+ * reduced-effects intensity channel; forced-colors mode strips both through
+ * UA forcing, where the hairline still separates). A neutral inset highlight
+ * on the content-facing edge (`--ds-action-dock-edge-highlight`) reinforces
+ * the hairline the way the cockpit-header surfaces do. Elevation is
+ * PLACEMENT-AWARE: a top dock keeps the downward `--ds-shadow-navbar`
+ * (correct for a top bar), while a bottom dock defaults to an UPWARD ambient
+ * shadow composed from `--ds-color-shadow` — the downward navbar shadow is
+ * invisible beneath a bottom bar and left the dock visually unanchored.
+ * Theme/density channel switches transition on the fast motion token and are
+ * silenced under prefers-reduced-motion.
  *
  * RTL: every rule is logical (inset-inline, padding-inline, margin-inline,
  * gap), so the row, the safe areas, and the priority grammar all mirror.
@@ -50,7 +63,16 @@
   width: 100%;
   padding-inline: var(--ds-action-dock-padding-inline, var(--ds-spacing-4, 1rem));
   z-index: var(--ds-action-dock-z-index, var(--ds-z-index-fixed, 1200));
-  background: var(--ds-color-bg-primary);
+  background: var(
+    --ds-action-dock-bg,
+    color-mix(in srgb, var(--ds-color-bg-primary) 90%, transparent)
+  );
+  backdrop-filter: var(--ds-action-dock-backdrop-filter, blur(var(--ds-glass-blur, 8px)));
+  -webkit-backdrop-filter: var(--ds-action-dock-backdrop-filter, blur(var(--ds-glass-blur, 8px)));
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .rottay-action-dock[data-part='root'][data-mode='fixed'] {
@@ -70,7 +92,16 @@
     var(--ds-action-dock-safe-area-bottom, var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px)))
   );
   border-block-start: 1px solid var(--ds-action-dock-edge-color, var(--ds-color-border-primary, transparent));
-  box-shadow: var(--ds-action-dock-shadow-bottom, var(--ds-shadow-navbar));
+  box-shadow:
+    inset 0 1px 0 var(
+      --ds-action-dock-edge-highlight,
+      color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent)
+    ),
+    var(
+      --ds-action-dock-shadow-bottom,
+      0 -2px 4px color-mix(in srgb, var(--ds-color-shadow) 30%, transparent),
+      0 -12px 28px -12px color-mix(in srgb, var(--ds-color-shadow) 60%, transparent)
+    );
 }
 
 .rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed'] {
@@ -93,7 +124,12 @@
   );
   padding-block-end: var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem));
   border-block-end: 1px solid var(--ds-action-dock-edge-color, var(--ds-color-border-primary, transparent));
-  box-shadow: var(--ds-action-dock-shadow-top, var(--ds-shadow-navbar));
+  box-shadow:
+    inset 0 -1px 0 var(
+      --ds-action-dock-edge-highlight,
+      color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent)
+    ),
+    var(--ds-action-dock-shadow-top, var(--ds-shadow-navbar));
 }
 
 .rottay-action-dock__actions {
@@ -129,5 +165,13 @@
   .rottay-action-dock__actions > :where(button, a),
   .rottay-action-dock__overflow-trigger {
     min-block-size: max(44px, var(--ds-size-touch-target, 44px));
+  }
+}
+
+/* Reduced motion: the surface transition (theme/density channel switches)
+ * is silenced; layout and the coarse floor are unaffected. */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-action-dock[data-part='root'][data-placement][data-mode] {
+    transition: none;
   }
 }

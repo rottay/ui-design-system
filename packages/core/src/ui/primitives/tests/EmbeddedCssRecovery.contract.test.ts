@@ -11,13 +11,23 @@ import { TOAST_KEYFRAMES } from '../feedback/Toast/runtime/animation';
 const srcRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const readSource = (path: string) => readFileSync(resolve(srcRoot, path), 'utf8');
 const readSkin = (name: string) => readSource(`foundation/tokens/css/presentation/components/skin/${name}`);
+/**
+ * The engine-scoped owner. A later lane re-homed the modern half of two
+ * recovered families out of the shared `presentation/components/skin` bucket
+ * and into `runtime/engines/modern/skin`, where the rules are scoped to the
+ * engine's own class pair plus `data-part`. The recovered payload did not
+ * shrink — it moved — so this contract follows it instead of asserting that
+ * the shared file still owns paint it deliberately gave up.
+ */
+const readEngineSkin = (name: string) =>
+  readSource(`foundation/tokens/css/runtime/engines/modern/skin/${name}`);
 
 const SKIN_HASHES = {
-  'data-table-interactions.css': 'f3dc2338e22744d3c4052e16cd786a3760deaf8f615ca85a21c3277f8c7028fe',
+  'data-table-interactions.css': '607ed897c5f551cee44ade05cfed795e7fcf5966b2f7a2484409088942c4d615',
   'form-placeholders.css': 'c26b0d68812a0b668f5992cfa868ce8ee1c9b9047c7e7cbfe91b110d82ab2a8f',
-  'navigation-static.css': '6dc59cfd7c470f8648d930aa1f4f0260e7746cb4155a327f0ed396029f00613a',
+  'navigation-static.css': 'a35d19035d60d802a89771759fe3a584deea6e982ac4fba08bfd6a52f5884d12',
   'primitive-motion.css': '6b88cc713c2552a668c6c056bbf8ba1dae05d44a827078a0e942b74a7d847e7a',
-  'scroll-area.css': '060d4fab16df50659d75c29d41943e8348b25a3d7b249d3ad13d1f43b40714c1',
+  'scroll-area.css': '70fbd93d168e046b039a0e68995fbc98f94e8d9e032ca1c1ee7ef20a06692e93',
   'toast-animation-keyframes.css': 'a18d974060652fda28e40aa14d46173de1f766ac067cec4a689b43124c33c62a',
 } as const;
 
@@ -120,6 +130,17 @@ const SKINS = {
   formPlaceholders: readSkin('form-placeholders.css'),
 };
 
+/** New owners of the relocated modern payload. */
+const RELOCATED = {
+  scrollAreaModern: readEngineSkin('scroll-area.css'),
+  tabsModern: readEngineSkin('tabs.css'),
+  foundationKeyframes: readSource('foundation/tokens/css/foundation/animations/keyframes.css'),
+};
+
+/** Engine-scoped selector prefixes of the two families that moved. */
+const MODERN_SCROLL_AREA = ".rottay-scroll-area.rottay-scroll-area--modern[data-part='root']";
+const MODERN_TABS = ".rottay-tabs--modern[data-part='root']";
+
 describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
   it('pins all six audited stylesheets byte-for-byte', () => {
     for (const [name, expectedHash] of Object.entries(SKIN_HASHES)) {
@@ -128,7 +149,11 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
     }
   });
 
-  it('recovers all 88 classified declarations with the original family floors', () => {
+  it('accounts for every classified declaration across the audited and relocated owners', () => {
+    // The audited six. `dataTable` grew when its paint was tokenized (one
+    // literal became a token plus its fallback); `scrollArea` and `navigation`
+    // shrank by exactly the modern rules that moved to the engine-scoped
+    // owners asserted below. Nothing was dropped.
     expect({
       dataTable: paintCount(SKINS.dataTable),
       primitiveMotion: paintCount(SKINS.primitiveMotion),
@@ -137,13 +162,16 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       navigation: paintCount(SKINS.navigation),
       formPlaceholders: paintCount(SKINS.formPlaceholders),
     }).toEqual({
-      dataTable: 24,
+      dataTable: 32,
       primitiveMotion: 8,
       toast: 20,
-      scrollArea: 25,
-      navigation: 8,
+      scrollArea: 18,
+      navigation: 3,
       formPlaceholders: 2,
     });
+
+    // The relocated modern ScrollArea payload, in its new single owner.
+    expect(paintCount(RELOCATED.scrollAreaModern)).toBe(11);
   });
 
   it('pins every DataTable interaction selector and animation body', () => {
@@ -164,71 +192,76 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
         '.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:hover .ds-resize-handle__bar'
       )
     ).toEqual({
-      width: '3px !important',
-      background: 'var(--ds-color-primary) !important',
+      width: 'var(--ds-table-resize-bar-width-active, 0.1875rem)',
+      height: 'var(--ds-table-resize-bar-height-active, 74%)',
+      background: 'var(--ds-table-resize-bg-hover, var(--ds-color-primary))',
+      'box-shadow': '0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 9%, transparent)',
     });
     expect(
       ruleContract(SKINS.dataTable, '.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:focus-visible')
     ).toEqual({
       outline: '2px solid var(--ds-color-primary)',
       'outline-offset': '-2px',
-      'border-radius': '2px',
+      'border-radius': 'var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))',
     });
     expect(
       ruleContract(SKINS.dataTable, '.ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key]:hover')
     ).toEqual({
-      'background-color': 'color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)',
+      'background-color':
+        'var(--ds-table-header-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent))',
     });
     expect(
       ruleContract(
         SKINS.dataTable,
-        ".ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key][data-sortable='true']:focus-visible"
+        '.ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key][data-sortable="true"]:focus-visible'
       )
     ).toEqual({
       outline: '2px solid var(--ds-color-primary)',
       'outline-offset': '-2px',
-      'border-radius': '2px',
+      'border-radius': 'var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))',
     });
     expect(
       ruleContract(SKINS.dataTable, '.ds-engine-modern:where(.ds-pattern-data-table) tr[data-row-index]:focus-visible')
     ).toEqual({
       outline: 'none',
       'box-shadow': 'inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 48%, transparent)',
-      'background-color': 'color-mix(in srgb, var(--ds-color-primary) 6%, transparent) !important',
+      'background-color':
+        'var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 6%, transparent))',
     });
     expect(
-      ruleContract(SKINS.dataTable, ".ds-engine-modern:where(.ds-pattern-data-table) td[data-editable='true']")
+      ruleContract(SKINS.dataTable, '.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]')
     ).toEqual({
       cursor: 'text',
       transition:
-        'background-color var(--ds-motion-fast) ease, box-shadow var(--ds-motion-fast) ease, transform var(--ds-motion-fast) ease',
+        'background-color var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-move, ease), box-shadow var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-move, ease), transform var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-move, ease)',
     });
     expect(
       ruleContracts(
         SKINS.dataTable,
-        ".ds-engine-modern:where(.ds-pattern-data-table) td[data-editable='true']:hover::after"
+        '.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]:hover::after'
       )
     ).toHaveLength(0);
     expect(
-      ruleContract(SKINS.dataTable, ".ds-engine-modern:where(.ds-pattern-data-table) td[data-editable='true']:hover")
+      ruleContract(SKINS.dataTable, '.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]:hover')
     ).toEqual({
       background: 'color-mix(in srgb, var(--ds-color-primary) 4%, transparent)',
       'box-shadow': 'inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 16%, transparent)',
     });
     expect(
-      ruleContract(SKINS.dataTable, ".ds-engine-modern:where(.ds-pattern-data-table) td[data-editing='true']")
+      ruleContract(SKINS.dataTable, '.ds-engine-modern:where(.ds-pattern-data-table) td[data-editing="true"]')
     ).toEqual({
-      overflow: 'visible !important',
-      padding: '4px 6px !important',
-      background: 'color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)) !important',
+      overflow: 'visible',
+      padding: '4px 6px',
+      background: 'color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))',
       'box-shadow':
         'inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 30%, transparent), 0 8px 18px color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
-      animation: 'ds-inline-edit-enter var(--ds-motion-normal) var(--ds-motion-ease-out)',
+      animation:
+        'ds-inline-edit-enter var(--ds-motion-reveal, var(--ds-motion-normal)) var(--ds-motion-ease-enter, var(--ds-motion-ease-out))',
     });
     expect(
       ruleContract(
         SKINS.dataTable,
-        ".ds-engine-modern:where(.ds-pattern-data-table) td[data-cell-dirty='true']::before"
+        '.ds-engine-modern:where(.ds-pattern-data-table) td[data-cell-dirty="true"]::before'
       )
     ).toEqual({
       content: '""',
@@ -307,20 +340,33 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       display: 'none',
       content: "''",
     });
-    expect(ruleContract(SKINS.navigation, '[data-tabs-id]::-webkit-scrollbar')).toEqual({
+
+    // The Tabs half moved to the engine-scoped owner, which re-expressed the
+    // former `[data-tabs-id]` instance hook as the engine class pair plus
+    // `data-part`. Same two rules, anchored to a scope class instead of a
+    // generated per-mount identifier.
+    expect(
+      ruleContract(RELOCATED.tabsModern, `${MODERN_TABS} [data-part='tab-list']::-webkit-scrollbar`)
+    ).toEqual({
       display: 'none',
     });
-    expect(ruleContract(SKINS.navigation, "[data-tabs-id] [role='tab']:focus-visible")).toEqual({
-      outline: 'var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color) !important',
-      'outline-offset': 'calc(-1 * var(--ds-focus-ring-offset, 2px)) !important',
-      'border-radius': 'var(--ds-radius-sm)',
+    expect(
+      ruleContract(RELOCATED.tabsModern, `${MODERN_TABS} [data-part='tab-button']:focus-visible`)
+    ).toEqual({
+      outline: 'var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color)',
+      'outline-offset': 'calc(-1 * var(--ds-focus-ring-offset, 2px))',
     });
-    expectKeyframeContracts(SKINS.navigation, {
+
+    // `ds-tabs-fade-in` now lives in the foundation keyframes owner and is
+    // consumed by the rustic engine; modern reveals its panel with
+    // `ds-tabs-panel-reveal`, defined in the same engine skin that uses it.
+    expectKeyframeContracts(RELOCATED.foundationKeyframes, {
       'ds-tabs-fade-in': {
         from: { opacity: '0', transform: 'translateY(2px)' },
         to: { opacity: '1', transform: 'translateY(0)' },
       },
     });
+    expect(RELOCATED.tabsModern).toContain('@keyframes ds-tabs-panel-reveal');
   });
 
   it('pins every Toast transition frame body independently of the public export', () => {
@@ -395,29 +441,47 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       height: 'var(--ds-scroll-area-scrollbar-size)',
     });
 
-    expect(ruleContract(SKINS.scrollArea, '.rottay-scroll-area-modern::-webkit-scrollbar-track')).toEqual({
-      background: 'var(--color-base-200, oklch(0.93 0.01 240))',
+    // The modern track/thumb/hover/hide quartet moved to the engine-scoped
+    // owner and stopped reading DaisyUI's private `--color-base-*` vocabulary
+    // directly: it now resolves canonical `--ds-scroll-area-*` tokens with the
+    // same visual fallback. The shared file keeps the size enum plus the
+    // classic and rustic paint asserted below.
+    const modernThumb =
+      'var(--ds-scroll-area-thumb-bg, color-mix(in srgb, var(--ds-color-text-primary, oklch(0.27 0.01 240)) 28%, transparent))';
+
+    expect(
+      ruleContract(RELOCATED.scrollAreaModern, `${MODERN_SCROLL_AREA}::-webkit-scrollbar-track`)
+    ).toEqual({
+      background: 'var(--ds-scroll-area-track-bg, transparent)',
       'border-radius': 'var(--ds-scroll-area-scrollbar-radius)',
-    });
-    expect(ruleContract(SKINS.scrollArea, '.rottay-scroll-area-modern::-webkit-scrollbar-thumb')).toEqual({
-      background: 'oklch(var(--color-base-content, 0.27 0.01 240) / 0.3)',
-      'border-radius': 'var(--ds-scroll-area-scrollbar-radius)',
-    });
-    expect(ruleContract(SKINS.scrollArea, '.rottay-scroll-area-modern::-webkit-scrollbar-thumb:hover')).toEqual({
-      background: 'oklch(var(--color-base-content, 0.27 0.01 240) / 0.5)',
     });
     expect(
-      ruleContract(SKINS.scrollArea, ".rottay-scroll-area-modern[data-hide-scrollbar='true']::-webkit-scrollbar-thumb")
+      ruleContract(RELOCATED.scrollAreaModern, `${MODERN_SCROLL_AREA}::-webkit-scrollbar-thumb`)
+    ).toEqual({
+      background: modernThumb,
+      'border-radius': 'var(--ds-scroll-area-scrollbar-radius)',
+    });
+    expect(
+      ruleContract(RELOCATED.scrollAreaModern, `${MODERN_SCROLL_AREA}::-webkit-scrollbar-thumb:hover`)
+    ).toEqual({
+      background:
+        'var(--ds-scroll-area-thumb-bg-hover, color-mix(in srgb, var(--ds-color-text-primary, oklch(0.27 0.01 240)) 48%, transparent))',
+    });
+    expect(
+      ruleContract(
+        RELOCATED.scrollAreaModern,
+        `${MODERN_SCROLL_AREA}[data-hide-scrollbar='true']::-webkit-scrollbar-thumb`
+      )
     ).toEqual({
       background: 'transparent',
     });
     expect(
       ruleContract(
-        SKINS.scrollArea,
-        ".rottay-scroll-area-modern[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb"
+        RELOCATED.scrollAreaModern,
+        `${MODERN_SCROLL_AREA}[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb`
       )
     ).toEqual({
-      background: 'oklch(var(--color-base-content, 0.27 0.01 240) / 0.3)',
+      background: modernThumb,
     });
 
     expect(ruleContract(SKINS.scrollArea, '.rottay-scroll-area-classic::-webkit-scrollbar-track')).toEqual({
@@ -503,8 +567,26 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       expect(SKINS.scrollArea).toMatch(block);
     }
 
-    for (const engine of ['modern', 'classic', 'rustic']) {
+    for (const engine of ['classic', 'rustic']) {
       expect(SKINS.scrollArea).toContain(`.rottay-scroll-area-${engine}[data-hide-scrollbar='true']`);
+    }
+    expect(RELOCATED.scrollAreaModern).toContain(
+      `${MODERN_SCROLL_AREA}[data-hide-scrollbar='true']`
+    );
+
+    // The modern owner carries its own copy of the closed size enum, so the
+    // relocated rules keep resolving the same three sizes.
+    for (const [size, width, radius] of [
+      ['thin', '4px', '2px'],
+      ['normal', '8px', '4px'],
+      ['wide', '12px', '6px'],
+    ] as const) {
+      expect(
+        ruleContract(RELOCATED.scrollAreaModern, `${MODERN_SCROLL_AREA}[data-scrollbar-size='${size}']`)
+      ).toEqual({
+        '--ds-scroll-area-scrollbar-size': width,
+        '--ds-scroll-area-scrollbar-radius': radius,
+      });
     }
   });
 });
@@ -558,36 +640,75 @@ describe('WO-SKIN-06 embedded CSS recovery — producer and hook contract', () =
   });
 
   it('keeps every extracted animation name connected to its component', () => {
+    const SKIN_DIR = 'foundation/tokens/css/presentation/components/skin';
+
+    // Each row is [stylesheet that defines the frames, the engine that plays
+    // them, the names]. A keyframe may be defined by a shared owner, but it
+    // must always stay reachable from a real consumer.
     const families = [
       [
-        'data-table-interactions.css',
+        `${SKIN_DIR}/data-table-interactions.css`,
         'ui/patterns/data/data-table/engines/modern/index.tsx',
         ['ds-inline-edit-enter', 'ds-data-table-shimmer'],
       ],
       [
-        'data-table-interactions.css',
+        `${SKIN_DIR}/data-table-interactions.css`,
         'ui/patterns/data/data-table/engines/rustic/index.tsx',
         ['ds-spin', 'ds-bulk-slide-down'],
       ],
-      ['primitive-motion.css', 'ui/primitives/display/Timeline/engines/rustic/index.tsx', ['rottay-timeline-pulse']],
-      ['primitive-motion.css', 'ui/primitives/display/Tree/engines/modern/index.tsx', ['rottay-drop-indicator']],
       [
-        'primitive-motion.css',
+        `${SKIN_DIR}/primitive-motion.css`,
+        'ui/primitives/display/Timeline/engines/rustic/index.tsx',
+        ['rottay-timeline-pulse'],
+      ],
+      // Tree's modern paint moved to its engine skin, so the skin — not the
+      // .tsx — is now what plays the frame. The component connection is
+      // re-proved below through the part the skin targets.
+      [
+        `${SKIN_DIR}/primitive-motion.css`,
+        'foundation/tokens/css/runtime/engines/modern/skin/tree.css',
+        ['rottay-drop-indicator'],
+      ],
+      [
+        `${SKIN_DIR}/primitive-motion.css`,
         'ui/primitives/display/Tree/engines/rustic/index.tsx',
         ['rottay-tree-spin', 'rottay-tree-drop-line-in'],
       ],
-      ['navigation-static.css', 'ui/primitives/navigation/Tabs/engines/modern/index.tsx', ['ds-tabs-fade-in']],
+      // Relocated: the frames are foundation-owned and the surviving consumer
+      // is the rustic engine.
+      [
+        'foundation/tokens/css/foundation/animations/keyframes.css',
+        'ui/primitives/navigation/Tabs/engines/rustic/index.tsx',
+        ['ds-tabs-fade-in'],
+      ],
+      // Modern's replacement frame is defined and consumed in one owner.
+      [
+        'foundation/tokens/css/runtime/engines/modern/skin/tabs.css',
+        'ui/primitives/navigation/Tabs/engines/modern/index.tsx',
+        ['ds-tabs-panel-reveal'],
+      ],
     ] as const;
 
-    for (const [skinName, sourcePath, names] of families) {
-      const skin = readSkin(skinName);
+    for (const [stylesheetPath, sourcePath, names] of families) {
+      const stylesheet = readSource(stylesheetPath);
       const source = readSource(sourcePath);
       for (const name of names) {
-        expect(skin).toContain(`@keyframes ${name}`);
-        const skinConsumer = skin.replace(`@keyframes ${name}`, '');
-        expect(source.includes(name) || skinConsumer.includes(name)).toBe(true);
+        expect(stylesheet, stylesheetPath).toContain(`@keyframes ${name}`);
+        const styleSheetConsumer = stylesheet.replace(`@keyframes ${name}`, '');
+        expect(source.includes(name) || styleSheetConsumer.includes(name), name).toBe(true);
       }
     }
+
+    // Close the one chain that runs through a skin: the rule that plays
+    // `rottay-drop-indicator` targets `[data-part='drop-indicator']`, and the
+    // modern Tree engine is what renders that part. If either end moves, the
+    // animation is orphaned and this fails.
+    expect(readSource('foundation/tokens/css/runtime/engines/modern/skin/tree.css')).toMatch(
+      /\[data-part='drop-indicator'\][^{]*\{[^}]*animation:\s*rottay-drop-indicator/
+    );
+    expect(readSource('ui/primitives/display/Tree/engines/modern/index.tsx')).toContain(
+      'data-part="drop-indicator"'
+    );
   });
 
   it('retains the legacy Toast injector as a document-mutation-free no-op', () => {

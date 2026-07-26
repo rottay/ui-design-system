@@ -4,25 +4,35 @@
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all.
  *
- * THIS ENGINE'S DaisyUI CLASSES ARE LOAD-BEARING AND MUST NOT BE REMOVED (P2a).
- * It is the only component in this family that renders real DaisyUI structural
- * classes (`modal modal-open`, `modal-backdrop`, `modal-box`, `modal-action`), and
- * TWO of its shipping paint channels have no inline footprint at all — they are
- * painted entirely by `runtime/personality.css` (layer `rottay-personality`):
+ * SINGLE PAINT OWNER. The engine no longer renders `modal modal-open`,
+ * `modal-backdrop`, `modal-box` or `modal-action`, so every channel those four
+ * classes carried is declared here. Two of them previously had no inline
+ * footprint at all and were painted from outside the component, by
+ * `runtime/personality.css` (layer `rottay-personality`, which sorts after
+ * `rottay-engines` and so also outranked `modern/theme.css`):
  *
  *   .modal-backdrop { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
  *   .modal-box      { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
  *
- * Personality's layer sorts AFTER `rottay-engines`, so it also outranks
- * `modern/theme.css`'s own `[data-tenant] .modal-box { box-shadow: … }`. This file
- * therefore declares NEITHER `box-shadow` NOR `backdrop-filter` on those two parts:
- * an unlayered rule here would outrank personality and silently replace a shipping
- * blur and shadow. They stay externally sourced, exactly as they ship.
+ * Both now resolve through the DS modal tokens the `theme.css` bridge already
+ * used for them. `--ds-modal-overlay-backdrop` is `blur(4px)`, so the blur is
+ * unchanged. `--ds-modal-shadow` replaces personality's hard-coded literal:
+ * the elevation now follows the tenant's own modal shadow instead of a fixed
+ * one no white-label could reach, which is the point of retiring the class.
  *
- * `background` and `border-radius` DO move here. They were inline before (inline
- * outranks every layer) and are unlayered now (which also outranks every layer), so
- * the winner's value is unchanged — they still mask `theme.css`'s `.modal-box`
- * background/radius declarations, as they always did.
+ * The dialog element's OWN scrim is deliberately not transcribed.
+ * `.modal-open` painted it `oklch(0% 0 0/0.4)`, but `[data-part='backdrop']` is
+ * a `position: fixed; inset: 0` child that paints `--ds-overlay-bg` above its
+ * ancestor's background across the whole viewport — the Daisy scrim was fully
+ * occluded and contributed no pixel. What DOES need transcribing is
+ * `.modal`'s `background-color: transparent` and `color: inherit`, which
+ * suppressed the UA `dialog` defaults (`Canvas` / `CanvasText`), and its
+ * `&::backdrop { display: none }`, which hides the native top-layer backdrop
+ * `showModal()` generates.
+ *
+ * `background` and `border-radius` on the surface were inline before (inline
+ * outranks every layer) and are unlayered now (which also outranks every
+ * layer), so the winner's value is unchanged.
  *
  * PORTAL: this engine does NOT portal (neither does rustic) — the tree renders
  * in-tree as a `position: fixed` sibling. The scope class still anchors every rule,
@@ -33,13 +43,50 @@
  * today (P3); adopting either would hand this component an animation it has never had.
  */
 
+/* ---- dialog element: the retired `.modal` resets. Geometry (fixed, inset 0,
+        viewport-sized, flex-centred) stays inline in the engine. ---- */
+.rottay-alert-dialog.rottay-alert-dialog--modern[data-part='root'] {
+  background-color: transparent;
+  color: inherit;
+  overflow: clip;
+  overscroll-behavior: contain;
+}
+
+/* `showModal()` generates a native `::backdrop`; the component paints its own
+   scrim part instead, so the UA one stays hidden. */
+.rottay-alert-dialog.rottay-alert-dialog--modern[data-part='root']::backdrop {
+  display: none;
+}
+
 .rottay-alert-dialog--modern[data-part='root'] > [data-part='backdrop'] {
   background: var(--ds-overlay-bg);
+  /* Took over from `runtime/personality.css`, which reached this element only
+     through the retired `.modal-backdrop` class. */
+  backdrop-filter: var(--ds-modal-overlay-backdrop);
+  -webkit-backdrop-filter: var(--ds-modal-overlay-backdrop);
+  /* `.modal-backdrop` kept the scrim behind the surface and its own text
+     invisible; both are transcribed rather than left to DOM order. */
+  z-index: -1;
+  color: transparent;
 }
 
 .rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
   background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
   border-radius: var(--ds-modal-radius, var(--ds-radius-lg));
+  /* ---- retired `.modal-box`: the scroll contract and the elevation ---- */
+  width: var(--ds-alert-dialog-width, 91.6667%);
+  max-height: 100vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  box-shadow: var(--ds-modal-shadow);
+}
+
+/* ---- retired `.modal-action`: end-aligned action row ---- */
+.rottay-alert-dialog--modern[data-part='root'] [data-part='footer'] {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--ds-modal-footer-padding);
+  gap: var(--ds-modal-footer-gap);
 }
 
 .rottay-alert-dialog--modern[data-part='root'] [data-part='icon'] {

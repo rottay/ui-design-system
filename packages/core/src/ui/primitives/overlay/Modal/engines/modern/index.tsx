@@ -19,10 +19,11 @@
 
 'use client';
 
-import React, { useEffect, useCallback, useRef, useId } from 'react';
+import React, { useEffect, useState, useCallback, useRef, useId } from 'react';
 import type { ModalProps } from '../../contracts';
 import { MODAL_DEFAULTS, SIZE_MAP, RADIUS_MAP, PADDING_MAP } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
+import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
@@ -161,6 +162,20 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
+  // The <dialog> mounts inside <Portal>, which renders null until its own
+  // mount effect resolves a container, so the element does not exist on the
+  // commit where `open` first becomes true. A plain ref cannot express that:
+  // it would still be null when an `[open]`-keyed effect runs, and nothing
+  // afterwards would retrigger it. A callback ref turns "the element
+  // attached" into a render-visible signal that the effects below can depend
+  // on. `dialogRef` stays as the imperative handle for callbacks that read
+  // the element outside render (usePresence's onExitComplete).
+  const [dialogEl, setDialogEl] = useState<HTMLDialogElement | null>(null);
+  const attachDialog = useCallback((node: HTMLDialogElement | null) => {
+    dialogRef.current = node;
+    setDialogEl(node);
+  }, []);
+
   // Presence: `open` flipping false keeps the dialog mounted and open in the
   // native top layer until the PANEL's own exit animation (ref'd below)
   // finishes; only then does the dialog actually leave the top layer (see
@@ -200,17 +215,52 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     [closeOnEscape, open, onClose],
   );
 
-  // Open the native <dialog> when `open` becomes true. Closing it is
-  // deliberately NOT symmetric here -- see the usePresence onExitComplete
-  // above, which calls dialog.close() only after the CSS exit animation
-  // finishes, not synchronously with `open` flipping false.
+  // Open the native <dialog> when `open` becomes true. Keyed on `dialogEl`,
+  // not on `open` alone: the element arrives a commit after `open` flips, so
+  // an `[open]`-only effect would run against a null ref and never fire again
+  // -- the dialog would stay out of the top layer for its whole lifetime.
+  // The `!dialog.open` guard keeps promotion single: showModal() on an
+  // already-open dialog throws InvalidStateError, and re-opening during the
+  // exit animation must not re-promote a dialog that never left.
+  // Closing is deliberately NOT symmetric here -- see the usePresence
+  // onExitComplete above, which calls dialog.close() only after the CSS exit
+  // animation finishes, not synchronously with `open` flipping false.
   useEffect(() => {
-    const dialog = dialogRef.current;
+    const dialog = dialogEl;
     if (!dialog) return;
     if (open && !dialog.open) {
       dialog.showModal();
     }
-  }, [open]);
+  }, [open, dialogEl]);
+
+  // `showModal()` promotes this dialog into the browser TOP LAYER, which
+  // paints above every normal-flow node regardless of z-index. A descendant
+  // overlay portaling to the shared `#rottay-portal-root` would land there as
+  // a SIBLING of this dialog and be occluded. Publishing a host INSIDE the
+  // dialog keeps those overlays in the same top-layer subtree; `display:
+  // contents` keeps the host out of the dialog's flex layout so it adds no
+  // box. Descendants resolve it through React context, so no component needs
+  // to plumb an anchor.
+  const [topLayerHost, setTopLayerHost] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    // Gated on `shouldRender` as well as `open`: usePresence keeps the dialog
+    // mounted through the exit animation, so the host must be withdrawn as
+    // soon as the modal stops being the active top layer.
+    const dialog = dialogEl;
+    if (!open || !shouldRender || !dialog) {
+      setTopLayerHost(null);
+      return;
+    }
+    const host = document.createElement('div');
+    host.setAttribute('data-rottay-toplayer-host', 'true');
+    host.style.display = 'contents';
+    dialog.appendChild(host);
+    setTopLayerHost(host);
+    return () => {
+      host.remove();
+      setTopLayerHost(null);
+    };
+  }, [open, shouldRender, dialogEl]);
 
   useEffect(() => {
     if (open && closeOnEscape) {
@@ -274,8 +324,11 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
 
   return (
     <Portal>
+      {/* Inside <Portal> on purpose: the dialog's own portal must NOT resolve
+          into a host that lives inside itself. Descendants still see it. */}
+      <TopLayerHostProvider host={topLayerHost}>
       <dialog
-        ref={dialogRef}
+        ref={attachDialog}
         id={id}
         data-testid={dataTestId}
         data-part="root"
@@ -438,6 +491,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
           )}
         </div>
       </dialog>
+      </TopLayerHostProvider>
     </Portal>
   );
 }

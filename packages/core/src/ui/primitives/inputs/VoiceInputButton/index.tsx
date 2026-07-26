@@ -38,7 +38,7 @@ import {
 } from '../../../../graphics/icons';
 
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import { useVoiceInput } from '../../../../infrastructure/runtime/application/automation/voice';
+import { useVoiceInput } from '../../../../infrastructure/runtime/application/automation/voice/composition/react/input';
 
 export interface VoiceInputButtonProps {
   /** BCP 47 language tag, e.g. 'en-US', 'es-AR'. Default: 'en-US'. */

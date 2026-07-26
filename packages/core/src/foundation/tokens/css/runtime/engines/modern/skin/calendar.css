@@ -50,10 +50,44 @@
  * SPECIFICITY (P-48): the today-ring's `border` shorthand clears the tenant's
  * unlayered (0,3,1) `*` border floor at (0,7,0). Values transcribed
  * verbatim from `engines/modern.tsx`.
+ *
+ * W10 (second visual pass, remediation-modern): the K4-B engine left the
+ * panel flat -- borderless root, `rounded-lg` utilities (fixed 8px, deaf to
+ * `--ds-radius-scale`), 13px regular chrome throughout (no typographic
+ * hierarchy), no header separator, no focus ring, no press state, and the
+ * state transition deferred ("motion re-ownership is a Pass-2 skin
+ * decision"). This pass resolves all six, staying inside the paint-owner
+ * rules: (1) the root gains a hairline border + tenant-scaled
+ * `--ds-radius-lg`, so the calendar reads as ONE panel instead of a flat
+ * stack of buttons (fewer perceived boxes, not more); (2) cell radii ride
+ * `--ds-radius-md` (same step as the header chrome -- one geometry law); (3)
+ * the viewed-period toggle becomes the panel title (semibold, one size step
+ * up) while weekday headers drop to an uppercase micro-label; (4) a hairline
+ * under the header separates chrome from grid; (5) every interactive part
+ * gets the canonical `--ds-focus-ring` on `:focus-visible` (plus a Highlight
+ * outline under forced colors, where box-shadows are dropped); (6) press
+ * states ride the WO-ENG-04 active channel -- background only, NO transform:
+ * the RTL glyph flip already owns `transform` on nav buttons, and scaling a
+ * grid cell jitters its neighbours; (7) the skin (unlayered, single paint
+ * owner) now owns the state transition on the repainted channels, guarded by
+ * prefers-reduced-motion.
  */
 
 .rottay-calendar.rottay-calendar--modern[data-part='root'] {
   background: var(--ds-surface-card);
+  /* W10: the panel edge. A hairline + tenant-scaled radius make the calendar
+     read as ONE surface on canvases where surface-card == page bg (the old
+     borderless card dissolved into the page). */
+  border: 1px solid var(--ds-calendar-border, var(--ds-color-border-subtle));
+  border-radius: var(--ds-calendar-radius, var(--ds-radius-lg));
+}
+
+/* ---- W10: header hairline -- separates the navigation chrome from the day
+        grid so the panel reads as header/body, not a flat stack of buttons.
+        The engine's `mb-4` keeps the air below the line. ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] {
+  padding-block-end: 10px;
+  border-block-end: 1px solid var(--ds-calendar-header-border, var(--ds-color-border-subtle));
 }
 
 /* ---- header: the four nav arrows and the two mode toggles share one resting
@@ -73,6 +107,19 @@
   color: var(--ds-color-text-primary);
   border-radius: var(--ds-radius-md);
   border: none;
+  /* W10: the skin owns motion on the repainted channels only (the engine
+     carries no transition utility -- a utilities-layer transition would sort
+     above this unlayered rule and could not be governed). */
+  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out), box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+/* ---- W10: typographic hierarchy -- the viewed period ("July 2026") is the
+        panel's title: one size step and a semibold above the 13px chrome
+        baseline, so the header stops reading as six identical ghost
+        buttons. The year toggle and nav glyphs stay quiet. ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-mode='month'] {
+  font-size: var(--ds-font-size-sm, 14px);
+  font-weight: var(--ds-font-weight-semibold, 600);
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true'] {
   background: var(--ds-color-primary);
@@ -110,16 +157,57 @@
         excluded so selected > rest stays discernible. Measured on the same
         surfaces as Transfer: bithire ≈ #EBF1F7 over #F4F8FB (ΔRGB 9/7/4),
         TMM ≈ #E7F0ED over #FBF6EC (ΔRGB 20/6/1); glyph ink stays
-        `--ds-color-text-primary` (>= 12:1 on both hover surfaces). No
-        transition: the paint is instant (see the cell note below). ---- */
+        `--ds-color-text-primary` (>= 12:1 on both hover surfaces). The
+        transition lives in the shared geometry rule above (W10). ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:disabled):hover,
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:disabled):hover {
   background: var(--ds-calendar-nav-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
 }
 
-/* ---- weekday column headers ---- */
+/* ---- W10: keyboard focus -- every interactive part carries the canonical
+        double ring (WO-ENG-04: bg gap + tenant ring colour, >= 3:1 on any
+        fill). Under forced colors box-shadows are dropped, so the
+        forced-colors block below re-maps this to a Highlight outline. ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:focus-visible,
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:focus-visible,
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:focus-visible {
+  box-shadow: var(--ds-calendar-focus-ring, var(--ds-focus-ring));
+}
+
+/* ---- W10: press feedback -- the WO-ENG-04 active channel, one step deeper
+        than hover. Background only, NO transform scale: the RTL glyph flip
+        already owns `transform` on the nav buttons, and scaling a grid cell
+        jitters its neighbours. Same gates as hover (the active mode toggle
+        excluded). ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:disabled):active,
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:disabled):active {
+  background: var(--ds-calendar-nav-bg-active, var(--ds-color-interactive-bg-active, var(--ds-button-ghost-bg-hover)));
+}
+
+/* ---- weekday column headers (W10: micro-label grammar -- a size step below
+        the day numbers, uppercase with tracking, so the grid reads
+        label/number instead of two competing text rows; ink stays the
+        contrast-governed secondary channel). ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > div > [data-part='weekday-header'] {
+  font-size: var(--ds-font-size-xs, 12px);
+  font-weight: var(--ds-font-weight-medium, 500);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--ds-color-text-secondary);
+}
+
+/* ---- W10: cell geometry + motion are skin-owned. The radius moved off the
+        Tailwind `rounded-lg` utility (fixed 8px, deaf to --ds-radius-scale)
+        onto the tenant-scaled step -- the SAME step as the header chrome, one
+        geometry law. Tabular numerals keep the day columns aligned. The K4-B
+        "instant paint" deferral is resolved here: the unlayered skin (single
+        paint owner) owns the state transition on the repainted channels;
+        prefers-reduced-motion clamps it below. Resting background stays
+        transparent by construction (the hover rule's contrast argument). ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
+  border-radius: var(--ds-calendar-cell-radius, var(--ds-radius-md));
+  font-variant-numeric: tabular-nums;
+  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out), border-color var(--ds-motion-fast) var(--ds-motion-ease-out), box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 /* ---- cells (one rule set serves the month grid and the year grid: their paint
@@ -134,6 +222,9 @@
      preserved. Escape hatch stays raw; --ds-color-white falls back to literal
      white when undeclared. */
   color: var(--ds-calendar-selected-ink, var(--ds-color-white, #fff));
+  /* W10: the selected day reads as the grid's focal point -- semibold on the
+     primary fill (the year-view month cells inherit the same weight). */
+  font-weight: var(--ds-font-weight-semibold, 600);
 }
 
 /* ---- forced colors: arbitrary fills are overridden by the system palette, so
@@ -153,6 +244,14 @@
     /* opacity-30 is a utilities-layer rule and cannot be overridden from this
        layer; the disabled channel in forced colors is GrayText ON TOP of it. */
     color: GrayText;
+  }
+  /* W10: box-shadow focus rings are dropped under forced colors -- re-map the
+     keyboard ring to a Highlight outline on every interactive part. */
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:focus-visible,
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:focus-visible,
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
   }
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true']) {
@@ -175,4 +274,24 @@
     --ds-calendar-cell-hover,
     var(--ds-color-interactive-bg-hover, color-mix(in srgb, var(--ds-color-primary) 8%, transparent))
   );
+}
+
+/* ---- W10: press feedback on cells -- the WO-ENG-04 active channel, one
+        step deeper than hover (alpha-primary-10 vs the 6-8% hover tint), same
+        gates. Background only, no transform (see the header press rule). ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:active:not([data-selected='true']):not([data-disabled]) {
+  background: var(
+    --ds-calendar-cell-active,
+    var(--ds-color-interactive-bg-active, color-mix(in srgb, var(--ds-color-primary) 14%, transparent))
+  );
+}
+
+/* ---- W10: reduced motion -- clamp the skin-owned state transitions (same
+        0.01ms idiom as transfer.css); state paint remains instant. ---- */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'],
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'],
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
+    transition-duration: 0.01ms;
+  }
 }

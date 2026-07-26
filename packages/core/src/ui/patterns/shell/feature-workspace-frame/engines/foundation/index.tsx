@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import type { FeatureWorkspaceFrameProps } from "../contracts";
+import type { FeatureWorkspaceFrameProps } from "../../contracts";
 
 /**
  * Shared, token-driven feature workspace anatomy used by every rendering

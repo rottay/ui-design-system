@@ -79,8 +79,14 @@ const NO_EXACT_STEP_LITERALS: Record<string, Record<string, string>> = {
     "--ds-color-bg-input": "#0F0F12",
     "--ds-color-text-primary": "#ECECEC",
     "--ds-color-text-secondary": "#A0A0A5",
-    "--ds-color-text-tertiary": "#8A8A90",
-    "--ds-color-text-muted": "#6B6B72",
+    // W8 (APCA remediation, reviewed): tertiary lifted #8A8A90 → #9A9AA2 to
+    // keep the secondary>tertiary>muted ladder coherent after the muted
+    // APCA fix. Deliberate, documented change — not a silent approximation.
+    "--ds-color-text-tertiary": "#9A9AA2",
+    // W8 (APCA remediation, reviewed): muted lifted #6B6B72 → #96969E to
+    // reach the APCA body/ui floor on page backgrounds. Deliberate,
+    // documented change — not a silent approximation.
+    "--ds-color-text-muted": "#96969E",
     "--ds-color-text-disabled": "#4A4A50",
     "--ds-color-text-on-primary": "#0C0C0E",
     "--ds-color-border": "#1C1C20",

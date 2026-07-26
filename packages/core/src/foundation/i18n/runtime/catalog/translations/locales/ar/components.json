@@ -411,5 +411,27 @@
   },
   "radio": {
     "group": "مجموعة أزرار الاختيار"
+  },
+  "listToolbar": {
+    "searchPlaceholder": "بحث...",
+    "compact": "مدمجة",
+    "comfortable": "مريحة",
+    "spacious": "واسعة",
+    "densitySuffix": "",
+    "rowDensity": "كثافة الصفوف",
+    "viewMode": "وضع العرض",
+    "listView": "عرض القائمة",
+    "cardView": "عرض البطاقات",
+    "columns": "الأعمدة",
+    "density": "الكثافة",
+    "views": "العروض",
+    "noColumnSettings": "لا تتوفر إعدادات للأعمدة.",
+    "noSavedViews": "لا تتوفر عروض محفوظة.",
+    "columnSettings": "إعدادات الأعمدة",
+    "settings": "الإعدادات",
+    "moreOptions": "خيارات إضافية",
+    "export": "تصدير",
+    "active": "نشطة",
+    "clearAll": "مسح الكل"
   }
 }

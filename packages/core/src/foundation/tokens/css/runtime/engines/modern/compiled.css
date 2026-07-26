@@ -1,9 +1,12 @@
 /* Modern Engine - Compiled CSS
- * This file is processed by Tailwind CSS 4 + DaisyUI 5 at build time.
+ * This file is processed by Tailwind CSS 4 at build time.
  * It generates all utility classes used by modern engine components.
+ *
+ * No visual framework plugin is registered here. The Modern engine paints from
+ * its own tokens, recipes and skin files; `scripts/modern-bundle-framework-gate.mjs`
+ * enforces that the shipped artifacts carry no third-party component CSS.
  */
 @import "tailwindcss" source(none);
-@plugin "daisyui";
 
 /* Utility candidates come ONLY from the canonical nested modern-engine
  * entrypoints under src/ui. source(none) disables Tailwind's automatic

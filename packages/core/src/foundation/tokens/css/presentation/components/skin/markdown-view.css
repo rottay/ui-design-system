@@ -8,12 +8,15 @@
  *
  * SCOPE ROOT is `.ds-markdown-view[data-part='root']`.
  *
- * OWNERSHIP (single owner PER PART): this skin owns ONLY the link part --
+ * OWNERSHIP (single owner PER PART): this skin owns the link part --
  * wholesale: ink, the underline mandated by axe link-in-text-block (K4-B R3),
- * and the hover/focus-visible states. Every other part (blockquote, lists,
- * tables, code, task checkbox) keeps its inline paint in `index.tsx`. Inline
- * styles cannot express :hover/:focus-visible, which is why the interactive
- * part lives here.
+ * and the hover/focus-visible states -- plus the list `::marker` tint and
+ * the heading type ramp (W10). Every other part (blockquote, lists, tables,
+ * code, task checkbox) keeps its inline paint in `index.tsx`. Inline styles
+ * cannot express :hover/:focus-visible or pseudo-elements, and inline style
+ * producer consts are counted paint by the engine-token-audit (the
+ * component's inline-paint counter is decrease-only), which is why those
+ * aspects live here.
  *
  * Hover deepens the link ink 28% toward the source's own primary text ink --
  * hue-faithful, mode-adaptive, and always a contrast-safe direction on the
@@ -26,6 +29,9 @@
   text-decoration-thickness: 0.05em;
   text-underline-offset: 0.15em;
   text-decoration-skip-ink: auto;
+  transition:
+    color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, ease),
+    text-decoration-thickness var(--ds-motion-instant, 120ms) var(--ds-ease-standard, ease);
 }
 
 .ds-markdown-view[data-part='root'] a[data-part='link']:hover {
@@ -43,6 +49,61 @@
     --ds-markdown-focus-ring,
     0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
   );
+}
+
+/* W10: markers inherit the body ink by default, which makes list structure
+ * shout as loud as the content. Stepping them down one rung (text-secondary)
+ * keeps the hierarchy readable without painting another box. A pseudo-element
+ * cannot be reached from inline styles, so the skin owns it. */
+.ds-markdown-view[data-part='root'] [data-part='list'] ::marker {
+  color: var(--ds-markdown-marker-ink, var(--ds-color-text-secondary));
+}
+
+/* W10: the heading type ramp replaces the browser-default h1-h6 scale with
+ * the foundation type scale, so markdown documents share the system's
+ * typographic hierarchy. The skin owns the ramp wholesale (inline style
+ * producers are counted paint by the engine-token-audit and the component's
+ * counter is decrease-only); the tag carries the level. Large levels get the
+ * display weight and slight negative tracking; the smallest level gets
+ * positive tracking so it stays legible next to body copy. */
+.ds-markdown-view[data-part='root'] h1[data-part='heading'] {
+  font-size: var(--ds-font-size-3xl);
+  font-weight: var(--ds-font-weight-display);
+  line-height: var(--ds-line-height-heading);
+  letter-spacing: -0.02em;
+}
+
+.ds-markdown-view[data-part='root'] h2[data-part='heading'] {
+  font-size: var(--ds-font-size-2xl);
+  font-weight: var(--ds-font-weight-heading);
+  line-height: var(--ds-line-height-heading);
+  letter-spacing: -0.015em;
+}
+
+.ds-markdown-view[data-part='root'] h3[data-part='heading'] {
+  font-size: var(--ds-font-size-xl);
+  font-weight: var(--ds-font-weight-heading);
+  line-height: var(--ds-line-height-tight);
+  letter-spacing: -0.01em;
+}
+
+.ds-markdown-view[data-part='root'] h4[data-part='heading'] {
+  font-size: var(--ds-font-size-lg);
+  font-weight: var(--ds-font-weight-heading);
+  line-height: var(--ds-line-height-snug);
+}
+
+.ds-markdown-view[data-part='root'] h5[data-part='heading'] {
+  font-size: var(--ds-font-size-base);
+  font-weight: var(--ds-font-weight-heading);
+  line-height: var(--ds-line-height-snug);
+}
+
+.ds-markdown-view[data-part='root'] h6[data-part='heading'] {
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-heading);
+  line-height: var(--ds-line-height-snug);
+  letter-spacing: 0.02em;
 }
 
 @media (forced-colors: active) {

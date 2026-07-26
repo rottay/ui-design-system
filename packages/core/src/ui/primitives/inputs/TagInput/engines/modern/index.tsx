@@ -26,7 +26,7 @@
 import React, { useState, useCallback, useId, useRef } from 'react';
 import type { TagInputProps } from '../../contracts';
 import { TAGINPUT_DEFAULTS } from '../../contracts';
-import { Tag } from '../../../../display/Tag';
+import { Tag } from '../../../../facade';
 
 /**
  * Modern (skin-painted) implementation of TagInput.

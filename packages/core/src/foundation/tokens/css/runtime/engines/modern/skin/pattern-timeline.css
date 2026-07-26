@@ -1,4 +1,120 @@
-/** Modern Timeline pattern skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+/**
+ * Modern Timeline pattern skin (WO-SKIN-06 CK-E), deliberately unlayered.
+ *
+ * SINGLE PAINT OWNER. The engine no longer emits the DaisyUI `timeline`,
+ * `timeline-vertical`, `timeline-start`, `timeline-middle`, `timeline-end` or
+ * `timeline-box` classes, so this file owns the rail geometry as well as the
+ * marker/badge paint it already owned. The sibling primitive
+ * (`skin/timeline.css`) made the same move; this is the pattern's half.
+ *
+ * The geometry below is a channel-for-channel transcription of the retired
+ * `timeline timeline-vertical` rules, resolved through the SAME `--ds-*`
+ * tokens `framework-token-projection.css` fed those Daisy variables from --
+ * `--color-base-100` was `--ds-color-bg-primary`, `--color-base-300` was
+ * `--ds-color-bg-tertiary`, `--radius-box` was `--ds-radius-lg`,
+ * `--radius-selector` was `--ds-radius-sm`, `--border` was
+ * `--ds-border-width-1`. Nothing is re-tuned here, so a tenant that
+ * white-labelled the rail through those tokens keeps the value it had.
+ *
+ * SIDE MAPPING IS INVERTED BETWEEN THE TWO SLOTS, and that is the shipped
+ * contract, not a slip: for a right-side item the CARD took `timeline-start`
+ * (track 1) while its timestamp slot took `timeline-end` (track 3), and for a
+ * left-side item the pair swapped. `data-side` carries the item's side; each
+ * rule below resolves the track that side implied for that particular part.
+ *
+ * The `.ds-timeline-modern__*` private classes are load-bearing. `data-part`
+ * is a shared vocabulary and `renderItem` may hand the item arbitrary caller
+ * content, so a bare `[data-part='item-card']` would reach into whatever
+ * component that content renders. Pairing every rule with the private class
+ * keeps the skin inside its own subtree.
+ *
+ * SPECIFICITY (P-48): rules painting a border COLOR reach at least (0,5,0)
+ * from the two root classes + `data-part='root'` + the private class + the
+ * target's own `data-part`, clearing the tenant `*` border-color floor
+ * at (0,3,1).
+ */
+
+/* ---- rail: the retired `timeline timeline-vertical` pair ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__list[data-part='list'] {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- item grid: `.timeline > li`, with `timeline-vertical`'s justify-items.
+        Three tracks each way; the middle column/row carries the dot. ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item[data-part='item'] {
+  position: relative;
+  display: grid;
+  flex-shrink: 0;
+  align-items: center;
+  justify-items: center;
+  grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+/* ---- connectors: `.timeline > li > hr` under the vertical variant. Daisy's
+        `border: none` is the colorless reset preflight's `hr` top border
+        needs; the rail's own thickness and colour follow. ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'] {
+  border: none;
+  width: var(--ds-timeline-line-width, 4px);
+  height: 100%;
+  grid-column-start: 2;
+  background: var(--ds-timeline-line-color, var(--ds-color-bg-tertiary));
+}
+
+/* Both ends of the rail round toward the dot, exactly as the
+   `:has(.timeline-middle)` branch did -- the marker always renders, so that
+   branch always applied. */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'][data-edge='leading'] {
+  grid-row-start: 1;
+  border-radius: 0 0 var(--ds-radius-sm) var(--ds-radius-sm);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'][data-edge='trailing'] {
+  grid-row-start: 3;
+  border-radius: var(--ds-radius-sm) var(--ds-radius-sm) 0 0;
+}
+
+/* ---- dot: `timeline-middle` ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker[data-part='marker'] {
+  grid-column-start: 2;
+  grid-row-start: 2;
+}
+
+/* ---- track placement. `timeline-start` spans column 1 and pulls toward the
+        rail; `timeline-end` spans column 3 and pushes away from it. Both are
+        logical, so RTL mirrors the layout with no extra rules. ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp-slot[data-part='timestamp-slot'][data-side='left'],
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-side='right'] {
+  grid-area: 1 / 1 / 4 / 2;
+  align-self: center;
+  justify-self: flex-end;
+  margin: 0.25rem;
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp-slot[data-part='timestamp-slot'][data-side='right'],
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-side='left'] {
+  grid-area: 1 / 3 / 4 / 4;
+  align-self: center;
+  justify-self: flex-start;
+  margin: 0.25rem;
+}
+
+/* ---- boxed treatment: the retired `timeline-box`. The card always carried
+        it; the timestamp slot carried it only on the side that renders no
+        timestamp of its own, which is the shipped shape. ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'],
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp-slot[data-part='timestamp-slot'][data-side='right'] {
+  border: var(--ds-border-width-1) solid var(--ds-color-bg-tertiary);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-color-bg-primary);
+  padding-inline: 1rem;
+  padding-block: 0.5rem;
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--ds-color-neutral-900, #000) 5%, transparent);
+}
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'] {
   color: var(--ds-color-primary);

@@ -1,0 +1,48 @@
+{
+  "$comment": [
+    "Ledger of authorized direct `createPortal` call sites outside",
+    "src/ui/primitives/runtime/overlay/portal. Each entry pins a file to an EXACT",
+    "site count: a new site in an allowlisted file fails the gate, and an entry",
+    "whose sites were migrated away fails too. The ledger can only shrink.",
+    "Adding an entry requires a written reason and an owner -- 'it was already",
+    "like that' is not one."
+  ],
+  "entries": [
+    {
+      "file": "src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx",
+      "sites": 1,
+      "owner": "design-system/engines-rustic",
+      "reason": "Rustic engine is FROZEN (no behaviour changes sanctioned). Rustic's contract is a zero-dependency vanilla-CSS fallback that deliberately portals to document.body; migrating it is a separate, explicitly scheduled wave."
+    },
+    {
+      "file": "src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx",
+      "sites": 1,
+      "owner": "design-system/engines-rustic",
+      "reason": "Rustic engine is FROZEN. See Cascader entry."
+    },
+    {
+      "file": "src/ui/primitives/inputs/DatePicker/engines/rustic/index.tsx",
+      "sites": 3,
+      "owner": "design-system/engines-rustic",
+      "reason": "Rustic engine is FROZEN. Three sites: the date, month/year and range panels each portal independently."
+    },
+    {
+      "file": "src/ui/primitives/inputs/TreeSelect/engines/rustic/index.tsx",
+      "sites": 1,
+      "owner": "design-system/engines-rustic",
+      "reason": "Rustic engine is FROZEN. See Cascader entry."
+    },
+    {
+      "file": "src/ui/primitives/overlay/Sheet/engines/rustic/index.tsx",
+      "sites": 1,
+      "owner": "design-system/engines-rustic",
+      "reason": "Rustic engine is FROZEN. See Cascader entry."
+    },
+    {
+      "file": "src/ui/primitives/overlay/Tour/engines/rustic/index.tsx",
+      "sites": 1,
+      "owner": "design-system/engines-rustic",
+      "reason": "Rustic engine is FROZEN. See Cascader entry."
+    }
+  ]
+}

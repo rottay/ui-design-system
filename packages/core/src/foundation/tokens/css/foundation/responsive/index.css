@@ -1,9 +1,13 @@
 /**
  * Responsive Tokens Index - Rottay Design System
  *
- * Central import file for all responsive token overrides.
- * These tokens adjust component behavior across different screen sizes.
+ * Central import file for adjustments conditioned on the rendering
+ * environment: screen size, and the language the text is written in. Both
+ * entrypoints import this file as `layer(rottay-responsive)`, the last
+ * design-system layer, so these adjustments outrank every token, skin, and
+ * tenant artifact they correct.
  */
 
 @import './avatar.css';
 @import './button.css';
+@import './language-arabic.css';

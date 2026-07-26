@@ -17,17 +17,28 @@
  * paths would fall out of sync whenever a product profile or tenant override
  * changes token values at runtime.
  *
- * PRECEDENCE LAW: personality is the layer everything else in the DS merge
- * chain (DS base -> vertical baseline -> BrandTheme -> generated artifacts) is
- * allowed to override, so its variables are written to a `:root` rule inside
- * a dedicated stylesheet, never as inline styles on `document.documentElement`.
- * Inline styles carry the highest specificity CSS offers and would beat every
- * tenant declaration, including the scoped `html[data-tenant='x'][data-theme=
- * 'dark']` rules `ThemeProvider` injects for a tenant's `generatedChromeCss`.
- * A bare `:root` rule loses to any tenant-scoped selector on specificity alone
- * (no `!important`, no CSS layer needed), so a tenant can always override a
- * personality-derived variable, while personality still supplies the default
- * when a tenant declares none for that variable.
+ * PRECEDENCE LAW: personality is resolved per product at runtime, so the
+ * cascade contract places `rottay-personality` directly above `rottay-tenants`
+ * (see `foundation/tokens/css/facade/entrypoints/base.css`). This bridge writes
+ * its `:root` rule INSIDE that layer, never as inline styles on
+ * `document.documentElement` and never as an unlayered rule.
+ *
+ * Both exclusions are load-bearing:
+ * - Inline styles carry the highest specificity CSS offers and would beat every
+ *   tenant declaration, including the scoped `html[data-tenant='x'][data-theme=
+ *   'dark']` rules `ThemeProvider` injects for a tenant's `generatedChromeCss`.
+ * - An UNLAYERED `:root` rule is not the safe middle ground it looks like.
+ *   Unlayered declarations outrank every cascade layer regardless of
+ *   specificity, so a bare `:root` here beat the layered tenant artifacts
+ *   outright while losing to any artifact that happened to be imported without
+ *   a `layer()`. That made the winner depend on how each vertical's entrypoint
+ *   was written rather than on the declared order -- the same variable resolved
+ *   to personality for one vertical and to the artifact for another.
+ *
+ * Writing into the named layer restores the declared precedence for every
+ * vertical at once: personality outranks the tenant artifacts, while unlayered
+ * runtime chrome (`ThemeProvider`'s `ds-chrome-<slug>` element) still wins,
+ * because unlayered beats layered.
  *
  * Variables are cleaned up on unmount so tenant switching and test isolation
  * do not leak values across render trees.
@@ -44,9 +55,54 @@ import { useEffect, useRef } from 'react';
 import { resolvePersonalityCssVariables } from '@/foundation/tokens/ts/runtime/personality';
 
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
+import {
+  buildCascadeLayerOrderStatement,
+  buildPersonalityRootRuleText,
+} from '@/infrastructure/runtime/theming/foundation/cascade-layers';
 
 /** Singleton style element: one bridge instance, one stylesheet, one `:root` rule. */
 const PERSONALITY_STYLE_ELEMENT_ID = 'ds-personality-tokens';
+
+/**
+ * Records which cascade path the bridge actually took, so the behavior is
+ * observable in the DOM instead of inferred.
+ */
+const CASCADE_MODE_ATTRIBUTE = 'data-ds-cascade';
+
+/**
+ * Inserts the empty `:root` rule the bridge writes into, preferring the
+ * personality cascade layer and degrading to an unlayered rule.
+ *
+ * The layer order statement is emitted first so the layer position is pinned
+ * even when this stylesheet is evaluated before the DS entrypoint; re-declaring
+ * an already registered name does not move it.
+ *
+ * Every engine that supports cascade layers (Baseline since March 2022) takes
+ * the layered path. The fallback exists for CSSOM implementations that cannot
+ * parse `@layer` at all -- notably the `happy-dom` test environment, whose
+ * `insertRule` throws on any `@layer` text. Falling back to the previous
+ * unlayered rule keeps personality applying there rather than silently
+ * emitting nothing.
+ *
+ * @returns The rule to write declarations into, or `null` if neither path worked.
+ */
+function insertPersonalityRootRule(sheet: CSSStyleSheet): CSSStyleRule | null {
+  try {
+    sheet.insertRule(buildCascadeLayerOrderStatement(), 0);
+    sheet.insertRule(buildPersonalityRootRuleText(), 1);
+    const layerBlock = sheet.cssRules[1] as CSSGroupingRule | undefined;
+    const layeredRoot = layerBlock?.cssRules?.[0] as CSSStyleRule | undefined;
+    if (layeredRoot?.style) return layeredRoot;
+  } catch {
+    // CSSOM cannot parse `@layer`; fall through to the unlayered rule.
+  }
+
+  while (sheet.cssRules.length > 0) {
+    sheet.deleteRule(0);
+  }
+  sheet.insertRule(':root {}', 0);
+  return (sheet.cssRules[0] as CSSStyleRule | undefined) ?? null;
+}
 
 /**
  * Renders nothing visually. Runs a side-effect that writes resolved personality
@@ -77,15 +133,21 @@ export function SystemCssVariablesBridge(): null {
     // never through text interpolation -- matching how ThemeProvider applies
     // branding/appearance vars. A value never passes through a CSS text
     // parser, so a malformed token value cannot break out of its declaration.
+    // Only the static layer/selector scaffolding is inserted as text.
     const sheet = styleElement.sheet;
     if (sheet) {
       while (sheet.cssRules.length > 0) {
         sheet.deleteRule(0);
       }
-      sheet.insertRule(':root {}', 0);
-      const rule = sheet.cssRules[0] as CSSStyleRule;
-      for (const [name, value] of Object.entries(resolvePersonalityCssVariables(tokens))) {
-        rule.style.setProperty(name, String(value));
+      const rule = insertPersonalityRootRule(sheet);
+      styleElement.setAttribute(
+        CASCADE_MODE_ATTRIBUTE,
+        sheet.cssRules.length > 1 ? 'layered' : 'unlayered',
+      );
+      if (rule) {
+        for (const [name, value] of Object.entries(resolvePersonalityCssVariables(tokens))) {
+          rule.style.setProperty(name, String(value));
+        }
       }
     }
 

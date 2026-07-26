@@ -17,7 +17,7 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
 } from "../../../../../../graphics/icons";
-import { PatternFilterPanel } from "../../../../forms/filter-panel";
+import { PatternFilterPanel } from "../../../../facade";
 import type {
   ColumnDef,
   ResponsiveColumnMode,

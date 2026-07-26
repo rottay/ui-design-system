@@ -43,6 +43,7 @@
 import React, { useState, useRef, useCallback, Children, cloneElement, isValidElement } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ResizeHandle, type ResizeHandleIntent } from '../../../../foundation/ResizeHandle';
 import type { SplitterProps, SplitterPanelProps } from '../../contracts';
 import { SPLITTER_DEFAULTS } from '../../contracts';
 
@@ -227,38 +228,18 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
       document.addEventListener('pointerup', handlePointerUp);
     }, [isVertical, onResizeStart, onResizeEnd, sizes, applyPointerPercentage]);
 
-    // Keyboard resize (WAI separator pattern): Arrow keys step the two
-    // adjacent panels; Home/End collapse fully to either side. In RTL the
-    // horizontal arrow mapping mirrors so ArrowLeft moves the gutter the way
-    // the user's eye expects.
-    const handleKeyDown = useCallback((index: number) => (e: React.KeyboardEvent) => {
+    // Keyboard resize (WAI separator pattern): the ResizeHandle primitive owns
+    // key-to-intent translation, including the RTL mirroring of the horizontal
+    // arrows. The gutter is a boundary rather than a size, so it uses the
+    // `position` arrow policy: arrows step the two adjacent panels along the
+    // separator's own axis and Home/End collapse fully to either side.
+    const handleAdjust = useCallback((index: number) => (intent: ResizeHandleIntent) => {
       const STEP = 2;
-      const rtl = readDirection() === 'rtl';
-      const increaseKeys = isVertical
-        ? ['ArrowDown']
-        : rtl
-          ? ['ArrowLeft']
-          : ['ArrowRight'];
-      const decreaseKeys = isVertical
-        ? ['ArrowUp']
-        : rtl
-          ? ['ArrowRight']
-          : ['ArrowLeft'];
-
-      if (increaseKeys.includes(e.key)) {
-        e.preventDefault();
-        applyDelta(index, STEP);
-      } else if (decreaseKeys.includes(e.key)) {
-        e.preventDefault();
-        applyDelta(index, -STEP);
-      } else if (e.key === 'Home') {
-        e.preventDefault();
-        applyDelta(index, -100);
-      } else if (e.key === 'End') {
-        e.preventDefault();
-        applyDelta(index, 100);
-      }
-    }, [isVertical, applyDelta]);
+      if (intent === 'increase') applyDelta(index, STEP);
+      else if (intent === 'decrease') applyDelta(index, -STEP);
+      else if (intent === 'minimize') applyDelta(index, -100);
+      else applyDelta(index, 100);
+    }, [applyDelta]);
 
     const childArray = Children.toArray(children);
 
@@ -284,19 +265,20 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
               : child}
             {/* Render a gutter drag handle between each pair of panels */}
             {index < childArray.length - 1 && (
-              <div
-                role="separator"
-                tabIndex={0}
-                aria-orientation={isVertical ? 'horizontal' : 'vertical'}
-                aria-valuenow={Math.round(arrayValueAt(sizes, index) ?? 0)}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-label={i18n?.t('splitter.resize_gutter') ?? 'Resize panels'}
+              <ResizeHandle
+                orientation={isVertical ? 'horizontal' : 'vertical'}
+                arrows="position"
+                label={i18n?.t('splitter.resize_gutter') ?? 'Resize panels'}
+                min={0}
+                max={100}
+                value={Math.round(arrayValueAt(sizes, index) ?? 0)}
                 onPointerDown={handlePointerDown(index)}
-                onKeyDown={handleKeyDown(index)}
-                data-part="gutter"
-                data-orientation={isVertical ? 'vertical' : 'horizontal'}
-                data-dragging={draggingIndex === index ? 'true' : 'false'}
+                onAdjust={handleAdjust(index)}
+                anatomy={{
+                  'data-part': 'gutter',
+                  'data-orientation': isVertical ? 'vertical' : 'horizontal',
+                  'data-dragging': draggingIndex === index ? 'true' : 'false',
+                }}
               />
             )}
           </React.Fragment>

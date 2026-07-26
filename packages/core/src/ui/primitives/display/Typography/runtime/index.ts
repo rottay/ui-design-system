@@ -8,7 +8,7 @@ import type {
   TypographyStyle,
   TypographyTracking,
   TypographyWrap,
-} from './contracts';
+} from '../contracts';
 
 type TypographyKind = 'heading' | 'text';
 

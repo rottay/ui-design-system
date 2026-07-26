@@ -46,7 +46,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import type { UploadProps, DraggerProps, UploadFile, UploadChangeInfo, UploadListType } from '../../contracts';
 import { UPLOAD_DEFAULTS } from '../../contracts';
 import { removeUploadFile, resolveAcceptedUploadFiles } from '../../runtime/upload-behavior';
-import { Progress } from '../../../../feedback/Progress';
+import { Progress } from '../../../../facade';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 
 // ---------------------------------------------------------------------------

@@ -24,8 +24,9 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import { createPortal } from 'react-dom';
 import type { DatePickerMode, DatePickerProps, RangePickerProps } from '../../contracts';
+import { Portal } from '../../../../runtime/overlay/portal';
+import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import {
   DAYS_SHORT,
@@ -712,6 +713,16 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
     const triggerRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    // The calendar leaves the trigger's DOM ancestry when it portals, so the
+    // tenant/locale scope has to be re-stamped around it. `usePortalScope`
+    // needs the anchor as state (a ref would not re-render when it lands), so
+    // the trigger publishes to both.
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+    const setTriggerRef = useCallback((node: HTMLDivElement | null) => {
+      (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      setAnchorEl(node);
+    }, []);
+    const portalScope = usePortalScope(anchorEl);
 
     // Merge refs
     const setInputRef = useCallback(
@@ -845,7 +856,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
     return (
       <>
         <div
-          ref={triggerRef}
+          ref={setTriggerRef}
           data-part="root"
           className={`relative w-full rottay-datepicker rottay-datepicker--modern ${className}`}
           style={style}
@@ -905,11 +916,17 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
           </span>
         </div>
 
-        {/* Calendar popover -- portalled to document.body to avoid
-            ancestor overflow:hidden clipping. Uses fixed positioning
-            based on trigger bounding rect. zIndex 1050 matches the DS
+        {/* Calendar popover -- rendered through the shared overlay substrate
+            to avoid ancestor overflow:hidden clipping. The target resolves as
+            explicit container > active top-layer host > shared
+            `#rottay-portal-root`, so the calendar stays visible when the field
+            sits inside a `showModal()` dialog. `PortalScope` carries the
+            tenant/theme/direction lineage across the boundary. Positioning
+            stays fixed off the trigger rect; zIndex 1050 matches the DS
             overlay stacking layer (above modals at 1040). */}
-        {isOpen && typeof document !== 'undefined' && createPortal(
+        {isOpen && (
+          <Portal>
+            <PortalScope snapshot={portalScope}>
           <div
             ref={panelRef}
             style={{
@@ -944,8 +961,9 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
               onFocusedDateChange={setFocusedDate}
               onPanelChange={onPanelChange}
             />
-          </div>,
-          document.body,
+          </div>
+            </PortalScope>
+          </Portal>
         )}
       </>
     );
@@ -1033,6 +1051,19 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
     // Refs
     const triggerRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
+    // See DatePickerBase: the portaled calendar needs the anchor as state so
+    // the scope snapshot re-resolves once the trigger lands. The callback must
+    // be stable -- an inline ref arrow is re-created every render, so React
+    // would detach (null) and re-attach it each commit and the setState would
+    // loop.
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+    const portalScope = usePortalScope(anchorEl);
+    const setTriggerRef = useCallback((node: HTMLDivElement | null) => {
+      (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      setAnchorEl(node);
+      if (typeof ref === 'function') ref(node);
+      else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+    }, [ref]);
 
     const popPos = usePopoverPosition(triggerRef, isOpen, placement);
 
@@ -1138,11 +1169,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
     return (
       <>
         <div
-          ref={(node) => {
-            (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-            if (typeof ref === 'function') ref(node);
-            else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
-          }}
+          ref={setTriggerRef}
           data-part="root"
           className={`flex items-center gap-2 w-full rottay-datepicker-range rottay-datepicker-range--modern ${className}`}
           style={style}
@@ -1209,7 +1236,10 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
           )}
         </div>
 
-        {isOpen && typeof document !== 'undefined' && createPortal(
+        {/* Shared overlay substrate -- see DatePickerBase. */}
+        {isOpen && (
+          <Portal>
+            <PortalScope snapshot={portalScope}>
           <div
             ref={panelRef}
             style={{
@@ -1246,8 +1276,9 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
               onFocusedDateChange={setFocusedDate}
               onPanelChange={onPanelChange}
             />
-          </div>,
-          document.body,
+          </div>
+            </PortalScope>
+          </Portal>
         )}
       </>
     );

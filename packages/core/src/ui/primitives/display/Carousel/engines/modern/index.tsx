@@ -20,6 +20,15 @@
  * direction-invariant, and a logical `start-1/2` would break the centre in
  * RTL.
  *
+ * Landmark law (axe landmark-unique; W8 remediation, mirror of the ScrollArea
+ * K3-C fix): the root is promoted to a named `role="region"` +
+ * `aria-roledescription="carousel"` landmark ONLY when the consumer supplies
+ * a meaningful, unique accessible name via `aria-label`/`aria-labelledby`.
+ * An unnamed carousel is NOT a landmark (plain div, no role, no
+ * roledescription — `aria-roledescription` is invalid on a generic), so the
+ * four gallery cells no longer collide as indistinguishable region
+ * landmarks.
+ *
  * **Features:**
  * - Transform-based slide navigation
  * - Interval-based autoplay
@@ -98,6 +107,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       children,
       className = '',
       style,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
     } = props;
 
     // Flatten children into an array so we can index into individual slides
@@ -215,6 +226,20 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       right: 'end-2 top-1/2 -translate-y-1/2 flex-col',
     }[dotPosition];
 
+    // A blank/whitespace-only name is not meaningful: the root stays a plain
+    // (non-landmark) div and the naming attribute is dropped. Only a named
+    // carousel is a `region` landmark (axe landmark-unique; W8, mirror of
+    // the ScrollArea K3-C law).
+    const hasLandmarkName = Boolean(ariaLabel?.trim()) || Boolean(ariaLabelledBy?.trim());
+    const landmarkProps = hasLandmarkName
+      ? {
+          role: 'region' as const,
+          'aria-roledescription': 'carousel' as const,
+          ...(ariaLabel !== undefined ? { 'aria-label': ariaLabel } : {}),
+          ...(ariaLabelledBy !== undefined ? { 'aria-labelledby': ariaLabelledBy } : {}),
+        }
+      : {};
+
     return (
       <div
         ref={containerRef}
@@ -225,8 +250,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         style={style}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        role="region"
-        aria-roledescription="carousel"
+        {...landmarkProps}
       >
         {/* Slides Container */}
         <div

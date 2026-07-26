@@ -38,6 +38,7 @@ import {
   OPERATOR_DEFINITIONS,
   toOperatorDefinition,
 } from '../../runtime/operators';
+import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
 
 /**
  * Modern FilterBuilder using DaisyUI form controls for each value type.
@@ -654,7 +655,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         className={`${ROOT_CLASS_NAME} flex items-center justify-center min-h-[100px] ${className ?? ''}`}
         style={style}
       >
-        <span data-part="spinner" className="loading-spinner" style={{ display: 'inline-block', width: 24, height: 24, animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
+        <ModernSpinner size="md" data-part="spinner" />
       </div>
     );
   }

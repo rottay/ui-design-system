@@ -64,6 +64,7 @@ import type {
   DensityKey,
 } from "../../contracts";
 import { useBreakpoints } from "@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state";
+import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
 import { searchInputStyle } from "../../foundation/tokens";
 
 // ============================================================================
@@ -96,6 +97,34 @@ const DEFAULT_MESSAGES: ListToolbarMessages = {
   active: "active",
   clearAll: "Clear all",
 };
+
+/**
+ * Keys of `ListToolbarMessages` mirrored in the i18n catalogs under
+ * `components.listToolbar.*` (en/es/ar; fr/pt resolve through the documented
+ * partial-locale fallback chain). `searchLabel` and the classic-only density
+ * descriptions stay prop-only and are intentionally NOT catalog keys.
+ */
+const CATALOG_MESSAGE_KEYS = [
+  "compact",
+  "comfortable",
+  "spacious",
+  "densitySuffix",
+  "rowDensity",
+  "viewMode",
+  "listView",
+  "cardView",
+  "columns",
+  "density",
+  "views",
+  "noColumnSettings",
+  "noSavedViews",
+  "columnSettings",
+  "settings",
+  "moreOptions",
+  "export",
+  "active",
+  "clearAll",
+] as const satisfies readonly (keyof ListToolbarMessages)[];
 
 /**
  * Container posture, with the historical viewport breakpoint as its SSR and
@@ -676,7 +705,7 @@ export default function ModernListToolbar({
   totalCount,
   search,
   onSearchChange,
-  searchPlaceholder = "Search...",
+  searchPlaceholder: searchPlaceholderProp,
   messages: messageOverrides,
   filterPills,
   activeFilters,
@@ -697,10 +726,35 @@ export default function ModernListToolbar({
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { isMobile } = useBreakpoints();
   const { containerRef, compact: isCompact } = useContainerCompact(isMobile);
+  const i18n = useOptionalTranslation("components");
+  /**
+   * Catalog lookup with an honest English floor: when the provider is absent
+   * or echoes the raw key (missing entry), the historical default wins.
+   * Unlike the Rate guard, an empty catalog string IS honored — es/ar land
+   * `densitySuffix` as "" because their density adjectives already agree
+   * with "densidad"/"كثافة" and need no suffix.
+   */
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (resolved === undefined || resolved === key || resolved === `components.${key}`) {
+      return fallback;
+    }
+    return resolved;
+  };
+  // Props win over the catalog; the catalog wins over the English floor.
   const messages = useMemo(
-    () => ({ ...DEFAULT_MESSAGES, ...messageOverrides }),
-    [messageOverrides]
+    () => {
+      const catalogDefaults = {} as ListToolbarMessages;
+      for (const key of CATALOG_MESSAGE_KEYS) {
+        catalogDefaults[key] = tOr(`listToolbar.${key}`, DEFAULT_MESSAGES[key]);
+      }
+      return { ...catalogDefaults, ...messageOverrides };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [messageOverrides, i18n?.t]
   );
+  const searchPlaceholder =
+    searchPlaceholderProp ?? tOr("listToolbar.searchPlaceholder", "Search...");
 
   const handleSearchChange = useCallback(
     (value: string) => {
@@ -851,7 +905,12 @@ export default function ModernListToolbar({
                 ) : undefined
               }
               style={searchInputStyle({
-                height: "var(--ds-input-md-height, 2.5rem)",
+                /* Same control height and type size as every other toolbar
+                   control (W10: the 2.5rem md-input default made the mobile
+                   search visibly taller than its sibling pills/buttons). The
+                   coarse-pointer skin floor still raises it for touch. */
+                height: CONTROL_SIZE,
+                fontSize: CONTROL_FONT_SIZE,
               })}
             />
           </Box>

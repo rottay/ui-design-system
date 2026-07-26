@@ -411,5 +411,27 @@
   },
   "radio": {
     "group": "Grupo de botones de opción"
+  },
+  "listToolbar": {
+    "searchPlaceholder": "Buscar...",
+    "compact": "Compacta",
+    "comfortable": "Cómoda",
+    "spacious": "Espaciosa",
+    "densitySuffix": "",
+    "rowDensity": "Densidad de filas",
+    "viewMode": "Modo de vista",
+    "listView": "Vista de lista",
+    "cardView": "Vista de tarjetas",
+    "columns": "Columnas",
+    "density": "Densidad",
+    "views": "Vistas",
+    "noColumnSettings": "No hay configuración de columnas disponible.",
+    "noSavedViews": "No hay vistas guardadas disponibles.",
+    "columnSettings": "Configuración de columnas",
+    "settings": "Configuración",
+    "moreOptions": "Más opciones",
+    "export": "Exportar",
+    "active": "activos",
+    "clearAll": "Limpiar todo"
   }
 }

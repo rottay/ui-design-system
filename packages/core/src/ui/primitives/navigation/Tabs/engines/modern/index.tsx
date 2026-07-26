@@ -22,6 +22,7 @@ import { flushSync } from 'react-dom';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
+import { TABS_RECIPE_DEFINITION } from '@/infrastructure/runtime/foundation/recipes/contracts/families';
 import { useRecipeProfileDefaults } from '@/infrastructure/runtime/foundation/recipes/profiles';
 import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
@@ -37,7 +38,7 @@ import {
   isResponsiveValue,
   type ResponsivePropEntry,
 } from '@/infrastructure/runtime/responsive/runtime/style-properties';
-import { Dropdown } from '../../../../overlay/Dropdown';
+import { Dropdown } from '../../../../facade';
 import type {
   TabItem,
   TabsProps,
@@ -51,12 +52,7 @@ import type {
  * (underline/contained/segmented/pills) stays on the `data-recipe` skin
  * contract; DS-R004 may promote it into typed recipe axes later.
  */
-export const modernTabsRecipe = defineRecipe({
-  name: 'tabs',
-  slots: { root: ['rottay-tabs', 'rottay-tabs--modern'] },
-  axes: {},
-  defaults: {},
-});
+export const modernTabsRecipe = defineRecipe(TABS_RECIPE_DEFINITION);
 
 const SIZE_CONFIG: Record<
   TabsSize,

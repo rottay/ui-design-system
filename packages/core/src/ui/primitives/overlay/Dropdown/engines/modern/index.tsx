@@ -18,9 +18,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { createPortal } from 'react-dom';
 import type { ReactElement, ReactNode } from 'react';
 import type { DropdownProps, DropdownMenuItem, DropdownPlacement } from '../../contracts';
+import { Portal } from '../../../../runtime/overlay/portal';
 import { DROPDOWN_DEFAULTS } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
@@ -263,8 +263,16 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
     else if (forwardedRef) forwardedRef.current = node;
   }, [forwardedRef]);
 
+  // Tracked as STATE, not only as a ref: the surface is measured to place it,
+  // and inside `<Portal>` it mounts one commit after `portalHost` resolves.
+  // A ref alone cannot re-trigger the positioning effect when that happens, so
+  // the effect would run against a surface that does not exist yet, bail, and
+  // leave the menu parked at `visibility: hidden`. Same posture Popover, Select
+  // and Tour already use for their measured surfaces.
+  const [surfaceEl, setSurfaceEl] = useState<HTMLDivElement | null>(null);
   const setSurfaceRef = useCallback((node: HTMLDivElement | null) => {
     surfaceRef.current = node;
+    setSurfaceEl(node);
     presenceRef(node);
   }, [presenceRef]);
 
@@ -339,13 +347,13 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
   }, [autoAdjustOverflow, placement, portalHost]);
 
   useLayoutEffect(() => {
-    if (!portalHost || !shouldRender) return undefined;
+    if (!portalHost || !shouldRender || !surfaceEl) return undefined;
     updatePortalPosition();
     const observer = typeof ResizeObserver !== 'undefined'
       ? new ResizeObserver(updatePortalPosition)
       : null;
     if (containerRef.current) observer?.observe(containerRef.current);
-    if (surfaceRef.current) observer?.observe(surfaceRef.current);
+    observer?.observe(surfaceEl);
     window.addEventListener('resize', updatePortalPosition);
     window.addEventListener('scroll', updatePortalPosition, true);
     return () => {
@@ -353,7 +361,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
       window.removeEventListener('resize', updatePortalPosition);
       window.removeEventListener('scroll', updatePortalPosition, true);
     };
-  }, [portalHost, shouldRender, updatePortalPosition]);
+  }, [portalHost, shouldRender, surfaceEl, updatePortalPosition]);
 
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -473,7 +481,13 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
       <span data-part="trigger-content">
         {describeTrigger(children, surfaceId, isOpen, disabled)}
       </span>
-      {portalHost && surface ? createPortal(surface, portalHost) : surface}
+      {/* `getPopupContainer` picks the host; it reaches the shared substrate as
+          an explicit container rather than a private `createPortal`. Precedence
+          then handles the rest: a host that never attached (or was detached
+          since) falls back to the top-layer host / `#rottay-portal-root`
+          instead of rendering the menu into a node that paints nowhere.
+          Without `getPopupContainer` the surface stays in-tree, unchanged. */}
+      {portalHost && surface ? <Portal container={portalHost}>{surface}</Portal> : surface}
     </div>
   );
 });

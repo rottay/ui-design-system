@@ -84,16 +84,42 @@ export type ResolvedRecipeSlots<Slot extends string> = Readonly<
   Record<Slot, string>
 >;
 
-/** The resolver a component engine consumes. */
-export interface RecipeResolver<
-  Slot extends string,
-  Axes extends RecipeAxisMatrix<Slot>,
-> {
+/**
+ * What a recipe states about itself: its identity, its slots and the authored
+ * value domain of every axis. This is the whole of what the public manifest
+ * publishes, and it is derivable from the definition alone — no resolver, no
+ * supplier and no component involved.
+ */
+export interface RecipeShape<Slot extends string, Axes> {
   readonly name: string;
   readonly slotNames: readonly Slot[];
   readonly axisNames: ReadonlyArray<keyof Axes & string>;
   /** Authored value domain per axis, for the public manifest. */
   readonly axisValues: Readonly<Record<keyof Axes & string, readonly string[]>>;
+}
+
+/**
+ * Derive a definition's public shape. The single derivation in the package:
+ * the engine builds its resolver on top of it and the manifest publishes it,
+ * so the two can never disagree about what a family exposes.
+ */
+export function describeRecipeDefinition<
+  Slot extends string,
+  Axes extends RecipeAxisMatrix<Slot>,
+>(definition: RecipeDefinition<Slot, Axes>): RecipeShape<Slot, Axes> {
+  const slotNames = Object.keys(definition.slots) as Slot[];
+  const axisNames = Object.keys(definition.axes) as Array<keyof Axes & string>;
+  const axisValues = Object.fromEntries(
+    axisNames.map((axis) => [axis, Object.keys(definition.axes[axis])])
+  ) as unknown as Record<keyof Axes & string, readonly string[]>;
+  return { name: definition.name, slotNames, axisNames, axisValues };
+}
+
+/** The resolver a component engine consumes. */
+export interface RecipeResolver<
+  Slot extends string,
+  Axes extends RecipeAxisMatrix<Slot>,
+> extends RecipeShape<Slot, Axes> {
   resolve<Selection extends RecipeSelection<Slot, Axes> = RecipeSelection<Slot, Axes>>(
     selection?: ExactRecipeSelection<Axes, Selection>,
     extras?: RecipeSlotExtras<Slot>

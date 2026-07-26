@@ -210,6 +210,23 @@ locales/
 | `fr` | Français | Français | ltr | fr-FR | fr-FR |
 | `ar` | Árabe | العربية | rtl | ar-SA | ar-SA |
 
+## Cobertura por locale (declaración formal)
+
+Los locales se clasifican en dos tiers:
+
+- **Completos (`es`, `en`, `ar`)**: 423 strings hoja cada uno (suma de los 4
+  namespaces; medido en W9, 2026-07-25). Toda key nueva DEBE aterrizar en los
+  tres a la vez.
+- **Parciales (`fr`, `pt`)**: 296/423 strings hoja (~70%). Las keys nuevas NO
+  se añaden a estos catálogos: las entradas ausentes resuelven por la cadena
+  de fallback documentada (traducción custom del tenant → locale activo →
+  `fallbackLocale`, `es` por defecto → eco de la key). Es el idiom vigente —
+  las familias wireadas recientemente (`backTop`, `codeBlock`, `floatbutton`,
+  `markdownView`, `progress`, `scrollArea`, `slider`, `splitter`, `stepper`,
+  `voiceInput`, `listToolbar`) existen solo en los locales completos.
+
+Completar `fr`/`pt` es trabajo de traducción adjudicado, no un gap accidental.
+
 ## TypeScript Types
 
 ```typescript
@@ -296,7 +313,9 @@ function MyComponent() {
 1. Editar archivos JSON en `locales/{locale}/`
 2. Respetar la estructura de namespaces
 3. Usar `{param}` para interpolación
-4. Mantener consistencia entre todos los locales
+4. Aterrizar la key en los 3 locales completos (`es`, `en`, `ar`) a la vez;
+   `fr`/`pt` son parciales declarados y resuelven por fallback (ver
+   "Cobertura por locale")
 
 ```json
 // locales/es/components.json

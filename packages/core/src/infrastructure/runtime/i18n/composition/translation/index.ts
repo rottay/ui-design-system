@@ -10,6 +10,7 @@
 import { useCallback } from "react";
 import type {
   TranslateFunction,
+  TranslateOrFunction,
   TranslationNamespace,
 } from "@/foundation/i18n/kernel/contracts";
 import { useI18nContext } from "@/infrastructure/runtime/i18n/runtime/context";
@@ -20,6 +21,17 @@ import { useI18nContext } from "@/infrastructure/runtime/i18n/runtime/context";
 export interface UseTranslationResult {
   /** Función de traducción */
   t: TranslateFunction;
+  /**
+   * Translation with a caller-owned floor, used when a missing key must never
+   * reach the UI — an `aria-label` of `components.rate.label` is worse than an
+   * untranslated one.
+   *
+   * Prefer this over comparing `t()`'s result to the key: the echoed key is a
+   * rendering floor, not a miss signal, so that comparison has to guess the
+   * namespace prefix and cannot tell a genuine miss from a translation that
+   * equals its key.
+   */
+  tOr: TranslateOrFunction;
   /** Locale actual */
   locale: string;
 }
@@ -58,8 +70,17 @@ export function useTranslation(
     [context.t, namespace]
   );
 
+  const tOr: TranslateOrFunction = useCallback(
+    (key: string, fallback: string, params?: Record<string, string | number>) => {
+      const fullKey = namespace ? `${namespace}.${key}` : key;
+      return context.tOr(fullKey, fallback, params);
+    },
+    [context.tOr, namespace]
+  );
+
   return {
     t,
+    tOr,
     locale: context.locale,
   };
 }

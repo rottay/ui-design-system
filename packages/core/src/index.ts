@@ -13,6 +13,21 @@
 export * from './infrastructure/runtime/engines';
 export { ThemeProvider, ThemeContext } from './infrastructure/runtime/theming';
 export type { ThemeProviderProps, VisualAuthority, ThemeConfig, ThemeContextValue } from './infrastructure/runtime/theming';
+export {
+  resolveVisualAuthority,
+  reportVisualAuthorityConflict,
+  resetVisualAuthorityDiagnostics,
+  appearanceMatchesArtifact,
+} from './infrastructure/runtime/theming';
+export type {
+  CompiledArtifactDeclaration,
+  ProviderDeclaration,
+  RuntimeVisualPayloadCensus,
+  VisualAuthorityDeclaration,
+  VisualAuthorityInput,
+  VisualAuthorityOrigin,
+  VisualAuthorityResolution,
+} from './infrastructure/runtime/theming';
 export * from './infrastructure/runtime/features';
 export * from './infrastructure/runtime/bootstrap';
 export * from './foundation/contracts';

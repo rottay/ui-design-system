@@ -30,6 +30,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { SavedViewsBarProps, SavedView } from '../../contracts';
+import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
 
 /* ---------------------------------------------------------------------------
  * Shared layout-style constants
@@ -209,28 +210,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
           ...style,
         }}
       >
-        <svg
-          className="loading-spinner ds-saved-views__spinner"
-          data-part="spinner"
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{
-            animation: 'ds-views-spin 1s linear infinite',
-          }}
-        >
-          <circle
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="3"
-            fill="none"
-            strokeDasharray="60 30"
-            strokeLinecap="round"
-          />
-        </svg>
+        <ModernSpinner size="sm" data-part="spinner" />
       </div>
     );
   }

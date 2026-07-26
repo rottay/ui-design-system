@@ -18,7 +18,8 @@
 
 import React, { useCallback, useState } from 'react';
 import type { KanbanBoardProps } from '../../contracts';
-import { pillBadgeSmStyle, spinnerStyle } from '../../../../foundation/engine-styles/modern';
+import { pillBadgeSmStyle } from '../../../../foundation/engine-styles/modern';
+import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
 import { useFlipLayout } from '@/graphics/motion/react/runtime';
 
 const ROOT_CLASS_NAME = 'ds-pattern-kanban-board ds-engine-modern';
@@ -123,7 +124,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
         className={[ROOT_CLASS_NAME, 'flex items-center justify-center min-h-[300px]', className].filter(Boolean).join(' ')}
         style={style}
       >
-        <span data-part="spinner" className="loading-spinner" style={spinnerStyle(32)} />
+        <ModernSpinner size="lg" data-part="spinner" />
       </div>
     );
   }

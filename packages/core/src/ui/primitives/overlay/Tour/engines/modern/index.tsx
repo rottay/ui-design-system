@@ -11,7 +11,7 @@
  * - A self-contained `rottay-tour--modern` tree: no DaisyUI classes and no
  *   utility-framework classes (K4-A drained the last Tailwind utilities and
  *   static inline chrome into the unlayered skin `tour.css`)
- * - Portal rendering via createPortal (documented direct-body bypass)
+ * - Portal rendering via the shared `runtime/overlay/portal` substrate
  * - Box-shadow spotlight technique
  *
  * Implementation details:
@@ -47,14 +47,18 @@
  * @category Overlay
  * @package @rottay/design-system
  */
-import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { TourProps, TourStepProps } from '../../contracts';
 import { TOUR_DEFAULTS } from '../../contracts';
 import {
   OverlayPortalBoundary,
   useOverlayPosition,
 } from '../../../../runtime/overlay/positioning';
+import { Portal } from '../../../../runtime/overlay/portal';
+import {
+  usePortalScope,
+  type PortalScopeSnapshot,
+} from '../../../../runtime/overlay/portal-scope';
 import { useTourSpotlightRect } from '../../runtime/spotlight-rect';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
@@ -89,50 +93,10 @@ interface ModernTourChromeProps {
   steps: TourStepProps[];
   currentStep: number;
   targetEl: HTMLElement | null;
-  portalScope: TourPortalScope;
+  portalScope: PortalScopeSnapshot;
   onClose?: () => void;
   onPrev: () => void;
   onNext: () => void;
-}
-
-/** Tenant/locale attributes projected onto the portaled chrome root. */
-interface TourPortalScope {
-  'data-ds-root'?: string;
-  'data-vertical'?: string;
-  'data-tenant'?: string;
-  'data-theme'?: string;
-  'data-engine'?: string;
-  'data-density'?: string;
-  dir?: 'ltr' | 'rtl';
-  lang?: string;
-}
-
-/**
- * Read the tenant/locale scope of the nearest DS owner chain (Popover's
- * readLocaleContext precedent). Tour portals DIRECTLY to document.body, which
- * escapes the `[data-ds-root]` provider scope carrying DB Appearance tokens
- * (and any wrapper-level `dir`/`lang`); the chrome re-stamps what this reads
- * so the portal computes the same tenant tokens and direction as the in-tree
- * app. Without it, a DB-tenant tour renders with base fallback tokens -- the
- * K4 remediation color-contrast failure on the TMM cells.
- */
-function readPortalScope(source: HTMLElement | null): TourPortalScope {
-  if (!source) return {};
-  const readNearest = (attribute: string): string | undefined =>
-    source.closest<HTMLElement>(`[${attribute}]`)?.getAttribute(attribute) ?? undefined;
-  const directionOwner = source.closest<HTMLElement>('[dir]');
-  const languageOwner = source.closest<HTMLElement>('[lang]');
-  const computedDirection = window.getComputedStyle(source).direction;
-  return {
-    'data-ds-root': readNearest('data-ds-root'),
-    'data-vertical': readNearest('data-vertical'),
-    'data-tenant': readNearest('data-tenant'),
-    'data-theme': readNearest('data-theme'),
-    'data-engine': readNearest('data-engine'),
-    'data-density': readNearest('data-density'),
-    dir: directionOwner?.dir === 'rtl' || computedDirection === 'rtl' ? 'rtl' : 'ltr',
-    lang: languageOwner?.lang || document.documentElement.lang || undefined,
-  };
 }
 
 /**
@@ -183,15 +147,21 @@ const ModernTourChrome = ({
       ref={forwardedRef}
       data-part="root"
       className={`rottay-tour--modern ${className || ''}`}
-      // Re-enter the tenant/locale scope the body portal escaped (read from
-      // the target or the in-tree scope marker; empty outside a DS provider).
-      {...portalScope}
+      // Re-enter the tenant/locale scope the portal escaped (read from the
+      // target or the in-tree scope marker; empty outside a DS provider). The
+      // snapshot comes from the shared `runtime/overlay/portal-scope` reader,
+      // so the inline `--ds-*` overrides a white-labelled shell set on the
+      // lineage now cross the boundary too -- the private reader this replaced
+      // carried only the attributes.
+      {...portalScope.scope}
+      dir={portalScope.direction}
+      lang={portalScope.language}
       // The mask colour is consumer-supplied and templated into the spotlight's
       // box-shadow, which also carries runtime geometry; the skin reads this
       // custom property (not a paint key) for both surfaces. Left unset when the
       // caller passes a `mask` object with no `color`, exactly as before: the
       // dependent declarations then drop, painting no scrim and no cutout.
-      style={{ zIndex, ['--ds-tour-mask-color' as any]: maskColor }}
+      style={{ ...portalScope.variables, zIndex, ['--ds-tour-mask-color' as any]: maskColor }}
     >
       {/* Mask. Fixed full-viewport positioning is skin-owned; only the
           consumer's mask.style spread stays inline (public API). */}
@@ -347,7 +317,10 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
     // In-tree marker the tenant/locale scope is read from when the step has
     // no target element (the chrome portals to body, outside the provider).
     const [scopeMarkerEl, setScopeMarkerEl] = useState<HTMLSpanElement | null>(null);
-    const [portalScope, setPortalScope] = useState<TourPortalScope>({});
+    // Shared substrate reader. The anchor switches per step (the next target
+    // may live under a different scope owner), and the hook re-resolves on
+    // every anchor change, so no step-keyed effect is needed here.
+    const portalScope = usePortalScope(targetEl ?? scopeMarkerEl);
 
     const currentStep = controlledCurrent ?? internalCurrent;
     const step = steps[currentStep];
@@ -383,15 +356,6 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
       setTargetEl(null);
     }, [open, step, currentStep]);
 
-    // Re-read the tenant/locale scope on open and on step change (the target
-    // may live under a different scope owner than the previous one). No
-    // MutationObserver, unlike Popover: a mid-tour tenant switch is out of
-    // contract.
-    useLayoutEffect(() => {
-      if (!open) return;
-      setPortalScope(readPortalScope(targetEl ?? scopeMarkerEl));
-    }, [open, targetEl, scopeMarkerEl, currentStep]);
-
     // Return an empty placeholder when closed to preserve ref stability
     if (!open || typeof document === 'undefined') return <div ref={ref} className={className} />;
 
@@ -407,7 +371,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
     return (
       <>
         <span ref={setScopeMarkerEl} data-part="scope-marker" hidden aria-hidden="true" />
-        {createPortal(
+        <Portal>
           <OverlayPortalBoundary>
             <ModernTourChrome
               forwardedRef={ref}
@@ -424,9 +388,8 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
               onPrev={handlePrev}
               onNext={handleNext}
             />
-          </OverlayPortalBoundary>,
-          document.body
-        )}
+          </OverlayPortalBoundary>
+        </Portal>
       </>
     );
   }

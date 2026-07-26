@@ -8,7 +8,8 @@
  * - Rendering toasts in a fixed position on the screen
  * - Managing the toast stack with configurable maximum
  * - Handling enter/exit animations per position
- * - Rendering via React Portal for proper z-index stacking
+ * - Rendering through the shared overlay portal substrate (top-layer aware,
+ *   tenant scope preserved) for proper stacking
  * - Providing pause on hover functionality for the entire stack
  *
  * @module Toast/Container
@@ -18,10 +19,11 @@
 
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
-import { createPortal } from 'react-dom';
 import type { ToastPosition, ToastState } from '../../contracts';
+import { Portal } from '../../../../runtime/overlay/portal';
+import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { TOAST_CONTAINER_DEFAULTS, POSITION_MAP } from '../../contracts';
 import { useToastContext } from '../../runtime/state/provider';
 import { injectToastStyles, getToastAnimationStyle } from '../../runtime/animation';
@@ -321,6 +323,12 @@ export function ToastContainer({
   const { toasts, config, dispatch } = useToastContext();
   const containerRef = useRef<HTMLDivElement>(null);
   const { prefersReducedMotion } = useBreakpoints();
+  // The stack has no trigger to anchor to -- it is a standing surface mounted
+  // by the provider -- so an in-tree marker supplies the lineage the portaled
+  // stack must inherit (Tour's scope-marker precedent). Declared here, above
+  // every early return, so the hook order stays fixed.
+  const [scopeMarkerEl, setScopeMarkerEl] = useState<HTMLSpanElement | null>(null);
+  const portalScope = usePortalScope(scopeMarkerEl);
 
   // Use prop position or fall back to config
   const position = positionProp || config.position;
@@ -481,12 +489,28 @@ export function ToastContainer({
   // Portal Rendering
   // ========================================================================
 
-  // Render in a portal for proper z-index stacking
-  if (typeof document !== 'undefined') {
-    return createPortal(content, document.body);
-  }
-
-  return content;
+  // The stack goes through the shared overlay substrate rather than straight
+  // to `document.body`. That buys three things this container previously did
+  // not have:
+  //   - top-layer awareness: a toast raised while a `showModal()` dialog is
+  //     open renders inside that dialog's top-layer subtree instead of being
+  //     occluded by it (no z-index can beat the top layer);
+  //   - a single resolution rule shared with every other DS overlay
+  //     (explicit container > top-layer host > `#rottay-portal-root`);
+  //   - tenant lineage: `PortalScope` re-stamps `data-tenant`/`data-theme`/
+  //     `data-vertical`/`data-density`, `dir`/`lang` and the inline `--ds-*`
+  //     overrides read from the in-tree marker, so a white-labelled shell's
+  //     toasts paint in the tenant's skin and mirror correctly under RTL.
+  // SSR-safety now lives in `Portal` (it renders nothing until mounted), so
+  // the `typeof document` branch is gone.
+  return (
+    <>
+      <span ref={setScopeMarkerEl} data-part="scope-marker" hidden aria-hidden="true" />
+      <Portal>
+        <PortalScope snapshot={portalScope}>{content}</PortalScope>
+      </Portal>
+    </>
+  );
 }
 
 ToastContainer.displayName = 'Toast.Container';

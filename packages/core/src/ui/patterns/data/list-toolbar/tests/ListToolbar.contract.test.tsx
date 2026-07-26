@@ -9,7 +9,7 @@ import React from 'react';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { PatternListToolbar } from '..';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../../tooling/testing/helpers/engine';
@@ -63,10 +63,15 @@ async function findToolbarRoot(): Promise<HTMLElement> {
 }
 
 describe('PatternListToolbar contract', () => {
-  afterEach(() => {
+  afterEach(async () => {
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
-    document.documentElement.removeAttribute('dir');
+    // W4 idiom: portal locale observers re-fire when dir/lang are removed;
+    // keep the teardown inside act with a drain for overlay follow-ups.
+    await act(async () => {
+      document.documentElement.removeAttribute('dir');
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    });
   });
 
   it.each(STABLE_ENGINES)(

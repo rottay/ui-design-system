@@ -7,10 +7,15 @@ import { STABLE_ENGINES, renderWithEngine } from '../../../../../tooling/testing
 import { mockMatchMedia } from '../../../../../tooling/testing/helpers/browser/match-media';
 
 describe('PatternListToolbar integration', () => {
-  afterEach(() => {
+  afterEach(async () => {
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
-    document.documentElement.removeAttribute('dir');
+    // W4 idiom: portal locale observers re-fire when dir/lang are removed;
+    // keep the teardown inside act with a drain for overlay follow-ups.
+    await act(async () => {
+      document.documentElement.removeAttribute('dir');
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    });
   });
 
   it.each(STABLE_ENGINES)(

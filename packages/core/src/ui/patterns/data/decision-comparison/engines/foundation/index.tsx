@@ -5,7 +5,7 @@ import React, { useId } from 'react';
 import type {
   DecisionComparisonProps,
   DecisionComparisonSubject,
-} from '../contracts';
+} from '../../contracts';
 
 function SubjectColumn({
   subject,

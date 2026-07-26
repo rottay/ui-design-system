@@ -2,122 +2,460 @@
 /**
  * engine-freeze-gate — Classic/Rustic are FROZEN (engine policy 2026-07-25,
  * Codex): implementation and visual-excellence effort is exclusively Modern.
- * Classic/Rustic are read-only except a minimal compile fix, and their
- * failures are reported, never blocking.
+ * Classic/Rustic are read-only except a minimal shared-contract compile fix.
  *
- * This gate rejects NEW changes under `engines/classic/` and
- * `engines/rustic/` beyond the grandfathered baseline (the allowlist of
- * paths already dirty when the policy was sealed, mostly pre-existing WIP).
- * It is PATH-scoped: a path becomes suspect when it appears in
- * `git status --porcelain` and is not in the baseline. Baseline paths that
- * come back clean are fine (decrease-only by construction).
+ * WHAT THIS GATE AUDITS
+ * ---------------------
+ * Every difference between the SEALED BASE REVISION and the current worktree
+ * under `engines/classic/` or `engines/rustic/` — committed history included.
+ * The base is a 40-character commit pinned in THIS FILE (`SEALED_BASE`), not in
+ * data a change can rewrite: a contract lock belongs in source. It is the
+ * PARENT of the commit that declared the freeze, so the freeze commit's own
+ * frozen-engine edits are inside the audit window and had to be authorized by
+ * name rather than snapshotted by the act of sealing.
  *
- * Escape hatch (the "explicit allowlist" the policy names): when a change
- * genuinely must touch a frozen engine — a shared-contract compile fix —
- * regenerate the baseline with `--write` in the SAME change and document the
- * reason in that change's notes. Never use --write to smuggle engine work.
+ * The previous revision of this gate read only `git status --porcelain`. That
+ * made it a dirty-tree linter, not a freeze gate: committing a frozen-engine
+ * edit removed it from the report forever, and its allowlist had been produced
+ * by `--write` inside the very commit that made the edits (every allowlisted
+ * path was modified by that commit). On a clean tree it printed 0 violations no
+ * matter what history contained. Both holes are closed here.
+ *
+ * AUTHORIZATION MODEL (why self-grandfathering is no longer expressible)
+ * ---------------------------------------------------------------------
+ *   • There is no bulk snapshot mode. `--write` is gone. The only way a frozen
+ *     path becomes allowed is `--authorize <path...> --reason "<text>"`, which
+ *     names each path and demands a written reason — an act that shows up in the
+ *     baseline diff as prose a reviewer reads, not as a silent path list that
+ *     regenerated itself from whatever happened to be dirty.
+ *   • Every entry is CONTENT-PINNED (sha256 of the authorized bytes). An entry
+ *     authorizes exactly one reviewed byte-state; the next edit to that same
+ *     file fails again until it is re-authorized. A path is never blessed
+ *     forever.
+ *   • The audit window cannot be moved by a change. `--check` refuses to run
+ *     unless the baseline echoes `SEALED_BASE` exactly, so re-pointing the base
+ *     at HEAD to erase history requires editing this source file.
+ *   • `--authorize` refuses paths that are not actually changed against the base
+ *     (no pre-authorizing a future edit) and refuses GENERATED paths outright:
+ *     a build product is never evidence that its authored source may change.
  *
  * Usage:
  *   node scripts/engine-freeze-gate.mjs            # print the report
  *   node scripts/engine-freeze-gate.mjs --check    # exit 1 on any violation
- *   node scripts/engine-freeze-gate.mjs --write    # regenerate the baseline
+ *   node scripts/engine-freeze-gate.mjs --authorize <path...> --reason "<text>"
+ *
+ * `ENGINE_FREEZE_BASE` may WIDEN the audit window (it must be an ancestor of the
+ * sealed base); it can never narrow it. `--repo`/`--baseline` exist for the
+ * fixture-mode self-test only, mirroring container-query-gate.mjs.
  */
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(scriptDir, '..');
-const repoRoot = resolve(packageRoot, '..', '..');
-const BASELINE_PATH = join(scriptDir, 'engine-freeze-gate.baseline.json');
 
-const FROZEN = /(^|\/)engines\/(classic|rustic)\//;
-const MODE = process.argv.includes('--write')
-  ? 'write'
+/**
+ * Parent of 6ce8cd54 ("feat(design-system): advance modern platform quality
+ * foundation"), the commit that declared the freeze policy. Sealing at the
+ * parent — not at the freeze commit — is what forced that commit's own 61
+ * frozen-engine paths through `--authorize` instead of letting them ride in as
+ * "already in the base".
+ */
+export const SEALED_BASE = 'ef269d71db916d0063ea8a87b08240f8b13e99ca';
+
+export const BASELINE_SCHEMA_VERSION = 2;
+
+/** A path is frozen when it lives under a classic/rustic engine folder. The
+ *  same law is restated in tenant-channel-consumer-gate.mjs (FROZEN_ENGINE_PATH);
+ *  the two are asserted equal by engine-freeze-gate.test.mjs. */
+export const FROZEN = /(^|\/)engines\/(classic|rustic)\//;
+
+/** Build products. They are regenerated from an authored source, so they are
+ *  never authorizable: allowlisting an artifact would launder an edit to the
+ *  source it was generated from. Nothing under the frozen engines matches today
+ *  — the predicate exists so that path stays closed. */
+const GENERATED_PATH = /(^|\/)(facade\/artifacts|dist|node_modules|__generated__)\//;
+const GENERATED_MARKER = /@generated|DO NOT EDIT|AUTO-?GENERATED|Generated by /i;
+
+function argValue(flag, fallback) {
+  const i = process.argv.indexOf(flag);
+  return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : fallback;
+}
+
+const REPO_OVERRIDE = argValue('--repo', null);
+const repoRoot = REPO_OVERRIDE ? resolve(REPO_OVERRIDE) : resolve(packageRoot, '..', '..');
+const BASELINE_PATH = resolve(
+  argValue('--baseline', join(scriptDir, 'engine-freeze-gate.baseline.json')),
+);
+/** Fixture mode: a self-test repo has its own history and cannot contain the
+ *  sealed base, so the source-pinned equality check is replaced by "the
+ *  baseline's base must be a real ancestor of that repo's HEAD". Requires BOTH
+ *  overrides, so no production invocation can slip into it. */
+const FIXTURE_MODE = Boolean(REPO_OVERRIDE) && process.argv.includes('--baseline');
+
+const MODE = process.argv.includes('--authorize')
+  ? 'authorize'
   : process.argv.includes('--check')
     ? 'check'
-    : 'report';
+    : process.argv.includes('--write')
+      ? 'write'
+      : 'report';
 
-function porcelainFrozen() {
-  const out = execFileSync('git', ['-C', repoRoot, 'status', '--porcelain'], {
+function git(args) {
+  return execFileSync('git', ['-C', repoRoot, ...args], {
     encoding: 'utf8',
+    maxBuffer: 32 * 1024 * 1024,
   });
+}
+
+function gitOk(args) {
+  try {
+    git(args);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function sha256(text) {
+  return createHash('sha256').update(text).digest('hex');
+}
+
+function toPosix(p) {
+  return p.split(sep).join('/');
+}
+
+/* -------------------------------------------------------------------------- */
+/* change collection                                                          */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * `git diff --name-status <base>` compares the base commit to the WORKTREE, so a
+ * single call covers committed history, staged work and unstaged edits. Renames
+ * are disabled: a renamed frozen file is two changes (a deletion and an
+ * addition) and both sides must be authorized.
+ */
+export function parseNameStatus(text) {
   const rows = [];
-  for (const line of out.split('\n')) {
+  for (const line of text.split('\n')) {
     if (!line.trim()) continue;
-    const status = line.slice(0, 2);
-    const path = line.slice(3).replace(/^"|"$/g, '');
-    if (FROZEN.test(path)) rows.push({ status: status.trim(), path });
+    const [status, path] = line.split('\t');
+    if (!path) continue;
+    const clean = path.replace(/^"|"$/g, '');
+    if (FROZEN.test(clean)) rows.push({ status: status.trim()[0], path: clean, untracked: false });
   }
   return rows;
 }
 
-function readBaseline() {
-  if (!existsSync(BASELINE_PATH)) return { paths: [] };
-  return JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
+/**
+ * `git status --porcelain --untracked-files=all` supplies what a diff against a
+ * commit cannot see: untracked files. (`-uall` matters — the default collapses a
+ * brand-new directory to a single entry, which would hide every frozen file
+ * inside it.)
+ */
+export function parsePorcelainUntracked(text) {
+  const rows = [];
+  for (const line of text.split('\n')) {
+    if (!line.startsWith('?? ')) continue;
+    const path = line.slice(3).replace(/^"|"$/g, '');
+    if (FROZEN.test(path)) rows.push({ status: 'A', path, untracked: true });
+  }
+  return rows;
 }
 
-function writeBaseline(rows) {
-  const paths = rows
-    .filter((r) => r.status !== 'D')
-    .map((r) => r.path)
+/** Union of the two collectors, deduplicated by path, sorted for stable output. */
+export function mergeChangeSets(diffRows, untrackedRows) {
+  const byPath = new Map();
+  for (const row of [...diffRows, ...untrackedRows]) {
+    if (!byPath.has(row.path)) byPath.set(row.path, row);
+  }
+  return [...byPath.values()].sort((a, b) => a.path.localeCompare(b.path));
+}
+
+/** `headText` is the first bytes of the file, or null when it no longer exists. */
+export function isGeneratedPath(path, headText) {
+  if (GENERATED_PATH.test(path)) return true;
+  return typeof headText === 'string' && GENERATED_MARKER.test(headText);
+}
+
+/* -------------------------------------------------------------------------- */
+/* evaluation                                                                 */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Pure verdict. `entries` is the baseline map (path -> {blob, reason}); `read`
+ * returns the current bytes of a path or null when it is gone.
+ *
+ *   unauthorized     — changed against the base with no allowlist entry
+ *   drifted          — allowlisted, but the bytes are no longer the reviewed ones
+ *   deletedAuthorized— an allowlisted file was deleted (deletion is a change too)
+ *   generated        — a build product changed under a frozen engine
+ *   stale            — an allowlist entry that no longer differs from the base
+ *                      (tighten it out; never a failure)
+ */
+export function evaluateFreeze({ changes, entries, read }) {
+  const unauthorized = [];
+  const drifted = [];
+  const deletedAuthorized = [];
+  const generated = [];
+  const changedPaths = new Set(changes.map((c) => c.path));
+
+  for (const change of changes) {
+    const content = read(change.path);
+    if (isGeneratedPath(change.path, content)) {
+      generated.push(change);
+      continue;
+    }
+    const entry = entries[change.path];
+    if (!entry) {
+      unauthorized.push(change);
+      continue;
+    }
+    if (content === null) {
+      deletedAuthorized.push(change);
+      continue;
+    }
+    if (sha256(content) !== entry.blob) {
+      drifted.push({ ...change, authorizedBlob: entry.blob, actualBlob: sha256(content) });
+    }
+  }
+
+  const stale = Object.keys(entries)
+    .filter((path) => !changedPaths.has(path))
     .sort();
+  return { unauthorized, drifted, deletedAuthorized, generated, stale };
+}
+
+/* -------------------------------------------------------------------------- */
+/* baseline + base revision                                                   */
+/* -------------------------------------------------------------------------- */
+
+function readBaseline() {
+  if (!existsSync(BASELINE_PATH)) {
+    fail(`baseline missing at ${BASELINE_PATH}`);
+  }
+  const parsed = JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
+  if (parsed.schemaVersion !== BASELINE_SCHEMA_VERSION) {
+    fail(
+      `baseline schemaVersion must be ${BASELINE_SCHEMA_VERSION} (found ${parsed.schemaVersion ?? 'none'}). ` +
+        'A v1 path-list baseline cannot express the content pin this gate requires.',
+    );
+  }
+  if (!parsed.entries || typeof parsed.entries !== 'object') {
+    fail('baseline must carry an `entries` object keyed by path');
+  }
+  return parsed;
+}
+
+function writeBaseline(baseline) {
+  const entries = Object.fromEntries(
+    Object.keys(baseline.entries)
+      .sort()
+      .map((path) => [path, baseline.entries[path]]),
+  );
   const payload = {
     _comment:
-      'Grandfathered allowlist for the Classic/Rustic engine freeze (policy 2026-07-25). ' +
-      'Regenerate ONLY with engine-freeze-gate.mjs --write inside the change that proves a ' +
-      'frozen-engine edit is a minimal compile fix, and document the reason there. Never widen ' +
-      'to smuggle Classic/Rustic work.',
+      'Written exceptions to the Classic/Rustic engine freeze (policy 2026-07-25). Each entry ' +
+      'authorizes ONE reviewed byte-state of ONE path: the next edit to an authorized file fails ' +
+      'again until it is re-authorized. Entries are added only by ' +
+      '`engine-freeze-gate.mjs --authorize <path> --reason "<text>"`; there is no bulk snapshot ' +
+      'mode, and generated files are never authorizable.',
     policy:
-      'Classic/Rustic are read-only; implementation effort is exclusively Modern. ' +
-      'Any frozen path not listed here that shows up dirty in git status fails the gate.',
-    paths,
+      'Classic/Rustic are read-only; implementation effort is exclusively Modern. Every difference ' +
+      'between baseRevision and the worktree under engines/classic or engines/rustic — committed ' +
+      'history included — must be listed here with a matching content pin.',
+    schemaVersion: BASELINE_SCHEMA_VERSION,
+    baseRevision: baseline.baseRevision,
+    entries,
   };
   writeFileSync(BASELINE_PATH, `${JSON.stringify(payload, null, 2)}\n`);
   return payload;
 }
 
-const rows = porcelainFrozen();
-const baseline = readBaseline();
-const allowed = new Set(baseline.paths ?? []);
-
-if (MODE === 'write') {
-  const payload = writeBaseline(rows);
-  console.log(
-    `engine-freeze-gate: baseline written (${payload.paths.length} grandfathered paths)`,
-  );
-  process.exit(0);
-}
-
-const violations = rows.filter((r) => !allowed.has(r.path));
-const deleted = rows.filter((r) => r.status === 'D' && allowed.has(r.path));
-
-console.log(
-  `engine-freeze-gate — frozen dirs: engines/classic, engines/rustic | ` +
-    `dirty frozen paths: ${rows.length} | grandfathered: ${allowed.size} | ` +
-    `violations: ${violations.length} | deleted-baseline: ${deleted.length}`,
-);
-
-for (const v of violations) {
-  console.log(
-    `  NEW frozen-engine change [${v.status}] ${v.path}\n` +
-      '    Classic/Rustic are read-only. If this is a minimal compile fix, ' +
-      'regenerate the allowlist with engine-freeze-gate.mjs --write in the same ' +
-      'change and document the reason.',
-  );
-}
-for (const d of deleted) {
-  console.log(
-    `  DELETED frozen-engine file ${d.path}\n` +
-      '    Deleting a frozen-engine file is also a change; regenerate the ' +
-      'allowlist with --write only if the deletion is intentional and documented.',
-  );
-}
-
-if (MODE === 'check' && (violations.length > 0 || deleted.length > 0)) {
-  console.error('engine-freeze-gate: FAIL');
+function fail(message) {
+  console.error(`engine-freeze-gate: ${message}`);
   process.exit(1);
 }
 
-console.log('engine-freeze-gate: OK');
+/**
+ * The audit window. Order: the baseline's `baseRevision` (which must equal the
+ * source-pinned SEALED_BASE outside fixture mode) and then an optional
+ * ENGINE_FREEZE_BASE override that may only WIDEN it. Every candidate must be a
+ * real commit and an ancestor of HEAD, so no run can point the window forward.
+ */
+export function resolveBase(baselineBase) {
+  if (!/^[0-9a-f]{40}$/.test(baselineBase ?? '')) {
+    fail('baseline.baseRevision must be a full 40-character commit');
+  }
+  if (!FIXTURE_MODE && baselineBase !== SEALED_BASE) {
+    fail(
+      `baseline.baseRevision ${baselineBase} does not equal the source-pinned SEALED_BASE ${SEALED_BASE}. ` +
+        'The audit window is locked in engine-freeze-gate.mjs; moving it is a reviewed source edit, ' +
+        'never a baseline edit.',
+    );
+  }
+  if (!gitOk(['cat-file', '-e', `${baselineBase}^{commit}`])) {
+    fail(`baseRevision ${baselineBase} is not a commit in ${repoRoot}`);
+  }
+  if (!gitOk(['merge-base', '--is-ancestor', baselineBase, 'HEAD'])) {
+    fail(
+      `baseRevision ${baselineBase} is not an ancestor of HEAD; the freeze window cannot start ahead of history`,
+    );
+  }
+  const override = process.env.ENGINE_FREEZE_BASE?.trim();
+  if (!override) return { base: baselineBase, widened: false };
+  if (!gitOk(['cat-file', '-e', `${override}^{commit}`])) {
+    fail(`ENGINE_FREEZE_BASE ${override} is not a commit in ${repoRoot}`);
+  }
+  if (!gitOk(['merge-base', '--is-ancestor', override, baselineBase])) {
+    fail(
+      `ENGINE_FREEZE_BASE ${override} is not an ancestor of the sealed base ${baselineBase}. ` +
+        'The override may only WIDEN the audit window; narrowing it would hide frozen-engine history.',
+    );
+  }
+  return { base: git(['rev-parse', override]).trim(), widened: true };
+}
+
+function collectChanges(base) {
+  const diff = parseNameStatus(git(['diff', '--name-status', '--no-renames', base]));
+  const untracked = parsePorcelainUntracked(git(['status', '--porcelain', '--untracked-files=all']));
+  return mergeChangeSets(diff, untracked);
+}
+
+function readWorktree(relativePath) {
+  const full = join(repoRoot, relativePath);
+  if (!existsSync(full)) return null;
+  return readFileSync(full, 'utf8');
+}
+
+/* -------------------------------------------------------------------------- */
+/* modes                                                                      */
+/* -------------------------------------------------------------------------- */
+
+function authorize(baseline, base, changes) {
+  const reason = argValue('--reason', '').trim();
+  if (reason.length < 12) {
+    fail(
+      '--authorize requires --reason "<why this frozen-engine edit is a minimal compile fix>" (12+ characters). ' +
+        'The reason is the written exception a reviewer reads in the baseline diff.',
+    );
+  }
+  if (process.env.ENGINE_FREEZE_BASE) {
+    fail('--authorize refuses to run with ENGINE_FREEZE_BASE set; authorize against the sealed base only');
+  }
+  const flags = new Set(['--authorize', '--reason', '--repo', '--baseline', '--check', '--write']);
+  const paths = [];
+  for (let i = 2; i < process.argv.length; i += 1) {
+    const token = process.argv[i];
+    if (flags.has(token)) {
+      if (token !== '--authorize') i += 1;
+      continue;
+    }
+    paths.push(toPosix(token));
+  }
+  if (paths.length === 0) fail('--authorize needs at least one path');
+
+  const changedByPath = new Map(changes.map((change) => [change.path, change]));
+  const entries = { ...baseline.entries };
+  for (const path of paths) {
+    if (!FROZEN.test(path)) fail(`${path} is not under a frozen engine; nothing to authorize`);
+    const change = changedByPath.get(path);
+    if (!change) {
+      fail(
+        `${path} does not differ from ${base.slice(0, 8)}; a path cannot be authorized before it changes`,
+      );
+    }
+    const content = readWorktree(path);
+    if (isGeneratedPath(path, content)) {
+      fail(
+        `${path} is a generated file. A build product is never authorization to modify the source it ` +
+          'came from; authorize the authored source and regenerate.',
+      );
+    }
+    entries[path] = {
+      blob: content === null ? null : sha256(content),
+      reason,
+      authorizedAgainst: base,
+    };
+  }
+  const payload = writeBaseline({ ...baseline, entries });
+  console.log(
+    `engine-freeze-gate: authorized ${paths.length} path(s); baseline now holds ${Object.keys(payload.entries).length} written exception(s)`,
+  );
+}
+
+function main() {
+  if (MODE === 'write') {
+    fail(
+      '--write is removed. It regenerated the allowlist from whatever happened to be dirty, which let a ' +
+        'change grandfather itself. Use: --authorize <path...> --reason "<text>".',
+    );
+  }
+
+  const baseline = readBaseline();
+  const { base, widened } = resolveBase(baseline.baseRevision);
+  const changes = collectChanges(base);
+
+  if (MODE === 'authorize') {
+    authorize(baseline, base, changes);
+    return;
+  }
+
+  const verdict = evaluateFreeze({ changes, entries: baseline.entries, read: readWorktree });
+  const { unauthorized, drifted, deletedAuthorized, generated, stale } = verdict;
+  const violations = unauthorized.length + drifted.length + deletedAuthorized.length + generated.length;
+
+  console.log(
+    'engine-freeze-gate — frozen dirs: engines/classic, engines/rustic | ' +
+      `base: ${base.slice(0, 8)}${widened ? ' (WIDENED by ENGINE_FREEZE_BASE)' : ''} | ` +
+      `changed since base: ${changes.length} | written exceptions: ${Object.keys(baseline.entries).length} | ` +
+      `violations: ${violations} | stale exceptions: ${stale.length}`,
+  );
+
+  for (const change of unauthorized) {
+    console.log(
+      `  UNAUTHORIZED frozen-engine change [${change.status}] ${change.path}\n` +
+        `    differs from the sealed base ${base.slice(0, 8)}${change.untracked ? ' (untracked)' : ''}.\n` +
+        '    Classic/Rustic are read-only. If this is a minimal shared-contract compile fix, record a\n' +
+        '    written exception:\n' +
+        `      node scripts/engine-freeze-gate.mjs --authorize ${change.path} --reason "<why>"`,
+    );
+  }
+  for (const change of drifted) {
+    console.log(
+      `  DRIFTED beyond its written exception ${change.path}\n` +
+        `    authorized bytes ${change.authorizedBlob.slice(0, 12)}, current bytes ${change.actualBlob.slice(0, 12)}.\n` +
+        '    An exception authorizes ONE reviewed byte-state. Revert the new edit, or re-authorize it\n' +
+        '    with a reason that covers what changed.',
+    );
+  }
+  for (const change of deletedAuthorized) {
+    console.log(
+      `  DELETED frozen-engine file ${change.path}\n` +
+        '    Deleting a frozen-engine file is also a change; re-authorize it if the deletion is intentional.',
+    );
+  }
+  for (const change of generated) {
+    console.log(
+      `  GENERATED file changed under a frozen engine ${change.path}\n` +
+        '    Build products are not authorizable: regenerate it from an authored source that is itself\n' +
+        '    authorized, rather than editing the artifact.',
+    );
+  }
+  for (const path of stale.slice(0, 20)) {
+    console.log(`  STALE exception (no longer differs from base; tighten it out) ${path}`);
+  }
+
+  if (MODE === 'check' && violations > 0) {
+    console.error(`engine-freeze-gate: FAIL — ${violations} frozen-engine violation(s)`);
+    process.exit(1);
+  }
+  console.log('engine-freeze-gate: OK');
+}
+
+const invokedDirectly =
+  process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+if (invokedDirectly) main();

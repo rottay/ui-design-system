@@ -23,7 +23,6 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
 
 import {
   ArrowDownIcon as ArrowDown,
@@ -36,6 +35,8 @@ import {
 } from '../../../../graphics/icons';
 
 import { Box, Checkbox, Flex, Text } from '../../../primitives';
+import { Portal } from '../../../primitives/runtime/overlay/portal';
+import { PortalScope, usePortalScope } from '../../../primitives/runtime/overlay/portal-scope';
 
 function readColumnRecordValue(value: unknown, key: PropertyKey): unknown {
   if (typeof value !== 'object' || value === null) return undefined;
@@ -208,6 +209,16 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
   const [draggedColumnKey, setDraggedColumnKey] = useState<string | null>(null);
   const [dragOverColumnKey, setDragOverColumnKey] = useState<string | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+  // The panel leaves the trigger's DOM ancestry when it portals, so the
+  // tenant/locale scope has to be re-stamped around it. `usePortalScope`
+  // needs the anchor as state (a ref would not re-render when it lands), so
+  // the trigger publishes to both.
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const setTriggerRef = useCallback((node: HTMLButtonElement | null) => {
+    triggerRef.current = node;
+    setAnchorEl(node);
+  }, []);
+  const portalScope = usePortalScope(anchorEl);
 
   const orderedColumns = useMemo(() => {
     const known = new Map(columns.map((column) => [column.key, column] as const));
@@ -467,7 +478,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
         data-open={isOpen}
         data-compact={compact}
         className="ds-structure ds-column-menu"
-        ref={triggerRef}
+        ref={setTriggerRef}
         onClick={isOpen ? () => setIsOpen(false) : handleOpen}
         title={`Columns: ${visibleCount} visible${hiddenCount > 0 ? `, ${hiddenCount} hidden` : ''}`}
         aria-label={`Columns: ${visibleCount} visible${hiddenCount > 0 ? `, ${hiddenCount} hidden` : ''}`}
@@ -503,8 +514,14 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
         </Flex>
       </Box>
 
-      {isOpen && typeof document !== 'undefined' && createPortal(
-        <>
+      {/* Panel + backdrop go through the shared overlay substrate: the target
+          resolves as explicit container > active top-layer host > shared
+          `#rottay-portal-root`, so the menu stays visible when the workspace
+          is itself inside a `showModal()` dialog. `PortalScope` carries the
+          tenant/theme/direction lineage across the portal boundary. */}
+      {isOpen && (
+        <Portal>
+          <PortalScope snapshot={portalScope}>
           <Box data-part="backdrop" onClick={() => setIsOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 1990 }} />
 
           <Box
@@ -978,8 +995,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
               </Box>
             </Flex>
           </Box>
-        </>,
-        document.body,
+          </PortalScope>
+        </Portal>
       )}
     </Box>
   );

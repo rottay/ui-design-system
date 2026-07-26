@@ -151,8 +151,15 @@
   overflow: visible;
   border: var(--ds-popover-edge-width) solid var(--ds-popover-edge);
   border-radius: var(--ds-popover-radius-current);
-  background: var(--ds-popover-texture-current),
-    var(--ds-popover-highlight-current), var(--ds-popover-surface);
+  /* The surface-lift overlay is its own layer directly above the fill so the
+     tenant material chain in --ds-popover-surface stays untouched; it is inert
+     until a dark surface raises --ds-elevation-lift-strength, where the
+     near-invisible shadow ramp needs the luminance step. Level 3 matches the
+     --ds-elevation-3 shadow this surface declares. */
+  background:
+    var(--ds-popover-texture-current), var(--ds-popover-highlight-current),
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-popover-surface);
   box-shadow: var(--ds-popover-shadow-current);
   color: var(--ds-popover-ink);
   font-family: var(--ds-font-family-base);

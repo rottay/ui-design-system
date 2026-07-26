@@ -318,8 +318,8 @@ export type {
 // ============================================================================
 // Voice hooks -- Web Speech API wrapper for voice input / dictation
 // ============================================================================
-export { useVoiceInput } from '../../application/automation/voice';
-export type { UseVoiceInputOptions, UseVoiceInputResult } from '../../application/automation/voice';
+export { useVoiceInput } from '../../application/automation/voice/composition/react/input';
+export type { UseVoiceInputOptions, UseVoiceInputResult } from '../../application/automation/voice/composition/react/input';
 
 // ============================================================================
 // Notification hooks -- preference matrix management (categories x channels)

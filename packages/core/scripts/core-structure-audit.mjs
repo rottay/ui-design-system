@@ -147,6 +147,12 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     contracts: 0,
     presets: 1,
   }),
+  // Locale metadata and message catalogs are the data floor that the
+  // resolution layer reads; resolution never publishes back into them.
+  'foundation/i18n/runtime': Object.freeze({
+    catalog: 0,
+    resolution: 1,
+  }),
   // Colorimetry sits below the accessibility math that consumes it.
   'foundation/kernel': Object.freeze({
     color: 0,
@@ -160,6 +166,13 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
   infrastructure: Object.freeze({
     compilers: 0,
     runtime: 1,
+  }),
+  // The top-layer host is the overlay substrate a portal resolves against:
+  // it decides whether portaled content stays inside an open dialog's
+  // top-layer subtree or falls back to the shared portal root.
+  'ui/primitives/runtime/overlay': Object.freeze({
+    'top-layer-host': 0,
+    portal: 1,
   }),
   'ui/primitives/feedback/Toast/runtime/state': Object.freeze({
     'method-registry': 0,

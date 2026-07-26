@@ -642,6 +642,9 @@
   font-size: var(--ds-font-size-sm, 14px);
 }
 
+/* The whole edit header is the grab target, so the drag affordance is not
+   bound to the width of the move control. The Button and Button.Icon inside it
+   keep their own primitive chrome. */
 .ds-pattern-widget-board .ds-widget-board__cell-controls {
   position: relative;
   z-index: 5;
@@ -659,103 +662,23 @@
     var(--ds-surface-panel-bg) 78%,
     var(--ds-surface-card-bg)
   );
-}
-
-.ds-pattern-widget-board .ds-widget-board__drag-surface {
-  display: inline-flex;
-  flex: 1 1 auto;
-  align-items: center;
-  align-self: stretch;
-  justify-content: flex-start;
-  gap: var(--ds-spacing-2, 8px);
-  min-width: 0;
-  min-height: 32px;
-  margin-block: -6px;
-  margin-inline-start: calc(var(--ds-spacing-3, 12px) * -1);
-  padding: 0 var(--ds-spacing-3, 12px);
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  color: var(--ds-color-text-secondary);
   cursor: grab;
-  font: inherit;
-  font-size: var(--ds-font-size-xs, 12px);
-  font-weight: var(--ds-font-weight-medium, 500);
-  text-align: start;
   touch-action: none;
   user-select: none;
-  transition: color var(--ds-motion-fast, 120ms)
-      var(--ds-motion-ease-out, ease-out),
-    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-pattern-widget-board .ds-widget-board__drag-surface:hover,
-.ds-pattern-widget-board .ds-widget-board__drag-surface:focus-visible {
-  background: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--ds-color-primary) 7%, transparent),
-    transparent 78%
-  );
-  color: var(--ds-color-primary);
-  outline: 2px solid
-    color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
-  outline-offset: -2px;
-}
-
-.ds-pattern-widget-board .ds-widget-board__drag-surface:active {
+.ds-pattern-widget-board .ds-widget-board__cell-controls:active {
   cursor: grabbing;
 }
 
-.ds-pattern-widget-board .ds-widget-board__drag-surface svg {
-  flex: 0 0 auto;
-  opacity: 0.72;
-  transition: opacity var(--ds-motion-fast, 120ms)
-      var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
-}
-
-.ds-pattern-widget-board
-  .ds-widget-board__drag-surface:where(:hover, :focus-visible)
-  svg {
-  opacity: 1;
-  transform: translateX(1px);
-}
-
-.ds-pattern-widget-board .ds-widget-board__cell-control {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  min-width: 34px;
-  height: 34px;
-  padding: 0 10px;
-  border: 1px solid
-    var(--ds-surface-card-border, var(--ds-color-border-primary));
-  border-radius: var(--ds-radius-md, 8px);
-  background: var(--ds-surface-card-bg, var(--ds-color-bg-elevated));
-  color: var(--ds-color-text-secondary);
-  cursor: pointer;
-  font: inherit;
-  font-size: var(--ds-font-size-xs, 12px);
-  font-weight: var(--ds-font-weight-medium, 500);
-  line-height: 1;
-  white-space: nowrap;
-  box-shadow: inset 0 1px 0
-    color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
-}
-
-.ds-pattern-widget-board .ds-widget-board__cell-control:hover,
-.ds-pattern-widget-board .ds-widget-board__cell-control:focus-visible {
-  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
-  color: var(--ds-color-primary);
-  outline: none;
-}
-
+/* The readout and the remove control stay pinned to the inline-end of the
+   header; the move control keeps its natural button width. */
 .ds-pattern-widget-board .ds-widget-board__size-readout {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   min-height: 28px;
+  margin-inline-start: auto;
   padding-inline: 9px;
   border: 1px solid
     var(--ds-surface-card-border, var(--ds-color-border-primary));

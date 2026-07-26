@@ -3,7 +3,7 @@ import { fireEvent, render, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import type { WidgetBoardItem, WidgetBoardLabels } from "../contracts";
-import { WidgetBoardEngine } from "../engines/shared";
+import { WidgetBoardEngine } from "../engines/foundation";
 
 const labels: WidgetBoardLabels = {
   context: "Role workspace",
@@ -232,9 +232,13 @@ describe("WidgetBoard product layout", () => {
       container.querySelectorAll('[data-part="resize-handle"]')
     ).toHaveLength(8);
 
-    const resizeHandle = await findByRole("slider", {
+    const resizeHandle = await findByRole("separator", {
       name: `${labels.resizeWidth}: pipeline`,
     });
+    expect(resizeHandle).toHaveAttribute("aria-orientation", "vertical");
+    expect(resizeHandle).toHaveAttribute("aria-valuemin", "0");
+    expect(resizeHandle).toHaveAttribute("aria-valuemax", "3");
+    expect(resizeHandle).toHaveAttribute("aria-valuenow", "2");
     fireEvent.keyDown(resizeHandle, { key: "ArrowLeft" });
     expect(onItemsChange).toHaveBeenCalledWith(
       expect.arrayContaining([
@@ -242,9 +246,10 @@ describe("WidgetBoard product layout", () => {
       ])
     );
 
-    const heightHandle = await findByRole("slider", {
+    const heightHandle = await findByRole("separator", {
       name: `${labels.resizeHeight}: pipeline`,
     });
+    expect(heightHandle).toHaveAttribute("aria-orientation", "horizontal");
     fireEvent.keyDown(heightHandle, { key: "ArrowUp" });
     expect(onItemsChange).toHaveBeenLastCalledWith(
       expect.arrayContaining([
@@ -266,9 +271,13 @@ describe("WidgetBoard product layout", () => {
     );
     const grid = container.querySelector<HTMLElement>('[data-part="grid"]');
     const cell = container.querySelector<HTMLElement>('[data-part="cell"]');
-    const corner = container.querySelector<HTMLButtonElement>(
+    const corner = container.querySelector<HTMLElement>(
       '[data-edge="block-end-inline-end"]'
     );
+    // The six pointer-only edges stay out of the accessibility tree; width and
+    // height keep their own keyboard-operable separators.
+    expect(corner).toHaveAttribute("aria-hidden", "true");
+    expect(corner).not.toHaveAttribute("role");
     expect(grid).not.toBeNull();
     expect(cell).not.toBeNull();
     expect(corner).not.toBeNull();

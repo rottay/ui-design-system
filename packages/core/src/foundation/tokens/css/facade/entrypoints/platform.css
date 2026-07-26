@@ -13,4 +13,4 @@
  * @version 1.0.0
  */
 @import './base.css';
-@import '../artifacts/rottay/index.css';
+@import '../artifacts/rottay/index.css' layer(rottay-tenants);

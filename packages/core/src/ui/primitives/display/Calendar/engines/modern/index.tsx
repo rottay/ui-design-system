@@ -12,14 +12,19 @@
  * Paint and header-control geometry live in the modern skin
  * (`runtime/engines/modern/skin/calendar.css`), keyed by `data-part` +
  * `data-selected`/`data-today`/`data-disabled`/`data-active`: the skin is the
- * single paint owner (selected/today/hover surfaces, nav-button geometry, the
- * today-ring's border width, and the `[dir='rtl']` nav-glyph flip). The
- * utilities below own layout only; directional utilities are logical
- * (`start-0`/`end-0`). Cells carry NO `transition-*` utility (K4-B round 2):
- * Tailwind's `utilities` layer sorts above the skin's `rottay-engines` layer,
- * so a utility transition cannot be overridden by the skin and defers the
- * skin-owned hover paint through a fade-from-transparent; state paint is
- * instant instead (motion re-ownership is a Pass-2 skin decision).
+ * single paint owner (selected/today/hover/press surfaces, focus rings,
+ * nav-button geometry, the today-ring's border width, and the `[dir='rtl']`
+ * nav-glyph flip). W10 moved the cell/root radii off the Tailwind
+ * `rounded-lg` utility (fixed 8px, deaf to `--ds-radius-scale`) into the
+ * skin, where they ride the tenant-scaled `--ds-radius-*` steps, and resolved
+ * the K4-B deferred motion re-ownership: the skin now owns the state
+ * transition on the repainted channels (guarded by prefers-reduced-motion).
+ * The utilities below own layout only; directional utilities are logical
+ * (`start-0`/`end-0`). Cells still carry NO `transition-*` utility (K4-B
+ * round 2): Tailwind's `utilities` layer sorts above the skin's
+ * `rottay-engines` layer, so a utility transition cannot be overridden by the
+ * skin and defers the skin-owned hover paint through a fade-from-transparent;
+ * the transition lives in the unlayered skin instead.
  *
  * Engine: **Tailwind CSS + skin (calendar.css)**
  *
@@ -217,7 +222,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
   return (
     <div
       ref={ref}
-      className={`rottay-calendar rottay-calendar--modern rounded-lg p-4 ${containerClass} ${className}`}
+      className={`rottay-calendar rottay-calendar--modern p-4 ${containerClass} ${className}`}
       data-part="root"
       data-mode={mode}
       style={style}
@@ -287,7 +292,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                   data-today={isToday ? 'true' : 'false'}
                   data-disabled={isDisabled || undefined}
                   className={`
-                    aspect-square flex flex-col items-center justify-center rounded-lg
+                    aspect-square flex flex-col items-center justify-center
                     relative
                     ${isDisabled ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'}
                   `}
@@ -319,7 +324,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                 data-part="cell"
                 data-selected={isSelected ? 'true' : 'false'}
                 data-today={isCurrentMonth ? 'true' : 'false'}
-                className="p-4 rounded-lg text-center"
+                className="p-4 text-center"
                 onClick={() => handleMonthClick(i)}
               >
                 <span className={fullscreen ? 'text-sm' : 'text-xs'}>{month}</span>

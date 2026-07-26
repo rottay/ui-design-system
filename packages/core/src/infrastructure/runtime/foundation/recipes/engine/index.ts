@@ -10,6 +10,7 @@
  */
 import { tv } from "tailwind-variants/lite";
 
+import { describeRecipeDefinition } from "../contracts";
 import type {
   RecipeAxisMatrix,
   RecipeClassValue,
@@ -36,8 +37,8 @@ export function defineRecipe<
   Slot extends string,
   Axes extends RecipeAxisMatrix<Slot>,
 >(definition: RecipeDefinition<Slot, Axes>): RecipeResolver<Slot, Axes> {
-  const slotNames = Object.keys(definition.slots) as Slot[];
-  const axisNames = Object.keys(definition.axes) as Array<keyof Axes & string>;
+  const shape = describeRecipeDefinition(definition);
+  const { axisNames, slotNames } = shape;
 
   const variants: Record<string, Record<string, Record<string, string>>> = {};
   for (const axis of axisNames) {
@@ -100,15 +101,5 @@ export function defineRecipe<
     return resolved;
   };
 
-  const axisValues = Object.fromEntries(
-    axisNames.map((axis) => [axis, Object.keys(definition.axes[axis])])
-  ) as unknown as Record<keyof Axes & string, readonly string[]>;
-
-  return {
-    name: definition.name,
-    slotNames,
-    axisNames,
-    axisValues,
-    resolve,
-  };
+  return { ...shape, resolve };
 }

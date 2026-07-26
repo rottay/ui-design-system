@@ -23,7 +23,7 @@ import React, { useEffect } from 'react';
 import { describe, expect, it } from 'vitest';
 import { act, screen, waitFor } from '@testing-library/react';
 
-import type { MessagePlacement } from '../../contracts';
+import type { MessagePlacement } from '../contracts';
 import {
   MessageItem as ModernMessageItem,
   MessageProvider as ModernMessageProvider,

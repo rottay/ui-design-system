@@ -44,6 +44,10 @@ import { partAttributes, useInteractionState } from '../../../../../../foundatio
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 import type { ButtonProps, ButtonSize } from '../../contracts';
 import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
+import {
+  BUTTON_RECIPE_DEFINITION,
+  BUTTON_VARIANT_VALUES,
+} from '@/infrastructure/runtime/foundation/recipes/contracts/families';
 import { useRecipeProfileDefaults } from '@/infrastructure/runtime/foundation/recipes/profiles';
 
 import { BUTTON_DEFAULTS, SIZE_MAP as BUTTON_SIZE_MAP, resolveButtonBusyState } from '../../contracts';
@@ -57,62 +61,16 @@ import {
 /**
  * The variants the modern skin paints. An unknown variant falls back to
  * `primary` for the className, the `data-variant` attribute and therefore the
- * paint, all three together.
- *
- * The paint itself lives in `foundation/tokens/css/runtime/engines/modern/skin/button.css`, keyed
- * on `data-variant`. This set is the contract those rules answer to; a variant
- * added here without a rule there renders unpainted, and the state matrix in
- * `packages/showroom/e2e/visual/states.spec.ts` is what says so.
+ * paint, all three together. The authored domain is the recipe definition's.
  */
-const KNOWN_VARIANT_VALUES = [
-  'primary',
-  'secondary',
-  'default',
-  'outline',
-  'ghost',
-  'text',
-  'dashed',
-  'danger',
-  'success',
-  'warning',
-  'info',
-  'ai',
-  'link',
-] as const;
-const KNOWN_VARIANTS: ReadonlySet<string> = new Set(KNOWN_VARIANT_VALUES);
-
-const BUTTON_SHAPES = ['default', 'circle', 'round'] as const;
-
-const axisFromDomain = <const Value extends string>(values: readonly Value[]) =>
-  Object.fromEntries(
-    [...values].map((value) => [value, { root: `rottay-button--${value}` }])
-  ) as Record<Value, { root: string }>;
+const KNOWN_VARIANTS: ReadonlySet<string> = new Set(BUTTON_VARIANT_VALUES);
 
 /**
  * DS-S001 recipe: the same semantic classes the skin has always selected on,
  * resolved through the Rottay recipe engine. Axis order mirrors the historical
  * class order exactly (variant, size, shape, then the boolean states).
  */
-export const modernButtonRecipe = defineRecipe({
-  name: 'button',
-  slots: { root: ['rottay-button', 'rottay-button--modern'] },
-  axes: {
-    variant: axisFromDomain(KNOWN_VARIANT_VALUES),
-    size: axisFromDomain(
-      Object.keys(BUTTON_SIZE_MAP) as Array<keyof typeof BUTTON_SIZE_MAP>
-    ),
-    shape: axisFromDomain(BUTTON_SHAPES),
-    block: { true: { root: 'rottay-button--block' } },
-    loading: { true: { root: 'rottay-button--loading' } },
-    pending: { true: { root: 'rottay-button--pending' } },
-    disabled: { true: { root: 'rottay-button--disabled' } },
-    shadow: { true: { root: 'rottay-button--shadow' } },
-    gradient: { true: { root: 'rottay-button--gradient' } },
-    pulse: { true: { root: 'rottay-button--pulse' } },
-    bordered: { true: { root: 'rottay-button--bordered' } },
-  },
-  defaults: {},
-});
+export const modernButtonRecipe = defineRecipe(BUTTON_RECIPE_DEFINITION);
 
 // ---------------------------------------------------------------------------
 // Loading spinner

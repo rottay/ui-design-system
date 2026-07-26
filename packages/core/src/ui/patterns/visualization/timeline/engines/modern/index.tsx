@@ -1,13 +1,14 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the Timeline pattern.
+ * @fileoverview Modern engine for the Timeline pattern.
  *
- * Uses DaisyUI's `timeline`, `timeline-vertical`, `timeline-start`,
- * `timeline-end`, and `timeline-box` classes to compose a vertical timeline.
- * Supports left, right, and alternate layout modes by conditionally swapping
- * `timeline-start` and `timeline-end` classes per item. Type-based semantic
- * badges use DaisyUI's badge color variants.
+ * Composes a vertical timeline from Rottay-namespaced parts. The rail geometry
+ * -- the three-track item grid, the connector placement, and the side on which
+ * each item's card and timestamp land -- is owned by
+ * `skin/pattern-timeline.css`, keyed on `data-part` + `data-side`. Supports
+ * left, right, and alternate layout modes by flipping `data-side` per item;
+ * the skin reads that attribute instead of the engine swapping class names.
  *
  * @example
  * <ModernTimeline
@@ -35,15 +36,14 @@ function formatDateKey(ts: string | Date): string {
 }
 
 /**
- * Modern (DaisyUI/Tailwind) engine for the Timeline pattern component.
+ * Modern engine for the Timeline pattern component.
  *
- * Renders a `<ul class="timeline timeline-vertical">` with `<li>` entries
- * that use DaisyUI's timeline utility classes for connector lines and dot
- * indicators. In alternate mode, even-indexed items swap start/end placement
- * for a zigzag layout.
+ * Renders a `<ul>` rail with `<li>` entries whose connector lines and dot
+ * indicators are placed by the skin's item grid. In alternate mode,
+ * odd-indexed items flip `data-side` for a zigzag layout.
  *
  * @param props - {@link TimelinePatternProps} controlling items, layout mode, grouping, and callbacks.
- * @returns A vertical timeline rendered with DaisyUI/Tailwind classes.
+ * @returns A vertical timeline rendered from Rottay-namespaced parts.
  */
 export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   const {
@@ -75,16 +75,16 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   }, [items, groupByDate]);
 
   /** Builds the default render for a single timeline item. In alternate mode,
-   *  odd-indexed items are placed on the right side by swapping start/end classes. */
+   *  odd-indexed items are placed on the right side by flipping `data-side`. */
   const buildDefaultRender = (item: TimelineItem<T>, index: number, total: number) => {
     const isAlternate = mode === 'alternate';
     const isRight = mode === 'right' || (isAlternate && index % 2 === 1);
 
     return (
       <>
-        {index !== 0 && <hr data-part="connector" />}
+        {index !== 0 && <hr data-part="connector" data-edge="leading" className="ds-timeline-modern__connector" />}
         {showTimestamp && (
-          <div data-part="timestamp-slot" data-side={isRight ? 'right' : 'left'} className={isRight ? 'timeline-end timeline-box' : 'timeline-start'}>
+          <div data-part="timestamp-slot" data-side={isRight ? 'right' : 'left'} className="ds-timeline-modern__timestamp-slot">
             {!isRight && (
               <time data-part="timestamp" className="font-mono text-xs opacity-60">
                 {formatTimestamp(item.timestamp)}
@@ -92,7 +92,7 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
             )}
           </div>
         )}
-        <div data-part="marker" className="timeline-middle">
+        <div data-part="marker" className="ds-timeline-modern__marker">
           {/* Render custom icon if provided; otherwise fall back to a
               checkmark circle SVG colored by the item's semantic type. */}
           {item.icon ? (
@@ -107,7 +107,7 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
           data-part="item-card"
           data-side={isRight ? 'right' : 'left'}
           data-clickable={Boolean(onItemClick)}
-          className={`${isRight ? 'timeline-start' : 'timeline-end'} timeline-box ${onItemClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
+          className={`ds-timeline-modern__item-card ${onItemClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
           onClick={onItemClick ? () => onItemClick(item) : undefined}
         >
           <div className="flex items-center gap-2 mb-1">
@@ -129,20 +129,20 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
           )}
           {item.description && <p className="text-xs opacity-70 mt-1">{item.description}</p>}
         </div>
-        {index !== total - 1 && <hr data-part="connector" />}
+        {index !== total - 1 && <hr data-part="connector" data-edge="trailing" className="ds-timeline-modern__connector" />}
       </>
     );
   };
 
-  /** Renders a list of timeline items as a DaisyUI vertical timeline. */
+  /** Renders a list of timeline items as a vertical timeline. */
   const renderList = (list: TimelineItem<T>[]) => (
-    <ul data-part="list" className="timeline timeline-vertical">
+    <ul data-part="list" className="ds-timeline-modern__list">
       {list.map((item, index) => {
         const defaultRender = buildDefaultRender(item, index, list.length);
         return renderItem ? (
-          <li data-part="item" data-type={item.type ?? 'default'} key={item.key}>{renderItem(item, defaultRender)}</li>
+          <li data-part="item" data-type={item.type ?? 'default'} className="ds-timeline-modern__item" key={item.key}>{renderItem(item, defaultRender)}</li>
         ) : (
-          <li data-part="item" data-type={item.type ?? 'default'} key={item.key}>{defaultRender}</li>
+          <li data-part="item" data-type={item.type ?? 'default'} className="ds-timeline-modern__item" key={item.key}>{defaultRender}</li>
         );
       })}
     </ul>

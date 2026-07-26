@@ -72,9 +72,13 @@ export interface ListToolbarProps extends PatternBaseProps {
   search: string;
   /** Search value change handler */
   onSearchChange: (value: string) => void;
-  /** Placeholder for the search input */
+  /** Placeholder for the search input. Defaults to the i18n catalog value
+   * `components.listToolbar.searchPlaceholder` (English floor: "Search..."). */
   searchPlaceholder?: string;
-  /** Localized toolbar chrome. Defaults preserve the historical English copy. */
+  /** Localized toolbar chrome. Defaults preserve the historical English copy.
+   * In the modern engine each entry resolves through the i18n catalogs
+   * (`components.listToolbar.*`, landed for en/es/ar; fr/pt use the
+   * documented partial-locale fallback chain) — these overrides still win. */
   messages?: Partial<ListToolbarMessages>;
 
   // Filters

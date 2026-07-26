@@ -3,7 +3,7 @@
 import { densityScopeAttributes } from "@/infrastructure/runtime/foundation/density";
 import React from "react";
 import type { CSSProperties } from "react";
-import type { RecordFactsProps } from "../contracts";
+import type { RecordFactsProps } from "../../contracts";
 
 export function RecordFactsEngine({
   ariaLabel,

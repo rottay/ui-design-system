@@ -1,0 +1,132 @@
+/**
+ * Arabic typography guard — `:lang(ar)` tracking neutralization.
+ *
+ * WHY. Arabic is a cursive script: letters JOIN, and the join is drawn by the
+ * glyph itself. `letter-spacing` inserts space between glyph boxes, which pulls
+ * the joining strokes apart and renders connected text as disconnected shapes.
+ * This is not a matter of taste like it is in Latin — negative tracking breaks
+ * the writing system, and positive tracking breaks it worse. The correct rule
+ * for Arabic is: do not track at all.
+ *
+ * The design system's Quiet Premium type ramp is built on negative tracking
+ * (`--ds-letter-spacing-tighter: -0.05em` down to `-0.01em`, plus per-heading
+ * steps, in `foundation/base/typography.css`), first-party tenants push it
+ * further (bithire ships `--ds-letter-spacing-display: -0.035em`), and the
+ * modern skin consumes it on every text style. Before this file, `:lang(ar)`
+ * and `[lang="ar"]` appeared ZERO times in the entire CSS corpus, so Arabic
+ * rendered with the full Latin tracking ramp applied to it.
+ *
+ * WHICH @LAYER, AND WHY IT CANNOT BE ACCIDENTALLY OVERRIDDEN.
+ * This file is reached through `foundation/responsive/index.css`, which both
+ * public entrypoints import as `layer(rottay-responsive)` — the LAST
+ * design-system layer in the canonical order:
+ *
+ *   theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion,
+ *   rottay-components, rottay-engines, rottay-tenants, rottay-personality,
+ *   rottay-responsive, components, utilities
+ *
+ * Layer precedence outranks specificity, so nothing inside the design system
+ * can beat these rules at any selector weight: not the base token scale
+ * (`rottay-tokens`), not a component or engine skin, not a tenant artifact
+ * (`rottay-tenants`) — which is exactly where the most aggressive negative
+ * tracking lives — and not the personality layer. A guard placed with the
+ * tokens it corrects would lose to every one of those. `rottay-responsive` is
+ * the right home in kind as well as in rank: it is the layer for adjustments
+ * conditioned on the rendering environment, and the rendering language is one
+ * of those conditions.
+ *
+ * What CAN still override it is deliberate and application-owned: a consumer's
+ * own `components`/`utilities` layer, unlayered application CSS, `!important`,
+ * or an inline `style`. An application that genuinely wants tracked Arabic has
+ * to say so explicitly.
+ *
+ * NO CLASSIC/RUSTIC EDIT REQUIRED. The guard is engine-agnostic: it corrects
+ * the tokens all three engines read and the `letter-spacing` property all three
+ * paint, so classic (Ant Design) and rustic inherit it untouched.
+ *
+ * `:lang(ar)` rather than `[lang="ar"]`: it matches `ar`, `ar-SA`, `ar-EG` and
+ * every other regional variant, and it matches through inheritance, so tagging
+ * the document or a single Arabic subtree both work.
+ *
+ * SCOPE NOTE. `letter-spacing` and custom properties both inherit, so a Latin
+ * ISLAND inside an Arabic document (`<span lang="en">` under `<html lang="ar">`)
+ * inherits neutral tracking. That is a deliberate trade: the alternative is a
+ * second copy of the whole tracking scale that would silently drift from the
+ * canonical one. An island that needs its tracking back declares it, which is
+ * a bounded, local act — and correcting an island's tracking is cosmetic,
+ * whereas breaking Arabic joining is not.
+ */
+
+/* ---------------------------------------------------------------------------
+   1. Token neutralization.
+
+   The floor in section 2 covers everything painted from a stylesheet. This
+   section covers what it cannot reach: components that resolve a tracking
+   token in an INLINE style (e.g. `letterSpacing: 'var(--ds-letter-spacing-
+   heading)'` in the modern cockpit/workbench/page-shell headers). An inline
+   style outranks every layer, so the only way to correct it is to change the
+   value the `var()` resolves to — which is what re-declaring the token on the
+   Arabic subtree does.
+
+   Values are `0` rather than `normal` so a token that lands inside a `calc()`
+   stays valid; for tracking the two are visually identical.
+   --------------------------------------------------------------------------- */
+:lang(ar) {
+  /* Canonical tracking scale (foundation/base/typography.css). */
+  --ds-letter-spacing-tighter: 0;
+  --ds-letter-spacing-tight: 0;
+  --ds-letter-spacing-snug: 0;
+  --ds-letter-spacing-subtle: 0;
+  --ds-letter-spacing-subtle-wide: 0;
+  --ds-letter-spacing-wide: 0;
+  --ds-letter-spacing-wider: 0;
+  --ds-letter-spacing-widest: 0;
+
+  /* Per-heading tracking steps. */
+  --ds-letter-spacing-h1: 0;
+  --ds-letter-spacing-h2: 0;
+  --ds-letter-spacing-h3: 0;
+  --ds-letter-spacing-h4: 0;
+  --ds-letter-spacing-h5: 0;
+  --ds-letter-spacing-h6: 0;
+
+  /* Brand/tenant tracking channels — the ones first-party artifacts push
+     negative, and the ones BrandTheme exposes to customers. */
+  --ds-letter-spacing-display: 0;
+  --ds-letter-spacing-heading: 0;
+  --ds-letter-spacing-body: 0;
+  --ds-letter-spacing-mono: 0;
+  --ds-personality-typography-heading-letter-spacing: 0;
+  --ds-typography-display-letter-spacing: 0;
+  --ds-typography-heading-letter-spacing: 0;
+  --ds-typography-body-letter-spacing: 0;
+
+  /* Semantic type roles consumed by the modern skin's `[data-text-style]`
+     rules and by the Text/Heading primitives. */
+  --ds-type-display-letter-spacing: 0;
+  --ds-type-page-title-letter-spacing: 0;
+  --ds-type-section-title-letter-spacing: 0;
+  --ds-type-body-letter-spacing: 0;
+  --ds-type-supporting-letter-spacing: 0;
+  --ds-type-label-letter-spacing: 0;
+  --ds-type-caption-letter-spacing: 0;
+  --ds-type-code-letter-spacing: 0;
+  --ds-type-numeric-letter-spacing: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   2. Property floor.
+
+   The complete guard for stylesheet-declared tracking, including the literal
+   values hard-coded in skins (widget-board, record-facts, markdown-view,
+   surface-section-card, decision-*, oauth-transition) that ride no token at
+   all, and including tracking tokens added after this file was written. It
+   needs no specificity arms race: `rottay-responsive` outranks every layer
+   those declarations live in.
+
+   `normal` rather than `0` so the browser keeps its justification-aware
+   default spacing behavior for the property itself.
+   --------------------------------------------------------------------------- */
+:lang(ar) {
+  letter-spacing: normal;
+}

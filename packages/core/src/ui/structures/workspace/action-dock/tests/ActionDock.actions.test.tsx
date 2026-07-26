@@ -330,6 +330,45 @@ describe('ActionDock skin ownership (structured grammar)', () => {
     expect(ACTION_DOCK_SKIN).not.toContain('@media (forced-colors');
     expect(ACTION_DOCK_SKIN).not.toMatch(/border-(top|bottom|left|right)\b/);
   });
+
+  it('reads as a frosted chrome sheet with placement-aware elevation (W10)', () => {
+    const rootRule = ACTION_DOCK_SKIN.match(
+      /\.rottay-action-dock\[data-part=["']root["']\]\[data-placement\]\[data-mode\]\s*\{([^}]*)\}/
+    )?.[1];
+    const bottomRule = ACTION_DOCK_SKIN.match(
+      /\[data-placement=["']bottom["']\]\s*\{([^}]*)\}/
+    )?.[1];
+    const topRule = ACTION_DOCK_SKIN.match(
+      /\[data-placement=["']top["']\]\s*\{([^}]*)\}/
+    )?.[1];
+
+    // Frosted surface: translucent bg-primary mix + tokenized backdrop blur on
+    // the glass channel (collapses to 0 under the reduced-effects intensity).
+    expect(rootRule).toContain('--ds-action-dock-bg');
+    expect(rootRule).toContain('color-mix(in srgb, var(--ds-color-bg-primary)');
+    expect(rootRule).toContain('transparent');
+    expect(rootRule).toContain('blur(var(--ds-glass-blur, 8px))');
+    expect(rootRule).toContain('backdrop-filter');
+
+    // Placement-aware elevation: a bottom dock casts UPWARD (the downward
+    // navbar shadow is invisible beneath it); a top dock keeps the downward
+    // navbar shadow. Both edges carry the neutral inset highlight.
+    expect(bottomRule).toContain('--ds-action-dock-shadow-bottom');
+    expect(bottomRule).toMatch(/0 -\d+px \d+px color-mix\(in srgb, var\(--ds-color-shadow\)/);
+    expect(bottomRule).not.toContain('--ds-shadow-navbar');
+    expect(topRule).toContain('var(--ds-action-dock-shadow-top, var(--ds-shadow-navbar))');
+    for (const rule of [bottomRule, topRule]) {
+      expect(rule).toContain('--ds-action-dock-edge-highlight');
+      expect(rule).toContain('color-mix(in srgb, var(--ds-color-bg-elevated)');
+    }
+
+    // Theme/density channel switches transition; reduced motion silences it.
+    expect(rootRule).toContain('transition:');
+    expect(rootRule).toContain('var(--ds-motion-fast, 120ms)');
+    expect(ACTION_DOCK_SKIN).toMatch(
+      /@media \(prefers-reduced-motion: reduce\)\s*\{[^}]*transition:\s*none/
+    );
+  });
 });
 
 

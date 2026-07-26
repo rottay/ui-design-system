@@ -131,12 +131,18 @@ describe("modern skins honor the surface layer they declare", () => {
     );
   });
 
+  // The popover fill is routed through the tenant material chain
+  // (--ds-popover-bordered-background -> --ds-material-overlay-background), so
+  // the card fill is pinned where it still lives: as the terminal fallback of
+  // --ds-popover-surface. The lift layer must sit inside the same background
+  // declaration as that fill and directly above it -- [^;] keeps the match from
+  // crossing into another declaration.
   it("popover composes the elevation-surface layer over its card fill", () => {
     expect(POPOVER_CSS).toContain(
-      "background-color: var(--ds-popover-bg, var(--ds-surface-card))",
+      "var(--ds-popover-bg, var(--ds-surface-overlay, var(--ds-surface-card)))",
     );
     expect(POPOVER_CSS).toMatch(
-      /background-image:\s*linear-gradient\(var\(--ds-elevation-surface-3\), var\(--ds-elevation-surface-3\)\)/,
+      /background:[^;]*linear-gradient\(\s*var\(--ds-elevation-surface-3\),\s*var\(--ds-elevation-surface-3\)\s*\),\s*var\(--ds-popover-surface\)\s*;/,
     );
   });
 });

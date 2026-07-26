@@ -180,26 +180,12 @@
   outline: none;
 }
 
-/* =============================================================================
-   MODAL - .modal
-   ============================================================================= */
-
-[data-tenant] .modal-box {
-  background-color: var(--ds-modal-bg);
-  border-radius: var(--ds-modal-radius);
-  box-shadow: var(--ds-modal-shadow);
-  padding: var(--ds-modal-padding);
-}
-
-[data-tenant] .modal-backdrop {
-  background-color: var(--ds-modal-overlay-bg);
-  backdrop-filter: var(--ds-modal-overlay-backdrop);
-}
-
-[data-tenant] .modal-action {
-  margin-top: var(--ds-modal-footer-padding);
-  gap: var(--ds-modal-footer-gap);
-}
+/* MODAL — bridge drained. AlertDialog was the last modern consumer of the
+   Daisy `.modal-box`/`.modal-backdrop`/`.modal-action` classes; it now paints
+   from `skin/alert-dialog.css`, which reads the same `--ds-modal-*` tokens
+   this bridge referenced (shadow, overlay backdrop, footer padding and gap),
+   so tenant white-labelling is unchanged. The Modal primitive never consumed
+   this block — its skins key on `.rottay-modal-*`/`.ds-modal*` instead. */
 
 /* =============================================================================
    LOADING / SPINNER - .loading
@@ -379,39 +365,18 @@
    the rules were already inert. The Toast primitive never consumed this
    block (its skins key on `.rottay-toast-*` classes only). */
 
-/* =============================================================================
-   LINK - a
-   ============================================================================= */
+/* LINK — bridge drained. FileManager's folder anchor was the last modern
+   consumer of the Daisy `link` class; its affordance now lives in
+   `skin/file-manager.css` on `.ds-file-manager__folder-link`, resolving the
+   colour through `--ds-color-link`/`--ds-color-link-hover`. The Link primitive
+   never consumed this block (its skin keys on `.rottay-link-shell--modern`). */
 
-[data-tenant] a.link {
-  color: var(--ds-link-color);
-  text-decoration: var(--ds-link-decoration);
-  transition: var(--ds-transition-fast);
-}
-
-[data-tenant] a.link:hover {
-  color: var(--ds-link-color-hover);
-  text-decoration: var(--ds-link-decoration-hover);
-}
-
-[data-tenant] a.link:active {
-  color: var(--ds-link-color-active);
-}
-
-/* =============================================================================
-   TIMELINE
-   ============================================================================= */
-
-[data-tenant] .timeline::before {
-  background-color: var(--ds-timeline-line-color);
-  width: var(--ds-timeline-line-width);
-}
-
-[data-tenant] .timeline-start,
-[data-tenant] .timeline-middle,
-[data-tenant] .timeline-end {
-  color: var(--ds-text-primary);
-}
+/* TIMELINE — bridge drained. The Timeline pattern was the last modern consumer
+   of the Daisy `timeline*` classes; the rail now paints from
+   `skin/pattern-timeline.css`, which keeps `--ds-timeline-line-color` and
+   `--ds-timeline-line-width` in its fallback chain. `.timeline::before` was
+   already inert — a `::before` with no `content` never generates a box. The
+   Timeline primitive drained the same classes earlier (`skin/timeline.css`). */
 
 /* =============================================================================
    TREE

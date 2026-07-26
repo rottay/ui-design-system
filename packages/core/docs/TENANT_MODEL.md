@@ -53,7 +53,7 @@ Rottay or another customer's styling.
 
 ## Customization Contract
 
-`TenantThemeDocument` schema v1 compiled by `tenant-theme-compiler@3` is the
+`TenantThemeDocument` schema v1 compiled by `tenant-theme-compiler@4` is the
 only write contract for tenant customization.
 
 - General fields expose bounded palette, typography, shape, density, motion,

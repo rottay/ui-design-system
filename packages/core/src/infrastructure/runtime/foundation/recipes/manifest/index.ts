@@ -12,11 +12,14 @@ import {
   RECIPE_PROFILES,
   RECIPE_PROFILE_SCHEMA_VERSION,
 } from '@/foundation/tokens/ts/presentation/recipe-profiles';
-import { modernButtonRecipe } from '@/ui/primitives/inputs/Button/engines/modern';
-import { modernCardRecipe } from '@/ui/primitives/display/Card/engines/modern';
-import { modernTabsRecipe } from '@/ui/primitives/navigation/Tabs/engines/modern';
-import { modernTagRecipe } from '@/ui/primitives/display/Tag/engines/modern';
-import { surfaceSectionCardRecipe } from '@/ui/surfaces/runtime/helpers/rendering';
+import { describeRecipeDefinition } from '../contracts';
+import {
+  BUTTON_RECIPE_DEFINITION,
+  CARD_RECIPE_DEFINITION,
+  SECTION_CARD_RECIPE_DEFINITION,
+  TABS_RECIPE_DEFINITION,
+  TAG_RECIPE_DEFINITION,
+} from '../contracts/families';
 
 export interface RecipeManifestFamily {
   readonly name: string;
@@ -38,28 +41,30 @@ export interface RecipeManifest {
   }>;
 }
 
-const FACADE_FAMILIES: ReadonlyArray<{
-  resolver:
-    | typeof modernButtonRecipe
-    | typeof modernCardRecipe
-    | typeof modernTabsRecipe
-    | typeof modernTagRecipe
-    | typeof surfaceSectionCardRecipe;
-  prefix: string;
+/** A family's authored shape, derived from the definition the engines resolve. */
+interface FacadeFamily {
+  readonly shape: {
+    readonly name: string;
+    readonly slotNames: readonly string[];
+    readonly axisValues: Readonly<Record<string, readonly string[]>>;
+  };
+  readonly prefix: string;
   /** Axes the skin selects through data attributes rather than classes. */
-  dataAxes?: Readonly<Record<string, readonly string[]>>;
-  mechanism?: RecipeManifestFamily['recipeMechanism'];
-}> = [
-  { resolver: modernButtonRecipe, prefix: '--ds-button-' },
-  { resolver: modernCardRecipe, prefix: '--ds-card-' },
+  readonly dataAxes?: Readonly<Record<string, readonly string[]>>;
+  readonly mechanism?: RecipeManifestFamily['recipeMechanism'];
+}
+
+const FACADE_FAMILIES: readonly FacadeFamily[] = [
+  { shape: describeRecipeDefinition(BUTTON_RECIPE_DEFINITION), prefix: '--ds-button-' },
+  { shape: describeRecipeDefinition(CARD_RECIPE_DEFINITION), prefix: '--ds-card-' },
   {
-    resolver: modernTabsRecipe,
+    shape: describeRecipeDefinition(TABS_RECIPE_DEFINITION),
     prefix: '--ds-tabs-',
     dataAxes: { recipe: ['underline', 'contained', 'segmented', 'pills'] },
     mechanism: 'hybrid',
   },
   {
-    resolver: modernTagRecipe,
+    shape: describeRecipeDefinition(TAG_RECIPE_DEFINITION),
     prefix: '--ds-tag-',
     dataAxes: {
       variant: ['default', 'primary', 'secondary', 'success', 'warning', 'error'],
@@ -71,7 +76,7 @@ const FACADE_FAMILIES: ReadonlyArray<{
     mechanism: 'hybrid',
   },
   {
-    resolver: surfaceSectionCardRecipe,
+    shape: describeRecipeDefinition(SECTION_CARD_RECIPE_DEFINITION),
     prefix: '--ds-section-card-',
   },
 ];
@@ -98,10 +103,10 @@ export function buildRecipeManifest(): RecipeManifest {
   return {
     schemaVersion: RECIPE_PROFILE_SCHEMA_VERSION,
     families: [
-      ...FACADE_FAMILIES.map(({ resolver, prefix, dataAxes, mechanism }) => ({
-        name: resolver.name,
-        slots: resolver.slotNames,
-        axes: { ...resolver.axisValues, ...(dataAxes ?? {}) },
+      ...FACADE_FAMILIES.map(({ shape, prefix, dataAxes, mechanism }) => ({
+        name: shape.name,
+        slots: shape.slotNames,
+        axes: { ...shape.axisValues, ...(dataAxes ?? {}) },
         customPropertyPrefix: prefix,
         recipeMechanism: mechanism ?? 'class',
       })),

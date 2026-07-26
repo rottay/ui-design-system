@@ -588,8 +588,11 @@
   /* -- Text - Light text on dark surfaces --------- */
   --ds-color-text-primary: #F0F0F0;
   --ds-color-text-secondary: #B0B0B5;
-  --ds-color-text-tertiary: #909095;
-  --ds-color-text-muted: #808088;
+  /* Ladder re-leveled (W8): muted must clear APCA |Lc| 45 on the page ground
+     (#808088 measured 34.9); tertiary rises with it so the
+     secondary > tertiary > muted ordering is preserved. */
+  --ds-color-text-tertiary: #9A9AA2;
+  --ds-color-text-muted: #96969E;
   --ds-color-text-disabled: #555560;
   --ds-color-text-on-primary: #0C0C0E;
   --ds-color-text: #ECECEC;
@@ -647,7 +650,11 @@
   --ds-color-warning-border: rgba(245, 158, 11, 0.22);
 
   /* Error - Red */
-  --ds-color-error: #EF4444;
+  /* Dark surface: the semantic channel doubles as status text on the page
+     ground, so it sits on the 400 step (APCA |Lc| 48.9 on --ds-color-bg-primary;
+     #EF4444 measured 37.7 — W8). Solid fills (buttons, inputs) keep their own
+     500-step literals from chrome.controls. */
+  --ds-color-error: var(--ds-color-error-400);
   --ds-color-error-50: rgba(239, 68, 68, 0.08);
   --ds-color-error-100: rgba(239, 68, 68, 0.12);
   --ds-color-error-200: #FECACA;
@@ -660,10 +667,12 @@
   --ds-color-error-900: #7F1D1D;
   --ds-color-error-bg: rgba(239, 68, 68, 0.10);
   --ds-color-error-border: rgba(239, 68, 68, 0.22);
-  --ds-color-danger: #EF4444;
+  --ds-color-danger: var(--ds-color-error-400);
 
   /* Info - Blue */
-  --ds-color-info: #3B82F6;
+  /* Same W8 dark-surface re-leveling as error: 400 step clears APCA |Lc| 45
+     (#3B82F6 measured 37.6; #60A5FA measures 52.1). */
+  --ds-color-info: var(--ds-color-info-400);
   --ds-color-info-50: rgba(59, 130, 246, 0.08);
   --ds-color-info-100: rgba(59, 130, 246, 0.12);
   --ds-color-info-200: #BFDBFE;
@@ -885,7 +894,9 @@
   --ds-button-disabled-border-color: #2A2A2F;
   --ds-button-disabled-opacity: 0.4;
 
-  --ds-button-focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.20);
+  /* Canonical WO-ENG-04 double ring (page-ground gap + white-primary ring,
+     19.8:1) — replaces the 20%-alpha single ring that measured 1.8:1 (W8). */
+  --ds-button-focus-ring: var(--ds-focus-ring);
 
   /* ============================================
      8. COMPONENT TOKENS - INPUT
@@ -2426,7 +2437,12 @@
   --ds-button-disabled-border-color: #E5E5E3;
   --ds-button-disabled-opacity: 0.4;
 
-  --ds-button-focus-ring: 0 0 0 2px rgba(10, 10, 10, 0.12);
+  /* Canonical WO-ENG-04 double ring (light ground gap + near-black primary
+     ring, ~19:1) — replaces the 12%-alpha single ring (W8). The ring color
+     must be re-declared per block: the :root fallback is the tenant-less
+     dark-default literal, not var(--ds-color-primary). */
+  --ds-focus-ring-color: var(--ds-color-primary);
+  --ds-button-focus-ring: var(--ds-focus-ring);
 
   /* ============================================
      8. COMPONENT TOKENS - INPUT

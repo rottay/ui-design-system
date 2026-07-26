@@ -1,0 +1,12 @@
+{
+  "capturedBefore": "canonicalization extraction to foundation/kernel/serialization",
+  "compilerVersion": "tenant-theme-compiler@4",
+  "documentSchemaDigest": "sha256-2b898d706c1e5a5baa2fdfa0c09936ea5df5d5d35c213d674f140aaa020b489d",
+  "configSchemaDigest": "sha256-54ed81d4aff6c676da3b48994eeb225698ec81eefdbb2f89d0b38a28850373bd",
+  "nullOverrideDigest": "sha256-f594475c5aba01a40f2fe9f4b3f08d6343a4e2df3640ecd4d2abd9acaece8a6c",
+  "nullOverrideEnvelopeDigest": "sha256-65da54f9b7e5bb192b79f73ae996855a43a9ce15ab8c6a419c69dca2a18d783f",
+  "populatedSimpleDigest": "sha256-63b2aa3e3c4f0551f022c6895821b13ca7c6079a5d78942ffac11be95b829327",
+  "populatedSimpleEnvelopeDigest": "sha256-65da54f9b7e5bb192b79f73ae996855a43a9ce15ab8c6a419c69dca2a18d783f",
+  "w4AbsentDigest": "sha256-55b4303d42d390902026138ba5bd0dc1a28d6159871b47a1517041134fefe913",
+  "w4AbsentEnvelopeDigest": "sha256-65da54f9b7e5bb192b79f73ae996855a43a9ce15ab8c6a419c69dca2a18d783f"
+}

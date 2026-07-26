@@ -21,6 +21,11 @@ import type {
   BrandCompilerInput,
 } from "@/foundation/contracts/composition/tenants/themes";
 import type { EngineName } from "@/foundation/contracts/runtime/engine";
+import {
+  DENSITY_MODE_FACTOR_VARIABLE,
+  isDensityPreference,
+  resolveDensityModeFactor,
+} from "@/foundation/tokens/ts/foundation/base/density";
 import { validateRecipeProfileSelection } from "@/foundation/tokens/ts/presentation/recipe-profiles";
 import type {
   TenantBranding,
@@ -448,6 +453,19 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
     "--ds-radius-scale": "1",
     "--ds-density-scale": String(bt.surfaces?.densityScale ?? 1),
   };
+  // Semantic posture — the static path's equivalent of the DB Appearance
+  // compiler. Same canonical resolver, same single channel, so a code-owned
+  // vertical is no longer limited to the structural scale. Absent posture
+  // emits nothing: the channel's `var(…, 1)` default already is the identity,
+  // so an explicit `1` would add no value while claiming the channel against
+  // every lower-precedence writer — including a root `data-density` boundary
+  // reached through an inline injection of this same variable map.
+  const authoredPosture = bt.surfaces?.density;
+  if (isDensityPreference(authoredPosture)) {
+    vars[DENSITY_MODE_FACTOR_VARIABLE] = String(
+      resolveDensityModeFactor(authoredPosture),
+    );
+  }
   if (bt.palette) {
     // Light-mode palette (default)
     if (bt.palette.primaryColor)

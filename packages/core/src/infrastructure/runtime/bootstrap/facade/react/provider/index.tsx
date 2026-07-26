@@ -78,7 +78,11 @@
 import React, { ReactNode, useState, useEffect, useRef, useMemo, memo } from 'react';
 import { EngineProvider } from '../../../../engines/composition/react/provider';
 import { ThemeProvider } from '../../../../theming';
-import type { VisualAuthority } from '../../../../theming';
+import type { VisualAuthority, VisualAuthorityDeclaration } from '../../../../theming';
+import {
+  reportVisualAuthorityConflict,
+  resolveVisualAuthority,
+} from '../../../../theming';
 import { TenantProvider } from '../../../../tenant/composition/react/provider';
 import { ProductProfileProvider } from '../../../../product-profiles/composition/react/provider';
 import { FeatureProvider } from '../../../../features';
@@ -139,14 +143,19 @@ export interface DesignSystemProviderProps {
    */
   tenantConfig?: TenantConfig;
   /**
-   * Selects the single owner of tenant visual CSS variables.
+   * Selects the owner of each tenant visual channel.
    *
-   * `provider` (default) preserves the runtime/bundled behavior. Use
-   * `compiled-artifact` when the app has already mounted the exact compiled
-   * tenant artifact during SSR; tenant, locale, theme, motion, and feature
-   * contexts remain active while provider-owned visual emitters are disabled.
+   * Prefer the typed declaration. `{ authority: 'compiled-artifact', artifact }`
+   * carries the artifact's coverage and compiled appearance, so the provider
+   * suppresses exactly the channels the artifact owns, recognises its own
+   * compiled appearance echoed back through the config, and leaves uncovered
+   * channels (personality) to their subordinate emitters.
+   *
+   * A bare `'provider'` (default) preserves the runtime/bundled behavior. A
+   * bare `'compiled-artifact'` string remains legal but unverifiable: any
+   * provider payload is reported as a conflict and every channel is suppressed.
    */
-  visualAuthority?: VisualAuthority;
+  visualAuthority?: VisualAuthority | VisualAuthorityDeclaration;
   /**
    * Runtime tenant overrides applied on top of the resolved tenant.
    *
@@ -396,7 +405,7 @@ export function DesignSystemProvider({
   children,
   tenantSlug: propTenantSlug,
   tenantConfig: propTenantConfig,
-  visualAuthority = 'provider',
+  visualAuthority: explicitVisualAuthority,
   tenantOverrides,
   productProfile,
   vertical,
@@ -533,6 +542,42 @@ export function DesignSystemProvider({
   }, [tenantConfig, resolvedVertical]);
 
   const normalizedConfig = resolvedVisualConfig?.config ?? null;
+
+  // Which emitter owns each tenant visual channel. Resolved from a declaration
+  // that carries the artifact's provenance rather than defaulted, so an app
+  // that mounted a server-compiled artifact and omitted the prop is no longer
+  // silently painted over, and an app that mounted one correctly is no longer
+  // reported for echoing the artifact's own compiled appearance back.
+  const {
+    authority: visualAuthority,
+    conflict: visualAuthorityConflict,
+    suppressedChannels,
+  } = useMemo(
+    () =>
+      resolveVisualAuthority({
+        declaration: explicitVisualAuthority,
+        slug: normalizedConfig?.slug ?? asyncRequestSlug,
+        hasBundledArtifact: isBundledTenant(normalizedConfig?.slug ?? asyncRequestSlug),
+        payload: {
+          visualBranding: hasVisualBrandingFields(normalizedConfig?.branding),
+          tokenOverrides: Object.keys(normalizedConfig?.tokenOverrides ?? {}).length > 0,
+          appearance: normalizedConfig?.appearance,
+        },
+      }),
+    [
+      explicitVisualAuthority,
+      normalizedConfig?.slug,
+      normalizedConfig?.branding,
+      normalizedConfig?.appearance,
+      normalizedConfig?.tokenOverrides,
+      asyncRequestSlug,
+    ],
+  );
+
+  useEffect(() => {
+    if (visualAuthorityConflict) reportVisualAuthorityConflict(visualAuthorityConflict);
+  }, [visualAuthorityConflict]);
+
   const recipeProfileSelection = useMemo(() => {
     const dbProfile = normalizedConfig?.appearance?.recipeProfile;
     if (dbProfile) {
@@ -562,19 +607,19 @@ export function DesignSystemProvider({
   // Resolve TenantAppearance (General + Advanced) into CSS custom properties.
   // These are layered ON TOP of brandTheme/tokenOverrides in the merge chain.
   const appearanceCssVars = useMemo(() => {
-    if (visualAuthority === 'compiled-artifact') return undefined;
+    if (suppressedChannels.includes('appearance')) return undefined;
     if (!normalizedConfig?.appearance) return undefined;
     const vars = compileAppearanceVariables(normalizedConfig.appearance).variables;
     return Object.keys(vars).length > 0 ? vars : undefined;
-  }, [normalizedConfig?.appearance, visualAuthority]);
+  }, [normalizedConfig?.appearance, suppressedChannels]);
 
   const generatedTenantCss = useMemo(() => {
-    if (visualAuthority === 'compiled-artifact') return undefined;
+    if (suppressedChannels.includes('brand-chrome')) return undefined;
     if (!resolvedVisualConfig) return undefined;
     const config = resolvedVisualConfig.config;
     if (!config?.brandTheme || isBundledTenant(config.slug)) return undefined;
     return generateTenantCssFromResolvedVisualConfig(resolvedVisualConfig);
-  }, [resolvedVisualConfig, visualAuthority]);
+  }, [resolvedVisualConfig, suppressedChannels]);
 
   if (loading || !normalizedConfig) {
     return <LoadingScreen />;
@@ -636,8 +681,16 @@ export function DesignSystemProvider({
                 tenant={normalizedConfig.slug}
                 visualAuthority={visualAuthority}
                 vertical={normalizedConfig.vertical ?? resolvedVertical?.key}
-                branding={visualAuthority === 'provider' ? normalizedConfig.branding : undefined}
-                tokenOverrides={visualAuthority === 'provider' ? normalizedConfig.tokenOverrides : undefined}
+                branding={
+                  suppressedChannels.includes('visual-branding')
+                    ? undefined
+                    : normalizedConfig.branding
+                }
+                tokenOverrides={
+                  suppressedChannels.includes('token-overrides')
+                    ? undefined
+                    : normalizedConfig.tokenOverrides
+                }
                 appearanceVars={appearanceCssVars}
                 generatedChromeCss={generatedTenantCss}
                 skipCssLoading={skipCssLoading}
@@ -648,7 +701,16 @@ export function DesignSystemProvider({
                     <ResponsiveProvider>
                       <CommandRegistryProvider>
                         <AntdConfigProvider>
-                          {visualAuthority === 'provider' ? <SystemCssVariablesBridge /> : null}
+                          {/*
+                            Personality is a subordinate product/vertical
+                            baseline, never a second tenant authority. The
+                            bridge stays mounted whenever the artifact does not
+                            cover `personality`, so it COMPLETES that channel
+                            without ever contesting a covered one.
+                          */}
+                          {suppressedChannels.includes('personality') ? null : (
+                            <SystemCssVariablesBridge />
+                          )}
                           <MemoizedChildren>{children}</MemoizedChildren>
                         </AntdConfigProvider>
                       </CommandRegistryProvider>

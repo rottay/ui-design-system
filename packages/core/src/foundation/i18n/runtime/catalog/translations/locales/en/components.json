@@ -411,5 +411,27 @@
   },
   "radio": {
     "group": "Radio group"
+  },
+  "listToolbar": {
+    "searchPlaceholder": "Search...",
+    "compact": "Compact",
+    "comfortable": "Comfortable",
+    "spacious": "Spacious",
+    "densitySuffix": "density",
+    "rowDensity": "Row density",
+    "viewMode": "View mode",
+    "listView": "List view",
+    "cardView": "Card view",
+    "columns": "Columns",
+    "density": "Density",
+    "views": "Views",
+    "noColumnSettings": "No column settings available.",
+    "noSavedViews": "No saved views available.",
+    "columnSettings": "Column settings",
+    "settings": "Settings",
+    "moreOptions": "More options",
+    "export": "Export",
+    "active": "active",
+    "clearAll": "Clear all"
   }
 }

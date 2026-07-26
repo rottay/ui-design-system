@@ -13,18 +13,11 @@
  *
  * The solid active pill and modern-only unsaved dot are intentional engine
  * semantics. They do not have rustic equivalents.
+ *
+ * The loading state renders the Spinner primitive's modern engine, so its ring
+ * paint and spin cadence live in `skin/spinner.css` alone. This file owns no
+ * spinner rule and no spin keyframe: one spinner contract, one place.
  */
-
-@keyframes ds-views-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__spinner[data-part="spinner"] {
-  color: var(--ds-color-primary);
-}
 
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__input[data-part="input"],

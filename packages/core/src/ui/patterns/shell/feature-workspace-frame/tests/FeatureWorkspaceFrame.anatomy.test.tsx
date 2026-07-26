@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { FeatureWorkspaceFrameEngine } from "../engines/shared";
+import { FeatureWorkspaceFrameEngine } from "../engines/foundation";
 
 describe("FeatureWorkspaceFrame anatomy", () => {
   it("keeps navigation and content in distinct, queryable layout lanes", () => {

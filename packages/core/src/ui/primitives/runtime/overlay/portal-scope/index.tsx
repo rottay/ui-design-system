@@ -30,7 +30,7 @@ import React, { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import {
   readDsPortalVariables,
   type DsPortalVariableStyle,
-} from '../portal-theme';
+} from '../foundation/portal-theme';
 
 /** DS/tenant lineage attributes projected onto portaled overlays. */
 export type PortalScopeAttributes = {

@@ -68,10 +68,10 @@
 'use client';
 
 import React, { forwardRef } from 'react';
-import type { ReactNode, CSSProperties, MouseEvent } from 'react';
+import type { ReactNode, CSSProperties, MouseEvent, PointerEvent } from 'react';
 import type { ButtonSize, ButtonVariant } from '../../contracts';
 import ModernButton from '../../engines/modern';
-import ModernTooltip from '../../../../display/Tooltip/engines/modern';
+import { ModernTooltip } from '../../../../facade';
 import { useOptionalTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 import {
   mergePersonalityStyle,
@@ -83,6 +83,12 @@ export interface ButtonIconProps {
   icon: ReactNode;
   /** Click handler */
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void;
+  /**
+   * Pointer-down handler. An icon button inside a draggable surface needs it
+   * to shield itself from the surrounding drag gesture; the primitive still
+   * owns its own press motion either way.
+   */
+  onPointerDown?: (e: PointerEvent<HTMLButtonElement>) => void;
   /** Button size */
   size?: ButtonSize;
   /** Button variant */
@@ -111,6 +117,7 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
     {
       icon,
       onClick,
+      onPointerDown,
       size = 'md',
       variant = 'default',
       disabled = false,
@@ -138,6 +145,7 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
         loading={loading}
         disabled={disabled}
         onClick={onClick}
+        onPointerDown={onPointerDown}
         style={resolvedStyle}
         aria-label={ariaLabel}
       />

@@ -72,6 +72,16 @@ export interface DataTableMessages {
   editCell?: (trigger: "click" | "doubleClick") => string;
   moveColumn?: (column: string) => string;
   resizeColumn?: (column: string) => string;
+  /**
+   * Accessible name / tooltip for the header pin toggle when activating it
+   * would pin the column to `side` (pin states cycle none → left → right).
+   */
+  pinColumn?: (column: string, side: "left" | "right") => string;
+  /** Accessible name / tooltip for the pin toggle when the column is pinned
+   *  to the right and activating it would unpin the column. */
+  unpinColumn?: (column: string) => string;
+  /** Accessible name / tooltip for the header hide-column affordance. */
+  hideColumn?: (column: string) => string;
   page?: (page: number) => string;
   emptyGroup?: ReactNode;
   selectAll?: string;
@@ -261,7 +271,11 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
    */
   onRowClick?: (row: T, index: number) => void;
 
-  /** Row double-click handler. Typically used to open a detail view or inline editing. */
+  /**
+   * Row double-click handler. Typically used to open a detail view or inline
+   * editing. Emitted by the modern engine from the row element; double-clicks
+   * on editable cells enter edit mode instead and do not emit.
+   */
   onRowDoubleClick?: (row: T, index: number) => void;
 
   // ---------------------------------------------------------------------------
@@ -430,8 +444,11 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
   visibleColumns?: string[];
 
   /**
-   * Called when the visible columns set changes (e.g., from an external
-   * column settings panel).
+   * Called when the visible columns set changes — either from an external
+   * column settings panel or from the modern engine's built-in hide-column
+   * header affordance (rendered on every non-locked header cell when this
+   * callback and `columnVisibility` are both set). Receives the new full
+   * visible-keys array.
    */
   onVisibleColumnsChange?: (keys: string[]) => void;
 
@@ -490,11 +507,21 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
   /**
    * Controlled pinned columns configuration. Overrides the `pin` property
    * on individual column definitions.
+   *
+   * Geometry guarantee (modern engine): every pinned column resolves to a
+   * concrete width — `columnWidths` → `ColumnDef.width` →
+   * `ColumnDef.minWidth` → a documented 150px default — and the table uses
+   * fixed layout while any column is pinned, so sticky offsets never drift
+   * into gaps or overlaps for width-less pinned columns.
    */
   pinnedColumns?: { left: string[]; right: string[] };
 
   /**
-   * Called when a column's pin state changes.
+   * Called when a column's pin state changes. The modern engine renders a
+   * pin toggle on every header cell when this callback is set; activating it
+   * cycles the column none → left → right → none and emits the full pinned
+   * configuration (a newly pinned column becomes the outermost on its side).
+   * Pin sides are logical: `left` maps to `inset-inline-start`.
    */
   onPinChange?: (pinned: { left: string[]; right: string[] }) => void;
 

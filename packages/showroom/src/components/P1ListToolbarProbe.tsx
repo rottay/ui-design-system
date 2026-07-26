@@ -25,6 +25,11 @@
  *  - `state` is accepted for forward compatibility and currently always
  *    `rest` (the lane's request).
  *
+ * W10 (2026-07): a third cell renders the toolbar IN a real list surface —
+ * page background, results card with static rows beneath — because the Codex
+ * verdict flagged the family evidence as isolated specimens only. The rows
+ * are inert fixture copy (English on every locale, per the probe convention).
+ *
  * No fixture value here is product content.
  */
 
@@ -97,6 +102,7 @@ interface LocaleCopy {
   settingsViews: string;
   captionAxis: string;
   captionCompact: string;
+  captionSurface: string;
   /** English leaves `messages` undefined to exercise the historical defaults. */
   messages?: ToolbarMessages;
 }
@@ -116,6 +122,7 @@ const COPY: Record<P1ListToolbarLocale, LocaleCopy> = {
     settingsViews: "Default · My pipeline · Archived",
     captionAxis: "Density axis value",
     captionCompact: "Pinned compact",
+    captionSurface: "Inside a results surface (W10)",
     messages: undefined,
   },
   es: {
@@ -132,6 +139,7 @@ const COPY: Record<P1ListToolbarLocale, LocaleCopy> = {
     settingsViews: "Predeterminada · Mi pipeline · Archivados",
     captionAxis: "Valor del eje de densidad",
     captionCompact: "Compacta fija",
+    captionSurface: "Dentro de una superficie de resultados (W10)",
     messages: {
       compact: "Compacta",
       comfortable: "Cómoda",
@@ -169,6 +177,7 @@ const COPY: Record<P1ListToolbarLocale, LocaleCopy> = {
     settingsViews: "الافتراضية · خط أنابيبي · المؤرشفة",
     captionAxis: "قيمة محور الكثافة",
     captionCompact: "مدمجة ثابتة",
+    captionSurface: "داخل سطح النتائج (W10)",
     messages: {
       compact: "مدمجة",
       comfortable: "مريحة",
@@ -203,8 +212,7 @@ function ToolbarCell({
   copy: LocaleCopy;
   initialDensity: DensityKey;
   testId: string;
-}) {
-  const [search, setSearch] = useState("");
+}) {  const [search, setSearch] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [density, setDensity] = useState<DensityKey>(initialDensity);
   const [filters, setFilters] = useState<Record<string, unknown>>({
@@ -270,6 +278,57 @@ function ToolbarCell({
         }}
         onExport={() => undefined}
       />
+    </Box>
+  );
+}
+
+/**
+ * W10 in-surface specimen: the toolbar composed as the header of a results
+ * surface (page background → toolbar → static result rows), answering the
+ * verdict's "isolated specimens only" finding. Rows are inert fixture copy.
+ */
+const SURFACE_ROWS = [
+  { name: "Amelia Torres", meta: "Ops · Active" },
+  { name: "Jonas Meyer", meta: "Growth · Paused" },
+  { name: "Priya Nair", meta: "Ops · Active" },
+] as const;
+
+function InSurfaceCell({ copy }: { copy: LocaleCopy }) {
+  return (
+    <Box
+      data-testid="p1lt-in-surface"
+      style={{
+        inlineSize: "100%",
+        overflow: "hidden",
+        border: "1px solid var(--ds-color-border)",
+        borderRadius: "var(--ds-radius-lg, 12px)",
+        background: "var(--ds-surface-card, var(--ds-color-bg-primary))",
+      }}
+    >
+      <Box style={{ padding: "var(--ds-spacing-3, 0.75rem)", paddingBlockEnd: 0 }}>
+        <ToolbarCell copy={copy} initialDensity="comfortable" testId="p1lt-toolbar-in-surface" />
+      </Box>
+      <Box style={{ padding: "var(--ds-spacing-3, 0.75rem)" }}>
+        {SURFACE_ROWS.map((row, index) => (
+          <Box
+            key={row.name}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: "var(--ds-spacing-3, 0.75rem)",
+              paddingBlock: "var(--ds-spacing-2, 0.5rem)",
+              borderBlockStart:
+                index === 0 ? "none" : "1px solid var(--ds-color-border-subtle, var(--ds-color-border))",
+            }}
+          >
+            <Text size="sm">{row.name}</Text>
+            <Text size="xs" color="secondary">
+              {row.meta}
+            </Text>
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 }
@@ -340,6 +399,12 @@ export function P1ListToolbarProbe({
                   {copy.captionCompact}
                 </Text>
                 <ToolbarCell copy={copy} initialDensity="compact" testId="p1lt-toolbar-compact" />
+              </Stack>
+              <Stack spacing="sm">
+                <Text size="xs" color="secondary" data-testid="p1lt-caption-surface">
+                  {copy.captionSurface}
+                </Text>
+                <InSurfaceCell copy={copy} />
               </Stack>
             </Stack>
           </main>

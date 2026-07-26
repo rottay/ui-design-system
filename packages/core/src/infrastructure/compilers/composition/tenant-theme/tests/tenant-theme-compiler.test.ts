@@ -237,7 +237,7 @@ describe("TenantThemeConfig v1 server contract", () => {
       true
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.limits)).toBe(true);
-    expect(TENANT_THEME_COMPILER_VERSION).toBe("tenant-theme-compiler@3");
+    expect(TENANT_THEME_COMPILER_VERSION).toBe("tenant-theme-compiler@4");
     expect(TENANT_THEME_CONFIG_SCHEMA.limits).toMatchObject({
       maxCompiledVariables: 512,
       maxCompiledVariableBytes: 90_112,
@@ -653,8 +653,10 @@ describe("deterministic artifact compilation and isolation", () => {
     expect(changed.length).toBeGreaterThan(20);
     expect(management.variables).toMatchObject({
       "--ds-color-bg-primary": "#FBF6EC",
+      // DS-A007: emission carries the Arabic-safe family ahead of the
+      // trailing generic; `--ds-badge-font-family` is outside that invariant.
       "--ds-font-family-display":
-        "'Fraunces', Georgia, 'Times New Roman', serif",
+        "'Fraunces', Georgia, 'Times New Roman', \"Noto Sans Arabic\", serif",
       "--ds-card-bg": "#FFFEFB",
       "--ds-table-header-bg": "#FFFFFF",
       "--ds-table-header-letter-spacing": "0.04em",

@@ -10,16 +10,55 @@
  * Its local defaults follow the caller's style spread and intentionally win;
  * moving them to CSS would reverse that public precedence contract.
  *
- * The list row's DaisyUI `active` class and folder anchor's `link link-hover`
- * classes remain the sole owners of their class-driven behavior. This skin
- * declares no row-selection or folder-link paint. SVG fill and stroke
- * presentation attributes also remain on their original elements.
+ * The list row's DaisyUI `active` class remains the sole owner of its
+ * class-driven behavior. SVG fill and stroke presentation attributes also
+ * remain on their original elements.
+ *
+ * The folder anchor's DaisyUI `link link-hover` pair is retired; this file now
+ * owns that affordance outright on `.ds-file-manager__folder-link`. The
+ * transcription is channel-for-channel: `link` gave cursor + underline +
+ * focus-visible ring, `link-hover` suppressed the resting underline and
+ * revealed it on hover behind `(hover: hover)`, and the modern theme bridge
+ * `[data-tenant] a.link` gave the tenant link colour and its hover/active
+ * ramp. The colour resolves through `--ds-color-link`, the same token the
+ * bridge's `--ds-link-color` fed from, so tenant white-labelling is unchanged.
  */
 
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__spinner[data-part='spinner'][data-part='spinner'] {
   border: 3px solid var(--ds-color-border);
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
+}
+
+/* ---- folder anchor: the retired `link link-hover` affordance, owned here.
+        The anchor carries no `href`, so the resting colour must be declared --
+        preflight leaves a hrefless <a> at `inherit`. ---- */
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'] {
+  cursor: pointer;
+  color: var(--ds-file-manager-link-color, var(--ds-color-link, var(--ds-color-primary)));
+  text-decoration-line: none;
+  text-decoration-thickness: var(--ds-link-underline-thickness, 1px);
+  text-underline-offset: var(--ds-link-underline-offset, 2px);
+  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+/* `link-hover` only revealed the underline where hovering is a real input
+   mode; a touch device kept the flat treatment. */
+@media (hover: hover) {
+  .ds-pattern-file-manager.ds-engine-modern
+    .ds-file-manager__folder-link[data-part='folder-link']:hover {
+    color: var(--ds-file-manager-link-hover-color, var(--ds-color-link-hover, var(--ds-color-primary-hover)));
+    text-decoration-line: underline;
+  }
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:focus {
+  outline-style: none;
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid currentColor;
+  outline-offset: 2px;
 }
 
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-part='toolbar-action'],

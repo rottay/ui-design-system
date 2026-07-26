@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { RecordFactsEngine } from "../engines/shared";
+import { RecordFactsEngine } from "../engines/foundation";
 
 describe("RecordFacts anatomy", () => {
   it("renders one labelled section with an internally segmented fact grid", () => {

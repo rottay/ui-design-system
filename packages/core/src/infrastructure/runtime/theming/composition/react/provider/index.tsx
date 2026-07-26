@@ -93,6 +93,7 @@ import React, {
   ReactNode,
 } from 'react';
 import type { ThemeContextValue, ThemeConfig, TenantBranding, TenantTokenOverrides } from '../../../../../../foundation/contracts';
+import type { VisualAuthority } from '@/infrastructure/runtime/theming/foundation/visual-authority';
 import { getDefaultTenant } from '../../../../tenant/foundation/configuration/registry';
 import { errorInDev, warnInDev, warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
 import {
@@ -486,7 +487,10 @@ export const ThemeContext = createContext<ThemeContextValue | null>(null);
  *   exact compiled tenant artifact. ThemeProvider keeps theme/tenant context
  *   and DOM attributes active, but does not emit or load competing visual CSS.
  */
-export type VisualAuthority = 'provider' | 'compiled-artifact';
+// Owned by `theming/foundation/visual-authority`, which also derives the
+// authority from configuration origin. Re-exported here so the long-standing
+// import path keeps working.
+export type { VisualAuthority };
 
 // ─────────────────────────────────────────────────────────────────
 // PROVIDER

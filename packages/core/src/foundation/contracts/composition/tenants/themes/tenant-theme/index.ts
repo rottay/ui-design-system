@@ -546,6 +546,44 @@ export interface TenantThemeContrastAdjustment {
   lcAfter: number;
 }
 
+/**
+ * Every channel through which tenant visual paint can reach the document.
+ *
+ * The list is the shared vocabulary between the compiler (which declares what
+ * it compiled) and the runtime provider (which decides which of its own
+ * emitters must stay silent). A channel names an EMITTER, not a token family:
+ * `appearance` is the provider's compiled-appearance variable block,
+ * `brand-chrome` is the generated tenant chrome stylesheet, and `personality`
+ * is the `SystemCssVariablesBridge` `--ds-personality-*` rule.
+ */
+export const TENANT_VISUAL_CHANNELS = [
+  "visual-branding",
+  "token-overrides",
+  "appearance",
+  "brand-chrome",
+  "personality",
+] as const;
+
+export type TenantVisualChannel = (typeof TENANT_VISUAL_CHANNELS)[number];
+
+/**
+ * v1 compiler coverage. Personality is deliberately NOT covered.
+ *
+ * The compiled artifact is the only tenant authority; personality is a
+ * subordinate product/vertical baseline that may COMPLETE channels the
+ * artifact does not cover. Because `personality` stays outside this set, the
+ * bridge keeps emitting under a compiled envelope, and because every channel
+ * the artifact does cover is suppressed, the artifact wins deterministically
+ * wherever both would declare the same variable.
+ */
+export const TENANT_THEME_V1_COVERAGE: readonly TenantVisualChannel[] =
+  Object.freeze([
+    "visual-branding",
+    "token-overrides",
+    "appearance",
+    "brand-chrome",
+  ]);
+
 /** Immutable, cacheable compiler output consumed by SSR and hydration. */
 export interface TenantThemeArtifact {
   schemaVersion: typeof TENANT_THEME_SCHEMA_VERSION;
@@ -558,6 +596,12 @@ export interface TenantThemeArtifact {
   verticalEnvelopeDigest?: string;
   /** `sha256-<hex>` over the canonical artifact source. */
   digest: string;
+  /**
+   * Channels this artifact compiled and therefore owns. Runtime emitters for
+   * a covered channel must stay silent; an uncovered channel remains open to
+   * the provider's subordinate emitters.
+   */
+  coverage: readonly TenantVisualChannel[];
   normalizedAppearance: NormalizedTenantThemeAppearance;
   variables: Readonly<Record<string, string>>;
   /** Present only when at least one contrast autocorrect was applied. */

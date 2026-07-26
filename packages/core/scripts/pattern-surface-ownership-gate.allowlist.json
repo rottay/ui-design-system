@@ -6,6 +6,12 @@
       "category": "local-svg",
       "rule": "local-svg-root",
       "reason": "This owner renders supplier brand marks whose authored vector geometry is the source asset."
+    },
+    {
+      "path": "src/ui/patterns/data/data-table/engines/modern/index.tsx",
+      "category": "native-interactive",
+      "rule": "native-button",
+      "reason": "Pin-toggle and hide-column are 12px icon-slot affordances nested inside the sort-plumbed header cell (th carries the sort onClick/onKeyDown). Composing the DS Button primitive here would drag its chrome and focus-ring skin into the slot and fight the header's own interaction plumbing; the parts are skin-owned (data-table.css reset), keyboard-native, and mirror the grandfathered Carousel arrow/dot idiom."
     }
   ]
 }

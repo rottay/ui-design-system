@@ -339,3 +339,82 @@ describe('Modern Calendar remediation (K4-B)', () => {
     expect(skin).toContain('--ds-color-interactive-bg-hover');
   });
 });
+
+describe('Modern Calendar W10 second visual pass', () => {
+  it('moves every radius off the fixed rounded-lg utility onto tenant-scaled skin steps', () => {
+    // The engine ships NO radius utility anymore: Tailwind's rounded-lg is a
+    // fixed 8px deaf to --ds-radius-scale; the skin rides the scaled steps.
+    // (Precise class-context substrings -- the engine docblock cites the old
+    // utility name when documenting the move.)
+    expect(engineSource).not.toContain('rottay-calendar--modern rounded-lg');
+    expect(engineSource).not.toContain('justify-center rounded-lg');
+    expect(engineSource).not.toContain('p-4 rounded-lg');
+    // Root = lg (panel), cells = md (SAME step as the header chrome) -- one
+    // geometry law, both with a family escape hatch.
+    expect(skin).toMatch(
+      /\[data-part='root'\]\s*\{[^}]*border-radius:\s*var\(--ds-calendar-radius, var\(--ds-radius-lg\)\)/,
+    );
+    expect(skin).toContain(
+      'border-radius: var(--ds-calendar-cell-radius, var(--ds-radius-md))',
+    );
+
+    const { container } = render(<CalendarModern defaultValue={notToday()} fullscreen={false} />);
+    expect(container.querySelector('[data-part="root"]')!.className).not.toContain('rounded-lg');
+    for (const cell of Array.from(container.querySelectorAll('[data-part="cell"]'))) {
+      expect(cell.className.split(/\s+/)).not.toContain('rounded-lg');
+    }
+  });
+
+  it('gives the panel a single surface edge and a header hairline instead of nested boxes', () => {
+    expect(skin).toContain(
+      'border: 1px solid var(--ds-calendar-border, var(--ds-color-border-subtle))',
+    );
+    expect(skin).toMatch(
+      /\[data-part='header'\]\s*\{\s*padding-block-end:\s*10px;\s*border-block-end:\s*1px solid var\(--ds-calendar-header-border, var\(--ds-color-border-subtle\)\)/,
+    );
+  });
+
+  it('establishes typographic hierarchy: period title semibold, weekday micro-labels', () => {
+    expect(skin).toMatch(
+      /\[data-part='mode-toggle'\]\[data-mode='month'\]\s*\{\s*font-size:\s*var\(--ds-font-size-sm, 14px\);\s*font-weight:\s*var\(--ds-font-weight-semibold, 600\)/,
+    );
+    expect(skin).toMatch(
+      /\[data-part='weekday-header'\]\s*\{\s*font-size:\s*var\(--ds-font-size-xs, 12px\);\s*font-weight:\s*var\(--ds-font-weight-medium, 500\);\s*letter-spacing:\s*0\.04em;\s*text-transform:\s*uppercase/,
+    );
+    // The selected day is the grid's focal point (weight on the primary fill).
+    expect(skin).toMatch(
+      /\[data-selected='true'\]\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-semibold, 600\)/,
+    );
+  });
+
+  it('paints keyboard focus with the canonical ring on every interactive part', () => {
+    expect(skin).toMatch(
+      /\[data-part='nav-button'\]:focus-visible,\s*\n\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\] > \[data-part='header'\] > div > \[data-part='mode-toggle'\]:focus-visible,\s*\n\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\] > \[data-part='grid'\] > \[data-part='cell'\]:focus-visible\s*\{\s*box-shadow:\s*var\(--ds-calendar-focus-ring, var\(--ds-focus-ring\)\)/,
+    );
+    // Forced colors drops box-shadows: the ring re-maps to a Highlight outline.
+    expect(skin).toMatch(/forced-colors: active\)[\s\S]*outline:\s*2px solid Highlight/);
+  });
+
+  it('adds a press channel one step deeper than hover, gated like hover, without transforms', () => {
+    // Cells and header chrome both ride the WO-ENG-04 active token; the active
+    // mode toggle stays excluded (same law as the hover grammar).
+    expect(skin).toMatch(
+      /\[data-part='cell'\]:active:not\(\[data-selected='true'\]\):not\(\[data-disabled\]\)\s*\{\s*background:\s*var\(\s*--ds-calendar-cell-active,\s*var\(--ds-color-interactive-bg-active/,
+    );
+    expect(skin).toContain('--ds-calendar-nav-bg-active');
+    // No transform scale anywhere: the RTL glyph flip owns `transform` on nav
+    // buttons and a scaling grid cell jitters its neighbours.
+    expect(skin).not.toMatch(/:active[^{]*\{[^}]*transform/);
+  });
+
+  it('resolves the K4-B deferred motion re-ownership in the skin, clamped under reduced motion', () => {
+    // The engine still ships no transition utility (utilities layer is
+    // ungovernable from the skin); the unlayered skin owns the transition on
+    // the repainted channels only.
+    expect(engineSource).not.toContain('transition-colors');
+    expect(skin).toMatch(
+      /\[data-part='grid'\] > \[data-part='cell'\]\s*\{[^}]*transition:\s*background-color var\(--ds-motion-fast\) var\(--ds-motion-ease-out\)/,
+    );
+    expect(skin).toMatch(/prefers-reduced-motion: reduce\)\s*\{[\s\S]*transition-duration:\s*0\.01ms/);
+  });
+});

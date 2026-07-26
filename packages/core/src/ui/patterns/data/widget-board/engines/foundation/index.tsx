@@ -15,11 +15,12 @@ import React, {
 import {
   Box,
   Button,
+  ResizeHandle,
   Sheet,
   Stack,
   Text,
-  Tooltip,
-} from "../../../../primitives";
+  type ResizeHandleIntent,
+} from "../../../../../primitives";
 import { ActionAddIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-add";
 import { ActionCloseIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-close";
 import { ActionRefreshIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-refresh";
@@ -32,7 +33,7 @@ import type {
   WidgetBoardItem,
   WidgetBoardProps,
   WidgetBoardSize,
-} from "../contracts";
+} from "../../contracts";
 
 const SIZE_RAMP: readonly WidgetBoardSize[] = ["sm", "md", "lg", "wide"];
 const SIZE_SPAN: Record<WidgetBoardSize, number> = {
@@ -590,7 +591,7 @@ export function WidgetBoardEngine({
   }, [dragPointerId]);
 
   const beginMove = (
-    event: ReactPointerEvent<HTMLButtonElement>,
+    event: ReactPointerEvent<HTMLElement>,
     item: WidgetBoardItem
   ): void => {
     if (!editing || resizeSessionRef.current) return;
@@ -751,7 +752,7 @@ export function WidgetBoardEngine({
   }, [resizeSession?.pointerId]);
 
   const beginResize = (
-    event: ReactPointerEvent<HTMLButtonElement>,
+    event: ReactPointerEvent<HTMLElement>,
     item: WidgetBoardItem,
     edge: WidgetResizeEdge
   ): void => {
@@ -1082,13 +1083,24 @@ export function WidgetBoardEngine({
                 style={cellStyle}
               >
                 {editing ? (
-                  <div className="ds-widget-board__cell-controls">
-                    <button
-                      type="button"
-                      className="ds-widget-board__drag-surface"
+                  /*
+                   * The whole control bar is the drag surface, not just the
+                   * move control: a widget is grabbed anywhere along its edit
+                   * header. The move Button therefore carries the accessible
+                   * name and the keyboard reorder contract while the pointer
+                   * gesture starts on the bar it bubbles into, and the destructive
+                   * control shields itself so pressing it never begins a drag.
+                   */
+                  <div
+                    className="ds-widget-board__cell-controls"
+                    onPointerDown={(event) => beginMove(event, item)}
+                  >
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      icon={<ActionReorderIcon size={15} decorative />}
                       aria-label={`${labels.move}: ${item.accessibleTitle}`}
                       aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown"
-                      onPointerDown={(event) => beginMove(event, item)}
                       onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
                         if (
                           event.key === "ArrowLeft" ||
@@ -1109,11 +1121,8 @@ export function WidgetBoardEngine({
                         }
                       }}
                     >
-                      <ActionReorderIcon size={15} decorative />
-                      <span className="ds-widget-board__cell-control-label">
-                        {labels.move}
-                      </span>
-                    </button>
+                      {labels.move}
+                    </Button>
                     <span className="ds-widget-board__size-readout" aria-hidden>
                       <LayoutColumnsIcon size={14} decorative />
                       <span>{SIZE_SPAN[effectiveSize]} / 12</span>
@@ -1121,20 +1130,15 @@ export function WidgetBoardEngine({
                         <span>· {Math.round(effectiveHeight)} px</span>
                       ) : null}
                     </span>
-                    <Tooltip
-                      content={`${labels.remove}: ${item.accessibleTitle}`}
-                      placement="top"
-                      showDelay={250}
-                    >
-                      <button
-                        type="button"
-                        className="ds-widget-board__cell-control"
-                        aria-label={`${labels.remove}: ${item.accessibleTitle}`}
-                        onClick={() => setVisible(item.id, false)}
-                      >
-                        <ActionCloseIcon size={15} decorative />
-                      </button>
-                    </Tooltip>
+                    <Button.Icon
+                      variant="default"
+                      size="sm"
+                      icon={<ActionCloseIcon size={15} decorative />}
+                      aria-label={`${labels.remove}: ${item.accessibleTitle}`}
+                      tooltip={`${labels.remove}: ${item.accessibleTitle}`}
+                      onPointerDown={(event) => event.stopPropagation()}
+                      onClick={() => setVisible(item.id, false)}
+                    />
                   </div>
                 ) : null}
                 {editing && !narrow ? (
@@ -1164,39 +1168,32 @@ export function WidgetBoardEngine({
                         : horizontal
                         ? labels.resizeWidth ?? labels.resize
                         : labels.resizeHeight ?? labels.resize;
+                      const widthEdge = horizontal && !vertical;
+                      const heightEdge = vertical && !horizontal;
                       return (
-                        <button
+                        /*
+                         * The inline-end and block-end edges are the two
+                         * keyboard-operable separators: one owns width, one
+                         * owns height. The remaining six edges and corners are
+                         * pointer-only hit areas, which is only honest because
+                         * both dimensions already have a keyboard equivalent.
+                         */
+                        <ResizeHandle
                           key={edge}
-                          type="button"
                           className="ds-widget-board__resize-handle"
-                          data-part="resize-handle"
-                          data-edge={edge}
-                          data-active={active ? "true" : "false"}
-                          aria-hidden={keyboardEdge ? undefined : true}
-                          tabIndex={keyboardEdge ? 0 : -1}
-                          aria-label={`${resizeLabel}: ${item.accessibleTitle}`}
-                          role="slider"
-                          aria-orientation={
-                            diagonal
-                              ? undefined
-                              : horizontal
-                              ? "horizontal"
-                              : "vertical"
+                          operable={keyboardEdge}
+                          orientation={widthEdge ? "vertical" : "horizontal"}
+                          label={`${resizeLabel}: ${item.accessibleTitle}`}
+                          min={widthEdge ? 0 : MIN_WIDGET_HEIGHT}
+                          max={
+                            widthEdge ? SIZE_RAMP.length - 1 : MAX_WIDGET_HEIGHT
                           }
-                          aria-valuemin={
-                            horizontal && !vertical ? 0 : MIN_WIDGET_HEIGHT
-                          }
-                          aria-valuemax={
-                            horizontal && !vertical
-                              ? SIZE_RAMP.length - 1
-                              : MAX_WIDGET_HEIGHT
-                          }
-                          aria-valuenow={
-                            horizontal && !vertical
+                          value={
+                            widthEdge
                               ? SIZE_RAMP.indexOf(effectiveSize)
                               : Math.round(effectiveHeight ?? MIN_WIDGET_HEIGHT)
                           }
-                          aria-valuetext={
+                          valueText={
                             diagonal
                               ? `${
                                   SIZE_SPAN[effectiveSize]
@@ -1210,62 +1207,36 @@ export function WidgetBoardEngine({
                               ? `${Math.round(effectiveHeight)} px`
                               : labels.autoHeight ?? resizeLabel
                           }
-                          aria-keyshortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown Home End"
+                          keyShortcuts="ArrowLeft ArrowRight ArrowUp ArrowDown Home End"
+                          anatomy={{
+                            "data-part": "resize-handle",
+                            "data-edge": edge,
+                            "data-active": active ? "true" : "false",
+                          }}
                           onPointerDown={(event) =>
                             beginResize(event, item, edge)
                           }
-                          onKeyDown={(
-                            event: KeyboardEvent<HTMLButtonElement>
-                          ) => {
-                            if (horizontal && !vertical) {
-                              if (
-                                event.key === "ArrowLeft" ||
-                                event.key === "ArrowDown"
-                              ) {
-                                event.preventDefault();
+                          onAdjust={(intent: ResizeHandleIntent) => {
+                            if (widthEdge) {
+                              if (intent === "decrease")
                                 resizeByStep(item.id, -1);
-                              }
-                              if (
-                                event.key === "ArrowRight" ||
-                                event.key === "ArrowUp"
-                              ) {
-                                event.preventDefault();
+                              else if (intent === "increase")
                                 resizeByStep(item.id, 1);
-                              }
-                              if (event.key === "Home") {
-                                event.preventDefault();
+                              else if (intent === "minimize")
                                 resizeWidthTo(item.id, SIZE_RAMP[0]);
-                              }
-                              if (event.key === "End") {
-                                event.preventDefault();
+                              else
                                 resizeWidthTo(
                                   item.id,
                                   SIZE_RAMP[SIZE_RAMP.length - 1]
                                 );
-                              }
-                            } else if (vertical && !horizontal) {
-                              if (
-                                event.key === "ArrowLeft" ||
-                                event.key === "ArrowDown"
-                              ) {
-                                event.preventDefault();
+                            } else if (heightEdge) {
+                              if (intent === "decrease")
                                 resizeHeightByStep(item.id, -1);
-                              }
-                              if (
-                                event.key === "ArrowRight" ||
-                                event.key === "ArrowUp"
-                              ) {
-                                event.preventDefault();
+                              else if (intent === "increase")
                                 resizeHeightByStep(item.id, 1);
-                              }
-                              if (event.key === "Home") {
-                                event.preventDefault();
+                              else if (intent === "minimize")
                                 resizeHeightTo(item.id, undefined);
-                              }
-                              if (event.key === "End") {
-                                event.preventDefault();
-                                resizeHeightTo(item.id, MAX_WIDGET_HEIGHT);
-                              }
+                              else resizeHeightTo(item.id, MAX_WIDGET_HEIGHT);
                             }
                           }}
                         >
@@ -1296,7 +1267,7 @@ export function WidgetBoardEngine({
                                 : labels.autoHeight ?? resizeLabel}
                             </span>
                           </span>
-                        </button>
+                        </ResizeHandle>
                       );
                     })}
                   </>

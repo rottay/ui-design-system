@@ -30,6 +30,7 @@
 
 import React, { useCallback } from 'react';
 import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
+import { TAG_RECIPE_DEFINITION } from '@/infrastructure/runtime/foundation/recipes/contracts/families';
 import { useRecipeProfileDefaults } from '@/infrastructure/runtime/foundation/recipes/profiles';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { TagProps } from '../../contracts';
@@ -39,12 +40,7 @@ import { TAG_DEFAULTS, TONE_TO_TAG_VARIANT } from '../../contracts';
  * DS-S001 recipe: the modern Tag shell classes. Variant/size/radius stay on
  * the `data-*` skin contract; profile-tunable axes arrive with DS-R00x.
  */
-export const modernTagRecipe = defineRecipe({
-  name: 'tag',
-  slots: { root: ['rottay-tag-shell', 'rottay-tag-shell--modern'] },
-  axes: {},
-  defaults: {},
-});
+export const modernTagRecipe = defineRecipe(TAG_RECIPE_DEFINITION);
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 /**

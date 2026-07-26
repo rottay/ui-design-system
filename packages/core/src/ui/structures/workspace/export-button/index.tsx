@@ -22,7 +22,6 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import { createPortal } from 'react-dom';
 
 import {
   BracesIcon as Braces,
@@ -33,6 +32,8 @@ import {
 } from '../../../../graphics/icons';
 
 import { Box, Button, Flex, Text } from '../../../primitives';
+import { Portal } from '../../../primitives/runtime/overlay/portal';
+import { PortalScope, usePortalScope } from '../../../primitives/runtime/overlay/portal-scope';
 import type { ExportColumn } from './runtime/file-export';
 import {
   copyToClipboard,
@@ -99,6 +100,16 @@ export function ExportButton<T = unknown>({
   const triggerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null);
+  // The menu leaves the trigger's DOM ancestry when it portals, so the
+  // tenant/locale scope has to be re-stamped around it. `usePortalScope`
+  // needs the anchor as state (a ref would not re-render when it lands), so
+  // the trigger publishes to both.
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+  const setTriggerRef = useCallback((node: HTMLDivElement | null) => {
+    triggerRef.current = node;
+    setAnchorEl(node);
+  }, []);
+  const portalScope = usePortalScope(anchorEl);
 
   // -----------------------------------------------------------------------
   // Position the dropdown beneath the trigger
@@ -234,7 +245,7 @@ export function ExportButton<T = unknown>({
       <Box
         data-part="root"
         className="ds-structure ds-export-button"
-        ref={triggerRef}
+        ref={setTriggerRef}
         style={{ position: 'relative', display: 'inline-flex' }}
       >
         <Button
@@ -284,11 +295,14 @@ export function ExportButton<T = unknown>({
         )}
       </Box>
 
-      {/* Dropdown (portal) */}
-      {open &&
-        dropdownPos &&
-        typeof document !== 'undefined' &&
-        createPortal(
+      {/* Dropdown -- shared overlay substrate: the target resolves as explicit
+          container > active top-layer host > shared `#rottay-portal-root`, so
+          the menu stays visible when the toolbar is itself inside a
+          `showModal()` dialog. `PortalScope` carries the tenant/theme/
+          direction lineage across the portal boundary. */}
+      {open && dropdownPos && (
+        <Portal>
+          <PortalScope snapshot={portalScope}>
           <Box
             data-part="panel"
             data-open={open}
@@ -354,9 +368,10 @@ export function ExportButton<T = unknown>({
                 </Box>
               );
             })}
-          </Box>,
-          document.body,
-        )}
+          </Box>
+          </PortalScope>
+        </Portal>
+      )}
     </>
   );
 }

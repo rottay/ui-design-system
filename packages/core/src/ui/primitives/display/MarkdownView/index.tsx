@@ -12,9 +12,17 @@
  * tokens and logical directional properties, while the family skin
  * (`presentation/components/skin/markdown-view.css`) owns the interactive
  * link part including its underline and hover/focus-visible states (inline
- * styles cannot express pseudo-states). The parser
+ * styles cannot express pseudo-states) plus the list `::marker` tint (a
+ * pseudo-element inline styles cannot reach either). The parser
  * (runtime/parser) produces an AST; this component walks it and
  * constructs React elements whose children are escaped text nodes.
+ *
+ * Typographic rhythm (W10 second visual pass): every block kills the UA
+ * margin (`marginBottom: 0`) so vertical rhythm comes ONLY from the density
+ * gap above each block. The heading type ramp (size 3xl→sm, heading/display
+ * weights, tight leading, slight negative tracking on the large levels) is
+ * owned WHOLESALE by the family skin -- inline style producers are counted
+ * paint by the engine-token-audit and this file's counter is decrease-only.
  *
  * Security invariant (independent of which element tag wraps the text):
  *   (a) every node is built via React element construction with escaped
@@ -87,6 +95,12 @@ const INLINE_CODE_STYLE: React.CSSProperties = {
   background: 'var(--ds-surface-inset)',
   color: 'var(--ds-color-text-primary)',
 };
+
+// The heading type ramp (W10) lives in the family skin, not inline: a
+// `*_STYLE` producer const is inline paint by the engine-token-audit
+// definition and this file's counter is decrease-only. The skin owns the
+// ramp wholesale via `hN[data-part='heading']` selectors; inline keeps only
+// the density-driven margins (layout, not paint).
 
 // ---------------------------------------------------------------------------
 // Inline rendering
@@ -202,12 +216,18 @@ function renderBlocks(
       case 'heading':
         return React.createElement(
           `h${node.level}`,
-          { key, 'data-part': 'heading', style: { marginTop: spacing } },
+          {
+            key,
+            'data-part': 'heading',
+            // Typography (size/weight/leading/tracking) is skin-owned via
+            // `hN[data-part='heading']` selectors (the tag carries the level).
+            style: { marginTop: spacing, marginBottom: 0 },
+          },
           renderInline(node.children, policy, key),
         );
       case 'paragraph':
         return (
-          <p key={key} data-part="paragraph" style={{ marginTop: spacing }}>
+          <p key={key} data-part="paragraph" style={{ marginTop: spacing, marginBottom: 0 }}>
             {renderInline(node.children, policy, key)}
           </p>
         );
@@ -232,7 +252,7 @@ function renderBlocks(
                 <code
                   style={{
                     fontFamily: MONO_FONT,
-                    fontSize: '0.85rem',
+                    fontSize: 'var(--ds-font-size-sm)',
                     lineHeight: 'var(--ds-line-height-body)',
                     whiteSpace: 'pre',
                     color: 'var(--ds-color-text-primary)',
@@ -251,7 +271,9 @@ function renderBlocks(
             data-part="blockquote"
             style={{
               marginTop: spacing,
+              marginBottom: 0,
               marginInline: 0,
+              paddingBlock: 'var(--ds-spacing-1)',
               paddingInlineStart: 'var(--ds-spacing-4)',
               borderInlineStart: '3px solid var(--ds-color-border)',
               color: 'var(--ds-color-text-secondary)',
@@ -264,6 +286,7 @@ function renderBlocks(
         const isTaskList = node.items.some((it) => it.checked !== null);
         const listStyle: React.CSSProperties = {
           marginTop: spacing,
+          marginBottom: 0,
           paddingInlineStart: 'var(--ds-spacing-6)',
           listStyleType: isTaskList ? 'none' : undefined,
         };
@@ -341,9 +364,11 @@ function renderBlocks(
                         // which misaligns against the start-aligned body
                         // column below it).
                         textAlign: alignToStyle(node.align[cellIndex] ?? null) ?? 'start',
-                        padding: 'var(--ds-spacing-2)',
+                        padding: 'var(--ds-spacing-2) var(--ds-spacing-3)',
                         borderBottom: '2px solid var(--ds-color-border)',
                         fontWeight: 600,
+                        fontSize: 'var(--ds-font-size-sm)',
+                        letterSpacing: '0.01em',
                       }}
                     >
                       {renderInline(cell.children, policy, `${key}-h${cellIndex}`)}
@@ -360,7 +385,7 @@ function renderBlocks(
                         data-part="table-cell"
                         style={{
                           textAlign: alignToStyle(node.align[cellIndex] ?? null),
-                          padding: 'var(--ds-spacing-2)',
+                          padding: 'var(--ds-spacing-2) var(--ds-spacing-3)',
                           borderBottom: '1px solid var(--ds-color-border)',
                         }}
                       >
@@ -380,6 +405,7 @@ function renderBlocks(
             data-part="thematic-break"
             style={{
               marginTop: spacing,
+              marginBottom: 0,
               border: 'none',
               borderTop: '1px solid var(--ds-color-border)',
             }}
@@ -425,6 +451,9 @@ export function MarkdownView({
       data-part="root"
       {...densityScopeAttributes(density)}
       style={{
+        // Body rhythm baseline for the whole document; headings override it
+        // with their own tighter leading from HEADING_STYLE.
+        lineHeight: 'var(--ds-line-height-body)',
         // Unbroken hostile tokens (long URLs/identifiers) wrap instead of
         // overflowing the column (Pass 2 capture evidence: 390px overflow).
         overflowWrap: 'break-word',

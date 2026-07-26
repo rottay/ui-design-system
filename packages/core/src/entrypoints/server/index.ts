@@ -91,6 +91,7 @@ export type {
   TenantThemeValidationIssueCode,
   TenantThemeValidationResult,
   TenantThemeVerticalEnvelope,
+  TenantVisualChannel,
   TenantVisualFoundation,
 } from '../../foundation/contracts/composition/tenants/themes/tenant-theme';
 export {
@@ -100,6 +101,8 @@ export {
   TENANT_THEME_CHROME_FAMILIES,
   TENANT_THEME_FONT_PACK_IDS,
   TENANT_THEME_ANATOMY_VARIANTS,
+  TENANT_THEME_V1_COVERAGE,
+  TENANT_VISUAL_CHANNELS,
 } from '../../foundation/contracts/composition/tenants/themes/tenant-theme';
 // A11y: branding contrast validation (Wave 6.2 Accessibility Guardian)
 export {

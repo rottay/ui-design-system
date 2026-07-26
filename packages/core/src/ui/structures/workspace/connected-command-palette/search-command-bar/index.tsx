@@ -34,7 +34,7 @@ import {
   XIcon as X,
 } from '../../../../../graphics/icons';
 
-import { useVoiceInput } from '@/infrastructure/runtime/application/automation/voice';
+import { useVoiceInput } from '@/infrastructure/runtime/application/automation/voice/composition/react/input';
 import { useRegisterCommands } from '@/infrastructure/runtime/application/commands';
 import { ConnectedCommandPalette } from '..';
 import { Box, Flex, Input, Text } from '@ui/primitives';

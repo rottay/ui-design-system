@@ -11,8 +11,9 @@
  * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { createPortal } from 'react-dom';
 import type { TimePickerProps, TimeRangePickerProps } from '../../contracts';
+import { Portal } from '../../../../runtime/overlay/portal';
+import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 
 /** Maps the canonical `sm | md | lg` size step to inline style dimensions. */
@@ -281,6 +282,16 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
   const triggerRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  // The panel leaves the trigger's DOM ancestry when it portals, so the
+  // tenant/locale scope has to be re-stamped around it. `usePortalScope`
+  // needs the anchor as state (a ref would not re-render when it lands), so
+  // the trigger publishes to both.
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+  const setTriggerRef = useCallback((node: HTMLDivElement | null) => {
+    (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+    setAnchorEl(node);
+  }, []);
+  const portalScope = usePortalScope(anchorEl);
 
   const setInputRef = useCallback(
     (node: HTMLInputElement | null) => {
@@ -373,7 +384,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
 
   return (
     <>
-      <div ref={triggerRef} data-part="root" className={`rottay-timepicker rottay-timepicker--modern relative w-full ${className}`} style={style}>
+      <div ref={setTriggerRef} data-part="root" className={`rottay-timepicker rottay-timepicker--modern relative w-full ${className}`} style={style}>
         <input
           ref={setInputRef}
           type="text"
@@ -425,22 +436,30 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
         </span>
       </div>
 
-      {isOpen && typeof document !== 'undefined' && createPortal(
-        <div
-          ref={panelRef}
-          style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 1050 }}
-        >
-          <TimePanel
-            hours={selectedTime?.h ?? 0}
-            minutes={selectedTime?.m ?? 0}
-            seconds={selectedTime?.s ?? 0}
-            showSeconds={showSeconds}
-            onSelect={handleSelect}
-            onNowClick={handleNowClick}
-            showNow={showNow}
-          />
-        </div>,
-        document.body,
+      {/* Panel goes through the shared overlay substrate: the target resolves
+          as explicit container > active top-layer host > shared
+          `#rottay-portal-root`, so the panel stays visible when the field is
+          inside a `showModal()` dialog. `PortalScope` carries the tenant/
+          theme/direction lineage across the portal boundary. */}
+      {isOpen && (
+        <Portal>
+          <PortalScope snapshot={portalScope}>
+            <div
+              ref={panelRef}
+              style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 1050 }}
+            >
+              <TimePanel
+                hours={selectedTime?.h ?? 0}
+                minutes={selectedTime?.m ?? 0}
+                seconds={selectedTime?.s ?? 0}
+                showSeconds={showSeconds}
+                onSelect={handleSelect}
+                onNowClick={handleNowClick}
+                showNow={showNow}
+              />
+            </div>
+          </PortalScope>
+        </Portal>
       )}
     </>
   );
@@ -514,6 +533,18 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
 
   const triggerRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  // See TimePickerBase: the portaled panel needs the anchor as state so the
+  // scope snapshot re-resolves once the trigger lands. The callback must be
+  // stable -- an inline ref arrow is re-created every render, so React would
+  // detach (null) and re-attach it each commit and the setState would loop.
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+  const portalScope = usePortalScope(anchorEl);
+  const setTriggerRef = useCallback((node: HTMLDivElement | null) => {
+    (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+    setAnchorEl(node);
+    if (typeof ref === 'function') ref(node);
+    else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+  }, [ref]);
 
   const [pos, setPos] = useState({ top: 0, left: 0 });
   useEffect(() => {
@@ -602,11 +633,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
   return (
     <>
       <div
-        ref={(node) => {
-          (triggerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-          if (typeof ref === 'function') ref(node);
-          else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
-        }}
+        ref={setTriggerRef}
         data-part="root"
         className={`rottay-timepicker-range rottay-timepicker-range--modern flex items-center gap-2 w-full ${className}`}
         style={style}
@@ -653,22 +680,26 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
         />
       </div>
 
-      {isOpen && typeof document !== 'undefined' && createPortal(
-        <div
-          ref={panelRef}
-          style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 1050 }}
-        >
-          <TimePanel
-            hours={activeTime?.h ?? 0}
-            minutes={activeTime?.m ?? 0}
-            seconds={activeTime?.s ?? 0}
-            showSeconds={showSeconds}
-            onSelect={handleSelect}
-            onNowClick={handleNowClick}
-            showNow={showNow}
-          />
-        </div>,
-        document.body,
+      {/* Shared overlay substrate -- see TimePickerBase. */}
+      {isOpen && (
+        <Portal>
+          <PortalScope snapshot={portalScope}>
+            <div
+              ref={panelRef}
+              style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 1050 }}
+            >
+              <TimePanel
+                hours={activeTime?.h ?? 0}
+                minutes={activeTime?.m ?? 0}
+                seconds={activeTime?.s ?? 0}
+                showSeconds={showSeconds}
+                onSelect={handleSelect}
+                onNowClick={handleNowClick}
+                showNow={showNow}
+              />
+            </div>
+          </PortalScope>
+        </Portal>
       )}
     </>
   );

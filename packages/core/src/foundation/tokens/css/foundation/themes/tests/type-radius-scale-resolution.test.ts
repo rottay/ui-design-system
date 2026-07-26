@@ -183,16 +183,21 @@ describe("type-scale + radius-scale calc ramp resolution (W4-B1)", () => {
     }
   });
 
+  // The contract is the shape -- one private -base literal, one multiplication,
+  // one axis var whose fallback is 1 -- not the formatting. Whitespace inside
+  // calc() is inert in CSS and each definition site wraps the expression as it
+  // sees fit (typography.css wraps, default.css does not), so the anchors below
+  // tolerate it exactly as evalToPx() above already does.
   it("keeps each public step defined as a calc over a private -base literal", () => {
     const scope = combinedScope();
     for (const token of Object.keys(FONT_SIZE_BEFORE_PX)) {
       expect(scope.get(token), token).toMatch(
-        /^calc\(var\(--ds-font-size-[a-z0-9]+-base\) \* var\(--ds-type-scale, 1\)\)$/
+        /^calc\(\s*var\(--ds-font-size-[a-z0-9]+-base\)\s*\*\s*var\(--ds-type-scale,\s*1\)\s*\)$/
       );
     }
     for (const token of Object.keys(RADIUS_BEFORE_PX)) {
       expect(scope.get(token), token).toMatch(
-        /^calc\(var\(--ds-radius-[a-z]+-base\) \* var\(--ds-radius-scale, 1\)\)$/
+        /^calc\(\s*var\(--ds-radius-[a-z]+-base\)\s*\*\s*var\(--ds-radius-scale,\s*1\)\s*\)$/
       );
     }
   });
