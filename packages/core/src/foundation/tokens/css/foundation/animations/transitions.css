@@ -415,7 +415,7 @@
     /* Defense-in-depth: the --ds-motion-* canon (declared above on :root) is
        also neutralized to 0s here, so this foundation file self-zeros the
        motion durations under reduced motion even in isolation -- without
-       relying on runtime/personality-paint.css, which zeros the same tokens
+       relying on the !important token zeroing below, which this file owns
        from a later unlayered import. Both declarations resolve to 0s, so the
        :root source-order tie between the two files yields 0s either way (no
        double-definition conflict). Durations only; the easing and geometry

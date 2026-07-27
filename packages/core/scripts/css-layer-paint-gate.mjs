@@ -3,9 +3,11 @@
  * Deterministic CSS cascade gate (DS-A001).
  *
  * Tailwind v4 and Rottay share one named layer order. First-party paint must
- * live in its owning DS layer; only the document-wide @property registry may
- * remain unlayered. This replaces the former paint-bridge posture that moved
- * component skins outside the cascade merely to outrank preflight.
+ * live in its owning DS layer, except for the deliberately unlayered root
+ * authorities: the document-wide @property registry, compiled tenant
+ * artifacts, and the Arabic root typography floor. Tenant artifacts are the
+ * final authored authority for the channels in their coverage declaration;
+ * putting them in a named layer would make unlayered application paint win.
  */
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -16,7 +18,7 @@ const scriptDir = dirname(fileURLToPath(import.meta.url));
 const packageRoot = resolve(scriptDir, "..");
 
 export const CANONICAL_LAYER_ORDER =
-  "@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-tenants, rottay-personality, rottay-responsive, components, utilities;";
+  "@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-personality, rottay-responsive, components, utilities;";
 
 const args = process.argv.slice(2);
 const entryArgs = [];
@@ -89,6 +91,9 @@ const DIRECT_DS_TOKEN_REFERENCE = /^var\(--ds-[a-z0-9-]+\)$/;
 
 const IMPORT_RE = /@import\s+(['"])([^'"]+)\1\s*(?:layer\(([^)]*)\))?\s*;/g;
 const UNLAYERED_REGISTRIES = new Set(["foundation/base/properties.css"]);
+const UNLAYERED_ROOT_AUTHORITIES = new Set([
+  "foundation/responsive/language-arabic-root.css",
+]);
 const PAINT_BRIDGE_RE = /(?:patterns|collapse|personality)-paint\.css$/;
 
 function normalizedSpecifier(specifier) {
@@ -107,11 +112,6 @@ function expectedLayer(specifier) {
     return "rottay-components";
   }
   if (normalized.includes("runtime/engines/")) return "rottay-engines";
-  if (
-    normalized.includes("facade/artifacts/") ||
-    normalized.startsWith("artifacts/")
-  )
-    return "rottay-tenants";
   if (normalized.includes("runtime/personality")) return "rottay-personality";
   if (normalized.includes("foundation/responsive/")) return "rottay-responsive";
   if (normalized.includes("foundation/animations/")) return "rottay-motion";
@@ -152,6 +152,19 @@ export function auditCascadeEntrypoint(path) {
         failures.push(
           `document-wide registry must remain unlayered: ${specifier}`
         );
+      continue;
+    }
+
+    if (
+      UNLAYERED_ROOT_AUTHORITIES.has(normalized) ||
+      normalized.includes("facade/artifacts/") ||
+      normalized.startsWith("artifacts/")
+    ) {
+      if (layer) {
+        failures.push(
+          `root paint authority must remain unlayered: ${specifier}`
+        );
+      }
       continue;
     }
 

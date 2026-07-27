@@ -518,7 +518,7 @@ export function buildBaselines(findings, metadata = {}) {
   return channels;
 }
 
-export function auditFindings({ findings, registry, now = new Date() }) {
+export function auditFindings({ findings, registry, now = new Date(), auditedRepositories = null }) {
   const failures = [];
   const actual = new Map();
   for (const record of findings) {
@@ -567,18 +567,28 @@ export function auditFindings({ findings, registry, now = new Date() }) {
   }
   for (const [key] of expected) {
     const [channel, repo, scope] = key.split('\0');
+    // A row for a repository this run did not scan is not stale -- it is out of
+    // scope. Reporting it would make every partial run fail for rows it was
+    // never asked to verify, which is precisely what turned this gate into a
+    // permanent warning.
+    if (auditedRepositories && !auditedRepositories.has(repo)) continue;
     failures.push(`${channel}: stale registry row ${repo}/${scope}`);
   }
   return failures;
 }
 
-export function auditWorkspace({ workspaceRoot = defaultWorkspaceRoot, registryPath = defaultRegistryPath, now } = {}) {
+export function auditWorkspace({ workspaceRoot = defaultWorkspaceRoot, registryPath = defaultRegistryPath, repositories = DEFAULT_REPOSITORIES, now } = {}) {
   if (!existsSync(registryPath)) return [`CRA12 missing registry: ${registryPath}`];
   const registry = JSON.parse(readFileSync(registryPath, 'utf8'));
   if (registry.schemaVersion !== 1) return [`CRA12 unsupported registry schema: ${registry.schemaVersion}`];
   try {
-    const findings = scanWorkspace({ workspaceRoot, registry });
-    return auditFindings({ findings, registry, now });
+    const findings = scanWorkspace({ workspaceRoot, registry, repositories });
+    return auditFindings({
+      findings,
+      registry,
+      now,
+      auditedRepositories: new Set(repositories.map((spec) => spec.name)),
+    });
   } catch (error) {
     return [error instanceof Error ? error.message : String(error)];
   }
@@ -590,6 +600,28 @@ function cliOptions(argv) {
     if (argv[index] === '--workspace-root') options.workspaceRoot = resolve(argv[++index]);
     else if (argv[index] === '--registry') options.registryPath = resolve(argv[++index]);
     else if (argv[index] === '--print-baseline') options.printBaseline = true;
+    else if (argv[index] === '--repositories') {
+      // Restrict the audit to a named subset of DEFAULT_REPOSITORIES.
+      //
+      // WHY THIS EXISTS. The audit spans four sibling repositories and THROWS
+      // on a missing one. A single-repo CI checkout therefore fails it every
+      // time for a reason that has nothing to do with motion governance, which
+      // is why the workflow ran it as `|| echo "::warning"` -- a gate declared
+      // blocking that could never block. Splitting the run lets the slice that
+      // IS verifiable from this checkout block properly, while the cross-repo
+      // slice runs where the other repos actually exist.
+      const names = String(argv[++index] ?? '').split(',').map((name) => name.trim()).filter(Boolean);
+      if (names.length === 0) throw new Error('CRA12 --repositories needs a comma-separated list');
+      const known = new Map(DEFAULT_REPOSITORIES.map((spec) => [spec.name, spec]));
+      const unknown = names.filter((name) => !known.has(name));
+      if (unknown.length) {
+        throw new Error(
+          `CRA12 unknown repository name(s): ${unknown.join(', ')}. ` +
+            `Known: ${[...known.keys()].join(', ')}.`,
+        );
+      }
+      options.repositories = names.map((name) => known.get(name));
+    }
     else throw new Error(`Unknown CRA12 option: ${argv[index]}`);
   }
   return options;
@@ -600,7 +632,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const registryPath = options.registryPath ?? defaultRegistryPath;
   const registry = JSON.parse(readFileSync(registryPath, 'utf8'));
   if (options.printBaseline) {
-    const findings = scanWorkspace({ workspaceRoot: options.workspaceRoot ?? defaultWorkspaceRoot, registry });
+    const findings = scanWorkspace({
+      workspaceRoot: options.workspaceRoot ?? defaultWorkspaceRoot,
+      registry,
+      ...(options.repositories ? { repositories: options.repositories } : {}),
+    });
     console.log(JSON.stringify(buildBaselines(findings), null, 2));
   } else {
     const failures = auditWorkspace(options);

@@ -87,6 +87,7 @@ import { TenantProvider } from '../../../../tenant/composition/react/provider';
 import { ProductProfileProvider } from '../../../../product-profiles/composition/react/provider';
 import { FeatureProvider } from '../../../../features';
 import { I18nProvider } from '@/infrastructure/runtime/i18n';
+import { toSupportedLocale } from '@/foundation/i18n/runtime/resolution';
 import type {
   EngineName,
   MotionProfile,
@@ -641,8 +642,22 @@ export function DesignSystemProvider({
     ? normalizedConfig.theme
     : undefined;
   const theme = forceTheme ?? explicitTenantTheme ?? appearanceBackgroundMode ?? normalizedConfig.theme ?? 'base';
-  const locale = forcedLocale ?? normalizedConfig.locale ?? 'en';
-  const fallbackLocale = forcedFallbackLocale ?? normalizedConfig.fallbackLocale ?? locale;
+  // Normalized, not taken on trust. `normalizedConfig.locale` reaches here from
+  // tenant DB branding and from application props, so it can be any string --
+  // `'de'`, `'en-GB'`, `''`. An unsupported value used to flow straight through
+  // to `LOCALE_CONFIGS[locale]`, which returns `undefined`, and the very next
+  // read of `config.code` THREW. An unknown language is not a crash; it is a
+  // fallback, and `toSupportedLocale` is the one place that decides so.
+  //
+  // The literal `'en'` that stood here also bypassed `DEFAULT_LOCALE` entirely,
+  // which made the constant's own claim -- "every default in the subsystem
+  // resolves through this ONE declaration" -- false for the primary mount point
+  // of the whole design system.
+  const locale = toSupportedLocale(forcedLocale ?? normalizedConfig.locale);
+  const fallbackLocale = toSupportedLocale(
+    forcedFallbackLocale ?? normalizedConfig.fallbackLocale,
+    locale,
+  );
   const customTranslations = mergeLocaleTranslations(
     normalizedConfig.customTranslations,
     appCustomTranslations

@@ -9,12 +9,12 @@
       "e2e/responsive/runtime.mobile.spec.ts",
       "--config",
       "playwright.visual.config.ts",
-      "--reporter=list,json"
+      "--reporter=json"
     ],
     "configFile": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/playwright.visual.config.ts",
     "rootDir": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/e2e",
     "failOnFlakyTests": false,
-    "forbidOnly": true,
+    "forbidOnly": false,
     "fullyParallel": false,
     "globalSetup": null,
     "globalTeardown": null,
@@ -30,7 +30,7 @@
       {
         "outputDir": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/test-results",
         "repeatEach": 1,
-        "retries": 1,
+        "retries": 0,
         "metadata": {
           "actualWorkers": 1
         },
@@ -51,7 +51,7 @@
       {
         "outputDir": "/Users/daniel/Developer/Rottay/ui-design-system/packages/showroom/test-results",
         "repeatEach": 1,
-        "retries": 1,
+        "retries": 0,
         "metadata": {
           "actualWorkers": 1
         },
@@ -67,9 +67,6 @@
     ],
     "quiet": false,
     "reporter": [
-      [
-        "list"
-      ],
       [
         "json"
       ]
@@ -87,7 +84,7 @@
     "webServer": {
       "command": "pnpm --filter @rottay/showroom run start",
       "url": "http://localhost:7001",
-      "reuseExistingServer": false,
+      "reuseExistingServer": true,
       "timeout": 180000,
       "stdout": "pipe",
       "stderr": "pipe"
@@ -123,12 +120,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1180,
+                      "duration": 1387,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-18T12:40:28.600Z",
+                      "startTime": "2026-07-27T01:58:55.439Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -157,12 +154,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1348,
+                      "duration": 1429,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-18T12:40:30.046Z",
+                      "startTime": "2026-07-27T01:58:57.739Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -191,12 +188,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1082,
+                      "duration": 1199,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-18T12:40:31.399Z",
+                      "startTime": "2026-07-27T01:58:59.174Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -242,12 +239,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2902,
+                      "duration": 3193,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-18T12:40:32.888Z",
+                      "startTime": "2026-07-27T01:59:00.867Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -276,12 +273,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2136,
+                      "duration": 2362,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-18T12:40:35.888Z",
+                      "startTime": "2026-07-27T01:59:04.267Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -310,12 +307,12 @@
                       "workerIndex": 1,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 674,
+                      "duration": 1099,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-18T12:40:38.031Z",
+                      "startTime": "2026-07-27T01:59:06.642Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -361,12 +358,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 731,
+                      "duration": 933,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-18T12:40:39.136Z",
+                      "startTime": "2026-07-27T01:59:08.402Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -376,7 +373,7 @@
               ],
               "id": "4d7df2d06bdca02f05ef-534a9c7e4bc9ee930a46",
               "file": "responsive/runtime.mobile.spec.ts",
-              "line": 46,
+              "line": 49,
               "column": 3
             },
             {
@@ -395,12 +392,12 @@
                       "workerIndex": 2,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 716,
+                      "duration": 808,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-07-18T12:40:39.968Z",
+                      "startTime": "2026-07-27T01:59:09.562Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -410,7 +407,7 @@
               ],
               "id": "4d7df2d06bdca02f05ef-d110d5efe979c18d3503",
               "file": "responsive/runtime.mobile.spec.ts",
-              "line": 72,
+              "line": 75,
               "column": 3
             }
           ]
@@ -420,8 +417,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-07-18T12:40:26.746Z",
-    "duration": 13993.659,
+    "startTime": "2026-07-27T01:58:52.727Z",
+    "duration": 17712.614,
     "expected": 8,
     "skipped": 0,
     "unexpected": 0,

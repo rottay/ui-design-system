@@ -124,6 +124,7 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
           // remove path (onChange + onRemove) is preserved through onClose.
           <Tag
             key={`${tag}-${index}`}
+            data-part="tag-chip"
             size={size}
             tone="primary"
             closable={!disabled}

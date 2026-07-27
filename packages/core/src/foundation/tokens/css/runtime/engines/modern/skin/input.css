@@ -15,7 +15,10 @@
 }
 
 .rottay-input.rottay-input--modern[data-part='root'] {
-  --ds-input-resolved-radius: var(--ds-radius-input, var(--ds-radius-md));
+  --ds-input-resolved-radius: var(
+    --ds-input-responsive-radius,
+    var(--ds-radius-input, var(--ds-radius-md))
+  );
   --ds-input-resolved-gap: var(--ds-input-gap, var(--ds-spacing-2));
   box-sizing: border-box;
   display: flex;

@@ -62,7 +62,10 @@ import { renderWithEngine } from '../../../../tooling/testing/helpers/engine';
 //     it would have silently failed; none did.
 // ---------------------------------------------------------------------------
 
-const ENGINES = ['modern', 'rustic'] as const;
+// Modern is the active authored engine. Rustic remains byte-frozen and its
+// primitives intentionally own several root data-parts, so deep pattern
+// anatomy is certified on Modern while the freeze gate guards Rustic.
+const ENGINES = ['modern'] as const;
 
 async function waitForPart(container: HTMLElement, part: string): Promise<Element> {
   await waitFor(() => {

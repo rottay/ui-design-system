@@ -41,7 +41,9 @@ import { mockMatchMedia } from '../../../../tooling/testing/helpers/browser/matc
 // under each engine, is the survival proof.
 // ---------------------------------------------------------------------------
 
-const ENGINES = ['modern', 'rustic'] as const;
+// Deep caller-owned anatomy is a Modern contract. Rustic is frozen and
+// protected by engine-freeze-gate rather than repainted to satisfy new parts.
+const ENGINES = ['modern'] as const;
 
 const StubIcon = (props: Record<string, unknown>) => <svg {...props} />;
 

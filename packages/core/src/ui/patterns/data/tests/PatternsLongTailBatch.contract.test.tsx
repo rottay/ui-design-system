@@ -45,7 +45,10 @@ describe('CK-I patterns/data anatomy', () => {
     expect(q(active.container, '.ds-bulk-select-toggle__trigger')).toHaveLength(1);
     expect(q(active.container, '.ds-bulk-select-toggle__count')).toHaveLength(1);
     expect(q(active.container, '[data-part="icon"]')).toHaveLength(1);
-    expect(q(active.container, '[data-part="label"]')).toHaveLength(1);
+    const authoredLabel = Array.from(
+      active.container.querySelectorAll('.ds-bulk-select-toggle__trigger [data-part="label"]'),
+    ).find((node) => node.textContent === 'Done');
+    expect(authoredLabel).toBeTruthy();
     active.unmount();
 
     const inactive = renderWithEngine(

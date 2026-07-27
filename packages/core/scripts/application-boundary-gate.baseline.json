@@ -1176,46 +1176,6 @@
       }
     },
     "undocumented-ds-writes": {
-      "app-bithire/src/features/candidates/surface/screens/record/detail/wiring/styles/index.css :: --ds-button-secondary-text": {
-        "count": 1,
-        "owner": "app-bithire/src/features/candidates/surface/screens/record/detail/wiring/styles/index.css",
-        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
-      },
-      "app-bithire/src/features/candidates/surface/screens/record/edit/view/sections/form-controls/styles/index.css :: --ds-button-ghost-text": {
-        "count": 1,
-        "owner": "app-bithire/src/features/candidates/surface/screens/record/edit/view/sections/form-controls/styles/index.css",
-        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
-      },
-      "app-bithire/src/features/candidates/surface/screens/record/edit/view/sections/form-controls/styles/index.css :: --ds-button-secondary-text": {
-        "count": 1,
-        "owner": "app-bithire/src/features/candidates/surface/screens/record/edit/view/sections/form-controls/styles/index.css",
-        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
-      },
-      "app-bithire/src/features/candidates/surface/screens/workflows/compare/wiring/styles/index.css :: --ds-button-secondary-text": {
-        "count": 1,
-        "owner": "app-bithire/src/features/candidates/surface/screens/workflows/compare/wiring/styles/index.css",
-        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
-      },
-      "app-bithire/src/features/candidates/surface/screens/workflows/matching/wiring/styles/index.css :: --ds-button-secondary-text": {
-        "count": 1,
-        "owner": "app-bithire/src/features/candidates/surface/screens/workflows/matching/wiring/styles/index.css",
-        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
-      },
-      "app-bithire/src/features/candidates/surface/screens/workflows/three-sixty/wiring/styles/index.css :: --ds-button-secondary-text": {
-        "count": 1,
-        "owner": "app-bithire/src/features/candidates/surface/screens/workflows/three-sixty/wiring/styles/index.css",
-        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
-      },
-      "app-bithire/src/styles/foundation.css :: --ds-button-primary-text": {
-        "count": 1,
-        "owner": "app-bithire/src/styles/foundation.css",
-        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
-      },
-      "app-bithire/src/styles/foundation.css :: --ds-button-secondary-text": {
-        "count": 1,
-        "owner": "app-bithire/src/styles/foundation.css",
-        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
-      },
       "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: --ds-filter-panel-inline-control-width": {
         "count": 1,
         "owner": "app-bithire/src/ui/tables/collection/preview/render/styles/index.css",

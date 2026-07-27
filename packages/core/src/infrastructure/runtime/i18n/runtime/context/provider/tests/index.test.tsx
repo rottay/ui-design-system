@@ -102,7 +102,7 @@ describe('I18nProvider — configured fallback authority', () => {
     expect(result.current.t(FALLBACK_PROBE)).not.toBe(FALLBACK_PROBE_EN);
   });
 
-  it('imposes NO universal English fallback behind the configured one', () => {
+  it('renders the English floor rather than a raw key when the configured chain misses', () => {
     const { result } = renderHook(() => useI18nContext(), {
       wrapper: ({ children }) => (
         <I18nProvider locale="fr" fallbackLocale="pt">
@@ -112,10 +112,14 @@ describe('I18nProvider — configured fallback authority', () => {
     });
 
     // Neither French nor the configured Portuguese fallback carries the key.
-    // English does — and must NOT be consulted: an app that configured `pt`
-    // has declared which languages it is willing to show.
-    expect(result.current.t(FALLBACK_PROBE)).not.toBe(FALLBACK_PROBE_EN);
-    expect(result.current.t(FALLBACK_PROBE)).toBe(FALLBACK_PROBE);
+    // What a reader used to get here was the literal string
+    // "components.calendar.navNextMonth" painted into the UI. English copy is
+    // the correct floor: it serves the reader without overruling `pt`, which
+    // was already consulted and had nothing.
+    expect(result.current.t(FALLBACK_PROBE)).toBe(FALLBACK_PROBE_EN);
+    expect(result.current.t(FALLBACK_PROBE)).not.toBe(FALLBACK_PROBE);
+    // A caller-owned floor still wins over the English one: `tOr` is an
+    // explicit local decision and outranks the system default.
     expect(result.current.tOr(FALLBACK_PROBE, 'Suivant')).toBe('Suivant');
   });
 

@@ -37,6 +37,8 @@ const SKINS: Record<string, string> = {
   'rustic/time-picker': read('runtime/engines/rustic/skin/time-picker.css'),
   'modern/date-picker': read('runtime/engines/modern/skin/date-picker.css'),
   'rustic/date-picker': read('runtime/engines/rustic/skin/date-picker.css'),
+  'modern/progress': read('runtime/engines/modern/skin/progress.css'),
+  'rustic/progress': read('runtime/engines/rustic/skin/progress.css'),
 };
 /** Comment-stripped copies -- keyframe/posture pins must not match header prose. */
 const NC: Record<string, string> = Object.fromEntries(
@@ -123,8 +125,10 @@ describe('pickers skins -- portal posture + keyframe + hatch pins', () => {
   it('routes the runtime swatch/progress colours through a custom-property hatch', () => {
     expect(/var\(--ds-colorpicker-swatch-color\)/.test(NC['modern/color-picker'])).toBe(true);
     expect(/var\(--ds-colorpicker-swatch-color\)/.test(NC['rustic/color-picker'])).toBe(true);
-    expect(/var\(--ds-upload-progress-fill\)/.test(NC['modern/upload'])).toBe(true);
-    expect(/var\(--ds-upload-progress-fill\)/.test(NC['rustic/upload'])).toBe(true);
+    // Upload composes Progress; the runtime override therefore travels through
+    // Progress's canonical hatch instead of duplicating an Upload-only one.
+    expect(/var\(--ds-progress-arc-color/.test(NC['modern/progress'])).toBe(true);
+    expect(/var\(--ds-progress-arc-color/.test(NC['rustic/progress'])).toBe(true);
   });
 });
 

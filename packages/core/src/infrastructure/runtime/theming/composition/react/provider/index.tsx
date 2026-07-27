@@ -81,6 +81,13 @@
 
 'use client';
 
+import {
+  claimRootAttribute,
+  claimRootClass,
+  claimRootStyleProperty,
+  composeRootAttributeReleases,
+  type ReleaseRootAttribute,
+} from '@/infrastructure/runtime/foundation/root-attributes';
 import React, {
   createContext,
   useContext,
@@ -1106,13 +1113,25 @@ export function ThemeProvider({
       return theme === 'dark' ? 'dark' : theme === 'light' ? 'light' : 'base';
     };
 
+    // Claims replace bare writes so cleanup can restore the SSR stamp instead
+    // of deleting it. Re-applying (an `auto` media change) releases the prior
+    // claim first, so exactly one claim is outstanding per attribute.
+    let release: ReleaseRootAttribute | null = null;
+
     const applyThemeToDom = () => {
       const nextResolvedTheme = resolveTheme();
 
       setResolvedTheme((current) => (current === nextResolvedTheme ? current : nextResolvedTheme));
-      rootElement.setAttribute('data-theme', nextResolvedTheme);
-      rootElement.classList.toggle('dark', nextResolvedTheme === 'dark');
-      rootElement.style.colorScheme = nextResolvedTheme === 'dark' ? 'dark' : 'light';
+      release?.();
+      release = composeRootAttributeReleases([
+        claimRootAttribute(rootElement, 'data-theme', nextResolvedTheme),
+        claimRootClass(rootElement, 'dark', nextResolvedTheme === 'dark'),
+        claimRootStyleProperty(
+          rootElement,
+          'color-scheme',
+          nextResolvedTheme === 'dark' ? 'dark' : 'light',
+        ),
+      ]);
 
       // Dev-only: verbose for debugging tenant/theme issues
       if (process.env.NODE_ENV === 'development') {
@@ -1136,9 +1155,7 @@ export function ThemeProvider({
 
     if (theme !== 'auto') {
       return () => {
-        rootElement.removeAttribute('data-theme');
-        rootElement.classList.remove('dark');
-        rootElement.style.removeProperty('color-scheme');
+        release?.();
       };
     }
 
@@ -1150,9 +1167,7 @@ export function ThemeProvider({
 
     return () => {
       mediaQuery.removeEventListener('change', handleMediaChange);
-      rootElement.removeAttribute('data-theme');
-      rootElement.classList.remove('dark');
-      rootElement.style.removeProperty('color-scheme');
+      release?.();
     };
   }, [theme]);
 

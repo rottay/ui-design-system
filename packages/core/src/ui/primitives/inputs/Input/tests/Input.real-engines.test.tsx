@@ -594,7 +594,10 @@ describe("Input CSS-first skin (WO-ARC-07)", () => {
     expect(generatedCss).toContain(
       "padding-inline: var(--ds-input-sm-padding-x) !important"
     );
-    expect(generatedCss).toContain("border-radius: var(--ds-input-xl-radius");
+    expect(generatedCss).toContain(
+      "--ds-input-responsive-radius: var(--ds-input-xl-radius"
+    );
+    expect(generatedCss).not.toContain("border-radius:");
     expect(generatedCss).toContain("gap: var(--ds-input-xl-gap");
   });
 

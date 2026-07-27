@@ -42,9 +42,9 @@ test('canonical graphics pack has exhaustive licensed provenance and notice cove
   assert.deepEqual(auditGraphicsPackaging(), {
     schemaVersion: 1,
     providers: 3,
-    functionalIcons: 263,
+    functionalIcons: 282,
     functionalIconCompatibilityImports: 330,
-    brandMarks: 9,
+    brandMarks: 11,
     cloudServiceMarks: 4,
     featurePictograms: 8,
     notice: 'THIRD_PARTY_NOTICES.md',

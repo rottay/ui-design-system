@@ -28,11 +28,13 @@
  */
 
 /**
- * Cascade layers in ascending precedence order.
+ * Cascade layers in ascending precedence order. Later entries win.
  *
- * Later entries win. `rottay-personality` sits above `rottay-tenants` because
- * personality is resolved per product at runtime and is designed to outrank the
- * static tenant artifacts.
+ * Every layer here is populated by real rules in the shipped bundles. A layer
+ * that nothing writes into is not a harmless placeholder: it publishes a
+ * position in the cascade that no emitter occupies, and readers reason about
+ * precedence from it. `rottay-tenants` was exactly that, and it encoded the
+ * WRONG law (see `TENANT_PAINT_IS_UNLAYERED`).
  */
 export const ROTTAY_CASCADE_LAYER_ORDER = [
   'theme',
@@ -43,15 +45,38 @@ export const ROTTAY_CASCADE_LAYER_ORDER = [
   'rottay-motion',
   'rottay-components',
   'rottay-engines',
-  'rottay-tenants',
   'rottay-personality',
   'rottay-responsive',
   'components',
   'utilities',
 ] as const;
 
-/** Layer owned by the static first-party tenant artifacts. */
-export const TENANT_CASCADE_LAYER = 'rottay-tenants';
+/**
+ * Tenant paint is deliberately UNLAYERED, and this constant exists so that fact
+ * is stated once instead of being inferred from the absence of a layer.
+ *
+ * Both tenant emitters -- the static first-party vertical artifact compiled
+ * into each bundle, and the runtime DB artifact injected as a `<style>` during
+ * SSR -- emit outside every cascade layer, scoped by
+ * `:is(html[data-tenant='x'], :where([data-ds-root][data-vertical='x']))`,
+ * which is (0,1,1). Unlayered rules outrank every layered rule regardless of
+ * layer order, so the tenant wins its channels by construction.
+ *
+ * This is REQUIRED by the coverage model, not incidental to it. A compiled
+ * artifact declares the channels it owns (`TENANT_THEME_V1_COVERAGE`), the
+ * provider silences exactly those emitters, and the artifact must therefore win
+ * wherever both would declare the same variable. Putting tenant paint into a
+ * layer BELOW `rottay-personality` -- which is what the removed
+ * `rottay-tenants` entry did -- inverted that: the subordinate bridge outranked
+ * the authority it is subordinate to.
+ *
+ * Consequence for the app tier: application CSS is unlayered too, so it beats
+ * every DS layer but loses to the artifact at `:root` (0,1,0 < 0,1,1). An app
+ * reaches tenant paint only by matching (0,1,1) itself -- typically
+ * `html[data-tenant] :where(...)` -- or with `!important`. Both are violations
+ * of the app-tier limit, not accidents of the cascade.
+ */
+export const TENANT_PAINT_IS_UNLAYERED = true;
 
 /** Layer owned by the runtime personality emitter. */
 export const PERSONALITY_CASCADE_LAYER = 'rottay-personality';

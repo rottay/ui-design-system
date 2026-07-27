@@ -1,20 +1,25 @@
 /**
  * Pure translation lookup and interpolation.
  *
- * The chain is exactly three tiers, always in this order, with no hidden
- * fourth hop:
+ * The chain is exactly four tiers, always in this order:
  *
  *   1. `custom`   — tenant overrides, so a whitelabel app can replace any DS
  *                   string without forking a locale dictionary
  *   2. `locale`   — the active locale's dictionary
  *   3. `fallback` — the CONFIGURED fallback locale's dictionary, skipped when
  *                   it is the active locale (the lookup already happened)
+ *   4. `floor`    — English, the guaranteed-complete catalog
  *
- * When tier 3 also misses, the lookup MISSES. The design system does not fall
- * through to English, or to any other locale, behind the configured fallback:
- * the fallback an application configures is the last word on which language it
- * is willing to show. A universal English floor would silently overrule an
- * app that deliberately configured, say, `fallbackLocale="es"`.
+ * Tier 4 does not overrule anybody. An application that configures
+ * `fallbackLocale="es"` still has Spanish consulted first, for every key
+ * Spanish has copy for; the floor answers only where the app's entire declared
+ * chain has nothing. The alternative it replaces was not "the app's policy
+ * wins" — it was a raw dotted key (`listToolbar.densitySuffix`) rendering into
+ * production UI, which serves no language policy and no reader.
+ *
+ * A `missing` result therefore now means the key exists in NO catalog at all:
+ * an authoring bug, not a translation gap. That is the only case where callers
+ * still see the key echoed, and it warns in development.
  */
 
 import type {
@@ -22,6 +27,7 @@ import type {
   SupportedLocale,
   TranslationResolution,
 } from '@/foundation/i18n/kernel/contracts';
+import { TRANSLATION_FLOOR_LOCALE } from '@/foundation/i18n/kernel/contracts';
 
 export interface TranslationResolutionOptions {
   key: string;
@@ -99,6 +105,16 @@ export function resolveTranslationEntry({
     }
   }
 
+  // Terminal floor. Skipped when English was already one of the tiers above,
+  // so a key genuinely absent from English still reports `missing` rather than
+  // being looked up twice and reported as a floor hit.
+  if (locale !== TRANSLATION_FLOOR_LOCALE && fallbackLocale !== TRANSLATION_FLOOR_LOCALE) {
+    const floorValue = getTranslationValue(catalog[TRANSLATION_FLOOR_LOCALE], key);
+    if (floorValue !== undefined) {
+      return { tier: 'floor', value: interpolateTranslation(floorValue, params) };
+    }
+  }
+
   return { tier: 'missing', value: undefined };
 }
 
@@ -111,15 +127,22 @@ export function resolveTranslation(
 /**
  * Resolves a key against a caller-owned floor.
  *
- * The floor is used only for a genuine miss, and is interpolated exactly like
- * catalog copy so it can carry the same placeholders.
+ * The floor is interpolated exactly like catalog copy so it can carry the same
+ * placeholders.
+ *
+ * It outranks the ENGLISH floor, and that ordering is the whole point: a call
+ * site that writes `tOr(key, 'Suivant')` inside a French surface has supplied
+ * copy in the right language for this exact spot. Preferring the DS's English
+ * catalog there would discard a more specific, deliberately-authored answer in
+ * favour of a generic one. The English floor exists to rescue call sites that
+ * named no alternative; this one did.
  */
 export function resolveTranslationOr(
   options: TranslationResolutionOptions,
   fallback: string,
 ): string {
   const resolution = resolveTranslationEntry(options);
-  return resolution.tier === 'missing'
+  return resolution.tier === 'missing' || resolution.tier === 'floor'
     ? interpolateTranslation(fallback, options.params)
     : resolution.value;
 }

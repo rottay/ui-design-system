@@ -83,21 +83,13 @@
 /**
  * Rottay Design System - Tenant-free base CSS
  *
- * Contains everything from index.css EXCEPT tenant overrides (Layer 4).
+ * Contains everything from index.css except compiled tenant paint.
  * Used by build-vertical-css.mjs to create per-vertical dist bundles
  * that include only one tenant's CSS.
  *
- * Layers included:
- * - 0: antd reset
- * - 1: DS foundation + default theme
- * - 2: Component tokens
- * - 3: Engine themes (classic, modern, rustic)
- * - 5: Personality overrides
- * - 6: Responsive overrides
- * - Accessibility + Animations (unlayered)
- *
- * Layer 4 (tenant overrides) is intentionally omitted.
- * Each vertical CSS adds its own tenant import.
+ * The canonical named-layer order is declared below. Compiled tenant paint is
+ * intentionally unlayered and omitted here; each vertical bundle appends one
+ * authoritative tenant artifact after this tenant-free base.
  *
  * @version 1.0.0
  */
@@ -106,13 +98,13 @@
  * Cross-framework cascade contract.
  *
  * Consumer Tailwind owns the top-level `theme`, `base`, `components`, and
- * `utilities` layers. The Modern engine's bundled Tailwind/DaisyUI artifact is
+ * `utilities` layers. The Modern engine's bundled Tailwind artifact is
  * separately nested under `rottay-framework`: it is a DS implementation
  * dependency, not consumer chrome. First-party tokens and skins therefore win
  * over the bundled framework by layer ownership, while product components and
  * utilities remain intentionally above the bounded DS skins.
  */
-@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-tenants, rottay-personality, rottay-responsive, components, utilities;
+@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-personality, rottay-responsive, components, utilities;
 
 /* Layer 0: antd reset */
 @import "antd/dist/reset.css" layer(rottay-reset);
@@ -4218,7 +4210,7 @@ html.dark {
     /* Defense-in-depth: the --ds-motion-* canon (declared above on :root) is
        also neutralized to 0s here, so this foundation file self-zeros the
        motion durations under reduced motion even in isolation -- without
-       relying on runtime/personality-paint.css, which zeros the same tokens
+       relying on the !important token zeroing below, which this file owns
        from a later unlayered import. Both declarations resolve to 0s, so the
        :root source-order tie between the two files yields 0s either way (no
        double-definition conflict). Durations only; the easing and geometry
@@ -22062,7 +22054,10 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 .rottay-input.rottay-input--modern[data-part='root'] {
-  --ds-input-resolved-radius: var(--ds-radius-input, var(--ds-radius-md));
+  --ds-input-resolved-radius: var(
+    --ds-input-responsive-radius,
+    var(--ds-radius-input, var(--ds-radius-md))
+  );
   --ds-input-resolved-gap: var(--ds-input-gap, var(--ds-spacing-2));
   box-sizing: border-box;
   display: flex;
@@ -32327,12 +32322,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 }
-/* markdown-view.css rides layer(rottay-engines): the modern theme.css bridge
-   (`html[data-tenant] a`, rottay-engines, (0,1,2)) targets every anchor with
-   UNDECLARED --ds-link-* tokens (IACVT -> inherit/initial); in
-   rottay-components the bridge would mask the skin's link part entirely.
-   Same layer + (0,3,1) > (0,1,2) lets the family rule win by specificity. */
-@layer rottay-engines {
+@layer rottay-components {
 /**
  * MarkdownView skin -- engine-agnostic, no `@layer` in-file (the facade
  * entrypoints import it into `layer(rottay-components)`, the same
@@ -32581,7 +32571,10 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   caret-color: var(--ds-input-caret-color);
   background: var(--ds-input-bg);
   border: var(--ds-input-border-width, 1px) var(--ds-input-border-style, solid) var(--ds-input-border);
-  border-radius: var(--ds-textarea-radius, var(--ds-radius-input));
+  border-radius: var(
+    --ds-textarea-responsive-radius,
+    var(--ds-textarea-radius, var(--ds-radius-input))
+  );
   box-shadow: var(--ds-input-shadow-rest, none), var(--ds-input-inset-shadow, none);
   font-family: var(--ds-input-font-family, inherit);
   font-weight: var(--ds-input-font-weight, var(--ds-font-weight-normal));
@@ -76674,9 +76667,11 @@ html[data-ds-motion="reduced"]
 
 }
 
-/* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */
+/* Tenant overrides: added per-vertical, and UNLAYERED by law
+   (cascade-layers: TENANT_PAINT_IS_UNLAYERED). */
 
-/* Layer 5: Personality overrides */
+/* Personality overrides -- subordinate to tenant paint; completes only the
+   channels a compiled artifact does not cover. */
 @layer rottay-personality {
 /**
  * Personality CSS Overrides - Rottay Design System
@@ -76684,17 +76679,19 @@ html[data-ds-motion="reduced"]
  * Cross-engine rules that consume personality CSS custom properties
  * pushed by SystemCssVariablesBridge via resolvePersonalityCssVariables().
  *
- * These rules apply personality tokens to ALL three engines
- * (Classic/Ant, Modern/DaisyUI, Rustic/Vanilla) via the CSS cascade.
- * Zero engine file changes required.
+ * These compatibility selectors project personality tokens across the
+ * supported engine DOM contracts. Modern is first-party; Classic and Rustic
+ * remain frozen compatibility engines.
  *
  * This file is imported inside `rottay-personality`, below a Tailwind v4
  * host's preflight (P-76). Its preflight-killable channels (card padding,
- * divider border-style/color) live in personality-paint.css, unlayered. The
+ * divider border-style/color) are painted by the tenant/engine rules that
+ * already ship (html[data-tenant] .ant-card-head, .ds-card__header). The
  * box-shadow / scrollbar / ::selection paint remaining here is not
- * preflight-resettable on its targets, and the layered position is
- * load-bearing: unlayered skins must keep beating personality (P-87);
- * declared residue in css-layer-paint-gate.allowlist.json.
+ * preflight-resettable on its targets. The declared layer order is
+ * load-bearing: bounded component and engine skins remain above the
+ * personality defaults (P-87); declared residue lives in
+ * css-layer-paint-gate.allowlist.json.
  */
 
 /* ========================================================================
@@ -77733,18 +77730,36 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
  * design-system layer in the canonical order:
  *
  *   theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion,
- *   rottay-components, rottay-engines, rottay-tenants, rottay-personality,
+ *   rottay-components, rottay-engines, rottay-personality,
  *   rottay-responsive, components, utilities
  *
- * Layer precedence outranks specificity, so nothing inside the design system
- * can beat these rules at any selector weight: not the base token scale
- * (`rottay-tokens`), not a component or engine skin, not a tenant artifact
- * (`rottay-tenants`) — which is exactly where the most aggressive negative
- * tracking lives — and not the personality layer. A guard placed with the
- * tokens it corrects would lose to every one of those. `rottay-responsive` is
- * the right home in kind as well as in rank: it is the layer for adjustments
- * conditioned on the rendering environment, and the rendering language is one
- * of those conditions.
+ * Layer precedence outranks specificity, so nothing LAYERED inside the design
+ * system can beat these rules at any selector weight: not the base token scale
+ * (`rottay-tokens`), not a component or engine skin, not the personality layer.
+ * A guard placed with the tokens it corrects would lose to every one of those.
+ * `rottay-responsive` is the right home in kind as well as in rank: it is the
+ * layer for adjustments conditioned on the rendering environment, and the
+ * rendering language is one of those conditions.
+ *
+ * KNOWN GAP — TENANT PAINT OUTRANKS THIS GUARD (open, R1 finding 2026-07-26).
+ * Tenant artifacts are UNLAYERED by law (see cascade-layers:
+ * TENANT_PAINT_IS_UNLAYERED), and an unlayered rule beats every layered rule
+ * regardless of layer order. An earlier version of this note claimed a tenant
+ * artifact could not override the guard because it lived in `rottay-tenants`;
+ * that layer never existed in any shipped bundle. Four tracking tokens are
+ * declared by BOTH this guard and the bithire artifact —
+ * `--ds-letter-spacing-{display,heading,body,mono}` — and the artifact wins all
+ * four when `lang="ar"` is on the ROOT element.
+ *
+ * Nested Arabic is unaffected: custom properties resolve from the nearest
+ * declaring ancestor, so a `<div lang="ar">` inside a Latin page still gets 0.
+ * Only a wholly-Arabic document is exposed.
+ *
+ * FIXED 2026-07-26 by `language-arabic-root.css`: an UNLAYERED
+ * `html[lang]:lang(ar)` rule at (0,2,1), which outranks the artifact's (0,1,1)
+ * without `!important` (that would also defeat legitimate application-owned
+ * Arabic typography). This file keeps the layered guard, which is still what
+ * neutralizes every LAYERED emitter and the nested-subtree case.
  *
  * What CAN still override it is deliberate and application-owned: a consumer's
  * own `components`/`utilities` layer, unlayered application CSS, `!important`,
@@ -77845,6 +77860,74 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
 
 }
 
+/* Arabic tracking floor at ROOT scope, deliberately UNLAYERED: the tenant
+   artifact is unlayered too, so a layered guard can never reach it. See
+   foundation/responsive/language-arabic-root.css. */
+/**
+ * Arabic tracking guard — ROOT scope, unlayered.
+ *
+ * WHY A SECOND FILE. `foundation/responsive/language-arabic.css` carries the
+ * same neutralization inside `@layer rottay-responsive`, which is correct for
+ * every LAYERED emitter. It is not enough for the one emitter that is not
+ * layered: the tenant artifact. Tenant paint is unlayered by law
+ * (cascade-layers: TENANT_PAINT_IS_UNLAYERED) and therefore outranks every
+ * layer regardless of specificity, so a tenant that ships negative display
+ * tracking -- bithire ships `--ds-letter-spacing-display: -0.035em` -- won it
+ * back on a wholly-Arabic document and broke the joining of the script.
+ *
+ * WHY NOT `!important`. It would also defeat an application that legitimately
+ * sets Arabic typography for its own surfaces, and it would put a correctness
+ * floor and a brand preference into the same, unarguable bucket. Specificity is
+ * enough and stays negotiable: `html[lang]:lang(ar)` is (0,2,1), which beats
+ * the artifact's `:is(html[data-tenant='x'], …)` at (0,1,1) while remaining
+ * reachable by any app rule that genuinely means to override it.
+ *
+ * WHY ONLY THE ROOT. Custom properties resolve from the NEAREST declaring
+ * ancestor, so a `<div lang="ar">` inside a Latin document already wins over an
+ * `html`-scoped artifact declaration by proximity — no specificity contest
+ * occurs. Only the case where `lang` sits on `<html>` itself is contested, and
+ * that is exactly what this file addresses. `:lang()` matches regional variants,
+ * so `ar`, `ar-SA` and `ar-EG` are all covered.
+ *
+ * DRIFT: the token list mirrors section 1 of the layered guard and is checked
+ * against it by `language-arabic-root.test.ts`.
+ */
+
+html[lang]:lang(ar) {
+  --ds-letter-spacing-tighter: 0;
+  --ds-letter-spacing-tight: 0;
+  --ds-letter-spacing-snug: 0;
+  --ds-letter-spacing-subtle: 0;
+  --ds-letter-spacing-subtle-wide: 0;
+  --ds-letter-spacing-wide: 0;
+  --ds-letter-spacing-wider: 0;
+  --ds-letter-spacing-widest: 0;
+  --ds-letter-spacing-h1: 0;
+  --ds-letter-spacing-h2: 0;
+  --ds-letter-spacing-h3: 0;
+  --ds-letter-spacing-h4: 0;
+  --ds-letter-spacing-h5: 0;
+  --ds-letter-spacing-h6: 0;
+  --ds-letter-spacing-display: 0;
+  --ds-letter-spacing-heading: 0;
+  --ds-letter-spacing-body: 0;
+  --ds-letter-spacing-mono: 0;
+  --ds-personality-typography-heading-letter-spacing: 0;
+  --ds-typography-display-letter-spacing: 0;
+  --ds-typography-heading-letter-spacing: 0;
+  --ds-typography-body-letter-spacing: 0;
+  --ds-type-display-letter-spacing: 0;
+  --ds-type-page-title-letter-spacing: 0;
+  --ds-type-section-title-letter-spacing: 0;
+  --ds-type-body-letter-spacing: 0;
+  --ds-type-supporting-letter-spacing: 0;
+  --ds-type-label-letter-spacing: 0;
+  --ds-type-caption-letter-spacing: 0;
+  --ds-type-code-letter-spacing: 0;
+  --ds-type-numeric-letter-spacing: 0;
+}
+
+
 /* Accessibility: touch targets (unlayered)
  *
  * This is the ONE shared coarse-pointer floor. It stays unlayered on purpose:
@@ -77904,7 +77987,7 @@ html[data-ds-motion='reduced'] [data-ds-motion-primitive][data-ds-motion-state='
 }
 
 
-/* === Modern Engine (DaisyUI + Tailwind utilities) === */
+/* === Modern Engine (Rottay skins + Tailwind utilities) === */
 @layer rottay-framework {
 /*! tailwindcss v4.2.4 | MIT License | https://tailwindcss.com */
 @layer properties;

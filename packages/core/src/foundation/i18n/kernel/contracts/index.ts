@@ -23,19 +23,36 @@ export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
  * normalization defaulted to `'en'` while translation fell back to `'es'`, so
  * two different implicit languages were in force at once depending on which
  * function you happened to call.
+ *
+ * English, not Spanish: the design system is the shared substrate of every
+ * vertical and every customer tenant, and a caller that names no locale has
+ * expressed no language policy at all. Defaulting such a caller into Spanish
+ * made the DS impose one product's audience on every other consumer, and every
+ * vertical that did not want it had to restate English locally to undo the DS
+ * — `app-bithire` declares its own `FALLBACK_LOCALE = 'en'`
+ * (`src/core/lib/i18n/index.ts`) for exactly that reason.
+ *
+ * Verticals keep owning their own locale policy; this constant only decides what
+ * happens when NOBODY states one. A tenant or vertical that wants Spanish still
+ * says so explicitly, and is unaffected.
  */
-export const DEFAULT_LOCALE: SupportedLocale = 'es';
+export const DEFAULT_LOCALE: SupportedLocale = 'en';
+
+/**
+ * The guaranteed-complete catalog, consulted as the terminal floor after the
+ * configured chain misses. See `TRANSLATION_FLOOR_LOCALE` semantics in
+ * `runtime/resolution/translation`.
+ */
+export const TRANSLATION_FLOOR_LOCALE: SupportedLocale = 'en';
 
 /**
  * The configured fallback locale, consulted when the active locale has no copy
  * for a key.
  *
- * This is CONFIGURATION, not a universal law: an application that passes
- * `fallbackLocale` to `I18nProvider` overrides it, and the resolution chain
- * honours whatever it is given. The design system never silently hops to
- * English behind a configured fallback — if the configured fallback also has
- * no copy for a key, the lookup MISSES. Anything else would make the
- * application's declared language policy advisory.
+ * This is CONFIGURATION: an application that passes `fallbackLocale` to
+ * `I18nProvider` overrides it, and the resolution chain honours whatever it is
+ * given — the configured language is always consulted BEFORE the English floor,
+ * so an app's declared policy still decides every key it has copy for.
  */
 export const DEFAULT_FALLBACK_LOCALE: SupportedLocale = DEFAULT_LOCALE;
 
@@ -98,9 +115,11 @@ export type TranslateOrFunction = (
  * - `custom`   — tenant `customTranslations` override
  * - `locale`   — the active locale's dictionary
  * - `fallback` — the CONFIGURED fallback locale's dictionary
- * - `missing`  — no tier had copy for the key
+ * - `floor`    — the English terminal floor, reached only after the configured
+ *                chain misses entirely
+ * - `missing`  — no tier had copy for the key, in ANY catalog
  */
-export type TranslationTier = 'custom' | 'locale' | 'fallback' | 'missing';
+export type TranslationTier = 'custom' | 'locale' | 'fallback' | 'floor' | 'missing';
 
 /**
  * Structured lookup result. The discriminant makes a miss a first-class value

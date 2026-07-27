@@ -62,5 +62,5 @@ export type {
 export {
   ROTTAY_CASCADE_LAYER_ORDER,
   PERSONALITY_CASCADE_LAYER,
-  TENANT_CASCADE_LAYER,
+  TENANT_PAINT_IS_UNLAYERED,
 } from '../foundation/cascade-layers';

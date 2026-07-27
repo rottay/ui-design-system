@@ -1,21 +1,13 @@
 /**
  * Rottay Design System - Tenant-free base CSS
  *
- * Contains everything from index.css EXCEPT tenant overrides (Layer 4).
+ * Contains everything from index.css except compiled tenant paint.
  * Used by build-vertical-css.mjs to create per-vertical dist bundles
  * that include only one tenant's CSS.
  *
- * Layers included:
- * - 0: antd reset
- * - 1: DS foundation + default theme
- * - 2: Component tokens
- * - 3: Engine themes (classic, modern, rustic)
- * - 5: Personality overrides
- * - 6: Responsive overrides
- * - Accessibility + Animations (unlayered)
- *
- * Layer 4 (tenant overrides) is intentionally omitted.
- * Each vertical CSS adds its own tenant import.
+ * The canonical named-layer order is declared below. Compiled tenant paint is
+ * intentionally unlayered and omitted here; each vertical bundle appends one
+ * authoritative tenant artifact after this tenant-free base.
  *
  * @version 1.0.0
  */
@@ -24,13 +16,13 @@
  * Cross-framework cascade contract.
  *
  * Consumer Tailwind owns the top-level `theme`, `base`, `components`, and
- * `utilities` layers. The Modern engine's bundled Tailwind/DaisyUI artifact is
+ * `utilities` layers. The Modern engine's bundled Tailwind artifact is
  * separately nested under `rottay-framework`: it is a DS implementation
  * dependency, not consumer chrome. First-party tokens and skins therefore win
  * over the bundled framework by layer ownership, while product components and
  * utilities remain intentionally above the bounded DS skins.
  */
-@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-tenants, rottay-personality, rottay-responsive, components, utilities;
+@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-personality, rottay-responsive, components, utilities;
 
 /* Layer 0: antd reset */
 @import "antd/dist/reset.css" layer(rottay-reset);
@@ -163,13 +155,8 @@
   layer(rottay-components);
 @import "../../presentation/components/skin/code-block.css"
   layer(rottay-components);
-/* markdown-view.css rides layer(rottay-engines): the modern theme.css bridge
-   (`html[data-tenant] a`, rottay-engines, (0,1,2)) targets every anchor with
-   UNDECLARED --ds-link-* tokens (IACVT -> inherit/initial); in
-   rottay-components the bridge would mask the skin's link part entirely.
-   Same layer + (0,3,1) > (0,1,2) lets the family rule win by specificity. */
 @import "../../presentation/components/skin/markdown-view.css"
-  layer(rottay-engines);
+  layer(rottay-components);
 @import "../../presentation/components/skin/input-compounds.css"
   layer(rottay-components);
 @import "../../runtime/engines/modern/skin/upload.css" layer(rottay-engines);
@@ -687,13 +674,20 @@
 @import "../../runtime/engines/rustic/skin/pattern-tree-view.css"
   layer(rottay-engines);
 
-/* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */
+/* Tenant overrides: added per-vertical, and UNLAYERED by law
+   (cascade-layers: TENANT_PAINT_IS_UNLAYERED). */
 
-/* Layer 5: Personality overrides */
+/* Personality overrides -- subordinate to tenant paint; completes only the
+   channels a compiled artifact does not cover. */
 @import "../../runtime/personality.css" layer(rottay-personality);
 
 /* Layer 6: Responsive overrides */
 @import "../../foundation/responsive/index.css" layer(rottay-responsive);
+
+/* Arabic tracking floor at ROOT scope, deliberately UNLAYERED: the tenant
+   artifact is unlayered too, so a layered guard can never reach it. See
+   foundation/responsive/language-arabic-root.css. */
+@import "../../foundation/responsive/language-arabic-root.css";
 
 /* Accessibility: touch targets (unlayered)
  *

@@ -10,9 +10,9 @@
       "count": 1,
       "reason": "pre-existing viewport query outside the W6-A command-home migration scope (design doc W6 section 1.2 explicitly excludes this file as a \"single\" to audit individually in a later wave)"
     },
-    "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css": {
+    "src/foundation/tokens/css/presentation/components/skin/button-group.css": {
       "count": 1,
-      "reason": "pre-existing viewport query outside the W6-A command-home migration scope (design doc W6 section 1.2 explicitly excludes this file as a \"single\" to audit individually in a later wave)"
+      "reason": "ButtonGroup is itself the responsive flex container, so a self-referential container query cannot express its mobile posture without adding a wrapper to the public DOM contract. This single viewport query is accepted, decrease-only debt until responsive posture is supplied by a parent surface; aggregate viewport-query debt did not grow when oauth-transition migrated to a container query."
     }
   }
 }

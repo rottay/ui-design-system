@@ -1,16 +1,28 @@
 /**
  * @fileoverview Cascade-layer contract tests - Rottay Design System
- * @description Pins the one property that makes runtime/static token
- * resolution deterministic: every emitter joins the SAME declared cascade
- * order, and no vertical resolves a variable differently from its siblings.
+ * @description Pins ONE cascade model: tenant paint is unlayered and wins;
+ * every other emitter joins the declared layer order and is subordinate to it.
  *
- * These tests exist because the previous defect was invisible to unit tests.
- * `platform.css` imported the rottay artifact WITHOUT `layer(rottay-tenants)`
- * while `bithire.css`/`evnto.css` imported theirs WITH it, and the personality
- * bridge wrote an UNLAYERED `:root` rule. Unlayered beats every layer, so the
- * bridge won for bithire/evnto and lost to the unlayered artifact for rottay --
- * the winner flipped per vertical, decided by entrypoint authoring rather than
- * by the declared order.
+ * Two defects produced this shape, and the tests are split accordingly.
+ *
+ * FIRST (fixed earlier): the entrypoints disagreed with each other --
+ * `platform.css` mounted the rottay artifact unlayered while
+ * `bithire.css`/`evnto.css` mounted theirs `layer(rottay-tenants)`, so the
+ * winner flipped per vertical. That was repaired by making all three agree.
+ *
+ * SECOND (fixed here): they agreed on the WRONG answer, and the guard could not
+ * tell. The build composes its bundle from base.css plus the artifact BY PATH
+ * and never reads the vertical entrypoints at all -- and every `./styles/*`
+ * package export resolves to dist/. So `layer(rottay-tenants)` in those
+ * entrypoints described a layer that existed in NO shipped bundle, and
+ * `rottay-tenants` sat in the declared order with zero rules in it, one rank
+ * below `rottay-personality`. The source asserted that the subordinate
+ * personality bridge outranked the compiled tenant artifact; production did the
+ * opposite, correctly.
+ *
+ * The lesson encoded below: these tests read `src/`, which the build does not
+ * consume, so they could pin a cascade nobody ships. The `shipped bundle
+ * parity` block reads the committed bundles instead -- the actual bytes.
  */
 
 import { describe, it, expect } from 'vitest';
@@ -20,7 +32,6 @@ import { resolve } from 'node:path';
 import {
   ROTTAY_CASCADE_LAYER_ORDER,
   PERSONALITY_CASCADE_LAYER,
-  TENANT_CASCADE_LAYER,
   buildCascadeLayerOrderStatement,
   buildPersonalityRootRuleText,
 } from '..';
@@ -56,12 +67,16 @@ describe('cascade layer order', () => {
     },
   );
 
-  it('ranks personality directly above tenants', () => {
-    const tenants = ROTTAY_CASCADE_LAYER_ORDER.indexOf(TENANT_CASCADE_LAYER);
+  it('ranks personality directly above the engine skins it completes', () => {
+    // Personality's job is to finish what the engine baseline leaves open, so
+    // it sits immediately above `rottay-engines`. It does NOT sit above tenant
+    // paint: tenant paint is unlayered and outranks every layer here, which is
+    // what makes the bridge subordinate to a compiled artifact.
+    const engines = ROTTAY_CASCADE_LAYER_ORDER.indexOf('rottay-engines');
     const personality = ROTTAY_CASCADE_LAYER_ORDER.indexOf(PERSONALITY_CASCADE_LAYER);
 
-    expect(tenants).toBeGreaterThan(-1);
-    expect(personality).toBe(tenants + 1);
+    expect(engines).toBeGreaterThan(-1);
+    expect(personality).toBe(engines + 1);
   });
 
   it('builds a statement that re-declares the full order', () => {
@@ -78,11 +93,17 @@ describe('cascade layer order', () => {
 });
 
 describe('vertical entrypoint parity', () => {
-  // The regression guard. A vertical that mounts its artifact unlayered pulls
-  // that artifact above every cascade layer, so the SAME variable resolves
-  // differently for that vertical than for its siblings.
+  // The regression guard, inverted from what it used to assert.
+  //
+  // These entrypoints previously mounted the artifact `layer(rottay-tenants)`,
+  // which the build then STRIPPED -- so dev resolved the cascade one way and
+  // production another. Worse, the declared order put `rottay-personality`
+  // ABOVE `rottay-tenants`, so in dev the subordinate personality bridge
+  // outranked the compiled tenant artifact it is supposed to complete. Under
+  // the coverage model the artifact must win every channel it declares, and it
+  // can only do that unlayered.
   it.each(VERTICAL_ENTRYPOINTS)(
-    '$entrypoint mounts the $artifact artifact inside the tenant layer',
+    '$entrypoint mounts the $artifact artifact UNLAYERED',
     ({ entrypoint, artifact }) => {
       const css = readCss(`${ENTRYPOINTS}/${entrypoint}`);
       const importLine = css
@@ -90,33 +111,28 @@ describe('vertical entrypoint parity', () => {
         .find((line) => line.includes(`artifacts/${artifact}/index.css`));
 
       expect(importLine).toBeDefined();
-      expect(importLine).toContain(`layer(${TENANT_CASCADE_LAYER})`);
+      expect(importLine).not.toMatch(/layer\(/);
     },
   );
 
-  it('declares the layer order before any vertical mounts its artifact', () => {
-    // Layers are ordered by first appearance. Every entrypoint imports
-    // base.css (which declares the order) ahead of its artifact, so the
-    // artifact cannot register `rottay-tenants` at an unintended position.
-    for (const { entrypoint, artifact } of VERTICAL_ENTRYPOINTS) {
-      const lines = readCss(`${ENTRYPOINTS}/${entrypoint}`).split('\n');
-      const baseIndex = lines.findIndex((line) => line.includes("'./base.css'"));
-      const artifactIndex = lines.findIndex((line) =>
-        line.includes(`artifacts/${artifact}/index.css`),
-      );
-
-      expect(baseIndex, `${entrypoint} must import base.css`).toBeGreaterThan(-1);
-      expect(artifactIndex, `${entrypoint} must import its artifact`).toBeGreaterThan(-1);
-      expect(baseIndex, `${entrypoint} declares layers before its artifact`).toBeLessThan(
-        artifactIndex,
-      );
+  it('declares no layer that nothing writes into', () => {
+    // A declared-but-empty layer publishes a precedence position no emitter
+    // occupies, and readers reason about the cascade from it. `rottay-tenants`
+    // was exactly that in every shipped bundle.
+    expect(ROTTAY_CASCADE_LAYER_ORDER).not.toContain('rottay-tenants');
+    for (const file of ['base.css', 'styles.css']) {
+      const css = readCss(`${ENTRYPOINTS}/${file}`);
+      expect(parseDeclaredLayerOrder(css), file).not.toContain('rottay-tenants');
+      // An @import DIRECTIVE, not a mention. Prose explaining why the layer
+      // was removed necessarily names it, and forbidding that would make the
+      // defect undocumentable.
+      expect(css, file).not.toMatch(/@import[^;]*layer\(rottay-tenants\)/);
     }
   });
 
   it('resolves identically no matter which vertical entrypoint is loaded', () => {
-    // Import order independence: with every artifact in the same layer and the
-    // personality bridge in the layer above, the winner is fixed by the
-    // declared order alone. No entrypoint can promote its artifact.
+    // Import-order independence now comes from every artifact being unlayered
+    // and scoped to its own vertical, not from a shared layer.
     const mountedLayers = VERTICAL_ENTRYPOINTS.map(({ entrypoint, artifact }) => {
       const css = readCss(`${ENTRYPOINTS}/${entrypoint}`);
       const importLine = css
@@ -127,7 +143,57 @@ describe('vertical entrypoint parity', () => {
     });
 
     expect(new Set(mountedLayers).size).toBe(1);
-    expect(mountedLayers[0]).toBe(TENANT_CASCADE_LAYER);
+    expect(mountedLayers[0]).toBe('UNLAYERED');
+  });
+});
+
+describe('shipped bundle parity (dev must equal prod)', () => {
+  /**
+   * The property every test above only approximates: what the entrypoints say
+   * is not what ships. The build reads the artifacts directly and composes its
+   * own bundle, so a source-only guard cannot see a divergence introduced in
+   * `build-vertical-css.mjs`. These read the COMMITTED bundle -- the exact
+   * bytes published to consumers.
+   *
+   * `styles/*.css` is the gate-checked mirror of `dist/*.css` (build-vertical-css
+   * writes both from one in-memory bundle and `--check` diffs them byte for
+   * byte), so reading the mirror is reading production.
+   */
+  const SHIPPED = ['bithire', 'evnto', 'platform', 'rottay', 'index'] as const;
+
+  it.each(SHIPPED)('styles/%s.css ships tenant paint unlayered', (bundle) => {
+    const css = readCss(`styles/${bundle}.css`);
+
+    expect(css).toContain('@layer');
+    // The precise property: no BLOCK may open the removed layer, and no order
+    // statement may name it. Prose that mentions the historical name while
+    // explaining why it is gone is not a violation -- matching on the bare
+    // string would forbid documenting the very defect this guards against.
+    expect(css).not.toMatch(/@layer\s+rottay-tenants\s*\{/);
+    expect(parseDeclaredLayerOrder(css)).not.toContain('rottay-tenants');
+  });
+
+  it.each(SHIPPED)('styles/%s.css keeps the personality bridge layered', (bundle) => {
+    // Personality must stay INSIDE a layer: that is what makes it lose to the
+    // unlayered artifact and therefore subordinate, as the coverage model says.
+    expect(readCss(`styles/${bundle}.css`)).toContain(`@layer ${PERSONALITY_CASCADE_LAYER}`);
+  });
+
+  it('ships the same declared layer order the TypeScript mirror states', () => {
+    for (const bundle of SHIPPED) {
+      const declared = parseDeclaredLayerOrder(readCss(`styles/${bundle}.css`));
+      expect(declared, `styles/${bundle}.css`).toEqual([...ROTTAY_CASCADE_LAYER_ORDER]);
+    }
+  });
+
+  it('scopes the bithire artifact with the (0,1,1) selector that beats an app :root', () => {
+    // The whole app-tier limit rests on this: `:is()` takes the specificity of
+    // its most specific argument, statically, so the artifact is (0,1,1) for
+    // EVERY tenant -- including custom ones that only match the `:where()` arm.
+    // An application `:root` is (0,1,0) and therefore loses.
+    expect(readCss('styles/bithire.css')).toContain(
+      ":is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))",
+    );
   });
 });
 

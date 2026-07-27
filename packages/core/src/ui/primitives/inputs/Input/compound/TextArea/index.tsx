@@ -176,7 +176,11 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
           { cssProperty: 'padding', value: size, resolve: (value) => `var(--ds-input-${value}-padding-y) var(--ds-input-${value}-padding-x) !important` },
           { cssProperty: 'font-size', value: size, resolve: (value) => `var(--ds-input-${value}-font-size) !important` },
           { cssProperty: 'line-height', value: size, resolve: (value) => `var(--ds-input-${value}-line-height) !important` },
-          { cssProperty: 'border-radius', value: size, resolve: (value) => `var(--ds-input-${value}-radius, var(--ds-input-${value}-border-radius)) !important` },
+          {
+            cssProperty: '--ds-textarea-responsive-radius',
+            value: size,
+            resolve: (value) => `var(--ds-input-${value}-radius, var(--ds-input-${value}-border-radius))`,
+          },
           ...(loading
             ? [{
                 cssProperty: 'padding-inline-end',

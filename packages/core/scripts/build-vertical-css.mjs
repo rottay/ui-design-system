@@ -13,7 +13,7 @@
  *
  * Vertical CSS is placed UNLAYERED at the end of each bundle. The generated
  * :is(legacy, :where(provider-root)) selector takes its specificity from the
- * legacy arm, so it still wins over DaisyUI defaults together with later source
+ * legacy arm, so it still wins over the engine baseline together with later source
  * order. A @layer wrapper is intentionally NOT used.
  *
  * styles/{index,modern,platform,rottay,bithire,evnto}.css are committed to git.
@@ -284,11 +284,26 @@ for (const { name, tenantFile, fontPacks } of verticals) {
   let tenantCss = readFile(tenantPath);
   tenantCss = resolveImports(tenantCss, dirname(tenantPath));
 
-  // Vertical CSS is kept UNLAYERED intentionally:
-  // 1. :is(legacy, :where(provider-root)) keeps the legacy arm's specificity
-  // 2. Source order: tenant CSS comes after modern-engine.css (DaisyUI + Tailwind)
-  // Both guarantees together ensure tenant --color-* values always override DaisyUI defaults.
-  // A layered copy (@layer rottay-tenants) is NOT needed and was removed to save ~10-50KB per bundle.
+  // Vertical CSS is kept UNLAYERED because the coverage model requires it: a
+  // compiled artifact declares the channels it owns and the provider silences
+  // exactly those emitters, so the artifact MUST win wherever both it and a
+  // subordinate emitter declare the same variable. Unlayered rules outrank
+  // every cascade layer, which delivers that unconditionally.
+  //
+  // `:is(html[data-tenant='x'], :where([data-ds-root][data-vertical='x']))` is
+  // (0,1,1) -- `:is()` takes the specificity of its most specific argument,
+  // statically -- so the artifact also beats an application `:root` (0,1,0).
+  //
+  // This bundle is the ONLY thing that ships: every `./styles/*` package
+  // export resolves to dist/, and this script reads base.css plus the artifact
+  // by path, never the vertical entrypoints. Those entrypoints used to import
+  // the artifact `layer(rottay-tenants)` -- a layer no shipped bundle ever
+  // had -- so the source described a cascade that did not exist rather than a
+  // cascade that differed. They are now unlayered to match.
+  // The earlier rationale here cited overriding DaisyUI defaults;
+  // DaisyUI is gone, and it was never the reason this had to be unlayered.
+  // See infrastructure/runtime/theming/foundation/cascade-layers:
+  // TENANT_PAINT_IS_UNLAYERED.
   const springBlock = springOverrideBlock(name);
   const verticalFontPacks = fontPackBundle(fontPacks);
   const bundle = [
@@ -301,7 +316,7 @@ for (const { name, tenantFile, fontPacks } of verticals) {
       : []),
     baseCss,
     "",
-    `/* === Modern Engine (DaisyUI + Tailwind utilities) === */`,
+    `/* === Modern Engine (Rottay skins + Tailwind utilities) === */`,
     modernEngine,
     "",
     `/* === ${name} tenant overrides (unlayered, wins by specificity + source order) === */`,
@@ -393,7 +408,7 @@ const stylesBundle = [
     : []),
   baseCss,
   "",
-  `/* === Modern Engine (DaisyUI + Tailwind utilities) === */`,
+  `/* === Modern Engine (Rottay skins + Tailwind utilities) === */`,
   modernEngine,
   "",
   `/* === All tenant overrides (unlayered, wins by specificity + source order) === */`,

@@ -1,4 +1,3 @@
-import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { basename, resolve } from 'node:path';
 
@@ -8,9 +7,6 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { OAuthTransitionScreen } from '../index';
 import type { OAuthProvider } from '../foundation/contracts';
 
-const EXPECTED_CSS_LENGTH = 53_076;
-const EXPECTED_CSS_LINE_COUNT = 2_226;
-const EXPECTED_CSS_SHA256 = '9af44d8087a899dc9434b06f6c2970328204b16f55d718c83a86e0d64deea697';
 const coreRoot = basename(process.cwd()) === 'core' ? process.cwd() : resolve(process.cwd(), 'packages/core');
 const oauthTransitionCss = readFileSync(
   resolve(coreRoot, 'src/foundation/tokens/css/presentation/components/skin/oauth-transition.css'),
@@ -95,17 +91,15 @@ function expectInlinePaletteContract(root: HTMLElement): void {
 
 afterEach(() => cleanup());
 
-describe('OAuthTransition byte-exact skin migration contract', () => {
-  it('pins the complete external skin byte-for-byte and names its critical mechanisms', () => {
-    const digest = createHash('sha256').update(oauthTransitionCss).digest('hex');
+describe('OAuthTransition external skin migration contract', () => {
+  it('pins the observable mechanisms without coupling the test to file topology', () => {
     const keyframes = Array.from(oauthTransitionCss.matchAll(/@keyframes\s+([\w-]+)/g), (match) => match[1]);
     const mediaQueries = Array.from(oauthTransitionCss.matchAll(/@media\s*([^\{]+)/g), (match) => match[1].trim());
 
-    expect(oauthTransitionCss).toHaveLength(EXPECTED_CSS_LENGTH);
-    expect(oauthTransitionCss.split('\n')).toHaveLength(EXPECTED_CSS_LINE_COUNT);
-    expect(digest).toBe(EXPECTED_CSS_SHA256);
     expect(keyframes).toEqual(EXPECTED_KEYFRAMES);
-    expect(mediaQueries).toEqual(['(max-width: 720px)', '(prefers-reduced-motion: reduce)']);
+    expect(oauthTransitionCss).toContain('@container (inline-size <= 720px)');
+    expect(mediaQueries).toEqual(['(prefers-reduced-motion: reduce)']);
+    expect(oauthTransitionCss).not.toContain('@layer daisyui');
 
     for (const selector of CRITICAL_SELECTORS) {
       expect(oauthTransitionCss, `missing critical selector ${selector}`).toContain(selector);

@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 import { auditEffectProvenance } from './effect-registry-audit.mjs';
+import { CI_GATES } from '../packages/core/scripts/ci-gates.manifest.mjs';
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const canonicalRoot = resolve(repoRoot, 'packages/core/provenance/effects');
@@ -15,6 +16,13 @@ const canonicalRegistry = resolve(
 );
 const ciPath = resolve(repoRoot, '.github/workflows/ci.yml');
 const coreManifestPath = resolve(repoRoot, 'packages/core/package.json');
+
+function assertBlockingGate(gates, id, expectedRun) {
+  const gate = gates.find((candidate) => candidate.id === id);
+  assert.ok(gate, `${id} must remain in the canonical CI gate manifest`);
+  assert.equal(gate.blocking, true, `${id} must remain blocking`);
+  assert.deepEqual(gate.run, expectedRun, `${id} must retain its executable command`);
+}
 
 function withFixture(run) {
   const fixtureRoot = mkdtempSync(resolve(tmpdir(), 'rottay-effects-provenance-'));
@@ -179,10 +187,25 @@ test('effect provenance remains a first-class local and CI release gate', () => 
   const coreManifest = JSON.parse(readFileSync(coreManifestPath, 'utf8'));
   const workflow = readFileSync(ciPath, 'utf8');
 
-  assert.match(coreManifest.scripts.pretest, /effects:provenance/);
+  assert.equal(coreManifest.scripts.pretest, 'pnpm run gates:ci');
+  assert.equal(coreManifest.scripts['gates:ci'], 'node scripts/run-ci-gates.mjs');
+  assertBlockingGate(
+    CI_GATES,
+    'effects:provenance',
+    ['pnpm', 'run', 'effects:provenance'],
+  );
   assert.match(coreManifest.scripts.lint, /effects:provenance/);
   assert.match(coreManifest.scripts['test:scripts'], /effect-registry-audit\.test\.mjs/);
   assert.ok(workflow.includes('scripts/effect-registry-audit(\\.test)?\\.mjs$'));
   assert.match(workflow, /^\s+pnpm effects:provenance$/m);
   assert.match(workflow, /^\s+pnpm effects:provenance:test$/m);
+
+  assert.throws(
+    () => assertBlockingGate(
+      CI_GATES.filter((gate) => gate.id !== 'effects:provenance'),
+      'effects:provenance',
+      ['pnpm', 'run', 'effects:provenance'],
+    ),
+    /must remain in the canonical CI gate manifest/,
+  );
 });

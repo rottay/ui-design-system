@@ -164,9 +164,9 @@ describe('fields skins -- per-component interaction + keyframe pins', () => {
     expect(/:hover/.test(NC['rustic/checkbox'])).toBe(false);
   });
 
-  it('Slider: rustic paints a focus ring on the handle (via the focused class); modern draws none (asymmetry)', () => {
+  it('Slider: both engines expose a visible focus treatment through their engine-specific hooks', () => {
     expect(/\.rottay-slider--focused \[data-part='handle'\]/.test(NC['rustic/slider'])).toBe(true);
-    expect(/:hover|:focus|:focus-within/.test(NC['modern/slider'])).toBe(false);
+    expect(/:focus|:focus-within/.test(NC['modern/slider'])).toBe(true);
   });
 
   it('OTP modern: the focus border replaces the imperative writes and error is gated out', () => {

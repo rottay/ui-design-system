@@ -25,6 +25,8 @@
  */
 
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 import type { TenantThemeDocument } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import {
@@ -92,15 +94,16 @@ const BRIDGE_KEYS = Object.keys(BRIDGE_VARIABLES).filter(
  * order only break ties INSIDE one layer, which is why they are absent here:
  * these two emitters are never in the same layer.
  */
-function cascadeRank(cssText: string): number {
+function cascadeRank(
+  cssText: string,
+  order: readonly string[] = ROTTAY_CASCADE_LAYER_ORDER,
+): number {
   const layer = cssText.match(/@layer\s+([\w-]+)\s*\{/)?.[1];
   if (!layer) return Number.POSITIVE_INFINITY;
-  const index = ROTTAY_CASCADE_LAYER_ORDER.indexOf(
-    layer as (typeof ROTTAY_CASCADE_LAYER_ORDER)[number],
-  );
+  const index = order.indexOf(layer);
   // An unregistered layer name registers at first appearance, i.e. above the
   // declared order. Treating it as the top is the pessimistic reading.
-  return index === -1 ? ROTTAY_CASCADE_LAYER_ORDER.length : index;
+  return index === -1 ? order.length : index;
 }
 
 /**
@@ -122,9 +125,10 @@ function specificityOf(selector: string): number {
 function resolveContested(
   artifact: { css: string; selector: string },
   bridgeRuleText: string,
+  order: readonly string[] = ROTTAY_CASCADE_LAYER_ORDER,
 ): 'artifact' | 'bridge' {
-  const artifactRank = cascadeRank(artifact.css);
-  const bridgeRank = cascadeRank(bridgeRuleText);
+  const artifactRank = cascadeRank(artifact.css, order);
+  const bridgeRank = cascadeRank(bridgeRuleText, order);
   if (artifactRank !== bridgeRank) return artifactRank > bridgeRank ? 'artifact' : 'bridge';
 
   const artifactSpecificity = specificityOf(artifact.selector);
@@ -205,14 +209,29 @@ describe('personality subordination — if contention became reachable', () => {
     );
   });
 
-  it('flips to the bridge when the artifact is planted into a layer', () => {
-    // Planted violation #1: the artifact joins the layered cascade. Personality
-    // sits above `rottay-tenants` by design, so the bridge would then win —
-    // even at (0,4,0) against `:root`, because a layer beats specificity. This
-    // is the regression the unlayered artifact exists to prevent, and it proves
-    // the passing assertions above are decided by the layer.
+  it('flips to the bridge when the artifact is planted into a subordinate layer', () => {
+    // Planted violation #1: the artifact joins the layered cascade BELOW
+    // personality. The bridge would then win — even at (0,4,0) against `:root`,
+    // because a layer beats specificity outright. This is the regression the
+    // unlayered artifact exists to prevent, and it proves the passing
+    // assertions above are decided by the layer, not by selector weight.
+    //
+    // `rottay-engines` is the layer immediately below personality, and it is
+    // REGISTERED. The drill used to plant into `rottay-tenants`, which has since
+    // been deleted from the declared order precisely because nothing wrote to
+    // it; an unregistered name registers at first appearance and therefore ranks
+    // ABOVE every declared layer, which would have made this drill silently
+    // stop demonstrating anything.
+    const subordinateLayer = ROTTAY_CASCADE_LAYER_ORDER[
+      ROTTAY_CASCADE_LAYER_ORDER.indexOf(PERSONALITY_CASCADE_LAYER) - 1
+    ];
+    expect(ROTTAY_CASCADE_LAYER_ORDER).toContain(subordinateLayer);
+
     const contesting = artifactClaiming(CONTESTED, ARTIFACT_VALUE);
-    const planted = { css: `@layer rottay-tenants {\n${contesting.css}\n}`, selector: contesting.selector };
+    const planted = {
+      css: `@layer ${subordinateLayer} {\n${contesting.css}\n}`,
+      selector: contesting.selector,
+    };
 
     expect(specificityOf(planted.selector)).toBeGreaterThan(specificityOf(':root'));
     expect(resolveContested(planted, buildPersonalityRootRuleText())).toBe('bridge');
@@ -241,11 +260,64 @@ describe('personality subordination — if contention became reachable', () => {
     expect(resolveContested(weakArtifact, layered)).toBe('artifact');
   });
 
-  it('keeps personality above the static first-party tenant artifacts', () => {
-    // Subordinate to the DB artifact, superior to the static vertical baseline:
-    // one ordering fact, both halves load-bearing.
-    expect(ROTTAY_CASCADE_LAYER_ORDER.indexOf(PERSONALITY_CASCADE_LAYER)).toBeGreaterThan(
-      ROTTAY_CASCADE_LAYER_ORDER.indexOf('rottay-tenants'),
+  it('states the subordination against SHIPPED bytes, not a layer-order lookup', () => {
+    // WHAT THIS REPLACES, and why the replacement is not cosmetic.
+    //
+    // This assertion used to read:
+    //   expect(indexOf(PERSONALITY)).toBeGreaterThan(indexOf('rottay-tenants'))
+    // After `rottay-tenants` was deleted from the order, `indexOf` returned -1,
+    // so it asserted `8 > -1` -- true for every possible input, including a
+    // total inversion of the cascade. It was green because it had stopped
+    // measuring anything.
+    //
+    // The property it MEANT to state cannot be read off the layer array at all,
+    // because tenant paint is not in the array: it is unlayered. So the real
+    // relationship lives in the emitted text and the shipped bundle, and that
+    // is what is read here.
+    const bundle = readFileSync(
+      resolve(process.cwd(), 'styles/bithire.css'),
+      'utf8',
+    );
+
+    // 1. Personality IS layered -- the half that makes it subordinate.
+    expect(buildPersonalityRootRuleText()).toContain(
+      `@layer ${PERSONALITY_CASCADE_LAYER} {`,
+    );
+    expect(bundle).toContain(`@layer ${PERSONALITY_CASCADE_LAYER}`);
+    expect(ROTTAY_CASCADE_LAYER_ORDER).toContain(PERSONALITY_CASCADE_LAYER);
+
+    // 2. Tenant paint is NOT layered, and no layer is reserved for it. A
+    //    reserved-but-empty layer is what made the old assertion look sound.
+    expect(ROTTAY_CASCADE_LAYER_ORDER).not.toContain('rottay-tenants');
+    expect(bundle).not.toMatch(/@layer\s+rottay-tenants\s*\{/);
+    expect(ARTIFACT.css).not.toContain('@layer');
+
+    // 3. Therefore, on a shared channel the tenant wins. Asserted as the
+    //    RESOLUTION, not as an ordering of two indices.
+    expect(resolveContested(ARTIFACT, buildPersonalityRootRuleText())).toBe('artifact');
+  });
+
+  it('DRILL: goes red if a layer is ever reserved for tenant paint again', () => {
+    // The negative drill for the assertion above. Re-introducing a tenant layer
+    // is precisely the change that would silently restore the inverted model,
+    // and it is the change `indexOf(...)` could not detect.
+    const inverted = [
+      ...ROTTAY_CASCADE_LAYER_ORDER.slice(0, ROTTAY_CASCADE_LAYER_ORDER.indexOf(PERSONALITY_CASCADE_LAYER)),
+      'rottay-tenants',
+      ...ROTTAY_CASCADE_LAYER_ORDER.slice(ROTTAY_CASCADE_LAYER_ORDER.indexOf(PERSONALITY_CASCADE_LAYER)),
+    ];
+
+    // Under that order the artifact would be layered BELOW personality...
+    const planted = {
+      css: `@layer rottay-tenants {\n${ARTIFACT.css}\n}`,
+      selector: ARTIFACT.selector,
+    };
+    expect(inverted.indexOf('rottay-tenants')).toBeLessThan(
+      inverted.indexOf(PERSONALITY_CASCADE_LAYER),
+    );
+    // ...and the bridge would win, which is the regression being guarded.
+    expect(resolveContested(planted, buildPersonalityRootRuleText(), inverted)).toBe(
+      'bridge',
     );
   });
 });

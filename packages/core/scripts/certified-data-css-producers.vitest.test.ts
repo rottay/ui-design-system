@@ -13,6 +13,7 @@ import { collectSourceFiles } from './runtime-svg-paint-census.mjs';
 
 const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const componentsDir = resolve(packageRoot, 'src/ui');
+const RESPONSIVE_PROPERTY_SITE_FLOOR = 81;
 
 function collectResponsivePropertyMap(): string[] {
   const properties: string[] = [];
@@ -52,7 +53,11 @@ function declarationProperties(css: string): string[] {
 describe('embedded CSS certified data producers', () => {
   it('executes the complete production responsive property map without paint declarations', () => {
     const propertyMap = collectResponsivePropertyMap();
-    expect(propertyMap).toHaveLength(81);
+    // This is a non-vacuity floor, not a product-shape pin. New responsive
+    // consumers may legitimately grow the map; the behavioral assertions
+    // below prove every discovered property remains layout-only and is
+    // faithfully emitted by the production generator.
+    expect(propertyMap.length).toBeGreaterThanOrEqual(RESPONSIVE_PROPERTY_SITE_FLOOR);
     expect(propertyMap.every((property) => !isEmbeddedCssPaintProperty(property))).toBe(true);
 
     const uniqueProperties = [...new Set(propertyMap)].sort();

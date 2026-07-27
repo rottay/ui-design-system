@@ -28,11 +28,11 @@ test('BitHire preset is bounded to its exact 104-role application inventory', as
   assert.equal(typeof cjs.BitHireIconPreset, 'object');
 });
 
-test('explicit full compatibility keeps all 263 roles in ESM and CJS', async () => {
+test('explicit full compatibility keeps the complete role inventory in ESM and CJS', async () => {
   const esm = await import(FULL_SUBPATH);
   const cjs = require(FULL_SUBPATH);
-  assert.equal(esm.ICON_NAMES.length, 263);
-  assert.equal(cjs.ICON_NAMES.length, 263);
+  assert.equal(esm.ICON_NAMES.length, 282);
+  assert.equal(cjs.ICON_NAMES.length, 282);
   assert.deepEqual(esm.ICON_NAMES, cjs.ICON_NAMES);
   assert.equal(typeof esm.Icon, 'object');
   assert.equal(typeof cjs.Icon, 'object');

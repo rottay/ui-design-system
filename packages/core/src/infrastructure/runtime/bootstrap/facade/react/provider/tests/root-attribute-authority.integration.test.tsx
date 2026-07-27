@@ -58,18 +58,30 @@ let restore: (() => void) | null = null;
 function callerModule(): string {
   const stack = new Error().stack ?? '';
   const lines = stack.split('\n').slice(1);
+  let crossedClaimRegistry = false;
   for (const line of lines) {
     const match = line.match(/(?:\(|\s|^)(?:file:\/\/)?(\/[^\s()]*?\/src\/[^\s():]+)/);
     if (!match) continue;
     const path = match[1];
     if (path.includes('/node_modules/')) continue;
     const relative = path.slice(path.lastIndexOf('/src/') + 5);
+    // The claim registry performs the physical set/remove on behalf of a
+    // semantic provider. Attribute the write to its first caller so two
+    // providers cannot collapse into one apparent "root-attributes" writer.
+    if (relative === 'infrastructure/runtime/foundation/root-attributes/index.ts') {
+      crossedClaimRegistry = true;
+      continue;
+    }
     // The interceptor itself sits in this file; skip it so the frame below is
     // credited, but keep a genuine write made BY this file (the planted
     // violation) attributable.
     if (relative.endsWith(THIS_TEST_FILE) && lines.indexOf(line) < 2) continue;
     return relative;
   }
+  // A release returned by claimRootAttribute can restore an SSR baseline from
+  // React's passive-unmount machinery. That is the lifecycle of an already
+  // attributed claim, not a second semantic writer.
+  if (crossedClaimRegistry) return '<claim-release>';
   return '<unattributed>';
 }
 
@@ -107,7 +119,11 @@ function interceptRootMutations(): () => void {
 
 function writersOf(attribute: string): string[] {
   return Array.from(
-    new Set(writes.filter((write) => write.attribute === attribute).map((w) => w.writer)),
+    new Set(
+      writes
+        .filter((write) => write.attribute === attribute && write.writer !== '<claim-release>')
+        .map((w) => w.writer),
+    ),
   ).sort();
 }
 
@@ -192,8 +208,11 @@ describe('root attribute authority', () => {
     // channel. Without this the whole suite would pass if the provider stopped
     // writing the document element altogether.
     for (const attribute of Object.keys(GOVERNED_ROOT_ATTRIBUTES)) {
-      expect(writersOf(attribute).length).toBeGreaterThan(0);
-      expect(writersOf(attribute)).not.toContain('<unattributed>');
+      const writers = writersOf(attribute);
+      expect(writers.length, `${attribute}: no writer observed`).toBeGreaterThan(0);
+      expect(writers, `${attribute}: unattributed writer in ${writers.join(', ')}`).not.toContain(
+        '<unattributed>',
+      );
     }
 
     for (const [attribute, owner] of Object.entries(GOVERNED_ROOT_ATTRIBUTES)) {

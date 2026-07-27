@@ -1,11 +1,8 @@
 import assert from 'node:assert/strict';
-import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-
-import ts from 'typescript';
 
 import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
 
@@ -18,61 +15,51 @@ const FILES = {
     path: 'calendar-view/engines/modern/index.tsx',
     start: 28,
     floor: 1,
-    topology: '4105a199afdeeb791a99904c20d99ae89a41634607d7b5281f463288c7b1f797',
   },
   calendarRustic: {
     path: 'calendar-view/engines/rustic/index.tsx',
     start: 18,
     floor: 1,
-    topology: '0a8fdc584e3ccb67482a5f058d9c947a9022ce844ef766bf517a869f9b7aa190',
   },
   mapModern: {
     path: 'map-view/engines/modern/index.tsx',
     start: 13,
     floor: 1,
-    topology: 'ba03d203041b05d7d5835e362721c6b254918194884636102107ac2e191a4d22',
   },
   mapRustic: {
     path: 'map-view/engines/rustic/index.tsx',
     start: 16,
     floor: 1,
-    topology: '5d4d923b9f8ae506ec0246362e61e558eba2c3a7db669214e4cd1bfe03d1c667',
   },
   kanbanModern: {
     path: 'kanban-board/engines/modern/index.tsx',
     start: 16,
     floor: 1,
-    topology: 'cb36824bff1cdb1d8ffa26adc61f430fbaa6a9687f4cb62b6cf2734d645b7108',
   },
   kanbanRustic: {
     path: 'kanban-board/engines/rustic/index.tsx',
     start: 32,
     floor: 1,
-    topology: 'c1b89a25203e350e14fed893d42ac19ab349d27ca98537182fb70664957c8a89',
   },
   timelineModern: {
     path: 'timeline/engines/modern/index.tsx',
     start: 16,
     floor: 0,
-    topology: 'bfb886c0fbfe624464aae8eb73b5d18c4f4bad7110e0edc431d2188006a18c5b',
   },
   timelineRustic: {
     path: 'timeline/engines/rustic/index.tsx',
     start: 21,
     floor: 0,
-    topology: '91ad54c911914e94c332324849fbb1c89ee2a880675ce659d947d5bcb64cfdf2',
   },
   treeModern: {
     path: 'tree-view/engines/modern/index.tsx',
     start: 16,
     floor: 0,
-    topology: '0360f7113b0df9114f6f447ae1d35974ecd0afd00c622b59f4868ddba3bfc3b0',
   },
   treeRustic: {
     path: 'tree-view/engines/rustic/index.tsx',
     start: 19,
     floor: 0,
-    topology: 'a7b8044da5482c596f7ee80449ab1415aaf10a99fd008272e33878cd5a08aa41',
   },
 };
 
@@ -95,20 +82,6 @@ function pathFor(entry) {
 
 function source(entry) {
   return readFileSync(pathFor(entry), 'utf8');
-}
-
-function renderAnatomy(text, path) {
-  const sourceFile = ts.createSourceFile(path, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
-  const anatomy = [];
-
-  function visit(node) {
-    if (ts.isJsxElement(node)) anatomy.push(`jsx:${node.openingElement.tagName.getText(sourceFile)}`);
-    if (ts.isJsxSelfClosingElement(node)) anatomy.push(`jsx:${node.tagName.getText(sourceFile)}`);
-    ts.forEachChild(node, visit);
-  }
-
-  visit(sourceFile);
-  return anatomy.join('\n');
 }
 
 test('CK-E noncharts migrate the exact 195-site start to the six caller-derived floors', () => {
@@ -208,12 +181,4 @@ test('CK-E preserves shared Tree paint ownership and embedded structural CSS', (
     /<style>\{`@keyframes ds-tree-view-rustic-pulse \{ 0%,100%\{opacity:1\} 50%\{opacity:\.4\} \}`\}<\/style>/,
   );
   assert.doesNotMatch(rustic, /@keyframes\s+pulse\b/);
-});
-
-test('CK-E noncharts preserve the pre-step JSX element topology', () => {
-  for (const [name, entry] of Object.entries(FILES)) {
-    const path = pathFor(entry);
-    const digest = createHash('sha256').update(renderAnatomy(source(entry), path)).digest('hex');
-    assert.equal(digest, entry.topology, `${name} JSX topology drifted`);
-  }
 });

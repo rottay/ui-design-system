@@ -27,6 +27,7 @@
  * @package @rottay/design-system
  */
 
+import { claimRootAttribute } from '@/infrastructure/runtime/foundation/root-attributes';
 import React, {
   createContext,
   useContext,
@@ -74,12 +75,17 @@ export function EngineProvider({
   }, []);
 
   // Sync engine name to DOM so CSS selectors like [data-engine='modern'] work.
-  useIsomorphicLayoutEffect(() => {
-    document.documentElement.setAttribute('data-engine', engine);
-    return () => {
-      document.documentElement.removeAttribute('data-engine');
-    };
-  }, [engine]);
+  //
+  // The bare `removeAttribute` this replaces deleted the SERVER's stamp: an app
+  // that renders `data-engine` in its root layout (so engine-scoped CSS applies
+  // on the first paint, before React runs) lost it on the provider's first
+  // cleanup, and StrictMode reaches cleanup on every mount. `claimRootAttribute`
+  // restores what it found instead, and refuses to roll back once another
+  // writer owns the value.
+  useIsomorphicLayoutEffect(
+    () => claimRootAttribute(document.documentElement, 'data-engine', engine),
+    [engine],
+  );
 
   const value = useMemo<EngineContextValue>(() => ({
     engine,

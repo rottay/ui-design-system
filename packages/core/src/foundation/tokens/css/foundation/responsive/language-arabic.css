@@ -22,18 +22,36 @@
  * design-system layer in the canonical order:
  *
  *   theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion,
- *   rottay-components, rottay-engines, rottay-tenants, rottay-personality,
+ *   rottay-components, rottay-engines, rottay-personality,
  *   rottay-responsive, components, utilities
  *
- * Layer precedence outranks specificity, so nothing inside the design system
- * can beat these rules at any selector weight: not the base token scale
- * (`rottay-tokens`), not a component or engine skin, not a tenant artifact
- * (`rottay-tenants`) — which is exactly where the most aggressive negative
- * tracking lives — and not the personality layer. A guard placed with the
- * tokens it corrects would lose to every one of those. `rottay-responsive` is
- * the right home in kind as well as in rank: it is the layer for adjustments
- * conditioned on the rendering environment, and the rendering language is one
- * of those conditions.
+ * Layer precedence outranks specificity, so nothing LAYERED inside the design
+ * system can beat these rules at any selector weight: not the base token scale
+ * (`rottay-tokens`), not a component or engine skin, not the personality layer.
+ * A guard placed with the tokens it corrects would lose to every one of those.
+ * `rottay-responsive` is the right home in kind as well as in rank: it is the
+ * layer for adjustments conditioned on the rendering environment, and the
+ * rendering language is one of those conditions.
+ *
+ * KNOWN GAP — TENANT PAINT OUTRANKS THIS GUARD (open, R1 finding 2026-07-26).
+ * Tenant artifacts are UNLAYERED by law (see cascade-layers:
+ * TENANT_PAINT_IS_UNLAYERED), and an unlayered rule beats every layered rule
+ * regardless of layer order. An earlier version of this note claimed a tenant
+ * artifact could not override the guard because it lived in `rottay-tenants`;
+ * that layer never existed in any shipped bundle. Four tracking tokens are
+ * declared by BOTH this guard and the bithire artifact —
+ * `--ds-letter-spacing-{display,heading,body,mono}` — and the artifact wins all
+ * four when `lang="ar"` is on the ROOT element.
+ *
+ * Nested Arabic is unaffected: custom properties resolve from the nearest
+ * declaring ancestor, so a `<div lang="ar">` inside a Latin page still gets 0.
+ * Only a wholly-Arabic document is exposed.
+ *
+ * FIXED 2026-07-26 by `language-arabic-root.css`: an UNLAYERED
+ * `html[lang]:lang(ar)` rule at (0,2,1), which outranks the artifact's (0,1,1)
+ * without `!important` (that would also defeat legitimate application-owned
+ * Arabic typography). This file keeps the layered guard, which is still what
+ * neutralizes every LAYERED emitter and the nested-subtree case.
  *
  * What CAN still override it is deliberate and application-owned: a consumer's
  * own `components`/`utilities` layer, unlayered application CSS, `!important`,

@@ -130,7 +130,9 @@ describe('Table modern — geometry lives in the skin, hooks in the DOM', () => 
   it('pins the skin rules that replaced the retired inline geometry', () => {
     // size-keyed padding and font-size
     expect(SKIN).toMatch(/\[data-part='table'\]\[data-size='sm'\][^{]*\{[^}]*padding:\s*4px 8px/);
-    expect(SKIN).toMatch(/\[data-part='table'\]\[data-size='lg'\]\s*\{[^}]*font-size:\s*16px/);
+    expect(SKIN).toMatch(
+      /\[data-part='table'\]\[data-size='lg'\]\s*\{[^}]*font-size:\s*var\(--ds-font-size-base,\s*16px\)/,
+    );
     // alignment hook
     expect(SKIN).toMatch(/\[data-align='right'\]\s*\{[^}]*text-align:\s*right/);
     // sticky header + fixed columns positioned by the skin

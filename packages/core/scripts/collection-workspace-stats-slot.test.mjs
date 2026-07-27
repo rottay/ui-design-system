@@ -17,7 +17,7 @@ const skin = readFileSync(
 function ruleFor(state) {
   const matches = [...skin.matchAll(
     new RegExp(
-      `\\.ds-collection-workspace__stats-slot\\[data-part='stats-slot'\\]\\[data-collapsed='${state}'\\]\\s*\\{([\\s\\S]*?)\\}`,
+      `\\.ds-collection-workspace__stats-slot\\[data-part=["']stats-slot["']\\]\\[data-collapsed=["']${state}["']\\]\\s*\\{([\\s\\S]*?)\\}`,
       'g'
     )
   )];
@@ -37,7 +37,7 @@ test('stats-slot layout contract is CSS-owned and has no expanded height ceiling
   assert.doesNotMatch(skin, /max-height:\s*400px/);
 
   const baseRule = skin.match(
-    /\.ds-collection-workspace__stats-slot\[data-part='stats-slot'\]\s*\{([\s\S]*?)\}/
+    /\.ds-surface\.ds-collection-workspace\s+\.ds-collection-workspace__stats-slot\[data-part=["']stats-slot["']\]\s*\{([\s\S]*?)\}/
   )?.[1] ?? '';
   assert.match(baseRule, /transition:\s*max-height 300ms/);
 

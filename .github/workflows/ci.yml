@@ -121,11 +121,47 @@ jobs:
       - name: Typecheck test files (GAT-03 ratchet)
         run: pnpm --filter @rottay/design-system run typecheck:tests
 
-      # WO-GAT-04: the engine-token ratchet includes the APCA contrast counter
-      # (a11y.apcaPairings). It runs off source, so no build is required first.
-      # (test:ci does not trigger the `pretest` hook, so it is gated explicitly.)
-      - name: Engine token + APCA audit
-        run: pnpm --filter @rottay/design-system run engine-audit:check
+      # The app<->DS boundary gate audits app-bithire's CSS, and this job clones
+      # only this repository. Without a real corpus the gate would be red on
+      # every CI run, which is how a blocking gate gets quietly downgraded to a
+      # warning. So the corpus is checked out explicitly at a pinned ref into a
+      # private subtree of GITHUB_WORKSPACE and handed to the gate by environment.
+      #
+      # SECRET REQUIRED: `ORG_REPO_READ_TOKEN` — a fine-grained token with
+      # Contents:read on rottay/app-bithire. `GITHUB_TOKEN` is scoped to this
+      # repository only and cannot clone a sibling.
+      - name: Check out app-bithire (boundary-gate corpus)
+        uses: actions/checkout@v4
+        with:
+          repository: rottay/app-bithire
+          # Pinned by Codex at R1 close; bump deliberately, never to `main`.
+          # A floating ref would let the corpus change under the baseline and
+          # turn this gate into a source of unexplained failures.
+          # R1 acceptance corpus. Update deliberately after a reviewed
+          # app-bithire publication; never follow a moving branch here.
+          ref: 2e844fd58638987d4a20cb752b2e6e68b63a0a05
+          token: ${{ secrets.ORG_REPO_READ_TOKEN }}
+          # actions/checkout requires this path to remain under GITHUB_WORKSPACE.
+          path: .corpora/app-bithire
+          fetch-depth: 1
+
+      - name: Record the audited corpus revision
+        run: |
+          cd "${{ github.workspace }}/.corpora/app-bithire"
+          echo "app-bithire corpus SHA: $(git rev-parse HEAD)"
+          echo "app-bithire corpus ref: 2e844fd58638987d4a20cb752b2e6e68b63a0a05"
+
+      # CI runs `test:ci`, and npm fires `pre<name>` only for the EXACT script
+      # `test` -- so the `pretest` chain never executed here and sixteen gates
+      # that looked enforced were not. `gates:ci` is the single inventory
+      # (scripts/ci-gates.manifest.mjs), consumed by both `pretest` and this
+      # step, so the two cannot drift apart again. It fails fast, prints a
+      # per-gate summary, and refuses to run a gate that is declared
+      # non-blocking without a recorded owner and reason.
+      - name: Quality gates (manifest-driven, blocking)
+        env:
+          APP_BITHIRE_ROOT: ${{ github.workspace }}/.corpora/app-bithire
+        run: pnpm --filter @rottay/design-system run gates:ci
 
       - name: Audit machinery regression tests
         run: pnpm --filter @rottay/design-system run test:scripts
@@ -484,12 +520,6 @@ jobs:
       - name: CRA-11 adaptive/factory census staleness
         run: pnpm run cra11:check
 
-      # Allow-listed OFF (structural): cra-12 scanWorkspace() throws unless
-      # ../app-bithire and ../app-platform are present at pinned SHAs — a
-      # cross-repo dependency this single-repo checkout does not satisfy. TODO
-      # wire with sibling checkouts, or split the DS-local slice out of the gate.
-      - name: CRA-12 motion governance
-        run: pnpm run cra12:check || echo "::warning title=cra12:check allow-listed::cross-repo gate needs ../app-bithire and ../app-platform checkouts at pinned SHAs"
 
       - name: Roadmap ledger consistency
         run: pnpm run roadmap:check

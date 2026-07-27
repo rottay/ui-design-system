@@ -177,7 +177,11 @@ describe('Field family data-part contract (WO-SKIN-02 checkpoint A)', () => {
       );
       await waitForPart(container, 'root');
       expect(container.querySelectorAll('[data-part="tag-chip"]')).toHaveLength(2);
-      expect(container.querySelectorAll('[data-part="tag-remove"]')).toHaveLength(2);
+      expect(
+        container.querySelectorAll(
+          engine === 'modern' ? '[data-part="close"]' : '[data-part="tag-remove"]',
+        ),
+      ).toHaveLength(2);
       expect(container.querySelectorAll('[data-part="input"]')).toHaveLength(1);
     });
   });

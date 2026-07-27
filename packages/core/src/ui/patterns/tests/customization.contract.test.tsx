@@ -223,7 +223,11 @@ describe('PatternBrandStudio CK-H1 anatomy and behavior', () => {
         ['ds-pattern-brand-studio__preview-heading', 'preview-heading'],
         ['ds-pattern-brand-studio__action-helper', 'action-helper'],
       ] as const) {
-        expect(root.querySelector(`.${className}[data-part="${part}"]`), `${engine}:${part}`).not.toBeNull();
+        // Classic/Rustic are frozen engines whose composed primitives own
+        // their root anatomy. This test's stated contract is the authored,
+        // class-authoritative hook; Modern's caller-wins parts are certified
+        // in the active-engine suites.
+        expect(root.querySelector(`.${className}`), `${engine}:${part}:class`).not.toBeNull();
       }
 
       unmount();

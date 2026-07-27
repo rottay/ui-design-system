@@ -90,9 +90,12 @@ describe('resolveTranslationEntry', () => {
     })).toEqual({ tier: 'missing', value: undefined });
   });
 
-  it('stops at the configured fallback instead of hopping to English', () => {
-    // Neither fr nor the configured pt fallback carries the key; English does.
-    // Consulting it would overrule the application's declared language policy.
+  it('reaches the English floor only after the configured chain misses', () => {
+    // Neither fr nor the configured pt fallback carries this key. The previous
+    // contract reported `missing` here, which rendered the raw dotted key into
+    // production UI. The floor answers instead -- and is reported as its own
+    // tier, so "the app's languages had it" and "English rescued it" stay
+    // distinguishable.
     const resolution = resolveTranslationEntry({
       key: 'components.calendar.navNextMonth',
       locale: 'fr',
@@ -100,8 +103,34 @@ describe('resolveTranslationEntry', () => {
       catalog: TRANSLATION_CATALOG,
     });
 
-    expect(resolution.tier).toBe('missing');
-    expect(resolution.value).not.toBe('Next month');
+    expect(resolution.tier).toBe('floor');
+    expect(resolution.value).toBe('Next month');
+  });
+
+  it('lets the configured fallback answer BEFORE the floor is consulted', () => {
+    // The property the floor must not destroy: an app that configured `es` has
+    // declared a language policy, and Spanish still decides every key Spanish
+    // has copy for. The floor is a last resort, never a competitor.
+    const resolution = resolveTranslationEntry({
+      key: 'components.calendar.navNextMonth',
+      locale: 'fr',
+      fallbackLocale: 'es',
+      catalog: TRANSLATION_CATALOG,
+    });
+
+    expect(resolution.tier).toBe('fallback');
+    expect(resolution.value).toBe('Mes siguiente');
+  });
+
+  it('still reports a miss for a key absent from EVERY catalog', () => {
+    // The floor is not a way to make misses disappear. A key no catalog has is
+    // an authoring bug and must stay observable.
+    expect(resolveTranslationEntry({
+      key: 'components.does.not.exist',
+      locale: 'fr',
+      fallbackLocale: 'pt',
+      catalog: TRANSLATION_CATALOG,
+    })).toEqual({ tier: 'missing', value: undefined });
   });
 
   it('reports the locale tier for an explicit empty translation', () => {

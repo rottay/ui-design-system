@@ -1,0 +1,63 @@
+/**
+ * Arabic tracking guard — ROOT scope, unlayered.
+ *
+ * WHY A SECOND FILE. `foundation/responsive/language-arabic.css` carries the
+ * same neutralization inside `@layer rottay-responsive`, which is correct for
+ * every LAYERED emitter. It is not enough for the one emitter that is not
+ * layered: the tenant artifact. Tenant paint is unlayered by law
+ * (cascade-layers: TENANT_PAINT_IS_UNLAYERED) and therefore outranks every
+ * layer regardless of specificity, so a tenant that ships negative display
+ * tracking -- bithire ships `--ds-letter-spacing-display: -0.035em` -- won it
+ * back on a wholly-Arabic document and broke the joining of the script.
+ *
+ * WHY NOT `!important`. It would also defeat an application that legitimately
+ * sets Arabic typography for its own surfaces, and it would put a correctness
+ * floor and a brand preference into the same, unarguable bucket. Specificity is
+ * enough and stays negotiable: `html[lang]:lang(ar)` is (0,2,1), which beats
+ * the artifact's `:is(html[data-tenant='x'], …)` at (0,1,1) while remaining
+ * reachable by any app rule that genuinely means to override it.
+ *
+ * WHY ONLY THE ROOT. Custom properties resolve from the NEAREST declaring
+ * ancestor, so a `<div lang="ar">` inside a Latin document already wins over an
+ * `html`-scoped artifact declaration by proximity — no specificity contest
+ * occurs. Only the case where `lang` sits on `<html>` itself is contested, and
+ * that is exactly what this file addresses. `:lang()` matches regional variants,
+ * so `ar`, `ar-SA` and `ar-EG` are all covered.
+ *
+ * DRIFT: the token list mirrors section 1 of the layered guard and is checked
+ * against it by `language-arabic-root.test.ts`.
+ */
+
+html[lang]:lang(ar) {
+  --ds-letter-spacing-tighter: 0;
+  --ds-letter-spacing-tight: 0;
+  --ds-letter-spacing-snug: 0;
+  --ds-letter-spacing-subtle: 0;
+  --ds-letter-spacing-subtle-wide: 0;
+  --ds-letter-spacing-wide: 0;
+  --ds-letter-spacing-wider: 0;
+  --ds-letter-spacing-widest: 0;
+  --ds-letter-spacing-h1: 0;
+  --ds-letter-spacing-h2: 0;
+  --ds-letter-spacing-h3: 0;
+  --ds-letter-spacing-h4: 0;
+  --ds-letter-spacing-h5: 0;
+  --ds-letter-spacing-h6: 0;
+  --ds-letter-spacing-display: 0;
+  --ds-letter-spacing-heading: 0;
+  --ds-letter-spacing-body: 0;
+  --ds-letter-spacing-mono: 0;
+  --ds-personality-typography-heading-letter-spacing: 0;
+  --ds-typography-display-letter-spacing: 0;
+  --ds-typography-heading-letter-spacing: 0;
+  --ds-typography-body-letter-spacing: 0;
+  --ds-type-display-letter-spacing: 0;
+  --ds-type-page-title-letter-spacing: 0;
+  --ds-type-section-title-letter-spacing: 0;
+  --ds-type-body-letter-spacing: 0;
+  --ds-type-supporting-letter-spacing: 0;
+  --ds-type-label-letter-spacing: 0;
+  --ds-type-caption-letter-spacing: 0;
+  --ds-type-code-letter-spacing: 0;
+  --ds-type-numeric-letter-spacing: 0;
+}

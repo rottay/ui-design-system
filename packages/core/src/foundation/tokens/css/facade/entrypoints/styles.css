@@ -21,7 +21,7 @@
  * Modern framework artifact stay below first-party DS paint, while consumer
  * components/utilities remain above its bounded skins.
  */
-@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-tenants, rottay-personality, rottay-responsive, components, utilities;
+@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-personality, rottay-responsive, components, utilities;
 
 /* Motion imports must remain in the import prelude. CSS permits @layer order
    declarations before @import, but rejects imports after qualified rules or
@@ -177,7 +177,7 @@
 @import "../../presentation/components/skin/code-block.css"
   layer(rottay-components);
 @import "../../presentation/components/skin/markdown-view.css"
-  layer(rottay-engines);
+  layer(rottay-components);
 @import "../../presentation/components/skin/input-compounds.css"
   layer(rottay-components);
 @import "../../runtime/engines/modern/skin/upload.css" layer(rottay-engines);
@@ -696,19 +696,34 @@
   layer(rottay-engines);
 
 /* =============================================================================
-   LAYER 4: TENANT OVERRIDES (rottay-tenants)
+   TENANT OVERRIDES (unlayered)
    First-party tenant variable definitions. These are pure CSS custom property
    overrides (~200-500 lines each, ~1KB total) - no component selectors.
    ============================================================================= */
-@import "../artifacts/rottay/index.css" layer(rottay-tenants);
-@import "../artifacts/bithire/index.css" layer(rottay-tenants);
-@import "../artifacts/evnto/index.css" layer(rottay-tenants);
+/* Tenant paint is UNLAYERED by law: unlayered rules outrank every cascade
+   layer, which is what the coverage model requires -- the compiled artifact
+   must win every channel it declares.
+
+   NOTE ON THIS FILE'S STATUS: every `./styles/*` package export resolves to
+   dist/, and the build reads base.css plus the artifact by path -- it never
+   reads this entrypoint. So this file ships to nobody; it is kept as the
+   readable statement of bundle structure. It previously declared
+   `layer(rottay-tenants)`, which the shipped bundle never had, so the only
+   thing it produced was a false claim about the cascade.
+   See infrastructure/runtime/theming/foundation/cascade-layers:
+   TENANT_PAINT_IS_UNLAYERED. */
+@import "../artifacts/rottay/index.css";
+@import "../artifacts/bithire/index.css";
+@import "../artifacts/evnto/index.css";
 
 /* =============================================================================
-   LAYER 5: PERSONALITY OVERRIDES (rottay-personality)
+   PERSONALITY OVERRIDES (rottay-personality)
    Cross-engine personality-driven CSS rules that consume personality tokens
-   pushed by SystemCssVariablesBridge. Higher priority than tenants because
-   personality is runtime-resolved per-product and must win over static tenants.
+   pushed by SystemCssVariablesBridge. SUBORDINATE to tenant paint by design:
+   personality COMPLETES the channels a compiled artifact does not cover
+   (TENANT_THEME_V1_COVERAGE), and the artifact -- being unlayered -- wins every
+   channel it does cover. The earlier note here claimed the opposite; that claim
+   contradicted the coverage model and was never what the shipped bundles did.
    ============================================================================= */
 @import "../../runtime/personality.css" layer(rottay-personality);
 

@@ -54,7 +54,8 @@ describe('buildPreviewCss scoping', () => {
         // Sanitization must be lossless on legitimate generator output.
         expect(keptDeclarationCount).toBe(rawDeclarationCount);
         expect(keptDeclarationCount).toBeGreaterThan(0);
-        expect(css.startsWith(`${scopeSelector} {`)).toBe(true);
+        const firstRule = css.split('\n').find((line) => line.endsWith('{'));
+        expect(firstRule?.startsWith(scopeSelector)).toBe(true);
         expect(css).not.toContain('html[data-tenant');
       }
     }

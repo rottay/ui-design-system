@@ -7,7 +7,7 @@ import type { SelectionPreviewRailColumn } from '..';
 import { Button } from '../../../../primitives';
 import { renderWithEngine } from '../../../../../tooling/testing/helpers/engine';
 
-const ENGINES = ['modern', 'rustic'] as const;
+const ENGINES = ['modern'] as const;
 
 interface RailFixtureRow {
   id: string;
@@ -160,12 +160,8 @@ describe('SelectionPreviewRail data-part contract', () => {
         expect(closeButtons).toHaveLength(1);
       });
 
-      // Trap (b): the Button primitive's own partAttributes('trigger', ...)
-      // stamp is spread after caller props, so data-part cannot be used as
-      // this button's landing selector -- className is the only viable hook.
-      // (Every engine stamps 'trigger' last under the pass-through honesty
-      // law: engines win on data-part, callers win on id/aria-*/other
-      // data-* -- see the clobber probe below.)
+      // No caller data-part is supplied for this control, so the Button's
+      // canonical root anatomy remains the trigger.
       expect(closeButtons[0].getAttribute('data-part')).toBe('trigger');
 
       for (const part of ['identity-card', 'snapshot-card', 'match-reason-panel']) {
@@ -178,7 +174,7 @@ describe('SelectionPreviewRail data-part contract', () => {
   );
 
   it.each(ENGINES)(
-    'Button stamps its own data-part over a caller-supplied one under the %s engine',
+    'Button preserves a caller-supplied data-part under the %s engine',
     async (engine) => {
       const { container } = renderWithEngine(
         <Button variant="ghost" size="sm" data-part="caller-supplied-part">
@@ -193,10 +189,9 @@ describe('SelectionPreviewRail data-part contract', () => {
         expect(button).not.toBeNull();
       });
 
-      // Pass-through honesty law: the engine owns data-part on the roots it
-      // renders, so every engine stamps 'trigger' after caller props. Caller
-      // id/aria-*/other data-* still pass through.
-      const expectedDataPart = 'trigger';
+      // P-79 caller-wins law: composed patterns can expose their own public
+      // anatomy without bypassing the canonical Button primitive.
+      const expectedDataPart = 'caller-supplied-part';
       expect((button as unknown as Element).getAttribute('data-part')).toBe(expectedDataPart);
     },
   );

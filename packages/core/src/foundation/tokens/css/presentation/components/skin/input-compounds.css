@@ -126,7 +126,10 @@
   caret-color: var(--ds-input-caret-color);
   background: var(--ds-input-bg);
   border: var(--ds-input-border-width, 1px) var(--ds-input-border-style, solid) var(--ds-input-border);
-  border-radius: var(--ds-textarea-radius, var(--ds-radius-input));
+  border-radius: var(
+    --ds-textarea-responsive-radius,
+    var(--ds-textarea-radius, var(--ds-radius-input))
+  );
   box-shadow: var(--ds-input-shadow-rest, none), var(--ds-input-inset-shadow, none);
   font-family: var(--ds-input-font-family, inherit);
   font-weight: var(--ds-input-font-weight, var(--ds-font-weight-normal));

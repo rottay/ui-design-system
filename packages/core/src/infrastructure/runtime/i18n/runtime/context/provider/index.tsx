@@ -47,8 +47,8 @@ import {
   TRANSLATION_CATALOG,
 } from '@/foundation/i18n/runtime/catalog';
 import {
-  interpolateTranslation,
   resolveTranslationEntry,
+  resolveTranslationOr,
 } from '@/foundation/i18n/runtime/resolution';
 import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
 import type { I18nProviderProps } from '@/infrastructure/runtime/i18n/kernel/contracts';
@@ -95,17 +95,27 @@ export function I18nProvider({
 
   // Tenant custom translations are checked first so whitelabel apps can
   // override any DS string without forking the locale dictionaries.
+  //
+  // The provider builds the OPTIONS and delegates every tier decision to the
+  // kernel resolvers. It previously reimplemented the "which tier counts as a
+  // miss" test inline, so the rule lived in two places and the second copy did
+  // not learn about the English floor when the first one did.
+  const options = useCallback(
+    (key: string, params?: Record<string, string | number>) => ({
+      key,
+      params,
+      locale,
+      fallbackLocale,
+      customTranslations,
+      catalog: TRANSLATION_CATALOG,
+    }),
+    [locale, fallbackLocale, customTranslations]
+  );
+
   const resolve = useCallback(
     (key: string, params?: Record<string, string | number>) =>
-      resolveTranslationEntry({
-        key,
-        params,
-        locale,
-        fallbackLocale,
-        customTranslations,
-        catalog: TRANSLATION_CATALOG,
-      }),
-    [locale, fallbackLocale, customTranslations]
+      resolveTranslationEntry(options(key, params)),
+    [options]
   );
 
   const t: TranslateFunction = useCallback(
@@ -130,13 +140,9 @@ export function I18nProvider({
   );
 
   const tOr: TranslateOrFunction = useCallback(
-    (key: string, fallback: string, params?: Record<string, string | number>) => {
-      const resolution = resolve(key, params);
-      return resolution.tier === 'missing'
-        ? interpolateTranslation(fallback, params)
-        : resolution.value;
-    },
-    [resolve]
+    (key: string, fallback: string, params?: Record<string, string | number>) =>
+      resolveTranslationOr(options(key, params), fallback),
+    [options]
   );
 
   // Cambiar locale

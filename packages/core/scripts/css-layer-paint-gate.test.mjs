@@ -11,7 +11,7 @@ const scriptDir = dirname(fileURLToPath(import.meta.url));
 const gate = join(scriptDir, "css-layer-paint-gate.mjs");
 const cssRoot = join(scriptDir, "..", "src/foundation/tokens/css");
 const canonical =
-  "@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-tenants, rottay-personality, rottay-responsive, components, utilities;";
+  "@layer theme, base, rottay-framework, rottay-reset, rottay-tokens, rottay-motion, rottay-components, rottay-engines, rottay-personality, rottay-responsive, components, utilities;";
 
 function fixture(source) {
   const dir = mkdtempSync(join(tmpdir(), "css-cascade-contract-"));
@@ -106,7 +106,7 @@ test("first-party paint cannot escape or use the wrong layer", () => {
   }
 });
 
-test("every owned channel maps to its canonical layer and @property stays document-wide", () => {
+test("every owned channel maps to its canonical layer and root authorities stay unlayered", () => {
   const f = fixture(
     [
       canonical,
@@ -115,9 +115,10 @@ test("every owned channel maps to its canonical layer and @property stays docume
       "@import './foundation/animations/index.css' layer(rottay-motion);",
       "@import './presentation/components/skin/card.css' layer(rottay-components);",
       "@import './runtime/engines/modern/skin/card.css' layer(rottay-engines);",
-      "@import './facade/artifacts/bithire/index.css' layer(rottay-tenants);",
+      "@import './facade/artifacts/bithire/index.css';",
       "@import './runtime/personality.css' layer(rottay-personality);",
       "@import './foundation/responsive/index.css' layer(rottay-responsive);",
+      "@import './foundation/responsive/language-arabic-root.css';",
       "",
     ].join("\n")
   );
@@ -126,6 +127,25 @@ test("every owned channel maps to its canonical layer and @property stays docume
     assert.equal(result.status, 0, result.stderr || result.stdout);
   } finally {
     f.cleanup();
+  }
+});
+
+test("tenant artifacts and the Arabic root floor cannot be demoted into a named layer", () => {
+  const tenant = fixture(
+    `${canonical}\n@import './facade/artifacts/bithire/index.css' layer(rottay-components);\n`
+  );
+  const arabic = fixture(
+    `${canonical}\n@import './foundation/responsive/language-arabic-root.css' layer(rottay-responsive);\n`
+  );
+  try {
+    for (const entry of [tenant.entry, arabic.entry]) {
+      const result = run(entry);
+      assert.equal(result.status, 1);
+      assert.match(result.stderr, /root paint authority must remain unlayered/);
+    }
+  } finally {
+    tenant.cleanup();
+    arabic.cleanup();
   }
 });
 

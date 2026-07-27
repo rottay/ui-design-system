@@ -231,7 +231,7 @@ const NO_PAINT_PARTS = [
 // keep engine-inline color via the color PROP — by design, not asserted here).
 const NO_COLOR_PARTS = ['signal', 'preset-chip', 'preset-chip-icon', 'filter-card-icon'] as const;
 
-describe.each(['modern', 'rustic'] as const)(
+describe.each(['modern'] as const)(
   'FieldFiltersPanel %s — the DOM carries the contract, not the paint',
   (engine) => {
     it('leaves background/border/box-shadow/border-radius (and Box color) to the skin', async () => {

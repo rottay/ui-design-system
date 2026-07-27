@@ -84,7 +84,7 @@ test('surface and engine skins do not paint named or tone-only edge rails', () =
   }
 });
 
-test('legacy compatibility is inert while functional lines remain available', () => {
+test('legacy compatibility is inert while functional affordances remain available without edge rails', () => {
   const compatibilitySkin = withoutComments(readFileSync(compatibilitySkinPath, 'utf8'));
   const personality = withoutComments(readFileSync(personalityPath, 'utf8'));
   const workspaceSkin = withoutComments(
@@ -104,9 +104,18 @@ test('legacy compatibility is inert while functional lines remain available', ()
   assert.doesNotMatch(compatibilitySkin, /\b(?:background|border|animation|box-shadow)\s*:/);
   assert.doesNotMatch(personality, /border-left-(?:width|style)\s*:/);
 
-  // These are structural or state-bearing, not ornamental: panel separation,
-  // keyboard focus, and dirty-cell state must survive this prohibition.
-  assert.match(workspaceSkin, /\[data-part='preview-rail'\][\s\S]*?border-left:\s*2px/);
-  assert.match(tableInteractions, /tr\[data-row-index\]:focus-visible[\s\S]*?inset 3px 0 0 0/);
-  assert.match(tableInteractions, /td\[data-cell-dirty='true'\]::before/);
+  // Panel separation must use a complete boundary. A one-sided rail is the
+  // decorative treatment prohibited by this contract, even when it was once
+  // described as structural.
+  const previewRailRule = workspaceSkin.match(
+    /\[data-part=["']preview-rail["']\]\s*\{([\s\S]*?)\}/,
+  )?.[1] ?? '';
+  assert.match(previewRailRule, /\bborder:\s*1px solid/);
+  assert.doesNotMatch(previewRailRule, /border-(?:left|inline-start)\s*:/);
+  const focusedRowRule = tableInteractions.match(
+    /tr\[data-row-index\]:focus-visible\s*\{([\s\S]*?)\}/,
+  )?.[1] ?? '';
+  assert.match(focusedRowRule, /box-shadow:\s*inset 0 0 0 1px/);
+  assert.doesNotMatch(focusedRowRule, /inset\s+[1-9][^;]*\s0\s+0\s+0/);
+  assert.match(tableInteractions, /td\[data-cell-dirty=["']true["']\]::before/);
 });

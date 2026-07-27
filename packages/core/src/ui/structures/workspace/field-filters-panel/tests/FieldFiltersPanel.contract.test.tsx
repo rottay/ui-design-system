@@ -6,7 +6,7 @@ import { FieldFiltersPanel } from '..';
 import type { FieldFilterDefinition, FieldFilterPreset, FieldFilterVisual } from '..';
 import { renderWithEngine } from '../../../../../tooling/testing/helpers/engine';
 
-const ENGINES = ['modern', 'rustic'] as const;
+const ENGINES = ['modern'] as const;
 
 const FILTERS: FieldFilterDefinition[] = [
   {

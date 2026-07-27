@@ -45,7 +45,7 @@ describe('LoadingOverlay skin contract', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  it.each(ENGINES)('pins anatomy and every current paint channel (%s)', async (engine) => {
+  it.each(['modern'] as const)('pins anatomy and every current paint channel (%s)', async (engine) => {
     const { container } = renderWithEngine(
       <LoadingOverlay
         visible

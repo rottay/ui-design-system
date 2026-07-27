@@ -296,10 +296,14 @@ describe('Record + workflow + form-surfaces data-part contract (WO-SKIN-06 check
       );
 
       await waitFor(() => {
-        expect(container.querySelectorAll('[data-part="field"]').length).toBe(2);
+        expect(container.querySelectorAll('.ds-edit-fields[data-part="field"]').length).toBe(2);
       });
       expect(container.querySelectorAll('[data-part="field-requirement"]').length).toBe(1);
-      expect(container.querySelector('[data-part="field"][data-requirement="optional"] [data-part="field-requirement"]')).not.toBeNull();
+      expect(
+        container.querySelector(
+          '.ds-edit-fields[data-part="field"][data-requirement="optional"] [data-part="field-requirement"]',
+        ),
+      ).not.toBeNull();
     });
 
     it('InlineEditField: stamps field(data-error=true)/field-error when hasError', async () => {

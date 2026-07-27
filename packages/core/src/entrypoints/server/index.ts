@@ -115,3 +115,18 @@ export type {
   ContrastSuggestion,
   ContrastValidationResult,
 } from '@/foundation/kernel/accessibility/branding-contrast';
+
+/**
+ * The canonical SSR projection of every governed root attribute, plus the
+ * pre-paint script that refines `auto`. Applications spread the projection onto
+ * their root element and add nothing of their own; see
+ * `infrastructure/runtime/foundation/root-attributes/ssr`.
+ */
+export {
+  resolveDocumentRootAttributes,
+  buildThemePrepaintScript,
+  type DocumentRootAttributes,
+  type DocumentRootAttributesInput,
+  type ResolvedTheme,
+  type TenantThemeMode,
+} from '@/infrastructure/runtime/foundation/root-attributes/ssr';

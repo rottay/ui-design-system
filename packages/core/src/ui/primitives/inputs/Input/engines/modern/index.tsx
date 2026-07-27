@@ -170,9 +170,9 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       resolve: (v: InputSize) => `var(--ds-input-${v}-line-height) !important`,
     } as ResponsivePropEntry<any>);
     responsiveEntries.push({
-      cssProperty: 'border-radius',
+      cssProperty: '--ds-input-responsive-radius',
       value: sizeProp,
-      resolve: (v: InputSize) => `var(--ds-input-${v}-radius, var(--ds-input-${v}-border-radius)) !important`,
+      resolve: (v: InputSize) => `var(--ds-input-${v}-radius, var(--ds-input-${v}-border-radius))`,
     } as ResponsivePropEntry<any>);
     responsiveEntries.push({
       cssProperty: 'gap',

@@ -213,7 +213,7 @@ describe('Transfer modern -- geometry lives in the skin, hooks in the DOM', () =
       /\[data-part='move-button'\]:disabled,\s*\n\.rottay-transfer\.rottay-transfer--modern \[data-part='pagination-button'\]:disabled\s*\{[^}]*cursor:\s*var\(--ds-transfer-button-disabled-cursor,\s*var\(--ds-button-disabled-cursor,\s*not-allowed\)\)/.test(SKIN_NC)
     ).toBe(true);
     expect(
-      /\[data-part='pagination-button'\]:disabled\s*\{[^}]*opacity:\s*var\(--ds-transfer-button-disabled-opacity,\s*var\(--ds-button-disabled-opacity,\s*0\.5\)\)/.test(SKIN_NC)
+      /\[data-part='pagination-button'\]:disabled\s*\{[^}]*opacity:\s*var\(--ds-transfer-button-disabled-opacity,\s*var\(--ds-button-disabled-opacity,\s*0\.6\)\)/.test(SKIN_NC)
     ).toBe(true);
     // The native checkboxes get the cursor correction (no double-dim: the
     // item row owns the opacity posture).

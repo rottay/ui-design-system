@@ -203,20 +203,22 @@ describe('MarkdownView remediation (K4-B)', () => {
     expect(skin).toContain('@media (forced-colors: active)');
   });
 
-  it('registers the skin in layer(rottay-engines) so the theme.css anchor bridge cannot mask it', () => {
-    // The modern theme.css bridge (`html[data-tenant] a`) lives in
-    // layer(rottay-engines) at (0,1,2) and references UNDECLARED --ds-link-*
-    // tokens (IACVT -> inherit/initial). In layer(rottay-components) it
-    // masked the skin's link part wholesale (live evidence: link computed
-    // color text-primary, textDecorationLine none). Same layer + (0,3,1)
-    // wins by specificity.
+  it('registers the family skin in layer(rottay-components) after the legacy anchor bridge drain', () => {
+    // The old Modern `[data-tenant] a.link` bridge lived in
+    // layer(rottay-engines) and forced this family skin into the same layer as
+    // a defensive specificity workaround. R0 drained that bridge into the
+    // canonical Link/FileManager skins, so presentation families return to
+    // their rightful `rottay-components` owner. Pin both sides of the
+    // contract: correct registration and no resurrection of the legacy
+    // cross-family anchor paint.
+    expect(modernTheme).not.toMatch(/\[data-tenant\]\s+a\.link(?:\W|$)/);
     for (const entry of ['base.css', 'styles.css'] as const) {
       const entrypoint = readFileSync(
         join(__dirname, '../../../../../foundation/tokens/css/facade/entrypoints', entry),
         'utf8',
       );
       expect(entrypoint, entry).toMatch(
-        /@import "\.\.\/\.\.\/presentation\/components\/skin\/markdown-view\.css"\s+layer\(rottay-engines\);/,
+        /@import "\.\.\/\.\.\/presentation\/components\/skin\/markdown-view\.css"\s+layer\(rottay-components\);/,
       );
     }
   });

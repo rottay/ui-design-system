@@ -4,17 +4,19 @@
  * Cross-engine rules that consume personality CSS custom properties
  * pushed by SystemCssVariablesBridge via resolvePersonalityCssVariables().
  *
- * These rules apply personality tokens to ALL three engines
- * (Classic/Ant, Modern/DaisyUI, Rustic/Vanilla) via the CSS cascade.
- * Zero engine file changes required.
+ * These compatibility selectors project personality tokens across the
+ * supported engine DOM contracts. Modern is first-party; Classic and Rustic
+ * remain frozen compatibility engines.
  *
  * This file is imported inside `rottay-personality`, below a Tailwind v4
  * host's preflight (P-76). Its preflight-killable channels (card padding,
- * divider border-style/color) live in personality-paint.css, unlayered. The
+ * divider border-style/color) are painted by the tenant/engine rules that
+ * already ship (html[data-tenant] .ant-card-head, .ds-card__header). The
  * box-shadow / scrollbar / ::selection paint remaining here is not
- * preflight-resettable on its targets, and the layered position is
- * load-bearing: unlayered skins must keep beating personality (P-87);
- * declared residue in css-layer-paint-gate.allowlist.json.
+ * preflight-resettable on its targets. The declared layer order is
+ * load-bearing: bounded component and engine skins remain above the
+ * personality defaults (P-87); declared residue lives in
+ * css-layer-paint-gate.allowlist.json.
  */
 
 /* ========================================================================

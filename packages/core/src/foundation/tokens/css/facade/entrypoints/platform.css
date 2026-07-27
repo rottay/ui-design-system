@@ -13,4 +13,16 @@
  * @version 1.0.0
  */
 @import './base.css';
-@import '../artifacts/rottay/index.css' layer(rottay-tenants);
+/* Tenant paint is UNLAYERED by law: unlayered rules outrank every cascade
+   layer, which is what the coverage model requires -- the compiled artifact
+   must win every channel it declares.
+
+   NOTE ON THIS FILE'S STATUS: every `./styles/*` package export resolves to
+   dist/, and the build reads base.css plus the artifact by path -- it never
+   reads this entrypoint. So this file ships to nobody; it is kept as the
+   readable statement of bundle structure. It previously declared
+   `layer(rottay-tenants)`, which the shipped bundle never had, so the only
+   thing it produced was a false claim about the cascade.
+   See infrastructure/runtime/theming/foundation/cascade-layers:
+   TENANT_PAINT_IS_UNLAYERED. */
+@import '../artifacts/rottay/index.css';

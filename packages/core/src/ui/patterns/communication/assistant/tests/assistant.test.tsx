@@ -170,20 +170,26 @@ describe('assistant patterns', () => {
     // caret's `ds-assistant-caret` keyframe into an unlayered skin (no longer injected
     // per-mount), so assert the caret's anatomy ([data-part='caret']) — the real
     // evidence it rendered — rather than the contents of an injected <style> tag.
-    const streamingView = renderSurface(<StreamingText text="Generating summary" streaming />);
+    const streamingView = renderSurface(
+      <StreamingText text="Generating summary" streaming />,
+      { engine: 'modern' },
+    );
 
     expect(await screen.findByText('|')).toBeInTheDocument();
     expect(document.querySelector('[data-part="caret"]')).toBeTruthy();
 
     streamingView.unmount();
 
-    renderSurface(<StreamingText text="Generating summary" />);
+    renderSurface(<StreamingText text="Generating summary" />, { engine: 'modern' });
     expect(await screen.findByText('Generating summary')).toBeInTheDocument();
     expect(screen.queryByText('|')).not.toBeInTheDocument();
   });
 
   it('runs the streaming shimmer and an animated caret when motion is allowed', async () => {
-    renderSurface(<StreamingText text="Generating summary" streaming />);
+    renderSurface(
+      <StreamingText text="Generating summary" streaming />,
+      { engine: 'modern' },
+    );
 
     expect(await screen.findByText('Generating summary')).toBeInTheDocument();
     // The shimmer effect mounts its own `ds-shimmer` keyframe; its presence is
@@ -201,6 +207,7 @@ describe('assistant patterns', () => {
       <MotionProvider reducedMotion>
         <StreamingText text="Generating summary" streaming />
       </MotionProvider>,
+      { engine: 'modern' },
     );
 
     // Full text is present at once -- there is no per-character cadence to wait on.

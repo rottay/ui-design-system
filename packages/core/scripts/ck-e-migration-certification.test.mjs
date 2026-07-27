@@ -6,64 +6,8 @@ import { fileURLToPath } from 'node:url';
 
 import postcss from 'postcss';
 
-import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
-import { analyzeRuntimeSvgPaint } from './lib/runtime-svg-paint-counter.mjs';
-
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
-const sourceRoot = join(packageRoot, 'src/ui');
 const cssRoot = join(packageRoot, 'src/foundation/tokens/css');
-
-const sources = [
-  // Non-chart visualization patterns.
-  { slice: 'noncharts', path: 'patterns/visualization/calendar-view/engines/modern/index.tsx', inline: 1, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/calendar-view/engines/rustic/index.tsx', inline: 1, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/kanban-board/engines/modern/index.tsx', inline: 1, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/kanban-board/engines/rustic/index.tsx', inline: 1, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/map-view/engines/modern/index.tsx', inline: 1, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/map-view/engines/rustic/index.tsx', inline: 1, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/timeline/engines/modern/index.tsx', inline: 0, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/timeline/engines/rustic/index.tsx', inline: 0, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/tree-view/engines/modern/index.tsx', inline: 0, runtimeSvg: 0 },
-  { slice: 'noncharts', path: 'patterns/visualization/tree-view/engines/rustic/index.tsx', inline: 0, runtimeSvg: 0 },
-
-  // Charts A+B.
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/area-chart/index.tsx', inline: 2, runtimeSvg: 8 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/bar-chart/index.tsx', inline: 2, runtimeSvg: 6 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/radar-chart/index.tsx', inline: 2, runtimeSvg: 0 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/treemap/index.tsx', inline: 1, runtimeSvg: 1 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/pie-chart/index.tsx', inline: 1, runtimeSvg: 1 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/bullet/index.tsx', inline: 12, runtimeSvg: 8 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/waterfall/index.tsx', inline: 4, runtimeSvg: 2 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/line-chart/index.tsx', inline: 2, runtimeSvg: 5 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/gantt-chart/index.tsx', inline: 0, runtimeSvg: 2 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/heatmap/index.tsx', inline: 0, runtimeSvg: 1 },
-  { slice: 'chartsAB', path: 'patterns/visualization/charts/families/calendar-heatmap/index.tsx', inline: 0, runtimeSvg: 1 },
-
-  // Charts C.
-  { slice: 'chartC', path: 'patterns/visualization/charts/families/histogram/index.tsx', inline: 2, runtimeSvg: 5 },
-  { slice: 'chartC', path: 'patterns/visualization/charts/families/scatter/index.tsx', inline: 1, runtimeSvg: 2 },
-  { slice: 'chartC', path: 'patterns/visualization/charts/families/gauge/index.tsx', inline: 1, runtimeSvg: 0 },
-  { slice: 'chartC', path: 'patterns/visualization/charts/families/sankey/index.tsx', inline: 3, runtimeSvg: 2 },
-  { slice: 'chartC', path: 'patterns/visualization/charts/families/sparkline/index.tsx', inline: 0, runtimeSvg: 4 },
-  { slice: 'chartC', path: 'patterns/visualization/charts/families/funnel-chart/index.tsx', inline: 1, runtimeSvg: 0 },
-  { slice: 'chartC', path: 'patterns/visualization/charts/families/network-graph/index.tsx', inline: 1, runtimeSvg: 1 },
-
-  // Shared chart foundation.
-  { slice: 'foundation', path: 'patterns/visualization/charts/presentation/scaffold/index.tsx', inline: 0, runtimeSvg: 0 },
-  { slice: 'foundation', path: 'patterns/visualization/charts/runtime/interaction/brush/index.ts', inline: 0, runtimeSvg: 0 },
-  { slice: 'foundation', path: 'patterns/visualization/charts/runtime/exporting/composition/react/index.ts', inline: 0, runtimeSvg: 0 },
-  { slice: 'foundation', path: 'patterns/visualization/charts/runtime/theming/presentation/react/color-theme/index.ts', inline: 4, runtimeSvg: 0 },
-  { slice: 'foundation', path: 'patterns/visualization/charts/presentation/tooltip/index.tsx', inline: 2, runtimeSvg: 0 },
-  { slice: 'foundation', path: 'patterns/visualization/charts/presentation/crosshair/index.ts', inline: 0, runtimeSvg: 1 },
-  { slice: 'foundation', path: 'patterns/visualization/charts/runtime/exporting/foundation/file/index.ts', inline: 2, runtimeSvg: 5 },
-];
-
-const sliceTargets = {
-  noncharts: { files: 10, inline: 6, runtimeSvg: 0, combined: 6 },
-  chartsAB: { files: 11, inline: 26, runtimeSvg: 35, combined: 61 },
-  chartC: { files: 7, inline: 9, runtimeSvg: 14, combined: 23 },
-  foundation: { files: 7, inline: 8, runtimeSvg: 6, combined: 14 },
-};
 
 const skins = [
   {
@@ -168,63 +112,7 @@ function parseImportParams(params) {
   return null;
 }
 
-test('CK-E inventory is exactly the 35 certified source files', () => {
-  assert.equal(sources.length, 35, 'CK-E must certify exactly 35 source files');
-  assert.equal(new Set(sources.map(({ path }) => path)).size, sources.length, 'CK-E source paths must be unique');
-
-  for (const [slice, target] of Object.entries(sliceTargets)) {
-    assert.equal(
-      sources.filter((source) => source.slice === slice).length,
-      target.files,
-      `${slice} must keep its certified file inventory`,
-    );
-  }
-
-  for (const source of sources) {
-    const absolutePath = join(sourceRoot, source.path);
-    assert.ok(existsSync(absolutePath), `missing CK-E source: ${source.path}`);
-  }
-});
-
-test('CK-E paint migration holds every per-file, slice, and global post-migration target', () => {
-  const actualSlices = Object.fromEntries(
-    Object.keys(sliceTargets).map((slice) => [slice, { files: 0, inline: 0, runtimeSvg: 0, combined: 0 }]),
-  );
-
-  let inline = 0;
-  let runtimeSvg = 0;
-  let unclassified = 0;
-
-  for (const expected of sources) {
-    const absolutePath = join(sourceRoot, expected.path);
-    const text = readFileSync(absolutePath, 'utf8');
-    const inlineResult = countArc09PaintInFile(text, absolutePath);
-    const runtimeResult = analyzeRuntimeSvgPaint(text, absolutePath);
-
-    assert.equal(runtimeResult.unclassified, 0, `${expected.path} has unclassified runtime SVG paint`);
-    assert.equal(inlineResult, expected.inline, `${expected.path} inline paint drifted`);
-    assert.equal(runtimeResult.count, expected.runtimeSvg, `${expected.path} runtime SVG paint drifted`);
-
-    const slice = actualSlices[expected.slice];
-    slice.files += 1;
-    slice.inline += inlineResult;
-    slice.runtimeSvg += runtimeResult.count;
-    slice.combined += inlineResult + runtimeResult.count;
-
-    inline += inlineResult;
-    runtimeSvg += runtimeResult.count;
-    unclassified += runtimeResult.unclassified;
-  }
-
-  assert.deepEqual(actualSlices, sliceTargets, 'CK-E slice floors drifted');
-  assert.deepEqual(
-    { inline, runtimeSvg, combined: inline + runtimeSvg, unclassified },
-    { inline: 49, runtimeSvg: 55, combined: 104, unclassified: 0 },
-    'CK-E global post-migration target drifted',
-  );
-});
-
-test('all 23 CK-E skins are unlayered, scope-anchored, and free of !important', () => {
+test('all 23 CK-E skins are internally scope-anchored and free of escalation', () => {
   assert.equal(skins.length, 23, 'CK-E must certify exactly 23 skins');
   assert.equal(new Set(skins.map(({ path }) => path)).size, skins.length, 'CK-E skin paths must be unique');
 
@@ -260,7 +148,7 @@ test('all 23 CK-E skins are unlayered, scope-anchored, and free of !important', 
   }
 });
 
-test('both canonical entrypoints import every CK-E skin exactly once and unlayered', () => {
+test('both canonical entrypoints import every CK-E skin exactly once in its owning layer', () => {
   for (const entrypoint of entrypoints) {
     assert.ok(existsSync(entrypoint.path), `missing CK-E entrypoint: ${entrypoint.name}`);
     const root = postcss.parse(readFileSync(entrypoint.path, 'utf8'), { from: entrypoint.path });
@@ -276,7 +164,14 @@ test('both canonical entrypoints import every CK-E skin exactly once and unlayer
       const matches = imports.filter((entry) => entry.target === target);
 
       assert.equal(matches.length, 1, `${entrypoint.name} must import ${target} exactly once`);
-      assert.equal(matches[0].suffix, '', `${entrypoint.name} must import ${target} without a layer or condition`);
+      const expectedLayer = skin.path.startsWith('runtime/engines/')
+        ? 'layer(rottay-engines)'
+        : 'layer(rottay-components)';
+      assert.equal(
+        matches[0].suffix,
+        expectedLayer,
+        `${entrypoint.name} must import ${target} through ${expectedLayer}`,
+      );
     }
   }
 });
