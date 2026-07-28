@@ -20,6 +20,22 @@ import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { AutoCompleteProps, AutoCompleteOption } from '../../contracts';
 import { AUTOCOMPLETE_DEFAULTS } from '../../contracts';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+
+/**
+ * Hook-local `tOr`: catalogue value with an English floor -- when the
+ * catalogue entry has not landed yet the provider echoes the full key, which
+ * must never reach visible copy or an aria-label.
+ */
+function useAutoCompleteTranslation() {
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+    return resolved;
+  };
+  return { tOr };
+}
 
 /**
  * Modern (DaisyUI) implementation of the AutoComplete input.
@@ -35,6 +51,7 @@ import { toLegacySize } from '../../../../../../foundation/contracts/kernel/comm
  */
 export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
   (props, ref) => {
+    const { tOr } = useAutoCompleteTranslation();
     const {
       options = [],
       value: controlledValue,
@@ -50,10 +67,14 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       open: controlledOpen,
       onDropdownVisibleChange,
       size: sizeProp = AUTOCOMPLETE_DEFAULTS.size,
-      notFoundContent = 'No results',
+      notFoundContent: notFoundContentProp,
       className,
       style,
     } = props;
+
+    // Explicit prop wins; otherwise localized copy with the historical
+    // English default as the floor.
+    const notFoundContent = notFoundContentProp ?? tOr('autocomplete.not_found', 'No results');
 
     // getSizeStyle's switch below is keyed by the legacy 'small' | 'middle' | 'large'
     // spelling; toLegacySize resolves either spelling to it.
@@ -211,31 +232,31 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             data-open={isOpen || undefined}
             data-disabled={disabled || undefined}
           />
-          {/* Clear button only visible when there is a non-empty value and the input is interactive. */}
+          {/* Clear button only visible when there is a non-empty value and the input is interactive.
+              Positioning/paint are skin-owned (the old `right-2` utility was
+              physical and broke RTL). */}
           {allowClear && value && !disabled && (
             <button
               type="button"
-              className="absolute right-2 top-1/2 -translate-y-1/2"
               style={{ width: 24, height: 24, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12 }}
               onClick={() => handleChange('')}
               data-part="clear-button"
+              aria-label={tOr('autocomplete.clear', 'Clear')}
             >
               ✕
             </button>
           )}
         </div>
 
-        {/* Dropdown list positioned absolutely below the input. Uses DaisyUI's
-            `menu` + `rounded-box` for consistent theming and `max-h-60` to
-            keep the list scrollable when there are many options. */}
+        {/* Dropdown list positioned absolutely below the input (geometry is
+            skin-owned; keyboard focus rides data-active). */}
         {isOpen && (
-          <ul data-part="dropdown" style={{ position: 'absolute', zIndex: 50, width: '100%', marginTop: 4, listStyle: 'none', margin: 0, marginBlockStart: 4, padding: 4, maxHeight: 240, overflowY: 'auto' }}>
+          <ul data-part="dropdown" role="listbox">
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
                 <li key={option.value}>
                   <button
                     type="button"
-                    className={`${option.disabled ? 'disabled' : ''} ${focusedIndex === index ? 'active' : ''}`}
                     disabled={option.disabled}
                     onClick={() => handleSelect(option)}
                     // Sync keyboard focus index on hover so mouse and keyboard
@@ -244,6 +265,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
                     data-part="option"
                     data-active={focusedIndex === index || undefined}
                     data-disabled={option.disabled || undefined}
+                    role="option"
+                    aria-selected={focusedIndex === index}
                   >
                     {option.label ?? option.value}
                   </button>

@@ -326,9 +326,12 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
 
   it('bithire generates button variant vars with correct values', () => {
     expect(bithireCss).toContain('--ds-button-primary-bg: #3A6FB0');
-    expect(bithireCss).toContain('--ds-button-primary-color: #ffffff');
     expect(bithireCss).toContain('--ds-button-secondary-color: #3A6FB0');
-    expect(bithireCss).toContain('--ds-button-secondary-border: #3A6FB0');
+    // Control ink and brand border route through the semantic control tokens.
+    // The artifact extension used to override both here; R1-P moved the value
+    // that actually shipped into the theme, so these are what production paints.
+    expect(bithireCss).toContain('--ds-button-primary-color: var(--ds-control-on-brand)');
+    expect(bithireCss).toContain('--ds-button-secondary-border: var(--ds-control-brand-border)');
   });
 
   it('bithire generates input vars with correct values', () => {
@@ -352,7 +355,12 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
 
   it('rottay generates table vars with correct values', () => {
     expect(rottayCss).toContain('--ds-table-header-bg: #131316');
-    expect(rottayCss).toContain('--ds-table-header-color: #A0A0A5');
+    // #A0A0A5 is the authored header ink. This is the legacy DB path, which now
+    // runs enforceTextContrast over the FINAL composed map instead of the
+    // appearance slice alone (AD-4 §4), so an ink that misses the threshold
+    // against its own header ground is lifted before it ships. The authored
+    // value still reaches the static artifact unchanged.
+    expect(rottayCss).toContain('--ds-table-header-color: #B3B3B8');
   });
 
   it('bithire generates table vars with correct values', () => {

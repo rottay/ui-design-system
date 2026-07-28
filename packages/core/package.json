@@ -182,6 +182,10 @@
     "./supplier-contract": {
       "default": "./supplier-contract.json"
     },
+    "./hooks-manifest": {
+      "types": "./hooks-manifest.d.ts",
+      "default": "./hooks-manifest.json"
+    },
     "./supplier-honesty-cli": {
       "import": "./consumer/ds-supplier-honesty.mjs",
       "default": "./consumer/ds-supplier-honesty.mjs"
@@ -235,6 +239,8 @@
     "dist/evnto.css",
     "dist/fonts/**",
     "supplier-contract.json",
+    "hooks-manifest.json",
+    "hooks-manifest.d.ts",
     "consumer/ds-supplier-honesty.mjs",
     "THIRD_PARTY_NOTICES.md",
     "provenance/graphics/**",
@@ -245,7 +251,7 @@
     "dev": "node scripts/dev.mjs",
     "icons:generate": "node scripts/generate-semantic-icons.mjs",
     "icons:check": "node scripts/generate-semantic-icons.mjs --check",
-    "prebuild": "pnpm run cra17:licenses && pnpm run icons:check && pnpm run contract:check && pnpm run csssource:check",
+    "prebuild": "pnpm run cra17:licenses && pnpm run icons:check && pnpm run contract:check && pnpm run hooks:check && pnpm run csssource:check",
     "prepack": "pnpm run distfresh:check && pnpm run cra15:gate && pnpm run cra17:licenses && pnpm run cra17:declarations",
     "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:commercial-css && pnpm run build:vertical-css && pnpm run build:fonts && pnpm run build:stamp",
     "postbuild": "pnpm run cra14:check",
@@ -262,6 +268,8 @@
     "cra17:declarations": "node scripts/cra-17-public-declaration-gate.mjs",
     "contract:check": "node scripts/generate-supplier-contract.mjs --check",
     "contract:generate": "node scripts/generate-supplier-contract.mjs --write",
+    "hooks:check": "node scripts/app-ds-hook-contract-gate.mjs --manifest-check",
+    "hooks:generate": "node scripts/app-ds-hook-contract-gate.mjs --manifest-write",
     "cra11:generate": "node scripts/cra-11-adaptive-contract-census.mjs",
     "cra11:check": "node scripts/cra-11-adaptive-contract-census.mjs --check",
     "cra11:gate": "node scripts/cra-11-adaptive-contract-census.mjs --check --require-clean",

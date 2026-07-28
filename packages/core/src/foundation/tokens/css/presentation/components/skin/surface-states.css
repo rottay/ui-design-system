@@ -1,6 +1,6 @@
 /**
- * Shared surface lifecycle-state skin (WO-SKIN-06 / CK-I).
- * Engine-agnostic: every export renders one tree under every engine.
+ * Shared surface lifecycle-state skin (WO-SKIN-06 / CK-I; R2+R3 ownership
+ * pass). Engine-agnostic: every export renders one tree under every engine.
  *
  * DELIBERATELY UNLAYERED. Every tenant layer sorts before Tailwind preflight;
  * an unlayered skin keeps component paint above that reset while leaving
@@ -11,39 +11,117 @@
  * the owned part three times to reach (0,5,0), above both engines' (0,4,0)
  * default Typography color rule. The stale-banner border repeats its own part
  * to reach the tenant border-color floor at (0,4,0).
+ *
+ * R2+R3: every inline style the state components used to carry (title
+ * weights, card paddings, icon size, banner rhythm, capability-anatomy grid)
+ * lives here now, on governed tokens — the engines stamp anatomy only. No
+ * hardcoded color literals: the stale-banner fallbacks derive from
+ * --ds-color-info via color-mix.
  */
+
+/* ---- loading state: copy hierarchy ---- */
+.ds-surface.ds-loading-state [data-part='title'][data-part='title'][data-part='title'] {
+  font-weight: var(--ds-font-weight-bold, 700);
+}
 
 .ds-surface.ds-loading-state [data-part='description'][data-part='description'][data-part='description'] {
   color: var(--ds-color-text-muted);
 }
 
+/* ---- loading skeleton: header bar geometry (was inline width/height) ---- */
+.ds-surface.ds-loading-skeleton .ds-loading-skeleton__header-primary[data-part='root'] {
+  inline-size: 30%;
+  block-size: var(--ds-loading-skeleton-header-height, 24px);
+}
+
+.ds-surface.ds-loading-skeleton .ds-loading-skeleton__header-secondary[data-part='root'] {
+  inline-size: 20%;
+  block-size: var(--ds-loading-skeleton-header-height, 24px);
+}
+
+/* ---- empty state card: centered composition on the system type scale ---- */
+.ds-surface.ds-empty-state-card [data-part='content'] {
+  padding: var(--ds-empty-state-card-padding-block, var(--ds-spacing-12, 48px))
+    var(--ds-empty-state-card-padding-inline, var(--ds-spacing-6, 24px));
+}
+
 .ds-surface.ds-empty-state-card [data-part='icon'][data-part='icon'][data-part='icon'] {
   color: var(--ds-color-text-disabled);
+  font-size: var(--ds-empty-state-card-icon-size, 3rem);
+  line-height: 1;
+}
+
+.ds-surface.ds-empty-state-card [data-part='copy'] {
+  text-align: center;
 }
 
 .ds-surface.ds-empty-state-card [data-part='title'][data-part='title'][data-part='title'] {
   color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-base, 1rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
 }
 
 .ds-surface.ds-empty-state-card [data-part='description'][data-part='description'][data-part='description'] {
   color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-sm, 0.875rem);
 }
 
+/* ---- error state: title weight ---- */
+.ds-surface.ds-error-state [data-part='title'][data-part='title'][data-part='title'] {
+  font-weight: var(--ds-font-weight-bold, 700);
+}
+
+/* ---- stale banner: compact info strip (no color literals; fallbacks derive
+        from --ds-color-info) ---- */
 .ds-surface.ds-stale-banner[data-part='banner'] {
+  padding: var(--ds-stale-banner-padding-block, var(--ds-spacing-2, 8px))
+    var(--ds-stale-banner-padding-inline, var(--ds-spacing-3, 12px));
   border-radius: var(--ds-radius-md, 8px);
-  background: var(--ds-color-info-bg, rgba(59,130,246,0.08));
+  background: var(--ds-color-info-bg, color-mix(in srgb, var(--ds-color-info) 8%, transparent));
   color: var(--ds-color-info);
+  font-size: var(--ds-font-size-sm, 0.875rem);
 }
 
 .ds-surface.ds-stale-banner[data-part='banner'][data-part='banner'] {
-  border: 1px solid var(--ds-color-info-border, rgba(59,130,246,0.2));
+  border: 1px solid var(--ds-color-info-border, color-mix(in srgb, var(--ds-color-info) 20%, transparent));
 }
 
 .ds-surface.ds-stale-banner > [data-part='description'][data-part='description'][data-part='description'] {
+  flex: 1 1 auto;
   color: inherit;
 }
 
+/* ---- capability anatomy: the data-independent inventory beside a failed
+        surface load (was fully inline in the engine) ---- */
+.ds-surface.ds-capability-anatomy[data-part='capability-anatomy'] {
+  display: grid;
+  gap: var(--ds-spacing-2, 8px);
+}
+
+.ds-surface.ds-capability-anatomy [data-part='capability-anatomy-label'][data-part='capability-anatomy-label'][data-part='capability-anatomy-label'] {
+  font-weight: var(--ds-font-weight-bold, 700);
+  letter-spacing: var(--ds-capability-anatomy-label-tracking, 0.06em);
+  text-transform: uppercase;
+}
+
+.ds-surface.ds-capability-anatomy [data-part='capability-list'] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--ds-capability-cell-min-size, 132px)), 1fr));
+  gap: var(--ds-spacing-2, 8px);
+}
+
 .ds-surface.ds-capability-anatomy [data-part='capability'] {
+  min-inline-size: 0;
+  padding: var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px);
   border: 1px solid var(--ds-color-border, currentColor);
   border-radius: var(--ds-radius-md, 8px);
+  opacity: var(--ds-capability-opacity, 0.72);
+}
+
+.ds-surface.ds-capability-anatomy [data-part='capability'][data-disabled='true'] {
+  opacity: var(--ds-capability-disabled-opacity, 0.5);
+}
+
+.ds-surface.ds-capability-anatomy [data-part='capability-label'][data-part='capability-label'][data-part='capability-label'] {
+  font-weight: var(--ds-font-weight-semibold, 600);
 }

@@ -2,6 +2,12 @@
  * TableToolbar skin — engine-agnostic and deliberately unlayered.
  * Search paint lands where caller style landed: the modern Input wrapper and
  * the rustic Input shell. The rustic selector outranks every Input state.
+ *
+ * WAVE R2+R3 (Quiet Premium editorial): a hairline-separated chrome row.
+ * The divider is a soft vertical hairline with a paper highlight (token
+ * color-mix, never a raw literal); the search icon stays muted and deepens
+ * when its field gains focus. Search typography uses the supporting step of
+ * the system scale on the exact per-engine paint node (P-79/Input landing).
  */
 
 .ds-structure.ds-table-toolbar[data-part='root'][data-part='root'] {
@@ -10,13 +16,33 @@
 .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'] {
   border-radius: 1px;
   background: linear-gradient(180deg, transparent 0%, var(--ds-color-border) 20%, var(--ds-color-border) 80%, transparent 100%);
-  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.04);
+  box-shadow: 1px 0 0 color-mix(in srgb, var(--ds-color-bg-elevated, white) 4%, transparent);
 }
+
 .ds-structure.ds-table-toolbar
   .ds-table-toolbar__search-field
   > .ds-table-toolbar__search-icon[data-part='search-icon'] {
   transform: translateY(-50%);
   color: var(--ds-color-text-muted);
+  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-table-toolbar
+  .ds-table-toolbar__search-field:focus-within
+  > .ds-table-toolbar__search-icon[data-part='search-icon'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* Search typography: the supporting step of the system scale, on the exact
+ * paint node per engine — the native input inside the modern wrapper, and
+ * the rustic shell which IS the input root. */
+.ds-structure.ds-table-toolbar
+  .ds-table-toolbar__search-field
+  .ds-table-toolbar__search-input
+  .rottay-input,
+.ds-structure.ds-table-toolbar
+  .ds-table-toolbar__search-field
+  .ds-table-toolbar__search-input.rottay-input {
+  font-size: var(--ds-type-supporting-font-size, 0.8125rem);
 }
 
 .ds-structure.ds-table-toolbar
@@ -30,4 +56,13 @@
   > .ds-table-toolbar__search-input.rottay-input.rottay-input--rustic[data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
   background: var(--ds-color-bg-secondary);
   border: 1px solid var(--ds-color-border);
+}
+
+/* Reduced motion: the only animated channel is the icon color cross-fade. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-table-toolbar
+    .ds-table-toolbar__search-field
+    > .ds-table-toolbar__search-icon[data-part='search-icon'] {
+    transition: none;
+  }
 }

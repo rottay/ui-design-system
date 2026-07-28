@@ -1,0 +1,283 @@
+diff --git a/archive/audits/2026-07-26-ds-modern-whitelabel-independent-audit-davila.md b/archive/audits/2026-07-26-ds-modern-whitelabel-independent-audit-davila.md
+index 93a1196..5b35972 100644
+--- a/archive/audits/2026-07-26-ds-modern-whitelabel-independent-audit-davila.md
++++ b/archive/audits/2026-07-26-ds-modern-whitelabel-independent-audit-davila.md
+@@ -683,3 +683,278 @@ It does **not** certify premium craft. R2/R3 remain sighted work:
+   migration inventory; their destinations require visual decisions rather than
+   mechanical renames.
+ - live-database operation is still not claimed by a fixture-backed compiler test.
++
++---
++
++# Round 3 — Static theme provenance and dual-authoring correction (Claude, 2026-07-27)
++
++Appended, not overwritten, per this file's convention (L215). Trigger: Codex observed that
++every prior wave treated the static vertical artifact as an indivisible authority, when it
++is built from TWO authored sources. This wave reproduces that observation independently
++from scratch, extends it to all three first-party verticals, classifies it, corrects the
++record, and reopens exactly one axis of the F4 closure. Nothing in this wave claims
++acceptance; Codex audits this correction and decides whether the document stands.
++
++Evidence bundle (all numbers below are recomputable from it):
++`/private/tmp/rottay-design-platform-independent-audit-round-3/` — SUMMARY.md,
++methodology.md, {bithire,evnto,rottay}-overlap.json, classification.json,
++classification.md, source-to-runtime-trace.md, audit-postmortem.md,
++negative-drill-design.md, single-authority-protocol.md, verification-notes.md, frozen
++snapshots with SHA256. Unlike R1's bundle — lost to a /tmp reap before promotion (P6
++below) — this bundle must be promoted via EvidenceManifest v1 before R2 acceptance.
++
++Session constraints honored: read-only on ui-design-system and app-bithire (Kimi
++concurrent on Modern/Candidates); zero builds/regenerations/git changes; analysis ran on
++frozen snapshots; writes confined to this document and /private/tmp.
++
++## P1. The fact this document did not contain
++
++`index.css = compileBrandTheme(<slug>BrandTheme) + <slug>/_source/extension.css`
++(`build-vertical-artifacts.mjs:5`; extension read at `:114`, compiled at `:116`,
++concatenated by `renderVerticalArtifact` with a mechanical scope projection). The compiled
++half is typed, envelope-bounded and APCA-checked; the extension half is free-form
++hand-authored CSS bounded by nothing. Before this wave, this file contained ZERO
++occurrences of `extension.css`, `_source`, `compileBrandTheme`, or
++`build-vertical-artifacts`. The artifact was always analyzed as a file, never as a build
++output with two authored inputs — even though its own second banner
++(`artifacts/bithire/index.css:1041` "Declared artifact extension (authored source,
++mechanically scoped)") states the dual authorship in-band.
++
++Measured on frozen snapshots (2026-07-27 13:30; postcss AST, no regex-as-evidence;
++correspondence proven by re-rendering each artifact through the real
++`renderVerticalArtifact` from dist compiler output + snapshot extension → **byte-identical
++SHA256 for all three**; staleness ruled out by `find -newermt` over packages/core/src):
++
++| Vertical | Compiled unique props | Extension unique props | Declared by BOTH | Extension share of artifact (lines) |
++|---|---|---|---|---|
++| bithire | 1,024 | 575 | **188** | 6,247 / 7,288 (~86%) |
++| evnto | 319 | 159 | **82** | 340 / 676 (~50%) |
++| rottay | 462 | 976 | **267** | 3,050 / 3,529 (~86%) |
++
++Codex's provisional BitHire numbers reproduce almost exactly: 1024/188 and buckets light
++14 · dark(banner) 114 · production-guardrails 48 are exact matches. Two deltas, both
++instructive: extension 575 vs Codex's 576 — the flat regex counted `--clickable` from the
++SELECTOR `.rottay-tag--clickable:hover` (extension.css:3332) as a custom property, a
++concrete demonstration of why grep is not semantic evidence; clear-guard 79 vs 83 —
++bucket-definition dependent; ours (nearest preceding root banner) is published and
++per-name recomputable, the 83 has no published method. Buckets are non-disjoint and are
++never summed.
++
++## P2. Classification — not all overlaps are defects
++
++Full rules and per-name data in `classification.md` / `classification.json`. Categories:
++A exact duplication · B contradiction (same effective context, different value) ·
++C legitimate conditional · D inert conditional · E component-local · F absent compiler
++capability (facet) · G domain token out of place · H explicit temporal compat ·
++I indeterminate. Final label = worst reachable-state category; rendered equality
++(one-level var() resolution) as primary, strict-textual preserved alongside.
++
++| Vertical | Shared | A | B | C | D | E | Notes |
++|---|---|---|---|---|---|---|---|
++| bithire | 188 | 20 | **42** | 3 | 122 | 1 | 42 B are live in the shipped state; 85 rows carry resolvedEquality UNKNOWN (25 reachable) pending computed styles |
++| evnto | 82 | **79** | 2 | 0 | 1 | 0 | the extension's light block re-states the compiled block nearly wholesale — pure drift surface |
++| rottay | 267 | 0 | 0 | 0 | **267** | 0 | every one carries the F facet: in the shipped state the compiled block does not apply at all |
++
++Two structural discoveries outrank the counts:
++
++1. **The rottay compiled block is a DARK palette emitted under a light-gated selector.**
++   `FIRST_PARTY_ARTIFACT_SPECS` scopes rottay to
++   `html[data-tenant='rottay'][data-theme='light'], .light`
++   (`artifact-renderer/index.ts:65`) while bithire/evnto get unconditional selectors — and
++   180 of the 267 shared compiled values are byte-identical to the extension's
++   DARK-default block (`--ds-sidebar-bg: #0D0D10`, `--ds-modal-bg: #1A1A1E` under a
++   *light* selector). The extension is not rogue here: it supplies the only correct light
++   palette on top of a mislabelled block. NEEDS_OWNER_DECISION: fix the spec selector vs
++   teach the compiler modes — classification is identical either way.
++2. **All three products ship `data-theme="base"`** (registry `theme: 'base'` ×3, no
++   `forceTheme` in any app, provider stamps what resolves), and no selector in any of the
++   six files tests any value other than light/dark. Light and dark are therefore
++   UNREACHABLE-BY-ABSENCE in all product shells — but the showroom reaches both via
++   `forceTheme` today, so every D is observable there and goes live the moment a mode
++   switch ships. D means "inert under current product policy", not "harmless".
++
++Shipped-state defects elevated from the B set (all file:line in `classification.md` §3):
++bithire's entire canvas (`--ds-color-bg-primary` compiled `#F4F8FB` → extension
++`#ffffff`), `--ds-surface-panel` authored gradient → flat fill, muted/disabled ink
++lightened ~2 steps against a now-white ground (contrast re-check required), badge 7px →
++pill, card 12px → 10px, breadcrumb `rem` → `px` (breaks user font scaling), filter-pill
++count ring deleted; and **evnto drops `"Noto Sans Arabic"` from both font-family stacks**
++— a live i18n regression in the shipped state. The bithire "PRODUCTION GUARDRAILS (TOKEN
++REMAP)" section (48 names) is H-ELIGIBLE but NOT H: it cites a reason and WO-UX-05 but
++names no owner and sets no retirement condition — and its stated premise ("the app pins
++`data-theme="light"`") is FALSE; nothing pins anything, the outcome holds only by
++negation. G within the overlap = 0; but 33 genuinely domain tokens live in DS namespace
++outside it (`--ds-candidate-{new..rejected}` ×12 bithire, `--ds-event-*`/`--ds-ticket-*`
++×21 evnto) — the G category's exact target, recorded for R1-P.
++
++## P3. Findings beyond the trigger (NEW FINDINGS)
++
++- **N-1 · 44 compiled values dead at identical specificity (bithire).** The extension
++  re-declares 48 names under the semantically-identical root selector — differing from the
++  compiled block's selector only in quote style, which defeats any textual duplicate scan
++  — and 44 carry different values. The compiler computes, emits, and the file then
++  discards its own resolution. Evnto/rottay: 0 same-selector overlap (rottay structurally,
++  see P2.1).
++- **N-2 · Behavioral propagation fully fails on the traced rottay channel.**
++  `--ds-card-bg`: `platform/index.ts:226` (`#18181B`) → `chrome-variables/index.ts:1286` →
++  artifact `:71` — dead in ALL three root states (default/dark fall to the extension's
++  `:not(light)` block; explicit light falls to the extension's identical-selector,
++  later-in-file block). Editing the TS source and regenerating changes nothing observable.
++  Full hop table: `source-to-runtime-trace.md`.
++- **N-3 · bithire's `darkPrimaryColor` never ships.** `bithire/index.ts:41` declares
++  `#6BB5F5`; the artifact's dark `--ds-color-primary` is hand-authored `#1e84e6`
++  (extension.css:379-391), unrelated to the TS seed.
++- **N-4 · The DB tenant path has a second ramp emitter, and the APCA gate validates the
++  loser.** `visual-config/index.ts:485` spreads a legacy sRGB scale
++  (`buildRuntimeScale`, `color-math/index.ts:96-109`) OVER the compiler's OKLCH
++  `deriveTenantColorRamps` for primary/secondary/accent. Bundled tenants are protected by
++  `useCssOwnedBranding`; **every DB customer tenant ships the sRGB values** — while
++  `build-vertical-artifacts.mjs:93-107` APCA-checks the OKLCH values that are not shipped
++  on that path. No test pins the two emitters together. This qualifies section 1's claim
++  1: the DB pipeline's chain is strongest-in-tree EXCEPT that its last merge step silently
++  swaps the ramp algorithm.
++- **N-5 · `--ds-motion-spring` has three authors** (`:root` baseline in transitions.css;
++  `build-vertical-css.mjs:252-273` script-authored block; runtime tokenOverrides at
++  `visual-config/index.ts:286`) — precedence reasoned only in a build-script comment.
++- **N-6 · The `--rt-*`/`--ds-*` boundary is violated in both directions.** App declares
++  190 `--ds-*`; the DS declares 54 `--rt-*` (18 names, 13 colliding with app
++  declarations), including a byte-parallel rule in BOTH repos with different values
++  (`extension.css:4343-4365` vs `detail-chrome.css:282-292`) where the app side (0,2,0)
++  kills the DS's authored Quiet Premium tint. The DS also ships BitHire product semantics
++  (`data-bithire-detail-*` hooks, `--rt-detail-*`) inside core — an ownership-rule
++  violation in the DS direction, recorded for R1-P scoping.
++- **N-7 · The same one-authority-two-sources pattern recurs across subsystems** (sweep
++  reports 1-3 in the bundle): typography — bithire `--ds-line-height-body` 1.55 compiled
++  light / 1.6 hand-authored dark despite "dark inherits" comment; density —
++  `--ds-density-local-factor` re-derived at (0,4,0) with fallbacks referencing
++  nonexistent variables, untested; motion — `.rottay-menu` hardcodes an unguarded
++  `transition: all 0.2s ease` (animates under `prefers-reduced-motion`), and the
++  `no-motion-literals` lint never scans CSS; root attributes — the app trio
++  `data-account-tenant`/`data-brand-artifact`/`data-css-tenant` is SSR-written then
++  client-rewritten with bare `removeAttribute` cleanup, bypassing the DS claim registry
++  built to prevent exactly this; chrome-vs-material — `--ds-card-bg` vs
++  `--ds-surface-card` emitted by two compilers, aliased in bithire, hard-coded
++  independently in evnto/rottay, with REVERSED fallback precedence between component
++  families; token base — two source files emit 165 duplicated names into the same
++  `@layer rottay-tokens :root` (documented, 3 change semantics), and
++  `--ds-divider-text-color` self-duplicates within themes/default.css (`:1092` themed vs
++  `:2019` hardcoded hex that wins for every tenant); bundle level — 223
++  property/identical-selector duplicate groups in styles/bithire.css, 121 with differing
++  values.
++- **N-8 · Positive exemplar (keep and generalize).** The recipe-profile subsystem already
++  implements the full discipline this wave mandates: `recipe-profile-single-path.test.tsx`
++  proves single-path by census (>1500 files) PLUS a planted conflicting value shown to
++  move zero components. The organization possessed the technique; it was applied to one
++  subsystem and not to the one carrying the "single authority" certification.
++
++## P4. Status of prior claims
++
++| Claim (line) | Status | Correction |
++|---|---|---|
++| L226 "ONE authority per channel, resolved by resolveVisualAuthority" | **OVERSTATED** | True at emitter level only. The resolver arbitrates provider-vs-compiled-artifact; it cannot arbitrate WITHIN the static artifact, where 188/82/267 names are declared by both authors and concatenation order decides. |
++| L240-243 "Both emitters agree… the artifact must win every channel it declares" | **UNDER-SPECIFIED** | "Every channel it declares" is ambiguous between two authors with opposite governance properties; and the emitter census missed the sRGB/OKLCH pair inside the DB path (N-4) and the third `--ds-motion-spring` author (N-5). |
++| L80 "Code-owned vertical baseline" (one authority-table cell) | **UNDER-SPECIFIED** | Collapses a typed, APCA-checked, envelope-bounded TS source and a free-form hand-authored CSS file into one owner. Only the first is bounded by any contract. |
++| L108 CLEAR MODE GUARD attributed to "Bithire artifact"; "~270 dead dark lines" | **STILL VALID as finding, authorship corrected** | The guard is hand-authored (`_source/extension.css:641`), invisible to BrandTheme and to any manifest. Dark-inert measurement refined: 122 D names, 55-property dark palette authored-then-reverted under a byte-identical selector, `color-scheme` dark→light contradiction at extension.css:376 vs :647 — both hand-written. |
++| L152 "OPEN (artifacts regenerating in WIP; guard present at read)" | **RETRACTED as resolution vector** | Regeneration REPRODUCES the guard by construction — proven byte-identically this round. Removing it requires editing the hand-authored file; no BrandTheme work touches it. |
++| L646 "DS blocking gates 23/23 passed" (as authority evidence) | **RE-SCOPED** | The artifact gate among the 23 proves byte-reproducibility only; a green `--check` reproduces the contradiction. `engine-token-audit`'s only extension-facing counter is a 7-role×9-step ramp-hex regex over extension.css that assumes drift by construction. NO script in packages/core/scripts performs a general compiled-vs-extension redeclaration check (verified exhaustively). |
++| L35/L173 adjudication #4 (static manifest → P2, "verticals are trusted file-owned code") | **UNDER-SPECIFIED** | The trusted-code argument was evaluated against BrandTheme only. extension.css is also file-owned but carries none of BrandTheme's structure (no schema, no clamps, no APCA, no coverage manifest). The P1→P2 downgrade needs re-adjudication with the second author on the table. |
++| L16 "DB-tenant pipeline is the strongest code in the tree… proven by schema, code, and behavior tests" | **STILL VALID, qualified by N-4** | The chain holds except the final merge, where the shipped primary/secondary/accent ramps are not the compiler's and are APCA-unchecked on the DB path. |
++| L192 "TMM evidence level: compiler-deterministic (fixture-projected)" | **UNDER-SPECIFIED** | Determinism is a property of the BrandTheme half; the static comparand (bithire) is ~86% hand-authored by line count. |
++| R1.F / C4 app-boundary analysis (SCOPED 253 / SHADOWED 97 / GLOBAL-OWN 27) | **STILL VALID** | Untouched by this wave; the app-side classification was parser-grade. It classified the app side only — artifact authorship was out of its corpus, which is the gap, not an error. |
++| C5 root-attribute ownership claims | **STILL VALID, perimeter incomplete** | data-theme/data-engine/color-scheme correctly governed by the claim registry. The app trio (N-7) bypasses it — new channels, not a regression of C5. |
++| L673 "R1 is technically accepted and closed… authority… stable enough to begin the visual canary" | **QUALIFIED — see P7** | The word "authority" in F4 covered runtime/emitter/cascade authority and those remain accepted. Author-level uniqueness of the static theme was never audited and is REOPENED as R1-P. |
++
++## P5. Postmortem — why three waves missed it
++
++All seven hypotheses adjudicated TRUE with evidence (full text:
++`audit-postmortem.md`): (H1) the audit verified runtime winners, never author uniqueness —
++the archetype was even on record for i18n at L315; (H2) the artifact was treated as
++atomic — provenance tracing stopped at the artifact path (L249-252); (H3)
++`--check` proves reproducibility, which reproduces the contradiction — and the gate was
++never named in this file, only counted inside "23/23"; (H4) engine-token-audit's
++artifact-facing scope is one regex over one file for 63 token names; (H5) valid,
++deterministic CSS conceals same-selector conflicts by design (last-wins); (H6) horizontal
++censuses dominated (409 decls / 1,316 !important / 907 files / 1,615 channels) while no
++channel was ever traced source→compiler→artifact→bundle→DOM — Round 3's two-channel trace
++hit the dual authorship at hop 2; (H7) negative drills existed for precedence and wiring
++but none planted a second AUTHOR — while the recipe subsystem (N-8) shows the exact
++missing drill implemented elsewhere in the same codebase. Aggravators: R1's evidence
++bundle was never promoted and is now unrecoverable (/tmp reaped — the exact risk L133
++flagged); "23/23" aggregate reporting hid per-gate scope; and the scorecard already said
++it — `single-authority(model) 5.0` was honest, the prose ("ONE authority per channel")
++outran it.
++
++## P6. Mandatory single-authority protocol (adopted for every future wave)
++
++No "single source of truth"/"single authority" claim may be certified without
++demonstrating ALL SIX properties separately, each with its own evidence: (1) author
++uniqueness — one authorized declaring location; (2) emitter uniqueness — no second
++compiler/bridge on the channel without explicit coverage; (3) writer uniqueness — no two
++runtime writers per element/channel; (4) precedence correctness — the cascade makes the
++declared owner win; (5) behavioral propagation — editing the canonical source observably
++changes the output (N-2 is the standing counterexample); (6) negative drill — a planted
++second author/emitter/writer makes a guard FAIL. A green gate without its negative drill
++certifies nothing about authority.
++
++Laws: L1 no grep as semantic evidence where an AST exists (the 576-vs-575 delta is the
++standing exhibit); L2 no "duplication" from name intersection without selector/context/
++reachability classification; L3 "generated" is not "single-source" — provenance is
++per-section, not per-file; L4 deterministic output ≠ correct ownership; L5 no total
++without denominator and method; L6 UNKNOWN never becomes PASS; L7 every broad audit
++includes ≥1 full vertical trace source→compiler→artifact→bundle→DOM/computed-style.
++
++## P7. R1-P — Static theme provenance closure (new phase; blocks R2 visual acceptance)
++
++Phase ordering is now **R1 → R1-P → R2 → R3 → R4**. The F4 exit verdict is requalified as
++follows: runtime authority, hydration, English-default i18n, DB-fixture compilation, CI
++failure propagation, cross-repo boundaries and buildability REMAIN accepted; **the
++uniqueness of static theme provenance is reopened until R1-P closes**. R2's visual canary
++must not begin before R1-P, because R2 would otherwise certify pixels produced by an
++unowned author mix (and for rottay, by a compiled block that never applies).
++
++Owners: **Claude** — architecture, contract, compiler, gates, documentation. **Kimi** —
++does not participate until authority is defined; afterwards adjusts visual craft where
++outcomes change. **Codex** — final audit, computed-style capture (the 25 reachable
++UNKNOWNs + the two trace channels carry ready probe specs), BitHire/TMM acceptance.
++
++Scope (design only this session; no remediation was implemented):
++
++1. Classify all 537 overlap records into destinations (input: `classification.json` — done
++   at category level; destination decisions pending).
++2. Move to BrandTheme everything the contract can already express (the 42 bithire B's and
++   20 A's are the first tranche; each B needs a canonical-value decision, owner Claude with
++   Kimi consulted where visual).
++3. Extend the compiler ONLY for reusable capabilities: per-mode emission (light/dark
++   blocks), `color-scheme`, `@media prefers-reduced-motion` — the F-facet set. No
++   vertical-specific emission paths.
++4. Resolve the dark/clear contradiction: either declare real dark (wire the TS dark seeds
++   — N-3 — and delete the clear guard) or delete the authored-then-reverted dark palette;
++   plus the rottay spec-selector owner decision (P2.1).
++5. Reduce extension.css to rules genuinely inexpressible by contract, each with owner +
++   reason (+ retirement condition where temporal → H); relocate the 33 domain tokens out
++   of `--ds-*`.
++6. Selector-aware overlap gate: AST-based, per-channel, distinguishing A/B/C/D/E — not a
++   name-intersection count (the quote-style variance of N-1 is the test case it must
++   pass).
++7. Negative drills ND-1..ND-7 per `negative-drill-design.md`; every gate cited in a future
++   certification runs with its most recent drill result attached.
++8. Propagation proof: a canary token edited in a BrandTheme fixture must change the
++   artifact at the expected location and nowhere else (kills N-2 class defects).
++9. Re-verify BitHire static and TMM DB with no per-tenant branches — including closing
++   N-4 (one ramp algorithm, APCA checks what ships).
++
++## P8. What remains valid from R1 (explicitly)
++
++The cascade law and unlayered-tenant-paint model; the `:is()` static-specificity
++correction (R2-2) — Round 3's own cascade scoring used it; the app-boundary
++classification and its gate; the root-attribute claim registry for its governed channels;
++CI fail-closed work (PIPESTATUS, gates:ci, v1.8.6); English-default i18n; the DB schema/
++envelope/injection security posture (L16, with the N-4 qualification); the honest
++append-only correction culture this wave itself relies on. R1's cascade-level findings
++were not wrong — they were incomplete on an axis nobody was measuring.
++
++Scorecard: values unchanged this wave (rescoring belongs to Codex's re-audit).
++Dimensions whose evidence basis moved: `single-authority(model)` (5.0 now
++evidence-backed rather than intuition), `static-vs-DB 6.5` and `evidence governance 5.5`
++(both read optimistic in hindsight), `gate truthfulness 3.5` (H3/H4 add texture, not
++direction).

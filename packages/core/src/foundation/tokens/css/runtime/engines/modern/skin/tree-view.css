@@ -1,0 +1,83 @@
+/**
+ * Modern TreeView skin (Lote 2 — composition pass).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's `base` layer, so layered paint loses to preflight regardless of
+ * specificity. Unlayered rules outrank preflight and still yield to caller
+ * inline styles.
+ *
+ * SCOPE ROOT carries `ds-pattern-tree-view ds-engine-modern` + `data-part`.
+ *
+ * COMPOSITION LAW (Lote 2): the tree itself is the DS Tree primitive's
+ * modern engine — every node row, connector, toggle, checkbox and selection
+ * frame is painted by `tree.css` alone. This file owns ONLY the pattern
+ * chrome the primitive does not: the search row and the loading skeleton
+ * (whose geometry and pulse were Tailwind utilities + inline styles in the
+ * hand-rolled tree). The shared `panelCardStyle` surface spread stays in
+ * the untouched engine-styles helper (WO-SKIN-06 adjudication, same as
+ * `live-feed.css`).
+ *
+ * WIRING (PENDING — coordinator-owned): this file is NOT yet imported by
+ * `facade/entrypoints/styles.css` / `base.css` (outside the lane write-set).
+ * Until the two standard `@import "../../runtime/engines/modern/skin/tree-view.css";`
+ * lines land, the search row renders flush against the tree and the
+ * skeleton bars render as plain blocks (functional, unpulsed).
+ */
+
+/* ---- body: the pattern's inner padding (was an inline style). ---- */
+.ds-pattern-tree-view.ds-engine-modern[data-part='root'] > [data-part='body'] {
+  padding: var(--ds-tree-view-body-padding, var(--ds-spacing-3, 12px));
+}
+
+/* ---- search row: breathing room above the tree (was Tailwind `mb-2`). ---- */
+.ds-pattern-tree-view.ds-engine-modern[data-part='root']
+  .ds-tree-view-modern__search-row[data-part='search-row'] {
+  margin-block-end: var(--ds-tree-view-search-margin-block-end, var(--ds-spacing-2, 8px));
+}
+
+/* ---- loading skeleton: geometry (was per-bar inline styles, with physical
+        margins now LOGICAL) + a single calm pulse (was `animate-pulse`). ---- */
+.ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list'] {
+  display: grid;
+  gap: var(--ds-tree-view-skeleton-gap, var(--ds-spacing-2, 8px));
+  padding: var(--ds-tree-view-skeleton-padding, var(--ds-spacing-5, 20px));
+  animation: ds-tree-view-skeleton-pulse
+    var(--ds-tree-view-skeleton-duration, var(--ds-motion-deliberate, 720ms))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
+}
+
+.ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton'] {
+  block-size: var(--ds-tree-view-skeleton-row-height, 24px);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-panel);
+}
+
+/* The staggered indent/width rhythm the inline styles painted (i % 3). */
+.ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']:nth-child(3n + 1) {
+  inline-size: 60%;
+  margin-inline-start: 1.25rem;
+}
+
+.ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']:nth-child(3n + 2) {
+  inline-size: 50%;
+  margin-inline-start: 2.5rem;
+}
+
+.ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']:nth-child(3n) {
+  inline-size: 70%;
+}
+
+@keyframes ds-tree-view-skeleton-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list'] {
+    animation: none;
+  }
+}

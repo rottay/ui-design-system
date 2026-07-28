@@ -26,7 +26,8 @@ import { Portal } from '../../../../runtime/overlay/portal';
 import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
@@ -72,29 +73,8 @@ function CloseButton({ onClick, label }: { onClick: () => void; label: string })
       data-part="close-button"
       onClick={onClick}
       aria-label={label}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '32px',
-        height: '32px',
-        cursor: 'pointer',
-        flexShrink: 0,
-        transition: `background-color var(--ds-motion-fast) ${MOTION_EASING}`,
-      }}
     >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M18 6L6 18M6 6l12 12" />
-      </svg>
+      <ActionCloseIcon decorative size={16} />
     </button>
   );
 }
@@ -109,7 +89,9 @@ function CloseButton({ onClick, label }: { onClick: () => void; label: string })
  * focus trapping. Compensates for scrollbar layout shift.
  */
 export default function ModernModal(props: ModalProps): React.ReactElement | null {
-  const { t } = useTranslation('components');
+  // Optional channel with an English floor: the modal renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
 
   const { isMobile } = useBreakpoints();
 
@@ -410,31 +392,17 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
             ...style,
           }}
         >
-          {/* ---- Header ---- */}
+          {/* ---- Header ----. Layout AND paint live in the modern skin
+              (overlay-modal.css); the engine stamps parts only. */}
           {(title || description || header || closable) && (
-            <div
-              data-part="header"
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                justifyContent: 'space-between',
-                gap: '12px',
-                padding: '16px 24px',
-                flexShrink: 0,
-              }}
-            >
-              <div style={{ flex: '1 1 auto', minWidth: 0 }}>
+            <div data-part="header">
+              <div data-part="heading-group">
                 {header || (
                   <>
                     {title && (
                       <div
                         id={titleId}
                         data-part="title"
-                        style={{
-                          fontSize: '16px',
-                          fontWeight: 600,
-                          lineHeight: '24px',
-                        }}
                       >
                         {title}
                       </div>
@@ -443,11 +411,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                       <div
                         id={descriptionId}
                         data-part="description"
-                        style={{
-                          fontSize: '13px',
-                          lineHeight: '18px',
-                          marginTop: title ? '2px' : undefined,
-                        }}
                       >
                         {description}
                       </div>
@@ -456,7 +419,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                 )}
               </div>
               {closable && (
-                <CloseButton onClick={onClose} label={t('modal.close')} />
+                <CloseButton onClick={onClose} label={i18n?.tOr('modal.close', 'Close') ?? 'Close'} />
               )}
             </div>
           )}
@@ -473,19 +436,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
             {children}
           </div>
 
-          {/* ---- Footer ---- */}
+          {/* ---- Footer ----. Layout lives in the skin. */}
           {footer && (
-            <div
-              data-part="footer"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-end',
-                gap: '8px',
-                padding: '16px 24px',
-                flexShrink: 0,
-              }}
-            >
+            <div data-part="footer">
               {footer}
             </div>
           )}

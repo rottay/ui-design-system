@@ -18,9 +18,9 @@
  *
  * The row's three-way background was `isFocused ? inset : isActive ? tint : {}`,
  * so focus outranks active: the [data-focused] rule is ordered AFTER
- * [data-active] to win at equal specificity when a row is both; the row's
- * left-border color depends only on active, so it lives on the active rule and
- * survives when focus overrides the background.
+ * [data-active] to win at equal specificity when a row is both. The active
+ * row's selection cue is the skin's inset frame (LOTE 2: the `border-l-[3px]`
+ * left-accent utility was drained — side rails are forbidden by product law).
  *
  * Values transcribed verbatim from engines/modern.tsx.
  */
@@ -51,9 +51,15 @@
   border-bottom: 1px solid var(--ds-color-border);
 }
 
+/* The active row reads as a QUIET TINT + full inset frame (menu.css's
+   framed-selection idiom): the former `border-l-[3px]` LEFT ACCENT utility is
+   gone — chromatic side rails are forbidden, and a physical left border was
+   wrong in RTL anyway. The inset shadow adds zero layout shift, so the old
+   transparent-border compensation is gone too. */
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-active='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
-  border-color: var(--ds-color-primary);
+  box-shadow: inset 0 0 0 1px
+    var(--ds-workspace-switcher-item-frame-active, color-mix(in srgb, var(--ds-color-primary) 34%, transparent));
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-focused='true'] {
@@ -92,4 +98,302 @@
 
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'][data-part='create'] {
   border: 1px solid var(--ds-color-border);
+}
+
+/* ============================================================================
+   LOTE 2 GEOMETRY DRAIN — every rule below re-expresses a Tailwind utility or
+   an inline style object the engine no longer carries (values transcribed
+   verbatim from the drained utilities). The three composed Buttons carry the
+   pattern's caller parts (P-79), so this file is their single paint owner.
+   ============================================================================ */
+
+/* ---- root + trigger ---- */
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] {
+  position: relative;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-workspace-switcher-trigger-gap, 8px);
+  block-size: var(--ds-workspace-switcher-trigger-height, 40px);
+  padding-block: 0;
+  padding-inline: var(--ds-workspace-switcher-trigger-padding-inline, 12px);
+  cursor: pointer;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'][data-position='sidebar'] [data-part='trigger'] {
+  inline-size: 100%;
+  justify-content: flex-start;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger-name'] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+  font-size: var(--ds-workspace-switcher-trigger-name-font-size, 14px);
+  font-weight: var(--ds-workspace-switcher-trigger-name-font-weight, var(--ds-font-weight-semibold, 600));
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='chevron'] {
+  opacity: 0.5;
+}
+
+/* ---- avatar frames (sizes transcribed from the drained w-*/h-* utilities) ---- */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-frame'] {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--ds-radius-lg);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'][data-position='sidebar'] [data-part='avatar-frame'][data-frame='trigger'] {
+  inline-size: 32px;
+  block-size: 32px;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root']:not([data-position='sidebar']) [data-part='avatar-frame'][data-frame='trigger'] {
+  inline-size: 24px;
+  block-size: 24px;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-frame'][data-frame='item'] {
+  inline-size: 36px;
+  block-size: 36px;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-frame'][data-frame='user'] {
+  inline-size: 28px;
+  block-size: 28px;
+  border-radius: var(--ds-radius-full, 9999px);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-frame'] img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-fallback'] {
+  display: flex;
+  inline-size: 100%;
+  block-size: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--ds-workspace-switcher-avatar-font-size, 12px);
+  font-weight: var(--ds-workspace-switcher-avatar-font-weight, var(--ds-font-weight-bold, 700));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-frame'][data-frame='item'] [data-part='avatar-fallback'] {
+  font-size: 14px;
+}
+
+/* ---- panel + positioning (logical: sidebar opens inline-end, topbar below) ---- */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel'] {
+  position: absolute;
+  z-index: 50;
+  inline-size: var(--ds-workspace-switcher-panel-width, 18rem);
+  overflow: hidden;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'][data-position='sidebar'] [data-part='panel'] {
+  inset-block-start: 0;
+  inset-inline-start: 100%;
+  margin-inline-start: var(--ds-workspace-switcher-panel-gap, 8px);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root']:not([data-position='sidebar']) [data-part='panel'] {
+  inset-block-start: 100%;
+  inset-inline-start: 0;
+  margin-block-start: var(--ds-workspace-switcher-panel-gap-block, 4px);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='header'] {
+  padding-block: 6px;
+  padding-inline: 12px;
+}
+
+/* ---- list + option rows ---- */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='list'] {
+  max-block-size: var(--ds-workspace-switcher-list-max-height, 16rem);
+  padding-block: 4px;
+  overflow-y: auto;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-workspace-switcher-item-gap, 12px);
+  padding-block: 8px;
+  padding-inline: 12px;
+  cursor: pointer;
+  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:hover:not([data-active='true']) {
+  background: var(--ds-workspace-switcher-item-bg-hover, var(--ds-surface-highlight));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-copy'] {
+  display: flex;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  flex-direction: column;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-title-row'] {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-name'] {
+  overflow: hidden;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-name'][data-active='true'] {
+  font-weight: var(--ds-font-weight-semibold, 600);
+}
+
+/* Secondary metadata keeps a LEGIBLE muted ink instead of the drained
+   `opacity-50` composite (the steps family's axe color-contrast law). */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-meta'] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ds-workspace-switcher-meta-color, var(--ds-color-text-muted));
+  font-size: 12px;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-plan'] {
+  text-transform: capitalize;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-online'] {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-variant-numeric: var(--ds-workspace-switcher-meta-numeric, tabular-nums);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='online-dot'] {
+  display: inline-block;
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: var(--ds-radius-full, 9999px);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-controls'] {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ---- settings gear: 24px box, revealed on row hover / virtual focus / own
+        focus (the reveal was an inline opacity ternary). ---- */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'] {
+  inline-size: 24px;
+  block-size: 24px;
+  padding: 0;
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:hover [data-part='settings'],
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'][data-focused='true'],
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:focus-visible {
+  opacity: 1;
+}
+
+/* ---- create row + current user ---- */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create-row'] {
+  padding-block: 8px;
+  padding-inline: 12px;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'] {
+  gap: 4px;
+  inline-size: 100%;
+  block-size: 32px;
+  padding-block: 0;
+  padding-inline: 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='current-user'] {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-block: 8px;
+  padding-inline: 12px;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='current-user-copy'] {
+  display: flex;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  flex-direction: column;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='current-user-name'] {
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: var(--ds-font-weight-medium, 500);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='current-user-email'] {
+  overflow: hidden;
+  color: var(--ds-workspace-switcher-meta-color, var(--ds-color-text-muted));
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---- focus rings for the three composed buttons ---- */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:focus-visible,
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:focus-visible,
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* ---- coarse pointers: 44px floors; the gear grows a transparent hit area
+        (and is always visible on touch, where there is no hover). ---- */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'],
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'],
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'] {
+    min-block-size: var(--ds-workspace-switcher-touch-target-min, 44px);
+  }
+
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'] {
+    position: relative;
+    opacity: 1;
+  }
+
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']::after {
+    content: '';
+    position: absolute;
+    inset: -10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'],
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'] {
+    transition: none;
+  }
 }

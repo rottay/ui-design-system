@@ -18,10 +18,24 @@
  *
  * COHERENCE (Pass 2, K4-A): the surface shares the lane's overlay material
  * register with Dropdown and ContextMenu (same widget class): the subtle
- * primary-tinted gradient, tinted border, inset highlight, elevation-3 and
- * backdrop blur, unified at radius-xl. Previously a flat
- * `--ds-surface-card`/`border-subtle` card, which read as a different system
- * beside the Dropdown surface in the same captures.
+ * primary-tinted gradient (sanctioned surface-tint role), tinted border,
+ * elevation-3 and the `--ds-elevation-surface-3` dark-lift layer, unified at
+ * radius-xl. Previously a flat `--ds-surface-card`/`border-subtle` card,
+ * which read as a different system beside the Dropdown surface in the same
+ * captures.
+ *
+ * MATERIAL (Quiet Premium alignment): the frosted-panel `backdrop-filter` is
+ * RETIRED -- glass lives on overlay backdrops only (spec section 5), and this
+ * is a panel. The former `white` literals in the fill gradient and the inset
+ * top-light now resolve through the `--ds-elevation-surface-3` lift layer
+ * (inert where `--ds-elevation-lift-strength` is 0).
+ *
+ * MOTION: the engine mounts the card on open and has no presence layer, so
+ * only the ENTRANCE is choreographed -- on the shared
+ * `--ds-motion-normal` / `--ds-motion-ease-out` cadence with an
+ * engine-namespaced keyframe; reduced motion collapses it to an instant fade.
+ * The card owns no inline animation, so the CSS rule below is the single
+ * motion owner.
  *
  * PORTAL: this engine does NOT portal (rustic DOES) — the surface renders in-tree
  * as a child of the trigger wrapper in BOTH positioning branches: top-layer
@@ -43,28 +57,40 @@
   display: inline-block;
 }
 
+/* ---- entrance keyframe: engine-namespaced so a future rustic twin cannot
+        collide on the name. ---- */
+@keyframes ds-hover-card-enter-modern {
+  from {
+    opacity: 0;
+    transform: translateY(var(--ds-hover-card-motion-offset, 0.25rem))
+      scale(var(--ds-hover-card-motion-scale, 0.975));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'] {
   inline-size: var(--ds-hover-card-width, 18rem);
+  max-inline-size: calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4));
   padding: var(--ds-hover-card-padding, var(--ds-spacing-4, 1rem));
-  /* Pass-2 coherence: the lane's overlay surfaces share Dropdown's material
-     register (same widget class) -- subtle primary-tinted gradient, tinted
-     border, inset highlight, elevation-3, backdrop blur, radius-xl. */
   border-radius: var(--ds-hover-card-radius, var(--ds-radius-xl, 16px));
+  /* The dark-aware luminance step is its own layer directly above the fill
+     (popover.css idiom): inert until a dark surface raises
+     --ds-elevation-lift-strength. Level 3 matches the --ds-elevation-3 shadow
+     this surface declares. */
   background:
     linear-gradient(
       145deg,
       color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
       transparent 44%
     ),
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--ds-surface-card) 98%, white 2%),
-      color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%)
-    );
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
-    var(--ds-hover-card-shadow, var(--ds-elevation-3));
-  backdrop-filter: blur(var(--ds-hover-card-backdrop-blur, 16px)) saturate(1.08);
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-surface-card);
+  box-shadow: var(--ds-hover-card-shadow, var(--ds-elevation-3));
+  animation: ds-hover-card-enter-modern var(--ds-motion-normal)
+    var(--ds-motion-ease-out) both;
 }
 .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-part='surface'] {
   border: var(--ds-hover-card-border-width, 1px) solid
@@ -78,4 +104,31 @@
 .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-ds-position-strategy='anchor-css'] {
   border: 0;
   overflow: visible;
+}
+
+/* Keyboard users landing inside the card (candidate peek links/actions) get
+   the family's visible ring on the surface frame; the content's own
+   components keep their own focus channels. */
+.rottay-hover-card--modern[data-part='trigger'] [data-part='surface']:focus-within {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* Coarse pointers: interactive content inside the card reaches the physical
+   44px floor via block-size only (popover.css idiom). */
+@media (pointer: coarse) {
+  .rottay-hover-card--modern[data-part='trigger']
+    [data-part='surface']
+    :where(button, [role='button'], a, input, select, textarea) {
+    min-block-size: var(--ds-hover-card-touch-target, 2.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'] {
+    animation-duration: 1ms;
+    animation-timing-function: linear;
+    transform: none;
+  }
 }

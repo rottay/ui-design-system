@@ -27,7 +27,7 @@
     background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
-  animation: ds-dashboard-header-enter var(--ds-motion-calm, 220ms) var(--ds-motion-ease-out, ease-out) both;
+  animation: ds-dashboard-header-enter var(--ds-motion-calm) var(--ds-motion-ease-out, ease-out) both;
   container-type: inline-size;
   container-name: ds-dashboard-header;
 }
@@ -179,12 +179,14 @@
 .ds-structure.ds-dashboard-header [data-part='metric-chip-value'][data-part='metric-chip-value'][data-part='metric-chip-value'] {
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-variant-numeric: tabular-nums;
 }
 
 .ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'] {
   padding: 1px 5px;
   border-radius: var(--ds-radius-full);
   background: color-mix(in srgb, currentColor 7%, transparent);
+  font-variant-numeric: tabular-nums;
 }
 
 .ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='up'] {
@@ -231,6 +233,13 @@
 .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='connected'] {
   background: var(--ds-color-success);
   color: var(--ds-color-success);
+}
+
+/* live/syncing pulse — moved out of the engine's inline `animation` so the
+   reduced-motion guard below can neutralize it. */
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='live'],
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='syncing'] {
+  animation: ds-foundation-pulse 2s var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
 .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='syncing'],
@@ -300,7 +309,8 @@
   .ds-structure.ds-dashboard-header[data-part='root'],
   .ds-structure.ds-dashboard-header[data-part='root']::after,
   .ds-structure.ds-dashboard-header [data-part='icon'],
-  .ds-structure.ds-dashboard-header [data-part='metric-chip'] {
+  .ds-structure.ds-dashboard-header [data-part='metric-chip'],
+  .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'] {
     animation: none;
     transition: none;
   }

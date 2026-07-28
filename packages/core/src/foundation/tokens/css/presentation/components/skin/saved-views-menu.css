@@ -12,10 +12,25 @@
   border-radius: 12px;
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, white 8%), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%));
   color: var(--ds-color-text-primary);
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-structure.ds-saved-views-menu[data-part='trigger'][data-part='trigger'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
+}
+
+.ds-structure.ds-saved-views-menu[data-part='trigger'][data-part='trigger']:hover:not([data-open='true']) {
+  border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, white 4%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
+}
+
+.ds-structure.ds-saved-views-menu[data-part='trigger']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
 }
 
 .ds-structure.ds-saved-views-menu[data-part='trigger'][data-open='true'] {
@@ -215,4 +230,129 @@
 .ds-structure.ds-saved-views-menu-panel
   [data-part='empty-state-description'][data-part='empty-state-description'][data-part='empty-state-description'] {
   color: var(--ds-color-text-muted);
+}
+
+/* ---------------------------------------------------------------------------
+   WAVE R2+R3 — typography + microinteractions (skin-owned, never inline).
+   Quiet Premium: the section headers are tracked uppercase eyebrows, counts
+   are tabular-nums pills, and every actionable part earns a deliberate
+   hover/focus/active state on the --ds-motion-* channels.
+--------------------------------------------------------------------------- */
+
+/* header + section eyebrows */
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='header-title'][data-part='header-title'][data-part='header-title'] {
+  font-size: var(--ds-font-size-sm);
+}
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='header-description'][data-part='header-description'][data-part='header-description'],
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='active-card-description'][data-part='active-card-description'][data-part='active-card-description'],
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='view-item-description'][data-part='view-item-description'][data-part='view-item-description'] {
+  font-size: var(--ds-font-size-xs);
+}
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='section-header'][data-part='section-header'][data-part='section-header'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* count + status pills: tabular-nums so tallies never jitter */
+.ds-structure.ds-saved-views-menu-panel [data-part='count-pill'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='status-pill'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 600;
+}
+
+/* action buttons: type per tone + deliberate hover/focus/active */
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'] {
+  font-size: var(--ds-font-size-xs);
+  font-weight: 600;
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary'] {
+  font-weight: 700;
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:hover {
+  background: color-mix(in srgb, var(--ds-surface-card) 70%, var(--ds-color-bg-primary) 30%);
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='action-button'][data-part='action-button'][data-tone='neutral']:hover {
+  border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:hover {
+  background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+}
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='action-button'][data-part='action-button'][data-tone='primary']:hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 38%, transparent);
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:active {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 60%, var(--ds-surface-card));
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:active {
+  background: color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
+}
+
+/* view items: the whole card lifts on hover; the select button keeps the
+   inset focus ring it already owns */
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item'] {
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item']:hover:not([data-active='true']) {
+  background: color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-primary) 4%);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+}
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='view-item'][data-part='view-item']:hover:not([data-active='true']) {
+  border-color: color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);
+}
+
+/* delete affordance: quiet until asked, then a measured danger whisper */
+.ds-structure.ds-saved-views-menu-panel [data-part='delete'] {
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='delete']:hover {
+  background: color-mix(in srgb, var(--ds-color-danger) 8%, transparent);
+  color: var(--ds-color-danger);
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='delete'][data-part='delete']:hover {
+  border-color: color-mix(in srgb, var(--ds-color-danger) 34%, transparent);
+}
+.ds-structure.ds-saved-views-menu-panel [data-part='delete']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-danger) 50%, transparent));
+}
+
+/* Reduced motion: every state change on the trigger and panel is a
+ * cross-fade; all of them go silent together. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-saved-views-menu[data-part='trigger'],
+  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'],
+  .ds-structure.ds-saved-views-menu-panel [data-part='view-item'],
+  .ds-structure.ds-saved-views-menu-panel [data-part='delete'] {
+    transition: none;
+  }
 }

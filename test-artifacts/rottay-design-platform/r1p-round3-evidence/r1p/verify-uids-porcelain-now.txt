@@ -1,0 +1,171 @@
+ M packages/core/scripts/app-ds-boundary-gate.baseline.json
+ M packages/core/scripts/app-ds-boundary-gate.mjs
+ M packages/core/scripts/app-ds-boundary-gate.test.mjs
+ M packages/core/scripts/build-vertical-artifacts.mjs
+ M packages/core/scripts/ci-gates.manifest.mjs
+ M packages/core/scripts/cra-12-motion-governance.registry.json
+ M packages/core/scripts/i18n-key-parity-gate.baseline.json
+ M packages/core/src/foundation/contracts/composition/tenants/themes/index.ts
+ M packages/core/src/foundation/i18n/runtime/catalog/translations/locales/ar/components.json
+ M packages/core/src/foundation/i18n/runtime/catalog/translations/locales/en/components.json
+ M packages/core/src/foundation/i18n/runtime/catalog/translations/locales/es/components.json
+ M packages/core/src/foundation/i18n/runtime/catalog/translations/locales/fr/components.json
+ M packages/core/src/foundation/i18n/runtime/catalog/translations/locales/pt/components.json
+ M packages/core/src/foundation/kernel/typography/index.ts
+ M packages/core/src/foundation/tokens/__tests__/first-party-artifacts-generated.test.ts
+ M packages/core/src/foundation/tokens/__tests__/first-party-artifacts-parity.test.ts
+ M packages/core/src/foundation/tokens/css/facade/artifacts/bithire/_source/extension.css
+ M packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css
+ M packages/core/src/foundation/tokens/css/facade/artifacts/evnto/_source/extension.css
+ M packages/core/src/foundation/tokens/css/facade/artifacts/evnto/index.css
+ M packages/core/src/foundation/tokens/css/facade/artifacts/rottay/_source/extension.css
+ M packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css
+ M packages/core/src/foundation/tokens/css/foundation/base/typography.css
+ M packages/core/src/foundation/tokens/css/foundation/themes/default.css
+ M packages/core/src/foundation/tokens/css/presentation/components/patterns.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/collection-header.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/column-menu.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/dashboard-header.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/detail-header.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/edit-header.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/export-button.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/field-filters-panel.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/form-header.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/mobile-header.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/saved-views-menu.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/search-command-bar.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/table-toolbar.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css
+ M packages/core/src/foundation/tokens/css/presentation/components/skin/widget-board.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/badge.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty-state.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-residual.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list-toolbar.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/modal.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pagination.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/sheet.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/table.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/timeline.css
+ M packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/workbench-header.css
+ M packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts
+ M packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts
+ M packages/core/src/foundation/tokens/ts/presentation/brand-themes/platform/index.ts
+ M packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts
+ M packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/i0-inventory.test.ts
+ M packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/premium-regression.test.ts
+ M packages/core/src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.ts
+ M packages/core/src/infrastructure/compilers/runtime/tenant-css/index.ts
+ M packages/core/src/infrastructure/compilers/runtime/tenant-css/visual-config/index.ts
+ M packages/core/src/infrastructure/runtime/theming/composition/react/provider/index.tsx
+ M packages/core/src/ui/patterns/data/list-toolbar/engines/modern/index.tsx
+ M packages/core/src/ui/patterns/data/widget-board/engines/foundation/index.tsx
+ M packages/core/src/ui/patterns/data/widget-board/tests/WidgetBoard.layout.test.tsx
+ M packages/core/src/ui/patterns/feedback/empty-state/engines/modern/index.tsx
+ M packages/core/src/ui/patterns/feedback/empty-state/tests/EmptyState.test.tsx
+ M packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx
+ M packages/core/src/ui/patterns/shell/cockpit-header/tests/CockpitHeader.test.tsx
+ M packages/core/src/ui/patterns/shell/page-shell/engines/modern/index.tsx
+ M packages/core/src/ui/patterns/shell/workbench-header/engines/modern/index.tsx
+ M packages/core/src/ui/patterns/shell/workbench-header/tests/WorkbenchHeader.test.tsx
+ M packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx
+ M packages/core/src/ui/primitives/display/Badge/OWNERSHIP.md
+ M packages/core/src/ui/primitives/display/Badge/engines/modern/index.tsx
+ M packages/core/src/ui/primitives/display/Card/engines/modern/index.tsx
+ M packages/core/src/ui/primitives/display/Card/tests/Card.pass1-contract.test.tsx
+ M packages/core/src/ui/primitives/display/Card/tests/Card.pass2-craft.test.tsx
+ M packages/core/src/ui/primitives/display/Empty/engines/modern/index.tsx
+ M packages/core/src/ui/primitives/display/Empty/tests/Empty.modern-engine.test.tsx
+ M packages/core/src/ui/primitives/display/Tag/engines/modern/index.tsx
+ M packages/core/src/ui/primitives/display/Tag/tests/Tag.modern-engine.test.tsx
+ M packages/core/src/ui/primitives/display/Tooltip/tests/Tooltip.positioning.test.tsx
+ M packages/core/src/ui/primitives/feedback/Drawer/engines/modern/index.tsx
+ M packages/core/src/ui/primitives/feedback/Modal/engines/modern/index.tsx
+ M packages/core/src/ui/primitives/feedback/Skeleton/engines/modern/index.tsx
+ M packages/core/src/ui/primitives/feedback/Skeleton/tests/Skeleton.integration.test.tsx
+ M packages/core/src/ui/primitives/feedback/Spinner/engines/modern/index.tsx
+ M packages/core/src/ui/primitives/feedback/Spinner/tests/Spinner.modern-engine.test.tsx
+ M packages/core/src/ui/primitives/inputs/Select/engines/modern/index.tsx
+ M packages/core/src/ui/primitives/inputs/Select/tests/Select.engine-advanced.test.tsx
+ M packages/core/src/ui/primitives/inputs/tests/FieldsBatch.real-engines.test.tsx
+ M packages/core/src/ui/primitives/navigation/Pagination/engines/modern/index.tsx
+ M packages/core/src/ui/primitives/navigation/Pagination/tests/Pagination.modern-engine.test.tsx
+ M packages/core/src/ui/primitives/navigation/Tabs/contracts/index.ts
+ M packages/core/src/ui/primitives/navigation/Tabs/engines/modern/index.tsx
+ M packages/core/src/ui/primitives/navigation/Tabs/tests/Tabs.integration.test.tsx
+ M packages/core/src/ui/primitives/overlay/Modal/engines/modern/index.tsx
+ M packages/core/src/ui/primitives/overlay/Popover/tests/Popover.modern-engine-advanced.test.tsx
+ M packages/core/src/ui/primitives/overlay/Popover/tests/Popover.positioning.test.tsx
+ M packages/core/src/ui/primitives/overlay/Sheet/engines/modern/index.tsx
+ M packages/core/src/ui/structures/headers/collection/index.tsx
+ M packages/core/src/ui/structures/headers/dashboard/index.tsx
+ M packages/core/src/ui/structures/headers/detail/index.tsx
+ M packages/core/src/ui/structures/headers/edit/index.tsx
+ M packages/core/src/ui/structures/headers/form/index.tsx
+ M packages/core/src/ui/structures/headers/mobile-header/runtime/rendering/index.tsx
+ M packages/core/src/ui/structures/headers/tests/HeadersBatch.contract.test.tsx
+ M packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx
+ M packages/core/src/ui/structures/shell/bottom-tab-bar/tests/BottomTabBar.test.tsx
+ M packages/core/src/ui/structures/shell/index.tsx
+ M packages/core/src/ui/structures/shell/tests/AppShell.test.tsx
+ M packages/core/src/ui/structures/workspace/active-filters-bar/index.tsx
+ M packages/core/src/ui/structures/workspace/column-menu/index.tsx
+ M packages/core/src/ui/structures/workspace/connected-command-palette/index.tsx
+ M packages/core/src/ui/structures/workspace/connected-command-palette/search-command-bar/index.tsx
+ M packages/core/src/ui/structures/workspace/export-button/index.tsx
+ M packages/core/src/ui/structures/workspace/field-filters-panel/index.tsx
+ M packages/core/src/ui/structures/workspace/saved-views-menu/index.tsx
+ M packages/core/src/ui/structures/workspace/scope-switcher/index.tsx
+ M packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx
+ M packages/core/src/ui/structures/workspace/table-toolbar/index.tsx
+ M packages/core/src/ui/structures/workspace/tests/WorkspaceChromeBatch.contract.test.tsx
+ M packages/core/src/ui/structures/workspace/view-mode-switcher/index.tsx
+ M packages/core/src/ui/surfaces/runtime/error-boundary/index.tsx
+ M packages/core/src/ui/surfaces/runtime/helpers/states/i18n/components/index.tsx
+ M packages/core/src/ui/surfaces/runtime/helpers/states/index.tsx
+ M packages/core/src/ui/surfaces/tests/SurfaceSectionCard.recipe-profile.test.tsx
+ M packages/core/styles/bithire.css
+ M packages/core/styles/evnto.css
+ M packages/core/styles/index.css
+ M packages/core/styles/platform.css
+ M packages/core/styles/rottay.css
+ M packages/core/supplier-contract.json
+?? packages/core/scripts/artifact-provenance-gate.baseline.json
+?? packages/core/scripts/artifact-provenance-gate.mjs
+?? packages/core/scripts/artifact-provenance-gate.test.mjs
+?? packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/mandatory-font-fallback.test.ts
+?? packages/core/src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/tests/
+?? packages/core/src/infrastructure/compilers/runtime/tenant-css/visual-config/tests/single-emitter.test.ts
+?? packages/core/src/infrastructure/compilers/runtime/tenant-css/visual-config/tests/text-contrast-composition.test.ts
+?? packages/core/src/infrastructure/runtime/foundation/root-attributes/ssr/tests/arabic-document-parity.test.tsx
+?? packages/core/src/infrastructure/runtime/theming/composition/react/provider/tests/mode-reachability.test.tsx
+?? packages/core/src/ui/patterns/data/list-toolbar/tests/ListToolbar.modern-search-skin.test.ts
+?? packages/core/src/ui/patterns/shell/page-shell/tests/PatternPageShell.modern-craft.test.tsx
+?? packages/core/src/ui/patterns/visualization/timeline/tests/PatternTimeline.modern-skin-ownership.test.tsx
+?? packages/core/src/ui/primitives/display/Badge/tests/Badge.i18n.test.tsx
+?? packages/core/src/ui/primitives/feedback/Drawer/tests/Drawer.modern-i18n-floor.test.tsx
+?? packages/core/src/ui/primitives/feedback/Modal/tests/Modal.modern-skin-ownership.test.tsx
+?? packages/core/src/ui/primitives/inputs/Input/tests/Input.skin-ownership.test.ts
+?? packages/core/src/ui/primitives/inputs/Select/tests/Select.modern-skin-contract.test.tsx
+?? packages/core/src/ui/primitives/navigation/Tabs/tests/Tabs.i18n.test.tsx
+?? packages/core/src/ui/primitives/overlay/Modal/tests/Modal.modern-skin-ownership.test.tsx
+?? packages/core/src/ui/primitives/overlay/Sheet/tests/Sheet.modern-skin-ownership.test.tsx
+?? packages/core/src/ui/structures/headers/mobile-header/tests/MobileHeader.modern.test.tsx
+?? packages/core/src/ui/structures/shell/bottom-tab-bar/tests/BottomTabBar.modern-engine.test.tsx
+?? packages/core/src/ui/surfaces/runtime/error-boundary/tests/
+?? packages/core/src/ui/surfaces/runtime/helpers/states/tests/
+?? packages/showroom/src/app/probe/wl-canary/

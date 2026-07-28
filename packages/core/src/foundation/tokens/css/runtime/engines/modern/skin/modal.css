@@ -71,10 +71,20 @@
 }
 
 /* ---- header / footer dividers: `--ds-modal-section-border` is stamped on the
-        surface and inherits down; it resolves to `none` when `divider` is off. ---- */
+        surface and inherits down; it resolves to `none` when `divider` is off.
+        Section LAYOUT also lives here (the engine stamps parts only): the
+        header/footer flex frames and paddings moved out of the engine's
+        inline styles so one owner holds the section chrome. ---- */
 .rottay-modal-root--modern.rottay-modal-root--modern
   > [data-part='surface']
   > [data-part='header'][data-part='header'] {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3);
+  padding-block: var(--ds-modal-section-padding-block, var(--ds-spacing-4));
+  padding-inline: var(--ds-modal-section-padding-inline, var(--ds-spacing-6));
+  flex-shrink: 0;
   border-bottom: var(--ds-modal-section-border);
   background-color: var(--ds-modal-header-bg, var(--ds-color-surface-raised));
   background-image:
@@ -85,6 +95,13 @@
 .rottay-modal-root--modern.rottay-modal-root--modern
   > [data-part='surface']
   > [data-part='footer'][data-part='footer'] {
+  display: flex;
+  align-items: center;
+  justify-content: var(--ds-modal-footer-justify, flex-end);
+  gap: var(--ds-modal-footer-gap, var(--ds-spacing-2));
+  padding-block: var(--ds-modal-section-padding-block, var(--ds-spacing-4));
+  padding-inline: var(--ds-modal-section-padding-inline, var(--ds-spacing-6));
+  flex-shrink: 0;
   border-top: var(--ds-modal-section-border);
   background-color: var(--ds-modal-footer-bg, var(--ds-color-surface-raised));
   background-image: var(--ds-gradient-surface, none);
@@ -95,9 +112,14 @@
 .rottay-modal-root--modern > [data-part='surface'] > [data-part='header'] > [data-part='heading-group'] {
   display: grid;
   gap: var(--ds-spacing-xs);
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .rottay-modal-root--modern > [data-part='surface'] > [data-part='header'] [data-part='title'] {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--ds-modal-title-color, var(--ds-color-text-primary));
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-modal-title-size, var(--ds-font-size-lg));
@@ -115,12 +137,20 @@
   line-height: var(--ds-line-height-relaxed);
 }
 
-/* ---- close button (ghost square). The `:hover` rule reproduces the deleted
-        mouseenter/mouseleave `.style.backgroundColor` writes. ---- */
+/* ---- close button (ghost square). Geometry lives here too -- the engine
+        stamps the part and nothing else. The `:hover` rule reproduces the
+        deleted mouseenter/mouseleave `.style.backgroundColor` writes. ---- */
 .rottay-modal-root--modern
   > [data-part='surface']
   > [data-part='header']
   [data-part='close-button'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-modal-close-size, 2rem);
+  block-size: var(--ds-modal-close-size, 2rem);
+  flex-shrink: 0;
+  cursor: pointer;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
   background-color: color-mix(in srgb, var(--ds-color-surface) 88%, transparent);
@@ -198,13 +228,29 @@
   > [data-part='footer']
   > [data-part='action'] {
   min-block-size: var(--ds-control-height-md);
+  padding-block: var(--ds-modal-action-padding-block, var(--ds-spacing-2));
+  padding-inline: var(--ds-modal-action-padding-inline, var(--ds-spacing-4));
+  cursor: pointer;
   font-family: var(--ds-font-family-base);
+  font-size: var(--ds-modal-action-font-size, var(--ds-font-size-sm));
   font-weight: var(--ds-font-weight-semibold);
   transition:
     background-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
     border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
     box-shadow var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
+    opacity var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
     transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard);
+}
+
+/* The confirm-pending state (confirmLoading) is skin-owned: the engine only
+   sets the `disabled` attribute. `cursor: wait` communicates the in-flight
+   cost of the action; the dim keeps it legible, not hidden. */
+.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action']:disabled {
+  cursor: wait;
+  opacity: var(--ds-modal-action-disabled-opacity, 0.7);
 }
 
 .rottay-modal-root--modern

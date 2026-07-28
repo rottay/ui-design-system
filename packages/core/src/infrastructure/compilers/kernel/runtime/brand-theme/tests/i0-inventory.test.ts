@@ -26,6 +26,34 @@ import type { BrandTheme } from "@/foundation/contracts/composition/tenants/them
 
 const DIST = resolve(process.cwd(), "dist");
 const CSS_SRC = resolve(process.cwd(), "src/foundation/tokens/css");
+
+/**
+ * Resolve what a channel actually computes to in one mode.
+ *
+ * A compiled mode block carries ONLY the channels that mode changes, so
+ * "is this declaration inside the dark block" stopped being a meaningful
+ * question the moment BrandTheme.modes replaced the hand-written blocks — a
+ * channel absent from the block is inherited from the base block, which is the
+ * whole point. These assertions ask what renders instead of where it is
+ * written, which is also what they were trying to prove all along.
+ */
+function modeEffective(artifact: string, mode: "light" | "dark") {
+  const section = (marker: string): Record<string, string> => {
+    const start = artifact.indexOf(marker);
+    if (start < 0) return {};
+    const open = artifact.indexOf("{", start);
+    const close = artifact.indexOf("\n}", open);
+    const out: Record<string, string> = {};
+    for (const line of artifact.slice(open + 1, close).split("\n")) {
+      const match = /^\s*(--[\w-]+):\s*(.+);\s*$/.exec(line);
+      if (match) out[match[1]] = match[2];
+    }
+    return out;
+  };
+  const base = section("=== Compiled from BrandTheme via compileBrandTheme");
+  const overlay = section(`=== Compiled from BrandTheme.modes.${mode}`);
+  return (channel: string): string | undefined => overlay[channel] ?? base[channel];
+}
 const PKG_JSON = JSON.parse(
   readFileSync(resolve(process.cwd(), "package.json"), "utf-8")
 );
@@ -764,12 +792,11 @@ describe("H3 contract: bithire", () => {
       resolve(CSS_SRC, "facade/artifacts/bithire/index.css"),
       "utf-8"
     );
-    // Split at the projected dark selector (not the :not() pseudo in the light block).
-    const darkSelector =
-      ':is(html[data-tenant="bithire"], :where([data-ds-root][data-vertical=\'bithire\']))[data-theme="dark"]';
-    const darkIdx = artifact.indexOf(darkSelector);
+    const darkIdx = artifact.indexOf(
+      "=== Compiled from BrandTheme.modes.dark",
+    );
     const lightBlock = darkIdx > 0 ? artifact.slice(0, darkIdx) : artifact;
-    const darkBlock = darkIdx > 0 ? artifact.slice(darkIdx) : "";
+    const dark = modeEffective(artifact, "dark");
 
     it("light: radius scale sm/md/lg/xl", () => {
       expect(lightBlock).toContain("--ds-radius-sm: 7px");
@@ -785,26 +812,21 @@ describe("H3 contract: bithire", () => {
       expect(lightBlock).toContain(`--ds-shadow-xl: ${authored.xl}`);
     });
     it("dark: radius scale matches light", () => {
-      expect(darkBlock).toContain("--ds-radius-sm: 7px");
-      expect(darkBlock).toContain("--ds-radius-md: 10px");
-      expect(darkBlock).toContain("--ds-radius-lg: 14px");
-      expect(darkBlock).toContain("--ds-radius-xl: 18px");
+      // Shape does not change with mode, so the overlay restates none of it and
+      // dark inherits the base scale. Asserting inheritance is the point.
+      expect(dark("--ds-radius-sm")).toBe("7px");
+      expect(dark("--ds-radius-md")).toBe("10px");
+      expect(dark("--ds-radius-lg")).toBe("14px");
+      expect(dark("--ds-radius-xl")).toBe("18px");
     });
     it("dark: shadow scale uses the authored dark elevation set", () => {
-      // Dark mode carries its own compact elevation set authored in the
-      // BitHire extension, using the same blue-petrol neutral authority.
-      expect(darkBlock).toContain(
-        "--ds-shadow-sm: 0 1px 2px rgba(20, 40, 59, 0.06)"
-      );
-      expect(darkBlock).toContain(
-        "--ds-shadow-md: 0 4px 12px rgba(20, 40, 59, 0.08)"
-      );
-      expect(darkBlock).toContain(
-        "--ds-shadow-lg: 0 8px 24px rgba(20, 40, 59, 0.1)"
-      );
-      expect(darkBlock).toContain(
-        "--ds-shadow-xl: 0 16px 48px rgba(20, 40, 59, 0.12)"
-      );
+      // Elevation DOES change with mode: dark carries its own compact set on
+      // the same blue-petrol neutral authority, now authored in
+      // modes.dark.surfaces.shadows instead of the extension.
+      expect(dark("--ds-shadow-sm")).toBe("0 1px 2px rgba(20, 40, 59, 0.06)");
+      expect(dark("--ds-shadow-md")).toBe("0 4px 12px rgba(20, 40, 59, 0.08)");
+      expect(dark("--ds-shadow-lg")).toBe("0 8px 24px rgba(20, 40, 59, 0.1)");
+      expect(dark("--ds-shadow-xl")).toBe("0 16px 48px rgba(20, 40, 59, 0.12)");
     });
     it("no stale 4px radius in either block", () => {
       expect(artifact).not.toContain("--ds-radius-sm: 4px");
@@ -883,7 +905,10 @@ describe("H3 contract: bithire", () => {
         resolve(CSS_SRC, "facade/artifacts/bithire/index.css"),
         "utf-8"
       );
-      expect(artifact).toContain("--ds-button-default-bg: #FFFFFF");
+      // R1-P moved the value that actually shipped (the artifact extension's
+      // semantic control token) into the theme, so the default button surface
+      // is the token rather than the literal it used to be shadowed with.
+      expect(artifact).toContain("--ds-button-default-bg: var(--ds-control-surface)");
       expect(artifact).toContain("--ds-button-ghost-bg: transparent");
     });
     it("artifact has disabled vars", () => {
@@ -915,7 +940,7 @@ describe("H3 contract: bithire", () => {
       );
       expect(css).toContain("--ds-layout-bg: #F4F7FA");
       expect(css).toContain("--ds-shell-grid-size: 0px");
-      expect(css).toContain("--ds-button-default-bg: #FFFFFF");
+      expect(css).toContain("--ds-button-default-bg: var(--ds-control-surface)");
       expect(css).toContain("--ds-button-disabled-opacity: 0.45");
     });
   });
@@ -1067,10 +1092,7 @@ describe("H3 contract: evnto", () => {
       resolve(CSS_SRC, "facade/artifacts/evnto/index.css"),
       "utf-8"
     );
-    const darkSelector =
-      ":is(html[data-tenant='evnto'], :where([data-ds-root][data-vertical='evnto']))[data-theme='dark']";
-    const darkIdx = artifact.indexOf(darkSelector);
-    const darkBlock = darkIdx > 0 ? artifact.slice(darkIdx) : "";
+    const dark = modeEffective(artifact, "dark");
     it("artifact: radius-sm is 10px", () => {
       expect(artifact).toContain("--ds-radius-sm: 10px");
     });
@@ -1093,33 +1115,33 @@ describe("H3 contract: evnto", () => {
       expect(artifact).toContain("--ds-button-disabled-opacity: 0.4");
       expect(artifact).toContain("--ds-input-disabled-opacity: 0.4");
     });
-    it("dark block: radius matches authored", () => {
-      expect(darkBlock).toContain("--ds-radius-sm: 10px");
-      expect(darkBlock).toContain("--ds-radius-xl: 24px");
+    it("dark: radius matches authored", () => {
+      expect(dark("--ds-radius-sm")).toBe("10px");
+      expect(dark("--ds-radius-xl")).toBe("24px");
     });
-    it("dark block: shadow matches authored", () => {
+    it("dark: shadow matches authored", () => {
       const authored = evntoBrandTheme.surfaces!.shadows!;
-      expect(darkBlock).toContain(`--ds-shadow-sm: ${authored.sm}`);
+      expect(dark("--ds-shadow-sm")).toBe(authored.sm);
     });
-    it("dark block: layout present", () => {
-      expect(darkBlock).toContain("--ds-layout-bg");
-      expect(darkBlock).toContain("--ds-layout-sider-bg");
+    it("dark: layout carries its own ground", () => {
+      expect(dark("--ds-layout-bg")).toBe("#131210");
+      expect(dark("--ds-layout-sider-bg")).toBe("#0E0D0B");
     });
-    it("dark block: shell present", () => {
-      expect(darkBlock).toContain("--ds-shell-grid-size: 0px");
+    it("dark: shell stays minimal", () => {
+      expect(dark("--ds-shell-grid-size")).toBe("0px");
     });
-    it("dark block: controls complete", () => {
-      expect(darkBlock).toContain("--ds-button-default-bg");
-      expect(darkBlock).toContain("--ds-button-ghost-bg");
-      expect(darkBlock).toContain("--ds-button-disabled-opacity: 0.4");
+    it("dark: controls complete", () => {
+      expect(dark("--ds-button-default-bg")).toBe("#1C1A16");
+      expect(dark("--ds-button-ghost-bg")).toBe("transparent");
+      expect(dark("--ds-button-disabled-opacity")).toBe("0.4");
     });
-    it("dark block: table metadata", () => {
-      expect(darkBlock).toContain("--ds-table-header-color");
-      expect(darkBlock).toContain("--ds-table-header-font-weight: 500");
+    it("dark: table metadata", () => {
+      expect(dark("--ds-table-header-color")).toBe("#A8A898");
+      expect(dark("--ds-table-header-font-weight")).toBe("500");
     });
-    it("dark block: disabled treatment", () => {
-      expect(darkBlock).toContain("--ds-input-disabled-opacity: 0.4");
-      expect(darkBlock).toContain("--ds-input-border-color-disabled");
+    it("dark: disabled treatment", () => {
+      expect(dark("--ds-input-disabled-opacity")).toBe("0.4");
+      expect(dark("--ds-input-border-color-disabled")).toBeDefined();
     });
     it("generated CSS includes chrome", () => {
       const css = generateTenantCss(

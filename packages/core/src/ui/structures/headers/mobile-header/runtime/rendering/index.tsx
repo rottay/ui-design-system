@@ -31,6 +31,7 @@ import type { CSSProperties } from 'react';
 import { Box } from '@/ui/primitives/layout/Box';
 import { Flex } from '@/ui/primitives/layout/Flex';
 import { Text } from '@/ui/primitives/display/Typography';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 import type { MobileHeaderProps } from '../../contracts';
 
@@ -77,11 +78,16 @@ export function MobileHeader({
   style,
   children,
 }: MobileHeaderProps) {
+  // Accessible back-button label via the DS i18n channel with an English floor.
+  const i18n = useOptionalTranslation('common');
+  const backAriaLabel = i18n?.tOr('go_back', 'Go back') ?? 'Go back';
+
   // Determine the left slot content
   const leftSlot = leftAction ?? (
     onBack ? (
       <Box
         as="button"
+        type="button"
         onClick={onBack}
         className="rottay-mobile-header__back"
         style={{
@@ -93,7 +99,7 @@ export function MobileHeader({
           minHeight: 44,
           padding: 0,
         } as CSSProperties}
-        aria-label="Go back"
+        aria-label={backAriaLabel}
         data-testid="mobile-header-back"
         data-part="trigger"
       >
@@ -125,14 +131,15 @@ export function MobileHeader({
       data-testid="mobile-header"
       role="banner"
       data-part="root"
+      data-sticky={sticky}
     >
       <Flex
         align="center"
         justify="between"
         style={{
           height: '100%',
-          paddingLeft: 4,
-          paddingRight: 4,
+          paddingInlineStart: 4,
+          paddingInlineEnd: 4,
           position: 'relative',
         }}
       >
@@ -145,6 +152,7 @@ export function MobileHeader({
             alignItems: 'center',
           }}
           data-testid="mobile-header-left"
+          data-part="left"
         >
           {leftSlot}
         </Box>
@@ -155,8 +163,8 @@ export function MobileHeader({
             flex: 1,
             overflow: 'hidden',
             textAlign: 'center',
-            paddingLeft: 8,
-            paddingRight: 8,
+            paddingInlineStart: 8,
+            paddingInlineEnd: 8,
           }}
         >
           {title && (
@@ -188,6 +196,7 @@ export function MobileHeader({
             justifyContent: 'flex-end',
           }}
           data-testid="mobile-header-right"
+          data-part="right"
         >
           {rightActions}
         </Box>

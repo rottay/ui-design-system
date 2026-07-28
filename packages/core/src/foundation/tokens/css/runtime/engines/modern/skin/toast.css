@@ -82,7 +82,7 @@
   background: color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary));
   border: 1px solid color-mix(in srgb, var(--ds-toast-accent) 26%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-md);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 56%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 56%, transparent);
 }
 
 .rottay-toast--modern[data-part='root'][data-tone='gradient'] [data-part='icon'] {
@@ -157,8 +157,8 @@
 }
 .rottay-toast--modern[data-part='root'] [data-part='action']:focus-visible,
 .rottay-toast--modern[data-part='root'] [data-part='close-button']:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--ds-toast-accent) 56%, transparent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--ds-shadow-focus-ring);
 }
 
 .rottay-toast--modern[data-part='root'] > [data-part='progress-bar'] {
@@ -178,6 +178,17 @@
   .rottay-toast--modern[data-part='root'] [data-part='action'],
   .rottay-toast--modern[data-part='root'] [data-part='close-button'],
   .rottay-toast--modern[data-part='root'] > [data-part='progress-bar'] {
-    transition-duration: 0.01ms;
+    transition: none;
+  }
+}
+
+/* forced-colors: shadow rings vanish, so the focus channel degrades to a
+   system outline. */
+@media (forced-colors: active) {
+  .rottay-toast--modern[data-part='root'] [data-part='action']:focus-visible,
+  .rottay-toast--modern[data-part='root'] [data-part='close-button']:focus-visible {
+    outline: 2px solid CanvasText;
+    outline-offset: 2px;
+    box-shadow: none;
   }
 }

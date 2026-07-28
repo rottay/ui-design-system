@@ -37,12 +37,17 @@ import type { PageShellProps } from '../../contracts';
 import Button from '../../../../../primitives/inputs/Button/engines/modern';
 import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /* ------------------------------------------------------------------ */
-/* Shared style constants                                              */
+/* RTL-aware direction reading (same contract as the data-table engine) */
 /* ------------------------------------------------------------------ */
 
-const TRANSITION_FAST = 'var(--ds-motion-fast) var(--ds-motion-ease-out)';
+function readDirectionAt(node: Element): 'ltr' | 'rtl' {
+  const explicit = node.closest('[dir]')?.getAttribute('dir');
+  if (explicit === 'rtl' || explicit === 'ltr') return explicit;
+  return getComputedStyle(node).direction === 'rtl' ? 'rtl' : 'ltr';
+}
 
 /* ------------------------------------------------------------------ */
 /* BreadcrumbLink                                                      */
@@ -79,12 +84,6 @@ function BreadcrumbItem({
               }
             : undefined
         }
-        style={{
-          fontWeight: 500,
-          textDecoration: 'none',
-          transition: `color ${TRANSITION_FAST}`,
-          cursor: 'pointer',
-        }}
       >
         {label}
       </a>
@@ -96,9 +95,6 @@ function BreadcrumbItem({
       data-part="crumb"
       data-interactive="false"
       data-last={isLast ? 'true' : 'false'}
-      style={{
-        fontWeight: isLast ? 600 : 500,
-      }}
     >
       {label}
     </span>
@@ -126,21 +122,10 @@ function TabButton({
       type="button"
       role="tab"
       aria-selected={isActive}
+      tabIndex={isActive ? 0 : -1}
       onClick={onClick}
       data-part="tab"
       data-active={isActive ? 'true' : 'false'}
-      style={{
-        position: 'relative',
-        minHeight: 'var(--ds-tabs-md-height)',
-        padding: 'var(--ds-tabs-md-padding)',
-        fontSize: 'var(--ds-tabs-md-font-size)',
-        fontWeight: isActive
-          ? 'var(--ds-tabs-item-font-weight-active)'
-          : 'var(--ds-tabs-item-font-weight)',
-        lineHeight: 'var(--ds-line-height-body)',
-        cursor: 'pointer',
-        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}, box-shadow ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
-      }}
     >
       {label}
     </button>
@@ -157,10 +142,13 @@ function TabButton({
 function BackButton({
   label,
   ariaLabel,
+  fallbackLabel,
   onClick,
 }: {
   label?: string;
   ariaLabel?: string;
+  /** i18n-resolved English-floor label used when neither label nor ariaLabel is set. */
+  fallbackLabel: string;
   onClick: () => void;
 }) {
   return (
@@ -175,13 +163,13 @@ function BackButton({
         size="sm"
         shape={label ? 'default' : 'circle'}
         onClick={onClick}
-        aria-label={ariaLabel ?? label ?? 'Back'}
+        aria-label={ariaLabel ?? label ?? fallbackLabel}
         style={{ flexShrink: 0 }}
         icon={(
           <NavigationBackIcon size={15} decorative />
         )}
       >
-        {label ?? <span className="ds-sr-only">{ariaLabel ?? 'Back'}</span>}
+        {label ?? <span className="ds-sr-only">{ariaLabel ?? fallbackLabel}</span>}
       </Button>
     </span>
   );
@@ -223,6 +211,16 @@ export default function ModernPageShell(props: PageShellProps) {
     style,
   } = props;
 
+  /* ---- Guarded i18n channel (K4 idiom): chrome labels resolve through the
+          catalogs when an I18nProvider is mounted; without one the documented
+          English floor renders, byte-identical to the pre-i18n contract. ---- */
+  const i18nCommon = useOptionalTranslation('common');
+  const i18nComponents = useOptionalTranslation('components');
+  const breadcrumbLabel = i18nCommon?.tOr('breadcrumb', 'Breadcrumb') ?? 'Breadcrumb';
+  const backFallbackLabel = i18nCommon?.tOr('back', 'Back') ?? 'Back';
+  const pageTabsLabel =
+    i18nComponents?.tOr('pageShell.tabs.label', 'Page tabs') ?? 'Page tabs';
+
   /* ---- Loading skeleton ---- */
   if (loading) {
     return (
@@ -230,6 +228,7 @@ export default function ModernPageShell(props: PageShellProps) {
         className={`ds-pattern-page-shell ds-pattern-page-shell--loading ds-engine-modern ${className ?? ''}`}
         data-part="root"
         data-loading="true"
+        aria-busy="true"
         style={{
           padding: 'var(--ds-page-shell-header-padding)',
           maxWidth: maxWidth ?? undefined,
@@ -306,6 +305,35 @@ export default function ModernPageShell(props: PageShellProps) {
   /* Default to the first tab when no activeTab is explicitly set */
   const activeTabKey = activeTab ?? tabs?.[0]?.key;
 
+  /* ---- APG tabs keyboard contract: roving focus with automatic activation.
+          Arrow keys are logical (RTL mirrors Left/Right); Home/End jump. ---- */
+  const handleTabsKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!tabs || tabs.length === 0) return;
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    event.preventDefault();
+    const list = event.currentTarget;
+    const buttons = Array.from(list.querySelectorAll<HTMLButtonElement>('[data-part="tab"]'));
+    if (buttons.length === 0) return;
+    const focusedIndex = buttons.indexOf(document.activeElement as HTMLButtonElement);
+    const fromIndex =
+      focusedIndex >= 0 ? focusedIndex : tabs.findIndex((tab) => tab.key === activeTabKey);
+    let nextIndex = fromIndex;
+    if (event.key === 'Home') {
+      nextIndex = 0;
+    } else if (event.key === 'End') {
+      nextIndex = buttons.length - 1;
+    } else {
+      const delta = event.key === 'ArrowRight' ? 1 : -1;
+      const logicalDelta = readDirectionAt(list) === 'rtl' ? -delta : delta;
+      nextIndex = (fromIndex + logicalDelta + buttons.length) % buttons.length;
+    }
+    const target = buttons[nextIndex];
+    if (!target) return;
+    target.focus();
+    const targetKey = tabs[nextIndex]?.key;
+    if (targetKey && targetKey !== activeTabKey) onTabChange?.(targetKey);
+  };
+
   return (
     <div
       className={`ds-pattern-page-shell ds-engine-modern ${className ?? ''}`}
@@ -331,15 +359,13 @@ export default function ModernPageShell(props: PageShellProps) {
         {/* ---- Breadcrumb trail ---- */}
         {breadcrumbs && breadcrumbs.length > 0 && (
           <nav
-            aria-label="Breadcrumb"
+            aria-label={breadcrumbLabel}
             data-part="breadcrumb"
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: 'var(--ds-spacing-2, 8px)',
               marginBottom: 'var(--ds-spacing-3, 12px)',
-              fontSize: 'var(--ds-font-size-sm)',
-              lineHeight: 'var(--ds-line-height-body)',
             }}
           >
             {breadcrumbs.map((bc, idx) => {
@@ -351,7 +377,6 @@ export default function ModernPageShell(props: PageShellProps) {
                       data-part="separator"
                       style={{
                         userSelect: 'none',
-                        fontSize: 12,
                       }}
                       aria-hidden="true"
                     >
@@ -393,7 +418,12 @@ export default function ModernPageShell(props: PageShellProps) {
             }}
           >
             {back && (
-              <BackButton label={back.label} ariaLabel={back.ariaLabel} onClick={back.onClick} />
+              <BackButton
+                label={back.label}
+                ariaLabel={back.ariaLabel}
+                fallbackLabel={backFallbackLabel}
+                onClick={back.onClick}
+              />
             )}
 
             {icon ? (
@@ -418,19 +448,6 @@ export default function ModernPageShell(props: PageShellProps) {
               >
                 <h1
                   data-part="title"
-                  style={{
-                    margin: 0,
-                    // W6-A cqi proof consumer: the fluid ramp only resolves against a
-                    // `container-type` ancestor (the page-shell root, declared in the
-                    // engine skin). At full container width this equals the prior
-                    // static 24px exactly; it steps down toward 20px as the shell is
-                    // squeezed by a sibling rail/chat panel.
-                    fontSize: 'var(--ds-font-size-fluid-2xl, 1.5rem)',
-                    fontWeight: 'var(--ds-font-weight-bold)',
-                    lineHeight: 'var(--ds-line-height-display)',
-                    letterSpacing: 'var(--ds-letter-spacing-display)',
-                    textWrap: 'balance',
-                  }}
                 >
                   {title}
                 </h1>
@@ -439,11 +456,6 @@ export default function ModernPageShell(props: PageShellProps) {
               {subtitle && (
                 <p
                   data-part="subtitle"
-                  style={{
-                    margin: '4px 0 0',
-                    fontSize: 'var(--ds-font-size-md)',
-                    lineHeight: 'var(--ds-line-height-body)',
-                  }}
                 >
                   {subtitle}
                 </p>
@@ -478,8 +490,9 @@ export default function ModernPageShell(props: PageShellProps) {
           /* Tab strip acts as the separator */
           <div
             role="tablist"
-            aria-label="Page tabs"
+            aria-label={pageTabsLabel}
             data-part="tabs"
+            onKeyDown={handleTabsKeyDown}
             style={{
               display: 'flex',
               alignItems: 'center',

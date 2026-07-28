@@ -53,8 +53,19 @@
  * that tag despite its panel referencing the same animation name (a real
  * missing-keyframe dependency gap). Renamed `ds-date-picker-slide-in` and moved
  * here (loads once, globally, for both `DatePickerBase` and `RangePicker`,
- * structurally fixing the gap); `panelStyle.animation`'s inline reference was
- * updated to match.
+ * structurally fixing the gap). The animation REFERENCE later left the inline
+ * `panelStyle` as well: the panel rule below owns `animation` so the
+ * reduced-motion block has full authority (an inline style would win).
+ *
+ * STATE-PAINT DRAIN (2026-07 lane-A pass): cell font-weight/opacity state
+ * ternaries, the clear-button JS opacity hover (onMouseEnter/onMouseLeave),
+ * every inline `transition`, the panel width, and the today-button emphasis
+ * moved here. New anatomy attributes stamped by the engine to make that
+ * possible: `data-outside-month` (day cells) and `data-decade-edge` (year
+ * cells). Interaction states completed: trigger hover/focus-visible/disabled,
+ * nav-button hover/focus-visible, date-cell `:focus-visible` ring (replacing
+ * the suppressed outline), today-button hover/focus-visible, coarse-pointer
+ * 44px floors, and the reduced-motion block.
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
@@ -86,6 +97,19 @@
 .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status='warning'] {
   border-color: var(--ds-color-warning);
 }
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-part='trigger-input']:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']) {
+  border-color: var(--ds-datepicker-border-hover, var(--ds-color-border-hover));
+}
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-part='trigger-input']:focus-visible {
+  border-color: var(--ds-datepicker-border-focus, var(--ds-color-primary));
+}
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input']:focus-visible {
+  box-shadow: var(--ds-datepicker-shadow-focus, var(--ds-shadow-focus-ring));
+}
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input']:disabled {
+  opacity: var(--ds-disabled-opacity, 0.5);
+  cursor: not-allowed;
+}
 
 .rottay-datepicker.rottay-datepicker--modern [data-part='clear-button'] {
   transform: translateY(-50%);
@@ -93,6 +117,11 @@
   border: none;
   border-radius: 50%;
   color: var(--ds-color-text-primary);
+  opacity: var(--ds-datepicker-clear-opacity, 0.5);
+  transition: opacity var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.rottay-datepicker.rottay-datepicker--modern [data-part='clear-button']:hover {
+  opacity: 1;
 }
 
 .rottay-datepicker.rottay-datepicker--modern [data-part='calendar-icon'] {
@@ -117,6 +146,19 @@
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status='warning'] {
   border-color: var(--ds-color-warning);
 }
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-part='trigger-input']:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']) {
+  border-color: var(--ds-datepicker-border-hover, var(--ds-color-border-hover));
+}
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-part='trigger-input']:focus-visible {
+  border-color: var(--ds-datepicker-border-focus, var(--ds-color-primary));
+}
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input']:focus-visible {
+  box-shadow: var(--ds-datepicker-shadow-focus, var(--ds-shadow-focus-ring));
+}
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input']:disabled {
+  opacity: var(--ds-disabled-opacity, 0.5);
+  cursor: not-allowed;
+}
 .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-active='true'] {
   box-shadow: 0 0 0 2px var(--ds-color-primary);
 }
@@ -130,6 +172,11 @@
   color: var(--ds-color-text-primary);
   border-radius: 50%;
   border: none;
+  opacity: var(--ds-datepicker-clear-opacity, 0.5);
+  transition: opacity var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='clear-button']:hover {
+  opacity: 1;
 }
 
 /* ---------------------------------------------------------------------
@@ -141,6 +188,18 @@
   background: var(--ds-color-bg-elevated);
   border-radius: var(--ds-radius-lg, 12px);
   box-shadow: var(--ds-datepicker-panel-shadow, var(--ds-shadow-popover, var(--ds-card-shadow)));
+  /* Skin-owned width (drained from the inline panelStyle): date mode reads the
+     base channel, month/year the compact one. max-inline-size is the <400px
+     guard so a fixed width never overflows a narrow viewport. */
+  inline-size: var(--ds-datepicker-panel-width, 288px);
+  max-inline-size: calc(100vw - 2 * var(--ds-spacing-4, 16px));
+  /* Skin-owned entrance (drained from inline panelStyle.animation) so the
+     reduced-motion block below can govern it; inline styles would win. */
+  animation: ds-date-picker-slide-in var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='month'],
+.rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='year'] {
+  inline-size: var(--ds-datepicker-panel-width-compact, 256px);
 }
 .rottay-datepicker-panel.rottay-datepicker-panel--modern[data-part='panel'][data-part='panel'] {
   border: 1px solid var(--ds-color-border);
@@ -151,14 +210,24 @@
   border: none;
   background: transparent;
   color: var(--ds-color-text-primary);
+  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='nav-button']:hover {
+  background: var(--ds-color-bg-hover);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='nav-button']:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-datepicker-shadow-focus, var(--ds-shadow-focus-ring));
 }
 
 .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='panel-title'] {
   color: var(--ds-color-text-primary);
+  font-weight: var(--ds-font-weight-semibold, 600);
 }
 
 .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='weekday-header'] {
   color: var(--ds-color-text-muted);
+  font-weight: var(--ds-font-weight-medium, 500);
 }
 
 /* Cell -- shared by the date/month/year grids (see header comment). */
@@ -167,9 +236,37 @@
   border: none;
   background: transparent;
   color: var(--ds-color-text-primary);
+  /* Skin-owned so reduced-motion can silence it (inline would win). Covers the
+     two properties states actually animate: hover background + scale. */
+  transition:
+    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] [data-part='cell'] {
   outline: none;
+}
+/* Keyboard focus replacement for the suppressed outline (date grid cells are
+   roving-tabIndex buttons); month/year cells keep their native outline. */
+.rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] [data-part='cell']:focus-visible {
+  box-shadow: var(--ds-datepicker-shadow-focus, var(--ds-shadow-focus-ring));
+}
+/* Emphasis paint drained from inline gridCellStyle/gridBtnStyle state
+   ternaries -- the attributes were already stamped for selection/today. */
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-today='true'],
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-selected='true'] {
+  font-weight: var(--ds-font-weight-semibold, 600);
+}
+/* Muted paint drained from the inline opacity ternaries: disabled day cells
+   (0.2), out-of-month day cells (0.3), decade-edge year cells (0.4) -- each
+   keeps its original value as the channel fallback (fallback-parity). */
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-disabled='true'] {
+  opacity: var(--ds-datepicker-cell-disabled-opacity, 0.2);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] [data-part='cell'][data-outside-month='true']:not([data-disabled='true']) {
+  opacity: var(--ds-datepicker-cell-outside-opacity, 0.3);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='year'] [data-part='cell'][data-decade-edge='true'] {
+  opacity: var(--ds-datepicker-cell-decade-edge-opacity, 0.4);
 }
 .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-in-range='true']:not([data-selected='true']) {
   background: var(--ds-color-bg-hover);
@@ -204,18 +301,28 @@
 }
 .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='time-column'] span {
   color: var(--ds-color-text-primary);
+  font-weight: var(--ds-font-weight-bold, 700);
 }
 
 .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='footer'][data-part='footer'] {
   border-top: 1px solid var(--ds-color-border);
 }
 
-/* today-button: static, no hover -- matches TimePicker's now-button gap. */
+/* today-button: primary CTA treatment with the standard hover/focus posture. */
 .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='today-button'] {
   border-radius: var(--ds-radius-md, 8px);
   border: none;
   background: var(--ds-color-primary);
   color: var(--ds-color-white);
+  font-weight: var(--ds-font-weight-medium, 500);
+  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='today-button']:hover {
+  background: var(--ds-color-primary-hover, var(--ds-color-primary));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='today-button']:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-datepicker-shadow-focus, var(--ds-shadow-focus-ring));
 }
 
 @keyframes ds-date-picker-slide-in {
@@ -226,5 +333,46 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+/* Coarse-pointer floor (responsive law): interactive parts reach 44px via
+   min-size channels -- min-* wins over the inline width/height geometry, so
+   the visual density contract on fine pointers is untouched. The date panel
+   switches to max-content so the widened 7x44 day grid (344px footprint,
+   mirrored by the engine's viewport clamp) is never clipped; month/year
+   panels keep their compact width since 3x44 fits inside it. */
+@media (hover: none) and (pointer: coarse) {
+  .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'],
+  .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'] {
+    min-block-size: var(--ds-datepicker-touch-target-min, 44px);
+  }
+  .rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] {
+    inline-size: max-content;
+    max-inline-size: calc(100vw - var(--ds-spacing-4, 16px));
+  }
+  .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='nav-button'],
+  .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'] {
+    min-inline-size: var(--ds-datepicker-touch-target-min, 44px);
+    min-block-size: var(--ds-datepicker-touch-target-min, 44px);
+  }
+  .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='today-button'] {
+    min-block-size: var(--ds-datepicker-touch-target-min, 44px);
+  }
+}
+
+/* Reduced motion: kills the panel entrance and every skin-owned state
+   transition. (All transitions now live here -- the engine keeps none inline,
+   so this block has full authority.) */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-datepicker-panel.rottay-datepicker-panel--modern {
+    animation: none;
+  }
+  .rottay-datepicker.rottay-datepicker--modern [data-part='clear-button'],
+  .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='clear-button'],
+  .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='nav-button'],
+  .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'],
+  .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='today-button'] {
+    transition: none;
   }
 }

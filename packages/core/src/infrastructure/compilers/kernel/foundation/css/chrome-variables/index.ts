@@ -546,6 +546,13 @@ export function chromeToVariables(
     if (s.groupColor) vars["--ds-sidebar-group-color"] = s.groupColor;
     if (s.groupLetterSpacing)
       vars["--ds-sidebar-group-letter-spacing"] = s.groupLetterSpacing;
+    if (s.groupMarginTop)
+      vars["--ds-sidebar-group-margin-top"] = s.groupMarginTop;
+    if (s.groupMarginBottom)
+      vars["--ds-sidebar-group-margin-bottom"] = s.groupMarginBottom;
+    if (s.groupPaddingTop)
+      vars["--ds-sidebar-group-padding-top"] = s.groupPaddingTop;
+    if (s.itemIndent) vars["--ds-sidebar-item-indent"] = s.itemIndent;
     if (s.itemFontSize) vars["--ds-sidebar-item-font-size"] = s.itemFontSize;
     if (s.itemFontWeight != null)
       vars["--ds-sidebar-item-font-weight"] = String(s.itemFontWeight);

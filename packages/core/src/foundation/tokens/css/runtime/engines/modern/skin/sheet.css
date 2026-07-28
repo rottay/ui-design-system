@@ -97,12 +97,23 @@
   border-radius: 9999px;
 }
 
-/* ---- header + title ---- */
+/* ---- header + title. Typography is skin-owned (the engine stamps parts
+        only): heading family, tight tracking, and an ellipsis guard so a long
+        title never pushes the close button out of the panel. ---- */
 .rottay-sheet--modern[data-part='root'] [data-part='header'][data-part='header'] {
+  gap: var(--ds-spacing-3);
   border-bottom: 1px solid var(--ds-color-border-subtle);
 }
 .rottay-sheet--modern[data-part='root'] [data-part='title'] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-sheet-title-size, var(--ds-font-size-lg));
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: var(--ds-letter-spacing-heading, -0.015em);
+  line-height: var(--ds-line-height-tight);
 }
 
 /* ---- scroll anatomy ---- */
@@ -118,15 +129,38 @@
 
 /* ---- close button: the removed imperative hover becomes a :hover rule. The rustic
         engine's close button has NO hover (only a dead transition) — that asymmetry
-        ships today and is preserved. ---- */
+        ships today and is preserved. Geometry moved here from the engine's inline
+        styles, and keyboard users get the family's visible focus ring. ---- */
 .rottay-sheet--modern[data-part='root'] [data-part='close-button'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-sheet-close-size, 2rem);
+  block-size: var(--ds-sheet-close-size, 2rem);
+  flex-shrink: 0;
+  cursor: pointer;
   border: none;
   border-radius: var(--ds-radius-md);
   background-color: transparent;
   color: var(--ds-color-text-secondary);
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .rottay-sheet--modern[data-part='root'] [data-part='close-button']:hover {
   background-color: var(--ds-surface-highlight);
+  color: var(--ds-color-text-primary);
+}
+.rottay-sheet--modern[data-part='root'] [data-part='close-button']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-sheet--modern[data-part='root'] [data-part='close-button'] {
+    transition: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -5,11 +5,16 @@
  * Renders a live preview of tenant branding inside a token-styled card.
  * Injects scoped CSS variables via a `<style>` tag so the preview
  * accurately reflects the tenant's color scheme. Shows palette swatches,
- * sample DS-token components (buttons, card, input, badges, table), and
- * personality token metadata in a responsive grid.
+ * sample components COMPOSED from the public DS primitives (Button, Input,
+ * Badge, Card) — so the preview demonstrates the real components under the
+ * injected tenant tokens — and personality token metadata in a responsive grid.
  *
- * Zero DaisyUI / Tailwind utility classes. Static paint comes from the
- * component skin; tenant-derived paint remains inline with DS-token layout.
+ * The pattern never recreates a control with its own HTML/CSS. Geometry and
+ * the pattern's own paint live in the unlayered modern tenant-preview skin.
+ * Own chrome copy resolves through the optional `components` i18n channel
+ * with an English floor. Tenant-derived values (palette swatches, preview
+ * tokens) are consumer config data and ride the scoped injection — never a
+ * DS-authored brand literal.
  *
  * @example
  * <ModernTenantPreview
@@ -24,43 +29,17 @@ import type { TenantPreviewProps, PreviewComponent } from '../../contracts';
 import { createTenantConfig } from '../../../../../../infrastructure/runtime/tenant/runtime/authoring/configuration';
 import { resolvePersonalityPreset } from '../../../../../../infrastructure/runtime/tenant/foundation/personality/presets';
 import { buildPreviewCss } from '../../runtime/preview-css';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
+import ModernInput from '../../../../../primitives/inputs/Input/engines/modern';
+import ModernBadge from '../../../../../primitives/display/Badge/engines/modern';
+import ModernCard from '../../../../../primitives/display/Card/engines/modern';
 
 /** Default component samples shown when none specified */
 const ALL_COMPONENTS: PreviewComponent[] = ['button', 'card', 'input', 'badge', 'table'];
 
 /* ------------------------------------------------------------------ */
-/*  Shared inline style fragments                                     */
-/* ------------------------------------------------------------------ */
-
-const sectionLabelStyle: React.CSSProperties = {
-  fontSize: 12,
-  fontWeight: 600,
-  textTransform: 'uppercase',
-  letterSpacing: '0.05em',
-  opacity: 0.5,
-  marginBottom: 12,
-};
-
-const subLabelStyle: React.CSSProperties = {
-  fontSize: 12,
-  opacity: 0.6,
-  marginBottom: 8,
-};
-
-const badgeBaseStyle: React.CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: 20,
-  padding: '0 8px',
-  fontSize: 11,
-  fontWeight: 500,
-  lineHeight: 1,
-  whiteSpace: 'nowrap',
-};
-
-/* ------------------------------------------------------------------ */
-/*  Color helpers                                                     */
+/*  Color helpers (palette-fixture computation from consumer config)  */
 /* ------------------------------------------------------------------ */
 
 /** Parses hex color to RGB; handles shorthand (#abc) and full (#aabbcc) */
@@ -83,7 +62,9 @@ function mixColor(base: string, target: string, ratio: number): string {
   return `#${[r, g, bl].map((c) => Math.max(0, Math.min(255, c)).toString(16).padStart(2, '0')).join('')}`;
 }
 
-/** Generates a 10-step palette (50-900) by mixing base with white/black */
+/** Generates a 10-step palette (50-900) by mixing base with white/black.
+ *  The mix endpoints are universal tint/shade anchors for the fixture
+ *  computation, not brand values. */
 function buildPaletteSteps(base: string): { step: number; color: string }[] {
   return [
     { step: 50, color: mixColor(base, '#ffffff', 0.92) },
@@ -117,6 +98,12 @@ function getContrastColor(hex: string): string {
  * @returns The rendered tenant preview card.
  */
 export default function ModernTenantPreview(props: TenantPreviewProps) {
+  // Optional channel with an English floor: the preview renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
+    i18n?.tOr(key, floor, params) ?? floor;
+
   const {
     config: creationConfig,
     components = ALL_COMPONENTS,
@@ -125,6 +112,35 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
     className,
     style,
   } = props;
+
+  const copy = {
+    colorPalette: tOr('tenantPreview.colorPalette', 'Color Palette'),
+    componentPreview: tOr('tenantPreview.componentPreview', 'Component Preview'),
+    buttons: tOr('tenantPreview.buttons', 'Buttons'),
+    card: tOr('tenantPreview.card', 'Card'),
+    input: tOr('tenantPreview.input', 'Input'),
+    badges: tOr('tenantPreview.badges', 'Badges'),
+    table: tOr('tenantPreview.table', 'Table'),
+    primary: tOr('tenantPreview.primary', 'Primary'),
+    secondary: tOr('tenantPreview.secondary', 'Secondary'),
+    outlined: tOr('tenantPreview.outlined', 'Outlined'),
+    default: tOr('tenantPreview.default', 'Default'),
+    inputPlaceholder: tOr('tenantPreview.inputPlaceholder', 'Type something...'),
+    sampleCardTitle: tOr('tenantPreview.sampleCardTitle', 'Sample Card Title'),
+    sampleCardBody: tOr(
+      'tenantPreview.sampleCardBody',
+      'This card demonstrates the tenant branding applied to a container component.',
+    ),
+    badgeActive: tOr('tenantPreview.badgeActive', 'Active'),
+    badgePending: tOr('tenantPreview.badgePending', 'Pending'),
+    badgeDraft: tOr('tenantPreview.badgeDraft', 'Draft'),
+    colName: tOr('tenantPreview.colName', 'Name'),
+    colStatus: tOr('tenantPreview.colStatus', 'Status'),
+    colAmount: tOr('tenantPreview.colAmount', 'Amount'),
+    yes: tOr('tenantPreview.yes', 'Yes'),
+    no: tOr('tenantPreview.no', 'No'),
+    disabled: tOr('tenantPreview.disabled', 'Disabled'),
+  };
 
   /* Build full tenant config from creation input -- memoized for performance */
   const tenantConfig = useMemo(() => createTenantConfig(creationConfig), [creationConfig]);
@@ -159,8 +175,18 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
     };
   }, [tenantConfig.slug]);
 
-  const primary500 = creationConfig.primaryColor;
-  const primaryFg = getContrastColor(primary500);
+  const primaryFg = getContrastColor(creationConfig.primaryColor);
+
+  const personalityTiles = [
+    { label: tOr('tenantPreview.tileAnimation', 'Animation'), value: personalityInfo.tokens.animation?.entrance ?? 'fade' },
+    { label: tOr('tenantPreview.tileIntensity', 'Intensity'), value: String(personalityInfo.tokens.animation?.intensity ?? 0.5) },
+    { label: tOr('tenantPreview.tileCardElevation', 'Card Elevation'), value: personalityInfo.tokens.card?.defaultElevation ?? 'sm' },
+    { label: tOr('tenantPreview.tileCardBorder', 'Card Border'), value: personalityInfo.tokens.card?.showBorder ? copy.yes : copy.no },
+    { label: tOr('tenantPreview.tileBadgeShape', 'Badge Shape'), value: personalityInfo.tokens.accent?.badgeShape ?? 'rounded' },
+    { label: tOr('tenantPreview.tileLabelStyle', 'Label Style'), value: personalityInfo.tokens.typography?.labelStyle ?? 'sentence' },
+    { label: tOr('tenantPreview.tileHoverLift', 'Hover Lift'), value: `${personalityInfo.tokens.animation?.hoverLift ?? 0}px` },
+    { label: tOr('tenantPreview.tileEdgeAccent', 'Edge Accent'), value: copy.disabled },
+  ];
 
   return (
     <div
@@ -177,61 +203,19 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
     >
       <style dangerouslySetInnerHTML={{ __html: preview.css }} />
 
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 24,
-          padding: 20,
-        }}
-      >
+      <div data-part="body">
         {/* Header */}
-        <div
-          data-part="header"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 12,
-            paddingBottom: 16,
-          }}
-        >
+        <div data-part="header">
           {creationConfig.logo && (
-            <div
-              data-part="logo"
-              style={{
-                width: 32,
-                height: 32,
-                overflow: 'hidden',
-                flexShrink: 0,
-              }}
-            >
-              <img
-                src={creationConfig.logo}
-                alt={creationConfig.name}
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
+            <div data-part="logo">
+              <img src={creationConfig.logo} alt={creationConfig.name} />
             </div>
           )}
           <div>
-            <h2
-              data-part="tenant-name"
-              style={{
-                fontSize: 18,
-                fontWeight: 600,
-                lineHeight: 1.3,
-                margin: 0,
-              }}
-            >
+            <h2 data-part="tenant-name">
               {creationConfig.name}
             </h2>
-            <p
-              data-part="tenant-slug"
-              style={{
-                fontSize: 12,
-                opacity: 0.6,
-                margin: 0,
-              }}
-            >
+            <p data-part="tenant-slug">
               {creationConfig.slug} | {creationConfig.engine ?? 'classic'} | {creationConfig.personality ?? 'neutral'}
             </p>
           </div>
@@ -240,26 +224,15 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
         {/* Color Palette */}
         {showColorPalette && (
           <div data-part="palette">
-            <div data-part="swatch-label" data-palette="all" style={sectionLabelStyle}>
-              Color Palette
+            <div data-part="section-label" data-palette="all">
+              {copy.colorPalette}
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div data-part="palette-groups">
               <div data-palette="primary">
-                <div
-                  data-part="swatch-label"
-                  data-palette="primary"
-                  style={{ fontSize: 12, opacity: 0.6, marginBottom: 4 }}
-                >
-                  Primary
+                <div data-part="swatch-label" data-palette="primary">
+                  {copy.primary}
                 </div>
-                <div
-                  data-part="palette"
-                  data-palette="primary"
-                  style={{
-                    display: 'flex',
-                    overflow: 'hidden',
-                  }}
-                >
+                <div data-part="palette" data-palette="primary">
                   {primaryPalette.map(({ step, color }) => (
                     <div
                       key={step}
@@ -267,25 +240,16 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                       data-part="swatch"
                       data-palette="primary"
                       data-step={step}
-                      style={{
-                        flex: 1,
-                        height: 32,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: color,
-                      }}
+                      /* Palette fixtures are consumer config data: the computed
+                         swatch color stays inline (the preview's purpose). */
+                      style={{ backgroundColor: color }}
                     >
                       {step === 500 && (
                         <span
                           data-part="swatch-label"
                           data-palette="primary"
                           data-step={step}
-                          style={{
-                            fontSize: 9,
-                            fontWeight: 700,
-                            color: primaryFg,
-                          }}
+                          style={{ color: primaryFg }}
                         >
                           500
                         </span>
@@ -296,21 +260,10 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
               </div>
               {secondaryPalette && (
                 <div data-palette="secondary">
-                  <div
-                    data-part="swatch-label"
-                    data-palette="secondary"
-                    style={{ fontSize: 12, opacity: 0.6, marginBottom: 4 }}
-                  >
-                    Secondary
+                  <div data-part="swatch-label" data-palette="secondary">
+                    {copy.secondary}
                   </div>
-                  <div
-                    data-part="palette"
-                    data-palette="secondary"
-                    style={{
-                      display: 'flex',
-                      overflow: 'hidden',
-                    }}
-                  >
+                  <div data-part="palette" data-palette="secondary">
                     {secondaryPalette.map(({ step, color }) => (
                       <div
                         key={step}
@@ -318,7 +271,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                         data-part="swatch"
                         data-palette="secondary"
                         data-step={step}
-                        style={{ flex: 1, height: 24, backgroundColor: color }}
+                        style={{ backgroundColor: color }}
                       />
                     ))}
                   </div>
@@ -328,285 +281,117 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
           </div>
         )}
 
-        {/* Component Samples -- non-functional DS-token elements
-            styled with the tenant's primary color to demonstrate real-world appearance.
-            Each sample type is gated behind the components array for selective rendering. */}
+        {/* Component Samples -- REAL DS primitives, painted by the injected
+            tenant tokens (the preview's purpose: what do the components look
+            like under this tenant). Each sample type is gated behind the
+            components array for selective rendering. */}
         {components.length > 0 && (
           <div>
-            <div style={sectionLabelStyle}>Component Preview</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              {/* Buttons -- tenant-derived values remain inline; static paint lives in the skin */}
+            <div data-part="section-label">{copy.componentPreview}</div>
+            <div data-part="samples">
+              {/* Buttons -- primary/outline/default variants under the tenant
+                  primary injected into the preview scope. */}
               {components.includes('button') && (
                 <div>
-                  <div style={subLabelStyle}>Buttons</div>
-                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <button
-                      type="button"
-                      data-part="button"
-                      data-variant="primary"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        height: 32,
-                        padding: '0 12px',
-                        fontSize: 13,
-                        cursor: 'pointer',
-                        backgroundColor: primary500,
-                        color: primaryFg,
-                      }}
-                    >
-                      Primary
-                    </button>
-                    <button
-                      type="button"
-                      data-part="button"
-                      data-variant="outlined"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        height: 32,
-                        padding: '0 12px',
-                        fontSize: 13,
-                        border: `1px solid ${primary500}`,
-                        cursor: 'pointer',
-                        color: primary500,
-                      }}
-                    >
-                      Outlined
-                    </button>
-                    <button
-                      type="button"
-                      data-part="button"
-                      data-variant="default"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        height: 32,
-                        padding: '0 12px',
-                        fontSize: 13,
-                        cursor: 'pointer',
-                      }}
-                    >
-                      Default
-                    </button>
+                  <div data-part="sub-label">{copy.buttons}</div>
+                  <div data-part="sample-row">
+                    <ModernButton variant="primary" size="sm" data-part="button" data-sample-variant="primary">
+                      {copy.primary}
+                    </ModernButton>
+                    <ModernButton variant="outline" size="sm" data-part="button" data-sample-variant="outlined">
+                      {copy.outlined}
+                    </ModernButton>
+                    <ModernButton variant="default" size="sm" data-part="button" data-sample-variant="default">
+                      {copy.default}
+                    </ModernButton>
                   </div>
                 </div>
               )}
 
-              {/* Card -- token-styled card using tenant surface tokens. */}
+              {/* Card -- the composed Card primitive under tenant surface tokens. */}
               {components.includes('card') && (
                 <div>
-                  <div style={subLabelStyle}>Card</div>
-                  <div data-part="sample-card">
-                    <div
-                      style={{
-                        padding: '12px 16px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 4,
-                      }}
-                    >
-                      <h3
-                        data-part="preview-card-title"
-                        style={{
-                          fontSize: 14,
-                          fontWeight: 600,
-                          margin: 0,
-                        }}
-                      >
-                        Sample Card Title
-                      </h3>
-                      <p
-                        data-part="preview-card-body"
-                        style={{
-                          fontSize: 12,
-                          opacity: 0.6,
-                          margin: 0,
-                        }}
-                      >
-                        This card demonstrates the tenant branding applied to a container component.
-                      </p>
-                    </div>
-                  </div>
+                  <div data-part="sub-label">{copy.card}</div>
+                  <ModernCard size="sm" title={copy.sampleCardTitle}>
+                    <p data-part="preview-card-body">
+                      {copy.sampleCardBody}
+                    </p>
+                  </ModernCard>
                 </div>
               )}
 
               {components.includes('input') && (
                 <div>
-                  <div style={subLabelStyle}>Input</div>
-                  <input
-                    type="text"
-                    placeholder="Type something..."
-                    readOnly
-                    data-part="sample-input"
-                    style={{
-                      height: 32,
-                      padding: '0 12px',
-                      fontSize: 13,
-                      width: '100%',
-                      maxWidth: 320,
-                    }}
-                  />
-                </div>
-              )}
-
-              {/* Badge -- primary badge uses tenant color; warning and neutral use DS tokens */}
-              {components.includes('badge') && (
-                <div>
-                  <div style={subLabelStyle}>Badges</div>
-                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    {/* Primary badge with tenant's primary color */}
-                    <span
-                      data-part="badge"
-                      data-status="active"
-                      style={{
-                        ...badgeBaseStyle,
-                        backgroundColor: primary500,
-                        color: primaryFg,
-                      }}
-                    >
-                      Active
-                    </span>
-                    <span
-                      data-part="badge"
-                      data-status="pending"
-                      style={{
-                        ...badgeBaseStyle,
-                      }}
-                    >
-                      Pending
-                    </span>
-                    <span
-                      data-part="badge"
-                      data-status="draft"
-                      style={{
-                        ...badgeBaseStyle,
-                      }}
-                    >
-                      Draft
-                    </span>
+                  <div data-part="sub-label">{copy.input}</div>
+                  {/* Slot keeps the historical data-part; the composed Input
+                      owns the control chrome. */}
+                  <div data-part="sample-input">
+                    <ModernInput
+                      size="sm"
+                      readOnly
+                      placeholder={copy.inputPlaceholder}
+                      aria-label={copy.input}
+                    />
                   </div>
                 </div>
               )}
 
-              {/* Table -- DS-token table with inline status badges */}
+              {/* Badges -- real Badge primitives; the active one demonstrates
+                  the tenant primary, the others the semantic channels. */}
+              {components.includes('badge') && (
+                <div>
+                  <div data-part="sub-label">{copy.badges}</div>
+                  <div data-part="sample-row">
+                    <ModernBadge variant="primary" data-part="badge" data-status="active">
+                      {copy.badgeActive}
+                    </ModernBadge>
+                    <ModernBadge variant="warning" data-part="badge" data-status="pending">
+                      {copy.badgePending}
+                    </ModernBadge>
+                    <ModernBadge variant="default" data-part="badge" data-status="draft">
+                      {copy.badgeDraft}
+                    </ModernBadge>
+                  </div>
+                </div>
+              )}
+
+              {/* Table -- display fixture with inline status badges */}
               {components.includes('table') && (
                 <div>
-                  <div style={subLabelStyle}>Table</div>
-                  <div style={{ overflowX: 'auto' }}>
-                    <table
-                      data-part="sample-table"
-                      style={{
-                        width: '100%',
-                        borderCollapse: 'collapse',
-                        fontSize: 13,
-                      }}
-                    >
+                  <div data-part="sub-label">{copy.table}</div>
+                  <div data-part="table-scroll">
+                    <table data-part="sample-table">
                       <thead>
                         <tr data-part="table-head">
-                          <th
-                            data-part="preview-table-cell"
-                            data-variant="head"
-                            style={{
-                              textAlign: 'left',
-                              padding: '8px 12px',
-                              fontWeight: 600,
-                              fontSize: 12,
-                            }}
-                          >
-                            Name
+                          <th data-part="preview-table-cell" data-variant="head">
+                            {copy.colName}
                           </th>
-                          <th
-                            data-part="preview-table-cell"
-                            data-variant="head"
-                            style={{
-                              textAlign: 'left',
-                              padding: '8px 12px',
-                              fontWeight: 600,
-                              fontSize: 12,
-                            }}
-                          >
-                            Status
+                          <th data-part="preview-table-cell" data-variant="head">
+                            {copy.colStatus}
                           </th>
-                          <th
-                            data-part="preview-table-cell"
-                            data-variant="head"
-                            style={{
-                              textAlign: 'right',
-                              padding: '8px 12px',
-                              fontWeight: 600,
-                              fontSize: 12,
-                            }}
-                          >
-                            Amount
+                          <th data-part="preview-table-cell" data-variant="head" data-align="end">
+                            {copy.colAmount}
                           </th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <td
-                            data-part="preview-table-cell"
-                            style={{
-                              padding: '8px 12px',
-                            }}
-                          >
-                            Project Alpha
+                          <td data-part="preview-table-cell">Project Alpha</td>
+                          <td data-part="preview-table-cell">
+                            <ModernBadge variant="primary" data-part="badge" data-status="active">
+                              {copy.badgeActive}
+                            </ModernBadge>
                           </td>
-                          <td data-part="preview-table-cell" style={{ padding: '8px 12px' }}>
-                            <span
-                              data-part="badge"
-                              data-status="active"
-                              style={{
-                                ...badgeBaseStyle,
-                                backgroundColor: `${primary500}18`,
-                                color: primary500,
-                              }}
-                            >
-                              Active
-                            </span>
-                          </td>
-                          <td
-                            data-part="preview-table-cell"
-                            style={{
-                              textAlign: 'right',
-                              padding: '8px 12px',
-                            }}
-                          >
-                            $12,400
-                          </td>
+                          <td data-part="preview-table-cell" data-align="end">$12,400</td>
                         </tr>
                         <tr>
-                          <td
-                            data-part="preview-table-cell"
-                            style={{
-                              padding: '8px 12px',
-                            }}
-                          >
-                            Project Beta
+                          <td data-part="preview-table-cell">Project Beta</td>
+                          <td data-part="preview-table-cell">
+                            <ModernBadge variant="default" data-part="badge" data-status="pending">
+                              {copy.badgePending}
+                            </ModernBadge>
                           </td>
-                          <td data-part="preview-table-cell" style={{ padding: '8px 12px' }}>
-                            <span
-                              data-part="badge"
-                              data-status="pending"
-                              style={{
-                                ...badgeBaseStyle,
-                              }}
-                            >
-                              Pending
-                            </span>
-                          </td>
-                          <td
-                            data-part="preview-table-cell"
-                            style={{
-                              textAlign: 'right',
-                              padding: '8px 12px',
-                            }}
-                          >
-                            $8,200
-                          </td>
+                          <td data-part="preview-table-cell" data-align="end">$8,200</td>
                         </tr>
                       </tbody>
                     </table>
@@ -621,57 +406,14 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
             so designers can verify the preset configuration. */}
         {showPersonalityInfo && (
           <div>
-            <div style={sectionLabelStyle}>Personality: {personalityInfo.preset}</div>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-                gap: 8,
-              }}
-            >
-              {[
-                {
-                  label: 'Animation',
-                  value: personalityInfo.tokens.animation?.entrance ?? 'fade',
-                },
-                {
-                  label: 'Intensity',
-                  value: String(personalityInfo.tokens.animation?.intensity ?? 0.5),
-                },
-                {
-                  label: 'Card Elevation',
-                  value: personalityInfo.tokens.card?.defaultElevation ?? 'sm',
-                },
-                {
-                  label: 'Card Border',
-                  value: personalityInfo.tokens.card?.showBorder ? 'Yes' : 'No',
-                },
-                {
-                  label: 'Badge Shape',
-                  value: personalityInfo.tokens.accent?.badgeShape ?? 'rounded',
-                },
-                {
-                  label: 'Label Style',
-                  value: personalityInfo.tokens.typography?.labelStyle ?? 'sentence',
-                },
-                {
-                  label: 'Hover Lift',
-                  value: `${personalityInfo.tokens.animation?.hoverLift ?? 0}px`,
-                },
-                {
-                  label: 'Edge Accent',
-                  value: 'Disabled',
-                },
-              ].map(({ label, value }) => (
-                <div
-                  key={label}
-                  data-part="personality-tile"
-                  style={{
-                    padding: 8,
-                  }}
-                >
-                  <div style={{ fontSize: 11, opacity: 0.5 }}>{label}</div>
-                  <div style={{ fontSize: 12, fontWeight: 500 }}>{value}</div>
+            <div data-part="section-label">
+              {tOr('tenantPreview.personalityLabel', 'Personality: {preset}', { preset: personalityInfo.preset })}
+            </div>
+            <div data-part="personality-grid">
+              {personalityTiles.map(({ label, value }) => (
+                <div key={label} data-part="personality-tile">
+                  <div data-part="personality-tile-label">{label}</div>
+                  <div data-part="personality-tile-value">{value}</div>
                 </div>
               ))}
             </div>

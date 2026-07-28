@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { waitFor } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 
 import { DetailHeader } from '../detail';
 import { EditHeader } from '../edit';
@@ -160,6 +160,66 @@ describe('Headers-family (structures) data-part contract (WO-SKIN-06 checkpoint 
         unmount();
       }
     });
+
+    it('tab strip follows the APG tabs pattern: tablist/tab roles, aria-selected, roving tabIndex, and keyboard activation/navigation', async () => {
+      const onTabChange = vi.fn();
+      const { container } = renderWithEngine(
+        <DetailHeader
+          title="Acme Corp"
+          backHref="/customers"
+          tabs={[
+            { id: 'overview', label: 'Overview' },
+            { id: 'activity', label: 'Activity' },
+            { id: 'notes', label: 'Notes' },
+          ]}
+          activeTab="overview"
+          onTabChange={onTabChange}
+        />,
+        'modern',
+      );
+
+      const strip = await waitForPart(container, 'tab-strip');
+      expect(strip.getAttribute('role')).toBe('tablist');
+      expect(strip.getAttribute('aria-label')).toBe('Tabs'); // English floor (no I18nProvider in this harness)
+
+      const tabs = Array.from(container.querySelectorAll<HTMLElement>('[data-part="tab"]'));
+      expect(tabs.length).toBe(3);
+      for (const tab of tabs) {
+        expect(tab.getAttribute('role')).toBe('tab');
+      }
+      // Roving tabIndex: the active tab is the only one in the tab order.
+      expect(tabs.map((tab) => tab.getAttribute('aria-selected'))).toEqual(['true', 'false', 'false']);
+      expect(tabs.map((tab) => tab.getAttribute('tabindex'))).toEqual(['0', '-1', '-1']);
+
+      // Enter and Space activate the focused tab.
+      fireEvent.keyDown(tabs[1]!, { key: 'Enter' });
+      expect(onTabChange).toHaveBeenCalledWith('activity');
+      fireEvent.keyDown(tabs[2]!, { key: ' ' });
+      expect(onTabChange).toHaveBeenCalledWith('notes');
+
+      // Arrow keys move focus without activating; the range wraps.
+      fireEvent.keyDown(tabs[0]!, { key: 'ArrowRight' });
+      expect(document.activeElement).toBe(tabs[1]);
+      fireEvent.keyDown(tabs[0]!, { key: 'ArrowLeft' });
+      expect(document.activeElement).toBe(tabs[2]);
+      fireEvent.keyDown(tabs[0]!, { key: 'End' });
+      expect(document.activeElement).toBe(tabs[2]);
+      fireEvent.keyDown(tabs[0]!, { key: 'Home' });
+      expect(document.activeElement).toBe(tabs[0]);
+      expect(onTabChange).toHaveBeenCalledTimes(2);
+    });
+
+    it('title typography is skin-owned: the Box-as-h1 carries no inline font paint', async () => {
+      const { container } = renderWithEngine(
+        <DetailHeader title="Skin-owned type" backHref="/x" archetype="editorial" />,
+        'modern',
+      );
+
+      const title = (await waitForPart(container, 'title')) as HTMLElement;
+      expect(title.style.fontSize).toBe('');
+      expect(title.style.fontWeight).toBe('');
+      expect(title.style.letterSpacing).toBe('');
+    });
   });
 
   describe('EditHeader', () => {
@@ -239,6 +299,31 @@ describe('Headers-family (structures) data-part contract (WO-SKIN-06 checkpoint 
       expect(container.querySelector('[data-part="context-card"]')).not.toBeNull();
       expect(container.querySelector('[data-part="context-rail"]')).not.toBeNull();
       expect(container.querySelector('[data-part="context-card-children"]')).not.toBeNull();
+    });
+
+    it('i18n channel: chrome copy renders the English floor without an I18nProvider and honors prop overrides', async () => {
+      const { container, unmount } = renderWithEngine(
+        <EditHeader title="Edit" backHref="/x" entityId="abcdef123456" onSave={vi.fn()} onCancel={vi.fn()} />,
+        'modern',
+      );
+
+      await waitForPart(container, 'root');
+      // No I18nProvider in this harness: useOptionalTranslation returns null and
+      // the documented English floors render instead of raw catalog keys.
+      expect(container.querySelector('[data-part="back-label"]')?.textContent).toBe('Back');
+      expect(container.querySelector('[data-part="entity-id"]')?.textContent).toContain('ID: abcdef12');
+      expect(container.textContent).toContain('Save Changes');
+      expect(container.textContent).toContain('Cancel');
+      expect(container.textContent).not.toContain('save_changes');
+      unmount();
+
+      const overridden = renderWithEngine(
+        <EditHeader title="Edit" backHref="/x" backLabel="Retour" />,
+        'modern',
+      );
+      await waitForPart(overridden.container, 'root');
+      expect(overridden.container.querySelector('[data-part="back-label"]')?.textContent).toBe('Retour');
+      overridden.unmount();
     });
 
     it('§4: the dead <style> block was removed by the migration — no <style> tag, no back-button/breadcrumb-link className hooks, and the never-firing hover was NOT transcribed', async () => {
@@ -470,6 +555,19 @@ describe('Headers-family (structures) data-part contract (WO-SKIN-06 checkpoint 
         expect(container.querySelector(`[data-part="status-dot-text"][data-state="${state}"]`), `state ${state}`).not.toBeNull();
         unmount();
       }
+    });
+
+    it('status labels resolve through the i18n channel with an English floor, and the live pulse is skin-owned (no inline animation)', async () => {
+      const { container } = renderWithEngine(
+        <DashboardHeader title="X" status={{ state: 'live' }} />,
+        'modern',
+      );
+
+      const glyph = (await waitForPart(container, 'status-dot-glyph')) as HTMLElement;
+      expect(container.querySelector('[data-part="status-dot-text"]')?.textContent).toBe('Live');
+      // The pulse moved to dashboard-header.css (keyed on data-state) so the
+      // reduced-motion guard can reach it — the engine must not paint it inline.
+      expect(glyph.style.animation).toBe('');
     });
   });
 });

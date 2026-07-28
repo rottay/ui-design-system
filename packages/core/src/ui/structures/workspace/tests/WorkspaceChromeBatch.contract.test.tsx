@@ -1,4 +1,7 @@
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { fireEvent, waitFor } from '@testing-library/react';
 
@@ -360,6 +363,41 @@ describe('column-menu -- data-part contract (CK-C), portal-panel standalone clas
     });
   });
 
+  it.each(['modern'] as const)('R2: trigger is a dialog disclosure, the panel is a labelled dialog, Escape closes and refocuses (%s)', async (engine) => {
+    const { container } = renderWithEngine(
+      <ColumnMenu
+        columns={[{ key: 'name', title: 'Name' }, { key: 'email', title: 'Email' }]}
+        visibleColumns={['name']}
+        onColumnsChange={() => undefined}
+        onReset={() => undefined}
+      />,
+      engine,
+    );
+    const trigger = (await waitForPart(container, 'trigger')) as HTMLElement;
+    expect(trigger.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(trigger.style.transition).toBe('');
+
+    fireEvent.click(trigger);
+    await waitFor(() => {
+      expect(document.querySelector('[data-part="panel"]')).not.toBeNull();
+    });
+    expect(trigger.getAttribute('aria-expanded')).toBe('true');
+    const panel = document.querySelector('[data-part="panel"]') as HTMLElement;
+    expect(panel.getAttribute('role')).toBe('dialog');
+    expect(panel.getAttribute('aria-label')).toBe('Table columns');
+
+    // Drag dim + row motion live in the skin, not inline.
+    const row = document.querySelector('[data-part="row"]') as HTMLElement;
+    expect(row.style.opacity).toBe('');
+    expect(row.style.transition).toBe('');
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    await waitFor(() => {
+      expect(document.querySelector('[data-part="panel"]')).toBeNull();
+    });
+  });
+
   it.each(['modern'] as const)('groups render group-toggle/group-toggle-label + action rows render action-row/action-section (%s)', async (engine) => {
     const { container } = renderWithEngine(
       <ColumnMenu
@@ -432,6 +470,46 @@ describe('saved-views-menu -- data-part contract (CK-C), portal-panel standalone
     expect(document.querySelectorAll('[data-part="section-header"]').length).toBeGreaterThanOrEqual(1);
   });
 
+  it.each(['modern'] as const)('R2: trigger is a dialog disclosure, the panel is a labelled dialog with header-title, Escape closes (%s)', async (engine) => {
+    const { container } = renderWithEngine(
+      <SavedViewsMenu
+        views={[
+          { key: 'sys-1', label: 'All', kind: 'system', isSystem: true, isDefault: true, state: {} },
+          { key: 'custom-1', label: 'Mine', kind: 'custom', state: { query: 'x' } },
+        ]}
+        activeViewKey="sys-1"
+        onViewSelect={() => undefined}
+        onViewSave={() => undefined}
+        onSaveCurrentView={() => undefined}
+      />,
+      engine,
+    );
+    const trigger = (await waitForPart(container, 'trigger')) as HTMLElement;
+    expect(trigger.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(trigger.style.transition).toBe('');
+
+    fireEvent.click(trigger);
+    await waitFor(() => {
+      expect(document.querySelector('[data-part="panel"]')).not.toBeNull();
+    });
+    const panel = document.querySelector('[data-part="panel"]') as HTMLElement;
+    expect(panel.getAttribute('role')).toBe('dialog');
+    expect(panel.getAttribute('aria-label')).toBe('Saved views');
+    // English i18n floor: header title + action buttons render their defaults.
+    expect(document.querySelector('[data-part="header-title"]')?.textContent).toBe('Saved views');
+    expect(document.querySelector('[data-part="active-card-label"]')?.textContent).toBe('All');
+    // Typography moved to the skin.
+    const sectionHeader = document.querySelector('[data-part="section-header"]') as HTMLElement;
+    expect(sectionHeader.style.textTransform).toBe('');
+    expect(sectionHeader.style.fontSize).toBe('');
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    await waitFor(() => {
+      expect(document.querySelector('[data-part="panel"]')).toBeNull();
+    });
+  });
+
   it.each(['modern'] as const)('stamps empty-state when there are no views (%s)', async (engine) => {
     const { container } = renderWithEngine(
       <SavedViewsMenu views={[]} activeViewKey="" onViewSelect={() => undefined} onSaveCurrentView={() => undefined} />,
@@ -484,6 +562,29 @@ describe('export-button -- data-part contract (CK-C), portal-panel standalone cl
     expect(document.querySelector('[data-part="menu-icon"]')).not.toBeNull();
     expect(document.querySelector('[data-part="menu-label"]')).not.toBeNull();
   });
+
+  it.each(['modern'] as const)('R2: menu labels resolve to the English i18n floor and item typography is skin-owned (%s)', async (engine) => {
+    const { container } = renderWithEngine(
+      <ExportButton data={[{ a: 1 }]} columns={[{ key: 'a', header: 'A' }]} />,
+      engine,
+    );
+    await waitForPart(container, 'trigger');
+    const triggerButton = container.querySelector('button[aria-label="Export data"]') as HTMLElement;
+    fireEvent.click(triggerButton);
+    await waitFor(() => {
+      expect(document.querySelector('[data-part="panel"]')).not.toBeNull();
+    });
+    const panel = document.querySelector('[data-part="panel"]') as HTMLElement;
+    expect(panel.getAttribute('role')).toBe('menu');
+    expect(panel.getAttribute('aria-label')).toBe('Export formats');
+    const labels = [...document.querySelectorAll('[data-part="menu-label"]')].map((n) => n.textContent);
+    expect(labels).toEqual(['Export as CSV', 'Export as JSON', 'Copy to clipboard']);
+    const firstItem = document.querySelector('[data-part="menu-item"]') as HTMLElement;
+    expect(firstItem.style.fontSize).toBe('');
+    expect(firstItem.style.transition).toBe('');
+    const firstLabel = document.querySelector('[data-part="menu-label"]') as HTMLElement;
+    expect(firstLabel.style.fontSize).toBe('');
+  });
 });
 
 // ===========================================================================
@@ -508,6 +609,34 @@ describe('active-filters-bar -- data-part contract (CK-C)', () => {
     for (const part of ['pill', 'chip', 'chip-label', 'chip-value', 'chip-remove', 'clear-all', 'add-filter']) {
       expect(q(container, `[data-part="${part}"]`).length, `must stamp "${part}"`).toBeGreaterThanOrEqual(1);
     }
+  });
+
+  it.each(['modern'] as const)('R2: root is a labelled region, strings resolve to the English i18n floor, and typography is skin-owned (%s)', async (engine) => {
+    const { container } = renderWithEngine(
+      <ActiveFiltersBar
+        activeFilters={[{ key: 'status', label: 'Status', value: 'active', displayValue: 'Active' }]}
+        onRemoveFilter={() => undefined}
+        onClearAll={() => undefined}
+        onAddFilter={() => undefined}
+      />,
+      engine,
+    );
+    const root = await waitForPart(container, 'root');
+    expect(root.getAttribute('role')).toBe('region');
+    expect(root.getAttribute('aria-label')).toBe('Active filters');
+    expect(q(container, '[data-part="pill"]')[0].textContent).toContain('1 active');
+    expect(q(container, '[data-part="clear-all"]')[0].textContent).toContain('Clear all');
+    expect(q(container, '[data-part="add-filter"]')[0].textContent).toContain('Add filter');
+    expect(q(container, '[data-part="chip-remove"]')[0].getAttribute('aria-label')).toBe('Remove filter: Status');
+    // The skin owns the type scale: nothing typographic survives inline.
+    const pill = q(container, '[data-part="pill"]')[0] as HTMLElement;
+    expect(pill.style.fontSize).toBe('');
+    expect(pill.style.textTransform).toBe('');
+    const chipLabel = q(container, '[data-part="chip-label"]')[0] as HTMLElement;
+    expect(chipLabel.style.fontSize).toBe('');
+    expect(chipLabel.style.letterSpacing).toBe('');
+    const clearAll = q(container, '[data-part="clear-all"]')[0] as HTMLElement;
+    expect(clearAll.style.transition).toBe('');
   });
 
   it.each(ENGINES)('returns null (no root) when there are no active filters (%s)', async (engine) => {
@@ -547,6 +676,32 @@ describe('scope-switcher -- data-part contract (CK-C)', () => {
     expect(q(container, '[data-part="pill-label"]')).toHaveLength(2);
     expect(q(container, '[data-part="count-badge"][data-active="true"]')).toHaveLength(1);
   });
+
+  it.each(['modern'] as const)('R2: root is a labelled group, pills carry aria-pressed, typography is skin-owned (%s)', async (engine) => {
+    const { container } = renderWithEngine(
+      <ScopeSwitcher
+        scopes={[
+          { key: 'all', label: 'All', count: 12 },
+          { key: 'mine', label: 'Mine', count: 3 },
+        ]}
+        activeScope="all"
+        onScopeChange={() => undefined}
+        variant="inline"
+      />,
+      engine,
+    );
+    const root = await waitForPart(container, 'root');
+    expect(root.getAttribute('role')).toBe('group');
+    expect(root.getAttribute('aria-label')).toBe('Scope');
+    expect(q(container, '[data-part="pill"][aria-pressed="true"]')).toHaveLength(1);
+    expect(q(container, '[data-part="pill"][aria-pressed="false"]')).toHaveLength(1);
+    const pill = q(container, '[data-part="pill"]')[0] as HTMLElement;
+    expect(pill.style.fontSize).toBe('');
+    expect(pill.style.fontWeight).toBe('');
+    expect(pill.style.transition).toBe('');
+    const badge = q(container, '[data-part="count-badge"]')[0] as HTMLElement;
+    expect(badge.style.fontSize).toBe('');
+  });
 });
 
 // ===========================================================================
@@ -576,6 +731,26 @@ describe('view-mode-switcher -- data-part contract (CK-C)', () => {
     // not couple CSS to it, but do not remove it either).
     const active = q(container, '[data-part="button"][data-selected="true"]')[0];
     expect(active.getAttribute('aria-checked')).toBe('true');
+  });
+
+  it.each(['modern'] as const)('R2: radiogroup label hits the English i18n floor; disabled dim + motion are skin-owned (%s)', async (engine) => {
+    const { container } = renderWithEngine(
+      <ViewModeSwitcher
+        modes={[
+          { key: 'table', icon: <span>T</span>, label: 'Table' },
+          { key: 'cards', icon: <span>C</span>, label: 'Cards', disabled: true },
+        ]}
+        value="table"
+        onChange={() => undefined}
+      />,
+      engine,
+    );
+    const root = await waitForPart(container, 'root');
+    expect(root.getAttribute('aria-label')).toBe('View mode');
+    const disabled = q(container, '[data-part="button"][data-disabled="true"]')[0] as HTMLElement;
+    expect(disabled.style.opacity).toBe('');
+    const selected = q(container, '[data-part="button"][data-selected="true"]')[0] as HTMLElement;
+    expect(selected.style.transition).toBe('');
   });
 });
 
@@ -611,6 +786,25 @@ describe('table-toolbar -- data-part contract (CK-C)', () => {
       expect(searchInputPaintNode.matches('.rottay-input.rottay-input--rustic[data-part="root"]')).toBe(true);
     }
     expect(q(container, '[data-part="divider"]')).toHaveLength(1);
+  });
+
+  it.each(['modern'] as const)('R2: the search placeholder resolves to the English i18n floor and the icon uses logical positioning (%s)', async (engine) => {
+    mockMatchMedia(1280);
+    const { container } = renderWithEngine(
+      <TableToolbar
+        search=""
+        onSearchChange={() => undefined}
+      />,
+      engine,
+    );
+    await waitForPart(container, 'root');
+    await waitFor(() => expect(container.querySelector('input')).not.toBeNull());
+    expect(container.querySelector('input')?.getAttribute('placeholder')).toBe('Search...');
+    const searchIcon = q(container, '[data-part="search-icon"]')[0] as HTMLElement;
+    // RTL: insetInlineStart, never the physical `left`.
+    expect(searchIcon.style.left).toBe('');
+    const searchField = container.querySelector('.ds-table-toolbar__search-input') as HTMLElement;
+    expect(searchField.style.fontSize).toBe('');
   });
 });
 
@@ -675,6 +869,34 @@ describe('search-command-bar -- data-part contract (CK-C)', () => {
     expect(q(container, '[data-part="suggestion-chip"]')).toHaveLength(1);
   });
 
+  it.each(['modern'] as const)('R2: Smart-refine label hits the English i18n floor; input + chip typography are skin-owned; icon uses logical positioning (%s)', async (engine) => {
+    const { container } = renderWithEngine(
+      <SearchCommandBar
+        command={{
+          placeholder: 'Search…',
+          value: 'ab',
+          onSearch: () => undefined,
+          suggestions: [{ key: 's1', label: 'Active in NY', query: 'status:active loc:ny' }],
+        }}
+      />,
+      engine,
+    );
+    await waitForPart(container, 'root');
+    expect(q(container, '[data-part="suggestions-label"]')[0].textContent).toBe('Smart refine');
+    const label = q(container, '[data-part="suggestions-label"]')[0] as HTMLElement;
+    expect(label.style.textTransform).toBe('');
+    expect(label.style.letterSpacing).toBe('');
+    const chip = q(container, '[data-part="suggestion-chip"]')[0] as HTMLElement;
+    expect(chip.style.fontSize).toBe('');
+    expect(chip.style.transition).toBe('');
+    const inputPaintNode = container.querySelector('.ds-search-command-bar__input') as HTMLElement;
+    expect(inputPaintNode.style.fontSize).toBe('');
+    // RTL: the icon hangs on insetInlineStart, the input pads logically.
+    const icon = q(container, '[data-part="search-icon"]')[0] as HTMLElement;
+    expect(icon.style.left).toBe('');
+    expect(inputPaintNode.style.paddingLeft).toBe('');
+  });
+
   it.each(ENGINES)('stamps clear when there is a value (%s)', async (engine) => {
     const { container } = renderWithEngine(
       <SearchCommandBar command={{ placeholder: 'Search…', value: 'candidates', onSearch: () => undefined }} />,
@@ -685,5 +907,91 @@ describe('search-command-bar -- data-part contract (CK-C)', () => {
     // voice badge/toggle. Assert its ABSENCE is consistent with that gate
     // rather than asserting presence (honest to the hardware-gate note above).
     expect(q(container, '[data-part="clear"]')).toHaveLength(0);
+  });
+});
+
+// ===========================================================================
+// Wave R2+R3 — the workspace-chrome skins are the single paint owner.
+// Structural pins of REAL stylesheet properties (no hashes): every skin that
+// moved motion out of the engines must carry --ds-motion-* channels, a
+// prefers-reduced-motion guard, and a visible focus treatment; no skin may
+// carry a raw color literal outside a documented var() escape hatch.
+// ===========================================================================
+const SKIN_DIR = join(
+  dirname(fileURLToPath(import.meta.url)),
+  '../../../../foundation/tokens/css/presentation/components/skin',
+);
+const readSkin = (name: string) => readFileSync(join(SKIN_DIR, name), 'utf8');
+/** Strip var(...) escape hatches, then hunt for raw color literals. */
+function rawColorLiterals(css: string): string[] {
+  const withoutVarFallbacks = css.replace(/var\([^)]*\)/g, '');
+  return withoutVarFallbacks.match(/#[0-9a-fA-F]{3,8}\b|rgba?\(/g) ?? [];
+}
+
+const MOTION_SKINS = [
+  'active-filters-bar.css',
+  'scope-switcher.css',
+  'view-mode-switcher.css',
+  'table-toolbar.css',
+  'column-menu.css',
+  'saved-views-menu.css',
+  'export-button.css',
+  'field-filters-panel.css',
+  'search-command-bar.css',
+] as const;
+
+const ALL_BATCH_SKINS = [...MOTION_SKINS, 'selection-preview-rail.css'] as const;
+
+describe('workspace chrome skins — R2 structural contract', () => {
+  it.each(ALL_BATCH_SKINS)('%s carries zero raw color literals outside documented var() escape hatches', (name) => {
+    expect(rawColorLiterals(readSkin(name))).toEqual([]);
+  });
+
+  it.each(MOTION_SKINS)('%s routes motion through --ds-motion-* channels and guards prefers-reduced-motion', (name) => {
+    const css = readSkin(name);
+    expect(css).toContain('--ds-motion-');
+    expect(css).toContain('prefers-reduced-motion');
+  });
+
+  it.each([
+    'active-filters-bar.css',
+    'scope-switcher.css',
+    'view-mode-switcher.css',
+    'column-menu.css',
+    'saved-views-menu.css',
+    'export-button.css',
+    'field-filters-panel.css',
+    'search-command-bar.css',
+  ] as const)('%s carries a visible :focus-visible treatment', (name) => {
+    expect(readSkin(name)).toContain(':focus-visible');
+  });
+
+  it.each(['column-menu.css', 'scope-switcher.css', 'saved-views-menu.css', 'field-filters-panel.css'] as const)(
+    '%s sets tabular-nums on its numeric readouts',
+    (name) => {
+      expect(readSkin(name)).toContain('tabular-nums');
+    },
+  );
+
+  it('numeric/RTL: rails and slots use logical borders, never physical left/right', () => {
+    expect(readSkin('selection-preview-rail.css')).toContain('border-inline-start');
+    expect(readSkin('selection-preview-rail.css')).not.toContain('border-left');
+    expect(readSkin('search-command-bar.css')).toContain('border-inline-start');
+    expect(readSkin('search-command-bar.css')).not.toContain('border-left');
+  });
+
+  it('selection-preview-rail.css owns the typography the engine stopped inlining', () => {
+    const css = readSkin('selection-preview-rail.css');
+    for (const part of ['identity-title', 'match-reason-eyebrow', 'snapshot-row-label', 'fallback-empty']) {
+      expect(css).toContain(`[data-part='${part}']`);
+    }
+    expect(css).toContain('text-transform: uppercase');
+    expect(css).toContain('font-style: italic');
+  });
+
+  it('search-command-bar.css owns the listening pulse + transcribing spin (moved out of inline styles)', () => {
+    const css = readSkin('search-command-bar.css');
+    expect(css).toContain("data-voice-status='listening']");
+    expect(css).toContain('ds-search-command-bar__spinning-icon');
   });
 });

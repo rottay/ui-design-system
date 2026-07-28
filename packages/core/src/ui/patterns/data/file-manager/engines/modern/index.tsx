@@ -1,11 +1,19 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI / Tailwind) engine for the FileManager pattern.
+ * @fileoverview Modern engine for the FileManager pattern.
  * Renders a file/folder browser with list (table) and grid (card) views,
  * breadcrumb navigation, drag-and-drop upload, multi-select, rename, and bulk delete.
- * Uses the engine skin for component paint and Tailwind utilities for layout
- * -- no Ant Design dependency.
+ *
+ * The pattern COMPOSES public DS primitives — Button (toolbar/view/item
+ * actions), Checkbox (row selection), Spinner (loading) and Empty (empty
+ * state) — and never recreates a control with its own HTML/CSS. Geometry and
+ * the pattern's own paint live in the unlayered modern file-manager skin,
+ * keyed on the `data-part`/`data-*` contract this file stamps.
+ *
+ * The pattern is domain-agnostic: every own label (toolbar, breadcrumb root,
+ * column headers, view toggle titles, rename prompt, empty floor) resolves
+ * through the optional `components` i18n channel with an English floor.
  *
  * @example
  * <ModernFileManager
@@ -17,8 +25,15 @@
  * />
  */
 
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import type { FileManagerProps, FileItem, FileSystemItem } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { LayoutGridIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-grid';
+import { LayoutListIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-list';
+import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
+import ModernCheckbox from '../../../../../primitives/inputs/Checkbox/engines/modern';
+import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
+import ModernEmpty from '../../../../../primitives/display/Empty/engines/modern';
 
 /** Converts raw byte count to a human-friendly size string (B/KB/MB/GB). */
 function formatSize(bytes?: number): string {
@@ -35,17 +50,37 @@ function formatDate(date?: string): string {
   return new Date(date).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
+/** Resolves the semantic kind channel the skin paints icons and rows with. */
+function fileKindOf(item: FileSystemItem): 'folder' | 'image' | 'pdf' | 'text' | 'other' {
+  if (item.type === 'folder') return 'folder';
+  const mime = (item as FileItem).mimeType ?? '';
+  if (mime.startsWith('image/')) return 'image';
+  if (mime === 'application/pdf') return 'pdf';
+  if (mime.startsWith('text/')) return 'text';
+  return 'other';
+}
+
 /**
- * Modern (DaisyUI) FileManager engine.
+ * Modern FileManager engine.
  *
- * Supports list and grid views with responsive grid columns (2/4/6 breakpoints).
- * Selection is toggle-based via DaisyUI checkboxes. The entire content area
- * acts as a drag-and-drop upload zone.
+ * Supports list and grid views with container-query grid columns, toggle
+ * selection via composed Checkbox primitives, and a content-area drop zone
+ * with drag-over feedback. The single raw `<input type="file">` that stays is
+ * deliberate: the public contract pins `data-testid="file-input"` on it (the
+ * composed Upload primitive owns its own internal input and cannot forward a
+ * caller testid), so this chrome-free, behavior-only input keeps the native
+ * picker plumbing while the Upload BUTTON is a composed Button primitive.
  *
  * @param props - {@link FileManagerProps} -- files, folders, callbacks, and display options.
- * @returns The FileManager UI wrapped in a DaisyUI card.
+ * @returns The FileManager UI as a token-painted card surface.
  */
 export default function ModernFileManager(props: FileManagerProps) {
+  // Optional channel with an English floor: the manager renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
+    i18n?.tOr(key, floor, params) ?? floor;
+
   const {
     files,
     folders,
@@ -58,15 +93,33 @@ export default function ModernFileManager(props: FileManagerProps) {
     onNavigate,
     onSelectionChange,
     onViewModeChange,
-    emptyMessage = 'No files or folders',
+    emptyMessage: emptyMessageProp,
     renderFileIcon,
     loading,
     className,
     style,
   } = props;
 
+  const copy = {
+    root: tOr('fileManager.root', 'Root'),
+    upload: tOr('fileManager.upload', 'Upload'),
+    rename: tOr('fileManager.rename', 'Rename'),
+    delete: tOr('fileManager.delete', 'Delete'),
+    switchToList: tOr('fileManager.switchToList', 'Switch to list'),
+    switchToGrid: tOr('fileManager.switchToGrid', 'Switch to grid'),
+    newNamePrompt: tOr('fileManager.newNamePrompt', 'New name:'),
+    empty: tOr('fileManager.empty', 'No files or folders'),
+    columnName: tOr('fileManager.columnName', 'Name'),
+    columnSize: tOr('fileManager.columnSize', 'Size'),
+    columnModified: tOr('fileManager.columnModified', 'Modified'),
+    columnActions: tOr('fileManager.columnActions', 'Actions'),
+  };
+  const emptyMessage = emptyMessageProp ?? copy.empty;
+
   // Hidden file input is triggered by the Upload button click to open the native file picker.
   const fileInputRef = useRef<HTMLInputElement>(null);
+  // Drag-over feedback state for the content-area drop zone.
+  const [isDragOver, setIsDragOver] = useState(false);
 
   // Merge folders first, then files, so folders always appear at the top (OS convention).
   const items: FileSystemItem[] = [
@@ -98,23 +151,33 @@ export default function ModernFileManager(props: FileManagerProps) {
   // Drag-and-drop handler. preventDefault is required to allow the drop event to fire.
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
+    setIsDragOver(false);
     if (e.dataTransfer.files.length > 0 && onUpload) {
       onUpload(Array.from(e.dataTransfer.files));
     }
   }, [onUpload]);
 
-  // Loading state renders a centered DaisyUI spinner instead of the full layout
-  // so skeleton proportions stay consistent regardless of content.
+  // Grid cards are action surfaces: Enter/Space mirrors the click contract so
+  // keyboard users can navigate folders and toggle selection.
+  const handleGridCardKeyDown = useCallback((event: React.KeyboardEvent, item: FileSystemItem) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    if (item.type === 'folder') onNavigate?.(item.id);
+    else handleSelect(item.id);
+  }, [handleSelect, onNavigate]);
+
+  // Loading state renders the composed Spinner primitive (ring, cadence and
+  // paint are spinner.css-owned); the skin owns the centering frame.
   if (loading) {
     return (
       <div
-        className={`ds-pattern-file-manager ds-engine-modern flex justify-center items-center py-12 ${className ?? ''}`}
+        className={`ds-pattern-file-manager ds-engine-modern ${className ?? ''}`}
         data-part="root"
         data-loading={true}
         data-view-mode={viewMode}
         style={style}
       >
-        <span className="ds-file-manager__spinner" data-part="spinner" style={{ display: 'inline-block', width: 24, height: 24, animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
+        <ModernSpinner size="md" data-part="spinner" />
       </div>
     );
   }
@@ -127,12 +190,12 @@ export default function ModernFileManager(props: FileManagerProps) {
       data-view-mode={viewMode}
       style={{ ...style, background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', boxShadow: 'var(--ds-elevation-1)' }}
     >
-      <div style={{ padding: 16 }}>
+      <div data-part="body">
         {/* Toolbar */}
-        <div data-part="toolbar" className="flex items-center justify-between mb-4">
-          <div data-part="breadcrumb" className="text-sm" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+        <div data-part="toolbar">
+          <div data-part="breadcrumb">
             <ul>
-              <li><a data-part="breadcrumb-link" data-action="navigate-root" onClick={() => onNavigate?.(null)} className="cursor-pointer">Root</a></li>
+              <li><a data-part="breadcrumb-link" data-action="navigate-root" onClick={() => onNavigate?.(null)} className="cursor-pointer">{copy.root}</a></li>
               {currentPath.map((segment, i) => (
                 <li key={segment}>
                   {i < currentPath.length - 1
@@ -142,11 +205,17 @@ export default function ModernFileManager(props: FileManagerProps) {
               ))}
             </ul>
           </div>
-          <div className="flex gap-2">
+          <div data-part="toolbar-actions">
             {selectedItems.length > 0 && onDelete && (
-              <button className="ds-file-manager__toolbar-action" data-part="toolbar-action" data-action="delete-selected" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={() => onDelete(selectedItems)}>
-                Delete ({selectedItems.length})
-              </button>
+              <ModernButton
+                variant="danger"
+                size="sm"
+                data-part="toolbar-action"
+                data-action="delete-selected"
+                onClick={() => onDelete(selectedItems)}
+              >
+                {tOr('fileManager.deleteSelected', 'Delete ({count})', { count: selectedItems.length })}
+              </ModernButton>
             )}
             {onUpload && (
               <>
@@ -159,54 +228,54 @@ export default function ModernFileManager(props: FileManagerProps) {
                   onChange={handleUploadChange}
                   data-testid="file-input"
                 />
-                <button className="ds-file-manager__toolbar-action" data-part="toolbar-action" data-action="upload" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={() => fileInputRef.current?.click()}>
-                  Upload
-                </button>
+                <ModernButton
+                  variant="primary"
+                  size="sm"
+                  data-part="toolbar-action"
+                  data-action="upload"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  {copy.upload}
+                </ModernButton>
               </>
             )}
-            <button
-              className="ds-file-manager__view-toggle"
+            <ModernButton
+              variant="ghost"
+              size="sm"
               data-part="view-toggle"
               data-action="toggle-view"
               data-view-mode={viewMode}
-              style={{ height: 32, width: 32, padding: 0, fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+              icon={viewMode === 'grid'
+                ? <LayoutListIcon decorative size={16} />
+                : <LayoutGridIcon decorative size={16} />}
               onClick={() => onViewModeChange?.(viewMode === 'grid' ? 'list' : 'grid')}
-              title={viewMode === 'grid' ? 'Switch to list' : 'Switch to grid'}
-            >
-              {viewMode === 'grid' ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-              )}
-            </button>
+              title={viewMode === 'grid' ? copy.switchToList : copy.switchToGrid}
+            />
           </div>
         </div>
 
         {/* Drop zone + content */}
         <div
           data-part="content"
-          onDragOver={e => e.preventDefault()}
+          data-drag-over={isDragOver ? 'true' : 'false'}
+          onDragOver={e => { e.preventDefault(); if (onUpload) setIsDragOver(true); }}
+          onDragLeave={() => setIsDragOver(false)}
           onDrop={handleDrop}
-          className="min-h-[200px]"
         >
           {items.length === 0 ? (
-            <div data-part="empty" className="flex justify-center items-center py-12 opacity-50">
-              {emptyMessage}
+            <div data-part="empty">
+              <ModernEmpty description={emptyMessage} />
             </div>
           ) : viewMode === 'list' ? (
-            <div className="overflow-x-auto">
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+            <div data-part="list-scroll">
+              <table data-part="list-table">
                 <thead>
                   <tr>
-                    <th style={{ width: 40 }}></th>
-                    <th>Name</th>
-                    <th>Size</th>
-                    <th>Modified</th>
-                    <th>Actions</th>
+                    <th data-part="column-select" />
+                    <th>{copy.columnName}</th>
+                    <th>{copy.columnSize}</th>
+                    <th>{copy.columnModified}</th>
+                    <th>{copy.columnActions}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -217,28 +286,30 @@ export default function ModernFileManager(props: FileManagerProps) {
                       className={selectedItems.includes(item.id) ? 'active' : ''}
                       data-part="row"
                       data-selected={selectedItems.includes(item.id)}
-                      data-file-kind={item.type === 'folder' ? 'folder' : (item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'}
+                      data-file-kind={fileKindOf(item)}
                     >
                       <td>
-                        <input
-                          data-part="checkbox"
-                          type="checkbox"
-                          style={{ width: 16, height: 16, cursor: 'pointer' }}
-                          checked={selectedItems.includes(item.id)}
-                          onChange={() => handleSelect(item.id)}
-                        />
+                        {/* Slot keeps the historical data-part; the composed
+                            Checkbox (standalone indicator) owns the control. */}
+                        <span data-part="checkbox">
+                          <ModernCheckbox
+                            size="sm"
+                            checked={selectedItems.includes(item.id)}
+                            onChange={() => handleSelect(item.id)}
+                          />
+                        </span>
                       </td>
                       <td>
                         <div className="flex items-center gap-2">
                           {/* Folders use an inline SVG folder icon; files use a renderFileIcon override or generic file SVG. */}
                           {item.type === 'folder' ? (
-                            <svg data-part="folder-icon" data-file-kind="folder" xmlns="http://www.w3.org/2000/svg" className="ds-file-manager__folder-icon h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                            <svg data-part="folder-icon" data-file-kind="folder" xmlns="http://www.w3.org/2000/svg" className="ds-file-manager__folder-icon" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                             </svg>
                           ) : (
-                            <span className="ds-file-manager__file-icon" data-part="file-icon" data-file-kind={(item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'}>
+                            <span className="ds-file-manager__file-icon" data-part="file-icon" data-file-kind={fileKindOf(item)}>
                               {renderFileIcon ? renderFileIcon(item as FileItem) : (
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                                 </svg>
                               )}
@@ -258,29 +329,29 @@ export default function ModernFileManager(props: FileManagerProps) {
                       <td>
                         <div className="flex gap-1">
                           {onRename && (
-                            <button
-                              className="ds-file-manager__item-action"
+                            <ModernButton
+                              variant="ghost"
+                              size="xs"
                               data-part="item-action"
                               data-action="rename"
-                              style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }}
                               onClick={() => {
-                                const newName = window.prompt('New name:', item.name);
+                                const newName = window.prompt(copy.newNamePrompt, item.name);
                                 if (newName && newName !== item.name) onRename(item.id, newName);
                               }}
                             >
-                              Rename
-                            </button>
+                              {copy.rename}
+                            </ModernButton>
                           )}
                           {onDelete && (
-                            <button
-                              className="ds-file-manager__item-action"
+                            <ModernButton
+                              variant="ghost"
+                              size="xs"
                               data-part="item-action"
                               data-action="delete"
-                              style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }}
                               onClick={() => onDelete([item.id])}
                             >
-                              Delete
-                            </button>
+                              {copy.delete}
+                            </ModernButton>
                           )}
                         </div>
                       </td>
@@ -290,34 +361,32 @@ export default function ModernFileManager(props: FileManagerProps) {
               </table>
             </div>
           ) : (
-            /* Grid view uses responsive columns: 2 on mobile, 4 on sm, 6 on md+.
-               Selected items are highlighted with a primary ring and subtle background. */
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
+            /* Grid view: columns come from the skin's container queries on the
+               root (the composition defines the cut, not viewport breakpoints). */
+            <div data-part="grid">
               {items.map(item => (
                 <div
                   key={item.id}
                   data-part="grid-card"
                   data-selected={selectedItems.includes(item.id)}
-                  data-file-kind={item.type === 'folder' ? 'folder' : (item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'}
-                  className="ds-file-manager__grid-card cursor-pointer transition-colors"
-                  style={{
-                    padding: 12,
-                  }}
+                  data-file-kind={fileKindOf(item)}
+                  className="ds-file-manager__grid-card"
+                  role="button"
+                  tabIndex={0}
                   onClick={() => item.type === 'folder' ? onNavigate?.(item.id) : handleSelect(item.id)}
+                  onKeyDown={(event) => handleGridCardKeyDown(event, item)}
                 >
-                  <div className="items-center text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 12 }}>
-                    <div className="text-3xl">
-                      {item.type === 'folder' ? (
-                        <svg data-part="folder-icon" data-file-kind="folder" xmlns="http://www.w3.org/2000/svg" className="ds-file-manager__folder-icon h-9 w-9" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                        </svg>
-                      ) : (
-                        <svg data-part="file-icon" data-file-kind={(item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'} xmlns="http://www.w3.org/2000/svg" className="ds-file-manager__file-icon h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                        </svg>
-                      )}
-                    </div>
-                    <span data-part="item-name" className="text-xs truncate w-full">{item.name}</span>
+                  <div data-part="grid-card-body">
+                    {item.type === 'folder' ? (
+                      <svg data-part="folder-icon" data-file-kind="folder" xmlns="http://www.w3.org/2000/svg" className="ds-file-manager__folder-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
+                      </svg>
+                    ) : (
+                      <svg data-part="file-icon" data-file-kind={fileKindOf(item)} xmlns="http://www.w3.org/2000/svg" className="ds-file-manager__file-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                      </svg>
+                    )}
+                    <span data-part="item-name">{item.name}</span>
                   </div>
                 </div>
               ))}

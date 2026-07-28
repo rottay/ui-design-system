@@ -1,21 +1,23 @@
 /**
  * @fileoverview Spinner Modern Engine - Rottay Design System
- * @description CSS border-based spinner using DS tokens and inline styles.
- * No DaisyUI dependency -- uses a CSS keyframe animation injected at render
- * time and DS color tokens for theming.
+ * @description CSS border-based spinner. All paint — ring geometry per size,
+ * track/segment colors, spin cadence, label typography — is owned by the
+ * unlayered modern skin; the engine stamps anatomy (`data-part`), the
+ * `data-size` contract and the accessible status semantics.
  *
  * @remarks
  * The Modern engine uses a pure-CSS border spinner approach:
  * - Zero DaisyUI dependency
  * - DS token colors (--ds-color-border, --ds-color-primary)
- * - Inline styles for deterministic rendering
- * - Injected @keyframes for the spin animation
+ * - Skin-owned geometry: `data-size` selects the ring diameter/stroke
+ * - The spin rides --ds-motion-slow, zeroed by the motion authority under
+ *   reduced motion (the ring rests as a static arc)
  *
- * Size mapping (pixel dimensions):
- * - `sm` -> 16px
- * - `md` -> 24px
- * - `lg` -> 32px
- * - `xl` -> 40px
+ * Size mapping (diameter / stroke, skin-owned):
+ * - `sm` -> 20px / 2px
+ * - `md` -> 24px / 2px
+ * - `lg` -> 32px / 3px
+ * - `xl` -> 40px / 3px
  *
  * @example
  * ```tsx
@@ -36,21 +38,6 @@ import { SPINNER_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ============================================================================
-// Size Mapping
-// ============================================================================
-
-/**
- * Maps Rottay size variants to DS token dimensions and border widths.
- * Dimension uses --ds-spinner-*-size tokens with pixel fallbacks.
- */
-const SIZE_MAP: Record<string, { dimension: string; ringWidth: number }> = {
-  sm: { dimension: 'var(--ds-spinner-sm-size, 20px)', ringWidth: 2 },
-  md: { dimension: 'var(--ds-spinner-md-size, 24px)', ringWidth: 2 },
-  lg: { dimension: 'var(--ds-spinner-lg-size, 32px)', ringWidth: 3 },
-  xl: { dimension: 'var(--ds-spinner-xl-size, 40px)', ringWidth: 3 },
-};
-
-// ============================================================================
 // Modern Engine Implementation
 // ============================================================================
 
@@ -58,8 +45,10 @@ const SIZE_MAP: Record<string, { dimension: string; ringWidth: number }> = {
  * Modern implementation of the Spinner component.
  *
  * @description
- * Renders a CSS border-based spinner using DS tokens for colors and
- * inline styles for layout. A <style> block injects the spin keyframe.
+ * Renders a CSS border-based spinner whose entire paint — ring geometry per
+ * `data-size`, track/segment colors, spin cadence and label typography —
+ * lives in the unlayered modern skin (`skin/spinner.css`). The engine stamps
+ * only anatomy and semantics.
  *
  * @param props - {@link SpinnerProps} Component properties
  * @returns React element with a pure-CSS spinner
@@ -75,10 +64,7 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
   // lightweight consumers) — a hard provider requirement would crash those
   // compositions. Idiom matches Rate/ListToolbar modern.
   const i18n = useOptionalTranslation('common');
-  const resolved = i18n?.t('loading');
-  const loadingLabel = resolved && resolved !== 'loading' && resolved !== 'common.loading'
-    ? resolved
-    : 'Loading';
+  const loadingLabel = i18n?.tOr('loading', 'Loading') ?? 'Loading';
   const {
     size = SPINNER_DEFAULTS.size,
     label,
@@ -86,7 +72,6 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
     style,
   } = props;
 
-  const sizeConfig = SIZE_MAP[size!] || SIZE_MAP.md;
   // P-79 caller-wins: a pattern composing the Spinner as one named part of
   // its own anatomy (loading branches stamp `spinner`) overrides the
   // default `root` stamp; standalone usage keeps `root`.
@@ -96,30 +81,24 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
   // Render
   // ============================================================================
 
-  // Layout (column stack, token gap) lives in the unlayered modern skin; the
-  // engine keeps only prop-driven geometry/cadence hatches inline. The spin
-  // cadence rides --ds-motion-slow, which the motion authority zeroes under
-  // reduced motion -- the ring then rests as a calm static arc.
+  // Geometry (ring diameter + stroke per size), color and cadence are all
+  // skin-owned against `data-size`; the spin rides --ds-motion-slow, which
+  // the motion authority zeroes under reduced motion — the ring then rests
+  // as a calm static arc.
   return (
     <div
       data-part={dataPart ?? 'root'}
+      data-size={size}
       className={['rottay-spinner', 'rottay-spinner--modern', className].filter(Boolean).join(' ')}
       style={style}
     >
       <span
         data-part="indicator"
-        style={{
-          display: 'inline-block',
-          width: sizeConfig.dimension,
-          height: sizeConfig.dimension,
-          '--ds-spinner-ring-width': `${sizeConfig.ringWidth}px`,
-          animation: `ds-spinner-modern-spin var(--ds-motion-slow) linear infinite`,
-        } as React.CSSProperties}
         role="status"
         aria-label={label || loadingLabel}
       />
       {label && (
-        <span data-part="label" style={{ fontSize: 'var(--ds-font-size-sm, 14px)' }}>{label}</span>
+        <span data-part="label">{label}</span>
       )}
     </div>
   );

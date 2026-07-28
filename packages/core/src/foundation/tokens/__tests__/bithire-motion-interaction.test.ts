@@ -9,12 +9,14 @@
  *     durations; app-side raw ms literals bind to them. `calm` tracks the theme's
  *     own entranceDuration (200ms for bithire) per design-language §2.6.
  *
- *  2. The generated bithire artifact must carry the ledger tag/badge/tooltip
- *     defaults (§8.2): tags as tint-toned pills at detail size, counting badges
- *     in tabular figures, tooltips as a level-2 paper overlay, and a
- *     reduced-motion block that zeroes the motion tokens. This half asserts the
+ *  2. The generated bithire artifact must carry the channels the ledger
+ *     interaction layer (§8.2) binds to — the closed tint scale, the detail type
+ *     step — plus a reduced-motion block that zeroes the motion tokens, and it
+ *     must carry no engine or product selector vocabulary. This half asserts the
  *     committed artifact so a stale/unsynced release cannot ship a mixed
- *     interaction identity.
+ *     interaction identity. The paint that reads these channels belongs to the
+ *     engine skins (`runtime/engines/modern/skin/{tag,badge,tooltip}.css`) and to
+ *     the app for its own composition; the artifact owns neither.
  */
 import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -64,23 +66,25 @@ describe('bithire artifact carries the ledger interaction defaults (§8.2)', () 
     expect(artifact).toContain('--ds-ease-standard: cubic-bezier(0.2, 0, 0, 1)');
   });
 
-  it('styles tags as tint-toned pills at detail size, sentence case', () => {
-    expect(artifact).toContain('border-radius: var(--ds-tag-radius-full, 9999px)');
-    expect(artifact).toContain('font-size: var(--ds-text-detail-size, 0.75rem)');
-    expect(artifact).toContain('text-transform: none');
-    // Tone binding: bg = tint-8, border = tint-24 of the tone role.
-    expect(artifact).toContain('background: var(--ds-tint-success-8)');
-    expect(artifact).toContain('border-color: var(--ds-tint-success-24)');
+  it('compiles the tone channels the ledger interaction layer binds to', () => {
+    // The artifact owns the CHANNELS; the engine skins own the paint that reads
+    // them (modern/skin/{tag,badge,tooltip}.css). Asserting the channels here is
+    // what keeps a stale release from shipping a mixed interaction identity —
+    // asserting the paint would only re-pin one engine's selector vocabulary.
+    expect(artifact).toContain('--ds-text-detail-size: 0.75rem');
+    expect(artifact).toMatch(/--ds-tint-8: color-mix\(in oklch, var\(--ds-color-primary\) 8%/);
+    expect(artifact).toMatch(/--ds-tint-success-8: color-mix\(in oklch, var\(--ds-color-success\) 8%/);
+    expect(artifact).toMatch(/--ds-tint-success-24: color-mix\(in oklch, var\(--ds-color-success\) 24%/);
   });
 
-  it('renders counting badges in tabular figures', () => {
-    expect(artifact).toMatch(/\.ant-badge-count[\s\S]*?font-variant-numeric: tabular-nums/);
-  });
-
-  it('renders the tooltip as a level-2 paper overlay', () => {
-    expect(artifact).toContain('.ant-tooltip .ant-tooltip-inner');
-    expect(artifact).toMatch(/background: var\(--ds-color-bg-primary, #ffffff\)/i);
-    expect(artifact).toContain('border-radius: var(--ds-radius-sm, 6px)');
+  it('keeps engine and product vocabulary out of the vertical extension', () => {
+    // The extension is a bounded exception mechanism: root-level semantic
+    // capability gaps plus governed reduced-motion emission. A frozen-engine or
+    // product selector here is a second UI system, and under engine:"modern" it
+    // paints nothing anyway — BitHire never renders an `.ant-*` element.
+    expect(artifact).not.toMatch(/\.ant-[a-z-]+\s*[,{]/);
+    expect(artifact).not.toMatch(/\.(?:rottay-tag|badge|btn)-[a-z-]+\s*[,{]/);
+    expect(artifact).not.toMatch(/\[data-bithire-/);
   });
 
   it('zeroes the motion tokens under reduced motion', () => {

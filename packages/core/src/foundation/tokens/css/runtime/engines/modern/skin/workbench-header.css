@@ -25,12 +25,16 @@
  * `(hovered||focused) && !disabled`; the button is natively `disabled`, so
  * `:hover:not(:disabled), :focus:not(:disabled)` reproduces that gate. SavedViewTab
  * tracks `onFocus`/`onBlur` in addition to hover (a keyboard-focus affordance the
- * page-shell tab deliberately lacks), so it keys on `:hover` AND `:focus`. Skeleton
- * blocks share one `data-part` but differ in radius, so each carries its radius on
- * an inline `--ds-workbench-header-skeleton-radius` custom property (default sm).
- * The `animation: ds-foundation-pulse` reference to the global keyframe stays inline.
+ * page-shell tab deliberately lacks), so it keys on `:hover` AND `:focus`.
  *
- * Values are transcribed verbatim from `engines/modern.tsx`.
+ * OWNERSHIP (R2+R3): the engine stamps anatomy + state only; this file owns
+ * 100% of layout and paint — typography, tab geometry, skeleton geometry and
+ * the pulse animation included. The skeleton blocks share one `data-part` but
+ * differ in geometry, so each block carries a `data-size` attribute and, where
+ * it deviates from the default, its radius on the sanctioned inline
+ * `--ds-workbench-header-skeleton-radius` custom-property data channel
+ * (uncounted). The only remaining inline style in the engine is the caller's
+ * own `style` prop on the root.
  */
 
 /* ---- root: card surface + bottom border (both loading and main roots) ---- */
@@ -62,10 +66,12 @@
     background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
-  animation: ds-workbench-header-arrive var(--ds-motion-calm, 220ms)
+  animation: ds-workbench-header-arrive var(--ds-motion-calm)
     var(--ds-motion-ease-out, ease-out) both;
   container-type: inline-size;
   container-name: ds-workbench-header;
+  /* Layout migrated from the engine (R2+R3). */
+  padding: var(--ds-workbench-header-padding);
 }
 .ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
@@ -215,6 +221,167 @@
   scrollbar-width: none;
 }
 
+/* ---- header row clusters (migrated from the engine, R2+R3) ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='header-row'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ds-workbench-header-section-gap);
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='lead'] {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--ds-workbench-header-item-gap);
+  min-width: 0;
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='titles'] {
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='title-row'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-workbench-header-item-gap);
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='actions'] {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-workbench-header-action-gap);
+}
+
+/* ---- quick action wrapper (migrated from the engine, R2+R3) ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'] {
+  display: contents;
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .rottay-button {
+  flex-shrink: 0;
+}
+
+/* ---- title / subtitle typography (migrated from the engine, R2+R3) ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='title'] {
+  margin: 0;
+  font-size: var(--ds-font-size-xl);
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: var(--ds-letter-spacing-heading);
+  line-height: var(--ds-line-height-heading);
+  text-wrap: balance;
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='subtitle'] {
+  margin: 4px 0 0;
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-body);
+  text-wrap: pretty;
+}
+
+/* ---- exception badge layout/typography (migrated from the engine, R2+R3) ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='exception'] {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: var(--ds-line-height-body);
+  white-space: nowrap;
+}
+
+/* ---- saved-view tab typography + motion (migrated from the engine, R2+R3);
+        the active weight was a JS ternary, now keyed on data-active. ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab'] {
+  position: relative;
+  min-height: var(--ds-tabs-md-height);
+  padding: var(--ds-tabs-md-padding);
+  cursor: pointer;
+  font-size: var(--ds-tabs-md-font-size);
+  font-weight: var(--ds-tabs-item-font-weight);
+  line-height: var(--ds-line-height-body);
+  transition:
+    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-active='true'] {
+  font-weight: var(--ds-tabs-item-font-weight-active);
+}
+
+/* ---- saved-views strip layout (migrated from the engine, R2+R3) ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tabs'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-tabs-gap);
+  margin-block-start: var(--ds-workbench-header-section-gap);
+}
+
+/* ---- loading skeleton: cluster layout + per-block geometry (migrated from
+        the engine, R2+R3). `data-size` is the skin-owned geometry hook; the
+        pulse animation lives here now. ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-row'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-lead'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-workbench-header-item-gap);
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-column'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2, 8px);
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton-actions'] {
+  display: flex;
+  gap: var(--ds-workbench-header-action-gap);
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'] {
+  animation: ds-foundation-pulse 1.5s ease-in-out infinite;
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='avatar'] {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='title'] {
+  width: 200px;
+  height: 22px;
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='subtitle'] {
+  width: 300px;
+  height: 14px;
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='action'] {
+  width: 80px;
+  height: 34px;
+}
+
+.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='tabs'] {
+  width: 100%;
+  height: 36px;
+  margin-block-start: var(--ds-workbench-header-section-gap);
+}
+
 @container ds-workbench-header (max-width: 640px) {
   .ds-pattern-workbench-header.ds-engine-modern [data-part='header-row'] {
     align-items: stretch;
@@ -245,7 +412,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-workbench-header.ds-engine-modern[data-part='root'],
-  .ds-pattern-workbench-header.ds-engine-modern [data-part='header-icon'] {
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='header-icon'],
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab'],
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'] {
     animation: none;
     transition: none;
   }

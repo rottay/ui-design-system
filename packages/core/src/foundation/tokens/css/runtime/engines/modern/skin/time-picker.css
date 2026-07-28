@@ -36,8 +36,18 @@
  *
  * KEYFRAME: `rottay-select-slide-in` was injected per-mount via a `<style>`
  * tag inside `TimePanel` itself. Renamed `ds-time-picker-slide-in` and moved
- * here (loads once, globally, instead of re-injecting on every panel mount);
- * `TimePanel`'s inline `animation` reference was updated to match.
+ * here (loads once, globally, instead of re-injecting on every panel mount).
+ * The animation REFERENCE later left the inline `panelStyle` as well: the
+ * panel rule below owns `animation` so the reduced-motion block has full
+ * authority (an inline style would win).
+ *
+ * STATE-PAINT DRAIN (lane-A pass): header/option/now-button font-weight
+ * ternaries and every inline `transition` moved here (new: trigger
+ * hover/focus-visible/disabled, clear-button opacity hover, time-option
+ * focus ring replacing the suppressed outline, now-button hover/focus,
+ * coarse-pointer 44px floors, reduced-motion block). Panel i18n: the
+ * Hr/Min/Sec labels, Now button, placeholders and range placeholders resolve
+ * through the `components.timepicker` catalogue with an English floor.
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
@@ -74,6 +84,23 @@
 .rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='warning'] {
   border-color: var(--ds-color-warning);
 }
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-part='trigger-input']:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']),
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-part='trigger-input']:where(:hover):not(:disabled):not([data-status='error']):not([data-status='warning']) {
+  border-color: var(--ds-timepicker-border-hover, var(--ds-color-border-hover));
+}
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-part='trigger-input']:focus-visible,
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-part='trigger-input']:focus-visible {
+  border-color: var(--ds-timepicker-border-focus, var(--ds-color-primary));
+}
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input']:focus-visible,
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input']:focus-visible {
+  box-shadow: var(--ds-timepicker-shadow-focus, var(--ds-shadow-focus-ring));
+}
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input']:disabled,
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input']:disabled {
+  opacity: var(--ds-disabled-opacity, 0.5);
+  cursor: not-allowed;
+}
 
 .rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-active='true'] {
   box-shadow: 0 0 0 2px var(--ds-color-primary);
@@ -92,6 +119,11 @@
   border: none;
   border-radius: 50%;
   color: var(--ds-color-text-primary);
+  opacity: var(--ds-timepicker-clear-opacity, 0.5);
+  transition: opacity var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.rottay-timepicker.rottay-timepicker--modern [data-part='clear-button']:hover {
+  opacity: 1;
 }
 
 .rottay-timepicker.rottay-timepicker--modern [data-part='clock-icon'] {
@@ -107,6 +139,9 @@
   background: var(--ds-color-bg-elevated);
   border-radius: var(--ds-radius-lg, 12px);
   box-shadow: var(--ds-timepicker-panel-shadow, var(--ds-shadow-popover, var(--ds-card-shadow)));
+  /* Skin-owned entrance (drained from inline panelStyle.animation) so the
+     reduced-motion block below can govern it; inline styles would win. */
+  animation: ds-time-picker-slide-in var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .rottay-timepicker__panel.rottay-timepicker__panel[data-part='panel'][data-part='panel'] {
   border: 1px solid var(--ds-color-border);
@@ -123,9 +158,11 @@
   border-bottom: 1px solid var(--ds-color-border);
 }
 /* column-label spans (Hr/Min/Sec + the two zero-width spacer spans) share one
-   color; all are bare `<span>` children of header, no individual data-part. */
+   color; all are bare `<span>` children of header, no individual data-part.
+   Font weight drained from the inline labelStyle. */
 .rottay-timepicker__panel [data-part='header'] > span {
   color: var(--ds-color-text-muted);
+  font-weight: var(--ds-font-weight-semibold, 600);
 }
 
 .rottay-timepicker__panel [data-part='time-option'] {
@@ -134,10 +171,18 @@
   outline: none;
   background: transparent;
   color: var(--ds-color-text-primary);
+  /* Skin-owned so reduced-motion can silence it (inline would win). */
+  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+/* Keyboard focus replacement for the suppressed outline. */
+.rottay-timepicker__panel [data-part='time-option']:focus-visible {
+  box-shadow: var(--ds-timepicker-shadow-focus, var(--ds-shadow-focus-ring));
 }
 .rottay-timepicker__panel [data-part='time-option'][data-selected='true'] {
   background: var(--ds-color-primary);
   color: var(--ds-color-white);
+  /* Emphasis paint drained from the inline getItemStyle ternary. */
+  font-weight: var(--ds-font-weight-semibold, 600);
 }
 .rottay-timepicker__panel [data-part='time-option']:hover:not([data-selected='true']) {
   background: var(--ds-color-bg-hover);
@@ -147,12 +192,23 @@
   border-top: 1px solid var(--ds-color-border);
 }
 
-/* now-button: static, no hover -- matches DatePicker's Today-button gap. */
+/* now-button: primary CTA treatment with the standard hover/focus posture
+   (closes the old "static, no hover" gap, same fix as the DatePicker
+   today-button). */
 .rottay-timepicker__panel [data-part='now-button'] {
   border-radius: var(--ds-radius-md, 8px);
   border: none;
   background: var(--ds-color-primary);
   color: var(--ds-color-white);
+  font-weight: var(--ds-font-weight-medium, 500);
+  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.rottay-timepicker__panel [data-part='now-button']:hover {
+  background: var(--ds-color-primary-hover, var(--ds-color-primary));
+}
+.rottay-timepicker__panel [data-part='now-button']:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-timepicker-shadow-focus, var(--ds-shadow-focus-ring));
 }
 
 @keyframes ds-time-picker-slide-in {
@@ -163,5 +219,33 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+/* Coarse-pointer floor: interactive parts reach 44px via min-size channels --
+   min-* wins over the inline width/height geometry, so the density contract
+   on fine pointers is untouched. */
+@media (hover: none) and (pointer: coarse) {
+  .rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'],
+  .rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'] {
+    min-block-size: var(--ds-timepicker-touch-target-min, 44px);
+  }
+  .rottay-timepicker__panel [data-part='time-option'],
+  .rottay-timepicker__panel [data-part='now-button'] {
+    min-block-size: var(--ds-timepicker-touch-target-min, 44px);
+  }
+}
+
+/* Reduced motion: kills the panel entrance and every skin-owned state
+   transition. (All transitions now live here -- the engine keeps none inline,
+   so this block has full authority.) */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-timepicker__panel {
+    animation: none;
+  }
+  .rottay-timepicker.rottay-timepicker--modern [data-part='clear-button'],
+  .rottay-timepicker__panel [data-part='time-option'],
+  .rottay-timepicker__panel [data-part='now-button'] {
+    transition: none;
   }
 }

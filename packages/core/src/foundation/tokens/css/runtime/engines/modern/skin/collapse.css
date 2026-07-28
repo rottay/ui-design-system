@@ -53,6 +53,30 @@
   transform: rotate(90deg);
 }
 
+/* The collapsed glyph is directional (▶ points in the reading direction);
+   mirror it in RTL so "forward" stays honest. The expanded state rotates to
+   point down — direction-neutral, no mirror needed. */
+[dir='rtl'] .rottay-collapse[data-part='root'] [data-part='arrow'][data-expanded='false'] {
+  transform: scaleX(-1);
+}
+
+/* ---- coarse pointers: interactive headers and the icon-only toggle meet
+        the physical 44px floor (the arrow is inline-block in the engine's
+        transition block; this rule's (0,5,0) outranks it). ---- */
+@media (hover: none), (pointer: coarse) {
+  .rottay-collapse[data-part='root'] [data-part='header'][role='button'] {
+    min-block-size: var(--ds-collapse-touch-target-min, 44px);
+  }
+
+  .rottay-collapse[data-part='root'] [data-part='arrow'][role='button'] {
+    display: inline-flex;
+    min-block-size: var(--ds-collapse-touch-target-min, 44px);
+    min-inline-size: var(--ds-collapse-touch-target-min, 44px);
+    align-items: center;
+    justify-content: center;
+  }
+}
+
 /* ---- panel: border-radius + surface (was the Panel root's inline style).
         Ghost overrides both to its own token pair; the extra
         `.rottay-collapse--ghost` class naturally out-specifies the default
@@ -200,19 +224,28 @@
  * ======================================================================== */
 
 .rottay-collapse[data-part='root'] [data-part='header'] {
-  transition: background var(--ds-collapse-transition-duration, var(--ds-motion-fast, 120ms))
-    var(--ds-collapse-transition-timing, var(--ds-motion-ease-out));
+  transition:
+    background var(--ds-collapse-transition-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-collapse-transition-timing, var(--ds-motion-ease-out)),
+    color var(--ds-collapse-transition-duration, var(--ds-motion-fast, 120ms))
+      var(--ds-collapse-transition-timing, var(--ds-motion-ease-out));
 }
 .rottay-collapse[data-part='root'] [data-part='header']:hover:not([data-disabled='true']):not([data-collapsible='disabled']):not([data-collapsible='icon']) {
+  /* `--ds-color-bg-hover` is a dark inset under both first-party themes
+     (#18181c) — dark-on-dark with the hover ink. The hover surface mixes
+     from the paired card chrome instead (pagination.css adjudication:
+     text-primary on `--ds-card-bg` = 15.0:1 BitHire / 14.8:1 TMM). */
   background: var(
     --ds-collapse-header-default-hover-bg,
-    var(--ds-color-bg-hover, color-mix(in srgb, var(--ds-color-primary) 4%, transparent))
+    color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-card-bg, var(--ds-surface-card)))
   );
 }
 .rottay-collapse[data-part='root'] [data-part='header']:active:not([data-disabled='true']):not([data-collapsible='disabled']):not([data-collapsible='icon']) {
+  /* `--ds-color-bg-active` is consumed-but-UNDEFINED (orphan, spec §2): the
+     pressed surface takes the same card-paired mix one step deeper. */
   background: var(
     --ds-collapse-header-default-pressed-bg,
-    var(--ds-color-bg-active, color-mix(in srgb, var(--ds-color-primary) 7%, transparent))
+    color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-surface-card)))
   );
 }
 .rottay-collapse[data-part='root'] [data-part='header']:focus-visible {

@@ -409,7 +409,7 @@ describe("Popover modern engine advanced coverage", () => {
     });
   });
 
-  it("dismisses only the top nested popover on Escape", () => {
+  it("dismisses only the top nested popover on Escape", async () => {
     const outerChange = vi.fn();
     const innerChange = vi.fn();
     render(
@@ -435,7 +435,12 @@ describe("Popover modern engine advanced coverage", () => {
     expect(screen.getAllByRole("dialog")).toHaveLength(2);
     fireEvent.keyDown(document, { key: "Escape" });
 
-    expect(innerChange).toHaveBeenCalledWith(false);
+    // The dismissed surface's exit teardown lands in a fallback timer; waitFor
+    // keeps those state updates inside act() instead of warning after the
+    // test body.
+    await waitFor(() => {
+      expect(innerChange).toHaveBeenCalledWith(false);
+    });
     expect(outerChange).not.toHaveBeenCalledWith(false);
     expect(
       screen

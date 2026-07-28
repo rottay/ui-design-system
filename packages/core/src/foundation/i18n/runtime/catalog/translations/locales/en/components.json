@@ -116,7 +116,12 @@
     "placeholder": "Select a time",
     "now": "Now",
     "clear": "Clear",
-    "ok": "OK"
+    "ok": "OK",
+    "hours_label": "Hr",
+    "minutes_label": "Min",
+    "seconds_label": "Sec",
+    "start_time": "Start time",
+    "end_time": "End time"
   },
   "search": {
     "placeholder": "Search...",
@@ -291,6 +296,52 @@
     "topLabel": "Top actions",
     "bottomLabel": "Bottom actions"
   },
+  "alertDialog": {
+    "cancel": "Cancel"
+  },
+  "appShell": {
+    "navigation": {
+      "label": "Navigation",
+      "open": "Open {label}",
+      "close": "Close {label}"
+    },
+    "skipToContent": {
+      "label": "Skip to main content"
+    }
+  },
+  "approvalWorkflow": {
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "escalated": "Escalated",
+      "skipped": "Skipped"
+    },
+    "action": {
+      "approve": "Approve",
+      "reject": "Reject",
+      "escalate": "Escalate"
+    }
+  },
+  "autocomplete": {
+    "not_found": "No results",
+    "clear": "Clear"
+  },
+  "calendarView": {
+    "today": "Today",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "viewMonth": "Month",
+    "viewWeek": "Week",
+    "viewDay": "Day",
+    "overflowMore": "+{count} more"
+  },
+  "cascader": {
+    "placeholder": "Please select",
+    "search_placeholder": "Search...",
+    "not_found": "No data",
+    "clear": "Clear"
+  },
   "stepper": {
     "navigation": "Progress steps"
   },
@@ -409,6 +460,85 @@
   "checkbox": {
     "group": "Checkbox group"
   },
+  "comment_thread": {
+    "submit": "Comment",
+    "save": "Save",
+    "cancel": "Cancel",
+    "reply": "Reply",
+    "edit": "Edit",
+    "delete": "Delete",
+    "edited": "(edited)",
+    "empty": "No comments yet",
+    "composer_placeholder": "Write a comment...",
+    "reply_placeholder": "Write a reply...",
+    "just_now": "just now",
+    "minutes_ago": "{count}m ago",
+    "hours_ago": "{count}h ago",
+    "days_ago": "{count}d ago"
+  },
+  "confirmDialog": {
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+  "environmentToggle": {
+    "select": "Select",
+    "banner": "You are viewing the {name} environment",
+    "confirmTitle": "Switch to {name}",
+    "cancel": "Cancel"
+  },
+  "fileManager": {
+    "root": "Root",
+    "upload": "Upload",
+    "deleteSelected": "Delete ({count})",
+    "rename": "Rename",
+    "delete": "Delete",
+    "switchToList": "Switch to list",
+    "switchToGrid": "Switch to grid",
+    "newNamePrompt": "New name:",
+    "empty": "No files or folders",
+    "columnName": "Name",
+    "columnSize": "Size",
+    "columnModified": "Modified",
+    "columnActions": "Actions"
+  },
+  "filterPanel": {
+    "apply": "Apply",
+    "clearAll": "Clear all",
+    "collapse": "Collapse filters",
+    "expand": "Expand filters",
+    "rangeTo": "to",
+    "min": "Min",
+    "max": "Max",
+    "selectPlaceholder": "Select..."
+  },
+  "filter_builder": {
+    "add_rule": "Add rule",
+    "add_group": "Add group",
+    "add_filter": "Add filter",
+    "clear_all": "Clear all",
+    "remove_rule": "Remove rule",
+    "remove_group": "Remove group",
+    "where": "Where",
+    "and": "AND",
+    "or": "OR",
+    "range_from": "From",
+    "range_to": "To",
+    "range_and": "and",
+    "value_placeholder": "Value",
+    "select_placeholder": "Select...",
+    "value_label": "Filter value",
+    "field_label": "Filter field",
+    "operator_label": "Filter operator"
+  },
+  "form_builder": {
+    "previous": "Previous",
+    "next": "Next",
+    "step_counter": "Step {current} of {total}"
+  },
+  "layout": {
+    "collapse_sidebar": "Collapse sidebar",
+    "expand_sidebar": "Expand sidebar"
+  },
   "radio": {
     "group": "Radio group"
   },
@@ -433,5 +563,86 @@
     "export": "Export",
     "active": "active",
     "clearAll": "Clear all"
+  },
+  "liveFeed": {
+    "refresh": "Refresh",
+    "loadMore": "Load more",
+    "newItem": "new item",
+    "newItems": "new items",
+    "empty": "No items"
+  },
+  "notificationCenter": {
+    "title": "Notifications",
+    "markAllRead": "Mark all read",
+    "clearAll": "Clear all",
+    "empty": "No notifications",
+    "dismiss": "Dismiss",
+    "justNow": "just now",
+    "minutesAgo": "{count}m ago",
+    "hoursAgo": "{count}h ago",
+    "daysAgo": "{count}d ago"
+  },
+  "popconfirm": {
+    "ok": "Yes",
+    "cancel": "No"
+  },
+  "savedViews": {
+    "rename": "Rename",
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "options": "options",
+    "unsavedChanges": "Unsaved changes"
+  },
+  "step_wizard": {
+    "next": "Next",
+    "prev": "Back",
+    "complete": "Complete",
+    "skip": "Skip",
+    "progress": "Step {current} of {total}: {title}",
+    "validation_default": "Please complete this step before continuing."
+  },
+  "taginput": {
+    "placeholder": "Type and press Enter"
+  },
+  "tenantPreview": {
+    "colorPalette": "Color Palette",
+    "componentPreview": "Component Preview",
+    "buttons": "Buttons",
+    "card": "Card",
+    "input": "Input",
+    "badges": "Badges",
+    "table": "Table",
+    "primary": "Primary",
+    "secondary": "Secondary",
+    "outlined": "Outlined",
+    "default": "Default",
+    "inputPlaceholder": "Type something...",
+    "sampleCardTitle": "Sample Card Title",
+    "sampleCardBody": "This card demonstrates the tenant branding applied to a container component.",
+    "badgeActive": "Active",
+    "badgePending": "Pending",
+    "badgeDraft": "Draft",
+    "colName": "Name",
+    "colStatus": "Status",
+    "colAmount": "Amount",
+    "personalityLabel": "Personality: {preset}",
+    "yes": "Yes",
+    "no": "No",
+    "disabled": "Disabled",
+    "tileAnimation": "Animation",
+    "tileIntensity": "Intensity",
+    "tileCardElevation": "Card Elevation",
+    "tileCardBorder": "Card Border",
+    "tileBadgeShape": "Badge Shape",
+    "tileLabelStyle": "Label Style",
+    "tileHoverLift": "Hover Lift",
+    "tileEdgeAccent": "Edge Accent"
+  },
+  "workspaceSwitcher": {
+    "switch": "Switch workspace",
+    "panel": "Workspaces",
+    "select": "Select workspace",
+    "create": "Create workspace",
+    "settings": "Settings for"
   }
 }

@@ -1,47 +1,75 @@
 /**
  * Modern Select skin.
  *
- * Native and custom branches share one complete, tenant-tokenized visual
- * language. The popup is portaled and therefore owns a standalone anatomy.
- * Full borders and framed states replace side rails or utility paint.
+ * SINGLE PAINT OWNER (R2+R3 wave): the modern engine stamps anatomy only —
+ * `data-part` hooks, `data-size`, `data-variant`, `data-status`,
+ * `data-open`/`data-active`/`data-selected`/`data-disabled`. Per-size trigger
+ * geometry (height / padding / type) lives HERE on `data-size` through
+ * documented `--ds-select-trigger-*` channels; the engine carries no inline
+ * typography, spacing or state paint. Runtime-measured dynamics (dropdown
+ * width, overlay position, virtual-scroll offsets) stay inline by contract.
+ *
+ * QUIET PREMIUM GRAMMAR (Pass 2): the trigger reads as the Input's sibling —
+ * flat control surface, one hairline border, focus as border + ring shadow,
+ * no glass gradients, no inset highlights, no lift transforms. The portaled
+ * dropdown is a finished flat surface: hairline frame, deliberate elevation,
+ * eyebrow group labels. The single accent is the tenant primary, spent on
+ * focus, selection and the open chevron. Backdrop blur is tenant opt-in via
+ * `--ds-select-backdrop-filter` (default: none).
+ *
+ * SPECIFICITY (P-48): the tenant artifact ships an unlayered
+ * `html[data-tenant]… *` at (0,3,1) setting `border-color` on every element.
+ * Every rule below that paints a border colour therefore reaches (0,4,0) via
+ * the two scope classes plus a REPEATED `data-part` (a legal double-count) or
+ * a contract data attribute. Non-border paint wins unlayered at (0,3,0).
+ * The portaled dropdown cannot see root-scoped aliases and keeps its own.
+ *
+ * Native and custom branches share one visual language; the popup is portaled
+ * and owns a standalone anatomy (`.ds-select-shell__dropdown`).
  */
 
 @keyframes ds-select-appear {
   from {
     opacity: 0;
-    transform: translateY(var(--ds-select-enter-y, -5px)) scale(0.975);
-    filter: saturate(0.9);
+    transform: translateY(var(--ds-select-enter-y, -5px)) scale(0.985);
   }
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: saturate(1);
   }
 }
 
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'] {
-  font-family: var(--ds-select-font-family, var(--ds-font-family-base));
-  transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    outline-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
-}
+/* ---- Trigger shell: layout + the Input-family control grammar. ---- */
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'],
 .ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'] {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+  align-items: center;
+  gap: var(--ds-select-trigger-gap, var(--ds-spacing-2, 8px));
+  min-block-size: var(--ds-select-trigger-height, 36px);
+  padding-inline: var(--ds-select-trigger-padding-x, 12px);
   color: var(--ds-select-color, var(--ds-color-text-primary));
-  border-radius: var(--ds-select-radius, var(--ds-radius-lg, 12px));
-  background:
-    linear-gradient(180deg, color-mix(in srgb, white 4%, transparent), transparent 42%),
-    var(--ds-select-bg, var(--ds-surface-control));
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 48%, transparent),
-    var(--ds-select-shadow, var(--ds-shadow-xs, 0 1px 2px rgb(15 23 42 / 0.04)));
-  outline: var(--ds-focus-ring-width, 2px) solid transparent;
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  font-family: var(--ds-select-font-family, inherit);
+  font-size: var(--ds-select-trigger-font-size, 14px);
+  line-height: var(--ds-select-trigger-line-height, 20px);
+  border-radius: var(--ds-select-radius, var(--ds-radius-input, var(--ds-radius-md)));
+  background: var(--ds-select-bg, var(--ds-surface-control));
+  box-shadow: var(--ds-select-shadow, none);
+  cursor: pointer;
+  outline: none;
+  transition:
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+
+/* The custom branch is a plain div and lays its parts out with flex; the
+   native <select> keeps its own box (flex would break its chrome in WebKit). */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'] {
+  display: flex;
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-part='trigger'],
@@ -52,71 +80,112 @@
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'] {
   overflow: hidden;
+  position: relative;
+  user-select: none;
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'] {
   appearance: none;
   background-image: none;
+  /* Clearance for the custom arrow glyph at the inline end. */
+  padding-inline-end: var(--ds-select-native-arrow-clearance, 2rem);
 }
 
-.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:not([data-disabled='true']):hover {
+/* ---- Public size geometry (the Input scale: 28/32/36/40/44). Responsive
+       sizes ride the engine's generated media rules, which set the same
+       properties and therefore need no application-authored CSS. ---- */
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='xs'] [data-part='trigger'] {
+  --ds-select-trigger-height: var(--ds-select-trigger-xs-height, 28px);
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-xs-padding-x, 8px);
+  --ds-select-trigger-font-size: var(--ds-select-trigger-xs-font-size, 12px);
+  --ds-select-trigger-line-height: var(--ds-select-trigger-xs-line-height, 16px);
+  --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='sm'] [data-part='trigger'] {
+  --ds-select-trigger-height: var(--ds-select-trigger-sm-height, 32px);
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-sm-padding-x, 10px);
+  --ds-select-trigger-font-size: var(--ds-select-trigger-sm-font-size, 14px);
+  --ds-select-trigger-line-height: var(--ds-select-trigger-sm-line-height, 20px);
+  --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='md'] [data-part='trigger'] {
+  --ds-select-trigger-height: var(--ds-select-trigger-md-height, 36px);
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-md-padding-x, 12px);
+  --ds-select-trigger-font-size: var(--ds-select-trigger-md-font-size, 14px);
+  --ds-select-trigger-line-height: var(--ds-select-trigger-md-line-height, 20px);
+  --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='lg'] [data-part='trigger'] {
+  --ds-select-trigger-height: var(--ds-select-trigger-lg-height, 40px);
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-lg-padding-x, 14px);
+  --ds-select-trigger-font-size: var(--ds-select-trigger-lg-font-size, 16px);
+  --ds-select-trigger-line-height: var(--ds-select-trigger-lg-line-height, 24px);
+  --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='xl'] [data-part='trigger'] {
+  --ds-select-trigger-height: var(--ds-select-trigger-xl-height, 44px);
+  --ds-select-trigger-padding-x: var(--ds-select-trigger-xl-padding-x, 16px);
+  --ds-select-trigger-font-size: var(--ds-select-trigger-xl-font-size, 16px);
+  --ds-select-trigger-line-height: var(--ds-select-trigger-xl-line-height, 24px);
+  --ds-select-native-arrow-inset: var(--ds-select-trigger-padding-x);
+}
+
+/* ---- Interaction and semantic states (Input grammar: flat + hairline). ---- */
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger']:not([data-disabled='true']):not([data-open='true']):not([data-status='error']):not([data-status='warning']):hover {
   border-color: var(--ds-select-border-color-hover, var(--ds-color-border-hover));
-  background:
-    linear-gradient(180deg, color-mix(in srgb, white 6%, transparent), transparent 48%),
-    var(--ds-select-bg-hover, color-mix(in srgb, var(--ds-color-primary) 3%, var(--ds-surface-control)));
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 56%, transparent),
-    var(--ds-select-shadow-hover, var(--ds-shadow-sm));
+  background: var(--ds-select-bg-hover, var(--ds-select-bg, var(--ds-surface-control)));
+  box-shadow: var(--ds-select-shadow-hover, var(--ds-select-shadow, none));
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-open='true'],
 .ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:focus-visible {
   border-color: var(--ds-select-border-color-focus, var(--ds-color-primary));
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 4%, white), transparent 52%),
-    var(--ds-select-bg-focus, var(--ds-surface-control));
-  outline-color: var(--ds-select-focus-ring, var(--ds-focus-ring-color));
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
-    var(--ds-select-shadow-focus, var(--ds-shadow-sm));
+  background: var(--ds-select-bg-focus, var(--ds-select-bg, var(--ds-surface-control)));
+  box-shadow: var(--ds-select-shadow-focus, var(--ds-focus-ring));
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-variant='filled'] {
-  background:
-    linear-gradient(180deg, color-mix(in srgb, white 4%, transparent), transparent),
-    var(--ds-select-filled-bg, var(--ds-surface-subtle, var(--ds-surface-canvas)));
+  background: var(--ds-select-filled-bg, var(--ds-surface-inset, var(--ds-surface-canvas)));
+  border-color: var(--ds-select-filled-border, transparent);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-variant='flushed'] {
-  border-width: 0 0 1px;
-  border-radius: 0;
+  padding-inline: 0;
   background: transparent;
+  border-width: 0 0 var(--ds-select-border-width, 1px);
+  border-radius: 0;
   box-shadow: none;
-  outline: none;
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='error'] {
-  border-color: var(--ds-color-error);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-error) 5%, var(--ds-surface-control)), var(--ds-surface-control));
+  border-color: var(--ds-select-error-border, var(--ds-color-error));
+  background: var(--ds-select-error-bg, var(--ds-select-bg, var(--ds-surface-control)));
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='warning'] {
-  border-color: var(--ds-color-warning);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-warning) 5%, var(--ds-surface-control)), var(--ds-surface-control));
+  border-color: var(--ds-select-warning-border, var(--ds-color-warning));
+  background: var(--ds-select-warning-bg, var(--ds-select-bg, var(--ds-surface-control)));
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='success'] {
-  border-color: color-mix(in srgb, var(--ds-color-success) 56%, var(--ds-color-border));
+  border-color: var(--ds-select-success-border, var(--ds-color-success));
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-disabled='true'] [data-part='trigger'],
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-disabled='true'] {
-  color: var(--ds-color-text-disabled, var(--ds-color-text-muted));
-  background: var(--ds-select-bg-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas)));
+  color: var(--ds-select-color-disabled, var(--ds-color-text-disabled, var(--ds-color-text-muted)));
+  background: var(--ds-select-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
   cursor: not-allowed;
-  opacity: var(--ds-opacity-disabled, 0.54);
-  filter: saturate(0.5);
+  opacity: var(--ds-select-disabled-opacity, var(--ds-opacity-disabled, 0.54));
 }
+
+/* ---- Trigger content parts. ---- */
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger-value'] {
   display: flex;
@@ -145,8 +214,8 @@
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='value'][data-mode='single'] {
   min-inline-size: 0;
   overflow: hidden;
-  color: var(--ds-color-text-primary);
-  font-weight: var(--ds-font-weight-medium, 500);
+  color: var(--ds-select-color, var(--ds-color-text-primary));
+  font-weight: var(--ds-select-value-font-weight, var(--ds-font-weight-medium, 500));
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -159,6 +228,8 @@
   align-items: center;
 }
 
+/* ---- Multi-select tags: quiet chips, primary only as a hairline tint. ---- */
+
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag'],
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-count'] {
   display: inline-flex;
@@ -168,16 +239,24 @@
   align-items: center;
   gap: 0.28rem;
   color: var(--ds-select-tag-color, var(--ds-color-text-primary));
-  border-radius: var(--ds-select-tag-radius, var(--ds-radius-md, 9px));
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), var(--ds-surface-card));
+  border-radius: var(--ds-select-tag-radius, var(--ds-radius-sm, 6px));
+  background: var(
+    --ds-select-tag-bg,
+    color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card))
+  );
   font-size: var(--ds-font-size-xs, 0.75rem);
   font-weight: var(--ds-font-weight-medium, 500);
+  font-variant-numeric: tabular-nums;
   line-height: 1.2;
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag'][data-part='tag'],
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-count'][data-part='tag-count'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
+  border: 1px solid
+    var(
+      --ds-select-tag-border,
+      color-mix(in srgb, var(--ds-color-primary) 16%, var(--ds-color-border-subtle))
+    );
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-label'] {
@@ -189,50 +268,64 @@
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-count'] {
   color: var(--ds-color-text-secondary);
-  background: var(--ds-surface-subtle, var(--ds-surface-canvas));
+  background: var(--ds-select-tag-count-bg, var(--ds-surface-subtle, var(--ds-surface-canvas)));
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove'],
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button'] {
   display: inline-grid;
   flex: none;
-  inline-size: 1.35rem;
-  block-size: 1.35rem;
+  inline-size: var(--ds-select-action-size, 1.35rem);
+  block-size: var(--ds-select-action-size, 1.35rem);
   padding: 0;
   place-items: center;
-  color: var(--ds-color-text-muted);
+  color: var(--ds-select-action-color, var(--ds-color-text-muted));
   border-radius: var(--ds-radius-full);
-  background: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  background: transparent;
   cursor: pointer;
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-spring, ease-out);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove'][data-part='tag-remove'],
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button'][data-part='clear-button'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 76%, transparent);
+  border: 1px solid transparent;
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove']:hover,
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button']:hover {
-  color: var(--ds-color-text-primary);
-  background: color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card));
-  transform: scale(1.05);
+  color: var(--ds-select-action-color-hover, var(--ds-color-text-primary));
+  border-color: var(--ds-select-action-border-hover, var(--ds-color-border-subtle));
+  background: var(--ds-select-action-bg-hover, var(--ds-surface-inset));
 }
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove']:focus-visible,
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button']:focus-visible {
+  outline: 0;
+  box-shadow: var(--ds-select-action-focus-ring, var(--ds-focus-ring));
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove']:active,
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button']:active {
+  transform: var(--ds-select-action-active-transform, scale(0.94));
+}
+
+/* ---- Chevron + loading: the open state spends the accent here. ---- */
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='arrow-icon'] {
   flex: none;
-  color: var(--ds-color-text-muted);
+  color: var(--ds-select-arrow-color, var(--ds-color-text-muted));
   transform: rotate(0deg);
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-spring, ease-out);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-open='true'] [data-part='arrow-icon'] {
-  color: var(--ds-color-primary);
+  color: var(--ds-select-arrow-color-open, var(--ds-color-primary));
   transform: rotate(180deg);
 }
 
@@ -242,7 +335,7 @@
   inset-inline-end: var(--ds-select-native-arrow-inset, 0.75rem);
   display: inline-grid;
   place-items: center;
-  color: var(--ds-color-text-muted);
+  color: var(--ds-select-arrow-color, var(--ds-color-text-muted));
   transform: translateY(-50%);
   pointer-events: none;
 }
@@ -251,12 +344,26 @@
   opacity: 0;
 }
 
+/* Native branch: the spinner parks where the arrow lives (logical inset). */
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading'] {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--ds-select-loading-inset, 2rem);
+  display: inline-flex;
   transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-spinner'] {
+  display: inline-block;
+  inline-size: var(--ds-select-loading-size, 12px);
+  block-size: var(--ds-select-loading-size, 12px);
+  animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-spinner'][data-part='loading-spinner'] {
-  border: 2px solid color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border));
+  border: 2px solid
+    color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border));
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
 }
@@ -272,26 +379,25 @@
   overflow: hidden;
   color: var(--ds-color-text-primary);
   font-family: var(--ds-select-font-family, var(--ds-font-family-base));
-  border-radius: var(--ds-select-dropdown-radius, var(--ds-radius-xl, 16px));
-  background:
-    linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 5%, transparent), transparent 46%),
-    linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 98%, white 2%), color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%));
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
-    var(--ds-select-dropdown-shadow, var(--ds-elevation-3, 0 16px 40px rgb(15 23 42 / 0.14)));
-  backdrop-filter: blur(var(--ds-select-backdrop-blur, 16px)) saturate(1.08);
+  border-radius: var(--ds-select-dropdown-radius, var(--ds-radius-lg, 12px));
+  background: var(--ds-select-dropdown-bg, var(--ds-surface-card));
+  box-shadow: var(--ds-select-dropdown-shadow, var(--ds-elevation-3, 0 16px 40px rgb(15 23 42 / 0.14)));
+  backdrop-filter: var(--ds-select-backdrop-filter, none);
   transform-origin: center top;
+  animation: ds-select-appear var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-select-shell__dropdown.ds-select-shell__dropdown[data-part='dropdown'][data-part='dropdown'] {
   border: var(--ds-select-dropdown-border-width, 1px) solid
-    var(--ds-select-dropdown-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));
+    var(--ds-select-dropdown-border-color, var(--ds-color-border));
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'][data-placement='top'] {
   --ds-select-enter-y: 5px;
   transform-origin: center bottom;
 }
+
+/* ---- Search row inside the panel. ---- */
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'] {
   display: grid;
@@ -302,17 +408,16 @@
   padding: 0.45rem 0.65rem;
   align-items: center;
   color: var(--ds-color-text-secondary);
-  border-radius: var(--ds-radius-lg, 12px);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)), var(--ds-surface-card));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 55%, transparent);
+  border-radius: var(--ds-select-search-radius, var(--ds-radius-md, 8px));
+  background: var(--ds-select-search-bg, var(--ds-surface-inset, var(--ds-surface-canvas)));
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'][data-part='search-input-wrapper'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 17%, var(--ds-color-border-subtle));
+  border: 1px solid var(--ds-select-search-border, var(--ds-color-border-subtle));
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-icon'] {
-  color: var(--ds-color-primary);
+  color: var(--ds-select-search-icon-color, var(--ds-color-text-muted));
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input'] {
@@ -332,12 +437,20 @@
   color: var(--ds-color-text-muted);
 }
 
+/* ---- Option list. ---- */
+
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-list'] {
   display: grid;
   gap: 0.2rem;
+  max-block-size: var(--ds-select-max-height, 240px);
   overflow-x: hidden;
+  overflow-y: auto;
   scrollbar-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border)) transparent;
   scrollbar-width: thin;
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-list'][data-virtual='true'] {
+  max-block-size: none;
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-list']::-webkit-scrollbar {
@@ -349,6 +462,8 @@
   background: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border));
 }
 
+/* ---- Group labels: the editorial eyebrow. ---- */
+
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='group-label'] {
   display: flex;
   min-block-size: 1.8rem;
@@ -356,8 +471,6 @@
   padding: 0.35rem 0.65rem;
   align-items: center;
   color: var(--ds-select-group-color, var(--ds-color-text-muted));
-  border-radius: var(--ds-radius-md, 10px);
-  background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), transparent 78%);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-font-size-xs, 0.75rem);
   font-weight: var(--ds-font-weight-semibold, 600);
@@ -371,17 +484,23 @@
   margin-block-start: 0.55rem;
 }
 
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='group-label'][data-divider='true'][data-divider='true'] {
+  border-block-start: 1px solid var(--ds-select-group-divider, var(--ds-color-border-subtle));
+}
+
+/* ---- Options: hairline frames, no lifts; state by surface and ink. ---- */
+
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] {
   position: relative;
   display: flex;
   inline-size: 100%;
-  min-block-size: var(--ds-select-option-height, 2.85rem);
+  min-block-size: var(--ds-select-option-height, 2.25rem);
   padding: var(--ds-select-option-padding-y, 0.48rem) var(--ds-select-option-padding-x, 0.62rem);
   align-items: center;
   gap: 0.55rem;
   overflow: hidden;
   color: var(--ds-select-option-color, var(--ds-color-text-secondary));
-  border-radius: var(--ds-select-option-radius, var(--ds-radius-lg, 12px));
+  border-radius: var(--ds-select-option-radius, var(--ds-radius-md, 8px));
   background: transparent;
   font-family: var(--ds-font-family-base);
   font-size: var(--ds-select-option-font-size, var(--ds-font-size-sm));
@@ -391,11 +510,9 @@
   outline: none;
   user-select: none;
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'] {
@@ -405,21 +522,23 @@
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option']:not([data-disabled='true']):hover,
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-active='true'] {
   color: var(--ds-select-option-color-hover, var(--ds-color-text-primary));
-  border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-subtle));
-  background: linear-gradient(135deg, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 3%, var(--ds-surface-card)));
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 58%, transparent),
-    var(--ds-shadow-xs);
-  transform: translateY(-1px);
+  border-color: var(--ds-select-option-border-hover, var(--ds-color-border-subtle));
+  background: var(
+    --ds-select-option-bg-hover,
+    color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))
+  );
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] {
   color: var(--ds-select-option-color-selected, var(--ds-color-primary));
-  border-color: color-mix(in srgb, var(--ds-color-primary) 36%, var(--ds-color-border-subtle));
-  background: linear-gradient(135deg, color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card)));
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
-    var(--ds-shadow-xs);
+  border-color: var(
+    --ds-select-option-border-selected,
+    color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border-subtle))
+  );
+  background: var(
+    --ds-select-option-bg-selected,
+    color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card))
+  );
   font-weight: var(--ds-font-weight-semibold, 600);
 }
 
@@ -427,8 +546,9 @@
   color: var(--ds-color-text-disabled, var(--ds-color-text-muted));
   cursor: not-allowed;
   opacity: var(--ds-opacity-disabled, 0.46);
-  filter: saturate(0.45);
 }
+
+/* ---- Option affordances (checkbox, icon well, check). ---- */
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-checkbox'] {
   display: inline-grid;
@@ -436,14 +556,12 @@
   inline-size: 1.05rem;
   block-size: 1.05rem;
   place-items: center;
-  color: var(--ds-color-text-on-primary, white);
+  color: var(--ds-color-text-on-primary, var(--ds-color-white, #fff));
   border-radius: var(--ds-radius-sm, 6px);
   background: var(--ds-surface-card);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 54%, transparent);
   transition:
-    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-checkbox'][data-part='option-checkbox'] {
@@ -453,7 +571,6 @@
 .ds-select-shell__dropdown[data-part='dropdown'] [data-selected='true'] [data-part='option-checkbox'] {
   border-color: var(--ds-color-primary);
   background: var(--ds-color-primary);
-  transform: scale(1.03);
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-icon'] {
@@ -466,13 +583,11 @@
   border-radius: var(--ds-radius-md, 10px);
   background: color-mix(in srgb, currentColor 7%, transparent);
   transition:
-    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option']:hover [data-part='option-icon'] {
   background: color-mix(in srgb, currentColor 11%, transparent);
-  transform: scale(1.04);
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-content'] {
@@ -514,21 +629,35 @@
   background: color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
 }
 
+/* ---- Empty posture: quiet dashed well with the honest message. ---- */
+
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='empty'] {
   display: grid;
   min-block-size: 4.5rem;
   padding: 1rem;
   place-items: center;
   color: var(--ds-color-text-muted);
-  border-radius: var(--ds-radius-lg, 12px);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent), transparent);
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-select-empty-bg, transparent);
   font-size: var(--ds-font-size-sm);
   line-height: var(--ds-line-height-relaxed);
   text-align: center;
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='empty'][data-part='empty'] {
-  border: 1px dashed color-mix(in srgb, var(--ds-color-border) 84%, transparent);
+  border: 1px dashed var(--ds-select-empty-border, var(--ds-color-border));
+}
+
+/* ---- Coarse pointers: the option row meets the touch floor. ---- */
+
+@media (pointer: coarse) {
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'] {
+    min-block-size: max(var(--ds-select-trigger-height, 36px), var(--ds-select-touch-target-min, 44px));
+  }
+
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] {
+    min-block-size: max(var(--ds-select-option-height, 2.25rem), var(--ds-select-touch-target-min, 44px));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -542,5 +671,32 @@
   .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-checkbox'] {
     animation: none;
     transition-duration: 0.01ms;
+  }
+
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-spinner'] {
+    animation-duration: 1.8s;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-part='trigger'] {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+  }
+
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-open='true'],
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .ds-select-shell.ds-select-shell--modern[data-part='root'][data-disabled='true'] [data-part='trigger'],
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-disabled='true'] {
+    color: GrayText;
+    border-color: GrayText;
+  }
+
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] {
+    outline: 1px solid Highlight;
   }
 }

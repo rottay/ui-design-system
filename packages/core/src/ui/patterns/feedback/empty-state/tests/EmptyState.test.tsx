@@ -1,4 +1,6 @@
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, screen } from '@testing-library/react';
 
@@ -237,10 +239,28 @@ describe('PatternEmptyState modern anatomy', () => {
     expect(root).toHaveAttribute('data-has-description', 'true');
     expect(root).toHaveAttribute('data-has-action', 'false');
     expect(root).toHaveAttribute('aria-live', 'polite');
-    expect(container.querySelector('[data-icon-name="communication.inbox"]')).not.toBeNull();
+    // The semantic fallback occupies the same icon slot a custom icon uses.
+    expect(container.querySelector('[data-part="visual"] > [data-part="icon"] [data-icon-name="communication.inbox"]')).not.toBeNull();
     expect(container.querySelector('[data-part="content"]')).not.toBeNull();
     expect(container.querySelector('[data-part="visual"]')).not.toBeNull();
     expect(container.querySelector('[data-part="copy"]')).not.toBeNull();
+  });
+
+  it('keeps the quiet-premium contract in the skin (status, not interactive)', () => {
+    const skin = readFileSync(
+      join(
+        __dirname,
+        '../../../../../foundation/tokens/css/runtime/engines/modern/skin/empty-state.css',
+      ),
+      'utf-8',
+    );
+
+    // A role=status region carries no root hover treatment and no glow
+    // backdrop; reduced motion stills the spinner instead of slowing it.
+    expect(skin).not.toMatch(/\[data-part='root'\]\[data-part='root'\]:hover/);
+    expect(skin).not.toContain('radial-gradient');
+    expect(skin).toContain('@media (prefers-reduced-motion: reduce)');
+    expect(skin).toContain("[data-part='spinner']");
   });
 
   it('marks its action tray and uses explicit button types', () => {

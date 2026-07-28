@@ -99,6 +99,31 @@ describe('Card Pass 1 primitive contract', () => {
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Decision readiness');
   });
 
+  it('keeps loading, header and actions anatomy free of inline layout (skin-owned)', () => {
+    const { container, rerender } = render(
+      <ModernCard loading>Hidden</ModernCard>,
+    );
+
+    // The loading branch stamps anatomy only: rhythm (gaps, stacks, min
+    // height) lives in the skin. Per-bar widths/heights remain inline as
+    // documented anatomy geometry.
+    expect(container.querySelector('[data-part="loading-content"]')).not.toHaveAttribute('style');
+    expect(container.querySelector('[data-part="skeleton"]')).not.toHaveAttribute('style');
+    expect(container.querySelector('[data-part="skeleton-stack"]')).not.toHaveAttribute('style');
+    expect(container.querySelector('[data-part="skeleton-bar"]')).toHaveAttribute('style');
+
+    rerender(
+      <ModernCard
+        title="Decision readiness"
+        actions={[<button key="continue" type="button">Continue</button>]}
+      >
+        Evidence
+      </ModernCard>,
+    );
+    expect(container.querySelector('[data-part="header-main"]')).not.toHaveAttribute('style');
+    expect(container.querySelector('[data-part="actions"]')).not.toHaveAttribute('style');
+  });
+
   it('compiles finite BrandTheme and DB-safe TenantTheme card channels', () => {
     const vars = chromeToVariables({
       cardComponent: {

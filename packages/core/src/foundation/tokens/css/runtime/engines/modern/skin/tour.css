@@ -237,7 +237,7 @@
 }
 .rottay-tour--modern[data-part='root'] [data-part='action']:not(:disabled):focus-visible,
 .rottay-tour--modern[data-part='root'] [data-part='close-button']:not(:disabled):focus-visible {
-  outline: 2px solid var(--ds-tour-focus-ring, color-mix(in srgb, var(--ds-color-primary) 56%, transparent));
+  outline: 2px solid var(--ds-tour-focus-ring, var(--ds-focus-ring-color, var(--ds-color-primary)));
   outline-offset: 2px;
 }
 .rottay-tour--modern[data-part='root'] [data-part='close-button']:not(:disabled):hover {
@@ -269,6 +269,6 @@
 @media (prefers-reduced-motion: reduce) {
   .rottay-tour--modern[data-part='root'] [data-part='action'],
   .rottay-tour--modern[data-part='root'] [data-part='close-button'] {
-    transition-duration: 0.01ms;
+    transition: none;
   }
 }

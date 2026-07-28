@@ -15,6 +15,21 @@ import type { TimePickerProps, TimeRangePickerProps } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+
+/**
+ * Hook-local `tOr`: catalogue value with an English floor -- when the
+ * catalogue entry has not landed yet the provider echoes the full key, which
+ * must never reach visible copy or an aria-label.
+ */
+function useTimePickerTranslation(): (key: string, fallback: string) => string {
+  const i18n = useOptionalTranslation('components');
+  return (key, fallback) => {
+    const resolved = i18n?.t(key);
+    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+    return resolved;
+  };
+}
 
 /** Maps the canonical `sm | md | lg` size step to inline style dimensions. */
 const sizeStyleMap: Record<'sm' | 'md' | 'lg', React.CSSProperties> = {
@@ -68,6 +83,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
   onNowClick,
   showNow,
 }) => {
+  const tOr = useTimePickerTranslation();
   const hoursRef = useRef<HTMLDivElement>(null);
   const minutesRef = useRef<HTMLDivElement>(null);
   const secondsRef = useRef<HTMLDivElement>(null);
@@ -88,7 +104,6 @@ const TimePanel: React.FC<TimePanelProps> = ({
 
   const panelStyle: React.CSSProperties = {
     fontFamily: 'inherit',
-    animation: 'ds-time-picker-slide-in var(--ds-motion-fast) ease-out',
     overflow: 'hidden',
   };
 
@@ -99,7 +114,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
   };
 
   const dividerStyle: React.CSSProperties = {
-    width: 1,
+    inlineSize: 1,
     flexShrink: 0,
   };
 
@@ -112,14 +127,13 @@ const TimePanel: React.FC<TimePanelProps> = ({
 
   const labelStyle: React.CSSProperties = {
     fontSize: 'var(--ds-font-size-2xs, 11px)',
-    fontWeight: 600,
     textTransform: 'uppercase' as const,
     letterSpacing: 'var(--ds-letter-spacing-wide, 0.025em)',
     textAlign: 'center' as const,
     flex: 1,
   };
 
-  const getItemStyle = (isActive: boolean): React.CSSProperties => ({
+  const itemStyle: React.CSSProperties = {
     width: 44,
     height: 'var(--ds-input-sm-height, 32px)',
     display: 'flex',
@@ -127,22 +141,20 @@ const TimePanel: React.FC<TimePanelProps> = ({
     justifyContent: 'center',
     fontSize: 'var(--ds-input-sm-font-size, 13px)',
     cursor: 'pointer',
-    fontWeight: isActive ? 600 : 400,
-    transition: 'all var(--ds-motion-fast)',
     margin: '1px auto',
-  });
+  };
 
   return (
     <div data-part="panel" className="rottay-timepicker__panel" style={panelStyle}>
       {/* Column headers */}
       <div data-part="header" style={headerStyle}>
-        <span style={labelStyle}>Hr</span>
-        <span style={{ ...labelStyle, flex: 0, width: 1 }} />
-        <span style={labelStyle}>Min</span>
+        <span style={labelStyle}>{tOr('timepicker.hours_label', 'Hr')}</span>
+        <span style={{ ...labelStyle, flex: 0, inlineSize: 1 }} />
+        <span style={labelStyle}>{tOr('timepicker.minutes_label', 'Min')}</span>
         {showSeconds && (
           <>
-            <span style={{ ...labelStyle, flex: 0, width: 1 }} />
-            <span style={labelStyle}>Sec</span>
+            <span style={{ ...labelStyle, flex: 0, inlineSize: 1 }} />
+            <span style={labelStyle}>{tOr('timepicker.seconds_label', 'Sec')}</span>
           </>
         )}
       </div>
@@ -157,7 +169,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
               type="button"
               data-part="time-option"
               data-selected={i === hours || undefined}
-              style={getItemStyle(i === hours)}
+              style={itemStyle}
               onClick={() => onSelect(i, minutes, seconds)}
             >
               {pad2(i)}
@@ -175,7 +187,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
               type="button"
               data-part="time-option"
               data-selected={i === minutes || undefined}
-              style={getItemStyle(i === minutes)}
+              style={itemStyle}
               onClick={() => onSelect(hours, i, seconds)}
             >
               {pad2(i)}
@@ -194,7 +206,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
                   type="button"
                   data-part="time-option"
                   data-selected={i === seconds || undefined}
-                  style={getItemStyle(i === seconds)}
+                  style={itemStyle}
                   onClick={() => onSelect(hours, minutes, i)}
                 >
                   {pad2(i)}
@@ -215,13 +227,11 @@ const TimePanel: React.FC<TimePanelProps> = ({
               width: '100%',
               padding: '4px var(--ds-spacing-3, 12px)',
               fontSize: 'var(--ds-font-size-xs, 12px)',
-              fontWeight: 500,
               cursor: 'pointer',
-              transition: 'opacity var(--ds-motion-fast)',
             }}
             onClick={onNowClick}
           >
-            Now
+            {tOr('timepicker.now', 'Now')}
           </button>
         </div>
       )}
@@ -234,6 +244,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
 // ---------------------------------------------------------------------------
 
 const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((props, ref) => {
+  const tOr = useTimePickerTranslation();
   const {
     value,
     defaultValue,
@@ -243,7 +254,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     disabled = false,
     size = 'default',
     status,
-    placeholder = 'Select time',
+    placeholder: placeholderProp,
     allowClear = true,
     showNow = true,
     onChange,
@@ -253,6 +264,10 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     id,
     name,
   } = props;
+
+  // Explicit prop wins; otherwise the localized placeholder with the
+  // historical English default as the floor.
+  const placeholder = placeholderProp ?? tOr('timepicker.placeholder', 'Select time');
 
   const parseTime = (val: Date | string | null | undefined): { h: number; m: number; s: number } | null => {
     if (!val) return null;
@@ -309,7 +324,12 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     const update = () => {
       const rect = triggerRef.current!.getBoundingClientRect();
       const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--ds-spacing-1') || '4', 10) || 4;
-      setPos({ top: rect.bottom + gap, left: rect.left });
+      // Responsive law: never let the panel overflow the viewport's inline
+      // end. 208 is the worst-case panel footprint (three 44px option columns
+      // + dividers + padding, coarse floors included).
+      const PANEL_MAX_FOOTPRINT = 208;
+      const left = Math.max(gap, Math.min(rect.left, window.innerWidth - PANEL_MAX_FOOTPRINT - gap));
+      setPos({ top: rect.bottom + gap, left });
     };
     update();
     window.addEventListener('scroll', update, true);
@@ -394,7 +414,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
           className="w-full cursor-pointer"
           style={{
             boxSizing: 'border-box',
-            paddingRight: 48,
+            paddingInlineEnd: 48,
             ...sizeStyle,
           }}
           value={displayText}
@@ -420,16 +440,17 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
           <button
             type="button"
             data-part="clear-button"
-            style={{ position: 'absolute', right: 28, top: '50%', cursor: 'pointer', padding: 'var(--ds-spacing-1, 4px)', opacity: 0.5, fontSize: 16, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ position: 'absolute', insetInlineEnd: 28, top: '50%', cursor: 'pointer', padding: 'var(--ds-spacing-1, 4px)', fontSize: 16, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={handleClear}
             tabIndex={-1}
+            aria-label={tOr('timepicker.clear', 'Clear')}
           >
             ×
           </button>
         )}
         <span
           data-part="clock-icon"
-          style={{ position: 'absolute', right: 10, top: '50%', pointerEvents: 'none', display: 'flex' }}
+          style={{ position: 'absolute', insetInlineEnd: 10, top: '50%', pointerEvents: 'none', display: 'flex' }}
           aria-hidden="true"
         >
           <ClockIcon />
@@ -446,7 +467,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
           <PortalScope snapshot={portalScope}>
             <div
               ref={panelRef}
-              style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 1050 }}
+              style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 'var(--ds-timepicker-z-index, 1050)' }}
             >
               <TimePanel
                 hours={selectedTime?.h ?? 0}
@@ -472,6 +493,7 @@ TimePickerBase.displayName = 'TimePicker.Modern';
 // ---------------------------------------------------------------------------
 
 const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((props, ref) => {
+  const tOr = useTimePickerTranslation();
   const {
     value,
     defaultValue,
@@ -481,7 +503,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     disabled = false,
     size = 'default',
     status,
-    placeholder = ['Start time', 'End time'],
+    placeholder: placeholderProp,
     separator = '→',
     showNow = true,
     onChange,
@@ -489,6 +511,13 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     style,
     id,
   } = props;
+
+  // Explicit prop wins; otherwise localized labels with the historical
+  // English defaults as the floor.
+  const placeholder = placeholderProp ?? [
+    tOr('timepicker.start_time', 'Start time'),
+    tOr('timepicker.end_time', 'End time'),
+  ];
 
   const parseTime = (val: Date | string | null | undefined): { h: number; m: number; s: number } | null => {
     if (!val) return null;
@@ -552,7 +581,10 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     const update = () => {
       const rect = triggerRef.current!.getBoundingClientRect();
       const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--ds-spacing-1') || '4', 10) || 4;
-      setPos({ top: rect.bottom + gap, left: rect.left });
+      // Responsive law: viewport clamp -- see TimePickerBase.
+      const PANEL_MAX_FOOTPRINT = 208;
+      const left = Math.max(gap, Math.min(rect.left, window.innerWidth - PANEL_MAX_FOOTPRINT - gap));
+      setPos({ top: rect.bottom + gap, left });
     };
     update();
     window.addEventListener('scroll', update, true);
@@ -686,7 +718,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
           <PortalScope snapshot={portalScope}>
             <div
               ref={panelRef}
-              style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 1050 }}
+              style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 'var(--ds-timepicker-z-index, 1050)' }}
             >
               <TimePanel
                 hours={activeTime?.h ?? 0}

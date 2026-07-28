@@ -31,7 +31,7 @@ import { MODAL_DEFAULTS, PADDING_MAP } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 import { usePhoneBreakpoint } from '@/infrastructure/runtime/responsive/composition/react/provider/phone-state';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 // ============================================================================
@@ -92,7 +92,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
   // contract here also retained touch and motion-preference runtimes in this
   // component's leaf bundle, although neither value affects modal layout.
   const isMobile = usePhoneBreakpoint();
-  const { t } = useTranslation('common');
+  // Optional channel with an English floor: the modal renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('common');
 
   const {
     open,
@@ -137,8 +139,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
   const backdropClosable = closeOnBackdropClick ?? closeOnOverlayClick;
   const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen !== false && isMobile;
   const effectiveFullscreen = fullScreen || isAdaptiveFullscreen;
-  const resolvedOkText = okText ?? t('ok');
-  const resolvedCancelText = cancelText ?? t('cancel');
+  const resolvedOkText = okText ?? i18n?.tOr('ok', 'OK') ?? 'OK';
+  const resolvedCancelText = cancelText ?? i18n?.tOr('cancel', 'Cancel') ?? 'Cancel';
 
   useModalInertSiblings(isOpen);
 
@@ -282,43 +284,20 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
             ...style,
           } as React.CSSProperties}
         >
-          {/* ---- Header ---- */}
+          {/* ---- Header ----. Layout AND paint live in the modern skin
+              (modal.css); the engine stamps parts only. */}
           {(header || title || description || closable) && (
-            <div
-              data-part="header"
-              style={{
-                display: 'flex',
-                alignItems: 'flex-start',
-                justifyContent: 'space-between',
-                padding: '16px 24px',
-                flexShrink: 0,
-              }}
-            >
-              <div data-part="heading-group" style={{ minWidth: 0 }}>
+            <div data-part="header">
+              <div data-part="heading-group">
                 {header ?? (
                   <>
                     {title && (
-                      <span
-                        data-part="title"
-                        style={{
-                          display: 'block',
-                          fontSize: '16px',
-                          fontWeight: 600,
-                          lineHeight: '24px',
-                        }}
-                      >
+                      <span data-part="title">
                         {title}
                       </span>
                     )}
                     {description && (
-                      <div
-                        data-part="description"
-                        style={{
-                          marginTop: title ? 4 : 0,
-                          fontSize: 13,
-                          lineHeight: '20px',
-                        }}
-                      >
+                      <div data-part="description">
                         {description}
                       </div>
                     )}
@@ -330,17 +309,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                   type="button"
                   data-part="close-button"
                   onClick={handleCancel}
-                  aria-label={t('close')}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '32px',
-                    height: '32px',
-                    cursor: 'pointer',
-                    transition: 'background-color var(--ds-motion-fast) var(--ds-motion-ease-out)',
-                    flexShrink: 0,
-                  }}
+                  aria-label={i18n?.tOr('close', 'Close') ?? 'Close'}
                 >
                   <ActionCloseIcon decorative size={16} />
                 </button>
@@ -361,19 +330,11 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
             {children}
           </div>
 
-          {/* ---- Footer ---- */}
+          {/* ---- Footer ----. Layout AND paint live in the modern skin; the
+              disabled (confirmLoading) state paints from the skin's
+              `:disabled` rule instead of an inline opacity/cursor ternary. */}
           {!hideFooter && (footer || onOk || onCancel) && (
-            <div
-              data-part="footer"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-end',
-                gap: '8px',
-                padding: '16px 24px',
-                flexShrink: 0,
-              }}
-            >
+            <div data-part="footer">
               {footer || (
                 <>
                   {onCancel && (
@@ -381,13 +342,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                       type="button"
                       data-part="action"
                       data-action="cancel"
-                      style={{
-                        padding: '8px 16px',
-                        fontSize: 14,
-                        fontWeight: 500,
-                        cursor: 'pointer',
-                        transition: 'background var(--ds-motion-fast) ease-out',
-                      }}
                       onClick={handleCancel}
                     >
                       {resolvedCancelText}
@@ -398,14 +352,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                       type="button"
                       data-part="action"
                       data-action="ok"
-                      style={{
-                        padding: '8px 16px',
-                        fontSize: 14,
-                        fontWeight: 500,
-                        cursor: confirmLoading ? 'wait' : 'pointer',
-                        opacity: confirmLoading ? 0.7 : 1,
-                        transition: 'opacity var(--ds-motion-fast) ease-out',
-                      }}
                       onClick={handleOk}
                       disabled={confirmLoading}
                     >

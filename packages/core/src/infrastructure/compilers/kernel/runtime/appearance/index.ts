@@ -44,13 +44,16 @@ import {
 } from '@/foundation/tokens/ts/foundation/base/density';
 import {
   clampValue,
-  isDarkSurface,
   isHexColor,
   isValidCssColor,
-  mixColor,
   normalizeHexColor,
 } from '../../foundation/css/color-math';
 import { chromeToVariables } from '../../foundation/css/chrome-variables';
+import {
+  deriveGroundLadder,
+  derivePaletteSemantics,
+  type GroundLadder,
+} from '../../foundation/css/color-math/palette-derivations';
 import { TENANT_THEME_CONFIG_SCHEMA } from '../../foundation/schemas/tenant-theme';
 
 /** Raw tokenOverrides entry cap; the schema limits object is the sole authority. */
@@ -103,6 +106,36 @@ function deriveReadableInk(seedHex: string): string {
   const white = '#ffffff';
   const dark = '#171717';
   return contrastRatio(white, normalized) >= contrastRatio(dark, normalized) ? white : dark;
+}
+
+/**
+ * Combine the light and dark halves of a derivation into one emission.
+ *
+ * A channel whose two halves agree — every `var()`-chained alias, because the
+ * chain re-resolves against whichever seed the active scheme declares — stays
+ * a single mode-blind value. Only a channel whose halves genuinely differ
+ * (real math on a mode's own seed) becomes a `light-dark()` pair, which is
+ * what keeps the emitted map as small as the tenant's actual divergence.
+ */
+function mergeDerivedModeHalves(
+  light: Record<string, string>,
+  dark: Record<string, string> | undefined,
+): Record<string, string> {
+  if (!dark) return light;
+  const merged: Record<string, string> = {};
+  for (const channel of new Set([...Object.keys(light), ...Object.keys(dark)])) {
+    const lightValue = light[channel];
+    const darkValue = dark[channel];
+    if (lightValue && darkValue) {
+      merged[channel] =
+        lightValue === darkValue
+          ? lightValue
+          : `light-dark(${lightValue}, ${darkValue})`;
+    } else {
+      merged[channel] = lightValue ?? darkValue;
+    }
+  }
+  return merged;
 }
 
 // ── General tier ──────────────────────────────────────────
@@ -285,6 +318,31 @@ export function appearanceGeneralToVariables(
   if (general.palette) {
     const p = general.palette;
     const mode = p.backgroundMode;
+
+    // Semantic defaults FIRST, from the SAME derivation module the static
+    // BrandTheme compiler uses, so a DB tenant and a code-owned vertical
+    // cannot drift in vocabulary or in math. Everything below restates its own
+    // channels and therefore wins, as does Advanced, which merges after
+    // General — the derivation only reaches channels nobody authored. Each
+    // mode half is derived from its own seeds and the halves are combined into
+    // `light-dark()` only where they actually differ, so the `var()`-chained
+    // channels stay mode-blind single values.
+    const darkSeeds = {
+      primary: p.dark?.primary ?? p.primary,
+      background: p.dark?.background ?? p.background,
+    };
+    Object.assign(
+      vars,
+      mergeDerivedModeHalves(
+        derivePaletteSemantics(
+          mode === 'dark'
+            ? darkSeeds
+            : { primary: p.primary, background: p.background },
+        ),
+        mode === 'auto' ? derivePaletteSemantics(darkSeeds) : undefined,
+      ),
+    );
+
     setColor(
       vars,
       '--ds-color-primary',
@@ -374,29 +432,12 @@ export function appearanceGeneralToVariables(
       setVar(vars, '--ds-color-text-on-primary', deriveReadableInk(resolvedPrimary));
     }
 
-    const deriveSurfaces = (
-      bg: string,
-    ): { secondary: string; tertiary: string; elevated: string; input: string } =>
-      isDarkSurface(bg)
-        ? {
-            // Mirrors the default dark theme's own ladder distances from its
-            // canvas (#0C0C0E → #0F0F12/#141417/#18181C).
-            secondary: mixColor(bg, '#ffffff', 0.01),
-            tertiary: mixColor(bg, '#ffffff', 0.03),
-            elevated: mixColor(bg, '#ffffff', 0.05),
-            input: mixColor(bg, '#ffffff', 0.01),
-          }
-        : {
-            // Light canvas: sunken areas darken, raised areas lighten — the
-            // first-party artifacts' ladder (#fafafa/#f5f5f5 → pure-white card).
-            secondary: mixColor(bg, '#000000', 0.025),
-            tertiary: mixColor(bg, '#000000', 0.05),
-            elevated: mixColor(bg, '#ffffff', 0.6),
-            input: mixColor(bg, '#ffffff', 0.75),
-          };
+    // The ladder itself now lives in the shared derivation module, so the DB
+    // path and the static path cannot drift apart; this tier keeps only the
+    // `light-dark()` pairing, which is a DB-only concern.
     const emitSurfaces = (
-      light: ReturnType<typeof deriveSurfaces>,
-      dark?: ReturnType<typeof deriveSurfaces>,
+      light: GroundLadder,
+      dark?: GroundLadder,
     ): void => {
       const channel = {
         secondary: '--ds-color-bg-secondary',
@@ -419,10 +460,10 @@ export function appearanceGeneralToVariables(
         ? normalizeHexColor(p.dark.background)
         : undefined;
     if (mode === 'auto' && lightBg && darkBg) {
-      emitSurfaces(deriveSurfaces(lightBg), deriveSurfaces(darkBg));
+      emitSurfaces(deriveGroundLadder(lightBg), deriveGroundLadder(darkBg));
     } else {
       const resolvedBg = mode === 'dark' ? darkBg ?? lightBg : lightBg;
-      if (resolvedBg) emitSurfaces(deriveSurfaces(resolvedBg));
+      if (resolvedBg) emitSurfaces(deriveGroundLadder(resolvedBg));
     }
 
     if (mode === 'auto' && p.dark && Object.keys(p.dark).length > 0) {

@@ -169,6 +169,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   searchValue,
   filterFn,
 }) => {
+  const { t } = useTranslation('components');
   const key = node.key ?? node.value;
   const isExpanded = expandedKeys.has(key);
   const isSelected = selectedKeys.has(node.value);
@@ -222,25 +223,43 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   return (
     <li>
       <div
-        className={`flex items-center py-1 px-2 rounded cursor-pointer ${isSelected ? 'font-medium' : ''} ${node.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-        style={{ paddingLeft: `${level * 16 + 8}px`, transition: 'all var(--ds-motion-fast)' }}
+        className="flex items-center py-1 cursor-pointer"
+        style={{
+          // Logical indent (RTL flips it free) riding the governed channels:
+          // per-level step + base offset, all skin-tunable.
+          paddingInlineStart: `calc(${level} * var(--ds-tree-select-indent, 16px) + var(--ds-spacing-2, 8px))`,
+        }}
         onClick={() => !node.disabled && onSelect(node)}
         data-part="option"
         data-selected={isSelected || undefined}
         data-disabled={node.disabled || undefined}
+        role="option"
+        aria-selected={isSelected}
+        aria-disabled={node.disabled || undefined}
+        tabIndex={node.disabled ? -1 : 0}
+        onKeyDown={(e) => {
+          if ((e.key === 'Enter' || e.key === ' ') && !node.disabled) {
+            e.preventDefault();
+            onSelect(node);
+          }
+        }}
       >
         {/* Expand/collapse or leaf indicator */}
         {!isLeaf ? (
           <button
             type="button"
-            style={{ height: 24, padding: '0 var(--ds-spacing-2, 8px)', fontSize: 'var(--ds-font-size-xs, 12px)', cursor: 'pointer', marginRight: 'var(--ds-spacing-1, 4px)' }}
+            style={{ height: 24, padding: '0 var(--ds-spacing-2, 8px)', fontSize: 'var(--ds-font-size-xs, 12px)', cursor: 'pointer', marginInlineEnd: 'var(--ds-spacing-1, 4px)' }}
             onClick={handleExpand}
             data-part="tree-node-toggle"
+            aria-label={isExpanded ? t('treeselect.collapse') : t('treeselect.expand')}
+            aria-expanded={isExpanded}
           >
             {isLoading ? (
-              <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12, animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite' }} />
+              <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12 }} />
             ) : (
-              <span style={{ transition: 'transform var(--ds-motion-fast)' }} className={`inline-block ${isExpanded ? 'rotate-90' : ''}`}>&#9654;</span>
+              /* Chevron glyph; direction (inline-end vs down) and the RTL
+                 mirror are skin-owned via data-expanded. */
+              <span data-part="chevron" data-expanded={isExpanded || undefined} className="inline-block">&#9654;</span>
             )}
           </button>
         ) : (
@@ -250,13 +269,11 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         {checkable && (
           <input
             type="checkbox"
-            className="mr-2"
             data-part="option-icon"
             style={{
               width: 16,
               height: 16,
               cursor: node.disabled || node.disableCheckbox ? 'not-allowed' : 'pointer',
-              transition: 'all var(--ds-motion-fast)',
             }}
             checked={isSelected}
             ref={(el) => { if (el) el.indeterminate = isIndeterminate; }}
@@ -268,7 +285,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         <span className="flex-1" data-part="tree-node-label">{renderTitle()}</span>
       </div>
       {hasChildren && isExpanded && (
-        <ul data-part="tree-list" className={treeLine ? 'ml-4' : ''} data-tree-line={treeLine || undefined}>
+        <ul data-part="tree-list" data-tree-line={treeLine || undefined}>
           {node.children!.map((child) => (
             <TreeNode
               key={child.key ?? child.value}
@@ -561,15 +578,31 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
         data-part="root"
       >
         <div
-          className={`flex items-center cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className="flex items-center cursor-pointer"
           style={{
             boxSizing: 'border-box',
             ...getSizeStyle(),
           }}
           onClick={() => !disabled && handleOpenChange(!isOpen)}
+          onKeyDown={(e) => {
+            if (disabled) return;
+            if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              if (!isOpen) handleOpenChange(true);
+            } else if (e.key === 'Escape' && isOpen) {
+              e.preventDefault();
+              handleOpenChange(false);
+            }
+          }}
           data-part="trigger"
           data-open={isOpen || undefined}
           data-disabled={disabled || undefined}
+          role="combobox"
+          aria-expanded={isOpen}
+          aria-haspopup="listbox"
+          aria-label={displayPlaceholder}
+          aria-disabled={disabled || undefined}
+          tabIndex={disabled ? -1 : 0}
         >
           <span
             className="flex-1 truncate"
@@ -583,15 +616,17 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
               style={{ width: 24, height: 24, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
               onClick={handleClear}
               data-part="clear-button"
+              aria-label={t('treeselect.clear')}
             >
               ✕
             </button>
           )}
-          <span style={{ transition: 'transform var(--ds-motion-fast)' }} className={`${isOpen ? 'rotate-180' : ''}`} data-part="arrow-icon">&#9660;</span>
+          {/* Chevron glyph; the open rotation is skin-owned via data-open. */}
+          <span data-part="arrow-icon" aria-hidden="true">&#9660;</span>
         </div>
 
         {isOpen && (
-          <div data-part="dropdown" style={{ position: 'absolute', zIndex: 50, width: '100%', marginTop: 'var(--ds-spacing-1, 4px)', maxHeight: 240, overflowY: 'auto', animation: 'ds-tree-select-slide-in var(--ds-motion-fast) ease-out' }}>
+          <div data-part="dropdown" role="listbox" aria-label={displayPlaceholder}>
             {/* Search input */}
             {showSearch && (
               <div className="p-2 sticky top-0 z-10" data-part="search-input-wrapper">
@@ -605,7 +640,6 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
                     fontSize: 'var(--ds-input-sm-font-size, 13px)',
                     height: 'var(--ds-input-sm-height, 32px)',
                     boxSizing: 'border-box',
-                    transition: 'all var(--ds-motion-fast)',
                   }}
                   placeholder={t('treeselect.search_placeholder')}
                   value={searchValue}

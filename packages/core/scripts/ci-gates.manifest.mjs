@@ -35,6 +35,10 @@ export const CI_GATES = Object.freeze([
   // --- artifact freshness: a stale artifact invalidates every census below ---
   { id: 'build-vertical-artifacts', run: ['node', 'scripts/build-vertical-artifacts.mjs', '--check'], blocking: true },
   { id: 'build-vertical-css', run: ['node', 'scripts/build-vertical-css.mjs', '--check'], blocking: true },
+  // Reads the compiled block out of the artifact above, so it runs after the
+  // freshness check: on a stale artifact its channel set would be last build's.
+  { id: 'artifact-provenance-drill', run: ['node', '--test', 'scripts/artifact-provenance-gate.test.mjs'], blocking: true },
+  { id: 'artifact-provenance', run: ['node', 'scripts/artifact-provenance-gate.mjs', '--check'], blocking: true },
 
   // --- structural / ownership ---
   { id: 'engine-token-audit', run: ['node', 'scripts/engine-token-audit.mjs', '--check'], blocking: true },
@@ -56,6 +60,28 @@ export const CI_GATES = Object.freeze([
   // and the manifest validator forbids downgrading a blocking gate.
   { id: 'app-ds-boundary', run: ['node', 'scripts/app-ds-boundary-gate.mjs', '--check'], blocking: true },
   { id: 'app-ds-boundary-drill', run: ['node', '--test', 'scripts/app-ds-boundary-gate.test.mjs'], blocking: true },
+  // Answers the question the boundary gate above does not: WHICH `--ds-*`
+  // properties an app may assign, and under what scope (audit 2026-07-26,
+  // Codex C3). Its allowlist is derived from DS source, so the drill runs
+  // first: an anchor that has drifted must surface as a drill failure, not as
+  // a corpus verdict computed from a degraded allowlist.
+  { id: 'app-ds-hook-contract-drill', run: ['node', '--test', 'scripts/app-ds-hook-contract-gate.test.mjs'], blocking: true },
+  { id: 'app-ds-hook-contract', run: ['node', 'scripts/app-ds-hook-contract-gate.mjs', '--check'], blocking: true },
+  // The contract is only "exported and consumed" (Codex C6.6) if the artifact an
+  // app resolves matches the DS it was derived from. This gate fails on a stale
+  // hooks-manifest.json, on a missing package export, and on an export that
+  // resolves in-repo but would 404 for an installed consumer. Without it the
+  // published contract can drift silently, which is worse than not publishing:
+  // apps would consume a hook list the DS no longer honours.
+  { id: 'app-ds-hook-manifest-freshness', run: ['node', 'scripts/app-ds-hook-contract-gate.mjs', '--manifest-check'], blocking: true },
+  // The same boundary at the DOM instead of the stylesheet (audit 2026-07-26,
+  // Codex C6.7): governed root channels have one SSR projection and one
+  // hydrated owner, so an application holds no raw `<html>` writer. It ships
+  // with no baseline, so the drill carries the whole burden of proving the
+  // scan can fail -- including on the computed attribute names the writer this
+  // gate was built for actually used.
+  { id: 'app-root-writer-drill', run: ['node', '--test', 'scripts/app-root-writer-gate.test.mjs'], blocking: true },
+  { id: 'app-root-writer', run: ['node', 'scripts/app-root-writer-gate.mjs', '--check'], blocking: true },
 
   // --- motion governance, DS slice ---
   //

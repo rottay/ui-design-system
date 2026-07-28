@@ -97,6 +97,7 @@ export {
   buildTenantSelector,
 } from '../../../compilers/runtime/tenant-css/visual-config';
 export {
+  renderFirstPartyArtifact,
   renderVerticalArtifact,
   GENERATED_ARTIFACT_BANNER,
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
@@ -106,6 +107,7 @@ export type {
   GenerateTenantCssOptions,
 } from '../../../compilers/runtime/tenant-css/visual-config';
 export type {
+  RenderFirstPartyArtifactInput,
   RenderVerticalArtifactInput,
   FirstPartyArtifactSpec,
 } from '../../../compilers/runtime/tenant-css';

@@ -41,6 +41,9 @@
   padding: 0;
   list-style: none;
   counter-reset: ds-stepper;
+  /* Narrow-collapse probe (the tabs.css `ds-tabs` idiom): lets a horizontal
+     track reflow to the vertical geometry when its container no longer fits. */
+  container: ds-stepper / inline-size;
   --ds-stepper-current-item-size: var(--ds-stepper-item-size-md, 32px);
   --ds-stepper-current-item-font-size: var(--ds-stepper-item-font-size-md, var(--ds-font-size-sm, 14px));
   --ds-stepper-current-label-font-size: var(--ds-stepper-label-font-size-md, var(--ds-font-size-sm, 14px));
@@ -59,6 +62,14 @@
   --ds-stepper-current-item-font-size: var(--ds-stepper-item-font-size-lg, var(--ds-font-size-md, 16px));
   --ds-stepper-current-label-font-size: var(--ds-stepper-label-font-size-lg, var(--ds-font-size-md, 16px));
   --ds-stepper-current-description-font-size: var(--ds-stepper-description-font-size-lg, var(--ds-font-size-sm, 14px));
+}
+
+.rottay-stepper--modern[data-part='root'][data-direction='horizontal'] {
+  /* The narrow collapse stacks items by wrapping (a container query cannot
+     restyle the container element itself, so `flex-direction` is out of
+     reach); in normal flow `flex: 1 1 0` items always shrink to fit one row
+     and this never engages. Vertical roots keep the `nowrap` default. */
+  flex-wrap: wrap;
 }
 
 /* ---- item: the grid the circle (row 1) and the text column (row 2) live in. ---- */
@@ -122,6 +133,9 @@
   font-size: var(--ds-stepper-current-item-font-size);
   font-weight: var(--ds-stepper-item-font-weight, 600);
   line-height: 1;
+  /* Step numerals align in columns across widths (Quiet Premium numeral law,
+     pagination.css's `--ds-pagination-numeric` precedent). */
+  font-variant-numeric: var(--ds-stepper-numeric, tabular-nums);
   transition:
     color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
     background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
@@ -253,7 +267,7 @@
 
 /* A held press settles the circle back with a tactile dip. */
 .rottay-stepper--modern[data-part='root'] [data-part='item'][data-clickable='true']:active::after {
-  transform: translateY(0) scale(0.96);
+  transform: translateY(0) scale(var(--ds-state-press-scale, 0.98));
   box-shadow: none;
 }
 
@@ -328,6 +342,64 @@
   /* optically centers a single-line label against the circle */
   padding-block-start: calc((var(--ds-stepper-current-item-size) - 1.3em) / 2);
   text-align: start;
+}
+
+/* ============================================================================
+   NARROW COLLAPSE — a horizontal track whose container no longer fits reflows
+   to the vertical geometry (the same layout `data-direction='vertical'`
+   paints), so labels never squeeze mid-word at 360px. Container-query idiom
+   and the 420px breakpoint follow tabs.css (`ds-tabs`). The connector edge
+   rules invert: vertical connectors drop OUT of their step, so the first item
+   regains a connector and the last loses it (ties (0,5,1), later source wins).
+   ============================================================================ */
+@container ds-stepper (max-width: 420px) {
+  /* Full-row basis + the root's `flex-wrap: wrap` stacks the items (the query
+     cannot restyle the container element, so `flex-direction` is out). */
+  .rottay-stepper--modern[data-part='root'][data-direction='horizontal'] [data-part='item'] {
+    flex: 1 1 100%;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: none;
+    column-gap: var(--ds-stepper-vertical-gap, 12px);
+    justify-items: start;
+    padding-block-end: var(--ds-stepper-vertical-item-gap, 16px);
+  }
+
+  .rottay-stepper--modern[data-part='root'][data-direction='horizontal'] [data-part='item']:last-child {
+    padding-block-end: 0;
+  }
+
+  .rottay-stepper--modern[data-part='root'][data-direction='horizontal'] [data-part='item']::after {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .rottay-stepper--modern[data-part='root'][data-direction='horizontal'] [data-part='item']::before {
+    inset-block-start: calc(var(--ds-stepper-current-item-size) + 4px);
+    inset-block-end: 2px;
+    inset-inline-start: calc(var(--ds-stepper-current-item-size) / 2 - 1px);
+    inset-inline-end: auto;
+    block-size: auto;
+    inline-size: var(--ds-stepper-connector-width, 2px);
+  }
+
+  .rottay-stepper--modern[data-part='root'][data-direction='horizontal'] [data-part='item']:first-child::before {
+    content: '';
+  }
+
+  .rottay-stepper--modern[data-part='root'][data-direction='horizontal'] [data-part='item']:last-child::before {
+    content: none;
+  }
+
+  .rottay-stepper--modern[data-part='root'][data-direction='horizontal'] [data-part='content'],
+  .rottay-stepper--modern[data-part='root'][data-direction='horizontal'] [data-part='trigger'] {
+    grid-column: 2;
+    grid-row: 1;
+    align-items: flex-start;
+    margin-block-start: 0;
+    /* optically centers a single-line label against the circle */
+    padding-block-start: calc((var(--ds-stepper-current-item-size) - 1.3em) / 2);
+    text-align: start;
+  }
 }
 
 /* ---- reduced motion: every transition collapses. ---- */

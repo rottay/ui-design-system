@@ -1,5 +1,5 @@
 /**
- * Modern FilterBuilder skin (WO-SKIN-06 checkpoint CK-D/F).
+ * Modern FilterBuilder skin (Lote 2 rebuild).
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * unnamed `base` layer, so a layered rule loses to preflight regardless of
@@ -7,132 +7,206 @@
  * `style`.
  *
  * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-filter-builder
- * ds-engine-modern` + `data-part='root'`. Both roots -- the tree and the loading
- * early-return -- carry the pair; the loading one adds `data-loading='true'`.
+ * ds-engine-modern` + `data-part='root'` (optionally `data-loading` /
+ * `data-compact`).
  *
- * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
- * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
- * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
- * `data-part` REPEATED, or + a contract attribute already on the element
- * (`data-logic`, `:not([data-root])`) -- a `:not()` carries the specificity of its
- * argument. Non-border paint wins unlayered at (0,3,0).
+ * SINGLE PAINT OWNER PER CONTROL (Lote 2 law): the pattern COMPOSES public
+ * primitives -- Select (field/operator/value), Input/InputNumber (text/number
+ * values), DatePicker (date values), Switch (boolean values), Button (add /
+ * remove / logic-toggle / clear / dropdown options) and Spinner (loading).
+ * This file therefore paints NO control chrome at all: no borders, fills or
+ * state paint on inputs or buttons -- each primitive's own skin owns that,
+ * including focus rings, disabled states and coarse-pointer floors. What this
+ * file owns is exactly what the pattern owns:
+ *   - the layout anatomy (rule rows, group nesting, action rows, dropdown
+ *     positioning) -- the engine stamps only `data-part` wrappers;
+ *   - the two text parts that are NOT controls (`rule-logic-label`,
+ *     `range-separator`);
+ *   - the nested-group hierarchy treatment (inset fill + indentation; the
+ *     quiet law forbids a left vertical accent, so there is no rail);
+ *   - the add-filter dropdown SURFACE (it is pattern composition chrome, not
+ *     a primitive).
  *
- * TWO RUNTIME CONSTRAINTS, both load-bearing:
+ * RESPONSIVE LAW: the root is a named container (`ds-filter-builder`); rows
+ * flex-wrap intrinsically and the logic-label column goes full-width under
+ * the narrow cut, so nothing breaks below 400px. The composition defines the
+ * cut, per the Lote 2 brief.
  *
- * 1. `value-input` is stamped on SIX controls, and the boolean one is a bare
- *    `<input type="checkbox">` that carries NO paint at all -- it renders with the
- *    UA's native checkbox chrome. Every input rule below is therefore gated
- *    `:not([data-field-type='boolean'])`. Without the gate the skin would paint a
- *    border, background and radius onto a native checkbox that never had them.
- *
- * 2. The nested-group tint is gated `:not([data-root])`. The root group carries
- *    `data-root='true'` and is deliberately chrome-less (it must sit invisibly in
- *    any parent layout); only nested groups get the left-border accent and inset
- *    fill. The border WIDTH comes from the Tailwind `border-l-[3px]` utility on the
- *    same element and stays there -- utilities sort after preflight, so it survives;
- *    this skin owns the COLOUR channel formerly carried by runtime paint.
- *
- * The `add-filter-option` hover below replaces an imperative
- * `onMouseEnter`/`onMouseLeave` pair that wrote `el.style.background` directly.
- * The element sets NO background at rest, so a `:hover`-only rule is byte-exact:
- * at rest it falls through to transparent, exactly as before. Nothing else in
- * `foundation/tokens/css/` competes for that element's background.
- *
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * SPECIFICITY (P-48): border-COLOR paint must reach (0,4,0) to clear the
+ * tenant `html[data-tenant]:not([data-theme]):not(.light) *` floor at (0,3,1).
+ * The only border paint left here (dropdown frame) buys it from the two root
+ * classes + the repeated `data-part` / `:not()` argument.
  */
 
-/* ---- rule row: the logic keyword column, and the "and" between a range's two
-        inputs (both are plain text elements with a literal inline colour -- no
-        `Text` prop map, nothing to resolve). ---- */
-.ds-pattern-filter-builder.ds-engine-modern [data-part='rule-logic-label'],
+.ds-pattern-filter-builder.ds-engine-modern[data-part='root'] {
+  container-type: inline-size;
+  container-name: ds-filter-builder;
+  inline-size: 100%;
+  min-inline-size: 0;
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- rule row: layout only. Every control inside is a primitive that
+        paints itself; the wrappers just distribute inline space. ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='rule'] {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-filter-builder-row-gap, var(--ds-spacing-2, 8px));
+  padding-block: var(--ds-filter-builder-row-padding-y, var(--ds-spacing-1, 4px));
+}
+.ds-pattern-filter-builder.ds-engine-modern[data-compact='true'] [data-part='rule'] {
+  padding-block: var(--ds-filter-builder-row-padding-y-compact, 2px);
+}
+
+.ds-pattern-filter-builder.ds-engine-modern [data-part='rule-logic-label'] {
+  flex: 0 0 auto;
+  inline-size: var(--ds-filter-builder-logic-width, 3.5rem);
+  text-align: center;
+  font-size: var(--ds-font-size-xs, 12px);
+  font-weight: var(--ds-font-weight-medium, 500);
+  line-height: var(--ds-line-height-snug, 1.375);
+  text-transform: uppercase;
+  color: var(--ds-color-text-secondary);
+  white-space: nowrap;
+}
+
+.ds-pattern-filter-builder.ds-engine-modern [data-part='rule-field'],
+.ds-pattern-filter-builder.ds-engine-modern [data-part='rule-operator'] {
+  flex: 1 1 var(--ds-filter-builder-control-min, 10rem);
+  min-inline-size: 0;
+}
+.ds-pattern-filter-builder.ds-engine-modern [data-part='rule-value'] {
+  flex: 2 1 var(--ds-filter-builder-value-min, 12rem);
+  min-inline-size: 0;
+}
+/* Composed primitives fill their layout wrapper. */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='rule-field'] > *,
+.ds-pattern-filter-builder.ds-engine-modern [data-part='rule-operator'] > *,
+.ds-pattern-filter-builder.ds-engine-modern [data-part='rule-value'] > * {
+  inline-size: 100%;
+}
+.ds-pattern-filter-builder.ds-engine-modern [data-part='rule-actions'] {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+}
+
+/* ---- range pair ("between" operators): two primitives + the "and" glue. ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='value-range'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-1, 4px);
+  min-inline-size: 0;
+}
+.ds-pattern-filter-builder.ds-engine-modern [data-part='value-range'] > * {
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
 .ds-pattern-filter-builder.ds-engine-modern [data-part='range-separator'] {
+  flex: 0 0 auto;
+  font-size: var(--ds-font-size-xs, 12px);
   color: var(--ds-color-text-secondary);
 }
 
-/* ---- the three native controls share one chrome. The boolean value-input is a
-        native checkbox and is excluded -- see constraint 1 in the header. ---- */
-.ds-pattern-filter-builder.ds-engine-modern [data-part='value-input'][data-part='value-input']:not([data-field-type='boolean']),
-.ds-pattern-filter-builder.ds-engine-modern [data-part='field-select'][data-part='field-select'],
-.ds-pattern-filter-builder.ds-engine-modern [data-part='operator-select'][data-part='operator-select'] {
-  border-radius: var(--ds-radius-md);
-  border: 1px solid var(--ds-color-border);
-  background: transparent;
-  color: inherit;
+.ds-pattern-filter-builder.ds-engine-modern [data-part='value-switch'] {
+  display: inline-flex;
+  align-items: center;
 }
 
-/* ---- remove buttons (rule + group carry the same literal) ---- */
-.ds-pattern-filter-builder.ds-engine-modern [data-part='remove-button'][data-part='remove-button'] {
-  background: transparent;
-  color: var(--ds-color-error);
-  border-radius: var(--ds-radius-md);
-  border: none;
-}
-
-/* ---- nested group: left-accent colour + inset fill. Root group is chrome-less
-        -- see constraint 2 in the header. ---- */
+/* ---- groups: root is chrome-less (sits invisibly in any parent layout);
+        nested groups read through the inset fill + indentation alone — the
+        quiet law forbids a left vertical accent, so there is no rail here;
+        hierarchy comes from surface, spacing and the group header. ---- */
 .ds-pattern-filter-builder.ds-engine-modern [data-part='group']:not([data-root]) {
-  border-color: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  margin-inline-start: var(--ds-spacing-2, 8px);
+  margin-block-end: var(--ds-spacing-2, 8px);
+  padding-block: var(--ds-spacing-2, 8px);
+  padding-inline-start: var(--ds-spacing-4, 16px);
+  padding-inline-end: var(--ds-spacing-3, 12px);
+  border-radius: var(--ds-radius-lg, 12px);
   background: var(--ds-surface-inset);
 }
 
-/* ---- AND/OR logic toggle: filled for the stricter AND, outlined for OR ---- */
-.ds-pattern-filter-builder.ds-engine-modern [data-part='logic-toggle'][data-logic='and'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-  border-radius: var(--ds-radius-md);
-  border: none;
-}
-.ds-pattern-filter-builder.ds-engine-modern [data-part='logic-toggle'][data-logic='or'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
-  border-radius: var(--ds-radius-md);
-  border: 1px solid var(--ds-color-border);
+.ds-pattern-filter-builder.ds-engine-modern [data-part='group-header'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2, 8px);
+  margin-block-end: var(--ds-spacing-1, 4px);
 }
 
-/* ---- add-rule / add-group: dashed, to stay subordinate to the rows ---- */
-.ds-pattern-filter-builder.ds-engine-modern [data-part='add-rule-button'][data-part='add-rule-button'],
-.ds-pattern-filter-builder.ds-engine-modern [data-part='add-group-button'][data-part='add-group-button'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
-  border-radius: var(--ds-radius-md);
-  border: 1px dashed var(--ds-color-border);
+.ds-pattern-filter-builder.ds-engine-modern [data-part='group-actions'] {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2, 8px);
+  margin-block-start: var(--ds-spacing-2, 8px);
 }
 
-/* ---- add-filter trigger + its dropdown ---- */
-.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-trigger'][data-part='add-filter-trigger'] {
-  background: var(--ds-color-bg-elevated, transparent);
-  color: var(--ds-color-text-primary);
-  border-radius: var(--ds-radius-md);
-  border: 1px solid var(--ds-color-border);
+.ds-pattern-filter-builder.ds-engine-modern [data-part='clear-row'] {
+  margin-block-start: var(--ds-spacing-3, 12px);
 }
 
-.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-dropdown'][data-part='add-filter-dropdown'] {
+/* ---- add-filter: trigger is a Button primitive; the dropdown SURFACE is
+        pattern chrome (a Menu/Dropdown primitive for this does not exist in
+        the pattern's composition surface -- registered gap). Options are
+        ghost Buttons stretched to full width. ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter'] {
+  position: relative;
+  display: inline-block;
+}
+
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-dropdown'] {
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline-start: 0;
+  z-index: var(--ds-filter-builder-dropdown-z, var(--ds-z-index-dropdown, 1000));
+  display: flex;
+  flex-direction: column;
+  min-inline-size: var(--ds-filter-builder-dropdown-min-width, 180px);
+  max-inline-size: calc(100cqi - var(--ds-spacing-4, 16px));
+  max-block-size: var(--ds-filter-builder-dropdown-max-height, 260px);
+  overflow-y: auto;
+  margin-block-start: var(--ds-spacing-1, 4px);
+  padding-block: var(--ds-spacing-1, 4px);
   background: var(--ds-color-bg-elevated);
-  border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-lg, 12px);
   box-shadow: var(--ds-elevation-2);
 }
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-dropdown'][data-part='add-filter-dropdown'] {
+  border: 1px solid var(--ds-color-border);
+}
 
 .ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-option'] {
-  color: var(--ds-color-text-primary);
-}
-.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-option']:hover {
-  background: var(--ds-color-bg-secondary);
+  inline-size: 100%;
+  justify-content: flex-start;
 }
 
-/* ---- clear-all ---- */
-.ds-pattern-filter-builder.ds-engine-modern [data-part='clear-button'][data-part='clear-button'] {
-  background: transparent;
-  color: var(--ds-color-text-secondary);
-  border-radius: var(--ds-radius-md);
-  border: none;
+/* ---- narrow composition cut: the logic-label column goes full-width and the
+        controls wrap beneath it -- no fixed width survives below 400px. ---- */
+@container ds-filter-builder (inline-size < 30rem) {
+  .ds-pattern-filter-builder.ds-engine-modern [data-part='rule-logic-label'] {
+    inline-size: 100%;
+    text-align: start;
+  }
+  .ds-pattern-filter-builder.ds-engine-modern [data-part='rule-field'],
+  .ds-pattern-filter-builder.ds-engine-modern [data-part='rule-operator'],
+  .ds-pattern-filter-builder.ds-engine-modern [data-part='rule-value'] {
+    flex-basis: 100%;
+  }
 }
 
-/* ---- loading spinner. `animation` stays inline on `ds-spin`, a real shared
-        keyframe defined once in rustic's theme.css -- not a per-mount injection,
-        so there is nothing to namespace here. ---- */
-.ds-pattern-filter-builder.ds-engine-modern [data-part='spinner'][data-part='spinner'] {
-  border: 3px solid var(--ds-color-border);
-  border-top-color: var(--ds-color-primary);
-  border-radius: 50%;
+/* ---- coarse pointer: the pattern's own action surfaces reach the 44px floor
+        via min-block-size (wins over the primitive's density height without
+        inflating the visual size contract on fine pointers). ---- */
+@media (hover: none) and (pointer: coarse) {
+  .ds-pattern-filter-builder.ds-engine-modern [data-part='remove-button'],
+  .ds-pattern-filter-builder.ds-engine-modern [data-part='add-rule-button'],
+  .ds-pattern-filter-builder.ds-engine-modern [data-part='add-group-button'],
+  .ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-trigger'],
+  .ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-option'],
+  .ds-pattern-filter-builder.ds-engine-modern [data-part='clear-button'],
+  .ds-pattern-filter-builder.ds-engine-modern [data-part='logic-toggle'] {
+    min-block-size: var(--ds-filter-builder-touch-target-min, 44px);
+  }
 }

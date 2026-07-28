@@ -20,94 +20,30 @@
  * />
  */
 
-import React, { useState, type CSSProperties } from 'react';
+import React, { useState } from 'react';
 import { StickyWizardActions } from '../../runtime/sticky-actions';
 import type { StepWizardProps } from '../../contracts';
+import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
+import ModernSteps from '../../../../../primitives/navigation/Steps/engines/modern';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /* ---------------------------------------------------------------------------
- * Inline SVG icons
- * -------------------------------------------------------------------------*/
-
-/** Checkmark icon for completed steps */
-const CheckIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-    <path d="M3 8l3.5 3.5L13 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-/** Small inline SVG error icon (circle-exclamation) */
-const ErrorIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ flexShrink: 0 }}>
-    <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" />
-    <path d="M8 4.5v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-    <circle cx="8" cy="11" r="0.75" fill="currentColor" />
-  </svg>
-);
-
-/* ---------------------------------------------------------------------------
- * Shared style constants (DS tokens)
+ * Shared constants
  * -------------------------------------------------------------------------*/
 
 const ROOT_CLASS_NAME = 'ds-pattern-step-wizard ds-engine-modern';
 
-const cardStyle: CSSProperties = {
-  overflow: 'hidden',
-};
-
-const contentAreaStyle: CSSProperties = {
-  minHeight: 200,
-  padding: '24px 0',
-};
-
-const ghostButtonBase: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: 36,
-  padding: '0 16px',
-  fontSize: 14,
-  fontWeight: 500,
-  lineHeight: '20px',
-  cursor: 'pointer',
-  transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out),
-               border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-               opacity var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-};
-
-const primaryButtonBase: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: 36,
-  padding: '0 20px',
-  fontSize: 14,
-  fontWeight: 500,
-  lineHeight: '20px',
-  cursor: 'pointer',
-  transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out),
-               opacity var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-};
-
-const linkButtonBase: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: 36,
-  padding: '0 12px',
-  fontSize: 14,
-  fontWeight: 500,
-  lineHeight: '20px',
-  cursor: 'pointer',
-  textDecoration: 'none',
-  transition: `color var(--ds-motion-fast) var(--ds-motion-ease-out),
-               opacity var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-};
-
-const disabledOverride: CSSProperties = {
-  opacity: 0.45,
-  cursor: 'not-allowed',
-  pointerEvents: 'none' as const,
-};
+/** Hook-local `tOr`: catalogue value with an English floor, never a raw key. */
+function useStepWizardTranslation() {
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, fallback: string, params?: Record<string, string | number>): string => {
+    const resolved = i18n?.t(key, params);
+    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+    return resolved;
+  };
+  return { tOr };
+}
 
 /* ---------------------------------------------------------------------------
  * ModernStepWizard
@@ -124,6 +60,7 @@ const disabledOverride: CSSProperties = {
  * @returns A card containing the step wizard.
  */
 export default function ModernStepWizard(props: StepWizardProps) {
+  const { tOr } = useStepWizardTranslation();
   const {
     steps,
     currentStep: controlledStep,
@@ -138,15 +75,22 @@ export default function ModernStepWizard(props: StepWizardProps) {
     progressPosture = 'rail',
     formatProgressLabel,
     actionPosture = 'inline',
-    nextLabel = 'Next',
-    prevLabel = 'Back',
-    completeLabel = 'Complete',
-    skipLabel = 'Skip',
+    nextLabel: nextLabelProp,
+    prevLabel: prevLabelProp,
+    completeLabel: completeLabelProp,
+    skipLabel: skipLabelProp,
     footer,
     loading,
     className,
     style,
   } = props;
+
+  // Copy defaults: explicit props win; otherwise localized labels with the
+  // historical English defaults as the floor (tests are pinned to them).
+  const nextLabel = nextLabelProp ?? tOr('step_wizard.next', 'Next');
+  const prevLabel = prevLabelProp ?? tOr('step_wizard.prev', 'Back');
+  const completeLabel = completeLabelProp ?? tOr('step_wizard.complete', 'Complete');
+  const skipLabel = skipLabelProp ?? tOr('step_wizard.skip', 'Skip');
 
   // Controlled/uncontrolled step index
   const [internalStep, setInternalStep] = useState(0);
@@ -169,7 +113,11 @@ export default function ModernStepWizard(props: StepWizardProps) {
       current: current + 1,
       total: steps.length,
       title: currentDef?.title ?? '',
-    }) ?? `Step ${current + 1} of ${steps.length}: ${currentDef?.title ?? ''}`;
+    }) ?? tOr('step_wizard.progress', 'Step {current} of {total}: {title}', {
+      current: current + 1,
+      total: steps.length,
+      title: currentDef?.title ?? '',
+    });
   // Progress percentage: 1-based so step 1 of 3 shows 33%, not 0%.
   const progress = Math.round(((current + 1) / steps.length) * 100);
 
@@ -193,7 +141,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
         return true;
       }
 
-      setValidationMessage(typeof result === 'string' ? result : 'Please complete this step before continuing.');
+      setValidationMessage(typeof result === 'string' ? result : tOr('step_wizard.validation_default', 'Please complete this step before continuing.'));
 
       return false;
     } finally {
@@ -221,188 +169,41 @@ export default function ModernStepWizard(props: StepWizardProps) {
         data-part="root"
         data-loading="true"
         className={[ROOT_CLASS_NAME, 'ds-step-wizard-skeleton', className].filter(Boolean).join(' ')}
-        style={{ ...cardStyle, ...style }}
+        style={style}
       >
-        <div style={{ padding: 24 }}>
-          {/* Shimmer bar for step indicators */}
+        <div data-part="body">
+          {/* Shimmer bar for step indicators -- animation is skin-owned so
+              reduced-motion can silence it (inline would win). */}
           <div
             data-part="skeleton-progress"
             className="ds-step-wizard-skeleton__progress"
-            style={{
-              height: 8,
-              marginBottom: 24,
-              animation: 'ds-step-wizard-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
-            }}
+            style={{ height: 8, marginBottom: 24 }}
           />
           {/* Shimmer block for content */}
           <div
             data-part="skeleton-content"
             className="ds-step-wizard-skeleton__content"
-            style={{
-              height: 200,
-              animation: 'ds-step-wizard-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
-            }}
+            style={{ height: 200 }}
           />
         </div>
       </div>
     );
   }
 
-  /* -- Step indicator rendering ------------------------------------------ */
+  /* -- Step rail ----------------------------------------------------------
+   * The rail is the public Steps navigation primitive (single paint owner,
+   * keyboard-reachable anatomy, skin-owned connectors). Display-only here:
+   * wizard navigation happens through the nav buttons, so no onChange is
+   * passed and steps render non-clickable, matching the previous divs.
+   * ---------------------------------------------------------------------- */
 
   const isVertical = orientation === 'vertical';
-
-  const renderStepIndicator = (index: number) => {
-    const stepDef = steps[index];
-    const isActive = index === current;
-    const isCompleted = index < current;
-
-    const indicatorSize = 32;
-
-    return (
-      <div
-        key={stepDef.key}
-        data-part="step"
-        data-active={isActive}
-        data-completed={isCompleted}
-        style={{
-          display: 'flex',
-          flexDirection: isVertical ? 'row' : 'column',
-          alignItems: 'center',
-          gap: 8,
-          minWidth: isVertical ? undefined : 0,
-          flex: isVertical ? undefined : 1,
-        }}
-      >
-        {/* Indicator circle */}
-        <div
-          data-part="step-indicator"
-          data-active={isActive}
-          data-completed={isCompleted}
-          style={{
-            width: indicatorSize,
-            height: indicatorSize,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 13,
-            fontWeight: 600,
-            flexShrink: 0,
-            transition: `all var(--ds-motion-normal) var(--ds-motion-ease-out)`,
-          }}
-        >
-          {isCompleted ? <CheckIcon /> : index + 1}
-        </div>
-
-        {/* Label area */}
-        <div
-          data-part="step-label-group"
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: isVertical ? 'flex-start' : 'center',
-            gap: 2,
-            minWidth: 0,
-          }}
-        >
-          <span
-            data-part="step-title"
-            data-active={isActive}
-            data-completed={isCompleted}
-            style={{
-              fontSize: 13,
-              fontWeight: isActive ? 600 : 400,
-              lineHeight: '18px',
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              maxWidth: isVertical ? 160 : '100%',
-              transition: `color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-            }}
-          >
-            {stepDef.title}
-          </span>
-          {stepDef.description && (
-            <span
-              data-part="step-description"
-              style={{
-                fontSize: 11,
-                lineHeight: '14px',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                maxWidth: isVertical ? 160 : '100%',
-              }}
-            >
-              {stepDef.description}
-            </span>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  /** Connecting line between step indicators */
-  const renderConnector = (index: number) => {
-    const isCompleted = index < current;
-
-    if (isVertical) {
-      return (
-        <div
-          key={`connector-${index}`}
-          data-part="step-connector"
-          data-completed={isCompleted}
-          style={{
-            width: 2,
-            flex: 1,
-            minHeight: 24,
-            marginLeft: 15, // center on 32px indicator
-            transition: `background var(--ds-motion-normal) var(--ds-motion-ease-out)`,
-          }}
-        />
-      );
-    }
-
-    return (
-      <div
-        key={`connector-${index}`}
-        data-part="step-connector"
-        data-completed={isCompleted}
-        style={{
-          flex: 1,
-          height: 2,
-          minWidth: 16,
-          transition: `background var(--ds-motion-normal) var(--ds-motion-ease-out)`,
-          marginTop: isVertical ? 0 : 16, // align with center of 32px indicator
-        }}
-      />
-    );
-  };
-
-  /* -- Build step rail ---------------------------------------------------- */
-
-  const stepRailItems: React.ReactNode[] = [];
-  steps.forEach((_, i) => {
-    if (i > 0) stepRailItems.push(renderConnector(i));
-    stepRailItems.push(renderStepIndicator(i));
-  });
 
   /* -- Error display ------------------------------------------------------ */
 
   const errorDisplay = validationMessage ? (
-    <div
-      data-part="error-panel"
-      style={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: 10,
-        padding: '12px 16px',
-        marginTop: 16,
-        fontSize: 14,
-        lineHeight: '20px',
-      }}
-    >
-      <ErrorIcon />
+    <div data-part="error-panel">
+      <StatusErrorIcon decorative size={14} />
       <span>{validationMessage}</span>
     </div>
   ) : null;
@@ -412,95 +213,61 @@ export default function ModernStepWizard(props: StepWizardProps) {
   const navDisabled = isValidating || actionsDisabled;
 
   const navigationContent = (
-    <div
-      data-part="nav-bar"
-      style={{
-        width: '100%',
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: 8,
-        marginTop: stickyActions ? 0 : 24,
-        paddingTop: stickyActions ? 0 : 20,
-      }}
-    >
+    <div data-part="nav-bar">
       {/* Left side: Previous */}
       <div>
         {current > 0 && (
-          <button
-            type="button"
+          <ModernButton
             data-part="prev-button"
+            variant="outline"
+            size="md"
             disabled={navDisabled}
             onClick={() => setCurrent(current - 1)}
-            style={{
-              ...ghostButtonBase,
-              ...(navDisabled ? disabledOverride : {}),
-            }}
           >
             {prevLabel}
-          </button>
+          </ModernButton>
         )}
       </div>
 
       {/* Right side: Footer + Skip + Next/Complete */}
-      <div
-        style={{
-          display: 'flex',
-          flex: '1 1 auto',
-          flexWrap: 'wrap',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          gap: 8,
-          minWidth: 0,
-        }}
-      >
+      <div data-part="nav-actions">
         {footer}
 
         {/* Skip: shown for optional steps that are not the final step */}
         {allowSkip && currentDef?.optional && !isLast && (
-          <button
-            type="button"
+          <ModernButton
             data-part="skip-button"
+            variant="text"
+            size="md"
             disabled={navDisabled}
             onClick={() => setCurrent(current + 1)}
-            style={{
-              ...linkButtonBase,
-              ...(navDisabled ? disabledOverride : {}),
-            }}
           >
             {skipLabel}
-          </button>
+          </ModernButton>
         )}
 
         {isLast ? (
           showCompleteAction ? (
-            <button
-              type="button"
+            <ModernButton
               data-part="complete-button"
+              variant="primary"
+              size="md"
               disabled={navDisabled || completeDisabled}
               onClick={handleComplete}
-              style={{
-                ...primaryButtonBase,
-                ...(navDisabled || completeDisabled ? disabledOverride : {}),
-              }}
             >
               {completeLabel}
-            </button>
+            </ModernButton>
           ) : null
         ) : (
-          <button
-            type="button"
+          <ModernButton
             data-part="next-button"
+            variant="primary"
+            size="md"
             disabled={navDisabled}
             onClick={handleAdvance}
-            style={{
-              ...primaryButtonBase,
-              ...(navDisabled ? disabledOverride : {}),
-            }}
           >
             {nextLabel}
-          </button>
+          </ModernButton>
         )}
       </div>
     </div>
@@ -522,9 +289,9 @@ export default function ModernStepWizard(props: StepWizardProps) {
       data-action-posture={actionPosture}
       data-progress-posture={progressPosture}
       className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
-      style={{ ...cardStyle, ...style }}
+      style={style}
     >
-      <div style={{ padding: 24 }}>
+      <div data-part="body">
         {/* Compact posture retains a live, named progress status. */}
         {showProgress && progressPosture === 'counter' && (
           <div data-part="step-counter" role="status" aria-live="polite" aria-label={progressLabel}>
@@ -534,62 +301,46 @@ export default function ModernStepWizard(props: StepWizardProps) {
 
         {/* Progress bar (subtle, at the very top) */}
         {showProgress && progressPosture === 'rail' && (
-          <div
-            data-part="progress-track"
-            style={{
-              width: '100%',
-              height: 4,
-              marginBottom: 24,
-              overflow: 'hidden',
-            }}
-          >
+          <div data-part="progress-track">
+            {/* `width` stays inline: it is computed from the step index
+                (runtime value); the fill's transition is skin-owned. */}
             <div
               data-part="progress-fill"
-              style={{
-                height: '100%',
-                width: `${progress}%`,
-                transition: `width var(--ds-motion-normal) var(--ds-motion-ease-out)`,
-              }}
+              style={{ width: `${progress}%` }}
             />
           </div>
         )}
 
-        {/* Step indicators */}
+        {/* Step rail: the public Steps primitive (display-only -- wizard
+            navigation happens through the nav buttons, so no onChange). */}
         {showProgress && progressPosture === 'rail' && !isVertical && (
-          <div
-            data-part="step-rail"
-            data-orientation="horizontal"
-            style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              marginBottom: 28,
-            }}
-          >
-            {stepRailItems}
+          <div data-part="step-rail" data-orientation="horizontal">
+            <ModernSteps
+              items={steps.map((s) => ({ title: s.title, description: s.description }))}
+              current={current}
+              direction="horizontal"
+              size="small"
+              responsive
+            />
           </div>
         )}
 
         {/* Vertical layout: indicators alongside content */}
         {showProgress && progressPosture === 'rail' && isVertical ? (
-          <div style={{ display: 'flex', gap: 32 }}>
+          <div data-part="wizard-split">
             {/* Vertical step rail */}
-            <div
-              data-part="step-rail"
-              data-orientation="vertical"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                flexShrink: 0,
-                width: 180,
-              }}
-            >
-              {stepRailItems}
+            <div data-part="step-rail" data-orientation="vertical">
+              <ModernSteps
+                items={steps.map((s) => ({ title: s.title, description: s.description }))}
+                current={current}
+                direction="vertical"
+                size="small"
+              />
             </div>
 
             {/* Content area */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div data-part="content" style={contentAreaStyle}>
+            <div data-part="main">
+              <div data-part="content">
                 {currentDef?.content}
               </div>
               {errorDisplay}
@@ -599,7 +350,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
         ) : (
           <>
             {/* Horizontal: content below the step indicators */}
-            <div data-part="content" style={contentAreaStyle}>
+            <div data-part="content">
               {currentDef?.content}
             </div>
             {errorDisplay}

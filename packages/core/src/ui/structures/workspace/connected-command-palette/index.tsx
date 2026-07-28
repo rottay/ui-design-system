@@ -33,6 +33,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useCommands, useRegisterCommands } from '@/infrastructure/runtime/application/commands';
 import { useRegisteredShortcuts } from '@/infrastructure/runtime/application/interaction/shortcuts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { PatternCommandPalette } from '@/ui/patterns/navigation/command-palette';
 import { useCommandPaletteItems } from '@/ui/patterns/navigation/command-palette/runtime/application-commands';
 import { PatternShortcutsOverlay } from '@/ui/patterns/navigation/shortcuts-overlay';
@@ -64,8 +65,8 @@ export interface ConnectedCommandPaletteProps {
  * of every registered shortcut.
  */
 export function ConnectedCommandPalette({
-  placeholder = 'Type a command or search...',
-  emptyMessage = 'No matching commands',
+  placeholder,
+  emptyMessage,
   openShortcut = 'mod+k',
   shortcutsOverlayKey = '?',
   footer,
@@ -73,6 +74,25 @@ export function ConnectedCommandPalette({
   const [open, setOpen] = useState(false);
   const [shortcutsOverlayOpen, setShortcutsOverlayOpen] = useState(false);
   const { items, onSearch } = useCommandPaletteItems();
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Catalog lookup with an honest English floor: when the provider is absent
+   * or echoes the raw key (missing entry), the historical default wins.
+   */
+  const tOr = useCallback(
+    (key: string, fallback: string): string => {
+      const resolved = i18n?.t(key);
+      if (resolved === undefined || resolved === key || resolved === `components.${key}`) {
+        return fallback;
+      }
+      return resolved;
+    },
+    [i18n],
+  );
+  const resolvedPlaceholder =
+    placeholder ?? tOr('connectedCommandPalette.placeholder', 'Type a command or search...');
+  const resolvedEmptyMessage =
+    emptyMessage ?? tOr('connectedCommandPalette.emptyMessage', 'No matching commands');
 
   // Close palette and execute the selected command
   const handleOpenChange = useCallback((nextOpen: boolean) => {
@@ -141,9 +161,9 @@ export function ConnectedCommandPalette({
   useRegisterCommands([
     {
       id: 'ds-keyboard-shortcuts',
-      label: 'Keyboard shortcuts',
-      description: 'View all keyboard shortcuts',
-      category: 'Help',
+      label: tOr('connectedCommandPalette.keyboardShortcuts', 'Keyboard shortcuts'),
+      description: tOr('connectedCommandPalette.keyboardShortcutsDescription', 'View all keyboard shortcuts'),
+      category: tOr('connectedCommandPalette.helpCategory', 'Help'),
       shortcut: shortcutsOverlayKey,
       action: () => setShortcutsOverlayOpen(true),
     },
@@ -164,7 +184,7 @@ export function ConnectedCommandPalette({
       .map((cmd) => ({
         key: cmd.shortcut as string,
         description: cmd.label,
-        category: cmd.category ?? 'Commands',
+        category: cmd.category ?? tOr('connectedCommandPalette.commandsCategory', 'Commands'),
       }));
     // Group by scope when a shortcut has no explicit category, so scoped
     // registrations (e.g. "Collection", per-gallery scope ids) don't all
@@ -172,7 +192,7 @@ export function ConnectedCommandPalette({
     const fromRegistry = registeredShortcuts.map((s) => ({
       key: s.key,
       description: s.description,
-      category: s.category ?? s.scope ?? 'Global',
+      category: s.category ?? s.scope ?? tOr('connectedCommandPalette.globalCategory', 'Global'),
     }));
 
     const seen = new Set<string>();
@@ -182,7 +202,7 @@ export function ConnectedCommandPalette({
       seen.add(dedupeKey);
       return true;
     });
-  }, [commands, registeredShortcuts]);
+  }, [commands, registeredShortcuts, tOr]);
 
   return (
     <>
@@ -191,15 +211,15 @@ export function ConnectedCommandPalette({
         onOpenChange={handleOpenChange}
         items={items}
         onSearch={onSearch}
-        placeholder={placeholder}
-        emptyMessage={emptyMessage}
+        placeholder={resolvedPlaceholder}
+        emptyMessage={resolvedEmptyMessage}
         footer={footer}
       />
       <PatternShortcutsOverlay
         open={shortcutsOverlayOpen}
         onOpenChange={setShortcutsOverlayOpen}
         shortcuts={shortcutDisplayItems}
-        title="Keyboard Shortcuts"
+        title={tOr('connectedCommandPalette.shortcutsOverlayTitle', 'Keyboard Shortcuts')}
       />
     </>
   );

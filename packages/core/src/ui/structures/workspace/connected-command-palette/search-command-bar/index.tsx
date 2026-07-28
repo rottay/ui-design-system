@@ -36,6 +36,7 @@ import {
 
 import { useVoiceInput } from '@/infrastructure/runtime/application/automation/voice/composition/react/input';
 import { useRegisterCommands } from '@/infrastructure/runtime/application/commands';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ConnectedCommandPalette } from '..';
 import { Box, Flex, Input, Text } from '@ui/primitives';
 
@@ -116,7 +117,9 @@ function SearchIcon() {
 
 function VoiceInputIcon({ status }: { status: 'idle' | 'listening' | 'transcribing' | 'error' | 'unsupported' }) {
   if (status === 'transcribing') {
-    return <LoaderCircle style={{ width: 15, height: 15, animation: 'ds-search-command-bar-spin 1s linear infinite' }} />;
+    // The spin motion lives in the skin (reduced-motion guarded); the engine
+    // only names the node.
+    return <LoaderCircle className="ds-search-command-bar__spinning-icon" style={{ width: 15, height: 15 }} />;
   }
 
   if (status === 'listening') {
@@ -145,9 +148,6 @@ function CommandSuggestionChip({
         minHeight: 30,
         padding: '0 11px',
         cursor: 'pointer',
-        fontSize: 12,
-        fontWeight: 600,
-        transition: 'border-color 0.12s ease, background 0.12s ease, color 0.12s ease',
       }}
     >
       {label}
@@ -170,6 +170,18 @@ export function SearchCommandBar({
   const editorialTech = layoutVariant === 'editorial-tech';
   // Register commands in the global registry when provided
   useRegisterCommands(commandsProp ?? []);
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Catalog lookup with an honest English floor: when the provider is absent
+   * or echoes the raw key (missing entry), the historical default wins.
+   */
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (resolved === undefined || resolved === key || resolved === `components.${key}`) {
+      return fallback;
+    }
+    return resolved;
+  };
 
   const renderPalette = showCommandPalette ?? (commandsProp && commandsProp.length > 0);
   const {
@@ -253,11 +265,11 @@ export function SearchCommandBar({
 
   const statusMessage = useMemo(() => {
     if (voiceStatus === 'listening') {
-      return 'Listening. Speak naturally. We will turn your speech into a table query.';
+      return tOr('searchCommandBar.statusListening', 'Listening. Speak naturally. We will turn your speech into a table query.');
     }
 
     if (voiceStatus === 'transcribing') {
-      return 'Transcribing your request and preparing the search input.';
+      return tOr('searchCommandBar.statusTranscribing', 'Transcribing your request and preparing the search input.');
     }
 
     if (voiceStatus === 'error' && errorMessage) {
@@ -269,7 +281,8 @@ export function SearchCommandBar({
     }
 
     return null;
-  }, [command.hint, errorMessage, voiceStatus]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [command.hint, errorMessage, voiceStatus, i18n?.t]);
 
   // Derived 5-way state for the skin's data-voice-status hook: raw `voiceStatus`
   // has no "needs-permission" member, but the paint conditionals throughout this
@@ -302,14 +315,14 @@ export function SearchCommandBar({
       : 14;
 
   const voiceBadgeLabel = voiceStatus === 'listening'
-    ? 'Listening'
+    ? tOr('searchCommandBar.badgeListening', 'Listening')
     : voiceStatus === 'transcribing'
-      ? 'Transcribing'
+      ? tOr('searchCommandBar.badgeTranscribing', 'Transcribing')
       : voiceStatus === 'error'
-        ? (isVoicePermissionBlocked ? 'Mic blocked' : 'Retry voice')
+        ? (isVoicePermissionBlocked ? tOr('searchCommandBar.badgeMicBlocked', 'Mic blocked') : tOr('searchCommandBar.badgeRetryVoice', 'Retry voice'))
         : needsVoicePermission
-          ? 'Mic permission needed'
-          : 'Ask the table';
+          ? tOr('searchCommandBar.badgePermissionNeeded', 'Mic permission needed')
+          : tOr('searchCommandBar.badgeIdle', 'Ask the table');
 
   const handleVoiceToggle = () => {
     if (!voiceSupported) return;
@@ -445,7 +458,7 @@ export function SearchCommandBar({
                 className="ds-search-command-bar__search-icon"
                 style={{
                   position: 'absolute',
-                  left: 24,
+                  insetInlineStart: 24,
                   top: '50%',
                   pointerEvents: 'none',
                   display: 'flex',
@@ -467,10 +480,8 @@ export function SearchCommandBar({
                 onChange={handleInputChange}
                 style={{
                   height: editorialTech ? 44 : 42,
-                  paddingLeft: 46,
-                  paddingRight: inputRightPadding,
-                  fontSize: 14,
-                  letterSpacing: '-0.01em',
+                  paddingInlineStart: 46,
+                  paddingInlineEnd: inputRightPadding,
                 }}
               />
 
@@ -479,7 +490,7 @@ export function SearchCommandBar({
                   className="ds-search-command-bar__voice-controls"
                   style={{
                     position: 'absolute',
-                    right: 18,
+                    insetInlineEnd: 18,
                     top: '50%',
                     display: 'flex',
                     alignItems: 'center',
@@ -493,8 +504,8 @@ export function SearchCommandBar({
                       data-part="clear"
                       className="ds-search-command-bar__clear"
                       onClick={() => handleInputChange('')}
-                      aria-label="Clear search"
-                      title="Clear search"
+                      aria-label={tOr('searchCommandBar.clearSearch', 'Clear search')}
+                      title={tOr('searchCommandBar.clearSearch', 'Clear search')}
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -532,8 +543,6 @@ export function SearchCommandBar({
                         className="ds-search-command-bar__voice-badge-label"
                         size="xs"
                         style={{
-                          fontSize: 11,
-                          fontWeight: 600,
                           whiteSpace: 'nowrap',
                         }}
                       >
@@ -549,19 +558,19 @@ export function SearchCommandBar({
                     data-voice-status={voiceStatusForSkin}
                     data-voice-active={isVoiceActive}
                     onClick={handleVoiceToggle}
-                    aria-label={isVoiceActive ? 'Stop voice input' : 'Start voice input'}
+                    aria-label={isVoiceActive ? tOr('searchCommandBar.stopVoiceInput', 'Stop voice input') : tOr('searchCommandBar.startVoiceInput', 'Start voice input')}
                     title={
                       voiceStatus === 'listening'
-                        ? 'Listening'
+                        ? tOr('searchCommandBar.badgeListening', 'Listening')
                         : voiceStatus === 'transcribing'
-                          ? 'Working'
+                          ? tOr('searchCommandBar.titleWorking', 'Working')
                           : isRequestingMicPermission
-                            ? 'Check permission prompt'
+                            ? tOr('searchCommandBar.titleCheckPermission', 'Check permission prompt')
                             : needsVoicePermission
-                              ? 'Enable microphone'
+                              ? tOr('searchCommandBar.enableMicrophone', 'Enable microphone')
                               : voiceStatus === 'error'
-                                ? (isVoicePermissionBlocked ? 'Enable microphone' : 'Retry voice input')
-                                : 'Speak'
+                                ? (isVoicePermissionBlocked ? tOr('searchCommandBar.enableMicrophone', 'Enable microphone') : tOr('searchCommandBar.titleRetryVoice', 'Retry voice input'))
+                                : tOr('searchCommandBar.titleSpeak', 'Speak')
                     }
                     style={{
                       display: 'inline-flex',
@@ -572,8 +581,6 @@ export function SearchCommandBar({
                       minWidth: 32,
                       padding: 0,
                       cursor: 'pointer',
-                      transition: 'background 0.14s ease, border-color 0.14s ease, color 0.14s ease',
-                      animation: voiceStatus === 'listening' ? 'ds-search-command-bar-pulse 1.6s ease-out infinite' : undefined,
                     }}
                   >
                     <VoiceInputIcon status={voiceStatus} />
@@ -586,9 +593,11 @@ export function SearchCommandBar({
                   data-part="voice-help"
                   className="ds-search-command-bar__voice-help"
                   data-permission-blocked={isVoicePermissionBlocked}
+                  role="dialog"
+                  aria-label={tOr('searchCommandBar.enableMicrophone', 'Enable microphone')}
                   style={{
                     position: 'absolute',
-                    right: 0,
+                    insetInlineEnd: 0,
                     top: 'calc(100% + 12px)',
                     width: 420,
                     zIndex: 180,
@@ -597,8 +606,10 @@ export function SearchCommandBar({
                 >
                   <Flex align="start" justify="between" gap={10}>
                     <Box style={{ minWidth: 0 }}>
-                      <Text size="sm" weight="medium" style={{ display: 'block', fontSize: 14 }}>
-                        {isVoicePermissionBlocked ? 'Enable microphone' : 'Allow microphone access'}
+                      <Text data-part="voice-help-title" size="sm" weight="medium" style={{ display: 'block' }}>
+                        {isVoicePermissionBlocked
+                          ? tOr('searchCommandBar.enableMicrophone', 'Enable microphone')
+                          : tOr('searchCommandBar.allowMicrophoneAccess', 'Allow microphone access')}
                       </Text>
                       <Text
                         data-part="voice-help-description"
@@ -607,15 +618,13 @@ export function SearchCommandBar({
                         style={{
                           display: 'block',
                           marginTop: 4,
-                          fontSize: 12,
-                          lineHeight: 1.5,
                         }}
                       >
                         {isVoicePermissionBlocked
-                          ? 'Browser voice is available, but this site is blocked from using the mic.'
+                          ? tOr('searchCommandBar.voiceHelpBlockedDescription', 'Browser voice is available, but this site is blocked from using the mic.')
                           : isRequestingMicPermission
-                            ? 'A browser permission sheet should appear near the address bar. Approve it to start dictation.'
-                            : 'Press the button below and approve the browser prompt so dictation can start from this workspace.'}
+                            ? tOr('searchCommandBar.voiceHelpRequestingDescription', 'A browser permission sheet should appear near the address bar. Approve it to start dictation.')
+                            : tOr('searchCommandBar.voiceHelpIdleDescription', 'Press the button below and approve the browser prompt so dictation can start from this workspace.')}
                       </Text>
                     </Box>
                     <Box
@@ -623,7 +632,7 @@ export function SearchCommandBar({
                       data-part="close"
                       className="ds-search-command-bar__voice-help-close"
                       onClick={() => setShowVoiceHelp(false)}
-                      aria-label="Close microphone help"
+                      aria-label={tOr('searchCommandBar.closeMicHelp', 'Close microphone help')}
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -644,30 +653,28 @@ export function SearchCommandBar({
                     className="ds-search-command-bar__voice-help-list"
                     style={{
                       margin: '12px 0 0',
-                      paddingLeft: 18,
-                      fontSize: 12,
-                      lineHeight: 1.55,
+                      paddingInlineStart: 18,
                     }}
                   >
                     {isVoicePermissionBlocked ? (
                       <>
                         <Box as="li" style={{ marginBottom: 6 }}>
-                          Click the site controls icon next to the URL.
+                          {tOr('searchCommandBar.voiceHelpStepClickSiteControls', 'Click the site controls icon next to the URL.')}
                         </Box>
                         <Box as="li" style={{ marginBottom: 6 }}>
-                          Set <strong>Microphone</strong> to <strong>Allow</strong>.
+                          {tOr('searchCommandBar.voiceHelpStepSetPrefix', 'Set')} <strong>{tOr('searchCommandBar.microphone', 'Microphone')}</strong> {tOr('searchCommandBar.voiceHelpStepSetMiddle', 'to')} <strong>{tOr('searchCommandBar.voiceHelpAllow', 'Allow')}</strong>.
                         </Box>
-                        <Box as="li">Return here and press <strong>Speak</strong> again.</Box>
+                        <Box as="li">{tOr('searchCommandBar.voiceHelpStepReturnPrefix', 'Return here and press')} <strong>{tOr('searchCommandBar.titleSpeak', 'Speak')}</strong> {tOr('searchCommandBar.voiceHelpStepReturnSuffix', 'again.')}</Box>
                       </>
                     ) : (
                       <>
                         <Box as="li" style={{ marginBottom: 6 }}>
-                          Press <strong>Enable microphone</strong> below.
+                          {tOr('searchCommandBar.voiceHelpStepPressPrefix', 'Press')} <strong>{tOr('searchCommandBar.enableMicrophone', 'Enable microphone')}</strong> {tOr('searchCommandBar.voiceHelpStepPressSuffix', 'below.')}
                         </Box>
                         <Box as="li" style={{ marginBottom: 6 }}>
-                          Approve the browser permission prompt for this site.
+                          {tOr('searchCommandBar.voiceHelpStepApprove', 'Approve the browser permission prompt for this site.')}
                         </Box>
-                        <Box as="li">We will start listening as soon as access is granted.</Box>
+                        <Box as="li">{tOr('searchCommandBar.voiceHelpStepAutoStart', 'We will start listening as soon as access is granted.')}</Box>
                       </>
                     )}
                   </Box>
@@ -679,15 +686,13 @@ export function SearchCommandBar({
                       size="xs"
                       style={{
                         flex: 1,
-                        fontSize: 11,
-                        lineHeight: 1.45,
                       }}
                     >
                       {isVoicePermissionBlocked
-                        ? 'If you already changed it, retry immediately.'
+                        ? tOr('searchCommandBar.voiceHelpHintBlocked', 'If you already changed it, retry immediately.')
                         : isRequestingMicPermission
-                          ? 'If you do not see the prompt, check the browser site controls near the URL.'
-                          : 'Grant access once and the mic button will switch to Speak.'}
+                          ? tOr('searchCommandBar.voiceHelpHintRequesting', 'If you do not see the prompt, check the browser site controls near the URL.')
+                          : tOr('searchCommandBar.voiceHelpHintIdle', 'Grant access once and the mic button will switch to Speak.')}
                     </Text>
                     <Flex align="center" gap={8} style={{ flexShrink: 0 }}>
                       <Box
@@ -707,12 +712,10 @@ export function SearchCommandBar({
                           minWidth: 96,
                           padding: '0 14px',
                           cursor: 'pointer',
-                          fontSize: 12,
-                          fontWeight: 600,
                         }}
                       >
                         <ExternalLink style={{ width: 12, height: 12 }} />
-                        Got it
+                        {tOr('searchCommandBar.gotIt', 'Got it')}
                       </Box>
                       <Box
                         as="button"
@@ -736,11 +739,13 @@ export function SearchCommandBar({
                           minWidth: 156,
                           padding: '0 16px',
                           cursor: 'pointer',
-                          fontSize: 12,
-                          fontWeight: 700,
                         }}
                       >
-                        {isVoicePermissionBlocked ? 'Retry' : isRequestingMicPermission ? 'Waiting for prompt' : 'Enable microphone'}
+                        {isVoicePermissionBlocked
+                          ? tOr('searchCommandBar.retry', 'Retry')
+                          : isRequestingMicPermission
+                            ? tOr('searchCommandBar.waitingForPrompt', 'Waiting for prompt')
+                            : tOr('searchCommandBar.enableMicrophone', 'Enable microphone')}
                       </Box>
                     </Flex>
                   </Flex>
@@ -761,10 +766,6 @@ export function SearchCommandBar({
                   className="ds-search-command-bar__status"
                   data-voice-status={voiceStatus}
                   size="xs"
-                  style={{
-                    fontSize: 11,
-                    lineHeight: 1.45,
-                  }}
                 >
                   {statusMessage}
                 </Text>
@@ -800,21 +801,16 @@ export function SearchCommandBar({
                     flexWrap: 'wrap',
                     justifyContent: 'flex-end',
                     minHeight: 44,
-                    padding: editorialTech ? '6px 0 6px 16px' : '6px 0 6px 18px',
+                    paddingBlock: 6,
+                    paddingInlineStart: editorialTech ? 16 : 18,
                   }}
                 >
                   <Text
                     data-part="suggestions-label"
                     className="ds-search-command-bar__suggestions-label"
                     size="xs"
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 700,
-                      letterSpacing: '0.08em',
-                      textTransform: 'uppercase' as const,
-                    }}
                   >
-                    Smart refine
+                    {tOr('searchCommandBar.smartRefine', 'Smart refine')}
                   </Text>
                   <Flex align="center" gap={8} wrap="wrap" justify="end">
                     {commandSuggestions.map((suggestion) => (
@@ -838,7 +834,8 @@ export function SearchCommandBar({
                     display: 'inline-flex',
                     alignItems: 'center',
                     minHeight: 44,
-                    padding: editorialTech ? '6px 0 6px 16px' : '6px 0 6px 18px',
+                    paddingBlock: 6,
+                    paddingInlineStart: editorialTech ? 16 : 18,
                   }}
                 >
                   {actionsSlot}

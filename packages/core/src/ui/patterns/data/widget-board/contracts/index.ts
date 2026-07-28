@@ -69,6 +69,10 @@ export interface WidgetBoardLabels {
   /** Optional catalog heading and guidance. */
   catalogHeading?: string;
   catalogDescription?: string;
+  /** Optional localized placeholder for the catalog search field. */
+  catalogSearchPlaceholder?: string;
+  /** Optional localized empty-result line when a catalog search matches nothing. */
+  catalogNoResults?: string;
   /** Optional localized recommendation marker. */
   recommended?: string;
   /** Localized names for the four responsive width presets. */

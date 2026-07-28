@@ -1,0 +1,2927 @@
+{
+ "inGrammar": 622,
+ "outGrammar": 296,
+ "noProperty": 59,
+ "leftoverHist": {
+  "focus": 17,
+  "border": 15,
+  "clear": 10,
+  "checked": 16,
+  "ring": 8,
+  "color": 5,
+  "dropdown": 13,
+  "filled": 6,
+  "empty": 4,
+  "hover": 14,
+  "skeleton": 6,
+  "preview": 18,
+  "cover": 2,
+  "gradient": 8,
+  "status": 2,
+  "overflow": 4,
+  "mark": 2,
+  "tag": 4,
+  "check": 2,
+  "control": 4,
+  "affix": 2,
+  "required": 2,
+  "help": 2,
+  "extra": 2,
+  "dragger": 12,
+  "file": 6,
+  "remove": 2,
+  "progress": 4,
+  "backdrop": 4,
+  "inner": 2,
+  "fill": 8,
+  "highlight": 2,
+  "wave": 4,
+  "active": 4,
+  "title": 2,
+  "selected": 4,
+  "submenu": 2,
+  "dark": 4,
+  "connector": 4,
+  "finish": 4,
+  "process": 4,
+  "wait": 4,
+  "node": 8,
+  "subtitle": 2,
+  "split": 2,
+  "meta": 2,
+  "background": 6,
+  "text": 2,
+  "badge": 4,
+  "shortcut": 2,
+  "glass": 4,
+  "trend": 6,
+  "positive": 2,
+  "negative": 2,
+  "backtop": 6,
+  "ink": 2,
+  "side": 2,
+  "soft": 1,
+  "topbar": 1,
+  "z": 2,
+  "index": 2,
+  "motion": 2,
+  "duration": 1,
+  "ease": 1,
+  "action": 2,
+  "max": 1,
+  "min": 2,
+  "cockpit": 1,
+  "column": 2,
+  "lane": 2,
+  "marker": 1,
+  "meter": 1,
+  "section": 1,
+  "padding": 5,
+  "x": 2,
+  "inline": 3,
+  "child": 3,
+  "font": 1,
+  "size": 1
+ },
+ "rows": [
+  {
+   "role": "bg",
+   "n": 51,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "border",
+   "n": 32,
+   "part": null,
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "error-border",
+   "n": 22,
+   "part": null,
+   "status": "error",
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "color",
+   "n": 19,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "error-color",
+   "n": 19,
+   "part": null,
+   "status": "error",
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "warning-border",
+   "n": 16,
+   "part": null,
+   "status": "warning",
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "bg-disabled",
+   "n": 14,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": "disabled",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "label-color",
+   "n": 14,
+   "part": "label",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "success-bg",
+   "n": 13,
+   "part": null,
+   "status": "success",
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "success-color",
+   "n": 13,
+   "part": null,
+   "status": "success",
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "warning-bg",
+   "n": 13,
+   "part": null,
+   "status": "warning",
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "warning-color",
+   "n": 13,
+   "part": null,
+   "status": "warning",
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "error-bg",
+   "n": 13,
+   "part": null,
+   "status": "error",
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "shadow",
+   "n": 12,
+   "part": null,
+   "status": null,
+   "property": "shadow",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "border-focus",
+   "n": 12,
+   "part": null,
+   "status": null,
+   "property": "border",
+   "state": "focus",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "default-bg",
+   "n": 11,
+   "part": null,
+   "status": "default",
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "default-color",
+   "n": 11,
+   "part": null,
+   "status": "default",
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "primary-bg",
+   "n": 11,
+   "part": null,
+   "status": "primary",
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "primary-color",
+   "n": 11,
+   "part": null,
+   "status": "primary",
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "border-hover",
+   "n": 10,
+   "part": null,
+   "status": null,
+   "property": "border",
+   "state": "hover",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "focus-ring",
+   "n": 10,
+   "part": null,
+   "status": null,
+   "property": "ring",
+   "state": null,
+   "leftover": [
+    "focus"
+   ],
+   "ok": false
+  },
+  {
+   "role": "description-color",
+   "n": 10,
+   "part": "description",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "shadow-focus",
+   "n": 10,
+   "part": null,
+   "status": null,
+   "property": "shadow",
+   "state": "focus",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "item-bg-hover",
+   "n": 10,
+   "part": "item",
+   "status": null,
+   "property": "bg",
+   "state": "hover",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "title-color",
+   "n": 10,
+   "part": "title",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "secondary-bg",
+   "n": 9,
+   "part": null,
+   "status": "secondary",
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "secondary-color",
+   "n": 9,
+   "part": null,
+   "status": "secondary",
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "border-color",
+   "n": 8,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "border"
+   ],
+   "ok": false
+  },
+  {
+   "role": "text-color",
+   "n": 8,
+   "part": null,
+   "status": "text",
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "success-border",
+   "n": 8,
+   "part": null,
+   "status": "success",
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "clear-color",
+   "n": 8,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "clear"
+   ],
+   "ok": false
+  },
+  {
+   "role": "icon-color",
+   "n": 8,
+   "part": "icon",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "item-color",
+   "n": 8,
+   "part": "item",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "item-bg-active",
+   "n": 8,
+   "part": "item",
+   "status": null,
+   "property": "bg",
+   "state": "active",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "item-color-active",
+   "n": 8,
+   "part": "item",
+   "status": null,
+   "property": "color",
+   "state": "active",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "checked-bg",
+   "n": 6,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "checked"
+   ],
+   "ok": false
+  },
+  {
+   "role": "focus-ring-color",
+   "n": 6,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "focus",
+    "ring"
+   ],
+   "ok": false
+  },
+  {
+   "role": "item-color-hover",
+   "n": 6,
+   "part": "item",
+   "status": null,
+   "property": "color",
+   "state": "hover",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "content-color",
+   "n": 6,
+   "part": "content",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "color-placeholder",
+   "n": 5,
+   "part": "placeholder",
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "color"
+   ],
+   "ok": false
+  },
+  {
+   "role": "dropdown-bg",
+   "n": 5,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "dropdown"
+   ],
+   "ok": false
+  },
+  {
+   "role": "dropdown-shadow",
+   "n": 5,
+   "part": null,
+   "status": null,
+   "property": "shadow",
+   "state": null,
+   "leftover": [
+    "dropdown"
+   ],
+   "ok": false
+  },
+  {
+   "role": "option-bg-hover",
+   "n": 5,
+   "part": "option",
+   "status": null,
+   "property": "bg",
+   "state": "hover",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "info-bg",
+   "n": 5,
+   "part": null,
+   "status": "info",
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "info-color",
+   "n": 5,
+   "part": null,
+   "status": "info",
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "checked-border",
+   "n": 4,
+   "part": null,
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [
+    "checked"
+   ],
+   "ok": false
+  },
+  {
+   "role": "label-color-disabled",
+   "n": 4,
+   "part": "label",
+   "status": null,
+   "property": "color",
+   "state": "disabled",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "filled-bg",
+   "n": 4,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "filled"
+   ],
+   "ok": false
+  },
+  {
+   "role": "separator-color",
+   "n": 4,
+   "part": "separator",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "card-border",
+   "n": 4,
+   "part": "card",
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "card-bg",
+   "n": 4,
+   "part": "card",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "empty-color",
+   "n": 4,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "empty"
+   ],
+   "ok": false
+  },
+  {
+   "role": "dot-bg",
+   "n": 4,
+   "part": "dot",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "header-border",
+   "n": 4,
+   "part": "header",
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "item-bg",
+   "n": 4,
+   "part": "item",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "item-hover-bg",
+   "n": 4,
+   "part": "item",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "hover"
+   ],
+   "ok": false
+  },
+  {
+   "role": "header-bg",
+   "n": 4,
+   "part": "header",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "header-color",
+   "n": 4,
+   "part": "header",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "value-color",
+   "n": 4,
+   "part": "value",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "skeleton-bg",
+   "n": 4,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "skeleton"
+   ],
+   "ok": false
+  },
+  {
+   "role": "bg-hover",
+   "n": 3,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": "hover",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "option-bg-selected",
+   "n": 3,
+   "part": "option",
+   "status": null,
+   "property": "bg",
+   "state": "selected",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "option-color-selected",
+   "n": 3,
+   "part": "option",
+   "status": null,
+   "property": "color",
+   "state": "selected",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "panel-shadow",
+   "n": 2,
+   "part": "panel",
+   "status": null,
+   "property": "shadow",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "border-color-hover",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": "hover",
+   "leftover": [
+    "border"
+   ],
+   "ok": false
+  },
+  {
+   "role": "border-color-focus",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": "focus",
+   "leftover": [
+    "border"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-row-gap",
+   "n": 2,
+   "part": "row",
+   "status": null,
+   "property": "gap",
+   "state": null,
+   "leftover": [
+    "preview"
+   ],
+   "ok": false
+  },
+  {
+   "role": "primary-hover-bg",
+   "n": 2,
+   "part": null,
+   "status": "primary",
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "hover"
+   ],
+   "ok": false
+  },
+  {
+   "role": "secondary-hover-bg",
+   "n": 2,
+   "part": null,
+   "status": "secondary",
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "hover"
+   ],
+   "ok": false
+  },
+  {
+   "role": "cover-overlay-bg",
+   "n": 2,
+   "part": "overlay",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "cover"
+   ],
+   "ok": false
+  },
+  {
+   "role": "close-color",
+   "n": 2,
+   "part": "close",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "close-color-hover",
+   "n": 2,
+   "part": "close",
+   "status": null,
+   "property": "color",
+   "state": "hover",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "gradient-bg",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "gradient"
+   ],
+   "ok": false
+  },
+  {
+   "role": "gradient-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "gradient"
+   ],
+   "ok": false
+  },
+  {
+   "role": "status-border",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [
+    "status"
+   ],
+   "ok": false
+  },
+  {
+   "role": "ring-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "ring"
+   ],
+   "ok": false
+  },
+  {
+   "role": "group-border",
+   "n": 2,
+   "part": "group",
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "group-overflow-bg",
+   "n": 2,
+   "part": "group",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "overflow"
+   ],
+   "ok": false
+  },
+  {
+   "role": "group-overflow-color",
+   "n": 2,
+   "part": "group",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "overflow"
+   ],
+   "ok": false
+  },
+  {
+   "role": "default-border",
+   "n": 2,
+   "part": null,
+   "status": "default",
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "primary-border",
+   "n": 2,
+   "part": null,
+   "status": "primary",
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "secondary-border",
+   "n": 2,
+   "part": null,
+   "status": "secondary",
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "info-border",
+   "n": 2,
+   "part": null,
+   "status": "info",
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "info-icon",
+   "n": 2,
+   "part": "icon",
+   "status": "info",
+   "property": null,
+   "state": null,
+   "leftover": [],
+   "ok": false
+  },
+  {
+   "role": "success-icon",
+   "n": 2,
+   "part": "icon",
+   "status": "success",
+   "property": null,
+   "state": null,
+   "leftover": [],
+   "ok": false
+  },
+  {
+   "role": "warning-icon",
+   "n": 2,
+   "part": "icon",
+   "status": "warning",
+   "property": null,
+   "state": null,
+   "leftover": [],
+   "ok": false
+  },
+  {
+   "role": "error-icon",
+   "n": 2,
+   "part": "icon",
+   "status": "error",
+   "property": null,
+   "state": null,
+   "leftover": [],
+   "ok": false
+  },
+  {
+   "role": "checked-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "checked"
+   ],
+   "ok": false
+  },
+  {
+   "role": "checked-dot",
+   "n": 2,
+   "part": "dot",
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "checked"
+   ],
+   "ok": false
+  },
+  {
+   "role": "checked-bg-hover",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": "hover",
+   "leftover": [
+    "checked"
+   ],
+   "ok": false
+  },
+  {
+   "role": "thumb-bg",
+   "n": 2,
+   "part": "thumb",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "thumb-shadow",
+   "n": 2,
+   "part": "thumb",
+   "status": null,
+   "property": "shadow",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "track-color",
+   "n": 2,
+   "part": "track",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "track-color-disabled",
+   "n": 2,
+   "part": "track",
+   "status": null,
+   "property": "color",
+   "state": "disabled",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "rail-color",
+   "n": 2,
+   "part": "rail",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "handle-bg",
+   "n": 2,
+   "part": "handle",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "handle-bg-disabled",
+   "n": 2,
+   "part": "handle",
+   "status": null,
+   "property": "bg",
+   "state": "disabled",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "handle-border",
+   "n": 2,
+   "part": "handle",
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "handle-shadow",
+   "n": 2,
+   "part": "handle",
+   "status": null,
+   "property": "shadow",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "mark-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "mark"
+   ],
+   "ok": false
+  },
+  {
+   "role": "color-disabled",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": "disabled",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "dropdown-border",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [
+    "dropdown"
+   ],
+   "ok": false
+  },
+  {
+   "role": "option-color-disabled",
+   "n": 2,
+   "part": "option",
+   "status": null,
+   "property": "color",
+   "state": "disabled",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "tag-bg",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "tag"
+   ],
+   "ok": false
+  },
+  {
+   "role": "tag-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "tag"
+   ],
+   "ok": false
+  },
+  {
+   "role": "arrow-color",
+   "n": 2,
+   "part": "arrow",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "clear-color-hover",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": "hover",
+   "leftover": [
+    "clear"
+   ],
+   "ok": false
+  },
+  {
+   "role": "check-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "check"
+   ],
+   "ok": false
+  },
+  {
+   "role": "control-bg",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "control"
+   ],
+   "ok": false
+  },
+  {
+   "role": "control-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "control"
+   ],
+   "ok": false
+  },
+  {
+   "role": "addon-bg",
+   "n": 2,
+   "part": "addon",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "addon-border",
+   "n": 2,
+   "part": "addon",
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "addon-color",
+   "n": 2,
+   "part": "addon",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "affix-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "affix"
+   ],
+   "ok": false
+  },
+  {
+   "role": "count-color",
+   "n": 2,
+   "part": "count",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "label-font-weight",
+   "n": 2,
+   "part": "label",
+   "status": null,
+   "property": "font-weight",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "required-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "required"
+   ],
+   "ok": false
+  },
+  {
+   "role": "help-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "help"
+   ],
+   "ok": false
+  },
+  {
+   "role": "extra-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "extra"
+   ],
+   "ok": false
+  },
+  {
+   "role": "button-bg",
+   "n": 2,
+   "part": "button",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "button-border",
+   "n": 2,
+   "part": "button",
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "button-color",
+   "n": 2,
+   "part": "button",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "dragger-bg",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "dragger"
+   ],
+   "ok": false
+  },
+  {
+   "role": "dragger-bg-hover",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": "hover",
+   "leftover": [
+    "dragger"
+   ],
+   "ok": false
+  },
+  {
+   "role": "dragger-border",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [
+    "dragger"
+   ],
+   "ok": false
+  },
+  {
+   "role": "dragger-border-active",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "border",
+   "state": "active",
+   "leftover": [
+    "dragger"
+   ],
+   "ok": false
+  },
+  {
+   "role": "dragger-icon-color",
+   "n": 2,
+   "part": "icon",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "dragger"
+   ],
+   "ok": false
+  },
+  {
+   "role": "dragger-text-color",
+   "n": 2,
+   "part": null,
+   "status": "text",
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "dragger"
+   ],
+   "ok": false
+  },
+  {
+   "role": "file-bg",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "file"
+   ],
+   "ok": false
+  },
+  {
+   "role": "file-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "file"
+   ],
+   "ok": false
+  },
+  {
+   "role": "file-remove-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "file",
+    "remove"
+   ],
+   "ok": false
+  },
+  {
+   "role": "progress-track",
+   "n": 2,
+   "part": "track",
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "progress"
+   ],
+   "ok": false
+  },
+  {
+   "role": "progress-bar",
+   "n": 2,
+   "part": "bar",
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "progress"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-overlay",
+   "n": 2,
+   "part": "overlay",
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "preview"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-backdrop",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "preview",
+    "backdrop"
+   ],
+   "ok": false
+  },
+  {
+   "role": "track-bg",
+   "n": 2,
+   "part": "track",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "track-bg-checked",
+   "n": 2,
+   "part": "track",
+   "status": null,
+   "property": "bg",
+   "state": "checked",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "dot-shadow",
+   "n": 2,
+   "part": "dot",
+   "status": null,
+   "property": "shadow",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "inner-label-color",
+   "n": 2,
+   "part": "label",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "inner"
+   ],
+   "ok": false
+  },
+  {
+   "role": "title-border",
+   "n": 2,
+   "part": "title",
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "footer-border",
+   "n": 2,
+   "part": "footer",
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "body-color",
+   "n": 2,
+   "part": "body",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "fill-primary",
+   "n": 2,
+   "part": null,
+   "status": "primary",
+   "property": null,
+   "state": null,
+   "leftover": [
+    "fill"
+   ],
+   "ok": false
+  },
+  {
+   "role": "fill-success",
+   "n": 2,
+   "part": null,
+   "status": "success",
+   "property": null,
+   "state": null,
+   "leftover": [
+    "fill"
+   ],
+   "ok": false
+  },
+  {
+   "role": "fill-warning",
+   "n": 2,
+   "part": null,
+   "status": "warning",
+   "property": null,
+   "state": null,
+   "leftover": [
+    "fill"
+   ],
+   "ok": false
+  },
+  {
+   "role": "fill-error",
+   "n": 2,
+   "part": null,
+   "status": "error",
+   "property": null,
+   "state": null,
+   "leftover": [
+    "fill"
+   ],
+   "ok": false
+  },
+  {
+   "role": "highlight",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "highlight"
+   ],
+   "ok": false
+  },
+  {
+   "role": "wave-gradient",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "wave",
+    "gradient"
+   ],
+   "ok": false
+  },
+  {
+   "role": "track",
+   "n": 2,
+   "part": "track",
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [],
+   "ok": false
+  },
+  {
+   "role": "item-border",
+   "n": 2,
+   "part": "item",
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "active-bg",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "active"
+   ],
+   "ok": false
+  },
+  {
+   "role": "active-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "active"
+   ],
+   "ok": false
+  },
+  {
+   "role": "group-title-color",
+   "n": 2,
+   "part": "group",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "title"
+   ],
+   "ok": false
+  },
+  {
+   "role": "divider-color",
+   "n": 2,
+   "part": "divider",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "item-selected-bg",
+   "n": 2,
+   "part": "item",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "selected"
+   ],
+   "ok": false
+  },
+  {
+   "role": "item-selected-color",
+   "n": 2,
+   "part": "item",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "selected"
+   ],
+   "ok": false
+  },
+  {
+   "role": "item-danger-color",
+   "n": 2,
+   "part": "item",
+   "status": "danger",
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "submenu-bg",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "submenu"
+   ],
+   "ok": false
+  },
+  {
+   "role": "dark-bg",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "dark"
+   ],
+   "ok": false
+  },
+  {
+   "role": "dark-item-color",
+   "n": 2,
+   "part": "item",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "dark"
+   ],
+   "ok": false
+  },
+  {
+   "role": "connector-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "connector"
+   ],
+   "ok": false
+  },
+  {
+   "role": "connector-color-active",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": "active",
+   "leftover": [
+    "connector"
+   ],
+   "ok": false
+  },
+  {
+   "role": "finish-bg",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "finish"
+   ],
+   "ok": false
+  },
+  {
+   "role": "finish-border",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [
+    "finish"
+   ],
+   "ok": false
+  },
+  {
+   "role": "process-bg",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "process"
+   ],
+   "ok": false
+  },
+  {
+   "role": "process-border",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [
+    "process"
+   ],
+   "ok": false
+  },
+  {
+   "role": "wait-bg",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "wait"
+   ],
+   "ok": false
+  },
+  {
+   "role": "wait-border",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [
+    "wait"
+   ],
+   "ok": false
+  },
+  {
+   "role": "header-bg-hover",
+   "n": 2,
+   "part": "header",
+   "status": null,
+   "property": "bg",
+   "state": "hover",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "content-bg",
+   "n": 2,
+   "part": "content",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "node-bg-hover",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": "hover",
+   "leftover": [
+    "node"
+   ],
+   "ok": false
+  },
+  {
+   "role": "node-bg-selected",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": "selected",
+   "leftover": [
+    "node"
+   ],
+   "ok": false
+  },
+  {
+   "role": "node-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "node"
+   ],
+   "ok": false
+  },
+  {
+   "role": "node-color-selected",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": "selected",
+   "leftover": [
+    "node"
+   ],
+   "ok": false
+  },
+  {
+   "role": "line-color",
+   "n": 2,
+   "part": "line",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "dot-border",
+   "n": 2,
+   "part": "dot",
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "subtitle-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "subtitle"
+   ],
+   "ok": false
+  },
+  {
+   "role": "color-active",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": "active",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "color-hover",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": "hover",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "prefix-color",
+   "n": 2,
+   "part": "prefix",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "suffix-color",
+   "n": 2,
+   "part": "suffix",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "overlay-bg",
+   "n": 2,
+   "part": "overlay",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "split-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "split"
+   ],
+   "ok": false
+  },
+  {
+   "role": "meta-description-color",
+   "n": 2,
+   "part": "description",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "meta"
+   ],
+   "ok": false
+  },
+  {
+   "role": "background-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "background"
+   ],
+   "ok": false
+  },
+  {
+   "role": "item-background-color",
+   "n": 2,
+   "part": "item",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "background"
+   ],
+   "ok": false
+  },
+  {
+   "role": "item-hover-background-color",
+   "n": 2,
+   "part": "item",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "hover",
+    "background"
+   ],
+   "ok": false
+  },
+  {
+   "role": "secondary-text-color",
+   "n": 2,
+   "part": null,
+   "status": "secondary",
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "text"
+   ],
+   "ok": false
+  },
+  {
+   "role": "badge-bg",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "badge"
+   ],
+   "ok": false
+  },
+  {
+   "role": "badge-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "badge"
+   ],
+   "ok": false
+  },
+  {
+   "role": "backdrop",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "backdrop"
+   ],
+   "ok": false
+  },
+  {
+   "role": "group-color",
+   "n": 2,
+   "part": "group",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "shortcut-border",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [
+    "shortcut"
+   ],
+   "ok": false
+  },
+  {
+   "role": "card-filled-bg",
+   "n": 2,
+   "part": "card",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "filled"
+   ],
+   "ok": false
+  },
+  {
+   "role": "card-glass-bg",
+   "n": 2,
+   "part": "card",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "glass"
+   ],
+   "ok": false
+  },
+  {
+   "role": "card-glass-border",
+   "n": 2,
+   "part": "card",
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [
+    "glass"
+   ],
+   "ok": false
+  },
+  {
+   "role": "trend-positive",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "trend",
+    "positive"
+   ],
+   "ok": false
+  },
+  {
+   "role": "trend-negative",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "trend",
+    "negative"
+   ],
+   "ok": false
+  },
+  {
+   "role": "trend-neutral",
+   "n": 2,
+   "part": null,
+   "status": "neutral",
+   "property": null,
+   "state": null,
+   "leftover": [
+    "trend"
+   ],
+   "ok": false
+  },
+  {
+   "role": "skeleton-wave-gradient",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "skeleton",
+    "wave",
+    "gradient"
+   ],
+   "ok": false
+  },
+  {
+   "role": "backtop-bg",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "backtop"
+   ],
+   "ok": false
+  },
+  {
+   "role": "backtop-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "backtop"
+   ],
+   "ok": false
+  },
+  {
+   "role": "backtop-shadow",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "shadow",
+   "state": null,
+   "leftover": [
+    "backtop"
+   ],
+   "ok": false
+  },
+  {
+   "role": "link-color",
+   "n": 2,
+   "part": null,
+   "status": "link",
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "link-color-active",
+   "n": 2,
+   "part": null,
+   "status": "link",
+   "property": "color",
+   "state": "active",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "ink-color",
+   "n": 2,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "ink"
+   ],
+   "ok": false
+  },
+  {
+   "role": "bg-focus",
+   "n": 1,
+   "part": null,
+   "status": null,
+   "property": "bg",
+   "state": "focus",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "dropdown-border-color",
+   "n": 1,
+   "part": null,
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "dropdown",
+    "border"
+   ],
+   "ok": false
+  },
+  {
+   "role": "option-color",
+   "n": 1,
+   "part": "option",
+   "status": null,
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "side-accent",
+   "n": 1,
+   "part": null,
+   "status": "accent",
+   "property": null,
+   "state": null,
+   "leftover": [
+    "side"
+   ],
+   "ok": false
+  },
+  {
+   "role": "side-accent-soft",
+   "n": 1,
+   "part": null,
+   "status": "accent",
+   "property": null,
+   "state": null,
+   "leftover": [
+    "side",
+    "soft"
+   ],
+   "ok": false
+  },
+  {
+   "role": "topbar-height",
+   "n": 1,
+   "part": null,
+   "status": null,
+   "property": "height",
+   "state": null,
+   "leftover": [
+    "topbar"
+   ],
+   "ok": false
+  },
+  {
+   "role": "z-index",
+   "n": 1,
+   "part": null,
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "z",
+    "index"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-rail-gap",
+   "n": 1,
+   "part": "rail",
+   "status": null,
+   "property": "gap",
+   "state": null,
+   "leftover": [
+    "preview"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-rail-border",
+   "n": 1,
+   "part": "rail",
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [
+    "preview"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-panel-bg",
+   "n": 1,
+   "part": "panel",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "preview"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-panel-border",
+   "n": 1,
+   "part": "panel",
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [
+    "preview"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-motion-duration",
+   "n": 1,
+   "part": null,
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "preview",
+    "motion",
+    "duration"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-motion-ease",
+   "n": 1,
+   "part": null,
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "preview",
+    "motion",
+    "ease"
+   ],
+   "ok": false
+  },
+  {
+   "role": "tooltip-z-index",
+   "n": 1,
+   "part": "tooltip",
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "z",
+    "index"
+   ],
+   "ok": false
+  },
+  {
+   "role": "action-tooltip-max-width",
+   "n": 1,
+   "part": "tooltip",
+   "status": null,
+   "property": "width",
+   "state": null,
+   "leftover": [
+    "action",
+    "max"
+   ],
+   "ok": false
+  },
+  {
+   "role": "row-focus-shadow",
+   "n": 1,
+   "part": "row",
+   "status": null,
+   "property": "shadow",
+   "state": null,
+   "leftover": [
+    "focus"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-panel-shadow",
+   "n": 1,
+   "part": "panel",
+   "status": null,
+   "property": "shadow",
+   "state": null,
+   "leftover": [
+    "preview"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-action-min-width",
+   "n": 1,
+   "part": null,
+   "status": null,
+   "property": "width",
+   "state": null,
+   "leftover": [
+    "preview",
+    "action",
+    "min"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-cockpit-min-column-width",
+   "n": 1,
+   "part": null,
+   "status": null,
+   "property": "width",
+   "state": null,
+   "leftover": [
+    "preview",
+    "cockpit",
+    "min",
+    "column"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-lane-gap",
+   "n": 1,
+   "part": null,
+   "status": null,
+   "property": "gap",
+   "state": null,
+   "leftover": [
+    "preview",
+    "lane"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-lane-marker-size",
+   "n": 1,
+   "part": null,
+   "status": null,
+   "property": "size",
+   "state": null,
+   "leftover": [
+    "preview",
+    "lane",
+    "marker"
+   ],
+   "ok": false
+  },
+  {
+   "role": "preview-meter-height",
+   "n": 1,
+   "part": null,
+   "status": null,
+   "property": "height",
+   "state": null,
+   "leftover": [
+    "preview",
+    "meter"
+   ],
+   "ok": false
+  },
+  {
+   "role": "shell-section-gap",
+   "n": 1,
+   "part": "shell",
+   "status": null,
+   "property": "gap",
+   "state": null,
+   "leftover": [
+    "section"
+   ],
+   "ok": false
+  },
+  {
+   "role": "bar-padding-x",
+   "n": 1,
+   "part": "bar",
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "padding",
+    "x"
+   ],
+   "ok": false
+  },
+  {
+   "role": "bar-bg",
+   "n": 1,
+   "part": "bar",
+   "status": null,
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "bar-border",
+   "n": 1,
+   "part": "bar",
+   "status": null,
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "bar-shadow",
+   "n": 1,
+   "part": "bar",
+   "status": null,
+   "property": "shadow",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "primary-border-color",
+   "n": 1,
+   "part": null,
+   "status": "primary",
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "border"
+   ],
+   "ok": false
+  },
+  {
+   "role": "default-hover-bg",
+   "n": 1,
+   "part": null,
+   "status": "default",
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "hover"
+   ],
+   "ok": false
+  },
+  {
+   "role": "default-border-color",
+   "n": 1,
+   "part": null,
+   "status": "default",
+   "property": "color",
+   "state": null,
+   "leftover": [
+    "border"
+   ],
+   "ok": false
+  },
+  {
+   "role": "ghost-hover-bg",
+   "n": 1,
+   "part": null,
+   "status": "ghost",
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "hover"
+   ],
+   "ok": false
+  },
+  {
+   "role": "text-hover-bg",
+   "n": 1,
+   "part": null,
+   "status": "text",
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "hover"
+   ],
+   "ok": false
+  },
+  {
+   "role": "danger-bg",
+   "n": 1,
+   "part": null,
+   "status": "danger",
+   "property": "bg",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "danger-hover-bg",
+   "n": 1,
+   "part": null,
+   "status": "danger",
+   "property": "bg",
+   "state": null,
+   "leftover": [
+    "hover"
+   ],
+   "ok": false
+  },
+  {
+   "role": "danger-color",
+   "n": 1,
+   "part": null,
+   "status": "danger",
+   "property": "color",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "danger-border",
+   "n": 1,
+   "part": null,
+   "status": "danger",
+   "property": "border",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "height",
+   "n": 1,
+   "part": null,
+   "status": null,
+   "property": "height",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "padding-x",
+   "n": 1,
+   "part": null,
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "padding",
+    "x"
+   ],
+   "ok": false
+  },
+  {
+   "role": "shell-padding-inline",
+   "n": 1,
+   "part": "shell",
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "padding",
+    "inline"
+   ],
+   "ok": false
+  },
+  {
+   "role": "shell-padding-collapsed",
+   "n": 1,
+   "part": "shell",
+   "status": null,
+   "property": "padding",
+   "state": "collapsed",
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "item-height",
+   "n": 1,
+   "part": "item",
+   "status": null,
+   "property": "height",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "item-child-height",
+   "n": 1,
+   "part": "item",
+   "status": null,
+   "property": "height",
+   "state": null,
+   "leftover": [
+    "child"
+   ],
+   "ok": false
+  },
+  {
+   "role": "item-font-size-child",
+   "n": 1,
+   "part": "item",
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "font",
+    "size",
+    "child"
+   ],
+   "ok": false
+  },
+  {
+   "role": "item-padding-inline",
+   "n": 1,
+   "part": "item",
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "padding",
+    "inline"
+   ],
+   "ok": false
+  },
+  {
+   "role": "icon-column-size",
+   "n": 1,
+   "part": "icon",
+   "status": null,
+   "property": "size",
+   "state": null,
+   "leftover": [
+    "column"
+   ],
+   "ok": false
+  },
+  {
+   "role": "item-gap",
+   "n": 1,
+   "part": "item",
+   "status": null,
+   "property": "gap",
+   "state": null,
+   "leftover": [],
+   "ok": true
+  },
+  {
+   "role": "child-padding-inline",
+   "n": 1,
+   "part": null,
+   "status": null,
+   "property": null,
+   "state": null,
+   "leftover": [
+    "child",
+    "padding",
+    "inline"
+   ],
+   "ok": false
+  }
+ ]
+}

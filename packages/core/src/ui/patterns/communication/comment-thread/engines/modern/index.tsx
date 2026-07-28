@@ -1,11 +1,14 @@
 'use client';
 
 /**
- * @fileoverview Modern engine for the CommentThread pattern.
- * Renders a recursive tree of comments with DS token inline styles.
- * Supports nested replies up to maxDepth, inline editing, deletion, and
- * emoji reactions. Falls back to a first-initial avatar placeholder when
- * no image URL is provided.
+ * @fileoverview Modern engine for the CommentThread pattern (Lote 2 rebuild).
+ * The pattern COMPOSES public primitives -- it never recreates controls:
+ * Avatar (author/currentUser), Textarea (composer / reply / edit), Button
+ * (submit / save / cancel / reply / edit / delete / reaction pills), Spinner
+ * (loading) and the EmptyState pattern (canonical empty kit). Each primitive
+ * is the single paint owner of its own chrome; this file owns semantics,
+ * recursion and the layout anatomy (`data-part` wrappers) only. All layout
+ * geometry lives in the `comment-thread.css` modern skin.
  *
  * @example
  * <ModernCommentThread
@@ -18,24 +21,46 @@
 
 import React, { useState, useCallback } from 'react';
 import type { CommentThreadProps, Comment } from '../../contracts';
+import ModernAvatar from '../../../../../primitives/display/Avatar/engines/modern';
+import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
+import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
+import ModernTextarea from '../../../../../primitives/inputs/Textarea/engines/modern';
+import ModernEmptyState from '../../../../feedback/empty-state/engines/modern';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+
+/** Shared i18n helper shape for the thread's localized copy. */
+type Translate = (key: string, fallback: string, params?: Record<string, string | number>) => string;
 
 /**
  * Convert an ISO timestamp string into a human-readable relative time label.
  * Uses progressively coarser units (minutes, hours, days) and falls back to
- * an absolute date for timestamps older than 7 days.
+ * an absolute date for timestamps older than 7 days. Unit words resolve
+ * through the components catalogue with an English floor; the absolute date
+ * follows the active locale.
  */
-function formatTimestamp(ts: string): string {
+function formatTimestamp(ts: string, tOr: Translate, locale?: string): string {
   const date = new Date(ts);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffMin = Math.floor(diffMs / 60000);
-  if (diffMin < 1) return 'just now';
-  if (diffMin < 60) return `${diffMin}m ago`;
+  if (diffMin < 1) return tOr('comment_thread.just_now', 'just now');
+  if (diffMin < 60) return tOr('comment_thread.minutes_ago', '{count}m ago', { count: diffMin });
   const diffHr = Math.floor(diffMin / 60);
-  if (diffHr < 24) return `${diffHr}h ago`;
+  if (diffHr < 24) return tOr('comment_thread.hours_ago', '{count}h ago', { count: diffHr });
   const diffDay = Math.floor(diffHr / 24);
-  if (diffDay < 7) return `${diffDay}d ago`;
-  return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+  if (diffDay < 7) return tOr('comment_thread.days_ago', '{count}d ago', { count: diffDay });
+  return date.toLocaleDateString(locale, { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+/** Hook-local `tOr`: catalogue value with an English floor, never a raw key. */
+function useThreadTranslation(): { tOr: Translate; locale?: string } {
+  const i18n = useOptionalTranslation('components');
+  const tOr: Translate = (key, fallback, params) => {
+    const resolved = i18n?.t(key, params);
+    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+    return resolved;
+  };
+  return { tOr, locale: i18n?.locale };
 }
 
 /** Props for the recursive CommentNode used internally by ModernCommentThread. */
@@ -51,11 +76,12 @@ interface CommentNodeProps {
 }
 
 /**
- * Recursive comment node using DaisyUI classes. Each instance renders its own
- * content, reactions, action buttons, and optionally its children (replies),
- * indented via Tailwind's ml-6 class per depth level.
+ * Recursive comment node composed from DS primitives. Each instance renders
+ * its own content, reaction pills, ghost action buttons, and optionally its
+ * children (replies) inside a skin-owned threading rail.
  */
 function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, onDelete, onReaction }: CommentNodeProps) {
+  const { tOr, locale } = useThreadTranslation();
   const [replyVisible, setReplyVisible] = useState(false);
   const [replyText, setReplyText] = useState('');
   const [editing, setEditing] = useState(false);
@@ -86,112 +112,113 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
   }, [editText, onEdit, comment.id]);
 
   return (
-    <div className={depth > 0 ? 'ml-6' : ''}>
-      <div className="flex gap-3 mb-3">
-        <div className="flex-shrink-0" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div data-part="avatar" className="rounded-full w-8 h-8" style={{ overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {comment.author.avatar ? (
-              <img src={comment.author.avatar} alt={comment.author.name} />
-            ) : (
-              <span className="text-xs">{comment.author.name.charAt(0).toUpperCase()}</span>
-            )}
-          </div>
+    <div data-part="comment">
+      <div data-part="comment-row">
+        <div data-part="avatar-col">
+          <ModernAvatar size="sm" src={comment.author.avatar} name={comment.author.name} />
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="font-semibold text-sm">{comment.author.name}</span>
-            <span className="text-xs opacity-50">{formatTimestamp(comment.timestamp)}</span>
+        <div data-part="comment-main">
+          <div data-part="comment-head">
+            <span data-part="author">{comment.author.name}</span>
+            <span data-part="timestamp">{formatTimestamp(comment.timestamp, tOr, locale)}</span>
             {comment.edited && (
-              <span className="text-xs opacity-30 italic">(edited)</span>
+              <span data-part="edited-mark">{tOr('comment_thread.edited', '(edited)')}</span>
             )}
           </div>
 
           {editing ? (
-            <div className="mb-2">
-              <textarea
-                data-part="edit-textarea"
-                className="w-full mb-2"
-                style={{ width: '100%', padding: '6px 10px', fontSize: 13, resize: 'vertical' }}
+            // TextareaProps does not extend BaseComponentProps (no aria/data
+            // index), so the accessible name rides a named group wrapper --
+            // same registered gap as the Switch contract in filter-builder.
+            <div data-part="edit-form" role="group" aria-label={tOr('comment_thread.edit', 'Edit')}>
+              <ModernTextarea
                 value={editText}
-                onChange={(e) => setEditText(e.target.value)}
+                onChange={(v) => setEditText(v)}
                 rows={2}
               />
-              <div className="flex gap-2">
-                <button data-part="save" style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }} onClick={handleEdit}>Save</button>
-                <button data-part="cancel" style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }} onClick={() => { setEditing(false); setEditText(comment.content); }}>Cancel</button>
+              <div data-part="form-actions">
+                <ModernButton data-part="save" variant="primary" size="xs" onClick={handleEdit}>
+                  {tOr('comment_thread.save', 'Save')}
+                </ModernButton>
+                <ModernButton
+                  data-part="cancel"
+                  variant="ghost"
+                  size="xs"
+                  onClick={() => { setEditing(false); setEditText(comment.content); }}
+                >
+                  {tOr('comment_thread.cancel', 'Cancel')}
+                </ModernButton>
               </div>
             </div>
           ) : (
-            <p className="text-sm mb-2 leading-relaxed">{comment.content}</p>
+            <p data-part="comment-body">{comment.content}</p>
           )}
 
-          {/* Reactions */}
+          {/* Reactions: pill Buttons; the active pill reads primary, the rest
+              ghost -- paint belongs to the button skin. */}
           {comment.reactions && comment.reactions.length > 0 && (
-            <div className="flex gap-1 mb-2">
+            <div data-part="reactions">
               {comment.reactions.map(r => (
-                <button
+                <ModernButton
                   key={r.emoji}
                   data-part="reaction"
-                  data-active={r.active}
-                  style={{
-                    height: 24, padding: '0 8px', fontSize: 12,
-                    cursor: 'pointer',
-                  }}
+                  data-active={r.active || undefined}
+                  variant={r.active ? 'primary' : 'ghost'}
+                  size="xs"
                   onClick={() => onReaction?.(comment.id, r.emoji)}
                 >
                   {r.emoji} {r.count}
-                </button>
+                </ModernButton>
               ))}
             </div>
           )}
 
           {/* Actions -- reply is depth-gated to prevent infinitely nested threads.
               Edit and delete are restricted to the comment owner. */}
-          <div className="flex gap-3 text-xs opacity-50">
+          <div data-part="comment-actions">
             {depth < maxDepth && onReply && (
-              <button data-part="reply" style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }} onClick={() => setReplyVisible(!replyVisible)}>
-                Reply
-              </button>
+              <ModernButton data-part="reply" variant="ghost" size="xs" onClick={() => setReplyVisible(!replyVisible)}>
+                {tOr('comment_thread.reply', 'Reply')}
+              </ModernButton>
             )}
             {isOwner && onEdit && (
-              <button data-part="edit" style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }} onClick={() => setEditing(true)}>
-                Edit
-              </button>
+              <ModernButton data-part="edit" variant="ghost" size="xs" onClick={() => setEditing(true)}>
+                {tOr('comment_thread.edit', 'Edit')}
+              </ModernButton>
             )}
             {isOwner && onDelete && (
-              <button data-part="delete" style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }} onClick={() => onDelete(comment.id)}>
-                Delete
-              </button>
+              <ModernButton data-part="delete" variant="danger" size="xs" onClick={() => onDelete(comment.id)}>
+                {tOr('comment_thread.delete', 'Delete')}
+              </ModernButton>
             )}
           </div>
 
-          {/* Reply input */}
+          {/* Reply composer */}
           {replyVisible && (
-            <div className="mt-2">
-              <textarea
-                data-part="reply-textarea"
-                className="w-full mb-2"
-                style={{ width: '100%', padding: '6px 10px', fontSize: 13, resize: 'vertical' }}
+            <div data-part="reply-form">
+              <ModernTextarea
                 value={replyText}
-                onChange={(e) => setReplyText(e.target.value)}
+                onChange={(v) => setReplyText(v)}
                 rows={2}
-                placeholder="Write a reply..."
+                placeholder={tOr('comment_thread.reply_placeholder', 'Write a reply...')}
               />
-              <div className="flex gap-2">
-                <button data-part="reply-submit" style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }} onClick={handleReply} disabled={!replyText.trim()}>
-                  Reply
-                </button>
-                <button data-part="reply-cancel" style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }} onClick={() => setReplyVisible(false)}>Cancel</button>
+              <div data-part="form-actions">
+                <ModernButton data-part="reply-submit" variant="primary" size="xs" onClick={handleReply} disabled={!replyText.trim()}>
+                  {tOr('comment_thread.reply', 'Reply')}
+                </ModernButton>
+                <ModernButton data-part="reply-cancel" variant="ghost" size="xs" onClick={() => setReplyVisible(false)}>
+                  {tOr('comment_thread.cancel', 'Cancel')}
+                </ModernButton>
               </div>
             </div>
           )}
         </div>
       </div>
 
-      {/* Nested replies -- rendered recursively with a left border line for
-          visual threading. Stops at maxDepth to cap DOM nesting depth. */}
+      {/* Nested replies -- rendered recursively inside a skin-owned threading
+          rail (inline-start hairline). Stops at maxDepth to cap DOM depth. */}
       {comment.replies && comment.replies.length > 0 && depth < maxDepth && (
-        <div data-part="nested-line" className="border-l-2 pl-3">
+        <div data-part="nested-line">
           {comment.replies.map(reply => (
             <CommentNode
               key={reply.id}
@@ -212,12 +239,15 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
 }
 
 /**
- * Modern (DaisyUI/Tailwind) comment thread with recursive nesting, reactions, and CRUD.
+ * Modern comment thread: recursive nesting, reactions and CRUD composed
+ * entirely from DS primitives (Avatar, Textarea, Button, Spinner) plus the
+ * canonical EmptyState kit for the empty list.
  * @param props - CommentThreadProps controlling the comment list, user identity,
  *   CRUD callbacks, nesting depth, and display options.
- * @returns A comment list with a DaisyUI spinner for loading and an optional input area.
+ * @returns A comment list with a primitive composer and canonical state kits.
  */
 export default function ModernCommentThread(props: CommentThreadProps) {
+  const { tOr } = useThreadTranslation();
   const {
     comments,
     onAdd,
@@ -227,12 +257,17 @@ export default function ModernCommentThread(props: CommentThreadProps) {
     onReaction,
     currentUser,
     maxDepth = 3,
-    placeholder = 'Write a comment...',
-    emptyMessage = 'No comments yet',
+    placeholder: placeholderProp,
+    emptyMessage: emptyMessageProp,
     loading,
     className,
     style,
   } = props;
+
+  // Copy defaults: explicit props win; otherwise the localized label with the
+  // historical English default as the floor (API and tests are pinned to it).
+  const placeholder = placeholderProp ?? tOr('comment_thread.composer_placeholder', 'Write a comment...');
+  const emptyMessage = emptyMessageProp ?? tOr('comment_thread.empty', 'No comments yet');
 
   const [newComment, setNewComment] = useState('');
 
@@ -245,56 +280,46 @@ export default function ModernCommentThread(props: CommentThreadProps) {
 
   if (loading) {
     return (
-      <div data-part="root" className={`ds-pattern-comment-thread ds-engine-modern flex justify-center items-center py-12 ${className ?? ''}`} style={style}>
-        <span
-          data-part="spinner"
-          role="status"
-          aria-label="Loading"
-          style={{ display: 'inline-block', width: 24, height: 24, animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }}
-        />
+      <div data-part="root" data-loading="true" className={`ds-pattern-comment-thread ds-engine-modern flex justify-center items-center py-12 ${className ?? ''}`} style={style}>
+        {/* Spinner primitive owns its paint and the status role/name
+            ("Loading" floor) the tests assert. */}
+        <ModernSpinner size="md" />
       </div>
     );
   }
 
   return (
     <div data-part="root" className={`ds-pattern-comment-thread ds-engine-modern ${className ?? ''}`} style={style}>
-      {/* New comment input -- only rendered when both onAdd and currentUser
+      {/* New comment composer -- only rendered when both onAdd and currentUser
           are provided. Without a user identity we cannot attribute the comment. */}
       {onAdd && currentUser && (
-        <div className="flex gap-3 mb-6">
-          <div className="flex-shrink-0" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div data-part="avatar" className="rounded-full w-8 h-8" style={{ overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              {currentUser.avatar ? (
-                <img src={currentUser.avatar} alt={currentUser.name} />
-              ) : (
-                <span className="text-xs">{currentUser.name.charAt(0).toUpperCase()}</span>
-              )}
-            </div>
+        <div data-part="composer-row">
+          <div data-part="avatar-col">
+            <ModernAvatar size="sm" src={currentUser.avatar} name={currentUser.name} />
           </div>
-          <div className="flex-1">
-            <textarea
-              data-part="composer"
-              className="w-full mb-2"
-              style={{ width: '100%', padding: '8px 10px', fontSize: 13, resize: 'vertical' }}
+          <div data-part="composer-main">
+            <ModernTextarea
               value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
+              onChange={(v) => setNewComment(v)}
               rows={3}
               placeholder={placeholder}
             />
-            <button data-part="submit" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={handleAdd} disabled={!newComment.trim()}>
-              Comment
-            </button>
+            <div data-part="form-actions">
+              <ModernButton data-part="submit" variant="primary" size="sm" onClick={handleAdd} disabled={!newComment.trim()}>
+                {tOr('comment_thread.submit', 'Comment')}
+              </ModernButton>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Comments */}
+      {/* Comments -- canonical empty kit when the list is empty. */}
       {comments.length === 0 ? (
-        <div className="flex justify-center items-center py-12 opacity-50">
-          {emptyMessage}
+        <div data-part="empty">
+          <ModernEmptyState title={emptyMessage} />
         </div>
       ) : (
-        <div>
+        <div data-part="comment-list">
           {comments.map(comment => (
             <CommentNode
               key={comment.id}

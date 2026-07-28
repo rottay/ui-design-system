@@ -45,7 +45,7 @@
   background: var(--ds-badge-surface, var(--ds-color-neutral-200));
   color: var(--ds-badge-ink, var(--ds-color-text-primary));
   box-shadow:
-    var(--ds-badge-highlight, inset 0 1px 0 color-mix(in srgb, white 46%, transparent)),
+    var(--ds-badge-highlight, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white, white) 46%, transparent)),
     var(--ds-badge-shadow, 0 1px 2px color-mix(in srgb, currentColor 7%, transparent));
   transform: var(--ds-badge-position-transform, translateY(0));
   transform-origin: center;
@@ -166,7 +166,7 @@
     var(--ds-badge-icon-border, color-mix(in srgb, currentColor 16%, transparent));
   border-radius: var(--ds-badge-icon-radius, 9999px);
   background: var(--ds-badge-icon-bg, color-mix(in srgb, currentColor 8%, transparent));
-  box-shadow: var(--ds-badge-icon-shadow, inset 0 1px 0 color-mix(in srgb, white 32%, transparent));
+  box-shadow: var(--ds-badge-icon-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white, white) 32%, transparent));
 }
 
 .rottay-badge.rottay-badge--modern [data-part='avatar'] {
@@ -440,7 +440,7 @@
     color-mix(in srgb, currentColor 24%, transparent)
   );
   box-shadow:
-    var(--ds-badge-highlight-hover, inset 0 1px 0 color-mix(in srgb, white 58%, transparent)),
+    var(--ds-badge-highlight-hover, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white, white) 58%, transparent)),
     var(--ds-badge-shadow-hover, 0 6px 14px -10px color-mix(in srgb, currentColor 42%, transparent));
   transform: var(--ds-badge-position-transform, translateY(0))
     var(--ds-badge-hover-transform, translateY(-1px));

@@ -2,8 +2,18 @@
  * ActiveFiltersBar skin — engine-agnostic and deliberately unlayered.
  * Unlayered paint outranks Tailwind preflight while caller inline styles keep
  * their per-instance override precedence. Border paint reaches the tenant
- * border floor at (0,4,0); composed Text color reaches (0,5,0).
+ * border floor at (0,4,0); composed Text color and typography reach (0,5,0).
+ *
+ * WAVE R2+R3 (Quiet Premium editorial): the rail is a hairline-separated
+ * strip of quiet chips. The count pill is the uppercase eyebrow, the chip
+ * label is the tracked mini-eyebrow, and the value is the readable payload.
+ * One worn-blue accent (the primary token) marks the count pill and the
+ * add-filter CTA only. Hover/focus/active microinteractions ride the
+ * --ds-motion-* channels and are silenced under prefers-reduced-motion.
+ * Typography lives here, never in the engine.
  */
+
+/* root --------------------------------------------------------------------- */
 
 .ds-structure.ds-active-filters-bar[data-part='root'][data-part='root'] {
   border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
@@ -14,12 +24,21 @@
   background: transparent;
 }
 
+/* count pill — the uppercase eyebrow ---------------------------------------- */
+
 .ds-structure.ds-active-filters-bar [data-part='pill'][data-part='pill'][data-part='pill'] {
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
   background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
   color: var(--ds-color-primary);
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
 }
+
+/* filter chip ---------------------------------------------------------------- */
 
 .ds-structure.ds-active-filters-bar [data-part='chip'][data-part='chip'] {
   border-radius: 999px;
@@ -29,25 +48,68 @@
 }
 .ds-structure.ds-active-filters-bar [data-part='chip-label'][data-part='chip-label'][data-part='chip-label'] {
   color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 .ds-structure.ds-active-filters-bar [data-part='chip-value'][data-part='chip-value'][data-part='chip-value'] {
   color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-xs);
+  font-weight: 600;
 }
 .ds-structure.ds-active-filters-bar [data-part='chip-remove'][data-part='chip-remove'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 54%, transparent);
   border-radius: 9999px;
   color: var(--ds-color-text-secondary);
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
+.ds-structure.ds-active-filters-bar [data-part='chip-remove'][data-part='chip-remove']:hover {
+  border-color: color-mix(in srgb, var(--ds-color-danger) 36%, transparent);
+  background: color-mix(in srgb, var(--ds-color-danger) 8%, transparent);
+  color: var(--ds-color-danger);
+}
+.ds-structure.ds-active-filters-bar [data-part='chip-remove'][data-part='chip-remove']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+}
+.ds-structure.ds-active-filters-bar [data-part='chip-remove'][data-part='chip-remove']:active {
+  background: color-mix(in srgb, var(--ds-color-danger) 14%, transparent);
+}
+
+/* clear-all / add-filter ------------------------------------------------------ */
 
 .ds-structure.ds-active-filters-bar [data-part='clear-all'][data-part='clear-all'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent);
   border-radius: 999px;
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs);
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-active-filters-bar [data-part='clear-all'] > .rottay-typography[data-color] {
   color: inherit;
+  font-size: var(--ds-font-size-xs);
+  font-weight: 600;
+}
+.ds-structure.ds-active-filters-bar [data-part='clear-all'][data-part='clear-all']:hover {
+  border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 78%, transparent);
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-active-filters-bar [data-part='clear-all'][data-part='clear-all']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+}
+.ds-structure.ds-active-filters-bar [data-part='clear-all'][data-part='clear-all']:active {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 92%, transparent);
 }
 
 .ds-structure.ds-active-filters-bar [data-part='add-filter'][data-part='add-filter'] {
@@ -55,7 +117,35 @@
   background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
   border-radius: 999px;
   color: var(--ds-color-primary);
+  font-size: var(--ds-font-size-xs);
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-active-filters-bar [data-part='add-filter'] > .rottay-typography[data-color] {
   color: inherit;
+  font-size: var(--ds-font-size-xs);
+  font-weight: 700;
+}
+.ds-structure.ds-active-filters-bar [data-part='add-filter'][data-part='add-filter']:hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 38%, transparent);
+  background: color-mix(in srgb, var(--ds-color-primary) 13%, transparent);
+}
+.ds-structure.ds-active-filters-bar [data-part='add-filter'][data-part='add-filter']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+}
+.ds-structure.ds-active-filters-bar [data-part='add-filter'][data-part='add-filter']:active {
+  background: color-mix(in srgb, var(--ds-color-primary) 17%, transparent);
+}
+
+/* Reduced motion: every microinteraction on this rail is a color/border
+ * cross-fade; all of them go silent together. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-active-filters-bar [data-part='chip-remove'],
+  .ds-structure.ds-active-filters-bar [data-part='clear-all'],
+  .ds-structure.ds-active-filters-bar [data-part='add-filter'] {
+    transition: none;
+  }
 }

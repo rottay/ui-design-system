@@ -248,6 +248,51 @@
       "count": 1,
       "owner": "vertical/surface/shell/sidebar",
       "reason": "pre-ratchet private-anatomy reach; migrate to public recipes/props/data-part hooks and delete the selector"
+    },
+    "app-bithire/src/styles/detail-editor-chrome.css :: .rottay-input": {
+      "count": 1,
+      "owner": "app-bithire/src/styles/detail-editor-chrome.css",
+      "reason": "R1-P Phase-3 drain transfer (2026-07-27): selector migrated verbatim from the DS static extension; reaches DS-private anatomy from app CSS \u2014 resolve in the joint Claude+Kimi wave (public hook or DS ownership); do not grow."
+    },
+    "app-bithire/src/styles/detail-editor-chrome.css :: .rottay-select": {
+      "count": 1,
+      "owner": "app-bithire/src/styles/detail-editor-chrome.css",
+      "reason": "R1-P Phase-3 drain transfer (2026-07-27): selector migrated verbatim from the DS static extension; reaches DS-private anatomy from app CSS \u2014 resolve in the joint Claude+Kimi wave (public hook or DS ownership); do not grow."
+    },
+    "app-bithire/src/styles/tenant-component-defaults.css :: .rottay-badge": {
+      "count": 1,
+      "owner": "app-bithire/src/styles/tenant-component-defaults.css",
+      "reason": "R1-P Phase-3 drain transfer (2026-07-27): selector migrated verbatim from the DS static extension; reaches DS-private anatomy from app CSS \u2014 resolve in the joint Claude+Kimi wave (public hook or DS ownership); do not grow."
+    },
+    "app-bithire/src/styles/collection-preview-chrome.css :: .rottay-tooltip": {
+      "count": 2,
+      "owner": "app-bithire/src/styles/collection-preview-chrome.css",
+      "reason": "R1-P Phase-3 drain transfer (2026-07-27): selector migrated verbatim from the DS static extension; reaches DS-private anatomy from app CSS \u2014 resolve in the joint Claude+Kimi wave (public hook or DS ownership); do not grow."
+    },
+    "app-bithire/src/styles/detail-editor-chrome.css :: .rottay-flex": {
+      "count": 13,
+      "owner": "app-bithire/src/styles/detail-editor-chrome.css",
+      "reason": "R1-P Phase-3 drain transfer (2026-07-27): selector migrated verbatim from the DS static extension; reaches DS-private anatomy from app CSS \u2014 resolve in the joint Claude+Kimi wave (public hook or DS ownership); do not grow."
+    },
+    "app-bithire/src/styles/detail-editor-chrome.css :: .rottay-stack": {
+      "count": 4,
+      "owner": "app-bithire/src/styles/detail-editor-chrome.css",
+      "reason": "R1-P Phase-3 drain transfer (2026-07-27): selector migrated verbatim from the DS static extension; reaches DS-private anatomy from app CSS \u2014 resolve in the joint Claude+Kimi wave (public hook or DS ownership); do not grow."
+    },
+    "app-bithire/src/styles/detail-editor-chrome.css :: .rottay-grid": {
+      "count": 1,
+      "owner": "app-bithire/src/styles/detail-editor-chrome.css",
+      "reason": "R1-P Phase-3 drain transfer (2026-07-27): selector migrated verbatim from the DS static extension; reaches DS-private anatomy from app CSS \u2014 resolve in the joint Claude+Kimi wave (public hook or DS ownership); do not grow."
+    },
+    "app-bithire/src/styles/detail-editor-chrome.css :: .rottay-box": {
+      "count": 3,
+      "owner": "app-bithire/src/styles/detail-editor-chrome.css",
+      "reason": "R1-P Phase-3 drain transfer (2026-07-27): selector migrated verbatim from the DS static extension; reaches DS-private anatomy from app CSS \u2014 resolve in the joint Claude+Kimi wave (public hook or DS ownership); do not grow."
+    },
+    "app-bithire/src/styles/detail-editor-chrome.css :: .rottay-text": {
+      "count": 1,
+      "owner": "app-bithire/src/styles/detail-editor-chrome.css",
+      "reason": "R1-P Phase-3 drain transfer (2026-07-27): selector migrated verbatim from the DS static extension; reaches DS-private anatomy from app CSS \u2014 resolve in the joint Claude+Kimi wave (public hook or DS ownership); do not grow."
     }
   },
   "categories": {
@@ -1173,6 +1218,46 @@
         "count": 3,
         "owner": "app-bithire/src/vertical/surface/shell/sidebar/styles/index.css",
         "reason": "Pre-OLA-5 literal in shared app chrome; replace with a governed public token/recipe or move truly domain-specific expression out of shared chrome."
+      },
+      "app-bithire/src/styles/collection-preview-chrome.css :: radius-literal": {
+        "count": 26,
+        "owner": "app-bithire/src/styles/collection-preview-chrome.css",
+        "reason": "R1-P Phase-3 drain transfer (2026-07-27): migrated verbatim from the DS static extension (provenance-gate debt 822->9); same shipped paint, new census location. Kimi visual wave tokenizes; do not grow."
+      },
+      "app-bithire/src/styles/collection-preview-chrome.css :: raw-duration": {
+        "count": 2,
+        "owner": "app-bithire/src/styles/collection-preview-chrome.css",
+        "reason": "R1-P Phase-3 drain transfer (2026-07-27): migrated verbatim from the DS static extension (provenance-gate debt 822->9); same shipped paint, new census location. Kimi visual wave tokenizes; do not grow."
+      },
+      "app-bithire/src/styles/collection-preview-chrome.css :: shadow-literal": {
+        "count": 17,
+        "owner": "app-bithire/src/styles/collection-preview-chrome.css",
+        "reason": "R1-P Phase-3 drain transfer (2026-07-27): migrated verbatim from the DS static extension (provenance-gate debt 822->9); same shipped paint, new census location. Kimi visual wave tokenizes; do not grow."
+      },
+      "app-bithire/src/styles/detail-editor-chrome.css :: color:#4a9fc1": {
+        "count": 2,
+        "owner": "app-bithire/src/styles/detail-editor-chrome.css",
+        "reason": "R1-P Phase-3 drain transfer (2026-07-27): migrated verbatim from the DS static extension (provenance-gate debt 822->9); same shipped paint, new census location. Kimi visual wave tokenizes; do not grow."
+      },
+      "app-bithire/src/styles/detail-editor-chrome.css :: color:#438eaa": {
+        "count": 2,
+        "owner": "app-bithire/src/styles/detail-editor-chrome.css",
+        "reason": "R1-P Phase-3 drain transfer (2026-07-27): migrated verbatim from the DS static extension (provenance-gate debt 822->9); same shipped paint, new census location. Kimi visual wave tokenizes; do not grow."
+      },
+      "app-bithire/src/styles/detail-editor-chrome.css :: radius-literal": {
+        "count": 15,
+        "owner": "app-bithire/src/styles/detail-editor-chrome.css",
+        "reason": "R1-P Phase-3 drain transfer (2026-07-27): migrated verbatim from the DS static extension (provenance-gate debt 822->9); same shipped paint, new census location. Kimi visual wave tokenizes; do not grow."
+      },
+      "app-bithire/src/styles/detail-editor-chrome.css :: raw-duration": {
+        "count": 1,
+        "owner": "app-bithire/src/styles/detail-editor-chrome.css",
+        "reason": "R1-P Phase-3 drain transfer (2026-07-27): migrated verbatim from the DS static extension (provenance-gate debt 822->9); same shipped paint, new census location. Kimi visual wave tokenizes; do not grow."
+      },
+      "app-bithire/src/styles/detail-editor-chrome.css :: shadow-literal": {
+        "count": 33,
+        "owner": "app-bithire/src/styles/detail-editor-chrome.css",
+        "reason": "R1-P Phase-3 drain transfer (2026-07-27): migrated verbatim from the DS static extension (provenance-gate debt 822->9); same shipped paint, new census location. Kimi visual wave tokenizes; do not grow."
       }
     },
     "undocumented-ds-writes": {
@@ -1203,6 +1288,22 @@
       }
     },
     "supplier-imports": {},
-    "tenant-style-branch": {}
+    "tenant-style-branch": {
+      "app-bithire/src/styles/collection-preview-chrome.css :: [data-tenant=\"bithire\"]": {
+        "count": 212,
+        "owner": "app-bithire/src/styles/collection-preview-chrome.css",
+        "reason": "R1-P Phase-3 drain transfer (2026-07-27): migrated verbatim from the DS static extension (provenance-gate debt 822->9); same shipped paint, new census location. Kimi visual wave tokenizes; do not grow. (+1: R1-P G-fix block relocating app-owned --rt-* list-preview knobs from the DS extension, 2026-07-27)"
+      },
+      "app-bithire/src/styles/detail-editor-chrome.css :: [data-tenant=\"bithire\"]": {
+        "count": 145,
+        "owner": "app-bithire/src/styles/detail-editor-chrome.css",
+        "reason": "R1-P Phase-3 drain transfer (2026-07-27): migrated verbatim from the DS static extension (provenance-gate debt 822->9); same shipped paint, new census location. Kimi visual wave tokenizes; do not grow."
+      },
+      "app-bithire/src/styles/tenant-component-defaults.css :: [data-tenant=\"bithire\"]": {
+        "count": 3,
+        "owner": "app-bithire/src/styles/tenant-component-defaults.css",
+        "reason": "R1-P Phase-3 drain transfer (2026-07-27): migrated verbatim from the DS static extension (provenance-gate debt 822->9); same shipped paint, new census location. Kimi visual wave tokenizes; do not grow."
+      }
+    }
   }
 }

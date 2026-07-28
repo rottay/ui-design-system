@@ -19,7 +19,10 @@ implementations that may drift.
 
 - Meaning: `tone`, `kind`, selected state, count, and whether the label is removable.
 - Localized visible copy and accessible names (`removeLabel`, `loadingText`, and
-  `aria-label`). The primitive intentionally has no hardcoded English fallback.
+  `aria-label`). When the caller supplies none, the close control and the busy
+  trigger fall back to the DS catalogue (`common.remove` / `common.loading`,
+  all five locales) with the documented English floor — an unnamed control is
+  never an acceptable default.
 - Controlled state and handlers. Product code must not target `.rottay-badge*` with
   application CSS or provide inline paint.
 

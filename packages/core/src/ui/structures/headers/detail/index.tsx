@@ -42,7 +42,7 @@
  * Status badge variants follow the standard DS Badge vocabulary.
  */
 
-import { type CSSProperties, type ReactNode } from 'react';
+import { type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 
 import { ArrowLeftIcon } from '@/graphics/icons/presentation/catalog/navigation';
 import type { ComponentType } from 'react';
@@ -56,7 +56,7 @@ import {
   resolveSharedHeaderActionTooltip,
   resolveSharedHeaderActionVariant,
 } from '../../../patterns/foundation/header-actions';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 export type DetailHeaderArchetype = 'editorial' | 'control' | 'technical' | 'governance';
 
@@ -101,49 +101,21 @@ export interface DetailHeaderProps {
   children?: ReactNode;
 }
 
-function getArchetypeStyles(archetype: DetailHeaderArchetype) {
+// Only the tab-active background still rides the engine: it is archetype-selected
+// but the tab strip is a SIBLING of the hero-panel, so no `data-archetype` ancestor
+// can reach it from CSS. Everything else the archetype used to compute (hero
+// gradient, fade mask, grid) lives in detail-header.css keyed on `data-archetype`.
+function getArchetypeTabActiveBackground(archetype: DetailHeaderArchetype) {
   switch (archetype) {
     case 'editorial':
-      return {
-        accent: 'color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)',
-        accentSecondary: 'color-mix(in srgb, var(--ds-color-text-secondary) 9%, transparent)',
-        gridColor: 'color-mix(in srgb, var(--ds-color-text-muted) 24%, transparent)',
-        gridSize: 26,
-        heroBackground: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 84%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%, transparent) 100%)',
-        fadeMask: 'linear-gradient(180deg, transparent 0%, transparent 40%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 52%, transparent) 100%)',
-        tabActiveBackground: 'color-mix(in srgb, var(--ds-color-bg-primary) 32%, transparent)',
-      };
+      return 'color-mix(in srgb, var(--ds-color-bg-primary) 32%, transparent)';
     case 'technical':
-      return {
-        accent: 'color-mix(in srgb, var(--ds-color-text-secondary) 16%, transparent)',
-        accentSecondary: 'color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)',
-        gridColor: 'color-mix(in srgb, var(--ds-color-text-muted) 28%, transparent)',
-        gridSize: 22,
-        heroBackground: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 82%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%, transparent) 100%)',
-        fadeMask: 'linear-gradient(180deg, transparent 0%, transparent 38%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 54%, transparent) 100%)',
-        tabActiveBackground: 'color-mix(in srgb, var(--ds-color-bg-primary) 36%, transparent)',
-      };
+      return 'color-mix(in srgb, var(--ds-color-bg-primary) 36%, transparent)';
     case 'governance':
-      return {
-        accent: 'color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)',
-        accentSecondary: 'color-mix(in srgb, var(--ds-color-text-secondary) 8%, transparent)',
-        gridColor: 'color-mix(in srgb, var(--ds-color-text-muted) 24%, transparent)',
-        gridSize: 24,
-        heroBackground: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 84%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%, transparent) 100%)',
-        fadeMask: 'linear-gradient(180deg, transparent 0%, transparent 42%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 52%, transparent) 100%)',
-        tabActiveBackground: 'color-mix(in srgb, var(--ds-color-bg-primary) 42%, transparent)',
-      };
+      return 'color-mix(in srgb, var(--ds-color-bg-primary) 42%, transparent)';
     case 'control':
     default:
-      return {
-        accent: 'color-mix(in srgb, var(--ds-color-text-secondary) 15%, transparent)',
-        accentSecondary: 'color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent)',
-        gridColor: 'color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent)',
-        gridSize: 28,
-        heroBackground: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 86%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%, transparent) 100%)',
-        fadeMask: 'linear-gradient(180deg, transparent 0%, transparent 42%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 52%, transparent) 100%)',
-        tabActiveBackground: 'color-mix(in srgb, var(--ds-color-bg-primary) 28%, transparent)',
-      };
+      return 'color-mix(in srgb, var(--ds-color-bg-primary) 28%, transparent)';
   }
 }
 
@@ -207,8 +179,9 @@ export function DetailHeader({
   contextRail,
   children,
 }: DetailHeaderProps) {
-  const { t } = useTranslation('common');
-  const resolvedBackLabel = backLabel ?? t('back');
+  const i18n = useOptionalTranslation('common');
+  const resolvedBackLabel = backLabel ?? i18n?.tOr('back', 'Back') ?? 'Back';
+  const tabStripLabel = i18n?.tOr('tabs', 'Tabs') ?? 'Tabs';
   // Resolve the framework-specific Link component once. Falls back to a
   // native <a> tag when no NavigationLinkProvider is mounted, which keeps
   // the DS package framework-agnostic.
@@ -232,7 +205,7 @@ export function DetailHeader({
     key: String(index),
     label: item.href ? renderHrefAnchor(item.href, item.label) : item.label,
   }));
-  const archetypeTone = getArchetypeStyles(archetype);
+  const tabActiveBackground = getArchetypeTabActiveBackground(archetype);
   const visibleMetadata = metadata?.filter((item) => item.value) || [];
 
   return (
@@ -339,10 +312,6 @@ export function DetailHeader({
                   as="h1"
                   style={{
                     margin: 0,
-                    fontSize: archetype === 'editorial' ? 34 : archetype === 'technical' ? 30 : 32,
-                    fontWeight: 720,
-                    letterSpacing: '-0.04em',
-                    lineHeight: 1.02,
                   }}
                 >
                   {title}
@@ -427,6 +396,8 @@ export function DetailHeader({
       {tabs && tabs.length > 0 ? (
         <Box
           data-part="tab-strip"
+          role="tablist"
+          aria-label={tabStripLabel}
           style={{
             padding: '10px 18px 0',
           }}
@@ -436,17 +407,57 @@ export function DetailHeader({
               const isActive = activeTab === tab.id;
               const TabIcon = tab.icon;
 
+              // APG tab keyboard contract: Enter/Space activates; the arrow
+              // keys (direction-aware under RTL), Home and End move focus
+              // between tabs without activating them.
+              const handleTabKeyDown = (event: ReactKeyboardEvent) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  onTabChange?.(tab.id);
+                  return;
+                }
+                const navKeys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
+                if (!navKeys.includes(event.key)) {
+                  return;
+                }
+                event.preventDefault();
+                const currentTab = event.currentTarget as HTMLElement;
+                const strip = currentTab.closest('[data-part="tab-strip"]');
+                const stripTabs = Array.from(
+                  strip?.querySelectorAll<HTMLElement>('[data-part="tab"]') ?? [],
+                );
+                const currentIndex = stripTabs.indexOf(currentTab);
+                if (currentIndex < 0) {
+                  return;
+                }
+                const rtl = Boolean(currentTab.closest('[dir="rtl"]'));
+                let nextIndex = currentIndex;
+                if (event.key === 'Home') {
+                  nextIndex = 0;
+                } else if (event.key === 'End') {
+                  nextIndex = stripTabs.length - 1;
+                } else {
+                  const forward = event.key === 'ArrowRight' ? !rtl : rtl;
+                  nextIndex =
+                    (currentIndex + (forward ? 1 : -1) + stripTabs.length) % stripTabs.length;
+                }
+                stripTabs[nextIndex]?.focus();
+              };
+
               return (
                 <Box
                   data-part="tab"
                   data-active={isActive}
                   key={tab.id}
+                  role="tab"
+                  aria-selected={isActive}
+                  tabIndex={isActive ? 0 : -1}
                   onClick={() => onTabChange?.(tab.id)}
+                  onKeyDown={handleTabKeyDown}
                   style={{
                     cursor: 'pointer',
                     padding: '10px 12px 12px',
-                    transition: 'background 160ms ease, border-color 160ms ease, transform 160ms ease',
-                    '--ds-detail-header-tab-active-bg': archetypeTone.tabActiveBackground,
+                    '--ds-detail-header-tab-active-bg': tabActiveBackground,
                   } as CSSProperties}
                 >
                   <Flex align="center" gap={8}>

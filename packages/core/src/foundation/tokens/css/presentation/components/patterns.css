@@ -572,31 +572,14 @@
     var(--ds-surface-card-border) 82%,
     transparent
   );
-  --ds-meter-fill: linear-gradient(
-    90deg,
-    var(--ds-color-primary),
-    var(--ds-color-secondary)
-  );
-  --ds-meter-fill-success: linear-gradient(
-    90deg,
-    var(--ds-color-success),
-    color-mix(in srgb, var(--ds-color-success) 72%, var(--ds-color-secondary))
-  );
-  --ds-meter-fill-warning: linear-gradient(
-    90deg,
-    var(--ds-color-warning),
-    color-mix(in srgb, var(--ds-color-warning) 70%, var(--ds-color-accent))
-  );
-  --ds-meter-fill-error: linear-gradient(
-    90deg,
-    var(--ds-color-error),
-    color-mix(in srgb, var(--ds-color-error) 72%, var(--ds-color-primary))
-  );
-  --ds-meter-fill-neutral: linear-gradient(
-    90deg,
-    var(--ds-color-text-muted),
-    color-mix(in srgb, var(--ds-color-text-muted) 72%, var(--ds-color-primary))
-  );
+  /* Meter colour is semantic state, not surface ornament. Each fill is a
+     single tenant token so a published anatomy can control it without a
+     baked-in two-colour brand treatment. */
+  --ds-meter-fill: var(--ds-color-primary);
+  --ds-meter-fill-success: var(--ds-color-success);
+  --ds-meter-fill-warning: var(--ds-color-warning);
+  --ds-meter-fill-error: var(--ds-color-error);
+  --ds-meter-fill-neutral: var(--ds-color-text-muted);
   --ds-cell-meter-track: color-mix(
     in srgb,
     var(--ds-surface-panel-bg) 78%,

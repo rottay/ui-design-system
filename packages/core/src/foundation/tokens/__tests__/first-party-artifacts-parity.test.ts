@@ -90,18 +90,18 @@ describe('bithire declared extension authority', () => {
     'utf8',
   );
   const declared = collectDeclaredValues(extension);
+  // Channels the compiler does not emit, so the declared extension is their
+  // only author and its value is the contract. Channels the compiler DOES emit
+  // are no longer listed here: R1-P made the BrandTheme their single author,
+  // and artifact-provenance-gate.mjs enforces that for every channel at once
+  // rather than for a hand-kept list of nine.
   const expectedValues: Record<string, string> = {
-    '--ds-radius-lg': '14px',
-    '--ds-radius-xl': '18px',
     '--ds-surface-icon-bg':
       'color-mix( in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card) )',
     '--ds-premium-card-bg': 'var(--ds-surface-card)',
     '--ds-premium-card-sheen': 'none',
-    '--ds-table-sheen': 'none',
     '--ds-shell-breadcrumb-bg':
       'color-mix( in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card) )',
-    '--ds-workspace-shell-shadow': '0 1px 2px rgba(20, 40, 59, 0.06)',
-    '--ds-command-glow': 'none',
   };
 
   it.each(Object.entries(expectedValues))(
@@ -112,4 +112,19 @@ describe('bithire declared extension authority', () => {
       expect(new Set(values)).toEqual(new Set([normalizeCssValue(expected)]));
     },
   );
+
+  it('serves the previously extension-shadowed channels from the compiled block', () => {
+    const compiled = compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
+    // `--ds-workspace-shell-shadow` is the reason this list shrank: the
+    // extension declared `0 1px 2px rgba(20,40,59,.06)` inside the CLEAR MODE
+    // GUARD, so the compiled elevation never rendered.
+    // `--ds-radius-lg` is deliberately absent: it survives in the declared dark
+    // mode block, which authors a mode the compiler does not emit and therefore
+    // shadows nothing in the shipped state.
+    for (const property of ['--ds-table-sheen', '--ds-workspace-shell-shadow', '--ds-command-glow']) {
+      expect(compiled.cssVariables[property]).toBeDefined();
+      const shadowed = [...(declared.get(property) ?? [])];
+      expect(shadowed, `${property} is re-declared by the extension`).toEqual([]);
+    }
+  });
 });

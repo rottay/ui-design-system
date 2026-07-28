@@ -94,6 +94,38 @@ export type {
 } from './infrastructure/runtime/foundation/density';
 
 // ============================================
+// ROOT ATTRIBUTE CLAIMS (the one governed writer for `<html>`)
+// ============================================
+// `<html>` is written by the SSR projection, then the pre-paint script, then
+// client effects. An effect that cleans up with `removeAttribute`/`classList
+// .remove` deletes a value it never created -- the server's. These claims are
+// how a runtime owner takes a channel and hands back exactly what it found,
+// and they track overlapping claims by identity so a StrictMode double-mount
+// or a remount at the same value cannot roll back over a live owner.
+//
+// Applications need them for the channels the design system does not govern
+// (a vertical's own tenant-scope attributes); without a public export an app
+// has no choice but to reimplement the stack, which is a second authority by
+// construction.
+//
+// `claimRootAttributeSet` is the same contract for a channel whose KEY SET is
+// data rather than fixed (`data-anatomy-*`, one attribute per chrome family the
+// tenant artifact declares). Reconciling that by hand forces the owner to keep
+// its own record of which keys it stamped, and a key dropped from the set then
+// comes back ABSENT instead of coming back to what the server rendered.
+export {
+  claimRootAttribute,
+  claimRootAttributeSet,
+  claimRootClass,
+  claimRootStyleProperty,
+  composeRootAttributeReleases,
+} from './infrastructure/runtime/foundation/root-attributes';
+export type {
+  ReleaseRootAttribute,
+  RootAttributeSetClaim,
+} from './infrastructure/runtime/foundation/root-attributes';
+
+// ============================================
 // NAVIGATION (framework-agnostic Link adapter)
 // ============================================
 export * from './infrastructure/runtime/adapters/presentation/react/navigation';

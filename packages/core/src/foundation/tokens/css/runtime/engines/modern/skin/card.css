@@ -270,7 +270,16 @@
   animation: ds-card-skeleton-sweep var(--ds-card-skeleton-duration, var(--ds-motion-glacial)) var(--ds-card-transition-timing) infinite;
 }
 .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-card-skeleton-gap, var(--ds-spacing-3, 12px));
   opacity: var(--ds-card-loading-skeleton-opacity, 0.52);
+}
+.ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton-stack'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-card-skeleton-stack-gap, var(--ds-spacing-2, 8px));
+  margin-block-start: var(--ds-card-skeleton-stack-margin-top, var(--ds-spacing-1, 4px));
 }
 
 /* ---- loading: the frosted spinner scrim ---- */
@@ -320,6 +329,8 @@
   overflow-wrap: anywhere;
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='loading-content'] {
+  position: relative;
+  min-block-size: var(--ds-card-skeleton-min-height, 120px);
   padding: var(--ds-card-instance-padding, var(--ds-card-padding-current));
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='cover'] {
@@ -373,10 +384,11 @@
   max-inline-size: 100%;
   margin-inline-start: var(--ds-card-header-actions-gap);
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > div {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='header-main'] {
+  flex: 1 1 auto;
   min-inline-size: 0;
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > div > [data-part='title'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='header-main'] > [data-part='title'] {
   margin: 0;
   color: var(--ds-card-title-color, var(--ds-card-header-color, var(--ds-color-text-primary)));
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
@@ -387,7 +399,7 @@
   overflow-wrap: anywhere;
   text-wrap: balance;
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > div > [data-part='description'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='header-main'] > [data-part='description'] {
   color: var(--ds-card-subtitle-color, var(--ds-color-text-secondary));
   font-size: var(--ds-card-subtitle-font-size);
   line-height: var(--ds-card-body-line-height);
@@ -395,12 +407,17 @@
   overflow-wrap: anywhere;
   text-wrap: pretty;
 }
-.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > div > [data-part='description'][data-has-title='true'] {
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='header-main'] > [data-part='description'][data-has-title='true'] {
   margin-block-start: var(--ds-card-subtitle-margin-top);
 }
 
-/* ---- actions rail ---- */
+/* ---- actions rail (layout was inline in the engine until the R2+R3 pass;
+        the skin now owns the row: flex, wrap, justify, gap and rhythm) ---- */
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: var(--ds-card-actions-justify, flex-end);
   border-block-start: var(--ds-card-footer-border-width, 1px) solid var(--ds-card-footer-border, var(--ds-color-border));
   background-color: var(--ds-card-footer-bg, transparent);
   gap: var(--ds-card-actions-gap, var(--ds-spacing-2, 8px));

@@ -2,10 +2,20 @@
 
 /**
  * @fileoverview Modern (token-driven) engine for the WorkspaceSwitcher pattern.
- * Renders a dropdown workspace picker styled with inline DS token styles and
- * shared modern-styles helpers. Manages its own open/close state via a manual
- * click-outside listener rather than a native dropdown, giving finer control
- * over keyboard navigation and programmatic close-on-select behavior.
+ * Renders a workspace picker: a Button trigger and a listbox panel with rich
+ * rows (avatar, name + active check, metadata, unread Badge, settings gear).
+ *
+ * COMPOSITION LAW (Lote 2): the trigger, the per-row settings gear and the
+ * create action are the public Button primitive; the unread counter is the
+ * public Badge primitive (caller `data-part` wins the root anatomy hook per
+ * P-79, so `workspace-switcher.css` owns their paint). The raw `<button>`
+ * elements are gone and their inline geometry moved to the skin. The panel
+ * stays a pattern-owned `role="listbox"`: its rows carry avatar + metadata +
+ * badge + settings, which the Dropdown primitive's label+icon menu items
+ * cannot express — the keyboard contract (ArrowUp/Down virtual focus, Enter
+ * selects, Escape dismisses) and the click-outside dismissal are preserved
+ * verbatim. The active row's former LEFT ACCENT (`border-l-[3px]`) is
+ * replaced by the skin's framed-surface treatment (product law).
  *
  * @example
  * <ModernWorkspaceSwitcher
@@ -18,7 +28,14 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { WorkspaceSwitcherProps, Workspace } from '../../contracts';
-import { pillBadgeSmStyle, menuSectionTitleStyle } from '../../../../foundation/engine-styles/modern';
+import { menuSectionTitleStyle } from '../../../../foundation/engine-styles/modern';
+import { Button } from '../../../../../primitives/inputs/Button';
+import { Badge } from '../../../../../primitives/display/Badge';
+import { ActionAddIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-add';
+import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
+import { NavigationSettingsIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-settings';
+import { StatusVerifiedIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-verified';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /**
  * Extracts up to two uppercase initials from a workspace or user name.
@@ -34,10 +51,8 @@ function getInitials(name: string): string {
 }
 
 /**
- * Modern engine workspace switcher built on DS token inline styles and shared
- * modern-styles helpers. Uses a custom click-outside handler and manual dropdown
- * positioning instead of a native dropdown to support full keyboard navigation
- * and close-on-select.
+ * Modern engine workspace switcher composed on DS primitives (see the module
+ * docblock). Uses a pattern-owned listbox panel for the rich workspace rows.
  *
  * @param props - {@link WorkspaceSwitcherProps}
  * @returns A button trigger that toggles an absolutely-positioned workspace list.
@@ -58,6 +73,14 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
     style,
   } = props;
 
+  /* ---- localized copy (components catalog, English floor) ---- */
+  const translation = useOptionalTranslation('components');
+  const switchLabel = translation?.tOr('workspaceSwitcher.switch', 'Switch workspace') ?? 'Switch workspace';
+  const panelLabel = translation?.tOr('workspaceSwitcher.panel', 'Workspaces') ?? 'Workspaces';
+  const selectLabel = translation?.tOr('workspaceSwitcher.select', 'Select workspace') ?? 'Select workspace';
+  const createLabel = translation?.tOr('workspaceSwitcher.create', 'Create workspace') ?? 'Create workspace';
+  const settingsLabel = translation?.tOr('workspaceSwitcher.settings', 'Settings for') ?? 'Settings for';
+
   const [open, setOpen] = useState(false);
   // -1 means no keyboard focus; updated on ArrowUp/Down or mouse hover.
   const [focusIndex, setFocusIndex] = useState(-1);
@@ -65,8 +88,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
 
   const activeWorkspace = workspaces.find(w => w.id === activeWorkspaceId);
 
-  // Manual click-outside detection because a native dropdown component
-  // does not support keyboard navigation or programmatic close-on-select.
+  // Click-outside dismissal for the pattern-owned listbox panel.
   const handleClickOutside = useCallback(
     (e: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -117,59 +139,55 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
   return (
     <div
       ref={containerRef}
-      className={`ds-pattern-workspace-switcher ds-engine-modern relative ${className ?? ''}`}
+      className={`ds-pattern-workspace-switcher ds-engine-modern ${className ?? ''}`}
       data-part="root"
+      data-position={position}
       style={style}
       onKeyDown={handleKeyDown}
     >
       {/* Trigger */}
-      <button
+      <Button
+        engine="modern"
+        variant="ghost"
+        size="sm"
         data-part="trigger"
-        style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, padding: '0 12px', height: 40, ...(position === 'sidebar' ? { width: '100%', justifyContent: 'flex-start' } : {}) }}
         onClick={() => setOpen(!open)}
         data-testid="workspace-trigger"
-        aria-label="Switch workspace"
+        aria-label={switchLabel}
+        aria-expanded={open}
       >
-        <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div className={`rounded-lg ${position === 'sidebar' ? 'w-8 h-8' : 'w-6 h-6'}`}>
-            {activeWorkspace?.logo ? (
-              <img src={activeWorkspace.logo} alt={activeWorkspace.name} />
-            ) : (
-              <div className="flex items-center justify-center w-full h-full text-xs font-bold" data-part="avatar-fallback">
-                {activeWorkspace ? getInitials(activeWorkspace.name) : '?'}
-              </div>
-            )}
-          </div>
-        </div>
+        <span data-part="avatar-frame" data-frame="trigger">
+          {activeWorkspace?.logo ? (
+            <img src={activeWorkspace.logo} alt={activeWorkspace.name} />
+          ) : (
+            <span data-part="avatar-fallback">
+              {activeWorkspace ? getInitials(activeWorkspace.name) : '?'}
+            </span>
+          )}
+        </span>
         {position === 'sidebar' && (
-          <span className="flex-1 text-left text-sm font-semibold truncate">
-            {activeWorkspace?.name ?? 'Select workspace'}
+          <span data-part="trigger-name">
+            {activeWorkspace?.name ?? selectLabel}
           </span>
         )}
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 opacity-50" viewBox="0 0 20 20" fill="currentColor">
-          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-        </svg>
-      </button>
+        <NavigationDownIcon decorative size={12} data-part="chevron" />
+      </Button>
 
-      {/* Dropdown -- positioned contextually: sidebar opens to the right so it
-          doesn't overlap the nav rail; topbar opens below the trigger. */}
+      {/* Panel -- positioned contextually in the skin: sidebar opens to the
+          inline-end so it doesn't overlap the nav rail; topbar opens below. */}
       {open && (
         <div
-          className={`absolute z-50 mt-1 w-72 overflow-hidden ${
-            position === 'sidebar' ? 'left-full top-0 ml-2' : 'top-full left-0'
-          }`}
           data-part="panel"
-          style={{ padding: 0 }}
           role="listbox"
-          aria-label="Workspaces"
+          aria-label={panelLabel}
         >
           {/* Header */}
-          <div data-part="header" style={{ padding: '6px 12px' }}>
-            <span style={menuSectionTitleStyle}>Workspaces</span>
+          <div data-part="header">
+            <span style={menuSectionTitleStyle}>{panelLabel}</span>
           </div>
 
           {/* Workspace list */}
-          <div className="max-h-64 overflow-y-auto py-1">
+          <div data-part="list">
             {workspaces.map((ws, idx) => {
               const isActive = ws.id === activeWorkspaceId;
               const isFocused = idx === focusIndex;
@@ -182,77 +200,72 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   data-active={isActive}
                   data-focused={isFocused}
                   data-testid={`workspace-item-${ws.id}`}
-                  // Three visual states: keyboard-focused (--ds-surface-inset), active workspace
-                  // (subtle primary tint + left accent border), and default (hover highlight).
-                  className={`flex items-center gap-3 px-3 py-2 cursor-pointer transition-colors ${
-                    isActive ? 'border-l-[3px]' : 'border-l-[3px] border-transparent'
-                  }`}
                   onClick={() => {
                     onSwitch(ws.id);
                     setOpen(false);
                   }}
                   onMouseEnter={() => setFocusIndex(idx)}
                 >
-                  <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div className="w-9 h-9 rounded-lg">
-                      {ws.logo ? (
-                        <img src={ws.logo} alt={ws.name} />
-                      ) : (
-                        <div className="flex items-center justify-center w-full h-full text-sm font-bold" data-part="avatar-fallback">
-                          {getInitials(ws.name)}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  {/* Workspace name + metadata row. min-w-0 is required for
-                      truncate to work inside a flex container. */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className={`text-sm truncate ${isActive ? 'font-semibold' : ''}`}>{ws.name}</span>
+                  <span data-part="avatar-frame" data-frame="item">
+                    {ws.logo ? (
+                      <img src={ws.logo} alt={ws.name} />
+                    ) : (
+                      <span data-part="avatar-fallback">
+                        {getInitials(ws.name)}
+                      </span>
+                    )}
+                  </span>
+                  {/* Workspace name + metadata row. */}
+                  <span data-part="item-copy">
+                    <span data-part="item-title-row">
+                      <span data-part="item-name" data-active={isActive}>{ws.name}</span>
                       {/* Checkmark confirms which workspace is currently active. */}
                       {isActive && (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 flex-shrink-0" data-part="check" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
+                        <StatusVerifiedIcon decorative size={12} data-part="check" />
                       )}
-                    </div>
+                    </span>
                     {/* Secondary metadata line: role, billing plan, and online count. */}
-                    <div className="flex items-center gap-2 text-xs opacity-50">
+                    <span data-part="item-meta">
                       {ws.role && <span>{ws.role}</span>}
-                      {ws.plan && <span className="capitalize">{ws.plan}</span>}
+                      {ws.plan && <span data-part="item-plan">{ws.plan}</span>}
                       {typeof ws.online === 'number' && (
-                        <span className="flex items-center gap-1">
+                        <span data-part="item-online">
                           {/* Green dot indicates active members. */}
-                          <span className="w-1.5 h-1.5 rounded-full inline-block" data-part="online-dot" />
+                          <span data-part="online-dot" />
                           {ws.online}
                         </span>
                       )}
-                    </div>
-                  </div>
-                  {/* Right-side controls: unread badge + settings gear.
-                      Settings button is hidden by default and revealed on hover/focus
-                      to keep the row visually clean. */}
-                  <div className="flex items-center gap-1.5">
+                    </span>
+                  </span>
+                  {/* Trailing controls: unread badge + settings gear.
+                      Settings is revealed on row hover/focus (skin-owned). */}
+                  <span data-part="item-controls">
                     {typeof ws.unreadCount === 'number' && ws.unreadCount > 0 && (
-                      <span data-part="badge" style={pillBadgeSmStyle}>{ws.unreadCount}</span>
+                      <Badge
+                        engine="modern"
+                        size="sm"
+                        tone="primary"
+                        data-part="badge"
+                        count={ws.unreadCount}
+                      />
                     )}
                     {onSettings && (
-                      <button
+                      <Button
+                        engine="modern"
+                        variant="ghost"
+                        size="xs"
                         data-part="settings"
-                        style={{ height: 24, width: 24, padding: 0, fontSize: 12, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', opacity: isFocused ? 1 : 0, transition: 'opacity var(--ds-motion-fast)' }}
+                        data-focused={isFocused}
+                        icon={<NavigationSettingsIcon decorative size={14} />}
                         onClick={(e) => {
                           e.stopPropagation();
                           onSettings(ws.id);
                         }}
                         data-testid={`workspace-settings-${ws.id}`}
-                        aria-label={`Settings for ${ws.name}`}
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-                        </svg>
-                      </button>
+                        aria-label={`${settingsLabel} ${ws.name}`}
+                      />
                     )}
-                  </div>
+                  </span>
                 </div>
               );
             })}
@@ -261,22 +274,22 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           {/* Create workspace */}
           {showCreateButton && onCreate && (
             <>
-              <div data-part="divider" style={{ margin: '0' }} />
-              <div className="px-3 py-2">
-                <button
+              <div data-part="divider" />
+              <div data-part="create-row">
+                <Button
+                  engine="modern"
+                  variant="ghost"
+                  size="sm"
                   data-part="create"
-                  style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4, width: '100%' }}
+                  icon={<ActionAddIcon decorative size={14} />}
                   onClick={() => {
                     onCreate();
                     setOpen(false);
                   }}
                   data-testid="workspace-create"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-                  </svg>
-                  Create workspace
-                </button>
+                  {createLabel}
+                </Button>
               </div>
             </>
           )}
@@ -284,25 +297,23 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           {/* Current user */}
           {currentUser && (
             <>
-              <div data-part="divider" style={{ margin: '0' }} />
-              <div className="flex items-center gap-2 px-3 py-2" data-testid="workspace-current-user">
-                <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <div className="w-7 h-7 rounded-full">
-                    {currentUser.avatar ? (
-                      <img src={currentUser.avatar} alt={currentUser.name} />
-                    ) : (
-                      <div className="flex items-center justify-center w-full h-full text-xs font-bold" data-part="avatar-fallback">
-                        {getInitials(currentUser.name)}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-medium truncate">{currentUser.name}</div>
-                  {currentUser.email && (
-                    <div className="text-xs opacity-50 truncate">{currentUser.email}</div>
+              <div data-part="divider" />
+              <div data-part="current-user" data-testid="workspace-current-user">
+                <span data-part="avatar-frame" data-frame="user">
+                  {currentUser.avatar ? (
+                    <img src={currentUser.avatar} alt={currentUser.name} />
+                  ) : (
+                    <span data-part="avatar-fallback">
+                      {getInitials(currentUser.name)}
+                    </span>
                   )}
-                </div>
+                </span>
+                <span data-part="current-user-copy">
+                  <span data-part="current-user-name">{currentUser.name}</span>
+                  {currentUser.email && (
+                    <span data-part="current-user-email">{currentUser.email}</span>
+                  )}
+                </span>
               </div>
             </>
           )}

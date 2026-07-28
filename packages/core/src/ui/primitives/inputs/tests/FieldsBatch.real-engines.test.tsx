@@ -58,7 +58,10 @@ const SKINS: Record<string, string> = {
   'rustic/otp-input': read('runtime/engines/rustic/skin/otp-input.css'),
   'modern/form': read('runtime/engines/modern/skin/form.css'),
   'rustic/form': read('runtime/engines/rustic/skin/form.css'),
-  'modern/input-residual': read('runtime/engines/modern/skin/input-residual.css'),
+  // 'modern/input-residual' was DRAINED in the R2+R3 wave (BATCH C): the file
+  // is now a documented stub — input.css is the single paint owner of every
+  // part the residual file used to re-paint (clear-button, affixes, count,
+  // error-message). It is intentionally absent from this map.
   'rustic/input-residual': read('runtime/engines/rustic/skin/input-residual.css'),
   'radio-group': read('presentation/components/skin/radio-group.css'),
   'checkbox-group': read('presentation/components/skin/checkbox-group.css'),

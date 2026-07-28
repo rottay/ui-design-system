@@ -60,6 +60,7 @@ type FormHeaderIcon = ComponentType<any>;
 
 import { Box, Breadcrumb, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import {
   type SharedHeaderActionKind,
   resolveSharedHeaderActionIcon,
@@ -148,7 +149,7 @@ export function FormHeader({
   title,
   subtitle,
   backHref,
-  backLabel = 'Back',
+  backLabel,
   action,
   secondaryAction,
   actions,
@@ -164,6 +165,9 @@ export function FormHeader({
   // native <a> tag when no NavigationLinkProvider is mounted, which keeps
   // the DS package framework-agnostic.
   const NavLink = useNavigationLink();
+  // Visible chrome copy rides the DS i18n channel with an English floor.
+  const i18n = useOptionalTranslation('common');
+  const resolvedBackLabel = backLabel ?? i18n?.tOr('back', 'Back') ?? 'Back';
   const renderHrefAnchor = (href: string, content: ReactNode, style?: CSSProperties) => {
     if (NavLink) {
       return (
@@ -218,7 +222,7 @@ export function FormHeader({
               >
                 <ArrowLeftIcon data-part="back-icon" style={{ width: 14, height: 14 }} />
                 <Text data-part="back-label" size="xs">
-                  {backLabel}
+                  {resolvedBackLabel}
                 </Text>
               </Flex>,
               { textDecoration: 'none' },

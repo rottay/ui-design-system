@@ -22,6 +22,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import type { ConfirmDialogProps } from '../../contracts';
 import { CONFIRM_DIALOG_DEFAULTS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
@@ -69,12 +70,26 @@ const VARIANT_ICON_MAP: Record<string, React.ReactNode> = {
  * the anchor when `open` is false.
  */
 export default function ModernConfirmDialog(props: ConfirmDialogProps): React.ReactElement {
+  // Optional channel with an English floor: the dialog renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Localized label with an English floor: when the catalogue entry has not
+   * landed yet the provider echoes the full key, which must never reach the
+   * UI.
+   */
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+    return resolved;
+  };
+
   const {
     open,
     title,
     description,
-    confirmLabel = CONFIRM_DIALOG_DEFAULTS.confirmLabel,
-    cancelLabel = CONFIRM_DIALOG_DEFAULTS.cancelLabel,
+    confirmLabel: confirmLabelProp,
+    cancelLabel: cancelLabelProp,
     onConfirm,
     onCancel,
     variant = CONFIRM_DIALOG_DEFAULTS.variant,
@@ -84,6 +99,9 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
     style,
     'data-testid': dataTestId,
   } = props;
+
+  const confirmLabel = confirmLabelProp ?? tOr('confirmDialog.confirm', CONFIRM_DIALOG_DEFAULTS.confirmLabel);
+  const cancelLabel = cancelLabelProp ?? tOr('confirmDialog.cancel', CONFIRM_DIALOG_DEFAULTS.cancelLabel);
 
   // Allow consumers to override the default variant icon
   const displayIcon = icon || VARIANT_ICON_MAP[variant];
@@ -207,12 +225,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
                 data-variant={variant}
                 role="alertdialog"
                 aria-modal="true"
-                style={{
-                  position: 'relative',
-                  maxWidth: 384,
-                  width: '100%',
-                  padding: 24,
-                }}
+                style={{ position: 'relative' }}
               >
                 <div className="flex gap-3">
                   {displayIcon && (
@@ -222,27 +235,22 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
                   )}
                   <div className="flex-1">
                     {title && (
-                      <h3 data-part="title" className="font-bold text-lg mb-2">{title}</h3>
+                      <h3 data-part="title">{title}</h3>
                     )}
                     {description && (
-                      <p data-part="description" className="text-sm">{description}</p>
+                      <p data-part="description">{description}</p>
                     )}
                   </div>
                 </div>
-                {/* Action buttons -- right-aligned flex container */}
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
+                {/* Action row: alignment, rhythm and all button paint are
+                    skin-owned (confirm-dialog.css). */}
+                <div data-part="footer">
                   <button
                     type="button"
                     data-part="action"
                     data-action="cancel"
                     onClick={onCancel}
                     disabled={loading}
-                    style={{
-                      height: 36,
-                      padding: '0 16px',
-                      cursor: 'pointer',
-                      fontSize: 14,
-                    }}
                   >
                     {cancelLabel}
                   </button>
@@ -253,27 +261,8 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
                     data-loading={loading ? 'true' : 'false'}
                     onClick={handleConfirm}
                     disabled={loading}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 6,
-                      height: 36,
-                      padding: '0 16px',
-                      cursor: 'pointer',
-                      fontSize: 14,
-                    }}
                   >
-                    {loading && (
-                      <span
-                        data-part="spinner"
-                        style={{
-                          display: 'inline-block',
-                          width: 16,
-                          height: 16,
-                          animation: 'ds-spin var(--ds-motion-glacial) linear infinite',
-                        }}
-                      />
-                    )}
+                    {loading && <span data-part="spinner" />}
                     {confirmLabel}
                   </button>
                 </div>

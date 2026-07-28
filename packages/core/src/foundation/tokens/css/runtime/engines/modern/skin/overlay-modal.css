@@ -110,21 +110,49 @@
 
 /* ---- header: the border is unconditional. This engine's `divider` prop resolved
         to the same value on BOTH branches of its ternary, so it paints nothing and
-        the rule must not be gated on it. ---- */
+        the rule must not be gated on it. Section LAYOUT lives here too (the
+        engine stamps parts only): the flex frame and paddings moved out of the
+        engine's inline styles so one owner holds the section chrome. ---- */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
   > [data-part='header'][data-part='header'] {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3);
+  padding-block: var(--ds-modal-section-padding-block, var(--ds-spacing-4));
+  padding-inline: var(--ds-modal-section-padding-inline, var(--ds-spacing-6));
+  flex-shrink: 0;
   border-bottom: 1px solid var(--ds-modal-header-border, var(--ds-color-border-subtle));
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
+  > [data-part='header'] > [data-part='heading-group'] {
+  display: grid;
+  gap: var(--ds-spacing-2xs, var(--ds-spacing-xs));
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
   > [data-part='header'] [data-part='title'] {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--ds-modal-title-color, var(--ds-color-text-primary));
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-modal-title-size, var(--ds-font-size-lg));
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: var(--ds-letter-spacing-heading, -0.015em);
+  line-height: var(--ds-line-height-tight);
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
   > [data-part='header'] [data-part='description'] {
   color: var(--ds-modal-subtitle-color, var(--ds-color-text-secondary));
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-modal-description-size, var(--ds-font-size-sm));
+  line-height: var(--ds-line-height-relaxed);
 }
 
 /* ---- body ---- */
@@ -134,26 +162,65 @@
   color: var(--ds-modal-body-color, inherit);
 }
 
-/* ---- footer: also unconditional in this engine (no `divider` gate at all) ---- */
+/* ---- footer: also unconditional in this engine (no `divider` gate at all).
+        Layout is skin-owned like the header's. ---- */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
   > [data-part='footer'][data-part='footer'] {
+  display: flex;
+  align-items: center;
+  justify-content: var(--ds-modal-footer-justify, flex-end);
+  gap: var(--ds-modal-footer-gap, var(--ds-spacing-2));
+  padding-block: var(--ds-modal-section-padding-block, var(--ds-spacing-4));
+  padding-inline: var(--ds-modal-section-padding-inline, var(--ds-spacing-6));
+  flex-shrink: 0;
   border-top: 1px solid var(--ds-modal-footer-border, var(--ds-color-border-subtle));
 }
 
-/* ---- close button: the removed imperative hover becomes a :hover rule ---- */
+/* ---- close button: the removed imperative hover becomes a :hover rule;
+        geometry moved here from the engine's inline styles, and keyboard
+        users get the same visible focus ring the rest of the overlay family
+        paints. ---- */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
   > [data-part='header']
   > [data-part='close-button'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-modal-close-size, 2rem);
+  block-size: var(--ds-modal-close-size, 2rem);
+  flex-shrink: 0;
+  cursor: pointer;
   border: none;
   border-radius: var(--ds-radius-md);
   background-color: transparent;
   color: var(--ds-modal-close-color, var(--ds-color-text-secondary));
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
   > [data-part='header']
   > [data-part='close-button']:hover {
   background-color: var(--ds-modal-close-bg-hover, var(--ds-surface-highlight));
+  color: var(--ds-modal-close-color-hover, var(--ds-color-text-primary));
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='header']
+  > [data-part='close-button']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface']
+    > [data-part='header']
+    > [data-part='close-button'] {
+    transition: none;
+  }
 }

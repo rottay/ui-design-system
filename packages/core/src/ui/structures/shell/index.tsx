@@ -35,6 +35,7 @@ import React, {
 import type { AppShellProps, ShellInset, ShellInsetByPosture, ShellPosture } from './contracts';
 import { SHELL_DEFAULTS } from './contracts';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 import { NavigationMenuIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-menu';
 import { Sheet } from '../../primitives/overlay/Sheet';
@@ -135,6 +136,7 @@ export function AppShell({
   // -- Compact navigation state (independent of desktop collapsed) -----------
   const [navigationOpen, setNavigationOpen] = useState(false);
   const navigationDialogId = useId();
+  const contentId = useId();
   const { isMobile, isTablet, isMobileOrTablet } = useBreakpoints();
   const posture: ShellPosture = isTablet ? 'tablet' : isMobile ? 'phone' : 'desktop';
   const isCompact = isMobileOrTablet;
@@ -159,7 +161,24 @@ export function AppShell({
   const sidebarHeaderHeight = geometry?.sidebarHeaderHeight ?? SHELL_DEFAULTS.sidebarHeaderHeight;
   const transition = geometry?.collapseTransition ?? SHELL_DEFAULTS.collapseTransition;
   const bottomInset = resolveBottomInset(geometry?.bottomInset, posture);
-  const navigationLabel = sidebar?.navigationLabel?.trim() || 'Navigation';
+
+  // -- Guarded i18n channel (K4 idiom): chrome labels resolve through the
+  //    `components` catalog when an I18nProvider is mounted; without one the
+  //    documented English floor renders, byte-identical to the pre-i18n
+  //    contract. An explicit `sidebar.navigationLabel` prop always wins. ----
+  const i18n = useOptionalTranslation('components');
+  const navigationLabel =
+    sidebar?.navigationLabel?.trim() ||
+    i18n?.tOr('appShell.navigation.label', 'Navigation') ||
+    'Navigation';
+  const openNavigationLabel =
+    i18n?.tOr('appShell.navigation.open', `Open ${navigationLabel}`, { label: navigationLabel }) ??
+    `Open ${navigationLabel}`;
+  const closeNavigationLabel =
+    i18n?.tOr('appShell.navigation.close', `Close ${navigationLabel}`, { label: navigationLabel }) ??
+    `Close ${navigationLabel}`;
+  const skipToContentLabel =
+    i18n?.tOr('appShell.skipToContent.label', 'Skip to main content') ?? 'Skip to main content';
 
   const sidebarInlineSize = `var(--ds-shell-sidebar-width, ${sidebarWidth}px)`;
   const sidebarCollapsedInlineSize = `var(--ds-shell-sidebar-collapsed-width, ${sidebarCollapsedWidth}px)`;
@@ -220,7 +239,7 @@ export function AppShell({
             className="rottay-app-shell__navigation-close"
             data-part="navigation-close"
             onClick={closeNavigation}
-            aria-label={`Close ${navigationLabel}`}
+            aria-label={closeNavigationLabel}
           >
             <ActionCloseIcon decorative size={20} />
           </button>
@@ -280,7 +299,7 @@ export function AppShell({
       : desktopSidebarInset,
     '--ds-shell-inline-end-inset': 'var(--ds-shell-safe-area-right)',
     '--ds-shell-collapse-transition': transition,
-    '--ds-shell-resolved-main-transition': isCompact ? 'none' : `margin-left ${transition}`,
+    '--ds-shell-resolved-main-transition': isCompact ? 'none' : `margin-inline-start ${transition}`,
     ...style,
   };
 
@@ -294,6 +313,15 @@ export function AppShell({
         data-compact={isCompact ? 'true' : 'false'}
         style={rootStyle}
       >
+        {/* ---- Skip link: first tab stop, targets the content landmark ---- */}
+        <a
+          href={`#${contentId}`}
+          className="rottay-app-shell__skip-link"
+          data-part="skip-link"
+        >
+          {skipToContentLabel}
+        </a>
+
         {/* ---- Desktop sidebar ---- */}
         {sidebar && !isCompact && (
           <aside
@@ -322,6 +350,15 @@ export function AppShell({
             aria-label={navigationLabel}
             surfaceClassName="rottay-app-shell__navigation-drawer"
             bodyClassName="rottay-app-shell__navigation-drawer-body"
+            bodyStyle={{
+              // The Sheet engine writes its scroll-body padding/overflow inline.
+              // The drawer body is a slot compositor, not a scroll region (the
+              // navigation body scrolls), so the shell restates the contract
+              // through the sanctioned `bodyStyle` channel instead of CSS
+              // `!important`. `bodyStyle` spreads last inside the engine.
+              padding: 'var(--ds-shell-navigation-drawer-body-padding, 0)',
+              overflow: 'hidden',
+            }}
             surfaceStyle={
               {
                 '--ds-shell-resolved-drawer-inline-size': `min(${sidebarInlineSize}, 100dvw)`,
@@ -357,7 +394,7 @@ export function AppShell({
                   className="rottay-app-shell__navigation-trigger"
                   data-part="navigation-trigger"
                   onClick={openNavigation}
-                  aria-label={`Open ${navigationLabel}`}
+                  aria-label={openNavigationLabel}
                   aria-expanded={navigationOpen}
                   aria-controls={navigationDialogId}
                 >
@@ -383,7 +420,12 @@ export function AppShell({
           )}
 
           {/* Content */}
-          <main className="rottay-app-shell__content" data-part="content">
+          <main
+            id={contentId}
+            tabIndex={-1}
+            className="rottay-app-shell__content"
+            data-part="content"
+          >
             {children}
           </main>
 

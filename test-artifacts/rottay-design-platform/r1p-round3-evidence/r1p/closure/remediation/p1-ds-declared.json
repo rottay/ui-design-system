@@ -1,0 +1,1302 @@
+{
+ "declared": {
+  "--ds-sidebar-item-padding-inline": [
+   "foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+   "foundation/tokens/css/runtime/engines/rustic/skin/layout.css"
+  ],
+  "--ds-sidebar-item-gap": [
+   "foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+   "foundation/tokens/css/runtime/engines/rustic/skin/layout.css"
+  ],
+  "--ds-card-cover-overlay-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/card.css"
+  ],
+  "--ds-divider-text-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-message-close-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-message-close-color-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-avatar-default-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-default-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-primary-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-primary-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-secondary-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-secondary-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-success-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-success-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-warning-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-warning-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-error-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-error-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-gradient-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-gradient-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-status-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-avatar-ring-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-avatar-border-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-avatar-group-overflow-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-avatar-group-overflow-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/avatar.css"
+  ],
+  "--ds-badge-default-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-badge-default-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-badge-primary-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-badge-primary-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-badge-secondary-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-badge-secondary-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-badge-success-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-badge-success-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-badge-warning-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-badge-warning-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-badge-error-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-badge-error-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-badge-info-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-badge-info-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-badge-text-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-badge-border-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/badge.css"
+  ],
+  "--ds-tag-default-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-default-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-default-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-primary-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-primary-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-primary-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-secondary-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-secondary-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-secondary-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-success-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-success-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-success-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-warning-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-warning-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-warning-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-error-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-error-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tag-error-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-info-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-info-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-info-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-info-icon": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-success-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-success-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-success-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-success-icon": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-warning-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-warning-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-warning-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-warning-icon": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-error-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-error-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-error-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-alert-error-icon": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-shadow": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-default-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-default-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-primary-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-primary-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-secondary-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-secondary-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-success-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-success-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-warning-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-warning-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-error-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tooltip-error-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-checkbox-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-checkbox-bg-disabled": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-checkbox-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-checkbox-border-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-checkbox-checked-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-checkbox-checked-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-checkbox-checked-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-checkbox-focus-ring": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-checkbox-focus-ring-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/checkbox.css"
+  ],
+  "--ds-checkbox-error-border": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/checkbox.css"
+  ],
+  "--ds-checkbox-error-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-checkbox-label-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-checkbox-label-color-disabled": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-radio-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-radio-bg-disabled": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-radio-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-radio-border-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-radio-checked-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-radio-checked-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-radio-checked-dot": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-radio-focus-ring": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-radio-focus-ring-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/radio.css"
+  ],
+  "--ds-radio-error-border": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/radio.css"
+  ],
+  "--ds-radio-error-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-radio-label-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-radio-label-color-disabled": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-radio-description-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-switch-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-switch-bg-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-switch-checked-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-switch-checked-bg-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-switch-thumb-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-switch-thumb-shadow": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-switch-focus-ring": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-switch-label-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-slider-track-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-slider-track-color-disabled": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-slider-rail-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-slider-handle-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-slider-handle-bg-disabled": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-slider-handle-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-slider-handle-shadow": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-slider-focus-ring": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-slider-mark-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-select-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-bg-disabled": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-color-placeholder": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-color-disabled": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-select-border-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-select-border-focus": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-select-shadow-focus": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-select-error-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-select-warning-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-select-success-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-select-filled-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-dropdown-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-dropdown-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-select-dropdown-shadow": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-option-bg-hover": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-option-bg-selected": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-option-color-selected": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-option-color-disabled": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-tag-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-tag-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-arrow-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-clear-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-clear-color-hover": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/select.css"
+  ],
+  "--ds-select-check-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-datepicker-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-datepicker-bg-disabled": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-datepicker-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-datepicker-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-datepicker-border-focus": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-datepicker-shadow-focus": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-datepicker-error-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-datepicker-warning-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-datepicker-icon-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-datepicker-clear-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-datepicker-separator-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-inputnumber-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-inputnumber-bg-disabled": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-inputnumber-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-inputnumber-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-inputnumber-border-focus": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-inputnumber-shadow-focus": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-inputnumber-error-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-inputnumber-warning-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-inputnumber-control-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-inputnumber-control-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-inputnumber-addon-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-inputnumber-addon-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-inputnumber-addon-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-inputnumber-affix-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-textarea-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-textarea-bg-disabled": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-textarea-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-textarea-color-placeholder": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-textarea-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-textarea-border-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-textarea-border-focus": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-textarea-shadow-focus": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-textarea-error-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-textarea-warning-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-textarea-success-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-textarea-filled-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-textarea-count-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-timepicker-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-timepicker-bg-disabled": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-timepicker-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-timepicker-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-timepicker-border-focus": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-timepicker-shadow-focus": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-timepicker-error-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-timepicker-warning-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-timepicker-icon-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-timepicker-clear-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-timepicker-separator-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-form-label-font-weight": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-form-label-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-form-required-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-form-help-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-form-error-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-form-warning-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-form-success-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-form-extra-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-button-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-button-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-button-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-dragger-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-dragger-bg-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-dragger-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-dragger-border-active": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-dragger-icon-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-dragger-text-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-file-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-file-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-file-remove-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-progress-track": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-progress-bar": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-card-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-card-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-error-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-preview-overlay": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-upload-preview-backdrop": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-autocomplete-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-autocomplete-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-autocomplete-border-focus": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-autocomplete-error-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-autocomplete-warning-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-autocomplete-dropdown-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-autocomplete-dropdown-shadow": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-autocomplete-option-bg-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-autocomplete-empty-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-autocomplete-clear-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-toggle-track-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-toggle-track-bg-checked": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-toggle-dot-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/toggle.css"
+  ],
+  "--ds-toggle-dot-shadow": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/toggle.css"
+  ],
+  "--ds-toggle-focus-ring": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-toggle-success-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/toggle.css"
+  ],
+  "--ds-toggle-warning-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/toggle.css"
+  ],
+  "--ds-toggle-error-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/toggle.css"
+  ],
+  "--ds-toggle-label-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/toggle.css"
+  ],
+  "--ds-toggle-description-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/toggle.css"
+  ],
+  "--ds-toggle-error-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-toggle-inner-label-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-progress-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-progress-fill-primary": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-progress-fill-success": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-progress-fill-warning": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-progress-fill-error": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-skeleton-bg": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/patterns.css"
+  ],
+  "--ds-skeleton-highlight": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-skeleton-wave-gradient": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-spinner-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-spinner-track": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-dropdown-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-dropdown-shadow": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-dropdown-item-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-dropdown-item-bg-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-dropdown-item-color-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-dropdown-item-bg-active": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-dropdown-item-color-active": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-popover-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-popover-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-popover-shadow": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-popover-title-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-popover-content-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-drawer-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-drawer-shadow": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-drawer-header-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-drawer-footer-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-notification-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-notification-shadow": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-notification-title-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-pagination-item-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-pagination-item-bg-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-pagination-item-bg-active": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-pagination-item-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-pagination-item-color-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-pagination-item-color-active": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-pagination-item-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-item-bg-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-item-bg-active": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-item-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-item-color-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-item-color-active": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-group-title-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-divider-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-item-hover-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-item-selected-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-item-selected-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-item-danger-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-submenu-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-focus-ring-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-dark-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-menu-dark-item-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-steps-connector-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-steps-connector-color-active": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-steps-item-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-steps-item-bg-active": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-steps-item-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-steps-item-color-active": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-collapse-header-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-collapse-header-bg-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-collapse-header-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-collapse-content-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-collapse-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-calendar-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-calendar-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-calendar-header-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-tree-node-bg-hover": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/tree.css"
+  ],
+  "--ds-tree-node-bg-selected": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/tree.css"
+  ],
+  "--ds-tree-node-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/tree.css"
+  ],
+  "--ds-tree-node-color-selected": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/tree.css"
+  ],
+  "--ds-timeline-line-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/timeline.css"
+  ],
+  "--ds-timeline-dot-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-timeline-dot-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-timeline-content-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/timeline.css"
+  ],
+  "--ds-empty-icon-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/empty.css"
+  ],
+  "--ds-empty-description-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/empty.css"
+  ],
+  "--ds-result-title-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-result-subtitle-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-result-icon-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-rate-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-rate-color-active": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-rate-color-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-statistic-title-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/statistic.css"
+  ],
+  "--ds-statistic-value-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/statistic.css"
+  ],
+  "--ds-statistic-prefix-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/statistic.css"
+  ],
+  "--ds-statistic-suffix-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/statistic.css"
+  ],
+  "--ds-image-overlay-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-list-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-list-item-bg-hover": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-list-border-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/list.css"
+  ],
+  "--ds-list-split-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/list.css"
+  ],
+  "--ds-list-skeleton-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-list-meta-description-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/list.css"
+  ],
+  "--ds-floatbutton-default-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-floatbutton-default-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-floatbutton-primary-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-floatbutton-primary-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-floatbutton-badge-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-floatbutton-badge-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-floatbutton-description-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-command-palette-backdrop": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-command-palette-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-command-palette-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-command-palette-item-hover-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-command-palette-group-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-command-palette-empty-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-command-palette-shortcut-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-stats-grid-card-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-stats-grid-card-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-stats-grid-card-filled-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-stats-grid-card-glass-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-stats-grid-card-glass-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-stats-grid-label-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-stats-grid-value-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-stats-grid-description-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-stats-grid-trend-positive": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-stats-grid-trend-negative": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-stats-grid-trend-neutral": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-stats-grid-skeleton-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-stats-grid-skeleton-wave-gradient": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-descriptions-label-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-descriptions-content-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-descriptions-border": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-descriptions-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-backtop-bg": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-backtop-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-backtop-shadow": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-anchor-link-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-anchor-link-color-active": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-anchor-ink-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-watermark-color": [
+   "foundation/tokens/css/foundation/themes/default.css"
+  ],
+  "--ds-list-background-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/list.css"
+  ],
+  "--ds-list-item-background-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/list.css"
+  ],
+  "--ds-list-item-hover-background-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/list.css"
+  ],
+  "--ds-list-text-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/list.css"
+  ],
+  "--ds-list-secondary-text-color": [
+   "foundation/tokens/css/foundation/themes/default.css",
+   "foundation/tokens/css/presentation/components/list.css"
+  ]
+ },
+ "undeclared": [
+  "--ds-avatar-group-border",
+  "--ds-tag-border",
+  "--ds-upload-bg",
+  "--ds-upload-border",
+  "--ds-upload-border-hover",
+  "--ds-popover-title-border",
+  "--ds-drawer-title-color",
+  "--ds-drawer-body-color",
+  "--ds-message-bg",
+  "--ds-message-shadow",
+  "--ds-pagination-active-bg",
+  "--ds-pagination-active-color",
+  "--ds-steps-finish-bg",
+  "--ds-steps-finish-border",
+  "--ds-steps-process-bg",
+  "--ds-steps-process-border",
+  "--ds-steps-wait-bg",
+  "--ds-steps-wait-border",
+  "--ds-collapse-bg",
+  "--ds-transfer-bg",
+  "--ds-transfer-border",
+  "--ds-transfer-header-bg",
+  "--ds-transfer-header-border",
+  "--ds-transfer-item-bg-hover",
+  "--ds-sidebar-shell-padding-inline",
+  "--ds-sidebar-shell-padding-collapsed",
+  "--ds-sidebar-item-height",
+  "--ds-sidebar-item-child-height",
+  "--ds-sidebar-item-font-size-child",
+  "--ds-sidebar-icon-column-size",
+  "--ds-sidebar-child-padding-inline"
+ ]
+}

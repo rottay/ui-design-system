@@ -26,13 +26,10 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import {
-  compileBrandTheme,
-  isDarkSurfacePalette,
-} from '../dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js';
+import { isDarkSurfacePalette } from '../dist/infrastructure/compilers/kernel/runtime/brand-theme/index.js';
 import { apcaContrast, APCA_BODY_TEXT_MIN_LC } from '../dist/foundation/kernel/accessibility/branding-contrast/index.js';
 import {
-  renderVerticalArtifact,
+  renderFirstPartyArtifact,
   FIRST_PARTY_ARTIFACT_SPECS,
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
 } from '../dist/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.js';
@@ -90,18 +87,53 @@ function firstDiff(a, b) {
  * independent of the seed (see ramp.ts), so a failure here means the
  * derivation itself broke, not that a tenant chose an unlucky color.
  */
-function checkGeneratedRampApca(slug, brandTheme, compiledCssVariables) {
-  const dark = isDarkSurfacePalette(brandTheme.palette);
-  const ground = dark ? brandTheme.palette?.darkBackgroundColor : (brandTheme.palette?.backgroundColor ?? '#FFFFFF');
-  if (!ground) return [];
+const RAMP_TOP_STEP = /^--ds-color-(primary|secondary|accent|success|warning|error|info|neutral)-900$/;
 
+/**
+ * Known-failing ramp/ground pairings, decrease-only.
+ *
+ * Extending the check to mode blocks revealed pairings that ALREADY ship in
+ * those states: an unpinned ramp inherited the base block's light-ground values
+ * into a dark state, where the -900 step is invisible. R1-P is an architecture
+ * wave and may not repaint anything silently, so the pairings are recorded here
+ * and adjudicated in sighted work. Anything NOT on this list fails the build;
+ * entries that stop failing may simply be deleted.
+ */
+const APCA_BASELINE_PATH = resolve(__dirname, 'build-vertical-artifacts.apca-baseline.json');
+const apcaBaseline = new Set(
+  existsSync(APCA_BASELINE_PATH)
+    ? JSON.parse(readFileSync(APCA_BASELINE_PATH, 'utf-8')).knownFailures.map((entry) => entry.key)
+    : [],
+);
+
+/** Check every -900 ramp step that ships in one state against that state's ground. */
+function checkRampApcaAgainstGround(scope, label, ground, cssVariables) {
+  if (!ground) return [];
   const failures = [];
-  for (const [name, hex] of Object.entries(compiledCssVariables)) {
-    if (!/^--ds-color-(primary|secondary|accent|success|warning|error|info)-900$/.test(name)) continue;
+  for (const [name, hex] of Object.entries(cssVariables)) {
+    if (!RAMP_TOP_STEP.test(name)) continue;
     const lc = apcaContrast(hex, ground);
-    if (Math.abs(lc) < APCA_BODY_TEXT_MIN_LC) {
-      failures.push(`${slug}: ${name} (${hex}) vs ground ${ground} -- |Lc|=${Math.abs(lc).toFixed(1)}, needs >=${APCA_BODY_TEXT_MIN_LC}`);
-    }
+    if (Math.abs(lc) >= APCA_BODY_TEXT_MIN_LC) continue;
+    failures.push({
+      key: `${scope}|${name}`,
+      message: `${label}: ${name} (${hex}) vs ground ${ground} -- |Lc|=${Math.abs(lc).toFixed(1)}, needs >=${APCA_BODY_TEXT_MIN_LC}`,
+    });
+  }
+  return failures;
+}
+
+function checkGeneratedRampApca(slug, brandTheme, compiled) {
+  const dark = isDarkSurfacePalette(brandTheme.palette);
+  const baseGround = dark ? brandTheme.palette?.darkBackgroundColor : (brandTheme.palette?.backgroundColor ?? '#FFFFFF');
+  const failures = checkRampApcaAgainstGround(slug, slug, baseGround, compiled.cssVariables);
+
+  // A mode block ships its own ramp on its own ground. Checking authored ramps
+  // only against the base ground would clear a dark ramp for the light canvas
+  // it never appears on -- and miss the pairing that actually renders.
+  for (const block of compiled.modeBlocks ?? []) {
+    const modeGround = block.cssVariables['--ds-color-bg-primary'] ?? baseGround;
+    const shipped = { ...compiled.cssVariables, ...block.cssVariables };
+    failures.push(...checkRampApcaAgainstGround(`${slug}|${block.mode}`, `${slug} (${block.mode} mode)`, modeGround, shipped));
   }
   return failures;
 }
@@ -109,22 +141,18 @@ function checkGeneratedRampApca(slug, brandTheme, compiledCssVariables) {
 let stale = 0;
 const apcaFailures = [];
 
-for (const { slug, verticalKey, displayName, selector, authoredThemePath, brandTheme } of artifacts) {
+for (const spec of artifacts) {
+  const { slug, brandTheme } = spec;
   const artifactPath = resolve(root, `src/foundation/tokens/css/facade/artifacts/${slug}/index.css`);
   const extensionPath = resolve(root, `src/foundation/tokens/css/facade/artifacts/${slug}/_source/extension.css`);
 
-  const compiled = compileBrandTheme({ brandTheme, tenantSlug: slug });
-  apcaFailures.push(...checkGeneratedRampApca(slug, brandTheme, compiled.cssVariables));
-  const output = renderVerticalArtifact({
-    tenantSlug: slug,
-    verticalKey,
-    authoredThemePath,
-    displayName,
-    selector,
-    compiledCssVariables: compiled.cssVariables,
+  const { css: output, compiled } = renderFirstPartyArtifact({
+    spec,
+    brandTheme,
     extensionCss: readFileSync(extensionPath, 'utf-8'),
     regenerateCommand: REGENERATE_COMMAND,
   });
+  apcaFailures.push(...checkGeneratedRampApca(slug, brandTheme, compiled));
 
   if (check) {
     const current = existsSync(artifactPath) ? readFileSync(artifactPath, 'utf-8') : '';
@@ -141,9 +169,18 @@ for (const { slug, verticalKey, displayName, selector, authoredThemePath, brandT
   }
 }
 
-if (apcaFailures.length > 0) {
-  console.error(`\n${apcaFailures.length} generated ramp pairing(s) failed the APCA body-text threshold:`);
-  for (const failure of apcaFailures) console.error(`  ✗ ${failure}`);
+const newApcaFailures = apcaFailures.filter((failure) => !apcaBaseline.has(failure.key));
+const baselinedApcaFailures = apcaFailures.filter((failure) => apcaBaseline.has(failure.key));
+
+if (baselinedApcaFailures.length > 0) {
+  console.warn(`\n${baselinedApcaFailures.length} known ramp pairing(s) below the APCA body-text threshold (baselined, decrease-only):`);
+  for (const failure of baselinedApcaFailures) console.warn(`  ! ${failure.message}`);
+}
+
+if (newApcaFailures.length > 0) {
+  console.error(`\n${newApcaFailures.length} generated ramp pairing(s) failed the APCA body-text threshold:`);
+  for (const failure of newApcaFailures) console.error(`  ✗ ${failure.message}`);
+  console.error(`\nFix the pairing, or add it to ${APCA_BASELINE_PATH} with an owner and a retirement condition.`);
   process.exit(1);
 }
 

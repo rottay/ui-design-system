@@ -62,6 +62,26 @@ describe('Skeleton integration', () => {
     });
   });
 
+  it('marks the modern placeholder anatomy as decorative (aria-hidden)', async () => {
+    renderWithEngine(
+      <div>
+        <Skeleton engine="modern" active avatar title paragraph={{ rows: 2 }} />
+        <Skeleton engine="modern" variant="circular" width={48} height={48} />
+      </div>,
+      'modern'
+    );
+
+    // APG: placeholder blocks are pure decoration; the owning region
+    // announces busy/loading. Both roots hide from the accessibility tree.
+    await waitFor(() => {
+      const roots = document.querySelectorAll(
+        '.rottay-skeleton-wrapper.rottay-skeleton--modern[data-part="root"], .rottay-skeleton.rottay-skeleton--modern[data-part="root"]'
+      );
+      expect(roots.length).toBe(2);
+      roots.forEach((root) => expect(root).toHaveAttribute('aria-hidden', 'true'));
+    });
+  });
+
   it('renders compound skeleton pieces using shared skeleton tokens', () => {
     const { container } = renderSurface(
       <div>

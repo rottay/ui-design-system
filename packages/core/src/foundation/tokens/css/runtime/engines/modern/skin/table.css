@@ -57,8 +57,8 @@
 
 /* ---- title block above the table ---- */
 .ds-table.ds-table--modern [data-part='title'] {
-  margin-bottom: 8px;
-  font-weight: 600;
+  margin-block-end: var(--ds-table-title-margin-block-end, 8px);
+  font-weight: var(--ds-table-title-font-weight, var(--ds-font-weight-semibold, 600));
 }
 
 /* ---- table element geometry: font size keyed on the stamped `data-size` ---- */
@@ -133,8 +133,8 @@
   transition: color var(--ds-motion-fast);
 }
 .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:focus-visible {
-  outline: 2px solid var(--ds-color-primary);
-  outline-offset: -2px;
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-focus-ring-offset, 2px));
 }
 
 /* ---- header cell content: title + sort indicator + resize handle ---- */
@@ -232,11 +232,21 @@
   color: var(--ds-color-text-secondary);
 }
 .ds-table.ds-table--modern [data-part='footer'] {
-  margin-top: 8px;
+  margin-block-start: var(--ds-table-footer-margin-block-start, 8px);
   font-size: var(--ds-font-size-sm, 14px);
 }
 .ds-table.ds-table--modern [data-part='pagination-range'] {
   font-size: var(--ds-font-size-sm, 14px);
+  /* The range readout is pure numerals and separators (Quiet Premium numeral
+     law, pagination.css's `--ds-pagination-numeric` precedent). */
+  font-variant-numeric: var(--ds-table-pagination-numeric, tabular-nums);
+}
+
+/* ---- metric cells: numeric columns align figures in columns (the hook is
+        the engine-stamped `data-field-type`, additive anatomy). ---- */
+.ds-table.ds-table--modern [data-part='cell'][data-field-type='number'],
+.ds-table.ds-table--modern [data-part='cell'][data-field-type='date'] {
+  font-variant-numeric: var(--ds-table-cell-numeric, tabular-nums);
 }
 
 /* ---- body row: selected fill, and the hover a non-selected hoverable row takes ---- */
@@ -256,7 +266,9 @@
 }
 .ds-table.ds-table--modern [data-part='cell'][data-editable='true'] {
   cursor: pointer;
-  transition: all var(--ds-motion-fast);
+  transition:
+    outline-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 .ds-table.ds-table--modern [data-part='cell'][data-editable='true']:hover {
   outline: 1px dashed color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
@@ -295,7 +307,9 @@
   padding: 0 8px;
   font-size: var(--ds-font-size-xs, 12px);
   cursor: pointer;
-  transition: all var(--ds-motion-normal);
+  transition:
+    color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
   background: transparent;
   color: var(--ds-color-text-primary);
   border: none;
@@ -359,7 +373,7 @@
   justify-content: flex-end;
   align-items: center;
   gap: 8px;
-  margin-top: 16px;
+  margin-block-start: var(--ds-table-pagination-margin-block-start, 16px);
 }
 .ds-table.ds-table--modern [data-part='pagination-controls'] {
   display: inline-flex;
@@ -368,8 +382,11 @@
   height: 32px;
   padding: 0 12px;
   font-size: var(--ds-table-pagination-font-size, 13px);
+  font-variant-numeric: var(--ds-table-pagination-numeric, tabular-nums);
   cursor: pointer;
-  transition: all var(--ds-motion-normal);
+  transition:
+    color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
   background: transparent;
   color: var(--ds-color-text-primary);
   border: none;
@@ -377,5 +394,56 @@
 }
 .ds-table.ds-table--modern [data-part='pagination-button'][data-current='true'] {
   pointer-events: none;
-  font-weight: 600;
+  font-weight: var(--ds-table-pagination-current-font-weight, var(--ds-font-weight-semibold, 600));
+}
+
+.ds-table.ds-table--modern [data-part='pagination-button']:focus-visible,
+.ds-table.ds-table--modern [data-part='expand-button']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* ---- coarse pointers: the row-level actions meet the physical 44px floor.
+        The 4px resize edge keeps its visual width and grows a capped
+        transparent hit area (the density contract forbids a full 44px reach
+        inside a dense header — it would swallow the sort click target). ---- */
+@media (hover: none), (pointer: coarse) {
+  .ds-table.ds-table--modern [data-part='pagination-button'],
+  .ds-table.ds-table--modern [data-part='expand-button'] {
+    min-block-size: var(--ds-table-touch-target-min, 44px);
+  }
+
+  .ds-table.ds-table--modern [data-part='expand-button'] {
+    min-inline-size: var(--ds-table-touch-target-min, 44px);
+  }
+
+  .ds-table.ds-table--modern [data-part='selection-control'] {
+    width: var(--ds-table-selection-control-coarse-size, 20px);
+    height: var(--ds-table-selection-control-coarse-size, 20px);
+  }
+
+  .ds-table.ds-table--modern [data-part='resize-handle']::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline: -10px;
+  }
+}
+
+/* ---- reduced motion: every animation/transition in this skin quiets down. ---- */
+@media (prefers-reduced-motion: reduce) {
+  .ds-table.ds-table--modern [data-part='cell'][data-editable='true'],
+  .ds-table.ds-table--modern [data-part='expand-button'],
+  .ds-table.ds-table--modern [data-part='expand-indicator'],
+  .ds-table.ds-table--modern [data-part='pagination-button'] {
+    transition: none;
+  }
+
+  .ds-table.ds-table--modern [data-part='expanded-row'] > td {
+    animation: none;
+  }
+
+  .ds-table.ds-table--modern [data-part='spinner'] {
+    animation: none;
+  }
 }

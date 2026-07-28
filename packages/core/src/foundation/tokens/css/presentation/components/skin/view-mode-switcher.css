@@ -1,6 +1,13 @@
 /**
  * ViewModeSwitcher skin — engine-agnostic and deliberately unlayered.
  * The root border reaches (0,4,0) so it clears the tenant border floor.
+ *
+ * WAVE R2+R3 (Quiet Premium editorial): a recessed segmented control. The
+ * selected segment is a raised paper card carrying the single worn-blue
+ * accent; unselected segments stay flat and quiet until hover. Disabled
+ * segments dim without a tint. Motion rides the --ds-motion-* channels and
+ * is silenced under prefers-reduced-motion. Typography and the disabled
+ * dim live here, never in the engine.
  */
 
 .ds-structure.ds-view-mode-switcher[data-part='root'][data-part='root'] {
@@ -17,6 +24,19 @@
   background: transparent;
   color: var(--ds-color-text-muted);
   box-shadow: none;
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-view-mode-switcher
+  > .ds-view-mode-switcher__button[data-part='button']:hover:not([data-selected='true']):not([data-disabled='true']) {
+  background: color-mix(in srgb, var(--ds-surface-card) 72%, transparent);
+  color: var(--ds-color-text-secondary);
+}
+.ds-structure.ds-view-mode-switcher
+  > .ds-view-mode-switcher__button[data-part='button']:focus-visible {
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
 }
 .ds-structure.ds-view-mode-switcher
   > .ds-view-mode-switcher__button[data-part='button'][data-selected='true'] {
@@ -30,4 +50,13 @@
 .ds-structure.ds-view-mode-switcher
   > .ds-view-mode-switcher__button[data-part='button'][data-disabled='true'] {
   color: var(--ds-color-text-disabled);
+  opacity: 0.5;
+}
+
+/* Reduced motion: segment changes are cross-fades; silence them. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-view-mode-switcher
+    > .ds-view-mode-switcher__button[data-part='button'] {
+    transition: none;
+  }
 }

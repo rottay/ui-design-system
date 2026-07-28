@@ -20,7 +20,7 @@ import { DRAWER_DEFAULTS } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 import { LayoutSidebarStartIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-sidebar-start';
 
@@ -79,7 +79,10 @@ function CloseButton({ onClick, label }: { onClick: () => void; label: string })
 // ============================================================================
 
 export default function ModernDrawer(props: DrawerProps): React.ReactElement {
-  const { t } = useTranslation('common');
+  // Optional channel: the drawer keeps its standalone rendering contract and
+  // falls back to the English accessibility floor when no I18nProvider is
+  // mounted (never a hard useTranslation crash).
+  const i18n = useOptionalTranslation('common');
   const {
     open,
     placement = DRAWER_DEFAULTS.placement,
@@ -308,7 +311,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
                 </>
               )}
             </div>
-            {closable && <CloseButton onClick={handleClose} label={t('close')} />}
+            {closable && <CloseButton onClick={handleClose} label={i18n?.tOr('close', 'Close') ?? 'Close'} />}
           </div>
         )}
 

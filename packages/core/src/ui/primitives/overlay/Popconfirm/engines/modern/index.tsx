@@ -2,8 +2,9 @@
 
 /**
  * @fileoverview Modern (Token-driven/Tailwind) engine for the Popconfirm overlay component.
- * Uses DS token inline styles for the confirmation panel with async-aware confirm handling
- * (auto-loading state), click-outside dismissal, and shared overlay positioning.
+ * Stamps `data-part` anatomy and owns behavior (async-aware confirm handling
+ * with auto-loading state, click-outside dismissal, shared overlay
+ * positioning); all paint lives in the `popconfirm.css` modern skin.
  *
  * @remarks
  * **Positioning:**
@@ -27,28 +28,45 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import type { PopconfirmProps } from '../../contracts';
 import { POPCONFIRM_DEFAULTS, POPCONFIRM_TO_OVERLAY_PLACEMENT } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
 
 /**
- * Popconfirm implementation using DS token inline styles for card and buttons.
+ * Popconfirm implementation that stamps the panel anatomy; card and button
+ * paint lives in the `popconfirm.css` modern skin.
  *
  * The component tracks an internal loading state that activates automatically
  * when `onConfirm` returns a Promise, disabling both buttons until the promise
  * settles. Supports controlled/uncontrolled open state and maps the unified
- * `okType` prop to DS token inline styles (primary, error, ghost backgrounds).
+ * `okType` prop to `data-ok-type`, which the skin resolves to semantic token
+ * fills (primary, error, ghost backgrounds).
  *
  * @param props - {@link PopconfirmProps} shared across all engines.
  * @returns A ref-forwarded relatively-positioned container with an in-tree, positioned panel.
  */
 export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
   (props, ref) => {
+    // Optional channel with an English floor: the panel renders standalone
+    // (no I18nProvider) without crashing, and never echoes a raw key.
+    const i18n = useOptionalTranslation('components');
+    /**
+     * Localized label with an English floor: when the catalogue entry has not
+     * landed yet the provider echoes the full key, which must never reach the
+     * UI.
+     */
+    const tOr = (key: string, fallback: string): string => {
+      const resolved = i18n?.t(key);
+      if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+      return resolved;
+    };
+
     const {
       title,
       description,
       onConfirm,
       onCancel,
-      okText = POPCONFIRM_DEFAULTS.okText,
-      cancelText = POPCONFIRM_DEFAULTS.cancelText,
+      okText: okTextProp,
+      cancelText: cancelTextProp,
       okType = POPCONFIRM_DEFAULTS.okType,
       icon,
       open: controlledOpen,
@@ -61,6 +79,9 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       overlayClassName,
       overlayStyle,
     } = props;
+
+    const okText = okTextProp ?? tOr('popconfirm.ok', POPCONFIRM_DEFAULTS.okText ?? 'Yes');
+    const cancelText = cancelTextProp ?? tOr('popconfirm.cancel', POPCONFIRM_DEFAULTS.cancelText ?? 'No');
 
     const [internalOpen, setInternalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -139,11 +160,12 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       flip: true,
     });
 
-    // Positioning keys come last so they win over the panel's own geometry
-    // and any caller-supplied overlayStyle.
+    // Chrome (padding, min-width) is skin-owned (popconfirm.css); only the
+    // z-index token channel, consumer overrides and measured positioning stay
+    // inline. overlayStyle still wins over the skin via the inline cascade.
+    // Positioning keys come last so they win over any caller-supplied
+    // overlayStyle.
     const surfaceStyle: React.CSSProperties = {
-      padding: 16,
-      minWidth: 200,
       zIndex: 'var(--ds-z-popover)',
       ...overlayStyle,
       ...positionStyle,
@@ -173,28 +195,24 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
             style={surfaceStyle}
           >
             <div className="flex items-start gap-2">
-              {icon && <span data-part="icon" className="mt-0.5">{icon}</span>}
+              {icon && <span data-part="icon">{icon}</span>}
               <div className="flex-1">
-                <div data-part="title" className="font-medium">{title}</div>
+                <div data-part="title">{title}</div>
                 {description && (
-                  <div data-part="description" className="text-sm mt-1">
+                  <div data-part="description">
                     {description}
                   </div>
                 )}
               </div>
             </div>
-            <div className="flex justify-end gap-2 mt-4">
+            {/* Action row: alignment, rhythm and all button paint are
+                skin-owned (popconfirm.css). */}
+            <div data-part="footer">
               <button
                 type="button"
                 data-part="action"
                 data-action="cancel"
                 onClick={handleCancel}
-                style={{
-                  height: 32,
-                  padding: '0 12px',
-                  fontSize: 13,
-                  cursor: 'pointer',
-                }}
               >
                 {cancelText}
               </button>
@@ -206,27 +224,8 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
                 data-loading={(loading || okButtonLoading) ? 'true' : 'false'}
                 onClick={handleConfirm}
                 disabled={loading || okButtonLoading}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  height: 32,
-                  padding: '0 12px',
-                  fontSize: 13,
-                  cursor: 'pointer',
-                }}
               >
-                {(loading || okButtonLoading) && (
-                  <span
-                    data-part="spinner"
-                    style={{
-                      display: 'inline-block',
-                      width: 14,
-                      height: 14,
-                      animation: 'ds-spin var(--ds-motion-glacial) linear infinite',
-                    }}
-                  />
-                )}
+                {(loading || okButtonLoading) && <span data-part="spinner" />}
                 {okText}
               </button>
             </div>

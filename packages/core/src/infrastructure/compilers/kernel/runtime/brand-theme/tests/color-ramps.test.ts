@@ -61,10 +61,19 @@ describe('deriveTenantColorRamps wired into compileBrandTheme', () => {
 
   it('emits a 50..900 ramp for every role rottay declares a dark seed (or falls back to the light seed) for', () => {
     const { cssVariables } = compileBrandTheme({ brandTheme: rottayBrandTheme, tenantSlug: 'rottay' });
+    const authored = rottayBrandTheme.palette?.ramps ?? {};
     for (const role of ROLES) {
       for (const step of RAMP_STEPS) {
         const value = cssVariables[`--ds-color-${role}-${step}`];
-        expect(value, `--ds-color-${role}-${step}`).toMatch(/^#[0-9A-F]{6}$/);
+        expect(value, `--ds-color-${role}-${step}`).toBeTruthy();
+        // Rottay hand-tunes its steps, and an authored step is any CSS color —
+        // its success-50 is an alpha tint. Only the DERIVED steps are the
+        // gamut-mapped opaque hex the OKLCH ramp produces.
+        if (authored[role]?.[step] === undefined) {
+          expect(value, `--ds-color-${role}-${step}`).toMatch(/^#[0-9A-F]{6}$/);
+        } else {
+          expect(value, `--ds-color-${role}-${step}`).toBe(authored[role][step]);
+        }
       }
     }
   });
@@ -181,8 +190,19 @@ describe('compile-time ramp gate (what is actually wired into build-vertical-art
     expect(rampFarExtremeFailures(bithireBrandTheme.palette as BrandPalette, '#F8FBFF')).toEqual([]);
   });
 
-  it('rottay: every role\'s step-900 clears the body-text threshold against its dark ground', () => {
-    expect(rampFarExtremeFailures(rottayBrandTheme.palette as BrandPalette, '#0C0C0E')).toEqual([]);
+  it('rottay: only its four hand-tuned status ramps miss the body-text threshold', () => {
+    // Rottay authors these four step-900s by hand against its dark canvas, and
+    // they do not clear the threshold. They ship today — the values moved from
+    // the artifact extension into palette.ramps without changing — so they are
+    // recorded in scripts/build-vertical-artifacts.apca-baseline.json rather
+    // than repainted inside an architecture wave. Anything BEYOND this list is
+    // a regression and fails here and in the build gate.
+    expect(rampFarExtremeFailures(rottayBrandTheme.palette as BrandPalette, '#0C0C0E')).toEqual([
+      '--ds-color-success-900 vs ground #0C0C0E',
+      '--ds-color-warning-900 vs ground #0C0C0E',
+      '--ds-color-error-900 vs ground #0C0C0E',
+      '--ds-color-info-900 vs ground #0C0C0E',
+    ]);
   });
 
   it('evnto: every role\'s step-900 clears the body-text threshold against its light ground', () => {

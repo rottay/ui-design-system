@@ -124,7 +124,12 @@
     "placeholder": "اختر وقتًا",
     "now": "الآن",
     "clear": "مسح",
-    "ok": "حسنًا"
+    "ok": "حسنًا",
+    "hours_label": "س",
+    "minutes_label": "د",
+    "seconds_label": "ث",
+    "start_time": "وقت البدء",
+    "end_time": "وقت الانتهاء"
   },
   "search": {
     "placeholder": "بحث...",
@@ -291,6 +296,52 @@
     "topLabel": "الإجراءات العلوية",
     "bottomLabel": "الإجراءات السفلية"
   },
+  "alertDialog": {
+    "cancel": "إلغاء"
+  },
+  "appShell": {
+    "navigation": {
+      "label": "التنقل",
+      "open": "فتح {label}",
+      "close": "إغلاق {label}"
+    },
+    "skipToContent": {
+      "label": "تخطَّ إلى المحتوى الرئيسي"
+    }
+  },
+  "approvalWorkflow": {
+    "status": {
+      "pending": "قيد الانتظار",
+      "approved": "معتمد",
+      "rejected": "مرفوض",
+      "escalated": "مُصعَّد",
+      "skipped": "تم تخطيه"
+    },
+    "action": {
+      "approve": "اعتماد",
+      "reject": "رفض",
+      "escalate": "تصعيد"
+    }
+  },
+  "autocomplete": {
+    "not_found": "لا توجد نتائج",
+    "clear": "مسح"
+  },
+  "calendarView": {
+    "today": "اليوم",
+    "previousMonth": "الشهر السابق",
+    "nextMonth": "الشهر التالي",
+    "viewMonth": "شهر",
+    "viewWeek": "أسبوع",
+    "viewDay": "يوم",
+    "overflowMore": "+{count} أخرى"
+  },
+  "cascader": {
+    "placeholder": "يرجى الاختيار",
+    "search_placeholder": "بحث...",
+    "not_found": "لا توجد بيانات",
+    "clear": "مسح"
+  },
   "stepper": {
     "navigation": "خطوات التقدم"
   },
@@ -409,6 +460,85 @@
   "checkbox": {
     "group": "مجموعة خانات الاختيار"
   },
+  "comment_thread": {
+    "submit": "تعليق",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "reply": "رد",
+    "edit": "تحرير",
+    "delete": "حذف",
+    "edited": "(مُعدَّل)",
+    "empty": "لا توجد تعليقات بعد",
+    "composer_placeholder": "اكتب تعليقًا...",
+    "reply_placeholder": "اكتب ردًا...",
+    "just_now": "الآن",
+    "minutes_ago": "منذ {count} د",
+    "hours_ago": "منذ {count} س",
+    "days_ago": "منذ {count} ي"
+  },
+  "confirmDialog": {
+    "confirm": "تأكيد",
+    "cancel": "إلغاء"
+  },
+  "environmentToggle": {
+    "select": "اختيار",
+    "banner": "أنت تعرض بيئة {name}",
+    "confirmTitle": "التبديل إلى {name}",
+    "cancel": "إلغاء"
+  },
+  "fileManager": {
+    "root": "الجذر",
+    "upload": "رفع",
+    "deleteSelected": "حذف ({count})",
+    "rename": "إعادة تسمية",
+    "delete": "حذف",
+    "switchToList": "التبديل إلى القائمة",
+    "switchToGrid": "التبديل إلى الشبكة",
+    "newNamePrompt": "الاسم الجديد:",
+    "empty": "لا توجد ملفات أو مجلدات",
+    "columnName": "الاسم",
+    "columnSize": "الحجم",
+    "columnModified": "آخر تعديل",
+    "columnActions": "إجراءات"
+  },
+  "filterPanel": {
+    "apply": "تطبيق",
+    "clearAll": "مسح الكل",
+    "collapse": "طيّ عوامل التصفية",
+    "expand": "توسيع عوامل التصفية",
+    "rangeTo": "إلى",
+    "min": "الحد الأدنى",
+    "max": "الحد الأقصى",
+    "selectPlaceholder": "اختر..."
+  },
+  "filter_builder": {
+    "add_rule": "إضافة قاعدة",
+    "add_group": "إضافة مجموعة",
+    "add_filter": "إضافة مرشح",
+    "clear_all": "مسح الكل",
+    "remove_rule": "إزالة القاعدة",
+    "remove_group": "إزالة المجموعة",
+    "where": "حيث",
+    "and": "و",
+    "or": "أو",
+    "range_from": "من",
+    "range_to": "إلى",
+    "range_and": "و",
+    "value_placeholder": "القيمة",
+    "select_placeholder": "اختر...",
+    "value_label": "قيمة المرشح",
+    "field_label": "حقل المرشح",
+    "operator_label": "عامل المرشح"
+  },
+  "form_builder": {
+    "previous": "السابق",
+    "next": "التالي",
+    "step_counter": "الخطوة {current} من {total}"
+  },
+  "layout": {
+    "collapse_sidebar": "طي الشريط الجانبي",
+    "expand_sidebar": "توسيع الشريط الجانبي"
+  },
   "radio": {
     "group": "مجموعة أزرار الاختيار"
   },
@@ -433,5 +563,86 @@
     "export": "تصدير",
     "active": "نشطة",
     "clearAll": "مسح الكل"
+  },
+  "liveFeed": {
+    "refresh": "تحديث",
+    "loadMore": "تحميل المزيد",
+    "newItem": "عنصر جديد",
+    "newItems": "عناصر جديدة",
+    "empty": "لا توجد عناصر"
+  },
+  "notificationCenter": {
+    "title": "الإشعارات",
+    "markAllRead": "تعليم الكل كمقروء",
+    "clearAll": "مسح الكل",
+    "empty": "لا توجد إشعارات",
+    "dismiss": "تجاهل",
+    "justNow": "الآن",
+    "minutesAgo": "منذ {count} دقيقة",
+    "hoursAgo": "منذ {count} ساعة",
+    "daysAgo": "منذ {count} يوم"
+  },
+  "popconfirm": {
+    "ok": "نعم",
+    "cancel": "لا"
+  },
+  "savedViews": {
+    "rename": "إعادة تسمية",
+    "duplicate": "تكرار",
+    "delete": "حذف",
+    "options": "خيارات",
+    "unsavedChanges": "تغييرات غير محفوظة"
+  },
+  "step_wizard": {
+    "next": "التالي",
+    "prev": "رجوع",
+    "complete": "إتمام",
+    "skip": "تخطي",
+    "progress": "الخطوة {current} من {total}: {title}",
+    "validation_default": "أكمل هذه الخطوة قبل المتابعة."
+  },
+  "taginput": {
+    "placeholder": "اكتب واضغط Enter"
+  },
+  "tenantPreview": {
+    "colorPalette": "لوحة الألوان",
+    "componentPreview": "معاينة المكونات",
+    "buttons": "أزرار",
+    "card": "بطاقة",
+    "input": "حقل إدخال",
+    "badges": "شارات",
+    "table": "جدول",
+    "primary": "أساسي",
+    "secondary": "ثانوي",
+    "outlined": "محدد",
+    "default": "افتراضي",
+    "inputPlaceholder": "اكتب شيئًا...",
+    "sampleCardTitle": "عنوان بطاقة تجريبي",
+    "sampleCardBody": "توضح هذه البطاقة تطبيق هوية المستأجر على مكوّن حاوٍ.",
+    "badgeActive": "نشط",
+    "badgePending": "قيد الانتظار",
+    "badgeDraft": "مسودة",
+    "colName": "الاسم",
+    "colStatus": "الحالة",
+    "colAmount": "المبلغ",
+    "personalityLabel": "الشخصية: {preset}",
+    "yes": "نعم",
+    "no": "لا",
+    "disabled": "معطّل",
+    "tileAnimation": "الحركة",
+    "tileIntensity": "الكثافة",
+    "tileCardElevation": "ارتفاع البطاقة",
+    "tileCardBorder": "حدود البطاقة",
+    "tileBadgeShape": "شكل الشارة",
+    "tileLabelStyle": "نمط التسمية",
+    "tileHoverLift": "الارتفاع عند التحويم",
+    "tileEdgeAccent": "تمييز الحافة"
+  },
+  "workspaceSwitcher": {
+    "switch": "تبديل مساحة العمل",
+    "panel": "مساحات العمل",
+    "select": "اختر مساحة العمل",
+    "create": "إنشاء مساحة عمل",
+    "settings": "إعدادات"
   }
 }

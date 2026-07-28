@@ -17,6 +17,7 @@
  * entity.
  */
 
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { Box, Flex, Text } from '../../../primitives';
 
 /** Definition of a single scope pill rendered by the strip. */
@@ -42,6 +43,19 @@ export function ScopeSwitcher({
   onScopeChange,
   variant = 'section',
 }: ScopeSwitcherProps) {
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Catalog lookup with an honest English floor: when the provider is absent
+   * or echoes the raw key (missing entry), the historical default wins.
+   */
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (resolved === undefined || resolved === key || resolved === `components.${key}`) {
+      return fallback;
+    }
+    return resolved;
+  };
+
   if (!scopes.length) return null;
 
   const isInline = variant === 'inline';
@@ -51,6 +65,8 @@ export function ScopeSwitcher({
       data-part="root"
       data-inline={isInline}
       className="ds-structure ds-scope-switcher"
+      role="group"
+      aria-label={tOr('scopeSwitcher.groupLabel', 'Scope')}
       style={{
         padding: isInline ? 0 : '8px 16px',
         overflowX: 'auto',
@@ -76,6 +92,7 @@ export function ScopeSwitcher({
               as="button"
               data-part="pill"
               data-active={isActive}
+              aria-pressed={isActive}
               onClick={() => onScopeChange(scope.key)}
               style={{
                 display: 'inline-flex',
@@ -83,10 +100,7 @@ export function ScopeSwitcher({
                 gap: isInline ? 5 : 8,
                 height: isInline ? 30 : 32,
                 padding: isInline ? '0 7px' : '0 12px',
-                fontSize: 13,
-                fontWeight: isActive ? 700 : 600,
                 cursor: 'pointer',
-                transition: 'transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease, color 0.16s ease',
                 whiteSpace: 'nowrap',
                 flexShrink: 0,
               }}
@@ -95,8 +109,6 @@ export function ScopeSwitcher({
                 data-part="pill-label"
                 size="sm"
                 style={{
-                  fontSize: 12,
-                  fontWeight: 'inherit',
                   lineHeight: 1,
                 }}
               >
@@ -113,9 +125,6 @@ export function ScopeSwitcher({
                     minWidth: 18,
                     height: 18,
                     padding: isInline ? '0 4px' : '0 6px',
-                    fontSize: 10,
-                    fontWeight: 700,
-                    lineHeight: 1,
                     flexShrink: 0,
                   }}
                 >

@@ -1,0 +1,146 @@
+{
+ "bithire": {
+  "default": {
+   "added": [],
+   "dropped": [],
+   "changed": []
+  },
+  "light": {
+   "added": [],
+   "dropped": [],
+   "changed": []
+  },
+  "dark": {
+   "added": [],
+   "dropped": [],
+   "changed": [
+    {
+     "k": "--ds-color-background",
+     "before": "#F4F8FB",
+     "after": "#0f1520"
+    },
+    {
+     "k": "--ds-color-bg",
+     "before": "#F4F8FB",
+     "after": "#0f1520"
+    },
+    {
+     "k": "--ds-color-bg-input",
+     "before": "#ffffff",
+     "after": "#0f1520"
+    },
+    {
+     "k": "--ds-font-family-base",
+     "before": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto,\n    \"Helvetica Neue\", sans-serif",
+     "after": "var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), \"Noto Sans Arabic\", sans-serif"
+    },
+    {
+     "k": "--ds-font-family-display",
+     "before": "-apple-system, BlinkMacSystemFont, \"Segoe UI\",\n    Roboto, \"Helvetica Neue\", sans-serif",
+     "after": "var(--ds-font-pack-grotesk-display, 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif), \"Noto Sans Arabic\", sans-serif"
+    },
+    {
+     "k": "--ds-font-family-heading",
+     "before": "-apple-system, BlinkMacSystemFont, \"Segoe UI\",\n    Roboto, \"Helvetica Neue\", sans-serif",
+     "after": "var(--ds-font-pack-grotesk-display, 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif), \"Noto Sans Arabic\", sans-serif"
+    },
+    {
+     "k": "--ds-font-family-mono",
+     "before": "\"SF Mono\", \"Fira Code\", \"Fira Mono\", Menlo, monospace",
+     "after": "var(--ds-font-pack-plex-mono, 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace)"
+    }
+   ]
+  }
+ },
+ "evnto": {
+  "default": {
+   "added": [],
+   "dropped": [],
+   "changed": []
+  },
+  "light": {
+   "added": [],
+   "dropped": [],
+   "changed": []
+  },
+  "dark": {
+   "added": [],
+   "dropped": [],
+   "changed": [
+    {
+     "k": "--ds-card-border-color",
+     "before": "rgba(0, 0, 0, 0.08)",
+     "after": "#2E2C24"
+    },
+    {
+     "k": "--ds-color-background",
+     "before": "#FFFFFF",
+     "after": "#131210"
+    },
+    {
+     "k": "--ds-color-bg",
+     "before": "#FFFFFF",
+     "after": "#131210"
+    }
+   ]
+  }
+ },
+ "rottay": {
+  "default": {
+   "added": [],
+   "dropped": [],
+   "changed": []
+  },
+  "light": {
+   "added": [],
+   "dropped": [],
+   "changed": [
+    {
+     "k": "--ds-card-border-color",
+     "before": "#2A2A2F",
+     "after": "#E5E5E3"
+    },
+    {
+     "k": "--ds-card-border-color-hover",
+     "before": "#3A3A40",
+     "after": "#D4D4D2"
+    },
+    {
+     "k": "--ds-card-elevated-shadow",
+     "before": "var(--ds-elevation-3)",
+     "after": "0 8px 24px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04)"
+    },
+    {
+     "k": "--ds-card-footer-border-color",
+     "before": "#2A2A2F",
+     "after": "#E5E5E3"
+    },
+    {
+     "k": "--ds-card-header-border-color",
+     "before": "#2A2A2F",
+     "after": "#E5E5E3"
+    },
+    {
+     "k": "--ds-font-family-base",
+     "before": "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+     "after": "'Inter', -apple-system, BlinkMacSystemFont, \"Noto Sans Arabic\", sans-serif"
+    },
+    {
+     "k": "--ds-font-family-display",
+     "before": "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+     "after": "'Inter', -apple-system, BlinkMacSystemFont, \"Noto Sans Arabic\", sans-serif"
+    },
+    {
+     "k": "--ds-font-family-heading",
+     "before": "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+     "after": "'Inter', -apple-system, BlinkMacSystemFont, \"Noto Sans Arabic\", sans-serif"
+    }
+   ]
+  },
+  "dark": {
+   "added": [],
+   "dropped": [],
+   "changed": []
+  }
+ }
+}

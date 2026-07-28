@@ -30,6 +30,7 @@ import {
   SparklesIcon as Sparkles,
 } from '../../../../graphics/icons';
 
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { Box, Flex, Input, Select, Text } from '../../../primitives';
 
 export interface FieldFilterDefinition {
@@ -73,6 +74,19 @@ export function FieldFiltersPanel({
   onChange,
   filterVisuals,
 }: FieldFiltersPanelProps) {
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Catalog lookup with an honest English floor: when the provider is absent
+   * or echoes the raw key (missing entry), the historical default wins.
+   */
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (resolved === undefined || resolved === key || resolved === `components.${key}`) {
+      return fallback;
+    }
+    return resolved;
+  };
+
   if (!filters.length) return null;
 
   const activeCount = Object.values(values).filter((value) => value && value !== 'all').length;
@@ -97,27 +111,22 @@ export function FieldFiltersPanel({
                 alignItems: 'center',
                 minHeight: 22,
                 padding: '0 8px',
-                fontSize: 10,
-                fontWeight: 700,
-                textTransform: 'uppercase' as const,
-                letterSpacing: '0.11em',
               }}
             >
-              Advanced filters
+              {tOr('fieldFiltersPanel.title', 'Advanced filters')}
             </Text>
             <Text
               data-part="subtitle"
               size="xs"
               color="secondary"
-              style={{ fontSize: 12, lineHeight: 1.45 }}
             >
-              Precision filters for the current slice.
+              {tOr('fieldFiltersPanel.subtitle', 'Precision filters for the current slice.')}
             </Text>
           </Flex>
         </Box>
         <Box style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', alignSelf: 'flex-start' }}>
-          <InlineSignal label={`${activeCount} active`} tone={activeCount > 0 ? 'primary' : 'neutral'} />
-          <InlineSignal label="Applies live" tone="neutral" />
+          <InlineSignal label={`${activeCount} ${tOr('fieldFiltersPanel.activeSuffix', 'active')}`} tone={activeCount > 0 ? 'primary' : 'neutral'} />
+          <InlineSignal label={tOr('fieldFiltersPanel.appliesLive', 'Applies live')} tone="neutral" />
         </Box>
       </Flex>
 
@@ -133,13 +142,9 @@ export function FieldFiltersPanel({
                 alignItems: 'center',
                 minHeight: 20,
                 padding: '0 8px',
-                fontSize: 10,
-                fontWeight: 700,
-                textTransform: 'uppercase' as const,
-                letterSpacing: '0.11em',
               }}
             >
-              Quick slices
+              {tOr('fieldFiltersPanel.quickSlices', 'Quick slices')}
             </Text>
             {presets.map((preset) => (
               <PresetChip
@@ -166,11 +171,11 @@ export function FieldFiltersPanel({
       >
         {filters.map((filter) => {
           const value = values[filter.key] ?? '';
-          const visual = filterVisuals?.[filter.key] ?? defaultFilterVisual(filter.label);
+          const visual = filterVisuals?.[filter.key] ?? defaultFilterVisual(filter.label, tOr('fieldFiltersPanel.refineBy', 'Refine by'));
           const inputLabel =
             filter.type === 'date-range'
-              ? filter.placeholder ?? `Any ${filter.label}`
-              : filter.placeholder ?? `All ${filter.label}`;
+              ? filter.placeholder ?? `${tOr('fieldFiltersPanel.anyPrefix', 'Any')} ${filter.label}`
+              : filter.placeholder ?? `${tOr('fieldFiltersPanel.allPrefix', 'All')} ${filter.label}`;
           const controlStyle = { width: '100%', minHeight: 40 } as const;
 
           if (filter.type === 'select' || filter.type === 'enum') {
@@ -262,10 +267,6 @@ function PresetChip({
         minHeight: 30,
         padding: '0 10px',
         cursor: 'pointer',
-        fontSize: 12,
-        fontWeight: 700,
-        letterSpacing: '0.01em',
-        transition: 'border-color 0.12s ease, background 0.12s ease, color 0.12s ease, transform 0.12s ease',
       }}
     >
       <Box
@@ -311,10 +312,6 @@ function InlineSignal({
         size="xs"
         color="inherit"
         style={{
-          fontSize: 11,
-          fontWeight: 700,
-          textTransform: 'uppercase' as const,
-          letterSpacing: '0.09em',
           lineHeight: 1,
         }}
       >
@@ -366,10 +363,6 @@ function FilterCard({
             color="subtle"
             style={{
               display: 'block',
-              fontSize: 10,
-              fontWeight: 700,
-              textTransform: 'uppercase' as const,
-              letterSpacing: '0.11em',
             }}
           >
             {label}
@@ -381,8 +374,6 @@ function FilterCard({
             style={{
               display: 'block',
               marginTop: 3,
-              fontSize: 11,
-              lineHeight: 1.35,
             }}
           >
             {description}
@@ -394,10 +385,10 @@ function FilterCard({
   );
 }
 
-function defaultFilterVisual(fallbackLabel: string): FieldFilterVisual {
+function defaultFilterVisual(fallbackLabel: string, refineByPrefix: string): FieldFilterVisual {
   return {
     icon: <SlidersHorizontal style={{ width: 15, height: 15 }} />,
-    description: `Refine by ${fallbackLabel.toLowerCase()}.`,
+    description: `${refineByPrefix} ${fallbackLabel.toLowerCase()}.`,
   };
 }
 

@@ -40,6 +40,7 @@ import {
 import { Box, Flex, Text } from '../../../primitives';
 import { Portal } from '../../../primitives/runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../primitives/runtime/overlay/portal-scope';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /** Discriminator for saved view kinds. */
 export type SavedViewsMenuEntryKind = 'system' | 'persona' | 'custom';
@@ -98,8 +99,55 @@ const triggerButtonStyle = {
   minHeight: 40,
   padding: '0 12px',
   cursor: 'pointer',
-  transition: 'border-color 0.16s ease, background 0.16s ease, color 0.16s ease',
 } as const;
+
+/**
+ * Every user-visible string the menu renders, resolved through the i18n
+ * catalog with an English floor. Threaded into the module-level helpers
+ * (describeView, buildShareSnapshot) and the leaf subcomponents so none of
+ * them hardcode copy.
+ */
+interface SavedViewsMenuLabels {
+  views: string;
+  headerTitle: string;
+  headerDescription: string;
+  current: string;
+  default: string;
+  system: string;
+  persona: string;
+  custom: string;
+  systemSuffix: string;
+  personaSuffix: string;
+  customSuffix: string;
+  duplicate: string;
+  share: string;
+  copied: string;
+  saveCurrent: string;
+  systemViewsSection: string;
+  personaViewsSection: string;
+  customViewsSection: string;
+  noPersonaTitle: string;
+  noPersonaDescription: string;
+  noViewsTitle: string;
+  noViewsDescription: string;
+  deletePrefix: string;
+  copySuffix: string;
+  panelLabel: string;
+  queryPrefix: string;
+  scopePrefix: string;
+  filterSingular: string;
+  filterPlural: string;
+  columnsSuffix: string;
+  sortedByPrefix: string;
+  densitySuffix: string;
+  emptyDescription: string;
+  shareViewPrefix: string;
+  shareTypePrefix: string;
+  shareFiltersPrefix: string;
+  shareColumnsPrefix: string;
+  shareSortPrefix: string;
+  shareDensityPrefix: string;
+}
 
 function ViewsIcon() {
   return (
@@ -119,11 +167,11 @@ function getViewKind(view: SavedViewsMenuEntry): SavedViewsMenuEntryKind {
   return view.isSystem ? 'system' : 'custom';
 }
 
-function getViewKindLabel(view: SavedViewsMenuEntry): string {
+function getViewKindLabel(view: SavedViewsMenuEntry, labels: SavedViewsMenuLabels): string {
   const kind = getViewKind(view);
-  if (kind === 'system') return 'System';
-  if (kind === 'persona') return 'Persona';
-  return 'Custom';
+  if (kind === 'system') return labels.system;
+  if (kind === 'persona') return labels.persona;
+  return labels.custom;
 }
 
 function cloneViewState(view: SavedViewsMenuEntry): SavedViewsMenuEntry['state'] {
@@ -135,38 +183,38 @@ function cloneViewState(view: SavedViewsMenuEntry): SavedViewsMenuEntry['state']
   };
 }
 
-function buildShareSnapshot(view: SavedViewsMenuEntry): string {
+function buildShareSnapshot(view: SavedViewsMenuEntry, labels: SavedViewsMenuLabels): string {
   const lines = [
-    `Workspace view: ${view.label}`,
-    `Type: ${getViewKindLabel(view)}`,
+    `${labels.shareViewPrefix}: ${view.label}`,
+    `${labels.shareTypePrefix}: ${getViewKindLabel(view, labels)}`,
   ];
 
   if (view.state.scope) {
-    lines.push(`Scope: ${view.state.scope}`);
+    lines.push(`${labels.scopePrefix}: ${view.state.scope}`);
   }
 
   if (view.state.query) {
-    lines.push(`Query: ${view.state.query}`);
+    lines.push(`${labels.queryPrefix}: ${view.state.query}`);
   }
 
   if (view.state.filters?.length) {
     lines.push(
-      `Filters: ${view.state.filters
+      `${labels.shareFiltersPrefix}: ${view.state.filters
         .map((filter) => `${filter.label}=${filter.displayValue ?? filter.value}`)
         .join(', ')}`,
     );
   }
 
   if (view.state.visibleColumns?.length) {
-    lines.push(`Columns: ${view.state.visibleColumns.join(', ')}`);
+    lines.push(`${labels.shareColumnsPrefix}: ${view.state.visibleColumns.join(', ')}`);
   }
 
   if (view.state.sort?.field) {
-    lines.push(`Sort: ${view.state.sort.field} ${view.state.sort.direction}`);
+    lines.push(`${labels.shareSortPrefix}: ${view.state.sort.field} ${view.state.sort.direction}`);
   }
 
   if (view.state.density) {
-    lines.push(`Density: ${view.state.density}`);
+    lines.push(`${labels.shareDensityPrefix}: ${view.state.density}`);
   }
 
   const query = new URLSearchParams({
@@ -194,6 +242,65 @@ export function SavedViewsMenu({
   const [shareState, setShareState] = useState<'idle' | 'copied'>('idle');
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const shareTimerRef = useRef<number | null>(null);
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Catalog lookup with an honest English floor: when the provider is absent
+   * or echoes the raw key (missing entry), the historical default wins.
+   */
+  const tOr = useCallback(
+    (key: string, fallback: string): string => {
+      const resolved = i18n?.t(key);
+      if (resolved === undefined || resolved === key || resolved === `components.${key}`) {
+        return fallback;
+      }
+      return resolved;
+    },
+    [i18n],
+  );
+  const labels = useMemo<SavedViewsMenuLabels>(
+    () => ({
+      views: tOr('savedViewsMenu.views', 'Views'),
+      headerTitle: tOr('savedViewsMenu.headerTitle', 'Saved views'),
+      headerDescription: tOr('savedViewsMenu.headerDescription', 'Switch between curated workspace states without leaving the list.'),
+      current: tOr('savedViewsMenu.current', 'Current'),
+      default: tOr('savedViewsMenu.default', 'Default'),
+      system: tOr('savedViewsMenu.system', 'System'),
+      persona: tOr('savedViewsMenu.persona', 'Persona'),
+      custom: tOr('savedViewsMenu.custom', 'Custom'),
+      systemSuffix: tOr('savedViewsMenu.systemSuffix', 'system'),
+      personaSuffix: tOr('savedViewsMenu.personaSuffix', 'persona'),
+      customSuffix: tOr('savedViewsMenu.customSuffix', 'custom'),
+      duplicate: tOr('savedViewsMenu.duplicate', 'Duplicate'),
+      share: tOr('savedViewsMenu.share', 'Share'),
+      copied: tOr('savedViewsMenu.copied', 'Copied'),
+      saveCurrent: tOr('savedViewsMenu.saveCurrent', 'Save current'),
+      systemViewsSection: tOr('savedViewsMenu.systemViewsSection', 'System views'),
+      personaViewsSection: tOr('savedViewsMenu.personaViewsSection', 'Persona views'),
+      customViewsSection: tOr('savedViewsMenu.customViewsSection', 'Custom views'),
+      noPersonaTitle: tOr('savedViewsMenu.noPersonaTitle', 'No persona views yet'),
+      noPersonaDescription: tOr('savedViewsMenu.noPersonaDescription', 'Save the current slice or duplicate a system view to start a personal workspace.'),
+      noViewsTitle: tOr('savedViewsMenu.noViewsTitle', 'No saved views yet'),
+      noViewsDescription: tOr('savedViewsMenu.noViewsDescription', 'Create curated filters and column layouts once save is wired for this workspace.'),
+      deletePrefix: tOr('savedViewsMenu.deletePrefix', 'Delete'),
+      copySuffix: tOr('savedViewsMenu.copySuffix', 'copy'),
+      panelLabel: tOr('savedViewsMenu.panelLabel', 'Saved views'),
+      queryPrefix: tOr('savedViewsMenu.queryPrefix', 'Query'),
+      scopePrefix: tOr('savedViewsMenu.scopePrefix', 'Scope'),
+      filterSingular: tOr('savedViewsMenu.filterSingular', 'filter'),
+      filterPlural: tOr('savedViewsMenu.filterPlural', 'filters'),
+      columnsSuffix: tOr('savedViewsMenu.columnsSuffix', 'columns'),
+      sortedByPrefix: tOr('savedViewsMenu.sortedByPrefix', 'Sorted by'),
+      densitySuffix: tOr('savedViewsMenu.densitySuffix', 'density'),
+      emptyDescription: tOr('savedViewsMenu.emptyDescription', 'No custom scope, filters, or layout saved yet.'),
+      shareViewPrefix: tOr('savedViewsMenu.shareViewPrefix', 'Workspace view'),
+      shareTypePrefix: tOr('savedViewsMenu.shareTypePrefix', 'Type'),
+      shareFiltersPrefix: tOr('savedViewsMenu.shareFiltersPrefix', 'Filters'),
+      shareColumnsPrefix: tOr('savedViewsMenu.shareColumnsPrefix', 'Columns'),
+      shareSortPrefix: tOr('savedViewsMenu.shareSortPrefix', 'Sort'),
+      shareDensityPrefix: tOr('savedViewsMenu.shareDensityPrefix', 'Density'),
+    }),
+    [tOr],
+  );
   // The panel leaves the trigger's DOM ancestry when it portals, so the
   // tenant/locale scope has to be re-stamped around it. `usePortalScope`
   // needs the anchor as state (a ref would not re-render when it lands), so
@@ -212,7 +319,6 @@ export function SavedViewsMenu({
     () => views.find((view) => view.key === activeViewKey) ?? views.find((view) => view.isDefault) ?? views[0],
     [activeViewKey, views],
   );
-  const activeViewKind = activeView ? getViewKind(activeView) : 'custom';
 
   const handleSelect = useCallback(
     (key: string) => {
@@ -233,9 +339,9 @@ export function SavedViewsMenu({
   const handleDuplicateActiveView = useCallback(() => {
     if (!activeView || !onViewSave) return;
 
-    const duplicateLabel = activeView.label.toLowerCase().endsWith(' copy')
+    const duplicateLabel = activeView.label.toLowerCase().endsWith(` ${labels.copySuffix}`)
       ? `${activeView.label} 2`
-      : `${activeView.label} copy`;
+      : `${activeView.label} ${labels.copySuffix}`;
 
     onViewSave({
       ...activeView,
@@ -246,13 +352,13 @@ export function SavedViewsMenu({
       isDefault: false,
       state: cloneViewState(activeView),
     });
-  }, [activeView, onViewSave]);
+  }, [activeView, labels.copySuffix, onViewSave]);
 
   const handleShareActiveView = useCallback(async () => {
     if (!activeView || typeof navigator === 'undefined' || !navigator.clipboard?.writeText) return;
 
     try {
-      await navigator.clipboard.writeText(buildShareSnapshot(activeView));
+      await navigator.clipboard.writeText(buildShareSnapshot(activeView, labels));
       setShareState('copied');
 
       if (shareTimerRef.current) {
@@ -266,7 +372,7 @@ export function SavedViewsMenu({
     } catch {
       setShareState('idle');
     }
-  }, [activeView]);
+  }, [activeView, labels]);
 
   const updatePanelPosition = useCallback(() => {
     const trigger = triggerRef.current;
@@ -331,6 +437,19 @@ export function SavedViewsMenu({
     setShareState('idle');
   }, [activeViewKey]);
 
+  // Close on Escape and hand focus back to the trigger (APG disclosure).
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen]);
+
   return (
     <Box style={{ position: 'relative', zIndex: isOpen ? 60 : 1 }}>
       <Box
@@ -340,8 +459,10 @@ export function SavedViewsMenu({
         className="ds-structure ds-saved-views-menu"
         ref={setTriggerRef}
         onClick={() => setIsOpen((prev) => !prev)}
-        title={activeView ? `Views: ${activeView.label}` : 'Views'}
-        aria-label={activeView ? `Views: ${activeView.label}` : 'Views'}
+        title={activeView ? `${labels.views}: ${activeView.label}` : labels.views}
+        aria-label={activeView ? `${labels.views}: ${activeView.label}` : labels.views}
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
         style={{
           ...triggerButtonStyle,
           width: 42,
@@ -384,6 +505,8 @@ export function SavedViewsMenu({
             data-part="panel"
             data-open={isOpen}
             className="ds-structure ds-saved-views-menu-panel"
+            role="dialog"
+            aria-label={labels.panelLabel}
             style={{
               position: 'fixed',
               top: panelPosition.top,
@@ -401,8 +524,8 @@ export function SavedViewsMenu({
             >
               <Flex align="start" justify="between" gap={12}>
                 <Box style={{ minWidth: 0 }}>
-                  <Text size="sm" weight="medium" style={{ display: 'block', fontSize: 14 }}>
-                    Saved views
+                  <Text data-part="header-title" size="sm" weight="medium" style={{ display: 'block' }}>
+                    {labels.headerTitle}
                   </Text>
                   <Text
                     data-part="header-description"
@@ -410,16 +533,15 @@ export function SavedViewsMenu({
                     style={{
                       display: 'block',
                       marginTop: 4,
-                      fontSize: 12,
                     }}
                   >
-                    Switch between curated workspace states without leaving the list.
+                    {labels.headerDescription}
                   </Text>
                 </Box>
                 <Flex align="center" gap={6} wrap="wrap" justify="end">
-                  <CountPill label={`${systemViews.length} system`} />
-                  <CountPill label={`${personaViews.length} persona`} />
-                  <CountPill label={`${customViews.length} custom`} />
+                  <CountPill label={`${systemViews.length} ${labels.systemSuffix}`} />
+                  <CountPill label={`${personaViews.length} ${labels.personaSuffix}`} />
+                  <CountPill label={`${customViews.length} ${labels.customSuffix}`} />
                 </Flex>
               </Flex>
 
@@ -435,7 +557,7 @@ export function SavedViewsMenu({
                     <Flex align="start" gap={10} style={{ minWidth: 0 }}>
                       <ViewGlyph isSystem={activeView.isSystem} active />
                       <Box style={{ minWidth: 0 }}>
-                        <Text size="sm" weight="medium" style={{ display: 'block' }}>
+                        <Text data-part="active-card-label" size="sm" weight="medium" style={{ display: 'block' }}>
                           {activeView.label}
                         </Text>
                         <Text
@@ -444,20 +566,19 @@ export function SavedViewsMenu({
                           style={{
                             display: 'block',
                             marginTop: 4,
-                            fontSize: 12,
                           }}
                         >
-                          {describeView(activeView)}
+                          {describeView(activeView, labels)}
                         </Text>
                       </Box>
                     </Flex>
                     <Flex align="center" gap={6} wrap="wrap" justify="end">
-                      <StatusPill label="Current" tone="primary" />
+                      <StatusPill label={labels.current} tone="primary" />
                       <StatusPill
-                        label={activeViewKind === 'system' ? 'System' : activeViewKind === 'persona' ? 'Persona' : 'Custom'}
+                        label={getViewKindLabel(activeView, labels)}
                         tone="neutral"
                       />
-                      {activeView.isDefault && <StatusPill label="Default" tone="neutral" />}
+                      {activeView.isDefault && <StatusPill label={labels.default} tone="neutral" />}
                     </Flex>
                   </Flex>
 
@@ -475,12 +596,10 @@ export function SavedViewsMenu({
                           minHeight: 32,
                           padding: '0 12px',
                           cursor: 'pointer',
-                          fontSize: 12,
-                          fontWeight: 600,
                         }}
                       >
                         <Copy style={{ width: 12, height: 12 }} />
-                        Duplicate
+                        {labels.duplicate}
                       </Box>
                     )}
 
@@ -497,12 +616,10 @@ export function SavedViewsMenu({
                           minHeight: 32,
                           padding: '0 12px',
                           cursor: 'pointer',
-                          fontSize: 12,
-                          fontWeight: 600,
                         }}
                       >
                         <Share2 style={{ width: 12, height: 12 }} />
-                        {shareState === 'copied' ? 'Copied' : 'Share'}
+                        {shareState === 'copied' ? labels.copied : labels.share}
                       </Box>
                     )}
 
@@ -522,12 +639,10 @@ export function SavedViewsMenu({
                           minHeight: 32,
                           padding: '0 12px',
                           cursor: 'pointer',
-                          fontSize: 12,
-                          fontWeight: 700,
                         }}
                       >
                         <BookmarkPlus style={{ width: 12, height: 12 }} />
-                        Save current
+                        {labels.saveCurrent}
                       </Box>
                     )}
                   </Flex>
@@ -537,26 +652,28 @@ export function SavedViewsMenu({
 
             <Box style={{ padding: '12px 12px 10px', maxHeight: 420, overflowY: 'auto' }}>
               {systemViews.length > 0 && (
-                <Section title="System views" count={systemViews.length}>
+                <Section title={labels.systemViewsSection} count={systemViews.length}>
                   {systemViews.map((view) => (
                     <ViewItem
                       key={view.key}
                       view={view}
                       isActive={view.key === activeView?.key}
                       onSelect={handleSelect}
+                      labels={labels}
                     />
                   ))}
                 </Section>
               )}
 
               {personaViews.length > 0 && (
-                <Section title="Persona views" count={personaViews.length}>
+                <Section title={labels.personaViewsSection} count={personaViews.length}>
                   {personaViews.map((view) => (
                     <ViewItem
                       key={view.key}
                       view={view}
                       isActive={view.key === activeView?.key}
                       onSelect={handleSelect}
+                      labels={labels}
                       onDelete={
                         onViewDelete
                           ? (event: React.MouseEvent) => handleDelete(event, view.key)
@@ -568,13 +685,14 @@ export function SavedViewsMenu({
               )}
 
               {customViews.length > 0 && (
-                <Section title="Custom views" count={customViews.length}>
+                <Section title={labels.customViewsSection} count={customViews.length}>
                   {customViews.map((view) => (
                     <ViewItem
                       key={view.key}
                       view={view}
                       isActive={view.key === activeView?.key}
                       onSelect={handleSelect}
+                      labels={labels}
                       onDelete={
                         onViewDelete
                           ? (event: React.MouseEvent) => handleDelete(event, view.key)
@@ -596,8 +714,8 @@ export function SavedViewsMenu({
                   <Flex align="start" gap={10}>
                     <Sparkles data-part="empty-state-icon" style={{ width: 16, height: 16, marginTop: 2 }} />
                     <Box style={{ minWidth: 0 }}>
-                      <Text size="sm" weight="medium" style={{ display: 'block' }}>
-                        No persona views yet
+                      <Text data-part="empty-state-title" size="sm" weight="medium" style={{ display: 'block' }}>
+                        {labels.noPersonaTitle}
                       </Text>
                       <Text
                         data-part="empty-state-description"
@@ -607,7 +725,7 @@ export function SavedViewsMenu({
                           marginTop: 4,
                         }}
                       >
-                        Save the current slice or duplicate a system view to start a personal workspace.
+                        {labels.noPersonaDescription}
                       </Text>
                     </Box>
                   </Flex>
@@ -631,8 +749,8 @@ export function SavedViewsMenu({
                       margin: '0 auto 8px',
                     }}
                   />
-                  <Text size="sm" weight="medium" style={{ display: 'block' }}>
-                    No saved views yet
+                  <Text data-part="empty-state-title" size="sm" weight="medium" style={{ display: 'block' }}>
+                    {labels.noViewsTitle}
                   </Text>
                   <Text
                     data-part="empty-state-description"
@@ -642,7 +760,7 @@ export function SavedViewsMenu({
                       marginTop: 4,
                     }}
                   >
-                    Create curated filters and column layouts once save is wired for this workspace.
+                    {labels.noViewsDescription}
                   </Text>
                 </Box>
               )}
@@ -670,12 +788,6 @@ function Section({
         <Text
           data-part="section-header"
           size="xs"
-          style={{
-            fontSize: 11,
-            fontWeight: 700,
-            textTransform: 'uppercase' as const,
-            letterSpacing: '0.08em',
-          }}
         >
           {title}
         </Text>
@@ -692,11 +804,12 @@ interface ViewItemProps {
   view: SavedViewsMenuEntry;
   isActive: boolean;
   onSelect: (key: string) => void;
+  labels: SavedViewsMenuLabels;
   onDelete?: (event: React.MouseEvent) => void;
 }
 
-function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
-  const kindLabel = getViewKindLabel(view);
+function ViewItem({ view, isActive, onSelect, labels, onDelete }: ViewItemProps) {
+  const kindLabel = getViewKindLabel(view, labels);
 
   return (
     <Box
@@ -716,7 +829,7 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
             minWidth: 0,
             flex: 1,
             padding: 12,
-            textAlign: 'left' as const,
+            textAlign: 'start' as const,
             cursor: 'pointer',
           }}
         >
@@ -738,8 +851,8 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
                   >
                     {view.label}
                   </Text>
-                  {isActive && <StatusPill label="Current" tone="primary" />}
-                  {view.isDefault && <StatusPill label="Default" tone="neutral" />}
+                  {isActive && <StatusPill label={labels.current} tone="primary" />}
+                  {view.isDefault && <StatusPill label={labels.default} tone="neutral" />}
                   <StatusPill label={kindLabel} tone="neutral" />
                 </Flex>
                 <Text
@@ -748,10 +861,9 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
                   style={{
                     display: 'block',
                     marginTop: 5,
-                    fontSize: 12,
                   }}
                 >
-                  {describeView(view)}
+                  {describeView(view, labels)}
                 </Text>
               </Box>
             </Flex>
@@ -773,7 +885,7 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
             type="button"
             data-part="delete"
             onClick={onDelete}
-            aria-label={`Delete ${view.label}`}
+            aria-label={`${labels.deletePrefix} ${view.label}`}
             style={{
               alignSelf: 'center',
               display: 'flex',
@@ -781,7 +893,7 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
               justifyContent: 'center',
               width: 28,
               height: 28,
-              marginRight: 8,
+              marginInlineEnd: 8,
               cursor: 'pointer',
             }}
           >
@@ -824,8 +936,6 @@ function CountPill({ label }: { label: string }) {
         minWidth: 24,
         height: 22,
         padding: '0 8px',
-        fontSize: 11,
-        fontWeight: 600,
       }}
     >
       {label}
@@ -850,8 +960,6 @@ function StatusPill({
         gap: 4,
         height: 20,
         padding: '0 8px',
-        fontSize: 11,
-        fontWeight: 600,
       }}
     >
       {tone === 'primary' ? <Star style={{ width: 10, height: 10 }} /> : null}
@@ -860,19 +968,19 @@ function StatusPill({
   );
 }
 
-function describeView(view: SavedViewsMenuEntry): string {
+function describeView(view: SavedViewsMenuEntry, labels: SavedViewsMenuLabels): string {
   const details: string[] = [];
 
-  if (view.state.query) details.push(`Query: ${view.state.query}`);
-  if (view.state.scope) details.push(`Scope: ${view.state.scope}`);
+  if (view.state.query) details.push(`${labels.queryPrefix}: ${view.state.query}`);
+  if (view.state.scope) details.push(`${labels.scopePrefix}: ${view.state.scope}`);
   if (view.state.filters?.length) {
-    details.push(`${view.state.filters.length} filter${view.state.filters.length === 1 ? '' : 's'}`);
+    details.push(`${view.state.filters.length} ${view.state.filters.length === 1 ? labels.filterSingular : labels.filterPlural}`);
   }
-  if (view.state.visibleColumns?.length) details.push(`${view.state.visibleColumns.length} columns`);
-  if (view.state.sort?.field) details.push(`Sorted by ${view.state.sort.field}`);
-  if (view.state.density) details.push(`${view.state.density} density`);
+  if (view.state.visibleColumns?.length) details.push(`${view.state.visibleColumns.length} ${labels.columnsSuffix}`);
+  if (view.state.sort?.field) details.push(`${labels.sortedByPrefix} ${view.state.sort.field}`);
+  if (view.state.density) details.push(`${view.state.density} ${labels.densitySuffix}`);
 
-  return details.length > 0 ? details.slice(0, 3).join(' • ') : 'No custom scope, filters, or layout saved yet.';
+  return details.length > 0 ? details.slice(0, 3).join(' • ') : labels.emptyDescription;
 }
 
 // Compatibility aliases for pre-Checkpoint-D names. Deprecated —

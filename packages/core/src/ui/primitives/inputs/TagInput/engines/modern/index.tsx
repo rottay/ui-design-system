@@ -27,6 +27,7 @@ import React, { useState, useCallback, useId, useRef } from 'react';
 import type { TagInputProps } from '../../contracts';
 import { TAGINPUT_DEFAULTS } from '../../contracts';
 import { Tag } from '../../../../facade';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /**
  * Modern (skin-painted) implementation of TagInput.
@@ -43,7 +44,7 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
   const {
     value = [],
     onChange,
-    placeholder = 'Type and press Enter',
+    placeholder: placeholderProp,
     maxTags,
     allowDuplicates = TAGINPUT_DEFAULTS.allowDuplicates,
     separator = TAGINPUT_DEFAULTS.separator,
@@ -60,6 +61,22 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
     validateTag,
     'aria-label': ariaLabel,
   } = props;
+
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Localized label with an English floor: when the catalogue entry has not
+   * landed yet the provider echoes the full key, which must never reach the
+   * placeholder or an aria-label.
+   */
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+    return resolved;
+  };
+
+  // Explicit prop wins; otherwise the localized placeholder with an EN floor
+  // (the pre-i18n default, kept as the floor so behavior never regresses).
+  const placeholder = placeholderProp ?? tOr('taginput.placeholder', 'Type and press Enter');
 
   // Local state tracks the text being typed before it becomes a tag
   const [inputValue, setInputValue] = useState('');

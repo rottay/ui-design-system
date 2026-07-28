@@ -29,7 +29,9 @@
  * inline `--ds-page-shell-skeleton-radius` custom property (default sm). The
  * `animation: ds-foundation-pulse` reference to the global keyframe stays inline.
  *
- * Values are transcribed verbatim from `engines/modern.tsx`.
+ * Values were transcribed verbatim from `engines/modern.tsx`; the wave R2+R3
+ * pass moved the remaining inline typography (title, subtitle, crumbs, tabs,
+ * separators) here as well, so the engine emits only structure and state.
  */
 
 /* ---- named container (W6-A): the shell root owns the width every descendant
@@ -77,7 +79,7 @@
     background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
-  animation: ds-page-header-arrive var(--ds-motion-calm, 220ms)
+  animation: ds-page-header-arrive var(--ds-motion-calm)
     var(--ds-motion-ease-out, ease-out) both;
 }
 
@@ -200,16 +202,25 @@
   );
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
   scrollbar-width: none;
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-body);
 }
 
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'] {
+  font-weight: var(--ds-font-weight-medium, 500);
+}
 .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
   color: var(--ds-color-text-muted);
+  cursor: pointer;
+  text-decoration: none;
+  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
   color: var(--ds-color-text-secondary);
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
   color: var(--ds-color-text-secondary);
+  font-weight: var(--ds-font-weight-semibold, 600);
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='false'] {
   color: var(--ds-color-text-muted);
@@ -221,6 +232,7 @@
   flex: 0 0 auto;
   align-items: center;
   color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs, 12px);
 }
 
 /* ---- back button: borderless ghost, highlighted on hover||focus. No painting
@@ -235,15 +247,30 @@
 }
 
 /* ---- tab: base (repeated data-part for the transparent 2px underline) + active
-        underline + hover (only when not active, matching the JS guard). ---- */
+        underline + hover (only when not active, matching the JS guard). Typography
+        and geometry live here (the engine owns structure/state only). ---- */
 .ds-pattern-page-shell.ds-engine-modern [data-part='tab'][data-part='tab'] {
+  position: relative;
+  min-height: var(--ds-tabs-md-height);
+  padding: var(--ds-tabs-md-padding);
   color: var(--ds-tab-color, var(--ds-color-text-muted));
+  font-size: var(--ds-tabs-md-font-size);
+  font-weight: var(--ds-tabs-item-font-weight);
+  line-height: var(--ds-line-height-body);
+  cursor: pointer;
   background: transparent;
   border: 1px solid transparent;
   border-radius: var(--ds-tabs-item-radius, var(--ds-radius-md));
+  transition:
+    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='tab'][data-active='true'] {
   color: var(--ds-tab-color-active, var(--ds-color-primary));
+  font-weight: var(--ds-tabs-item-font-weight-active);
   background: var(--ds-tabs-active-bg, var(--ds-surface-card));
   border-color: var(--ds-tabs-list-border, var(--ds-color-border-subtle));
   box-shadow: var(--ds-tabs-active-shadow, var(--ds-elevation-1));
@@ -265,10 +292,22 @@
 
 /* ---- title / subtitle ---- */
 .ds-pattern-page-shell.ds-engine-modern [data-part='title'] {
+  margin: 0;
   color: var(--ds-color-text-primary);
+  /* W6-A cqi proof consumer: the fluid ramp only resolves against a
+     `container-type` ancestor (the page-shell root). At full container width
+     this equals the prior static 24px exactly; it steps down toward 20px as
+     the shell is squeezed by a sibling rail/chat panel. */
+  font-size: var(--ds-font-size-fluid-2xl, 1.5rem);
+  font-weight: var(--ds-font-weight-bold);
+  line-height: var(--ds-line-height-display);
+  letter-spacing: var(--ds-letter-spacing-display);
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='subtitle'] {
+  margin: var(--ds-spacing-1, 4px) 0 0;
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-md);
+  line-height: var(--ds-line-height-body);
 }
 
 /* ---- separators: tab strip and the no-tabs rule (both 1px bottom border). ---- */
@@ -320,7 +359,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-page-shell.ds-engine-modern [data-part='header'],
-  .ds-pattern-page-shell.ds-engine-modern [data-part='header-icon'] {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='header-icon'],
+  .ds-pattern-page-shell.ds-engine-modern [data-part='tab'],
+  .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'] {
     transition: none;
   }
 

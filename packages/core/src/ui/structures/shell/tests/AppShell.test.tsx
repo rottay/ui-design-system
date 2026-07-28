@@ -342,4 +342,21 @@ describe('AppShell responsive contract', () => {
       expect(shellStyles).toContain(hook);
     }
   });
+
+  it('owns hover/active/reduced-motion chrome states in the skin, not the engine', () => {
+    // Wave R2+R3: the compact chrome buttons gained hover + active washes via
+    // documented escape hatches, motion rides --ds-motion-* channels, and the
+    // sidebar/main collapse transition is gated for reduced motion.
+    expect(shellStyles).toContain('[data-part="navigation-close"]:hover');
+    expect(shellStyles).toContain('[data-part="navigation-trigger"]:hover');
+    expect(shellStyles).toContain('--ds-shell-navigation-action-hover-bg');
+    expect(shellStyles).toContain('--ds-shell-navigation-action-active-bg');
+    expect(shellStyles).toContain('@media (prefers-reduced-motion: reduce)');
+
+    const { container } = renderShell(PHONE_CONTEXT);
+    const trigger = screen.getByRole('button', { name: 'Open Primary navigation' });
+    expect(trigger.style.background).toBe('');
+    expect(trigger.style.transition).toBe('');
+    expect(container.querySelector('[data-part="navigation-trigger"]')).toBe(trigger);
+  });
 });

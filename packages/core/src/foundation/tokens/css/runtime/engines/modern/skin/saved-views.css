@@ -1,5 +1,5 @@
 /**
- * Modern SavedViews skin — filled-pill engine treatment.
+ * Modern SavedViews skin — filled-pill engine treatment (Lote 2 rewrite).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
  * Tailwind's `base` layer, so layered paint loses to preflight regardless of
@@ -11,157 +11,382 @@
  * state to reach at least (0,4,0), above the tenant border floor (0,3,1).
  * Other paint needs only the root pair plus one target attribute (0,3,0).
  *
- * The solid active pill and modern-only unsaved dot are intentional engine
- * semantics. They do not have rustic equivalents.
+ * COMPOSITION LAW (Lote 2): every control is a DS primitive whose root carries
+ * the pattern's caller `data-part` (Button P-79: the caller part replaces the
+ * primitive's default root anatomy hook, so `button.css`/`input.css` rules
+ * anchored on the primitive's own parts do not paint these elements — THIS
+ * file is their single paint owner):
+ *   - `[data-part='pill-select']`  — Button (ghost): the view-select control.
+ *   - `[data-part='menu-trigger']` — Button (ghost, icon): opens the menu.
+ *   - `[data-part='create-button']`— Button (dashed): the create affordance.
+ *   - `.ds-saved-views__input` / `__create-input` — the Input primitive's
+ *     field WRAPPER (variant="unstyled"); the control inside is painted here.
+ * The management menu surface is the Dropdown primitive: its panel, items
+ * and divider are painted by `dropdown.css` — the retired
+ * `menu-panel`/`menu-item`/`menu-divider` rules are gone from this file.
  *
  * The loading state renders the Spinner primitive's modern engine, so its ring
  * paint and spin cadence live in `skin/spinner.css` alone. This file owns no
  * spinner rule and no spin keyframe: one spinner contract, one place.
  */
 
-.ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part="input"],
-.ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part="create-input"] {
-  border-radius: var(--ds-radius-sm);
-  background: var(--ds-surface-inset);
-  color: inherit;
-  outline: none;
-  box-shadow: none;
+/* ---- root: the scrollable bar (geometry was engine inline styles). ---- */
+.ds-pattern-saved-views.ds-engine-modern[data-part='root'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-saved-views-gap, 6px);
+  min-block-size: var(--ds-saved-views-bar-min-height, 40px);
+  padding-inline: var(--ds-saved-views-bar-padding-inline, 8px);
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* Narrow-composition probe (tabs.css `ds-tabs` idiom): the compact rhythm
+     is driven by the bar's own width, never the viewport. */
+  container: ds-saved-views / inline-size;
 }
 
-.ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part="input"][data-part="input"],
-.ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part="create-input"][data-part="create-input"] {
-  border: 1px solid var(--ds-color-border);
+.ds-pattern-saved-views.ds-engine-modern[data-part='root']::-webkit-scrollbar {
+  display: none;
 }
 
-.ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part="input"]:focus,
-.ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part="create-input"]:focus {
-  border-color: var(--ds-focus-ring-color);
-  box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color);
+.ds-pattern-saved-views.ds-engine-modern[data-part='root'][data-loading='true'] {
+  justify-content: center;
 }
 
+@container ds-saved-views (max-width: 420px) {
+  .ds-pattern-saved-views.ds-engine-modern[data-part='root'] {
+    gap: var(--ds-saved-views-gap-compact, 4px);
+    padding-inline: var(--ds-saved-views-bar-padding-inline-compact, 4px);
+  }
+}
+
+/* ---- pill shell: the painted surface + drag source (layout element; the
+        select action is the Button inside it — never a clickable div). ---- */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill[data-part="pill"] {
+  .ds-saved-views__pill[data-part='pill'] {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--ds-saved-views-pill-gap, 6px);
+  padding-block: var(--ds-saved-views-pill-padding-block, 4px);
+  padding-inline: var(--ds-saved-views-pill-padding-inline, 12px);
   color: var(--ds-color-text);
+  font-size: var(--ds-saved-views-pill-font-size, 13px);
+  line-height: var(--ds-saved-views-pill-line-height, 20px);
   background: transparent;
   border-radius: var(--ds-radius-full, 9999px);
   box-shadow: none;
+  user-select: none;
+  transition:
+    background var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill[data-part="pill"][data-part="pill"] {
+  .ds-saved-views__pill[data-part='pill'][data-part='pill'] {
   border: 1px solid var(--ds-color-border);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill[data-part="pill"][data-active="true"] {
+  .ds-saved-views__pill[data-part='pill'][data-active='true'] {
   color: var(--ds-color-primary-foreground);
   background: var(--ds-color-primary);
   border-color: var(--ds-color-primary);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill[data-part="pill"][data-active="false"]:hover {
+  .ds-saved-views__pill[data-part='pill'][data-active='false']:hover {
   background: var(--ds-surface-highlight);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill[data-part="pill"][data-drop-target="true"] {
-  box-shadow: inset 0 0 0 2px var(--ds-color-primary);
+  .ds-saved-views__pill[data-part='pill'][data-dragging='true'] {
+  opacity: 0.4;
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__unsaved-dot[data-part="unsaved-dot"] {
+  .ds-saved-views__pill[data-part='pill'][data-drop-target='true'] {
+  box-shadow: inset 0 0 0 2px var(--ds-color-primary);
+}
+
+/* ---- the select Button inside the pill: chrome-free, fills the surface so
+        the whole pill stays clickable; the ink follows the shell. ---- */
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__pill [data-part='pill-select'] {
+  display: inline-flex;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: var(--ds-saved-views-pill-font-weight, 400);
+  line-height: inherit;
+  text-align: start;
+  white-space: nowrap;
+  cursor: pointer;
+  appearance: none;
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__pill [data-part='pill-select'][data-active='true'] {
+  font-weight: var(--ds-saved-views-pill-font-weight-active, var(--ds-font-weight-semibold, 600));
+}
+
+/* Long view names truncate with the "…" affordance instead of stretching the
+   bar (content-integrity law; the root scroll stays the many-views one). */
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__pill [data-part='pill-select'] [data-part='label'] {
+  min-inline-size: 0;
+  max-inline-size: var(--ds-saved-views-pill-label-max-width, 14rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__pill [data-part='pill-select']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+  border-radius: var(--ds-saved-views-focus-ring-radius, var(--ds-radius-sm));
+}
+
+/* ---- drag grip: quiet chrome, grab affordance. ---- */
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__drag-handle[data-part='drag-handle'] {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  opacity: var(--ds-saved-views-drag-handle-opacity, 0.4);
+  cursor: grab;
+}
+
+/* ---- unsaved dot + default star (geometry was engine inline styles). ---- */
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__unsaved-dot[data-part='unsaved-dot'] {
+  display: inline-block;
+  flex-shrink: 0;
+  inline-size: var(--ds-saved-views-unsaved-dot-size, 6px);
+  block-size: var(--ds-saved-views-unsaved-dot-size, 6px);
   border-radius: 50%;
   background: var(--ds-color-primary);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__unsaved-dot[data-part="unsaved-dot"][data-active="true"] {
+  .ds-saved-views__unsaved-dot[data-part='unsaved-dot'][data-active='true'] {
   background: var(--ds-color-primary-foreground);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__default-star[data-part="default-star"] {
+  .ds-saved-views__default-star[data-part='default-star'] {
+  flex-shrink: 0;
   color: var(--ds-color-warning);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__default-star[data-part="default-star"][data-active="true"] {
+  .ds-saved-views__default-star[data-part='default-star'][data-active='true'] {
   color: var(--ds-color-primary-foreground);
 }
 
+/* ---- menu trigger: icon Button, revealed on pill hover / while open (the
+        reveal is skin paint now — the engine no longer tracks hover state). ---- */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part="menu-trigger"] {
+  .ds-saved-views__menu-trigger[data-part='menu-trigger'] {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-saved-views-menu-trigger-size, 20px);
+  block-size: var(--ds-saved-views-menu-trigger-size, 20px);
+  padding: 0;
   border: none;
   background: transparent;
   border-radius: var(--ds-radius-sm);
   color: inherit;
+  cursor: pointer;
+  opacity: 0;
+  transition:
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part="menu-trigger"][data-active="false"]:hover {
+  .ds-saved-views__pill:hover .ds-saved-views__menu-trigger[data-part='menu-trigger'],
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-open='true'],
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__menu-trigger[data-part='menu-trigger']:focus-visible {
+  opacity: 1;
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='false']:hover {
   background: var(--ds-surface-highlight);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part="menu-trigger"][data-active="true"]:hover {
+  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='true']:hover {
   background: var(--ds-color-alpha-white-20);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-panel[data-part="menu-panel"] {
-  background: var(--ds-surface-card);
-  border-radius: var(--ds-radius-md);
-  box-shadow: var(--ds-elevation-3);
+  .ds-saved-views__menu-trigger[data-part='menu-trigger']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* ---- inputs (rename + create): the primitive's field wrapper carries the
+        pattern class; the unstyled control inside is painted here. ---- */
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__input[data-part='field'],
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__create-input[data-part='field'] {
+  flex-shrink: 0;
+  inline-size: var(--ds-saved-views-input-width, 130px);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-panel[data-part="menu-panel"][data-part="menu-panel"] {
+  .ds-saved-views__input[data-part='field'] .rottay-input,
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__create-input[data-part='field'] .rottay-input {
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: var(--ds-saved-views-input-height, 26px);
+  padding-block: 0;
+  padding-inline: var(--ds-saved-views-input-padding-inline, 8px);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-inset);
+  color: inherit;
+  font-size: var(--ds-saved-views-input-font-size, 13px);
+  outline: none;
+  box-shadow: none;
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__input[data-part='field'][data-part='field'] .rottay-input,
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__create-input[data-part='field'][data-part='field'] .rottay-input {
   border: 1px solid var(--ds-color-border);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-item[data-part="menu-item"] {
-  border: none;
-  background: transparent;
-  border-radius: var(--ds-radius-sm);
-  color: inherit;
+  .ds-saved-views__input[data-part='field'] .rottay-input:focus,
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__create-input[data-part='field'] .rottay-input:focus {
+  border-color: var(--ds-focus-ring-color);
+  box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color);
 }
 
+/* ---- create form wrapper (geometry was engine inline styles). ---- */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-item[data-part="menu-item"]:hover {
-  background: var(--ds-surface-highlight);
+  .ds-saved-views__create-form[data-part='create-form'] {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--ds-saved-views-create-form-gap, 4px);
+  padding-block: var(--ds-saved-views-create-form-padding-block, 4px);
 }
 
+/* ---- create button: the dashed quiet affordance. ---- */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-item[data-part="menu-item"][data-danger="true"] {
-  color: var(--ds-color-error);
-}
-
-.ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-divider[data-part="menu-divider"] {
-  background: var(--ds-color-border);
-}
-
-.ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-button[data-part="create-button"] {
+  .ds-saved-views__create-button[data-part='create-button'] {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--ds-saved-views-create-button-gap, 4px);
+  padding-block: var(--ds-saved-views-create-button-padding-block, 4px);
+  padding-inline: var(--ds-saved-views-create-button-padding-inline, 10px);
   background: transparent;
   border-radius: var(--ds-radius-full, 9999px);
   color: var(--ds-color-text-muted);
+  font-size: var(--ds-saved-views-pill-font-size, 13px);
+  font-weight: var(--ds-saved-views-create-button-font-weight, var(--ds-font-weight-medium, 500));
+  cursor: pointer;
+  transition:
+    background var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-button[data-part="create-button"][data-part="create-button"] {
+  .ds-saved-views__create-button[data-part='create-button'][data-part='create-button'] {
   border: 1px dashed var(--ds-color-border);
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-button[data-part="create-button"]:hover {
+  .ds-saved-views__create-button[data-part='create-button']:hover {
   background: var(--ds-surface-highlight);
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__create-button[data-part='create-button']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* ---- coarse pointers: the pill and the create button meet the physical
+        44px floor; the 20px icon trigger keeps its visual size and grows a
+        transparent hit area instead (density contract). ---- */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__pill[data-part='pill'],
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__create-button[data-part='create-button'] {
+    min-block-size: var(--ds-saved-views-touch-target-min, 44px);
+  }
+
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__menu-trigger[data-part='menu-trigger'] {
+    position: relative;
+    /* A hidden trigger is useless on touch: always visible on coarse. */
+    opacity: 1;
+  }
+
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__menu-trigger[data-part='menu-trigger']::after {
+    content: '';
+    position: absolute;
+    inset: calc((var(--ds-saved-views-menu-trigger-size, 20px) - var(--ds-saved-views-touch-target-min, 44px)) / 2);
+  }
+}
+
+/* ---- reduced motion: every transition collapses. ---- */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__pill[data-part='pill'],
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__menu-trigger[data-part='menu-trigger'],
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__create-button[data-part='create-button'],
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__input[data-part='field'] .rottay-input,
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__create-input[data-part='field'] .rottay-input {
+    transition: none;
+  }
+}
+
+/* ---- forced colors: the pill frame and the active pill survive. ---- */
+@media (forced-colors: active) {
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__pill[data-part='pill'][data-part='pill'],
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__create-button[data-part='create-button'][data-part='create-button'] {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__pill[data-part='pill'][data-active='true'] {
+    background: Highlight;
+    color: HighlightText;
+  }
 }

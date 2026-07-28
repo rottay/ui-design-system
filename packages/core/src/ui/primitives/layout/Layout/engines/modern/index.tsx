@@ -44,6 +44,7 @@ import type {
   LayoutFooterProps,
 } from '../../contracts';
 import { LAYOUT_DEFAULTS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /**
  * Modern Layout shell.
@@ -131,6 +132,11 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
     // Controlled prop takes priority over internal state
     const isCollapsed = controlledCollapsed ?? internalCollapsed;
 
+    /* Localized trigger name (components catalog, English floor; the catalog
+       keys are a pending coordinator request — the tOr fallback is the
+       documented floor until they land). */
+    const translation = useOptionalTranslation('components');
+
     const handleToggle = () => {
       const newCollapsed = !isCollapsed;
       // Only update internal state in uncontrolled mode
@@ -144,6 +150,8 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
     // DS tokens: surface-panel for dark sidebar, surface-card for light.
     // Width stays inline (runtime value); shrink/overflow/collapse transition
     // and the trigger chrome are skin-owned (`layout.css`).
+    const collapseLabel = translation?.tOr('layout.collapse_sidebar', 'Collapse sidebar') ?? 'Collapse sidebar';
+    const expandLabel = translation?.tOr('layout.expand_sidebar', 'Expand sidebar') ?? 'Expand sidebar';
     return (
       <aside
         ref={ref}
@@ -163,8 +171,14 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
             onClick={handleToggle}
             data-part="trigger"
             data-collapsed={isCollapsed ? 'true' : 'false'}
+            aria-label={isCollapsed ? expandLabel : collapseLabel}
+            aria-expanded={!isCollapsed}
           >
-            {trigger ?? (isCollapsed ? '→' : '←')}
+            {trigger ?? (
+              /* The directional glyph mirrors in RTL via the skin's
+                 `[dir='rtl']` rule on this part. */
+              <span data-part="trigger-icon" aria-hidden="true">{isCollapsed ? '→' : '←'}</span>
+            )}
           </button>
         )}
       </aside>

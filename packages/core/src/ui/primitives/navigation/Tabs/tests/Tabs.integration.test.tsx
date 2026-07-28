@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 
 import { renderWithEngine, STABLE_ENGINES } from '../../../../../tooling/testing/helpers/engine';
 
@@ -27,7 +27,9 @@ describe('Tabs integration', () => {
     renderWithEngine(<Tabs engine="rustic" items={items} defaultActiveKey="overview" />, 'rustic');
 
     const overviewTab = await screen.findByRole('tab', { name: 'Overview' }, { timeout: 10000 });
-    overviewTab.focus();
+    act(() => {
+      overviewTab.focus();
+    });
     fireEvent.keyDown(overviewTab, { key: 'ArrowRight' });
 
     expect(screen.getByRole('tab', { name: 'Details' })).toHaveFocus();
@@ -49,7 +51,9 @@ describe('Tabs integration', () => {
     expect(root).toHaveAttribute('data-has-icons', 'false');
     expect(root).toHaveAttribute('data-active-key', 'overview');
     expect(overviewTab.querySelector('[data-part="tab-label"]')).not.toBeNull();
-    overviewTab.focus();
+    act(() => {
+      overviewTab.focus();
+    });
     fireEvent.keyDown(overviewTab, { key: 'End' });
 
     // End should skip the disabled tab and land on the last enabled one.
@@ -71,7 +75,9 @@ describe('Tabs integration', () => {
     );
 
     const overviewTab = await screen.findByRole('tab', { name: 'Overview' });
-    overviewTab.focus();
+    act(() => {
+      overviewTab.focus();
+    });
     fireEvent.keyDown(overviewTab, { key: 'ArrowRight' });
 
     const detailsTab = screen.getByRole('tab', { name: 'Details' });
@@ -142,7 +148,9 @@ describe('Tabs integration', () => {
     fireEvent.click(loadingTab);
     expect(onChange).not.toHaveBeenCalled();
 
-    screen.getByRole('tab', { name: 'Overview' }).focus();
+    act(() => {
+      screen.getByRole('tab', { name: 'Overview' }).focus();
+    });
     fireEvent.keyDown(screen.getByRole('tab', { name: 'Overview' }), {
       key: 'ArrowRight',
     });
@@ -173,7 +181,9 @@ describe('Tabs integration', () => {
     expect(root).toHaveAttribute('data-direction', 'rtl');
 
     const overviewTab = screen.getByRole('tab', { name: 'Overview' });
-    overviewTab.focus();
+    act(() => {
+      overviewTab.focus();
+    });
     fireEvent.keyDown(overviewTab, { key: 'ArrowLeft' });
     expect(screen.getByRole('tab', { name: 'Details' })).toHaveFocus();
   });

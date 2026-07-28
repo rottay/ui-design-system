@@ -33,6 +33,7 @@ import {
   useDirectionalViewTransition,
 } from '@/graphics/motion/react/runtime';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import {
   generateResponsiveCSS,
   isResponsiveValue,
@@ -179,6 +180,23 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
 
   const tabsId = useId().replace(/:/g, '');
   const recipe = canonicalRecipe(type);
+
+  // Chrome copy: an explicit `accessibilityLabels` entry always wins, then the
+  // `components.tabs.*` catalogue, then the documented English floor. Without
+  // a provider the optional hook is null and the floor answers directly.
+  const i18n = useOptionalTranslation('components');
+  const chromeLabels = {
+    previous:
+      accessibilityLabels?.previous ??
+      i18n?.tOr('tabs.previous', 'Previous tabs') ??
+      'Previous tabs',
+    next:
+      accessibilityLabels?.next ?? i18n?.tOr('tabs.next', 'Next tabs') ?? 'Next tabs',
+    more:
+      accessibilityLabels?.more ?? i18n?.tOr('tabs.more', 'More tabs') ?? 'More tabs',
+    loading:
+      accessibilityLabels?.loading ?? i18n?.tOr('tabs.loading', 'Loading') ?? 'Loading',
+  };
   const scalarSize = scalarOrUndefined(sizeProp) ?? 'md';
   const responsiveSize = isResponsiveValue<TabsSize>(sizeProp)
     ? sizeProp
@@ -436,11 +454,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
       <button
         type="button"
         data-part={isPrevious ? 'overflow-previous' : 'overflow-next'}
-        aria-label={
-          isPrevious
-            ? (accessibilityLabels?.previous ?? 'Previous tabs')
-            : (accessibilityLabels?.next ?? 'Next tabs')
-        }
+        aria-label={isPrevious ? chromeLabels.previous : chromeLabels.next}
         disabled={disabled}
         onClick={() => scrollRail(isPrevious ? -1 : 1)}
       >
@@ -587,7 +601,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
             <button
               type="button"
               data-part="overflow-more"
-              aria-label={accessibilityLabels?.more ?? 'More tabs'}
+              aria-label={chromeLabels.more}
             >
               <NavigationMoreIcon decorative size="sm" />
             </button>
@@ -604,7 +618,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
                 {item.label}
               </React.Fragment>
             ))}{' '}
-            {accessibilityLabels?.loading ?? 'Loading'}
+            {chromeLabels.loading}
           </>
         ) : null}
       </span>

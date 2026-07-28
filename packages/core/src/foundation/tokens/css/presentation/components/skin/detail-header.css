@@ -96,7 +96,7 @@
   transition:
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
-  animation: ds-detail-header-enter var(--ds-motion-calm, 220ms) var(--ds-motion-ease-out, ease-out) both;
+  animation: ds-detail-header-enter var(--ds-motion-calm) var(--ds-motion-ease-out, ease-out) both;
   container-type: inline-size;
   container-name: ds-detail-header;
 }
@@ -141,6 +141,12 @@
   transform: translateY(-1px);
 }
 
+/* keyboard focus: the back button is a Flex inside an <a>, so the ring lands
+   on the chip when the anchor is focus-visible */
+.ds-structure.ds-detail-header a:focus-visible [data-part='back-button'] {
+  box-shadow: var(--ds-detail-header-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
+}
+
 /* ─── avatar (image + initials variants) ───────────────────────────────────── */
 
 .ds-structure.ds-detail-header [data-part='avatar'] {
@@ -148,7 +154,7 @@
   box-shadow:
     0 0 0 4px color-mix(in srgb, var(--ds-surface-card) 78%, transparent),
     0 12px 30px -18px color-mix(in srgb, var(--ds-color-text-primary) 42%, transparent);
-  transition: transform var(--ds-motion-normal, 200ms) var(--ds-motion-ease-spring, ease-out);
+  transition: transform var(--ds-motion-normal) var(--ds-motion-ease-spring, ease-out);
 }
 .ds-structure.ds-detail-header [data-part='avatar'][data-variant='initials'] {
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent);
@@ -166,8 +172,23 @@
 .ds-structure.ds-detail-header [data-part='eyebrow'][data-part='eyebrow'][data-part='eyebrow'] {
   color: var(--ds-color-text-muted);
 }
+/* the title is a `Box as="h1"` (NOT typography), so its display type lives here
+   and wins unlayered at (0,3,0); the per-archetype size keys on the stamped
+   data-archetype (editorial 34 / technical 30 / control+governance 32). */
 .ds-structure.ds-detail-header [data-part='title'] {
   color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-detail-header-title-size, 32px);
+  font-weight: var(--ds-detail-header-title-weight, 720);
+  letter-spacing: var(--ds-detail-header-title-tracking, -0.04em);
+  line-height: var(--ds-detail-header-title-leading, 1.02);
+  text-wrap: balance;
+}
+.ds-structure.ds-detail-header [data-part='title'][data-archetype='editorial'] {
+  font-size: var(--ds-detail-header-title-size-editorial, 34px);
+}
+.ds-structure.ds-detail-header [data-part='title'][data-archetype='technical'] {
+  font-size: var(--ds-detail-header-title-size-technical, 30px);
 }
 .ds-structure.ds-detail-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
   color: var(--ds-color-text-secondary);
@@ -288,6 +309,13 @@
   background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
   border-color: color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
   transform: translateY(-1px);
+}
+
+/* APG tab keyboard focus — the tab is focusable (tabIndex), so the ring must
+   be visible on both active and inactive tabs. */
+.ds-structure.ds-detail-header [data-part='tab']:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-detail-header-tab-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
 }
 
 .ds-structure.ds-detail-header [data-part='tab-icon'][data-active='true'] {

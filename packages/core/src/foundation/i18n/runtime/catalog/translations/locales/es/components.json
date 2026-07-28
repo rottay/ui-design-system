@@ -116,7 +116,12 @@
     "placeholder": "Selecciona una hora",
     "now": "Ahora",
     "clear": "Limpiar",
-    "ok": "OK"
+    "ok": "OK",
+    "hours_label": "H",
+    "minutes_label": "Min",
+    "seconds_label": "Seg",
+    "start_time": "Hora de inicio",
+    "end_time": "Hora de fin"
   },
   "search": {
     "placeholder": "Buscar...",
@@ -291,6 +296,52 @@
     "topLabel": "Acciones superiores",
     "bottomLabel": "Acciones inferiores"
   },
+  "alertDialog": {
+    "cancel": "Cancelar"
+  },
+  "appShell": {
+    "navigation": {
+      "label": "Navegación",
+      "open": "Abrir {label}",
+      "close": "Cerrar {label}"
+    },
+    "skipToContent": {
+      "label": "Saltar al contenido principal"
+    }
+  },
+  "approvalWorkflow": {
+    "status": {
+      "pending": "Pendiente",
+      "approved": "Aprobado",
+      "rejected": "Rechazado",
+      "escalated": "Escalado",
+      "skipped": "Omitido"
+    },
+    "action": {
+      "approve": "Aprobar",
+      "reject": "Rechazar",
+      "escalate": "Escalar"
+    }
+  },
+  "autocomplete": {
+    "not_found": "Sin resultados",
+    "clear": "Limpiar"
+  },
+  "calendarView": {
+    "today": "Hoy",
+    "previousMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente",
+    "viewMonth": "Mes",
+    "viewWeek": "Semana",
+    "viewDay": "Día",
+    "overflowMore": "+{count} más"
+  },
+  "cascader": {
+    "placeholder": "Seleccionar",
+    "search_placeholder": "Buscar...",
+    "not_found": "Sin datos",
+    "clear": "Limpiar"
+  },
   "stepper": {
     "navigation": "Pasos del progreso"
   },
@@ -409,6 +460,85 @@
   "checkbox": {
     "group": "Grupo de casillas de verificación"
   },
+  "comment_thread": {
+    "submit": "Comentar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "reply": "Responder",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "edited": "(editado)",
+    "empty": "Aún no hay comentarios",
+    "composer_placeholder": "Escribe un comentario...",
+    "reply_placeholder": "Escribe una respuesta...",
+    "just_now": "ahora mismo",
+    "minutes_ago": "hace {count} min",
+    "hours_ago": "hace {count} h",
+    "days_ago": "hace {count} d"
+  },
+  "confirmDialog": {
+    "confirm": "Confirmar",
+    "cancel": "Cancelar"
+  },
+  "environmentToggle": {
+    "select": "Seleccionar",
+    "banner": "Estás viendo el entorno {name}",
+    "confirmTitle": "Cambiar a {name}",
+    "cancel": "Cancelar"
+  },
+  "fileManager": {
+    "root": "Raíz",
+    "upload": "Subir",
+    "deleteSelected": "Eliminar ({count})",
+    "rename": "Renombrar",
+    "delete": "Eliminar",
+    "switchToList": "Cambiar a lista",
+    "switchToGrid": "Cambiar a cuadrícula",
+    "newNamePrompt": "Nuevo nombre:",
+    "empty": "No hay archivos ni carpetas",
+    "columnName": "Nombre",
+    "columnSize": "Tamaño",
+    "columnModified": "Modificado",
+    "columnActions": "Acciones"
+  },
+  "filterPanel": {
+    "apply": "Aplicar",
+    "clearAll": "Limpiar todo",
+    "collapse": "Contraer filtros",
+    "expand": "Expandir filtros",
+    "rangeTo": "a",
+    "min": "Mín",
+    "max": "Máx",
+    "selectPlaceholder": "Seleccionar..."
+  },
+  "filter_builder": {
+    "add_rule": "Añadir regla",
+    "add_group": "Añadir grupo",
+    "add_filter": "Añadir filtro",
+    "clear_all": "Limpiar todo",
+    "remove_rule": "Eliminar regla",
+    "remove_group": "Eliminar grupo",
+    "where": "Donde",
+    "and": "Y",
+    "or": "O",
+    "range_from": "Desde",
+    "range_to": "Hasta",
+    "range_and": "y",
+    "value_placeholder": "Valor",
+    "select_placeholder": "Seleccionar...",
+    "value_label": "Valor del filtro",
+    "field_label": "Campo del filtro",
+    "operator_label": "Operador del filtro"
+  },
+  "form_builder": {
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "step_counter": "Paso {current} de {total}"
+  },
+  "layout": {
+    "collapse_sidebar": "Contraer barra lateral",
+    "expand_sidebar": "Expandir barra lateral"
+  },
   "radio": {
     "group": "Grupo de botones de opción"
   },
@@ -433,5 +563,86 @@
     "export": "Exportar",
     "active": "activos",
     "clearAll": "Limpiar todo"
+  },
+  "liveFeed": {
+    "refresh": "Actualizar",
+    "loadMore": "Cargar más",
+    "newItem": "elemento nuevo",
+    "newItems": "elementos nuevos",
+    "empty": "Sin elementos"
+  },
+  "notificationCenter": {
+    "title": "Notificaciones",
+    "markAllRead": "Marcar todo leído",
+    "clearAll": "Limpiar todo",
+    "empty": "Sin notificaciones",
+    "dismiss": "Descartar",
+    "justNow": "ahora mismo",
+    "minutesAgo": "hace {count} min",
+    "hoursAgo": "hace {count} h",
+    "daysAgo": "hace {count} d"
+  },
+  "popconfirm": {
+    "ok": "Sí",
+    "cancel": "No"
+  },
+  "savedViews": {
+    "rename": "Renombrar",
+    "duplicate": "Duplicar",
+    "delete": "Eliminar",
+    "options": "opciones",
+    "unsavedChanges": "Cambios sin guardar"
+  },
+  "step_wizard": {
+    "next": "Siguiente",
+    "prev": "Atrás",
+    "complete": "Completar",
+    "skip": "Omitir",
+    "progress": "Paso {current} de {total}: {title}",
+    "validation_default": "Completá este paso antes de continuar."
+  },
+  "taginput": {
+    "placeholder": "Escribe y presiona Enter"
+  },
+  "tenantPreview": {
+    "colorPalette": "Paleta de color",
+    "componentPreview": "Vista previa de componentes",
+    "buttons": "Botones",
+    "card": "Tarjeta",
+    "input": "Campo de texto",
+    "badges": "Insignias",
+    "table": "Tabla",
+    "primary": "Primario",
+    "secondary": "Secundario",
+    "outlined": "Contorno",
+    "default": "Por defecto",
+    "inputPlaceholder": "Escribe algo...",
+    "sampleCardTitle": "Título de tarjeta de muestra",
+    "sampleCardBody": "Esta tarjeta demuestra la marca del tenant aplicada a un componente contenedor.",
+    "badgeActive": "Activo",
+    "badgePending": "Pendiente",
+    "badgeDraft": "Borrador",
+    "colName": "Nombre",
+    "colStatus": "Estado",
+    "colAmount": "Monto",
+    "personalityLabel": "Personalidad: {preset}",
+    "yes": "Sí",
+    "no": "No",
+    "disabled": "Desactivado",
+    "tileAnimation": "Animación",
+    "tileIntensity": "Intensidad",
+    "tileCardElevation": "Elevación de tarjeta",
+    "tileCardBorder": "Borde de tarjeta",
+    "tileBadgeShape": "Forma de insignia",
+    "tileLabelStyle": "Estilo de etiqueta",
+    "tileHoverLift": "Elevación al pasar",
+    "tileEdgeAccent": "Acento de borde"
+  },
+  "workspaceSwitcher": {
+    "switch": "Cambiar de espacio de trabajo",
+    "panel": "Espacios de trabajo",
+    "select": "Seleccionar espacio de trabajo",
+    "create": "Crear espacio de trabajo",
+    "settings": "Configuración de"
   }
 }

@@ -1,5 +1,6 @@
 /**
- * Modern Spinner skin (WO-SKIN-03 checkpoint S).
+ * Modern Spinner skin (R2+R3 ownership pass; supersedes the WO-SKIN-03
+ * checkpoint-S split).
  *
  * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
  * layer and loses to preflight; unlayered outranks it and still yields to the
@@ -8,15 +9,18 @@
  * SCOPE ROOT carries `rottay-spinner rottay-spinner--modern` + `data-part='root'`;
  * the ring is `[data-part='indicator']`, the caption `[data-part='label']`.
  *
- * SPECIFICITY (P-48): the ring paints a border COLOR (track + colored top), so
- * its rule reaches (0,4,0) via the two root classes + the repeated
+ * OWNERSHIP: ring diameter and stroke per `data-size`, the spin cadence and
+ * the label typography all live here — the engine stamps no inline style.
+ * The cadence rides --ds-motion-slow, which the motion authority zeroes under
+ * reduced motion; the explicit media guard below is the second net.
+ *
+ * SPECIFICITY (P-48): the ring paints a border COLOR (track + colored head),
+ * so its rule reaches (0,4,0) via the two root classes + the repeated
  * `[data-part='indicator']`, clearing the tenant `* { border-color }` floor
  * (0,3,1). The label's `color` is non-border and wins unlayered at (0,3,0).
  *
- * RUNTIME: the ring WIDTH varies by `size` (2px/3px) so it rides the
- * `--ds-spinner-ring-width` custom-property hatch stamped inline; the shorthand
- * keeps width+style+color atomic (an undefined var would drop the whole
- * declaration). Values transcribed verbatim from `engines/modern.tsx`.
+ * RTL: the secondary arc segment uses the logical `border-inline-end-color`
+ * so the resting arc mirrors with the document direction.
  */
 
 @keyframes ds-spinner-modern-spin {
@@ -28,8 +32,8 @@
   }
 }
 
-/* Root layout (was inline in the engine): column stack with a token gap so
-   density retunes the indicator/label rhythm from one place. */
+/* Root layout: column stack with a token gap so density retunes the
+   indicator/label rhythm from one place. */
 .rottay-spinner.rottay-spinner--modern[data-part='root'] {
   display: flex;
   flex-direction: column;
@@ -38,14 +42,45 @@
 }
 
 .rottay-spinner.rottay-spinner--modern [data-part='indicator'][data-part='indicator'] {
-  border: var(--ds-spinner-ring-width) solid var(--ds-color-border);
+  display: inline-block;
+  border: var(--ds-spinner-ring-width, 2px) solid var(--ds-color-border);
   border-top-color: var(--ds-color-primary);
   /* A soft second segment gives the sweep premium depth instead of a flat
-     single-pixel head. */
-  border-right-color: color-mix(in srgb, var(--ds-color-primary) 45%, var(--ds-color-border));
+     single-pixel head. Logical, so the resting arc mirrors under RTL. */
+  border-inline-end-color: color-mix(in srgb, var(--ds-color-primary) 45%, var(--ds-color-border));
   border-radius: 50%;
+  animation: ds-spinner-modern-spin var(--ds-motion-slow) linear infinite;
+}
+
+/* Ring geometry per size: diameter + stroke, both tenant-tunable. */
+.rottay-spinner.rottay-spinner--modern[data-size='sm'] [data-part='indicator'][data-part='indicator'] {
+  inline-size: var(--ds-spinner-sm-size, 20px);
+  block-size: var(--ds-spinner-sm-size, 20px);
+  --ds-spinner-ring-width: 2px;
+}
+.rottay-spinner.rottay-spinner--modern[data-size='md'] [data-part='indicator'][data-part='indicator'] {
+  inline-size: var(--ds-spinner-md-size, 24px);
+  block-size: var(--ds-spinner-md-size, 24px);
+  --ds-spinner-ring-width: 2px;
+}
+.rottay-spinner.rottay-spinner--modern[data-size='lg'] [data-part='indicator'][data-part='indicator'] {
+  inline-size: var(--ds-spinner-lg-size, 32px);
+  block-size: var(--ds-spinner-lg-size, 32px);
+  --ds-spinner-ring-width: 3px;
+}
+.rottay-spinner.rottay-spinner--modern[data-size='xl'] [data-part='indicator'][data-part='indicator'] {
+  inline-size: var(--ds-spinner-xl-size, 40px);
+  block-size: var(--ds-spinner-xl-size, 40px);
+  --ds-spinner-ring-width: 3px;
 }
 
 .rottay-spinner.rottay-spinner--modern [data-part='label'] {
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-spinner-label-size, var(--ds-font-size-sm, 14px));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-spinner.rottay-spinner--modern [data-part='indicator'][data-part='indicator'] {
+    animation: none;
+  }
 }

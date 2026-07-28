@@ -16,13 +16,13 @@ import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
 import { describe, expect, it } from 'vitest';
 
-import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
 import {
-  renderVerticalArtifact,
+  renderFirstPartyArtifact,
   FIRST_PARTY_ARTIFACT_SPECS,
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
   GENERATED_ARTIFACT_BANNER,
 } from '@/infrastructure/compilers/runtime/tenant-css';
+import { brandModeSelector } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
 import {
   bithireBrandTheme,
   evntoBrandTheme,
@@ -44,17 +44,12 @@ function generate(slug: string): string {
   if (!spec) throw new Error(`no artifact spec for ${slug}`);
   const brandTheme = BRAND_THEMES[slug];
   if (!brandTheme) throw new Error(`no BrandTheme registered in this test for slug ${slug}`);
-  const compiled = compileBrandTheme({ brandTheme, tenantSlug: slug });
-  return renderVerticalArtifact({
-    tenantSlug: spec.slug,
-    verticalKey: spec.verticalKey,
-    authoredThemePath: spec.authoredThemePath,
-    displayName: spec.displayName,
-    selector: spec.selector,
-    compiledCssVariables: compiled.cssVariables,
+  return renderFirstPartyArtifact({
+    spec,
+    brandTheme,
     extensionCss: readFileSync(resolve(ARTIFACTS_DIR, `${slug}/_source/extension.css`), 'utf8'),
     regenerateCommand: FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
-  });
+  }).css;
 }
 
 function countInRuleSelectors(css: string, fragments: readonly string[]): number {
@@ -96,7 +91,20 @@ describe('first-party generated artifact scope ownership', () => {
         resolve(ARTIFACTS_DIR, `${spec.slug}/_source/extension.css`),
         'utf8',
       );
-      const authoredSelectors = `${spec.selector} {}\n${extension}`;
+      // The authored owner arms are the base block's selector, one block per
+      // mode the BrandTheme authors, and the extension's own rules. A mode
+      // block is authored too — in `BrandTheme.modes` rather than the
+      // extension — so it counts here or the projection would look like it
+      // invented an owner.
+      const modeSelectors = (BRAND_THEMES[spec.slug]?.modes
+        ? Object.keys(BRAND_THEMES[spec.slug].modes!)
+        : []
+      ).map((mode) => brandModeSelector(spec.slug, mode as 'light' | 'dark'));
+      const authoredSelectors = [
+        `${spec.selector} {}`,
+        ...modeSelectors.map((selector) => `${selector} {}`),
+        extension,
+      ].join('\n');
       const legacyOwners = [
         `html[data-tenant='${spec.slug}']`,
         `html[data-tenant="${spec.slug}"]`,

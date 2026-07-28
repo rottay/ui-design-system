@@ -143,3 +143,81 @@
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
 }
+
+/* ---------------------------------------------------------------------------
+   WAVE R2+R3 — typography + microinteractions (skin-owned, never inline).
+   Text parts carry the repeated data-part x3 so typography clears the
+   Typography engine skin the same way color does (0,5,0).
+--------------------------------------------------------------------------- */
+
+/* header eyebrow + subtitle */
+.ds-structure.ds-field-filters-panel [data-part='title-pill'][data-part='title-pill'][data-part='title-pill'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+.ds-structure.ds-field-filters-panel [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
+  font-size: var(--ds-font-size-xs);
+  line-height: 1.45;
+}
+.ds-structure.ds-field-filters-panel [data-part='presets-pill'][data-part='presets-pill'][data-part='presets-pill'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+/* inline signal — tabular-nums so the live count never jitters */
+.ds-structure.ds-field-filters-panel [data-part='signal-label'][data-part='signal-label'][data-part='signal-label'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+/* preset chip: label type + deliberate hover/focus/active on --ds-motion-* */
+.ds-structure.ds-field-filters-panel [data-part='preset-chip'] {
+  font-size: var(--ds-font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-field-filters-panel [data-part='preset-chip']:hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%));
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-field-filters-panel [data-part='preset-chip']:focus-visible {
+  outline: none;
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, white 4%, transparent),
+    0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+}
+.ds-structure.ds-field-filters-panel [data-part='preset-chip']:active {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card));
+}
+
+/* filter card eyebrow + description */
+.ds-structure.ds-field-filters-panel [data-part='filter-card-label'][data-part='filter-card-label'][data-part='filter-card-label'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+.ds-structure.ds-field-filters-panel [data-part='filter-card-description'][data-part='filter-card-description'][data-part='filter-card-description'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  line-height: 1.35;
+}
+
+/* Reduced motion: the preset-chip cross-fades go silent. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-field-filters-panel [data-part='preset-chip'] {
+    transition: none;
+  }
+}

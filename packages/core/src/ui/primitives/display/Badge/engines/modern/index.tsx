@@ -14,6 +14,7 @@ import { partAttributes, useInteractionState } from '@/foundation/behavior';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 import { StatusLoadingIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-loading';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import {
   generateResponsiveCSS,
   isResponsiveValue,
@@ -158,6 +159,16 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   } = props;
 
   void _engine;
+  // Accessible names: the caller's localized copy always wins, then the DS
+  // catalogue (`common.remove` / `common.loading`, all five locales), then the
+  // documented English floor — an unnamed close control or busy trigger is an
+  // a11y violation, never an acceptable default.
+  const i18n = useOptionalTranslation();
+  const removeAriaLabel =
+    removeLabel ?? i18n?.tOr('common.remove', 'Remove') ?? 'Remove';
+  const busyAriaLabel = loading
+    ? (loadingText ?? ariaLabel ?? i18n?.tOr('common.loading', 'Loading') ?? 'Loading')
+    : ariaLabel;
   const effectiveMax = max ?? overflowCount ?? BADGE_DEFAULTS.overflowCount;
   const statusVariant = status ? STATUS_VARIANT[status] : undefined;
   const variant = tone
@@ -310,7 +321,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
               disabled={isInert}
               aria-disabled={isInert || undefined}
               aria-pressed={onSelectedChange ? selected : undefined}
-              aria-label={loading ? loadingText ?? ariaLabel : ariaLabel}
+              aria-label={busyAriaLabel}
               aria-describedby={ariaDescribedBy}
               onClick={activate}
               {...interactionHandlers}
@@ -326,7 +337,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
               type="button"
               data-part="close"
               disabled={isInert}
-              aria-label={removeLabel}
+              aria-label={removeAriaLabel}
               onClick={remove}
             >
               <ActionCloseIcon size={12} decorative />
@@ -382,7 +393,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
             type="button"
             disabled={isInert}
             aria-disabled={isInert || undefined}
-            aria-label={loading ? loadingText ?? ariaLabel : ariaLabel}
+            aria-label={busyAriaLabel}
             onClick={activate}
           >
             {!dot && overlayValue}

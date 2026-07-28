@@ -47,7 +47,10 @@ import type { UploadProps, DraggerProps, UploadFile, UploadChangeInfo, UploadLis
 import { UPLOAD_DEFAULTS } from '../../contracts';
 import { removeUploadFile, resolveAcceptedUploadFiles } from '../../runtime/upload-behavior';
 import { Progress } from '../../../../facade';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useTranslation, formatFileSize } from '@/infrastructure/runtime/i18n';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+import { ActionDeleteIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-delete';
+import { ContentFileIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-file';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -143,7 +146,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
           onClick={onClose}
           aria-label={t('upload.close_preview')}
         >
-          x
+          <ActionCloseIcon decorative size={14} />
         </button>
         <img src={src} alt={alt} className="max-w-full max-h-[85vh] rounded-lg object-contain" />
       </div>
@@ -213,11 +216,15 @@ const FileItem: React.FC<FileItemProps> = ({
   progress,
   thumbUrls,
 }) => {
-  const { t } = useTranslation('components');
+  const { t, locale } = useTranslation('components');
   const [hovered, setHovered] = useState(false);
   const thumb = file.thumbUrl || file.url || readThumbUrl(thumbUrls, file.uid);
   const isImg = isImageFile(file);
   const isUploading = file.status === 'uploading';
+  // Product law: file rows carry a semantic file icon and the size in
+  // locale-formatted bytes (skin paints it tabular). Size is optional in the
+  // contract (server-returned entries may lack it) -- no size, no span.
+  const sizeText = typeof file.size === 'number' ? formatFileSize(file.size, locale) : undefined;
 
   const actions = {
     download: () => { if (file.url) window.open(file.url, '_blank'); },
@@ -257,7 +264,7 @@ const FileItem: React.FC<FileItemProps> = ({
               </button>
             )}
             <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
-              <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              <ActionDeleteIcon decorative size={16} />
             </button>
           </div>
         )}
@@ -296,7 +303,7 @@ const FileItem: React.FC<FileItemProps> = ({
               </button>
             )}
             <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              <ActionDeleteIcon decorative size={12} />
             </button>
           </div>
         )}
@@ -308,19 +315,22 @@ const FileItem: React.FC<FileItemProps> = ({
   // -- picture: horizontal row with a small thumbnail on the left --
   if (listType === 'picture') {
     const originNode = (
-      <div data-part="file-item" data-status={file.status || undefined} className={`flex items-center gap-2 p-2 rounded transition-colors duration-200 ${file.status === 'error' ? 'border border-error' : ''}`} role="listitem" aria-label={file.name}>
+      <div data-part="file-item" data-status={file.status || undefined} className="flex items-center gap-2 p-2" role="listitem" aria-label={file.name}>
         {isImg && thumb ? (
           <img src={thumb} alt={file.name} className="w-12 h-12 object-cover rounded flex-shrink-0 cursor-pointer" onClick={() => onPreview?.(file)} />
         ) : (
           <div className="w-12 h-12 rounded flex items-center justify-center flex-shrink-0">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+            <ContentFileIcon decorative size={24} />
           </div>
         )}
         <div className="flex-1 min-w-0">
-          <span className="text-sm truncate block">{file.name}</span>
+          <span data-part="file-name" className="text-sm truncate block">{file.name}</span>
+          {sizeText && <span data-part="file-size">{sizeText}</span>}
           {isUploading && <UploadProgress percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />}
         </div>
-        <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>x</button>
+        <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
+          <ActionDeleteIcon decorative size={14} />
+        </button>
       </div>
     );
     return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
@@ -328,12 +338,18 @@ const FileItem: React.FC<FileItemProps> = ({
 
   // -- text (default): simple filename row with remove button --
   const originNode = (
-    <div data-part="file-item" data-status={file.status || undefined} className={`flex items-center justify-between p-2 rounded transition-colors duration-200 ${file.status === 'error' ? 'border border-error' : ''}`} role="listitem" aria-label={file.name}>
+    <div data-part="file-item" data-status={file.status || undefined} className="flex items-center justify-between gap-2 p-2" role="listitem" aria-label={file.name}>
+      <span data-part="file-icon">
+        <ContentFileIcon decorative size={16} />
+      </span>
       <div className="flex-1 min-w-0">
-        <span className="text-sm truncate block">{file.name}</span>
+        <span data-part="file-name" className="text-sm truncate block">{file.name}</span>
+        {sizeText && <span data-part="file-size">{sizeText}</span>}
         {isUploading && <UploadProgress percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />}
       </div>
-      <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>x</button>
+      <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
+        <ActionDeleteIcon decorative size={14} />
+      </button>
     </div>
   );
   return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
@@ -473,6 +489,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
             <label
               htmlFor={inputId}
               data-part="add-button"
+              data-disabled={disabled || undefined}
               className={`flex items-center justify-center border-2 border-dashed hover:border-primary hover:bg-primary/5 transition-all duration-300 ${
                 listType === 'picture-circle' ? 'rounded-full' : 'rounded-lg'
               } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
@@ -666,11 +683,16 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
           }}
           data-part="dropzone"
           data-state={isDragOver ? 'dragging' : 'idle'}
+          data-disabled={disabled || undefined}
           className={`border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ${
             isDragOver ? 'border-primary bg-primary/5 shadow-lg scale-[1.01]' : 'hover:border-primary hover:bg-primary/5'
           } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
           /* Runtime prop-driven height rides the governed channel; the skin
-             owns the block-size declaration. */
+             owns the block-size declaration. The Tailwind paint utilities in
+             className stay for a test-anchored assertion (`border-primary`
+             during drag) but the skin OVERRIDES their effective paint by
+             layer ownership (quiet hairline + tint, token motion) -- see the
+             upload.css header, deviation #1. */
           style={{ '--ds-upload-dropzone-height': typeof height === 'number' ? `${height}px` : height } as React.CSSProperties}
         >
           <input

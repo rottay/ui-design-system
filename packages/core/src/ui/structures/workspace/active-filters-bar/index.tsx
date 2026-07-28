@@ -17,6 +17,12 @@
  * The family stays domain-agnostic. Each chip's label and displayValue
  * are consumer-supplied, so the rail knows nothing about tenants, users,
  * or any specific entity.
+ *
+ * PAINT OWNERSHIP (Wave R2+R3): the skin owns every typography and motion
+ * channel — chip label/value type, the uppercase eyebrow pill, hover /
+ * focus-visible / active microinteractions, and transitions. The engine
+ * keeps layout only (flex, spacing, hit areas) and the data-part/state
+ * anatomy the skin keys on.
  */
 
 import {
@@ -24,6 +30,7 @@ import {
   XIcon as X,
 } from '../../../../graphics/icons';
 
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { Box, Flex, Text } from '../../../primitives';
 import type { ActiveFilter } from '@/foundation/contracts/runtime/components/patterns/data';
 
@@ -45,6 +52,19 @@ export function ActiveFiltersBar({
   onAddFilter,
   surfaceVariant = 'default',
 }: ActiveFiltersBarProps) {
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Catalog lookup with an honest English floor: when the provider is absent
+   * or echoes the raw key (missing entry), the historical default wins.
+   */
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (resolved === undefined || resolved === key || resolved === `components.${key}`) {
+      return fallback;
+    }
+    return resolved;
+  };
+
   if (!activeFilters.length) return null;
 
   const embedded = surfaceVariant === 'embedded';
@@ -54,6 +74,8 @@ export function ActiveFiltersBar({
       data-part="root"
       data-embedded={embedded}
       className="ds-structure ds-active-filters-bar"
+      role="region"
+      aria-label={tOr('activeFiltersBar.regionLabel', 'Active filters')}
       style={{
         padding: embedded ? '6px 16px 10px' : '10px 16px 12px',
       }}
@@ -76,13 +98,9 @@ export function ActiveFiltersBar({
                 alignItems: 'center',
                 minHeight: 24,
                 padding: '0 9px',
-                fontSize: 10,
-                fontWeight: 700,
-                textTransform: 'uppercase' as const,
-                letterSpacing: '0.11em',
               }}
             >
-              {activeFilters.length} active
+              {activeFilters.length} {tOr('activeFiltersBar.activeSuffix', 'active')}
             </Text>
             {activeFilters.map((filter) => (
               <Box
@@ -100,10 +118,6 @@ export function ActiveFiltersBar({
                   data-part="chip-label"
                   size="xs"
                   style={{
-                    fontSize: 11,
-                    fontWeight: 700,
-                    textTransform: 'uppercase' as const,
-                    letterSpacing: '0.08em',
                     lineHeight: 1,
                     whiteSpace: 'nowrap',
                   }}
@@ -114,8 +128,6 @@ export function ActiveFiltersBar({
                   data-part="chip-value"
                   size="xs"
                   style={{
-                    fontSize: 12,
-                    fontWeight: 600,
                     lineHeight: 1,
                     whiteSpace: 'nowrap',
                   }}
@@ -134,10 +146,9 @@ export function ActiveFiltersBar({
                     height: 24,
                     padding: 0,
                     cursor: 'pointer',
-                    transition: 'background 0.15s ease, color 0.15s ease, border-color 0.15s ease',
                     flexShrink: 0,
                   }}
-                  aria-label={`Remove ${filter.label} filter`}
+                  aria-label={`${tOr('activeFiltersBar.removeFilter', 'Remove filter')}: ${filter.label}`}
                 >
                   <X style={{ width: 12, height: 12 }} />
                 </Box>
@@ -167,14 +178,10 @@ export function ActiveFiltersBar({
               minHeight: 32,
               padding: '0 12px',
               cursor: 'pointer',
-              fontSize: 12,
-              transition: 'border-color 0.15s ease, background 0.15s ease, color 0.15s ease',
             }}
           >
             <X style={{ width: 12, height: 12 }} />
-            <Text size="xs" style={{ fontSize: 12, fontWeight: 600 }}>
-              Clear all
-            </Text>
+            <Text size="xs">{tOr('activeFiltersBar.clearAll', 'Clear all')}</Text>
           </Box>
 
           {onAddFilter && (
@@ -189,14 +196,10 @@ export function ActiveFiltersBar({
                 minHeight: 32,
                 padding: '0 12px',
                 cursor: 'pointer',
-                fontSize: 12,
-                transition: 'opacity 0.15s ease, background 0.15s ease',
               }}
             >
               <Plus style={{ width: 12, height: 12 }} />
-              <Text size="xs" style={{ fontSize: 12, fontWeight: 700 }}>
-                Add filter
-              </Text>
+              <Text size="xs">{tOr('activeFiltersBar.addFilter', 'Add filter')}</Text>
             </Box>
           )}
         </Flex>

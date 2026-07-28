@@ -1,0 +1,94 @@
+{
+  "note": "Decrease-only. `capabilityGaps` and `metrics` are volume budgets; `grandfather` is the shape inventory the architecture laws (component-local regions, application/framework selector tokens, !important, media descendant skins, structural component paint, over-budget capability-gap regions, re-declared compiler-emitted channels, capability-gap raw CSS) are allowed to still see on this tree. Both shrink as the extensions drain; neither may grow. Re-seed only with a written exception -- `--seed` refuses growth without --allow-growth.",
+  "capabilityGaps": {
+    "bithire": 2,
+    "evnto": 0,
+    "rottay": 7
+  },
+  "metrics": {
+    "bithire": {
+      "bytes": 26440,
+      "rules": 7,
+      "declarations": 248,
+      "important": 0,
+      "literals": 154,
+      "appSelectors": 0,
+      "engineSelectors": 0
+    },
+    "evnto": {
+      "bytes": 4680,
+      "rules": 2,
+      "declarations": 57,
+      "important": 0,
+      "literals": 56,
+      "appSelectors": 0,
+      "engineSelectors": 0
+    },
+    "rottay": {
+      "bytes": 71610,
+      "rules": 2,
+      "declarations": 1207,
+      "important": 0,
+      "literals": 1392,
+      "appSelectors": 0,
+      "engineSelectors": 0
+    }
+  },
+  "grandfather": {
+    "bithire": {
+      "componentLocalRegions": [],
+      "appSelectorTokens": [],
+      "engineSelectorTokens": [],
+      "importantBySelector": {},
+      "mediaDescendantSelectors": [],
+      "structuralPaintSelectors": [],
+      "capabilityGapRegionSizes": {
+        "capability-gap#04950ac6#1": 98,
+        "capability-gap#04950ac6#3": 18,
+        "capability-gap#04950ac6#6": 119
+      },
+      "capabilityGapChannels": [
+        "--ds-color-bg-primary",
+        "--ds-surface-card-border-strong"
+      ],
+      "capabilityGapRawSelectors": []
+    },
+    "evnto": {
+      "componentLocalRegions": [],
+      "appSelectorTokens": [],
+      "engineSelectorTokens": [],
+      "importantBySelector": {},
+      "mediaDescendantSelectors": [],
+      "structuralPaintSelectors": [],
+      "capabilityGapRegionSizes": {
+        "capability-gap#04950ac6#1": 52
+      },
+      "capabilityGapChannels": [],
+      "capabilityGapRawSelectors": []
+    },
+    "rottay": {
+      "componentLocalRegions": [],
+      "appSelectorTokens": [],
+      "engineSelectorTokens": [],
+      "importantBySelector": {},
+      "mediaDescendantSelectors": [],
+      "structuralPaintSelectors": [],
+      "capabilityGapRegionSizes": {
+        "capability-gap#04950ac6#1": 647,
+        "capability-gap#f7c06ae1#1": 560
+      },
+      "capabilityGapChannels": [
+        "--ds-card-shadow-elevated",
+        "--ds-color-bg-input",
+        "--ds-color-error",
+        "--ds-color-info",
+        "--ds-font-family-base",
+        "--ds-font-family-display",
+        "--ds-font-family-heading"
+      ],
+      "capabilityGapRawSelectors": [
+        "html[data-tenant='rottay']:not([data-theme='light']):not(.light)"
+      ]
+    }
+  }
+}

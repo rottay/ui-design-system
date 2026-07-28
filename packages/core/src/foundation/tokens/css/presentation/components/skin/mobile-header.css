@@ -29,6 +29,13 @@
   background: var(--ds-color-bg-primary);
 }
 
+/* sticky posture: the bar floats over scrolling content, so it earns a
+   translucent glass treatment instead of the flat resting fill */
+.rottay-mobile-header[data-part='root'][data-sticky='true'] {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent);
+  backdrop-filter: blur(var(--ds-glass-blur, 8px));
+}
+
 .rottay-mobile-header[data-part='root'][data-part='root'][data-part='root'] {
   border-bottom: 1px solid var(--ds-color-border);
 }
@@ -36,9 +43,42 @@
 .rottay-mobile-header__back[data-part='trigger'] {
   background: none;
   border: none;
+  border-radius: var(--ds-radius-md, 8px);
   color: var(--ds-color-text-primary);
+  transition:
+    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+.rottay-mobile-header__back[data-part='trigger']:hover {
+  background: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+}
+
+.rottay-mobile-header__back[data-part='trigger']:active {
+  transform: scale(0.94);
+}
+
+.rottay-mobile-header__back[data-part='trigger']:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-mobile-header-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
+}
+
+/* the back glyph points in the reading-backward direction — flip it under RTL */
+[dir='rtl'] .rottay-mobile-header__back[data-part='trigger'] > svg {
+  transform: scaleX(-1);
 }
 
 .rottay-mobile-header__title[data-part='label'] {
   color: var(--ds-color-text-primary);
+  letter-spacing: -0.01em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-mobile-header__back[data-part='trigger'] {
+    transition: none;
+  }
+  .rottay-mobile-header__back[data-part='trigger']:active {
+    transform: none;
+  }
 }

@@ -1,0 +1,37 @@
+/**
+ * Modern WidgetBoard skin (Lote 6 — additive).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's `base` layer, so layered paint loses to preflight regardless of
+ * specificity. Unlayered rules outrank preflight and still yield to caller
+ * inline styles.
+ *
+ * SCOPE: the board's surface paint (cells, toolbar, catalog cards, drag /
+ * resize chrome) already lives in the SHARED presentation skin
+ * (`presentation/components/skin/widget-board.css`), consumed byte-identical
+ * by the classic/modern/rustic engines — this file owns ONLY the parts the
+ * Lote-6 catalog search adds: the `catalog-search` row and the
+ * `catalog-no-results` empty state. The search field is the public Input
+ * primitive (`size="sm"`): its chrome is painted by `input.css`; this file
+ * owns only the row's geometry within the catalog.
+ *
+ * WIRING (PENDING — coordinator-owned): this file is NOT yet imported by
+ * `facade/entrypoints/styles.css` / `base.css` (outside the lane write-set).
+ * Until the two standard `@import "../../runtime/engines/modern/skin/widget-board.css";`
+ * lines land, the search row renders functional but unspaced (the Input
+ * primitive's own chrome still paints).
+ */
+
+/* ---- catalog search row: quiet geometry above the add-widget grid. ---- */
+:is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
+  .ds-widget-board__catalog-search[data-part='catalog-search'] {
+  margin-block-end: var(--ds-widget-board-catalog-search-margin-block-end, var(--ds-spacing-3, 12px));
+  max-inline-size: var(--ds-widget-board-catalog-search-max-width, 680px);
+}
+
+/* ---- no-results: the same quiet framed empty the catalog already paints
+        (`catalog-empty` class), keyed here for the part hook only. ---- */
+:is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
+  .ds-widget-board__catalog-empty[data-part='catalog-no-results'] {
+  min-block-size: var(--ds-widget-board-catalog-no-results-min-height, 96px);
+}

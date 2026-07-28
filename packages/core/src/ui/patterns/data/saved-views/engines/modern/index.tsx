@@ -1,21 +1,35 @@
 'use client';
 
 /**
- * @fileoverview Modern engine for the SavedViews bar pattern.
- * Renders a premium horizontal pill/chip strip using DS token-driven layout
- * styles and engine skin paint, with drag-and-drop reorder, inline rename, a
- * custom dropdown context menu (rename/duplicate/delete), and a "Create view"
- * button with inline text input.
+ * @fileoverview Modern engine for the SavedViews bar pattern (Lote 2 rewrite).
  *
- * All styling uses CSS custom properties from the design system:
- * - Surfaces: --ds-surface-card, --ds-surface-highlight, --ds-surface-inset
- * - Elevation: --ds-elevation-3
- * - Motion: --ds-motion-fast, --ds-motion-normal, --ds-motion-ease-out
- * - Radius: --ds-radius-sm, --ds-radius-md, --ds-radius-full
- * - Border: --ds-color-border
- * - Focus: --ds-focus-ring-width, --ds-focus-ring-color
- * - Colors: --ds-color-primary, --ds-color-primary-foreground, --ds-color-text,
- *           --ds-color-text-muted, --ds-color-error, --ds-color-warning
+ * @remarks
+ * COMPOSITION LAW (Lote 2): a pattern COMPOSES primitives, it never
+ * recreates them. Every former raw control is now a public DS primitive:
+ * - the view-select control, the menu trigger and the create button are the
+ *   Button primitive (`engine="modern"`, caller `data-part` wins the root
+ *   anatomy hook per P-79, so the pattern skin owns their paint);
+ * - the inline rename input and the create input are the Input primitive
+ *   (`variant="unstyled"` — behavior from the primitive, geometry and paint
+ *   from the pattern skin);
+ * - the per-pill management menu is the Dropdown primitive (portal surface,
+ *   roving keyboard contract, outside-click/Escape close, RTL-aware
+ *   placement following the Tabs engine's precedent) — the hand-rolled
+ *   absolute panel, its outside-click listener and the `menu-panel` /
+ *   `menu-item` / `menu-divider` parts are retired in favor of the
+ *   Dropdown's own anatomy and `dropdown.css` paint.
+ *
+ * The pill shell stays a plain layout element (drag source + testid hook);
+ * the select action moved INTO a real Button inside it, so no interactive
+ * element nests inside another (the Collapse K3-C header-row remediation
+ * pattern). All geometry, paint and the hover-reveal of the menu trigger
+ * live in `modern/skin/saved-views.css`; the engine stamps anatomy and
+ * state only.
+ *
+ * Copy contract: `useOptionalTranslation('components')` with the documented
+ * English floor via `tOr` (page-shell idiom) — byte-identical English when
+ * no provider is mounted. Consumer-facing labels (`createLabel`,
+ * `newViewPlaceholder`) remain props, unchanged.
  *
  * @example
  * <ModernSavedViewsBar
@@ -30,48 +44,22 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { SavedViewsBarProps, SavedView } from '../../contracts';
+import type { DropdownMenuItem } from '../../../../../primitives/overlay/Dropdown/contracts';
+import { Dropdown } from '../../../../../primitives/overlay/Dropdown';
+import { Button } from '../../../../../primitives/inputs/Button';
+import { Input } from '../../../../../primitives/inputs/Input';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
-
-/* ---------------------------------------------------------------------------
- * Shared layout-style constants
- * ----------------------------------------------------------------------- */
-
-const inlineInputStyle: React.CSSProperties = {
-  height: 26,
-  padding: '0 8px',
-  fontSize: 13,
-  boxSizing: 'border-box' as const,
-  width: 130,
-  transition: `border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-               box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-};
-
-/** Reusable menu-item layout style factory */
-function menuItemStyle(isDisabled?: boolean): React.CSSProperties {
-  return {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 8,
-    width: '100%',
-    padding: '6px 10px',
-    fontSize: 13,
-    cursor: isDisabled ? 'not-allowed' : 'pointer',
-    opacity: isDisabled ? 0.5 : 1,
-    textAlign: 'left' as const,
-    transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-  };
-}
-
-/* ---------------------------------------------------------------------------
- * ModernSavedViewsBar
- * ----------------------------------------------------------------------- */
+import { ActionEditIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-edit';
+import { ActionCopyIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-copy';
+import { ActionDeleteIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-delete';
+import { ActionAddIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-add';
+import { ActionReorderIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-reorder';
+import { NavigationMoreIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-more';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /**
- * Modern engine saved views bar built on DS token-driven layout styles and
- * skin paint. Renders a scrollable horizontal pill list with drag-and-drop
- * reorder,
- * inline rename, a manually-controlled dropdown menu per pill, and an
- * inline create input. Default views (isDefault) are protected from deletion.
+ * Modern engine saved views bar: a scrollable horizontal strip of pills
+ * composed entirely from DS primitives (see the module docblock).
  *
  * @param props - {@link SavedViewsBarProps}
  * @returns A horizontal flex container acting as a pill bar for saved views.
@@ -99,6 +87,15 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
     style,
   } = props;
 
+  /* ---- localized copy (components catalog, English floor) ---- */
+  const translation = useOptionalTranslation('components');
+  const renameLabel = translation?.tOr('savedViews.rename', 'Rename') ?? 'Rename';
+  const duplicateLabel = translation?.tOr('savedViews.duplicate', 'Duplicate') ?? 'Duplicate';
+  const deleteLabel = translation?.tOr('savedViews.delete', 'Delete') ?? 'Delete';
+  const optionsLabel = translation?.tOr('savedViews.options', 'options') ?? 'options';
+  const unsavedChangesTitle =
+    translation?.tOr('savedViews.unsavedChanges', 'Unsaved changes') ?? 'Unsaved changes';
+
   // --- Local UI state ---
   const [isCreating, setIsCreating] = useState(false);
   const [newViewName, setNewViewName] = useState('');
@@ -107,21 +104,17 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [dragViewId, setDragViewId] = useState<string | null>(null);
   const [dropTargetId, setDropTargetId] = useState<string | null>(null);
-  const [hoveredViewId, setHoveredViewId] = useState<string | null>(null);
 
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  // Close menu on outside click
+  /* RTL probe for the Dropdown placement mirror (Tabs engine precedent):
+     the nearest explicit `dir` wins; otherwise the document direction. */
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [isRtl, setIsRtl] = useState(false);
   useEffect(() => {
-    if (!openMenuId) return;
-    const handler = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setOpenMenuId(null);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [openMenuId]);
+    const el = rootRef.current;
+    if (!el) return;
+    const scoped = el.closest('[dir]');
+    setIsRtl(scoped ? scoped.getAttribute('dir') === 'rtl' : document.documentElement.dir === 'rtl');
+  }, []);
 
   const handleCreate = useCallback(() => {
     if (!newViewName.trim()) return;
@@ -196,19 +189,15 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
     setDropTargetId(null);
   }, []);
 
-  /* -- Loading state -- */
+  /* -- Loading state (geometry lives in the skin, keyed on data-loading) -- */
   if (loading) {
     return (
       <div
+        ref={rootRef}
         data-part="root"
         className={`ds-pattern-saved-views ds-engine-modern ${className ?? ''}`}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: 40,
-          ...style,
-        }}
+        data-loading="true"
+        style={style}
       >
         <ModernSpinner size="sm" data-part="spinner" />
       </div>
@@ -217,51 +206,62 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
 
   const canCreate = allowCreate && (!maxViews || views.length < maxViews);
 
-  /* -- Bar container -- */
-  const barStyle: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 6,
-    paddingLeft: 8,
-    paddingRight: 8,
-    minHeight: 40,
-    overflowX: 'auto',
-    ...style,
-  };
-
   return (
-    <div data-part="root" className={`ds-pattern-saved-views ds-engine-modern ${className ?? ''}`} style={barStyle}>
+    <div
+      ref={rootRef}
+      data-part="root"
+      className={`ds-pattern-saved-views ds-engine-modern ${className ?? ''}`}
+      style={style}
+    >
       {views.map((view) => {
         const isActive = view.id === activeViewId;
         const isEditing = editingViewId === view.id;
         const isDragging = dragViewId === view.id;
         const isDropTarget = dropTargetId === view.id;
         const isMenuOpen = openMenuId === view.id;
-        const isHovered = hoveredViewId === view.id;
         const customActions = getMenuActions?.(view) ?? [];
         const hasMenu =
           allowRename || allowDelete || onViewDuplicate || customActions.length > 0;
 
-        /* -- Pill/chip style -- */
-        const pillStyle: React.CSSProperties = {
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 6,
-          padding: '4px 12px',
-          cursor: 'pointer',
-          flexShrink: 0,
-          fontSize: 13,
-          fontWeight: isActive ? 600 : 400,
-          lineHeight: '20px',
-          opacity: isDragging ? 0.4 : 1,
-          transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out),
-                       color var(--ds-motion-fast) var(--ds-motion-ease-out),
-                       border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-                       opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
-                       box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-          position: 'relative' as const,
-          userSelect: 'none' as const,
-        };
+        /* The management menu as Dropdown items; per-item onClick fires
+           before the primitive closes the surface (controlled open). */
+        const menuItems: DropdownMenuItem[] = [];
+        if (allowRename) {
+          menuItems.push({
+            key: 'rename',
+            label: renameLabel,
+            icon: <ActionEditIcon decorative size={14} />,
+            onClick: () => handleRenameStart(view),
+          });
+        }
+        if (onViewDuplicate) {
+          menuItems.push({
+            key: 'duplicate',
+            label: duplicateLabel,
+            icon: <ActionCopyIcon decorative size={14} />,
+            onClick: () => onViewDuplicate(view.id),
+          });
+        }
+        for (const action of customActions) {
+          menuItems.push({
+            key: action.key,
+            label: action.label,
+            icon: action.icon,
+            danger: action.danger,
+            disabled: action.disabled,
+            onClick: action.onClick,
+          });
+        }
+        if (allowDelete && !view.isDefault) {
+          menuItems.push({ key: 'delete-divider', type: 'divider', label: '' });
+          menuItems.push({
+            key: 'delete',
+            label: deleteLabel,
+            icon: <ActionDeleteIcon decorative size={14} />,
+            danger: true,
+            onClick: () => onViewDelete(view.id),
+          });
+        }
 
         return (
           <div
@@ -276,44 +276,27 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             onDragOver={(e) => handleDragOver(e, view.id)}
             onDrop={(e) => handleDrop(e, view.id)}
             onDragEnd={handleDragEnd}
-            onMouseEnter={() => setHoveredViewId(view.id)}
-            onMouseLeave={() => setHoveredViewId(null)}
             data-testid={`view-tab-${view.id}`}
-            style={pillStyle}
-            onClick={() => {
-              if (!isEditing) onViewSelect(view.id);
-            }}
           >
-            {/* Drag handle */}
+            {/* Drag grip (decorative chrome; the pill shell is the drag source) */}
             {onViewReorder && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                style={{ opacity: 0.4, cursor: 'grab', flexShrink: 0 }}
-              >
-                <path d="M4 8h16M4 16h16" />
-              </svg>
+              <span data-part="drag-handle" className="ds-saved-views__drag-handle" aria-hidden="true">
+                <ActionReorderIcon decorative size={12} />
+              </span>
             )}
 
-            {/* View icon */}
+            {/* View icon slot (consumer-provided) */}
             {view.icon}
 
-            {/* Name or rename input */}
+            {/* Name: a real Button select control, or the rename Input while editing */}
             {isEditing ? (
-              <input
-                type="text"
-                data-part="input"
+              <Input
+                engine="modern"
+                variant="unstyled"
+                size="sm"
                 className="ds-saved-views__input"
-                style={inlineInputStyle}
                 value={editingName}
-                onChange={(e) => setEditingName(e.target.value)}
+                onChange={(value) => setEditingName(value)}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') handleRenameConfirm();
                   if (e.key === 'Escape') {
@@ -322,11 +305,22 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                   }
                 }}
                 onBlur={handleRenameConfirm}
-                onClick={(e) => e.stopPropagation()}
                 autoFocus
+                aria-label={renameLabel}
               />
             ) : (
-              <span style={{ whiteSpace: 'nowrap' }}>{view.name}</span>
+              <Button
+                engine="modern"
+                variant="ghost"
+                size="sm"
+                data-part="pill-select"
+                className="ds-saved-views__pill-select"
+                data-active={isActive}
+                aria-current={isActive ? 'page' : undefined}
+                onClick={() => onViewSelect(view.id)}
+              >
+                {view.name}
+              </Button>
             )}
 
             {/* Unsaved changes indicator */}
@@ -336,217 +330,50 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                 className="ds-saved-views__unsaved-dot"
                 data-dirty={true}
                 data-active={isActive}
-                style={{
-                  display: 'inline-block',
-                  width: 6,
-                  height: 6,
-                  flexShrink: 0,
-                }}
-                title="Unsaved changes"
+                title={unsavedChangesTitle}
               />
             )}
 
-            {/* Default star */}
+            {/* Default star (decorative; no semantic role exists for it yet) */}
             {view.isDefault && (
               <svg
                 data-part="default-star"
                 className="ds-saved-views__default-star"
                 data-default={true}
                 data-active={isActive}
+                aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="12"
                 height="12"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                style={{
-                  flexShrink: 0,
-                }}
               >
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               </svg>
             )}
 
-            {/* Context menu trigger -- ghost icon button */}
+            {/* Management menu: the Dropdown primitive owns the surface, the
+                keyboard contract and dismissal; the trigger is a Button. */}
             {hasMenu && (
-              <div
-                style={{ position: 'relative' }}
-                ref={isMenuOpen ? menuRef : undefined}
+              <Dropdown
+                trigger={['click']}
+                placement={isRtl ? 'bottomLeft' : 'bottomRight'}
+                open={isMenuOpen}
+                onOpenChange={(open) => setOpenMenuId(open ? view.id : null)}
+                menu={{ items: menuItems }}
               >
-                <button
-                  type="button"
+                <Button
+                  engine="modern"
+                  variant="ghost"
+                  size="xs"
                   data-part="menu-trigger"
                   className="ds-saved-views__menu-trigger"
                   data-open={isMenuOpen}
                   data-active={isActive}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: 20,
-                    height: 20,
-                    padding: 0,
-                    cursor: 'pointer',
-                    opacity: isHovered || isMenuOpen ? 1 : 0,
-                    transition: `opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
-                                 background var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-                    flexShrink: 0,
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setOpenMenuId(isMenuOpen ? null : view.id);
-                  }}
-                  aria-label={`${view.name} options`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="12" cy="5" r="1" fill="currentColor" />
-                    <circle cx="12" cy="12" r="1" fill="currentColor" />
-                    <circle cx="12" cy="19" r="1" fill="currentColor" />
-                  </svg>
-                </button>
-
-                {/* Dropdown menu */}
-                {isMenuOpen && (
-                  <div
-                    data-part="menu-panel"
-                    className="ds-saved-views__menu-panel"
-                    data-open={isMenuOpen}
-                    style={{
-                      position: 'absolute',
-                      top: '100%',
-                      right: 0,
-                      marginTop: 4,
-                      minWidth: 160,
-                      padding: 4,
-                      zIndex: 50,
-                      overflow: 'hidden',
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {allowRename && (
-                      <button
-                        type="button"
-                        data-part="menu-item"
-                        className="ds-saved-views__menu-item"
-                        data-danger={false}
-                        style={menuItemStyle()}
-                        onClick={() => handleRenameStart(view)}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                        </svg>
-                        Rename
-                      </button>
-                    )}
-                    {onViewDuplicate && (
-                      <button
-                        type="button"
-                        data-part="menu-item"
-                        className="ds-saved-views__menu-item"
-                        data-danger={false}
-                        style={menuItemStyle()}
-                        onClick={() => {
-                          onViewDuplicate(view.id);
-                          setOpenMenuId(null);
-                        }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <rect width="14" height="14" x="8" y="8" rx="2" />
-                          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-                        </svg>
-                        Duplicate
-                      </button>
-                    )}
-                    {customActions.map((action) => (
-                      <button
-                        key={action.key}
-                        type="button"
-                        data-part="menu-item"
-                        className="ds-saved-views__menu-item"
-                        data-danger={!!action.danger}
-                        data-disabled={!!action.disabled}
-                        disabled={action.disabled}
-                        style={menuItemStyle(action.disabled)}
-                        onClick={() => {
-                          action.onClick();
-                          setOpenMenuId(null);
-                        }}
-                      >
-                        {action.icon}
-                        {action.label}
-                      </button>
-                    ))}
-                    {/* Divider + Delete */}
-                    {allowDelete && !view.isDefault && (
-                      <>
-                        <div
-                          data-part="menu-divider"
-                          className="ds-saved-views__menu-divider"
-                          style={{
-                            height: 1,
-                            margin: '4px 0',
-                          }}
-                        />
-                        <button
-                          type="button"
-                          data-part="menu-item"
-                          className="ds-saved-views__menu-item"
-                          data-danger={true}
-                          style={menuItemStyle()}
-                          onClick={() => {
-                            onViewDelete(view.id);
-                            setOpenMenuId(null);
-                          }}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-                          </svg>
-                          Delete
-                        </button>
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
+                  aria-label={`${view.name} ${optionsLabel}`}
+                  icon={<NavigationMoreIcon decorative size={14} />}
+                />
+              </Dropdown>
             )}
           </div>
         );
@@ -554,23 +381,15 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
 
       {/* Create view input / button */}
       {isCreating ? (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 4,
-            padding: '4px 0',
-            flexShrink: 0,
-          }}
-        >
-          <input
-            type="text"
-            data-part="create-input"
+        <div data-part="create-form" className="ds-saved-views__create-form">
+          <Input
+            engine="modern"
+            variant="unstyled"
+            size="sm"
             className="ds-saved-views__create-input"
-            style={inlineInputStyle}
             placeholder={newViewPlaceholder}
             value={newViewName}
-            onChange={(e) => setNewViewName(e.target.value)}
+            onChange={(value) => setNewViewName(value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') handleCreate();
               if (e.key === 'Escape') {
@@ -583,46 +402,24 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
               else handleCreate();
             }}
             autoFocus
+            aria-label={createLabel}
             data-testid="new-view-input"
           />
         </div>
       ) : (
         canCreate && (
-          <button
-            type="button"
+          <Button
+            engine="modern"
+            variant="dashed"
+            size="sm"
             data-part="create-button"
             className="ds-saved-views__create-button"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 4,
-              padding: '4px 10px',
-              fontSize: 13,
-              fontWeight: 500,
-              cursor: 'pointer',
-              flexShrink: 0,
-              transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out),
-                           color var(--ds-motion-fast) var(--ds-motion-ease-out),
-                           border-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-            }}
+            icon={<ActionAddIcon decorative size={14} />}
             onClick={() => setIsCreating(true)}
             data-testid="create-view-button"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 4v16m8-8H4" />
-            </svg>
             {createLabel}
-          </button>
+          </Button>
         )
       )}
     </div>

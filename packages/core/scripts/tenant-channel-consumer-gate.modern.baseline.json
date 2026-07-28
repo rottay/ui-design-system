@@ -3,18 +3,18 @@
   "view": "engine=modern",
   "states": "DECLARED = the contract exposes the dial | EMITTED = a compiler writes it | CONSUMED = some source reads it in any engine | PAINTED = a modern-reachable source reads it (not under engines/classic|rustic). CONSUMED and not PAINTED = dead-in-modern.",
   "generatedFrom": {
-    "channelsInventoried": 1615,
+    "channelsInventoried": 1619,
     "declared": 313,
-    "emitted": 1302,
-    "consumed": 1379,
-    "painted": 1367,
+    "emitted": 1306,
+    "consumed": 1383,
+    "painted": 1371,
     "neverConsumed": 236,
     "consumedFrozenOnly": 12,
-    "paintedWithoutModernBlock": 410,
+    "paintedWithoutModernBlock": 398,
     "sourceFilesByScope": {
       "frozen-engine": 381,
       "modern-engine": 255,
-      "engine-neutral": 1845
+      "engine-neutral": 1864
     },
     "anatomyContractPresent": true
   },

@@ -4,9 +4,20 @@
  * @fileoverview BottomTabBar - mobile app-style bottom tab navigation.
  *
  * @description
- * A fixed-bottom tab bar with up to 5 items, each displaying an icon and label.
- * Supports active state highlighting, optional badge indicators, and safe area
- * insets for notched devices.
+ * A fixed-bottom navigation landmark with up to 5 items, each displaying an
+ * icon and label. Supports active state highlighting (`aria-current="page"`),
+ * optional badge indicators, and safe area insets for notched devices.
+ *
+ * A11y contract (APG navigation, R2+R3): the bar is a `<nav>` landmark with a
+ * translated accessible name; the active item carries `aria-current="page"`.
+ * The previous `tablist`/`tab`/`aria-selected` semantics were dropped — a tab
+ * role without an owned `tabpanel` is a broken APG tabs pattern.
+ *
+ * Ownership: the engine stamps anatomy (`data-part`) and state
+ * (`data-selected`, `data-wide`); the skin
+ * (`presentation/components/skin/bottom-tab-bar.css`) owns 100% of layout and
+ * paint — typography included. The only inline style left is the caller's own
+ * `style` prop merged onto the root.
  *
  * Engine-agnostic: composes DS primitives (Box, Flex, Text) which resolve
  * through the engine system themselves.
@@ -29,8 +40,7 @@
  * @package @rottay/design-system
  */
 
-import type { CSSProperties } from 'react';
-
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { Box } from '@/ui/primitives/layout/Box';
 import { Flex } from '@/ui/primitives/layout/Flex';
 import { Text } from '@/ui/primitives/display/Typography';
@@ -42,6 +52,10 @@ import type { BottomTabBarProps, BottomTabBarItem } from '../../contracts';
 // ---------------------------------------------------------------------------
 
 const MAX_ITEMS = 5;
+
+/** English accessibility floor; overridable via the `components` namespace. */
+const NAV_LABEL_KEY = 'bottomTabBar.navigation';
+const NAV_LABEL_FALLBACK = 'Bottom navigation';
 
 // ---------------------------------------------------------------------------
 // TabItem sub-component
@@ -59,22 +73,6 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
     onSelect();
   };
 
-  const tabStyle: CSSProperties = {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: 44,
-    minHeight: 44,
-    paddingTop: 6,
-    paddingBottom: 2,
-    cursor: 'pointer',
-    position: 'relative',
-    WebkitTapHighlightColor: 'transparent',
-    textDecoration: 'none',
-  };
-
   // Use Box as="button" for non-link items, Box as="a" for links
   const Element = item.href ? 'a' : 'button';
 
@@ -83,28 +81,16 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
       as={Element}
       {...(item.href ? { href: item.href } as any : { type: 'button' } as any)}
       className="rottay-bottom-tab-bar__tab"
-      style={tabStyle}
       onClick={handleClick}
-      role="tab"
-      aria-selected={isActive}
+      aria-current={isActive ? 'page' : undefined}
       aria-label={item.label}
       data-testid={`tab-item-${item.key}`}
       data-part="tab-button"
       data-selected={isActive}
     >
-      {/* Icon container with optional badge */}
-      <Box style={{ position: 'relative', width: 24, height: 24 }}>
-        <Box
-          data-part="icon"
-          className="rottay-bottom-tab-bar__icon"
-          style={{
-            width: 24,
-            height: 24,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
+      {/* Icon container with optional badge; the active pill paints in the skin */}
+      <Box data-part="icon-wrap" className="rottay-bottom-tab-bar__icon-wrap">
+        <Box data-part="icon" className="rottay-bottom-tab-bar__icon">
           {item.icon}
         </Box>
 
@@ -113,28 +99,10 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
           <Box
             data-part="badge"
             className="rottay-bottom-tab-bar__badge"
-            style={{
-              position: 'absolute',
-              top: -4,
-              right: -8,
-              minWidth: item.badge > 99 ? 20 : 16,
-              height: 16,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingLeft: 4,
-              paddingRight: 4,
-            }}
+            data-wide={item.badge > 99 || undefined}
             data-testid={`tab-badge-${item.key}`}
           >
-            <Text
-              className="rottay-bottom-tab-bar__badge-text"
-              style={{
-                fontSize: 10,
-                fontWeight: 600,
-                lineHeight: '16px',
-              }}
-            >
+            <Text data-part="badge-text" className="rottay-bottom-tab-bar__badge-text">
               {item.badge > 99 ? '99+' : String(item.badge)}
             </Text>
           </Box>
@@ -142,16 +110,7 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
       </Box>
 
       {/* Label */}
-      <Text
-        data-part="label"
-        className="rottay-bottom-tab-bar__label"
-        style={{
-          fontSize: 11,
-          lineHeight: '14px',
-          marginTop: 2,
-          fontWeight: isActive ? 600 : 400,
-        }}
-      >
+      <Text data-part="label" className="rottay-bottom-tab-bar__label">
         {item.label}
       </Text>
     </Box>
@@ -163,11 +122,12 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
 // ---------------------------------------------------------------------------
 
 /**
- * Fixed-bottom tab bar for mobile app-style navigation.
+ * Fixed-bottom navigation bar for mobile app-style navigation.
  *
  * Renders up to 5 items evenly distributed horizontally. Each item shows an
- * icon (24px) and label (11px) stacked vertically, with active state using
- * the primary color. Optional badge indicator appears top-right of the icon.
+ * icon and label stacked vertically, with the active item marked through
+ * `aria-current="page"` and painted by the skin. An optional badge indicator
+ * appears at the end edge of the icon.
  */
 export function BottomTabBar({
   items,
@@ -178,31 +138,25 @@ export function BottomTabBar({
   // Enforce max items
   const visibleItems = items.slice(0, MAX_ITEMS);
 
-  const containerStyle: CSSProperties = {
-    position: 'fixed',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    width: '100%',
-    paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-    zIndex: 40,
-    ...style,
-  };
+  // Optional i18n: without an I18nProvider the hook returns null and the
+  // English floor renders, byte-identical to the pre-i18n contract.
+  const i18n = useOptionalTranslation('components');
+  const navLabel = i18n?.tOr(NAV_LABEL_KEY, NAV_LABEL_FALLBACK) ?? NAV_LABEL_FALLBACK;
 
   return (
     <Box
       as="nav"
       className="rottay-bottom-tab-bar"
-      style={containerStyle}
+      style={style}
       data-testid="bottom-tab-bar"
-      role="tablist"
-      aria-label="Bottom navigation"
+      aria-label={navLabel}
       data-part="root"
     >
       <Flex
         align="stretch"
         justify="evenly"
-        style={{ width: '100%' }}
+        className="rottay-bottom-tab-bar__list"
+        data-part="list"
       >
         {visibleItems.map((item) => (
           <TabItemRenderer

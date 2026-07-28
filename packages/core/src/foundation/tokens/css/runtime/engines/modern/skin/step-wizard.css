@@ -1,33 +1,35 @@
 /**
- * Modern StepWizard skin (WO-SKIN-06 checkpoint CK-D/F).
+ * Modern StepWizard skin (Lote 2 rebuild).
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * unnamed `base` layer, so a layered rule loses to preflight regardless of
  * specificity. Unlayered outranks preflight and still yields to a caller's
- * inline `style` -- which the root relies on, since the JSX spreads the caller's
- * `style` prop last (`{ ...cardStyle, ...style }`).
+ * inline `style`.
  *
- * SCOPE ROOT is the outer `<div>`, which carries the pair
- * `ds-pattern-step-wizard ds-engine-modern` + `data-part='root'`. The engine has
- * two roots -- the content card and the loading early-return -- and both carry
- * the pair; the loading one adds `data-loading='true'`.
+ * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-step-wizard
+ * ds-engine-modern` + `data-part='root'`; the loading early-return carries the
+ * same pair + `data-loading='true'`.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
- * `border-color` on every element. A rule painting a border COLOR must reach
- * (0,4,0): the two root classes (0,2,0) + the target's `data-part` REPEATED
- * (0,2,0). Non-border paint (background, color, box-shadow, border-radius) wins
- * unlayered at (0,3,0). Pure `border: none` resets carry no colour and are exempt.
+ * SINGLE PAINT OWNER PER CONTROL (Lote 2 law): the step rail is the public
+ * `Steps` navigation primitive (its own skin owns indicators, connectors,
+ * statuses and click anatomy) and every navigation action is a `Button`
+ * primitive (`outline` prev, `text` skip, `primary` next/complete -- disabled
+ * states included, so the old inline `disabledOverride` is gone). This file
+ * paints NO step chrome and NO button chrome anymore; it owns exactly what
+ * the pattern owns:
+ *   - the card shell and body rhythm (`root`/`body`);
+ *   - the counter posture, the progress track/fill chrome, the loading
+ *     skeleton shimmer (animation now skin-owned -- reduced-motion governs);
+ *   - the validation error panel (semantic error channels);
+ *   - the layout anatomy: nav bar, rail offsets, the vertical split.
+ *
+ * SPECIFICITY (P-48): the only border paint left (nav-bar rule, error panel)
+ * reaches (0,4,0) via the two root classes + the repeated `data-part`.
  *
  * KEYFRAME NAMESPACE: the skeleton shimmer was injected per-mount as a bare
  * `@keyframes pulse`, which SHADOWS the global `pulse` in
- * `foundation/animations/keyframes.css` (last parsed wins). The two bodies are
- * value-identical today (50% -> opacity 1 -> .5), but the rustic engine's local
- * `pulse` dims to .4 -- so mounting both engines on one page made whichever
- * mounted last silently repaint the other. Namespaced here to make that
- * impossible; the sibling rustic skin owns its own .4 copy.
- *
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * `foundation/animations/keyframes.css` (last parsed wins). Namespaced here
+ * so that is impossible; the sibling rustic skin owns its own copy.
  */
 
 @keyframes ds-step-wizard-modern-pulse {
@@ -40,8 +42,9 @@
   }
 }
 
-/* ---- root: card surface (was cardStyle, shared by the content + loading roots) ---- */
+/* ---- root: card surface ---- */
 .ds-pattern-step-wizard.ds-engine-modern[data-part='root'] {
+  overflow: hidden;
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-1);
   border-radius: var(--ds-radius-lg);
@@ -51,19 +54,26 @@
   padding-block-end: var(--ds-step-wizard-action-dock-reserved-space, 7rem);
 }
 
+/* ---- body rhythm (was the inline `padding: 24` wrapper) ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='body'] {
+  padding: var(--ds-step-wizard-body-padding, var(--ds-spacing-6, 24px));
+}
+
+/* ---- counter posture ---- */
 .ds-pattern-step-wizard.ds-engine-modern [data-part='step-counter'][data-part='step-counter'] {
   margin-block-end: var(--ds-spacing-5, 1.25rem);
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-sm);
   font-weight: var(--ds-typography-heading-font-weight, 600);
   line-height: var(--ds-line-height-sm, 1.25rem);
+  font-variant-numeric: tabular-nums;
 }
 
-.ds-pattern-step-wizard.ds-engine-modern .ds-step-wizard__action-dock [data-part='nav-bar'][data-part='nav-bar'] {
-  border-top: 0;
+/* ---- loading skeleton shimmer bars (animation drained from inline) ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='skeleton-progress'],
+.ds-pattern-step-wizard.ds-engine-modern [data-part='skeleton-content'] {
+  animation: ds-step-wizard-modern-pulse var(--ds-step-wizard-skeleton-duration, 2s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
-
-/* ---- loading skeleton shimmer bars ---- */
 .ds-pattern-step-wizard.ds-engine-modern [data-part='skeleton-progress'] {
   border-radius: var(--ds-radius-full);
   background: var(--ds-surface-panel);
@@ -73,101 +83,138 @@
   background: var(--ds-surface-panel);
 }
 
-/* ---- progress bar ---- */
+/* ---- progress bar (rail posture's thin track) ---- */
 .ds-pattern-step-wizard.ds-engine-modern [data-part='progress-track'] {
+  inline-size: 100%;
+  block-size: var(--ds-step-wizard-progress-height, 4px);
+  margin-block-end: var(--ds-spacing-6, 24px);
+  overflow: hidden;
   border-radius: var(--ds-radius-full);
   background: var(--ds-surface-panel);
 }
 /* `width` stays inline: it is computed from the step index (runtime value). */
 .ds-pattern-step-wizard.ds-engine-modern [data-part='progress-fill'] {
+  block-size: 100%;
   border-radius: var(--ds-radius-full);
   background: var(--ds-color-primary);
+  transition: inline-size var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
 }
 
-/* ---- step indicator: the JSX resolved three properties through
-        `isActive`/`isCompleted` ternaries. Base = neither; `active` is written
-        last so it wins the background/colour it shares with `completed`, exactly
-        as the JS `isActive ? … : isCompleted ? … : …` chain did. ---- */
-.ds-pattern-step-wizard.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'] {
-  border-radius: 50%;
-  background: var(--ds-surface-panel);
-  color: var(--ds-color-text-muted);
-  border: 2px solid var(--ds-color-border-secondary);
-  box-shadow: none;
+/* ---- step rail wrapper (the Steps primitive renders inside) ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-rail'][data-orientation='horizontal'] {
+  margin-block-end: var(--ds-step-wizard-rail-offset, 28px);
 }
-.ds-pattern-step-wizard.ds-engine-modern
-  [data-part='step-indicator'][data-part='step-indicator'][data-completed='true'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-  border: none;
-}
-.ds-pattern-step-wizard.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-active='true'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-  border: none;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-rail'][data-orientation='vertical'] {
+  flex-shrink: 0;
+  inline-size: var(--ds-step-wizard-vertical-rail-width, 180px);
 }
 
-/* ---- step title: same three-way chain, `active` last for the same reason.
-        `font-weight` stays inline (not a counted channel). ---- */
-.ds-pattern-step-wizard.ds-engine-modern [data-part='step-title'] {
-  color: var(--ds-color-text-muted);
+/* ---- vertical split layout (was inline flex/gap/width) ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='wizard-split'] {
+  display: flex;
+  gap: var(--ds-step-wizard-split-gap, var(--ds-spacing-8, 32px));
 }
-.ds-pattern-step-wizard.ds-engine-modern [data-part='step-title'][data-completed='true'] {
-  color: var(--ds-color-text-secondary);
-}
-.ds-pattern-step-wizard.ds-engine-modern [data-part='step-title'][data-active='true'] {
-  color: var(--ds-color-text-primary);
+.ds-pattern-step-wizard.ds-engine-modern [data-part='main'] {
+  flex: 1;
+  min-inline-size: 0;
 }
 
-.ds-pattern-step-wizard.ds-engine-modern [data-part='step-description'] {
-  color: var(--ds-color-text-muted);
+/* ---- content area ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='content'] {
+  min-block-size: var(--ds-step-wizard-content-min-height, 200px);
+  padding-block: var(--ds-spacing-6, 24px);
 }
 
-/* ---- connector: one rule serves both orientations; the JSX painted the same
-        background in each branch and differed only in layout, which stays inline. ---- */
-.ds-pattern-step-wizard.ds-engine-modern [data-part='step-connector'] {
-  background: var(--ds-color-border-secondary);
-}
-.ds-pattern-step-wizard.ds-engine-modern [data-part='step-connector'][data-completed='true'] {
-  background: var(--ds-color-primary);
-}
-
-/* ---- validation error panel ---- */
-.ds-pattern-step-wizard.ds-engine-modern [data-part='error-panel'][data-part='error-panel'] {
+/* ---- validation error panel (semantic error channels) ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='error-panel'] {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ds-step-wizard-error-gap, 10px);
+  padding: var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px);
+  margin-block-start: var(--ds-spacing-4, 16px);
+  font-size: var(--ds-font-size-sm, 14px);
+  line-height: var(--ds-line-height-snug, 1.375);
   background: color-mix(in srgb, var(--ds-color-error) 8%, transparent);
-  border: 1px solid color-mix(in srgb, var(--ds-color-error) 25%, transparent);
   border-radius: var(--ds-radius-md);
   color: var(--ds-color-error);
 }
+.ds-pattern-step-wizard.ds-engine-modern [data-part='error-panel'][data-part='error-panel'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-error) 25%, transparent);
+}
+.ds-pattern-step-wizard.ds-engine-modern [data-part='error-panel'] svg {
+  flex-shrink: 0;
+}
 
-/* ---- navigation bar ---- */
+/* ---- navigation bar (layout only; the Buttons paint themselves) ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='nav-bar'] {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  inline-size: 100%;
+  margin-block-start: var(--ds-spacing-6, 24px);
+  padding-block-start: var(--ds-spacing-5, 20px);
+}
 .ds-pattern-step-wizard.ds-engine-modern [data-part='nav-bar'][data-part='nav-bar'] {
   border-top: 1px solid var(--ds-color-border);
 }
-
-/* ---- nav buttons. Three bases, one per part: ghost (prev), primary (next +
-        complete), link (skip). The disabled merge the JSX applied on top of each
-        base carried only opacity/cursor/pointer-events -- no paint -- so it stays
-        inline and no `:disabled` rule is needed here. ---- */
-.ds-pattern-step-wizard.ds-engine-modern [data-part='prev-button'][data-part='prev-button'] {
-  color: var(--ds-color-text-primary);
-  background: transparent;
-  border: 1px solid var(--ds-color-border);
-  border-radius: var(--ds-radius-md);
+.ds-pattern-step-wizard.ds-engine-modern .ds-step-wizard__action-dock [data-part='nav-bar'] {
+  margin-block-start: 0;
+  padding-block-start: 0;
+}
+.ds-pattern-step-wizard.ds-engine-modern .ds-step-wizard__action-dock [data-part='nav-bar'][data-part='nav-bar'] {
+  border-top: 0;
+}
+.ds-pattern-step-wizard.ds-engine-modern [data-part='nav-actions'] {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  min-inline-size: 0;
 }
 
-.ds-pattern-step-wizard.ds-engine-modern [data-part='next-button'][data-part='next-button'],
-.ds-pattern-step-wizard.ds-engine-modern [data-part='complete-button'][data-part='complete-button'] {
-  color: var(--ds-color-text-on-primary);
-  background: var(--ds-color-primary);
-  border: none;
-  border-radius: var(--ds-radius-md);
+/* ---- narrow composition cut: the vertical split collapses to a single
+        column (rail on top), matching the Steps primitive's own responsive
+        behavior for the horizontal posture. ---- */
+@container ds-step-wizard (inline-size < 34rem) {
+  .ds-pattern-step-wizard.ds-engine-modern [data-part='wizard-split'] {
+    flex-direction: column;
+  }
+  .ds-pattern-step-wizard.ds-engine-modern [data-part='step-rail'][data-orientation='vertical'] {
+    inline-size: 100%;
+  }
 }
 
-.ds-pattern-step-wizard.ds-engine-modern [data-part='skip-button'][data-part='skip-button'] {
-  color: var(--ds-color-text-muted);
-  background: transparent;
-  border: none;
-  border-radius: var(--ds-radius-md);
+/* The root is the composition's named container (established above the cut
+   so the query resolves against it). */
+.ds-pattern-step-wizard.ds-engine-modern[data-part='root'] {
+  container-type: inline-size;
+  container-name: ds-step-wizard;
+}
+
+/* ---- coarse pointer: nav actions reach the 44px floor via min-block-size
+        (min-* wins over the Button's density height, fine pointers
+        untouched). The Steps primitive owns its own coarse floors. ---- */
+@media (hover: none) and (pointer: coarse) {
+  .ds-pattern-step-wizard.ds-engine-modern [data-part='prev-button'],
+  .ds-pattern-step-wizard.ds-engine-modern [data-part='skip-button'],
+  .ds-pattern-step-wizard.ds-engine-modern [data-part='next-button'],
+  .ds-pattern-step-wizard.ds-engine-modern [data-part='complete-button'] {
+    min-block-size: var(--ds-step-wizard-touch-target-min, 44px);
+  }
+}
+
+/* ---- reduced motion: skeleton shimmer, progress fill, and every skin-owned
+        transition go quiet (the primitives silence their own). ---- */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-step-wizard.ds-engine-modern [data-part='skeleton-progress'],
+  .ds-pattern-step-wizard.ds-engine-modern [data-part='skeleton-content'] {
+    animation: none;
+  }
+  .ds-pattern-step-wizard.ds-engine-modern [data-part='progress-fill'] {
+    transition: none;
+  }
 }

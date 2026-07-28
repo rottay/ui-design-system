@@ -20,6 +20,7 @@
 
 import React, { useMemo } from 'react';
 import type { TimelinePatternProps, TimelineItem } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 const ROOT_CLASS_NAME = 'ds-pattern-timeline ds-engine-modern';
 
@@ -46,6 +47,9 @@ function formatDateKey(ts: string | Date): string {
  * @returns A vertical timeline rendered from Rottay-namespaced parts.
  */
 export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
+  // Optional channel with an English floor: the pattern renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
   const {
     items,
     renderItem,
@@ -75,10 +79,27 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   }, [items, groupByDate]);
 
   /** Builds the default render for a single timeline item. In alternate mode,
-   *  odd-indexed items are placed on the right side by flipping `data-side`. */
+   *  odd-indexed items are placed on the right side by flipping `data-side`.
+   *  All paint AND micro-layout (meta row, timestamp type, badge geometry,
+   *  clickable-card states) live in `skin/pattern-timeline.css` — the engine
+   *  stamps parts, side, type and the clickable channel only. */
   const buildDefaultRender = (item: TimelineItem<T>, index: number, total: number) => {
     const isAlternate = mode === 'alternate';
     const isRight = mode === 'right' || (isAlternate && index % 2 === 1);
+    const clickable = Boolean(onItemClick);
+    const activate = clickable
+      ? {
+          role: 'button' as const,
+          tabIndex: 0,
+          onClick: () => onItemClick?.(item),
+          onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              onItemClick?.(item);
+            }
+          },
+        }
+      : {};
 
     return (
       <>
@@ -86,7 +107,7 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
         {showTimestamp && (
           <div data-part="timestamp-slot" data-side={isRight ? 'right' : 'left'} className="ds-timeline-modern__timestamp-slot">
             {!isRight && (
-              <time data-part="timestamp" className="font-mono text-xs opacity-60">
+              <time data-part="timestamp" className="ds-timeline-modern__timestamp">
                 {formatTimestamp(item.timestamp)}
               </time>
             )}
@@ -94,11 +115,12 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
         )}
         <div data-part="marker" className="ds-timeline-modern__marker">
           {/* Render custom icon if provided; otherwise fall back to a
-              checkmark circle SVG colored by the item's semantic type. */}
+              checkmark circle SVG colored by the item's semantic type. The
+              marker is decorative: the item's title carries the meaning. */}
           {item.icon ? (
-            <span data-part="marker-icon" data-type={item.type ?? 'default'} className="flex items-center justify-center w-5 h-5">{item.icon}</span>
+            <span data-part="marker-icon" data-type={item.type ?? 'default'} className="ds-timeline-modern__marker-icon">{item.icon}</span>
           ) : (
-            <svg data-part="marker-icon" data-type={item.type ?? 'default'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="ds-timeline-modern__marker-icon w-5 h-5">
+            <svg data-part="marker-icon" data-type={item.type ?? 'default'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false" className="ds-timeline-modern__marker-icon">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
             </svg>
           )}
@@ -106,28 +128,28 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
         <div
           data-part="item-card"
           data-side={isRight ? 'right' : 'left'}
-          data-clickable={Boolean(onItemClick)}
-          className={`ds-timeline-modern__item-card ${onItemClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
-          onClick={onItemClick ? () => onItemClick(item) : undefined}
+          data-clickable={clickable || undefined}
+          className="ds-timeline-modern__item-card"
+          {...activate}
         >
-          <div className="flex items-center gap-2 mb-1">
+          <div data-part="item-meta" className="ds-timeline-modern__item-meta">
             {item.user?.avatar && (
-              <div data-part="avatar" className="ds-timeline-modern__avatar" style={{ display: 'inline-flex', width: 24, height: 24, overflow: 'hidden' }}>
-                <img src={item.user.avatar} alt={item.user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div data-part="avatar" className="ds-timeline-modern__avatar">
+                <img src={item.user.avatar} alt={item.user.name} />
               </div>
             )}
-            {item.user && <span className="text-xs font-semibold">{item.user.name}</span>}
+            {item.user && <span data-part="user-name" className="ds-timeline-modern__user-name">{item.user.name}</span>}
             {item.type && item.type !== 'default' && (
-              <span data-part="type-badge" data-type={item.type} className="ds-timeline-modern__type-badge" style={{ display: 'inline-flex', alignItems: 'center', padding: '1px 5px', fontSize: 10 }}>{item.type}</span>
+              <span data-part="type-badge" data-type={item.type} className="ds-timeline-modern__type-badge">{item.type}</span>
             )}
           </div>
-          <div className="font-semibold text-sm">{item.title}</div>
+          <div data-part="item-title" className="ds-timeline-modern__item-title">{item.title}</div>
           {isRight && showTimestamp && (
-            <time data-part="timestamp" className="font-mono text-xs opacity-60">
+            <time data-part="timestamp" className="ds-timeline-modern__timestamp">
               {formatTimestamp(item.timestamp)}
             </time>
           )}
-          {item.description && <p className="text-xs opacity-70 mt-1">{item.description}</p>}
+          {item.description && <p data-part="item-description" className="ds-timeline-modern__item-description">{item.description}</p>}
         </div>
         {index !== total - 1 && <hr data-part="connector" data-edge="trailing" className="ds-timeline-modern__connector" />}
       </>
@@ -148,11 +170,12 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
     </ul>
   );
 
-  // Early-return loading state using DaisyUI's built-in spinner component.
+  // Early-return loading state. The spinner's geometry and motion live in the
+  // skin (ds-foundation-spin with a reduced-motion guard).
   if (loading) {
     return (
-      <div data-part="root" data-loading="true" data-empty="false" data-mode={mode} className={[ROOT_CLASS_NAME, 'flex justify-center items-center py-12', className].filter(Boolean).join(' ')} style={style}>
-        <span data-part="spinner" className="ds-timeline-modern__spinner" style={{ display: 'inline-block', width: 24, height: 24, animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
+      <div data-part="root" data-loading="true" data-empty="false" data-mode={mode} className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
+        <span data-part="spinner" className="ds-timeline-modern__spinner" />
       </div>
     );
   }
@@ -163,7 +186,9 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
       <div data-part="root" data-loading="false" data-empty="true" data-mode={mode} className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
         {header}
         {emptyState ?? (
-          <div data-part="empty" className="text-center py-12 opacity-60">No timeline items</div>
+          <div data-part="empty" className="ds-timeline-modern__empty">
+            {i18n?.tOr('empty.description', 'No timeline items') ?? 'No timeline items'}
+          </div>
         )}
         {footer}
       </div>
@@ -177,8 +202,8 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
           own heading; otherwise render all items as a single flat list. */}
       {grouped ? (
         Object.entries(grouped).map(([dateKey, group]) => (
-          <div data-part="date-group" key={dateKey} className="mb-6">
-            <div data-part="date-heading" className="text-sm font-semibold opacity-70 mb-3">{dateKey}</div>
+          <div data-part="date-group" key={dateKey} className="ds-timeline-modern__date-group">
+            <div data-part="date-heading" className="ds-timeline-modern__date-heading">{dateKey}</div>
             {renderList(group)}
           </div>
         ))

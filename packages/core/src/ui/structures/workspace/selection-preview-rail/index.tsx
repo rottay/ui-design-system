@@ -42,6 +42,7 @@ import {
 } from '../../../../graphics/icons';
 
 import { Badge, Box, Button, Flex, Text } from '../../../primitives';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /** Minimal column definition consumed by the rail. */
 export interface SelectionPreviewRailColumn<T> {
@@ -122,18 +123,18 @@ function extractString(record: Record<string, unknown>, candidates: string[]): s
   return undefined;
 }
 
-function renderFallbackValue(value: unknown): ReactNode {
+function renderFallbackValue(
+  value: unknown,
+  labels: { noData: string; yes: string; no: string },
+): ReactNode {
   if (value === undefined || value === null || value === '') {
     return (
       <Text
         size="sm"
         color="subtle"
         data-part="fallback-empty"
-        style={{
-          fontStyle: 'italic',
-        }}
       >
-        No data
+        {labels.noData}
       </Text>
     );
   }
@@ -141,7 +142,7 @@ function renderFallbackValue(value: unknown): ReactNode {
   if (typeof value === 'boolean') {
     return (
       <Text size="sm" data-part="fallback-boolean">
-        {value ? 'Yes' : 'No'}
+        {value ? labels.yes : labels.no}
       </Text>
     );
   }
@@ -150,9 +151,6 @@ function renderFallbackValue(value: unknown): ReactNode {
     <Text
       size="sm"
       data-part="fallback-string"
-      style={{
-        lineHeight: 1.45,
-      }}
     >
       {String(value)}
     </Text>
@@ -173,6 +171,23 @@ export function SelectionPreviewRail<T extends object>({
   preview,
 }: SelectionPreviewRailProps<T>) {
   const record = item as Record<string, unknown>;
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Catalog lookup with an honest English floor: when the provider is absent
+   * or echoes the raw key (missing entry), the historical default wins.
+   */
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (resolved === undefined || resolved === key || resolved === `components.${key}`) {
+      return fallback;
+    }
+    return resolved;
+  };
+  const fallbackLabels = {
+    noData: tOr('selectionPreviewRail.noData', 'No data'),
+    yes: tOr('selectionPreviewRail.yes', 'Yes'),
+    no: tOr('selectionPreviewRail.no', 'No'),
+  };
 
   const identity = useMemo(() => {
     // The identity card only auto-extracts domain-agnostic fields: a title
@@ -259,7 +274,7 @@ export function SelectionPreviewRail<T extends object>({
               style={{
                 position: 'absolute',
                 top: 12,
-                right: 12,
+                insetInlineEnd: 12,
                 zIndex: 1,
               }}
             >
@@ -267,7 +282,7 @@ export function SelectionPreviewRail<T extends object>({
                 variant="ghost"
                 size="sm"
                 icon={<PanelRightClose style={{ width: 16, height: 16 }} />}
-                aria-label="Close preview"
+                aria-label={tOr('selectionPreviewRail.closePreview', 'Close preview')}
                 onClick={onClose}
                 className="ds-selection-preview-rail__close"
                 style={{
@@ -325,13 +340,15 @@ export function SelectionPreviewRail<T extends object>({
           <Box style={{ padding: '18px 18px 16px' }}>
             <Flex align="center" justify="between" gap={12}>
               <Badge variant={mode === 'selection' ? 'primary' : 'secondary'} size="sm">
-                {mode === 'selection' ? 'Selected row' : 'Focused preview'}
+                {mode === 'selection'
+                  ? tOr('selectionPreviewRail.selectedRow', 'Selected row')
+                  : tOr('selectionPreviewRail.focusedPreview', 'Focused preview')}
               </Badge>
               <Button
                 variant="ghost"
                 size="sm"
                 icon={<PanelRightClose style={{ width: 16, height: 16 }} />}
-                aria-label="Close preview"
+                aria-label={tOr('selectionPreviewRail.closePreview', 'Close preview')}
                 onClick={onClose}
                 style={{ width: 34, minWidth: 34, padding: 0 }}
               />
@@ -344,8 +361,6 @@ export function SelectionPreviewRail<T extends object>({
                 data-part="identity-title"
                 style={{
                   display: 'block',
-                  letterSpacing: '-0.02em',
-                  lineHeight: 1.12,
                 }}
               >
                 {identity.title}
@@ -358,7 +373,6 @@ export function SelectionPreviewRail<T extends object>({
                   style={{
                     display: 'block',
                     marginTop: 6,
-                    lineHeight: 1.4,
                   }}
                 >
                   {identity.subtitle}
@@ -390,7 +404,7 @@ export function SelectionPreviewRail<T extends object>({
                   <Box style={{ minWidth: 0 }}>
                     <Flex align="center" gap={8} wrap="wrap">
                       <Badge variant="primary" size="sm">
-                        Why this row?
+                        {tOr('selectionPreviewRail.whyThisRow', 'Why this row?')}
                       </Badge>
                       <Text
                         size="xs"
@@ -399,11 +413,9 @@ export function SelectionPreviewRail<T extends object>({
                         data-part="match-reason-eyebrow"
                         style={{
                           display: 'block',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.06em',
                         }}
                       >
-                        Current search, scope, or filters matched this record.
+                        {tOr('selectionPreviewRail.matchReasonEyebrow', 'Current search, scope, or filters matched this record.')}
                       </Text>
                     </Flex>
                     <Text
@@ -413,7 +425,6 @@ export function SelectionPreviewRail<T extends object>({
                       style={{
                         display: 'block',
                         marginTop: 6,
-                        lineHeight: 1.5,
                       }}
                     >
                       {matchReason}
@@ -443,7 +454,7 @@ export function SelectionPreviewRail<T extends object>({
                   onClick={() => onOpenItem(item)}
                   style={{ gap: 6 }}
                 >
-                  Open record
+                  {tOr('selectionPreviewRail.openRecord', 'Open record')}
                 </Button>
               )}
               <Button
@@ -453,7 +464,7 @@ export function SelectionPreviewRail<T extends object>({
                 onClick={handleCopyKey}
                 style={{ gap: 6 }}
               >
-                Copy key
+                {tOr('selectionPreviewRail.copyKey', 'Copy key')}
               </Button>
               {visibleActions.slice(0, 2).map((action) => (
                 <Button
@@ -491,7 +502,7 @@ export function SelectionPreviewRail<T extends object>({
                 display: 'block',
               }}
             >
-              {preview?.title ?? 'Snapshot'}
+              {preview?.title ?? tOr('selectionPreviewRail.snapshotTitle', 'Snapshot')}
             </Text>
             <Text
               size="xs"
@@ -502,7 +513,7 @@ export function SelectionPreviewRail<T extends object>({
                 marginTop: 4,
               }}
             >
-              {preview?.description ?? `Key ${itemKey} · Row ${itemIndex + 1}`}
+              {preview?.description ?? `${tOr('selectionPreviewRail.keyPrefix', 'Key')} ${itemKey} · ${tOr('selectionPreviewRail.rowPrefix', 'Row')} ${itemIndex + 1}`}
             </Text>
           </Box>
 
@@ -511,7 +522,7 @@ export function SelectionPreviewRail<T extends object>({
               const rawValue = resolveColumnValue(column, item);
               const content = column.render
                 ? column.render(rawValue, item, itemIndex)
-                : renderFallbackValue(rawValue);
+                : renderFallbackValue(rawValue, fallbackLabels);
 
               return (
                 <Box
@@ -529,8 +540,6 @@ export function SelectionPreviewRail<T extends object>({
                     style={{
                       display: 'block',
                       marginBottom: 6,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.05em',
                     }}
                   >
                     {column.title}
@@ -546,11 +555,8 @@ export function SelectionPreviewRail<T extends object>({
                   size="sm"
                   color="subtle"
                   data-part="snapshot-empty"
-                  style={{
-                    lineHeight: 1.45,
-                  }}
                 >
-                  No preview fields are available for this record.
+                  {tOr('selectionPreviewRail.snapshotEmpty', 'No preview fields are available for this record.')}
                 </Text>
               </Box>
             )}

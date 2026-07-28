@@ -7,6 +7,15 @@
  * compilers.
  */
 
+import type {
+  BrandTheme,
+  CompiledBrand,
+  CompiledBrandModeBlock,
+} from '@/foundation/contracts/composition/tenants/themes';
+import {
+  brandModeSelector,
+  compileBrandTheme,
+} from '../../../kernel/runtime/brand-theme';
 import { projectFirstPartyArtifactScopes } from '../../../kernel/foundation/css/scope-projection';
 
 /** Marker written at the top of every generated vertical artifact. */
@@ -62,7 +71,7 @@ export const FIRST_PARTY_ARTIFACT_SPECS: readonly FirstPartyArtifactSpec[] = [
     verticalKey: 'platform',
     displayName: 'Rottay',
     authoredThemePath: 'foundation/tokens/ts/presentation/brand-themes/platform/index.ts',
-    selector: "html[data-tenant='rottay'][data-theme='light'], html[data-tenant='rottay'].light",
+    selector: "html[data-tenant='rottay']",
   },
 ];
 
@@ -74,6 +83,10 @@ export interface RenderVerticalArtifactInput {
   displayName: string;
   selector: string;
   compiledCssVariables: Record<string, string>;
+  /** Declared default mode of the compiled values; emitted as `color-scheme`. */
+  colorScheme?: 'light' | 'dark';
+  /** Compiled deltas for every mode the theme authors beyond its default. */
+  modeBlocks?: readonly CompiledBrandModeBlock[];
   extensionCss: string;
   regenerateCommand: string;
 }
@@ -87,6 +100,8 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
     displayName,
     selector,
     compiledCssVariables,
+    colorScheme,
+    modeBlocks,
     extensionCss,
     regenerateCommand,
   } = input;
@@ -105,10 +120,12 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
     ' */',
   ].join('\n');
 
-  const compiledDecls = Object.keys(compiledCssVariables)
-    .sort()
-    .map((key) => `  ${key}: ${compiledCssVariables[key]};`)
-    .join('\n');
+  const compiledDecls = [
+    ...(colorScheme ? [`  color-scheme: ${colorScheme};`] : []),
+    ...Object.keys(compiledCssVariables)
+      .sort()
+      .map((key) => `  ${key}: ${compiledCssVariables[key]};`),
+  ].join('\n');
   const compiledBlock = [
     '/* === Compiled from BrandTheme via compileBrandTheme — do not edit === */',
     `${selector} {`,
@@ -116,14 +133,75 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
     '}',
   ].join('\n');
 
+  // One block per authored non-default mode, from BrandTheme.modes. Each holds
+  // only the channels that mode moves; the base block above still supplies the
+  // rest. These used to be hand-written blocks in the extension, which made the
+  // extension a second theme author for every state but the default one.
+  const modeBlockSections = (modeBlocks ?? []).map((block) =>
+    [
+      `/* === Compiled from BrandTheme.modes.${block.mode} — do not edit === */`,
+      `${brandModeSelector(tenantSlug, block.mode)} {`,
+      [
+        `  color-scheme: ${block.colorScheme};`,
+        ...Object.keys(block.cssVariables)
+          .sort()
+          .map((key) => `  ${key}: ${block.cssVariables[key]};`),
+      ].join('\n'),
+      '}',
+    ].join('\n'),
+  );
+
   const extensionSection = [
     '/* === Declared artifact extension (authored source, mechanically scoped) === */',
     extensionCss.replace(/^\s+/, '').replace(/\s+$/, ''),
   ].join('\n');
 
   return projectFirstPartyArtifactScopes(
-    `${header}\n\n${compiledBlock}\n\n${extensionSection}\n`,
+    [header, compiledBlock, ...modeBlockSections, extensionSection].join(
+      '\n\n',
+    ) + '\n',
     tenantSlug,
     verticalKey,
   );
+}
+
+/** Inputs for {@link renderFirstPartyArtifact}. */
+export interface RenderFirstPartyArtifactInput {
+  spec: FirstPartyArtifactSpec;
+  brandTheme: BrandTheme;
+  extensionCss: string;
+  regenerateCommand?: string;
+}
+
+/**
+ * Compile a first-party BrandTheme and render its artifact in one call.
+ *
+ * The build script, the parity tests and the gates each used to assemble
+ * {@link RenderVerticalArtifactInput} by hand from the same spec. Three copies
+ * of one mapping means a field added to the contract reaches some of them and
+ * not others, and the artifact each produces silently disagrees — which is how
+ * a caller ends up "regenerating" an artifact into a different file than the
+ * build writes. There is one assembly, and it lives here.
+ */
+export function renderFirstPartyArtifact(input: RenderFirstPartyArtifactInput): {
+  css: string;
+  compiled: CompiledBrand;
+} {
+  const { spec, brandTheme, extensionCss, regenerateCommand } = input;
+  const compiled = compileBrandTheme({ brandTheme, tenantSlug: spec.slug });
+  return {
+    compiled,
+    css: renderVerticalArtifact({
+      tenantSlug: spec.slug,
+      verticalKey: spec.verticalKey,
+      authoredThemePath: spec.authoredThemePath,
+      displayName: spec.displayName,
+      selector: spec.selector,
+      compiledCssVariables: compiled.cssVariables,
+      colorScheme: compiled.colorScheme,
+      modeBlocks: compiled.modeBlocks,
+      extensionCss,
+      regenerateCommand: regenerateCommand ?? FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
+    }),
+  };
 }

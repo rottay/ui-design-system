@@ -59,6 +59,7 @@
      own -base literals so the winning value scales identically. The steps only
      defined here (md, 7xl-9xl) win from this file.
      ======================================================================== */
+  --ds-font-size-2xs-base: 0.6875rem; /* 11px - micro labels/eyebrows */
   --ds-font-size-xs-base: 0.75rem; /* 12px */
   --ds-font-size-sm-base: 0.875rem; /* 14px */
   --ds-font-size-base-base: 1rem; /* 16px */
@@ -74,6 +75,9 @@
   --ds-font-size-8xl-base: 6rem; /* 96px */
   --ds-font-size-9xl-base: 8rem; /* 128px */
 
+  --ds-font-size-2xs: calc(
+    var(--ds-font-size-2xs-base) * var(--ds-type-scale, 1)
+  );
   --ds-font-size-xs: calc(
     var(--ds-font-size-xs-base) * var(--ds-type-scale, 1)
   );

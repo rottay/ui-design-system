@@ -133,11 +133,163 @@
 }
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__avatar[data-part='avatar'] {
+  display: inline-flex;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  overflow: hidden;
   border-radius: 50%;
 }
 
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__avatar[data-part='avatar'] > img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* ---- marker icon geometry: the retired `w-5 h-5 flex items-center
+        justify-center` pair, one owner for the span and the fallback svg. ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-timeline-marker-size, 1.25rem);
+  block-size: var(--ds-timeline-marker-size, 1.25rem);
+}
+
+/* ---- item meta row: avatar + actor + type badge on one baseline ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-meta[data-part='item-meta'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 0.5rem);
+  margin-block-end: var(--ds-spacing-1, 0.25rem);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__user-name[data-part='user-name'] {
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+}
+
+/* ---- title / description hierarchy: primary action statement first,
+        supporting detail quieter and smaller ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-title[data-part='item-title'] {
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  line-height: var(--ds-line-height-snug, 1.375);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-description[data-part='item-description'] {
+  margin-block-start: var(--ds-spacing-1, 0.25rem);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  line-height: var(--ds-line-height-relaxed, 1.625);
+}
+
+/* ---- timestamp: mono tabular figures so dates align down the rail ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp[data-part='timestamp'] {
+  color: var(--ds-timeline-timestamp-color, var(--ds-color-text-muted));
+  font-family: var(--ds-font-family-mono, ui-monospace, monospace);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--ds-timeline-timestamp-letter-spacing, -0.01em);
+}
+
+/* ---- clickable card: pointer affordance + hover lift + visible focus ring.
+        The engine stamps `data-clickable` and owns the activation handlers;
+        every state paints here. ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true'] {
+  cursor: pointer;
+  transition:
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-bg-tertiary));
+  box-shadow: var(--ds-shadow-md, 0 4px 6px -1px color-mix(in srgb, var(--ds-color-neutral-900, #000) 10%, transparent));
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* ---- date grouping ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-group[data-part='date-group'] {
+  margin-block-end: var(--ds-spacing-6, 1.5rem);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-heading[data-part='date-heading'] {
+  margin-block-end: var(--ds-spacing-3, 0.75rem);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--ds-timeline-date-heading-letter-spacing, 0.02em);
+}
+
+/* ---- empty state ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__empty[data-part='empty'] {
+  padding-block: var(--ds-timeline-empty-padding-block, 3rem);
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  text-align: center;
+}
+
+/* ---- loading posture + spinner: geometry AND motion are skin-owned. The
+        retired engine inline style referenced `ds-spin`, a keyframe this
+        engine's tree never loads; the foundation's ds-foundation-spin is the
+        canonical spin. ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--ds-timeline-loading-padding-block, 3rem);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']
+  > .ds-timeline-modern__spinner[data-part='spinner'][data-part='spinner'] {
+  display: inline-block;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
+  border: 3px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
+/* ---- reduced motion: the infinite spinner settles to a static ring ---- */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']
+    > .ds-timeline-modern__spinner[data-part='spinner'] {
+    animation: none;
+  }
+
+  .ds-pattern-timeline.ds-engine-modern[data-part='root']
+    .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true'] {
+    transition: none;
+  }
+}
+
+html[data-ds-motion='reduced']
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']
+  > .ds-timeline-modern__spinner[data-part='spinner'] {
+  animation: none;
+}
+
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'] {
+  display: inline-flex;
+  align-items: center;
+  padding-block: 1px;
+  padding-inline: var(--ds-timeline-badge-padding-inline, 0.3125rem);
   border-radius: 9999px;
+  font-size: var(--ds-timeline-badge-font-size, 0.625rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  line-height: 1.4;
+  letter-spacing: 0.02em;
 }
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='default'],
@@ -159,11 +311,4 @@
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='error'] {
   background: color-mix(in srgb, var(--ds-color-error) 15%, transparent);
   color: var(--ds-color-error);
-}
-
-.ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']
-  > .ds-timeline-modern__spinner[data-part='spinner'][data-part='spinner'] {
-  border: 3px solid var(--ds-color-border);
-  border-top-color: var(--ds-color-primary);
-  border-radius: 50%;
 }

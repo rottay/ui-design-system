@@ -128,7 +128,12 @@
       "empty_title": "Nada para mostrar ainda",
       "empty_description": "Esta surface nao tem dados para renderizar agora.",
       "error_title": "A surface falhou ao renderizar",
-      "retry": "Tentar novamente"
+      "retry": "Tentar novamente",
+      "error_description": "Algo correu mal ao renderizar esta superfície.",
+      "capability_label": "Disponível quando os dados forem recuperados",
+      "capability_aria": "Capacidades registadas da superfície",
+      "error_boundary_title": "{surface} encontrou um erro",
+      "error_boundary_generic_surface": "Esta secção"
     },
     "list": {
       "empty_title": "Nenhum resultado disponivel",
@@ -239,5 +244,23 @@
     },
     "topLabel": "Ações superiores",
     "bottomLabel": "Ações inferiores"
+  },
+  "appShell": {
+    "navigation": {
+      "label": "Navegação",
+      "open": "Abrir {label}",
+      "close": "Fechar {label}"
+    }
+  },
+  "pageShell": {
+    "tabs": {
+      "label": "Separadores da página"
+    }
+  },
+  "tabs": {
+    "previous": "Abas anteriores",
+    "next": "Próximas abas",
+    "more": "Mais abas",
+    "loading": "Carregando"
   }
 }

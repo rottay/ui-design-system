@@ -15,6 +15,7 @@ import React, {
 import {
   Box,
   Button,
+  Input,
   ResizeHandle,
   Sheet,
   Stack,
@@ -131,6 +132,7 @@ export function WidgetBoardEngine({
   style,
 }: WidgetBoardProps): React.ReactElement {
   const catalogId = useId();
+  const headingId = useId();
   const [layout, setLayout] = useState(items);
   const [editing, setEditing] = useState(editable && defaultEditing);
   const [catalogOpen, setCatalogOpen] = useState(
@@ -142,6 +144,7 @@ export function WidgetBoardEngine({
   const [resizeSession, setResizeSession] =
     useState<WidgetResizeSession | null>(null);
   const [rowSpans, setRowSpans] = useState<Record<string, number>>({});
+  const [catalogQuery, setCatalogQuery] = useState("");
   const resizeSessionRef = useRef<WidgetResizeSession | null>(null);
   const dragSessionRef = useRef<WidgetDragSession | null>(null);
   const layoutRef = useRef(items);
@@ -168,6 +171,29 @@ export function WidgetBoardEngine({
     () => layout.filter((item) => !item.visible),
     [layout]
   );
+
+  /*
+   * Catalog search filters the hidden (addable) widgets by name, description
+   * and category. Rich ReactNode metadata only participates when it is plain
+   * text; the plain-text accessibleTitle always covers the name.
+   */
+  const normalizedCatalogQuery = catalogQuery.trim().toLocaleLowerCase();
+  const filteredHidden = useMemo(() => {
+    if (!normalizedCatalogQuery) return hidden;
+    const textOf = (node: React.ReactNode): string =>
+      typeof node === "string" ? node : "";
+    return hidden.filter((item) =>
+      [
+        item.accessibleTitle,
+        textOf(item.title),
+        textOf(item.catalog?.description),
+        textOf(item.catalog?.category),
+      ]
+        .join("\n")
+        .toLocaleLowerCase()
+        .includes(normalizedCatalogQuery)
+    );
+  }, [hidden, normalizedCatalogQuery]);
 
   const visibleIds = useMemo(
     () => visible.map((item) => item.id).join("|"),
@@ -818,6 +844,8 @@ export function WidgetBoardEngine({
     <section
       className={rootClassName}
       data-part="root"
+      aria-labelledby={editable && labels.heading ? headingId : undefined}
+      aria-busy={loading ? true : undefined}
       data-editing={editing ? "true" : "false"}
       data-moving={draggingId ? "true" : "false"}
       data-resizing={resizeSession ? "true" : "false"}
@@ -861,6 +889,7 @@ export function WidgetBoardEngine({
               ) : null}
               {labels.heading ? (
                 <h2
+                  id={headingId}
                   className="ds-widget-board__toolbar-title"
                   data-part="toolbar-title"
                 >
@@ -923,7 +952,10 @@ export function WidgetBoardEngine({
       {editing ? (
         <Sheet
           open={catalogOpen}
-          onOpenChange={setCatalogOpen}
+          onOpenChange={(open) => {
+            setCatalogOpen(open);
+            if (!open) setCatalogQuery("");
+          }}
           side="right"
           title={labels.catalogHeading ?? labels.addWidget}
           id={catalogId}
@@ -955,11 +987,41 @@ export function WidgetBoardEngine({
                 </Text>
               </div>
             ) : (
+              <>
+                <div
+                  className="ds-widget-board__catalog-search"
+                  data-part="catalog-search"
+                >
+                  <Input
+                    size="sm"
+                    value={catalogQuery}
+                    onChange={(value) => setCatalogQuery(value)}
+                    placeholder={
+                      labels.catalogSearchPlaceholder ?? "Search widgets"
+                    }
+                    aria-label={
+                      labels.catalogSearchPlaceholder ?? "Search widgets"
+                    }
+                    clearable
+                    onClear={() => setCatalogQuery("")}
+                  />
+                </div>
+                {filteredHidden.length === 0 ? (
+                  <div
+                    className="ds-widget-board__catalog-empty"
+                    data-part="catalog-no-results"
+                  >
+                    <Text size="sm" color="muted">
+                      {labels.catalogNoResults ??
+                        "No widgets match the search"}
+                    </Text>
+                  </div>
+                ) : (
               <div
                 className="ds-widget-board__catalog-grid"
                 data-part="catalog-grid"
               >
-                {hidden.map((item) => {
+                {filteredHidden.map((item) => {
                   const catalogIcon = item.catalog?.icon ?? item.header?.icon;
                   const catalogDescription =
                     item.catalog?.description ?? item.header?.supporting;
@@ -1026,6 +1088,8 @@ export function WidgetBoardEngine({
                   );
                 })}
               </div>
+                )}
+              </>
             )}
           </section>
         </Sheet>

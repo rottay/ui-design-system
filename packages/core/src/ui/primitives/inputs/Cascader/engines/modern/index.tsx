@@ -20,6 +20,22 @@ import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { CascaderProps, CascaderOption, CascaderValue, CascaderFieldNames } from '../../contracts';
 import { CASCADER_DEFAULTS } from '../../contracts';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+
+/**
+ * Hook-local `tOr`: catalogue value with an English floor -- when the
+ * catalogue entry has not landed yet the provider echoes the full key, which
+ * must never reach visible copy or an aria-label.
+ */
+function useCascaderTranslation() {
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+    return resolved;
+  };
+  return { tOr };
+}
 
 // ---------------------------------------------------------------------------
 // Helpers for fieldNames mapping.
@@ -99,6 +115,7 @@ function flattenOptions(
  */
 export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
   (props, ref) => {
+    const { tOr } = useCascaderTranslation();
     const {
       options,
       value: controlledValue,
@@ -106,12 +123,12 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       onChange,
       displayRender,
       expandTrigger = CASCADER_DEFAULTS.expandTrigger,
-      placeholder = CASCADER_DEFAULTS.placeholder,
+      placeholder: placeholderProp,
       disabled,
       showSearch,
       allowClear = CASCADER_DEFAULTS.allowClear,
       size: sizeProp = CASCADER_DEFAULTS.size,
-      notFoundContent = 'No data',
+      notFoundContent: notFoundContentProp,
       open: controlledOpen,
       onDropdownVisibleChange,
       fieldNames,
@@ -119,6 +136,11 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       className,
       style,
     } = props;
+
+    // Copy defaults: explicit props win; otherwise localized copy with the
+    // historical English defaults (contract + pre-i18n literals) as the floor.
+    const placeholder = placeholderProp ?? tOr('cascader.placeholder', 'Please select');
+    const notFoundContent = notFoundContentProp ?? tOr('cascader.not_found', 'No data');
 
     // getSizeStyle's switch below is keyed by the legacy 'small' | 'middle' | 'large'
     // spelling; toLegacySize resolves either spelling to it.
@@ -339,15 +361,31 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
         data-part="root"
       >
         <div
-          className={`flex items-center cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className="flex items-center cursor-pointer"
           style={{
             boxSizing: 'border-box',
             ...getSizeStyle(),
           }}
           onClick={() => !disabled && handleOpenChange(!isOpen)}
+          onKeyDown={(e) => {
+            if (disabled) return;
+            if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+              e.preventDefault();
+              if (!isOpen) handleOpenChange(true);
+            } else if (e.key === 'Escape' && isOpen) {
+              e.preventDefault();
+              handleOpenChange(false);
+            }
+          }}
           data-part="trigger"
           data-open={isOpen || undefined}
           data-disabled={disabled || undefined}
+          role="combobox"
+          aria-expanded={isOpen}
+          aria-haspopup="listbox"
+          aria-label={placeholder}
+          aria-disabled={disabled || undefined}
+          tabIndex={disabled ? -1 : 0}
         >
           <span
             className="flex-1 truncate"
@@ -361,16 +399,18 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
               style={{ width: 24, height: 24, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
               onClick={handleClear}
               data-part="clear-button"
+              aria-label={tOr('cascader.clear', 'Clear')}
             >
               ✕
             </button>
           )}
-          <span style={{ transition: 'transform var(--ds-motion-fast)' }} className={`${isOpen ? 'rotate-180' : ''}`} data-part="arrow-icon">&#9660;</span>
+          {/* Chevron glyph; the open rotation is skin-owned via data-open. */}
+          <span data-part="arrow-icon" aria-hidden="true">&#9660;</span>
         </div>
 
         {isOpen && (
           <>
-            <div data-part="dropdown" style={{ position: 'absolute', zIndex: 50, marginTop: 'var(--ds-spacing-1, 4px)', animation: 'ds-cascader-slide-in var(--ds-motion-fast) ease-out' }}>
+            <div data-part="dropdown" role="listbox" aria-label={placeholder}>
             {/* Search input */}
             {showSearch && (
               <div className="p-2" data-part="search-input-wrapper">
@@ -384,9 +424,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                     fontSize: 'var(--ds-input-sm-font-size, 13px)',
                     height: 'var(--ds-input-sm-height, 32px)',
                     boxSizing: 'border-box',
-                    transition: 'all var(--ds-motion-fast)',
                   }}
-                  placeholder="Search..."
+                  placeholder={tOr('cascader.search_placeholder', 'Search...')}
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   onClick={(e) => e.stopPropagation()}
@@ -397,7 +436,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
             {isSearchMode ? (
               <>
                 {/* Flat search results */}
-                <ul data-part="option-list" style={{ listStyle: 'none', margin: 0, padding: 'var(--ds-spacing-1, 4px)', width: 256, maxHeight: 240, overflowY: 'auto' }}>
+                <ul data-part="option-list">
                   {filteredFlatOptions.length > 0 ? (
                     filteredFlatOptions.map((fo, idx) => (
                       <li key={idx}>
@@ -425,15 +464,6 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                       key={colIndex}
                       data-part="menu-column"
                       data-last={colIndex === activeColumns.length - 1 || undefined}
-                      style={{
-                        listStyle: 'none',
-                        margin: 0,
-                        padding: 'var(--ds-spacing-1, 4px)',
-                        width: 192,
-                        maxHeight: 240,
-                        overflowY: 'auto',
-                        ...(colIndex > 0 ? { animation: 'ds-cascader-panel-in var(--ds-motion-fast) ease-out' } : {}),
-                      }}
                     >
                       {column.length > 0 ? (
                         column.map((option) => {
@@ -447,21 +477,23 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                             <li key={String(optValue)}>
                               <button
                                 type="button"
-                                className={`flex justify-between ${option.disabled ? 'disabled' : ''} ${isSelected ? 'active font-medium' : ''}`}
-                                style={{ transition: 'all var(--ds-motion-fast)' }}
+                                className="flex justify-between"
                                 disabled={option.disabled}
                                 onClick={() => handleOptionClick(option, colIndex)}
                                 onMouseEnter={() => handleOptionHover(option, colIndex)}
                                 data-part="option"
                                 data-selected={isSelected || undefined}
                                 data-disabled={option.disabled || undefined}
+                                aria-current={isSelected || undefined}
                               >
                                 <span className="truncate">{optLabel}</span>
                                 {isLoading ? (
-                                  <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12, animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite' }} />
+                                  <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12 }} />
                                 ) : (
                                   (optChildren && optChildren.length > 0 || (!isLeaf(option, fieldNames) && loadData)) && (
-                                    <span data-part="menu-item-arrow">›</span>
+                                    /* Static child chevron; the RTL mirror is
+                                       skin-owned (TreeSelect idiom). */
+                                    <span data-part="chevron" aria-hidden="true">›</span>
                                   )
                                 )}
                               </button>

@@ -763,6 +763,38 @@
   color: var(--ds-search-icon-color, var(--ds-color-text-muted));
 }
 
+/* R2+R3 (BATCH C): the toolbar search is skin-owned end to end — the engine
+   no longer injects the `searchInputStyle` inline object (the last inline
+   paint in this pattern). The --ds-input-* channels cascade from the section;
+   the field wrapper keeps its tenant surface channels; and the control keeps
+   the W10 geometry law: same height and type size as every other toolbar
+   control, while input.css's coarse-pointer floor still raises it for touch. */
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__search-section[data-part="search-section"] {
+  --ds-input-bg: var(--ds-search-input-bg, var(--ds-search-bg, var(--ds-surface-control, var(--ds-color-bg-input))));
+  --ds-input-border: var(--ds-search-input-border, var(--ds-search-border, var(--ds-color-border)));
+  --ds-input-color: var(--ds-search-input-color, var(--ds-search-color, var(--ds-color-text-primary)));
+  --ds-input-color-placeholder: var(--ds-search-placeholder-color, var(--ds-color-text-muted));
+  --ds-input-addon-color: var(--ds-search-icon-color, var(--ds-color-text-muted));
+  --ds-input-clear-color: var(--ds-search-clear-color, var(--ds-color-text-muted));
+  --ds-input-clear-color-hover: var(--ds-search-clear-color-hover, var(--ds-color-text-secondary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__search-section[data-part="search-section"]
+  .rottay-input-field[data-part="field"] {
+  background: var(--ds-search-bg, transparent);
+  border-radius: var(--ds-search-radius, var(--ds-toolbar-radius, var(--ds-radius-sm, 6px)));
+  box-shadow: var(--ds-search-shadow, none);
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__search-section[data-part="search-section"]
+  .rottay-input.rottay-input--modern[data-part="root"] {
+  block-size: var(--ds-toolbar-search-height, var(--ds-button-sm-height, 2rem));
+  font-size: var(--ds-toolbar-search-font-size, var(--ds-button-sm-font-size, 0.8125rem));
+}
+
 /* Active-filter strip ----------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern

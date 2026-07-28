@@ -1,10 +1,14 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI / Tailwind) engine for the FilterBuilder pattern.
- * Renders a recursive, composable filter tree using DaisyUI input/select/toggle
- * classes with native HTML form elements. Nested groups get a left-border
- * accent and tinted background to communicate hierarchy visually.
+ * @fileoverview Modern engine for the FilterBuilder pattern (Lote 2 rebuild).
+ * The pattern COMPOSES public primitives -- it never recreates controls:
+ * Select (field / operator / select values), Input + InputNumber (text and
+ * numeric values), DatePicker (date values), Switch (boolean values), and
+ * Button (add / remove / logic-toggle / clear). Each primitive is the single
+ * paint owner of its own chrome; this file owns semantics, the recursive
+ * filter tree and the layout anatomy (`data-part` wrappers) only. All paint
+ * and geometry live in the `filter-builder.css` modern skin.
  *
  * @example
  * <FilterBuilder
@@ -39,13 +43,25 @@ import {
   toOperatorDefinition,
 } from '../../runtime/operators';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
+import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
+import ModernInput from '../../../../../primitives/inputs/Input/engines/modern';
+import ModernInputNumber from '../../../../../primitives/inputs/InputNumber/engines/modern';
+import ModernSelect from '../../../../../primitives/inputs/Select/engines/modern';
+import ModernSwitch from '../../../../../primitives/inputs/Switch/engines/modern';
+import ModernDatePicker from '../../../../../primitives/inputs/DatePicker/engines/modern';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionAddIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-add';
+import { ActionDeleteIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-delete';
 
 /**
- * Modern FilterBuilder using DaisyUI form controls for each value type.
- * Manages a recursive filter tree (FilterGroup) via immutable updates.
+ * Modern FilterBuilder: a recursive filter composer built ENTIRELY from DS
+ * primitives. Manages the recursive filter tree (FilterGroup) via immutable
+ * updates; every interactive element is a public primitive, so focus rings,
+ * disabled/loading states, coarse-pointer floors and tenant paint cannot
+ * drift from the rest of the system.
  *
  * @param props - See {@link FilterBuilderProps} for full prop documentation.
- * @returns A DaisyUI-styled interactive filter composer with AND/OR grouping.
+ * @returns A primitive-composed interactive filter composer with AND/OR grouping.
  */
 const ROOT_CLASS_NAME = 'ds-pattern-filter-builder ds-engine-modern';
 
@@ -56,10 +72,10 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     onChange,
     maxDepth = 3,
     allowGrouping = true,
-    addRuleLabel = 'Add rule',
-    addGroupLabel = 'Add group',
+    addRuleLabel: addRuleLabelProp,
+    addGroupLabel: addGroupLabelProp,
     showClear,
-    clearLabel = 'Clear all',
+    clearLabel: clearLabelProp,
     onClear,
     compact,
     loading,
@@ -67,8 +83,31 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     style,
     customOperators,
     showAddFilter,
-    addFilterLabel = 'Add filter',
+    addFilterLabel: addFilterLabelProp,
   } = props;
+
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Localized label with an English floor: when the catalogue entry has not
+   * landed yet the provider echoes the full key, which must never reach
+   * visible copy or an aria-label.
+   */
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+    return resolved;
+  };
+
+  // Copy defaults: explicit props win; otherwise the localized label with the
+  // historical English default as the floor (API and tests are pinned to it).
+  const addRuleLabel = addRuleLabelProp ?? tOr('filter_builder.add_rule', 'Add rule');
+  const addGroupLabel = addGroupLabelProp ?? tOr('filter_builder.add_group', 'Add group');
+  const clearLabel = clearLabelProp ?? tOr('filter_builder.clear_all', 'Clear all');
+  const addFilterLabel = addFilterLabelProp ?? tOr('filter_builder.add_filter', 'Add filter');
+  const removeRuleLabel = tOr('filter_builder.remove_rule', 'Remove rule');
+  const removeGroupLabel = tOr('filter_builder.remove_group', 'Remove group');
+  const logicLabel = (logic: 'and' | 'or') =>
+    logic === 'and' ? tOr('filter_builder.and', 'AND') : tOr('filter_builder.or', 'OR');
 
   // Build a merged operator definitions list (built-in + custom) once.
   const allOperatorDefs: OperatorDefinition[] = React.useMemo(() => {
@@ -261,14 +300,14 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     [value, onChange, updateRule]
   );
 
-  // DaisyUI size classes are chosen based on the compact prop to keep the
-  // filter row visually tight in dense UIs like data-table toolbars.
-  const sizeClass = compact ? 'input-xs select-xs' : 'input-sm select-sm';
+  // One size step for every composed control: compact toolbars read 'sm',
+  // the default posture reads 'md'. Each primitive maps it onto its own
+  // density-scaled geometry -- the pattern never paints a pixel.
+  const controlSize = compact ? 'sm' : 'md';
+  const buttonSize = compact ? 'xs' : 'sm';
 
-  // Renders the appropriate native input for the field type. Uses native HTML
-  // elements (input, select, checkbox) styled with DaisyUI classes rather
-  // than Ant Design components, keeping the bundle lightweight.
-  // Custom operators with a renderValue function get priority.
+  // Renders the appropriate PRIMITIVE for the field type. Custom operators
+  // with a renderValue function get priority.
   const renderValueInput = (rule: FilterRule, fieldDef: FilterFieldDefinition) => {
     const opDef = allOperatorDefs.find((o) => o.key === rule.operator);
     // Unary operators (isEmpty, isNotEmpty) render no value input.
@@ -284,39 +323,32 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
       );
     }
 
+    const valueAriaLabel = tOr('filter_builder.value_label', 'Filter value');
+
     // Range operators ("between") require paired from/to inputs.
     if (opDef.requiresRange) {
       const rangeVal = Array.isArray(rule.value) ? rule.value : [undefined, undefined];
+      const RangeControl = fieldDef.type === 'number' ? ModernInputNumber : ModernInput;
       return (
-        <div className="flex items-center gap-1">
-          <input
-            data-part="value-input"
-            data-field-type={fieldDef.type}
-            type={fieldDef.type === 'number' ? 'number' : 'text'}
-            style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, width: 80 }}
-            placeholder="From"
-            value={rangeVal[0] ?? ''}
-            onChange={(e) =>
-              handleValueChange(rule.id, [
-                fieldDef.type === 'number' ? Number(e.target.value) : e.target.value,
-                rangeVal[1],
-              ])
+        <div data-part="value-range">
+          <RangeControl
+            size={controlSize}
+            placeholder={tOr('filter_builder.range_from', 'From')}
+            value={rangeVal[0] ?? undefined}
+            onChange={(v: unknown) =>
+              handleValueChange(rule.id, [v ?? undefined, rangeVal[1]])
             }
+            aria-label={`${valueAriaLabel} – ${tOr('filter_builder.range_from', 'From')}`}
           />
-          <span data-part="range-separator" className="text-xs">and</span>
-          <input
-            data-part="value-input"
-            data-field-type={fieldDef.type}
-            type={fieldDef.type === 'number' ? 'number' : 'text'}
-            style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, width: 80 }}
-            placeholder="To"
-            value={rangeVal[1] ?? ''}
-            onChange={(e) =>
-              handleValueChange(rule.id, [
-                rangeVal[0],
-                fieldDef.type === 'number' ? Number(e.target.value) : e.target.value,
-              ])
+          <span data-part="range-separator">{tOr('filter_builder.range_and', 'and')}</span>
+          <RangeControl
+            size={controlSize}
+            placeholder={tOr('filter_builder.range_to', 'To')}
+            value={rangeVal[1] ?? undefined}
+            onChange={(v: unknown) =>
+              handleValueChange(rule.id, [rangeVal[0], v ?? undefined])
             }
+            aria-label={`${valueAriaLabel} – ${tOr('filter_builder.range_to', 'To')}`}
           />
         </div>
       );
@@ -325,75 +357,79 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     switch (fieldDef.type) {
       case 'number':
         return (
-          <input
-            data-part="value-input"
-            data-field-type="number"
-            type="number"
-            style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, width: 112 }}
-            placeholder={fieldDef.placeholder ?? 'Value'}
-            value={rule.value ?? ''}
-            onChange={(e) => handleValueChange(rule.id, Number(e.target.value))}
+          <ModernInputNumber
+            size={controlSize}
+            placeholder={fieldDef.placeholder ?? tOr('filter_builder.value_placeholder', 'Value')}
+            value={typeof rule.value === 'number' ? rule.value : undefined}
+            onChange={(v) => handleValueChange(rule.id, v ?? undefined)}
+            aria-label={valueAriaLabel}
           />
         );
       case 'date':
         return (
-          <input
-            data-part="value-input"
-            data-field-type="date"
-            type="date"
-            style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, width: 144 }}
-            value={rule.value ?? ''}
-            onChange={(e) => handleValueChange(rule.id, e.target.value)}
+          <ModernDatePicker
+            size={controlSize}
+            value={rule.value ?? null}
+            onChange={(_date, dateStr) => handleValueChange(rule.id, dateStr || undefined)}
+            allowClear
           />
         );
       case 'select':
+        return (
+          <ModernSelect
+            size={controlSize}
+            forceCustomDropdown
+            placeholder={fieldDef.placeholder ?? tOr('filter_builder.select_placeholder', 'Select...')}
+            value={rule.value ?? undefined}
+            onChange={(v) => handleValueChange(rule.id, v || undefined)}
+            options={(fieldDef.options ?? []).map((opt) => ({ value: opt.value, label: opt.label }))}
+            allowClear
+            aria-label={valueAriaLabel}
+          />
+        );
       case 'multiSelect':
         return (
-          <select
-            data-part="value-input"
-            data-field-type={fieldDef.type}
-            style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, minWidth: 120 }}
-            value={rule.value ?? ''}
-            onChange={(e) => handleValueChange(rule.id, e.target.value)}
-          >
-            <option value="" disabled>
-              {fieldDef.placeholder ?? 'Select...'}
-            </option>
-            {fieldDef.options?.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+          <ModernSelect
+            size={controlSize}
+            forceCustomDropdown
+            multiple
+            placeholder={fieldDef.placeholder ?? tOr('filter_builder.select_placeholder', 'Select...')}
+            value={Array.isArray(rule.value) ? rule.value : rule.value ? [rule.value] : []}
+            onChange={(v) => handleValueChange(rule.id, Array.isArray(v) && v.length > 0 ? v : undefined)}
+            options={(fieldDef.options ?? []).map((opt) => ({ value: opt.value, label: opt.label }))}
+            allowClear
+            aria-label={valueAriaLabel}
+          />
         );
       case 'boolean':
+        // SwitchProps does not extend BaseComponentProps (no aria-* index), so
+        // the accessible name rides a named group wrapper -- registered gap:
+        // the Switch contract should extend BaseComponentProps directly.
         return (
-          <input
-            data-part="value-input"
-            data-field-type="boolean"
-            type="checkbox"
-            style={{ width: 36, height: 18, cursor: 'pointer' }}
-            checked={rule.value === true}
-            onChange={(e) => handleValueChange(rule.id, e.target.checked)}
-          />
+          <span data-part="value-switch" role="group" aria-label={valueAriaLabel}>
+            <ModernSwitch
+              size={controlSize}
+              checked={rule.value === true}
+              onChange={(checked) => handleValueChange(rule.id, checked)}
+            />
+          </span>
         );
       default:
         return (
-          <input
-            data-part="value-input"
-            data-field-type={fieldDef.type}
-            type="text"
-            style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, width: 160 }}
-            placeholder={fieldDef.placeholder ?? 'Value'}
+          <ModernInput
+            size={controlSize}
+            placeholder={fieldDef.placeholder ?? tOr('filter_builder.value_placeholder', 'Value')}
             value={rule.value ?? ''}
-            onChange={(e) => handleValueChange(rule.id, e.target.value)}
+            onChange={(v) => handleValueChange(rule.id, v)}
+            aria-label={valueAriaLabel}
           />
         );
     }
   };
 
-  // A single rule row: logic keyword, field dropdown, operator dropdown,
-  // type-appropriate value input, and a delete button.
+  // A single rule row: logic keyword, field selector, operator selector,
+  // type-appropriate value primitive, and a remove action -- every one a
+  // public primitive inside a layout wrapper the skin owns.
   const renderRule = (rule: FilterRule, isFirst: boolean, parentLogic: 'and' | 'or') => {
     const fieldDef = fields.find((f) => f.key === rule.field);
     const operators = fieldDef ? getOperatorsForFieldWithCustom(fieldDef, customOperators) : [];
@@ -403,70 +439,54 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         key={rule.id}
         data-testid={`filter-rule-${rule.id}`}
         data-part="rule"
-        className={`flex items-center gap-2 ${compact ? 'py-1' : 'py-1.5'}`}
       >
-        <div data-part="rule-logic-label" className="w-14 text-center text-xs font-medium uppercase">
-          {isFirst ? 'Where' : parentLogic.toUpperCase()}
+        <div data-part="rule-logic-label">
+          {isFirst ? tOr('filter_builder.where', 'Where') : logicLabel(parentLogic)}
         </div>
 
-        <select
-          data-part="field-select"
-          style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, minWidth: 120 }}
-          value={rule.field}
-          onChange={(e) => handleFieldChange(rule.id, e.target.value)}
-          data-testid={`field-select-${rule.id}`}
-        >
-          {fields.map((f) => (
-            <option key={f.key} value={f.key}>
-              {f.label}
-            </option>
-          ))}
-        </select>
+        <div data-part="rule-field" data-testid={`field-select-${rule.id}`}>
+          <ModernSelect
+            size={controlSize}
+            forceCustomDropdown
+            options={fields.map((f) => ({ value: f.key, label: f.label }))}
+            value={rule.field}
+            onChange={(v) => v && handleFieldChange(rule.id, String(v))}
+            aria-label={tOr('filter_builder.field_label', 'Filter field')}
+          />
+        </div>
 
-        <select
-          data-part="operator-select"
-          style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, minWidth: 130 }}
-          value={rule.operator}
-          onChange={(e) => handleOperatorChange(rule.id, e.target.value as FilterOperator)}
-          data-testid={`operator-select-${rule.id}`}
-        >
-          {operators.map((op) => (
-            <option key={op.key} value={op.key}>
-              {op.label}
-            </option>
-          ))}
-        </select>
+        <div data-part="rule-operator" data-testid={`operator-select-${rule.id}`}>
+          <ModernSelect
+            size={controlSize}
+            forceCustomDropdown
+            options={operators.map((op) => ({ value: op.key, label: op.label }))}
+            value={rule.operator}
+            onChange={(v) => v && handleOperatorChange(rule.id, v as FilterOperator)}
+            aria-label={tOr('filter_builder.operator_label', 'Filter operator')}
+          />
+        </div>
 
-        {fieldDef && renderValueInput(rule, fieldDef)}
+        <div data-part="rule-value">
+          {fieldDef && renderValueInput(rule, fieldDef)}
+        </div>
 
-        <button
-          data-part="remove-button"
-          style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
-          onClick={() => handleRemoveNode(rule.id)}
-          aria-label="Remove rule"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-3.5 w-3.5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            />
-          </svg>
-        </button>
+        <div data-part="rule-actions">
+          <ModernButton
+            data-part="remove-button"
+            icon={<ActionDeleteIcon decorative size={14} />}
+            variant="ghost"
+            size={buttonSize}
+            onClick={() => handleRemoveNode(rule.id)}
+            aria-label={removeRuleLabel}
+          />
+        </div>
       </div>
     );
   };
 
   // Groups render recursively. The root group has no visual container so it
-  // integrates cleanly into any parent layout; nested groups get a colored
-  // left border and tinted background to show nesting hierarchy.
+  // integrates cleanly into any parent layout; nested groups get a quiet
+  // inline-start hairline and inset fill (skin-owned) to show hierarchy.
   const renderGroup = (group: FilterGroup, depth: number = 0) => {
     const isRoot = depth === 0;
     // maxDepth - 1 because "Add group" creates a child at depth + 1.
@@ -478,44 +498,27 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         data-testid={`filter-group-${group.id}`}
         data-part="group"
         data-root={isRoot || undefined}
-        className={
-          isRoot
-            ? ''
-            : 'border-l-[3px] pl-4 ml-2 mb-2 rounded-r-lg py-2 pr-3'
-        }
       >
         {!isRoot && (
-          <div className="flex items-center justify-between mb-1">
-            <button
+          <div data-part="group-header">
+            <ModernButton
               data-part="logic-toggle"
               data-logic={group.logic}
-              style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }}
+              variant={group.logic === 'and' ? 'primary' : 'outline'}
+              size={buttonSize}
               onClick={() => handleToggleLogic(group.id)}
               data-testid={`logic-toggle-${group.id}`}
             >
-              {group.logic.toUpperCase()}
-            </button>
-            <button
+              {logicLabel(group.logic)}
+            </ModernButton>
+            <ModernButton
               data-part="remove-button"
-              style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+              icon={<ActionDeleteIcon decorative size={14} />}
+              variant="ghost"
+              size={buttonSize}
               onClick={() => handleRemoveNode(group.id)}
-              aria-label="Remove group"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3.5 w-3.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                />
-              </svg>
-            </button>
+              aria-label={removeGroupLabel}
+            />
           </div>
         )}
 
@@ -525,105 +528,66 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
             : renderRule(rule, index === 0, group.logic)
         )}
 
-        <div className="flex items-center gap-2 mt-2">
-          <button
+        <div data-part="group-actions">
+          <ModernButton
             data-part="add-rule-button"
-            style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+            icon={<ActionAddIcon decorative size={14} />}
+            variant="dashed"
+            size={buttonSize}
             onClick={() => handleAddRule(group.id)}
             data-testid={`add-rule-${group.id}`}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-3.5 w-3.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
             {addRuleLabel}
-          </button>
+          </ModernButton>
           {canNest && (
-            <button
+            <ModernButton
               data-part="add-group-button"
-              style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+              icon={<ActionAddIcon decorative size={14} />}
+              variant="dashed"
+              size={buttonSize}
               onClick={() => handleAddGroup(group.id)}
               data-testid={`add-group-${group.id}`}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3.5 w-3.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2z"
-                />
-              </svg>
               {addGroupLabel}
-            </button>
+            </ModernButton>
           )}
           {showAddFilter && isRoot && (
-            <div style={{ position: 'relative', display: 'inline-block' }}>
-              <button
+            <div data-part="add-filter">
+              <ModernButton
                 data-part="add-filter-trigger"
-                data-open={addFilterOpen}
-                style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4 }}
+                data-open={addFilterOpen || undefined}
+                icon={<ActionAddIcon decorative size={14} />}
+                variant="outline"
+                size={buttonSize}
                 onClick={() => setAddFilterOpen((prev) => !prev)}
                 data-testid="add-filter-button"
+                aria-expanded={addFilterOpen}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
                 {addFilterLabel}
-              </button>
+              </ModernButton>
               {addFilterOpen && (
                 <div
                   data-testid="add-filter-dropdown"
                   data-part="add-filter-dropdown"
                   data-open="true"
-                  style={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: 0,
-                    marginTop: 4,
-                    zIndex: 10,
-                    minWidth: 180,
-                    maxHeight: 260,
-                    overflowY: 'auto',
-                    padding: '4px 0',
-                  }}
+                  role="listbox"
+                  aria-label={addFilterLabel}
                 >
                   {fields.map((f) => (
-                    <div
+                    <ModernButton
                       key={f.key}
                       data-part="add-filter-option"
+                      variant="ghost"
+                      size={buttonSize}
+                      icon={f.icon ? <span data-part="add-filter-option-icon">{f.icon}</span> : undefined}
                       onClick={() => {
                         handleAddRule(group.id, f.key);
                         setAddFilterOpen(false);
                       }}
                       data-testid={`add-filter-field-${f.key}`}
-                      style={{
-                        padding: '6px 12px',
-                        cursor: 'pointer',
-                        fontSize: compact ? 12 : 13,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 8,
-                      }}
                     >
-                      {f.icon && <span>{f.icon}</span>}
-                      <span>{f.label}</span>
-                    </div>
+                      {f.label}
+                    </ModernButton>
                   ))}
                 </div>
               )}
@@ -632,15 +596,16 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         </div>
 
         {isRoot && showClear && onClear && group.rules.length > 0 && (
-          <div className="mt-3">
-            <button
+          <div data-part="clear-row">
+            <ModernButton
               data-part="clear-button"
-              style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }}
+              variant="text"
+              size={buttonSize}
               onClick={onClear}
               data-testid="clear-filters"
             >
               {clearLabel}
-            </button>
+            </ModernButton>
           </div>
         )}
       </div>
@@ -652,16 +617,19 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
       <div
         data-part="root"
         data-loading="true"
+        data-compact={compact || undefined}
         className={`${ROOT_CLASS_NAME} flex items-center justify-center min-h-[100px] ${className ?? ''}`}
         style={style}
       >
-        <ModernSpinner size="md" data-part="spinner" />
+        {/* No data-part override: the Spinner primitive keeps its own anatomy
+            so spinner.css stays its single paint owner. */}
+        <ModernSpinner size="md" />
       </div>
     );
   }
 
   return (
-    <div data-part="root" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
+    <div data-part="root" data-compact={compact || undefined} className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
       {renderGroup(value, 0)}
     </div>
   );

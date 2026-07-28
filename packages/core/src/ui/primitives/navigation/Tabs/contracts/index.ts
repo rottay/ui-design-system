@@ -128,7 +128,11 @@ export type TabsIndicator = 'tab' | 'label' | 'none';
 /** Visual treatment of the active tab panel. */
 export type TabsPanelVariant = 'plain' | 'contained';
 
-/** Localizable labels for Tabs-owned overflow controls. */
+/**
+ * Localizable labels for Tabs-owned overflow controls. Each entry wins over
+ * the `components.tabs.*` catalogue entry, which in turn wins over the
+ * documented English floor; supply these only for product-specific copy.
+ */
 export interface TabsAccessibilityLabels {
   previous?: string;
   next?: string;

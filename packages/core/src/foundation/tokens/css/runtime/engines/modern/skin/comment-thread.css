@@ -1,107 +1,163 @@
 /**
- * Modern CommentThread skin (WO-SKIN-06 CK-F unit F1).
+ * Modern CommentThread skin (Lote 2 rebuild).
  *
  * DELIBERATELY UNLAYERED (P-76): every `rottay-*` layer sorts before Tailwind's
  * `base` layer, so a layered rule cannot paint these elements at all.
  *
  * SCOPE ROOT: the root `<div>` carries `ds-pattern-comment-thread ds-engine-modern`
- * + `data-part='root'`; every painted element is a descendant with its own
- * `data-part`.
+ * + `data-part='root'` (plus `data-loading` on the loading early-return).
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
- * `border-color` on every element. A rule that paints a border COLOR must reach
- * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
- * Non-border paint (background, color, border-radius) wins unlayered at (0,3,0).
- * `border: none` resets carry no color and are exempt.
+ * SINGLE PAINT OWNER PER CONTROL (Lote 2 law): the pattern COMPOSES public
+ * primitives -- Avatar (author/composer), Textarea (composer/reply/edit),
+ * Button (submit/save/cancel/reply/edit/delete/reaction pills), Spinner
+ * (loading) and the EmptyState pattern (empty kit). This file paints NO
+ * control chrome: no button fills, no textarea borders, no avatar frame --
+ * each primitive's own skin owns that, including focus rings, disabled
+ * states and coarse floors. What this file owns is exactly what the pattern
+ * owns:
+ *   - the layout anatomy (comment rows, head row, forms, action rows,
+ *     threading rail) -- the engine stamps only `data-part` wrappers;
+ *   - the typographic treatment of the NON-control text parts (author,
+ *     timestamp, edited mark, body) -- timestamps read tabular-nums per the
+ *     product law so relative times never jitter;
+ *   - the threading rail (quiet inline-start hairline, RTL-free).
  *
- * TOKENS: modern's primary-button text color is `--ds-color-text-on-primary`;
- * rustic's equivalent is `--ds-color-primary-foreground` — two real, independently
- * declared tokens for the same slot, not aliases. Preserved verbatim, not unified
- * (WO-SKIN-06 CK-F contract §0).
+ * RESPONSIVE LAW: the root is a named container (`ds-comment-thread`); the
+ * narrow cut collapses the rail indent and lets the head row wrap, so the
+ * thread survives below 400px. The composition defines the cut.
  *
- * INTERACTION: this component has no hover treatment in either engine (neither
- * file ever wired onMouseEnter/Leave) — only the reaction pill's `[data-active]`
- * state and the always-static remainder.
- *
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * SPECIFICITY (P-48): the only border paint left (the rail) reaches (0,4,0)
+ * via the two root classes + the repeated `data-part`.
  */
 
-/* avatar wrapper (reply avatar + composer avatar share one data-part) */
-.ds-pattern-comment-thread.ds-engine-modern [data-part='avatar'] {
-  background: var(--ds-surface-panel);
+.ds-pattern-comment-thread.ds-engine-modern[data-part='root'] {
+  container-type: inline-size;
+  container-name: ds-comment-thread;
+  inline-size: 100%;
+  min-inline-size: 0;
   color: var(--ds-color-text-primary);
 }
 
-/* edit / reply / new-comment textareas share the identical bordered-transparent
-   treatment */
-.ds-pattern-comment-thread.ds-engine-modern [data-part='edit-textarea'],
-.ds-pattern-comment-thread.ds-engine-modern [data-part='reply-textarea'],
-.ds-pattern-comment-thread.ds-engine-modern [data-part='composer'] {
-  background: transparent;
-  color: inherit;
-  border-radius: var(--ds-radius-md);
+/* ---- comment structure: row + main column ---- */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='comment'] {
+  margin-block-end: var(--ds-comment-thread-comment-gap, var(--ds-spacing-3, 12px));
 }
-.ds-pattern-comment-thread.ds-engine-modern [data-part='edit-textarea'][data-part='edit-textarea'],
-.ds-pattern-comment-thread.ds-engine-modern [data-part='reply-textarea'][data-part='reply-textarea'],
-.ds-pattern-comment-thread.ds-engine-modern [data-part='composer'][data-part='composer'] {
-  border: 1px solid var(--ds-color-border);
+.ds-pattern-comment-thread.ds-engine-modern [data-part='comment-row'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='composer-row'] {
+  display: flex;
+  gap: var(--ds-comment-thread-row-gap, var(--ds-spacing-3, 12px));
+  min-inline-size: 0;
 }
-
-/* primary-filled action buttons: Save / Reply-submit / Comment-submit */
-.ds-pattern-comment-thread.ds-engine-modern [data-part='save'],
-.ds-pattern-comment-thread.ds-engine-modern [data-part='reply-submit'],
-.ds-pattern-comment-thread.ds-engine-modern [data-part='submit'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-  border-radius: var(--ds-radius-md);
-  border: none;
+.ds-pattern-comment-thread.ds-engine-modern [data-part='composer-row'] {
+  margin-block-end: var(--ds-comment-thread-composer-gap, var(--ds-spacing-6, 24px));
+}
+.ds-pattern-comment-thread.ds-engine-modern [data-part='avatar-col'] {
+  flex: 0 0 auto;
+}
+.ds-pattern-comment-thread.ds-engine-modern [data-part='comment-main'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='composer-main'] {
+  flex: 1;
+  min-inline-size: 0;
 }
 
-/* ghost action buttons: Cancel / Reply / Edit / Reply-cancel */
-.ds-pattern-comment-thread.ds-engine-modern [data-part='cancel'],
-.ds-pattern-comment-thread.ds-engine-modern [data-part='reply'],
-.ds-pattern-comment-thread.ds-engine-modern [data-part='edit'],
-.ds-pattern-comment-thread.ds-engine-modern [data-part='reply-cancel'] {
-  background: transparent;
+/* ---- head row: author + tabular timestamp + edited mark ---- */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='comment-head'] {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2, 8px);
+  margin-block-end: var(--ds-spacing-1, 4px);
+}
+.ds-pattern-comment-thread.ds-engine-modern [data-part='author'] {
+  font-size: var(--ds-font-size-sm, 14px);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  line-height: var(--ds-line-height-snug, 1.375);
   color: var(--ds-color-text-primary);
-  border-radius: var(--ds-radius-md);
-  border: none;
+}
+.ds-pattern-comment-thread.ds-engine-modern [data-part='timestamp'] {
+  font-size: var(--ds-font-size-xs, 12px);
+  line-height: var(--ds-line-height-snug, 1.375);
+  color: var(--ds-color-text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ds-pattern-comment-thread.ds-engine-modern [data-part='edited-mark'] {
+  font-size: var(--ds-font-size-xs, 12px);
+  font-style: italic;
+  color: var(--ds-color-text-muted);
 }
 
-/* delete: ghost shape, fixed error color -- never toggled, always red */
-.ds-pattern-comment-thread.ds-engine-modern [data-part='delete'] {
-  background: transparent;
-  color: var(--ds-color-error);
-  border-radius: var(--ds-radius-md);
-  border: none;
-}
-
-/* reaction pill: data-active selects background/color; shape stays static */
-.ds-pattern-comment-thread.ds-engine-modern [data-part='reaction'] {
-  background: transparent;
+/* ---- body copy ---- */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='comment-body'] {
+  margin: 0 0 var(--ds-spacing-2, 8px);
+  font-size: var(--ds-font-size-sm, 14px);
+  line-height: var(--ds-line-height-relaxed, 1.625);
   color: var(--ds-color-text-primary);
-  border-radius: var(--ds-radius-md);
-  border: none;
-}
-.ds-pattern-comment-thread.ds-engine-modern [data-part='reaction'][data-active='true'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
+  overflow-wrap: anywhere;
 }
 
-/* nested-reply left border line (className supplies the width/style, this
-   supplies the color) */
+/* ---- forms (edit / reply / composer): primitive fills the block wrapper;
+        no width rules needed -- the Textarea primitive is block-level. ---- */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='edit-form'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reply-form'] {
+  margin-block-end: var(--ds-spacing-2, 8px);
+}
+.ds-pattern-comment-thread.ds-engine-modern [data-part='form-actions'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  margin-block-start: var(--ds-spacing-2, 8px);
+}
+
+/* ---- reactions + actions rows: pills and ghost buttons paint themselves ---- */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reactions'] {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-1, 4px);
+  margin-block-end: var(--ds-spacing-2, 8px);
+}
+.ds-pattern-comment-thread.ds-engine-modern [data-part='comment-actions'] {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2, 8px);
+}
+
+/* ---- threading rail: quiet inline-start hairline (was the Tailwind
+        border-l-2 + ml-6 pair; logical properties flip it under RTL). ---- */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line'] {
+  margin-inline-start: var(--ds-comment-thread-rail-offset, var(--ds-spacing-2, 8px));
+  margin-block-start: var(--ds-spacing-2, 8px);
+  padding-inline-start: var(--ds-comment-thread-rail-padding, var(--ds-spacing-3, 12px));
+}
 .ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line'][data-part='nested-line'] {
-  border-color: var(--ds-color-border);
+  border-inline-start: var(--ds-comment-thread-rail-width, 1px) solid
+    var(--ds-comment-thread-rail-color, var(--ds-color-border));
 }
 
-/* loading spinner ring; consumes the global `ds-spin` keyframe (declared in
-   engines/rustic/theme.css, loaded into every bundle regardless of active
-   engine) -- animation-name stays inline, not a paint channel */
-.ds-pattern-comment-thread.ds-engine-modern [data-part='spinner'] {
-  border-radius: 50%;
+/* ---- narrow composition cut: the rail indent collapses first (it is the
+        only fixed-ish indent in the pattern); the head row already wraps. ---- */
+@container ds-comment-thread (inline-size < 28rem) {
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line'] {
+    margin-inline-start: 0;
+    padding-inline-start: var(--ds-spacing-2, 8px);
+  }
 }
-.ds-pattern-comment-thread.ds-engine-modern [data-part='spinner'][data-part='spinner'] {
-  border: 3px solid var(--ds-color-border);
-  border-top-color: var(--ds-color-primary);
+
+/* ---- coarse pointer: the thread's small action surfaces (xs buttons and
+        reaction pills) reach the 44px floor via min-block-size -- min-* wins
+        over the primitive's density height without touching fine pointers. ---- */
+@media (hover: none) and (pointer: coarse) {
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='reply'],
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='edit'],
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='delete'],
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='reaction'],
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='save'],
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='cancel'],
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='reply-submit'],
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='reply-cancel'],
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='submit'] {
+    min-block-size: var(--ds-comment-thread-touch-target-min, 44px);
+  }
 }

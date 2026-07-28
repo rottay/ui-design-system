@@ -1,54 +1,24 @@
 /**
- * Modern Input RESIDUAL skin (WO-SKIN-02 checkpoint A, fields batch).
+ * Modern Input RESIDUAL skin — DRAINED (R2+R3 wave, BATCH C).
  *
- * COMPOSES with engines/modern/skin/input.css (WO-ARC-07), which paints only
- * the shell `[data-part='root']`. This file paints the parts that skin never
- * scoped: the affix spans, the clear button, the inert inner `<input>` (shell
- * branch only), and the count / error-message siblings. No selector here
- * touches `[data-part='root']` itself, so there is no collision.
+ * This file predates the WO-ARC-07 expansion of `engines/modern/skin/input.css`
+ * and had become a SECOND paint owner for the same parts, one cascade slot
+ * later in the same `rottay-engines` layer (facade entrypoints import it after
+ * input.css), so on equal specificity it silently won:
  *
- * DELIBERATELY UNLAYERED (P-47). The clear button's hover was two IMPERATIVE
- * `.style.backgroundColor` writes (`as any`-cast, which the census lexer could
- * not see, but still inline paint) -> a `:hover` rule. The inert inner input is
- * a documented exclusion in the engine: it carries the skin classes but no
- * `data-part`, so the shell skin never matches it; the rule below is scoped to
- * `[data-part='root'] input`, which matches ONLY the inner input of the label
- * shell (in the simple branch the root IS the input, with no descendant input),
- * reproducing its chrome-free reset.
+ * - `clear-button`: its `border: none` + `radius-sm` + canvas hover overrode
+ *   input.css's framed ghost action (1px transparent border, full radius,
+ *   inset hover, focus ring, active scale).
+ * - `~ [data-part='count']` / `~ [data-part='error-message']`: at (0,4,0) they
+ *   outranked input.css's (0,3,0) W8 contrast-law inks (the muted→primary
+ *   65/35 mix and the darkened state hues), re-exposing the WCAG AA failure
+ *   the contrast channels were built to close. Its `[data-error='true']`
+ *   selector was additionally dead — the engine stamps `data-invalid` /
+ *   `data-count-state`.
+ * - affix colours and the inner-control reset: verbatim duplicates of rules
+ *   input.css already owns (`[data-part='affix-*']`, `> .rottay-input__control`).
  *
- * SPECIFICITY (P-48): no rule here paints a border COLOR (the inner-input and
- * clear-button borders are `none` resets), so every rule wins unlayered at
- * (0,3,0) or higher.
+ * Every one of those parts is now painted EXACTLY ONCE, by input.css. This
+ * stub remains only so the facade entrypoint imports keep resolving; do NOT
+ * add rules back here — paint for the modern Input belongs in input.css.
  */
-
-.rottay-input.rottay-input--modern[data-part='root'] [data-part='clear-button'] {
-  border: none;
-  border-radius: var(--ds-radius-sm, 6px);
-  background-color: transparent;
-  color: var(--ds-color-text-muted);
-}
-.rottay-input.rottay-input--modern[data-part='root'] [data-part='clear-button']:hover {
-  background-color: var(--ds-surface-canvas);
-}
-
-.rottay-input.rottay-input--modern[data-part='root'] [data-part='affix-prefix'],
-.rottay-input.rottay-input--modern[data-part='root'] [data-part='affix-suffix'] {
-  color: var(--ds-input-addon-color, var(--ds-color-text-muted));
-}
-
-.rottay-input.rottay-input--modern[data-part='root'] input {
-  border: none;
-  outline: none;
-  background-color: transparent;
-  color: inherit;
-}
-
-.rottay-input.rottay-input--modern[data-part='root'] ~ [data-part='count'] {
-  color: var(--ds-color-text-muted);
-}
-.rottay-input.rottay-input--modern[data-part='root'] ~ [data-part='count'][data-error='true'] {
-  color: var(--ds-color-error);
-}
-.rottay-input.rottay-input--modern[data-part='root'] ~ [data-part='error-message'] {
-  color: var(--ds-color-error);
-}

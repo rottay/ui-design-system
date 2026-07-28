@@ -12,11 +12,51 @@
   display: flex;
   background: var(--ds-shell-background, var(--ds-surface-canvas));
 }
+
+/* Skip link: first tab stop, hidden until focused, revealed above all chrome. */
+.rottay-app-shell__skip-link {
+  position: fixed;
+  inset-block-start: calc(var(--ds-shell-safe-area-top) + var(--ds-spacing-3, 12px));
+  inset-inline-start: calc(var(--ds-shell-safe-area-left) + var(--ds-spacing-3, 12px));
+  z-index: var(--ds-shell-skip-link-z-index, var(--ds-z-index-skip-link, 9999));
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: var(--ds-shell-skip-link-padding, 0 var(--ds-spacing-4, 16px));
+  border-radius: var(--ds-shell-skip-link-radius, var(--ds-radius-md, 8px));
+  background: var(--ds-shell-skip-link-background, var(--ds-color-bg-elevated));
+  color: var(--ds-shell-skip-link-color, var(--ds-color-text-primary));
+  border: var(
+    --ds-shell-skip-link-border,
+    1px solid var(--ds-color-border-subtle)
+  );
+  box-shadow: var(--ds-shell-skip-link-shadow, var(--ds-elevation-2, none));
+  text-decoration: none;
+}
+.rottay-app-shell__skip-link:not(:focus) {
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.rottay-app-shell__skip-link:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
 .rottay-app-shell__navigation-sidebar {
   position: fixed;
-  inset: 0 auto 0 0;
+  inset-block: 0;
+  inset-inline-start: 0;
   width: var(--ds-shell-inline-start-inset);
-  z-index: 100;
+  z-index: var(--ds-shell-navigation-z-index, var(--ds-z-index-fixed, 1200));
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -70,10 +110,9 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
-  /* Sheet engines own these two declarations inline. The shell body is a slot
-     compositor rather than a scroll region, so its contract must win here. */
-  padding: var(--ds-shell-navigation-drawer-body-padding, 0) !important;
-  overflow: hidden !important;
+  /* The Sheet engine writes body padding/overflow inline; AppShell restates
+     this compositor contract through the engine's `bodyStyle` channel, so no
+     `!important` is needed here. Layout-only declarations stay in the skin. */
 }
 
 .rottay-app-shell__navigation-drawer-header {
@@ -89,7 +128,10 @@
   );
   overflow: hidden;
   background: var(--ds-shell-navigation-header-background, transparent);
-  border-block-end: var(--ds-shell-navigation-header-border, 0);
+  border-block-end: var(
+    --ds-shell-navigation-header-border,
+    1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))
+  );
 }
 
 .rottay-app-shell__navigation-drawer-logo {
@@ -230,7 +272,7 @@
   position: sticky;
   inset-block-start: var(--ds-shell-header-inset-block-start, 0);
   inset-inline: var(--ds-shell-header-inset-inline, 0);
-  z-index: 50;
+  z-index: var(--ds-shell-header-z-index, var(--ds-z-index-sticky, 1100));
   height: var(--ds-shell-top-inset);
   box-sizing: border-box;
   padding-block-start: var(
@@ -312,20 +354,40 @@
 /* Interaction and accessibility states. */
 
 :is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
-  [data-part="navigation-drawer-header"] {
-  border-bottom: 1px solid
-    var(--ds-sidebar-border, var(--ds-color-border-subtle));
-}
-
-:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
   [data-part="navigation-close"] {
   border: none;
   border-radius: var(--ds-radius-md, 8px);
   background: transparent;
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .rottay-app-shell [data-part="navigation-trigger"] {
   border-radius: var(--ds-radius-md, 8px);
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+
+/* Hover microinteraction: quiet wash, no accent — the shell chrome stays
+   neutral so the single blue accent keeps its scarcity. */
+:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+  [data-part="navigation-close"]:hover,
+.rottay-app-shell [data-part="navigation-trigger"]:hover {
+  background: var(
+    --ds-shell-navigation-action-hover-bg,
+    var(--ds-color-neutral-100)
+  );
+}
+
+:is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
+  [data-part="navigation-close"]:active,
+.rottay-app-shell [data-part="navigation-trigger"]:active {
+  background: var(
+    --ds-shell-navigation-action-active-bg,
+    var(--ds-color-neutral-200, var(--ds-color-neutral-100))
+  );
 }
 
 :is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
@@ -335,6 +397,15 @@
   outline: var(--ds-focus-ring-width, 2px) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-app-shell__navigation-sidebar,
+  .rottay-app-shell__main,
+  .rottay-app-shell [data-part="navigation-trigger"],
+  .rottay-app-shell__navigation-drawer [data-part="navigation-close"] {
+    transition: none;
+  }
 }
 
 @media (forced-colors: active) {

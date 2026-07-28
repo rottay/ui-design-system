@@ -166,10 +166,6 @@
   pointer-events: none;
 }
 
-.rottay-button.rottay-button--modern [data-part='busy-content'] {
-  max-inline-size: 100%;
-}
-
 .rottay-button.rottay-button--modern [data-part='content-frame'] > [data-part='busy-content'] {
   position: absolute;
   inset: 0;
@@ -659,7 +655,7 @@
 }
 
 /* -------------------------------------------------------------------------
-   Inert, touch, RTL and accessibility modes
+   Inert, touch and accessibility modes
    ------------------------------------------------------------------------- */
 
 .rottay-button.rottay-button--modern[data-disabled='true'] {
@@ -671,7 +667,6 @@
   opacity: var(--ds-button-disabled-opacity);
   transform: none;
   filter: none;
-  pointer-events: none;
 }
 
 .rottay-button.rottay-button--modern[data-disabled='true']::before {
@@ -682,16 +677,17 @@
   cursor: var(--ds-button-loading-cursor);
 }
 
-[dir='rtl'] .rottay-button.rottay-button--modern [data-part='icon'] {
-  direction: rtl;
-}
-
 @media (hover: none), (pointer: coarse) {
   .rottay-button.rottay-button--modern[data-part='trigger'] {
     min-block-size: var(--ds-button-touch-target-min);
   }
 
-  .rottay-button.rottay-button--modern[data-icon-only='true'] {
+  /* Icon-only and circle buttons pin their inline size, so the 44px block
+     minimum alone would squash them into ovals on coarse pointers. */
+  .rottay-button.rottay-button--modern:is(
+      [data-icon-only='true'],
+      [data-shape='circle']
+    ) {
     min-inline-size: var(--ds-button-touch-target-min);
   }
 
@@ -740,7 +736,6 @@
     ) {
     outline: var(--ds-button-border-width-focus) solid Highlight;
     outline-offset: var(--ds-button-focus-ring-offset);
-    outline-color: Highlight;
   }
 
   .rottay-button.rottay-button--modern[data-disabled='true'] {

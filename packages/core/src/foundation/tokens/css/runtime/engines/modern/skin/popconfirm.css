@@ -1,8 +1,15 @@
 /**
- * Modern Popconfirm skin (WO-SKIN-04 checkpoint P).
+ * Modern Popconfirm skin (WO-SKIN-04 checkpoint P; Quiet Premium uplift).
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all.
+ *
+ * SINGLE PAINT OWNER. The engine stamps `data-part`s and positioning only
+ * (z-index channel, consumer overlayStyle, measured geometry stay inline so
+ * the inline cascade keeps overlayStyle winning); every color, elevation,
+ * typography and interaction state channel is declared here through semantic
+ * `--ds-*` tokens. The action row the engine previously laid out with utility
+ * classes now carries `data-part='footer'` so one owner holds the chrome.
  *
  * PORTAL: this engine does NOT portal (rustic DOES) — the panel is an in-tree absolute
  * sibling inside a relative wrapper, so it can be clipped by an `overflow: hidden`
@@ -11,24 +18,55 @@
  * OK-TYPE: `data-ok-type` carries the `okType` prop. The engine's `default:` branch is
  * the catch-all for anything that is neither `danger` nor `primary`, reproduced with a
  * `:not():not()` guard so an unrecognised value keeps painting the transparent default.
+ * Destructive tone resolves through `--ds-color-error`, never a palette literal.
  *
- * TOKENS: this engine has NO `--ds-popconfirm-*` surface at all — every value is a
- * generic DS token. The rustic engine has a full dedicated family. That asymmetry ships
- * today and is transcribed as-is, not harmonised.
- *
- * LOADING: this engine shows a spinner ring; rustic instead dims the confirm button to
- * `opacity: 0.7` and renders no spinner. Two mutually exclusive treatments of the same
- * boolean, one per engine — both preserved.
+ * MOTION (spec section 2): the panel enters on the shared `--ds-motion-normal`
+ * / `--ds-motion-ease-out` cadence with an engine-namespaced keyframe. There
+ * is no EXIT animation by design: the engine unmounts the panel synchronously
+ * when open flips false, so only the entrance is choreographed.
  *
  * SPECIFICITY (P-48): the panel's and the spinner's colored borders repeat their
  * `data-part` to clear the tenant `*` border-color floor at (0,3,1).
  */
 
-/* ---- panel ---- */
+/* ---- entrance keyframe: engine-namespaced so a future rustic twin cannot
+        collide on the name. ---- */
+@keyframes ds-popconfirm-enter-modern {
+  from {
+    opacity: 0;
+    transform: translateY(var(--ds-popconfirm-motion-offset, 0.25rem))
+      scale(var(--ds-popconfirm-motion-scale, 0.975));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---- panel: overlay material (fill + dark lift + elevation) ---- */
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'] {
-  background: var(--ds-surface-card);
+  /* The lift overlay is its own layer directly above the fill so the fallback
+     chain stays untouched; it is inert until a dark surface raises
+     --ds-elevation-lift-strength, where the near-invisible shadow ramp needs
+     the luminance step. Level 3 matches the --ds-elevation-3 shadow this
+     surface declares. */
+  background-color: var(--ds-surface-card);
+  background-image: linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3));
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-3);
+  padding: var(--ds-popconfirm-padding, var(--ds-spacing-4));
+  min-inline-size: min(
+    var(--ds-popconfirm-min-width, 12.5rem),
+    calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4))
+  );
+  max-inline-size: min(
+    var(--ds-popconfirm-max-width, 21.875rem),
+    calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4))
+  );
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-base);
+  animation: ds-popconfirm-enter-modern var(--ds-motion-normal)
+    var(--ds-motion-ease-out) both;
 }
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'][data-part='surface'] {
   border: 1px solid var(--ds-color-border-subtle);
@@ -43,27 +81,75 @@
   overflow: visible;
 }
 
-/* ---- copy ---- */
+/* ---- copy: typography is skin-owned (the engine stamps parts only) ---- */
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='icon'] {
+  margin-block-start: var(--ds-popconfirm-icon-offset, 0.125rem);
   color: var(--ds-color-warning);
 }
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='title'] {
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-line-height-tight);
+}
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='description'] {
+  margin-block-start: var(--ds-spacing-1, 0.25rem);
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-relaxed);
 }
 
-/* ---- cancel action ---- */
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-action='cancel'] {
-  border-radius: var(--ds-radius-md);
+/* ---- footer: end-aligned action row ---- */
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='footer'] {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--ds-spacing-2);
+  margin-block-start: var(--ds-spacing-4);
+}
+
+/* ---- actions: shared geometry + the state contract (spec section 4) ---- */
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+  min-block-size: var(--ds-popconfirm-action-height, 2rem);
+  padding-inline: var(--ds-spacing-3);
+  cursor: pointer;
   border: none;
+  border-radius: var(--ds-radius-md);
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-popconfirm-action-font-size, var(--ds-font-size-sm));
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='action']:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-shadow-focus-ring);
+}
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='action']:active:not(:disabled) {
+  transform: scale(var(--ds-state-press-scale));
+}
+/* The confirm-pending state (loading) is skin-owned: the engine only sets the
+   `disabled` attribute. `cursor: wait` communicates the in-flight cost of the
+   action; the dim keeps it legible, not hidden. */
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='action']:disabled {
+  cursor: wait;
+  opacity: var(--ds-state-disabled-opacity);
+}
+
+/* ---- cancel action: ghost treatment ---- */
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-action='cancel'] {
   background: transparent;
   color: var(--ds-color-text-primary);
 }
-
-/* ---- confirm action, by okType ---- */
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-action='confirm'] {
-  border-radius: var(--ds-radius-md);
-  border: none;
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-action='cancel']:hover:not(:disabled) {
+  background: var(--ds-surface-highlight);
 }
+
+/* ---- confirm action, by okType: semantic fills ---- */
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-ok-type='danger'] {
   background: var(--ds-color-error);
   color: var(--ds-color-text-on-primary);
@@ -77,12 +163,62 @@
   background: transparent;
   color: var(--ds-color-text-primary);
 }
+/* Hover on the default/ghost confirm lifts the surface luminance. */
+.rottay-popconfirm--modern[data-part='trigger']
+  [data-part='action'][data-action='confirm']:not([data-ok-type='danger']):not([data-ok-type='primary']):hover:not(:disabled) {
+  background: var(--ds-surface-highlight);
+}
+/* Hover on the filled confirms is a quiet luminance veil (spec section 4). */
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-ok-type='danger']:hover:not(:disabled),
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-ok-type='primary']:hover:not(:disabled) {
+  background-image: linear-gradient(
+    color-mix(in srgb, var(--ds-color-text-on-primary) var(--ds-state-hover-shift, 4%), transparent),
+    color-mix(in srgb, var(--ds-color-text-on-primary) var(--ds-state-hover-shift, 4%), transparent)
+  );
+}
 
 /* ---- loading spinner ring ---- */
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='spinner'] {
+  display: inline-block;
+  inline-size: 0.875rem;
+  block-size: 0.875rem;
   border-radius: 50%;
+  animation: ds-spin var(--ds-motion-glacial) linear infinite;
 }
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='spinner'][data-part='spinner'] {
   border: 2px solid currentColor;
   border-top-color: transparent;
+}
+
+/* 44px hit area on coarse pointers, via block-size only — never by inflating
+   the visual size beyond the density contract. */
+@media (pointer: coarse) {
+  .rottay-popconfirm--modern[data-part='trigger'] [data-part='action'] {
+    min-block-size: var(--ds-popconfirm-touch-target, 2.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'] {
+    animation-duration: 1ms;
+    animation-timing-function: linear;
+    transform: none;
+  }
+
+  .rottay-popconfirm--modern[data-part='trigger'] [data-part='action'] {
+    transition: none;
+  }
+  .rottay-popconfirm--modern[data-part='trigger'] [data-part='action']:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* Forced colors: shadow rings vanish, so the focus channel degrades to a
+   system outline. */
+@media (forced-colors: active) {
+  .rottay-popconfirm--modern[data-part='trigger'] [data-part='action']:focus-visible {
+    outline: 2px solid CanvasText;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
 }

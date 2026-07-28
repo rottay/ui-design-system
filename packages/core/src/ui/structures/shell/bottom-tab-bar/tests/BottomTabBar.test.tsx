@@ -22,7 +22,7 @@ vi.mock('@/infrastructure/runtime/engines/presentation/component-factory', () =>
         ...style,
       };
       return (
-        <nav style={containerStyle} data-testid="bottom-tab-bar" role="tablist" aria-label="Bottom navigation">
+        <nav style={containerStyle} data-testid="bottom-tab-bar" aria-label="Bottom navigation">
           <div style={{ display: 'flex', width: '100%' }}>
             {visibleItems.map((item: any) => {
               const isActive = activeKey === item.key;
@@ -30,8 +30,7 @@ vi.mock('@/infrastructure/runtime/engines/presentation/component-factory', () =>
                 <button
                   key={item.key}
                   type="button"
-                  role="tab"
-                  aria-selected={isActive}
+                  aria-current={isActive ? 'page' : undefined}
                   aria-label={item.label}
                   data-testid={`tab-item-${item.key}`}
                   onClick={() => { item.onClick?.(); onChange?.(item.key); }}
@@ -91,10 +90,10 @@ describe('BottomTabBar', () => {
     expect(screen.getByTestId('icon-profile')).toBeInTheDocument();
   });
 
-  it('highlights active item with aria-selected', () => {
+  it('marks the active item with aria-current', () => {
     render(<BottomTabBar items={mockItems} activeKey="search" />);
-    expect(screen.getByTestId('tab-item-search')).toHaveAttribute('aria-selected', 'true');
-    expect(screen.getByTestId('tab-item-home')).toHaveAttribute('aria-selected', 'false');
+    expect(screen.getByTestId('tab-item-search')).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByTestId('tab-item-home')).not.toHaveAttribute('aria-current');
   });
 
   it('calls onChange when a tab is clicked', () => {
@@ -158,15 +157,14 @@ describe('BottomTabBar', () => {
     expect(bar).toHaveStyle({ position: 'fixed', bottom: '0' });
   });
 
-  it('has tablist role for accessibility', () => {
+  it('is a navigation landmark with an accessible name', () => {
     render(<BottomTabBar items={mockItems} />);
-    expect(screen.getByRole('tablist')).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Bottom navigation' })).toBeInTheDocument();
   });
 
-  it('each item has tab role', () => {
+  it('exposes one focusable item per tab', () => {
     render(<BottomTabBar items={mockItems} />);
-    const tabs = screen.getAllByRole('tab');
-    expect(tabs).toHaveLength(3);
+    expect(screen.getAllByRole('button')).toHaveLength(3);
   });
 
   it('merges custom style', () => {

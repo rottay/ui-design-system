@@ -59,7 +59,6 @@ export function SurfaceLoadingSkeleton({
             rows={1}
             animation={skeletonAnimation}
             active
-            style={{ width: '30%', height: 24 }}
           />
           <Skeleton
             className="ds-loading-skeleton__header-secondary"
@@ -67,7 +66,6 @@ export function SurfaceLoadingSkeleton({
             rows={1}
             animation={skeletonAnimation}
             active
-            style={{ width: '20%', height: 24 }}
           />
         </Flex>
       )}
@@ -120,34 +118,21 @@ export function SurfaceEmptyStateCard({
   return (
     <Card className="ds-surface ds-empty-state-card" variant="outlined">
       <Card.Body className="ds-empty-state-card__body">
-        <Flex data-part="content" direction="column" align="center" gap={4} style={{ padding: '48px 24px' }}>
+        <Flex data-part="content" direction="column" align="center" gap={4}>
           {icon && (
-            <Text
-              data-part="icon"
-              style={{
-                fontSize: 48,
-                lineHeight: 1,
-              }}
-            >
+            <Text data-part="icon">
               {icon}
             </Text>
           )}
-          <Stack data-part="copy" spacing="xs" style={{ textAlign: 'center' }}>
+          <Stack data-part="copy" spacing="xs">
             <Text
               data-part="title"
               as="p"
-              style={{
-                fontWeight: 600,
-                fontSize: 16,
-              }}
             >
               {title ?? tSurface('states.empty_title')}
             </Text>
             <Text
               data-part="description"
-              style={{
-                fontSize: 14,
-              }}
             >
               {description ?? tSurface('states.empty_description')}
             </Text>
@@ -245,11 +230,8 @@ export function SurfaceStaleBanner({
   const { tSurface } = useSurfaceTranslations();
 
   return (
-    <Flex className="ds-surface ds-stale-banner" data-part="banner" data-refreshing={refreshing ? 'true' : 'false'} gap={3} align="center" style={{
-      padding: '8px 12px',
-      fontSize: 13,
-    }}>
-      <Text data-part="description" style={{ flex: 1 }}>{message ?? tSurface('states.stale_message')}</Text>
+    <Flex className="ds-surface ds-stale-banner" data-part="banner" data-refreshing={refreshing ? 'true' : 'false'} gap={3} align="center">
+      <Text data-part="description">{message ?? tSurface('states.stale_message')}</Text>
       {onRefresh && (
         <Button className="ds-stale-banner__refresh" variant="ghost" size="sm" onClick={onRefresh} loading={refreshing}>
           {tSurface('states.refresh')}

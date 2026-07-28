@@ -175,6 +175,13 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
     expect(additions.filter((token) => CHART_SERIES_TOKEN.test(token))).toHaveLength(10);
     expect(additions).toContain(DENSITY_MODE_FACTOR_TOKEN);
     expect([...additions].sort()).toEqual([
+      // The palette-derivation layer (R1-P phase C) derives button-primary and
+      // input-focus chrome from the tenant's primary seed, so a document that
+      // authors a primary now emits these six alongside its ramp.
+      "--ds-button-primary-bg",
+      "--ds-button-primary-bg-hover",
+      "--ds-button-primary-border",
+      "--ds-button-primary-color",
       "--ds-chart-series-1",
       "--ds-chart-series-10",
       "--ds-chart-series-2",
@@ -187,6 +194,8 @@ describe("tenant theme artifact byte-identity against pre-W4 fixtures", () => {
       "--ds-chart-series-9",
       ON_PRIMARY_INK_TOKEN,
       DENSITY_MODE_FACTOR_TOKEN,
+      "--ds-input-border-focus",
+      "--ds-input-shadow-focus",
     ]);
     expect(artifact.variables[ON_PRIMARY_INK_TOKEN]).toBe("#ffffff");
     expect(artifact.variables[DENSITY_MODE_FACTOR_TOKEN]).toBe("1");

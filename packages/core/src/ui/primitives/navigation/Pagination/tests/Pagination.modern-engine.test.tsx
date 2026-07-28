@@ -122,3 +122,41 @@ describe('Modern Pagination public anatomy', () => {
     expect(controlsRule?.[0]).toContain('overflow-x: auto');
   });
 });
+
+/**
+ * R2+R3 (BATCH C) Pass-2 pins: the nav glyphs are semantic icons (consistent
+ * with the rest of the modern fleet, auto-mirrored in RTL) and the numerals
+ * are tabular so page columns never jitter across widths.
+ */
+describe('Modern Pagination premium craft', () => {
+  it('renders semantic chevron icons instead of text guillemets', () => {
+    const { container } = render(<ModernPagination current={2} total={50} pageSize={10} />);
+
+    const prev = screen.getByRole('button', { name: 'Previous' });
+    const next = screen.getByRole('button', { name: 'Next' });
+    expect(prev.querySelector('svg')).not.toBeNull();
+    expect(next.querySelector('svg')).not.toBeNull();
+    expect(prev.textContent).not.toContain('«');
+    expect(next.textContent).not.toContain('»');
+    // The glyphs are decorative: the accessible name stays the i18n label.
+    expect(prev.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+    expect(container.querySelector('[data-part="pagination-nav-button"]')).toBeInTheDocument();
+  });
+
+  it('pins tabular numerals in the skin for controls and the range readout', () => {
+    const PAGINATION_SKIN = readFileSync(
+      join(here, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/pagination.css'),
+      'utf8'
+    ).replace(/\/\*[\s\S]*?\*\//g, '');
+
+    // The shared controls rule (nav + page buttons + ellipsis) and the range
+    // readout both set the tabular channel — two declaration sites.
+    const sites = PAGINATION_SKIN.match(
+      /font-variant-numeric: var\(--ds-pagination-numeric, tabular-nums\)/g
+    );
+    expect(sites).toHaveLength(2);
+
+    const rangeRule = PAGINATION_SKIN.match(/\[data-part='pagination-range'\]\s*\{[^}]*\}/);
+    expect(rangeRule?.[0]).toContain('font-variant-numeric');
+  });
+});

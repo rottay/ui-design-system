@@ -287,12 +287,11 @@ export default function ModernCard(props: CardProps): React.ReactElement {
           {cover && (
             <div data-part="cover" />
           )}
-          <div data-part="loading-content" style={{
-            position: 'relative',
-            minHeight: 'var(--ds-card-skeleton-min-height, 120px)',
-          }}>
-            {/* Skeleton bars */}
-            <div data-part="skeleton" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-3, 12px)' }}>
+          <div data-part="loading-content">
+            {/* Skeleton bars: the skin owns fill/radius/motion and the column
+                rhythm; only the per-bar widths and heights stay inline as
+                anatomy geometry. */}
+            <div data-part="skeleton">
               <div data-part="skeleton-bar" style={{
                 height: 'var(--ds-skeleton-bar-height, 12px)',
                 width: '60%',
@@ -301,7 +300,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
                 height: 'var(--ds-skeleton-bar-height, 12px)',
                 width: '40%',
               }} />
-              <div data-part="skeleton-stack" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-2, 8px)', marginTop: 'var(--ds-spacing-1, 4px)' }}>
+              <div data-part="skeleton-stack">
                 <div data-part="skeleton-bar" style={{
                   height: 'var(--ds-skeleton-bar-height-sm, 10px)',
                   width: '100%',
@@ -380,7 +379,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
               data-part="header"
               data-divider={divider ? 'true' : undefined}
             >
-              <div style={{ minWidth: 0, flex: 1 }}>
+              <div data-part="header-main">
                 {title && (
                   <TitleHeading data-part="title">
                     {title}
@@ -403,17 +402,10 @@ export default function ModernCard(props: CardProps): React.ReactElement {
           {/* Content */}
           {children}
 
-          {/* Actions */}
+          {/* Actions: the skin owns the row layout (flex, wrap, justify,
+              gap, rhythm) through the --ds-card-actions-* channels. */}
           {actions && actions.length > 0 && (
-            <div data-part="actions" style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'var(--ds-card-actions-justify, flex-end)',
-              alignItems: 'center',
-              gap: 'var(--ds-card-actions-gap, var(--ds-spacing-2, 8px))',
-              marginTop: 'var(--ds-card-actions-margin-top, var(--ds-spacing-4, 16px))',
-              paddingTop: 'var(--ds-card-actions-padding-top, var(--ds-spacing-4, 16px))',
-            }}>
+            <div data-part="actions">
               {actions.map((action, index) => (
                 <React.Fragment key={index}>{action}</React.Fragment>
               ))}

@@ -12,10 +12,25 @@
   border-radius: 12px;
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, white 8%), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%));
   color: var(--ds-color-text-primary);
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-structure.ds-column-menu[data-part='trigger'][data-part='trigger'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
+}
+
+.ds-structure.ds-column-menu[data-part='trigger'][data-part='trigger']:hover:not([data-open='true']) {
+  border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, white 4%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
+}
+
+.ds-structure.ds-column-menu[data-part='trigger']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
 }
 
 .ds-structure.ds-column-menu[data-part='trigger'][data-compact='true'] {
@@ -271,4 +286,176 @@
 
 .ds-structure.ds-column-menu-panel [data-part='icon-button'][data-disabled='true'] {
   color: var(--ds-color-text-disabled);
+  opacity: 0.45;
+}
+
+/* ---------------------------------------------------------------------------
+   WAVE R2+R3 — typography + microinteractions (skin-owned, never inline).
+   Quiet Premium: header and section eyebrows carry the tracked uppercase
+   treatment, every tally is tabular-nums, and each actionable part earns a
+   deliberate hover/focus/active state on the --ds-motion-* channels. The
+   drag dim lives on data-dragging, not in the engine.
+--------------------------------------------------------------------------- */
+
+/* header + footer type */
+.ds-structure.ds-column-menu-panel
+  [data-part='header-title'][data-part='header-title'][data-part='header-title'] {
+  font-size: var(--ds-font-size-sm);
+  letter-spacing: -0.01em;
+}
+.ds-structure.ds-column-menu-panel
+  [data-part='description'][data-part='description'][data-part='description'] {
+  font-size: var(--ds-font-size-xs);
+  line-height: 1.45;
+}
+.ds-structure.ds-column-menu-panel
+  [data-part='footer-hint'][data-part='footer-hint'][data-part='footer-hint'] {
+  font-size: var(--ds-font-size-xs);
+}
+
+/* row + section type */
+.ds-structure.ds-column-menu-panel
+  [data-part='title'][data-part='title'][data-part='title'] {
+  font-weight: 600;
+}
+.ds-structure.ds-column-menu-panel
+  [data-part='pin-badge'][data-part='pin-badge'][data-part='pin-badge'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.ds-structure.ds-column-menu-panel
+  [data-part='group-toggle-label'][data-part='group-toggle-label'][data-part='group-toggle-label'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.ds-structure.ds-column-menu-panel
+  [data-part='action-section-label'][data-part='action-section-label'][data-part='action-section-label'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* counts + width readouts: tabular-nums so numbers never jitter */
+.ds-structure.ds-column-menu-panel [data-part='count-pill'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.ds-structure.ds-column-menu-panel [data-part='width-badge'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.ds-structure.ds-column-menu-panel [data-part='width-input'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* rows: motion + the drag dim (was engine-inline opacity) */
+.ds-structure.ds-column-menu-panel [data-part='row'] {
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    opacity var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-column-menu-panel [data-part='row'][data-dragging='true'] {
+  opacity: 0.58;
+}
+
+/* reset: quiet pill, deliberate hover/focus/active */
+.ds-structure.ds-column-menu-panel [data-part='reset'] {
+  font-size: var(--ds-font-size-xs);
+  font-weight: 600;
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-column-menu-panel [data-part='reset']:hover {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 36%, transparent);
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-column-menu-panel [data-part='reset']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+}
+.ds-structure.ds-column-menu-panel [data-part='reset']:active {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 48%, transparent);
+}
+
+/* apply: the one filled CTA keeps its accent and earns a lift on hover */
+.ds-structure.ds-column-menu-panel [data-part='apply'] {
+  font-size: var(--ds-font-size-sm);
+  font-weight: 700;
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-column-menu-panel [data-part='apply']:hover {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 24%, transparent), color-mix(in srgb, var(--ds-color-primary) 15%, transparent));
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+}
+.ds-structure.ds-column-menu-panel [data-part='apply'][data-part='apply']:hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 44%, transparent);
+}
+.ds-structure.ds-column-menu-panel [data-part='apply']:focus-visible {
+  outline: none;
+  box-shadow:
+    0 10px 22px color-mix(in srgb, var(--ds-color-primary) 12%, transparent),
+    0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+}
+.ds-structure.ds-column-menu-panel [data-part='apply']:active {
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+}
+
+/* icon buttons + drag handle + width badge + group toggle: shared hover grammar */
+.ds-structure.ds-column-menu-panel [data-part='icon-button'],
+.ds-structure.ds-column-menu-panel [data-part='drag-handle'],
+.ds-structure.ds-column-menu-panel [data-part='width-badge'],
+.ds-structure.ds-column-menu-panel [data-part='group-toggle'] {
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-column-menu-panel [data-part='icon-button']:hover:not([data-disabled='true']) {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 40%, transparent);
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-column-menu-panel [data-part='icon-button']:focus-visible,
+.ds-structure.ds-column-menu-panel [data-part='drag-handle']:focus-visible,
+.ds-structure.ds-column-menu-panel [data-part='width-badge']:focus-visible,
+.ds-structure.ds-column-menu-panel [data-part='group-toggle']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+}
+.ds-structure.ds-column-menu-panel [data-part='drag-handle']:hover {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 40%, transparent);
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-column-menu-panel [data-part='width-badge']:hover {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  color: var(--ds-color-primary);
+}
+.ds-structure.ds-column-menu-panel [data-part='group-toggle']:hover {
+  color: var(--ds-color-text-secondary);
+}
+
+/* Reduced motion: state changes and the drag dim are cross-fades; silence. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-column-menu[data-part='trigger'],
+  .ds-structure.ds-column-menu-panel [data-part='row'],
+  .ds-structure.ds-column-menu-panel [data-part='reset'],
+  .ds-structure.ds-column-menu-panel [data-part='apply'],
+  .ds-structure.ds-column-menu-panel [data-part='icon-button'],
+  .ds-structure.ds-column-menu-panel [data-part='drag-handle'],
+  .ds-structure.ds-column-menu-panel [data-part='width-badge'],
+  .ds-structure.ds-column-menu-panel [data-part='group-toggle'] {
+    transition: none;
+  }
 }

@@ -158,7 +158,34 @@
   margin-block-start: var(--ds-spacing-2, 8px);
   font-size: var(--ds-layout-sider-trigger-font-size, 13px);
   cursor: pointer;
+  transition:
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
+
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:hover {
+  background: var(--ds-layout-sider-trigger-bg-hover, var(--ds-surface-highlight));
+}
+
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-focus-ring-offset, 2px));
+}
+
+/* The collapse/expand glyph is directional: in RTL the sider sits at the
+   inline-end, so the arrow mirrors (the skin owns the flip; the engine only
+   stamps the part). */
+[dir='rtl'] .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger-icon'] {
+  transform: scaleX(-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'],
+  .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger'] {
+    transition: none;
+  }
+}
+
 @media (pointer: coarse) {
   .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger'] {
     min-block-size: 44px;

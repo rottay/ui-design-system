@@ -442,23 +442,49 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ========================================================================
-  // Auto-close Timer
+  // Auto-close countdown with hover pause (Toast family parity): hovering
+  // freezes BOTH the JS countdown (remaining-time tracked, never a full
+  // restart) and the skin's progress bar (data-paused), so a user reading a
+  // long notification never loses it mid-sentence.
   // ========================================================================
 
+  const [isPaused, setIsPaused] = useState(false);
+  const remainingRef = useRef<number>(duration && duration > 0 ? duration * 1000 : 0);
+  const startedAtRef = useRef(0);
+  // A duration prop change re-arms the countdown from its full length,
+  // matching the pre-pause contract.
+  const prevDurationRef = useRef(duration);
+  if (prevDurationRef.current !== duration) {
+    prevDurationRef.current = duration;
+    remainingRef.current = duration && duration > 0 ? duration * 1000 : 0;
+  }
+
   useEffect(() => {
-    if (duration && duration > 0) {
+    if (duration && duration > 0 && !isPaused) {
+      startedAtRef.current = Date.now();
       timerRef.current = setTimeout(() => {
         onRemove?.(id);
         onClose?.();
-      }, duration * 1000);
+      }, remainingRef.current);
     }
 
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
+        timerRef.current = null;
       }
     };
-  }, [id, duration, onRemove, onClose]);
+  }, [id, duration, isPaused, onRemove, onClose]);
+
+  const handleMouseEnter = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+      remainingRef.current = Math.max(0, remainingRef.current - (Date.now() - startedAtRef.current));
+    }
+    setIsPaused(true);
+  };
+  const handleMouseLeave = () => setIsPaused(false);
 
   // ========================================================================
   // Event Handlers
@@ -507,12 +533,15 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
       data-has-actions={actions ? 'true' : 'false'}
       data-closable={closable ? 'true' : 'false'}
       data-clickable={onClick ? 'true' : 'false'}
+      data-paused={isPaused ? 'true' : 'false'}
       className={`rottay-notification--modern ${className}`}
       style={{
         '--ds-notification-duration': duration && duration > 0 ? `${duration}s` : undefined,
         ...style,
       } as React.CSSProperties}
       onClick={onClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       onKeyDown={onClick ? (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();

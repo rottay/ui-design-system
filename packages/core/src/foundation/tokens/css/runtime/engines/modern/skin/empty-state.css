@@ -1,4 +1,17 @@
-/** Modern EmptyState: expressive framed placeholder with tenant-controlled tenor. */
+/**
+ * Modern EmptyState skin (R2+R3 quiet-premium pass; supersedes the glow/lift
+ * pass): framed placeholder with tenant-controlled tenor.
+ *
+ * The root is a `role="status"` region, not an interactive surface: it has NO
+ * hover treatment. A reactive visual lift on a non-operable element is a
+ * false affordance; hover/focus paint belongs only to the real action
+ * buttons in the tray.
+ *
+ * Craft grammar: one quiet framed region (hairline border, flat tenant
+ * surface), a single restrained accent in the visual well, a copy hierarchy
+ * (title primary / description secondary), and an action tray that is a
+ * plain row of buttons — not a second boxed card.
+ */
 
 .ds-pattern-empty-state.ds-engine-modern[data-part='root'][data-part='root'] {
   position: relative;
@@ -11,12 +24,8 @@
   padding: var(--ds-empty-state-padding, clamp(var(--ds-spacing-xl), 5vw, var(--ds-spacing-3xl)));
   border: var(--ds-empty-state-border-width, 1px) solid var(--ds-empty-state-border-color, var(--ds-color-border));
   border-radius: var(--ds-empty-state-radius, var(--ds-radius-xl));
-  background:
-    radial-gradient(circle at 50% -15%, color-mix(in srgb, var(--ds-color-primary) 12%, transparent) 0%, transparent 45%),
-    linear-gradient(150deg, var(--ds-empty-state-surface, var(--ds-color-surface)) 0%, var(--ds-color-surface-raised) 100%);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 38%, transparent),
-    var(--ds-empty-state-shadow, var(--ds-shadow-sm));
+  background: var(--ds-empty-state-surface, var(--ds-color-surface));
+  box-shadow: var(--ds-empty-state-shadow, none);
   color: var(--ds-color-text-primary);
   text-align: center;
 }
@@ -42,22 +51,18 @@
   gap: var(--ds-spacing-md);
 }
 
+/* The visual well is the single accent the component spends: a calm tinted
+   tile with a hairline ring, no bloom shadow and no hover motion. */
 .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__visual[data-part='visual'][data-part='visual'] {
   display: grid;
   inline-size: var(--ds-empty-state-visual-size, 5rem);
   block-size: var(--ds-empty-state-visual-size, 5rem);
   place-items: center;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border));
+  border: 1px solid var(--ds-empty-state-visual-border, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border)));
   border-radius: var(--ds-empty-state-visual-radius, var(--ds-radius-xl));
-  background: linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-color-surface-raised)), var(--ds-color-surface));
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 50%, transparent),
-    0 14px 34px color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+  background: var(--ds-empty-state-visual-bg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-color-surface)));
   color: var(--ds-color-primary);
-  transition:
-    transform var(--ds-motion-base) var(--ds-ease-emphasized),
-    box-shadow var(--ds-motion-base) var(--ds-ease-standard);
 }
 
 .ds-pattern-empty-state.ds-engine-modern[data-size='sm'] .ds-empty-state__visual[data-part='visual'][data-part='visual'] {
@@ -69,13 +74,6 @@
 .ds-pattern-empty-state.ds-engine-modern[data-size='lg'] .ds-empty-state__visual[data-part='visual'][data-part='visual'] {
   inline-size: var(--ds-empty-state-lg-visual-size, 6.25rem);
   block-size: var(--ds-empty-state-lg-visual-size, 6.25rem);
-}
-
-.ds-pattern-empty-state.ds-engine-modern[data-part='root'][data-part='root']:hover .ds-empty-state__visual[data-part='visual'] {
-  transform: translateY(-3px) scale(1.025);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 60%, transparent),
-    0 18px 40px color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
 }
 
 .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__visual[data-part='visual'] > [data-part='image'] {
@@ -125,18 +123,15 @@
   text-wrap: balance;
 }
 
+/* The action tray is a plain rhythm row: the action buttons already carry
+   their own frames, so a second bordered box here was noise. */
 .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__actions[data-part='actions'][data-part='actions'] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: var(--ds-spacing-sm);
+  gap: var(--ds-empty-state-actions-gap, var(--ds-spacing-sm));
   margin-block-start: var(--ds-spacing-xs);
-  padding: var(--ds-spacing-sm);
-  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
-  border-radius: var(--ds-radius-lg);
-  background: color-mix(in srgb, var(--ds-color-surface-raised) 86%, transparent);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 34%, transparent);
 }
 
 .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__spinner[data-part='spinner'][data-part='spinner'] {
@@ -203,19 +198,18 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__visual[data-part='visual'][data-part='visual'],
   .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__action[data-part='action'][data-part='action'],
   .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__secondary-action[data-part='secondary-action'][data-part='secondary-action'] {
     transition: none;
   }
 
-  .ds-pattern-empty-state.ds-engine-modern[data-part='root'][data-part='root']:hover .ds-empty-state__visual[data-part='visual'],
   .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__action[data-part='action'][data-part='action']:hover,
   .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__secondary-action[data-part='secondary-action'][data-part='secondary-action']:hover {
     transform: none;
   }
 
+  /* A calm static arc replaces the spin; the region still reads as busy. */
   .ds-pattern-empty-state.ds-engine-modern .ds-empty-state__spinner[data-part='spinner'][data-part='spinner'] {
-    animation-duration: 1.5s;
+    animation: none;
   }
 }

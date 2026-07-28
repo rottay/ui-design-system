@@ -21,6 +21,7 @@
     "./fonts/grotesk-display.css",
     "./fonts/humanist-text.css",
     "./fonts/plex-mono.css",
+    "./hooks-manifest",
     "./styles",
     "./styles.css",
     "./styles/bithire",
@@ -601,11 +602,13 @@
         "actionsColumn",
         "apcaContrast",
         "appearanceMatchesArtifact",
+        "applyModeOverlay",
         "applySkinPack",
         "applyStreamCommit",
         "ar",
         "arePropsEqual",
         "bithireBrandTheme",
+        "brandModeSelector",
         "brandThemeToBranding",
         "brandThemeToChromeVariables",
         "brandThemeToPersonality",
@@ -623,6 +626,10 @@
         "buildViewModes",
         "canonicalizeTenantThemeValue",
         "cellRenderers",
+        "claimRootAttribute",
+        "claimRootAttributeSet",
+        "claimRootClass",
+        "claimRootStyleProperty",
         "clearCustomRegistry",
         "clearServerHeaders",
         "clearSkinPacks",
@@ -632,6 +639,7 @@
         "compileBrandTheme",
         "compileTenantThemeConfig",
         "compileTenantThemePreview",
+        "composeRootAttributeReleases",
         "configureCustomEngine",
         "configureDomainLookup",
         "configureTenantApi",
@@ -758,6 +766,7 @@
         "registerCustomComponents",
         "registerHighlighter",
         "registerSkinPack",
+        "renderFirstPartyArtifact",
         "renderVerticalArtifact",
         "reportVisualAuthorityConflict",
         "resetVisualAuthorityDiagnostics",
@@ -1284,7 +1293,6 @@
           "motion"
         ],
         "EditHeader": [
-          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
           "motion"
@@ -1642,6 +1650,7 @@
           "motion"
         ],
         "OverlayModal": [
+          "@phosphor-icons/react",
           "antd",
           "motion"
         ],
@@ -1653,6 +1662,7 @@
           "motion"
         ],
         "Pagination": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "Paragraph": [
@@ -2048,6 +2058,7 @@
           "motion"
         ],
         "Sheet": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "ShimmerText": [
@@ -2759,11 +2770,13 @@
         "actionsColumn",
         "apcaContrast",
         "appearanceMatchesArtifact",
+        "applyModeOverlay",
         "applySkinPack",
         "applyStreamCommit",
         "ar",
         "arePropsEqual",
         "bithireBrandTheme",
+        "brandModeSelector",
         "brandThemeToBranding",
         "brandThemeToChromeVariables",
         "brandThemeToPersonality",
@@ -2780,6 +2793,10 @@
         "buildTenantThemePreviewScope",
         "canonicalizeTenantThemeValue",
         "cellRenderers",
+        "claimRootAttribute",
+        "claimRootAttributeSet",
+        "claimRootClass",
+        "claimRootStyleProperty",
         "clearCustomRegistry",
         "clearServerHeaders",
         "clearSkinPacks",
@@ -2789,6 +2806,7 @@
         "compileBrandTheme",
         "compileTenantThemeConfig",
         "compileTenantThemePreview",
+        "composeRootAttributeReleases",
         "configureCustomEngine",
         "configureDomainLookup",
         "configureTenantApi",
@@ -2906,6 +2924,7 @@
         "registerCustomComponents",
         "registerHighlighter",
         "registerSkinPack",
+        "renderFirstPartyArtifact",
         "renderVerticalArtifact",
         "reportVisualAuthorityConflict",
         "resetVisualAuthorityDiagnostics",

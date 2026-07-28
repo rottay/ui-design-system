@@ -30,21 +30,23 @@
  * (0,3,0) or higher.
  *
  * DEVIATIONS (reported, not silently taken):
- * 1. The Dragger's active-drag paint (`border-primary bg-primary/5 shadow-lg
- *    scale-[1.01]`, applied via conditional Tailwind utility classes, not an
- *    object-literal style key) is NOT counted by the inline-paint audit and is
- *    left in the JSX untouched -- `Upload.engine-advanced.test.tsx:135`
- *    asserts `border-primary` is present in the dropzone's className during
- *    drag, and this repo ships no `tailwind.config.*` this agent could read to
- *    verify the exact compiled value of an opacity-modified utility
- *    (`bg-primary/5`) or `shadow-lg`, so duplicating them into a static CSS
- *    rule risked a byte-INEXACT transcription -- a worse RULE ZERO violation
- *    than leaving a harmless, already-correct mechanism alone. The idle-state
- *    border color below is explicitly gated to `[data-state='idle']` so it
- *    cannot fight the still-Tailwind-driven dragging-state border color.
+ * 1. The dropzone/add-button Tailwind paint utilities (`border-2 border-dashed
+ *    hover:border-primary hover:bg-primary/5 transition-all duration-300`, the
+ *    dragging `shadow-lg scale-[1.01]`) REMAIN in the JSX because
+ *    `Upload.engine-advanced.test.tsx:135` asserts `border-primary` is present
+ *    in the dropzone's className during drag. They are no longer the effective
+ *    paint: the dropzone/add-button rules below override them by layer
+ *    ownership (rottay-engines sorts after rottay-framework) with the product
+ *    law's quiet treatment -- 1px dashed hairline, 4% primary tint on
+ *    hover/drag, token-cadence transitions, NO saturated 2px primary border,
+ *    NO shadow, NO scale. `data-disabled` (stamped by the engine) gates the
+ *    hover rules.
  * 2. The dropzone height is a runtime prop (`height`, default 200): it rides
  *    the `--ds-upload-dropzone-height` custom property stamped by the engine
  *    and is declared here, keeping the block-size ownership in this file.
+ * 3. File rows carry `data-part='file-icon'` (semantic ContentFileIcon) and
+ *    `data-part='file-size'` (locale-formatted bytes, painted tabular-nums)
+ *    per the product law for the CV/evidence list.
  */
 
 /* ---- preview-modal / preview-close-button: identical in both Upload and
@@ -96,6 +98,46 @@
 .ds-upload.ds-upload--modern:not(.ds-upload--picture-card) [data-part='file-item'],
 .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card) [data-part='file-item'] {
   background: var(--ds-surface-inset);
+  border-radius: var(--ds-upload-file-radius, 6px);
+  transition:
+    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+/* Per-file error state (product law): semantic error hairline + error ink on
+   the name -- the engine no longer carries the `border border-error`
+   utilities; the repeated data-part keeps (0,4,0) parity for border paint. */
+.ds-upload.ds-upload--modern:not(.ds-upload--picture-card) [data-part='file-item'][data-part='file-item'],
+.ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card) [data-part='file-item'][data-part='file-item'] {
+  border: 1px solid transparent;
+}
+.ds-upload.ds-upload--modern:not(.ds-upload--picture-card) [data-part='file-item'][data-part='file-item'][data-status='error'],
+.ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card) [data-part='file-item'][data-part='file-item'][data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+.ds-upload.ds-upload--modern:not(.ds-upload--picture-card) [data-part='file-item'][data-status='error'] [data-part='file-name'],
+.ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card) [data-part='file-item'][data-status='error'] [data-part='file-name'] {
+  color: var(--ds-color-error);
+}
+
+/* ---- file-icon / file-size: variant-exclusive parts (text rows carry the
+        icon; text + picture rows carry the size), so no listType scope is
+        needed -- same precedent as file-item-overlay. Size reads tabular per
+        the product law (CV/evidence list numerals never jitter). ---- */
+.ds-upload.ds-upload--modern [data-part='file-icon'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-icon'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  color: var(--ds-color-text-secondary);
+}
+.ds-upload.ds-upload--modern [data-part='file-size'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-size'] {
+  display: block;
+  font-size: var(--ds-upload-file-size-font-size, var(--ds-font-size-xs, 12px));
+  line-height: var(--ds-line-height-snug, 1.375);
+  color: var(--ds-color-text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item'],
@@ -111,8 +153,8 @@
   background: var(--ds-color-bg-secondary);
   border-radius: var(--ds-upload-file-radius, 6px);
   transition:
-    box-shadow var(--ds-motion-normal, 200ms),
-    transform var(--ds-motion-normal, 200ms);
+    box-shadow var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item'][data-part='file-item'],
 .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item'][data-part='file-item'] {
@@ -197,7 +239,7 @@
   color: var(--ds-upload-overlay-action-color);
   border-radius: 50%;
   border: none;
-  transition: background var(--ds-motion-fast, 120ms);
+  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item-action'],
 .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item-action'] {
@@ -215,6 +257,9 @@
 }
 .ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item-action'],
 .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item-action'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   block-size: 24px;
   flex-shrink: 0;
   padding-inline: 8px;
@@ -227,16 +272,30 @@
 }
 
 /* ---- add-button (picture-card/circle "add" tile): Upload only, Dragger has
-        no add-button. Border color repeats the data-part to reach (0,4,0)
-        (no listType modifier applies -- add-button renders in both card and
-        circle with the same border token). ---- */
+        no add-button. The JSX keeps test-anchored Tailwind utilities; the
+        rules below override their effective paint by layer ownership with
+        the quiet treatment (1px dashed hairline + 4% tint, deviation #1). ---- */
 .ds-upload.ds-upload--modern [data-part='add-button'] {
   min-inline-size: var(--ds-upload-card-size, 104px);
   min-block-size: var(--ds-upload-card-size, 104px);
   padding: 16px;
+  background: transparent;
+  transition:
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-upload.ds-upload--modern [data-part='add-button'][data-part='add-button'] {
-  border-color: var(--ds-color-border);
+  border: 1px dashed var(--ds-upload-add-border, var(--ds-color-border));
+}
+.ds-upload.ds-upload--modern [data-part='add-button']:where(:hover):not([data-disabled='true']) {
+  background: var(--ds-upload-add-bg-hover, color-mix(in srgb, var(--ds-color-primary) 4%, transparent));
+}
+.ds-upload.ds-upload--modern [data-part='add-button'][data-part='add-button']:where(:hover):not([data-disabled='true']) {
+  border-color: var(--ds-upload-add-border-hover, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-color-border)));
+}
+.ds-upload.ds-upload--modern [data-part='add-button'][data-disabled='true'] {
+  opacity: var(--ds-disabled-opacity, 0.5);
+  cursor: not-allowed;
 }
 .ds-upload.ds-upload--modern [data-part='add-button'] svg {
   color: var(--ds-color-text-secondary);
@@ -294,13 +353,34 @@
   display: none;
 }
 
-/* ---- dropzone (Dragger only): runtime height channel + idle-state border
-        color (see header deviation #1 for the dragging-state exception). ---- */
+/* ---- dropzone (Dragger only): runtime height channel + the quiet dropzone
+        law. The Tailwind paint utilities stay in the JSX for a test-anchored
+        assertion but lose every effective declaration here (deviation #1):
+        1px dashed hairline, 4% primary tint on hover/drag, no shadow, no
+        scale, token-cadence transitions. ---- */
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'] {
   block-size: var(--ds-upload-dropzone-height, 200px);
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+  transition:
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='idle'] {
-  border-color: var(--ds-color-border);
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-part='dropzone'] {
+  border: 1px dashed var(--ds-upload-dropzone-border, var(--ds-color-border));
+}
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone']:where(:hover):not([data-disabled='true']),
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='dragging'] {
+  background: var(--ds-upload-dropzone-bg-active, color-mix(in srgb, var(--ds-color-primary) 4%, transparent));
+}
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-part='dropzone']:where(:hover):not([data-disabled='true']),
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-part='dropzone'][data-state='dragging'] {
+  border-color: var(--ds-upload-dropzone-border-active, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-color-border)));
+}
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-disabled='true'] {
+  opacity: var(--ds-disabled-opacity, 0.5);
+  cursor: not-allowed;
 }
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'] svg {
   color: var(--ds-color-text-secondary);
@@ -312,12 +392,15 @@
 /* Coarse-pointer floor: secondary icon actions meet the 44px touch target.
    Physical px, never rem (the fluid 15px root erodes rem floors at narrow
    widths -- measured on the live bundle, Axe R0). */
-@media (pointer: coarse) {
+@media (hover: none) and (pointer: coarse) {
   .ds-upload.ds-upload--modern [data-part='file-item-action'],
   .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'],
   .ds-upload.ds-upload--modern [data-part='preview-close-button'],
   .ds-upload-dragger.ds-upload-dragger--modern [data-part='preview-close-button'] {
     min-inline-size: var(--ds-upload-touch-target-min, 44px);
+    min-block-size: var(--ds-upload-touch-target-min, 44px);
+  }
+  .ds-upload.ds-upload--modern [data-part='trigger'][data-part='trigger'] button {
     min-block-size: var(--ds-upload-touch-target-min, 44px);
   }
 }
@@ -326,7 +409,10 @@
   .ds-upload.ds-upload--modern [data-part='file-item'],
   .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item'],
   .ds-upload.ds-upload--modern [data-part='file-item-action'],
-  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'] {
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'],
+  .ds-upload.ds-upload--modern [data-part='add-button'],
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'],
+  .ds-upload.ds-upload--modern [data-part='trigger'] button {
     transition: none;
   }
 }

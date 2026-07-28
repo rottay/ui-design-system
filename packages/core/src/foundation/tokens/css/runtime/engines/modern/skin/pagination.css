@@ -43,6 +43,7 @@
   margin-block-end: var(--ds-pagination-range-margin-block-end, 8px);
   color: var(--ds-pagination-range-color, var(--ds-color-text-secondary));
   font-size: var(--ds-pagination-range-font-size, var(--ds-font-size-sm, 14px));
+  font-variant-numeric: var(--ds-pagination-numeric, tabular-nums);
 }
 
 .rottay-pagination--modern[data-part='root'] [data-part='pagination-controls'] {
@@ -98,6 +99,8 @@
   color: var(--ds-pagination-item-color, var(--ds-color-text-primary));
   font: inherit;
   font-size: var(--ds-pagination-current-font-size);
+  /* Page numerals align in columns across widths (Quiet Premium numeral law). */
+  font-variant-numeric: var(--ds-pagination-numeric, tabular-nums);
   cursor: pointer;
   transition:
     color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),

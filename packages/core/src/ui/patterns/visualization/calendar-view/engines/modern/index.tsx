@@ -1,10 +1,15 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the CalendarView pattern.
- * Renders a month grid using Tailwind utility classes and DaisyUI component
- * classes (select, loading spinner) and DS token inline styles for buttons. Styling uses no
- * inline styles, except for per-event color which must be dynamic.
+ * @fileoverview Modern engine for the CalendarView pattern.
+ * Renders a month grid with event chips, composing public DS primitives
+ * (Button for navigation/today, Select for the view switch, Spinner for
+ * loading) — the pattern never recreates a control with its own HTML/CSS.
+ * Geometry and the pattern's own paint live in the unlayered modern
+ * pattern-calendar-view skin, keyed on the `data-part`/`data-*` contract
+ * this file stamps. Own copy resolves through the optional `components`
+ * i18n channel with an English floor; weekday and month names follow the
+ * active locale via Intl.
  *
  * @example
  * <ModernCalendarView
@@ -16,10 +21,19 @@
 
 import React, { useMemo } from 'react';
 import type { CalendarViewProps, CalendarEvent } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
+import ModernSelect from '../../../../../primitives/inputs/Select/engines/modern';
+import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
 
-/** Abbreviated day headers starting at Sunday to match JS Date.getDay() indices. */
-const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const ROOT_CLASS_NAME = 'ds-pattern-calendar-view ds-engine-modern';
+
+/** Jan 4 2026 is a Sunday: weekday short names derive from the active locale. */
+function weekdayNames(locale: string): string[] {
+  return Array.from({ length: 7 }, (_, i) =>
+    new Date(2026, 0, 4 + i).toLocaleDateString(locale, { weekday: 'short' }),
+  );
+}
 
 /**
  * Build a 7-column grid for the given month. Leading nulls pad the days
@@ -47,18 +61,22 @@ function toDateKey(d: Date | string): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
-/** Format a date as "March 2026" using the browser's default locale. */
-function formatMonth(date: Date) {
-  return date.toLocaleString('default', { month: 'long', year: 'numeric' });
-}
-
 /**
- * Modern (DaisyUI/Tailwind) calendar view rendering a month grid with event chips.
+ * Modern calendar view rendering a month grid with event chips.
  * @param props - CalendarViewProps including events array, navigation callbacks,
  *   optional custom toolbar/header, and a generic `T` for event payload data.
- * @returns A rounded month grid card; loading state uses DaisyUI's spinner.
+ * @returns A month grid card; loading state composes the Spinner primitive.
  */
 export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
+  // Optional channel with an English floor: the calendar renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key. The
+  // locale drives weekday/month names; without a provider it floors to the
+  // browser default locale (the engine's historical behaviour).
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
+    i18n?.tOr(key, floor, params) ?? floor;
+  const locale = i18n?.locale ?? 'default';
+
   const {
     events,
     view = 'month',
@@ -75,7 +93,17 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
     loading = false,
   } = props;
 
+  const copy = {
+    today: tOr('calendarView.today', 'Today'),
+    previousMonth: tOr('calendarView.previousMonth', 'Previous month'),
+    nextMonth: tOr('calendarView.nextMonth', 'Next month'),
+    viewMonth: tOr('calendarView.viewMonth', 'Month'),
+    viewWeek: tOr('calendarView.viewWeek', 'Week'),
+    viewDay: tOr('calendarView.viewDay', 'Day'),
+  };
+
   const cells = useMemo(() => getMonthGrid(currentDate), [currentDate]);
+  const dayNames = useMemo(() => weekdayNames(locale), [locale]);
 
   // Index events by date string for O(1) lookup per cell during render.
   // Only keyed by start date -- multi-day events appear on their start day only.
@@ -110,40 +138,75 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
     >
       {header}
       {/* Render custom toolbar if provided; otherwise show the default
-          DaisyUI ghost-button nav with month title and view-mode selector. */}
+          composed nav with month title and view-mode selector. */}
       {toolbar ?? (
-        <div data-part="toolbar" className="flex items-center justify-between mb-4">
-          <div data-part="navigation" className="flex items-center gap-2">
-            <button data-part="toolbar-action" data-action="previous" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={() => navigateMonth(-1)}>{'<'}</button>
-            <h3 data-part="month-title" className="text-lg font-semibold">{formatMonth(currentDate)}</h3>
-            <button data-part="toolbar-action" data-action="next" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={() => navigateMonth(1)}>{'>'}</button>
-          </div>
-          <div data-part="view-controls" className="flex items-center gap-2">
-            <button data-part="toolbar-action" data-action="today" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={() => onDateChange?.(new Date())}>Today</button>
-            <select
-              data-part="view-select"
-              style={{ padding: '4px 8px', fontSize: 13 }}
-              value={view}
-              onChange={(e) => onViewChange?.(e.target.value as any)}
+        <div data-part="toolbar">
+          <div data-part="navigation">
+            <ModernButton
+              variant="ghost"
+              size="sm"
+              data-part="toolbar-action"
+              data-action="previous"
+              aria-label={copy.previousMonth}
+              onClick={() => navigateMonth(-1)}
             >
-              <option value="month">Month</option>
-              <option value="week">Week</option>
-              <option value="day">Day</option>
-            </select>
+              {'<'}
+            </ModernButton>
+            <h3 data-part="month-title">
+              {currentDate.toLocaleString(locale, { month: 'long', year: 'numeric' })}
+            </h3>
+            <ModernButton
+              variant="ghost"
+              size="sm"
+              data-part="toolbar-action"
+              data-action="next"
+              aria-label={copy.nextMonth}
+              onClick={() => navigateMonth(1)}
+            >
+              {'>'}
+            </ModernButton>
+          </div>
+          <div data-part="view-controls">
+            <ModernButton
+              variant="ghost"
+              size="sm"
+              data-part="toolbar-action"
+              data-action="today"
+              onClick={() => onDateChange?.(new Date())}
+            >
+              {copy.today}
+            </ModernButton>
+            {/* Slot keeps the historical data-part; the composed Select owns
+                the control chrome and its dropdown. */}
+            <span data-part="view-select">
+              <ModernSelect
+                size="sm"
+                value={view}
+                onChange={(val) => onViewChange?.(val as 'month' | 'week' | 'day')}
+                options={[
+                  { value: 'month', label: copy.viewMonth },
+                  { value: 'week', label: copy.viewWeek },
+                  { value: 'day', label: copy.viewDay },
+                ]}
+              />
+            </span>
           </div>
         </div>
       )}
       {/* Loading uses a conditional branch (not an overlay) so the grid
           DOM is not rendered at all -- saves layout computation for large
-          event sets. */}
+          event sets. The composed Spinner owns ring and cadence. */}
       {loading ? (
-        <div data-part="loading" className="flex justify-center py-12">
-          <span data-part="spinner" style={{ display: 'inline-block', width: 24, height: 24, animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
+        <div data-part="loading">
+          <ModernSpinner size="md" data-part="spinner" />
         </div>
       ) : (
-        <div data-part="grid" className="grid grid-cols-7 border rounded-lg overflow-hidden">
-          {DAY_NAMES.map((d) => (
-            <div data-part="weekday" key={d} className="text-center text-xs font-semibold py-2 border-b">
+        /* The `grid grid-cols-7` utilities are pinned by the public test
+           contract (`[style*=grid-template-columns],.grid-cols-7`); border,
+           radius and overflow live in the skin. */
+        <div data-part="grid" className="grid grid-cols-7">
+          {dayNames.map((d) => (
+            <div data-part="weekday" key={d}>
               {d}
             </div>
           ))}
@@ -161,13 +224,10 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                 data-last-column={(i + 1) % 7 === 0}
                 key={key}
                 onClick={() => cell && onDateClick?.(cell)}
-                className={`min-h-[80px] p-1 border-r border-b last:border-r-0 ${
-                  cell ? 'cursor-pointer' : ''
-                }`}
               >
                 {cell && (
                   <>
-                    <div data-part="date-label" className={`text-xs text-right px-1 ${isToday ? 'font-bold' : ''}`}>
+                    <div data-part="date-label" data-today={Boolean(isToday)}>
                       {cell.getDate()}
                     </div>
                     {/* Show at most 3 event chips per cell to keep the grid compact;
@@ -177,16 +237,17 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                         data-part="event"
                         key={ev.id}
                         onClick={(e) => { e.stopPropagation(); onEventClick?.(ev); }}
-                        className="text-[11px] px-1 mt-0.5 rounded truncate cursor-pointer"
-                        // Per-event color must be inline because it varies per item;
-                        // falls back to the DS primary token when no color is set.
-                        style={{ background: ev.color ?? 'var(--ds-color-primary)' }}
+                        /* Per-event color is consumer config data: it rides the
+                           accent hatch (quoted key) and the skin owns the fill. */
+                        style={{ '--ds-calendar-event-accent': ev.color } as React.CSSProperties}
                       >
                         {renderEvent ? renderEvent(ev) : ev.title}
                       </div>
                     ))}
                     {dayEvents.length > 3 && (
-                      <div data-part="overflow-count" className="text-[10px] px-1">+{dayEvents.length - 3} more</div>
+                      <div data-part="overflow-count">
+                        {tOr('calendarView.overflowMore', '+{count} more', { count: dayEvents.length - 3 })}
+                      </div>
                     )}
                   </>
                 )}

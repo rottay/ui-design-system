@@ -169,7 +169,7 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
             }
           : {})}
         style={{
-          fontSize: 12,
+          fontSize: 'var(--ds-collapse-arrow-font-size, 12px)',
           ...(iconOnly && !inert
             ? { cursor: 'var(--ds-collapse-header-default-idle-cursor, pointer)' }
             : {}),
@@ -212,7 +212,7 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
               minWidth: 0,
               display: 'flex',
               alignItems: 'center',
-              gap: 8,
+              gap: 'var(--ds-collapse-header-gap, var(--ds-spacing-2, 8px))',
               cursor: inert
                 ? disabled
                   ? 'var(--ds-collapse-header-default-disabled-cursor, not-allowed)'

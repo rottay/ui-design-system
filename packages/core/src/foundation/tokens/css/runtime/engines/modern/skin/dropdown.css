@@ -5,6 +5,20 @@
  * paint is required. Full borders, hierarchy, interaction states and motion
  * are driven by component/tenant tokens. Chromatic side rails are forbidden.
  *
+ * MATERIAL (Quiet Premium alignment): the surface-tint primary gradient stays
+ * (sanctioned role, spec section 5); the frosted-panel `backdrop-filter` is
+ * RETIRED -- glass lives on overlay backdrops only, and this is a panel. The
+ * dark-aware luminance step rides the `--ds-elevation-surface-3` lift layer
+ * (inert where `--ds-elevation-lift-strength` is 0), and every former `white`
+ * literal now resolves through the theme-aware `--ds-color-text-on-primary`
+ * channel (modal.css idiom).
+ *
+ * REDUCED MOTION: the surface's enter/exit animation is INLINE in the engine,
+ * so no unlayered rule can cancel it; it is neutralized at the source because
+ * the foundation reduced-motion block zeroes `--ds-motion-fast`/`--ds-motion-*`
+ * (the canon mechanism, spec section 2). The block at the bottom covers every
+ * CSS-owned transition/animation (items, sheen, icons, submenu).
+ *
  * RTL: placement is LOGICAL. Submenus hang off the reading-end edge via
  * `inset-inline-start: calc(100% + ...)` and mirror for free; the open-state
  * submenu-indicator nudge flips sign under `:dir(rtl)`. The submenu chevron
@@ -15,12 +29,10 @@
   from {
     opacity: 0;
     transform: translateY(-4px) scale(0.975);
-    filter: saturate(0.9);
   }
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: saturate(1);
   }
 }
 
@@ -47,7 +59,7 @@
 
 .rottay-dropdown--modern[data-part='trigger'][data-disabled='true'] {
   cursor: not-allowed;
-  opacity: var(--ds-opacity-disabled, 0.54);
+  opacity: var(--ds-state-disabled-opacity);
 }
 
 .rottay-dropdown--modern[data-part='trigger'] > [data-part='trigger-content'] {
@@ -66,21 +78,19 @@
   overflow: visible;
   color: var(--ds-dropdown-color, var(--ds-color-text-secondary));
   border-radius: var(--ds-dropdown-radius, var(--ds-radius-xl, 16px));
+  /* The dark-aware luminance step is its own layer directly above the fill
+     (popover.css idiom): inert until a dark surface raises
+     --ds-elevation-lift-strength. Level 3 matches the --ds-elevation-3 shadow
+     this surface declares. */
   background:
     linear-gradient(
       145deg,
       color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
       transparent 44%
     ),
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--ds-surface-card) 98%, white 2%),
-      color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%)
-    );
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
-    var(--ds-dropdown-shadow, var(--ds-elevation-3, 0 16px 40px rgb(15 23 42 / 0.14)));
-  backdrop-filter: blur(var(--ds-dropdown-backdrop-blur, 16px)) saturate(1.08);
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-surface-card);
+  box-shadow: var(--ds-dropdown-shadow, var(--ds-elevation-3));
   transform-origin: center top;
 }
 
@@ -141,7 +151,7 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(115deg, transparent 20%, color-mix(in srgb, white 28%, transparent) 50%, transparent 80%);
+  background: linear-gradient(115deg, transparent 20%, color-mix(in srgb, var(--ds-color-text-on-primary) 28%, transparent) 50%, transparent 80%);
   opacity: 0;
   transform: translateX(-40%);
   transition:
@@ -167,9 +177,25 @@
     )
   );
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 58%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 58%, transparent),
     var(--ds-dropdown-item-shadow-hover, var(--ds-shadow-xs));
   transform: translateY(-1px);
+}
+
+/* Keyboard focus gets the same hover treatment PLUS the visible focus ring
+   (spec section 4): the ring is appended to the hover shadow stack so the
+   top-light and lift survive underneath it. */
+.rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 58%, transparent),
+    var(--ds-dropdown-item-shadow-hover, var(--ds-shadow-xs)),
+    var(--ds-shadow-focus-ring);
+}
+
+/* Press = the state contract's scale step (spec section 4). Declared after
+   :hover so it wins when both apply. */
+.rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):active {
+  transform: scale(var(--ds-state-press-scale));
 }
 
 .rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):hover::after {
@@ -192,7 +218,7 @@
     )
   );
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 60%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 60%, transparent),
     var(--ds-shadow-xs);
 }
 
@@ -213,8 +239,7 @@
 .rottay-dropdown__surface[data-part='surface'] [data-part='item']:disabled {
   color: var(--ds-color-text-disabled, var(--ds-color-text-muted));
   cursor: not-allowed;
-  opacity: var(--ds-opacity-disabled, 0.48);
-  filter: saturate(0.5);
+  opacity: var(--ds-state-disabled-opacity);
 }
 
 .rottay-dropdown__surface[data-part='surface'] [data-part='selection-indicator'],
@@ -337,10 +362,9 @@
   border-radius: var(--ds-dropdown-radius, var(--ds-radius-xl, 16px));
   background:
     linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 5%, transparent), transparent 45%),
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
     var(--ds-surface-card);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
-    var(--ds-dropdown-shadow, var(--ds-elevation-3));
+  box-shadow: var(--ds-dropdown-shadow, var(--ds-elevation-3));
   animation: ds-dropdown-popover-enter-modern var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease) both;
 }
 
@@ -390,7 +414,12 @@
   .rottay-dropdown__surface[data-part='surface'] [data-part='selection-indicator'],
   .rottay-dropdown__surface[data-part='surface'] [data-part='submenu'] {
     animation: none;
-    transition-duration: 0.01ms;
+    transition: none;
+  }
+
+  .rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):hover,
+  .rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):active {
+    transform: none;
   }
 }
 

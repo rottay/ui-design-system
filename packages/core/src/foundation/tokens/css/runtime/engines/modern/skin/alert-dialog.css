@@ -1,49 +1,62 @@
 /**
- * Modern AlertDialog skin (WO-SKIN-04 checkpoint P).
+ * Modern AlertDialog skin (WO-SKIN-04 checkpoint P; Quiet Premium uplift).
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all.
  *
- * SINGLE PAINT OWNER. The engine no longer renders `modal modal-open`,
- * `modal-backdrop`, `modal-box` or `modal-action`, so every channel those four
- * classes carried is declared here. Two of them previously had no inline
- * footprint at all and were painted from outside the component, by
- * `runtime/personality.css` (layer `rottay-personality`, which sorts after
- * `rottay-engines` and so also outranked `modern/theme.css`):
+ * SINGLE PAINT OWNER. The engine stamps `data-part`s and structural geometry
+ * only; every color, elevation, typography and interaction state channel is
+ * declared here through semantic `--ds-*` tokens.
  *
- *   .modal-backdrop { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
- *   .modal-box      { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+ * BACKDROP (spec section 5): glass is sanctioned on overlay backdrops only.
+ * The scrim keeps the tenant `--ds-overlay-bg` fill and gains the frost tint +
+ * blur from the `--ds-glass-*` family, both scaling with
+ * `--ds-effect-intensity` (a zero-intensity tenant collapses to a plain scrim).
  *
- * Both now resolve through the DS modal tokens the `theme.css` bridge already
- * used for them. `--ds-modal-overlay-backdrop` is `blur(4px)`, so the blur is
- * unchanged. `--ds-modal-shadow` replaces personality's hard-coded literal:
- * the elevation now follows the tenant's own modal shadow instead of a fixed
- * one no white-label could reach, which is the point of retiring the class.
+ * SURFACE (spec section 3): high overlay elevation via `--ds-modal-shadow`,
+ * plus the dark-aware luminance step (`--ds-elevation-surface-4` lift layer —
+ * inert where `--ds-elevation-lift-strength` is 0) and a hairline
+ * `--ds-color-border-subtle` edge so the panel reads on dark surfaces.
  *
- * The dialog element's OWN scrim is deliberately not transcribed.
- * `.modal-open` painted it `oklch(0% 0 0/0.4)`, but `[data-part='backdrop']` is
- * a `position: fixed; inset: 0` child that paints `--ds-overlay-bg` above its
- * ancestor's background across the whole viewport — the Daisy scrim was fully
- * occluded and contributed no pixel. What DOES need transcribing is
- * `.modal`'s `background-color: transparent` and `color: inherit`, which
- * suppressed the UA `dialog` defaults (`Canvas` / `CanvasText`), and its
- * `&::backdrop { display: none }`, which hides the native top-layer backdrop
- * `showModal()` generates.
+ * MOTION (spec section 2): the panel and backdrop enter on the shared
+ * `--ds-motion-normal` / `--ds-motion-ease-out` cadence with engine-namespaced
+ * keyframes. There is no EXIT animation by design: the engine unmounts the
+ * dialog synchronously when `open` flips false (a behavior its test contract
+ * pins), so only the entrance is choreographed. Reduced motion collapses the
+ * entrance to an instant fade and kills every interactive transition.
  *
- * `background` and `border-radius` on the surface were inline before (inline
- * outranks every layer) and are unlayered now (which also outranks every
- * layer), so the winner's value is unchanged.
+ * SPECIFICITY (P-48): any rule painting a border COLOR reaches b >= 4 to clear
+ * the tenant artifacts' unlayered `*` border-color floor at (0,3,1); the
+ * target's own `data-part` is repeated to buy the extra attributes.
+ * Color-free resets are exempt.
  *
- * PORTAL: this engine does NOT portal (neither does rustic) — the tree renders
- * in-tree as a `position: fixed` sibling. The scope class still anchors every rule,
- * so the selectors are position-independent.
+ * PORTAL: this engine portals through the shared `#rottay-portal-root`; the
+ * scope class anchors every rule, so the selectors are position-independent.
  *
  * SCOPE: `rottay-alert-dialog--modern`. NOT `ds-popover` / `ds-dropdown` — those two
  * names carry DORMANT entrance-animation rules in personality.css that match nothing
  * today (P3); adopting either would hand this component an animation it has never had.
  */
 
-/* ---- dialog element: the retired `.modal` resets. Geometry (fixed, inset 0,
+/* ---- entrance keyframes: engine-namespaced so a future rustic twin cannot
+        collide on the name. ---- */
+@keyframes ds-alert-dialog-backdrop-enter-modern {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes ds-alert-dialog-enter-modern {
+  from {
+    opacity: 0;
+    transform: translateY(var(--ds-alert-dialog-motion-offset, 0.5rem))
+      scale(var(--ds-alert-dialog-motion-scale, 0.97));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---- dialog element: UA-chrome reset. Geometry (fixed, inset 0,
         viewport-sized, flex-centred) stays inline in the engine. ---- */
 .rottay-alert-dialog.rottay-alert-dialog--modern[data-part='root'] {
   background-color: transparent;
@@ -58,50 +71,146 @@
   display: none;
 }
 
+/* ---- backdrop: scrim + the sanctioned glass layer ---- */
 .rottay-alert-dialog--modern[data-part='root'] > [data-part='backdrop'] {
-  background: var(--ds-overlay-bg);
-  /* Took over from `runtime/personality.css`, which reached this element only
-     through the retired `.modal-backdrop` class. */
-  backdrop-filter: var(--ds-modal-overlay-backdrop);
-  -webkit-backdrop-filter: var(--ds-modal-overlay-backdrop);
-  /* `.modal-backdrop` kept the scrim behind the surface and its own text
-     invisible; both are transcribed rather than left to DOM order. */
+  background-color: var(--ds-overlay-bg);
+  background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
+  backdrop-filter: var(--ds-glass-backdrop-filter, var(--ds-modal-overlay-backdrop));
+  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter, var(--ds-modal-overlay-backdrop));
+  animation: ds-alert-dialog-backdrop-enter-modern var(--ds-motion-normal)
+    var(--ds-motion-ease-out) both;
+  /* The scrim stays behind the surface and its own text invisible. */
   z-index: -1;
   color: transparent;
 }
 
+/* ---- surface: overlay material (fill + dark lift + elevation) ---- */
 .rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
-  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  /* The lift overlay is its own layer directly above the fill so the fallback
+     chain stays untouched; it is inert until a dark surface raises
+     --ds-elevation-lift-strength, where the near-invisible shadow ramp needs
+     the luminance step. Level 4 matches the overlay elevation band. */
+  background-color: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  background-image: linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4));
   border-radius: var(--ds-modal-radius, var(--ds-radius-lg));
-  /* ---- retired `.modal-box`: the scroll contract and the elevation ---- */
-  width: var(--ds-alert-dialog-width, 91.6667%);
-  max-height: 100vh;
+  box-shadow: var(--ds-modal-shadow);
+  inline-size: var(--ds-alert-dialog-width, 91.6667%);
+  max-inline-size: min(
+    var(--ds-alert-dialog-max-width, 24rem),
+    calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4))
+  );
+  max-block-size: 100vh;
   overflow-y: auto;
   overscroll-behavior: contain;
-  box-shadow: var(--ds-modal-shadow);
+  padding: var(--ds-modal-padding, var(--ds-spacing-6));
+  animation: ds-alert-dialog-enter-modern var(--ds-motion-normal)
+    var(--ds-motion-ease-out) both;
+}
+.rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'][data-part='surface'] {
+  border: 1px solid var(--ds-color-border-subtle);
 }
 
-/* ---- retired `.modal-action`: end-aligned action row ---- */
-.rottay-alert-dialog--modern[data-part='root'] [data-part='footer'] {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: var(--ds-modal-footer-padding);
-  gap: var(--ds-modal-footer-gap);
+/* ---- copy: typography is skin-owned (the engine stamps parts only) ---- */
+.rottay-alert-dialog--modern[data-part='root'] [data-part='title'] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-block-end: var(--ds-spacing-2);
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-font-size-lg);
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: var(--ds-letter-spacing-heading, -0.015em);
+  line-height: var(--ds-line-height-tight);
+}
+.rottay-alert-dialog--modern[data-part='root'] [data-part='description'] {
+  color: var(--ds-color-text-secondary);
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-relaxed);
 }
 
+/* ---- icon: error-tinted circle (destructive tone via semantic channels) ---- */
 .rottay-alert-dialog--modern[data-part='root'] [data-part='icon'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: var(--ds-alert-dialog-icon-size, 2.5rem);
+  block-size: var(--ds-alert-dialog-icon-size, 2.5rem);
+  border-radius: var(--ds-radius-full, 9999px);
   background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
   color: var(--ds-color-error);
 }
 
-.rottay-alert-dialog--modern[data-part='root'] [data-part='description'] {
-  color: var(--ds-color-text-secondary);
+/* ---- footer: end-aligned action row ---- */
+.rottay-alert-dialog--modern[data-part='root'] [data-part='footer'] {
+  display: flex;
+  justify-content: flex-end;
+  margin-block-start: var(--ds-modal-footer-padding);
+  gap: var(--ds-modal-footer-gap);
 }
 
 /* ---- cancel action (the consumer's own `action` node is NOT painted here) ---- */
 .rottay-alert-dialog--modern[data-part='root'] [data-part='action'][data-action='cancel'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
+  min-block-size: var(--ds-control-height-sm, 2.25rem);
+  padding-inline: var(--ds-spacing-md);
+  cursor: pointer;
   border: none;
   border-radius: var(--ds-radius-md);
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-font-size-sm);
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.rottay-alert-dialog--modern[data-part='root'] [data-part='action'][data-action='cancel']:hover:not(:disabled) {
+  background: var(--ds-surface-highlight);
+}
+.rottay-alert-dialog--modern[data-part='root'] [data-part='action'][data-action='cancel']:active:not(:disabled) {
+  transform: scale(var(--ds-state-press-scale));
+}
+.rottay-alert-dialog--modern[data-part='root'] [data-part='action'][data-action='cancel']:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-shadow-focus-ring);
+}
+.rottay-alert-dialog--modern[data-part='root'] [data-part='action'][data-action='cancel']:disabled {
+  cursor: not-allowed;
+  opacity: var(--ds-state-disabled-opacity);
+}
+
+/* 44px hit area on coarse pointers, via block-size only — never by inflating
+   the visual size beyond the density contract. */
+@media (pointer: coarse) {
+  .rottay-alert-dialog--modern[data-part='root'] [data-part='action'][data-action='cancel'] {
+    min-block-size: var(--ds-alert-dialog-touch-target, 2.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-alert-dialog--modern[data-part='root'] > [data-part='backdrop'],
+  .rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
+    animation-duration: 1ms;
+    animation-timing-function: linear;
+    transform: none;
+  }
+
+  .rottay-alert-dialog--modern[data-part='root'] [data-part='action'][data-action='cancel'] {
+    transition: none;
+  }
+  .rottay-alert-dialog--modern[data-part='root'] [data-part='action'][data-action='cancel']:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+/* Forced colors: shadow rings vanish, so the focus channel degrades to a
+   system outline. */
+@media (forced-colors: active) {
+  .rottay-alert-dialog--modern[data-part='root'] [data-part='action'][data-action='cancel']:focus-visible {
+    outline: 2px solid CanvasText;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
 }

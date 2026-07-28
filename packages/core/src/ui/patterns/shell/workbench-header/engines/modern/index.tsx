@@ -11,9 +11,12 @@
  * - Saved views: integrated tab strip with active underline highlight
  * - Exception count badge with warning icon
  *
- * Token-driven styling, zero DaisyUI dependency. Consistent visual family
- * with CockpitHeader: same container treatment, typography scale, transitions,
- * and token usage.
+ * Ownership (R2+R3): the engine stamps anatomy (`data-part`), state
+ * (`data-active`, `data-variant`, `data-loading`) and the sanctioned skeleton
+ * radius data channel; the modern skin
+ * (`runtime/engines/modern/skin/workbench-header.css`) owns 100% of layout and
+ * paint — typography included. Token-driven styling, zero DaisyUI dependency,
+ * zero inline paint. Consistent visual family with CockpitHeader.
  *
  * @module Patterns/WorkbenchHeader/Engines/Modern
  * @category Patterns
@@ -24,10 +27,14 @@ import React from 'react';
 import type { WorkbenchHeaderProps, WorkbenchQuickAction } from '../../contracts';
 import Button from '../../../../../primitives/inputs/Button/engines/modern';
 import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /* ------------------------------------------------------------------ */
-/* Shared style constants                                              */
+/* English accessibility floors (translatable via `components` ns)     */
 /* ------------------------------------------------------------------ */
+
+const SAVED_VIEWS_LABEL_KEY = 'workbenchHeader.savedViews';
+const SAVED_VIEWS_LABEL_FALLBACK = 'Saved views';
 
 /* ------------------------------------------------------------------ */
 /* QuickActionButton                                                   */
@@ -44,7 +51,6 @@ function QuickActionButton({ action }: { action: WorkbenchQuickAction }) {
     <span
       data-part="action"
       data-variant={variant}
-      style={{ display: 'contents' }}
     >
       <Button
         htmlType="button"
@@ -52,7 +58,6 @@ function QuickActionButton({ action }: { action: WorkbenchQuickAction }) {
         variant={variant}
         disabled={action.disabled}
         onClick={action.onClick}
-        style={{ flexShrink: 0 }}
         icon={action.icon}
       >
         {action.label}
@@ -85,18 +90,6 @@ function SavedViewTab({
       onClick={onClick}
       data-part="tab"
       data-active={isActive ? 'true' : 'false'}
-      style={{
-        position: 'relative',
-        minHeight: 'var(--ds-tabs-md-height)',
-        padding: 'var(--ds-tabs-md-padding)',
-        fontSize: 'var(--ds-tabs-md-font-size)',
-        fontWeight: isActive
-          ? 'var(--ds-tabs-item-font-weight-active)'
-          : 'var(--ds-tabs-item-font-weight)',
-        lineHeight: 'var(--ds-line-height-body)',
-        cursor: 'pointer',
-        transition: 'color var(--ds-motion-fast) var(--ds-motion-ease-out), background var(--ds-motion-fast) var(--ds-motion-ease-out), border-color var(--ds-motion-fast) var(--ds-motion-ease-out), box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out), transform var(--ds-motion-fast) var(--ds-motion-ease-out)',
-      }}
     >
       {label}
     </button>
@@ -107,20 +100,17 @@ function SavedViewTab({
 /* Skeleton                                                            */
 /* ------------------------------------------------------------------ */
 
-const PULSE_STYLE: React.CSSProperties = {
-  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
-};
-
-function SkeletonBlock(props: { width: number | string; height: number; style?: React.CSSProperties }) {
+/**
+ * One skeleton block. `size` is the skin-owned geometry hook (`data-size`);
+ * the optional inline style carries only the sanctioned radius
+ * custom-property data channel.
+ */
+function SkeletonBlock(props: { size: string; style?: React.CSSProperties }) {
   return (
     <div
       data-part="skeleton"
-      style={{
-        width: props.width,
-        height: props.height,
-        ...PULSE_STYLE,
-        ...props.style,
-      }}
+      data-size={props.size}
+      style={props.style}
     />
   );
 }
@@ -162,11 +152,11 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
     style,
   } = props;
 
-  /* ---- Container styles ---- */
-  const containerStyle: React.CSSProperties = {
-    padding: 'var(--ds-workbench-header-padding)',
-    ...style,
-  };
+  // Optional i18n: without an I18nProvider the hook returns null and the
+  // English floor renders, byte-identical to the pre-i18n contract.
+  const i18n = useOptionalTranslation('components');
+  const savedViewsLabel =
+    i18n?.tOr(SAVED_VIEWS_LABEL_KEY, SAVED_VIEWS_LABEL_FALLBACK) ?? SAVED_VIEWS_LABEL_FALLBACK;
 
   /* ---- Loading skeleton ---- */
   if (loading) {
@@ -175,45 +165,32 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
         className={`ds-pattern-workbench-header ds-engine-modern ${className ?? ''}`}
         data-part="root"
         data-loading="true"
-        style={containerStyle}
+        style={style}
       >
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-workbench-header-item-gap)' }}>
+        <div data-part="skeleton-row">
+          <div data-part="skeleton-lead">
             {/* Avatar skeleton */}
             <SkeletonBlock
-              width={40}
-              height={40}
-              style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-full)', flexShrink: 0 } as React.CSSProperties}
+              size="avatar"
+              style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-full)' } as React.CSSProperties}
             />
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-2, 8px)' }}>
-              <SkeletonBlock width={200} height={22} />
-              <SkeletonBlock width={300} height={14} />
+            <div data-part="skeleton-column">
+              <SkeletonBlock size="title" />
+              <SkeletonBlock size="subtitle" />
             </div>
           </div>
-          <div style={{ display: 'flex', gap: 'var(--ds-workbench-header-action-gap)' }}>
+          <div data-part="skeleton-actions">
             <SkeletonBlock
-              width={80}
-              height={34}
+              size="action"
               style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
             />
             <SkeletonBlock
-              width={80}
-              height={34}
+              size="action"
               style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
             />
           </div>
         </div>
-        <SkeletonBlock
-          width="100%"
-          height={36}
-          style={{ marginTop: 'var(--ds-workbench-header-section-gap)' }}
-        />
+        <SkeletonBlock size="tabs" />
       </div>
     );
   }
@@ -227,30 +204,12 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
       data-has-icon={icon ? 'true' : 'false'}
       data-has-actions={quickActions && quickActions.length > 0 ? 'true' : 'false'}
       data-has-tabs={savedViews && savedViews.length > 0 ? 'true' : 'false'}
-      style={containerStyle}
+      style={style}
     >
       {/* ---- Header row: back + title + badge | quick actions ---- */}
-      <div
-        data-part="header-row"
-        style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          gap: 'var(--ds-workbench-header-section-gap)',
-          flexWrap: 'wrap',
-        }}
-      >
+      <div data-part="header-row">
         {/* Left: title group */}
-        <div
-          data-part="lead"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--ds-workbench-header-item-gap)',
-            minWidth: 0,
-            flex: 1,
-          }}
-        >
+        <div data-part="lead">
           {icon ? (
             <span data-part="header-icon" aria-hidden="true">
               {icon}
@@ -258,45 +217,16 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
           ) : null}
 
           {/* Title + subtitle column */}
-          <div data-part="titles" style={{ minWidth: 0, flex: 1 }}>
+          <div data-part="titles">
             {eyebrow ? <div data-part="eyebrow">{eyebrow}</div> : null}
-            <div
-              data-part="title-row"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--ds-workbench-header-item-gap)',
-              }}
-            >
-              <h2
-                data-part="title"
-                style={{
-                  margin: 0,
-                  fontSize: 'var(--ds-font-size-xl)',
-                  fontWeight: 'var(--ds-font-weight-semibold)',
-                  lineHeight: 'var(--ds-line-height-heading)',
-                  letterSpacing: 'var(--ds-letter-spacing-heading)',
-                  textWrap: 'balance',
-                }}
-              >
+            <div data-part="title-row">
+              <h2 data-part="title">
                 {title}
               </h2>
 
               {/* Exception count badge */}
               {exceptionCount != null && exceptionCount > 0 && (
-                <span
-                  data-part="exception"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 4,
-                    padding: '2px 10px',
-                    fontSize: 'var(--ds-font-size-xs)',
-                    fontWeight: 'var(--ds-font-weight-semibold)',
-                    lineHeight: 'var(--ds-line-height-body)',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
+                <span data-part="exception">
                   <StatusWarningIcon size={12} decorative />
                   {exceptionCount}
                 </span>
@@ -305,15 +235,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
 
             {/* Subtitle */}
             {subtitle && (
-              <p
-                data-part="subtitle"
-                style={{
-                  margin: '4px 0 0',
-                  fontSize: 'var(--ds-font-size-sm)',
-                  lineHeight: 'var(--ds-line-height-body)',
-                  textWrap: 'pretty',
-                }}
-              >
+              <p data-part="subtitle">
                 {subtitle}
               </p>
             )}
@@ -322,16 +244,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
 
         {/* Right: quick action buttons */}
         {quickActions && quickActions.length > 0 && (
-          <div
-            data-part="actions"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--ds-workbench-header-action-gap)',
-              flexShrink: 0,
-              flexWrap: 'wrap',
-            }}
-          >
+          <div data-part="actions">
             {quickActions.map((action, idx) => (
               <QuickActionButton key={`qa-${idx}`} action={action} />
             ))}
@@ -343,14 +256,8 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
       {savedViews && savedViews.length > 0 && onViewChange && (
         <div
           role="tablist"
-          aria-label="Saved views"
+          aria-label={savedViewsLabel}
           data-part="tabs"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--ds-tabs-gap)',
-            marginTop: 'var(--ds-workbench-header-section-gap)',
-          }}
         >
           {savedViews.map((view) => {
             const isActive = view.id === activeViewId;

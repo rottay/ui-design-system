@@ -1,0 +1,27 @@
+=== ui-design-system ===
+f3720ea87b753c309f4b460e33f5e2fefd4a66b1
+stash@{0}: WIP on main: 04d29fac feat(data-table): add column visibility, resize, reorder, pin, and density
+     140
+=== app-bithire ===
+2e844fd58638987d4a20cb752b2e6e68b63a0a05
+stash@{0}: On main: revert: family files from stopped design workflow
+stash@{1}: On main: revert: wrong app globals/foundation theme edits (DS owns theming)
+stash@{2}: On main: tangled-autostash-conflict-quarantine-lane09
+     102
+=== app-evnto ===
+e7509caeabd14c7b094447af22b096fe9c6ef8e4
+stash@{0}: WIP on main: f35622702 fix(evnto): upgrade DS to 2.6.3 (includes tenant CSS)
+       2
+=== app-platform ===
+bafb786f1417ece93c991a87cd827ef69e489e47
+stash@{0}: WIP on main: 85cc3e83 feat(enterprise): add 9 enterprise features with security hardening
+stash@{1}: WIP on main: 90af047 fix: update configs to use unified rottay infrastructure
+     140
+=== docs-engineering ===
+ca53acf047c7db38d582c96ee2b9cdcb8c3d3d95
+       1
+ M packages/core/scripts/app-ds-boundary-gate.baseline.json
+ M packages/core/scripts/app-ds-boundary-gate.mjs
+ M packages/core/scripts/app-ds-boundary-gate.test.mjs
+ M packages/core/scripts/cra-12-motion-governance.registry.json
+ M packages/core/scripts/i18n-key-parity-gate.baseline.json

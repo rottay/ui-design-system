@@ -220,12 +220,15 @@
   border-radius: var(--ds-radius-lg, 12px);
   color: var(--ds-text-secondary);
   background-color: transparent;
-  transition: all 0.2s ease;
+  transition:
+    background-color var(--ds-motion-normal, 200ms)
+      var(--ds-motion-ease-out, ease),
+    color var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease);
   text-decoration: none;
   cursor: pointer;
   border: none;
   width: 100%;
-  text-align: left;
+  text-align: start;
   font-size: var(--ds-sidebar-item-font-size, 15.75px);
   font-weight: 500;
   line-height: 1.28;
@@ -276,7 +279,10 @@
   border-radius: var(--ds-radius-lg, 12px);
   color: var(--ds-text-secondary);
   background-color: transparent;
-  transition: all 0.2s ease;
+  transition:
+    background-color var(--ds-motion-normal, 200ms)
+      var(--ds-motion-ease-out, ease),
+    color var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease);
   cursor: pointer;
   font-size: var(--ds-sidebar-item-font-size, 15.75px);
   font-weight: 500;
@@ -437,4 +443,12 @@
 
 [data-tenant] .rottay-qrcode[data-status="scanned"] {
   opacity: var(--ds-qrcode-status-scanned-opacity);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-tenant] .rottay-menu li > a,
+  [data-tenant] .rottay-menu li > button,
+  [data-tenant] .rottay-menu details > summary {
+    transition: none;
+  }
 }

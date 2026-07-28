@@ -441,6 +441,19 @@
   min-width: 0;
 }
 
+/* The header-content flex row must mirror the cell's logical text alignment,
+   otherwise a right-aligned (numeric) column shows its label on the opposite
+   edge from its values. */
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-align="center"] [data-part="header-content"] {
+  justify-content: center;
+}
+
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="header-cell"][data-align="right"] [data-part="header-content"] {
+  justify-content: flex-end;
+}
+
 .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"] {
   display: inline-flex;
   flex-shrink: 0;
@@ -512,7 +525,8 @@
 .ds-pattern-data-table.ds-engine-modern [data-part="header-label"] {
   flex: 1;
   overflow: hidden;
-  text-overflow: ellipsis;  text-align: inherit;
+  text-overflow: ellipsis;
+  text-align: inherit;
   white-space: nowrap;
 }
 
@@ -638,6 +652,50 @@
   white-space: normal;
 }
 
+/* ---- inline cell editor geometry. Paint (border rest/error, radius, fill,
+        accent-color) stays in the agnostic data-table-mobile skin; this block
+        owns only layout/type geometry and uses logical props so the error
+        anchoring mirrors under RTL. ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part="editor-shell"] {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="editor-input"] {
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--ds-table-editor-input-padding, 0.25rem 0.5rem);
+  font-family: inherit;
+  font-size: var(
+    --ds-table-editor-input-font-size,
+    var(--ds-font-size-sm, 0.875rem)
+  );
+  line-height: var(--ds-table-editor-input-line-height, 1.5);
+}
+
+.ds-pattern-data-table.ds-engine-modern select[data-part="editor-input"] {
+  appearance: auto;
+  cursor: pointer;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="editor-checkbox"] {
+  flex-shrink: 0;
+  inline-size: var(--ds-table-editor-checkbox-size, 1rem);
+  block-size: var(--ds-table-editor-checkbox-size, 1rem);
+  cursor: pointer;
+}
+
+.ds-pattern-data-table.ds-engine-modern [data-part="editor-error"] {
+  position: absolute;
+  inset-block-start: calc(100% + 0.25rem);
+  inset-inline-start: 0;
+  font-size: var(--ds-table-editor-error-font-size, 0.6875rem);
+  white-space: nowrap;
+}
+
 .ds-pattern-data-table.ds-engine-modern [data-part="expanded-row"],
 .ds-pattern-data-table.ds-engine-modern [data-part="virtual-spacer"] {
   padding: 0;
@@ -695,7 +753,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-left: 4px;
+  margin-inline-start: 4px;
   font-size: var(--ds-table-caption-font-size, var(--ds-font-size-xs));
   font-weight: 400;
 }
@@ -1049,23 +1107,12 @@
     color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
 }
 
-/* ---- resize handle bar (rest; the :hover width/color swap is owned by
-        data-table-interactions.css) ---- */
+/* ---- resize handle bar (rest only; the :hover/:focus-visible width and
+        color swap is owned by data-table-interactions.css — single paint
+        owner, do not re-declare it here) ---- */
 .ds-pattern-data-table.ds-engine-modern [data-part="resize-handle-bar"] {
   border-radius: var(--ds-radius-full, 9999px);
   background: var(--ds-table-resize-bg, var(--ds-color-border));
-}
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="resize-handle"]:hover
-  [data-part="resize-handle-bar"],
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="resize-handle"]:focus-visible
-  [data-part="resize-handle-bar"] {
-  width: var(--ds-table-resize-bar-width-active, 0.1875rem);
-  height: var(--ds-table-resize-bar-height-active, 74%);
-  background: var(--ds-table-resize-bg-hover, var(--ds-color-primary));
-  box-shadow: 0 0 0 3px
-    color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
 }
 
 /* ---- body row: rest fill (selected > striped > transparent) + the one hover
@@ -1710,6 +1757,35 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+/* ---- coarse pointers: the pattern's own chrome reaches the 44px touch floor.
+        Header affordances keep their visual size and grow an invisible hit
+        surface instead, so the header row does not change geometry on touch;
+        the resize strip widens for real because it is already an overlay.
+        Composed DS Buttons (pagination, bulk bar, inline-edit actions) keep
+        their own density — same convention as the filter-panel skin. ---- */
+@media (pointer: coarse) {
+  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="hide-column-button"] {
+    position: relative;
+  }
+
+  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]::after,
+  .ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"]::after,
+  .ds-pattern-data-table.ds-engine-modern [data-part="hide-column-button"]::after {
+    content: "";
+    position: absolute;
+    inset: calc(var(--ds-table-touch-hit-expansion, 0.5625rem) * -1);
+  }
+
+  .ds-pattern-data-table.ds-engine-modern
+    .ds-data-table__column-tooltip--resize.ds-data-table__column-tooltip--resize {
+    inset-inline-end: calc(var(--ds-table-touch-target, 2.75rem) / -2);
+    width: var(--ds-table-touch-target, 2.75rem);
+    min-width: var(--ds-table-touch-target, 2.75rem);
   }
 }
 

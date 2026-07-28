@@ -1,13 +1,19 @@
 /**
- * BottomTabBar skin (WO-SKIN-04 checkpoint N).
+ * BottomTabBar skin (WO-SKIN-04 checkpoint N; R2+R3 modern premium pass).
  *
- * ENGINE-AGNOSTIC: BottomTabBar has no `engines/` split — it composes Box/Flex/
- * Text, which resolve through the engine system themselves. One skin file, no
- * engine modifier class.
+ * ENGINE-AGNOSTIC: BottomTabBar has no per-engine markup split — it composes
+ * Box/Flex/Text, which resolve through the engine system themselves. One skin
+ * file, no engine modifier class.
+ *
+ * OWNERSHIP (R2+R3): the engine stamps anatomy + state only (`data-part`,
+ * `data-selected`, `data-wide`); this file owns 100% of layout and paint —
+ * fixed positioning, safe-area inset, tab geometry, typography, the active
+ * icon pill, badge, motion. The one inline style left in the engine is the
+ * caller's own `style` prop on the root, which still wins (unlayered skin
+ * yields to inline style).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * still yields to a caller's inline `style`.
+ * base layer, so a layered rule cannot paint these elements at all.
  *
  * ELEMENT-LEVEL CLASSES, NOT BARE `data-part` DESCENDANTS: `data-part='icon'` /
  * `'label'` / `'badge'` are shared vocabulary across the component fleet, and
@@ -15,35 +21,67 @@
  * painted element therefore carries its own class and is matched by a COMPOUND
  * selector.
  *
- * ACTIVE COLOR: one JS ternary fanned out to three redundant `color` sites (tab
- * button, icon, label — none of them relying on inheritance). All three are
- * reproduced explicitly, keyed on the tab button's `data-selected`, so the
- * cascade cannot be changed by a future `color` landing on an intermediate node.
- * Those three sites were JS object SHORTHAND (`color,`) and are invisible to the
- * inline-paint counter — they are real paint, migrated from the inventory's
- * coverage list, not the counter's.
+ * ACTIVE COLOR: the selected/idle ink fans out to three explicit sites (tab
+ * button, icon, label — none relying on inheritance), keyed on the tab
+ * button's `data-selected`, so the cascade cannot be changed by a future
+ * `color` landing on an intermediate node.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
- * (0,3,1). The root's `border-top` carries a real color, so it must reach
- * (0,4,0); with only ONE root class that is bought by a thrice-repeated
- * `[data-part='root']` (the voice-input-button precedent). The tab button's
- * `border: none` is a color-free reset, exempt from the floor. Non-border paint
- * (background, color, border-radius) wins unlayered at (0,2,0)+.
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
+ * border-color floor at (0,3,1). The root's `border-top` carries a real color,
+ * so it must reach (0,4,0) — bought by a thrice-repeated `[data-part='root']`.
+ * The tab button's `border: none` is a color-free reset, exempt from the
+ * floor. Non-border paint (background, color, border-radius, box-shadow) wins
+ * unlayered at (0,2,0)+.
  */
 
+/* ---- root: fixed navigation bar, safe-area aware. Positioning was inline
+        in the engine pre-R2+R3; the skin owns it now. ---- */
 .rottay-bottom-tab-bar[data-part='root'] {
+  position: fixed;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: var(--ds-bottom-tab-bar-z, 40);
+  padding-block-end: env(safe-area-inset-bottom, 0px);
   background: var(--ds-color-bg-primary);
+  box-shadow: var(--ds-bottom-tab-bar-shadow, var(--ds-elevation-2, 0 -4px 16px rgb(15 23 42 / 0.08)));
+  animation: ds-bottom-tab-bar-enter var(--ds-motion-calm)
+    var(--ds-motion-ease-out, ease-out) both;
 }
 
 .rottay-bottom-tab-bar[data-part='root'][data-part='root'][data-part='root'] {
   border-top: 1px solid var(--ds-color-border);
 }
 
-/* ---- tab button: transparent shell; the active/idle color fans out to the
-        icon and label, which re-declare it rather than inherit. ---- */
+/* ---- list: the Flex row the engine renders around the items. ---- */
+.rottay-bottom-tab-bar__list[data-part='list'] {
+  inline-size: 100%;
+}
+
+/* ---- tab button: transparent shell; geometry migrated from the engine's
+        former inline tabStyle. The active/idle color fans out to the icon
+        and label, which re-declare it rather than inherit. ---- */
 .rottay-bottom-tab-bar__tab[data-part='tab-button'] {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  padding-block: 6px 2px;
   background: none;
   border: none;
+  cursor: pointer;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--ds-motion-fast) var(--ds-ease-standard, ease);
+}
+
+.rottay-bottom-tab-bar__tab[data-part='tab-button']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));
+  border-radius: var(--ds-radius-md, 10px);
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'],
@@ -52,18 +90,140 @@
   color: var(--ds-color-text-muted);
 }
 
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover,
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover .rottay-bottom-tab-bar__icon,
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover .rottay-bottom-tab-bar__label {
+  color: var(--ds-color-text-secondary);
+}
+
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'],
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon,
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label {
   color: var(--ds-color-primary);
 }
 
-/* ---- badge: fixed error pill; its text literal has no token backing. ---- */
-.rottay-bottom-tab-bar__badge[data-part='badge'] {
-  border-radius: 8px;
-  background: var(--ds-color-error);
+/* ---- icon wrap: the active tab's framed pill (M3-style indicator — a
+        horizontal framed surface, never a vertical accent rail). The badge
+        anchors to this box; logical offsets keep it on the trailing edge
+        in RTL. ---- */
+.rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap'] {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  block-size: 26px;
+  padding-inline: 10px;
+  border-radius: var(--ds-radius-full, 9999px);
+  transition:
+    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
 }
 
-.rottay-bottom-tab-bar__badge-text {
-  color: #fff;
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap {
+  background: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
+}
+
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:not(:active):hover .rottay-bottom-tab-bar__icon-wrap {
+  background: color-mix(in srgb, var(--ds-color-text-muted) 8%, transparent);
+}
+
+.rottay-bottom-tab-bar__tab[data-part='tab-button']:active .rottay-bottom-tab-bar__icon-wrap {
+  transform: scale(0.94);
+}
+
+.rottay-bottom-tab-bar__icon[data-part='icon'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 24px;
+  block-size: 24px;
+}
+
+/* ---- badge: error pill with a cut-out ring against the bar surface; the
+        wide variant (99+) keeps its extra 4px via `data-wide`. ---- */
+.rottay-bottom-tab-bar__badge[data-part='badge'] {
+  position: absolute;
+  inset-block-start: -3px;
+  inset-inline-end: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 16px;
+  block-size: 16px;
+  padding-inline: 4px;
+  border-radius: 8px;
+  background: var(--ds-color-error);
+  box-shadow: 0 0 0 2px var(--ds-color-bg-primary);
+}
+
+.rottay-bottom-tab-bar__badge[data-part='badge'][data-wide='true'] {
+  min-inline-size: 20px;
+}
+
+/* On-token pair for the error pill. DOCUMENTED ESCAPE HATCH: no
+   `--ds-color-text-on-error` token exists yet (shared-token proposal
+   reported); the `#fff` floor matches the export-button.css
+   `--ds-color-text-on-success` precedent. */
+.rottay-bottom-tab-bar__badge-text[data-part='badge-text'] {
+  color: var(--ds-color-text-on-error, #fff);
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 600;
+  line-height: 16px;
+}
+
+/* ---- label: typography migrated from the engine's inline Text style; the
+        selected weight was a JS ternary, now keyed on data-selected. ---- */
+.rottay-bottom-tab-bar__label[data-part='label'] {
+  margin-block-start: 2px;
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 14px;
+  transition: color var(--ds-motion-fast) var(--ds-ease-standard, ease);
+}
+
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label {
+  font-weight: 600;
+}
+
+@keyframes ds-bottom-tab-bar-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-bottom-tab-bar[data-part='root'],
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'],
+  .rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap'],
+  .rottay-bottom-tab-bar__label[data-part='label'] {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* ---- forced colors: the bar keeps its top rule, selection survives as a
+        Highlight pill, and the badge keeps a real frame. ---- */
+@media (forced-colors: active) {
+  .rottay-bottom-tab-bar[data-part='root'] {
+    border-top-color: CanvasText;
+  }
+
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap {
+    background: Highlight;
+  }
+
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon {
+    color: HighlightText;
+  }
+
+  .rottay-bottom-tab-bar__badge[data-part='badge'] {
+    box-shadow: none;
+    outline: 1px solid CanvasText;
+  }
 }

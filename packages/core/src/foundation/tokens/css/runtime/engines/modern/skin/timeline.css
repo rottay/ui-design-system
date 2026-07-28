@@ -108,7 +108,9 @@
   color: var(--ds-timeline-content-color, var(--ds-text-primary, var(--ds-color-text-primary)));
 }
 
-/* ---- per-item label ---- */
+/* ---- per-item label: the temporal eyebrow. Quiet Premium treatment: small
+        caps-adjacent tracking and tabular figures so dates/durations align
+        across rows (labels are overwhelmingly numeric in journey UIs). ---- */
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'] > [data-part='label'] {
   /* CONTRAST LAW (K3-A Pass 2, axe color-contrast/serious on BOTH sources):
      the resolved label channel fails AA (bithire's #888d9e = 3.10:1 on
@@ -125,6 +127,9 @@
     )
   );
   font-size: var(--ds-timeline-label-font-size, 12px);
+  font-weight: var(--ds-timeline-label-font-weight, var(--ds-font-weight-medium, 500));
+  letter-spacing: var(--ds-timeline-label-letter-spacing, 0.02em);
+  font-variant-numeric: var(--ds-timeline-label-font-variant-numeric, tabular-nums);
   margin-bottom: 0.25rem;
 }
 
@@ -189,4 +194,20 @@
   border: 2px solid var(--ds-color-border);
   border-top-color: var(--ds-timeline-pending-dot-color, var(--ds-color-primary));
   border-radius: 50%;
+}
+
+/* ---- reduced motion: the pending pulse and the spinner are infinite loops,
+        so they settle to a static pending marker instead of cycling. ---- */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'],
+  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='content'] > [data-part='spinner'] {
+    animation: none;
+  }
+}
+
+html[data-ds-motion='reduced']
+  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'],
+html[data-ds-motion='reduced']
+  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='content'] > [data-part='spinner'] {
+  animation: none;
 }

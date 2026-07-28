@@ -30,7 +30,7 @@
   font-family: var(--ds-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
   color: var(--ds-menu-color, var(--ds-color-text-secondary));
   border-radius: var(--ds-menu-radius, var(--ds-radius-xl, 16px));
-  box-shadow: var(--ds-menu-shadow, var(--ds-shadow-xs, 0 1px 2px rgb(15 23 42 / 0.04)));
+  box-shadow: var(--ds-menu-shadow, var(--ds-shadow-xs));
   transition:
     background var(--ds-motion-normal) var(--ds-ease-standard, ease),
     box-shadow var(--ds-motion-normal) var(--ds-ease-standard, ease),
@@ -54,6 +54,14 @@
   margin-block: 0.5px;
   padding: 0;
   list-style: none;
+}
+
+/* A group carries its own vertical rhythm so a tenant can separate sections
+   without touching plain rows. Both halves default to the shared 0.5px above,
+   so a tenant that sets neither is byte-identical to the rule it overrides. */
+.rottay-menu--modern[data-part='root'] [data-part='group'] {
+  margin-block: var(--ds-sidebar-group-margin-top, 0.5px)
+    var(--ds-sidebar-group-margin-bottom, 0.5px);
 }
 
 .rottay-menu.rottay-menu--modern[data-part='root'][data-part='root'] {
@@ -83,7 +91,7 @@
   padding-block: 0;
   border-radius: var(--ds-menu-item-radius, var(--ds-radius-lg, 12px));
   color: var(--ds-menu-item-color, var(--ds-color-text-secondary));
-  font-weight: 500;
+  font-weight: var(--ds-menu-item-font-weight, var(--ds-font-weight-medium, 500));
   line-height: 1.28;
   text-align: start;
   text-decoration: none;
@@ -141,15 +149,26 @@
 
 /* Selected rows carry extra ink weight. */
 .rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true'] {
-  font-weight: 600;
+  font-weight: var(--ds-menu-item-font-weight-selected, var(--ds-font-weight-semibold, 600));
 }
 
-/* Disabled rows dim and refuse interaction entirely. */
+/* Disabled rows refuse interaction entirely. The row does NOT ride a blanket
+   opacity: the steps family's axe measurements pinned the 0.5-opacity text
+   composite at 3.05:1 (fail) on these same tokens, so the text keeps the
+   measured AA-legible ink (text-secondary = 5.33:1 BitHire / 7.38:1 TMM) and
+   only the chrome (icon, disclosure arrow) dims. */
 .rottay-menu--modern[data-part='root'] [data-part='item'][data-disabled],
 .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-disabled] {
-  opacity: 0.5;
+  color: var(--ds-menu-item-color-disabled, var(--ds-color-text-secondary));
   cursor: not-allowed;
   pointer-events: none;
+}
+
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-disabled] [data-part='icon'],
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-disabled] [data-part='arrow-icon'],
+.rottay-menu--modern[data-part='root'] [data-part='trigger'][data-disabled] [data-part='icon'],
+.rottay-menu--modern[data-part='root'] [data-part='trigger'][data-disabled] [data-part='arrow-icon'] {
+  opacity: var(--ds-menu-disabled-opacity, 0.5);
 }
 
 .rottay-menu--modern[data-part='root'] [data-part='item'][data-part='item'],
@@ -277,24 +296,29 @@
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
+/* `[data-part='panel']` is the items container inside a group — the same role
+   app shells indent to set a group's rows in from its label. Defaulting to 0
+   keeps the current geometry for any tenant that does not set it. */
 .rottay-menu--modern[data-part='root'] [data-part='panel'] {
   position: relative;
   margin: 0;
   margin-block: 2px 5px;
-  padding: 0 0 1px 0;
+  padding: 0 0 1px var(--ds-sidebar-item-indent, 0px);
   list-style: none;
   border-radius: var(--ds-radius-lg, 12px);
   background: color-mix(in srgb, var(--ds-surface-subtle, var(--ds-card-bg, var(--ds-surface-card))) 72%, transparent);
-  animation: ds-menu-panel-enter var(--ds-motion-normal) var(--ds-ease-decelerate, ease-out);
+  /* `--ds-ease-decelerate` was consumed here and defined NOWHERE (orphan —
+     spec §2): the canon deceleration curve is `--ds-motion-ease-out`. */
+  animation: ds-menu-panel-enter var(--ds-motion-normal) var(--ds-motion-ease-out);
 }
 
 .rottay-menu--modern[data-part='root'] [data-part='group-label'] {
-  padding-block: 6px 3px;
+  padding-block: var(--ds-sidebar-group-padding-top, 6px) 3px;
   padding-inline: var(--ds-menu-item-padding-inline, var(--ds-sidebar-item-padding-inline, 16px));
   border-radius: var(--ds-radius-sm, 8px);
   color: var(--ds-menu-group-color, var(--ds-color-text-muted));
   font-size: var(--ds-menu-group-font-size, var(--ds-sidebar-group-font-size, 10.9px));
-  font-weight: 600;
+  font-weight: var(--ds-menu-group-font-weight, var(--ds-font-weight-semibold, 600));
   letter-spacing: 0.085em;
   line-height: 1.1;
   text-transform: uppercase;
@@ -345,7 +369,7 @@
   .rottay-menu--modern[data-part='root'] [data-part='icon'],
   .rottay-menu--modern[data-part='root'] [data-part='arrow-icon'] {
     animation: none;
-    transition-duration: 0.01ms;
+    transition: none;
   }
 }
 

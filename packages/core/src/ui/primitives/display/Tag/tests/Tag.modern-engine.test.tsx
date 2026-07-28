@@ -3,6 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import ModernTag from '../engines/modern';
+import { I18nProvider } from '@/infrastructure/runtime/i18n';
 
 describe('Tag modern engine contract', () => {
   it('stamps its premium anatomy and uses the semantic close role', () => {
@@ -69,6 +70,16 @@ describe('Tag modern engine contract', () => {
     render(<ModernTag closable>Active</ModernTag>);
 
     expect(screen.getByRole('button', { name: 'Remove tag' })).toBeInTheDocument();
+  });
+
+  it('resolves the close label from the active locale through the provider', () => {
+    render(
+      <I18nProvider locale="es" fallbackLocale="es">
+        <ModernTag closable>Activo</ModernTag>
+      </I18nProvider>
+    );
+
+    expect(screen.getByRole('button', { name: 'Quitar' })).toBeInTheDocument();
   });
 
   it('routes the color prop through the custom-bg hatch, not a direct fill', () => {

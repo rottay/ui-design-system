@@ -4,6 +4,13 @@
  * The dropdown is portaled under document.body and therefore owns a standalone
  * two-class panel scope. Border selectors repeat data-part for the tenant
  * border-color floor (P-48); the toast remains under the trigger-side root.
+ *
+ * WAVE R2+R3 (Quiet Premium editorial): the panel is warm elevated paper
+ * with a hairline and a deliberate two-stop ambient shadow; menu items are
+ * quiet rows with a soft hover wash, a visible focus ring, and supporting-
+ * scale typography. The success toast is the one semaphore accent, guarded
+ * under prefers-reduced-motion. Menu-item motion rides --ds-motion-*.
+ * RTL: the end-aligned panel flip is mirrored via :dir(rtl).
  */
 
 /* trigger-side toast ------------------------------------------------------ */
@@ -14,11 +21,15 @@
   color: var(--ds-color-text-on-success, #fff);
   transform: translateX(-50%);
   animation: ds-export-toast-fade 1.8s ease forwards;
+  font-size: var(--ds-font-size-xs);
+  font-weight: 600;
 }
 
 .ds-structure.ds-export-button
   [data-part='toast-label'][data-part='toast-label'][data-part='toast-label'] {
   color: inherit;
+  font-size: var(--ds-font-size-xs);
+  font-weight: 600;
 }
 
 /* standalone portaled dropdown ------------------------------------------- */
@@ -28,6 +39,9 @@
   background: var(--ds-color-bg-elevated, #fff);
   box-shadow: 0 4px 12px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), 0 1px 3px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
   transform: translateX(-100%);
+}
+.ds-structure.ds-export-button-panel[data-part='panel']:dir(rtl) {
+  transform: translateX(100%);
 }
 
 .ds-structure.ds-export-button-panel[data-part='panel'][data-part='panel'] {
@@ -39,6 +53,9 @@
   background: transparent;
   color: var(--ds-color-text-primary, #1a1a1a);
   outline: none;
+  font-size: var(--ds-font-size-sm);
+  font-weight: 500;
+  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-structure.ds-export-button-panel [data-part='menu-item'][data-part='menu-item'] {
@@ -49,6 +66,9 @@
 .ds-structure.ds-export-button-panel [data-part='menu-item']:focus {
   background: var(--ds-color-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, transparent));
 }
+.ds-structure.ds-export-button-panel [data-part='menu-item']:focus-visible {
+  box-shadow: inset 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+}
 
 .ds-structure.ds-export-button-panel [data-part='menu-icon'] {
   border-radius: 4px;
@@ -58,6 +78,8 @@
 .ds-structure.ds-export-button-panel
   [data-part='menu-label'][data-part='menu-label'][data-part='menu-label'] {
   color: inherit;
+  font-size: var(--ds-font-size-sm);
+  font-weight: 500;
 }
 
 @keyframes ds-export-toast-fade {
@@ -65,4 +87,15 @@
   10% { opacity: 1; transform: translateX(-50%) translateY(0); }
   80% { opacity: 1; transform: translateX(-50%) translateY(0); }
   100% { opacity: 0; transform: translateX(-50%) translateY(-4px); }
+}
+
+/* Reduced motion: the toast appears/disappears instantly and the menu-item
+ * hover wash stops cross-fading. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-export-button [data-part='toast'] {
+    animation: none;
+  }
+  .ds-structure.ds-export-button-panel [data-part='menu-item'] {
+    transition: none;
+  }
 }

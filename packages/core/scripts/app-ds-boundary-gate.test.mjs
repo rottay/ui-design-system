@@ -103,15 +103,23 @@ test('DRILL 3: a legitimate SCOPED hook assignment passes', () => {
 
 test('DRILL 4: draining a channel is allowed (decrease-only)', () => {
   // Removing a tracked declaration must never fail. A baseline that punished
-  // improvement would make the debt permanent.
-  const ws = withWorkspace((file) => {
-    const css = readFileSync(file, 'utf8');
-    const drained = css.replace(/^\s*--ds-surface-card-bg\s*:[^;]*;\s*$/m, '');
-    assert.notEqual(drained, css, 'fixture must actually drop a tracked declaration');
-    writeFileSync(file, drained, 'utf8');
-  });
+  // improvement would make the debt permanent. The live baseline has drained
+  // to zero tracked declarations, so the scenario is built explicitly: an
+  // injected baseline that still tracks declarations the corpus no longer
+  // makes.
+  const ws = withWorkspace();
+  const baseline = join(ws.dir, 'baseline.json');
+  writeFileSync(
+    baseline,
+    JSON.stringify({
+      shadowed: [`${APP_CSS} :: --ds-surface-card-bg`],
+      globalOwn: [`${APP_CSS} :: --ds-meter-fill`],
+      orphan: [],
+    }),
+  );
   try {
-    assert.equal(ws.run(['--check']).status, 0, 'removing a declaration must stay green');
+    const result = ws.run(['--check', '--baseline', baseline]);
+    assert.equal(result.status, 0, 'removing a declaration must stay green');
   } finally {
     rmSync(ws.dir, { recursive: true, force: true });
   }

@@ -67,7 +67,11 @@ export default function ModernEmptyState(props: EmptyStateProps) {
           ) : icon ? (
             <span data-part="icon">{icon}</span>
           ) : (
-            <CommunicationInboxIcon decorative size={iconSizes[size]} />
+            /* The semantic fallback occupies the same icon slot as a custom
+               icon, so the skin paints one anatomy, never two. */
+            <span data-part="icon">
+              <CommunicationInboxIcon decorative size={iconSizes[size]} />
+            </span>
           )}
         </div>
 

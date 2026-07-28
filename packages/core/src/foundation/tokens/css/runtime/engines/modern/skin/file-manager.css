@@ -1,10 +1,19 @@
 /**
- * Modern FileManager skin (WO-SKIN-06 checkpoint CK-H2).
+ * Modern FileManager skin (WO-SKIN-06 checkpoint CK-H2; Lote-2 composition uplift).
  *
  * DELIBERATELY UNLAYERED (P-47): layered component rules sort before
  * Tailwind's base layer. Real border colours use the two scope classes plus
  * a private ownership class and repeated part, clearing the tenant border
  * floor at (0,3,1).
+ *
+ * COMPOSITION LAW (Lote 2): the pattern COMPOSES public DS primitives —
+ * Button (toolbar / view-toggle / item actions), Checkbox (row selection),
+ * Spinner (loading) and Empty (empty state) — which own their own chrome,
+ * density, states and skins. This stylesheet paints only what the PATTERN
+ * owns: layout geometry, the breadcrumb, the folder-link affordance, the
+ * per-kind icon colours, the list table, the grid cards and the drop-zone
+ * feedback. The former button fills, checkbox sizing and spinner ring are
+ * retired (duplication).
  *
  * The normal root keeps `background`, `borderRadius`, and `boxShadow` inline.
  * Its local defaults follow the caller's style spread and intentionally win;
@@ -14,25 +23,79 @@
  * class-driven behavior. SVG fill and stroke presentation attributes also
  * remain on their original elements.
  *
- * The folder anchor's DaisyUI `link link-hover` pair is retired; this file now
- * owns that affordance outright on `.ds-file-manager__folder-link`. The
- * transcription is channel-for-channel: `link` gave cursor + underline +
- * focus-visible ring, `link-hover` suppressed the resting underline and
- * revealed it on hover behind `(hover: hover)`, and the modern theme bridge
- * `[data-tenant] a.link` gave the tenant link colour and its hover/active
- * ramp. The colour resolves through `--ds-color-link`, the same token the
- * bridge's `--ds-link-color` fed from, so tenant white-labelling is unchanged.
+ * RESPONSIVE: the root is the named container `ds-file-manager`; the grid
+ * column cuts are container queries (the composition defines the cut, not
+ * viewport breakpoints — spec section 13).
  */
 
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__spinner[data-part='spinner'][data-part='spinner'] {
-  border: 3px solid var(--ds-color-border);
-  border-top-color: var(--ds-color-primary);
-  border-radius: 50%;
+/* ---- root: named container (the composition defines the cut) ---- */
+.ds-pattern-file-manager.ds-engine-modern[data-part='root'] {
+  container: ds-file-manager / inline-size;
+}
+
+/* ---- loading root: centered Spinner frame (Spinner owns ring + cadence) ---- */
+.ds-pattern-file-manager.ds-engine-modern[data-part='root'][data-loading='true'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--ds-spacing-12, 3rem);
+}
+
+/* ---- body ---- */
+.ds-pattern-file-manager.ds-engine-modern [data-part='body'] {
+  padding: var(--ds-spacing-4);
+}
+
+/* ---- toolbar ---- */
+.ds-pattern-file-manager.ds-engine-modern [data-part='toolbar'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3);
+  margin-block-end: var(--ds-spacing-4);
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='toolbar-actions'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
+
+/* ---- breadcrumb: the ul/li had NO layout owner (the retired engine relied
+        on an unstyled list); the pattern owns a plain flex breadcrumb with a
+        muted separator. ---- */
+.ds-pattern-file-manager.ds-engine-modern [data-part='breadcrumb'] {
+  font-size: var(--ds-font-size-sm);
+  min-inline-size: 0;
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='breadcrumb'] ul {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-1, 0.25rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='breadcrumb'] li {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-1, 0.25rem);
+  min-inline-size: 0;
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='breadcrumb'] li + li::before {
+  content: '/';
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='breadcrumb-current'] {
+  color: var(--ds-color-text-primary);
+  font-weight: var(--ds-font-weight-medium);
 }
 
 /* ---- folder anchor: the retired `link link-hover` affordance, owned here.
         The anchor carries no `href`, so the resting colour must be declared --
-        preflight leaves a hrefless <a> at `inherit`. ---- */
+        preflight leaves a hrefless <a> at `inherit`. The colour resolves
+        through `--ds-color-link`, the same token the bridge's
+        `--ds-link-color` fed from, so tenant white-labelling is unchanged. ---- */
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'] {
   cursor: pointer;
   color: var(--ds-file-manager-link-color, var(--ds-color-link, var(--ds-color-primary)));
@@ -42,8 +105,7 @@
   transition: color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
-/* `link-hover` only revealed the underline where hovering is a real input
-   mode; a touch device kept the flat treatment. */
+/* Underline reveals only where hovering is a real input mode. */
 @media (hover: hover) {
   .ds-pattern-file-manager.ds-engine-modern
     .ds-file-manager__folder-link[data-part='folder-link']:hover {
@@ -57,75 +119,182 @@
 }
 
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid currentColor;
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--ds-shadow-focus-ring);
 }
 
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-part='toolbar-action'],
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__view-toggle[data-part='view-toggle'][data-part='view-toggle'] {
-  border-radius: var(--ds-radius-md);
-  border: none;
-}
-
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-action='delete-selected'] {
-  background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
-}
-
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-action='upload'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-}
-
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__view-toggle[data-part='view-toggle'] {
-  background: transparent;
+/* ---- item-action tones: the composed ghost Buttons keep their chrome; the
+        pattern owns only the semantic tone of each action label. ---- */
+.ds-pattern-file-manager.ds-engine-modern [data-part='item-action'][data-action='rename'] {
   color: var(--ds-color-text-primary);
 }
-
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-icon[data-part='folder-icon'][data-file-kind='folder'] {
-  color: var(--ds-color-warning);
-}
-
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'][data-file-kind='image'] {
-  color: var(--ds-color-info);
-}
-
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'][data-file-kind='pdf'] {
+.ds-pattern-file-manager.ds-engine-modern [data-part='item-action'][data-action='delete'] {
   color: var(--ds-color-error);
 }
 
+/* ---- per-kind icon colours + sizes (moved off the retired h-* utilities) ---- */
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-icon[data-part='folder-icon'],
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'] {
+  display: inline-flex;
+  flex-shrink: 0;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'] > svg {
+  inline-size: 100%;
+  block-size: 100%;
+}
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-icon[data-part='folder-icon'][data-file-kind='folder'] {
+  color: var(--ds-color-warning);
+}
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'][data-file-kind='image'] {
+  color: var(--ds-color-info);
+}
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'][data-file-kind='pdf'] {
+  color: var(--ds-color-error);
+}
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'][data-file-kind='text'] {
   color: var(--ds-color-success);
 }
-
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'][data-file-kind='other'] {
   color: var(--ds-color-text-secondary);
 }
 
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__item-action[data-part='item-action'][data-part='item-action'] {
-  background: transparent;
+/* ---- drop zone: quiet drag-over affordance (fill tint + hairline, no
+        dashed chrome) gated on having an upload handler at all ---- */
+.ds-pattern-file-manager.ds-engine-modern [data-part='content'] {
+  min-block-size: var(--ds-file-manager-content-min-height, 12.5rem);
   border-radius: var(--ds-radius-md);
-  border: none;
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='content'][data-drag-over='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 45%, transparent);
 }
 
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__item-action[data-part='item-action'][data-action='rename'] {
-  color: var(--ds-color-text-primary);
+/* ---- empty state: the composed Empty primitive owns visual + copy paint ---- */
+.ds-pattern-file-manager.ds-engine-modern [data-part='empty'] {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--ds-spacing-12, 3rem);
 }
 
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__item-action[data-part='item-action'][data-action='delete'] {
-  color: var(--ds-color-error);
+/* ---- list view ---- */
+.ds-pattern-file-manager.ds-engine-modern [data-part='list-scroll'] {
+  overflow-x: auto;
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--ds-font-size-sm);
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] th {
+  padding-block: var(--ds-spacing-2);
+  padding-inline: var(--ds-spacing-2);
+  color: var(--ds-color-text-secondary);
+  font-weight: var(--ds-font-weight-semibold);
+  text-align: start;
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] td {
+  padding-block: var(--ds-spacing-2);
+  padding-inline: var(--ds-spacing-2);
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] [data-part='column-select'] {
+  inline-size: 2.5rem;
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='checkbox'] {
+  display: inline-flex;
 }
 
+/* ---- grid view: 2 columns, widening by container cut (was viewport
+        sm:/md: utilities). ---- */
+.ds-pattern-file-manager.ds-engine-modern [data-part='grid'] {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ds-spacing-3);
+}
+@container ds-file-manager (min-width: 40rem) {
+  .ds-pattern-file-manager.ds-engine-modern [data-part='grid'] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@container ds-file-manager (min-width: 48rem) {
+  .ds-pattern-file-manager.ds-engine-modern [data-part='grid'] {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* ---- grid card: an action surface (role=button in the engine), so it owns
+        the full state triad -- hover hairline, focus ring, selected fill. ---- */
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'] {
+  padding: var(--ds-spacing-3);
+  cursor: pointer;
   border-radius: var(--ds-radius-lg);
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-shadow-focus-ring);
+}
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false'] {
   background: var(--ds-surface-card);
+}
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-part='grid-card'][data-selected='false'] {
   border: 1px solid var(--ds-color-border);
 }
-
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false']:hover {
+  background: var(--ds-surface-highlight);
+}
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-part='grid-card'][data-selected='false']:hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 35%, var(--ds-color-border));
+}
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+}
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-part='grid-card'][data-selected='true'] {
   border: 2px solid var(--ds-color-primary);
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='grid-card-body'] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+  inline-size: 100%;
+  padding: var(--ds-spacing-3);
+  text-align: center;
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='grid-card-body'] [data-part='folder-icon'],
+.ds-pattern-file-manager.ds-engine-modern [data-part='grid-card-body'] [data-part='file-icon'] {
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='item-name'] {
+  inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--ds-font-size-xs, 0.75rem);
+}
+
+/* ---- coarse pointers: the pattern's own action chrome reaches the physical
+        44px floor via block-size only (the composed Buttons keep density) ---- */
+@media (pointer: coarse) {
+  .ds-pattern-file-manager.ds-engine-modern [data-part='toolbar-action'],
+  .ds-pattern-file-manager.ds-engine-modern [data-part='view-toggle'],
+  .ds-pattern-file-manager.ds-engine-modern [data-part='item-action'] {
+    min-block-size: var(--ds-file-manager-touch-target, 2.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-file-manager.ds-engine-modern [data-part='content'],
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'],
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'] {
+    transition: none;
+  }
 }

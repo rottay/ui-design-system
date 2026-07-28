@@ -1029,7 +1029,7 @@ export default function ModernDataTable<T extends object>(
       };
 
       return (
-        <span aria-label="Inline edit actions" data-part="inline-edit-actions">
+        <span data-part="inline-edit-actions">
           <span
             data-part="inline-edit-action"
             data-intent="save"
@@ -1412,7 +1412,9 @@ export default function ModernDataTable<T extends object>(
                               </span>
                             </Tooltip>
                           )}
-                          <span data-part="header-label">{col.header}</span>
+                          <span data-part="header-label" title={columnLabel}>
+                            {col.header}
+                          </span>
                           {col.sortable && (
                             <span
                               data-active={sortState !== "none" ? "true" : "false"}
@@ -1769,6 +1771,17 @@ export default function ModernDataTable<T extends object>(
                                     editingCell?.rowKey === key &&
                                     editingCell?.columnKey === col.key;
                                   const cellValue = resolveAccessor(col, row);
+                                  // Truncated text cells expose their full
+                                  // value via the native title affordance;
+                                  // custom renderers and editable cells own
+                                  // their own disclosure.
+                                  const grpCellTitle =
+                                    !isCellEditable &&
+                                    !col.render &&
+                                    cellValue != null &&
+                                    cellValue !== ""
+                                      ? String(cellValue)
+                                      : undefined;
 
                                   const grpTriggerProps: Record<
                                     string,
@@ -1817,6 +1830,7 @@ export default function ModernDataTable<T extends object>(
                                               : "Double-click to edit")
                                           : undefined
                                       }
+                                      title={grpCellTitle}
                                       {...grpTriggerProps}
                                       className={
                                         col.align === "right"
@@ -2172,6 +2186,17 @@ export default function ModernDataTable<T extends object>(
                                 editingCell?.rowKey === key &&
                                 editingCell?.columnKey === col.key;
                               const cellValue = resolveAccessor(col, row);
+                              // Truncated text cells expose their full value
+                              // via the native title affordance; custom
+                              // renderers and editable cells own their own
+                              // disclosure.
+                              const cellTitle =
+                                !isCellEditable &&
+                                !col.render &&
+                                cellValue != null &&
+                                cellValue !== ""
+                                  ? String(cellValue)
+                                  : undefined;
 
                               // Build the edit-trigger event handler
                               const triggerProps: Record<string, unknown> = {};
@@ -2216,6 +2241,7 @@ export default function ModernDataTable<T extends object>(
                                           : "Double-click to edit")
                                       : undefined
                                   }
+                                  title={cellTitle}
                                   {...triggerProps}
                                   className={
                                     col.align === "right"
@@ -2434,8 +2460,9 @@ export default function ModernDataTable<T extends object>(
                       <span
                         key={`ellipsis-${idx}`}
                         data-part="pagination-ellipsis"
+                        aria-hidden="true"
                       >
-                        ...
+                        {"\u2026"}
                       </span>
                     ) : (
                       <span

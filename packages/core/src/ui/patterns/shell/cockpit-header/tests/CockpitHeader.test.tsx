@@ -190,4 +190,80 @@ describe('PatternCockpitHeader (modern engine)', () => {
     fireEvent.click(backBtn);
     expect(onBack).toHaveBeenCalled();
   });
+
+  it('names the breadcrumb landmark with the i18n English floor', async () => {
+    renderSurface(
+      <PatternCockpitHeader
+        title="Detail"
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Current' }]}
+      />,
+      { engine: 'modern' },
+    );
+    expect(await screen.findByRole('navigation', { name: 'Breadcrumb' })).toBeInTheDocument();
+  });
+
+  it('paints nothing inline on its own parts — the skin owns layout and paint', async () => {
+    const { container } = renderSurface(
+      <PatternCockpitHeader
+        eyebrow="Ops"
+        title="Detail"
+        subtitle="Context"
+        sticky
+        breadcrumbs={[{ label: 'Home', href: '/' }, { label: 'Current' }]}
+        status={[{ label: 'Live', variant: 'success' }]}
+        actions={<button>Save</button>}
+        onBack={() => {}}
+      />,
+      { engine: 'modern' },
+    );
+    await screen.findByText('Detail');
+
+    // Every data-part element the cockpit engine renders must carry zero
+    // inline style (consumer primitives like the back Button are another
+    // family's scope). The root keeps only the caller's `style` prop — not
+    // passed here.
+    for (const el of container.querySelectorAll('[data-part]')) {
+      const htmlEl = el as HTMLElement;
+      for (const prop of Array.from(htmlEl.style)) {
+        expect(
+          prop.startsWith('--'),
+          `${htmlEl.tagName}[data-part="${htmlEl.getAttribute('data-part')}"] carries inline "${prop}"`,
+        ).toBe(true);
+      }
+    }
+  });
+
+  it('stamps sticky state hooks without inline positioning', async () => {
+    const { container } = renderSurface(
+      <PatternCockpitHeader title="Detail" sticky />,
+      { engine: 'modern' },
+    );
+    await screen.findByText('Detail');
+
+    const root = container.querySelector('[data-part="root"]') as HTMLElement;
+    expect(root).toHaveAttribute('data-sticky', 'true');
+    expect(root).toHaveAttribute('data-compact', 'false');
+    expect(root.style.position).toBe('');
+    expect(root.style.padding).toBe('');
+  });
+
+  it('renders the loading skeleton with skin-owned geometry hooks', async () => {
+    const { container } = renderSurface(
+      <PatternCockpitHeader title="Detail" loading />,
+      { engine: 'modern' },
+    );
+
+    const root = container.querySelector('[data-part="root"]') as HTMLElement;
+    expect(root).toHaveAttribute('data-loading', 'true');
+
+    const skeletons = container.querySelectorAll('[data-part="skeleton"]');
+    expect(skeletons.length).toBeGreaterThanOrEqual(5);
+    for (const el of skeletons) {
+      expect((el as HTMLElement).getAttribute('data-size')).toBeTruthy();
+      // Only the sanctioned custom-property data channel may be inline.
+      expect((el as HTMLElement).style.width).toBe('');
+      expect((el as HTMLElement).style.height).toBe('');
+      expect((el as HTMLElement).style.animation).toBe('');
+    }
+  });
 });

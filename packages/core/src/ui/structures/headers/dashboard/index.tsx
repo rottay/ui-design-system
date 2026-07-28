@@ -23,7 +23,7 @@
 
 import { type ReactNode } from 'react';
 import { Box, Button, Flex, Text } from '../../../primitives';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -78,9 +78,20 @@ export interface DashboardHeaderProps {
 // Status indicator
 // ---------------------------------------------------------------------------
 
+// English floors for the status labels; the `dashboard_status_*` catalog keys
+// override them when an I18nProvider is mounted.
+const STATUS_LABEL_FLOOR: Record<DashboardStatusState, string> = {
+  live: 'Live',
+  connected: 'Connected',
+  syncing: 'Syncing',
+  offline: 'Offline',
+  warning: 'Warning',
+};
+
 function StatusDot({ state, label }: { state: DashboardStatusState; label?: string }) {
-  const { t } = useTranslation('common');
-  const resolvedLabel = label ?? t(`dashboard_status_${state}` as any);
+  const i18n = useOptionalTranslation('common');
+  const resolvedLabel =
+    label ?? i18n?.tOr(`dashboard_status_${state}`, STATUS_LABEL_FLOOR[state]) ?? STATUS_LABEL_FLOOR[state];
 
   return (
     <Flex
@@ -92,6 +103,8 @@ function StatusDot({ state, label }: { state: DashboardStatusState; label?: stri
         padding: '2px 10px',
       }}
     >
+      {/* The live/syncing pulse is painted by dashboard-header.css keyed on
+          data-state, where the reduced-motion guard can reach it. */}
       <Box
         data-part="status-dot-glyph"
         data-state={state}
@@ -99,7 +112,6 @@ function StatusDot({ state, label }: { state: DashboardStatusState; label?: stri
           width: 6,
           height: 6,
           flexShrink: 0,
-          animation: state === 'live' || state === 'syncing' ? 'ds-foundation-pulse 2s infinite' : undefined,
         }}
       />
       <Text data-part="status-dot-text" data-state={state} size="xs" style={{ whiteSpace: 'nowrap', fontWeight: 500 }}>
@@ -163,7 +175,9 @@ export function DashboardHeader({
   compact,
   icon,
 }: DashboardHeaderProps) {
-  const { t } = useTranslation('common');
+  const i18n = useOptionalTranslation('common');
+  const actionsLabel = i18n?.tOr('actions', 'Actions') ?? 'Actions';
+  const keyMetricsLabel = i18n?.tOr('key_metrics', 'Key metrics') ?? 'Key metrics';
 
   // ---------- Compact mode (phone) ----------
   if (compact) {
@@ -191,7 +205,7 @@ export function DashboardHeader({
             <Box
               data-part="actions"
               role="toolbar"
-              aria-label={t('actions')}
+              aria-label={actionsLabel}
               style={{ display: 'flex', gap: 4 }}
             >
               {actions.slice(0, 2).map((action) => (
@@ -215,7 +229,7 @@ export function DashboardHeader({
             data-part="metrics-row"
             data-compact="true"
             role="group"
-            aria-label={t('key_metrics')}
+            aria-label={keyMetricsLabel}
             style={{
               display: 'flex',
               gap: 8,
@@ -284,7 +298,7 @@ export function DashboardHeader({
 
       {/* Row 2: metric chips */}
       {metrics && metrics.length > 0 && (
-        <Box data-part="metrics-row" data-compact="false" role="group" aria-label={t('key_metrics')} style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+        <Box data-part="metrics-row" data-compact="false" role="group" aria-label={keyMetricsLabel} style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
           {metrics.map((m) => (
             <MetricChip key={m.key} metric={m} />
           ))}

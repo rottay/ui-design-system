@@ -105,10 +105,49 @@
   border-radius: 14px;
   background: var(--ds-header-icon-tone-bg);
   color: var(--ds-header-icon-tone-fg);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 62%, transparent),
+    0 8px 18px -14px color-mix(in srgb, var(--ds-color-text-primary) 38%, transparent);
 }
 .ds-structure.ds-edit-header [data-part='icon-badge'][data-part='icon-badge'],
 .ds-structure.ds-form-header [data-part='icon-badge'][data-part='icon-badge'] {
   border: 1px solid var(--ds-header-icon-tone-bd);
+}
+
+/* ─── SHARED EDIT+FORM: back-button microinteraction + keyboard focus ────────
+   (per-file base rules above set the resting border token; these add the
+   motion + hover/focus states on top of either) */
+
+.ds-structure.ds-edit-header [data-part='back-button'],
+.ds-structure.ds-form-header [data-part='back-button'] {
+  transition:
+    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-edit-header [data-part='back-button']:hover,
+.ds-structure.ds-form-header [data-part='back-button']:hover {
+  background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
+  transform: translateY(-1px);
+}
+/* the repeated data-part buys (0,5,0) so the hover border-COLOR clears both
+   the tenant floor (0,3,1) and the resting border rule (0,4,0) */
+.ds-structure.ds-edit-header [data-part='back-button'][data-part='back-button']:hover,
+.ds-structure.ds-form-header [data-part='back-button'][data-part='back-button']:hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
+}
+/* the back button is a Flex inside an <a> — the ring lands on the chip */
+.ds-structure.ds-edit-header a:focus-visible [data-part='back-button'],
+.ds-structure.ds-form-header a:focus-visible [data-part='back-button'] {
+  box-shadow: var(--ds-header-back-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
+}
+
+/* ─── SHARED EDIT+FORM: enter motion (defined once, consumed by both roots) ─ */
+
+@keyframes ds-header-enter {
+  from { opacity: 0; transform: translateY(8px) scale(0.995); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* ─── EDIT-SPECIFIC ───────────────────────────────────────────────────────── */
@@ -118,6 +157,7 @@
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
   border-radius: 20px;
   box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
+  animation: ds-header-enter var(--ds-motion-calm) var(--ds-motion-ease-out, ease-out) both;
 }
 .ds-structure.ds-edit-header[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-color-border-secondary);
@@ -127,6 +167,7 @@
 .ds-structure.ds-edit-header[data-part='root'][data-loading='true'] {
   border-radius: 0;
   box-shadow: none;
+  animation: none;
 }
 
 /* top bar */
@@ -169,6 +210,7 @@
 /* entity id chip */
 .ds-structure.ds-edit-header [data-part='entity-id'] {
   border-radius: 999px;
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 64%, transparent);
 }
 .ds-structure.ds-edit-header [data-part='entity-id'][data-part='entity-id'] {
   border: 1px solid var(--ds-color-border-secondary);
@@ -191,12 +233,14 @@
 .ds-structure.ds-edit-header [data-part='status-pill'] {
   border-radius: 999px;
   background: var(--ds-edit-header-status-tone-bg);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent);
 }
 .ds-structure.ds-edit-header [data-part='status-pill'][data-part='status-pill'] {
   border: 1px solid var(--ds-edit-header-status-tone-bd);
 }
 .ds-structure.ds-edit-header [data-part='status-pill-text'][data-part='status-pill-text'][data-part='status-pill-text'] {
   color: var(--ds-edit-header-status-tone-fg);
+  letter-spacing: 0.04em;
 }
 
 /* context card below the hero */
@@ -215,4 +259,12 @@
 }
 .ds-structure.ds-edit-header [data-part='context-card'][data-part='context-card'] {
   border: 1px solid var(--ds-color-border-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-edit-header[data-part='root'],
+  .ds-structure.ds-edit-header [data-part='back-button'] {
+    animation: none;
+    transition: none;
+  }
 }

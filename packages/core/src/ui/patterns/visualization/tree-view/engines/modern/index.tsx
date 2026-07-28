@@ -3,11 +3,23 @@
 /**
  * @fileoverview Modern (token-driven) engine for the TreeView pattern.
  *
- * A fully custom tree implementation without Ant Design's Tree component.
- * Manages expand/collapse, selection, and check state internally (via Sets)
- * while supporting controlled mode through external key arrays. Each node row
- * uses DS token inline styles for consistent styling, and an inline SVG
- * chevron that rotates on expand.
+ * COMPOSITION LAW (Lote 2): the tree itself is the DS Tree primitive's modern
+ * engine (WAI-ARIA TreeView keyboard contract, roving tabindex, RTL-mirrored
+ * arrows and chevron, cascade checking with half-checked state, full HTML5
+ * drag-and-drop) — this pattern no longer hand-rolls a second tree motor.
+ * What the pattern owns: the `label`-shaped contract adaptation (label →
+ * title, renderNode with depth), the search field (the public Input
+ * primitive feeding the primitive's `filterTreeNode`/`searchValue`
+ * contract), the selection/check wrappers that preserve the pattern's
+ * public callback shapes (`onSelect(keys)`, additive `multiple` sets,
+ * `onCheck(keys)`, `onDrop({dragKey, dropKey, position})`), and the loading
+ * skeleton.
+ *
+ * Notable upgrades the composition brings (documented, same public API):
+ * - `draggable` now actually reorders: the previous hand-rolled tree stamped
+ *   the `draggable` attribute but never wired a single drag handler.
+ * - Checkable gained the primitive's cascade + indeterminate model; the
+ *   callback still reports the flat checked-key array.
  *
  * @example
  * <ModernTreeView
@@ -18,40 +30,43 @@
  * />
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import type { Key } from 'react';
 import type { TreeViewProps, TreeNode } from '../../contracts';
 import { panelCardStyle } from '../../../../foundation/engine-styles/modern';
+import ModernTree from '../../../../../primitives/display/Tree/engines/modern';
+import type {
+  TreeDataNode,
+  TreeDropInfo,
+} from '../../../../../primitives/display/Tree/contracts';
+import { filterTree } from '../../../../../primitives/display/Tree/runtime/tree-behavior';
+import { Input } from '../../../../../primitives/inputs/Input';
 
 const ROOT_CLASS_NAME = 'ds-pattern-tree-view ds-engine-modern';
 
 /**
- * Recursively filters the tree, keeping any node whose label matches the query
- * or whose descendants match, preserving the full ancestor chain.
+ * Adapts the pattern's `label`-shaped nodes to the primitive's `title`
+ * shape, resolving `renderNode` with its depth argument during the walk.
  */
-function filterTree(nodes: TreeNode[], query: string): TreeNode[] {
-  const q = query.toLowerCase();
-  return nodes
-    .map((node) => {
-      const children = node.children ? filterTree(node.children, query) : [];
-      const labelStr = typeof node.label === 'string' ? node.label : '';
-      if (labelStr.toLowerCase().includes(q) || children.length > 0) {
-        return { ...node, children: children.length > 0 ? children : node.children };
-      }
-      return null;
-    })
-    .filter(Boolean) as TreeNode[];
+function toTreeData(
+  nodes: TreeNode[],
+  renderNode: TreeViewProps['renderNode'],
+  depth: number
+): TreeDataNode[] {
+  return nodes.map((node) => ({
+    key: node.key,
+    title: renderNode ? renderNode(node, depth) : node.label,
+    icon: node.icon,
+    disabled: node.disabled,
+    children: node.children ? toTreeData(node.children, renderNode, depth + 1) : undefined,
+  }));
 }
 
 /**
  * Modern (token-driven) engine for the TreeView pattern component.
  *
- * Unlike the Classic engine which delegates to Ant Design's Tree, this engine
- * implements all tree interactions from scratch using Sets for O(1) key
- * lookups. It supports both controlled and uncontrolled modes for expanded,
- * selected, and checked keys.
- *
  * @param props - {@link TreeViewProps} controlling tree data, selection, checking, and drag-drop.
- * @returns A searchable, interactive tree rendered with DS token inline styles.
+ * @returns A searchable tree composed on the DS Tree primitive.
  */
 export default function ModernTreeView(props: TreeViewProps) {
   const {
@@ -61,116 +76,96 @@ export default function ModernTreeView(props: TreeViewProps) {
     loading, className, style,
   } = props;
 
-  // Internal state for uncontrolled mode. When controlled key arrays are
-  // provided, these are ignored in favor of the external source of truth.
-  const [internalExpanded, setInternalExpanded] = useState<Set<string>>(new Set(defaultExpandedKeys ?? []));
-  const [internalSelected, setInternalSelected] = useState<Set<string>>(new Set());
-  const [internalChecked, setInternalChecked] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
+  const [internalSelected, setInternalSelected] = useState<string[]>([]);
+  const [internalChecked, setInternalChecked] = useState<string[]>([]);
 
-  // Resolve controlled vs. uncontrolled sets. New Set() is cheap for typical
-  // tree sizes (<1000 nodes) and avoids stale-reference bugs.
-  const expandedSet = controlledExpanded ? new Set(controlledExpanded) : internalExpanded;
-  const selectedSet = controlledSelected ? new Set(controlledSelected) : internalSelected;
-  const checkedSet = controlledChecked ? new Set(controlledChecked) : internalChecked;
+  const resolvedSelected = controlledSelected ?? internalSelected;
+  const resolvedChecked = controlledChecked ?? internalChecked;
 
-  const filteredData = useMemo(() => {
-    if (!searchQuery) return data;
-    return filterTree(data, searchQuery);
-  }, [data, searchQuery]);
+  const treeData = useMemo(() => toTreeData(data, renderNode, 0), [data, renderNode]);
 
-  const handleToggle = useCallback((key: string) => {
-    const next = new Set(expandedSet);
-    if (next.has(key)) next.delete(key); else next.add(key);
-    if (!controlledExpanded) setInternalExpanded(next);
-    onExpand?.([...next]);
-  }, [expandedSet, controlledExpanded, onExpand]);
+  /* The search predicate matches the ORIGINAL string labels (rich ReactNode
+     titles are not text-searchable, same contract as the hand-rolled tree). */
+  const labelByKey = useMemo(() => {
+    const map = new Map<string, string>();
+    const walk = (nodes: TreeNode[]): void => {
+      for (const node of nodes) {
+        if (typeof node.label === 'string') map.set(node.key, node.label);
+        if (node.children) walk(node.children);
+      }
+    };
+    walk(data);
+    return map;
+  }, [data]);
 
-  const handleSelect = useCallback((key: string) => {
-    let next: Set<string>;
-    if (multiple) {
-      next = new Set(selectedSet);
-      if (next.has(key)) next.delete(key); else next.add(key);
-    } else {
-      next = new Set([key]);
-    }
-    if (!controlledSelected) setInternalSelected(next);
-    onSelect?.([...next]);
-  }, [selectedSet, controlledSelected, onSelect, multiple]);
+  const filterTreeNode = useCallback(
+    (searchValue: string, node: TreeDataNode): boolean => {
+      const label = labelByKey.get(String(node.key)) ?? '';
+      return label.toLowerCase().includes(searchValue.toLowerCase());
+    },
+    [labelByKey]
+  );
 
-  const handleCheck = useCallback((key: string) => {
-    const next = new Set(checkedSet);
-    if (next.has(key)) next.delete(key); else next.add(key);
-    if (!controlledChecked) setInternalChecked(next);
-    onCheck?.([...next]);
-  }, [checkedSet, controlledChecked, onCheck]);
+  /* The `data-empty` hook keeps its pre-composition semantics: it flips when
+     the tree has no data at all OR when a search matches nothing. The shared
+     `tree-behavior` util (the same one the primitive runs) computes the
+     match count -- one filter implementation, no second motor. */
+  const isEmpty = useMemo(() => {
+    if (!searchQuery) return data.length === 0;
+    return filterTree(treeData, filterTreeNode, searchQuery).filteredKeys.size === 0;
+  }, [searchQuery, data.length, treeData, filterTreeNode]);
 
-  /** Recursively renders tree nodes with depth-based indentation via paddingLeft. */
-  function renderNodes(nodes: TreeNode[], depth: number): React.ReactNode {
-    return nodes.map((node) => {
-      const hasChildren = node.children && node.children.length > 0;
-      const expanded = expandedSet.has(node.key);
-      const selected = selectedSet.has(node.key);
-      const checked = checkedSet.has(node.key);
+  /* Preserve the pattern's public selection contract: additive sets when
+     `multiple`, single key otherwise — the primitive reports the toggled
+     node + direction in the info argument, so the set math stays here. */
+  const handleSelect = useCallback(
+    (_keys: Key[], info: { node: TreeDataNode; selected: boolean }) => {
+      const key = String(info.node.key);
+      const next = multiple
+        ? info.selected
+          ? [...resolvedSelected, key]
+          : resolvedSelected.filter((k) => k !== key)
+        : info.selected
+        ? [key]
+        : [];
+      if (!controlledSelected) setInternalSelected(next);
+      onSelect?.(next);
+    },
+    [multiple, resolvedSelected, controlledSelected, onSelect]
+  );
 
-      return (
-        <div
-          data-part="node"
-          data-depth={depth}
-          data-expanded={expanded}
-          data-selected={selected}
-          data-checked={checked}
-          data-disabled={Boolean(node.disabled)}
-          key={node.key}
-        >
-          <div
-            data-part="node-row"
-            data-selected={selected}
-            data-disabled={Boolean(node.disabled)}
-            className={`ds-tree-view-modern__node-row flex items-center gap-1.5 px-2 py-1 rounded-md cursor-pointer transition-colors ${
-              selected ? 'font-medium' : ''
-            } ${node.disabled ? 'opacity-40 pointer-events-none' : ''}`}
-            style={{
-              paddingLeft: `${depth * 1.25 + 0.5}rem`,
-            }}
-            onClick={() => handleSelect(node.key)}
-            draggable={draggable}
-          >
-            <button
-              data-part="toggle"
-              data-visible={Boolean(hasChildren)}
-              data-expanded={expanded}
-              className="ds-tree-view-modern__toggle"
-              style={{ height: 24, width: 24, padding: 0, fontSize: 12, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', visibility: hasChildren ? 'visible' : 'hidden' }}
-              onClick={(e) => { e.stopPropagation(); handleToggle(node.key); }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={`h-3.5 w-3.5 transition-transform ${expanded ? 'rotate-90' : ''}`}
-                viewBox="0 0 20 20" fill="currentColor"
-              >
-                <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-              </svg>
-            </button>
-            {checkable && (
-              <input data-part="checkbox" className="ds-tree-view-modern__checkbox" type="checkbox" style={{ width: 14, height: 14, cursor: 'pointer' }} checked={checked} onChange={() => handleCheck(node.key)} onClick={(e) => e.stopPropagation()} />
-            )}
-            {draggable && <span data-part="drag-handle" className="ds-tree-view-modern__drag-handle cursor-grab text-xs">::</span>}
-            {node.icon && <span className="flex-shrink-0">{node.icon}</span>}
-            <span className="text-sm truncate flex-1">{renderNode ? renderNode(node, depth) : node.label}</span>
-          </div>
-          {hasChildren && expanded && renderNodes(node.children!, depth + 1)}
-        </div>
-      );
-    });
-  }
+  /* The primitive reports cascade results as an object; the pattern's public
+     contract is the flat checked-key array. */
+  const handleCheck = useCallback(
+    (
+      keysOrResult: Key[] | { checked: Key[]; halfChecked: Key[] },
+      _info: { node: TreeDataNode; checked: boolean }
+    ) => {
+      const next = (Array.isArray(keysOrResult) ? keysOrResult : keysOrResult.checked).map(String);
+      if (!controlledChecked) setInternalChecked(next);
+      onCheck?.(next);
+    },
+    [controlledChecked, onCheck]
+  );
+
+  const handleDrop = useCallback(
+    (info: TreeDropInfo) => {
+      onDrop?.({
+        dragKey: String(info.dragNode.key),
+        dropKey: String(info.dropNode.key),
+        position: info.dropPosition === -1 ? 'before' : info.dropPosition === 1 ? 'after' : 'inside',
+      });
+    },
+    [onDrop]
+  );
 
   if (loading) {
     return (
       <div data-part="root" data-loading="true" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...panelCardStyle, ...style }}>
-        <div data-part="skeleton-list" className="animate-pulse" style={{ padding: 20 }}>
+        <div data-part="skeleton-list">
           {[1, 2, 3, 4, 5].map((i) => (
-            <div data-part="skeleton" className="ds-tree-view-modern__skeleton" key={i} style={{ height: 24, marginLeft: `${(i % 3) * 1.25}rem`, width: `${70 - (i % 3) * 10}%` }} />
+            <div data-part="skeleton" className="ds-tree-view-modern__skeleton" key={i} />
           ))}
         </div>
       </div>
@@ -178,20 +173,46 @@ export default function ModernTreeView(props: TreeViewProps) {
   }
 
   return (
-    <div data-part="root" data-loading="false" data-empty={filteredData.length === 0} className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...panelCardStyle, ...style }}>
-      <div style={{ padding: 12 }}>
+    <div
+      data-part="root"
+      data-loading="false"
+      data-empty={isEmpty}
+      className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
+      style={{ ...panelCardStyle, ...style }}
+    >
+      <div data-part="body">
         {searchable && (
-          <input
-            data-part="search-input"
-            type="text"
-            className="ds-tree-view-modern__search-input w-full mb-2"
-            style={{ padding: '6px 10px', fontSize: 13, width: '100%' }}
-            placeholder={searchPlaceholder}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+          <div data-part="search-row" className="ds-tree-view-modern__search-row">
+            <Input
+              engine="modern"
+              size="sm"
+              value={searchQuery}
+              onChange={(value) => setSearchQuery(value)}
+              placeholder={searchPlaceholder}
+              aria-label={searchPlaceholder}
+              clearable
+              onClear={() => setSearchQuery('')}
+            />
+          </div>
         )}
-        <div data-part="tree">{renderNodes(filteredData, 0)}</div>
+        <ModernTree
+          treeData={treeData}
+          checkable={checkable}
+          expandedKeys={controlledExpanded}
+          defaultExpandedKeys={defaultExpandedKeys}
+          selectedKeys={resolvedSelected}
+          checkedKeys={resolvedChecked}
+          showIcon
+          blockNode
+          draggable={draggable}
+          multiple={multiple}
+          searchValue={searchQuery || undefined}
+          filterTreeNode={searchQuery ? filterTreeNode : undefined}
+          onExpand={(keys) => onExpand?.(keys.map(String))}
+          onSelect={handleSelect}
+          onCheck={handleCheck}
+          onDrop={handleDrop}
+        />
       </div>
     </div>
   );

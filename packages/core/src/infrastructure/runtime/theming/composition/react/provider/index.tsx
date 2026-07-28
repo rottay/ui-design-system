@@ -1123,15 +1123,23 @@ export function ThemeProvider({
 
       setResolvedTheme((current) => (current === nextResolvedTheme ? current : nextResolvedTheme));
       release?.();
-      release = composeRootAttributeReleases([
+
+      // `color-scheme` is emitted by the brand compiler into each artifact's
+      // base block, and an inline claim outranks every stylesheet. Claiming
+      // `light` for the 'base' state would therefore override a dark-by-default
+      // vertical's own scheme, so only an explicit mode claims inline — 'base'
+      // means "the vertical's default mode" and leaves the channel to the
+      // stylesheet that declares it. A DB tenant, whose theme resolves to
+      // light/dark (directly or through `auto`), keeps the inline claim because
+      // the DB compiler emits no `color-scheme` of its own.
+      const claims: ReleaseRootAttribute[] = [
         claimRootAttribute(rootElement, 'data-theme', nextResolvedTheme),
         claimRootClass(rootElement, 'dark', nextResolvedTheme === 'dark'),
-        claimRootStyleProperty(
-          rootElement,
-          'color-scheme',
-          nextResolvedTheme === 'dark' ? 'dark' : 'light',
-        ),
-      ]);
+      ];
+      if (nextResolvedTheme !== 'base') {
+        claims.push(claimRootStyleProperty(rootElement, 'color-scheme', nextResolvedTheme));
+      }
+      release = composeRootAttributeReleases(claims);
 
       // Dev-only: verbose for debugging tenant/theme issues
       if (process.env.NODE_ENV === 'development') {

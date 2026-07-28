@@ -53,7 +53,7 @@ function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefi
   if (isResponsiveValue(value)) return undefined;
   return value as T;
 }
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 import { ActionSearchIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-search';
 import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
@@ -69,81 +69,24 @@ import {
 } from '../../runtime/selection';
 
 /* ------------------------------------------------------------------ */
-/*  Sizing tokens (matching Input for visual consistency)              */
+/*  i18n English floor (provider optional, never a hard dependency)    */
 /* ------------------------------------------------------------------ */
 
-const SIZES = {
-  xs: { height: '28px', paddingX: '8px', fontSize: '12px', lineHeight: '16px' },
-  sm: {
-    height: '32px',
-    paddingX: '10px',
-    fontSize: '14px',
-    lineHeight: '20px',
-  },
-  md: {
-    height: '36px',
-    paddingX: '12px',
-    fontSize: '14px',
-    lineHeight: '20px',
-  },
-  lg: {
-    height: '40px',
-    paddingX: '14px',
-    fontSize: '16px',
-    lineHeight: '24px',
-  },
-  xl: {
-    height: '44px',
-    paddingX: '16px',
-    fontSize: '16px',
-    lineHeight: '24px',
-  },
+/**
+ * English fallbacks mirror the `components.select.*` / `common.*` catalog
+ * keys so the primitive keeps its documented standalone rendering contract
+ * when no I18nProvider is mounted (the `useOptionalTranslation` rationale,
+ * same idiom as Pagination/ListToolbar). The provider's missing-key echoes
+ * (the raw key or the `i18n:missing:<locale>:<key>` marker) are detected
+ * and swapped for the floor.
+ */
+const EN_FALLBACK = {
+  placeholder: 'Select an option',
+  noOptions: 'No options available',
+  clear: 'Clear selection',
+  search: 'Search...',
+  remove: 'Remove',
 } as const;
-
-/* ------------------------------------------------------------------ */
-/*  Shared transition string                                           */
-/* ------------------------------------------------------------------ */
-
-const TRANSITION =
-  'border-color var(--ds-motion-fast) var(--ds-motion-ease-out), outline-color var(--ds-motion-fast) var(--ds-motion-ease-out), outline-offset var(--ds-motion-fast) var(--ds-motion-ease-out), background-color var(--ds-motion-fast) var(--ds-motion-ease-out)';
-
-/* ------------------------------------------------------------------ */
-/*  Trigger shell builder (matches Input shell exactly)                */
-/* ------------------------------------------------------------------ */
-
-function buildTriggerStyle(size: keyof typeof SIZES, variant: string, isDisabled: boolean): React.CSSProperties {
-  const s = SIZES[size];
-
-  const base: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    width: '100%',
-    minHeight: s.height,
-    paddingLeft: s.paddingX,
-    paddingRight: s.paddingX,
-    fontSize: s.fontSize,
-    lineHeight: s.lineHeight,
-    fontFamily: 'inherit',
-    transition: TRANSITION,
-    boxSizing: 'border-box',
-    cursor: 'pointer',
-    userSelect: 'none',
-    position: 'relative',
-  };
-
-  if (variant === 'flushed') {
-    base.paddingLeft = '0';
-    base.paddingRight = '0';
-  }
-
-  if (isDisabled) {
-    base.opacity = 0.5;
-    base.cursor = 'not-allowed';
-  }
-
-  return base;
-}
 
 /* ------------------------------------------------------------------ */
 /*  Checkmark icon for selected items                                  */
@@ -181,17 +124,6 @@ function ClearButton({ onClick, label }: { onClick: (e: React.MouseEvent) => voi
       aria-label={label}
       tabIndex={-1}
       data-part="clear-button"
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '20px',
-        height: '20px',
-        padding: 0,
-        cursor: 'pointer',
-        flexShrink: 0,
-        transition: 'background-color var(--ds-motion-fast)',
-      }}
     >
       <ActionCloseIcon decorative size={13} />
     </button>
@@ -215,8 +147,23 @@ function ClearButton({ onClick, label }: { onClick: (e: React.MouseEvent) => voi
  * a custom dropdown with full keyboard navigation.
  */
 const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
-  const { t } = useTranslation('components');
-  const { t: tCommon } = useTranslation('common');
+  const translation = useOptionalTranslation('components');
+  const translationCommon = useOptionalTranslation('common');
+
+  /**
+   * Catalog lookup with the English floor: when the provider is absent or
+   * echoes a missing-key marker, the catalogued English default wins.
+   */
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = translation?.t(key);
+    if (!resolved || resolved === key || resolved.startsWith('i18n:missing:')) return fallback;
+    return resolved;
+  };
+  const tCommonOr = (key: string, fallback: string): string => {
+    const resolved = translationCommon?.t(key);
+    if (!resolved || resolved === key || resolved.startsWith('i18n:missing:')) return fallback;
+    return resolved;
+  };
 
   const {
     value,
@@ -282,8 +229,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const size = scalarOrUndefined(sizeProp) ?? SELECT_DEFAULTS.size;
 
   // Use translation as default, allow prop override
-  const displayPlaceholder = placeholder ?? t('select.placeholder');
-  const noOptionsText = t('select.no_options');
+  const displayPlaceholder = placeholder ?? tOr('select.placeholder', EN_FALLBACK.placeholder);
+  const noOptionsText = tOr('select.no_options', EN_FALLBACK.noOptions);
 
   // Resolve aliases
   const isClearable = clearable || allowClear;
@@ -699,7 +646,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               <button
                 type="button"
                 tabIndex={-1}
-                aria-label={`${tCommon('remove')} ${getLabelText(opt.label)}`}
+                aria-label={`${tCommonOr('remove', EN_FALLBACK.remove)} ${getLabelText(opt.label)}`}
                 onClick={(e) => {
                   e.stopPropagation();
                   handleSelect(opt.value, opt);
@@ -724,7 +671,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         {selectedOptions[0].label}
       </span>
     );
-  }, [selectedOptions, multiple, maxTagCount, handleSelect, tCommon]);
+  }, [selectedOptions, multiple, maxTagCount, handleSelect, translationCommon]);
 
   /* ---------------------------------------------------------------- */
   /*  Native <select> fallback for simple cases                        */
@@ -762,32 +709,9 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       ...htmlProps
     } = rest as any;
 
-    const s = SIZES[size as keyof typeof SIZES] || SIZES.md;
-
-    const nativeSelectStyle: React.CSSProperties = {
-      display: 'block',
-      width: '100%',
-      height: s.height,
-      paddingLeft: s.paddingX,
-      paddingRight: '32px', // space for native arrow
-      fontSize: s.fontSize,
-      lineHeight: s.lineHeight,
-      fontFamily: 'inherit',
-      transition: TRANSITION,
-      boxSizing: 'border-box',
-      appearance: 'none',
-      // The native arrow's horizontal inset tracks the size's paddingX; the
-      // skin's background-position reads this custom property (not a paint key).
-      ['--ds-select-native-arrow-inset' as any]: s.paddingX,
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      opacity: disabled ? 0.5 : 1,
-    };
-
-    // Variant padding for native (all native paint lives in the skin, keyed on
-    // data-variant / data-status).
-    if (variant === 'flushed') {
-      nativeSelectStyle.paddingLeft = '0';
-    }
+    // All trigger paint and per-size geometry live in the modern skin, keyed
+    // on `data-size` / `data-variant` / `data-status` (single paint owner);
+    // the engine stamps anatomy only.
 
     return (
       <div
@@ -806,7 +730,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           data-variant={variant}
           data-status={effectiveStatus !== 'default' ? effectiveStatus : undefined}
           data-disabled={disabled || undefined}
-          style={nativeSelectStyle}
           value={internalValue[0] ?? ''}
           disabled={disabled}
           required={rest.required}
@@ -837,22 +760,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             className="rottay-select__loading-indicator"
             data-part="loading"
             aria-hidden="true"
-            style={{
-              position: 'absolute',
-              right: '32px',
-              top: '50%',
-              display: 'inline-flex',
-            }}
           >
-            <span
-              data-part="loading-spinner"
-              style={{
-                display: 'inline-block',
-                width: 12,
-                height: 12,
-                animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite',
-              }}
-            />
+            <span data-part="loading-spinner" />
           </span>
         )}
       </div>
@@ -862,8 +771,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   /* ---------------------------------------------------------------- */
   /*  Custom dropdown for advanced cases                               */
   /* ---------------------------------------------------------------- */
-
-  const triggerStyle = buildTriggerStyle(size as keyof typeof SIZES, variant, disabled);
 
   const {
     engine: _customEngine,
@@ -976,7 +883,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         data-open={isOpen || undefined}
         data-disabled={disabled || undefined}
         data-status={effectiveStatus !== 'default' ? effectiveStatus : undefined}
-        style={triggerStyle}
         onClick={() => {
           if (!disabled && !loading) {
             setIsOpen(!isOpen);
@@ -1001,19 +907,13 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
         <div data-part="trigger-actions">
           {isClearable && internalValue.length > 0 && !disabled && (
-            <ClearButton onClick={handleClear} label={t('select.clear')} />
+            <ClearButton onClick={handleClear} label={tOr('select.clear', EN_FALLBACK.clear)} />
           )}
           {loading && (
             <span
               className="rottay-select__loading-indicator"
               data-part="loading-spinner"
               aria-hidden="true"
-              style={{
-                display: 'inline-block',
-                width: 12,
-                height: 12,
-                animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite',
-              }}
             />
           )}
           <ChevronIcon />
@@ -1043,7 +943,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                 lang={portalScope.language}
                 style={{
                   width: dropdownWidth || undefined,
-                  animation: 'ds-select-appear var(--ds-motion-fast) var(--ds-motion-ease-out)',
                   ...positionStyle,
                   ...layerProps.style,
                 }}
@@ -1059,7 +958,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                   data-part="search-input"
                   value={searchValue}
                   onChange={handleSearchInput}
-                  placeholder={t('select.search')}
+                  placeholder={tOr('select.search', EN_FALLBACK.search)}
                   onClick={(e) => e.stopPropagation()}
                   autoFocus
                 />
@@ -1073,17 +972,15 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               aria-multiselectable={multiple || undefined}
               data-part="option-list"
               data-virtual={virtualEnabled || undefined}
-              style={{
-                ...(virtualEnabled
+              style={
+                virtualEnabled
                   ? {
+                      // Runtime-measured virtual window: stays inline (not paint).
                       maxHeight: `${containerHeight}px`,
                       overflowY: 'auto' as const,
                     }
-                  : {
-                      maxHeight: 'var(--ds-select-max-height, 240px)',
-                      overflowY: 'auto' as const,
-                    }),
-              }}
+                  : undefined
+              }
               onScroll={virtualEnabled ? handleDropdownScroll : undefined}
             >
               {virtualEnabled ? (
@@ -1092,8 +989,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                     style={{
                       position: 'absolute',
                       top: `${offsetY}px`,
-                      left: 0,
-                      right: 0,
+                      insetInline: 0,
                     }}
                   >
                     {visibleItems.length === 0 ? (

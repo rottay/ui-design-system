@@ -82,6 +82,17 @@
   appearance: none;
 }
 
+/* Long labels truncate with the "…" affordance instead of stretching the
+   trail (content-integrity law: never clip without an affordance; the
+   18rem bound follows tabs.css's `--ds-tabs-item-max-width`). The root's
+   horizontal scroll remains the many-items affordance. */
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='label'] {
+  min-inline-size: 0;
+  max-inline-size: var(--ds-breadcrumb-label-max-width, 18rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true'] {
   cursor: pointer;
 }
@@ -174,6 +185,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'] {
-    transition-duration: 0.01ms;
+    transition: none;
   }
 }

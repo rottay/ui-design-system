@@ -102,3 +102,8 @@ packages/showroom/.tmp/
 
 .vercel
 .env*.local
+
+# R1-P round-3 audit evidence (allowlisted individually; rest of rottay-design-platform stays ignored)
+!test-artifacts/rottay-design-platform/
+test-artifacts/rottay-design-platform/*
+!test-artifacts/rottay-design-platform/r1p-round3-evidence/

@@ -45,6 +45,15 @@
  * component+engine namespace so it cannot shadow, or be shadowed by, the global
  * `pulse` or any sibling engine's copy.
  *
+ * LOTE 2 REBUILD (lane-A): the hand-rolled wizard step rail (step-button /
+ * connector / indicator / label) is the public `Steps` navigation primitive
+ * now, and every action (section disclosure, wizard prev/next) is a `Button`
+ * primitive -- this file no longer paints any step or button chrome (the old
+ * rules were deleted, not moved). What it owns: head/section typography
+ * (drained from inline literals), the skeleton shimmer (animation drained),
+ * disclosure geometry + hairline, collapse cadence, wizard/action-bar layout,
+ * the container query and the coarse/reduced-motion floors.
+ *
  * Values transcribed verbatim from `engines/modern.tsx`.
  */
 
@@ -58,20 +67,32 @@
   }
 }
 
-/* ---- title + description ---- */
+/* ---- title + description (typography drained from inline literals) ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='head'] {
+  margin-block-end: var(--ds-spacing-6, 24px);
+}
 .ds-pattern-form-builder.ds-engine-modern [data-part='title'] {
   color: var(--ds-color-text-primary);
+  font-size: var(--ds-form-builder-title-font-size, 18px);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  line-height: var(--ds-form-builder-title-line-height, 1.45);
+  letter-spacing: var(--ds-form-builder-title-letter-spacing, -0.01em);
 }
 .ds-pattern-form-builder.ds-engine-modern [data-part='description'] {
+  margin-block-start: var(--ds-spacing-1, 4px);
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm, 14px);
+  line-height: var(--ds-line-height-snug, 1.375);
 }
 
 /* ---- loading skeleton. Five of the six bars share a radius; the field-LABEL
         shimmer is tighter, and `data-variant` is the only thing that tells them
-        apart -- see constraint 2. ---- */
+        apart -- see constraint 2. Animation drained from inline (reduced-motion
+        now governs it). ---- */
 .ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'] {
   border-radius: var(--ds-radius-md);
   background: var(--ds-surface-panel);
+  animation: ds-form-builder-modern-pulse var(--ds-form-builder-skeleton-duration, 2s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 .ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'][data-variant='label'] {
   border-radius: var(--ds-radius-sm);
@@ -100,114 +121,163 @@
   border-radius: var(--ds-radius-md);
 }
 
-/* ---- per-field help + error text ---- */
+/* ---- per-field help + error text (typography drained from inline) ---- */
 .ds-pattern-form-builder.ds-engine-modern [data-part='field-description'] {
+  margin-block-start: var(--ds-spacing-1, 4px);
   color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs, 12px);
+  line-height: var(--ds-line-height-snug, 1.375);
 }
 .ds-pattern-form-builder.ds-engine-modern [data-part='field-error'] {
+  margin-block-start: var(--ds-spacing-1, 4px);
   color: var(--ds-color-error);
+  font-size: var(--ds-font-size-xs, 12px);
+  line-height: var(--ds-line-height-snug, 1.375);
 }
 
-/* ---- wizard step rail ---- */
-.ds-pattern-form-builder.ds-engine-modern [data-part='step-connector'] {
-  background: var(--ds-color-border-secondary);
-}
-.ds-pattern-form-builder.ds-engine-modern [data-part='step-connector'][data-completed='true'] {
-  background: var(--ds-color-primary);
-}
-
-.ds-pattern-form-builder.ds-engine-modern [data-part='step-button'] {
-  background: none;
-  border: none;
-}
-
-/* ---- step indicator: the JSX merged `isActive || isCompleted` for background,
-        colour and border, and gave the focus ring to `isActive` alone. ---- */
-.ds-pattern-form-builder.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'] {
-  border-radius: 50%;
-  background: var(--ds-surface-panel);
-  color: var(--ds-color-text-muted);
-  border: 2px solid var(--ds-color-border-secondary);
-  box-shadow: none;
-}
-.ds-pattern-form-builder.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-active='true'],
-.ds-pattern-form-builder.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-completed='true'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-  border: none;
-}
-.ds-pattern-form-builder.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-active='true'] {
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
-}
-
-/* ---- step label: three-way chain, `active` written last to win as it did in JS.
-        `font-weight` stays inline (not a counted channel). ---- */
-.ds-pattern-form-builder.ds-engine-modern [data-part='step-label'] {
-  color: var(--ds-color-text-muted);
-}
-.ds-pattern-form-builder.ds-engine-modern [data-part='step-label'][data-completed='true'] {
-  color: var(--ds-color-text-secondary);
-}
-.ds-pattern-form-builder.ds-engine-modern [data-part='step-label'][data-active='true'] {
-  color: var(--ds-color-text-primary);
+/* ---- wizard step rail: the public Steps primitive renders inside; the
+        pattern owns only the row offset. (The old step-button/connector/
+        indicator/label rules are gone -- Steps' own skin is the single paint
+        owner for every step chrome.) ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-list'] {
+  margin-block-end: var(--ds-form-builder-step-list-offset, var(--ds-spacing-8, 32px));
 }
 
 /* ---- sections. The header reset `border` before setting `border-bottom`; the
         order is preserved because a shorthand must not clobber the longhand. ---- */
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-divider'] {
+  block-size: 1px;
+  margin-block: var(--ds-form-builder-section-divider-gap, 28px);
   background: var(--ds-color-border);
 }
 
+/* Section header: a ghost Button primitive turned disclosure row. The rules
+   below are COMPOSITION geometry (full-width row, content split) plus the
+   disclosure hairline -- the button's own interactive paint (hover, focus
+   ring, states) stays with the button skin. */
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-header'] {
+  inline-size: 100%;
+  justify-content: space-between;
+  padding-block-end: var(--ds-form-builder-section-header-padding, 14px);
+  margin-block-end: var(--ds-form-builder-section-header-gap, var(--ds-spacing-5, 20px));
+  text-align: start;
+  transition: margin-block-end var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-header'][data-collapsed='true'] {
+  margin-block-end: 0;
+}
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-header'][data-part='section-header'] {
-  background: none;
-  border: none;
   border-bottom: 1px solid var(--ds-color-border);
 }
 
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-title'] {
   color: var(--ds-color-text-primary);
+  font-size: var(--ds-form-builder-section-title-font-size, 15px);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  line-height: var(--ds-line-height-snug, 1.375);
+  letter-spacing: var(--ds-form-builder-section-title-letter-spacing, -0.005em);
 }
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-description'] {
+  margin-block-start: var(--ds-spacing-1, 4px);
   color: var(--ds-color-text-muted);
+  font-size: var(--ds-form-builder-section-description-font-size, 13px);
+  line-height: var(--ds-line-height-snug, 1.375);
 }
 
-/* ---- collapse chevron: the rotation is STATE-SELECTED off `data-collapsed`,
-        not a runtime angle. `transition` stays inline. ---- */
+/* ---- collapse chevron: the rotation is STATE-SELECTED off `data-collapsed`;
+        the transition moved here from inline so reduced-motion governs it. ---- */
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-chevron'] {
   color: var(--ds-color-text-muted);
   transform: rotate(0deg);
+  transition: transform var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-chevron'][data-collapsed='true'] {
   transform: rotate(-90deg);
 }
 
-/* ---- wizard navigation. `wizard-nav` and the skeleton's `action-bar` were the
-        two elements in this engine that carried paint and no anatomy; both are
-        stamped now, reusing the names the RUSTIC engine already uses for the same
-        two elements rather than minting new ones. ---- */
+/* ---- section content collapse: runtime max-height/opacity stay inline;
+        the cadence is skin-owned so reduced-motion can silence it. ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-content'] {
+  transition:
+    max-height var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out),
+    opacity var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
+}
+
+/* ---- wizard navigation (layout only; Buttons paint themselves) ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav'] {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2, 8px);
+  margin-block-start: var(--ds-form-builder-wizard-nav-offset, 28px);
+  padding-block-start: var(--ds-spacing-5, 20px);
+}
 .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav'][data-part='wizard-nav'] {
   border-top: 1px solid var(--ds-color-border);
 }
-
-.ds-pattern-form-builder.ds-engine-modern [data-part='wizard-prev-button'][data-part='wizard-prev-button'] {
-  color: var(--ds-color-text-primary);
-  background: transparent;
-  border: 1px solid var(--ds-color-border);
-  border-radius: var(--ds-radius-md);
-}
-
-.ds-pattern-form-builder.ds-engine-modern [data-part='wizard-next-button'][data-part='wizard-next-button'] {
-  color: var(--ds-color-text-on-primary);
-  background: var(--ds-color-primary);
-  border: none;
-  border-radius: var(--ds-radius-md);
+.ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav-end'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
 }
 
 .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-step-counter'] {
+  margin-inline-end: var(--ds-spacing-1, 4px);
   color: var(--ds-color-text-muted);
+  font-size: var(--ds-form-builder-counter-font-size, 13px);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 /* ---- action bar ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='action-bar'] {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-3, 12px);
+  margin-block-start: var(--ds-spacing-8, 32px);
+  padding-block-start: var(--ds-spacing-5, 20px);
+}
 .ds-pattern-form-builder.ds-engine-modern [data-part='action-bar'][data-part='action-bar'] {
   border-top: 1px solid var(--ds-color-border);
+}
+
+/* ---- responsive + coarse + reduced-motion ------------------------------- */
+
+/* The root is the composition's named container; autoAdaptive stays JS-driven
+   (useBreakpoints) and this container query only handles the nav bar wrap. */
+.ds-pattern-form-builder.ds-engine-modern[data-part='root'] {
+  container-type: inline-size;
+  container-name: ds-form-builder;
+}
+
+@container ds-form-builder (inline-size < 30rem) {
+  .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav'] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav-end'] {
+    justify-content: space-between;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .ds-pattern-form-builder.ds-engine-modern [data-part='section-header'],
+  .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-prev-button'],
+  .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-next-button'] {
+    min-block-size: var(--ds-form-builder-touch-target-min, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'] {
+    animation: none;
+  }
+  .ds-pattern-form-builder.ds-engine-modern [data-part='section-content'],
+  .ds-pattern-form-builder.ds-engine-modern [data-part='section-chevron'],
+  .ds-pattern-form-builder.ds-engine-modern [data-part='section-header'] {
+    transition: none;
+  }
 }

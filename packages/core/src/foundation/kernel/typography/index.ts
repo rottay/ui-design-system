@@ -8,10 +8,53 @@
  * families first.
  */
 
-const ARABIC_SAFE_FAMILY = '"Noto Sans Arabic"';
+/**
+ * Families that satisfy the Arabic-safe tail. A stack containing any of them
+ * carries the coverage; `MANDATORY_FONT_FALLBACK_FAMILY` is the one this module
+ * appends when a stack carries none.
+ */
+export const MANDATORY_FONT_FALLBACK_FAMILY = '"Noto Sans Arabic"';
+
+/**
+ * CSS channels whose stacks must carry the mandatory fallback. Mono is absent
+ * on purpose: a code face renders no Arabic body text, and forcing the tail
+ * onto it would change every mono stack for no reading benefit.
+ */
+export const MANDATORY_FALLBACK_FONT_CHANNELS = [
+  "--ds-font-family-base",
+  "--ds-font-family-heading",
+  "--ds-font-family-display",
+] as const;
+
+const ARABIC_SAFE_FAMILY = MANDATORY_FONT_FALLBACK_FAMILY;
 
 const ARABIC_CAPABLE_PATTERN =
   /noto\s+(?:sans|kufi|naskh)\s+arabic|geeza\s+pro|tahoma/i;
+
+/** Whether a font stack already carries Arabic-capable coverage. */
+export function hasMandatoryFontFallback(stack: string): boolean {
+  return ARABIC_CAPABLE_PATTERN.test(stack);
+}
+
+/**
+ * Fail-closed check over an emitted variable map. `withArabicSafeFallback`
+ * appends the tail on the way in; this is what stops a later mapping, override
+ * or compat path from taking it back out again without anyone noticing — the
+ * evnto artifact shipped Arabic-less stacks for exactly that reason.
+ */
+export function assertMandatoryFontFallback(
+  variables: Record<string, string>,
+  context: string
+): void {
+  for (const channel of MANDATORY_FALLBACK_FONT_CHANNELS) {
+    const stack = variables[channel];
+    if (stack == null || hasMandatoryFontFallback(stack)) continue;
+    throw new Error(
+      `${context}: ${channel} omits the mandatory font fallback ` +
+        `${MANDATORY_FONT_FALLBACK_FAMILY} (stack: ${stack}).`
+    );
+  }
+}
 
 const TRAILING_GENERIC_PATTERN =
   /(,\s*)(sans-serif|serif|monospace|system-ui|ui-rounded|ui-serif)\s*$/i;

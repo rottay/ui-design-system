@@ -4,13 +4,16 @@
  * @fileoverview Modern engine for the CockpitHeader pattern.
  *
  * Renders a premium command-center style header for dashboards and detail
- * pages. All visuals use `--ds-*` CSS custom properties. Zero DaisyUI
- * dependency.
+ * pages. The engine stamps anatomy (`data-part`), state (`data-compact`,
+ * `data-sticky`, `data-loading`, `data-variant`) and the sanctioned skeleton
+ * radius data channel; the modern skin
+ * (`runtime/engines/modern/skin/cockpit-header.css`) owns 100% of layout and
+ * paint — typography included. Zero DaisyUI dependency, zero inline paint.
  *
  * Features:
  * - Breadcrumb trail with "/" separators, muted color, current item darker
- * - Back navigation button (ghost, token-driven)
- * - Title (700 weight, 22px, tight tracking) + status pill chips
+ * - Back navigation button (ghost, token-driven, translated aria-label)
+ * - Title + status pill chips
  * - Subtitle / metadata row below title
  * - Action toolbar right-aligned with primary/ghost treatment
  * - Optional sticky compact mode on scroll with elevation
@@ -27,16 +30,16 @@ import type { CockpitHeaderProps, CockpitStatus } from '../../contracts';
 import Button from '../../../../../primitives/inputs/Button/engines/modern';
 import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /* ------------------------------------------------------------------ */
-/* Shared style constants                                              */
+/* English accessibility floors (translatable via `components` ns)     */
 /* ------------------------------------------------------------------ */
 
-const TRANSITION_FAST =
-  'var(--ds-motion-fast) var(--ds-motion-ease-out)';
-
-const TRANSITION_NORMAL =
-  'var(--ds-motion-normal) var(--ds-motion-ease-out)';
+const BACK_LABEL_KEY = 'cockpitHeader.back';
+const BACK_LABEL_FALLBACK = 'Go back';
+const BREADCRUMB_LABEL_KEY = 'cockpitHeader.breadcrumb';
+const BREADCRUMB_LABEL_FALLBACK = 'Breadcrumb';
 
 /* ------------------------------------------------------------------ */
 /* BreadcrumbLink                                                      */
@@ -61,12 +64,6 @@ function BreadcrumbLink({
         data-part="crumb"
         data-interactive="true"
         data-last="false"
-        style={{
-          fontWeight: 500,
-          textDecoration: 'none',
-          transition: `color ${TRANSITION_FAST}`,
-          cursor: 'pointer',
-        }}
       >
         {label}
       </a>
@@ -78,9 +75,6 @@ function BreadcrumbLink({
       data-part="crumb"
       data-interactive="false"
       data-last={isLast ? 'true' : 'false'}
-      style={{
-        fontWeight: isLast ? 600 : 500,
-      }}
     >
       {label}
     </span>
@@ -94,22 +88,21 @@ function BreadcrumbLink({
 /**
  * Ghost back navigation button with token-driven hover/focus state.
  */
-function BackButton({ onClick, ariaLabel }: { onClick: () => void; ariaLabel?: string }) {
+function BackButton({ onClick, ariaLabel }: { onClick: () => void; ariaLabel: string }) {
   return (
-    <span data-part="back" style={{ display: 'contents' }}>
+    <span data-part="back">
       <Button
         htmlType="button"
         variant="ghost"
         size="sm"
         shape="circle"
         onClick={onClick}
-        aria-label={ariaLabel ?? 'Go back'}
-        style={{ flexShrink: 0 }}
+        aria-label={ariaLabel}
         icon={(
           <NavigationBackIcon size={15} decorative />
         )}
       >
-        <span className="ds-sr-only">{ariaLabel ?? 'Go back'}</span>
+        <span className="ds-sr-only">{ariaLabel}</span>
       </Button>
     </span>
   );
@@ -127,16 +120,6 @@ function StatusPill({ status }: { status: CockpitStatus }) {
     <span
       data-part="status"
       data-variant={status.variant}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        padding: 'var(--ds-badge-padding-y, 2px) var(--ds-badge-padding-x, 0.375rem)',
-        fontSize: 'var(--ds-font-size-xs)',
-        fontWeight: 'var(--ds-font-weight-semibold)',
-        lineHeight: 'var(--ds-line-height-body)',
-        whiteSpace: 'nowrap',
-        letterSpacing: '0.01em',
-      }}
     >
       {status.label}
     </span>
@@ -152,7 +135,7 @@ function StatusPill({ status }: { status: CockpitStatus }) {
  *
  * Token-driven header for detail pages and dashboards. No DaisyUI classes --
  * every color, radius, and elevation value references a `--ds-*` CSS custom
- * property. Supports sticky compact mode on scroll.
+ * property in the skin. Supports sticky compact mode on scroll.
  *
  * @param props - {@link CockpitHeaderProps}
  * @returns The rendered cockpit header.
@@ -177,6 +160,15 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
   const [isCompact, setIsCompact] = useState(false);
   const headerRef = useRef<HTMLDivElement>(null);
 
+  // Optional i18n: without an I18nProvider the hook returns null and the
+  // English floors render, byte-identical to the pre-i18n contract. Explicit
+  // props always win.
+  const i18n = useOptionalTranslation('components');
+  const backLabel =
+    backAriaLabel ?? i18n?.tOr(BACK_LABEL_KEY, BACK_LABEL_FALLBACK) ?? BACK_LABEL_FALLBACK;
+  const breadcrumbLabel =
+    i18n?.tOr(BREADCRUMB_LABEL_KEY, BREADCRUMB_LABEL_FALLBACK) ?? BREADCRUMB_LABEL_FALLBACK;
+
   useEffect(() => {
     if (!sticky) return;
 
@@ -195,78 +187,35 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
         className={`ds-pattern-cockpit-header ds-engine-modern ${className ?? ''}`}
         data-part="root"
         data-loading="true"
-        style={{
-          padding: 'var(--ds-cockpit-header-padding)',
-          ...style,
-        }}
+        style={style}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-cockpit-header-item-gap)' }}>
+        <div data-part="skeleton-stack">
           {/* Breadcrumb skeleton */}
-          <div
-            data-part="skeleton"
-            style={{
-              width: 160,
-              height: 12,
-              animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
-            }}
-          />
+          <div data-part="skeleton" data-size="crumb" />
           {/* Title row skeleton */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: 'var(--ds-cockpit-header-section-gap)',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-cockpit-header-item-gap)' }}>
+          <div data-part="skeleton-row">
+            <div data-part="skeleton-lead">
               <div
                 data-part="skeleton"
-                style={{
-                  width: 34,
-                  height: 34,
-                  '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)',
-                  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
-                } as React.CSSProperties}
+                data-size="icon"
+                style={{ '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
               />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-2, 8px)' }}>
-                <div
-                  data-part="skeleton"
-                  style={{
-                    width: 260,
-                    height: 24,
-                    animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
-                  }}
-                />
-                <div
-                  data-part="skeleton"
-                  style={{
-                    width: 180,
-                    height: 14,
-                    animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
-                  }}
-                />
+              <div data-part="skeleton-column">
+                <div data-part="skeleton" data-size="title" />
+                <div data-part="skeleton" data-size="subtitle" />
               </div>
             </div>
             {/* Action skeleton */}
-            <div style={{ display: 'flex', gap: 'var(--ds-cockpit-header-action-gap)' }}>
+            <div data-part="skeleton-actions">
               <div
                 data-part="skeleton"
-                style={{
-                  width: 80,
-                  height: 34,
-                  '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)',
-                  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
-                } as React.CSSProperties}
+                data-size="action"
+                style={{ '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
               />
               <div
                 data-part="skeleton"
-                style={{
-                  width: 100,
-                  height: 34,
-                  '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)',
-                  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
-                } as React.CSSProperties}
+                data-size="action"
+                style={{ '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
               />
             </div>
           </div>
@@ -274,16 +223,6 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
       </div>
     );
   }
-
-  /* ---- Sticky behavior ---- */
-  const stickyStyles: React.CSSProperties = sticky
-    ? {
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        transition: `padding ${TRANSITION_NORMAL}, box-shadow ${TRANSITION_NORMAL}`,
-      }
-    : {};
 
   return (
     <div
@@ -295,26 +234,13 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
       data-compact={isCompact ? 'true' : 'false'}
       data-has-icon={icon ? 'true' : 'false'}
       data-has-actions={actions ? 'true' : 'false'}
-      style={{
-        padding: isCompact ? 'var(--ds-cockpit-header-padding-compact)' : 'var(--ds-cockpit-header-padding)',
-        transition: `padding ${TRANSITION_NORMAL}`,
-        ...stickyStyles,
-        ...style,
-      }}
+      style={style}
     >
       {/* ---- Breadcrumb trail ---- */}
       {breadcrumbs && breadcrumbs.length > 0 && !isCompact && (
         <nav
-          aria-label="Breadcrumb"
+          aria-label={breadcrumbLabel}
           data-part="breadcrumb"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--ds-spacing-2, 8px)',
-            marginBottom: 'var(--ds-cockpit-header-item-gap)',
-            fontSize: 'var(--ds-font-size-sm)',
-            lineHeight: 'var(--ds-line-height-body)',
-          }}
         >
           {breadcrumbs.map((crumb, idx) => {
             const isLast = idx === breadcrumbs.length - 1;
@@ -323,11 +249,6 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                 {idx > 0 && (
                   <span
                     data-part="separator"
-                    style={{
-                      userSelect: 'none',
-                      fontSize: 12,
-                      opacity: 0.7,
-                    }}
                     aria-hidden="true"
                   >
                     <NavigationForwardIcon size={11} decorative />
@@ -345,27 +266,10 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
       )}
 
       {/* ---- Main row: back + title + status | actions ---- */}
-      <div
-        data-part="main-row"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 'var(--ds-cockpit-header-section-gap)',
-        }}
-      >
+      <div data-part="main-row">
         {/* Left cluster: back button + title group */}
-        <div
-          data-part="lead"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--ds-cockpit-header-item-gap)',
-            minWidth: 0,
-            flex: 1,
-          }}
-        >
-          {onBack && <BackButton onClick={onBack} ariaLabel={backAriaLabel} />}
+        <div data-part="lead">
+          {onBack && <BackButton onClick={onBack} ariaLabel={backLabel} />}
 
           {icon ? (
             <span data-part="header-icon" aria-hidden="true">
@@ -374,42 +278,16 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
           ) : null}
 
           {/* Title + subtitle column */}
-          <div data-part="titles" style={{ minWidth: 0, flex: 1 }}>
+          <div data-part="titles">
             {eyebrow && !isCompact ? <div data-part="eyebrow">{eyebrow}</div> : null}
-            <div
-              data-part="title-row"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--ds-cockpit-header-item-gap)',
-                flexWrap: 'wrap',
-              }}
-            >
-              <h2
-                data-part="title"
-                style={{
-                  margin: 0,
-                  fontSize: isCompact ? 'var(--ds-font-size-lg)' : 'var(--ds-font-size-2xl)',
-                  fontWeight: 'var(--ds-font-weight-bold)',
-                  lineHeight: 'var(--ds-line-height-heading)',
-                  letterSpacing: 'var(--ds-letter-spacing-heading)',
-                  textWrap: 'balance',
-                  transition: `font-size ${TRANSITION_NORMAL}`,
-                }}
-              >
+            <div data-part="title-row">
+              <h2 data-part="title">
                 {title}
               </h2>
 
               {/* Status pills */}
               {status && status.length > 0 && (
-                <div
-                  data-part="status-list"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 'var(--ds-spacing-2, 8px)',
-                  }}
-                >
+                <div data-part="status-list">
                   {status.map((s, idx) => (
                     <StatusPill key={`status-${idx}`} status={s} />
                   ))}
@@ -419,15 +297,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
 
             {/* Subtitle / metadata row */}
             {subtitle && !isCompact && (
-              <p
-                data-part="subtitle"
-                style={{
-                  margin: '4px 0 0',
-                  fontSize: 'var(--ds-font-size-sm)',
-                  lineHeight: 'var(--ds-line-height-body)',
-                  textWrap: 'pretty',
-                }}
-              >
+              <p data-part="subtitle">
                 {subtitle}
               </p>
             )}
@@ -436,15 +306,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
 
         {/* Action toolbar */}
         {actions && (
-          <div
-            data-part="actions"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--ds-cockpit-header-action-gap)',
-              flexShrink: 0,
-            }}
-          >
+          <div data-part="actions">
             {actions}
           </div>
         )}

@@ -433,21 +433,52 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     }, MESSAGE_EXIT_DURATION_MS);
   }, [id, onRemove, onClose]);
 
-  // Auto-close timer
+  // Auto-close countdown with hover pause (Toast family parity): hovering
+  // freezes BOTH the JS countdown (remaining-time tracked, never a full
+  // restart) and the skin's progress bar (data-paused), so a user reading a
+  // long message never loses it mid-sentence.
+  const [isPaused, setIsPaused] = useState(false);
+  const remainingRef = useRef<number>(duration > 0 ? duration * 1000 : 0);
+  const startedAtRef = useRef(0);
+  // A duration prop change re-arms the countdown from its full length,
+  // matching the pre-pause contract.
+  const prevDurationRef = useRef(duration);
+  if (prevDurationRef.current !== duration) {
+    prevDurationRef.current = duration;
+    remainingRef.current = duration > 0 ? duration * 1000 : 0;
+  }
+
   useEffect(() => {
-    if (duration > 0) {
-      timerRef.current = setTimeout(beginExit, duration * 1000);
+    if (duration > 0 && !isPaused) {
+      startedAtRef.current = Date.now();
+      timerRef.current = setTimeout(beginExit, remainingRef.current);
     }
 
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
-      }
-      if (exitTimerRef.current) {
-        clearTimeout(exitTimerRef.current);
+        timerRef.current = null;
       }
     };
-  }, [id, duration, beginExit]);
+  }, [duration, isPaused, beginExit]);
+
+  // The exit timer is independent of the hover-aware countdown above: it only
+  // needs cancelling on unmount.
+  useEffect(() => () => {
+    if (exitTimerRef.current) {
+      clearTimeout(exitTimerRef.current);
+    }
+  }, []);
+
+  const handleMouseEnter = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+      remainingRef.current = Math.max(0, remainingRef.current - (Date.now() - startedAtRef.current));
+    }
+    setIsPaused(true);
+  };
+  const handleMouseLeave = () => setIsPaused(false);
 
   // Manual close must cancel the auto-close timer first to prevent
   // a double-removal race condition (user clicks close, then timer fires).
@@ -469,10 +500,9 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     info: <StatusInfoIcon decorative size={18} />,
     warning: <StatusWarningIcon decorative size={18} />,
     // `data-icon` marks the built-in spinner so the skin's ring rule cannot also
-    // paint a consumer-supplied `icon` rendered into the same slot.
-    loading: (
-      <span data-icon="spinner" style={{ display: 'inline-block', width: 16, height: 16, animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite' }}></span>
-    ),
+    // paint a consumer-supplied `icon` rendered into the same slot. Geometry
+    // and the spin cadence are skin-owned (message.css).
+    loading: <span data-icon="spinner" />,
   };
 
   // role="alert" triggers screen reader announcement on appearance, inside the
@@ -484,6 +514,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
       data-tone={type}
       data-state={exiting ? 'exit' : 'enter'}
       data-closable={closable ? 'true' : 'false'}
+      data-paused={isPaused ? 'true' : 'false'}
       className={`rottay-message--modern ${className}`}
       style={{
         '--ds-message-duration': duration > 0 ? `${duration}s` : undefined,
@@ -491,6 +522,8 @@ export const MessageItem: React.FC<MessageItemProps> = ({
       } as React.CSSProperties}
       role="alert"
       aria-live="polite"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <span data-part="icon">{icon || icons[type]}</span>
       <span data-part="body">{content}</span>

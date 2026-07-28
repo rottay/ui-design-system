@@ -23,7 +23,8 @@
  *
  * **Hierarchy:**
  * - Primary: Solid brand bg, high contrast, elevation on hover
- * - Secondary: Bordered with transparent bg, subtle fill on hover
+ * - Secondary: Second-tier emphasis through the tenant-authored
+ *   `--ds-button-secondary-*` channels, same interaction model as primary
  * - Ghost: No border, minimal hover bg
  * - Danger: Red-tinted, same interaction model as primary
  * - Link: Underline on hover, no background

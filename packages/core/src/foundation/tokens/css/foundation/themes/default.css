@@ -658,8 +658,13 @@
   --ds-shadow-warning: 0 4px 14px 0 rgba(245, 158, 11, 0.15), 0 8px 24px rgba(245, 158, 11, 0.08);
   --ds-shadow-error: 0 4px 14px 0 rgba(239, 68, 68, 0.15), 0 8px 24px rgba(239, 68, 68, 0.08);
 
-  /* Focus Ring */
-  --ds-shadow-focus-ring: 0 0 0 2px rgba(0, 0, 0, 0.12);
+  /* Focus Ring. The single-layer ring is primary-tinted (24%), not a neutral
+     black wash: it must track the tenant accent like every other focus
+     affordance. Interactive controls use the W8 double ring (--ds-focus-ring)
+     or the outline pattern; this token backs card/modal selected and focus
+     surfaces. */
+  --ds-shadow-focus-ring: 0 0 0 3px
+    var(--ds-tint-24, color-mix(in srgb, var(--ds-color-primary) 24%, transparent));
   --ds-shadow-focus-ring-error: 0 0 0 2px rgba(239, 68, 68, 0.25);
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -1978,11 +1983,15 @@
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-skeleton-bg: #e5e5e5;
   --ds-skeleton-highlight: #f5f5f5;
+  /* The wave is a tenant-tinted premium shimmer over the panel/card surfaces.
+     It references the surface aliases directly: routing it through
+     --ds-skeleton-bg would nest a gradient inside a gradient stop (invalid at
+     computed-value time) once the components layer redefines that token. */
   --ds-skeleton-wave-gradient: linear-gradient(
     90deg,
-    var(--ds-skeleton-bg) 25%,
-    var(--ds-skeleton-highlight) 50%,
-    var(--ds-skeleton-bg) 75%
+    var(--ds-surface-panel-bg) 25%,
+    color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg)) 50%,
+    var(--ds-surface-panel-bg) 75%
   );
   --ds-skeleton-radius: var(--ds-radius-md);
   --ds-skeleton-animation-duration: 1.5s;

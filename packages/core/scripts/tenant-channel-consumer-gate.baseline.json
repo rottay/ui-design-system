@@ -2,7 +2,7 @@
   "_comment": "Decrease-only accepted-debt ledger for tenant visual channels with zero source consumers. A NEW dead channel (not listed here) fails tenant-channel-consumer-gate --check. Revive a channel by wiring a var()/selector consumer, or tighten this list once revived.",
   "generatedFrom": {
     "overrideTokens": 293,
-    "emittedChromeChannels": 1302,
+    "emittedChromeChannels": 1306,
     "chartSeriesChannels": 10,
     "anatomyChannels": 10,
     "anatomyContractPresent": true

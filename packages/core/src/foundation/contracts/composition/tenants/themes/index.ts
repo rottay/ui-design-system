@@ -74,6 +74,49 @@ export interface BrandRecipeSelection {
   profile: string;
 }
 
+/**
+ * Mode posture of the palette a BrandTheme actually authors.
+ *
+ * A theme declares one default mode and its values ARE that mode: bithire and
+ * evnto author light palettes, rottay authors a dark one. The compiler emits
+ * `color-scheme: <defaultMode>` on the base block so form controls, scrollbars
+ * and the UA canvas agree with the paint, and the root-state contract resolves
+ * a `data-theme` of `base` (or absent) through this field instead of assuming
+ * light. Non-default-mode values are authored as declared mode blocks.
+ */
+export interface BrandAppearance {
+  defaultMode: "light" | "dark";
+}
+
+/** The two modes a theme can be authored for. */
+export type BrandThemeMode = "light" | "dark";
+
+/**
+ * One mode's values, as deep partials of the semantic families.
+ *
+ * A vertical authors its DEFAULT mode in the main BrandTheme body — those
+ * fields are unchanged and a theme without `modes` compiles exactly as before.
+ * The NON-default mode is authored here, and only where it diverges: the
+ * compiler merges this over the base theme, runs the SAME family compilers,
+ * and emits the difference. That is what makes a second mode a typed brand
+ * decision instead of a hand-written stylesheet block — one source per
+ * channel per mode, with no per-vertical branch anywhere in the compiler.
+ *
+ * `palette` is `Partial` only because `primaryColor` is required on the base;
+ * every other family is already all-optional, so it is its own deep partial.
+ */
+export interface BrandThemeModeOverlay {
+  palette?: Partial<BrandPalette>;
+  typography?: BrandTypography;
+  surfaces?: BrandSurfaces;
+  chrome?: BrandChrome;
+}
+
+/** Typed per-mode overlays keyed by the mode they describe. */
+export type BrandThemeModes = Partial<
+  Record<BrandThemeMode, BrandThemeModeOverlay>
+>;
+
 export interface BrandTheme {
   /** Unique identifier for this brand theme */
   id: string;
@@ -82,6 +125,13 @@ export interface BrandTheme {
   /** Optional preset key to inherit defaults from (e.g. 'corporate-clean') */
   extends?: string;
 
+  /** Which mode this theme's values are; drives the emitted `color-scheme`. */
+  appearance?: BrandAppearance;
+  /**
+   * Values for the mode this theme is NOT authored in. Absent means the
+   * vertical ships one mode.
+   */
+  modes?: BrandThemeModes;
   /** Light/dark palettes and semantic colors */
   palette?: BrandPalette;
   /** Font families and heading/label strategies */
@@ -100,22 +150,84 @@ export interface BrandTheme {
   engineBridge?: Partial<Record<EngineName, Record<string, unknown>>>;
 }
 
+/** Palette roles that carry a `--ds-color-{role}-{50..900}` ramp. */
+export type BrandRampRole =
+  | "primary"
+  | "secondary"
+  | "accent"
+  | "success"
+  | "warning"
+  | "error"
+  | "info"
+  | "neutral";
+
+/** The nine steps of a ramp, plus the 50 tint. */
+export type BrandRampStep =
+  | 50
+  | 100
+  | 200
+  | 300
+  | 400
+  | 500
+  | 600
+  | 700
+  | 800
+  | 900;
+
+/** Hand-authored ramp steps for one role. Absent steps stay derived. */
+export type BrandColorRamp = Partial<Record<BrandRampStep, string>>;
+
+/**
+ * Ramp steps authored by hand instead of derived from the role's seed.
+ *
+ * `deriveTenantColorRamps` turns one seed into a perceptually even ramp, which
+ * is what a tenant with no design capacity should get. A brand that HAS tuned
+ * its ramp could not express it: the seed field owned all ten steps, so the
+ * only way to ship hand values was a stylesheet block outside the contract —
+ * which is precisely the duplicate authority this contract exists to remove.
+ * An authored step wins over the derived one; the rest of the ramp keeps
+ * deriving. `neutral` has no seed of its own and is therefore authored-only.
+ */
+export type BrandColorRamps = Partial<Record<BrandRampRole, BrandColorRamp>>;
+
 export interface BrandPalette {
   primaryColor: string;
   secondaryColor?: string;
   accentColor?: string;
+  /** Hand-authored ramp steps; anything absent stays derived from the seed. */
+  ramps?: BrandColorRamps;
+  /** Hover state of the primary seed. */
+  primaryHoverColor?: string;
+  /** Hover state of the secondary seed. */
+  secondaryHoverColor?: string;
+  /** Hover state of the accent seed. */
+  accentHoverColor?: string;
+  /** Ink that stays legible ON the primary color. */
+  onPrimaryColor?: string;
+  /** Ink for solid primary surfaces (Badge and every filled primary fill). */
+  primaryForegroundColor?: string;
   /** Global reading ink used on the tenant canvas and neutral surfaces. */
   textPrimaryColor?: string;
   /** Supporting copy that must remain readable at normal text sizes. */
   textSecondaryColor?: string;
   /** Quiet metadata/captions; still expected to meet accessible text contrast. */
   textMutedColor?: string;
+  /** The third ink step, between muted and disabled. */
+  textTertiaryColor?: string;
   /** Disabled ink. Components remain responsible for non-color disabled cues. */
   textDisabledColor?: string;
   /** Default neutral separator on cards, controls, rows and page regions. */
   borderPrimaryColor?: string;
   /** Quieter nested separator used inside already-bounded surfaces. */
   borderSecondaryColor?: string;
+  /** The unqualified separator token components fall back to. */
+  borderColor?: string;
+  /** Third separator step for deeply nested bounded surfaces. */
+  borderTertiaryColor?: string;
+  /** The quietest separator: a hairline that reads as texture, not structure. */
+  borderSubtleColor?: string;
+  /** Separator of the focused control. Not the focus ring itself. */
+  borderFocusColor?: string;
   darkPrimaryColor?: string;
   darkSecondaryColor?: string;
   darkAccentColor?: string;
@@ -127,10 +239,50 @@ export interface BrandPalette {
   backgroundColor?: string;
   /** The page ground in dark mode. Reaches `--ds-color-bg-primary`. */
   darkBackgroundColor?: string;
+  /** The ground one step off the page: panels, wells, quiet bands. */
+  backgroundSecondaryColor?: string;
+  /** The ground two steps off the page. */
+  backgroundTertiaryColor?: string;
+  /** The ground of a surface that reads as lifted (menus, popovers, cards). */
+  backgroundElevatedColor?: string;
+  /** The ground of a bounded content surface. */
+  backgroundSurfaceColor?: string;
+  /** The scrim drawn over the page behind a modal or drawer. */
+  backgroundOverlayColor?: string;
   successColor?: string;
   warningColor?: string;
   errorColor?: string;
   infoColor?: string;
+  /** Ground of a success surface (alert/banner/tag fill). */
+  successBgColor?: string;
+  /** Separator of a success surface. */
+  successBorderColor?: string;
+  /** Ground of a warning surface. */
+  warningBgColor?: string;
+  /** Separator of a warning surface. */
+  warningBorderColor?: string;
+  /** Ground of an error surface. */
+  errorBgColor?: string;
+  /** Separator of an error surface. */
+  errorBorderColor?: string;
+  /** Ground of an informational surface. */
+  infoBgColor?: string;
+  /** Separator of an informational surface. */
+  infoBorderColor?: string;
+  /** Link ink at rest. */
+  linkColor?: string;
+  /** Link ink on hover. */
+  linkHoverColor?: string;
+  /** Link ink once visited. */
+  linkVisitedColor?: string;
+  /** Separator of a generic interactive affordance. */
+  interactiveBorderColor?: string;
+  /** Ground an interactive affordance takes on hover. */
+  interactiveBgHoverColor?: string;
+  /** Ground an interactive affordance takes while active/pressed. */
+  interactiveBgActiveColor?: string;
+  /** The quietest interactive ground: selected-but-inactive rows and chips. */
+  interactiveBgMutedColor?: string;
 }
 
 export interface BrandTypography {
@@ -169,7 +321,8 @@ export interface BrandSurfaces {
    * new static themes and DB payloads must not author this field.
    */
   materials?: SemanticSurfaceRoleMap;
-  borderRadius?: Partial<Record<"sm" | "md" | "lg" | "xl", string>>;
+  /** `full` is the pill/circle radius, not a fifth step of the scale. */
+  borderRadius?: Partial<Record<"sm" | "md" | "lg" | "xl" | "full", string>>;
   shadows?: Partial<Record<"sm" | "md" | "lg" | "xl", string>>;
   glass?: TenantGlassTokens;
   gradients?: TenantGradientTokens;
@@ -283,6 +436,12 @@ export interface BrandSidebarChrome {
   groupFontWeight?: string | number;
   groupColor?: string;
   groupLetterSpacing?: string;
+  /** Space above a group label, separating it from the group before it. */
+  groupMarginTop?: string;
+  /** Space below a group label, before its first item. */
+  groupMarginBottom?: string;
+  /** Inner space above a group label. */
+  groupPaddingTop?: string;
   itemFontSize?: string;
   itemFontWeight?: string | number;
   itemFontWeightActive?: string | number;
@@ -291,6 +450,8 @@ export interface BrandSidebarChrome {
   itemBgActive?: string;
   itemBgHover?: string;
   itemPadding?: string;
+  /** Extra leading inset for nested items. */
+  itemIndent?: string;
   iconSize?: string;
   footerBg?: string;
 }
@@ -1682,6 +1843,29 @@ export interface CompiledBrand {
   engineBridge: Partial<Record<EngineName, Record<string, unknown>>>;
   /** Validated recipe-profile id (DS-S001); absent when none or invalid. */
   recipeProfile?: string;
+  /**
+   * Declared default mode, emitted as `color-scheme` on the base block. Kept
+   * off `cssVariables` because it is a real CSS property, not a custom one:
+   * that map is injected as inline custom properties and merged into
+   * mode-specific blocks where a default-mode value would be a contradiction.
+   */
+  colorScheme?: "light" | "dark";
+  /**
+   * One entry per authored `BrandTheme.modes` overlay: the channels whose
+   * value differs from the base block, and nothing else. The base block still
+   * supplies every channel the mode does not restate, so a `var()` chain
+   * authored once re-resolves against the mode's own ground.
+   */
+  modeBlocks?: readonly CompiledBrandModeBlock[];
+}
+
+/** A non-default mode's compiled delta over the base block. */
+export interface CompiledBrandModeBlock {
+  mode: BrandThemeMode;
+  /** Only the channels this mode changes. */
+  cssVariables: Record<string, string>;
+  /** Always the block's own mode. */
+  colorScheme: BrandThemeMode;
 }
 
 /**

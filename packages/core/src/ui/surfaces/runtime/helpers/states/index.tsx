@@ -44,7 +44,7 @@ export function SurfaceLoadingState({
       <Card.Body className="ds-loading-state__body">
         <Stack data-part="content" spacing="md">
           <Stack data-part="copy" spacing="xs">
-            <Text data-part="title" style={{ fontWeight: 700 }}>
+            <Text data-part="title">
               {title ?? tSurface('states.loading_title')}
             </Text>
             <Text data-part="description">
@@ -123,7 +123,7 @@ export function SurfaceErrorState({
     <Card className="ds-surface ds-error-state" variant="outlined">
       <Card.Body className="ds-error-state__body">
         <Stack data-part="content" spacing="md">
-          <Text data-part="title" style={{ fontWeight: 700 }}>
+          <Text data-part="title">
             {title ?? tSurface('states.error_title')}
           </Text>
           <Alert
@@ -153,9 +153,11 @@ export interface SurfaceCapabilityAnatomyProps {
 /** Responsive, data-independent inventory shown beside a failed surface load. */
 export function SurfaceCapabilityAnatomy({
   capabilities,
-  label = 'Available when data recovers',
-  ariaLabel = 'Registered surface capabilities',
+  label,
+  ariaLabel,
 }: SurfaceCapabilityAnatomyProps): React.ReactElement | null {
+  const { tSurface } = useSurfaceTranslations();
+
   if (capabilities.length === 0) return null;
 
   return (
@@ -163,25 +165,18 @@ export function SurfaceCapabilityAnatomy({
       className="ds-surface ds-capability-anatomy"
       data-part="capability-anatomy"
       data-capability-count={capabilities.length}
-      aria-label={ariaLabel}
-      style={{ display: 'grid', gap: 'var(--ds-spacing-2, 8px)' }}
+      aria-label={ariaLabel ?? tSurface('states.capability_aria')}
     >
       <Text
         data-part="capability-anatomy-label"
         size="xs"
         color="muted"
-        style={{ fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' }}
       >
-        {label}
+        {label ?? tSurface('states.capability_label')}
       </Text>
       <Box
         role="list"
         data-part="capability-list"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 132px), 1fr))',
-          gap: 'var(--ds-spacing-2, 8px)',
-        }}
       >
         {capabilities.map((capability) => (
           <Box
@@ -191,13 +186,8 @@ export function SurfaceCapabilityAnatomy({
             data-capability-kind={capability.kind}
             data-capability-id={capability.id}
             data-disabled={capability.disabled ? 'true' : undefined}
-            style={{
-              minWidth: 0,
-              padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)',
-              opacity: capability.disabled ? 0.5 : 0.72,
-            }}
           >
-            <Text size="sm" style={{ fontWeight: 650 }}>
+            <Text size="sm" data-part="capability-label">
               {capability.label ?? capability.id}
             </Text>
           </Box>

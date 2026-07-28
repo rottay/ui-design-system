@@ -34,6 +34,7 @@ import {
 import { Box, Button, Flex, Text } from '../../../primitives';
 import { Portal } from '../../../primitives/runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../primitives/runtime/overlay/portal-scope';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { ExportColumn } from './runtime/file-export';
 import {
   copyToClipboard,
@@ -71,14 +72,18 @@ export interface ExportButtonProps<T = unknown> {
 // ---------------------------------------------------------------------------
 
 interface FormatMeta {
-  label: string;
   icon: ReactNode;
 }
 
+/**
+ * Icons are static; the labels resolve through the i18n catalog inside the
+ * component (English floor per format) so the module-level map stays
+ * render-context free.
+ */
 const FORMAT_META: Record<string, FormatMeta> = {
-  csv: { label: 'Export as CSV', icon: <FileDown size={15} /> },
-  json: { label: 'Export as JSON', icon: <Braces size={15} /> },
-  clipboard: { label: 'Copy to clipboard', icon: <ClipboardCopy size={15} /> },
+  csv: { icon: <FileDown size={15} /> },
+  json: { icon: <Braces size={15} /> },
+  clipboard: { icon: <ClipboardCopy size={15} /> },
 };
 
 // ---------------------------------------------------------------------------
@@ -97,6 +102,23 @@ export function ExportButton<T = unknown>({
 }: ExportButtonProps<T>) {
   const [open, setOpen] = useState(false);
   const [copiedFeedback, setCopiedFeedback] = useState(false);
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Catalog lookup with an honest English floor: when the provider is absent
+   * or echoes the raw key (missing entry), the historical default wins.
+   */
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (resolved === undefined || resolved === key || resolved === `components.${key}`) {
+      return fallback;
+    }
+    return resolved;
+  };
+  const formatLabels: Record<string, string> = {
+    csv: tOr('exportButton.formatCsv', 'Export as CSV'),
+    json: tOr('exportButton.formatJson', 'Export as JSON'),
+    clipboard: tOr('exportButton.formatClipboard', 'Copy to clipboard'),
+  };
   const triggerRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null);
@@ -256,7 +278,7 @@ export function ExportButton<T = unknown>({
           onClick={() => setOpen((prev) => !prev)}
           aria-haspopup="menu"
           aria-expanded={open}
-          aria-label="Export data"
+          aria-label={tOr('exportButton.triggerLabel', 'Export data')}
           style={{
             height: buttonHeight,
             padding: buttonPadding,
@@ -273,13 +295,12 @@ export function ExportButton<T = unknown>({
           <Box
             data-part="toast"
             data-copied={true}
+            role="status"
             style={{
               position: 'absolute',
               top: -32,
               left: '50%',
               padding: '4px 10px',
-              fontSize: 12,
-              fontWeight: 600,
               whiteSpace: 'nowrap',
               pointerEvents: 'none',
               zIndex: 9999,
@@ -287,8 +308,8 @@ export function ExportButton<T = unknown>({
           >
             <Flex gap={1} style={{ alignItems: 'center' }}>
               <Check size={12} />
-              <Text data-part="toast-label" style={{ fontSize: 12, fontWeight: 600 }}>
-                Copied!
+              <Text data-part="toast-label">
+                {tOr('exportButton.copied', 'Copied!')}
               </Text>
             </Flex>
           </Box>
@@ -309,7 +330,7 @@ export function ExportButton<T = unknown>({
             className="ds-structure ds-export-button-panel"
             ref={dropdownRef}
             role="menu"
-            aria-label="Export formats"
+            aria-label={tOr('exportButton.panelLabel', 'Export formats')}
             onKeyDown={handleDropdownKeyDown}
             style={{
               position: 'fixed',
@@ -338,10 +359,7 @@ export function ExportButton<T = unknown>({
                     gap: 10,
                     width: '100%',
                     padding: '8px 12px',
-                    fontSize: 13,
-                    fontWeight: 500,
                     cursor: 'pointer',
-                    transition: 'background 120ms ease',
                   }}
                 >
                   <Flex
@@ -358,12 +376,8 @@ export function ExportButton<T = unknown>({
                   </Flex>
                   <Text
                     data-part="menu-label"
-                    style={{
-                      fontSize: 13,
-                      fontWeight: 500,
-                    }}
                   >
-                    {meta.label}
+                    {formatLabels[fmt] ?? fmt}
                   </Text>
                 </Box>
               );

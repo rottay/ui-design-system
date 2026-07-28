@@ -20,13 +20,17 @@
  * border-radius) beats preflight while unlayered at (0,3,0).
  *
  * Interaction paint that the removed React hover/focus state used to own now lives
- * here as `:hover, :focus` rules. The skeleton blocks share one `data-part` but
- * differ in radius, so each block carries its radius on an inline
- * `--ds-cockpit-header-skeleton-radius` custom property (uncounted); the uniform
- * pulse background lives here. The `animation: ds-foundation-pulse` reference to
- * the global keyframe stays inline (sanctioned residual).
+ * here as `:hover, :focus` rules.
  *
- * Values are transcribed verbatim from `engines/modern.tsx`.
+ * OWNERSHIP (R2+R3): the engine stamps anatomy + state only; this file owns
+ * 100% of layout and paint — typography, sticky positioning, compact padding,
+ * skeleton geometry and the pulse animation included. The skeleton blocks
+ * share one `data-part` but differ in geometry, so each block carries a
+ * `data-size` attribute (skin-owned geometry) and, where it deviates from the
+ * default, its radius on the sanctioned inline
+ * `--ds-cockpit-header-skeleton-radius` custom-property data channel
+ * (uncounted). The only remaining inline style in the engine is the caller's
+ * own `style` prop on the root.
  */
 
 /* ---- root: card surface + bottom border (both loading and main roots) ---- */
@@ -55,14 +59,26 @@
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
     var(--ds-workspace-card-shadow, var(--ds-elevation-1));
-  transition:
-    background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
-  animation: ds-cockpit-header-arrive var(--ds-motion-calm, 220ms)
+  animation: ds-cockpit-header-arrive var(--ds-motion-calm)
     var(--ds-motion-ease-out, ease-out) both;
   container-type: inline-size;
   container-name: ds-cockpit-header;
+  /* Layout migrated from the engine (R2+R3): full padding, with the compact
+     and sticky variants keyed on the engine's data hooks below. */
+  padding: var(--ds-cockpit-header-padding);
+  transition:
+    background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    padding var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
+}
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-compact='true'] {
+  padding: var(--ds-cockpit-header-padding-compact);
+}
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky='true'] {
+  position: sticky;
+  top: 0;
+  z-index: var(--ds-cockpit-header-sticky-z, 100);
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border-subtle));
@@ -135,7 +151,7 @@
   margin-bottom: 4px;
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-family-mono, ui-monospace, monospace);
-  font-size: 10px;
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-weight: var(--ds-font-weight-semibold, 600);
   letter-spacing: 0.11em;
   line-height: 1.2;
@@ -216,6 +232,184 @@
   background: var(--ds-color-neutral-100);
 }
 
+/* ---- breadcrumb nav + crumb layout/typography (migrated from the engine,
+        R2+R3). Colors stay below; these own the frame and the type. ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  margin-block-end: var(--ds-cockpit-header-item-gap);
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-body);
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'] {
+  font-weight: 500;
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
+  cursor: pointer;
+  text-decoration: none;
+  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-last='true'] {
+  font-weight: 600;
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='separator'] {
+  font-size: var(--ds-font-size-xs);
+  opacity: 0.7;
+  user-select: none;
+}
+
+/* ---- main row clusters (migrated from the engine, R2+R3) ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='main-row'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-cockpit-header-section-gap);
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='lead'] {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--ds-cockpit-header-item-gap);
+  min-width: 0;
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='titles'] {
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='title-row'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-cockpit-header-item-gap);
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='status-list'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='actions'] {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--ds-cockpit-header-action-gap);
+}
+
+/* ---- back button wrapper (migrated from the engine, R2+R3) ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'] {
+  display: contents;
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'] > .rottay-button {
+  flex-shrink: 0;
+}
+
+/* ---- title / subtitle typography (migrated from the engine, R2+R3); the
+        compact size follows the root's data-compact hook. ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='title'] {
+  margin: 0;
+  font-size: var(--ds-font-size-2xl);
+  font-weight: var(--ds-font-weight-bold);
+  letter-spacing: var(--ds-letter-spacing-heading);
+  line-height: var(--ds-line-height-heading);
+  text-wrap: balance;
+  transition: font-size var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-compact='true'] [data-part='title'] {
+  font-size: var(--ds-font-size-lg);
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='subtitle'] {
+  margin: 4px 0 0;
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-body);
+  text-wrap: pretty;
+}
+
+/* ---- status pill typography (migrated from the engine, R2+R3) ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='status'] {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--ds-badge-padding-y, 0) var(--ds-badge-padding-x, 0.375rem);
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: 0.01em;
+  line-height: var(--ds-line-height-body);
+  white-space: nowrap;
+}
+
+/* ---- loading skeleton: cluster layout + per-block geometry (migrated from
+        the engine, R2+R3). `data-size` is the skin-owned geometry hook; the
+        pulse animation lives here now. ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-stack'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-cockpit-header-item-gap);
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-row'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-cockpit-header-section-gap);
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-lead'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-cockpit-header-item-gap);
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-column'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2, 8px);
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton-actions'] {
+  display: flex;
+  gap: var(--ds-cockpit-header-action-gap);
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'] {
+  animation: ds-foundation-pulse 1.5s ease-in-out infinite;
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='crumb'] {
+  width: 160px;
+  height: 12px;
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='icon'] {
+  width: 34px;
+  height: 34px;
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='title'] {
+  width: 260px;
+  height: 24px;
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='subtitle'] {
+  width: 180px;
+  height: 14px;
+}
+
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='action'] {
+  width: 80px;
+  height: 34px;
+}
+
 @container ds-cockpit-header (max-width: 640px) {
   .ds-pattern-cockpit-header.ds-engine-modern [data-part='main-row'] {
     align-items: stretch;
@@ -267,7 +461,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'],
-  .ds-pattern-cockpit-header.ds-engine-modern [data-part='header-icon'] {
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='header-icon'],
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='title'],
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'] {
     animation: none;
     transition: none;
   }

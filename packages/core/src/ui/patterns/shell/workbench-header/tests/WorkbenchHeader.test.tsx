@@ -206,4 +206,91 @@ describe('PatternWorkbenchHeader (modern engine)', () => {
     fireEvent.click(alertsTab);
     expect(onViewChange).toHaveBeenCalledWith('v2');
   });
+
+  it('names the saved-views tablist with the i18n English floor', async () => {
+    renderSurface(
+      <PatternWorkbenchHeader
+        title="Modern Hub"
+        savedViews={[{ id: 'v1', label: 'Overview' }]}
+        activeViewId="v1"
+        onViewChange={vi.fn()}
+      />,
+      { engine: 'modern' },
+    );
+    expect(await screen.findByRole('tablist', { name: 'Saved views' })).toBeInTheDocument();
+  });
+
+  it('marks the active saved view with aria-selected and data-active', async () => {
+    renderSurface(
+      <PatternWorkbenchHeader
+        title="Modern Hub"
+        savedViews={[
+          { id: 'v1', label: 'Overview' },
+          { id: 'v2', label: 'Alerts' },
+        ]}
+        activeViewId="v2"
+        onViewChange={vi.fn()}
+      />,
+      { engine: 'modern' },
+    );
+
+    const alerts = (await screen.findByText('Alerts')).closest('[data-part="tab"]') as HTMLElement;
+    expect(alerts).toHaveAttribute('aria-selected', 'true');
+    expect(alerts).toHaveAttribute('data-active', 'true');
+
+    const overview = screen.getByText('Overview').closest('[data-part="tab"]') as HTMLElement;
+    expect(overview).toHaveAttribute('aria-selected', 'false');
+    expect(overview).toHaveAttribute('data-active', 'false');
+  });
+
+  it('paints nothing inline on its own parts — the skin owns layout and paint', async () => {
+    const { container } = renderSurface(
+      <PatternWorkbenchHeader
+        eyebrow="Intel"
+        title="Modern Hub"
+        subtitle="Briefing"
+        exceptionCount={3}
+        quickActions={[{ label: 'New Event', onClick: () => {}, variant: 'primary' }]}
+        savedViews={[{ id: 'v1', label: 'Overview' }]}
+        activeViewId="v1"
+        onViewChange={vi.fn()}
+      />,
+      { engine: 'modern' },
+    );
+    await screen.findByText('Modern Hub');
+
+    // Every data-part element the workbench engine renders must carry zero
+    // inline style (consumer primitives like the quick-action Buttons are
+    // another family's scope). The root keeps only the caller's `style`
+    // prop — not passed here.
+    for (const el of container.querySelectorAll('[data-part]')) {
+      const htmlEl = el as HTMLElement;
+      for (const prop of Array.from(htmlEl.style)) {
+        expect(
+          prop.startsWith('--'),
+          `${htmlEl.tagName}[data-part="${htmlEl.getAttribute('data-part')}"] carries inline "${prop}"`,
+        ).toBe(true);
+      }
+    }
+  });
+
+  it('renders the loading skeleton with skin-owned geometry hooks', async () => {
+    const { container } = renderSurface(
+      <PatternWorkbenchHeader title="Modern Hub" loading />,
+      { engine: 'modern' },
+    );
+
+    const root = container.querySelector('[data-part="root"]') as HTMLElement;
+    expect(root).toHaveAttribute('data-loading', 'true');
+
+    const skeletons = container.querySelectorAll('[data-part="skeleton"]');
+    expect(skeletons.length).toBeGreaterThanOrEqual(5);
+    for (const el of skeletons) {
+      expect((el as HTMLElement).getAttribute('data-size')).toBeTruthy();
+      // Only the sanctioned custom-property data channel may be inline.
+      expect((el as HTMLElement).style.width).toBe('');
+      expect((el as HTMLElement).style.height).toBe('');
+      expect((el as HTMLElement).style.animation).toBe('');
+    }
+  });
 });

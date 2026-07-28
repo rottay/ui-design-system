@@ -25,6 +25,9 @@
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
   border-radius: 20px;
   box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
+  /* shared keyframes defined once in edit-header.css (this file already
+     depends on it for the archetype gradients + icon-badge tone) */
+  animation: ds-header-enter var(--ds-motion-calm) var(--ds-motion-ease-out, ease-out) both;
 }
 .ds-structure.ds-form-header[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-color-border-secondary);
@@ -82,4 +85,12 @@
 }
 .ds-structure.ds-form-header [data-part='context-card'][data-part='context-card'] {
   border: 1px solid var(--ds-color-border-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-form-header[data-part='root'],
+  .ds-structure.ds-form-header [data-part='back-button'] {
+    animation: none;
+    transition: none;
+  }
 }

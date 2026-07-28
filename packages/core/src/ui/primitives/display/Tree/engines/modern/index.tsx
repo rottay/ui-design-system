@@ -50,6 +50,16 @@ import {
 } from '../../runtime/tree-behavior';
 
 // ---------------------------------------------------------------------------
+// Reading-direction probe (Segmented engine idiom): the nearest explicit
+// `dir` wins; otherwise the document direction applies.
+// ---------------------------------------------------------------------------
+function isRtlContext(el: HTMLElement): boolean {
+  const scoped = el.closest('[dir]');
+  if (scoped) return scoped.getAttribute('dir') === 'rtl';
+  return document.documentElement.dir === 'rtl';
+}
+
+// ---------------------------------------------------------------------------
 // Highlight helper
 // ---------------------------------------------------------------------------
 
@@ -78,8 +88,8 @@ function highlightText(text: React.ReactNode, searchValue: string): React.ReactN
 // ---------------------------------------------------------------------------
 
 const LoadingSpinner: React.FC = () => (
-  <span className="inline-block w-4 h-4 mr-1 flex-shrink-0 animate-spin">
-    <svg viewBox="0 0 16 16" fill="none" className="w-full h-full">
+  <span data-part="loading" aria-hidden="true">
+    <svg viewBox="0 0 16 16" fill="none">
       <circle
         cx="8"
         cy="8"
@@ -324,36 +334,14 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         <DropIndicator position={dropPosition} level={level} />
       )}
 
-      {/* Node content */}
-      {/* Node row classes use DaisyUI color utilities with opacity modifiers.
-          The border-l-2 accent appears on hover (30% opacity) and selected (full),
-          providing a progressive disclosure of the selection state. */}
+      {/* Node content: the skin owns every painted pixel (layout, hover,
+          selected frame, focus rings, drop ring) keyed on the data hooks --
+          the Tailwind utilities and the imperative --tw-ring-color writes are
+          drained. The selected row never carries a left accent rail (product
+          law; the skin's framed-surface treatment replaced it). */}
       <div
-        className={[
-          'flex items-center py-1 px-2 rounded cursor-pointer',
-          'transition-all duration-200 relative',
-          isSelected ? 'border-l-2 font-medium' : '',
-          disabled ? 'opacity-50 cursor-not-allowed' : '',
-          isFocused ? 'ring-2 ring-offset-1 rounded' : '',
-          blockNode ? 'w-full' : 'inline-flex',
-          // "inside" drop target uses ring-inset so the indicator does not
-          // overlap adjacent nodes (ring-2 alone would extend outward).
-          isDropTarget && dropPosition === 'inside' ? 'ring-2 ring-inset' : '',
-        ]
-          .filter(Boolean)
-          .join(' ')}
         style={{
           paddingInlineStart,
-          ...(isFocused
-            ? ({
-                '--tw-ring-color': 'color-mix(in srgb, var(--ds-color-primary) 30%, transparent)',
-              } as React.CSSProperties)
-            : {}),
-          ...(isDropTarget && dropPosition === 'inside'
-            ? ({
-                '--tw-ring-color': 'var(--ds-color-primary)',
-              } as React.CSSProperties)
-            : {}),
         }}
         onClick={handleClick}
         role="treeitem"
@@ -402,9 +390,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
             aria-label={isExpanded ? collapseLabel : expandLabel}
             tabIndex={-1}
           >
-            <span
-              className={['inline-block transition-transform duration-200', isExpanded ? 'rotate-90' : ''].join(' ')}
-            >
+            <span>
               <svg
                 width="var(--ds-tree-icon-size, 12px)"
                 height="var(--ds-tree-icon-size, 12px)"
@@ -448,7 +434,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         {/* Title */}
         <span
           data-part="tree-node-label"
-          className={['truncate', !isFiltered && filteredKeys ? 'opacity-40' : ''].join(' ')}
+          data-filtered-out={!isFiltered && filteredKeys ? 'true' : undefined}
         >
           {displayTitle}
         </span>
@@ -516,15 +502,15 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
 // ---------------------------------------------------------------------------
 
 /**
- * Modern Tree engine backed by DaisyUI/Tailwind.
+ * Modern Tree engine -- semantic markup painted by the modern skin.
  *
  * Manages expand, select, check, drag-and-drop, async loading, search/filter,
- * and keyboard navigation state. Renders tree nodes recursively via
- * `TreeNodeInternal`. Supports both controlled and uncontrolled modes for
- * expandedKeys, selectedKeys, and checkedKeys.
+ * and keyboard navigation state (arrows mirror in RTL). Renders tree nodes
+ * recursively via `TreeNodeInternal`. Supports both controlled and
+ * uncontrolled modes for expandedKeys, selectedKeys, and checkedKeys.
  *
  * @param props - Unified DS TreeProps (see Tree.types.ts)
- * @returns A DaisyUI-styled tree with role="tree" ARIA semantics
+ * @returns A skin-painted tree with role="tree" ARIA semantics
  */
 export default function ModernTree(props: TreeProps): React.ReactElement {
   const {
@@ -820,7 +806,17 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
       const currentIndex = visibleKeys.indexOf(anchorKey);
       if (currentIndex === -1) return;
 
-      switch (e.key) {
+      // Expand/collapse arrows mirror in RTL (the Segmented engine's idiom):
+      // in a right-to-left tree ArrowLeft expands and ArrowRight collapses.
+      const rtl = isRtlContext(e.currentTarget as HTMLElement);
+      const directionalKey =
+        rtl && e.key === 'ArrowRight'
+          ? 'ArrowLeft'
+          : rtl && e.key === 'ArrowLeft'
+          ? 'ArrowRight'
+          : e.key;
+
+      switch (directionalKey) {
         case 'ArrowDown': {
           e.preventDefault();
           if (currentIndex < visibleKeys.length - 1) {
@@ -906,6 +902,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
       ref={treeContainerRef}
       className={`rottay-tree rottay-tree--modern ${className}`}
       data-part="root"
+      data-block-node={blockNode || undefined}
       style={style}
       role="tree"
       aria-multiselectable={props.multiple || false}

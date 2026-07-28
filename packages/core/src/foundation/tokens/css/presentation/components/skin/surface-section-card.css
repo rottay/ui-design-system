@@ -1,5 +1,6 @@
 /**
- * SurfaceSectionCard skin (WO-SKIN-06 / CK-I). Engine-agnostic.
+ * SurfaceSectionCard skin (WO-SKIN-06 / CK-I; R2+R3 quiet-premium pass).
+ * Engine-agnostic.
  *
  * DELIBERATELY UNLAYERED. Every tenant layer sorts before Tailwind preflight;
  * an unlayered skin keeps component paint above that reset while leaving
@@ -9,6 +10,14 @@
  * surface passes through. The optional header is a reusable piece of anatomy:
  * context, semantic icon, title/copy and actions. Every paint channel resolves
  * through tenant variables; consumers only provide content.
+ *
+ * R2+R3 craft decisions:
+ * - The section card is NOT interactive: no hover sweep on the header and no
+ *   icon lift. A reactive gradient on a static wrapper is noise, not craft.
+ * - The header keeps one quiet gradient (it separates chrome from content);
+ *   the icon well is a hairline tile with no bloom shadow.
+ * - Logical properties throughout (RTL-safe); every literal that was baked in
+ *   (icon size, header min-height, tracking) is now a tenant channel.
  */
 
 .ds-surface.ds-section-card[data-part='root'] {
@@ -23,74 +32,55 @@
 }
 
 .ds-surface.ds-section-card > .ds-section-card__body[data-part='body'] {
-  min-width: 0;
+  min-inline-size: 0;
 }
 
 .ds-surface.ds-section-card [data-part='content'] {
-  min-width: 0;
+  min-inline-size: 0;
 }
 
 .ds-surface.ds-section-card [data-part='header'] {
   position: relative;
   z-index: 1;
-  min-width: 0;
-  min-height: 68px;
+  min-inline-size: 0;
+  min-block-size: var(--ds-section-card-header-min-height, 68px);
   padding: var(--ds-card-header-padding, var(--ds-spacing-4, 16px));
-  border-bottom: 1px solid
+  border-block-end: 1px solid
     var(--ds-card-header-border, var(--ds-surface-card-border));
   background: var(
     --ds-card-header-bg,
     linear-gradient(
       112deg,
-      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card-bg)),
-      var(--ds-surface-card-bg) 56%,
-      color-mix(in srgb, var(--ds-surface-panel-bg) 72%, var(--ds-surface-card-bg))
+      color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card-bg)),
+      var(--ds-surface-card-bg) 62%
     )
   );
-  background-position: 0% 50%;
-  background-size: 180% 180%;
   box-shadow: inset 0 1px 0
     color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
-  transition:
-    background-position var(--ds-motion-slow, 320ms)
-      var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast)
-      var(--ds-motion-ease-out, ease-out);
-}
-
-.ds-surface.ds-section-card:hover [data-part='header'] {
-  background-position: 100% 50%;
 }
 
 .ds-surface.ds-section-card [data-part='header-main'] {
   flex: 1 1 auto;
-  min-width: 0;
+  min-inline-size: 0;
 }
 
 .ds-surface.ds-section-card [data-part='header-icon'] {
   display: inline-grid;
   flex: 0 0 auto;
-  width: 38px;
-  height: 38px;
+  inline-size: var(--ds-section-card-icon-size, 38px);
+  block-size: var(--ds-section-card-icon-size, 38px);
   place-items: center;
   border: 1px solid
     var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
   border-radius: var(--ds-radius-lg, 11px);
   background: var(--ds-workspace-card-icon-bg, var(--ds-surface-card-bg));
   color: var(--ds-workspace-card-icon-color, var(--ds-color-primary));
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
-    0 6px 16px -11px color-mix(in srgb, var(--ds-color-primary) 52%, transparent);
-  transition: transform var(--ds-motion-fast)
-    var(--ds-motion-ease-out, ease-out);
-}
-
-.ds-surface.ds-section-card:hover [data-part='header-icon'] {
-  transform: translateY(-1px) scale(1.025);
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
 }
 
 .ds-surface.ds-section-card [data-part='header-copy'] {
-  min-width: 0;
+  min-inline-size: 0;
 }
 
 .ds-surface.ds-section-card
@@ -99,7 +89,7 @@
   font-family: var(--ds-font-family-mono, ui-monospace, monospace);
   font-size: var(--ds-text-eyebrow-size, var(--ds-font-size-xs));
   font-weight: var(--ds-font-weight-semibold, 600);
-  letter-spacing: 0.11em;
+  letter-spacing: var(--ds-section-card-eyebrow-tracking, 0.11em);
   line-height: 1.25;
   text-transform: uppercase;
 }
@@ -110,7 +100,7 @@
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-card-title-font-size, var(--ds-font-size-lg, 16px));
   font-weight: var(--ds-card-title-font-weight, var(--ds-font-weight-semibold, 600));
-  letter-spacing: -0.02em;
+  letter-spacing: var(--ds-card-title-letter-spacing, var(--ds-letter-spacing-heading));
   line-height: 1.25;
   text-wrap: balance;
 }
@@ -130,7 +120,7 @@
 }
 
 .ds-surface.ds-section-card [data-part='section-content'] {
-  min-width: 0;
+  min-inline-size: 0;
   padding: var(--ds-card-body-padding, var(--ds-spacing-5, 20px));
 }
 
@@ -146,13 +136,6 @@
 
   .ds-surface.ds-section-card [data-part='header-actions'],
   .ds-surface.ds-section-card [data-part='header-actions'] > * {
-    width: 100%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ds-surface.ds-section-card [data-part='header'],
-  .ds-surface.ds-section-card [data-part='header-icon'] {
-    transition: none;
+    inline-size: 100%;
   }
 }

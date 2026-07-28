@@ -65,16 +65,12 @@ import type {
 } from "../../contracts";
 import { useBreakpoints } from "@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state";
 import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
-import { searchInputStyle } from "../../foundation/tokens";
 
 // ============================================================================
 // DESIGN TOKENS (local aliases for readability)
 // ============================================================================
 
 const COMPACT_CONTAINER_MAX = 1080;
-
-const CONTROL_SIZE = "var(--ds-button-sm-height, 2rem)";
-const CONTROL_FONT_SIZE = "var(--ds-button-sm-font-size, 0.8125rem)";
 
 const DEFAULT_MESSAGES: ListToolbarMessages = {
   compact: "Compact",
@@ -904,14 +900,6 @@ export default function ModernListToolbar({
                   <FilterCountBadge count={activeFilterCount} />
                 ) : undefined
               }
-              style={searchInputStyle({
-                /* Same control height and type size as every other toolbar
-                   control (W10: the 2.5rem md-input default made the mobile
-                   search visibly taller than its sibling pills/buttons). The
-                   coarse-pointer skin floor still raises it for touch. */
-                height: CONTROL_SIZE,
-                fontSize: CONTROL_FONT_SIZE,
-              })}
             />
           </Box>
 
@@ -997,10 +985,6 @@ export default function ModernListToolbar({
                   <FilterCountBadge count={activeFilterCount} />
                 ) : undefined
               }
-              style={searchInputStyle({
-                height: CONTROL_SIZE,
-                fontSize: CONTROL_FONT_SIZE,
-              })}
             />
           </Box>
 

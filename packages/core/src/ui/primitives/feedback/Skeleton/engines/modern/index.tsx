@@ -1,29 +1,29 @@
 /**
  * @fileoverview Skeleton Modern Engine - Rottay Design System
- * @description DaisyUI/Tailwind implementation of the Skeleton component.
- * A lightweight, utility-first alternative to the Classic engine.
+ * @description Token-driven skeleton: the unlayered modern skin
+ * (`skin/skeleton.css`) owns the flat/shimmer fills, the canon animation
+ * wiring, all layout and the line/title geometry. No DaisyUI `skeleton`
+ * class remains (drained in the TASK S canon-shimmer pass).
  *
  * @remarks
  * **Engine Overview:**
- * Modern is the utility-first engine built on DaisyUI and Tailwind CSS.
- * It provides a smaller bundle size compared to Classic while maintaining
- * core skeleton functionality.
+ * Modern renders placeholder blocks whose every visual decision — fill,
+ * radius, cadence, rhythm — resolves through governed tokens, so tenant
+ * density, motion and surface personality retune the skeleton like any
+ * other family.
  *
  * **Key Features:**
- * - Utility-first styling with Tailwind
- * - Smaller bundle size than Ant Design
- * - DaisyUI skeleton class
- * - Custom shape handling
- *
- * **When to Use Modern:**
- * - Projects using Tailwind CSS
- * - When bundle size is a concern
- * - Landing pages and marketing sites
- * - When DaisyUI theme is preferred
+ * - Canon keyframe set (ds-skeleton-pulse/shimmer/wave) selected through
+ *   `--ds-skeleton-animation-name`
+ * - Cadence rides `--ds-skeleton-animation-duration`
+ * - Skin-owned anatomy: shape variants, avatar, title/line rhythm
+ * - Global reduced-motion guard pins every canon animation to its final
+ *   frame (personality.css wildcard, OS media query + data-ds-motion)
  *
  * **Multi-Tenant Theming:**
- * Modern uses DaisyUI's color system with CSS custom properties.
- * Tenant themes can override the skeleton background via DaisyUI tokens.
+ * The tenant background, highlight and cadence arrive through
+ * `--ds-skeleton-*` channels; the personality `skeletonStyle` chooses
+ * pulse vs wave and the engine maps it onto the canon animation name.
  *
  * **Size Handling:**
  * | Size | Implementation |
@@ -38,19 +38,6 @@
  * <Skeleton engine="modern" active avatar paragraph />
  * ```
  *
- * @example Global Engine Configuration
- * ```tsx
- * import { EngineProvider, Skeleton } from '@rottay/design-system';
- *
- * <EngineProvider engine="modern">
- *   <App>
- *     <Skeleton active avatar paragraph>
- *       All skeletons use Modern engine
- *     </Skeleton>
- *   </App>
- * </EngineProvider>
- * ```
- *
  * @example Variant Shapes
  * ```tsx
  * <Skeleton engine="modern" variant="circular" width={48} height={48} />
@@ -58,9 +45,6 @@
  * ```
  *
  * @see {@link SkeletonProps} - Component props interface
- * @see {@link ClassicSkeleton} - Ant Design alternative
- * @see {@link RusticSkeleton} - Vanilla alternative
- * @see {@link https://daisyui.com/components/skeleton} - DaisyUI Skeleton docs
  * @module Skeleton/Engines/Modern
  * @category Feedback
  * @package @rottay/design-system
@@ -187,6 +171,9 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
         data-part="root"
         data-animation={resolvedStyle}
         className={`rottay-skeleton rottay-skeleton--modern ${className}`}
+        // Purely decorative placeholder: hidden from AT; the busy state is
+        // announced by the region that owns the loading contract.
+        aria-hidden="true"
         style={{
           ...getSkeletonStyle(),
           '--ds-skeleton-shape-radius': variant === 'circular'
@@ -215,6 +202,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
     <div
       data-part="root"
       className={`rottay-skeleton-wrapper rottay-skeleton--modern ${className}`}
+      aria-hidden="true"
       style={{ ...style, '--ds-skeleton-animation-name': animationName } as React.CSSProperties}
     >
       {/* Avatar placeholder */}

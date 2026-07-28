@@ -1,0 +1,69 @@
+{
+ "bithire": {
+  "default": {
+   "added": [],
+   "dropped": [
+    "--ds-sidebar-group-border"
+   ],
+   "changed": []
+  },
+  "light": {
+   "added": [],
+   "dropped": [
+    "--ds-sidebar-group-border"
+   ],
+   "changed": []
+  },
+  "dark": {
+   "added": [],
+   "dropped": [
+    "--ds-sidebar-group-border"
+   ],
+   "changed": []
+  }
+ },
+ "evnto": {
+  "default": {
+   "added": [],
+   "dropped": [
+    "--ds-sidebar-group-border"
+   ],
+   "changed": []
+  },
+  "light": {
+   "added": [],
+   "dropped": [
+    "--ds-sidebar-group-border"
+   ],
+   "changed": []
+  },
+  "dark": {
+   "added": [],
+   "dropped": [],
+   "changed": []
+  }
+ },
+ "rottay": {
+  "default": {
+   "added": [],
+   "dropped": [
+    "--ds-sidebar-group-border"
+   ],
+   "changed": []
+  },
+  "light": {
+   "added": [],
+   "dropped": [
+    "--ds-sidebar-group-border"
+   ],
+   "changed": []
+  },
+  "dark": {
+   "added": [],
+   "dropped": [
+    "--ds-sidebar-group-border"
+   ],
+   "changed": []
+  }
+ }
+}

@@ -21,8 +21,9 @@
  * - The spotlight cutout is measured by `Tour/runtime/spotlight-rect`
  * - Spotlight uses box-shadow: 0 0 0 9999px for mask effect
  * - Step indicators/actions are skin-owned, keyed on data-part; close/prev/next
- *   copy uses the common locale (`close`/`previous`/`next`; `Finish` still
- *   lacks a key -- tracked in the family ficha)
+ *   copy uses the common locale (`close`/`previous`/`next`) and `Finish`
+ *   resolves through the same channel's `tOr` floor until its key lands
+ *   (tracked in the family ficha)
  *
  * @example Using Modern Engine
  * ```tsx
@@ -247,8 +248,9 @@ const ModernTourChrome = ({
             ))}
           </div>
 
-          {/* Buttons. `Finish` has no common-locale key yet (listed in the
-              family ficha); the literal ships until the key lands. */}
+          {/* Buttons. `Finish` resolves through the common channel with an
+              English floor until the locale key lands (family ficha); the
+              floor keeps the shipped label byte-identical. */}
           <div data-part="actions">
             {currentStep > 0 && (
               <button
@@ -266,7 +268,7 @@ const ModernTourChrome = ({
               data-action="next"
               onClick={onNext}
             >
-              {currentStep === steps.length - 1 ? 'Finish' : (translation?.t('next') ?? 'Next')}
+              {currentStep === steps.length - 1 ? (translation?.tOr('finish', 'Finish') ?? 'Finish') : (translation?.t('next') ?? 'Next')}
             </button>
           </div>
         </div>

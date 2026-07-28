@@ -24,6 +24,7 @@ import {
 } from '../../../../graphics/icons';
 import type { ReactNode } from 'react';
 
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { Box, Flex } from '../../../primitives';
 import type { CollectionViewMode } from '@/foundation/contracts/runtime/components/patterns/data';
 
@@ -92,6 +93,19 @@ export function ViewModeSwitcher({
   size = 'sm',
   className,
 }: ViewModeSwitcherProps) {
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Catalog lookup with an honest English floor: when the provider is absent
+   * or echoes the raw key (missing entry), the historical default wins.
+   */
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (resolved === undefined || resolved === key || resolved === `components.${key}`) {
+      return fallback;
+    }
+    return resolved;
+  };
+
   if (!modes.length) return null;
 
   const isSm = size === 'sm';
@@ -101,7 +115,7 @@ export function ViewModeSwitcher({
   return (
     <Box
       role="radiogroup"
-      aria-label="View mode"
+      aria-label={tOr('viewModeSwitcher.groupLabel', 'View mode')}
       data-part="root"
       className={`ds-structure ds-view-mode-switcher ${className ?? ''}`}
       style={{
@@ -162,9 +176,6 @@ export function ViewModeSwitcher({
               height: btnSize,
               padding: iconPad,
               cursor: isDisabled ? 'not-allowed' : 'pointer',
-              transition:
-                'background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease',
-              opacity: isDisabled ? 0.5 : 1,
             }}
           >
             <Flex

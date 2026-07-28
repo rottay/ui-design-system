@@ -110,7 +110,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='label'] {
-    transition-duration: 0.01ms;
+    transition: none;
   }
 }
 

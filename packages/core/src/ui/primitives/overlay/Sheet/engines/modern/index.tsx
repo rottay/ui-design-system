@@ -21,6 +21,8 @@ import { Portal } from '../../../../runtime/overlay/portal';
 import { FocusTrap } from '../../../../runtime/overlay/focus-management/focus-trap';
 import { useSheetOverlayRuntime } from '../../runtime/overlay-stack';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 // ============================================================================
 // Constants
@@ -44,36 +46,15 @@ const SIDE_PANEL_WIDTH = '380px';
 // Close Button (shared visual with Modal/Drawer)
 // ============================================================================
 
-function CloseButton({ onClick }: { onClick: () => void }) {
+function CloseButton({ onClick, label }: { onClick: () => void; label: string }) {
   return (
     <button
       type="button"
       data-part="close-button"
       onClick={onClick}
-      aria-label="Close"
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '32px',
-        height: '32px',
-        cursor: 'pointer',
-        flexShrink: 0,
-        transition: `background-color var(--ds-motion-fast) ${MOTION_EASING}`,
-      }}
+      aria-label={label}
     >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M18 6L6 18M6 6l12 12" />
-      </svg>
+      <ActionCloseIcon decorative size={16} />
     </button>
   );
 }
@@ -94,6 +75,9 @@ function CloseButton({ onClick }: { onClick: () => void }) {
  * empty fragment when closed so no DOM nodes remain in the tree.
  */
 export default function ModernSheet(props: SheetProps): React.ReactElement {
+  // Optional channel with an English floor: the sheet renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
   const {
     open,
     onOpenChange,
@@ -303,7 +287,8 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
             </div>
           )}
 
-          {/* Title area */}
+          {/* Title area. Typography lives in the modern Sheet skin; the
+              engine stamps parts only. */}
           {title && (
             <div
               data-part="header"
@@ -319,16 +304,13 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
                 id={titleId}
                 data-part="title"
                 style={{
-                  fontSize: '16px',
-                  fontWeight: 600,
-                  lineHeight: '24px',
                   flex: '1 1 auto',
                   minWidth: 0,
                 }}
               >
                 {title}
               </div>
-              <CloseButton onClick={handleClose} />
+              <CloseButton onClick={handleClose} label={i18n?.tOr('drawer.close', 'Close') ?? 'Close'} />
             </div>
           )}
 

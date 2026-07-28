@@ -47,6 +47,9 @@ import { ColorPicker } from '../../../../../primitives/inputs/ColorPicker';
 import type { Color } from '../../../../../primitives/inputs/ColorPicker/contracts';
 import { Slider } from '../../../../../primitives/inputs/Slider';
 import { Rate } from '../../../../../primitives/feedback/Rate';
+import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
+import ModernSteps from '../../../../../primitives/navigation/Steps/engines/modern';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /* ---------------------------------------------------------------------------
  * Shared inline-style constants (DS tokens) -- retained for read-only
@@ -67,7 +70,19 @@ function readRecordValue(value: unknown, key: PropertyKey): unknown {
   return Reflect.get(value, key);
 }
 
-/* Chevron icon for collapsible sections */
+/** Hook-local `tOr`: catalogue value with an English floor, never a raw key. */
+function useFormBuilderTranslation() {
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, fallback: string, params?: Record<string, string | number>): string => {
+    const resolved = i18n?.t(key, params);
+    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+    return resolved;
+  };
+  return { tOr };
+}
+
+/* Chevron icon for collapsible sections -- the rotation is state-selected in
+   the skin off `data-collapsed`; no inline transition (reduced-motion owns). */
 const ChevronIcon = ({ collapsed }: { collapsed: boolean }) => (
   <svg
     data-part="section-chevron"
@@ -76,10 +91,7 @@ const ChevronIcon = ({ collapsed }: { collapsed: boolean }) => (
     height="16"
     viewBox="0 0 16 16"
     fill="none"
-    style={{
-      flexShrink: 0,
-      transition: `transform var(--ds-motion-normal) var(--ds-motion-ease-out)`,
-    }}
+    style={{ flexShrink: 0 }}
   >
     <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
@@ -99,6 +111,7 @@ const ChevronIcon = ({ collapsed }: { collapsed: boolean }) => (
  * @returns A rendered `<form>` element using DS primitive components.
  */
 export default function ModernFormBuilder(props: FormBuilderProps) {
+  const { tOr } = useFormBuilderTranslation();
   const {
     fields,
     layout = 'vertical',
@@ -623,7 +636,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             height: 20,
             width: '40%',
             marginBottom: 8,
-            animation: 'ds-form-builder-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
+            /* shimmer animation is skin-owned (reduced-motion governs) */
           }}
         />
         {/* Description shimmer */}
@@ -633,7 +646,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             height: 14,
             width: '65%',
             marginBottom: 28,
-            animation: 'ds-form-builder-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
+            /* shimmer animation is skin-owned (reduced-motion governs) */
           }}
         />
         {/* Field shimmer rows */}
@@ -646,7 +659,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                 height: 14,
                 width: 100,
                 marginBottom: 8,
-                animation: 'ds-form-builder-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
+                /* shimmer animation is skin-owned (reduced-motion governs) */
               }}
             />
             <div
@@ -654,7 +667,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
               style={{
                 height: 40,
                 width: '100%',
-                animation: 'ds-form-builder-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
+                /* shimmer animation is skin-owned (reduced-motion governs) */
               }}
             />
           </div>
@@ -675,7 +688,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             style={{
               height: 36,
               width: 80,
-              animation: 'ds-form-builder-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
+              /* shimmer animation is skin-owned (reduced-motion governs) */
             }}
           />
           <div
@@ -683,7 +696,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             style={{
               height: 36,
               width: 100,
-              animation: 'ds-form-builder-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
+              /* shimmer animation is skin-owned (reduced-motion governs) */
             }}
           />
         </div>
@@ -798,12 +811,12 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           <>
             {content}
             {field.description && !error && (
-              <div data-part="field-description" style={{ fontSize: 12, lineHeight: '16px', marginTop: 4 }}>
+              <div data-part="field-description">
                 {field.description}
               </div>
             )}
             {error && (
-              <div data-part="field-error" style={{ fontSize: 12, lineHeight: '16px', marginTop: 4 }}>
+              <div data-part="field-error">
                 {error}
               </div>
             )}
@@ -870,126 +883,33 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     >
       {/* Title & description */}
       {(title || description) && (
-        <div style={{ marginBottom: 24 }}>
+        <div data-part="head">
           {title && (
-            <div
-              data-part="title"
-              style={{
-                fontSize: 18,
-                fontWeight: 600,
-                lineHeight: '26px',
-                letterSpacing: '-0.01em',
-              }}
-            >
+            <div data-part="title">
               {title}
             </div>
           )}
           {description && (
-            <div
-              data-part="description"
-              style={{
-                fontSize: 14,
-                lineHeight: '20px',
-                marginTop: 4,
-              }}
-            >
+            <div data-part="description">
               {description}
             </div>
           )}
         </div>
       )}
 
-      {/* Wizard step indicator */}
+      {/* Wizard step rail: the public Steps navigation primitive (single
+          paint owner; clickable steps render a real button trigger inside the
+          item -- keyboard-reachable by construction). */}
       {adaptedLayout === 'steps' && stepLabels && (
-        <div
-          data-part="step-list"
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: 0,
-            marginBottom: 32,
-          }}
-        >
-          {stepLabels.map((label, i) => {
-            const isActive = i === currentStep;
-            const isCompleted = i < currentStep;
-            return (
-              <React.Fragment key={i}>
-                {i > 0 && (
-                  <div
-                    data-part="step-connector"
-                    data-completed={isCompleted}
-                    style={{
-                      flex: 1,
-                      height: 2,
-                      marginTop: 15, // vertically center with 32px indicator
-                      transition: `background var(--ds-motion-normal) var(--ds-motion-ease-out)`,
-                    }}
-                  />
-                )}
-                <button
-                  type="button"
-                  data-part="step-button"
-                  data-active={isActive}
-                  data-completed={isCompleted}
-                  onClick={() => handleStepChange(i)}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: 8,
-                    cursor: 'pointer',
-                    padding: 0,
-                    minWidth: 64,
-                  }}
-                >
-                  <div
-                    data-part="step-indicator"
-                    data-active={isActive}
-                    data-completed={isCompleted}
-                    style={{
-                      width: 32,
-                      height: 32,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: 13,
-                      fontWeight: 600,
-                      flexShrink: 0,
-                      transition: `all var(--ds-motion-normal) var(--ds-motion-ease-out)`,
-                    }}
-                  >
-                    {isCompleted ? (
-                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                        <path
-                          d="M3 8l3.5 3.5L13 5"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    ) : (
-                      i + 1
-                    )}
-                  </div>
-                  <span
-                    data-part="step-label"
-                    data-active={isActive}
-                    data-completed={isCompleted}
-                    style={{
-                      fontSize: 12,
-                      fontWeight: isActive ? 600 : 400,
-                      whiteSpace: 'nowrap',
-                      transition: `color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-                    }}
-                  >
-                    {label}
-                  </span>
-                </button>
-              </React.Fragment>
-            );
-          })}
+        <div data-part="step-list">
+          <ModernSteps
+            items={stepLabels.map((label) => ({ title: label }))}
+            current={currentStep}
+            onChange={(step) => handleStepChange(step)}
+            direction="horizontal"
+            size="small"
+            responsive
+          />
         </div>
       )}
 
@@ -1003,64 +923,37 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           <div key={section.key}>
             {/* Section divider (between sections, not before first) */}
             {sectionIdx > 0 && (
-              <div
-                data-part="section-divider"
-                style={{
-                  height: 1,
-                  margin: '28px 0',
-                }}
-              />
+              <div data-part="section-divider" />
             )}
 
-            {/* Section header */}
+            {/* Section header (disclosure): a Button primitive spanning the
+                row; the chevron rotation is skin-owned off data-collapsed. */}
             {hasSectionHeader && (
-              <button
-                type="button"
+              <ModernButton
                 data-part="section-header"
                 data-collapsed={isCollapsed}
+                variant="ghost"
+                size="md"
                 onClick={() => toggleSection(section.key)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  width: '100%',
-                  padding: '0 0 14px 0',
-                  marginBottom: isCollapsed ? 0 : 20,
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  transition: `margin-bottom var(--ds-motion-normal) var(--ds-motion-ease-out)`,
-                }}
+                aria-expanded={!isCollapsed}
               >
                 <div>
-                  <div
-                    data-part="section-title"
-                    style={{
-                      fontSize: 15,
-                      fontWeight: 600,
-                      lineHeight: '22px',
-                      letterSpacing: '-0.005em',
-                    }}
-                  >
+                  <div data-part="section-title">
                     {section.title}
                   </div>
                   {section.description && (
-                    <div
-                      data-part="section-description"
-                      style={{
-                        fontSize: 13,
-                        lineHeight: '18px',
-                        marginTop: 4,
-                      }}
-                    >
+                    <div data-part="section-description">
                       {section.description}
                     </div>
                   )}
                 </div>
                 <ChevronIcon collapsed={isCollapsed} />
-              </button>
+              </ModernButton>
             )}
 
-            {/* Section content with smooth collapse */}
+            {/* Section content with smooth collapse. The transition lives in
+                the skin (reduced-motion governs); max-height/opacity stay
+                inline as runtime state values. */}
             <div
               data-part="section-content"
               data-collapsed={isCollapsed}
@@ -1069,9 +962,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
               }}
               style={{
                 overflow: 'hidden',
-                transition: hasSectionHeader
-                  ? `max-height var(--ds-motion-normal) var(--ds-motion-ease-out), opacity var(--ds-motion-normal) var(--ds-motion-ease-out)`
-                  : undefined,
                 maxHeight: hasSectionHeader ? (isCollapsed ? 0 : contentHeight ?? 2000) : undefined,
                 opacity: isCollapsed ? 0 : 1,
               }}
@@ -1084,72 +974,37 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
       {/* Wizard step navigation */}
       {adaptedLayout === 'steps' && stepLabels && (
-        <div
-          data-part="wizard-nav"
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginTop: 28,
-            paddingTop: 20,
-          }}
-        >
+        <div data-part="wizard-nav">
           <div>
             {currentStep > 0 && (
-              <button
-                type="button"
+              <ModernButton
                 data-part="wizard-prev-button"
+                variant="outline"
+                size="md"
                 disabled={currentStep === 0}
                 onClick={() => handleStepChange(currentStep - 1)}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: 36,
-                  padding: '0 16px',
-                  fontSize: 14,
-                  fontWeight: 500,
-                  lineHeight: '20px',
-                  cursor: 'pointer',
-                  transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out),
-                               border-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-                }}
               >
-                Previous
-              </button>
+                {tOr('form_builder.previous', 'Previous')}
+              </ModernButton>
             )}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            {/* Step counter text */}
-            <span
-              data-part="wizard-step-counter"
-              style={{
-                fontSize: 13,
-                marginRight: 4,
-              }}
-            >
-              Step {currentStep + 1} of {stepLabels.length}
+          <div data-part="wizard-nav-end">
+            {/* Step counter text -- tabular numerals via the skin. */}
+            <span data-part="wizard-step-counter">
+              {tOr('form_builder.step_counter', 'Step {current} of {total}', {
+                current: currentStep + 1,
+                total: stepLabels.length,
+              })}
             </span>
             {currentStep < stepLabels.length - 1 && (
-              <button
-                type="button"
+              <ModernButton
                 data-part="wizard-next-button"
+                variant="primary"
+                size="md"
                 onClick={() => handleStepChange(currentStep + 1)}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: 36,
-                  padding: '0 20px',
-                  fontSize: 14,
-                  fontWeight: 500,
-                  lineHeight: '20px',
-                  cursor: 'pointer',
-                  transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-                }}
               >
-                Next
-              </button>
+                {tOr('form_builder.next', 'Next')}
+              </ModernButton>
             )}
           </div>
         </div>
@@ -1157,17 +1012,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
       {/* Action bar */}
       {actions && (
-        <div
-          data-part="action-bar"
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            gap: 12,
-            paddingTop: 20,
-            marginTop: 32,
-          }}
-        >
+        <div data-part="action-bar">
           {actions}
         </div>
       )}

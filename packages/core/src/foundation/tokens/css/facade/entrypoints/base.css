@@ -492,6 +492,10 @@
   layer(rottay-engines);
 @import "../../runtime/engines/modern/skin/saved-views.css"
   layer(rottay-engines);
+@import "../../runtime/engines/modern/skin/widget-board.css"
+  layer(rottay-engines);
+@import "../../runtime/engines/modern/skin/tree-view.css"
+  layer(rottay-engines);
 @import "../../runtime/engines/rustic/skin/saved-views.css"
   layer(rottay-engines);
 @import "../../presentation/components/skin/active-filters-bar.css"

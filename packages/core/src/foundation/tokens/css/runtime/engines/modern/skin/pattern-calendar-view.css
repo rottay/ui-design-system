@@ -1,82 +1,184 @@
 /**
- * Modern CalendarView pattern skin (WO-SKIN-06 CK-E).
+ * Modern CalendarView pattern skin (WO-SKIN-06 CK-E; Lote-2 composition uplift).
+ *
  * Deliberately unlayered. All selectors are owned by the modern pattern root;
  * border-colour declarations clear the tenant floor through root/part state.
+ *
+ * COMPOSITION LAW (Lote 2): the toolbar composes Button primitives (previous /
+ * next / today) and a Select primitive (view switch), and loading composes
+ * the Spinner primitive — they own their chrome, states and focus rings. This
+ * stylesheet paints only what the PATTERN owns: grid frame, weekday header,
+ * day cells, date labels and event chips. The former button/select resets
+ * and the spinner ring are retired (duplication).
+ *
+ * GRID DISPLAY: the `grid grid-cols-7` utilities stay on the element —
+ * the public test contract pins `[style*=grid-template-columns],.grid-cols-7`.
+ * The border, radius and overflow those classes also carried moved here.
+ *
+ * EVENT ACCENT HATCH: `CalendarEvent.color` is consumer-supplied config data;
+ * it rides the quoted `--ds-calendar-event-accent` custom property the engine
+ * stamps per chip, and the single rule below owns the fill (one paint owner).
+ *
+ * LOGICAL: cell borders are `border-inline-end`/`border-block-end` (the
+ * retired `border-r` mirrored nothing under RTL) and the date label aligns
+ * to `end`.
  */
 
-.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
-  > [data-part='toolbar']
-  [data-part='toolbar-action'] {
-  background: transparent;
+/* ---- loading frame (Spinner owns ring + cadence) ---- */
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='loading'] {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--ds-spacing-12, 3rem);
+}
+
+/* ---- toolbar (geometry drained from utilities) ---- */
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='toolbar'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3);
+  margin-block-end: var(--ds-spacing-4);
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='toolbar'] [data-part='navigation'],
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='toolbar'] [data-part='view-controls'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] [data-part='month-title'] {
+  margin: 0;
   color: var(--ds-color-text-primary);
-  border-radius: var(--ds-radius-md);
-  border: none;
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-font-size-lg);
+  font-weight: var(--ds-font-weight-semibold);
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] [data-part='view-select'] {
+  display: inline-flex;
 }
 
-.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
-  > [data-part='toolbar']
-  > [data-part='view-controls']
-  > [data-part='view-select'][data-part='view-select'] {
-  border-radius: var(--ds-radius-md);
-  border: 1px solid var(--ds-color-border);
-  background: transparent;
-  color: inherit;
-}
-
-.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
-  > [data-part='loading']
-  > [data-part='spinner'][data-part='spinner'] {
-  border: 3px solid var(--ds-color-border);
-  border-top-color: var(--ds-color-primary);
-  border-radius: 50%;
-}
-
+/* ---- grid frame (display/columns are the pinned utilities; frame is ours) ---- */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'][data-part='grid'] {
-  border-color: var(--ds-color-border);
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-lg);
+  overflow: hidden;
 }
 
+/* ---- weekday header row ---- */
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  > [data-part='weekday'] {
+  padding-block: var(--ds-spacing-2);
+  background: var(--ds-surface-inset);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-weight: var(--ds-font-weight-semibold);
+  text-align: center;
+}
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   > [data-part='weekday'][data-part='weekday'] {
-  background: var(--ds-surface-inset);
-  border-color: var(--ds-color-border);
+  border-block-end: 1px solid var(--ds-color-border);
 }
 
+/* ---- day cells ---- */
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell'] {
+  min-block-size: var(--ds-calendar-view-cell-min-height, 5rem);
+  padding: var(--ds-spacing-1, 0.25rem);
+}
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   > [data-part='day-cell'][data-part='day-cell'] {
-  border-color: var(--ds-color-border);
+  border-inline-end: 1px solid var(--ds-color-border);
+  border-block-end: 1px solid var(--ds-color-border);
 }
-
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell'][data-part='day-cell'][data-last-column='true'] {
+  border-inline-end: none;
+}
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   > [data-part='day-cell'][data-empty='false'] {
   background: var(--ds-surface-card);
+  cursor: pointer;
 }
-
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   > [data-part='day-cell'][data-empty='true'] {
   background: var(--ds-surface-inset);
 }
 
+/* ---- date label (today = primary accent + semibold) ---- */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell'][data-today='true']
+  > [data-part='day-cell']
   > [data-part='date-label'] {
+  padding-inline: var(--ds-spacing-1, 0.25rem);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  text-align: end;
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell']
+  > [data-part='date-label'][data-today='true'] {
   color: var(--ds-color-primary);
+  font-weight: var(--ds-font-weight-semibold);
 }
 
+/* ---- event chip (fill rides the per-event accent hatch) ---- */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   > [data-part='day-cell']
   [data-part='event'] {
+  margin-block-start: 0.125rem;
+  padding-inline: var(--ds-spacing-1, 0.25rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-calendar-event-accent, var(--ds-color-primary));
   color: var(--ds-color-text-on-primary);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  transition: filter var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   > [data-part='day-cell']
-  > [data-part='overflow-count'] {
+  [data-part='overflow-count'] {
+  padding-inline: var(--ds-spacing-1, 0.25rem);
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+}
+
+/* ---- narrow containers: the composition defines the cut — compact cells ---- */
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] {
+  container: ds-calendar-view / inline-size;
+}
+@container ds-calendar-view (max-width: 30rem) {
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    > [data-part='day-cell'] {
+    min-block-size: var(--ds-calendar-view-cell-min-height-compact, 3.5rem);
+  }
+}
+
+/* ---- coarse pointers: nav actions reach the physical 44px floor ---- */
+@media (pointer: coarse) {
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='toolbar']
+    [data-part='toolbar-action'] {
+    min-block-size: var(--ds-calendar-view-touch-target, 2.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    > [data-part='day-cell']
+    [data-part='event'] {
+    transition: none;
+  }
 }

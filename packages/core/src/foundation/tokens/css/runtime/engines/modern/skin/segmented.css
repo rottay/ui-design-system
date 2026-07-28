@@ -30,7 +30,15 @@
   gap: var(--ds-segmented-gap, 2px);
   min-width: 0;
   padding: var(--ds-segmented-padding, 3px);
-  overflow: hidden;
+  /* Narrow frames: the group scrolls inside its container instead of clipping
+     options without an affordance (pagination.css's controls-row precedent).
+     The 3px track padding keeps the option lift and the focus ring inside the
+     scrollport; `overflow-y: hidden` is a legal pair with `overflow-x: auto`
+     (neither is `visible`). */
+  max-inline-size: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
   border-radius: var(--ds-segmented-radius, var(--ds-radius-md));
   background: var(
     --ds-segmented-bg,
@@ -53,6 +61,10 @@
 
 .rottay-segmented.rottay-segmented--modern[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-segmented-border, var(--ds-color-border));
+}
+
+.rottay-segmented.rottay-segmented--modern[data-part='root']::-webkit-scrollbar {
+  display: none;
 }
 
 .rottay-segmented.rottay-segmented--modern[data-part='root'][data-part='root']:hover {
@@ -176,9 +188,9 @@
   transform: translateY(-1px);
 }
 
-/* A held press settles the option back onto the track. */
+/* A held press settles the option back onto the track with a tactile dip. */
 .rottay-segmented--modern[data-part='root'] [data-part='option']:not([data-disabled='true']):active {
-  transform: translateY(0);
+  transform: translateY(0) scale(var(--ds-state-press-scale, 0.98));
 }
 
 .rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='true'] {
@@ -201,7 +213,11 @@
     var(--ds-shadow-xs)
   );
   font-weight: var(--ds-segmented-item-font-weight-selected, var(--ds-font-weight-semibold));
-  transform: translateY(-1px);
+  /* Selected reads as a QUIET TINT (product law), never a lifted pill: the
+     tabs.css segmented-recipe precedent flattens the active transform
+     (`--ds-tabs-active-transform, none`). The hover lift stays on the
+     unselected options only. */
+  transform: var(--ds-segmented-item-transform-selected, none);
 }
 
 .rottay-segmented--modern[data-part='root'] [data-part='option']:hover [data-part='icon'],

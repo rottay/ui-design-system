@@ -97,7 +97,7 @@ describe('Card Pass 2 craft contract', () => {
     expect(container.querySelector('.rottay-card-image')).toHaveAttribute('data-error', 'true');
   });
 
-  it('keeps one DS anatomy locale-agnostic across tenant language and direction', () => {
+  it('keeps one DS anatomy locale-agnostic across tenant language and direction', async () => {
     const { container, rerender } = render(
       <section lang="en" dir="ltr">
         <Card
@@ -109,11 +109,14 @@ describe('Card Pass 2 craft contract', () => {
       </section>,
     );
 
+    // The engine factory lazy-loads the modern engine behind suspense; the
+    // first assertion of each render awaits resolution so nothing settles
+    // outside act().
     let localeRoot = container.querySelector('section') as HTMLElement;
     expect(localeRoot).toHaveAttribute('lang', 'en');
     expect(localeRoot).toHaveAttribute('dir', 'ltr');
-    expect(screen.getByText('Candidate ready for review')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Continue' })).toBeInTheDocument();
+    expect(await screen.findByText('Candidate ready for review')).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: 'Continue' })).toBeInTheDocument();
 
     rerender(
       <section lang="es" dir="ltr">
@@ -128,8 +131,8 @@ describe('Card Pass 2 craft contract', () => {
 
     localeRoot = container.querySelector('section') as HTMLElement;
     expect(localeRoot).toHaveAttribute('lang', 'es');
-    expect(screen.getByText('Candidata lista para revisión')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Continuar' })).toBeInTheDocument();
+    expect(await screen.findByText('Candidata lista para revisión')).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: 'Continuar' })).toBeInTheDocument();
 
     rerender(
       <section lang="ar" dir="rtl">
@@ -145,8 +148,8 @@ describe('Card Pass 2 craft contract', () => {
     localeRoot = container.querySelector('section') as HTMLElement;
     expect(localeRoot).toHaveAttribute('lang', 'ar');
     expect(localeRoot).toHaveAttribute('dir', 'rtl');
-    expect(screen.getByText('المرشحة جاهزة للمراجعة')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'متابعة' })).toBeInTheDocument();
+    expect(await screen.findByText('المرشحة جاهزة للمراجعة')).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: 'متابعة' })).toBeInTheDocument();
     expect(container.querySelector('.ds-card--modern')).toBeInTheDocument();
   });
 

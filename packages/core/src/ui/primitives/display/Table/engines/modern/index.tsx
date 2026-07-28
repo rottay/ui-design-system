@@ -506,12 +506,13 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   data-bordered={bordered ? 'true' : undefined}
                   data-fixed={column.fixed === true ? 'true' : (column.fixed || undefined)}
                   data-align={column.align || undefined}
+                  data-field-type={column.fieldType || undefined}
                   style={{
                     width,
                     // Ellipsis is a per-column prop projection (overflow +
                     // max-width cap); it stays inline next to the column's own
-                    // style overrides.
-                    ...(column.ellipsis ? { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, maxWidth: 320 } : {}),
+                    // style overrides. The cap rides a token channel.
+                    ...(column.ellipsis ? { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, maxWidth: 'var(--ds-table-cell-ellipsis-max-width, 320px)' } : {}),
                     ...column.style,
                   }}
                   role="gridcell"
@@ -666,7 +667,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           <span
             data-part="spinner"
             role="status"
-            aria-label="Loading"
+            aria-label={t('table.loading')}
           />
         </div>
       )}

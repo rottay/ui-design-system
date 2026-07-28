@@ -101,7 +101,14 @@
 
 /* ---- loading spinner: `data-icon='spinner'` marks the BUILT-IN ring, so a
         consumer-supplied `icon` rendered into the same slot stays unpainted, as
-        it is today. ---- */
+        it is today. Geometry and cadence moved here from the engine's inline
+        style (the ring's own rule stays below). ---- */
+.rottay-message--modern[data-part='root'] [data-icon='spinner'] {
+  display: inline-block;
+  inline-size: 1rem;
+  block-size: 1rem;
+  animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
+}
 .rottay-message--modern.rottay-message--modern
   [data-part='icon']
   > [data-icon='spinner'][data-icon='spinner'] {
@@ -135,8 +142,8 @@
   border-color: color-mix(in srgb, var(--ds-message-accent) 34%, var(--ds-color-border-subtle));
 }
 .rottay-message--modern[data-part='root'] [data-part='close-button']:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--ds-message-accent) 56%, transparent);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: var(--ds-shadow-focus-ring);
 }
 
 .rottay-message--modern[data-part='root'] > [data-part='progress'] {
@@ -170,12 +177,30 @@
 /* Exit lifecycle: the engine stamps data-state='exit' for one
    --ds-motion-fast cadence before removing the node (rustic parity), so the
    stack never witnesses an abrupt disappearance. Bottom-placed stacks let the
-   item settle back DOWN toward the screen edge it entered from. */
+   item settle back DOWN toward the screen edge it entered from. The exit
+   rides the canon's `--ds-motion-ease-exit` (the former `--ds-motion-ease-in`
+   was an orphan name, declared nowhere). */
 .rottay-message--modern.rottay-message--modern[data-part='root'][data-state='exit'] {
-  animation: ds-message-exit-modern var(--ds-motion-fast) var(--ds-motion-ease-in, ease-in) both;
+  animation: ds-message-exit-modern var(--ds-motion-fast) var(--ds-motion-ease-exit) both;
 }
 .rottay-message-stack--modern[data-placement='bottom'] .rottay-message--modern[data-part='root'][data-state='exit'] {
   animation-name: ds-message-exit-bottom-modern;
+}
+
+/* Hover pause (Toast family parity): while the engine reports data-paused,
+   the lifetime bar freezes alongside the JS countdown. */
+.rottay-message--modern[data-part='root'][data-paused='true'] > [data-part='progress'] {
+  animation-play-state: paused;
+}
+
+/* forced-colors: shadow rings vanish, so the focus channel degrades to a
+   system outline. */
+@media (forced-colors: active) {
+  .rottay-message--modern[data-part='root'] [data-part='close-button']:focus-visible {
+    outline: 2px solid CanvasText;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
 }
 
 /* RTL: the lifetime bar drains toward the reading direction's end edge. */

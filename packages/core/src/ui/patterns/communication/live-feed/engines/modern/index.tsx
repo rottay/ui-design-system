@@ -4,6 +4,16 @@
  * @fileoverview Modern (token-driven) engine for the LiveFeed pattern.
  * Renders a real-time feed inside a DS token card with optional auto-refresh
  * polling, a "new items" banner, and load-more pagination.
+ *
+ * COMPOSITION LAW (Lote 2): every control is a DS primitive — the refresh,
+ * banner and load-more buttons are the public Button (caller `data-part`
+ * wins the root anatomy hook per P-79, so `live-feed.css` owns their
+ * paint), and the busy spinners are the Spinner primitive's modern engine.
+ * The raw `<button>` elements, the hand-rolled spinner spans and the
+ * Tailwind layout utilities are gone; the geometry they carried inline
+ * moved to `live-feed.css`. Copy is localized through
+ * `useOptionalTranslation('components')` with the documented English floor.
+ *
  * New items receive the `ds-pulse-changed` single-flash utility to signal freshness.
  *
  * @example
@@ -18,17 +28,20 @@
 
 import React, { useEffect, useRef } from 'react';
 import type { LiveFeedProps, FeedItem } from '../../contracts';
-import { panelCardStyle, cardBodyStyle, pillBadgeSmStyle, spinnerStyle } from '../../../../foundation/engine-styles/modern';
+import { panelCardStyle, cardBodyStyle, pillBadgeSmStyle } from '../../../../foundation/engine-styles/modern';
 import { useInfiniteScroll } from '../../../../runtime/virtualization/infinite-scroll';
+import { Button } from '../../../../../primitives/inputs/Button';
+import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
+import { ActionRefreshIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-refresh';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 const NO_OP = (): void => {};
 
 /**
  * Modern (token-driven) LiveFeed engine.
  *
- * Uses DS token inline styles and shared modern-styles helpers. Supports
- * polling-based auto-refresh, a configurable item cap (maxItems), and
- * scrollable feed area.
+ * Supports polling-based auto-refresh, a configurable item cap (maxItems),
+ * and a scrollable feed area.
  *
  * @typeParam T - Feed item shape, must extend {@link FeedItem}.
  * @param props - {@link LiveFeedProps} -- items, renderItem callback, refresh/load-more controls.
@@ -52,6 +65,12 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
     className,
     style,
   } = props;
+
+  /* ---- localized copy (components catalog, English floor) ---- */
+  const translation = useOptionalTranslation('components');
+  const refreshLabel = translation?.tOr('liveFeed.refresh', 'Refresh') ?? 'Refresh';
+  const loadMoreLabel = translation?.tOr('liveFeed.loadMore', 'Load more') ?? 'Load more';
+  const emptyLabel = translation?.tOr('liveFeed.empty', 'No items') ?? 'No items';
 
   // Interval ref persists across renders so the useEffect cleanup can
   // clear the correct timer when dependencies change or the component unmounts.
@@ -86,10 +105,10 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
   if (loading && items.length === 0) {
     return (
       <div data-part="root" className={`ds-pattern-live-feed ds-engine-modern ${className ?? ''}`} style={{ ...panelCardStyle, ...style }}>
-        <div className="animate-pulse" style={cardBodyStyle}>
-          <div data-part="skeleton" style={{ height: 16, width: '33%', marginBottom: 16 }} />
+        <div data-part="skeleton-list" style={cardBodyStyle}>
+          <div data-part="skeleton" data-skeleton="title" />
           {[1, 2, 3].map((i) => (
-            <div key={i} data-part="skeleton" style={{ height: 64, marginBottom: 8 }} />
+            <div key={i} data-part="skeleton" data-skeleton="row" />
           ))}
         </div>
       </div>
@@ -101,18 +120,18 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
       <div style={cardBodyStyle}>
         {/* Header */}
         {(header || onRefresh) && (
-          <div className="flex items-center justify-between mb-3">
+          <div data-part="header-row">
             <div>{header}</div>
             {onRefresh && (
-              <button data-part="refresh" style={{ width: 32, height: 32, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }} onClick={onRefresh}>
-                {loading ? (
-                  <span style={spinnerStyle(14)} />
-                ) : (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clipRule="evenodd" />
-                  </svg>
-                )}
-              </button>
+              <Button
+                engine="modern"
+                variant="ghost"
+                size="sm"
+                data-part="refresh"
+                icon={loading ? <ModernSpinner size="sm" data-part="spinner" /> : <ActionRefreshIcon size={14} decorative />}
+                aria-label={refreshLabel}
+                onClick={onRefresh}
+              />
             )}
           </div>
         )}
@@ -120,25 +139,32 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
         {/* New items indicator -- full-width info button so it is impossible to miss.
             Clicking merges buffered items into the visible list (handled by parent). */}
         {newItemsCount != null && newItemsCount > 0 && (
-          <button
+          <Button
+            engine="modern"
+            variant="ghost"
+            size="sm"
             data-part="banner"
-            // Signal-glow (spec section 5, role 3): reserved for live moments like
-            // new real-time items arriving. Collapses to none when --ds-effect-intensity is 0.
-            style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, width: '100%', marginBottom: 12 }}
             onClick={onShowNewItems}
           >
-            <div data-part="badge" style={pillBadgeSmStyle}>{newItemsCount}</div>
-            new {newItemsCount === 1 ? 'item' : 'items'}
-          </button>
+            <span data-part="badge" style={pillBadgeSmStyle}>{newItemsCount}</span>
+            {newItemsCount === 1
+              ? translation?.tOr('liveFeed.newItem', 'new item') ?? 'new item'
+              : translation?.tOr('liveFeed.newItems', 'new items') ?? 'new items'}
+          </Button>
         )}
 
         {/* Feed -- maxHeight enables vertical scrolling for bounded-height containers.
-            When omitted, the feed grows unbounded. */}
+            When omitted, the feed grows unbounded. maxHeight/overflow stay inline:
+            they are runtime-measured values (the ScrollArea precedent), not paint. */}
         <div ref={scrollContainerRef} style={{ maxHeight: maxHeight ?? undefined, overflow: maxHeight ? 'auto' : undefined }}>
           {displayItems.length === 0 ? (
-            emptyState ?? <div data-part="empty" className="text-center py-8">No items</div>
+            emptyState ?? <div data-part="empty">{emptyLabel}</div>
           ) : (
-            <div className="flex flex-col gap-2">
+            /* The Tailwind layout classes on the list are PINNED by
+               LiveFeed.pulse.test.tsx (`.flex.flex-col.gap-2 > div` row
+               queries) — they stay as layout utilities until the test is
+               re-pointed at `data-part='list'`. */
+            <div data-part="list" className="flex flex-col gap-2">
               {/* ds-pulse-changed (foundation/animations/transitions.css) flashes
                   ONCE on insertion to signal a freshly-arrived item. Each item
                   has a stable key, so the flash plays when its DOM node is first
@@ -153,17 +179,23 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
           )}
           {/* End-of-feed sentinel: triggers onLoadMore when scrolled into view. */}
           {hasMore && onLoadMore ? (
-            <div ref={sentinelRef} data-part="sentinel" aria-hidden="true" style={{ height: 1 }} />
+            <div ref={sentinelRef} data-part="sentinel" aria-hidden="true" />
           ) : null}
         </div>
 
         {/* Load more */}
         {hasMore && onLoadMore && (
-          <div className="text-center mt-3">
-            <button data-part="load-more" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6 }} onClick={onLoadMore}>
-              {loading && <span style={spinnerStyle(14)} />}
-              Load more
-            </button>
+          <div data-part="footer">
+            <Button
+              engine="modern"
+              variant="ghost"
+              size="sm"
+              data-part="load-more"
+              icon={loading ? <ModernSpinner size="sm" data-part="spinner" /> : undefined}
+              onClick={onLoadMore}
+            >
+              {loadMoreLabel}
+            </Button>
           </div>
         )}
       </div>

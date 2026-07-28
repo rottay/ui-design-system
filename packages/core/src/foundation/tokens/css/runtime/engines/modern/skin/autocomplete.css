@@ -1,5 +1,6 @@
 /**
- * Modern AutoComplete skin (WO-SKIN-02 checkpoint B, dropdown family).
+ * Modern AutoComplete skin (lane-A Quiet Premium pass over WO-SKIN-02
+ * checkpoint B).
  *
  * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
  * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
@@ -12,12 +13,29 @@
  * portals in either engine). The `input` border reaches (0,4,0) via the two
  * root classes (0,2,0) + `[data-part='root']` + the descendant `[data-part]`.
  *
- * The modern engine's suggestion `option` carries no inline paint (its
- * hover/active highlight rides the external `active`/`disabled` DaisyUI classes,
- * unchanged by this migration), so it has no rule here.
- *
- * Values are transcribed verbatim from `engines/modern.tsx`.
+ * LANE-A PASS:
+ * - The dropdown's position/z-index/padding/max-height and the clear button's
+ *   positioning lived inline (the clear button rode the PHYSICAL `right-2`
+ *   utility -- RTL broke it; now `inset-inline-end`). Both are skin-owned.
+ * - The option rows' hover/active highlight used to ride the dead DaisyUI
+ *   `active`/`disabled` class tokens (removed from the engine); the states
+ *   are real rules below keyed on `data-active`/`data-disabled`, matching the
+ *   Select/Cascader idiom, with the keyboard-focus ring and 44px coarse floor.
+ * - The input gained hover/focus-visible states (its outline was suppressed
+ *   with no replacement) and an inline-end reserve so the value never runs
+ *   under the clear button.
  */
+
+@keyframes ds-autocomplete-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input'] {
   border: 1px solid var(--ds-color-border);
@@ -25,22 +43,119 @@
   background: var(--ds-color-bg-input);
   color: var(--ds-color-text-primary);
   outline: none;
+  transition:
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:where(:hover):not(:disabled) {
+  border-color: var(--ds-autocomplete-border-hover, var(--ds-color-border-hover));
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:focus-visible {
+  border-color: var(--ds-autocomplete-border-focus, var(--ds-color-primary));
+  box-shadow: var(--ds-autocomplete-shadow-focus, var(--ds-shadow-focus-ring));
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:disabled {
+  opacity: var(--ds-disabled-opacity, 0.5);
+  cursor: not-allowed;
+}
+/* Inline-end reserve so a long value never runs under the clear button. */
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input-wrapper']:has([data-part='clear-button']) [data-part='input'] {
+  padding-inline-end: var(--ds-autocomplete-clear-reserve, 32px);
 }
 
+/* Clear button: positioning drained from the physical `right-2 top-1/2
+   -translate-y-1/2` utilities -- logical, RTL-free. */
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button'] {
+  position: absolute;
+  inset-inline-end: var(--ds-spacing-2, 8px);
+  inset-block-start: 50%;
+  transform: translateY(-50%);
   background: transparent;
   color: var(--ds-color-text-primary);
   border: none;
   border-radius: 50%;
+  transition: color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button']:hover {
+  color: var(--ds-color-error);
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button']:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-autocomplete-shadow-focus, var(--ds-shadow-focus-ring));
 }
 
+/* Dropdown: geometry drained from the inline style. */
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='dropdown'] {
+  position: absolute;
+  inset-inline: 0;
+  z-index: var(--ds-autocomplete-dropdown-z, 50);
+  margin: 0;
+  margin-block-start: var(--ds-spacing-1, 4px);
+  padding: var(--ds-spacing-1, 4px);
+  max-block-size: var(--ds-autocomplete-dropdown-max-height, 240px);
+  overflow-y: auto;
+  list-style: none;
   border-radius: var(--ds-radius-lg);
   background: var(--ds-surface-card);
   border: 1px solid var(--ds-color-border-subtle);
   box-shadow: var(--ds-elevation-2);
+  animation: ds-autocomplete-slide-in var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+
+/* Option rows: the states that used to ride the dead DaisyUI `active` /
+   `disabled` class tokens, now real rules (Select/Cascader idiom). */
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'] {
+  display: flex;
+  align-items: center;
+  inline-size: 100%;
+  padding-block: var(--ds-spacing-1, 4px);
+  padding-inline: var(--ds-spacing-2, 8px);
+  border-radius: var(--ds-radius-sm, 6px);
+  border: none;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-input-sm-font-size, 13px);
+  text-align: start;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:where(:hover):not([data-disabled='true']),
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-active='true'] {
+  background: var(--ds-color-bg-hover);
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-autocomplete-shadow-focus, var(--ds-shadow-focus-ring));
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+  opacity: var(--ds-disabled-opacity, 0.5);
+  cursor: not-allowed;
 }
 
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='empty'] {
   color: var(--ds-color-text-secondary);
+}
+
+/* Coarse pointer: suggestions and the clear button reach the 44px floor via
+   min-block-size (wins over inline heights, fine pointers untouched). */
+@media (hover: none) and (pointer: coarse) {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'],
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button'] {
+    min-block-size: var(--ds-autocomplete-touch-target-min, 44px);
+  }
+}
+
+/* Reduced motion: dropdown entrance and every state transition go quiet. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='dropdown'] {
+    animation: none;
+  }
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input'],
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'],
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button'] {
+    transition: none;
+  }
 }

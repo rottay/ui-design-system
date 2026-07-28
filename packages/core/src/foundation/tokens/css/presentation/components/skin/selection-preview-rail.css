@@ -41,14 +41,14 @@
 /* roots — two mutually-exclusive trees, keyed on data-preview ---------------- */
 
 .ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom'] {
-  border-left: 1px solid var(--ds-color-border-subtle);
+  border-inline-start: 1px solid var(--ds-color-border-subtle);
   background: transparent;
   container-type: inline-size;
   container-name: ds-rail;
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default'] {
-  border-left: 1px solid var(--ds-color-border-subtle);
+  border-inline-start: 1px solid var(--ds-color-border-subtle);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, white 6%), var(--ds-surface-card));
   container-type: inline-size;
   container-name: ds-rail;
@@ -126,4 +126,40 @@
 
 .ds-structure.ds-selection-preview-rail [data-part='snapshot-row'][data-part='snapshot-row'] {
   border-top: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 60%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+   WAVE R2+R3 — typography (skin-owned, never inline). Text parts repeat the
+   data-part x3 so type clears the Typography engine skin the same way color
+   does (0,5,0). Quiet Premium editorial: the identity title is the one
+   display moment (tight tracking, tight leading); eyebrows are tracked
+   uppercase; body copy keeps a relaxed 1.5 read.
+--------------------------------------------------------------------------- */
+
+.ds-structure.ds-selection-preview-rail [data-part='identity-title'][data-part='identity-title'][data-part='identity-title'] {
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+.ds-structure.ds-selection-preview-rail [data-part='identity-subtitle'][data-part='identity-subtitle'][data-part='identity-subtitle'] {
+  line-height: 1.4;
+}
+.ds-structure.ds-selection-preview-rail [data-part='match-reason-eyebrow'][data-part='match-reason-eyebrow'][data-part='match-reason-eyebrow'] {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.ds-structure.ds-selection-preview-rail [data-part='match-reason-body'][data-part='match-reason-body'][data-part='match-reason-body'] {
+  line-height: 1.5;
+}
+.ds-structure.ds-selection-preview-rail [data-part='snapshot-row-label'][data-part='snapshot-row-label'][data-part='snapshot-row-label'] {
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.ds-structure.ds-selection-preview-rail [data-part='snapshot-empty'][data-part='snapshot-empty'][data-part='snapshot-empty'] {
+  line-height: 1.45;
+}
+.ds-structure.ds-selection-preview-rail [data-part='fallback-empty'][data-part='fallback-empty'][data-part='fallback-empty'] {
+  font-style: italic;
+}
+.ds-structure.ds-selection-preview-rail [data-part='fallback-string'][data-part='fallback-string'][data-part='fallback-string'] {
+  line-height: 1.45;
 }

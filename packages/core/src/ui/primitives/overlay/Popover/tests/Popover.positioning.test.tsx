@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import ModernPopover from '../engines/modern';
@@ -58,7 +58,7 @@ describe('ModernPopover positioning branches', () => {
     expect(trigger.contains(surface)).toBe(false);
   });
 
-  it('anchor-css branch: promotes the panel via the popover API in place, with anchor attributes', () => {
+  it('anchor-css branch: promotes the panel via the popover API in place, with anchor attributes', async () => {
     const { showPopover } = forceAnchorBranch();
 
     const { container } = render(
@@ -68,7 +68,11 @@ describe('ModernPopover positioning branches', () => {
     );
 
     const surface = container.querySelector(MODERN_SURFACE_SELECTOR) as HTMLElement;
-    expect(surface.getAttribute('data-ds-position-strategy')).toBe('anchor-css');
+    // The measured geometry lands in a rAF callback; waitFor keeps those
+    // state updates inside act() instead of warning after the test body.
+    await waitFor(() => {
+      expect(surface.getAttribute('data-ds-position-strategy')).toBe('anchor-css');
+    });
     // Still in-tree: the top layer promotes paint order, not DOM position.
     expect(surface.closest('[data-rottay-portal]')).toBeNull();
     expect(surface.getAttribute('popover')).toBe('manual');

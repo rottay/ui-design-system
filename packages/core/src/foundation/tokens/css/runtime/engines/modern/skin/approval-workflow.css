@@ -126,10 +126,21 @@
 
 /* --- Action buttons -------------------------------------------------------- */
 
-/* Native `<button>` elements, not the DS Button primitive: no button.css rule
-   competes with these. */
+/* The public Button primitive carries the pattern's caller part (P-79), so
+   button.css does not paint these: this file is their single paint owner
+   (geometry included — it was the engine's shared inline style object). */
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'] {
+  block-size: var(--ds-approval-action-height, 32px);
+  padding-block: 0;
+  padding-inline: var(--ds-approval-action-padding-inline, 12px);
   border-radius: var(--ds-radius-md);
+  font-size: var(--ds-approval-action-font-size, 13px);
+  cursor: pointer;
+  transition:
+    background var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve'] {
@@ -161,7 +172,222 @@
 
 /* --- Footer ---------------------------------------------------------------- */
 
-/* Tailwind's `border-t` supplies the width; only the colour was ever inline. */
+/* The `border-t` utility supplied the width before the drain; the logical
+   block-start shorthand owns both now (doubled part keeps the (0,4,0) floor). */
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='footer'][data-part='footer'] {
-  border-color: var(--ds-color-border);
+  margin-block-start: var(--ds-approval-footer-margin-block-start, 16px);
+  padding-block-start: var(--ds-approval-footer-padding-block-start, 16px);
+  border-block-start: 1px solid var(--ds-color-border);
+}
+
+/* ============================================================================
+   LOTE 2 GEOMETRY DRAIN — every rule below re-expresses a Tailwind utility or
+   an inline style object the engine no longer carries (values transcribed
+   verbatim: rem equivalents of the drained utilities).
+   ============================================================================ */
+
+/* --- Step row + timeline track ---------------------------------------------- */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step'] {
+  display: flex;
+  gap: var(--ds-approval-step-gap, 12px);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-track'] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'] {
+  inline-size: var(--ds-approval-dot-size, 12px);
+  block-size: var(--ds-approval-dot-size, 12px);
+  flex-shrink: 0;
+  margin-block-start: var(--ds-approval-dot-margin-block-start, 6px);
+  border-radius: var(--ds-radius-full, 9999px);
+}
+
+/* The current pending dot pulses for attention (was `animate-pulse`). */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-current='true'][data-status='pending'] {
+  animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-deliberate, 720ms))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
+}
+
+@keyframes ds-approval-dot-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.45;
+  }
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'] {
+  inline-size: var(--ds-approval-connector-width, 2px);
+  flex: 1 1 auto;
+  min-block-size: var(--ds-approval-connector-min-height, 2rem);
+}
+
+/* --- Step content ------------------------------------------------------------ */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-content'] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  padding-block-end: var(--ds-approval-step-padding-block-end, 24px);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-approver-row'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-approval-approver-row-gap, 8px);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-avatar'] {
+  flex-shrink: 0;
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-approver'] {
+  font-size: var(--ds-approval-approver-font-size, 14px);
+  font-weight: var(--ds-approval-approver-font-weight, var(--ds-font-weight-medium, 500));
+}
+
+/* Pill geometry for the two composed Badges (transcribed from the drained
+   `pillBadgeSmStyle` spread: radius 9999px, padding 1px 6px, 11px/500/16px).
+   P-79: the caller part makes this file their single paint owner. */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'],
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='entity-badge'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 1px;
+  padding-inline: 6px;
+  border-radius: var(--ds-radius-full, 9999px);
+  font-size: var(--ds-approval-badge-font-size, 11px);
+  font-weight: var(--ds-approval-badge-font-weight, var(--ds-font-weight-medium, 500));
+  line-height: 16px;
+}
+
+/* Skipped de-emphasis (was an inline opacity, the one status with a style). */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='skipped'] {
+  opacity: var(--ds-approval-skipped-opacity, 0.5);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-timestamp'] {
+  margin-block-start: var(--ds-approval-timestamp-margin-block-start, 4px);
+  font-size: var(--ds-approval-timestamp-font-size, 12px);
+  /* Approval timestamps read as data: tabular figures keep columns aligned. */
+  font-variant-numeric: var(--ds-approval-timestamp-numeric, tabular-nums);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-comment'] {
+  margin-block-start: var(--ds-approval-comment-margin-block-start, 8px);
+  padding: var(--ds-approval-comment-padding, 8px);
+  border-radius: var(--ds-radius-lg);
+  font-size: var(--ds-approval-comment-font-size, 14px);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-metadata'] {
+  margin-block-start: var(--ds-approval-metadata-margin-block-start, 4px);
+  font-size: var(--ds-approval-metadata-font-size, 12px);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-metadata-key'] {
+  font-weight: var(--ds-font-weight-medium, 500);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-actions'] {
+  display: flex;
+  gap: var(--ds-approval-actions-gap, 8px);
+  margin-block-start: var(--ds-approval-actions-margin-block-start, 12px);
+}
+
+/* --- Header ------------------------------------------------------------------ */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='header'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-approval-header-gap, 8px);
+  margin-block-end: var(--ds-approval-header-margin-block-end, 16px);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='title'] {
+  margin: 0;
+  font-size: var(--ds-approval-title-font-size, 18px);
+  font-weight: var(--ds-approval-title-font-weight, var(--ds-font-weight-semibold, 600));
+}
+
+/* --- Action states: focus ring, disabled, coarse floor ------------------------ */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:disabled {
+  opacity: var(--ds-approval-disabled-opacity, 0.6);
+  cursor: not-allowed;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'] {
+    min-block-size: var(--ds-approval-touch-target-min, 44px);
+  }
+}
+
+/* --- Skeleton (geometry was Tailwind; the pulse was `animate-pulse`) ----------- */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton'] {
+  animation: ds-approval-dot-pulse var(--ds-approval-pulse-duration, var(--ds-motion-deliberate, 720ms))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-steps'] {
+  display: grid;
+  gap: var(--ds-approval-skeleton-steps-gap, 16px);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-row'] {
+  display: flex;
+  gap: var(--ds-approval-step-gap, 12px);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-dot'] {
+  inline-size: var(--ds-approval-dot-size, 12px);
+  block-size: var(--ds-approval-dot-size, 12px);
+  margin-block-start: 4px;
+  border-radius: var(--ds-radius-full, 9999px);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-row-lines'] {
+  display: grid;
+  flex: 1 1 auto;
+  gap: var(--ds-approval-skeleton-line-gap, 8px);
+  align-content: start;
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-line'] {
+  block-size: var(--ds-approval-skeleton-line-height, 16px);
+  border-radius: var(--ds-radius-sm);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-line'][data-width='third'] {
+  inline-size: 33.333%;
+  block-size: 20px;
+  margin-block-end: var(--ds-approval-skeleton-title-margin-block-end, 16px);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-line'][data-width='quarter'] {
+  inline-size: 25%;
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-line'][data-width='half'] {
+  inline-size: 50%;
+  block-size: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton'],
+  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-current='true'][data-status='pending'] {
+    animation: none;
+  }
+
+  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'] {
+    transition: none;
+  }
 }

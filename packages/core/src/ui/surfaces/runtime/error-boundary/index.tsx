@@ -49,6 +49,94 @@ import { Component, ErrorInfo, ReactNode } from 'react';
 import { ErrorHandler } from '../../../../infrastructure/runtime/error-handling/runtime/handler';
 import { ErrorCategory, ErrorSeverity } from '@/foundation/contracts/runtime/errors';
 import { errorInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+
+/**
+ * Default fallback, rendered as a function component so the localized copy
+ * resolves through the standard i18n channel with an honest English floor:
+ * when the crashed tree took the I18nProvider down with it, the floor still
+ * renders a complete sentence.
+ *
+ * STYLING ESCAPE HATCH (documented): the fallback keeps its paint inline so
+ * it renders correctly even when the theming provider or the CSS token chain
+ * is the crash source. Every color is a `--ds-error-boundary-*` channel with
+ * a literal fallback — the token wins in a healthy tree, the literal keeps
+ * the message legible in a broken one. No other component may copy this
+ * pattern; it exists because this boundary outlives its own design system.
+ */
+function DefaultSurfaceErrorFallback({
+  surfaceName,
+  error,
+  onRetry,
+}: {
+  surfaceName?: string;
+  error: Error;
+  onRetry: () => void;
+}): React.ReactElement {
+  const i18n = useOptionalTranslation('components');
+  const surfaceLabel =
+    surfaceName ??
+    i18n?.tOr('surfaces.states.error_boundary_generic_surface', 'This section') ??
+    'This section';
+  const titleTemplate = i18n?.tOr(
+    'surfaces.states.error_boundary_title',
+    '{surface} encountered an error',
+    { surface: surfaceLabel },
+  ) ?? '{surface} encountered an error';
+  // tOr interpolates when the catalog resolves; the English floor still
+  // carries the placeholder, so substitute it manually.
+  const title = titleTemplate.replace('{surface}', surfaceLabel);
+  const retryLabel = i18n?.tOr('surfaces.states.retry', 'Try again') ?? 'Try again';
+
+  return (
+    <div
+      role="alert"
+      style={{
+        padding: '24px',
+        border: '1px solid var(--ds-error-boundary-border, #fca5a5)',
+        borderRadius: '8px',
+        backgroundColor: 'var(--ds-error-boundary-bg, #fef2f2)',
+        color: 'var(--ds-error-boundary-color, #991b1b)',
+      }}
+    >
+      <div
+        style={{
+          fontSize: '16px',
+          fontWeight: 700,
+          marginBottom: '8px',
+        }}
+      >
+        {title}
+      </div>
+      <div
+        style={{
+          fontSize: '14px',
+          opacity: 0.8,
+          marginBottom: '16px',
+          lineHeight: 1.5,
+        }}
+      >
+        {error.message}
+      </div>
+      <button
+        type="button"
+        onClick={onRetry}
+        style={{
+          padding: '8px 20px',
+          fontSize: '14px',
+          fontWeight: 500,
+          cursor: 'pointer',
+          border: '1px solid var(--ds-error-boundary-border, #fca5a5)',
+          borderRadius: '6px',
+          backgroundColor: 'var(--ds-error-boundary-action-bg, #ffffff)',
+          color: 'var(--ds-error-boundary-color, #991b1b)',
+        }}
+      >
+        {retryLabel}
+      </button>
+    </div>
+  );
+}
 
 export interface SurfaceErrorBoundaryProps {
   /** Child components (the surface being wrapped) */
@@ -126,56 +214,16 @@ export class SurfaceErrorBoundary extends Component<SurfaceErrorBoundaryProps, S
         return this.props.fallbackRender(this.state.error, this.reset);
       }
 
-      const surfaceLabel = this.props.surfaceName ?? 'This section';
-
-      // Default fallback uses inline styles so it renders correctly even when
-      // the theming provider or CSS variables are unavailable.
+      // The default fallback is a function component: copy resolves through
+      // the i18n channel with an English floor, and its inline paint rides
+      // documented --ds-error-boundary-* escape hatches so it renders even
+      // when the theming provider itself is the crash source.
       return (
-        <div
-          style={{
-            padding: '24px',
-            border: '1px solid #fca5a5',
-            borderRadius: '8px',
-            backgroundColor: '#fef2f2',
-            color: '#991b1b',
-          }}
-        >
-          <div
-            style={{
-              fontSize: '16px',
-              fontWeight: 700,
-              marginBottom: '8px',
-            }}
-          >
-            {surfaceLabel} encountered an error
-          </div>
-          <div
-            style={{
-              fontSize: '14px',
-              opacity: 0.8,
-              marginBottom: '16px',
-              lineHeight: 1.5,
-            }}
-          >
-            {this.state.error.message}
-          </div>
-          <button
-            type="button"
-            onClick={this.reset}
-            style={{
-              padding: '8px 20px',
-              fontSize: '14px',
-              fontWeight: 500,
-              cursor: 'pointer',
-              border: '1px solid #fca5a5',
-              borderRadius: '6px',
-              backgroundColor: '#ffffff',
-              color: '#991b1b',
-            }}
-          >
-            Retry
-          </button>
-        </div>
+        <DefaultSurfaceErrorFallback
+          surfaceName={this.props.surfaceName}
+          error={this.state.error}
+          onRetry={this.reset}
+        />
       );
     }
 

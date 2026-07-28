@@ -38,6 +38,33 @@ const GOVERNED_ROOT_ATTRIBUTES: Readonly<Record<string, string>> = {
   'data-density': 'infrastructure/runtime/foundation/density/index.ts',
 };
 
+/**
+ * Channels an APPLICATION claims, which this tree must therefore never write.
+ *
+ * These four are stamped by the SSR projection and re-claimed on hydration by
+ * app-bithire (`core/providers` for the tenant-scope trio, the runtime tenant
+ * theme hook for the mode) through the shared claim registry. They are censused
+ * here for one property only: the design system must not quietly become their
+ * second writer. They are deliberately NOT in the owner map above -- nothing in
+ * this tree writes them, so the "at least one writer" anti-cheat would report a
+ * false violation.
+ *
+ * Moving one of these into a design-system provider is a legitimate future
+ * decision. It turns this assertion red, which is the intent: the transfer has
+ * to be made deliberately and the application's claim removed in the same
+ * change, rather than two owners accumulating in silence.
+ */
+const APP_OWNED_ROOT_CHANNELS: readonly string[] = [
+  'data-account-tenant',
+  'data-brand-artifact',
+  'data-css-tenant',
+  'data-tenant-theme-mode',
+];
+
+function isCensusedChannel(name: string): boolean {
+  return name in GOVERNED_ROOT_ATTRIBUTES || APP_OWNED_ROOT_CHANNELS.includes(name);
+}
+
 const THIS_TEST_FILE = 'root-attribute-authority.integration.test.tsx';
 
 interface RootWrite {
@@ -94,7 +121,7 @@ function interceptRootMutations(): () => void {
     configurable: true,
     writable: true,
     value: function patchedSetAttribute(name: string, value: string): void {
-      if (name in GOVERNED_ROOT_ATTRIBUTES) {
+      if (isCensusedChannel(name)) {
         writes.push({ attribute: name, writer: callerModule() });
       }
       originalSet(name, value);
@@ -104,7 +131,7 @@ function interceptRootMutations(): () => void {
     configurable: true,
     writable: true,
     value: function patchedRemoveAttribute(name: string): void {
-      if (name in GOVERNED_ROOT_ATTRIBUTES) {
+      if (isCensusedChannel(name)) {
         writes.push({ attribute: name, writer: callerModule() });
       }
       originalRemove(name);
@@ -154,6 +181,9 @@ afterEach(() => {
   restore = null;
   const root = document.documentElement;
   for (const attribute of Object.keys(GOVERNED_ROOT_ATTRIBUTES)) {
+    root.removeAttribute(attribute);
+  }
+  for (const attribute of APP_OWNED_ROOT_CHANNELS) {
     root.removeAttribute(attribute);
   }
   root.removeAttribute('data-ds-motion');
@@ -247,6 +277,45 @@ describe('root attribute authority', () => {
         ).toBe(false);
       }
     });
+  });
+
+  it('never writes a channel an application claims', async () => {
+    // R1-P Phase4. The SSR projection stamps all four, so the document arrives
+    // with them already set; a provider that re-derived any of them would be a
+    // second hydrated owner of a channel it does not project.
+    const root = document.documentElement;
+    for (const channel of APP_OWNED_ROOT_CHANNELS) root.setAttribute(channel, 'ssr');
+    // The interceptor is already installed, so the planted stamps above are
+    // this test's own writes. Drop them or they read as the trespass.
+    writes = [];
+
+    const view = await mountFullTree();
+    view.rerender(
+      <DesignSystemProvider
+        tenantConfig={tenantConfig({ theme: 'light' })}
+        vertical="evnto"
+        forceEngine="rustic"
+        locale="es"
+        skipCssLoading
+      >
+        <Probe />
+      </DesignSystemProvider>,
+    );
+    view.unmount();
+
+    const trespass = writes.filter((write) => APP_OWNED_ROOT_CHANNELS.includes(write.attribute));
+    expect(
+      trespass,
+      `design system wrote app-owned channels: ${trespass
+        .map((write) => `${write.attribute} <- ${write.writer}`)
+        .join(', ')}`,
+    ).toEqual([]);
+
+    // The values the test planted survive untouched, which is the same property
+    // stated as a DOM fact rather than a writer census.
+    for (const channel of APP_OWNED_ROOT_CHANNELS) {
+      expect(root.getAttribute(channel), `${channel} was modified`).toBe('ssr');
+    }
   });
 
   it('keeps each channel independent when a single input moves', async () => {

@@ -15,9 +15,14 @@ import {
   compileBrandTheme,
   brandThemeToBranding,
   brandThemeToChromeVariables,
+  isDarkSurfacePalette,
   mergePartialPersonality,
   deepMergeTokenOverrides,
 } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import {
+  enforceTextContrast,
+  type TextContrastBackgroundMode,
+} from '@/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect';
 import {
   isHexColor,
   normalizeHexColor,
@@ -36,6 +41,31 @@ import { getProductProfile } from '@/foundation/presets/product-profiles';
 import { resolvePartialPersonalityCssVariables } from '@/foundation/tokens/ts/runtime/personality';
 
 const COLOR_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
+
+/**
+ * Palette roles that own a `--ds-color-{role}` channel and a
+ * `--ds-color-{role}-{50..900}` ramp. The OKLCH brand compiler
+ * (`deriveTenantColorRamps`) authors these for every role a BrandTheme seeds;
+ * the legacy sRGB scale below may only fill the roles it leaves unauthored.
+ * Both sides are asserted to a single author per channel by
+ * `assertSingleLightEmitter`.
+ */
+const PALETTE_ROLES = [
+  'primary',
+  'secondary',
+  'accent',
+  'success',
+  'warning',
+  'error',
+  'info',
+] as const;
+
+const PALETTE_CHANNELS: ReadonlySet<string> = new Set(
+  PALETTE_ROLES.flatMap((role) => [
+    `--ds-color-${role}`,
+    ...COLOR_STEPS.map((step) => `--ds-color-${role}-${step}`),
+  ]),
+);
 
 export interface GenerateTenantCssOptions {
   includeDarkSelector?: boolean;
@@ -210,8 +240,28 @@ function indentBlock(block: string, spaces = 2): string {
     .join('\n');
 }
 
-/** Generate tenant branding variables for the default light theme. */
-function brandingVariables(config: TenantConfig): Record<string, string | number | undefined> {
+/**
+ * Generate tenant branding variables for the default light theme.
+ *
+ * Single-author law: a palette channel the OKLCH brand compiler already wrote
+ * is NOT written here. The flat `mixColor` scale used to be spread over the
+ * compiled ramp and won every step, so a tenant carrying both `branding` and
+ * `brandTheme` shipped the sRGB mix instead of the perceptual ramp its own
+ * BrandTheme compiled. The scale still fills roles the compiler left
+ * unauthored -- a tenant with legacy branding colors and no `brandTheme` has
+ * no other palette author, and dropping it outright would repaint it in the
+ * design system's default colors.
+ *
+ * The four derived channels below have no compiled counterpart (the brand
+ * compiler emits none of them), so they stay legacy-owned and keep deriving
+ * from the sRGB scale. They are written unconditionally on purpose: if the
+ * compiler ever starts emitting one, that is a second author and
+ * `assertSingleLightEmitter` must say so rather than silently yield.
+ */
+function brandingVariables(
+  config: TenantConfig,
+  compilerOwnedChannels: ReadonlySet<string>,
+): Record<string, string | number | undefined> {
   const declarations: Record<string, string | number | undefined> = {};
   const colorEntries = [
     ['primary', config.branding.primaryColor],
@@ -225,9 +275,15 @@ function brandingVariables(config: TenantConfig): Record<string, string | number
     }
 
     const scale = buildRuntimeScale(colorValue);
-    declarations[`--ds-color-${tokenName}`] = scale[500];
+    const claimUnowned = (name: string, value: string): void => {
+      if (!compilerOwnedChannels.has(name)) {
+        declarations[name] = value;
+      }
+    };
+
+    claimUnowned(`--ds-color-${tokenName}`, scale[500]);
     COLOR_STEPS.forEach((step) => {
-      declarations[`--ds-color-${tokenName}-${step}`] = scale[step];
+      claimUnowned(`--ds-color-${tokenName}-${step}`, scale[step]);
     });
 
     if (tokenName === 'primary') {
@@ -241,7 +297,22 @@ function brandingVariables(config: TenantConfig): Record<string, string | number
   return declarations;
 }
 
-/** Generate tenant branding variables for dark-theme selectors. */
+/**
+ * Generate tenant branding variables for dark-theme selectors.
+ *
+ * @ds-exception kind=capability-gap owner=claude
+ *   purpose="sole author of the dark palette ramp; no OKLCH dark competitor exists"
+ *   reachability=mode:dark
+ *   retire="until OKLCH dark ramp derivation exists"
+ *
+ * `deriveTenantColorRamps` derives one ramp keyed to the theme's own surface,
+ * so a light-surface tenant gets no compiled dark twin at all. This sRGB dark
+ * scale is therefore the only author of `--ds-color-{role}-{50..900}` inside
+ * the dark blocks -- a capability gap, not the dual emission the light block
+ * carried. It stays until the OKLCH compiler can derive a dark ramp, at which
+ * point this function retires and the dark blocks join the same single-author
+ * assertion the light block is held to.
+ */
 function darkBrandingVariables(config: TenantConfig): Record<string, string | number | undefined> {
   const declarations: Record<string, string | number | undefined> = {};
   const colorEntries = [
@@ -444,12 +515,144 @@ export function buildTenantSelector(slug: string): string {
 }
 
 /**
+ * One internal source of light-block declarations, plus the authority it holds
+ * over the compiled BrandTheme map.
+ *
+ * `compat` layers exist precisely to re-declare compiled values:
+ * `resolveTenantVisualConfig` deep-merges the tenant's own `tokenOverrides`
+ * and `personality` on top of the compiled ones, so a tenant radius of 18px is
+ * MEANT to beat the theme's 10px and a personality card elevation is MEANT to
+ * beat the theme's compiled card shadow. An `exclusive` layer holds no such
+ * authority: anything it re-declares is a second author.
+ */
+interface LightMergeLayer {
+  name: string;
+  declarations: Record<string, string | number | undefined>;
+  authority: 'exclusive' | 'compat';
+}
+
+/**
+ * Fail closed when the light block ends up with two internal authors for one
+ * channel, so composition is by construction rather than spread-order luck.
+ *
+ * Two rules:
+ * 1. an `exclusive` layer may never re-declare a compiled channel, even with
+ *    an identical value -- an agreeing duplicate is still a second author, and
+ *    it stops agreeing the moment either derivation changes;
+ * 2. a palette channel has exactly one author whatever the layer's authority.
+ *    That family is the OKLCH compiler's, and no compatibility layer has a
+ *    mandate to re-derive a ramp.
+ *
+ * `appearanceVars` is deliberately not a layer here: it is the sanctioned
+ * final authority (itself OKLCH-derived and APCA-corrected) and is documented
+ * to win over everything below it.
+ */
+function assertSingleLightEmitter(
+  compiledBrandVars: Record<string, string>,
+  layers: readonly LightMergeLayer[],
+  slug: string,
+): void {
+  const authors = new Map<string, { layer: string; value: string }>();
+  for (const [name, value] of Object.entries(compiledBrandVars)) {
+    authors.set(name, { layer: 'compiled-brand-theme', value });
+  }
+
+  const conflicts: string[] = [];
+  for (const layer of layers) {
+    for (const [name, rawValue] of Object.entries(layer.declarations)) {
+      if (rawValue === undefined || rawValue === null) continue;
+      const value = String(rawValue);
+      const prior = authors.get(name);
+      if (prior !== undefined) {
+        const authorized = layer.authority === 'compat' && !PALETTE_CHANNELS.has(name);
+        if (!authorized) {
+          conflicts.push(`${name} (${prior.layer}=${prior.value} vs ${layer.name}=${value})`);
+        }
+      }
+      authors.set(name, { layer: layer.name, value });
+    }
+  }
+
+  if (conflicts.length > 0) {
+    throw new Error(
+      `Tenant "${slug}" light block has more than one author for ` +
+        `${conflicts.length} channel(s): ${conflicts.join(', ')}. ` +
+        `Remove the competing emission at its source -- filtering at the merge ` +
+        `would keep both authors and only hide which one wins.`,
+    );
+  }
+}
+
+/**
+ * The background the APCA pass assumes when a text pairing's whole ground
+ * chain is unauthored.
+ *
+ * A dark-surface BrandTheme declares `darkBackgroundColor` and no
+ * `backgroundColor`, so it emits no `--ds-color-bg-*` for its own base block
+ * -- reading the default LIGHT ground there would "correct" its near-white ink
+ * to near-black. `isDarkSurfacePalette` is the same classification the ramp
+ * derivation keys off, so the contrast pass and the ramp agree on which
+ * surface the tenant actually has.
+ */
+function resolveContrastBackgroundMode(config: TenantConfig): TextContrastBackgroundMode {
+  const declared = config.appearance?.general?.palette?.backgroundMode;
+  if (declared) return declared;
+  return isDarkSurfacePalette(config.brandTheme?.palette) ? 'dark' : 'light';
+}
+
+/**
+ * Run the governed APCA pairings over a block's FINAL declarations.
+ *
+ * The pass used to see only the appearance slice, so it validated values that
+ * were not the ones shipped: a button ink compiled from chrome, or a text
+ * color from the BrandTheme, reached the stylesheet unchecked, and an
+ * appearance foreground could be checked against a ground that a lower layer
+ * then replaced. Running it here -- over exactly the map `toCssBlock`
+ * serializes -- makes the value APCA validated and the value emitted the same
+ * value, which is what `compileTenantThemeConfig` already does for v1.
+ *
+ * Scope note: this covers the TEXT_CONTRAST_PAIRINGS semantic pairs (the same
+ * guarantee v1 gives). Ramp steps as such are checked by the static path's
+ * APCA gate, not here.
+ */
+function withEnforcedTextContrast(
+  declarations: Record<string, string | number | undefined>,
+  backgroundMode: TextContrastBackgroundMode,
+): Record<string, string | number | undefined> {
+  const authored: Record<string, string> = {};
+  for (const [name, value] of Object.entries(declarations)) {
+    if (value === undefined || value === null) continue;
+    authored[name] = String(value);
+  }
+
+  // Nothing authored means nothing to verify: an empty tenant must serialize
+  // as an empty block, not as a set of autocorrected defaults.
+  if (Object.keys(authored).length === 0) return declarations;
+
+  const { variables } = enforceTextContrast(authored, {
+    general: { palette: { backgroundMode } },
+  });
+
+  // `enforceTextContrast` only rewrites keys it was given, so the spread
+  // replaces values in place and the declaration order stays byte-stable.
+  return { ...declarations, ...variables };
+}
+
+/**
  * Generate a complete CSS stylesheet from an already-resolved tenant visual config.
  *
  * Produces up to three selector blocks:
  * 1. Light theme -- branding + personality + token overrides
  * 2. Dark theme -- explicit `[data-theme='dark']` / `.dark` selectors
  * 3. System dark -- `@media (prefers-color-scheme: dark)` for unset themes
+ *
+ * This is the COMPATIBILITY path, not the canonical one. A tenant that mounts
+ * a compiled v1 artifact never reaches it: `TENANT_THEME_V1_COVERAGE` includes
+ * `brand-chrome`, `resolveVisualAuthority` suppresses every covered channel,
+ * and the provider skips this generator entirely for a suppressed
+ * `brand-chrome`. What reaches it is a DB tenant with a `brandTheme` and no
+ * compiled artifact, the brand-studio tenant preview (`buildPreviewCss`), and
+ * the build-time `generateTenantCssFile` export.
  *
  * @param resolvedVisualConfig - Output from resolveTenantVisualConfig()
  * @param options - Control dark mode selector generation
@@ -472,17 +675,39 @@ export function generateTenantCssFromResolvedVisualConfig(
     ? compileAppearanceVariables(effectiveConfig.appearance).variables
     : {};
 
-  // Base declarations without chrome (shared across light + dark base)
+  // Base declarations without chrome (shared across light + dark base).
+  // The legacy sRGB scale is handed the compiled channel set so it can stay
+  // off the palette channels the OKLCH compiler already authored.
+  const brandingDeclarations = brandingVariables(
+    effectiveConfig,
+    new Set(Object.keys(compiledBrandVars)),
+  );
+  const tokenOverrideDeclarations = tokenOverrideVariables(effectiveConfig);
+  const personalityDeclarations = personalityVariables(effectiveConfig);
   const baseDeclarations = {
-    ...brandingVariables(effectiveConfig),
-    ...tokenOverrideVariables(effectiveConfig),
-    ...personalityVariables(effectiveConfig),
+    ...brandingDeclarations,
+    ...tokenOverrideDeclarations,
+    ...personalityDeclarations,
   };
 
+  assertSingleLightEmitter(
+    compiledBrandVars,
+    [
+      { name: 'legacy-branding', declarations: brandingDeclarations, authority: 'exclusive' },
+      { name: 'tenant-token-overrides', declarations: tokenOverrideDeclarations, authority: 'compat' },
+      { name: 'tenant-personality', declarations: personalityDeclarations, authority: 'compat' },
+    ],
+    effectiveConfig.slug,
+  );
+
   // Compiled BrandTheme vars include palette, structural, typography, and
-  // chrome CSS. Tenant compat fields then override palette/structure, and
-  // appearance stays the highest-priority CSS layer.
-  const lightDeclarations = { ...compiledBrandVars, ...baseDeclarations, ...appearanceVars };
+  // chrome CSS. Tenant compat fields then override structure/personality, and
+  // appearance stays the highest-priority CSS layer. The APCA pass runs last,
+  // over the composed map, so it verifies the values this block ships.
+  const lightDeclarations = withEnforcedTextContrast(
+    { ...compiledBrandVars, ...baseDeclarations, ...appearanceVars },
+    resolveContrastBackgroundMode(effectiveConfig),
+  );
 
   // Block 1: light-theme tenant variables (always generated).
   // Scoped to the html element (page-wide) AND directly to the DS-root wrapper
@@ -522,14 +747,20 @@ export function generateTenantCssFromResolvedVisualConfig(
     // followed by dark-only personality deltas. Appearance vars are included because
     // in the runtime they are set as inline styles on the root element and persist
     // across theme switches.
-    const darkDeclarations = {
-      ...baseDeclarations,
-      ...darkBrandingVariables(effectiveConfig),
-      ...darkSemanticVariables(effectiveConfig),
-      ...darkChromeVars,
-      ...darkPersonalityOverrides(effectiveConfig),
-      ...appearanceVars,
-    };
+    // The dark block's ground is always dark by construction
+    // (`darkSemanticVariables` authors it), so the APCA pass is told so rather
+    // than inferring a light default for any pairing whose chain is unauthored.
+    const darkDeclarations = withEnforcedTextContrast(
+      {
+        ...baseDeclarations,
+        ...darkBrandingVariables(effectiveConfig),
+        ...darkSemanticVariables(effectiveConfig),
+        ...darkChromeVars,
+        ...darkPersonalityOverrides(effectiveConfig),
+        ...appearanceVars,
+      },
+      'dark',
+    );
 
     // Block 2: explicit dark mode -- matches `data-theme='dark'` attribute or `.dark` class.
     // The `:is()` variant handles frameworks that set only the attribute without a class.

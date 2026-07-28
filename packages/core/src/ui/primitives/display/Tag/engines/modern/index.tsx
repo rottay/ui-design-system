@@ -155,7 +155,7 @@ export default function ModernTag(props: TagProps): React.ReactElement {
 
   // Accessible name for the close control: the caller's localized label wins,
   // then the component catalogue, then the documented English fallback.
-  const removeAriaLabel = closeLabel ?? i18n?.t('common.remove') ?? 'Remove tag';
+  const removeAriaLabel = closeLabel ?? i18n?.tOr('common.remove', 'Remove tag') ?? 'Remove tag';
 
   // Conditionally add button semantics so keyboard users can activate
   // clickable tags via Enter/Space without extra JS key handlers.

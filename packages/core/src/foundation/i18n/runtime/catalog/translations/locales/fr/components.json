@@ -128,7 +128,12 @@
       "empty_title": "Rien a afficher pour le moment",
       "empty_description": "Cette surface ne dispose d'aucune donnee a afficher pour le moment.",
       "error_title": "La surface n'a pas pu etre rendue",
-      "retry": "Reessayer"
+      "retry": "Reessayer",
+      "error_description": "Une erreur s'est produite lors du rendu de cette surface.",
+      "capability_label": "Disponible lorsque les données seront récupérées",
+      "capability_aria": "Fonctionnalités de surface enregistrées",
+      "error_boundary_title": "{surface} a rencontré une erreur",
+      "error_boundary_generic_surface": "Cette section"
     },
     "list": {
       "empty_title": "Aucun resultat disponible",
@@ -239,5 +244,23 @@
     },
     "topLabel": "Actions en haut",
     "bottomLabel": "Actions en bas"
+  },
+  "appShell": {
+    "navigation": {
+      "label": "Navigation",
+      "open": "Ouvrir {label}",
+      "close": "Fermer {label}"
+    }
+  },
+  "pageShell": {
+    "tabs": {
+      "label": "Onglets de la page"
+    }
+  },
+  "tabs": {
+    "previous": "Onglets précédents",
+    "next": "Onglets suivants",
+    "more": "Plus d'onglets",
+    "loading": "Chargement"
   }
 }

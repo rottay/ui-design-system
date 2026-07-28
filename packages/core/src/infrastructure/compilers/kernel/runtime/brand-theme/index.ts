@@ -12,12 +12,18 @@
  * and a CSS string from a BrandTheme + vertical baseline.
  */
 
-import { withArabicSafeFallback } from "@/foundation/kernel/typography";
+import {
+  assertMandatoryFontFallback,
+  withArabicSafeFallback,
+} from "@/foundation/kernel/typography";
 import type {
   BrandTheme,
   BrandPalette,
+  BrandThemeMode,
+  BrandThemeModeOverlay,
   CompileBrandTheme,
   CompiledBrand,
+  CompiledBrandModeBlock,
   BrandCompilerInput,
 } from "@/foundation/contracts/composition/tenants/themes";
 import type { EngineName } from "@/foundation/contracts/runtime/engine";
@@ -47,6 +53,7 @@ import {
   type RampSurface,
 } from "@/foundation/kernel/color/oklch/ramp";
 import { chromeToVariables } from "../../foundation/css/chrome-variables";
+import { derivePaletteSemantics } from "../../foundation/css/color-math/palette-derivations";
 import {
   springLinearEasing,
   springLinearEasingGentle,
@@ -332,6 +339,14 @@ export function deriveTenantColorRamps(
       vars[`--ds-color-${role.name}-${step}`] = ramp[step];
     }
   }
+  // Authored steps win over derived ones. A role that is authored-only
+  // (`neutral` has no seed to derive from) emits nothing until authored, so an
+  // absent override never claims a channel.
+  for (const [role, ramp] of Object.entries(palette.ramps ?? {})) {
+    for (const [step, value] of Object.entries(ramp ?? {})) {
+      if (value) vars[`--ds-color-${role}-${step}`] = value;
+    }
+  }
   return vars;
 }
 
@@ -440,6 +455,63 @@ export function semanticSurfaceRolesToCssVariables(
 export const semanticMaterialsToCssVariables =
   semanticSurfaceRolesToCssVariables;
 
+/**
+ * The palette channels beyond the seeds: the second and third steps of every
+ * semantic family a product actually paints with.
+ *
+ * These are DS-owned channels with real consumers (`--ds-color-bg-elevated`
+ * alone is read in ~295 places). Before they were contract fields the only way
+ * for a vertical to set them was a hand-written root block in its artifact
+ * extension, which is how a static vertical ended up with a second theme
+ * author. One field reaches exactly one channel, so a value that ships today
+ * moves into the contract without changing.
+ */
+const EXTENDED_PALETTE_CHANNELS: readonly (readonly [
+  keyof BrandPalette,
+  string,
+])[] = [
+  ["primaryHoverColor", "--ds-color-primary-hover"],
+  ["secondaryHoverColor", "--ds-color-secondary-hover"],
+  ["accentHoverColor", "--ds-color-accent-hover"],
+  ["onPrimaryColor", "--ds-color-text-on-primary"],
+  ["primaryForegroundColor", "--ds-color-primary-foreground"],
+  ["textTertiaryColor", "--ds-color-text-tertiary"],
+  ["borderColor", "--ds-color-border"],
+  ["borderTertiaryColor", "--ds-color-border-tertiary"],
+  ["borderSubtleColor", "--ds-color-border-subtle"],
+  ["borderFocusColor", "--ds-color-border-focus"],
+  ["backgroundSecondaryColor", "--ds-color-bg-secondary"],
+  ["backgroundTertiaryColor", "--ds-color-bg-tertiary"],
+  ["backgroundElevatedColor", "--ds-color-bg-elevated"],
+  ["backgroundSurfaceColor", "--ds-color-bg-surface"],
+  ["backgroundOverlayColor", "--ds-color-bg-overlay"],
+  ["successBgColor", "--ds-color-success-bg"],
+  ["successBorderColor", "--ds-color-success-border"],
+  ["warningBgColor", "--ds-color-warning-bg"],
+  ["warningBorderColor", "--ds-color-warning-border"],
+  ["errorBgColor", "--ds-color-error-bg"],
+  ["errorBorderColor", "--ds-color-error-border"],
+  ["infoBgColor", "--ds-color-info-bg"],
+  ["infoBorderColor", "--ds-color-info-border"],
+  ["linkColor", "--ds-color-link"],
+  ["linkHoverColor", "--ds-color-link-hover"],
+  ["linkVisitedColor", "--ds-color-link-visited"],
+  ["interactiveBorderColor", "--ds-color-interactive-border"],
+  ["interactiveBgHoverColor", "--ds-color-interactive-bg-hover"],
+  ["interactiveBgActiveColor", "--ds-color-interactive-bg-active"],
+  ["interactiveBgMutedColor", "--ds-color-interactive-bg-muted"],
+];
+
+function setExtendedPaletteVariables(
+  vars: Record<string, string>,
+  palette: BrandPalette
+): void {
+  for (const [field, variable] of EXTENDED_PALETTE_CHANNELS) {
+    const value = palette[field];
+    if (typeof value === "string" && value) vars[variable] = value;
+  }
+}
+
 function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
   // A compiled BrandTheme is the complete static baseline for a first-party
   // product. Keep the three ramp axes explicit in that artifact instead of
@@ -467,6 +539,29 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
     );
   }
   if (bt.palette) {
+    // Semantic defaults come FIRST, so every authored layer outranks them:
+    // the palette literals immediately below restate their own channels, and
+    // `compileBrandTheme` merges the chrome map after this whole object. A
+    // theme that authors its button chrome therefore keeps its exact pixels
+    // while a palette-only theme stops being inert — the seeds reach the
+    // buttons, focus ring, links, interactive states and grounds instead of
+    // stopping at the ramps. Seed resolution mirrors `deriveTenantColorRamps`:
+    // a dark-surface tenant derives from its dark seeds against its own dark
+    // ground. A ground is derived only when the palette actually declares one,
+    // so an absent seed never claims a channel.
+    const darkSurface = isDarkSurfacePalette(bt.palette);
+    Object.assign(
+      vars,
+      derivePaletteSemantics({
+        primary: darkSurface
+          ? bt.palette.darkPrimaryColor ?? bt.palette.primaryColor
+          : bt.palette.primaryColor,
+        background: darkSurface
+          ? bt.palette.darkBackgroundColor
+          : bt.palette.backgroundColor,
+      })
+    );
+
     // Light-mode palette (default)
     if (bt.palette.primaryColor)
       vars["--ds-color-primary"] = bt.palette.primaryColor;
@@ -492,6 +587,7 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
       vars["--ds-color-warning"] = bt.palette.warningColor;
     if (bt.palette.errorColor) vars["--ds-color-error"] = bt.palette.errorColor;
     if (bt.palette.infoColor) vars["--ds-color-info"] = bt.palette.infoColor;
+    setExtendedPaletteVariables(vars, bt.palette);
 
     // Dark-mode palette aliases consumed by ThemeProvider.
     if (bt.palette.darkPrimaryColor)
@@ -566,6 +662,7 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
       if (su.borderRadius.md) vars["--ds-radius-md"] = su.borderRadius.md;
       if (su.borderRadius.lg) vars["--ds-radius-lg"] = su.borderRadius.lg;
       if (su.borderRadius.xl) vars["--ds-radius-xl"] = su.borderRadius.xl;
+      if (su.borderRadius.full) vars["--ds-radius-full"] = su.borderRadius.full;
     }
     if (su.shadows) {
       if (su.shadows.sm) vars["--ds-shadow-sm"] = su.shadows.sm;
@@ -922,15 +1019,142 @@ function setTintScaleVariables(
   }
 }
 
+// ── Mode overlays ───────────────────────────────────────
+
+/**
+ * Merge one mode overlay over the base theme.
+ *
+ * Plain-object branches recurse so a partial like `chrome.controls.input.bg`
+ * replaces one leaf and leaves its siblings alone; everything else (strings,
+ * numbers, arrays) is a leaf and is replaced wholesale. `undefined` in the
+ * overlay means "not authored", never "unset".
+ */
+function mergeModeOverlay<T>(base: T, overlay: unknown): T {
+  if (overlay === undefined) return base;
+  if (
+    !overlay ||
+    typeof overlay !== "object" ||
+    Array.isArray(overlay) ||
+    !base ||
+    typeof base !== "object" ||
+    Array.isArray(base)
+  ) {
+    return overlay as T;
+  }
+  const merged: Record<string, unknown> = {
+    ...(base as Record<string, unknown>),
+  };
+  for (const [key, value] of Object.entries(overlay)) {
+    if (value === undefined) continue;
+    merged[key] = mergeModeOverlay(
+      (base as Record<string, unknown>)[key],
+      value
+    );
+  }
+  return merged as T;
+}
+
+/** Apply a mode overlay to a BrandTheme, leaving identity fields alone. */
+export function applyModeOverlay(
+  bt: BrandTheme,
+  overlay: BrandThemeModeOverlay
+): BrandTheme {
+  return {
+    ...bt,
+    palette: mergeModeOverlay(bt.palette, overlay.palette) as
+      | BrandPalette
+      | undefined,
+    typography: mergeModeOverlay(bt.typography, overlay.typography),
+    surfaces: mergeModeOverlay(bt.surfaces, overlay.surfaces),
+    chrome: mergeModeOverlay(bt.chrome, overlay.chrome),
+  };
+}
+
+/**
+ * Compile every authored mode overlay into its delta over the base block.
+ *
+ * The overlay goes through the SAME family compilers as the base — there is no
+ * second emission path and no per-vertical branch. Only channels whose value
+ * actually moves are kept: everything the mode does not restate keeps
+ * cascading from the base block, which is also what lets a `var()` chain
+ * authored once (the tint scale mixes against `--ds-color-bg-primary`)
+ * re-resolve against the mode's own ground instead of being duplicated.
+ */
+function compileModeBlocks(
+  bt: BrandTheme,
+  baseVars: Record<string, string>
+): CompiledBrandModeBlock[] {
+  const modes = bt.modes;
+  if (!modes) return [];
+  const defaultMode = bt.appearance?.defaultMode;
+  const blocks: CompiledBrandModeBlock[] = [];
+  for (const mode of ["light", "dark"] as const) {
+    const overlay = modes[mode];
+    if (!overlay) continue;
+    if (mode === defaultMode) {
+      throw new Error(
+        `BrandTheme '${bt.id}' authors modes.${mode}, but ${mode} is its declared defaultMode. ` +
+          `The default mode's values belong in the theme body; a mode overlay describes the OTHER mode.`
+      );
+    }
+    const merged = applyModeOverlay(bt, overlay);
+    const modeVars = {
+      ...brandThemeToCssVariables(merged),
+      ...brandThemeToChromeVariables(merged),
+    };
+    const cssVariables: Record<string, string> = {};
+    for (const [key, value] of Object.entries(modeVars)) {
+      if (baseVars[key] !== value) cssVariables[key] = value;
+    }
+    blocks.push({ mode, cssVariables, colorScheme: mode });
+  }
+  return blocks;
+}
+
 /** Build a CSS string from variables with tenant selector scoping. */
 function buildCssString(
   vars: Record<string, string>,
-  tenantSlug: string
+  tenantSlug: string,
+  colorScheme?: "light" | "dark"
 ): string {
   const entries = Object.entries(vars).filter(([, v]) => v != null);
-  if (entries.length === 0) return "";
-  const declarations = entries.map(([k, v]) => `  ${k}: ${v};`).join("\n");
+  if (entries.length === 0 && !colorScheme) return "";
+  const declarations = [
+    ...(colorScheme ? [`  color-scheme: ${colorScheme};`] : []),
+    ...entries.map(([k, v]) => `  ${k}: ${v};`),
+  ].join("\n");
   return `html[data-tenant='${tenantSlug}'] {\n${declarations}\n}`;
+}
+
+/**
+ * Selector a compiled mode block is scoped to.
+ *
+ * Both arms are the root-state contract's two ways of naming an explicit mode:
+ * `data-theme` is what the SSR projection and the DS provider stamp, the class
+ * is the legacy hook still used by pre-paint scripts. Both are one attribute
+ * more specific than the base block, so a mode wins wherever it speaks and the
+ * base supplies everything else — no source-order dependency.
+ */
+export function brandModeSelector(
+  tenantSlug: string,
+  mode: BrandThemeMode
+): string {
+  return `html[data-tenant='${tenantSlug}'][data-theme='${mode}'], html[data-tenant='${tenantSlug}'].${mode}`;
+}
+
+/** Build one compiled mode block's CSS. */
+function buildModeCssString(
+  block: CompiledBrandModeBlock,
+  tenantSlug: string
+): string {
+  const entries = Object.entries(block.cssVariables).filter(
+    ([, v]) => v != null
+  );
+  const declarations = [
+    `  color-scheme: ${block.colorScheme};`,
+    ...entries.map(([k, v]) => `  ${k}: ${v};`),
+  ].join("\n");
+  return `${brandModeSelector(tenantSlug, block.mode)} {\n${declarations}\n}`;
 }
 
 // ── Chrome Variables ────────────────────────────────────
@@ -1014,8 +1238,30 @@ export const compileBrandTheme: CompileBrandTheme = (
     cssVariables["--ds-recipe-profile"] = `"${recipeProfile}"`;
   }
 
+  assertMandatoryFontFallback(cssVariables, tenantSlug);
+
+  // The declared mode of the values above; the non-default modes are compiled
+  // from the typed `modes` overlays into their own blocks below.
+  const colorScheme = brandTheme.appearance?.defaultMode;
+  const modeBlocks = compileModeBlocks(brandTheme, cssVariables);
+  for (const block of modeBlocks) {
+    // A mode may restyle type; it may not drop the mandatory fallback while
+    // doing so. The guard reads the block's own emission, not the base's.
+    assertMandatoryFontFallback(
+      block.cssVariables,
+      `${tenantSlug} (${block.mode} mode)`
+    );
+  }
+
   // CSS string with tenant selectors
-  const cssString = buildCssString(cssVariables, tenantSlug);
+  const cssString = [
+    buildCssString(cssVariables, tenantSlug, colorScheme),
+    ...modeBlocks.map((block) =>
+      buildModeCssString(block, tenantSlug)
+    ),
+  ]
+    .filter(Boolean)
+    .join("\n\n");
 
   // Engine bridge passthrough
   const engineBridge: Partial<Record<EngineName, Record<string, unknown>>> =
@@ -1028,5 +1274,7 @@ export const compileBrandTheme: CompileBrandTheme = (
     tokenOverrides,
     engineBridge,
     ...(recipeProfile ? { recipeProfile } : {}),
+    ...(colorScheme ? { colorScheme } : {}),
+    ...(modeBlocks.length > 0 ? { modeBlocks } : {}),
   };
 };

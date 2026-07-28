@@ -295,13 +295,13 @@
   .ds-search-command-bar__suggestions[data-ds-search-shell-slot='true'][data-part='suggestions'][data-part='suggestions'],
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__actions-slot[data-ds-search-shell-slot='true'][data-part='actions-slot'][data-part='actions-slot'] {
-  border-left: 1px solid var(--ds-color-border-subtle);
+  border-inline-start: 1px solid var(--ds-color-border-subtle);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__suggestions[data-ds-search-shell-slot='true'][data-part='suggestions'][data-part='suggestions'][data-editorial-tech='true'],
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__actions-slot[data-ds-search-shell-slot='true'][data-part='actions-slot'][data-part='actions-slot'][data-editorial-tech='true'] {
-  border-left: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent);
+  border-inline-start: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__suggestions
@@ -311,4 +311,236 @@
 .ds-structure.ds-search-command-bar
   > .ds-search-command-bar__divider[data-part='divider'] {
   background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 44%, transparent 100%);
+}
+
+/* ---------------------------------------------------------------------------
+   WAVE R2+R3 — typography + motion (skin-owned, never inline).
+   Quiet Premium: the command input reads at the body step with tightened
+   tracking, the Smart-refine label is the tracked uppercase eyebrow, and
+   every chip/button earns hover/focus/active on the --ds-motion-* channels.
+   The listening pulse and the transcribing spin moved here from inline
+   styles and are silenced under prefers-reduced-motion.
+--------------------------------------------------------------------------- */
+
+/* command input typography — the exact per-engine paint node (P-79):
+ * modern wraps the native input, rustic IS the input root. */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__input
+  .rottay-input,
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__input.rottay-input {
+  font-size: var(--ds-font-size-sm);
+  letter-spacing: -0.01em;
+}
+
+/* suggestion chips: label type + deliberate hover/focus/active */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__suggestions[data-part='suggestions']
+  .ds-search-command-bar__suggestion-chip[data-part='suggestion-chip'] {
+  font-size: var(--ds-font-size-xs);
+  font-weight: 600;
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__suggestions[data-part='suggestions']
+  .ds-search-command-bar__suggestion-chip[data-part='suggestion-chip']:hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-panel));
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__suggestions[data-part='suggestions']
+  .ds-search-command-bar__suggestion-chip[data-part='suggestion-chip']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__suggestions[data-part='suggestions']
+  .ds-search-command-bar__suggestion-chip[data-part='suggestion-chip']:active {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-panel));
+}
+
+/* Smart-refine eyebrow */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__suggestions
+  > .ds-search-command-bar__suggestions-label[data-part='suggestions-label'][data-part='suggestions-label'][data-part='suggestions-label'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* status line */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__status[data-part='status'][data-part='status'][data-part='status'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  line-height: 1.45;
+}
+
+/* voice badge label */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-badge
+  > .ds-search-command-bar__voice-badge-label[data-part='voice-badge-label'][data-part='voice-badge-label'][data-part='voice-badge-label'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 600;
+}
+
+/* voice controls: motion + hover/focus grammar on clear and toggle */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-controls
+  > .ds-search-command-bar__clear[data-part='clear'],
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-controls
+  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'] {
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-controls
+  > .ds-search-command-bar__clear[data-part='clear']:hover {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 60%, transparent);
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-controls
+  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle']:hover:not([data-voice-active='true']) {
+  background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-panel));
+  color: var(--ds-color-primary);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-controls
+  > .ds-search-command-bar__clear[data-part='clear']:focus-visible,
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-controls
+  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+}
+
+/* the listening pulse: keyed on the stamped state, never inline */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-controls
+  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-status='listening'] {
+  animation: ds-search-command-bar-pulse 1.6s ease-out infinite;
+}
+
+/* the transcribing spin: the engine names the node, the skin owns the motion */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__spinning-icon {
+  animation: ds-search-command-bar-spin 1s linear infinite;
+}
+
+/* voice-help drawer typography + button grammar */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  [data-part='voice-help-title'][data-part='voice-help-title'][data-part='voice-help-title'] {
+  font-size: var(--ds-font-size-sm);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  .ds-search-command-bar__voice-help-description[data-part='voice-help-description'][data-part='voice-help-description'][data-part='voice-help-description'] {
+  font-size: var(--ds-font-size-xs);
+  line-height: 1.5;
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  .ds-search-command-bar__voice-help-list[data-part='voice-help-list'] {
+  font-size: var(--ds-font-size-xs);
+  line-height: 1.55;
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  .ds-search-command-bar__voice-help-hint[data-part='voice-help-hint'][data-part='voice-help-hint'][data-part='voice-help-hint'] {
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  line-height: 1.45;
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  .ds-search-command-bar__voice-help-cancel[data-part='voice-help-cancel'] {
+  font-size: var(--ds-font-size-xs);
+  font-weight: 600;
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  .ds-search-command-bar__voice-help-confirm[data-part='voice-help-confirm'] {
+  font-size: var(--ds-font-size-xs);
+  font-weight: 700;
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  .ds-search-command-bar__voice-help-close[data-part='close'] {
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  .ds-search-command-bar__voice-help-close[data-part='close']:hover {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent);
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  .ds-search-command-bar__voice-help-cancel[data-part='voice-help-cancel']:hover {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent);
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  .ds-search-command-bar__voice-help-confirm[data-part='voice-help-confirm']:hover {
+  background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  .ds-search-command-bar__voice-help-close[data-part='close']:focus-visible,
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  .ds-search-command-bar__voice-help-cancel[data-part='voice-help-cancel']:focus-visible,
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  .ds-search-command-bar__voice-help-confirm[data-part='voice-help-confirm']:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+}
+
+/* Reduced motion: the pulse and spin stop outright, and every hover
+ * cross-fade goes silent. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-search-command-bar
+    .ds-search-command-bar__voice-controls
+    > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-status='listening'] {
+    animation: none;
+  }
+  .ds-structure.ds-search-command-bar
+    .ds-search-command-bar__spinning-icon {
+    animation: none;
+  }
+  .ds-structure.ds-search-command-bar
+    .ds-search-command-bar__suggestion-chip,
+  .ds-structure.ds-search-command-bar
+    .ds-search-command-bar__clear,
+  .ds-structure.ds-search-command-bar
+    .ds-search-command-bar__voice-toggle,
+  .ds-structure.ds-search-command-bar
+    .ds-search-command-bar__voice-help-close,
+  .ds-structure.ds-search-command-bar
+    .ds-search-command-bar__voice-help-cancel,
+  .ds-structure.ds-search-command-bar
+    .ds-search-command-bar__voice-help-confirm {
+    transition: none;
+  }
 }

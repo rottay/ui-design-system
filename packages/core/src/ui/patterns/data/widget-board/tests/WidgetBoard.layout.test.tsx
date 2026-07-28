@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import type { WidgetBoardItem, WidgetBoardLabels } from "../contracts";
@@ -221,6 +221,12 @@ describe("WidgetBoard product layout", () => {
       />
     );
 
+    // The editing cell carries a tooltip-wrapped control whose locale observer
+    // reacts to the board's own post-mount layout mutations; those deliveries
+    // are microtasks, so each one is drained inside act right after the render
+    // or interaction that queued it, before any query flips the act flag.
+    await act(async () => {});
+
     expect(
       await findByText(richLabels.catalogHeading as string)
     ).toBeInTheDocument();
@@ -240,6 +246,7 @@ describe("WidgetBoard product layout", () => {
     expect(resizeHandle).toHaveAttribute("aria-valuemax", "3");
     expect(resizeHandle).toHaveAttribute("aria-valuenow", "2");
     fireEvent.keyDown(resizeHandle, { key: "ArrowLeft" });
+    await act(async () => {});
     expect(onItemsChange).toHaveBeenCalledWith(
       expect.arrayContaining([
         expect.objectContaining({ id: "pipeline", size: "md" }),
@@ -251,6 +258,7 @@ describe("WidgetBoard product layout", () => {
     });
     expect(heightHandle).toHaveAttribute("aria-orientation", "horizontal");
     fireEvent.keyDown(heightHandle, { key: "ArrowUp" });
+    await act(async () => {});
     expect(onItemsChange).toHaveBeenLastCalledWith(
       expect.arrayContaining([
         expect.objectContaining({ id: "pipeline", height: 220 }),
@@ -426,6 +434,64 @@ describe("WidgetBoard product layout", () => {
         expect.objectContaining({ id: "two", order: 0 }),
         expect.objectContaining({ id: "one", order: 1 }),
       ])
+    );
+  });
+
+  it("marks the region busy while loading so assistive tech hears the state", () => {
+    const { container, getByRole } = render(
+      <WidgetBoardEngine
+        labels={labels}
+        items={[item("one", "md", 0)]}
+        editable
+        loading
+      />
+    );
+
+    const root = container.querySelector('[data-part="root"]');
+    expect(root).toHaveAttribute("data-loading", "true");
+    expect(root).toHaveAttribute("aria-busy", "true");
+    // The heading gives the region its accessible name.
+    expect(
+      getByRole("region", { name: "Decision cockpit" })
+    ).toBeInTheDocument();
+  });
+
+  it("renders the consumer empty state when no widget is visible", () => {
+    const { container, getByText } = render(
+      <WidgetBoardEngine
+        labels={labels}
+        items={[{ ...item("one", "md", 0), visible: false }]}
+        emptyState={<span>No widgets yet</span>}
+      />
+    );
+
+    expect(
+      container.querySelector('[data-part="empty-state"]')
+    ).toBeInTheDocument();
+    expect(getByText("No widgets yet")).toBeInTheDocument();
+    expect(container.querySelector('[data-part="grid"]')).toBeNull();
+  });
+
+  it("drops pointer-only chrome in the narrow mobile composition", () => {
+    const { container, queryByRole } = render(
+      <WidgetBoardEngine
+        labels={labels}
+        items={[item("one", "lg", 0)]}
+        editable
+        defaultEditing
+        narrow
+      />
+    );
+
+    // The move control stays (it is the keyboard/pointer reorder channel)
+    // but the eight edge resize handles are a wide-board affordance.
+    expect(
+      container.querySelectorAll('[data-part="resize-handle"]')
+    ).toHaveLength(0);
+    expect(queryByRole("separator")).toBeNull();
+    expect(container.querySelector('[data-part="grid"]')).toHaveAttribute(
+      "data-narrow",
+      "true"
     );
   });
 });

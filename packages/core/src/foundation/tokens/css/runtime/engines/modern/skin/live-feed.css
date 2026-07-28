@@ -32,28 +32,75 @@
   box-shadow: var(--ds-elevation-1);
 }
 
-/* skeleton: shared radius/background across the title bar and row blocks */
+/* skeleton: the pulse cadence replaces Tailwind's `animate-pulse`; the bar
+   geometry was per-bar inline styles. */
+.ds-pattern-live-feed.ds-engine-modern [data-part='skeleton-list'] {
+  animation: ds-live-feed-skeleton-pulse
+    var(--ds-live-feed-skeleton-duration, var(--ds-motion-deliberate, 720ms))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
+}
+
 .ds-pattern-live-feed.ds-engine-modern [data-part='skeleton'] {
   border-radius: var(--ds-radius-sm);
   background: var(--ds-surface-panel);
+  margin-block-end: var(--ds-live-feed-skeleton-row-gap, 8px);
 }
 
-/* refresh button */
+.ds-pattern-live-feed.ds-engine-modern [data-part='skeleton'][data-skeleton='title'] {
+  block-size: var(--ds-live-feed-skeleton-title-height, 16px);
+  inline-size: 33%;
+  margin-block-end: var(--ds-live-feed-skeleton-title-gap, 16px);
+}
+
+.ds-pattern-live-feed.ds-engine-modern [data-part='skeleton'][data-skeleton='row'] {
+  block-size: var(--ds-live-feed-skeleton-row-height, 64px);
+}
+
+@keyframes ds-live-feed-skeleton-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.45;
+  }
+}
+
+/* header row (was Tailwind `flex items-center justify-between mb-3`) */
+.ds-pattern-live-feed.ds-engine-modern [data-part='header-row'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-block-end: var(--ds-live-feed-header-margin-block-end, 12px);
+}
+
+/* refresh button (geometry was inline; P-79: the caller part makes this file
+   the button's single paint owner) */
 .ds-pattern-live-feed.ds-engine-modern [data-part='refresh'] {
+  inline-size: var(--ds-live-feed-refresh-size, 32px);
+  block-size: var(--ds-live-feed-refresh-size, 32px);
+  padding: 0;
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: var(--ds-radius-md);
   border: none;
+  font-size: var(--ds-live-feed-control-font-size, 13px);
 }
 
 /* new-items banner -- Signal-glow (spec section 5, role 3): reserved for live
-   moments like new real-time items arriving. */
+   moments like new real-time items arriving. Geometry was inline. */
 .ds-pattern-live-feed.ds-engine-modern [data-part='banner'] {
+  inline-size: 100%;
+  block-size: var(--ds-live-feed-banner-height, 32px);
+  gap: var(--ds-live-feed-banner-gap, 8px);
+  padding-block: 0;
+  padding-inline: var(--ds-live-feed-banner-padding-inline, 12px);
+  margin-block-end: var(--ds-live-feed-banner-margin-block-end, 12px);
   background: var(--ds-color-info);
   color: var(--ds-color-text-on-primary);
   border-radius: var(--ds-radius-md);
   border: none;
   box-shadow: var(--ds-shadow-glow-primary);
+  font-size: var(--ds-live-feed-control-font-size, 13px);
 }
 
 /* banner count badge -- only these two channels are local overrides on top of
@@ -63,15 +110,59 @@
   color: var(--ds-color-text-primary);
 }
 
-/* empty state */
+/* feed list: layout stays on the test-pinned Tailwind utilities
+   (`flex flex-col gap-2`, see the engine comment) — this file paints no
+   duplicate list rule. */
+
+/* empty state (was Tailwind `text-center py-8`) */
 .ds-pattern-live-feed.ds-engine-modern [data-part='empty'] {
+  padding-block: var(--ds-live-feed-empty-padding-block, 32px);
   color: var(--ds-color-text-secondary);
+  text-align: center;
 }
 
-/* load more */
+/* end-of-feed sentinel (geometry was inline) */
+.ds-pattern-live-feed.ds-engine-modern [data-part='sentinel'] {
+  block-size: 1px;
+}
+
+/* load more (footer centering was Tailwind; button geometry was inline) */
+.ds-pattern-live-feed.ds-engine-modern [data-part='footer'] {
+  margin-block-start: var(--ds-live-feed-footer-margin-block-start, 12px);
+  text-align: center;
+}
+
 .ds-pattern-live-feed.ds-engine-modern [data-part='load-more'] {
+  gap: var(--ds-live-feed-load-more-gap, 6px);
+  block-size: var(--ds-live-feed-control-height, 32px);
+  padding-block: 0;
+  padding-inline: var(--ds-live-feed-control-padding-inline, 12px);
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: var(--ds-radius-md);
   border: none;
+  font-size: var(--ds-live-feed-control-font-size, 13px);
+}
+
+/* focus rings for the three composed buttons */
+.ds-pattern-live-feed.ds-engine-modern [data-part='refresh']:focus-visible,
+.ds-pattern-live-feed.ds-engine-modern [data-part='banner']:focus-visible,
+.ds-pattern-live-feed.ds-engine-modern [data-part='load-more']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* coarse pointers: the three controls meet the physical 44px floor */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-live-feed.ds-engine-modern [data-part='refresh'],
+  .ds-pattern-live-feed.ds-engine-modern [data-part='banner'],
+  .ds-pattern-live-feed.ds-engine-modern [data-part='load-more'] {
+    min-block-size: var(--ds-live-feed-touch-target-min, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-live-feed.ds-engine-modern [data-part='skeleton-list'] {
+    animation: none;
+  }
 }

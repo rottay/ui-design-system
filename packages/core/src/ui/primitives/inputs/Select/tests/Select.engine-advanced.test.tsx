@@ -62,9 +62,14 @@ describe('Select advanced engine coverage', () => {
 
     const select = (await screen.findByRole('combobox')) as HTMLSelectElement;
     expect(select).toBeTruthy();
-    expect(select.style.height).toBe('40px');
-    expect(select.style.fontSize).toBe('16px');
-    expect(select.style.paddingLeft).toBe('0px');
+    // R2+R3 (BATCH C): per-size geometry and typography are the modern skin's,
+    // keyed on `data-size` — the trigger carries NO inline paint or geometry.
+    expect(select.style.height).toBe('');
+    expect(select.style.fontSize).toBe('');
+    expect(select.style.paddingLeft).toBe('');
+    expect(select.getAttribute('data-variant')).toBe('flushed');
+    // `data-size` rides the shell root (single owner of the size contract).
+    expect(container.querySelector("[data-part='root']")?.getAttribute('data-size')).toBe('lg');
     // The warning border color is applied by the modern Select skin keyed on
     // `data-status`; the native select carries the attribute, not inline paint.
     expect(select.getAttribute('data-status')).toBe('warning');

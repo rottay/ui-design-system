@@ -47,6 +47,8 @@ import React from 'react';
 import type { PaginationProps } from '../../contracts';
 import { PAGINATION_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 
 // ============================================================================
 // i18n fallback helpers
@@ -210,7 +212,8 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
 
       {/* Pagination controls */}
       <div data-part="pagination-controls">
-        {/* Previous button: glyph-only, so the accessible name comes from i18n */}
+        {/* Previous button: glyph-only, so the accessible name comes from
+            i18n; the semantic chevron auto-mirrors in RTL. */}
         <button
           type="button"
           onClick={() => handlePageChange(current - 1)}
@@ -219,7 +222,7 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
           data-direction="prev"
           aria-label={translate('pagination.previous', EN_FALLBACK.previous)}
         >
-          «
+          <NavigationBackIcon decorative size="sm" />
         </button>
 
         {/* Page number buttons: the visible number IS the accessible name */}
@@ -252,7 +255,7 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
           data-direction="next"
           aria-label={translate('pagination.next', EN_FALLBACK.next)}
         >
-          »
+          <NavigationForwardIcon decorative size="sm" />
         </button>
       </div>
     </nav>

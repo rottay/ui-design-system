@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import ModernTooltip from '../engines/modern';
@@ -30,7 +30,7 @@ describe('ModernTooltip positioning branches', () => {
     expect(tooltip).not.toHaveAttribute('popover');
   });
 
-  it('anchor-css branch: renders inline in the top layer with anchor attributes', () => {
+  it('anchor-css branch: renders inline in the top layer with anchor attributes', async () => {
     Object.assign(overlayCapabilities, { anchorPositioning: true, topLayer: true });
     const showPopover = vi.fn();
     Object.defineProperty(HTMLElement.prototype, 'showPopover', {
@@ -52,7 +52,11 @@ describe('ModernTooltip positioning branches', () => {
       );
 
       const tooltip = screen.getByRole('tooltip');
-      expect(tooltip).toHaveAttribute('data-ds-position-strategy', 'anchor-css');
+      // The measured geometry lands in a rAF callback; waitFor keeps those
+      // state updates inside act() instead of warning after the test body.
+      await waitFor(() => {
+        expect(tooltip).toHaveAttribute('data-ds-position-strategy', 'anchor-css');
+      });
       // Portal is bypassed: the bubble stays inside the anchor wrapper.
       expect(tooltip.closest('[data-rottay-portal]')).toBeNull();
       const wrapper = tooltip.closest('[data-part="root"]') as HTMLElement;

@@ -33,6 +33,7 @@ import {
 } from '../../../../graphics/icons';
 import type { ReactNode } from 'react';
 
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { Box, Button, Flex, Input, Text } from '../../../primitives';
 
 export interface TableToolbarProps {
@@ -80,7 +81,7 @@ function ToolbarDivider() {
 export function TableToolbar({
   search,
   onSearchChange,
-  searchPlaceholder = 'Search...',
+  searchPlaceholder,
   isFiltered,
   onResetFilters,
   primaryAction,
@@ -88,6 +89,21 @@ export function TableToolbar({
   actions,
   leftContent,
 }: TableToolbarProps) {
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Catalog lookup with an honest English floor: when the provider is absent
+   * or echoes the raw key (missing entry), the historical default wins.
+   */
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (resolved === undefined || resolved === key || resolved === `components.${key}`) {
+      return fallback;
+    }
+    return resolved;
+  };
+  const resolvedSearchPlaceholder =
+    searchPlaceholder ?? tOr('tableToolbar.searchPlaceholder', 'Search...');
+
   return (
     <Box
       data-part="root"
@@ -106,7 +122,7 @@ export function TableToolbar({
                 className="ds-table-toolbar__search-icon"
                 style={{
                   position: 'absolute',
-                  left: 10,
+                  insetInlineStart: 10,
                   top: '50%',
                   width: 15,
                   height: 15,
@@ -116,12 +132,11 @@ export function TableToolbar({
               <Input
                 data-part="search-input"
                 className="ds-table-toolbar__search-input"
-                placeholder={searchPlaceholder}
+                placeholder={resolvedSearchPlaceholder}
                 value={search ?? ''}
                 onChange={(value: string) => onSearchChange(value)}
                 style={{
-                  paddingLeft: 32,
-                  fontSize: 13,
+                  paddingInlineStart: 32,
                 }}
               />
             </Box>
@@ -147,7 +162,7 @@ export function TableToolbar({
                   style={{ gap: 4 }}
                 >
                   <X style={{ width: 14, height: 14 }} />
-                  <Text size="sm">Clear filters</Text>
+                  <Text size="sm">{tOr('tableToolbar.clearFilters', 'Clear filters')}</Text>
                 </Button>
               )}
             </Flex>
@@ -163,7 +178,7 @@ export function TableToolbar({
                 <a href={primaryAction.href} style={{ textDecoration: 'none' }}>
                   <Button>
                     {primaryAction.icon ?? (
-                      <Plus style={{ width: 16, height: 16, marginRight: 8 }} />
+                      <Plus style={{ width: 16, height: 16, marginInlineEnd: 8 }} />
                     )}
                     {primaryAction.label}
                   </Button>
@@ -171,7 +186,7 @@ export function TableToolbar({
               ) : (
                 <Button onClick={primaryAction.onClick}>
                   {primaryAction.icon ?? (
-                    <Plus style={{ width: 16, height: 16, marginRight: 8 }} />
+                    <Plus style={{ width: 16, height: 16, marginInlineEnd: 8 }} />
                   )}
                   {primaryAction.label}
                 </Button>

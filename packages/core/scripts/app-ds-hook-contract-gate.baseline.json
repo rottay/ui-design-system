@@ -1,0 +1,5 @@
+{
+  "schemaVersion": 1,
+  "note": "Decrease-only. Every entry is an OPEN violation of the application customization contract (audit 2026-07-26, Codex C3), fenced from growing — not an approval. Keyed file -> property -> classification -> count. Regenerate only to record a DECREASE; adding a row to make a new finding pass is forbidden.",
+  "grandfathered": {}
+}

@@ -51,7 +51,7 @@
 
 import { type CSSProperties, type ReactNode } from 'react';
 
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import { ArrowLeftIcon } from '@/graphics/icons/presentation/catalog/navigation';
 import {
   SaveIcon as Save,
   XIcon as X,
@@ -61,6 +61,7 @@ type HeaderIcon = ComponentType<any>;
 
 import { Box, Button, Flex, Spinner, Stack, Text, Tooltip } from '../../../primitives';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import {
   type SharedHeaderActionDescriptor,
   resolveSharedHeaderActionIcon,
@@ -158,7 +159,7 @@ export function EditHeader({
   subtitle,
   entityId,
   backHref,
-  backLabel = 'Back',
+  backLabel,
   colorVariant = 'secondary',
   loading = false,
   saving = false,
@@ -177,6 +178,13 @@ export function EditHeader({
   // native <a> tag when no NavigationLinkProvider is mounted, which keeps
   // the DS package framework-agnostic.
   const NavLink = useNavigationLink();
+  // Visible chrome copy rides the DS i18n channel with an English floor, so the
+  // header still renders complete labels outside an I18nProvider.
+  const i18n = useOptionalTranslation('common');
+  const resolvedBackLabel = backLabel ?? i18n?.tOr('back', 'Back') ?? 'Back';
+  const cancelLabel = i18n?.tOr('cancel', 'Cancel') ?? 'Cancel';
+  const saveLabel = i18n?.tOr('save_changes', 'Save Changes') ?? 'Save Changes';
+  const entityIdLabel = i18n?.tOr('entity_id', 'ID') ?? 'ID';
   const renderHrefAnchor = (href: string, content: ReactNode, style?: CSSProperties) => {
     if (NavLink) {
       return (
@@ -242,9 +250,9 @@ export function EditHeader({
                   cursor: 'pointer',
                 }}
               >
-                <ArrowLeftOutlined data-part="back-icon" style={{ fontSize: 14 }} />
+                <ArrowLeftIcon data-part="back-icon" style={{ width: 14, height: 14 }} />
                 <Text data-part="back-label" size="xs" weight="medium">
-                  {backLabel}
+                  {resolvedBackLabel}
                 </Text>
               </Flex>,
               { textDecoration: 'none' },
@@ -285,11 +293,11 @@ export function EditHeader({
                 data-part="entity-id"
                 size="xs"
                 style={{
-                  fontFamily: 'monospace',
+                  fontFamily: 'var(--ds-font-family-mono, monospace)',
                   padding: '4px 10px',
                 }}
               >
-                ID: {entityId.slice(0, 8)}
+                {entityIdLabel}: {entityId.slice(0, 8)}
               </Text>
             )}
           </Flex>
@@ -357,7 +365,7 @@ export function EditHeader({
             </Stack>
           </Flex>
 
-          <Flex data-part="actions" gap={12} wrap="wrap" style={{ marginLeft: 'auto' }}>
+          <Flex data-part="actions" gap={12} wrap="wrap" style={{ marginInlineStart: 'auto' }}>
             {actions.map((action, index) => {
               const ActionIcon = resolveSharedHeaderActionIcon(action);
 
@@ -383,7 +391,7 @@ export function EditHeader({
                 icon={<X style={{ width: 14, height: 14 }} />}
                 onClick={onCancel}
               >
-                Cancel
+                {cancelLabel}
               </Button>
             )}
             {onSave && (
@@ -393,7 +401,7 @@ export function EditHeader({
                 onClick={onSave}
                 loading={saving}
               >
-                Save Changes
+                {saveLabel}
               </Button>
             )}
           </Flex>

@@ -1,4 +1,20 @@
-/** Modern Empty: compact, purposeful placeholder for lists and data regions. */
+/**
+ * Modern Empty skin (R2+R3 quiet-premium pass; supersedes the glow/lift pass).
+ *
+ * Empty is a `role="status"` placeholder, not an interactive surface: it has
+ * NO root hover treatment. A hover lift or a reactive border on a
+ * non-operable element is a false affordance; the only hover/focus paint an
+ * empty state may carry belongs to the real controls slotted into its footer.
+ *
+ * Craft grammar: one quiet framed region (hairline border, flat tenant
+ * surface, bounded rhythm), a single restrained accent in the visual well,
+ * secondary-copy description, and an action tray that is a plain row of the
+ * caller's own buttons — the tray is not a second boxed card.
+ *
+ * DELIBERATELY UNLAYERED (P-47): layered rules sort before Tailwind preflight
+ * and lose to it; unlayered paint outranks the reset and still yields to a
+ * caller's inline `style`.
+ */
 
 .rottay-empty.rottay-empty--modern[data-part='root'][data-part='root'] {
   position: relative;
@@ -13,18 +29,10 @@
   padding: var(--ds-empty-padding, clamp(var(--ds-spacing-lg), 4vw, var(--ds-spacing-2xl)));
   border: var(--ds-empty-border-width, 1px) solid var(--ds-empty-border-color, var(--ds-color-border));
   border-radius: var(--ds-empty-radius, var(--ds-radius-xl));
-  background:
-    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--ds-color-primary) 8%, transparent) 0%, transparent 46%),
-    linear-gradient(145deg, var(--ds-empty-surface, var(--ds-color-surface)) 0%, var(--ds-color-surface-raised) 100%);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 34%, transparent),
-    var(--ds-empty-shadow, var(--ds-shadow-sm));
+  background: var(--ds-empty-surface, var(--ds-color-surface));
+  box-shadow: var(--ds-empty-shadow, none);
   color: var(--ds-color-text-primary);
   text-align: center;
-  transition:
-    border-color var(--ds-motion-fast) var(--ds-ease-standard),
-    box-shadow var(--ds-motion-fast) var(--ds-ease-standard),
-    transform var(--ds-motion-fast) var(--ds-ease-standard);
 }
 
 .rottay-empty.rottay-empty--modern[data-part='root'][data-image='simple'] {
@@ -36,41 +44,22 @@
   padding-block-end: var(--ds-empty-footer-padding, var(--ds-spacing-lg));
 }
 
-.rottay-empty.rottay-empty--modern[data-part='root'][data-part='root']:hover {
-  border-color: color-mix(in srgb, var(--ds-color-primary) 36%, var(--ds-color-border));
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent),
-    var(--ds-empty-hover-shadow, var(--ds-shadow-md));
-  transform: translateY(-1px);
-}
-
+/* The visual well is the single accent the component spends: a calm tinted
+   tile with a hairline ring, no bloom shadow. */
 .rottay-empty.rottay-empty--modern > .rottay-empty__visual[data-part='image'][data-part='image'] {
   display: grid;
-  inline-size: var(--ds-empty-visual-size, 4.25rem);
-  block-size: var(--ds-empty-visual-size, 4.25rem);
+  inline-size: var(--ds-empty-visual-size, 4rem);
+  block-size: var(--ds-empty-visual-size, 4rem);
   place-items: center;
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 25%, var(--ds-color-border));
+  border: 1px solid var(--ds-empty-visual-border, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border)));
   border-radius: var(--ds-empty-visual-radius, var(--ds-radius-lg));
-  background: linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-color-surface-raised)), var(--ds-color-surface));
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 52%, transparent),
-    0 10px 24px color-mix(in srgb, var(--ds-color-primary) 11%, transparent);
-  color: var(--ds-color-primary);
-  transition:
-    transform var(--ds-motion-base) var(--ds-ease-emphasized),
-    box-shadow var(--ds-motion-base) var(--ds-ease-standard);
+  background: var(--ds-empty-visual-bg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-color-surface)));
+  color: var(--ds-empty-icon-color, var(--ds-color-primary));
 }
 
 .rottay-empty.rottay-empty--modern[data-image='simple'] > .rottay-empty__visual[data-part='image'][data-part='image'] {
-  inline-size: var(--ds-empty-simple-visual-size, 3.25rem);
-  block-size: var(--ds-empty-simple-visual-size, 3.25rem);
-}
-
-.rottay-empty.rottay-empty--modern[data-part='root'][data-part='root']:hover > .rottay-empty__visual[data-part='image'] {
-  transform: translateY(-2px) scale(1.025);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 58%, transparent),
-    0 14px 30px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+  inline-size: var(--ds-empty-simple-visual-size, 3rem);
+  block-size: var(--ds-empty-simple-visual-size, 3rem);
 }
 
 .rottay-empty.rottay-empty--modern .rottay-empty__illustration[data-part='icon'] {
@@ -88,29 +77,14 @@
   text-wrap: balance;
 }
 
+/* The action tray is a plain rhythm row: the caller's buttons already carry
+   their own frames, so a second bordered box here was noise. */
 .rottay-empty.rottay-empty--modern > .rottay-empty__footer[data-part='footer'][data-part='footer'] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: var(--ds-spacing-sm);
+  gap: var(--ds-empty-footer-gap, var(--ds-spacing-sm));
   min-block-size: var(--ds-control-height-md);
   margin-block-start: var(--ds-spacing-xs);
-  padding: var(--ds-spacing-sm);
-  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
-  border-radius: var(--ds-radius-lg);
-  background: color-mix(in srgb, var(--ds-color-surface-raised) 84%, transparent);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 32%, transparent);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .rottay-empty.rottay-empty--modern[data-part='root'][data-part='root'],
-  .rottay-empty.rottay-empty--modern > .rottay-empty__visual[data-part='image'][data-part='image'] {
-    transition: none;
-  }
-
-  .rottay-empty.rottay-empty--modern[data-part='root'][data-part='root']:hover,
-  .rottay-empty.rottay-empty--modern[data-part='root'][data-part='root']:hover > .rottay-empty__visual[data-part='image'] {
-    transform: none;
-  }
 }

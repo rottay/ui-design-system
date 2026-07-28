@@ -170,9 +170,9 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 130,
-          "maxFiles": 16,
-          "digest": "2761d903d033672009c0db8490583c47647a79846080bb49969ede6bbb51f045"
+          "maxCount": 122,
+          "maxFiles": 14,
+          "digest": "6b03c0fc1ed7bc5ebfe2dc6674ff384395cd22c72d68c55d9e1ba370ce06e015"
         },
         {
           "repo": "ui-design-system",
@@ -191,13 +191,25 @@
       ],
       "reanchor": {
         "kind": "one-off-reanchor",
-        "snapshotSha": "a5a4c3b4",
-        "snapshotDate": "2026-07-26",
-        "owner": "design-system-program",
-        "verifiedBy": "clean `git archive a5a4c3b4` scan, reproduced independently by Codex",
-        "reason": "The ui-design-system rows were authored 2026-07-17 and went stale against the R0 commit that was subsequently reviewed and ACCEPTED as a5a4c3b4. Scanning a clean archive of that exact commit reproduces every current finding (raw-motion-timing/ds-internal 593 in 234 files; raw-motion-timing/test 48 in 16; global-keyframes/test 25 in 6), so none of them is an R1 regression -- the registry simply never caught up. These rows are re-anchored to the accepted commit ONCE.",
-        "notAnImprovement": "593 is INHERITED MOTION DEBT, not an achievement and not a licence to add more. It is frozen at the accepted state so the ratchet can start biting again; reducing it is a Kimi visual wave scoped to Modern and prioritised by impact, not R1 work.",
-        "doNotRepeat": "This is a one-off reconciliation against a named commit, NOT the routine way to update a baseline. A future count that exceeds these rows is a real regression: fix the code, do not re-run --print-baseline."
+        "snapshotSha": "f3720ea8",
+        "snapshotDate": "2026-07-27",
+        "owner": "claude/R1-P",
+        "verifiedBy": "Pre-drain mirror proof. A copy of the scanned tree with ONLY the six vertical-artifact files restored from the W-B snapshot (test-artifacts/rottay-design-platform/r1p-round3-evidence/r1p/closure/wb-snapshot) reproduces the superseded row byte-exact -- 130 findings in 16 files, digest 2761d903... -- and the finding-set diff against the live tree is 18 removals and ZERO additions, all inside two files.",
+        "reason": "The R1-P Phase-3 drain moved the BitHire vertical extension's application/component CSS out of the DS artifact and into app-bithire. Four global-keyframes findings left `foundation/tokens/css/facade/artifacts/bithire/_source/extension.css` and their four generated copies left `artifacts/bithire/index.css`: the duplicate definitions and bare references of `bithire-preview-enter` and `rt-detail-floating-toggle-in`. Both files now contribute zero findings and no other scanned path changed, so this row is re-anchored DOWN (130 -> 122 in 16 -> 14 files) to the DS slice this gate certifies via `--repositories ui-design-system`. The matching growth on the receiving side is app-bithire's, not the DS's; the cross-repo slice is a separate lane and was deliberately NOT touched here.",
+        "notAnImprovement": "122 global keyframe findings across fourteen DS files remain INHERITED DEBT. The decrease is a relocation of BitHire-owned paint out of the DS, not a cleanup, and it is not a licence to add a single new global name.",
+        "doNotRepeat": "This is a one-off reconciliation for one named, evidence-backed removal wave, NOT the routine way to update a baseline. A future count above these rows is a real regression: fix the code, do not re-run --print-baseline.",
+        "supersedes": [
+          {
+            "kind": "one-off-reanchor",
+            "snapshotSha": "a5a4c3b4",
+            "snapshotDate": "2026-07-26",
+            "owner": "design-system-program",
+            "verifiedBy": "clean `git archive a5a4c3b4` scan, reproduced independently by Codex",
+            "reason": "The ui-design-system rows were authored 2026-07-17 and went stale against the R0 commit that was subsequently reviewed and ACCEPTED as a5a4c3b4. Scanning a clean archive of that exact commit reproduces every current finding (raw-motion-timing/ds-internal 593 in 234 files; raw-motion-timing/test 48 in 16; global-keyframes/test 25 in 6), so none of them is an R1 regression -- the registry simply never caught up. These rows are re-anchored to the accepted commit ONCE.",
+            "notAnImprovement": "593 is INHERITED MOTION DEBT, not an achievement and not a licence to add more. It is frozen at the accepted state so the ratchet can start biting again; reducing it is a Kimi visual wave scoped to Modern and prioritised by impact, not R1 work.",
+            "doNotRepeat": "This is a one-off reconciliation against a named commit, NOT the routine way to update a baseline. A future count that exceeds these rows is a real regression: fix the code, do not re-run --print-baseline."
+          }
+        ]
       }
     },
     "raw-motion-timing": {
@@ -264,9 +276,9 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 593,
-          "maxFiles": 234,
-          "digest": "9fecd2001464c119a081a11568682c7c61a350fd16d180019045665f30fc07df"
+          "maxCount": 574,
+          "maxFiles": 229,
+          "digest": "19c74b4a01f22873f0c792aff2ea951122434ca6b10c5f9d190c4dd8352dffe3"
         },
         {
           "repo": "ui-design-system",
@@ -285,13 +297,25 @@
       ],
       "reanchor": {
         "kind": "one-off-reanchor",
-        "snapshotSha": "a5a4c3b4",
-        "snapshotDate": "2026-07-26",
-        "owner": "design-system-program",
-        "verifiedBy": "clean `git archive a5a4c3b4` scan, reproduced independently by Codex",
-        "reason": "The ui-design-system rows were authored 2026-07-17 and went stale against the R0 commit that was subsequently reviewed and ACCEPTED as a5a4c3b4. Scanning a clean archive of that exact commit reproduces every current finding (raw-motion-timing/ds-internal 593 in 234 files; raw-motion-timing/test 48 in 16; global-keyframes/test 25 in 6), so none of them is an R1 regression -- the registry simply never caught up. These rows are re-anchored to the accepted commit ONCE.",
-        "notAnImprovement": "593 is INHERITED MOTION DEBT, not an achievement and not a licence to add more. It is frozen at the accepted state so the ratchet can start biting again; reducing it is a Kimi visual wave scoped to Modern and prioritised by impact, not R1 work.",
-        "doNotRepeat": "This is a one-off reconciliation against a named commit, NOT the routine way to update a baseline. A future count that exceeds these rows is a real regression: fix the code, do not re-run --print-baseline."
+        "snapshotSha": "f3720ea8",
+        "snapshotDate": "2026-07-27",
+        "owner": "claude/R1-P",
+        "verifiedBy": "Pre-drain mirror proof. A copy of the scanned tree with ONLY the six vertical-artifact files restored from the W-B snapshot (test-artifacts/rottay-design-platform/r1p-round3-evidence/r1p/closure/wb-snapshot) reproduces the superseded row byte-exact -- 584 findings in 231 files, digest cf64542f... -- and the finding-set diff against the live tree is 18 removals and ZERO additions, all inside two files. The R2/R3 rows for showroom, test and transition-all reproduce unchanged in the same run, which is the proof that no edit outside the drain contributed to this drift.",
+        "reason": "The R1-P Phase-3 drain moved the BitHire vertical extension's application/component CSS out of the DS artifact and into app-bithire. Five raw-motion-timing findings left `foundation/tokens/css/facade/artifacts/bithire/_source/extension.css` and their five generated copies left `artifacts/bithire/index.css` (one `animation: rt-detail-floating-toggle-in 180ms`, and transitions on background-color, color, border-color and width). Both files now contribute zero findings and no other scanned path changed, so this row is re-anchored DOWN (584 -> 574 in 231 -> 229 files) to the DS slice this gate certifies via `--repositories ui-design-system`. The matching growth on the receiving side is app-bithire's, not the DS's; the cross-repo slice is a separate lane and was deliberately NOT touched here.",
+        "notAnImprovement": "574 raw-motion timings across 229 DS files remain INHERITED DEBT from earlier waves. The decrease is a relocation of BitHire-owned paint out of the DS, not a cleanup, and it is not a licence to add a single new literal; the decrease-only law stands.",
+        "doNotRepeat": "This is a one-off reconciliation for one named, evidence-backed removal wave, NOT the routine way to update a baseline. Routine changes must land below these ceilings without touching this registry; a count above them is a real regression to fix in the code.",
+        "supersedes": [
+          {
+            "kind": "one-off-reanchor",
+            "snapshotSha": "f3720ea8",
+            "snapshotDate": "2026-07-27",
+            "owner": "design-system-program",
+            "verifiedBy": "live scan after the R2/R3 wave's motion-literal drain; gate rerun green",
+            "reason": "The R2/R3 Modern-premium wave introduced raw motion literals via var() fallbacks in transition/animation declarations (593->609) and moved pre-existing findings (hash drift). The orchestrator dropped every literal fallback from motion declarations and hatched long decorative durations, landing BELOW the inherited count (584 and 73). Rows are re-anchored to the tree at HEAD f3720ea8 plus this wave's uncommitted work, which is the tree the gate must certify.",
+            "notAnImprovement": "584 raw-motion timings and 73 transition-all remain inherited debt from earlier waves, not an achievement and not a licence to add more; the decrease-only law stands.",
+            "doNotRepeat": "This is a one-off reconciliation for the R2/R3 wave's intentional change, not the routine way to update a baseline; routine changes must land below the current ceilings without touching this registry."
+          }
+        ]
       }
     },
     "transition-all": {
@@ -337,9 +361,9 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 76,
-          "maxFiles": 46,
-          "digest": "589d681d1a935c34bcc5dfa2b5d6242f016fc117b88d838c09548a0e5bf388a8"
+          "maxCount": 73,
+          "maxFiles": 45,
+          "digest": "cb5c27a39f57aa01f83fef07eb47a75df31135de6726b00c768f0988b9e345d9"
         },
         {
           "repo": "ui-design-system",
@@ -358,13 +382,13 @@
       ],
       "reanchor": {
         "kind": "one-off-reanchor",
-        "snapshotSha": "a5a4c3b4",
-        "snapshotDate": "2026-07-26",
+        "snapshotSha": "f3720ea8",
+        "snapshotDate": "2026-07-27",
         "owner": "design-system-program",
-        "verifiedBy": "clean `git archive a5a4c3b4` scan, reproduced independently by Codex",
-        "reason": "The ui-design-system rows were authored 2026-07-17 and went stale against the R0 commit that was subsequently reviewed and ACCEPTED as a5a4c3b4. Scanning a clean archive of that exact commit reproduces every current finding (raw-motion-timing/ds-internal 593 in 234 files; raw-motion-timing/test 48 in 16; global-keyframes/test 25 in 6), so none of them is an R1 regression -- the registry simply never caught up. These rows are re-anchored to the accepted commit ONCE.",
-        "notAnImprovement": "593 is INHERITED MOTION DEBT, not an achievement and not a licence to add more. It is frozen at the accepted state so the ratchet can start biting again; reducing it is a Kimi visual wave scoped to Modern and prioritised by impact, not R1 work.",
-        "doNotRepeat": "This is a one-off reconciliation against a named commit, NOT the routine way to update a baseline. A future count that exceeds these rows is a real regression: fix the code, do not re-run --print-baseline."
+        "verifiedBy": "live scan after the R2/R3 wave's motion-literal drain; gate rerun green",
+        "reason": "The R2/R3 Modern-premium wave introduced raw motion literals via var() fallbacks in transition/animation declarations (593->609) and moved pre-existing findings (hash drift). The orchestrator dropped every literal fallback from motion declarations and hatched long decorative durations, landing BELOW the inherited count (584 and 73). Rows are re-anchored to the tree at HEAD f3720ea8 plus this wave's uncommitted work, which is the tree the gate must certify.",
+        "notAnImprovement": "584 raw-motion timings and 73 transition-all remain inherited debt from earlier waves, not an achievement and not a licence to add more; the decrease-only law stands.",
+        "doNotRepeat": "This is a one-off reconciliation for the R2/R3 wave's intentional change, not the routine way to update a baseline; routine changes must land below the current ceilings without touching this registry."
       }
     }
   }

@@ -29,9 +29,22 @@
  *
  * COHERENCE (Pass 2, K4-A): the panel shares the lane's overlay material
  * register with Dropdown and HoverCard (same widget class): the subtle
- * primary-tinted gradient, tinted border, inset highlight, elevation-3 and
- * backdrop blur, unified at radius-xl. Previously a flat
- * `--ds-surface-card`/`border-subtle`/elevation-2 card.
+ * primary-tinted gradient (sanctioned surface-tint role), tinted border,
+ * elevation-3 and the `--ds-elevation-surface-3` dark-lift layer, unified at
+ * radius-xl. Previously a flat `--ds-surface-card`/`border-subtle`/elevation-2
+ * card.
+ *
+ * MATERIAL (Quiet Premium alignment): the frosted-panel `backdrop-filter` is
+ * RETIRED -- glass lives on overlay backdrops only (spec section 5), and this
+ * is a panel. The former `white` literals in the fill gradient and the inset
+ * top-light now resolve through the `--ds-elevation-surface-3` lift layer
+ * (inert where `--ds-elevation-lift-strength` is 0).
+ *
+ * REDUCED MOTION: the surface's enter/exit animation is INLINE in the engine,
+ * so no unlayered rule can cancel it; it is neutralized at the source because
+ * the foundation reduced-motion block zeroes `--ds-motion-fast`/`--ds-motion-*`
+ * (the canon mechanism, spec section 2). The block at the bottom covers every
+ * CSS-owned transition.
  *
  * PORTAL: this engine does NOT portal — the menu is an in-tree absolute child of the
  * trigger container (rustic DOES portal). The scope class anchors every rule anyway.
@@ -69,21 +82,19 @@
      register (same widget class) -- subtle primary-tinted gradient, tinted
      border, inset highlight, elevation-3, backdrop blur, radius-xl. */
   border-radius: var(--ds-context-menu-radius, var(--ds-radius-xl, 16px));
+  /* The dark-aware luminance step is its own layer directly above the fill
+     (popover.css idiom): inert until a dark surface raises
+     --ds-elevation-lift-strength. Level 3 matches the --ds-elevation-3 shadow
+     this surface declares. */
   background:
     linear-gradient(
       145deg,
       color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
       transparent 44%
     ),
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--ds-surface-card) 98%, white 2%),
-      color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%)
-    );
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
-    var(--ds-context-menu-shadow, var(--ds-elevation-3));
-  backdrop-filter: blur(var(--ds-context-menu-backdrop-blur, 16px)) saturate(1.08);
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-surface-card);
+  box-shadow: var(--ds-context-menu-shadow, var(--ds-elevation-3));
 }
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
   border: 1px solid
@@ -152,8 +163,8 @@
   );
 }
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
-  outline: 2px solid var(--ds-context-menu-item-focus-ring, color-mix(in srgb, var(--ds-color-primary) 56%, transparent));
-  outline-offset: -2px;
+  outline: none;
+  box-shadow: var(--ds-shadow-focus-ring);
 }
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):active {
   background: var(
@@ -187,7 +198,7 @@
 }
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-disabled='true'] {
   cursor: not-allowed;
-  opacity: var(--ds-opacity-disabled, 0.5);
+  opacity: var(--ds-state-disabled-opacity);
 }
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger'] {
   color: var(--ds-color-error);
@@ -207,6 +218,6 @@
   .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'],
   .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'] {
     animation: none;
-    transition-duration: 0.01ms;
+    transition: none;
   }
 }

@@ -49,6 +49,10 @@ const packageRoot = resolve(HERE, '..');
  * `--workspace-root <dir>` relocates the corpus search. It exists so the
  * missing-corpus behaviour is TESTABLE: without it, a drill can only assert
  * fail-closed by deleting the real sibling repository, which no test may do.
+ *
+ * `--baseline <file>` relocates the baseline for the same reason: once the
+ * live baseline drains to zero, the decrease-only drill can no longer lean on
+ * real tracked debt and must inject a baseline that still tracks some.
  */
 function argValue(flag) {
   const index = process.argv.indexOf(flag);
@@ -72,7 +76,7 @@ const workspaceRoot = resolve(argValue('--workspace-root') ?? resolve(packageRoo
 const APP_ROOT = resolve(
   argValue('--app-root') ?? process.env.APP_BITHIRE_ROOT ?? resolve(workspaceRoot, 'app-bithire'),
 );
-const BASELINE = resolve(HERE, 'app-ds-boundary-gate.baseline.json');
+const BASELINE = resolve(argValue('--baseline') ?? resolve(HERE, 'app-ds-boundary-gate.baseline.json'));
 
 /** Stable logical prefix for baseline keys, independent of where APP_ROOT is. */
 const CORPUS_KEY_PREFIX = 'app-bithire';

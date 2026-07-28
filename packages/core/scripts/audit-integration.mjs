@@ -525,9 +525,17 @@ for (const exemptedName of PRE_EXISTING_PERSONALITY_ORPHANS) {
 }
 
 if (emittedPersonalityVars.size > 0) {
+  // The reference adoption app is part of the reader census: the R1-P drain
+  // moved real consumption of foundation vocabulary (e.g. --ds-duration-slow,
+  // 10 readers) into app-bithire, and a DS-only scan re-reports those channels
+  // as orphans. Same corpus-widening the boundary/hook gates already use;
+  // absence of the sibling checkout keeps the census DS-only rather than failing.
+  const PERSONALITY_APP_ROOT =
+    process.env.APP_BITHIRE_ROOT ?? resolve(SRC_ROOT, '../../../../app-bithire/src');
   const personalityConsumerFiles = [
     ...walkFiles(SRC_ROOT, /\.(css|tsx?)$/),
     ...walkFiles(PERSONALITY_SHOWROOM_ROOT, /\.(css|tsx?)$/),
+    ...(existsSync(PERSONALITY_APP_ROOT) ? walkFiles(PERSONALITY_APP_ROOT, /\.(css|tsx?)$/) : []),
   ].filter((f) => {
     if (f.includes('.test.') || f.includes('.spec.') || f.includes('.stories.')) return false;
     if (resolve(f) === resolve(PERSONALITY_CANONICAL_PATH)) return false;

@@ -131,23 +131,17 @@ export function InlineCellEditor<T>({
 
   const editorType = config.type ?? 'text';
 
-  // Shared input layout. Paint (border rest/error, radius, background, color,
-  // outline) lives in the agnostic data-table-mobile skin, keyed on data-part=
-  // 'editor-input' and the data-invalid stamp.
-  const inputStyle: React.CSSProperties = {
-    width: '100%',
-    padding: '4px 8px',
-    fontSize: 14,
-    fontFamily: 'inherit',
-    boxSizing: 'border-box' as const,
-    lineHeight: 1.5,
-  };
+  // Geometry (width, padding, font, error anchoring) lives in the modern
+  // engine skin keyed on data-part='editor-shell'/'editor-input'/'editor-
+  // error'/'editor-checkbox'. Paint (border rest/error, radius, background,
+  // color, outline, accent-color) stays in the agnostic data-table-mobile
+  // skin, keyed on data-part='editor-input' and the data-invalid stamp.
 
   // Custom editor
   if (editorType === 'custom' && config.render) {
     return (
       <div
-        style={{ width: '100%' }}
+        data-part="editor-shell"
         onKeyDown={handleKeyDown}
         onClick={(e) => e.stopPropagation()}
       >
@@ -163,7 +157,7 @@ export function InlineCellEditor<T>({
   if (editorType === 'checkbox') {
     return (
       <div
-        style={{ display: 'flex', alignItems: 'center', width: '100%' }}
+        data-part="editor-shell"
         onClick={(e) => e.stopPropagation()}
       >
         <input
@@ -177,11 +171,6 @@ export function InlineCellEditor<T>({
             void saveValue(e.target.checked);
           }}
           onKeyDown={handleKeyDown}
-          style={{
-            width: 16,
-            height: 16,
-            cursor: 'pointer',
-          }}
         />
       </div>
     );
@@ -190,7 +179,7 @@ export function InlineCellEditor<T>({
   // Select editor
   if (editorType === 'select' && config.options) {
     return (
-      <div style={{ width: '100%', position: 'relative' }} onClick={(e) => e.stopPropagation()}>
+      <div data-part="editor-shell" onClick={(e) => e.stopPropagation()}>
         <select
           ref={inputRef as React.RefObject<HTMLSelectElement>}
           value={String(editValue ?? '')}
@@ -201,11 +190,6 @@ export function InlineCellEditor<T>({
             setEditValue(selected ? selected.value : e.target.value);
           }}
           onKeyDown={handleKeyDown}
-          style={{
-            ...inputStyle,
-            appearance: 'auto',
-            cursor: 'pointer',
-          }}
         >
           {config.options.map((opt) => (
             <option key={String(opt.value)} value={String(opt.value)}>
@@ -214,16 +198,7 @@ export function InlineCellEditor<T>({
           ))}
         </select>
         {error && (
-          <span
-            data-part="editor-error"
-            style={{
-              position: 'absolute',
-              bottom: -18,
-              left: 0,
-              fontSize: 11,
-              whiteSpace: 'nowrap',
-            }}
-          >
+          <span data-part="editor-error">
             {error}
           </span>
         )}
@@ -233,7 +208,7 @@ export function InlineCellEditor<T>({
 
   // Text / Number / Date editor
   return (
-    <div style={{ width: '100%', position: 'relative' }} onClick={(e) => e.stopPropagation()}>
+    <div data-part="editor-shell" onClick={(e) => e.stopPropagation()}>
       <input
         ref={inputRef as React.RefObject<HTMLInputElement>}
         type={editorType === 'number' ? 'number' : editorType === 'date' ? 'date' : 'text'}
@@ -253,19 +228,9 @@ export function InlineCellEditor<T>({
           setError(null);
         }}
         onKeyDown={handleKeyDown}
-        style={inputStyle}
       />
       {error && (
-        <span
-          data-part="editor-error"
-          style={{
-            position: 'absolute',
-            bottom: -18,
-            left: 0,
-            fontSize: 11,
-            whiteSpace: 'nowrap',
-          }}
-        >
+        <span data-part="editor-error">
           {error}
         </span>
       )}

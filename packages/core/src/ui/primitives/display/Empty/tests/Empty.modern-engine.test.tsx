@@ -1,11 +1,36 @@
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 
 import ModernEmpty from '../engines/modern';
 import { renderWithEngine } from '@/tooling/testing/helpers/engine';
 
+const modernSkinPath = join(
+  __dirname,
+  '../../../../../foundation/tokens/css/runtime/engines/modern/skin/empty.css',
+);
+
 describe('Empty modern engine', () => {
+  it('renders the English floor with no I18nProvider mounted (bare composition)', () => {
+    // Wave law: the primitive must never hard-require a provider — a bare
+    // render still announces a complete, localizable-by-default description.
+    render(<ModernEmpty />);
+
+    expect(screen.getByRole('status')).toHaveTextContent('No data');
+  });
+
+  it('keeps the quiet-premium contract in the skin (status, not interactive)', () => {
+    const skin = readFileSync(modernSkinPath, 'utf-8');
+
+    // A role=status placeholder carries no root hover treatment: a hover
+    // lift or reactive border on a non-operable element is a false
+    // affordance. The action tray is a plain row, not a second boxed card.
+    expect(skin).not.toMatch(/\[data-part='root'\][^\n]*:hover/);
+    expect(skin).not.toContain('radial-gradient');
+    expect(skin).toContain("[data-part='footer']");
+  });
   it('renders a compact tenant-aware semantic visual', () => {
     const { container } = renderWithEngine(
       <ModernEmpty image="simple" description="No matches" />,

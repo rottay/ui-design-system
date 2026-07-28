@@ -6,7 +6,15 @@
  * Supports three display variants: segmented toggle (default), pill
  * buttons, and a custom dropdown with click-outside dismissal.
  * A colored banner warns when a non-production environment is active.
- * Production switches can require a confirmation modal.
+ * Production switches can require a confirmation dialog.
+ *
+ * The pattern COMPOSES public DS primitives — Button (trigger and every
+ * option across the three variants) and ConfirmDialog (the production
+ * confirmation, previously a hand-rolled modal) — and never recreates a
+ * control with its own HTML/CSS. Option STATE paint (active accent, joined
+ * segmented corners, banner) stays in the unlayered modern skin, keyed on
+ * the `data-part`/`data-*` contract this file stamps. Own copy resolves
+ * through the optional `components` i18n channel with an English floor.
  *
  * @example
  * <ModernEnvironmentToggle
@@ -17,19 +25,29 @@
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import type { EnvironmentToggleProps, EnvironmentDef } from '../../contracts';
-import { pillBadgeSmStyle, inlineActionGroupStyle } from '../../../../foundation/engine-styles/modern';
+import type { EnvironmentToggleProps } from '../../contracts';
+import { pillBadgeSmStyle } from '../../../../foundation/engine-styles/modern';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { NavigationExpandIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-expand';
+import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
+import ModernConfirmDialog from '../../../../../primitives/overlay/ConfirmDialog/engines/modern';
 
 /**
  * Modern (token-driven) implementation of the EnvironmentToggle pattern.
- * Uses a segmented control for the default toggle, a custom dropdown with
- * outside-click detection, and a token-styled modal for production
- * confirmation.
+ * Uses a segmented control for the default toggle, a dropdown with
+ * outside-click detection, and the composed ConfirmDialog primitive for
+ * production confirmation.
  *
  * @param props - See {@link EnvironmentToggleProps} for the full prop contract.
- * @returns The rendered environment toggle with optional banner and confirmation modal.
+ * @returns The rendered environment toggle with optional banner and confirmation dialog.
  */
 export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
+  // Optional channel with an English floor: the toggle renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
+    i18n?.tOr(key, floor, params) ?? floor;
+
   const {
     environments,
     activeEnvironment,
@@ -52,6 +70,16 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
 
   const activeEnv = environments.find(e => e.id === activeEnvironment);
   const isProduction = activeEnvironment === productionId;
+  const confirmEnvName = environments.find(e => e.id === confirmEnv)?.name ?? confirmEnv ?? '';
+
+  const copy = {
+    select: tOr('environmentToggle.select', 'Select'),
+    banner: activeEnv
+      ? tOr('environmentToggle.banner', 'You are viewing the {name} environment', { name: activeEnv.name })
+      : '',
+    confirmTitle: tOr('environmentToggle.confirmTitle', 'Switch to {name}', { name: confirmEnvName }),
+    cancel: tOr('environmentToggle.cancel', 'Cancel'),
+  };
 
   /** Closes dropdown when user clicks outside the dropdown container */
   const handleClickOutside = useCallback(
@@ -71,13 +99,13 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
 
   /**
    * Handles environment switching with production safety gate.
-   * Routes to a confirmation modal if switching to production.
+   * Routes to a confirmation dialog if switching to production.
    */
   const handleSwitch = useCallback(
     (envId: string) => {
       if (envId === activeEnvironment) return;
       if (envId === productionId && confirmProductionSwitch) {
-        /* Show confirmation modal instead of switching immediately */
+        /* Show confirmation dialog instead of switching immediately */
         setConfirmEnv(envId);
       } else {
         onChange(envId);
@@ -92,19 +120,19 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
     /* Dropdown variant: positioned menu with click-outside dismissal */
     if (variant === 'dropdown') {
       return (
-        <div ref={dropdownRef} className="relative inline-block" data-part="toggle" data-variant="dropdown">
-          <button
+        <div ref={dropdownRef} data-part="toggle" data-variant="dropdown">
+          <ModernButton
+            variant="ghost"
+            size="sm"
             data-part="trigger"
-            style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8 }}
             onClick={() => setDropdownOpen(!dropdownOpen)}
             data-testid="env-toggle-trigger"
           >
             <span
-              className="w-2 h-2 rounded-full inline-block"
               data-part="dot"
               style={{ '--ds-envtoggle-accent': activeEnv?.color ?? 'var(--ds-color-neutral-400)' } as React.CSSProperties}
             />
-            {activeEnv?.name ?? 'Select'}
+            {activeEnv?.name ?? copy.select}
             {activeEnv?.badge && (
               <span
                 data-part="badge"
@@ -113,35 +141,32 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
                 {activeEnv.badge}
               </span>
             )}
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 opacity-50" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-            </svg>
-          </button>
+            <NavigationExpandIcon decorative size={12} />
+          </ModernButton>
 
           {dropdownOpen && (
-            <div className="absolute top-full left-0 mt-1 z-50 min-w-[180px]" data-part="panel" style={{ padding: 4 }}>
+            <div data-part="panel">
               {environments.map(env => (
-                <button
+                <ModernButton
                   key={env.id}
+                  variant="ghost"
+                  size="sm"
                   data-part="option"
                   data-active={env.id === activeEnvironment}
-                  className={`w-full flex items-center gap-2 px-3 py-2 text-sm text-left transition-colors ${
-                    env.id === activeEnvironment ? 'font-semibold' : ''
-                  }`}
                   onClick={() => handleSwitch(env.id)}
                   data-testid={`env-option-${env.id}`}
                 >
-                  <span className="w-2 h-2 rounded-full" data-part="dot" style={{ '--ds-envtoggle-accent': env.color } as React.CSSProperties} />
-                  <span className="flex-1">{env.name}</span>
+                  <span data-part="dot" style={{ '--ds-envtoggle-accent': env.color } as React.CSSProperties} />
+                  <span data-part="option-name">{env.name}</span>
                   {env.badge && (
                     <span data-part="badge" style={{ ...pillBadgeSmStyle, padding: '1px 5px', fontSize: 10, '--ds-envtoggle-accent': env.color } as React.CSSProperties}>{env.badge}</span>
                   )}
                   {env.id === activeEnvironment && (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" data-part="check" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" data-part="check" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                   )}
-                </button>
+                </ModernButton>
               ))}
             </div>
           )}
@@ -152,22 +177,24 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
     /* Pills variant: individual buttons with environment color applied to active button */
     if (variant === 'pills') {
       return (
-        <div className="flex gap-1" data-part="toggle" data-variant="pills" data-testid="env-toggle-trigger">
+        <div data-part="toggle" data-variant="pills" data-testid="env-toggle-trigger">
           {environments.map(env => (
-            <button
+            <ModernButton
               key={env.id}
+              variant="ghost"
+              size="sm"
               data-part="option"
               data-active={env.id === activeEnvironment}
-              style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6, '--ds-envtoggle-accent': env.color } as React.CSSProperties}
+              style={{ '--ds-envtoggle-accent': env.color } as React.CSSProperties}
               onClick={() => handleSwitch(env.id)}
               data-testid={`env-option-${env.id}`}
             >
               {env.icon}
               {env.name}
               {env.badge && (
-                <span style={{ ...pillBadgeSmStyle, padding: '1px 5px', fontSize: 10, opacity: 0.8 }}>{env.badge}</span>
+                <span data-part="badge" style={{ ...pillBadgeSmStyle, padding: '1px 5px', fontSize: 10, opacity: 0.8 }}>{env.badge}</span>
               )}
-            </button>
+            </ModernButton>
           ))}
         </div>
       );
@@ -175,14 +202,16 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
 
     /* Default: segmented control -- buttons share borders for a joined look */
     return (
-      <div style={{ display: 'inline-flex' }} data-part="toggle" data-variant="toggle" data-testid="env-toggle-trigger">
+      <div data-part="toggle" data-variant="toggle" data-testid="env-toggle-trigger">
         {environments.map((env, idx) => (
-          <button
+          <ModernButton
             key={env.id}
+            variant="ghost"
+            size="sm"
             data-part="option"
             data-active={env.id === activeEnvironment}
             data-position={idx === 0 ? 'first' : idx === environments.length - 1 ? 'last' : 'middle'}
-            style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', '--ds-envtoggle-accent': env.color } as React.CSSProperties}
+            style={{ '--ds-envtoggle-accent': env.color } as React.CSSProperties}
             onClick={() => handleSwitch(env.id)}
             data-testid={`env-option-${env.id}`}
           >
@@ -190,10 +219,10 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
               {env.icon}
               {env.name}
               {env.badge && (
-                <span style={{ ...pillBadgeSmStyle, padding: '1px 5px', fontSize: 10 }}>{env.badge}</span>
+                <span data-part="badge" style={{ ...pillBadgeSmStyle, padding: '1px 5px', fontSize: 10 }}>{env.badge}</span>
               )}
             </span>
-          </button>
+          </ModernButton>
         ))}
       </div>
     );
@@ -201,11 +230,10 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
 
   return (
     <div className={`ds-pattern-environment-toggle ds-engine-modern ${className ?? ''}`} data-part="root" style={style}>
-      {/* Banner -- pulsing dot + message in env color; only for non-production environments */}
-      {/* Color suffix '15' gives ~9% hex opacity for a subtle background tint */}
+      {/* Banner -- pulsing dot + message in env color; only for non-production environments.
+          The soft tint rides the consumer-supplied accent hatch (config data). */}
       {showBanner && !isProduction && activeEnv && (
         <div
-          className="flex items-center justify-center gap-2 py-1.5 px-4 text-xs font-medium"
           data-part="banner"
           style={{
             '--ds-envtoggle-accent': activeEnv.color,
@@ -213,55 +241,41 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
           } as React.CSSProperties}
           data-testid="env-banner"
         >
-          {/* Pulsing dot for visual attention */}
+          {/* Pulsing dot for visual attention (cadence rides the Tailwind
+              animate-pulse utility; the skin owns dot geometry and fill) */}
           <span
-            className="w-2 h-2 rounded-full animate-pulse"
+            className="animate-pulse"
             data-part="banner-dot"
             style={{ '--ds-envtoggle-accent': activeEnv.color } as React.CSSProperties}
           />
-          {bannerMessage ?? `You are viewing the ${activeEnv.name} environment`}
+          {bannerMessage ?? copy.banner}
         </div>
       )}
 
       {/* Toggle control */}
-      <div className="flex items-center">
+      <div data-part="toggle-row">
         {renderToggle()}
       </div>
 
-      {/* Production confirmation modal -- triggered by setting confirmEnv state.
-          Confirming fires onChange and resets both modal and dropdown state.
-          Clicking the backdrop or Cancel dismisses without switching. */}
+      {/* Production confirmation: the composed ConfirmDialog primitive owns
+          the top layer, focus trap, glass scrim and action chrome. Confirming
+          fires onChange and resets both dialog and dropdown state; Escape,
+          backdrop click and Cancel dismiss without switching. */}
       {confirmEnv && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div data-part="confirm-dialog" style={{ padding: 24, maxWidth: 384, width: '100%', position: 'relative', zIndex: 1 }}>
-            <h3 className="font-bold text-lg">Switch to Production</h3>
-            <p className="py-4 text-sm opacity-70">{confirmProductionSwitch}</p>
-            <div className="flex justify-end gap-2">
-              <button
-                data-part="confirm-cancel"
-                style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }}
-                onClick={() => setConfirmEnv(null)}
-              >
-                Cancel
-              </button>
-              <button
-                data-part="confirm-submit"
-                style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }}
-                onClick={() => {
-                  /* Commit the environment switch and clean up all UI state */
-                  onChange(confirmEnv);
-                  setConfirmEnv(null);
-                  setDropdownOpen(false);
-                }}
-                data-testid="env-confirm-production"
-              >
-                Switch to Production
-              </button>
-            </div>
-          </div>
-          {/* Transparent backdrop -- closes modal on click without switching */}
-          <div data-part="confirm-backdrop" style={{ position: 'absolute', inset: 0 }} onClick={() => setConfirmEnv(null)} />
-        </div>
+        <ModernConfirmDialog
+          open
+          variant="danger"
+          title={copy.confirmTitle}
+          description={confirmProductionSwitch}
+          confirmLabel={copy.confirmTitle}
+          cancelLabel={copy.cancel}
+          onConfirm={() => {
+            onChange(confirmEnv);
+            setConfirmEnv(null);
+            setDropdownOpen(false);
+          }}
+          onCancel={() => setConfirmEnv(null)}
+        />
       )}
     </div>
   );

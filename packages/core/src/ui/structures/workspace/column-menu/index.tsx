@@ -37,6 +37,7 @@ import {
 import { Box, Checkbox, Flex, Text } from '../../../primitives';
 import { Portal } from '../../../primitives/runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../primitives/runtime/overlay/portal-scope';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 function readColumnRecordValue(value: unknown, key: PropertyKey): unknown {
   if (typeof value !== 'object' || value === null) return undefined;
@@ -113,8 +114,6 @@ function CountPill({ label }: { label: string }) {
         minWidth: 26,
         height: 22,
         padding: '0 8px',
-        fontSize: 11,
-        fontWeight: 600,
       }}
     >
       {label}
@@ -209,6 +208,21 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
   const [draggedColumnKey, setDraggedColumnKey] = useState<string | null>(null);
   const [dragOverColumnKey, setDragOverColumnKey] = useState<string | null>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Catalog lookup with an honest English floor: when the provider is absent
+   * or echoes the raw key (missing entry), the historical default wins.
+   */
+  const tOr = useCallback(
+    (key: string, fallback: string): string => {
+      const resolved = i18n?.t(key);
+      if (resolved === undefined || resolved === key || resolved === `components.${key}`) {
+        return fallback;
+      }
+      return resolved;
+    },
+    [i18n],
+  );
   // The panel leaves the trigger's DOM ancestry when it portals, so the
   // tenant/locale scope has to be re-stamped around it. `usePortalScope`
   // needs the anchor as state (a ref would not re-render when it lands), so
@@ -470,6 +484,19 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
     };
   }, [externalToggleEventName, handleOpen, isOpen]);
 
+  // Close on Escape and hand focus back to the trigger (APG disclosure).
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen]);
+
   return (
     <Box style={{ position: 'relative', zIndex: isOpen ? 60 : 1 }}>
       <Box
@@ -480,8 +507,10 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
         className="ds-structure ds-column-menu"
         ref={setTriggerRef}
         onClick={isOpen ? () => setIsOpen(false) : handleOpen}
-        title={`Columns: ${visibleCount} visible${hiddenCount > 0 ? `, ${hiddenCount} hidden` : ''}`}
-        aria-label={`Columns: ${visibleCount} visible${hiddenCount > 0 ? `, ${hiddenCount} hidden` : ''}`}
+        title={`${tOr('columnMenu.triggerLabel', 'Columns')}: ${visibleCount} ${tOr('columnMenu.visibleSuffix', 'visible')}${hiddenCount > 0 ? `, ${hiddenCount} ${tOr('columnMenu.hiddenSuffix', 'hidden')}` : ''}`}
+        aria-label={`${tOr('columnMenu.triggerLabel', 'Columns')}: ${visibleCount} ${tOr('columnMenu.visibleSuffix', 'visible')}${hiddenCount > 0 ? `, ${hiddenCount} ${tOr('columnMenu.hiddenSuffix', 'hidden')}` : ''}`}
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
         style={{
           display: 'inline-flex',
           alignItems: 'center',
@@ -492,7 +521,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
           minHeight: compact ? 32 : 42,
           padding: 0,
           cursor: 'pointer',
-          transition: 'border-color 0.16s ease, background 0.16s ease, color 0.16s ease',
         }}
       >
         <Flex align="center" justify="center" style={{ minWidth: 0 }}>
@@ -528,6 +556,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
             data-part="panel"
             data-open={isOpen}
             className="ds-structure ds-column-menu-panel"
+            role="dialog"
+            aria-label={tOr('columnMenu.panelLabel', 'Table columns')}
             style={{
               position: 'fixed',
               top: panelPosition.top,
@@ -546,11 +576,12 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
               <Flex align="start" justify="between" gap={12}>
                 <Box style={{ minWidth: 0 }}>
                   <Text
+                    data-part="header-title"
                     size="sm"
                     weight="medium"
-                    style={{ display: 'block', fontSize: 14, letterSpacing: '-0.01em' }}
+                    style={{ display: 'block' }}
                   >
-                    Table columns
+                    {tOr('columnMenu.headerTitle', 'Table columns')}
                   </Text>
                   <Text
                     data-part="description"
@@ -558,11 +589,9 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                     style={{
                       display: 'block',
                       marginTop: 4,
-                      fontSize: 12,
-                      lineHeight: 1.45,
                     }}
                   >
-                    Configure the table surface before applying.
+                    {tOr('columnMenu.headerDescription', 'Configure the table surface before applying.')}
                   </Text>
                 </Box>
                 <Flex align="center" gap={6}>
@@ -578,12 +607,10 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                       minHeight: 30,
                       padding: '0 12px',
                       cursor: 'pointer',
-                      fontSize: 12,
-                      fontWeight: 600,
                     }}
                   >
                     <RotateCcw style={{ width: 12, height: 12 }} />
-                    Reset
+                    {tOr('columnMenu.reset', 'Reset')}
                   </Box>
                 </Flex>
               </Flex>
@@ -620,8 +647,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                         onDrop={(event: React.DragEvent<HTMLElement>) => handleColumnDrop(event, column.key)}
                         style={{
                           overflow: 'hidden',
-                          opacity: isDragging ? 0.58 : 1,
-                          transition: 'border-color 0.16s ease, background 0.16s ease, opacity 0.16s ease',
                         }}
                       >
                         <Flex align="center" justify="between" gap={10} style={{ padding: '13px 15px' }}>
@@ -632,8 +657,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                               data-drag-target={isDragTarget}
                               data-dragging={isDragging}
                               draggable
-                              aria-label={`Drag to move ${column.title}`}
-                              title={`Drag to move ${column.title}`}
+                              aria-label={`${tOr('columnMenu.dragToMove', 'Drag to move')} ${column.title}`}
+                              title={`${tOr('columnMenu.dragToMove', 'Drag to move')} ${column.title}`}
                               onDragStart={(event: React.DragEvent<HTMLElement>) => handleColumnDragStart(event, column.key)}
                               onDragEnd={handleColumnDragEnd}
                               onClick={(event: React.MouseEvent<HTMLElement>) => event.preventDefault()}
@@ -663,7 +688,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                   size="sm"
                                   style={{
                                     display: 'block',
-                                    fontWeight: 600,
                                   }}
                                 >
                                   {column.title}
@@ -673,12 +697,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                     data-part="pin-badge"
                                     data-pinned={true}
                                     size="xs"
-                                    style={{
-                                      fontSize: 10,
-                                      fontWeight: 600,
-                                      textTransform: 'uppercase',
-                                      letterSpacing: '0.04em',
-                                    }}
                                   >
                                     {isPinnedLeft ? 'L' : 'R'}
                                   </Text>
@@ -691,10 +709,11 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                   size="xs"
                                   style={{
                                     display: 'block',
-                                    fontSize: 12,
                                   }}
                                 >
-                                  {isVisible ? 'Visible in the table' : 'Hidden from the current view'}
+                                  {isVisible
+                                    ? tOr('columnMenu.visibleInTable', 'Visible in the table')
+                                    : tOr('columnMenu.hiddenFromView', 'Hidden from the current view')}
                                 </Text>
                                 {/* Width badge (only when columnWidths prop is provided) */}
                                 {onColumnResize && currentWidth != null && !isEditingWidth && (
@@ -702,7 +721,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                     as="button"
                                     data-part="width-badge"
                                     onClick={() => setEditingWidthKey(column.key)}
-                                    title={`Width: ${currentWidth}px (click to edit)`}
+                                    title={`${tOr('columnMenu.widthPrefix', 'Width')}: ${currentWidth}px (${tOr('columnMenu.clickToEdit', 'click to edit')})`}
                                     style={{
                                       display: 'inline-flex',
                                       alignItems: 'center',
@@ -710,9 +729,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                       height: 18,
                                       padding: '0 6px',
                                       cursor: 'pointer',
-                                      fontSize: 10,
-                                      fontWeight: 600,
-                                      fontVariantNumeric: 'tabular-nums',
                                     }}
                                   >
                                     {currentWidth}px
@@ -727,6 +743,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                     min={40}
                                     max={2000}
                                     autoFocus
+                                    aria-label={`${tOr('columnMenu.widthPrefix', 'Width')}: ${column.title}`}
                                     onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
                                       const v = parseInt(e.target.value, 10);
                                       if (!isNaN(v)) handleWidthChange(column.key, v);
@@ -745,9 +762,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                       width: 56,
                                       height: 22,
                                       padding: '0 4px',
-                                      fontSize: 11,
-                                      fontWeight: 600,
-                                      fontVariantNumeric: 'tabular-nums',
                                       textAlign: 'center',
                                     }}
                                   />
@@ -761,7 +775,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                             {onPinChange && (
                               <>
                                 <IconButton
-                                  label={isPinnedLeft ? `Unpin ${column.title} from left` : `Pin ${column.title} to left`}
+                                  label={isPinnedLeft ? `${tOr('columnMenu.unpinFromLeft', 'Unpin')} ${column.title} ${tOr('columnMenu.fromLeftSuffix', 'from left')}` : `${tOr('columnMenu.pinToLeft', 'Pin')} ${column.title} ${tOr('columnMenu.toLeftSuffix', 'to left')}`}
                                   onClick={() => handleTogglePin(column.key, 'left')}
                                 >
                                   {isPinnedLeft ? (
@@ -771,7 +785,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                   )}
                                 </IconButton>
                                 <IconButton
-                                  label={isPinnedRight ? `Unpin ${column.title} from right` : `Pin ${column.title} to right`}
+                                  label={isPinnedRight ? `${tOr('columnMenu.unpinFromRight', 'Unpin')} ${column.title} ${tOr('columnMenu.fromRightSuffix', 'from right')}` : `${tOr('columnMenu.pinToRight', 'Pin')} ${column.title} ${tOr('columnMenu.toRightSuffix', 'to right')}`}
                                   onClick={() => handleTogglePin(column.key, 'right')}
                                 >
                                   {isPinnedRight ? (
@@ -783,14 +797,14 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                               </>
                             )}
                             <IconButton
-                              label={`Move ${column.title} up`}
+                              label={`${tOr('columnMenu.moveUp', 'Move')} ${column.title} ${tOr('columnMenu.upSuffix', 'up')}`}
                               disabled={index === 0}
                               onClick={() => handleMove(column.key, -1)}
                             >
                               <ArrowUp style={{ width: 14, height: 14 }} />
                             </IconButton>
                             <IconButton
-                              label={`Move ${column.title} down`}
+                              label={`${tOr('columnMenu.moveDown', 'Move')} ${column.title} ${tOr('columnMenu.downSuffix', 'down')}`}
                               disabled={index === listLength - 1}
                               onClick={() => handleMove(column.key, 1)}
                             >
@@ -818,6 +832,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                           <Box
                             as="button"
                             data-part="group-toggle"
+                            aria-expanded={!isCollapsed}
                             onClick={() => handleToggleGroup(section.groupKey)}
                             style={{
                               display: 'flex',
@@ -837,18 +852,13 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                               data-part="group-toggle-label"
                               size="xs"
                               weight="medium"
-                              style={{
-                                fontSize: 11,
-                                letterSpacing: '0.06em',
-                                textTransform: 'uppercase',
-                              }}
                             >
                               {section.label}
                             </Text>
                             <CountPill label={String(section.columns.length)} />
                           </Box>
                           {!isCollapsed && (
-                            <Flex direction="column" gap={6} style={{ paddingLeft: 4 }}>
+                            <Flex direction="column" gap={6} style={{ paddingInlineStart: 4 }}>
                               {section.columns.map((col, idx) =>
                                 renderColumnRow(col, idx, section.columns.length),
                               )}
@@ -881,12 +891,9 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                           weight="medium"
                           style={{
                             display: 'block',
-                            fontSize: 11,
-                            letterSpacing: '0.08em',
-                            textTransform: 'uppercase',
                           }}
                         >
-                          Row actions
+                          {tOr('columnMenu.rowActionsLabel', 'Row actions')}
                         </Text>
                         <Text
                           data-part="description"
@@ -894,10 +901,9 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                           style={{
                             display: 'block',
                             marginTop: 4,
-                            fontSize: 12,
                           }}
                         >
-                          Choose which quick actions stay visible in the table.
+                          {tOr('columnMenu.rowActionsDescription', 'Choose which quick actions stay visible in the table.')}
                         </Text>
                       </Box>
                       <CountPill label={`${visibleActionsCount}/${totalActionCount}`} />
@@ -931,7 +937,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                     size="sm"
                                     style={{
                                       display: 'block',
-                                      fontWeight: 600,
                                     }}
                                   >
                                     {action.title}
@@ -943,14 +948,13 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                     style={{
                                       display: 'block',
                                       marginTop: 4,
-                                      fontSize: 12,
                                     }}
                                   >
                                     {action.locked
-                                      ? 'Always visible in the table'
+                                      ? tOr('columnMenu.alwaysVisible', 'Always visible in the table')
                                       : isVisible
-                                        ? 'Visible in the actions column'
-                                        : 'Hidden from the actions column'}
+                                        ? tOr('columnMenu.visibleInActions', 'Visible in the actions column')
+                                        : tOr('columnMenu.hiddenFromActions', 'Hidden from the actions column')}
                                   </Text>
                                 </Box>
                               </Flex>
@@ -973,8 +977,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                 padding: 12,
               }}
             >
-              <Text data-part="footer-hint" size="xs" style={{ fontSize: 12 }}>
-                Column widths are also adjustable directly from the table header.
+              <Text data-part="footer-hint" size="xs">
+                {tOr('columnMenu.footerHint', 'Column widths are also adjustable directly from the table header.')}
               </Text>
               <Box
                 as="button"
@@ -987,11 +991,9 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                   minHeight: 40,
                   padding: '0 16px',
                   cursor: 'pointer',
-                  fontSize: 13,
-                  fontWeight: 700,
                 }}
               >
-                Apply columns
+                {tOr('columnMenu.apply', 'Apply columns')}
               </Box>
             </Flex>
           </Box>
@@ -1028,7 +1030,6 @@ function IconButton({
         width: 28,
         height: 28,
         cursor: disabled ? 'not-allowed' : 'pointer',
-        opacity: disabled ? 0.45 : 1,
       }}
     >
       {children}

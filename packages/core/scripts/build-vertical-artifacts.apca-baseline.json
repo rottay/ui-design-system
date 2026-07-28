@@ -1,0 +1,71 @@
+{
+  "purpose": "Ramp/ground pairings below the APCA body-text threshold that ALREADY ship. R1-P extended the ramp check to compiled mode blocks, which is what made them visible; an architecture wave may not repaint them silently, so they are recorded here instead. Decrease-only: a pairing not on this list fails the build, and an entry that stops failing may simply be deleted.",
+  "owner": "claude",
+  "retire": "sighted mode-palette work (R2/R3) gives each dark state a ramp derived against its own ground, at which point the -900 step stops being invisible and the entry is removed",
+  "knownFailures": [
+    {
+      "key": "rottay|--ds-color-success-900",
+      "note": "hand-tuned status ramp on rottay's dark canvas; shipped from the artifact extension before palette.ramps existed, so the base check never saw it"
+    },
+    {
+      "key": "rottay|--ds-color-warning-900",
+      "note": "hand-tuned status ramp on rottay's dark canvas"
+    },
+    {
+      "key": "rottay|--ds-color-error-900",
+      "note": "hand-tuned status ramp on rottay's dark canvas"
+    },
+    {
+      "key": "rottay|--ds-color-info-900",
+      "note": "hand-tuned status ramp on rottay's dark canvas"
+    },
+    {
+      "key": "bithire|dark|--ds-color-accent-900",
+      "note": "dark inherits the light-ground accent ramp; -900 is near-black on the dark canvas"
+    },
+    {
+      "key": "bithire|dark|--ds-color-success-900",
+      "note": "dark inherits the light-ground success ramp"
+    },
+    {
+      "key": "bithire|dark|--ds-color-warning-900",
+      "note": "dark inherits the light-ground warning ramp"
+    },
+    {
+      "key": "bithire|dark|--ds-color-error-900",
+      "note": "dark inherits the light-ground error ramp"
+    },
+    {
+      "key": "bithire|dark|--ds-color-info-900",
+      "note": "dark inherits the light-ground info ramp"
+    },
+    {
+      "key": "evnto|dark|--ds-color-primary-900",
+      "note": "dark inherits the light-ground primary ramp"
+    },
+    {
+      "key": "evnto|dark|--ds-color-secondary-900",
+      "note": "dark inherits the light-ground secondary ramp"
+    },
+    {
+      "key": "evnto|dark|--ds-color-accent-900",
+      "note": "dark inherits the light-ground accent ramp"
+    },
+    {
+      "key": "evnto|dark|--ds-color-success-900",
+      "note": "dark inherits the light-ground success ramp"
+    },
+    {
+      "key": "evnto|dark|--ds-color-warning-900",
+      "note": "dark inherits the light-ground warning ramp"
+    },
+    {
+      "key": "evnto|dark|--ds-color-error-900",
+      "note": "dark inherits the light-ground error ramp"
+    },
+    {
+      "key": "evnto|dark|--ds-color-info-900",
+      "note": "dark inherits the light-ground info ramp"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "bithire": {
+    "guardRemoved": 208,
+    "declsRemoved": 60,
+    "regions": 29,
+    "kinds": {
+      "capability-gap": 6,
+      "mode-block": 1,
+      "structural": 2,
+      "component-local": 15,
+      "media": 3,
+      "reduced-motion": 2
+    }
+  },
+  "evnto": {
+    "guardRemoved": 0,
+    "declsRemoved": 81,
+    "regions": 2,
+    "kinds": {
+      "capability-gap": 1,
+      "mode-block": 1
+    }
+  },
+  "rottay": {
+    "guardRemoved": 0,
+    "declsRemoved": 190,
+    "regions": 2,
+    "kinds": {
+      "capability-gap": 1,
+      "mode-block": 1
+    }
+  }
+}

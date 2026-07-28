@@ -1,10 +1,20 @@
 /**
- * Modern FilterPanel skin (WO-ARC-09 checkpoint 3).
+ * Modern FilterPanel skin (WO-ARC-09 checkpoint 3; Lote-2 composition uplift).
  *
  * DELIBERATELY UNLAYERED, for the reason button.css states in full: every
  * `rottay-*` layer sorts before Tailwind's `base` layer, so a layered rule
  * loses to preflight regardless of specificity (P-47). Unlayered outranks
  * preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * COMPOSITION LAW (Lote 2): the pattern COMPOSES public DS primitives —
+ * Select, Input, InputNumber, Switch, Checkbox, Button, Badge, Spinner —
+ * which own their own chrome, state contracts and skins. This stylesheet
+ * paints only what the PATTERN owns: layout geometry, the header/footer
+ * rhythm, the collapse transition, the field-label/title/separator
+ * typography, the reset hover the contract pins, and the option-icon-badge
+ * swatches that ride inside the Select's portal. It no longer paints input
+ * borders/rings, button fills, badge fills or the loading spinner — that
+ * paint was duplication and is retired.
  *
  * SCOPE ROOT is the panel's outer `<div>`, which carries the pair
  * `ds-pattern-filter-panel ds-engine-modern`; every painted element is a
@@ -15,107 +25,223 @@
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule that sets `border` / `border-color`
  * must reach (0,4,0): the two root classes (0,2,0) + the `data-part` REPEATED on
- * the target (0,2,0). Rules that set only non-border paint (background, color,
- * box-shadow, outline, transform) beat preflight while unlayered at (0,3,0). The
- * 4th unit is bought by REPEATING the `data-part`, never by an incidental
- * attribute a refactor could move (`role`, `aria-label`, `placeholder`). Pure
- * `border: none` resets carry no color and are exempt from the (0,4,0) floor.
+ * the target (0,2,0). Pure `border: none` resets carry no color and are exempt.
  *
- * Values are transcribed verbatim from `engines/modern.tsx`.
+ * SOURCE-GATED CONTRACT RULES (FilterPanel.real-engines.test.tsx reads this
+ * file): the `[data-part='reset-button']:hover` rule and a
+ * `[data-part='input']…:focus` selector must exist. The input slot's
+ * `:focus-within` variant is in the geometry rule below: the composed
+ * Input/InputNumber owns its chrome and focus ring, so the slot deliberately
+ * paints nothing on focus — the selector documents the pass-through.
  */
 
-/* ---- keyframes: referenced by the inline `animation` shorthand the engine
-        sets on the loading spinner (a sanctioned inline residual, WO-ARC-09). ---- */
-@keyframes ds-filter-spin {
-  to { transform: rotate(360deg); }
+/* ---- root: named container (the composition defines the cut) ---- */
+.ds-pattern-filter-panel.ds-engine-modern[data-part='root'] {
+  container: ds-filter-panel / inline-size;
 }
 
-/* ---- root: right border only in the sidebar layout ---- */
+/* ---- loading root: centered spinner frame (Spinner owns ring + cadence) ---- */
+.ds-pattern-filter-panel.ds-engine-modern[data-part='root'][data-loading='true'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--ds-spacing-4);
+}
+
+/* ---- root: sidebar layout rail (logical, mirrors under RTL) ---- */
 .ds-pattern-filter-panel.ds-engine-modern[data-part='root'][data-sidebar='true'] {
-  border-right: 1px solid var(--ds-color-border);
+  padding-inline-end: var(--ds-spacing-4);
+  border-inline-end: 1px solid var(--ds-color-border);
 }
 
-/* ---- collapse toggle: a ghost button that rotates -90deg when collapsed ---- */
-.ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'] {
-  border: none;
-  background: transparent;
-  border-radius: var(--ds-radius-sm);
-  color: var(--ds-color-text-muted);
-  transform: rotate(0deg);
+/* ---- header: title row + rhythm; the bottom gap collapses with the panel ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='header'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2);
+  margin-block-end: var(--ds-spacing-3);
 }
-.ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'][data-collapsed='true'] {
-  transform: rotate(-90deg);
+.ds-pattern-filter-panel.ds-engine-modern [data-part='header'][data-collapsed='true'] {
+  margin-block-end: 0;
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='title-group'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+  min-inline-size: 0;
 }
 
 /* ---- title ---- */
 .ds-pattern-filter-panel.ds-engine-modern [data-part='title'] {
   color: var(--ds-color-text);
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-semibold);
 }
 
-/* ---- active-count badge ---- */
-.ds-pattern-filter-panel.ds-engine-modern [data-part='active-count-badge'] {
-  border-radius: 9px;
-  background: var(--ds-color-primary);
-  color: var(--ds-color-primary-foreground);
+/* ---- collapse toggle: a ghost Button primitive; the pattern only rotates
+        the chevron (on the Button's own icon span, so the Button's press
+        transform on the element itself is never fought). ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'] [data-part='icon'] {
+  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'][data-collapsed='true'] [data-part='icon'] {
+  transform: rotate(-90deg);
 }
 
-/* ---- reset (clear-all) ghost button + its pointer hover ---- */
-.ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button'] {
-  border: none;
-  background: transparent;
-  border-radius: var(--ds-radius-sm);
-  color: var(--ds-color-text-muted);
-}
+/* ---- reset (clear-all) ghost Button: the source-gated pointer hover ---- */
 .ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button']:hover {
   color: var(--ds-color-error);
   background: var(--ds-surface-highlight);
 }
 
-/* ---- native filter inputs (text/date/number/range), and the focus ring the
-        removed onFocus/onBlur handlers used to paint imperatively ---- */
-.ds-pattern-filter-panel.ds-engine-modern [data-part='input'][data-part='input'] {
-  border: 1px solid var(--ds-color-border);
-  border-radius: var(--ds-radius-sm);
-  background: var(--ds-surface-inset);
-  color: inherit;
-  outline: none;
+/* ---- fields container: the two layouts (geometry drained from the engine) ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='fields'][data-layout='inline'] {
+  display: flex;
+  flex-wrap: var(--ds-filter-panel-inline-wrap, wrap);
+  align-items: center;
+  gap: var(--ds-filter-panel-inline-gap, var(--ds-spacing-3));
+  position: relative;
+  z-index: 1;
+  overflow: visible;
 }
-.ds-pattern-filter-panel.ds-engine-modern [data-part='input'][data-part='input']:focus {
-  border-color: var(--ds-focus-ring-color);
-  box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color);
-}
-
-/* ---- range separator ("to" / "-") ---- */
-.ds-pattern-filter-panel.ds-engine-modern [data-part='range-separator'] {
-  color: var(--ds-color-text-muted);
+.ds-pattern-filter-panel.ds-engine-modern [data-part='fields'][data-layout='stacked'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-filter-panel-stacked-gap, var(--ds-spacing-3));
 }
 
-/* ---- field label (stacked + inline both resolve to the same muted color) ---- */
+/* ---- field row + control slot ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='fields'][data-layout='inline'] [data-part='field-row'] {
+  flex: var(--ds-filter-panel-inline-flex, 1 1 268px);
+  min-inline-size: var(--ds-filter-panel-inline-min-width, 196px);
+  display: flex;
+  align-items: center;
+  gap: var(--ds-filter-panel-field-gap, var(--ds-spacing-2));
+  position: relative;
+  z-index: 1;
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='field-control'] {
+  flex: 1 1 var(--ds-filter-panel-inline-control-width, 0px);
+  min-inline-size: 0;
+}
+
+/* ---- field label (stacked + inline share the muted color; typography is
+        layout-specific. The inline 11px/600 and stacked 12px/500 literals are
+        re-expressed on the type scale, spec section 7) ---- */
 .ds-pattern-filter-panel.ds-engine-modern [data-part='field-label'] {
   color: var(--ds-color-text-muted);
+  font-family: var(--ds-font-family-base);
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='fields'][data-layout='stacked'] [data-part='field-label'] {
+  display: block;
+  margin-block-end: var(--ds-spacing-1, 0.25rem);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-weight: var(--ds-font-weight-medium);
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='fields'][data-layout='inline'] [data-part='field-label'] {
+  flex-shrink: 0;
+  white-space: nowrap;
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-weight: var(--ds-font-weight-semibold);
 }
 
-/* ---- apply button ---- */
-.ds-pattern-filter-panel.ds-engine-modern [data-part='apply-button'] {
-  border: none;
-  border-radius: var(--ds-radius-sm);
-  background: var(--ds-color-primary);
-  color: var(--ds-color-primary-foreground);
+/* ---- input slot: the pattern owns ONLY the slot geometry. The composed
+        Input/InputNumber primitive inside owns its chrome, states and focus
+        ring — the :focus-within selector is kept (and kept paint-free) so the
+        focus pass-through is explicit, not accidental. ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='input'],
+.ds-pattern-filter-panel.ds-engine-modern [data-part='input']:focus-within {
+  inline-size: 100%;
+  min-inline-size: 0;
 }
 
-/* ---- loading spinner ---- */
-.ds-pattern-filter-panel.ds-engine-modern [data-part='loading-spinner'] {
-  color: var(--ds-color-primary);
+/* ---- range group (date-range / number-range) + separator ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='range-group'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-filter-panel-range-gap, var(--ds-spacing-2));
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='range-group'] > [data-part='input'] {
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='range-separator'] {
+  flex-shrink: 0;
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+}
+
+/* ---- option group (multi-select checkbox wrap) ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='option-group'] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-filter-panel-option-gap, var(--ds-spacing-2));
+}
+
+/* ---- collapsible content: max-block-size + opacity cadence on the motion
+        contract (engine stamps data-collapsed). ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='content'] {
+  overflow: hidden;
+  max-block-size: var(--ds-filter-panel-content-max-height, 125rem);
+  opacity: 1;
+  transition:
+    max-block-size var(--ds-motion-normal) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-normal) var(--ds-motion-ease-out);
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='content'][data-collapsed='true'] {
+  max-block-size: 0;
+  opacity: 0;
+}
+
+/* ---- actions row (Apply) ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='actions'] {
+  display: flex;
+  gap: var(--ds-spacing-2);
+  margin-block-start: var(--ds-spacing-3);
+}
+
+/* ---- narrow containers: inline rows take the full width (the composition
+        defines the cut, not a page breakpoint). ---- */
+@container ds-filter-panel (max-width: 30rem) {
+  .ds-pattern-filter-panel.ds-engine-modern [data-part='fields'][data-layout='inline'] [data-part='field-row'] {
+    flex-basis: 100%;
+  }
+}
+
+/* ---- coarse pointers: the pattern's own action chrome reaches the physical
+        44px floor via block-size only (the composed Button keeps its density) ---- */
+@media (pointer: coarse) {
+  .ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'],
+  .ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button'],
+  .ds-pattern-filter-panel.ds-engine-modern [data-part='apply-button'] {
+    min-block-size: var(--ds-filter-panel-touch-target, 2.75rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-filter-panel.ds-engine-modern [data-part='content'],
+  .ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'] [data-part='icon'] {
+    transition: none;
+  }
 }
 
 /* ---- option-icon-badge: the per-tone swatch handed to ModernSelect via
         `options[].icon`, which renders inside the child's dropdown PORTAL — out
         of reach of the panel root. It carries a self-sufficient class hook
         (`ds-pattern-filter-panel__option-icon`) plus `data-part` + `data-tone`,
-        so its rules stand alone. Non-border paint reaches (0,3,0) via
-        class + data-part + data-tone; the per-tone border folds in at (0,4,0)
-        with one data-part repeat. ---- */
+        so its rules stand alone. Geometry moved here from the engine's inline
+        styles. Non-border paint reaches (0,3,0) via class + data-part +
+        data-tone; the per-tone border folds in at (0,4,0) with one data-part
+        repeat. ---- */
 .ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: 1.375rem;
+  block-size: 1.375rem;
   border-radius: 8px;
 }
 .ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='neutral'] {

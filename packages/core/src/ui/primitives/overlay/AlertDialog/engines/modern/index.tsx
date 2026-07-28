@@ -22,6 +22,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import type { AlertDialogProps } from '../../contracts';
 import { ALERT_DIALOG_DEFAULTS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
@@ -44,18 +45,34 @@ import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
  * the anchor when `open` is false.
  */
 export default function ModernAlertDialog(props: AlertDialogProps): React.ReactElement {
+  // Optional channel with an English floor: the dialog renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
+  /**
+   * Localized label with an English floor: when the catalogue entry has not
+   * landed yet the provider echoes the full key, which must never reach the
+   * UI.
+   */
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+    return resolved;
+  };
+
   const {
     open,
     onOpenChange,
     title,
     description,
     action,
-    cancelLabel = ALERT_DIALOG_DEFAULTS.cancelLabel,
+    cancelLabel: cancelLabelProp,
     closeOnBackdropClick = ALERT_DIALOG_DEFAULTS.closeOnBackdropClick,
     className = '',
     style,
     'data-testid': dataTestId,
   } = props;
+
+  const cancelLabel = cancelLabelProp ?? tOr('alertDialog.cancel', ALERT_DIALOG_DEFAULTS.cancelLabel);
 
   // Inline anchor: the component's DOM position carries the tenant/locale
   // lineage that PortalScope re-stamps onto the portaled dialog.
@@ -167,17 +184,14 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
               <div
                 data-part="surface"
                 data-open="true"
-                className="max-w-sm"
                 role="alertdialog"
                 aria-modal="true"
-                style={{
-                  position: 'relative',
-                  padding: 'var(--ds-modal-padding, 1.5rem)',
-                }}
+                style={{ position: 'relative' }}
               >
                 <div className="flex gap-3 items-start">
-                  {/* Error-tinted circle with inline SVG warning triangle */}
-                  <div data-part="icon" className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center">
+                  {/* Error-tinted circle with inline SVG warning triangle;
+                      geometry and tint are skin-owned (alert-dialog.css). */}
+                  <div data-part="icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
                       <line x1="12" y1="9" x2="12" y2="13" />
@@ -186,10 +200,10 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
                   </div>
                   <div className="flex-1">
                     {title && (
-                      <h3 data-part="title" className="font-bold text-lg mb-2">{title}</h3>
+                      <h3 data-part="title">{title}</h3>
                     )}
                     {description && (
-                      <p data-part="description" className="text-sm">{description}</p>
+                      <p data-part="description">{description}</p>
                     )}
                   </div>
                 </div>
@@ -199,12 +213,6 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
                     type="button"
                     data-part="action"
                     data-action="cancel"
-                    style={{
-                      height: 'var(--ds-control-height-sm, 36px)',
-                      padding: '0 var(--ds-spacing-md, 16px)',
-                      fontSize: 'var(--ds-font-size-sm, 14px)',
-                      cursor: 'pointer',
-                    }}
                     onClick={handleCancel}
                   >
                     {cancelLabel}

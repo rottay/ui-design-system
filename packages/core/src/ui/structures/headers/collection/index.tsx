@@ -28,7 +28,7 @@ import type { ReactNode } from 'react';
 import { Box, Button, Flex, Text } from '../../../primitives';
 import { KeyboardIcon } from '@/graphics/icons';
 import { useResponsive } from '../../../../infrastructure/runtime/responsive';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 export interface CollectionHeaderQuickAction {
   key: string;
@@ -99,8 +99,9 @@ export function CollectionHeader({
   compact,
   minimal = false,
 }: CollectionHeaderProps) {
-  const { t } = useTranslation('common');
+  const i18n = useOptionalTranslation('common');
   const { isPhoneOrTablet } = useResponsive();
+  const shortcutsLabel = i18n?.tOr('shortcuts', 'Shortcuts') ?? 'Shortcuts';
 
   const embedded = surfaceVariant === 'embedded';
   const useDisplayTitle = titleTreatment === 'display';
@@ -395,7 +396,7 @@ export function CollectionHeader({
               width: compactLayout ? '100%' : 'auto',
               maxWidth: compactLayout ? '100%' : 560,
               minWidth: compactLayout ? 0 : 300,
-              marginLeft: compactLayout ? 0 : 'auto',
+              marginInlineStart: compactLayout ? 0 : 'auto',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'stretch',
@@ -438,7 +439,7 @@ export function CollectionHeader({
                   wrap="wrap"
                   justify={compactLayout ? 'start' : 'end'}
                   style={{
-                    paddingLeft: 'var(--ds-spacing-2, 8px)',
+                    paddingInlineStart: 'var(--ds-spacing-2, 8px)',
                   }}
                 >
                   {inlineMetaItems.map(renderMetaItem)}
@@ -470,7 +471,7 @@ export function CollectionHeader({
                         as="span"
                         style={{
                           display: 'inline-flex',
-                          marginRight: 'var(--ds-spacing-1, 4px)',
+                          marginInlineEnd: 'var(--ds-spacing-1, 4px)',
                         }}
                       >
                         {action.icon}
@@ -514,7 +515,7 @@ export function CollectionHeader({
                       }}
                     >
                       <KeyboardIcon data-part="shortcuts-label-icon" style={{ width: 10, height: 10 }} />
-                      {t('shortcuts')}
+                      {shortcutsLabel}
                     </Box>
                     {shortcuts.map((shortcut) => (
                       <Box
@@ -550,7 +551,7 @@ export function CollectionHeader({
               width: compactLayout ? '100%' : 'auto',
               maxWidth: compactLayout ? '100%' : 560,
               minWidth: compactLayout ? 0 : 260,
-              marginLeft: compactLayout ? 0 : 'auto',
+              marginInlineStart: compactLayout ? 0 : 'auto',
               display: 'grid',
               gap: 'var(--ds-spacing-2, 8px)',
               justifyItems: compactLayout ? 'start' : 'end',

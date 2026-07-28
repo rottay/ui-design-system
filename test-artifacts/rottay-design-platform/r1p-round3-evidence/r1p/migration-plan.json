@@ -1,0 +1,1803 @@
+{
+  "bithire": {
+    "deleteNames": [
+      "--ds-badge-font-weight",
+      "--ds-badge-radius",
+      "--ds-breadcrumb-active-color",
+      "--ds-breadcrumb-color",
+      "--ds-breadcrumb-color-active",
+      "--ds-breadcrumb-color-hover",
+      "--ds-breadcrumb-font-size",
+      "--ds-breadcrumb-link-color",
+      "--ds-breadcrumb-separator-color",
+      "--ds-button-default-bg",
+      "--ds-button-default-bg-hover",
+      "--ds-button-default-border",
+      "--ds-button-default-color",
+      "--ds-button-ghost-bg",
+      "--ds-button-ghost-bg-hover",
+      "--ds-button-ghost-color",
+      "--ds-button-primary-bg",
+      "--ds-button-primary-bg-hover",
+      "--ds-button-primary-border",
+      "--ds-button-primary-color",
+      "--ds-button-secondary-bg",
+      "--ds-button-secondary-bg-hover",
+      "--ds-button-secondary-border",
+      "--ds-button-secondary-color",
+      "--ds-card-bg",
+      "--ds-card-bg-hover",
+      "--ds-card-body-color",
+      "--ds-card-border",
+      "--ds-card-border-color",
+      "--ds-card-border-radius",
+      "--ds-card-footer-bg",
+      "--ds-card-radius",
+      "--ds-card-shadow",
+      "--ds-card-shadow-hover",
+      "--ds-color-bg-input",
+      "--ds-color-border-primary",
+      "--ds-color-border-secondary",
+      "--ds-color-text-disabled",
+      "--ds-color-text-muted",
+      "--ds-color-text-primary",
+      "--ds-color-text-secondary",
+      "--ds-command-glow",
+      "--ds-filter-pill-active-border",
+      "--ds-filter-pill-active-shadow",
+      "--ds-filter-pill-count-active-bg",
+      "--ds-filter-pill-count-active-ring",
+      "--ds-filter-pill-count-bg",
+      "--ds-filter-pill-count-ring",
+      "--ds-filter-pill-frame-border",
+      "--ds-filter-pill-hover-bg",
+      "--ds-filter-pill-hover-border",
+      "--ds-input-bg-focus",
+      "--ds-input-bg-hover",
+      "--ds-surface-canvas",
+      "--ds-surface-card",
+      "--ds-surface-card-bg",
+      "--ds-surface-card-border",
+      "--ds-surface-control",
+      "--ds-surface-panel",
+      "--ds-surface-panel-bg"
+    ],
+    "duplicateCount": 20,
+    "compiledWinsCount": 0,
+    "adoptedCount": 40,
+    "sets": [
+      {
+        "name": "--ds-badge-font-weight",
+        "path": "chrome.badge.fontWeight",
+        "from": "650",
+        "to": "700",
+        "controlsVars": [
+          "--ds-badge-font-weight"
+        ]
+      },
+      {
+        "name": "--ds-badge-radius",
+        "path": "chrome.badge.radius",
+        "from": "7px",
+        "to": "var(--ds-radius-full)",
+        "controlsVars": [
+          "--ds-badge-radius"
+        ]
+      },
+      {
+        "name": "--ds-breadcrumb-color-hover",
+        "path": "chrome.breadcrumb.colorHover",
+        "from": "#2C5587",
+        "to": "var(--ds-color-primary)",
+        "controlsVars": [
+          "--ds-breadcrumb-color-hover"
+        ]
+      },
+      {
+        "name": "--ds-breadcrumb-font-size",
+        "path": "chrome.breadcrumb.fontSize",
+        "from": "0.75rem",
+        "to": "11px",
+        "controlsVars": [
+          "--ds-breadcrumb-font-size"
+        ]
+      },
+      {
+        "name": "--ds-breadcrumb-link-color",
+        "path": "chrome.breadcrumb.linkColor",
+        "from": "#3A6FB0",
+        "to": "var(--ds-color-text-secondary)",
+        "controlsVars": [
+          "--ds-breadcrumb-link-color"
+        ]
+      },
+      {
+        "name": "--ds-button-default-bg",
+        "path": "chrome.controls.buttonDefault.bg",
+        "from": "#FFFFFF",
+        "to": "var(--ds-control-surface)",
+        "controlsVars": [
+          "--ds-button-default-bg"
+        ]
+      },
+      {
+        "name": "--ds-button-default-bg-hover",
+        "path": "chrome.controls.buttonDefault.bgHover",
+        "from": "#F4F8FD",
+        "to": "var(--ds-control-surface-raised)",
+        "controlsVars": [
+          "--ds-button-default-bg-hover"
+        ]
+      },
+      {
+        "name": "--ds-button-default-border",
+        "path": "chrome.controls.buttonDefault.border",
+        "from": "#C4D2DE",
+        "to": "var(--ds-color-border)",
+        "controlsVars": [
+          "--ds-button-default-border"
+        ]
+      },
+      {
+        "name": "--ds-button-default-color",
+        "path": "chrome.controls.buttonDefault.color",
+        "from": "#14283B",
+        "to": "var(--ds-control-ink)",
+        "controlsVars": [
+          "--ds-button-default-color"
+        ]
+      },
+      {
+        "name": "--ds-button-ghost-bg-hover",
+        "path": "chrome.controls.buttonGhost.bgHover",
+        "from": "#F4F8FD",
+        "to": "var(--ds-control-brand-tint)",
+        "controlsVars": [
+          "--ds-button-ghost-bg-hover"
+        ]
+      },
+      {
+        "name": "--ds-button-ghost-color",
+        "path": "chrome.controls.buttonGhost.color",
+        "from": "#53697E",
+        "to": "var(--ds-control-ink-muted)",
+        "controlsVars": [
+          "--ds-button-ghost-color"
+        ]
+      },
+      {
+        "name": "--ds-button-primary-border",
+        "path": "chrome.controls.buttonPrimary.border",
+        "from": "transparent",
+        "to": "var(--ds-button-primary-bg)",
+        "controlsVars": [
+          "--ds-button-primary-border"
+        ]
+      },
+      {
+        "name": "--ds-button-primary-color",
+        "path": "chrome.controls.buttonPrimary.color",
+        "from": "#ffffff",
+        "to": "var(--ds-control-on-brand)",
+        "controlsVars": [
+          "--ds-button-primary-color"
+        ]
+      },
+      {
+        "name": "--ds-button-secondary-bg",
+        "path": "chrome.controls.buttonSecondary.bg",
+        "from": "transparent",
+        "to": "var(--ds-control-brand-tint)",
+        "controlsVars": [
+          "--ds-button-secondary-bg"
+        ]
+      },
+      {
+        "name": "--ds-button-secondary-bg-hover",
+        "path": "chrome.controls.buttonSecondary.bgHover",
+        "from": "var(--ds-tint-8)",
+        "to": "var(--ds-control-brand-tint-hover)",
+        "controlsVars": [
+          "--ds-button-secondary-bg-hover"
+        ]
+      },
+      {
+        "name": "--ds-button-secondary-border",
+        "path": "chrome.controls.buttonSecondary.border",
+        "from": "#3A6FB0",
+        "to": "var(--ds-control-brand-border)",
+        "controlsVars": [
+          "--ds-button-secondary-border"
+        ]
+      },
+      {
+        "name": "--ds-card-bg-hover",
+        "path": "chrome.cardComponent.bgHover",
+        "from": "#F9FBFE",
+        "to": "color-mix( in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card) )",
+        "controlsVars": [
+          "--ds-card-bg-hover"
+        ]
+      },
+      {
+        "name": "--ds-card-border",
+        "path": "chrome.cardComponent.border",
+        "from": "#D4E0EA",
+        "to": "var(--ds-premium-card-border)",
+        "controlsVars": [
+          "--ds-card-border"
+        ]
+      },
+      {
+        "name": "--ds-card-border-color",
+        "path": "chrome.cardComponent.borderColor",
+        "from": "#D4E0EA",
+        "to": "var(--ds-premium-card-border)",
+        "controlsVars": [
+          "--ds-card-border-color"
+        ]
+      },
+      {
+        "name": "--ds-card-border-radius",
+        "path": "chrome.cardComponent.radius",
+        "from": "12px",
+        "to": "var(--ds-radius-md)",
+        "controlsVars": [
+          "--ds-card-radius",
+          "--ds-card-border-radius"
+        ]
+      },
+      {
+        "name": "--ds-card-footer-bg",
+        "path": "chrome.cardComponent.footerBg",
+        "from": "#F8FBFF",
+        "to": "var(--ds-premium-card-footer-bg)",
+        "controlsVars": [
+          "--ds-card-footer-bg"
+        ]
+      },
+      {
+        "name": "--ds-card-shadow",
+        "path": "chrome.cardComponent.shadow",
+        "from": "0 1px 2px rgba(20, 40, 59, 0.06)",
+        "to": "var(--ds-surface-shadow, var(--ds-shadow-sm))",
+        "controlsVars": [
+          "--ds-card-shadow"
+        ]
+      },
+      {
+        "name": "--ds-card-shadow-hover",
+        "path": "chrome.cardComponent.shadowHover",
+        "from": "0 2px 6px rgba(20, 40, 59, 0.08), 0 12px 28px rgba(20, 40, 59, 0.08)",
+        "to": "var(--ds-surface-shadow-hover, var(--ds-shadow-md))",
+        "controlsVars": [
+          "--ds-card-shadow-hover"
+        ]
+      },
+      {
+        "name": "--ds-color-border-secondary",
+        "path": "palette.borderSecondaryColor",
+        "from": "#E3EAF0",
+        "to": "#c4d2de",
+        "controlsVars": [
+          "--ds-color-border-secondary"
+        ]
+      },
+      {
+        "name": "--ds-color-text-disabled",
+        "path": "palette.textDisabledColor",
+        "from": "#566E84",
+        "to": "#b2b6c5",
+        "controlsVars": [
+          "--ds-color-text-disabled"
+        ]
+      },
+      {
+        "name": "--ds-color-text-muted",
+        "path": "palette.textMutedColor",
+        "from": "#5B7187",
+        "to": "#8a9aaa",
+        "controlsVars": [
+          "--ds-color-text-muted"
+        ]
+      },
+      {
+        "name": "--ds-color-text-secondary",
+        "path": "palette.textSecondaryColor",
+        "from": "#516980",
+        "to": "#53697e",
+        "controlsVars": [
+          "--ds-color-text-secondary"
+        ]
+      },
+      {
+        "name": "--ds-filter-pill-active-border",
+        "path": "chrome.filterPill.activeBorder",
+        "from": "color-mix(in srgb, #3A6FB0 28%, #D4E0EA)",
+        "to": "color-mix( in srgb, var(--ds-color-primary) 26%, var(--ds-color-border) )",
+        "controlsVars": [
+          "--ds-filter-pill-active-border"
+        ]
+      },
+      {
+        "name": "--ds-filter-pill-active-shadow",
+        "path": "chrome.filterPill.activeShadow",
+        "from": "inset 0 0 0 1px color-mix(in srgb, #3A6FB0 28%, #D4E0EA), 0 1px 2px rgba(20, 40, 59, 0.05)",
+        "to": "inset 0 0 0 1px var(--ds-filter-pill-active-border), 0 1px 2px color-mix(in srgb, var(--ds-control-ink) 6%, transparent)",
+        "controlsVars": [
+          "--ds-filter-pill-active-shadow"
+        ]
+      },
+      {
+        "name": "--ds-filter-pill-count-active-bg",
+        "path": "chrome.filterPill.countActiveBg",
+        "from": "#ffffff",
+        "to": "var(--ds-control-surface)",
+        "controlsVars": [
+          "--ds-filter-pill-count-active-bg"
+        ]
+      },
+      {
+        "name": "--ds-filter-pill-count-active-ring",
+        "path": "chrome.filterPill.countActiveRing",
+        "from": "inset 0 0 0 1px color-mix(in srgb, #3A6FB0 24%, #C4D2DE)",
+        "to": "none",
+        "controlsVars": [
+          "--ds-filter-pill-count-active-ring"
+        ]
+      },
+      {
+        "name": "--ds-filter-pill-count-bg",
+        "path": "chrome.filterPill.countBg",
+        "from": "#ffffff",
+        "to": "color-mix( in srgb, var(--ds-surface-panel) 78%, var(--ds-control-surface) )",
+        "controlsVars": [
+          "--ds-filter-pill-count-bg"
+        ]
+      },
+      {
+        "name": "--ds-filter-pill-count-ring",
+        "path": "chrome.filterPill.countRing",
+        "from": "inset 0 0 0 1px color-mix(in srgb, #D4E0EA 82%, transparent)",
+        "to": "none",
+        "controlsVars": [
+          "--ds-filter-pill-count-ring"
+        ]
+      },
+      {
+        "name": "--ds-filter-pill-frame-border",
+        "path": "chrome.filterPill.frameBorder",
+        "from": "color-mix(in srgb, #3A6FB0 10%, #D4E0EA)",
+        "to": "color-mix( in srgb, var(--ds-color-primary) 10%, var(--ds-color-border) )",
+        "controlsVars": [
+          "--ds-filter-pill-frame-border"
+        ]
+      },
+      {
+        "name": "--ds-filter-pill-hover-bg",
+        "path": "chrome.filterPill.hoverBg",
+        "from": "var(--ds-tint-4)",
+        "to": "color-mix( in srgb, var(--ds-color-primary) 8%, var(--ds-control-surface) )",
+        "controlsVars": [
+          "--ds-filter-pill-hover-bg"
+        ]
+      },
+      {
+        "name": "--ds-filter-pill-hover-border",
+        "path": "chrome.filterPill.hoverBorder",
+        "from": "color-mix(in srgb, #3A6FB0 16%, #D4E0EA)",
+        "to": "color-mix( in srgb, var(--ds-color-primary) 20%, var(--ds-color-border) )",
+        "controlsVars": [
+          "--ds-filter-pill-hover-border"
+        ]
+      },
+      {
+        "name": "--ds-input-bg-hover",
+        "path": "chrome.controls.input.bgHover",
+        "from": "#FCFDFF",
+        "to": "#ffffff",
+        "controlsVars": [
+          "--ds-input-bg-hover"
+        ]
+      },
+      {
+        "name": "--ds-surface-canvas",
+        "path": "surfaces.surfaceRoles.canvas.background",
+        "from": "#F4F8FB",
+        "to": "#f8fbff",
+        "controlsVars": [
+          "--ds-surface-canvas"
+        ]
+      },
+      {
+        "name": "--ds-surface-panel",
+        "path": "surfaces.surfaceRoles.panel.background",
+        "from": "linear-gradient(180deg, rgba(249, 252, 254, 0.98), rgba(241, 247, 251, 0.96))",
+        "to": "#f4f8fd",
+        "controlsVars": [
+          "--ds-surface-panel"
+        ]
+      }
+    ],
+    "gaps": [
+      {
+        "name": "--ds-color-bg-primary",
+        "compiled": "#F4F8FB",
+        "extension": "#ffffff",
+        "candidates": [
+          "palette.backgroundColor moves 66"
+        ]
+      },
+      {
+        "name": "--ds-surface-card-border-strong",
+        "compiled": "var(--ds-material-card-border-strong)",
+        "extension": "var(--ds-color-border-secondary)",
+        "candidates": []
+      }
+    ],
+    "keep": [
+      {
+        "name": "--ds-card-footer-border",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-card-header-border",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-accent",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-error",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-error-100",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-error-50",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-info",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-info-100",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-info-50",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-primary",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-primary-100",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-primary-200",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-primary-300",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-primary-400",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-primary-50",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-primary-500",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-primary-600",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-primary-700",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-primary-800",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-primary-900",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-secondary",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-secondary-100",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-secondary-200",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-secondary-300",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-secondary-400",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-secondary-50",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-secondary-500",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-secondary-600",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-secondary-700",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-secondary-800",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-secondary-900",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-success",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-success-100",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-success-50",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-warning",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-warning-100",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-color-warning-50",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-font-family-base",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-font-family-display",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-font-family-heading",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-font-family-mono",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-input-bg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-input-bg-disabled",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-input-border",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-input-border-color-disabled",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-input-border-disabled",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-input-border-focus",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-input-border-hover",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-input-color",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-input-color-disabled",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-input-color-placeholder",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-input-shadow-focus",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-layout-bg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-layout-header-bg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-layout-header-border",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-layout-sider-bg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-layout-sider-border",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-letter-spacing-body",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-letter-spacing-display",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-letter-spacing-heading",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-letter-spacing-mono",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-line-height-body",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-line-height-display",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-line-height-heading",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-line-height-relaxed",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-line-height-tight",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-listing-grid-min-card-width",
+        "reason": "E"
+      },
+      {
+        "name": "--ds-modal-bg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-modal-shadow",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-motion-calm",
+        "reason": "C"
+      },
+      {
+        "name": "--ds-motion-deliberate",
+        "reason": "C"
+      },
+      {
+        "name": "--ds-motion-instant",
+        "reason": "C"
+      },
+      {
+        "name": "--ds-radius-lg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-radius-md",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-radius-sm",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-radius-xl",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-shadow-lg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-shadow-md",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-shadow-sm",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-shadow-xl",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-bg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-border",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-footer-bg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-group-color",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-group-font-size",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-group-font-weight",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-group-letter-spacing",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-icon-size",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-item-bg-active",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-item-bg-hover",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-item-color",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-item-color-active",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-item-font-size",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-item-font-weight",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-item-font-weight-active",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-item-padding",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-text",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-sidebar-text-muted",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-action-bg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-action-border",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-bg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-border",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-cell-color",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-cell-font-size",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-header-bg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-header-bg-hover",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-header-border",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-header-color",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-header-font-size",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-header-font-weight",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-header-shadow",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-radius",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-reorder-bg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-resize-bg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-resize-bg-hover",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-row-bg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-row-bg-hover",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-row-bg-selected",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-row-bg-striped",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-row-border",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-row-hover-shadow",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-table-sheen",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-workspace-shell-bg",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-workspace-shell-border",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-workspace-shell-overlay",
+        "reason": "D"
+      },
+      {
+        "name": "--ds-workspace-shell-shadow",
+        "reason": "D"
+      }
+    ]
+  },
+  "evnto": {
+    "deleteNames": [
+      "--ds-button-default-bg",
+      "--ds-button-default-bg-hover",
+      "--ds-button-default-border",
+      "--ds-button-default-color",
+      "--ds-button-disabled-bg",
+      "--ds-button-disabled-border",
+      "--ds-button-disabled-border-color",
+      "--ds-button-disabled-color",
+      "--ds-button-disabled-opacity",
+      "--ds-button-ghost-bg",
+      "--ds-button-ghost-bg-hover",
+      "--ds-button-ghost-color",
+      "--ds-button-primary-bg",
+      "--ds-button-primary-bg-hover",
+      "--ds-button-primary-border",
+      "--ds-button-primary-color",
+      "--ds-button-primary-shadow",
+      "--ds-button-secondary-bg",
+      "--ds-button-secondary-bg-hover",
+      "--ds-button-secondary-border",
+      "--ds-button-secondary-color",
+      "--ds-card-bg",
+      "--ds-card-border",
+      "--ds-card-shadow",
+      "--ds-card-shadow-hover",
+      "--ds-color-accent",
+      "--ds-color-bg-primary",
+      "--ds-color-error",
+      "--ds-color-info",
+      "--ds-color-primary",
+      "--ds-color-secondary",
+      "--ds-color-success",
+      "--ds-color-warning",
+      "--ds-font-family-base",
+      "--ds-font-family-heading",
+      "--ds-font-family-mono",
+      "--ds-input-bg",
+      "--ds-input-bg-disabled",
+      "--ds-input-border",
+      "--ds-input-border-color-disabled",
+      "--ds-input-border-disabled",
+      "--ds-input-border-focus",
+      "--ds-input-color-disabled",
+      "--ds-input-disabled-opacity",
+      "--ds-input-shadow-focus",
+      "--ds-layout-bg",
+      "--ds-layout-header-backdrop",
+      "--ds-layout-header-bg",
+      "--ds-layout-header-border",
+      "--ds-layout-sider-bg",
+      "--ds-layout-sider-border",
+      "--ds-radius-lg",
+      "--ds-radius-md",
+      "--ds-radius-sm",
+      "--ds-radius-xl",
+      "--ds-shadow-lg",
+      "--ds-shadow-md",
+      "--ds-shadow-sm",
+      "--ds-shadow-xl",
+      "--ds-shell-grid-line",
+      "--ds-shell-grid-size",
+      "--ds-sidebar-bg",
+      "--ds-sidebar-group-color",
+      "--ds-sidebar-group-font-size",
+      "--ds-sidebar-group-font-weight",
+      "--ds-sidebar-group-letter-spacing",
+      "--ds-sidebar-icon-size",
+      "--ds-sidebar-item-bg-active",
+      "--ds-sidebar-item-bg-hover",
+      "--ds-sidebar-item-color",
+      "--ds-sidebar-item-color-active",
+      "--ds-sidebar-item-font-size",
+      "--ds-sidebar-item-font-weight",
+      "--ds-sidebar-item-font-weight-active",
+      "--ds-sidebar-item-padding",
+      "--ds-sidebar-text",
+      "--ds-sidebar-text-muted",
+      "--ds-table-header-bg",
+      "--ds-table-header-color",
+      "--ds-table-header-font-size",
+      "--ds-table-header-font-weight"
+    ],
+    "duplicateCount": 79,
+    "compiledWinsCount": 2,
+    "adoptedCount": 0,
+    "sets": [],
+    "gaps": [],
+    "keep": [
+      {
+        "name": "--ds-color-bg-input",
+        "reason": "D"
+      }
+    ]
+  },
+  "rottay": {
+    "deleteNames": [
+      "--ds-button-default-bg",
+      "--ds-button-default-bg-active",
+      "--ds-button-default-bg-hover",
+      "--ds-button-default-border",
+      "--ds-button-default-border-hover",
+      "--ds-button-default-color",
+      "--ds-button-disabled-bg",
+      "--ds-button-disabled-border",
+      "--ds-button-disabled-border-color",
+      "--ds-button-disabled-color",
+      "--ds-button-disabled-opacity",
+      "--ds-button-error-bg",
+      "--ds-button-error-bg-active",
+      "--ds-button-error-bg-hover",
+      "--ds-button-error-border",
+      "--ds-button-error-color",
+      "--ds-button-focus-ring",
+      "--ds-button-ghost-bg",
+      "--ds-button-ghost-bg-active",
+      "--ds-button-ghost-bg-hover",
+      "--ds-button-ghost-color",
+      "--ds-button-info-bg",
+      "--ds-button-info-bg-active",
+      "--ds-button-info-bg-hover",
+      "--ds-button-info-border",
+      "--ds-button-info-color",
+      "--ds-button-link-color",
+      "--ds-button-link-color-active",
+      "--ds-button-link-color-hover",
+      "--ds-button-primary-bg",
+      "--ds-button-primary-bg-active",
+      "--ds-button-primary-bg-hover",
+      "--ds-button-primary-border",
+      "--ds-button-primary-color",
+      "--ds-button-primary-shadow",
+      "--ds-button-primary-shadow-hover",
+      "--ds-button-secondary-bg",
+      "--ds-button-secondary-bg-active",
+      "--ds-button-secondary-bg-hover",
+      "--ds-button-secondary-border",
+      "--ds-button-secondary-border-hover",
+      "--ds-button-secondary-color",
+      "--ds-button-success-bg",
+      "--ds-button-success-bg-active",
+      "--ds-button-success-bg-hover",
+      "--ds-button-success-border",
+      "--ds-button-success-color",
+      "--ds-button-text-bg",
+      "--ds-button-text-bg-active",
+      "--ds-button-text-bg-hover",
+      "--ds-button-text-color",
+      "--ds-button-warning-bg",
+      "--ds-button-warning-bg-active",
+      "--ds-button-warning-bg-hover",
+      "--ds-button-warning-border",
+      "--ds-button-warning-color",
+      "--ds-card-bg",
+      "--ds-card-bg-hover",
+      "--ds-card-body-color",
+      "--ds-card-border",
+      "--ds-card-border-accent-hover",
+      "--ds-card-border-hover",
+      "--ds-card-color",
+      "--ds-card-footer-bg",
+      "--ds-card-footer-border",
+      "--ds-card-header-border",
+      "--ds-card-header-color",
+      "--ds-card-shadow",
+      "--ds-card-shadow-hover",
+      "--ds-card-subtitle-color",
+      "--ds-card-title-color",
+      "--ds-color-accent",
+      "--ds-color-primary",
+      "--ds-color-secondary",
+      "--ds-color-success",
+      "--ds-color-warning",
+      "--ds-font-family-mono",
+      "--ds-input-addon-bg",
+      "--ds-input-addon-border",
+      "--ds-input-addon-color",
+      "--ds-input-bg",
+      "--ds-input-bg-disabled",
+      "--ds-input-bg-focus",
+      "--ds-input-bg-hover",
+      "--ds-input-border",
+      "--ds-input-border-color-disabled",
+      "--ds-input-border-disabled",
+      "--ds-input-border-focus",
+      "--ds-input-border-hover",
+      "--ds-input-clear-color",
+      "--ds-input-clear-color-hover",
+      "--ds-input-color",
+      "--ds-input-color-disabled",
+      "--ds-input-color-placeholder",
+      "--ds-input-disabled-opacity",
+      "--ds-input-error-border",
+      "--ds-input-error-color",
+      "--ds-input-error-shadow-focus",
+      "--ds-input-filled-bg",
+      "--ds-input-filled-bg-focus",
+      "--ds-input-filled-bg-hover",
+      "--ds-input-helper-color",
+      "--ds-input-label-color",
+      "--ds-input-shadow-focus",
+      "--ds-input-success-border",
+      "--ds-input-success-shadow-focus",
+      "--ds-input-warning-border",
+      "--ds-input-warning-shadow-focus",
+      "--ds-layout-bg",
+      "--ds-layout-header-backdrop",
+      "--ds-layout-header-bg",
+      "--ds-layout-header-border",
+      "--ds-layout-sider-bg",
+      "--ds-layout-sider-border",
+      "--ds-letter-spacing-body",
+      "--ds-letter-spacing-display",
+      "--ds-letter-spacing-heading",
+      "--ds-letter-spacing-mono",
+      "--ds-line-height-body",
+      "--ds-line-height-display",
+      "--ds-line-height-heading",
+      "--ds-line-height-relaxed",
+      "--ds-line-height-tight",
+      "--ds-modal-bg",
+      "--ds-modal-body-color",
+      "--ds-modal-close-bg-hover",
+      "--ds-modal-close-color",
+      "--ds-modal-close-color-hover",
+      "--ds-modal-color",
+      "--ds-modal-footer-bg",
+      "--ds-modal-footer-border",
+      "--ds-modal-header-bg",
+      "--ds-modal-header-border",
+      "--ds-modal-overlay-backdrop",
+      "--ds-modal-overlay-bg",
+      "--ds-modal-shadow",
+      "--ds-modal-subtitle-color",
+      "--ds-modal-title-color",
+      "--ds-radius-lg",
+      "--ds-radius-md",
+      "--ds-radius-sm",
+      "--ds-radius-xl",
+      "--ds-shadow-lg",
+      "--ds-shadow-md",
+      "--ds-shadow-sm",
+      "--ds-shadow-xl",
+      "--ds-shell-grid-line",
+      "--ds-shell-grid-size",
+      "--ds-sidebar-bg",
+      "--ds-sidebar-border",
+      "--ds-sidebar-collapsed-width",
+      "--ds-sidebar-footer-bg",
+      "--ds-sidebar-group-color",
+      "--ds-sidebar-group-font-size",
+      "--ds-sidebar-group-font-weight",
+      "--ds-sidebar-group-letter-spacing",
+      "--ds-sidebar-header-height",
+      "--ds-sidebar-icon-size",
+      "--ds-sidebar-item-bg-active",
+      "--ds-sidebar-item-bg-hover",
+      "--ds-sidebar-item-color",
+      "--ds-sidebar-item-color-active",
+      "--ds-sidebar-item-font-size",
+      "--ds-sidebar-item-font-weight",
+      "--ds-sidebar-item-font-weight-active",
+      "--ds-sidebar-item-padding",
+      "--ds-sidebar-text",
+      "--ds-sidebar-text-muted",
+      "--ds-sidebar-width",
+      "--ds-tab-bg-hover",
+      "--ds-tab-border-active",
+      "--ds-tab-color",
+      "--ds-tab-color-active",
+      "--ds-tab-color-hover",
+      "--ds-table-bg",
+      "--ds-table-border",
+      "--ds-table-cell-color",
+      "--ds-table-cell-font-size",
+      "--ds-table-cell-padding",
+      "--ds-table-header-bg",
+      "--ds-table-header-color",
+      "--ds-table-header-font-size",
+      "--ds-table-header-font-weight",
+      "--ds-table-loading-overlay-bg",
+      "--ds-table-row-bg",
+      "--ds-table-row-bg-hover",
+      "--ds-table-row-bg-selected",
+      "--ds-table-row-bg-striped",
+      "--ds-table-row-border",
+      "--ds-tabs-border"
+    ],
+    "duplicateCount": 180,
+    "compiledWinsCount": 0,
+    "adoptedCount": 10,
+    "sets": [
+      {
+        "name": "--ds-button-focus-ring",
+        "path": "chrome.controls.focusRing",
+        "from": "0 0 0 2px rgba(255, 255, 255, 0.20)",
+        "to": "var(--ds-focus-ring)",
+        "controlsVars": [
+          "--ds-button-focus-ring"
+        ]
+      },
+      {
+        "name": "--ds-card-shadow",
+        "path": "chrome.cardComponent.shadow",
+        "from": "none",
+        "to": "var(--ds-elevation-1)",
+        "controlsVars": [
+          "--ds-card-shadow"
+        ]
+      },
+      {
+        "name": "--ds-card-shadow-hover",
+        "path": "chrome.cardComponent.shadowHover",
+        "from": "0 8px 24px rgba(0, 0, 0, 0.20)",
+        "to": "var(--ds-elevation-2)",
+        "controlsVars": [
+          "--ds-card-shadow-hover"
+        ]
+      },
+      {
+        "name": "--ds-color-accent",
+        "path": "palette.accentColor",
+        "from": "#6B6B6B",
+        "to": "#A0A0A5",
+        "controlsVars": [
+          "--ds-color-accent"
+        ]
+      },
+      {
+        "name": "--ds-color-primary",
+        "path": "palette.primaryColor",
+        "from": "#0A0A0A",
+        "to": "#FFFFFF",
+        "controlsVars": [
+          "--ds-color-primary"
+        ]
+      },
+      {
+        "name": "--ds-color-secondary",
+        "path": "palette.secondaryColor",
+        "from": "#6B6B6B",
+        "to": "#A0A0A5",
+        "controlsVars": [
+          "--ds-color-secondary"
+        ]
+      },
+      {
+        "name": "--ds-shadow-lg",
+        "path": "surfaces.shadows.lg",
+        "from": "0 8px 20px rgba(0, 0, 0, 0.28), 0 16px 40px rgba(0, 0, 0, 0.22)",
+        "to": "var(--ds-elevation-3)",
+        "controlsVars": [
+          "--ds-shadow-lg"
+        ]
+      },
+      {
+        "name": "--ds-shadow-md",
+        "path": "surfaces.shadows.md",
+        "from": "0 2px 4px rgba(0, 0, 0, 0.32), 0 8px 24px rgba(0, 0, 0, 0.18)",
+        "to": "var(--ds-elevation-2)",
+        "controlsVars": [
+          "--ds-shadow-md"
+        ]
+      },
+      {
+        "name": "--ds-shadow-sm",
+        "path": "surfaces.shadows.sm",
+        "from": "0 1px 2px rgba(0, 0, 0, 0.28), 0 4px 12px rgba(0, 0, 0, 0.14)",
+        "to": "var(--ds-elevation-1)",
+        "controlsVars": [
+          "--ds-shadow-sm"
+        ]
+      },
+      {
+        "name": "--ds-shadow-xl",
+        "path": "surfaces.shadows.xl",
+        "from": "0 16px 40px rgba(0, 0, 0, 0.34), 0 24px 56px rgba(0, 0, 0, 0.28)",
+        "to": "var(--ds-elevation-4)",
+        "controlsVars": [
+          "--ds-shadow-xl"
+        ]
+      }
+    ],
+    "gaps": [
+      {
+        "name": "--ds-card-shadow-elevated",
+        "compiled": "0 16px 40px rgba(0, 0, 0, 0.28)",
+        "extension": "var(--ds-elevation-3)",
+        "candidates": [
+          "chrome.cardComponent.shadowElevated moves 2"
+        ]
+      },
+      {
+        "name": "--ds-color-accent-100",
+        "compiled": "#202023",
+        "extension": "#131316",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-accent-200",
+        "compiled": "#37373A",
+        "extension": "#1A1A1E",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-accent-300",
+        "compiled": "#4E4E52",
+        "extension": "#2A2A2F",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-accent-400",
+        "compiled": "#68686C",
+        "extension": "#6B6B72",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-accent-50",
+        "compiled": "#0C0C0D",
+        "extension": "#0C0C0E",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-accent-500",
+        "compiled": "#828287",
+        "extension": "#A0A0A5",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-accent-600",
+        "compiled": "#9D9DA2",
+        "extension": "#C0C0C4",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-accent-700",
+        "compiled": "#BABABE",
+        "extension": "#D4D4D8",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-accent-800",
+        "compiled": "#D7D7DA",
+        "extension": "#E4E4E8",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-accent-900",
+        "compiled": "#F5F5F7",
+        "extension": "#ECECEC",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-bg-input",
+        "compiled": "#131316",
+        "extension": "#0F0F12",
+        "candidates": [
+          "chrome.controls.input.bg moves 2"
+        ]
+      },
+      {
+        "name": "--ds-color-error",
+        "compiled": "#EF4444",
+        "extension": "var(--ds-color-error-400)",
+        "candidates": [
+          "palette.errorColor moves 11"
+        ]
+      },
+      {
+        "name": "--ds-color-error-100",
+        "compiled": "#450004",
+        "extension": "rgba(239, 68, 68, 0.12)",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-error-200",
+        "compiled": "#6D000B",
+        "extension": "#FECACA",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-error-300",
+        "compiled": "#970014",
+        "extension": "#FCA5A5",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-error-400",
+        "compiled": "#C30A1F",
+        "extension": "#F87171",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-error-50",
+        "compiled": "#210001",
+        "extension": "rgba(239, 68, 68, 0.08)",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-error-500",
+        "compiled": "#E43A3C",
+        "extension": "#EF4444",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-error-600",
+        "compiled": "#FF625D",
+        "extension": "#DC2626",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-error-700",
+        "compiled": "#FF9A92",
+        "extension": "#B91C1C",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-error-800",
+        "compiled": "#FFC8C2",
+        "extension": "#991B1B",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-error-900",
+        "compiled": "#FFF2F0",
+        "extension": "#7F1D1D",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-info",
+        "compiled": "#3B82F6",
+        "extension": "var(--ds-color-info-400)",
+        "candidates": [
+          "palette.infoColor moves 11"
+        ]
+      },
+      {
+        "name": "--ds-color-info-100",
+        "compiled": "#001C4F",
+        "extension": "rgba(59, 130, 246, 0.12)",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-info-200",
+        "compiled": "#00317B",
+        "extension": "#BFDBFE",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-info-300",
+        "compiled": "#0046AB",
+        "extension": "#93C5FD",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-info-400",
+        "compiled": "#1961D1",
+        "extension": "#60A5FA",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-info-50",
+        "compiled": "#000A26",
+        "extension": "rgba(59, 130, 246, 0.08)",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-info-500",
+        "compiled": "#377DF0",
+        "extension": "#3B82F6",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-info-600",
+        "compiled": "#609CFF",
+        "extension": "#2563EB",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-info-700",
+        "compiled": "#92BBFF",
+        "extension": "#1D4ED8",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-info-800",
+        "compiled": "#C1D9FF",
+        "extension": "#1E40AF",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-info-900",
+        "compiled": "#F0F6FF",
+        "extension": "#1E3A8A",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-primary-100",
+        "compiled": "#212121",
+        "extension": "#131316",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-primary-200",
+        "compiled": "#373737",
+        "extension": "#1A1A1E",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-primary-300",
+        "compiled": "#4F4F4F",
+        "extension": "#2A2A2F",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-primary-400",
+        "compiled": "#686868",
+        "extension": "#6B6B72",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-primary-50",
+        "compiled": "#0C0C0C",
+        "extension": "#0C0C0E",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-primary-500",
+        "compiled": "#828282",
+        "extension": "#A0A0A5",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-primary-600",
+        "compiled": "#9E9E9E",
+        "extension": "#C0C0C4",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-primary-700",
+        "compiled": "#BABABA",
+        "extension": "#D4D4D8",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-primary-800",
+        "compiled": "#D7D7D7",
+        "extension": "#E4E4E8",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-primary-900",
+        "compiled": "#F5F5F5",
+        "extension": "#ECECEC",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-secondary-100",
+        "compiled": "#202023",
+        "extension": "#131316",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-secondary-200",
+        "compiled": "#37373A",
+        "extension": "#1A1A1E",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-secondary-300",
+        "compiled": "#4E4E52",
+        "extension": "#2A2A2F",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-secondary-400",
+        "compiled": "#68686C",
+        "extension": "#6B6B72",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-secondary-50",
+        "compiled": "#0C0C0D",
+        "extension": "#0C0C0E",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-secondary-500",
+        "compiled": "#828287",
+        "extension": "#A0A0A5",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-secondary-600",
+        "compiled": "#9D9DA2",
+        "extension": "#C0C0C4",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-secondary-700",
+        "compiled": "#BABABE",
+        "extension": "#D4D4D8",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-secondary-800",
+        "compiled": "#D7D7DA",
+        "extension": "#E4E4E8",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-secondary-900",
+        "compiled": "#F5F5F7",
+        "extension": "#ECECEC",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-success-100",
+        "compiled": "#00290D",
+        "extension": "rgba(34, 197, 94, 0.12)",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-success-200",
+        "compiled": "#00441A",
+        "extension": "#6EE7B7",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-success-300",
+        "compiled": "#006028",
+        "extension": "#34D399",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-success-400",
+        "compiled": "#007E36",
+        "extension": "#22C55E",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-success-50",
+        "compiled": "#001103",
+        "extension": "rgba(34, 197, 94, 0.08)",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-success-500",
+        "compiled": "#009D45",
+        "extension": "#16A34A",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-success-600",
+        "compiled": "#2DBB5D",
+        "extension": "#15803D",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-success-700",
+        "compiled": "#69D583",
+        "extension": "#166534",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-success-800",
+        "compiled": "#9FEDAE",
+        "extension": "#14532D",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-success-900",
+        "compiled": "#DFFFE4",
+        "extension": "#052E16",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-warning-100",
+        "compiled": "#301B00",
+        "extension": "rgba(245, 158, 11, 0.12)",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-warning-200",
+        "compiled": "#4E2F00",
+        "extension": "#FDE68A",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-warning-300",
+        "compiled": "#6E4400",
+        "extension": "#FCD34D",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-warning-400",
+        "compiled": "#905B00",
+        "extension": "#FBBF24",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-warning-50",
+        "compiled": "#150900",
+        "extension": "rgba(245, 158, 11, 0.08)",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-warning-500",
+        "compiled": "#B47200",
+        "extension": "#F59E0B",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-warning-600",
+        "compiled": "#D88A00",
+        "extension": "#D97706",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-warning-700",
+        "compiled": "#F0AA53",
+        "extension": "#B45309",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-warning-800",
+        "compiled": "#FFCD94",
+        "extension": "#92400E",
+        "candidates": []
+      },
+      {
+        "name": "--ds-color-warning-900",
+        "compiled": "#FFF3E6",
+        "extension": "#78350F",
+        "candidates": []
+      },
+      {
+        "name": "--ds-font-family-base",
+        "compiled": "'Inter', -apple-system, BlinkMacSystemFont, \"Noto Sans Arabic\", sans-serif",
+        "extension": "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+        "candidates": []
+      },
+      {
+        "name": "--ds-font-family-display",
+        "compiled": "'Inter', -apple-system, BlinkMacSystemFont, \"Noto Sans Arabic\", sans-serif",
+        "extension": "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+        "candidates": []
+      },
+      {
+        "name": "--ds-font-family-heading",
+        "compiled": "'Inter', -apple-system, BlinkMacSystemFont, \"Noto Sans Arabic\", sans-serif",
+        "extension": "'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+        "candidates": []
+      }
+    ],
+    "keep": []
+  }
+}

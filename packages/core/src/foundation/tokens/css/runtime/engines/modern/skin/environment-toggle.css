@@ -1,14 +1,23 @@
 /**
- * EnvironmentToggle — Modern engine skin. DELIBERATELY UNLAYERED (P-47):
- * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
- * rule cannot paint these elements; unlayered outranks preflight + DaisyUI and
- * still yields to a caller's inline `style`.
+ * EnvironmentToggle — Modern engine skin (Lote-2 composition uplift).
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before
+ * Tailwind's base layer, so a layered rule cannot paint these elements;
+ * unlayered outranks preflight + DaisyUI and still yields to a caller's
+ * inline `style`.
+ *
+ * COMPOSITION LAW (Lote 2): every control is a composed Button primitive
+ * (trigger + options across the three variants) and the production
+ * confirmation is the composed ConfirmDialog primitive — they own their
+ * chrome, density, states and focus rings. This stylesheet paints only what
+ * the PATTERN owns: the accent hatch consumption (dots, badges, banner,
+ * active options), the segmented joined-corners geometry, the dropdown
+ * panel position and the option row layout. The former button resets and
+ * the hand-rolled confirm-modal paint are retired (duplication).
  *
  * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
  * two root classes (0,2,0) + the `data-part` REPEATED (0,2,0), or a contract
  * attribute (`[data-variant]`/`[data-active]`), to beat the tenant's unlayered
- * `…*` border-color floor at (0,3,1). `border: none` resets carry no color and
- * stay at (0,3,0). Non-border paint wins unlayered at (0,3,0).
+ * `…*` border-color floor at (0,3,1).
  *
  * THE HATCH. `EnvironmentDef.color` is consumer-supplied config data — it cannot
  * live in a static rule, so it rides two custom properties emitted inline
@@ -19,143 +28,154 @@
  * 15% — so the value is passed through ALREADY CONCATENATED and consumed
  * directly (`background: var(--ds-envtoggle-accent-soft)`); no color-mix, no
  * percentage, no arithmetic. Byte-exact by construction.
- *
- * The three toggle variants share `[data-part='option']` but paint differently,
- * so option rules are scoped by the parent toggle's `[data-variant]`. Active
- * state selects the accent; position selects the segmented corner radii.
- *
- * The `[data-part='panel']` rules re-express what `popupPanelStyle` supplied by
- * spread: the spread set `boxShadow: var(--ds-elevation-2)` INLINE and the JSX
- * overrode it to `elevation-3` on the same element — inline wins over any skin,
- * so the surface had to move off the spread to be skinnable (padding stays
- * inline). Byte-identical render.
- *
- * Values transcribed verbatim from engines/modern.tsx.
  */
 
-/* dropdown trigger ------------------------------------------------------- */
+/* ---- toggle rows: layout containers (geometry drained from utilities) ---- */
 
-.ds-pattern-environment-toggle.ds-engine-modern [data-part='trigger'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
-  border: none;
-  border-radius: var(--ds-radius-md);
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='toggle-row'] {
+  display: flex;
+  align-items: center;
+}
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='toggle'][data-variant='dropdown'] {
+  position: relative;
+  display: inline-block;
+}
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='toggle'][data-variant='pills'] {
+  display: flex;
+  gap: var(--ds-spacing-1, 0.25rem);
+}
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='toggle'][data-variant='toggle'] {
+  display: inline-flex;
 }
 
-/* status dot — trigger + dropdown option (both read the per-element accent) */
+/* ---- status dot — trigger + dropdown option (per-element accent hatch) ---- */
 
 .ds-pattern-environment-toggle.ds-engine-modern [data-part='dot'] {
+  flex-shrink: 0;
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: 50%;
   background: var(--ds-envtoggle-accent);
 }
 
-/* pill badge — trigger + dropdown option (spread pillBadgeSmStyle keeps its
-   non-paint keys inline; bg rides the accent, text color is a static token) */
+/* ---- pill badge — trigger + options (fill rides the accent hatch) ---- */
 
 .ds-pattern-environment-toggle.ds-engine-modern [data-part='badge'] {
   background: var(--ds-envtoggle-accent);
   color: var(--ds-color-text-on-primary);
 }
 
-/* dropdown panel (was popupPanelStyle + elevation-3 override) ------------- */
+/* ---- dropdown panel: position + overlay material (fill + dark lift +
+        elevation). Hangs off the reading-START edge (logical). ---- */
 
 .ds-pattern-environment-toggle.ds-engine-modern [data-part='panel'] {
-  background: var(--ds-surface-card);
+  position: absolute;
+  inset-block-start: calc(100% + var(--ds-spacing-1, 0.25rem));
+  inset-inline-start: 0;
+  z-index: var(--ds-z-dropdown);
+  min-inline-size: var(--ds-environment-toggle-panel-min-width, 11.25rem);
+  padding: var(--ds-spacing-1, 0.25rem);
+  background-color: var(--ds-surface-card);
+  background-image: linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3));
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-3);
 }
-
 .ds-pattern-environment-toggle.ds-engine-modern [data-part='panel'][data-part='panel'] {
   border: 1px solid var(--ds-color-border-subtle);
 }
 
-/* dropdown option (active row highlight) + check ------------------------- */
+/* ---- dropdown options: full-width start-aligned rows (the composed Button
+        keeps its chrome; the pattern owns row layout + the active highlight) ---- */
 
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] [data-part='option'] {
+  inline-size: 100%;
+  justify-content: flex-start;
+}
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] [data-part='option'] [data-part='option-name'] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  text-align: start;
+}
 .ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] [data-part='option'][data-active='true'] {
   background: var(--ds-surface-inset);
+  font-weight: var(--ds-font-weight-semibold);
 }
 
 .ds-pattern-environment-toggle.ds-engine-modern [data-part='check'] {
+  inline-size: 1rem;
+  block-size: 1rem;
+  flex-shrink: 0;
   color: var(--ds-color-primary);
 }
 
-/* pills variant --------------------------------------------------------- */
-
-.ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] [data-part='option'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
-  border: none;
-  border-radius: var(--ds-radius-md);
-}
+/* ---- pills variant: active option rides the accent hatch ---- */
 
 .ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] [data-part='option'][data-active='true'] {
   background: var(--ds-envtoggle-accent);
   color: var(--ds-color-text-on-primary);
+}
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] [data-part='option'][data-part='option'][data-active='true'] {
   border: 1px solid var(--ds-envtoggle-accent);
 }
 
-/* segmented (default toggle) variant ------------------------------------ */
+/* ---- segmented (default toggle) variant: joined corners on LOGICAL radii,
+        so the first/last segment mirrors under RTL ---- */
 
-.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-part='option'] {
   border: 1px solid var(--ds-color-border);
 }
-
 .ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active='true'] {
   background: var(--ds-envtoggle-accent);
   color: var(--ds-color-text-on-primary);
+}
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-part='option'][data-active='true'] {
   border: 1px solid var(--ds-envtoggle-accent);
 }
-
 .ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='first'] {
-  border-radius: var(--ds-radius-md) 0 0 var(--ds-radius-md);
+  border-start-start-radius: var(--ds-radius-md);
+  border-end-start-radius: var(--ds-radius-md);
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
 }
-
 .ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='last'] {
-  border-radius: 0 var(--ds-radius-md) var(--ds-radius-md) 0;
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  border-start-end-radius: var(--ds-radius-md);
+  border-end-end-radius: var(--ds-radius-md);
 }
-
 .ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='middle'] {
   border-radius: 0;
 }
 
-/* non-production banner (soft tint bg + accent border/text) -------------- */
+/* ---- non-production banner (soft tint bg + accent border/text, hatch) ---- */
 
 .ds-pattern-environment-toggle.ds-engine-modern [data-part='banner'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-2);
+  padding-block: var(--ds-spacing-2);
+  padding-inline: var(--ds-spacing-4);
   background: var(--ds-envtoggle-accent-soft);
   color: var(--ds-envtoggle-accent);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-weight: var(--ds-font-weight-medium);
 }
-
 .ds-pattern-environment-toggle.ds-engine-modern [data-part='banner'][data-part='banner'] {
-  border-bottom: 2px solid var(--ds-envtoggle-accent);
+  border-block-end: 2px solid var(--ds-envtoggle-accent);
 }
-
 .ds-pattern-environment-toggle.ds-engine-modern [data-part='banner-dot'] {
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: 50%;
   background: var(--ds-envtoggle-accent);
 }
 
-/* production-confirmation modal ----------------------------------------- */
-
-.ds-pattern-environment-toggle.ds-engine-modern [data-part='confirm-dialog'] {
-  background: var(--ds-surface-card);
-  border-radius: var(--ds-radius-lg);
-  box-shadow: var(--ds-elevation-3);
-}
-
-.ds-pattern-environment-toggle.ds-engine-modern [data-part='confirm-cancel'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
-  border: none;
-  border-radius: var(--ds-radius-md);
-}
-
-.ds-pattern-environment-toggle.ds-engine-modern [data-part='confirm-submit'] {
-  background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
-  border: none;
-  border-radius: var(--ds-radius-md);
-}
-
-.ds-pattern-environment-toggle.ds-engine-modern [data-part='confirm-backdrop'] {
-  background: var(--ds-color-alpha-black-50);
+/* ---- coarse pointers: the pattern's option chrome reaches the physical
+        44px floor via block-size only (the composed Buttons keep density) ---- */
+@media (pointer: coarse) {
+  .ds-pattern-environment-toggle.ds-engine-modern [data-part='trigger'],
+  .ds-pattern-environment-toggle.ds-engine-modern [data-part='option'] {
+    min-block-size: var(--ds-environment-toggle-touch-target, 2.75rem);
+  }
 }
