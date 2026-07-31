@@ -1,13 +1,91 @@
 /**
- * MediaSurface skin (WO-SKIN-06 CK-I). Engine-agnostic and deliberately
- * unlayered. The selected card rule clears Card's interactive hover selector,
- * preserving the former inline border throughout every interaction state.
+ * MediaSurface skin (KIMI Modern wave 2026-07-30, SU21; originally WO-SKIN-06 CK-I).
+ *
+ * LAYER: registered in `facade/entrypoints/base.css` (~l.614) and
+ * `facade/entrypoints/styles.css` (~l.635) into `layer(rottay-components)`,
+ * alongside the sibling experience surface skins (the old "deliberately
+ * unlayered" note predates the wiring).
+ *
+ * SCOPE: the surface composes public primitives and helpers (PageShell, Grid,
+ * Stack, Card with its native selectable/selected mechanics, Image with its
+ * own governed fallback, SurfaceSectionCard, the surface state kits) — each
+ * owns its chrome, interaction states and forced-colors treatment, so this
+ * file paints ONLY what the surface itself owns:
+ *   - the pointer affordance on the item wrapper when a custom
+ *     `renderGridItem` renderer is in use (click delegation is the only
+ *     selection channel the render context exposes; the default card path
+ *     gets its cursor from the Card primitive's own `data-clickable` skin);
+ *   - the gallery-mirror skeleton blocks (`media-skeleton-*`), whose pulse
+ *     rides the canonical `ds-foundation-pulse` keyframes on the
+ *     `--ds-motion-attention` channel and goes quiet under reduced motion.
+ * No forced-colors block on purpose: the only fills set here are neutral
+ * surface fills (skeleton blocks), which the UA re-keys to Canvas under
+ * forced colors, and every interactive part already carries its own
+ * forced-colors treatment.
+ *
+ * SPECIFICITY: no class/attribute repetition anywhere. Every selector keys on
+ * an always-stamped hook: the `ds-media` root class plus a `data-part` or a
+ * `data-*` state attribute. Two pre-existing rules were RETIRED, not
+ * replaced:
+ *   - the selected-card border rule (`.ds-media__card` tripled plus doubled
+ *     attributes, (0,9,0)) fought the Card hover selector to re-paint a
+ *     primary border; selection now rides the Card primitive's native
+ *     `data-selectable`/`data-selected` treatment
+ *     (`--ds-card-border-selected` + selected outline), which already wins
+ *     every interaction state without surface involvement;
+ *   - the muted-text color rule (`[data-part='root']` doubled) yielded to the
+ *     Typography `color="muted"` channel (the unlayered typography skin
+ *     governs regardless); the `ds-media__muted-text` hook stays in the DOM.
  */
 
-.ds-surface.ds-media .ds-media__item[data-selected='true'] .ds-media__card.ds-media__card.ds-media__card[data-part='root'][data-variant='outlined'] {
-  border-color: var(--ds-color-primary-500);
+/* ---- custom-renderer pointer affordance ----
+   Only the delegated-click wrapper (custom `renderGridItem`) needs a cursor;
+   the default card paints its own via the Card skin's `data-clickable`. */
+.ds-surface.ds-media .ds-media__item[data-clickable='true'] {
+  cursor: pointer;
 }
 
-.ds-surface.ds-media .ds-media__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+/* ---- gallery-mirror skeleton ----
+   Card-shaped blocks sit on the same responsive column template and spacing
+   rhythm as the loaded gallery, so the swap to real content is a pure paint
+   change, never a layout shift. The frame mirrors the outlined card metrics;
+   the thumb mirrors the 180px image block; the lines mirror title/caption. */
+.ds-surface.ds-media [data-part='media-skeleton-card'] {
+  display: grid;
+  gap: var(--ds-spacing-2, 8px);
+  border: var(--ds-card-border-width, 1px) solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-md, 8px);
+  padding: var(--ds-spacing-3, 12px);
+}
+
+.ds-surface.ds-media [data-part='media-skeleton-thumb'],
+.ds-surface.ds-media [data-part='media-skeleton-line'],
+.ds-surface.ds-media [data-part='media-skeleton-preview'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
+  animation: ds-foundation-pulse
+    var(--ds-motion-attention, 1.5s)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-surface.ds-media [data-part='media-skeleton-thumb'] {
+  min-block-size: 180px;
+}
+
+.ds-surface.ds-media [data-part='media-skeleton-line'][data-size='title'] {
+  inline-size: 60%;
+  min-block-size: 14px;
+}
+
+.ds-surface.ds-media [data-part='media-skeleton-line'][data-size='caption'] {
+  inline-size: 85%;
+  min-block-size: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-media [data-part='media-skeleton-thumb'],
+  .ds-surface.ds-media [data-part='media-skeleton-line'],
+  .ds-surface.ds-media [data-part='media-skeleton-preview'] {
+    animation: none;
+  }
 }

@@ -19,21 +19,21 @@ async function preloadOverlayEngine(engine: StableEngineName): Promise<void> {
   switch (engine) {
     case 'classic':
       await Promise.all([
-        import('@/ui/primitives/overlay/Modal/engines/classic'),
+        import('@/ui/primitives/feedback/Modal/engines/classic'),
         import('@/ui/primitives/feedback/Drawer/engines/classic'),
         import('@/ui/primitives/overlay/Sheet/engines/classic'),
       ]);
       return;
     case 'modern':
       await Promise.all([
-        import('@/ui/primitives/overlay/Modal/engines/modern'),
+        import('@/ui/primitives/feedback/Modal/engines/modern'),
         import('@/ui/primitives/feedback/Drawer/engines/modern'),
         import('@/ui/primitives/overlay/Sheet/engines/modern'),
       ]);
       return;
     case 'rustic':
       await Promise.all([
-        import('@/ui/primitives/overlay/Modal/engines/rustic'),
+        import('@/ui/primitives/feedback/Modal/engines/rustic'),
         import('@/ui/primitives/feedback/Drawer/engines/rustic'),
         import('@/ui/primitives/overlay/Sheet/engines/rustic'),
       ]);

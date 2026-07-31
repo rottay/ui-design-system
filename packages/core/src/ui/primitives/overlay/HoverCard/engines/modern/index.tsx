@@ -25,7 +25,7 @@
  * ```
  */
 
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useId, isValidElement, cloneElement } from 'react';
 import type { HoverCardProps } from '../../contracts';
 import { HOVERCARD_DEFAULTS, resolveOverlayPlacement } from '../../contracts';
 import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
@@ -98,6 +98,38 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
     closeTimerRef.current = setTimeout(() => handleOpen(false), closeDelay);
   }, [closeDelay, handleOpen]);
 
+  // Keyboard parity: the card is rich content (not a tooltip), so focus must
+  // reach it without a pointer. Focus on the trigger opens with the same
+  // debounce; blur closes only when focus leaves BOTH trigger and surface
+  // (the surface renders in-tree, inside this wrapper). Escape closes and
+  // returns focus to the trigger's focusable child (Dropdown precedent).
+  const handleFocus = handleMouseEnter;
+
+  const handleBlur = useCallback(
+    (event: React.FocusEvent<HTMLDivElement>) => {
+      const next = event.relatedTarget as Node | null;
+      if (next && event.currentTarget.contains(next)) return;
+      handleMouseLeave();
+    },
+    [handleMouseLeave],
+  );
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key !== 'Escape' || !isOpen) return;
+      event.stopPropagation();
+      clearTimeout(openTimerRef.current);
+      clearTimeout(closeTimerRef.current);
+      handleOpen(false);
+      anchorEl
+        ?.querySelector<HTMLElement>(
+          'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        )
+        ?.focus();
+    },
+    [isOpen, handleOpen, anchorEl],
+  );
+
   // The trigger wrapper is the anchor; the surface is the positioned
   // overlay. The surface only mounts while open, so element presence drives
   // the positioning lifecycle.
@@ -131,6 +163,19 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
     placement: logicalPlacement,
   });
 
+  // Disclosure semantics live on the consumer's trigger ELEMENT (Popover's
+  // describeTrigger precedent): this role-less wrapper may not carry
+  // aria-controls/aria-expanded (axe aria-allowed-attr). Non-element triggers
+  // (text, fragments) receive nothing — there is no valid host for them.
+  const surfaceId = useId();
+  const describedTrigger =
+    isValidElement(trigger) && trigger.type !== React.Fragment
+      ? cloneElement(
+          trigger as React.ReactElement<{ 'aria-controls'?: string; 'aria-expanded'?: boolean }>,
+          { 'aria-controls': surfaceId, 'aria-expanded': isOpen },
+        )
+      : trigger;
+
   // Card chrome (width, padding) is skin-owned (hover-card.css); only the
   // z-index token channel, consumer overrides and measured positioning stay
   // inline. overlayStyle still wins over the skin via the inline cascade.
@@ -150,14 +195,19 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
       className={`rottay-hover-card--modern ${className || ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onKeyDown={handleKeyDown}
       {...anchorAttrs}
     >
-      {trigger}
+      {describedTrigger}
       {isOpen && mounted && (
         <div
           ref={setSurfaceEl}
+          id={surfaceId}
           data-part="surface"
           data-open="true"
+          data-placement={logicalPlacement}
           data-ds-position-strategy={strategy}
           className={overlayClassName || undefined}
           style={surfaceStyle}

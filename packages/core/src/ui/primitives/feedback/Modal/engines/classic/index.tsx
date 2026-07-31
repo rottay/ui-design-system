@@ -69,7 +69,7 @@
  * ```
  *
  * @see {@link ModalProps} - Component props interface
- * @see {@link ModernModal} - DaisyUI alternative
+ * @see {@link ModernModal} - Rottay native-dialog alternative
  * @see {@link RusticModal} - Vanilla alternative
  * @see {@link https://ant.design/components/modal} - Ant Design Modal docs
  * @module Modal/Engines/Classic
@@ -77,7 +77,7 @@
  * @package @rottay/design-system
  */
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Modal as AntModal } from 'antd';
 import type { ModalProps, ModalSize } from '../../contracts';
 import { MODAL_DEFAULTS } from '../../contracts';
@@ -200,7 +200,31 @@ export default function ClassicModal(props: ModalProps): React.ReactElement {
     // Styling
     className,
     style,
+    id,
+    'data-testid': dataTestId,
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
   } = props;
+
+  const panelRef = useRef<HTMLDivElement | null>(null);
+
+  // Ant owns the dialog node and does not forward arbitrary DOM attributes to
+  // it. Keep the public Rottay identity/ARIA contract at the adapter boundary
+  // instead of forcing consumers to know that engine-specific limitation.
+  useEffect(() => {
+    const panel = panelRef.current;
+    if (!panel) return;
+
+    if (id === undefined) panel.removeAttribute('id');
+    else panel.setAttribute('id', id);
+    if (dataTestId === undefined) panel.removeAttribute('data-testid');
+    else panel.setAttribute('data-testid', dataTestId);
+    if (ariaLabel === undefined) panel.removeAttribute('aria-label');
+    else panel.setAttribute('aria-label', ariaLabel);
+    if (ariaDescribedBy === undefined) panel.removeAttribute('aria-describedby');
+    else panel.setAttribute('aria-describedby', ariaDescribedBy);
+    if (ariaLabel) panel.removeAttribute('aria-labelledby');
+  }, [ariaDescribedBy, ariaLabel, dataTestId, id, open, title]);
 
   // ---------------------------------------------------------------------------
   // Event Handlers
@@ -268,6 +292,7 @@ export default function ClassicModal(props: ModalProps): React.ReactElement {
       // Styling
       className={className}
       style={style}
+      panelRef={panelRef}
     >
       {children}
     </AntModal>

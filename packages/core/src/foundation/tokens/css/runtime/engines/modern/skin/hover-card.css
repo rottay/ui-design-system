@@ -58,24 +58,41 @@
 }
 
 /* ---- entrance keyframe: engine-namespaced so a future rustic twin cannot
-        collide on the name. ---- */
+        collide on the name. The travel resolves through
+        --_ds-hover-card-closed-transform so each placement enters from its own
+        edge (popover.css idiom); the base value matches the default
+        side='bottom'. ---- */
 @keyframes ds-hover-card-enter-modern {
   from {
     opacity: 0;
-    transform: translateY(var(--ds-hover-card-motion-offset, 0.25rem))
-      scale(var(--ds-hover-card-motion-scale, 0.975));
+    transform: var(--_ds-hover-card-closed-transform);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
   }
 }
 
 .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'] {
+  --_ds-hover-card-closed-transform: translate3d(
+      0,
+      calc(0px - var(--ds-hover-card-motion-offset, 0.25rem)),
+      0
+    )
+    scale(var(--ds-hover-card-motion-scale, 0.975));
+
   inline-size: var(--ds-hover-card-width, 18rem);
   max-inline-size: calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4));
+  /* Rich content can run long: the card scrolls internally with a quiet thin
+     scrollbar instead of growing past the viewport. The anchor-css branch
+     keeps overflow: visible (UA [popover] reset below wins on specificity). */
+  max-block-size: var(--ds-hover-card-max-block-size, min(60vh, 24rem));
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: var(--ds-hover-card-scrollbar-width, thin);
   padding: var(--ds-hover-card-padding, var(--ds-spacing-4, 1rem));
   border-radius: var(--ds-hover-card-radius, var(--ds-radius-xl, 16px));
+  transform-origin: center top;
   /* The dark-aware luminance step is its own layer directly above the fill
      (popover.css idiom): inert until a dark surface raises
      --ds-elevation-lift-strength. Level 3 matches the --ds-elevation-3 shadow
@@ -95,6 +112,36 @@
 .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-part='surface'] {
   border: var(--ds-hover-card-border-width, 1px) solid
     var(--ds-hover-card-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));
+}
+
+/* ---- direction-aware entrance: each placement travels from its own edge,
+        with the transform origin on the trigger-facing side. ---- */
+.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-placement^='top'] {
+  --_ds-hover-card-closed-transform: translate3d(
+      0,
+      var(--ds-hover-card-motion-offset, 0.25rem),
+      0
+    )
+    scale(var(--ds-hover-card-motion-scale, 0.975));
+  transform-origin: center bottom;
+}
+.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-placement^='left'] {
+  --_ds-hover-card-closed-transform: translate3d(
+      var(--ds-hover-card-motion-offset, 0.25rem),
+      0,
+      0
+    )
+    scale(var(--ds-hover-card-motion-scale, 0.975));
+  transform-origin: right center;
+}
+.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-placement^='right'] {
+  --_ds-hover-card-closed-transform: translate3d(
+      calc(0px - var(--ds-hover-card-motion-offset, 0.25rem)),
+      0,
+      0
+    )
+    scale(var(--ds-hover-card-motion-scale, 0.975));
+  transform-origin: left center;
 }
 
 /* ---- top-layer branch: the surface carries the `popover` attribute there, and
@@ -130,5 +177,13 @@
     animation-duration: 1ms;
     animation-timing-function: linear;
     transform: none;
+  }
+}
+
+/* Forced colors: the gradient fill, lift layer and depth are stripped; the
+   card keeps a visible system-color boundary. */
+@media (forced-colors: active) {
+  .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-placement] {
+    border: 1px solid CanvasText;
   }
 }

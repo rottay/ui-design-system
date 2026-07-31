@@ -1261,26 +1261,6 @@
       }
     },
     "undocumented-ds-writes": {
-      "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: --ds-filter-panel-inline-control-width": {
-        "count": 1,
-        "owner": "app-bithire/src/ui/tables/collection/preview/render/styles/index.css",
-        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
-      },
-      "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: --ds-filter-panel-inline-flex": {
-        "count": 2,
-        "owner": "app-bithire/src/ui/tables/collection/preview/render/styles/index.css",
-        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
-      },
-      "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: --ds-filter-panel-inline-min-width": {
-        "count": 2,
-        "owner": "app-bithire/src/ui/tables/collection/preview/render/styles/index.css",
-        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
-      },
-      "app-bithire/src/ui/tables/collection/preview/render/styles/index.css :: --ds-filter-panel-inline-wrap": {
-        "count": 2,
-        "owner": "app-bithire/src/ui/tables/collection/preview/render/styles/index.css",
-        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
-      },
       "app-bithire/src/vertical/surface/shell/mobile-tabs/styles.css :: --ds-sheet-max-height": {
         "count": 2,
         "owner": "app-bithire/src/vertical/surface/shell/mobile-tabs/styles.css",

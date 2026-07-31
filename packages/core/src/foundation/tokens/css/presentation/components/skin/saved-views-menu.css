@@ -1,16 +1,31 @@
 /**
- * SavedViewsMenu skin — engine-agnostic and deliberately unlayered so it
- * beats layered base/preflight paint (P-47).
+ * SavedViewsMenu skin — engine-agnostic.
+ * LAYERING: imported by `facade/entrypoints/base.css` into
+ * `layer(rottay-components)` — this file does not control its own layering
+ * (the older "deliberately unlayered" note predates that wiring).
+ *
  * The document.body portal uses its own standalone two-class panel scope;
- * nothing in this file assumes trigger-to-panel ancestry. Border selectors
- * repeat data-part to clear the tenant border-color floor (P-48).
+ * nothing in this file assumes trigger-to-panel ancestry. Class/attribute
+ * repetition is prohibited, so the border floor (P-48) is bought from
+ * ALWAYS-PRESENT attributes instead (fragility documented): the trigger and
+ * the panel both stamp `data-open` on every render, and every panel rule
+ * chains the two scope classes + `data-part='panel'` (+ `data-open` for the
+ * (0,5,0) Text tier) + the target part.
+ *
+ * HOVER LAW: every hover is hover-capable-only (`@media (hover: hover)`);
+ * actionable parts keep their `:active` and `:focus-visible` states beside
+ * it. In forced colors the box-shadow focus rings would vanish, so the
+ * focusables re-express the ring as a Highlight outline.
+ *
+ * INK DERIVATION: the surface brightening mixes resolve against
+ * `--ds-color-bg-elevated` — never a hard `white` literal.
  */
 
 /* trigger ----------------------------------------------------------------- */
 
 .ds-structure.ds-saved-views-menu[data-part='trigger'] {
   border-radius: 12px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, white 8%), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-elevated) 8%), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%));
   color: var(--ds-color-text-primary);
   transition:
     background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
@@ -19,13 +34,15 @@
     color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-structure.ds-saved-views-menu[data-part='trigger'][data-part='trigger'] {
+.ds-structure.ds-saved-views-menu[data-part='trigger'][data-open] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu[data-part='trigger'][data-part='trigger']:hover:not([data-open='true']) {
-  border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, white 4%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
+@media (hover: hover) {
+  .ds-structure.ds-saved-views-menu[data-part='trigger'][data-open]:hover:not([data-open='true']) {
+    border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-elevated) 4%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
+  }
 }
 
 .ds-structure.ds-saved-views-menu[data-part='trigger']:focus-visible {
@@ -35,9 +52,6 @@
 
 .ds-structure.ds-saved-views-menu[data-part='trigger'][data-open='true'] {
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)));
-}
-
-.ds-structure.ds-saved-views-menu[data-part='trigger'][data-part='trigger'][data-open='true'] {
   border-color: color-mix(in srgb, var(--ds-color-primary) 34%, transparent);
 }
 
@@ -56,11 +70,11 @@
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
   border-radius: 18px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 98%, white 2%), color-mix(in srgb, var(--ds-color-bg-primary) 28%, var(--ds-surface-card)));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 98%, var(--ds-color-bg-elevated) 2%), color-mix(in srgb, var(--ds-color-bg-primary) 28%, var(--ds-surface-card)));
   box-shadow: 0 24px 60px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-part='panel'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent);
 }
 
@@ -68,12 +82,11 @@
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='header'][data-part='header'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='header'] {
   border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='header-description'][data-part='header-description'][data-part='header-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='header-description'] {
   color: var(--ds-color-text-muted);
 }
 
@@ -90,12 +103,11 @@
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='active-card'][data-part='active-card'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='active-card'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='active-card-description'][data-part='active-card-description'][data-part='active-card-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='active-card-description'] {
   color: var(--ds-color-text-muted);
 }
 
@@ -108,8 +120,7 @@
   color: var(--ds-color-text-secondary);
 }
 
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='action-button'][data-part='action-button'][data-tone='neutral'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='neutral'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 86%, transparent);
 }
 
@@ -118,15 +129,13 @@
   color: var(--ds-color-primary);
 }
 
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='action-button'][data-part='action-button'][data-tone='primary'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='primary'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 26%, transparent);
 }
 
 /* list sections ----------------------------------------------------------- */
 
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='section-header'][data-part='section-header'][data-part='section-header'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='section-header'] {
   color: var(--ds-color-text-muted);
 }
 
@@ -135,7 +144,7 @@
   background: color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%);
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item'][data-part='view-item'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
 }
 
@@ -155,18 +164,15 @@
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
 }
 
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='view-item'][data-part='view-item'][data-active='true'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item'][data-active='true'] {
   border-color: color-mix(in srgb, var(--ds-color-primary) 28%, transparent);
 }
 
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='view-item-label'][data-part='view-item-label'][data-part='view-item-label'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='view-item-label'] {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='view-item-description'][data-part='view-item-description'][data-part='view-item-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='view-item-description'] {
   color: var(--ds-color-text-muted);
 }
 
@@ -180,7 +186,7 @@
   color: var(--ds-color-text-muted);
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='delete'][data-part='delete'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='delete'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-danger) 18%, transparent);
 }
 
@@ -215,7 +221,7 @@
   border-radius: 14px;
 }
 
-.ds-structure.ds-saved-views-menu-panel [data-part='empty-state'][data-part='empty-state'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='empty-state'] {
   border: 1px dashed color-mix(in srgb, var(--ds-color-border-subtle) 92%, transparent);
 }
 
@@ -227,8 +233,7 @@
   color: var(--ds-color-text-muted);
 }
 
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='empty-state-description'][data-part='empty-state-description'][data-part='empty-state-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='empty-state-description'] {
   color: var(--ds-color-text-muted);
 }
 
@@ -240,20 +245,15 @@
 --------------------------------------------------------------------------- */
 
 /* header + section eyebrows */
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='header-title'][data-part='header-title'][data-part='header-title'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='header-title'] {
   font-size: var(--ds-font-size-sm);
 }
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='header-description'][data-part='header-description'][data-part='header-description'],
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='active-card-description'][data-part='active-card-description'][data-part='active-card-description'],
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='view-item-description'][data-part='view-item-description'][data-part='view-item-description'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='header-description'],
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='active-card-description'],
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='view-item-description'] {
   font-size: var(--ds-font-size-xs);
 }
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='section-header'][data-part='section-header'][data-part='section-header'] {
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] [data-part='section-header'] {
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -284,20 +284,20 @@
 .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary'] {
   font-weight: 700;
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:hover {
-  background: color-mix(in srgb, var(--ds-surface-card) 70%, var(--ds-color-bg-primary) 30%);
-  color: var(--ds-color-text-primary);
-}
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='action-button'][data-part='action-button'][data-tone='neutral']:hover {
-  border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
-}
-.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:hover {
-  background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
-}
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='action-button'][data-part='action-button'][data-tone='primary']:hover {
-  border-color: color-mix(in srgb, var(--ds-color-primary) 38%, transparent);
+@media (hover: hover) {
+  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral']:hover {
+    background: color-mix(in srgb, var(--ds-surface-card) 70%, var(--ds-color-bg-primary) 30%);
+    color: var(--ds-color-text-primary);
+  }
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='neutral']:hover {
+    border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
+  }
+  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary']:hover {
+    background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+  }
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'][data-tone='primary']:hover {
+    border-color: color-mix(in srgb, var(--ds-color-primary) 38%, transparent);
+  }
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='action-button']:focus-visible {
   outline: none;
@@ -318,13 +318,14 @@
     border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='view-item']:hover:not([data-active='true']) {
-  background: color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-primary) 4%);
-  box-shadow: 0 4px 14px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
-}
-.ds-structure.ds-saved-views-menu-panel
-  [data-part='view-item'][data-part='view-item']:hover:not([data-active='true']) {
-  border-color: color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);
+@media (hover: hover) {
+  .ds-structure.ds-saved-views-menu-panel [data-part='view-item']:hover:not([data-active='true']) {
+    background: color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-bg-primary) 4%);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  }
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item']:hover:not([data-active='true']) {
+    border-color: color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);
+  }
 }
 
 /* delete affordance: quiet until asked, then a measured danger whisper */
@@ -334,12 +335,14 @@
     border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
     color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-structure.ds-saved-views-menu-panel [data-part='delete']:hover {
-  background: color-mix(in srgb, var(--ds-color-danger) 8%, transparent);
-  color: var(--ds-color-danger);
-}
-.ds-structure.ds-saved-views-menu-panel [data-part='delete'][data-part='delete']:hover {
-  border-color: color-mix(in srgb, var(--ds-color-danger) 34%, transparent);
+@media (hover: hover) {
+  .ds-structure.ds-saved-views-menu-panel [data-part='delete']:hover {
+    background: color-mix(in srgb, var(--ds-color-danger) 8%, transparent);
+    color: var(--ds-color-danger);
+  }
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='delete']:hover {
+    border-color: color-mix(in srgb, var(--ds-color-danger) 34%, transparent);
+  }
 }
 .ds-structure.ds-saved-views-menu-panel [data-part='delete']:focus-visible {
   outline: none;
@@ -354,5 +357,49 @@
   .ds-structure.ds-saved-views-menu-panel [data-part='view-item'],
   .ds-structure.ds-saved-views-menu-panel [data-part='delete'] {
     transition: none;
+  }
+}
+
+/* Forced colors: system colors only. Frames re-express as ButtonText; the
+   active/current marks read by the checkmark shape and the pill text (never
+   tint); the box-shadow focus rings would vanish, so the focusables get a
+   real Highlight outline; the dashed empty-state frame survives as ButtonText. */
+@media (forced-colors: active) {
+  .ds-structure.ds-saved-views-menu[data-part='trigger'][data-open],
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open],
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='header'],
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='active-card'],
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='action-button'],
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item'],
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='delete'],
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='empty-state'] {
+    border-color: ButtonText;
+  }
+
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='view-item'][data-active='true'] {
+    border-color: Highlight;
+  }
+
+  .ds-structure.ds-saved-views-menu [data-part='trigger-icon'],
+  .ds-structure.ds-saved-views-menu-panel [data-part='glyph'],
+  .ds-structure.ds-saved-views-menu-panel [data-part='checkmark'],
+  .ds-structure.ds-saved-views-menu-panel [data-part='status-pill'],
+  .ds-structure.ds-saved-views-menu-panel [data-part='count-pill'] {
+    color: CanvasText;
+  }
+
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='status-pill'],
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='count-pill'] {
+    border: 1px solid ButtonText;
+    background: transparent;
+  }
+
+  .ds-structure.ds-saved-views-menu[data-part='trigger']:focus-visible,
+  .ds-structure.ds-saved-views-menu-panel [data-part='action-button']:focus-visible,
+  .ds-structure.ds-saved-views-menu-panel [data-part='view-item-select']:focus-visible,
+  .ds-structure.ds-saved-views-menu-panel [data-part='delete']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
   }
 }

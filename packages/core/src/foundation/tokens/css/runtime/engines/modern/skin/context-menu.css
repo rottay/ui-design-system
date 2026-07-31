@@ -96,19 +96,35 @@
     var(--ds-surface-card);
   box-shadow: var(--ds-context-menu-shadow, var(--ds-elevation-3));
 }
-.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'][data-open] {
+  /* The panel's colored border clears the tenant `*` floor at (0,3,1) via the
+     two scope units plus the always-stamped `[data-open]` (4th-wave de-hack
+     of the former repeated `[data-part='surface']`; FRAGILITY NOTE: if a
+     future render ever drops the data-open stamp, restore it rather than
+     re-doubling the part). */
   border: 1px solid
     var(--ds-context-menu-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%));
 }
 
 /* ---- top-layer branch: the panel carries the `popover` attribute there, and UA
-        [popover] rules clip via `overflow: auto` and force `color: CanvasText`;
-        this surface owns neither (its border above is kept — it outranks the UA
-        default). `data-ds-position-strategy` is stamped by the engine alongside
-        data-part. ---- */
+        [popover] rules clip via `overflow: auto` and force `color: CanvasText`.
+        The inline axis stays unclipped; the block axis scrolls internally on
+        long menus (shared with the js strategy below), and the border above is
+        kept — it outranks the UA default. `data-ds-position-strategy` is
+        stamped by the engine alongside data-part. ---- */
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'][data-ds-position-strategy='anchor-css'] {
-  overflow: visible;
+  overflow-inline: visible;
+  overflow-block: auto;
   color: inherit;
+}
+
+/* ---- long menus scroll internally (either strategy): capped at 70vh with
+        the lane's thin, ink-derived scrollbar (ScrollArea idiom). ---- */
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] {
+  max-block-size: var(--ds-context-menu-max-block-size, min(70vh, 32rem));
+  overflow-block: auto;
+  scrollbar-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border)) transparent;
+  scrollbar-width: thin;
 }
 
 /* ---- structural rows (scoped UNDER the surface so consumer trigger content
@@ -147,14 +163,33 @@
   text-align: start;
   cursor: pointer;
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    background-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    outline-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out),
+    outline-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out);
+}
+
+/* The trigger itself is now a keyboard target (Shift+F10 / Menu key opens
+   the menu), so it needs a visible focus ring. */
+.rottay-context-menu--modern[data-part='trigger']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+  border-radius: var(--ds-radius-md, 8px);
 }
 
 /* ---- interaction feedback (leveled in Pass 2): quieter than Dropdown's
-        lifted, bordered hover -- this menu is the flatter sibling. ---- */
-.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):hover,
+        lifted, bordered hover -- this menu is the flatter sibling. Hover is
+        hover-capable-only (4th-wave law); focus-visible stays unwrapped
+        because keyboard focus is pointer-agnostic, and :active gives touch
+        the equivalent pressed surface. ---- */
+@media (hover: hover) {
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):hover {
+    color: var(--ds-context-menu-item-color-hover, var(--ds-color-text-primary));
+    background: var(
+      --ds-context-menu-item-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card))
+    );
+  }
+}
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
   color: var(--ds-context-menu-item-color-hover, var(--ds-color-text-primary));
   background: var(
@@ -172,12 +207,26 @@
     color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card))
   );
 }
-.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger']:not(:disabled):hover,
+@media (hover: hover) {
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger']:not(:disabled):hover {
+    color: var(--ds-context-menu-danger-color-hover, var(--ds-color-error));
+    background: var(
+      --ds-context-menu-danger-bg-hover,
+      color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-surface-card))
+    );
+  }
+}
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger']:not(:disabled):focus-visible {
   color: var(--ds-context-menu-danger-color-hover, var(--ds-color-error));
   background: var(
     --ds-context-menu-danger-bg-hover,
     color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-surface-card))
+  );
+}
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger']:not(:disabled):active {
+  background: var(
+    --ds-context-menu-danger-bg-active,
+    color-mix(in srgb, var(--ds-color-error) 13%, var(--ds-surface-card))
   );
 }
 

@@ -182,12 +182,55 @@
   }
 }
 
-/* forced-colors: shadow rings vanish, so the focus channel degrades to a
-   system outline. */
+/* ---- coarse pointers: the toast's real buttons meet the physical 44px
+        floor without inflating the card's own rhythm. ---- */
+@media (pointer: coarse) {
+  .rottay-toast--modern[data-part='root'] [data-part='action'],
+  .rottay-toast--modern[data-part='root'] [data-part='close-button'] {
+    min-block-size: var(--ds-toast-action-touch-target, 44px);
+  }
+  .rottay-toast--modern[data-part='root'] [data-part='close-button'] {
+    min-inline-size: var(--ds-toast-action-touch-target, 44px);
+  }
+}
+
+/* forced-colors: every tone wash strips to the system canvas, so the frame,
+   the severity icon well, the controls and the progress track re-assert in
+   system colors. Severity still reads by GLYPH SHAPE (check / X / triangle /
+   info), never by hue. */
 @media (forced-colors: active) {
+  .rottay-toast--modern[data-part='root'][data-tone][data-radius],
+  .rottay-toast--modern[data-part='root'][data-tone='gradient'][data-radius][data-shadow] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+  .rottay-toast--modern[data-part='root'] [data-part='icon'],
+  .rottay-toast--modern[data-part='root'][data-tone='gradient'] [data-part='icon'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+  .rottay-toast--modern[data-part='root'] [data-part='description'],
+  .rottay-toast--modern[data-part='root'] [data-part='custom-content'],
+  .rottay-toast--modern[data-part='root'][data-tone='gradient'] [data-part='description'],
+  .rottay-toast--modern[data-part='root'][data-tone='gradient'] [data-part='custom-content'] {
+    color: CanvasText;
+  }
+  .rottay-toast--modern[data-part='root'] [data-part='action'],
+  .rottay-toast--modern[data-part='root'] [data-part='close-button'] {
+    border-color: ButtonText;
+    background: Canvas;
+    color: CanvasText;
+  }
+  .rottay-toast--modern[data-part='root'] > [data-part='progress-bar'] {
+    background: Highlight;
+  }
   .rottay-toast--modern[data-part='root'] [data-part='action']:focus-visible,
   .rottay-toast--modern[data-part='root'] [data-part='close-button']:focus-visible {
-    outline: 2px solid CanvasText;
+    outline: 2px solid Highlight;
     outline-offset: 2px;
     box-shadow: none;
   }

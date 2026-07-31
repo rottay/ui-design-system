@@ -1,5 +1,5 @@
 /**
- * overlay/Modal modern engine — skin ownership + i18n floor pins (R2+R3 batch E).
+ * Deprecated overlay/Modal adapter — canonical Modern Modal contract pins.
  *
  * The engine stamps parts; `modern/skin/overlay-modal.css` owns section
  * layout AND typography. These pins fail if typography/layout creeps back
@@ -20,7 +20,7 @@ function part(name: string): HTMLElement {
   return el as HTMLElement;
 }
 
-describe('overlay/Modal modern — skin ownership', () => {
+describe('overlay/Modal compatibility adapter — skin ownership', () => {
   it('stamps header parts with NO inline layout or typography (the skin owns them)', async () => {
     renderWithEngine(
       <Modal engine="modern" open title="Decision review" description="Read-only summary" onClose={() => {}}>
@@ -74,7 +74,7 @@ describe('overlay/Modal modern — skin ownership', () => {
   });
 });
 
-describe('overlay/Modal modern — i18n English floor (no I18nProvider)', () => {
+describe('overlay/Modal compatibility adapter — i18n English floor (no I18nProvider)', () => {
   it('resolves the close button label to the English floor and renders the semantic close icon', async () => {
     renderWithEngine(
       <Modal engine="modern" open title="t" onClose={() => {}}>

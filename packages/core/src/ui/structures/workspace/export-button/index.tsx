@@ -23,15 +23,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 
-import {
-  BracesIcon as Braces,
-  CheckIcon as Check,
-  ClipboardCopyIcon as ClipboardCopy,
-  DownloadIcon as Download,
-  FileDownIcon as FileDown,
-} from '../../../../graphics/icons';
-
 import { Box, Button, Flex, Text } from '../../../primitives';
+import { ActionDownloadIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-download';
+import { ActionCopyIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-copy';
+import { ContentDocumentIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-document';
+import { ContentCodeIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-code';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 import { Portal } from '../../../primitives/runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../primitives/runtime/overlay/portal-scope';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -76,14 +73,14 @@ interface FormatMeta {
 }
 
 /**
- * Icons are static; the labels resolve through the i18n catalog inside the
- * component (English floor per format) so the module-level map stays
- * render-context free.
+ * Icons are the governed semantic roles (decorative); the labels resolve
+ * through the i18n catalog inside the component (English floor per format)
+ * so the module-level map stays render-context free.
  */
 const FORMAT_META: Record<string, FormatMeta> = {
-  csv: { icon: <FileDown size={15} /> },
-  json: { icon: <Braces size={15} /> },
-  clipboard: { icon: <ClipboardCopy size={15} /> },
+  csv: { icon: <ContentDocumentIcon decorative size={15} /> },
+  json: { icon: <ContentCodeIcon decorative size={15} /> },
+  clipboard: { icon: <ActionCopyIcon decorative size={15} /> },
 };
 
 // ---------------------------------------------------------------------------
@@ -258,9 +255,6 @@ export function ExportButton<T = unknown>({
   // Render
   // -----------------------------------------------------------------------
 
-  const buttonHeight = size === 'sm' ? 30 : 36;
-  const buttonPadding = size === 'sm' ? '0 8px' : '0 12px';
-
   return (
     <>
       {/* Trigger */}
@@ -268,9 +262,9 @@ export function ExportButton<T = unknown>({
         data-part="root"
         className="ds-structure ds-export-button"
         ref={setTriggerRef}
-        style={{ position: 'relative', display: 'inline-flex' }}
       >
         <Button
+          engine="modern"
           data-part="trigger"
           variant="ghost"
           size={size}
@@ -279,16 +273,8 @@ export function ExportButton<T = unknown>({
           aria-haspopup="menu"
           aria-expanded={open}
           aria-label={tOr('exportButton.triggerLabel', 'Export data')}
-          style={{
-            height: buttonHeight,
-            padding: buttonPadding,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 4,
-          }}
-        >
-          <Download size={15} />
-        </Button>
+          icon={<ActionDownloadIcon decorative size={15} />}
+        />
 
         {/* Copied toast overlay */}
         {copiedFeedback && (
@@ -296,18 +282,9 @@ export function ExportButton<T = unknown>({
             data-part="toast"
             data-copied={true}
             role="status"
-            style={{
-              position: 'absolute',
-              top: -32,
-              left: '50%',
-              padding: '4px 10px',
-              whiteSpace: 'nowrap',
-              pointerEvents: 'none',
-              zIndex: 9999,
-            }}
           >
-            <Flex gap={1} style={{ alignItems: 'center' }}>
-              <Check size={12} />
+            <Flex gap={1} align="center">
+              <StatusSuccessIcon decorative size={12} />
               <Text data-part="toast-label">
                 {tOr('exportButton.copied', 'Copied!')}
               </Text>
@@ -320,7 +297,9 @@ export function ExportButton<T = unknown>({
           container > active top-layer host > shared `#rottay-portal-root`, so
           the menu stays visible when the toolbar is itself inside a
           `showModal()` dialog. `PortalScope` carries the tenant/theme/
-          direction lineage across the portal boundary. */}
+          direction lineage across the portal boundary. The measured position
+          (top/left) is runtime geometry and stays inline; the panel frame is
+          skin-owned. */}
       {open && dropdownPos && (
         <Portal>
           <PortalScope snapshot={portalScope}>
@@ -336,50 +315,29 @@ export function ExportButton<T = unknown>({
               position: 'fixed',
               top: dropdownPos.top,
               left: dropdownPos.left,
-              zIndex: 9998,
-              minWidth: 200,
-              padding: 4,
             }}
           >
             {formats.map((fmt) => {
               const meta = FORMAT_META[fmt];
               if (!meta) return null;
               return (
-                <Box
+                /* Interim menu items while Dropdown P88 is blocked: composed
+                   Buttons carrying the menu semantics (the pattern's arrow
+                   contract queries `data-export-item`). */
+                <Button
+                  engine="modern"
                   key={fmt}
-                  as="button"
+                  variant="ghost"
+                  size="sm"
                   data-export-item
                   data-part="menu-item"
                   role="menuitem"
                   tabIndex={-1}
+                  icon={meta.icon}
                   onClick={() => handleExport(fmt)}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    width: '100%',
-                    padding: '8px 12px',
-                    cursor: 'pointer',
-                  }}
                 >
-                  <Flex
-                    data-part="menu-icon"
-                    style={{
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: 24,
-                      height: 24,
-                      flexShrink: 0,
-                    }}
-                  >
-                    {meta.icon}
-                  </Flex>
-                  <Text
-                    data-part="menu-label"
-                  >
-                    {formatLabels[fmt] ?? fmt}
-                  </Text>
-                </Box>
+                  {formatLabels[fmt] ?? fmt}
+                </Button>
               );
             })}
           </Box>

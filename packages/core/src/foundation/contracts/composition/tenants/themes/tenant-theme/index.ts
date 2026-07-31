@@ -554,7 +554,9 @@ export interface TenantThemeContrastAdjustment {
  * emitters must stay silent). A channel names an EMITTER, not a token family:
  * `appearance` is the provider's compiled-appearance variable block,
  * `brand-chrome` is the generated tenant chrome stylesheet, and `personality`
- * is the `SystemCssVariablesBridge` `--ds-personality-*` rule.
+ * is the `SystemCssVariablesBridge` namespaced `--ds-personality-*` data rule.
+ * The personality channel does not own canonical component variables: the
+ * static personality projection maps its namespaced inputs to those aliases.
  */
 export const TENANT_VISUAL_CHANNELS = [
   "visual-branding",
@@ -570,11 +572,10 @@ export type TenantVisualChannel = (typeof TENANT_VISUAL_CHANNELS)[number];
  * v1 compiler coverage. Personality is deliberately NOT covered.
  *
  * The compiled artifact is the only tenant authority; personality is a
- * subordinate product/vertical baseline that may COMPLETE channels the
- * artifact does not cover. Because `personality` stays outside this set, the
- * bridge keeps emitting under a compiled envelope, and because every channel
- * the artifact does cover is suppressed, the artifact wins deterministically
- * wherever both would declare the same variable.
+ * subordinate product/vertical data axis. Because `personality` stays outside
+ * this set, its namespaced bridge remains live under a compiled envelope. A
+ * single static projection consumes that data; the bridge itself never paints
+ * canonical component channels, so it cannot compete with the artifact.
  */
 export const TENANT_THEME_V1_COVERAGE: readonly TenantVisualChannel[] =
   Object.freeze([

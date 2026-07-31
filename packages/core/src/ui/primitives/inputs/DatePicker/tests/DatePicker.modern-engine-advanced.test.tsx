@@ -21,8 +21,8 @@ describe('DatePicker modern advanced coverage', () => {
     );
 
     const yearInput = screen.getByRole('combobox', { name: 'Modern advanced' });
-    expect(yearInput.className).toContain('input-lg');
-    expect(yearInput.className).toContain('input-warning');
+    expect(yearInput).toHaveAttribute('data-size', 'lg');
+    expect(yearInput).toHaveAttribute('data-status', 'warning');
 
     fireEvent.click(yearInput);
     expect(screen.getByRole('button', { name: 'Previous decade' })).toBeInTheDocument();
@@ -68,7 +68,7 @@ describe('DatePicker modern advanced coverage', () => {
     );
 
     const [start] = screen.getAllByRole('combobox');
-    expect(start.className).toContain('input-error');
+    expect(start).toHaveAttribute('data-status', 'error');
     expect(screen.getByText('through')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Clear dates' }));
@@ -91,8 +91,8 @@ describe('DatePicker modern advanced coverage', () => {
     );
 
     const weekInput = await screen.findByPlaceholderText('Week picker');
-    expect(weekInput.className).toContain('input-sm');
-    expect(weekInput.className).toContain('input-error');
+    expect(weekInput).toHaveAttribute('data-size', 'sm');
+    expect(weekInput).toHaveAttribute('data-status', 'error');
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
 
     fireEvent.click(weekInput);

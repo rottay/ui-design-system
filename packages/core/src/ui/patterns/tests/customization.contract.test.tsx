@@ -104,7 +104,11 @@ describe.each([
     ) as HTMLElement;
 
     expect(root).toHaveAttribute('data-tenant', 'ck-h1-preview');
-    expect(queryAll(root, '[data-part="header"]')).toHaveLength(1);
+    const headerSelector =
+      engine === 'modern'
+        ? ':scope > [data-part="body"] > [data-part="header"]'
+        : ':scope > [data-part="header"]';
+    expect(queryAll(root, headerSelector)).toHaveLength(1);
     expect(queryAll(root, '[data-part="logo"]')).toHaveLength(1);
     expect(queryAll(root, '[data-part="tenant-name"]')).toHaveLength(1);
     expect(queryAll(root, '[data-part="tenant-slug"]')).toHaveLength(1);
@@ -118,11 +122,11 @@ describe.each([
     }
 
     for (const variant of ['primary', 'outlined', 'default']) {
-      expect(queryAll(root, `[data-part="button"][data-variant="${variant}"]`)).toHaveLength(1);
+      const variantAttribute = engine === 'modern' ? 'data-sample-variant' : 'data-variant';
+      expect(queryAll(root, `[data-part="button"][${variantAttribute}="${variant}"]`)).toHaveLength(1);
     }
     for (const part of [
       'sample-card',
-      'preview-card-title',
       'preview-card-body',
       'sample-input',
       'sample-table',
@@ -130,6 +134,9 @@ describe.each([
     ]) {
       expect(queryAll(root, `[data-part="${part}"]`), part).toHaveLength(1);
     }
+    expect(
+      queryAll(root, engine === 'modern' ? '[data-part="sample-card"] [data-part="title"]' : '[data-part="preview-card-title"]')
+    ).toHaveLength(1);
     expect(queryAll(root, '[data-part="accent-bar"]')).toHaveLength(0);
     expect(queryAll(root, '[data-part="preview-table-cell"]')).toHaveLength(9);
     expect(queryAll(root, '[data-part="personality-tile"]')).toHaveLength(8);

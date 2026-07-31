@@ -53,11 +53,15 @@
   }
 }
 
-/* ---- backdrop ---- */
+/* ---- backdrop: scrim + glass, intensity-governed like the rest of the
+        overlay family (Drawer/Modal precedent): the frost tint and blur scale
+        with --ds-effect-intensity and collapse at 0. Glass is sanctioned on
+        overlay backdrops only. ---- */
 .rottay-sheet--modern[data-part='root'] > [data-part='backdrop'] {
-  background: color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background-color: var(--ds-sheet-overlay-bg, color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent));
+  background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
+  backdrop-filter: var(--ds-glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
 }
 
 /* ---- panel ---- */
@@ -69,10 +73,23 @@
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='bottom'] {
   padding-bottom: var(--ds-sheet-safe-area-bottom, env(safe-area-inset-bottom, 0px));
 }
+/* Side panels: the width channel (previously an inline 380px literal) and the
+   safe-area pads for notched viewports. The sliding edge stays flush; the
+   outer edges breathe. `data-placement` is physical by contract — see the
+   SIDE note in the header. */
+.rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='left'],
+.rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='right'] {
+  inline-size: var(--ds-sheet-side-width, 380px);
+  max-inline-size: 100vw;
+  padding-block-start: var(--ds-sheet-safe-area-top, env(safe-area-inset-top, 0px));
+  padding-block-end: var(--ds-sheet-safe-area-bottom, env(safe-area-inset-bottom, 0px));
+}
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='left'] {
+  padding-left: env(safe-area-inset-left, 0px);
   border-radius: 0 var(--ds-radius-lg) var(--ds-radius-lg) 0;
 }
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='right'] {
+  padding-right: env(safe-area-inset-right, 0px);
   border-radius: var(--ds-radius-lg) 0 0 var(--ds-radius-lg);
 }
 
@@ -91,20 +108,37 @@
   border-right: none;
 }
 
-/* ---- handle bar: a full pill here (rustic's is a small rounded rect) ---- */
+/* ---- handle bar: a full pill here (rustic's is a small rounded rect). The
+        wrapper centers it; geometry moved out of the engine's inline styles. ---- */
+.rottay-sheet--modern[data-part='root'] [data-part='handle-area'] {
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+  padding-block-start: var(--ds-sheet-handle-area-padding-block-start, 12px);
+  padding-block-end: var(--ds-sheet-handle-area-padding-block-end, 4px);
+}
 .rottay-sheet--modern[data-part='root'] [data-part='handle'] {
+  inline-size: var(--ds-sheet-handle-inline-size, 40px);
+  block-size: var(--ds-sheet-handle-block-size, 4px);
   background: var(--ds-color-border-secondary);
   border-radius: 9999px;
 }
 
-/* ---- header + title. Typography is skin-owned (the engine stamps parts
-        only): heading family, tight tracking, and an ellipsis guard so a long
-        title never pushes the close button out of the panel. ---- */
+/* ---- header + title. Layout AND typography are skin-owned (the engine stamps
+        parts only): heading family, tight tracking, and an ellipsis guard so a
+        long title never pushes the close button out of the panel. ---- */
 .rottay-sheet--modern[data-part='root'] [data-part='header'][data-part='header'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
   gap: var(--ds-spacing-3);
+  padding: var(--ds-sheet-header-padding, 12px 16px);
   border-bottom: 1px solid var(--ds-color-border-subtle);
 }
 .rottay-sheet--modern[data-part='root'] [data-part='title'] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -116,10 +150,14 @@
   line-height: var(--ds-line-height-tight);
 }
 
-/* ---- scroll anatomy ---- */
+/* ---- scroll anatomy: the body is the scroll region (default padding moved
+        out of the engine; a caller's bodyStyle still wins inline). A quiet
+        thin scrollbar keeps long content usable without chrome weight. ---- */
 .rottay-sheet--modern[data-part='root'] [data-part='body'] {
   min-height: 0;
+  padding: var(--ds-sheet-body-padding, 16px);
   overscroll-behavior: contain;
+  scrollbar-width: var(--ds-sheet-body-scrollbar-width, thin);
   -webkit-overflow-scrolling: touch;
 }
 .rottay-sheet--modern[data-part='root'] [data-part='footer'] {
@@ -163,10 +201,34 @@
   }
 }
 
+/* Reduced motion: the engine declares NO entrance animation at all when the
+   recipe resolves settled, so the panel/backdrop appear in their final state
+   immediately. No `!important` is needed — the inline animation is simply
+   absent in that posture (these guards stay as inert documentation). */
 @media (prefers-reduced-motion: reduce) {
   .rottay-sheet--modern[data-part='root'] > [data-part='backdrop'],
   .rottay-sheet--modern[data-part='root'] > [data-part='surface'] {
-    animation: none !important;
-    transition: none !important;
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Coarse pointers: the close button meets the 44px physical floor; min sizing
+   composes with the `--ds-sheet-close-size` square (ActionDock contract). */
+@media (pointer: coarse) {
+  .rottay-sheet--modern[data-part='root'] [data-part='close-button'] {
+    min-inline-size: max(44px, var(--ds-size-touch-target, 44px));
+    min-block-size: max(44px, var(--ds-size-touch-target, 44px));
+  }
+}
+
+/* Forced colors: the scrim, glass and depth disappear; the panel and its
+   close control keep a visible system-color boundary. */
+@media (forced-colors: active) {
+  .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement] {
+    border: 1px solid CanvasText;
+  }
+  .rottay-sheet--modern[data-part='root'] [data-part='close-button'] {
+    border: 1px solid ButtonText;
   }
 }

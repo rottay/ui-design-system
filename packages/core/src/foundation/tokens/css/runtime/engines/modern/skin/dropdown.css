@@ -47,6 +47,30 @@
   }
 }
 
+/* Top-placement mirrors: the surface sits ABOVE the trigger, so it enters
+   travelling up from below and exits back down (engine picks the pair). */
+@keyframes ds-dropdown-popover-enter-top-modern {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.975);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ds-dropdown-popover-exit-top-modern {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(3px) scale(0.985);
+  }
+}
+
 /* NO `isolation: isolate` here (Pass-2 stacking fix): an isolated trigger
    caps its subtree, so the in-tree surface -- absolute, z-index 1000 --
    lost every page-level stacking contest to LATER in-flow siblings (the
@@ -378,7 +402,11 @@
   inline-size: 0.72rem;
   block-size: 0.72rem;
   border: 1px solid var(--ds-dropdown-border-color, var(--ds-color-border));
-  background: var(--ds-surface-card);
+  /* the same fill + dark-aware lift layer the surface declares, so the seam
+     does not flash a lighter square where the arrow crosses the border */
+  background:
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-surface-card);
   transform: rotate(45deg);
 }
 
@@ -424,11 +452,17 @@
 }
 
 /* forced-colors contract: backgrounds are stripped, so hover/focus must
-   still read -- a plain outline survives the forced palette. */
+   still read -- a plain outline survives the forced palette. The selected
+   item keeps its own Highlight boundary (its wash disappears too). */
 @media (forced-colors: active) {
   .rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):hover,
   .rottay-dropdown__surface[data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
     outline: 1px solid;
+    outline-offset: -1px;
+  }
+
+  .rottay-dropdown__surface[data-part='surface'] [data-part='item'][data-selected='true'] {
+    outline: 1px solid Highlight;
     outline-offset: -1px;
   }
 }

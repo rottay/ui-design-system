@@ -79,7 +79,7 @@ const CASES: Array<{ variant: string; source: string; tone: string; surface: str
 describe('Link modern skin: base-ink contrast channel (R0/Axe round 2)', () => {
   it('keeps the single-tone architecture with a bounded darkened base mix', () => {
     expect(SKIN).toContain(
-      'color-mix(in srgb, var(--ds-link-tone) 84%, var(--ds-color-black, #000) 16%)'
+      'color-mix(in srgb, var(--ds-link-tone) 84%, var(--ds-color-neutral-900, #171717) 16%)'
     );
     expect(SKIN).toContain('--ds-link-color,');
     // The failing raw-tone base must not return.

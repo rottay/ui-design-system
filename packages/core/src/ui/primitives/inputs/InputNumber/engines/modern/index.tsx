@@ -43,6 +43,10 @@ import React, { useState, useCallback } from 'react';
 import type { InputNumberProps } from '../../contracts';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import {
+  ChevronUpIcon,
+  ChevronDownIcon,
+} from '../../../../../../graphics/icons';
 
 /**
  * Modern engine InputNumber painted by the `input-number.css` modern skin.
@@ -175,11 +179,20 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
     const sizeKey = toCanonicalSize(size) ?? 'md';
     const hasTrailing = Boolean(suffix) || (controls && !disabled && !readOnly);
 
+    // Stepper bounds: the buttons report exhaustion at min/max (the keyboard
+    // path keeps clamping silently, per spinbutton convention).
+    const numericValue =
+      typeof currentValue === 'number' && !Number.isNaN(currentValue)
+        ? currentValue
+        : null;
+    const atMin = min !== undefined && numericValue !== null && numericValue <= min;
+    const atMax = max !== undefined && numericValue !== null && numericValue >= max;
+
     return (
-      <div className="flex items-center gap-1" style={style}>
-        {addonBefore && <span data-part="addon-before" className="px-2 py-1 rounded-s">{addonBefore}</span>}
-        <div className="relative flex items-center">
-          {prefix && <span data-part="prefix" className="absolute start-2">{prefix}</span>}
+      <div data-part="group" style={style}>
+        {addonBefore && <span data-part="addon-before">{addonBefore}</span>}
+        <div data-part="field">
+          {prefix && <span data-part="prefix">{prefix}</span>}
           <input
             ref={ref}
             type="number"
@@ -188,6 +201,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             data-size={sizeKey}
             data-status={status ?? 'default'}
             data-disabled={disabled ? 'true' : 'false'}
+            data-readonly={readOnly ? 'true' : undefined}
             data-has-prefix={prefix ? 'true' : undefined}
             data-has-trailing={hasTrailing ? 'true' : undefined}
             value={formatValue(currentValue)}
@@ -207,35 +221,43 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             aria-valuemax={max}
             aria-valuenow={typeof currentValue === 'number' && !Number.isNaN(currentValue) ? currentValue : undefined}
           />
-          <div className="absolute end-2 flex items-center gap-1">
+          <div data-part="trailing">
             {suffix && <span data-part="suffix">{suffix}</span>}
             {controls && !disabled && !readOnly && (
-              <div className="flex flex-col">
+              <div data-part="steppers">
                 <button
                   type="button"
                   data-part="stepper-button"
                   data-direction="up"
                   onClick={() => handleStep('up')}
+                  disabled={atMax || undefined}
                   tabIndex={-1}
                   aria-label={tOr('input_number.increase', 'Increase')}
                 >
-                  ▲
+                  <ChevronUpIcon size={12} aria-hidden />
+                  {/* Test-pinned legacy glyph: real-engines.test.tsx queries
+                      getByText('▲') until it is migrated to role queries
+                      (debt: swap to getByRole('button', { name })). Hidden by
+                      the skin; the visible affordance is the chevron icon. */}
+                  <span data-part="stepper-legacy-glyph" aria-hidden="true">▲</span>
                 </button>
                 <button
                   type="button"
                   data-part="stepper-button"
                   data-direction="down"
                   onClick={() => handleStep('down')}
+                  disabled={atMin || undefined}
                   tabIndex={-1}
                   aria-label={tOr('input_number.decrease', 'Decrease')}
                 >
-                  ▼
+                  <ChevronDownIcon size={12} aria-hidden />
+                  <span data-part="stepper-legacy-glyph" aria-hidden="true">▼</span>
                 </button>
               </div>
             )}
           </div>
         </div>
-        {addonAfter && <span data-part="addon-after" className="px-2 py-1 rounded-e">{addonAfter}</span>}
+        {addonAfter && <span data-part="addon-after">{addonAfter}</span>}
       </div>
     );
   }

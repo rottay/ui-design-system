@@ -774,6 +774,10 @@
     --ds-table-control-font-size,
     var(--ds-button-sm-font-size, var(--ds-font-size-sm))
   );
+  /* Flush with the card's bottom corners whenever it is the last chrome
+     region (no bulk bar below); harmless when the bulk bar follows. */
+  border-end-start-radius: var(--ds-table-radius, var(--ds-radius-lg));
+  border-end-end-radius: var(--ds-table-radius, var(--ds-radius-lg));
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="pagination-range"],
@@ -853,6 +857,9 @@
   gap: 12px;
   min-height: var(--ds-table-bulk-bar-min-height, 3.5rem);
   padding: var(--ds-table-bulk-bar-padding, 0.625rem 1rem);
+  /* Last chrome region: keep the card's bottom radius unbroken. */
+  border-end-start-radius: var(--ds-table-radius, var(--ds-radius-lg));
+  border-end-end-radius: var(--ds-table-radius, var(--ds-radius-lg));
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar-count"] {
@@ -1882,7 +1889,6 @@
   .ds-pattern-data-table.ds-engine-modern [data-part="body-row"],
   .ds-pattern-data-table.ds-engine-modern [data-part="pagination-bar"],
   .ds-pattern-data-table.ds-engine-modern [data-part="bulk-bar"] {
-    forced-color-adjust: none;
     background: Canvas;
     color: CanvasText;
   }

@@ -35,7 +35,7 @@
  * @category Layout
  * @package @rottay/design-system
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type {
   LayoutProps,
   LayoutHeaderProps,
@@ -45,6 +45,23 @@ import type {
 } from '../../contracts';
 import { LAYOUT_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+
+/**
+ * Viewport widths for the sider `breakpoint` contract prop, in the canonical
+ * Ant-parity ladder the contract's names come from (the Classic engine
+ * defers to Ant's own Sider for the same values). Used only by the modern
+ * engine's auto-collapse listener.
+ */
+const SIDER_BREAKPOINT_WIDTHS: Record<string, number> = {
+  xs: 480,
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200,
+  xxl: 1600,
+};
 
 /**
  * Modern Layout shell.
@@ -119,6 +136,7 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
       collapsed: controlledCollapsed,
       defaultCollapsed = false,
       collapsible = false,
+      breakpoint,
       onCollapse,
       trigger,
       theme = 'light',
@@ -131,6 +149,35 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
     const [internalCollapsed, setInternalCollapsed] = useState(defaultCollapsed);
     // Controlled prop takes priority over internal state
     const isCollapsed = controlledCollapsed ?? internalCollapsed;
+
+    // Contract `breakpoint`: auto-collapse when the viewport shrinks past the
+    // named ladder rung (crossing only -- never auto-expands, and the initial
+    // match collapses silently without firing onCollapse, Ant parity).
+    useEffect(() => {
+      if (!breakpoint || typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+        return undefined;
+      }
+      const px = SIDER_BREAKPOINT_WIDTHS[breakpoint];
+      if (!px) return undefined;
+      const mq = window.matchMedia(`(max-width: ${px - 0.02}px)`);
+      let wasMatching = mq.matches;
+      if (wasMatching && controlledCollapsed === undefined) {
+        setInternalCollapsed(true);
+      }
+      const handleChange = () => {
+        if (mq.matches && !wasMatching) {
+          wasMatching = true;
+          if (controlledCollapsed === undefined) {
+            setInternalCollapsed(true);
+          }
+          onCollapse?.(true);
+        } else if (!mq.matches) {
+          wasMatching = false;
+        }
+      };
+      mq.addEventListener('change', handleChange);
+      return () => mq.removeEventListener('change', handleChange);
+    }, [breakpoint, controlledCollapsed, onCollapse]);
 
     /* Localized trigger name (components catalog, English floor; the catalog
        keys are a pending coordinator request — the tOr fallback is the
@@ -175,9 +222,17 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
             aria-expanded={!isCollapsed}
           >
             {trigger ?? (
-              /* The directional glyph mirrors in RTL via the skin's
-                 `[dir='rtl']` rule on this part. */
-              <span data-part="trigger-icon" aria-hidden="true">{isCollapsed ? '→' : '←'}</span>
+              /* Governed semantic icons (pre-flag 11: no unicode glyphs). The
+                 directional meaning mirrors in RTL via the skin's `[dir='rtl']`
+                 rule on this part: back = collapse toward the sider edge,
+                 forward = expand away from it. */
+              <span data-part="trigger-icon" aria-hidden="true">
+                {isCollapsed ? (
+                  <NavigationForwardIcon decorative size={14} />
+                ) : (
+                  <NavigationBackIcon decorative size={14} />
+                )}
+              </span>
             )}
           </button>
         )}

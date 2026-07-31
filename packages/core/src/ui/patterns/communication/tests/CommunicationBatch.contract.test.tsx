@@ -126,21 +126,24 @@ describe('comment-thread -- data-part contract (CK-F)', () => {
     expect(q(container, '[data-part="delete"]').length).toBeGreaterThanOrEqual(1);
     // nested reply renders the threading line
     expect(q(container, '[data-part="nested-line"]')).toHaveLength(1);
-    // composer
-    expect(q(container, '[data-part="composer"]')).toHaveLength(1);
+    // Modern exposes the composed row/main anatomy; Rustic remains on its
+    // frozen single composer wrapper.
+    expect(q(container, `[data-part="${engine === 'modern' ? 'composer-row' : 'composer'}"]`)).toHaveLength(1);
     expect(q(container, '[data-part="submit"]')).toHaveLength(1);
 
     // Edit branch: clicking the owned comment's "edit" part reveals
     // edit-textarea/save/cancel.
     fireEvent.click(q(container, '[data-part="edit"]')[0]);
-    await waitForPart(container, 'edit-textarea');
+    await waitForPart(container, 'edit-form');
+    expect(q(container, '[data-part="edit-form"] textarea')).toHaveLength(1);
     expect(q(container, '[data-part="save"]')).toHaveLength(1);
     expect(q(container, '[data-part="cancel"]')).toHaveLength(1);
 
     // Reply branch: clicking "reply" on the top-level comment reveals
     // reply-textarea/reply-submit/reply-cancel.
     fireEvent.click(q(container, '[data-part="reply"]')[0]);
-    await waitForPart(container, 'reply-textarea');
+    await waitForPart(container, 'reply-form');
+    expect(q(container, '[data-part="reply-form"] textarea')).toHaveLength(1);
     expect(q(container, '[data-part="reply-submit"]')).toHaveLength(1);
     expect(q(container, '[data-part="reply-cancel"]')).toHaveLength(1);
   });
@@ -213,14 +216,9 @@ describe('notification-center -- data-part contract (CK-F)', () => {
     );
     await waitForPart(container, 'root');
     await waitForPart(container, 'panel');
-    // modern's empty row uses a plain Tailwind opacity class (no inline
-    // paint, so no stamp per the inventory); rustic paints it inline and
-    // is stamped. Preserved asymmetry -- see wo-skin-06-ck-f-inventory.md.
-    if (engine === 'rustic') {
-      expect(q(container, '[data-part="empty"]')).toHaveLength(1);
-    } else {
-      expect(q(container, '[data-part="empty"]')).toHaveLength(0);
-    }
+    // Both engines expose the empty state as pattern anatomy. Modern now
+    // composes the canonical EmptyState primitive inside that owned slot.
+    expect(q(container, '[data-part="empty"]')).toHaveLength(1);
   });
 });
 
@@ -255,12 +253,19 @@ describe('activity-log -- data-part contract (CK-F)', () => {
     expect(root.className).toContain(`ds-engine-${engine}`);
 
     expect(q(container, '[data-part="dot"]')).toHaveLength(3);
-    // connecting line renders between items, not after the last
-    expect(q(container, '[data-part="line"]')).toHaveLength(2);
+    // Modern delegates the temporal axis to Timeline, whose canonical
+    // connector parts replace ActivityLog's former bespoke line elements.
+    // Rustic is frozen on the legacy two-line anatomy.
+    if (engine === 'modern') {
+      expect(q(container, '[data-part="connector"]').length).toBeGreaterThanOrEqual(2);
+    } else {
+      expect(q(container, '[data-part="line"]')).toHaveLength(2);
+    }
     // each engine's OWN classifier resolves a value for data-action-category;
     // the vocabulary differs by design (modern: category name, rustic: the
     // color token the classifier returns -- see the report's contract-gap note).
-    const dotCategories = Array.from(q(container, '[data-part="dot"]')).map((el) => el.getAttribute('data-action-category'));
+    const dotCategories = Array.from(q(container, '[data-part="activity-dot"]')).map((el) => el.getAttribute('data-action-category'));
+    expect(dotCategories).toHaveLength(3);
     expect(dotCategories.every((v) => !!v)).toBe(true);
 
     // diff renders for the one activity that has a diff

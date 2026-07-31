@@ -6,11 +6,14 @@
  * borders are forbidden (semantic tone comes from the governed icon well,
  * tinted surface and progress line -- never a left accent bar).
  *
- * SPECIFICITY (P-48): the only rule here that paints a border COLOR is the
- * loading spinner's ring, and it reaches exactly b=4 (class + data-tone +
- * data-part + `:empty`), clearing the tenant artifacts' unlayered
+ * SPECIFICITY (4th-wave de-hack): every rule that paints a border COLOR is
+ * LIFTED under the stack scope -- `.rottay-message-stack--modern[data-part=
+ * 'stack-container']` prefixes the selector, reaching (0,5,0)+ with NO
+ * repeated class or attribute, clearing the tenant artifacts' unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
- * (0,3,1). `border: none` on the close button is a color-free reset and is exempt.
+ * (0,3,1). The previous repeated-class/attribute mints are gone; the lift
+ * also repaired the icon well and close button, whose (0,3,0) border colors
+ * lost to that same floor. `border: none`-free resets stay exempt.
  *
  * PLACEMENT: keyed on `data-placement` (stamped by the provider). The engine
  * emits NO DaisyUI toast placement classes -- those were drained alongside
@@ -19,9 +22,9 @@
  * below is the single paint owner. The provider's `top` prop reaches the
  * paint through the engine-stamped `--ds-message-stack-offset` channel
  * (skin-declared consumer), and `--ds-z-message` keeps its family-local
- * fallback (1590): it is declared nowhere globally. Centring is
+ * (1590): it is declared nowhere globally. Centring is
  * direction-neutral `inset-inline: 0` + `margin-inline: auto` -- unlike the
- * former `left: 50%; transform: translateX(-50%)` it creates no transform
+ * former half-offset-plus-translate centering, it creates no transform
  * containing block (notification.css precedent).
  */
 
@@ -32,13 +35,13 @@
   flex-direction: column;
   align-items: center;
   gap: var(--ds-spacing-2);
-  width: min(34rem, calc(100vw - (var(--ds-spacing-4) * 2)));
+  inline-size: min(34rem, calc(100vw - (var(--ds-spacing-4) * 2)));
   pointer-events: none;
 }
 /* Margin-auto centring is direction-neutral and avoids the former
-   left: 50% + translateX(-50%) transform containing block. The provider's
-   `top` prop arrives on the engine-stamped --ds-message-stack-offset channel;
-   bottom keeps its fixed token gutter. */
+   half-offset-plus-translate centering, which created a transform containing
+   block. The provider's `top` prop arrives on the engine-stamped
+   --ds-message-stack-offset channel; bottom keeps its fixed token gutter. */
 .rottay-message-stack--modern[data-part='stack-container'][data-placement='top'] {
   top: var(--ds-message-stack-offset, 0);
   inset-inline: 0;
@@ -50,15 +53,21 @@
   margin-inline: auto;
 }
 
-.rottay-message--modern.rottay-message--modern[data-part='root'][data-part='root'] {
+/* Every border-painting rule is LIFTED under the stack scope (4th-wave
+   de-hack): `.rottay-message-stack--modern[data-part='stack-container']`
+   prefixes each selector, reaching (0,5,0)+ with NO repeated class or
+   attribute. That also repairs two silent losses: the icon well and the
+   close button sat at (0,3,0) and their border colors were stomped by the
+   tenant floor (0,3,1) whenever it applied. */
+.rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'] {
   --ds-message-accent: var(--ds-color-info);
   position: relative;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--ds-spacing-3);
-  min-width: min(20rem, calc(100vw - (var(--ds-spacing-4) * 2)));
-  max-width: 100%;
+  min-inline-size: min(20rem, calc(100vw - (var(--ds-spacing-4) * 2)));
+  max-inline-size: 100%;
   padding: var(--ds-spacing-3) var(--ds-spacing-4);
   overflow: hidden;
   pointer-events: auto;
@@ -75,14 +84,14 @@
   animation: ds-message-enter-modern var(--ds-motion-normal) var(--ds-motion-ease-out) both;
 }
 
-.rottay-message--modern[data-part='root'][data-tone='success'] { --ds-message-accent: var(--ds-color-success); }
-.rottay-message--modern[data-part='root'][data-tone='error'] { --ds-message-accent: var(--ds-color-error); }
-.rottay-message--modern[data-part='root'][data-tone='warning'] { --ds-message-accent: var(--ds-color-warning); }
-.rottay-message--modern[data-part='root'][data-tone='loading'] { --ds-message-accent: var(--ds-color-primary); }
+.rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'][data-tone='success'] { --ds-message-accent: var(--ds-color-success); }
+.rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'][data-tone='error'] { --ds-message-accent: var(--ds-color-error); }
+.rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'][data-tone='warning'] { --ds-message-accent: var(--ds-color-warning); }
+.rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'][data-tone='loading'] { --ds-message-accent: var(--ds-color-primary); }
 
-.rottay-message--modern[data-part='root'] > [data-part='icon'] {
-  width: 1.875rem;
-  height: 1.875rem;
+.rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'] > [data-part='icon'] {
+  inline-size: 1.875rem;
+  block-size: 1.875rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -103,23 +112,24 @@
         consumer-supplied `icon` rendered into the same slot stays unpainted, as
         it is today. Geometry and cadence moved here from the engine's inline
         style (the ring's own rule stays below). ---- */
-.rottay-message--modern[data-part='root'] [data-icon='spinner'] {
+.rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'] [data-icon='spinner'] {
   display: inline-block;
   inline-size: 1rem;
   block-size: 1rem;
   animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
 }
-.rottay-message--modern.rottay-message--modern
-  [data-part='icon']
-  > [data-icon='spinner'][data-icon='spinner'] {
+.rottay-message-stack--modern[data-part='stack-container']
+  .rottay-message--modern[data-part='root']
+  > [data-part='icon']
+  > [data-icon='spinner'] {
   border: 2px solid var(--ds-color-border);
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
 }
 
-.rottay-message--modern[data-part='root'] [data-part='close-button'] {
-  width: 1.875rem;
-  height: 1.875rem;
+.rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'] [data-part='close-button'] {
+  inline-size: 1.875rem;
+  block-size: 1.875rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -135,23 +145,32 @@
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
     color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-.rottay-message--modern[data-part='root'] [data-part='close-button']:hover {
-  transform: translateY(-1px);
+/* Hover is hover-capable-only (4th-wave law); a held press settles the lift
+   and keeps the same quiet surface via :active. */
+@media (hover: hover) {
+  .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'] [data-part='close-button']:hover {
+    transform: translateY(-1px);
+    color: var(--ds-color-text-primary);
+    background-color: var(--ds-surface-highlight);
+    border-color: color-mix(in srgb, var(--ds-message-accent) 34%, var(--ds-color-border-subtle));
+  }
+}
+.rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'] [data-part='close-button']:active {
+  transform: scale(var(--ds-state-press-scale, 0.98));
   color: var(--ds-color-text-primary);
   background-color: var(--ds-surface-highlight);
   border-color: color-mix(in srgb, var(--ds-message-accent) 34%, var(--ds-color-border-subtle));
 }
-.rottay-message--modern[data-part='root'] [data-part='close-button']:focus-visible {
+.rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'] [data-part='close-button']:focus-visible {
   outline: none;
   box-shadow: var(--ds-shadow-focus-ring);
 }
 
-.rottay-message--modern[data-part='root'] > [data-part='progress'] {
+.rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'] > [data-part='progress'] {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 2px;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: 2px;
   background: color-mix(in srgb, var(--ds-message-accent) 74%, transparent);
   transform-origin: left center;
   animation: ds-message-progress-modern var(--ds-message-duration) linear both;
@@ -180,7 +199,7 @@
    item settle back DOWN toward the screen edge it entered from. The exit
    rides the canon's `--ds-motion-ease-exit` (the former `--ds-motion-ease-in`
    was an orphan name, declared nowhere). */
-.rottay-message--modern.rottay-message--modern[data-part='root'][data-state='exit'] {
+.rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'][data-state='exit'] {
   animation: ds-message-exit-modern var(--ds-motion-fast) var(--ds-motion-ease-exit) both;
 }
 .rottay-message-stack--modern[data-placement='bottom'] .rottay-message--modern[data-part='root'][data-state='exit'] {
@@ -194,12 +213,16 @@
 }
 
 /* forced-colors: shadow rings vanish, so the focus channel degrades to a
-   system outline. */
+   system outline; the lifetime bar survives as a ButtonText mark. */
 @media (forced-colors: active) {
-  .rottay-message--modern[data-part='root'] [data-part='close-button']:focus-visible {
+  .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'] [data-part='close-button']:focus-visible {
     outline: 2px solid CanvasText;
     outline-offset: 2px;
     box-shadow: none;
+  }
+
+  .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'] > [data-part='progress'] {
+    background: ButtonText;
   }
 }
 
@@ -209,8 +232,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-message--modern.rottay-message--modern[data-part='root'][data-part='root'],
-  .rottay-message--modern[data-part='root'] > [data-part='progress'] {
+  .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'],
+  .rottay-message-stack--modern[data-part='stack-container'] .rottay-message--modern[data-part='root'] > [data-part='progress'] {
     animation: none;
   }
 }

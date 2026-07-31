@@ -63,12 +63,14 @@ export interface HookManifestAnchor {
 }
 
 export interface HookManifest {
-  readonly schemaVersion: 2;
+  readonly schemaVersion: 4;
   readonly generatedBy: string;
   /** The DS sources the contract is derived from. */
   readonly generatedFrom: readonly HookManifestAnchor[];
   readonly derivation: {
     readonly publicHook: string;
+    readonly unadjudicatedRead: string;
+    readonly componentToken: string;
     readonly foundationToken: string;
     readonly tenantChannel: string;
   };
@@ -81,11 +83,18 @@ export interface HookManifest {
   };
   readonly counts: Readonly<Record<string, number>>;
   readonly declaredSlots: Readonly<Record<string, DeclaredSlot>>;
-  /** Every `--ds-*` property an application may assign under a feature scope. */
+  /** Explicitly promoted `--ds-*` properties an application may assign. */
   readonly publicHooks: readonly string[];
+  /** Decrease-only DS reads with no canonical owner; debt, never application API. */
+  readonly unadjudicatedReads: readonly string[];
+  /** Closed channels supplied by DS component CSS/source. */
+  readonly componentTokens: readonly string[];
   /** Closed: root-declared in authored DS CSS; the DS owns the value. */
   readonly foundationTokens: readonly string[];
-  /** Closed: written at `:root` per tenant by the white-label chrome compiler. */
+  /**
+   * Closed: written at `:root` per tenant by the governed chrome, static
+   * BrandTheme, or DB Appearance compiler.
+   */
   readonly tenantChannel: readonly string[];
 }
 

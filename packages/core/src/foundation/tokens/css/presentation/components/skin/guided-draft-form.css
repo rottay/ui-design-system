@@ -1,53 +1,88 @@
 /**
- * GuidedDraftFormSurface skin (WO-SKIN-06 / CK-D/R). Engine-agnostic: the surface
- * renders ONE tree under every engine, so one file serves all four.
+ * GuidedDraftFormSurface skin (WO-SKIN-06 / CK-D/R, premium pass 2026-07-30).
  *
- * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
- * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
- * preflight zeroes `border-width` on every element. A layered rule here could not
- * paint a border at all.
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring). Every engine skin
+ * (`rottay-engines`) sorts AFTER this file, so a declaration painted over a
+ * composed primitive would lose by layer regardless of selector weight.
  *
- * ==========================================================================
- * A SURFACE OWNS NO DOM (P-79). IT OWNS COMPOSITION.
- * ==========================================================================
- * `Grid`, `Card` and `Button` never emit a consumer-supplied `data-part`:
- * Grid has no rest-spread, and Card/Button spread caller rest FIRST and stamp
- * their own `partAttributes(...)` last (pass-through honesty law: engines win
- * on data-part). `tsc` accepts the stamp regardless -- `BaseComponentProps`
- * declares `data-part` on every component -- so a rule anchored on one would
- * silently match nothing (or match the engine's own stamp instead). The
- * anatomy of every composed primitive below is therefore its CLASSNAME. Only the
- * nodes this surface renders ITSELF (`Box`/`Flex`/`Text`) are addressed by part.
+ * SCOPE: the surface composes public primitives and the step-wizard pattern —
+ * Button, Select, Card, Progress, Skeleton, Text — each owning its chrome,
+ * states and forced-colors treatment. This file paints ONLY what the surface
+ * owns (its Box/Flex anatomy: badge, dots, rails, panels, grids) and retunes
+ * composed primitives exclusively through their public channels:
+ *   - ghost Button nav items:  `--ds-button-ghost-{bg,color,border}` (+ -hover)
+ *     `--ds-button-sm-radius`, `--ds-button-sm-height`, `--ds-button-font-weight`
+ *   - Cards (recovery / section / summary): `--ds-card-bordered-border-color`
+ *   Channel defaults live at `:root`, so an element-scoped override resolves
+ *   per-element and survives the layer order honestly — no specificity war,
+ *   no repeated attribute/class selectors (4th-tanda prohibition).
+ *   Text ink is set through the Typography `color` prop in the tsx (success /
+ *   warning / error / muted / inherit), never through color rules here:
+ *   typography.css sorts in `rottay-engines` and would win anyway.
  *
- * ==========================================================================
- * THIS SKIN MUST OUTRANK THE PRIMITIVES IT PAINTS OVER.
- * ==========================================================================
- * The declarations below replace an INLINE style, which beat every rule in
- * `button.css` and `card.css` -- including their hover states. To hold that same
- * position from a stylesheet, each rule must clear the highest specificity those
- * skins reach for the variant in question:
- *   - Button `ghost`:  (0,4,0) resting, (0,5,0) `[data-state~='hovered']`
- *                      (both engines; rustic's gradient variant also (0,5,0))
- *   - Card `outlined`: (0,4,0) resting  (the (0,6,0) hover rules require
- *                      `data-interactive`/`data-hoverable`, which none of these
- *                      Cards set)
- * Every rule here therefore reaches b >= 5, and the Button rules b >= 6. A rule
- * that merely TIED would let the primitive's hover repaint a node that has never
- * reacted to hover -- a new interaction, not a preserved one.
+ * SPECIFICITY: every selector is single-pass (no repetition). Anatomy is
+ * `data-part` on nodes the surface renders itself (Box/Flex/Text) and the
+ * consumer className on composed primitives (P-79: Button/Card drop a
+ * consumer `data-part`, so classes are their only honest hook).
  *
- * A THIRD FLOOR, for text: Typography colours EVERY `Text` at (0,4,0) via
- * `[data-color='default']`, so every `color` rule on a `Text` node reaches b >= 5
- * as well.
+ * MOTION: state transitions ride the engine channels (Button/Card transition
+ * contracts already cover their chrome). The only surface-owned transitions
+ * (draft badge) use `--ds-motion-*` channels, zeroed by the motion authority
+ * under reduced motion.
+ *
+ * FORCED-COLORS: status dots are re-keyed to system colors and the badge/nav
+ * gain structural outlines — forced-color-adjust is never disabled.
  */
 
-/* --- Draft status badge ----------------------------------------------------- */
+/* ==========================================================================
+   Title bar
+   ========================================================================== */
+
+.ds-surface.ds-guided-draft-form [data-part='title-copy'] {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='title-copy'] [data-part='title'] {
+  margin-block-end: var(--ds-spacing-1);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='progress'] {
+  min-inline-size: 120px;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='progress-bar'] {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='progress-count'] {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   Draft status badge (surface-owned anatomy; dot + label ink per state)
+   ========================================================================== */
 
 .ds-surface.ds-guided-draft-form [data-part='draft-status'] {
+  padding-block: var(--ds-spacing-1);
+  padding-inline: var(--ds-spacing-3);
   border-radius: var(--ds-radius-sm);
   background: var(--ds-color-bg-tertiary);
+  transition:
+    background-color var(--ds-motion-fast, 120ms)
+      var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+    color var(--ds-motion-fast, 120ms)
+      var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
 .ds-surface.ds-guided-draft-form [data-part='draft-status-dot'] {
+  inline-size: var(--ds-spacing-2);
+  block-size: var(--ds-spacing-2);
+  flex-shrink: 0;
   border-radius: 50%;
 }
 
@@ -67,240 +102,355 @@
   background: var(--ds-color-error);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='draft-status'][data-status='unsaved'] [data-part='draft-status-label'] {
-  color: var(--ds-color-warning);
+.ds-surface.ds-guided-draft-form [data-part='draft-status-label'] {
+  white-space: nowrap;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='draft-status'][data-status='saving'] [data-part='draft-status-label'] {
-  color: var(--ds-color-text-muted);
+/* ==========================================================================
+   Section navigation -- dropdown | pills | sidebar
+   ========================================================================== */
+
+/* Eyebrow label. text-transform/letter-spacing are safe declarations here:
+   typography.css only paints them under `data-text-style`, which these plain
+   size/weight Texts never stamp. */
+.ds-surface.ds-guided-draft-form [data-part='section-nav-label'] {
+  display: block;
+  margin-block-end: var(--ds-spacing-2);
+  text-transform: uppercase;
+  letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='draft-status'][data-status='saved'] [data-part='draft-status-label'] {
-  color: var(--ds-color-success);
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='dropdown'] {
+  margin-block-end: var(--ds-spacing-1);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='draft-status'][data-status='error'] [data-part='draft-status-label'] {
-  color: var(--ds-color-error);
+.ds-surface.ds-guided-draft-form [data-part='section-nav-select'],
+.ds-surface.ds-guided-draft-form [data-part='section-nav-select'] > :first-child {
+  inline-size: 100%;
 }
 
-/* --- Section nav ------------------------------------------------------------ */
-
-.ds-surface.ds-guided-draft-form [data-part='section-nav'] [data-part='section-nav-label'][data-part='section-nav-label'] {
-  color: var(--ds-color-text-muted);
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='pills'] {
+  margin-block-end: var(--ds-spacing-1);
 }
 
-/* The nav item is a ghost `Button`: its className is the anatomy, its
-   `data-active`/`data-errors` survive the engine's prop allowlist, and the two
-   layouts paint DIFFERENT boxes -- a pill bar and a sidebar rail -- so
-   `data-layout` on the nav discriminates them. */
-.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='pills'] .ds-guided-draft-form__section-nav-item[data-active='false'] {
-  border-radius: var(--ds-radius-full, 9999px);
-  background: var(--ds-color-bg-secondary, var(--ds-color-bg-tertiary));
-  border: 1px solid var(--ds-color-border, transparent);
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='pills'] [data-part='section-nav-list'] {
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  padding-block-end: var(--ds-spacing-1);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] {
+  inline-size: 220px;
+  flex-shrink: 0;
+  position: sticky;
+  inset-block-start: var(--ds-spacing-4);
+  align-self: flex-start;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] [data-part='section-nav-label'] {
+  margin-block-end: var(--ds-spacing-3);
+  padding-inline-start: var(--ds-spacing-3);
+}
+
+/* --- Nav items: ghost Buttons retuned through --ds-button-* channels ------ */
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-item {
+  flex-shrink: 0;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-item {
+  inline-size: 100%;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='pills'] .ds-guided-draft-form__section-nav-item {
+  --ds-button-sm-radius: var(--ds-radius-full, 9999px);
+  --ds-button-ghost-bg: var(--ds-color-bg-secondary);
+  --ds-button-ghost-border: var(--ds-color-border);
+  --ds-button-ghost-color: var(--ds-color-text-secondary);
+  --ds-button-ghost-bg-hover: var(--ds-color-bg-tertiary);
+  --ds-button-ghost-border-hover: var(--ds-color-border-secondary);
+  --ds-button-ghost-color-hover: var(--ds-color-text-primary);
 }
 
 .ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='pills'] .ds-guided-draft-form__section-nav-item[data-active='true'] {
-  border-radius: var(--ds-radius-full, 9999px);
-  background: var(--ds-color-primary-bg, var(--ds-color-bg-tertiary));
-  border: 1px solid var(--ds-color-primary);
+  --ds-button-ghost-bg: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  --ds-button-ghost-border: color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-secondary));
+  --ds-button-ghost-color: var(--ds-color-primary);
+  --ds-button-ghost-bg-hover: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+  --ds-button-ghost-border-hover: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-secondary));
+  --ds-button-ghost-color-hover: var(--ds-color-primary);
+  --ds-button-font-weight: var(--ds-font-weight-semibold, 600);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-item[data-active='false'] {
-  border-radius: var(--ds-radius-sm);
-  background: transparent;
-  border: 1px solid transparent;
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-item {
+  --ds-button-sm-radius: var(--ds-radius-sm);
+  --ds-button-ghost-bg: transparent;
+  --ds-button-ghost-border: transparent;
+  --ds-button-ghost-color: var(--ds-color-text-secondary);
+  --ds-button-ghost-bg-hover: var(--ds-color-bg-tertiary);
+  --ds-button-ghost-color-hover: var(--ds-color-text-primary);
 }
 
 .ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-item[data-active='true'] {
-  border-radius: var(--ds-radius-sm);
-  background: var(--ds-color-primary-bg, var(--ds-color-bg-tertiary));
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-secondary));
+  --ds-button-ghost-bg: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  --ds-button-ghost-border: color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-secondary));
+  --ds-button-ghost-color: var(--ds-color-primary);
+  --ds-button-ghost-bg-hover: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+  --ds-button-ghost-color-hover: var(--ds-color-primary);
+  --ds-button-font-weight: var(--ds-font-weight-semibold, 600);
 }
 
-/* Errors outrank active in the label colour, exactly as the ternary did. The
-   three rules are mutually exclusive on `data-errors`, so none of them relies on
-   declaration order. */
-.ds-surface.ds-guided-draft-form [data-part='section-nav'] .ds-guided-draft-form__section-nav-item[data-errors='true'] {
-  color: var(--ds-color-error);
+/* Errors outrank active in the item ink, exactly as the retired inline
+   ternary did. Declared last so equal-specificity channel overrides resolve
+   in this order. */
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-item[data-errors='true'] {
+  --ds-button-ghost-color: var(--ds-color-error);
+  --ds-button-ghost-color-hover: var(--ds-color-error);
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav'] .ds-guided-draft-form__section-nav-item[data-errors='false'][data-active='true'] {
-  color: var(--ds-color-primary);
+/* Item inner anatomy (surface-owned nodes inside the Button). */
+.ds-surface.ds-guided-draft-form [data-part='section-nav-item-row'] {
+  inline-size: 100%;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav'] .ds-guided-draft-form__section-nav-item[data-errors='false'][data-active='false'] {
-  color: var(--ds-color-text-secondary);
+.ds-surface.ds-guided-draft-form [data-part='section-nav-item-main'] {
+  flex: 1;
+  min-inline-size: 0;
 }
 
-/* The label defers to whatever the button resolved above. */
-.ds-surface.ds-guided-draft-form [data-part='section-nav'] [data-part='section-nav-item-label'][data-part='section-nav-item-label'] {
-  color: inherit;
+.ds-surface.ds-guided-draft-form [data-part='section-nav-item-label'] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav'] [data-part='section-nav-item-complete'][data-part='section-nav-item-complete'] {
-  color: var(--ds-color-success);
+.ds-surface.ds-guided-draft-form [data-part='section-nav-item-icon'] {
+  flex-shrink: 0;
+  opacity: 0.7;
 }
 
-.ds-surface.ds-guided-draft-form [data-part='section-nav'] [data-part='section-nav-item-error-dot'] {
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-item[data-active='true'] [data-part='section-nav-item-icon'] {
+  opacity: 1;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav-item-error-dot'] {
+  inline-size: var(--ds-spacing-2);
+  block-size: var(--ds-spacing-2);
+  flex-shrink: 0;
   border-radius: 50%;
   background: var(--ds-color-error);
 }
 
-/* --- Template picker -------------------------------------------------------- */
+/* ==========================================================================
+   Template picker
+   ========================================================================== */
 
-/* The trigger is a ghost `Button` whose inline `transparent` background beat
-   button.css's ghost hover. Repeated class + repeated `data-variant` clears that
-   (0,5,0) hover rule so the card, not the button, owns the hover affordance. */
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card-trigger.ds-guided-draft-form__template-card-trigger[data-variant='ghost'][data-variant='ghost'] {
-  background: transparent;
+.ds-surface.ds-guided-draft-form [data-part='template-picker'] {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+  gap: var(--ds-spacing-3);
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card [data-part='template-card-icon'] {
+.ds-surface.ds-guided-draft-form[data-mobile='true'] [data-part='template-picker'] {
+  grid-template-columns: 1fr;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='template-card-icon'] {
+  margin-block-end: var(--ds-spacing-1);
+  font-size: var(--ds-font-size-2xl, 1.25rem);
   color: var(--ds-color-primary);
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card [data-part='template-card-title'][data-part='template-card-title'] {
-  color: var(--ds-color-text-primary);
+/* ==========================================================================
+   Draft recovery banner (border via the Card's bordered-border channel)
+   ========================================================================== */
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery {
+  --ds-card-bordered-border-color: var(--ds-color-info);
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card [data-part='template-card-description'][data-part='template-card-description'] {
-  color: var(--ds-color-text-muted);
-}
-
-/* --- Draft recovery banner --------------------------------------------------- */
-
-/* `[data-part='root'][data-variant]` are the Card's OWN stamps -- the two
-   attributes card.css itself keys on, so both are guaranteed present -- and they
-   buy the specificity needed to beat card.css's (0,4,0) variant border. The Card
-   cannot be re-stamped from outside (it drops a consumer `data-part`), so
-   anchoring on its root is safe here in a way it would not be on a Box. */
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery[data-part='root'][data-variant] {
-  border-color: var(--ds-color-info);
-}
-
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery [data-part='draft-recovery-icon'] {
+.ds-surface.ds-guided-draft-form [data-part='draft-recovery-icon'] {
+  inline-size: var(--ds-spacing-8);
+  block-size: var(--ds-spacing-8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   border-radius: var(--ds-radius-sm);
   background: var(--ds-color-info-bg, var(--ds-color-bg-tertiary));
   color: var(--ds-color-info);
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery [data-part='draft-recovery-title'][data-part='draft-recovery-title'] {
-  color: var(--ds-color-text-primary);
+.ds-surface.ds-guided-draft-form [data-part='draft-recovery-copy'] {
+  flex: 1;
+  min-inline-size: 12ch;
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery [data-part='draft-recovery-description'][data-part='draft-recovery-description'] {
-  color: var(--ds-color-text-muted);
+/* ==========================================================================
+   Section cards (scroll mode)
+   ========================================================================== */
+
+/* Active context and error locus are painted on the card border through the
+   bordered-border channel; `--errors` sorts last so it outranks `--active`
+   when both modifiers are present. */
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card {
+  scroll-margin-block-start: var(--ds-spacing-4);
 }
 
-/* --- Title bar --------------------------------------------------------------- */
-
-/* `title` is a part `Card` also stamps, and every section card wraps
-   consumer-rendered content. A descendant hop from the surface root could reach
-   one; the direct-child chain through `title-bar` cannot leave the header. */
-.ds-surface.ds-guided-draft-form[data-part='root'] > [data-part='title-bar'] > * > [data-part='title'][data-part='title'] {
-  color: var(--ds-color-text-primary);
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card--active {
+  --ds-card-bordered-border-color: color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-secondary));
 }
 
-.ds-surface.ds-guided-draft-form[data-part='root'] > [data-part='title-bar'] > * > [data-part='subtitle'][data-part='subtitle'] {
-  color: var(--ds-color-text-muted);
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card--errors {
+  --ds-card-bordered-border-color: var(--ds-color-error);
 }
 
-.ds-surface.ds-guided-draft-form[data-part='root'] > [data-part='title-bar'] > [data-part='progress'] > [data-part='progress-count'] {
-  color: var(--ds-color-text-muted);
-}
-
-/* --- Section cards ------------------------------------------------------------ */
-
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-icon'] {
+.ds-surface.ds-guided-draft-form [data-part='section-card-icon'] {
+  flex-shrink: 0;
   color: var(--ds-color-primary);
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-title'][data-part='section-card-title'] {
-  color: var(--ds-color-text-primary);
+.ds-surface.ds-guided-draft-form [data-part='section-card-complete'],
+.ds-surface.ds-guided-draft-form [data-part='section-card-errors'] {
+  flex-shrink: 0;
+  margin-inline-start: auto;
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-complete'][data-part='section-card-complete'] {
-  color: var(--ds-color-success);
+.ds-surface.ds-guided-draft-form [data-part='section-card-complete'] ~ [data-part='section-card-errors'] {
+  margin-inline-start: 0;
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-errors'][data-part='section-card-errors'] {
-  color: var(--ds-color-error);
+.ds-surface.ds-guided-draft-form [data-part='section-card-description'] {
+  margin-block-start: var(--ds-spacing-1);
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-description'][data-part='section-card-description'] {
-  color: var(--ds-color-text-muted);
+/* ==========================================================================
+   Validation summary
+   ========================================================================== */
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--error {
+  --ds-card-bordered-border-color: var(--ds-color-error);
 }
 
-/* --- Validation summary -------------------------------------------------------- */
-
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--error[data-part='root'][data-variant] {
-  border-color: var(--ds-color-error);
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--warning {
+  --ds-card-bordered-border-color: var(--ds-color-warning);
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--warning[data-part='root'][data-variant] {
-  border-color: var(--ds-color-warning);
-}
-
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-summary-dot'] {
+.ds-surface.ds-guided-draft-form [data-part='validation-issue-dot'] {
+  inline-size: var(--ds-spacing-1);
+  block-size: var(--ds-spacing-1);
+  flex-shrink: 0;
+  margin-block-start: var(--ds-spacing-1);
   border-radius: 50%;
 }
 
-/* The summary dot has no severity of its own: it reports the CARD's verdict, and
-   the card's modifier class is the only place that verdict lives. */
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--error [data-part='validation-summary-dot'] {
+.ds-surface.ds-guided-draft-form [data-part='validation-issue-dot'][data-severity='error'] {
   background: var(--ds-color-error);
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--warning [data-part='validation-summary-dot'] {
+.ds-surface.ds-guided-draft-form [data-part='validation-issue-dot'][data-severity='warning'] {
   background: var(--ds-color-warning);
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-summary-title'][data-part='validation-summary-title'] {
-  color: var(--ds-color-text-primary);
+/* ==========================================================================
+   Submit bar (posture: sticky-bottom default | inline | floating)
+   ========================================================================== */
+
+/* Docked to the viewport block-end. z-index stays inside the local stacking
+   range (0-4): it only has to clear the scrolled form content, and staying
+   under the `--ds-z-index-dropdown` band keeps an open section Select above
+   the bar. */
+.ds-surface.ds-guided-draft-form [data-part='submit-bar'] {
+  position: sticky;
+  inset-block-end: 0;
+  z-index: 2;
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-dot'] {
-  border-radius: 50%;
+.ds-surface.ds-guided-draft-form [data-part='submit-bar'][data-action-bar='inline'] {
+  position: static;
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-dot'][data-severity='error'] {
-  background: var(--ds-color-error);
+.ds-surface.ds-guided-draft-form [data-part='submit-bar-panel'] {
+  padding-block: var(--ds-spacing-3);
+  padding-inline: var(--ds-spacing-4);
+  background: var(--ds-color-bg-elevated, var(--ds-surface-card, var(--ds-color-bg-tertiary)));
+  border-block-start: 1px solid var(--ds-color-border, transparent);
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-dot'][data-severity='warning'] {
-  background: var(--ds-color-warning);
+.ds-surface.ds-guided-draft-form [data-part='submit-bar'][data-action-bar='floating'] [data-part='submit-bar-panel'] {
+  margin: var(--ds-spacing-2);
+  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border));
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-2);
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-message'][data-part='validation-issue-message'] {
-  color: var(--ds-color-text-secondary);
+.ds-surface.ds-guided-draft-form[data-mobile='true'] [data-part='submit-bar-panel'] {
+  padding-block-end: calc(var(--ds-spacing-3) + env(safe-area-inset-bottom, 0px));
 }
 
-/* Each issue reports its OWN severity, so the field name is reached through a
-   direct-child hop from that issue row rather than from the card's verdict. */
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue'][data-severity='error'] [data-part='validation-issue-field'][data-part='validation-issue-field'] {
-  color: var(--ds-color-error);
+.ds-surface.ds-guided-draft-form[data-mobile='true'] .ds-guided-draft-form__submit-primary {
+  inline-size: 100%;
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue'][data-severity='warning'] [data-part='validation-issue-field'][data-part='validation-issue-field'] {
-  color: var(--ds-color-warning);
+.ds-surface.ds-guided-draft-form[data-mobile='true'] [data-part='submit-bar-secondary'] {
+  inline-size: 100%;
 }
 
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-overflow'][data-part='validation-issue-overflow'] {
-  color: var(--ds-color-text-muted);
+.ds-surface.ds-guided-draft-form[data-mobile='true'] .ds-guided-draft-form__submit-secondary {
+  flex: 1;
 }
 
-/* --- Sticky submit bar ---------------------------------------------------------- */
-
-/* The submit bar docks to the viewport edge: it keeps only its top border, and
-   squares off. These are resets, exempt from the border-COLOUR floor, but they
-   still have to outrank card.css's `border` shorthand at (0,4,0). */
-.ds-surface.ds-guided-draft-form .ds-guided-draft-form__submit-bar-card[data-part='root'][data-variant] {
-  border-radius: 0;
-  border-left: none;
-  border-right: none;
-  border-bottom: none;
+.ds-surface.ds-guided-draft-form [data-part='submit-bar-progress'] {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
-.ds-surface.ds-guided-draft-form[data-part='root'] [data-part='submit-bar'] [data-part='submit-bar-progress'][data-part='submit-bar-progress'] {
-  color: var(--ds-color-text-muted);
+.ds-surface.ds-guided-draft-form[data-mobile='true'] [data-part='submit-bar-progress'] {
+  text-align: center;
+}
+
+/* ==========================================================================
+   Loading skeleton (form-shaped: title row + field rows per section card)
+   ========================================================================== */
+
+.ds-surface.ds-guided-draft-form [data-part='loading-skeleton-title'] {
+  max-inline-size: 40%;
+}
+
+/* ==========================================================================
+   Coarse pointers: nav items and submit actions reach the 44px touch floor
+   through the Button height channels (visual density is untouched).
+   ========================================================================== */
+
+@media (pointer: coarse) {
+  .ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-item {
+    --ds-button-sm-height: 2.75rem;
+  }
+
+  .ds-surface.ds-guided-draft-form .ds-guided-draft-form__submit-primary,
+  .ds-surface.ds-guided-draft-form .ds-guided-draft-form__submit-secondary {
+    --ds-button-md-height: 2.75rem;
+  }
+}
+
+/* ==========================================================================
+   Forced colors: status dots survive as system-ink marks, the badge keeps a
+   structural edge, and the active nav item reads without color.
+   ========================================================================== */
+
+@media (forced-colors: active) {
+  .ds-surface.ds-guided-draft-form [data-part='draft-status-dot'],
+  .ds-surface.ds-guided-draft-form [data-part='section-nav-item-error-dot'],
+  .ds-surface.ds-guided-draft-form [data-part='validation-issue-dot'] {
+    background: CanvasText;
+  }
+
+  .ds-surface.ds-guided-draft-form [data-part='draft-status'] {
+    border: 1px solid CanvasText;
+  }
+
+  .ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-nav-item[data-active='true'] {
+    outline: 2px solid ButtonText;
+    outline-offset: -2px;
+  }
 }

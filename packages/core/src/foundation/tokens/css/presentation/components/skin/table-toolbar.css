@@ -1,27 +1,88 @@
 /**
- * TableToolbar skin — engine-agnostic and deliberately unlayered.
+ * TableToolbar skin — engine-agnostic.
+ * LAYERING: imported by `facade/entrypoints/base.css` into
+ * `layer(rottay-components)` — this file does not control its own layering
+ * (the older "deliberately unlayered" note predates that wiring).
+ *
  * Search paint lands where caller style landed: the modern Input wrapper and
- * the rustic Input shell. The rustic selector outranks every Input state.
+ * the rustic Input shell (the P-79/Input landing the contract tests pin).
+ * The rustic arm NO LONGER repeats `[data-part='root']` six times — class/
+ * attribute repetition is prohibited; the honest selector is the class triple
+ * + one part, and the cascade order between `rottay-components` (this file)
+ * and `rottay-engines` (the rustic input skin) decides the rest, exactly as
+ * it did before (the repetitions never changed layer order).
+ *
+ * SPECIFICITY: the root border reaches the (0,4,0) tenant floor from the two
+ * scope classes + `data-part='root'` + the always-present
+ * `data-structure='table-toolbar'` hook the engine stamps (the record/PT10
+ * precedent — never a repeated attribute).
  *
  * WAVE R2+R3 (Quiet Premium editorial): a hairline-separated chrome row.
  * The divider is a soft vertical hairline with a paper highlight (token
  * color-mix, never a raw literal); the search icon stays muted and deepens
  * when its field gains focus. Search typography uses the supporting step of
- * the system scale on the exact per-engine paint node (P-79/Input landing).
+ * the system scale on the exact per-engine paint node.
  */
 
-.ds-structure.ds-table-toolbar[data-part='root'][data-part='root'] {
+/* ---- root: hairline-bottomed chrome row + named container ---- */
+.ds-structure.ds-table-toolbar[data-part='root'] {
+  padding-block: 10px;
+  padding-inline: 16px;
+  container-type: inline-size;
+}
+.ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar'] {
   border-bottom: 1px solid var(--ds-color-border);
 }
+
+/* ---- row sections (geometry drained from inline flex styles) ---- */
+.ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__left {
+  flex-shrink: 0;
+  min-inline-size: 0;
+  padding-inline-end: 12px;
+}
+.ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__spacer {
+  flex: 1;
+}
+.ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__right {
+  flex-shrink: 0;
+  min-inline-size: 0;
+}
+.ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__filters {
+  padding-inline-end: 12px;
+}
+.ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__actions {
+  padding-inline-start: 12px;
+}
+
+/* ---- divider: soft vertical hairline with a paper highlight ---- */
 .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'] {
+  inline-size: 2px;
+  block-size: 28px;
+  flex-shrink: 0;
+  margin-inline: 4px;
   border-radius: 1px;
   background: linear-gradient(180deg, transparent 0%, var(--ds-color-border) 20%, var(--ds-color-border) 80%, transparent 100%);
-  box-shadow: 1px 0 0 color-mix(in srgb, var(--ds-color-bg-elevated, white) 4%, transparent);
+  box-shadow: 1px 0 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent);
+}
+
+/* ---- search field: fluid with a 476px cap, ceding before the actions ---- */
+.ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__search-field {
+  position: relative;
+  flex: 0 1 auto;
+  inline-size: 100%;
+  max-inline-size: 476px;
+  min-inline-size: 160px;
 }
 
 .ds-structure.ds-table-toolbar
   .ds-table-toolbar__search-field
   > .ds-table-toolbar__search-icon[data-part='search-icon'] {
+  position: absolute;
+  inset-inline-start: 10px;
+  top: 50%;
+  inline-size: 15px;
+  block-size: 15px;
+  pointer-events: none;
   transform: translateY(-50%);
   color: var(--ds-color-text-muted);
   transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
@@ -45,6 +106,8 @@
   font-size: var(--ds-type-supporting-font-size, 0.8125rem);
 }
 
+/* Search field surface + the icon's inline-start inset (drained from the
+ * engine's inline paddingInlineStart) on the same per-engine paint nodes. */
 .ds-structure.ds-table-toolbar
   .ds-table-toolbar__search-field
   > .ds-table-toolbar__search-icon[data-part='search-icon']
@@ -53,9 +116,39 @@
   .ds-table-toolbar__search-field
   > .ds-table-toolbar__search-icon[data-part='search-icon']
   + div
-  > .ds-table-toolbar__search-input.rottay-input.rottay-input--rustic[data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
+  > .ds-table-toolbar__search-input.rottay-input.rottay-input--rustic[data-part='root'] {
+  padding-inline-start: 32px;
   background: var(--ds-color-bg-secondary);
   border: 1px solid var(--ds-color-border);
+}
+
+/* ---- narrow containers: the row wraps and search takes the full width ---- */
+@container (max-width: 40rem) {
+  .ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__row {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+  .ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__search-field {
+    flex: 1 1 100%;
+    max-inline-size: 100%;
+  }
+}
+
+/* ---- forced colors: system colors only — the hairlines re-express as
+        ButtonText and the search icon follows the field ink. ---- */
+@media (forced-colors: active) {
+  .ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar'] {
+    border-color: ButtonText;
+  }
+  .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'] {
+    background: ButtonText;
+    box-shadow: none;
+  }
+  .ds-structure.ds-table-toolbar
+    .ds-table-toolbar__search-field
+    > .ds-table-toolbar__search-icon[data-part='search-icon'] {
+    color: CanvasText;
+  }
 }
 
 /* Reduced motion: the only animated channel is the icon color cross-fade. */

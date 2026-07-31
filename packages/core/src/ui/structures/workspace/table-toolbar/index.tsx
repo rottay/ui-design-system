@@ -16,7 +16,8 @@
  * Use `TableToolbar` (chrome) when you want:
  *   - a single-row toolbar
  *   - free-form `filters` / `actions` / `leftContent` ReactNode slots
- *   - an optional search input
+ *   - an optional search input (certified Input with its built-in
+ *     `clearable` affordance wired to the search handler)
  *   - a primary action that supports either `href` or `onClick`
  *
  * Use `ListToolbar` (pattern, still in `components/patterns/`) when you
@@ -24,6 +25,16 @@
  *   - the full professional two-row treatment with title, count,
  *     structured filter pills, density control, view-mode toggle, and
  *     settings dropdown
+ *
+ * COMPOSITION NOTES: the primary action renders through the certified
+ * Button `href` contract (never an `<a>` wrapping a `<button>` — nested
+ * interactives are invalid); the search clear is the Input primitive's
+ * own `clearable` button. The root stamps `data-structure='table-toolbar'`
+ * as its always-present specificity hook (the record/PT10 precedent), and
+ * every static geometry lives in
+ * `presentation/components/skin/table-toolbar.css`; the only inline styles
+ * left are icon glyph sizes and the Input class/style passthrough the
+ * contract tests pin per engine (P-79).
  */
 
 import {
@@ -34,7 +45,7 @@ import {
 import type { ReactNode } from 'react';
 
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import { Box, Button, Flex, Input, Text } from '../../../primitives';
+import { Box, Button, Flex, Input } from '../../../primitives';
 
 export interface TableToolbarProps {
   /** Search input value */
@@ -68,12 +79,6 @@ function ToolbarDivider() {
     <Box
       data-part="divider"
       className="ds-table-toolbar__divider"
-      style={{
-        width: 2,
-        height: 28,
-        flexShrink: 0,
-        marginInline: 4,
-      }}
     />
   );
 }
@@ -107,27 +112,17 @@ export function TableToolbar({
   return (
     <Box
       data-part="root"
+      data-structure="table-toolbar"
       className="ds-structure ds-table-toolbar"
-      style={{
-        padding: '10px 16px',
-      }}
     >
-      <Flex align="center" gap={0}>
+      <Flex align="center" gap={0} className="ds-table-toolbar__row">
         {/* Left: Search + leftContent */}
-        <Flex align="center" gap={8} style={{ flexShrink: 0, paddingRight: 12 }}>
+        <Flex align="center" gap={8} className="ds-table-toolbar__left">
           {onSearchChange && (
-            <Box className="ds-table-toolbar__search-field" style={{ position: 'relative', width: 476 }}>
+            <Box className="ds-table-toolbar__search-field">
               <Search
                 data-part="search-icon"
                 className="ds-table-toolbar__search-icon"
-                style={{
-                  position: 'absolute',
-                  insetInlineStart: 10,
-                  top: '50%',
-                  width: 15,
-                  height: 15,
-                  pointerEvents: 'none',
-                }}
               />
               <Input
                 data-part="search-input"
@@ -135,9 +130,8 @@ export function TableToolbar({
                 placeholder={resolvedSearchPlaceholder}
                 value={search ?? ''}
                 onChange={(value: string) => onSearchChange(value)}
-                style={{
-                  paddingInlineStart: 32,
-                }}
+                clearable
+                onClear={() => onSearchChange('')}
               />
             </Box>
           )}
@@ -146,23 +140,22 @@ export function TableToolbar({
         </Flex>
 
         {/* Spacer */}
-        <Box style={{ flex: 1 }} />
+        <Box className="ds-table-toolbar__spacer" />
 
         {/* Right: Filters + Divider + Actions */}
-        <Flex align="center" gap={0} style={{ flexShrink: 0 }}>
+        <Flex align="center" gap={0} className="ds-table-toolbar__right">
           {filters && (
-            <Flex align="center" gap={8} style={{ paddingRight: 12, flexWrap: 'wrap' }}>
+            <Flex align="center" gap={8} wrap="wrap" className="ds-table-toolbar__filters">
               {filters}
 
               {isFiltered && onResetFilters && (
                 <Button
                   variant="ghost"
                   size="sm"
+                  icon={<X style={{ width: 14, height: 14 }} />}
                   onClick={onResetFilters}
-                  style={{ gap: 4 }}
                 >
-                  <X style={{ width: 14, height: 14 }} />
-                  <Text size="sm">{tOr('tableToolbar.clearFilters', 'Clear filters')}</Text>
+                  {tOr('tableToolbar.clearFilters', 'Clear filters')}
                 </Button>
               )}
             </Flex>
@@ -170,27 +163,19 @@ export function TableToolbar({
 
           {(actions || primaryAction) && <ToolbarDivider />}
 
-          <Flex align="center" gap={8} style={{ paddingLeft: 12 }}>
+          <Flex align="center" gap={8} className="ds-table-toolbar__actions">
             {actions}
 
             {primaryAction && (
-              primaryAction.href ? (
-                <a href={primaryAction.href} style={{ textDecoration: 'none' }}>
-                  <Button>
-                    {primaryAction.icon ?? (
-                      <Plus style={{ width: 16, height: 16, marginInlineEnd: 8 }} />
-                    )}
-                    {primaryAction.label}
-                  </Button>
-                </a>
-              ) : (
-                <Button onClick={primaryAction.onClick}>
-                  {primaryAction.icon ?? (
-                    <Plus style={{ width: 16, height: 16, marginInlineEnd: 8 }} />
-                  )}
-                  {primaryAction.label}
-                </Button>
-              )
+              <Button
+                href={primaryAction.href}
+                onClick={primaryAction.onClick}
+                icon={primaryAction.icon ?? (
+                  <Plus style={{ width: 16, height: 16 }} />
+                )}
+              >
+                {primaryAction.label}
+              </Button>
             )}
           </Flex>
         </Flex>

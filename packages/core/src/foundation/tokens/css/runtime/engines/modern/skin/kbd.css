@@ -12,10 +12,13 @@
  *
  * SPECIFICITY (P-48): the `border` shorthand carries a real colour, so it must
  * clear the tenant's unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
- * border-color floor at (0,3,1). The repeated `[data-part='root']` buys the fourth
- * unit. It stays a SHORTHAND because preflight zeroes `border-width` on every
- * element: a longhand `border-color` alone would leave the width at 0 and the
- * key-cap frame would vanish.
+ * border-color floor at (0,3,1). Two DISTINCT attributes buy the fourth unit
+ * without repetition (4th-tanda law): `[data-part='root']` plus the
+ * always-stamped `[data-size]` (the engine stamps it unconditionally, default
+ * included). It stays a SHORTHAND because preflight zeroes `border-width` on
+ * every element: a longhand `border-color` alone would leave the width at 0
+ * and the key-cap frame would vanish. The forced-colors remap at the bottom
+ * uses the same pair and wins by source order.
  *
  * GEOMETRY owns this file: layout, per-size padding/font-size/min-block-size and
  * the key-cap depth were lifted out of the engine's inline styles so the skin is
@@ -23,7 +26,7 @@
  * affordance; the inset top highlight keeps it from reading flat.
  */
 
-.rottay-kbd.rottay-kbd--modern[data-part='root'][data-part='root'] {
+.rottay-kbd.rottay-kbd--modern[data-part='root'][data-size] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -37,7 +40,7 @@
   border-block-end-width: var(--ds-kbd-depth-width, 2px);
   border-block-end-color: var(
     --ds-kbd-depth,
-    color-mix(in srgb, var(--ds-kbd-frame, var(--ds-color-border)) 72%, var(--ds-color-black, #000) 28%)
+    color-mix(in srgb, var(--ds-kbd-frame, var(--ds-color-border)) 72%, var(--ds-color-neutral-900, #171717) 28%)
   );
   border-radius: var(--ds-kbd-radius, var(--ds-radius-sm));
   background: var(--ds-kbd-surface, var(--ds-surface-inset, var(--ds-color-neutral-100)));
@@ -45,11 +48,11 @@
   box-shadow: var(
     --ds-kbd-shadow,
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-white, #fff) 55%, transparent),
-    0 1px 2px color-mix(in srgb, var(--ds-color-black, #000) 8%, transparent)
+    0 1px 2px color-mix(in srgb, var(--ds-color-neutral-900, #171717) 8%, transparent)
   );
 }
 
-.rottay-kbd.rottay-kbd--modern[data-part='root'][data-part='root'][data-size='sm'] {
+.rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='sm'] {
   min-block-size: var(--ds-kbd-sm-min-height, 1.25rem);
   min-inline-size: var(--ds-kbd-sm-min-width, 1.25rem);
   padding-block: var(--ds-kbd-sm-padding-block, 1px);
@@ -57,7 +60,7 @@
   font-size: var(--ds-kbd-sm-font-size, var(--ds-font-size-xs, 0.75rem));
 }
 
-.rottay-kbd.rottay-kbd--modern[data-part='root'][data-part='root'][data-size='md'] {
+.rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='md'] {
   min-block-size: var(--ds-kbd-md-min-height, 1.5rem);
   min-inline-size: var(--ds-kbd-md-min-width, 1.5rem);
   padding-block: var(--ds-kbd-md-padding-block, 2px);
@@ -65,7 +68,7 @@
   font-size: var(--ds-kbd-md-font-size, var(--ds-font-size-xs, 0.75rem));
 }
 
-.rottay-kbd.rottay-kbd--modern[data-part='root'][data-part='root'][data-size='lg'] {
+.rottay-kbd.rottay-kbd--modern[data-part='root'][data-size='lg'] {
   min-block-size: var(--ds-kbd-lg-min-height, 1.75rem);
   min-inline-size: var(--ds-kbd-lg-min-width, 1.75rem);
   padding-block: var(--ds-kbd-lg-padding-block, 3px);
@@ -74,7 +77,7 @@
 }
 
 @media (forced-colors: active) {
-  .rottay-kbd.rottay-kbd--modern[data-part='root'][data-part='root'] {
+  .rottay-kbd.rottay-kbd--modern[data-part='root'][data-size] {
     border: 1px solid ButtonText;
     border-block-end-width: 2px;
     background: Canvas;

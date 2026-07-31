@@ -592,13 +592,15 @@ describe("Input CSS-first skin (WO-ARC-07)", () => {
     expect(shell).toHaveAttribute("data-size-responsive", "true");
     expect(shell).toHaveAttribute("data-responsive-id");
     expect(generatedCss).toContain(
-      "padding-inline: var(--ds-input-sm-padding-x) !important"
+      "padding-inline: var(--ds-input-sm-padding-x);"
     );
     expect(generatedCss).toContain(
       "--ds-input-responsive-radius: var(--ds-input-xl-radius"
     );
     expect(generatedCss).not.toContain("border-radius:");
-    expect(generatedCss).toContain("gap: var(--ds-input-xl-gap");
+    expect(generatedCss).toContain(
+      "--ds-input-responsive-gap: var(--ds-input-xl-gap"
+    );
   });
 
   it.each([

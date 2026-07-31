@@ -24,7 +24,7 @@
   scrollbar-width: none;
 }
 
-.rottay-breadcrumb-shell.rottay-breadcrumb-shell--modern[data-part='root'][data-part='root'] {
+.rottay-breadcrumb-shell.rottay-breadcrumb-shell--modern[data-part='root'][data-count] {
   border: 1px solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
 }
 
@@ -97,22 +97,28 @@
   cursor: pointer;
 }
 
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-part='crumb'] {
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-current] {
   border: 1px solid transparent;
 }
 
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:hover {
+@media (hover: hover) {
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:hover {
+    color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
+    background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)));
+    border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
+    box-shadow: var(--ds-shadow-xs);
+    transform: translateY(-1px);
+  }
+}
+
+/* A held press keeps the hover wash but drops the lift back onto the surface
+   (4th-tanda law: the touch/active equivalent of the hover treatment). */
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:active {
   color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
   background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)));
   border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
-  box-shadow: var(--ds-shadow-xs);
-  transform: translateY(-1px);
-}
-
-/* A held press drops the hover lift back onto the surface. */
-.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:active {
-  transform: translateY(0);
   box-shadow: none;
+  transform: translateY(0);
 }
 
 .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-current='true'] {
@@ -156,11 +162,11 @@
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
-/* The default separator glyph is directional (parent -> child); mirror it in
-   RTL so the reading direction of the trail stays honest. */
-[dir='rtl'] .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='separator'] svg {
-  transform: scaleX(-1);
-}
+/* The default separator is a governed NavigationForwardIcon whose facade
+   mirrors it under RTL globally (`semantic-icon.css`: `[data-icon-mirrored=
+   'auto']:dir(rtl)`), so this family declares NO flip of its own -- the
+   former `[dir='rtl'] scaleX(-1)` rule double-mirrored the autoMirror. A
+   consumer-supplied `separator` node owns its own RTL posture. */
 
 /* ---- coarse pointers: physical 44px floor, never a rem floor. ---- */
 @media (hover: none), (pointer: coarse) {
@@ -170,10 +176,11 @@
 }
 
 /* ---- forced colors: every crumb keeps a frame; the current page survives.
-        The doubled data-part ties the (0,4,0) border shorthand and wins on
-        source order inside this later media block. ---- */
+        The distinct `[data-current]` attribute (stamped on EVERY crumb) ties
+        the (0,4,0) border shorthand -- no repetition -- and this later media
+        block wins on source order. ---- */
 @media (forced-colors: active) {
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-part='crumb'] {
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-current] {
     forced-color-adjust: auto;
     border-color: ButtonText;
   }

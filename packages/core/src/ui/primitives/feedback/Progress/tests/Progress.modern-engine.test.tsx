@@ -113,7 +113,7 @@ describe('Progress modern engine (post Daisy drain)', () => {
       'modern',
     );
     expect(
-      (line.querySelector('[data-part="fill"]') as HTMLElement).style.getPropertyValue(
+      (line.querySelector('[data-part="root"]') as HTMLElement).style.getPropertyValue(
         '--ds-progress-arc-color',
       ),
     ).toBe('rebeccapurple');

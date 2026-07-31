@@ -1,21 +1,90 @@
-/** ReportSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+/**
+ * ReportSurface skin (WO-SKIN-06 / CK-I).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
+ *
+ * SCOPE: the surface composes public primitives and patterns (PageShell,
+ * StatsGrid, FilterPanel, DataTable, Card) — each owns its own chrome, states
+ * and forced-colors treatment. In particular the selected template card is
+ * painted by the Card skin itself (`data-selectable` + `data-selected` get
+ * the primary border/outline/elevation there), so this file paints ONLY:
+ *   - the leading template icon tint (muted ink at rest, primary when its
+ *     card is the selected one — the only report-owned selection cue the
+ *     Card skin does not already provide);
+ *   - the report-mirror skeleton blocks (`report-skeleton-*`), whose pulse
+ *     rides the canonical `ds-foundation-pulse` keyframes on the
+ *     `--ds-motion-attention` channel and goes quiet under reduced motion.
+ *     Their fills are neutral surface tokens, so forced colors needs no
+ *     re-keying here (the composed Cards already force their own frames).
+ *
+ * SPECIFICITY: single-class hooks plus the always-stamped state attribute
+ * (`data-selected`); no repetition, no `!important`. Section titles carry no
+ * weight paint on purpose: they use the tenant's `sectionTitle` type style
+ * and typography.css sorts in `rottay-engines` (after this file), where the
+ * `font:` shorthand would defeat any components-layer font-weight anyway.
+ */
 
-.ds-surface.ds-report
-  .ds-report__template-card.ds-report__template-card--selected[data-part="root"][data-interactive="true"][data-variant="outlined"]:not(
-    [data-tone]
-  ),
-.ds-surface.ds-report
-  .ds-report__template-card.ds-report__template-card--selected[data-part="root"][data-hoverable="true"][data-clickable="true"][data-variant="outlined"]:not(
-    [data-tone]
-  ) {
-  border-color: var(--ds-color-primary);
-}
-
-.ds-surface.ds-report
-  .ds-report__muted-text[data-part="root"][data-part="root"] {
+.ds-surface.ds-report .ds-report__template-icon {
+  flex-shrink: 0;
   color: var(--ds-color-text-muted);
 }
 
-.ds-surface.ds-report .ds-report__divider[data-part="divider"] {
-  border-top: 1px solid var(--ds-color-border);
+.ds-surface.ds-report
+  .ds-report__template-card[data-selected="true"]
+  .ds-report__template-icon {
+  color: var(--ds-color-primary);
+}
+
+/* ---- report-mirror skeleton: blocks sit on the same layout as the real
+        content (templates/filters aside, stats + chart + rows in the results
+        column), preventing a loading-time layout shift. ---- */
+.ds-surface.ds-report [data-part="report-skeleton-block"] {
+  border-radius: var(--ds-skeleton-radius, var(--ds-radius-md, 8px));
+  background: var(
+    --ds-skeleton-bg,
+    var(--ds-surface-panel, var(--ds-color-bg-secondary))
+  );
+  animation: ds-foundation-pulse
+    var(--ds-skeleton-animation-duration, var(--ds-motion-attention, 1.5s))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-surface.ds-report
+  [data-part="report-skeleton-block"][data-size="section-title"] {
+  inline-size: 32%;
+  min-block-size: 20px;
+}
+
+.ds-surface.ds-report
+  [data-part="report-skeleton-block"][data-size="template-card"] {
+  min-block-size: 72px;
+}
+
+.ds-surface.ds-report
+  [data-part="report-skeleton-block"][data-size="filter"] {
+  min-block-size: 96px;
+}
+
+.ds-surface.ds-report
+  [data-part="report-skeleton-block"][data-size="stat"] {
+  min-block-size: 96px;
+}
+
+.ds-surface.ds-report
+  [data-part="report-skeleton-block"][data-size="chart"] {
+  min-block-size: 240px;
+}
+
+.ds-surface.ds-report
+  [data-part="report-skeleton-block"][data-size="line"] {
+  inline-size: 100%;
+  min-block-size: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-report [data-part="report-skeleton-block"] {
+    animation: none;
+  }
 }

@@ -82,12 +82,6 @@
     --ds-material-control-focus-ring,
     var(--ds-shadow-focus-ring)
   );
-  --ds-color-surface-raised: var(
-    --ds-material-raised-background,
-    var(--ds-surface-raised, var(--ds-surface-card-bg))
-  );
-  --ds-color-surface-subtle: var(--ds-surface-panel-bg);
-  --ds-color-text-subtle: var(--ds-color-text-muted);
   --ds-control-ink: var(--ds-color-text-primary);
   --ds-control-ink-muted: var(--ds-color-text-secondary);
   --ds-control-on-brand: var(

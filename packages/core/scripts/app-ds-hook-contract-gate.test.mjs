@@ -24,6 +24,7 @@ import postcssModule from 'postcss';
 import {
   checkManifestFreshness,
   CLASSIFICATIONS,
+  compareUnadjudicatedReadBaseline,
   compareToBaseline,
   CORE_ROOT,
   DEFAULT_APP_ROOT,
@@ -35,6 +36,7 @@ import {
 } from './app-ds-hook-contract-gate.mjs';
 import {
   ANCHORS,
+  componentSourceReads,
   deriveHookManifest,
   deriveInterpolatedEmissions,
   isRootEquivalentSelector,
@@ -47,6 +49,9 @@ import {
 const postcss = postcssModule.default ?? postcssModule;
 
 const CHROME_ANCHOR = ANCHORS.tenantChannel.path;
+const BRAND_THEME_EMITTER_ANCHOR = ANCHORS.brandThemeEmitter.path;
+const APPEARANCE_EMITTER_ANCHOR = ANCHORS.appearanceEmitter.path;
+const THEME_CONTRACTS_ANCHOR = ANCHORS.themeContracts.path;
 const STYLE_ANCHOR = ANCHORS.styleRoots.path;
 const COMPONENT_ANCHOR = ANCHORS.componentReads.path;
 
@@ -71,6 +76,8 @@ function write(root, relativePath, contents) {
 function manifestFixture() {
   return {
     hookSet: new Set(['--ds-tabs-list-bg', '--ds-panel-inline-gap']),
+    unadjudicatedReadSet: new Set(['--ds-unowned-legacy']),
+    componentTokenSet: new Set(['--ds-internal-component-channel']),
     tenantChannel: new Set(['--ds-signal-card-soft']),
     foundationTokens: new Set(['--ds-card-bg', '--ds-color-primary']),
     yields: {},
@@ -104,6 +111,24 @@ test('RED: a scoped write to a property that is not a public hook fails', () => 
   assert.equal(result.growth.length, 1);
   assert.equal(result.growth[0].property, '--ds-mystery-accent');
   assert.equal(result.byReason.undeclared, 1);
+});
+
+test('RED: an unadjudicated DS read is debt, not an implicit application hook', () => {
+  const result = gateOn(
+    `.rt-feature-card { --ds-unowned-legacy: var(--ds-color-text-primary); }`,
+  );
+  assertOnly(result, CLASSIFICATIONS.unknownHook, 1);
+  assert.equal(result.ok, false);
+  assert.equal(result.byReason['unadjudicated-read'], 1);
+});
+
+test('RED: a DS-owned component token is not an application hook', () => {
+  const result = gateOn(
+    `.rt-feature-card { --ds-internal-component-channel: var(--rt-feature-ink); }`,
+  );
+  assertOnly(result, CLASSIFICATIONS.unknownHook, 1);
+  assert.equal(result.ok, false);
+  assert.equal(result.byReason['component-token'], 1);
 });
 
 test('RED: a DS foundation token is not assignable even under a feature scope', () => {
@@ -340,6 +365,26 @@ function coreFixture() {
     `export function chromeVariables(a) {\n  const vars = {};\n${emissions.join('\n')}\n  return vars;\n}\n` +
       `${families.join('\n')}\n`,
   );
+  write(
+    root,
+    `${THEME_CONTRACTS_ANCHOR}/index.ts`,
+    `export interface BrandTheme { palette?: { primary?: string } }\n` +
+      `export interface TenantAppearance { primaryColor?: string }\n`,
+  );
+  write(
+    root,
+    BRAND_THEME_EMITTER_ANCHOR,
+    `export function compileBrandTheme(vars, theme) {\n` +
+      `  vars["--ds-brand-generated"] = theme.palette?.primary;\n` +
+      `}\n`,
+  );
+  write(
+    root,
+    APPEARANCE_EMITTER_ANCHOR,
+    `export function compileAppearance(vars, appearance) {\n` +
+      `  vars["--ds-db-generated"] = appearance.primaryColor;\n` +
+      `}\n`,
+  );
 
   for (let index = 0; index < 120; index += 1) {
     write(
@@ -360,18 +405,104 @@ function coreFixture() {
   return root;
 }
 
-test('the manifest derives the three ownership classes from source', () => {
+test('the manifest derives tenant, foundation, internal, explicit-hook and unadjudicated classes', () => {
   const root = coreFixture();
   const manifest = deriveHookManifest({ coreRoot: root, postcss, promotions: [] });
 
   assert.equal(manifest.tenantChannel.has('--ds-chrome-7'), true);
+  assert.equal(manifest.tenantChannel.has('--ds-brand-generated'), true);
+  assert.equal(manifest.tenantChannel.has('--ds-db-generated'), true);
   assert.equal(manifest.foundationTokens.has('--ds-foundation-7'), true);
-  assert.equal(manifest.hookSet.has('--ds-hook-7'), true, 'read with no owner is a public hook');
-  assert.equal(manifest.hookSet.has('--ds-uihook-7'), true, 'component-source reads count');
+  assert.equal(manifest.hookSet.has('--ds-hook-7'), false, 'an unowned read is not public API');
+  assert.equal(manifest.hookSet.has('--ds-uihook-7'), false, 'component reads are not implicit API');
+  assert.equal(
+    manifest.unadjudicatedReadSet.has('--ds-hook-7'),
+    true,
+    'a CSS read with no owner is fenced for adjudication',
+  );
+  assert.equal(
+    manifest.unadjudicatedReadSet.has('--ds-uihook-7'),
+    true,
+    'a component-source read with no owner is fenced for adjudication',
+  );
 
   // Ownership outranks consumption: a property the DS reads AND owns is not a hook.
   assert.equal(manifest.hookSet.has('--ds-chrome-7'), false, 'tenant-owned must not be a hook');
+  assert.equal(
+    manifest.hookSet.has('--ds-brand-generated'),
+    false,
+    'static BrandTheme output must not be a hook',
+  );
+  assert.equal(
+    manifest.hookSet.has('--ds-db-generated'),
+    false,
+    'DB appearance output must not be a hook',
+  );
   assert.equal(manifest.hookSet.has('--ds-foundation-7'), false, 'root-declared must not be a hook');
+});
+
+test('scoped CSS and component-source suppliers stay internal unless explicitly promoted', () => {
+  const root = coreFixture();
+  write(
+    root,
+    `${STYLE_ANCHOR}/internal-slots.css`,
+    `.ds-internal { --ds-internal-css-slot: 1px; gap: var(--ds-internal-css-slot); }\n` +
+      `.ds-runtime-reader { inline-size: var(--ds-internal-ts-slot); }\n`,
+  );
+  write(
+    root,
+    `${COMPONENT_ANCHOR}/internal-slots/index.tsx`,
+    `export const variables = { '--ds-internal-ts-slot': '20rem' };\n`,
+  );
+  const manifest = deriveHookManifest({ coreRoot: root, postcss, promotions: [] });
+
+  assert.equal(manifest.componentTokenSet.has('--ds-internal-css-slot'), true);
+  assert.equal(manifest.componentTokenSet.has('--ds-internal-ts-slot'), true);
+  assert.equal(manifest.unadjudicatedReadSet.has('--ds-internal-css-slot'), false);
+  assert.equal(manifest.unadjudicatedReadSet.has('--ds-internal-ts-slot'), false);
+  assert.equal(manifest.hookSet.has('--ds-internal-css-slot'), false);
+  assert.equal(manifest.hookSet.has('--ds-internal-ts-slot'), false);
+});
+
+test('CSS comments and quoted prose cannot fabricate public hooks', () => {
+  const root = coreFixture();
+  write(
+    root,
+    `${STYLE_ANCHOR}/comment-prose.css`,
+    `/* var(--ds-comment-only) */\n.example::before { content: "var(--ds-quoted-only)"; }\n`,
+  );
+  const manifest = deriveHookManifest({ coreRoot: root, postcss, promotions: [] });
+  assert.equal(manifest.hookSet.has('--ds-comment-only'), false);
+  assert.equal(manifest.hookSet.has('--ds-quoted-only'), false);
+  assert.equal(manifest.unadjudicatedReadSet.has('--ds-comment-only'), false);
+  assert.equal(manifest.unadjudicatedReadSet.has('--ds-quoted-only'), false);
+});
+
+test('private --_ds-* implementation properties never enter the public or debt manifests', () => {
+  const root = coreFixture();
+  write(
+    root,
+    `${STYLE_ANCHOR}/private-implementation.css`,
+    `.surface {\n` +
+      `  color: var(--_ds-private-icon-ink, currentColor);\n` +
+      `  background: var(--_ds-personality-resolved-card-bg, transparent);\n` +
+      `}\n`,
+  );
+  write(
+    root,
+    `${COMPONENT_ANCHOR}/private-implementation/index.tsx`,
+    `export const style = { width: 'var(--_ds-instance-sidebar-width, 18rem)' };\n`,
+  );
+  const manifest = deriveHookManifest({ coreRoot: root, postcss, promotions: [] });
+  assert.equal(manifest.hookSet.has('--_ds-private-icon-ink'), false);
+  assert.equal(manifest.unadjudicatedReadSet.has('--_ds-private-icon-ink'), false);
+  assert.equal(manifest.hookSet.has('--_ds-instance-sidebar-width'), false);
+  assert.equal(manifest.unadjudicatedReadSet.has('--_ds-instance-sidebar-width'), false);
+  assert.equal(manifest.hookSet.has('--_ds-personality-resolved-card-bg'), false);
+  assert.equal(
+    manifest.unadjudicatedReadSet.has('--_ds-personality-resolved-card-bg'),
+    false,
+  );
 });
 
 test('ANCHOR DRIFT: a missing derivation source fails loudly and names the anchor', () => {
@@ -410,6 +541,7 @@ test('generated vertical artifacts cannot promote an app property into DS owners
   const manifest = deriveHookManifest({ coreRoot: root, postcss, promotions: [] });
   assert.equal(manifest.foundationTokens.has('--ds-app-invented-accent'), false);
   assert.equal(manifest.hookSet.has('--ds-app-invented-accent'), false);
+  assert.equal(manifest.unadjudicatedReadSet.has('--ds-app-invented-accent'), false);
 });
 
 test('test and fixture directories cannot confer DS ownership either', () => {
@@ -569,6 +701,50 @@ test('a promotion pointing at a name the DS never reads is fatal, not silently d
   );
 });
 
+test('RED drill: a new unadjudicated read grows the published decrease-only baseline', () => {
+  const root = coreFixture();
+  const before = deriveHookManifest({ coreRoot: root, postcss, promotions: [] });
+  const published = JSON.parse(serializeHookManifest(before));
+
+  write(
+    root,
+    `${STYLE_ANCHOR}/new-unowned-read.css`,
+    `.new-component { color: var(--ds-new-unowned-read, currentColor); }\n`,
+  );
+  const after = deriveHookManifest({ coreRoot: root, postcss, promotions: [] });
+  const comparison = compareUnadjudicatedReadBaseline(after, published);
+
+  assert.deepEqual(comparison.additions, ['--ds-new-unowned-read']);
+  assert.deepEqual(comparison.removals, []);
+  assert.equal(after.hookSet.has('--ds-new-unowned-read'), false, 'growth must not become API');
+
+  const publishedPath = join(root, 'hooks-manifest.json');
+  writeFileSync(publishedPath, `${JSON.stringify(published, null, 2)}\n`, 'utf8');
+  const freshness = checkManifestFreshness({
+    manifest: after,
+    manifestPath: publishedPath,
+    packageJson: packageJsonFixture(),
+  });
+  assert.ok(
+    freshness.problems.some((problem) => problem.code === 'UNADJUDICATED_GROWTH'),
+    'the published-contract gate did not bite on a new unowned read',
+  );
+});
+
+test('schema-3 migration reconstructs the legacy unadjudicated ceiling without widening it', () => {
+  const manifest = {
+    promotedSet: new Set(['--ds-explicit-slot']),
+    unadjudicatedReadSet: new Set(['--ds-old-read']),
+  };
+  const comparison = compareUnadjudicatedReadBaseline(manifest, {
+    schemaVersion: 3,
+    publicHooks: ['--ds-explicit-slot', '--ds-old-read'],
+  });
+
+  assert.deepEqual(comparison.additions, []);
+  assert.deepEqual(comparison.removals, []);
+});
+
 test('every declared slot carries all seven contract terms', () => {
   const required = [
     'owner',
@@ -689,15 +865,28 @@ test('an installed consumer resolves the contract through the package exports pa
   assert.equal(resolved, DEFAULT_MANIFEST_PATH, 'resolved somewhere other than the published artifact');
 
   const contract = JSON.parse(readFileSync(resolved, 'utf8'));
-  assert.equal(contract.schemaVersion, 2);
-  assert.ok(contract.publicHooks.length > 100, 'the consumed contract is implausibly small');
+  assert.equal(contract.schemaVersion, 4);
+  assert.ok(contract.publicHooks.length > 0, 'the consumed contract exposes no reviewed slots');
+  assert.equal(
+    contract.publicHooks.length,
+    Object.keys(contract.declaredSlots).length,
+    'publicHooks must be exactly the explicitly declared slots',
+  );
+  assert.ok(contract.unadjudicatedReads.length > 0, 'legacy unowned reads lost their debt ledger');
+  assert.ok(contract.componentTokens.length > 0, 'closed DS component channels are absent');
   assert.ok(contract.foundationTokens.length > 0);
   assert.ok(contract.tenantChannel.length > 0);
   assert.ok(Object.keys(contract.declaredSlots).length > 0);
 
   // The three sets must be disjoint, or "may I assign this?" has no answer.
   const hooks = new Set(contract.publicHooks);
-  const closed = [...contract.foundationTokens, ...contract.tenantChannel];
+  const unadjudicated = new Set(contract.unadjudicatedReads);
+  const closed = [
+    ...contract.foundationTokens,
+    ...contract.tenantChannel,
+    ...contract.componentTokens,
+  ];
+  const closedSet = new Set(closed);
   const declared = new Set(Object.keys(contract.declaredSlots));
   for (const property of closed) {
     if (declared.has(property)) continue; // promoted on purpose, and declared as such
@@ -706,6 +895,24 @@ test('an installed consumer resolves the contract through the package exports pa
   for (const property of declared) {
     assert.ok(hooks.has(property), `${property} is declared but not listed as assignable`);
   }
+  for (const property of unadjudicated) {
+    assert.ok(!hooks.has(property), `${property} is both unadjudicated debt and public API`);
+    assert.ok(!closedSet.has(property), `${property} is both unadjudicated and DS-owned`);
+  }
+});
+
+test('the published declaration pins the same schema version as the JSON artifact', () => {
+  const contract = JSON.parse(readFileSync(DEFAULT_MANIFEST_PATH, 'utf8'));
+  const declarationPath = join(dirname(DEFAULT_MANIFEST_PATH), 'hooks-manifest.d.ts');
+  const declaration = readFileSync(declarationPath, 'utf8');
+  const match = /readonly\s+schemaVersion:\s*(\d+)\s*;/u.exec(declaration);
+
+  assert.ok(match, 'HookManifest declaration does not pin a numeric schemaVersion');
+  assert.equal(
+    Number(match[1]),
+    contract.schemaVersion,
+    'hooks-manifest.d.ts and hooks-manifest.json expose different schema versions',
+  );
 });
 
 test('the published contract names the sources it was derived from', () => {
@@ -716,4 +923,22 @@ test('the published contract names the sources it was derived from', () => {
     assert.ok(anchor.describes.length > 0, `${anchor.id} has no description`);
   }
   assert.match(contract.generatedBy, /--manifest-write/);
+});
+
+test('component hook derivation reads runtime literals, not comments or interpolated name fragments', () => {
+  const reads = componentSourceReads(`
+    // var(--ds-comment-only)
+    const prose = "var(--ds-exact-string)";
+    const dynamicName = \`var(--ds-select-trigger-\${size}-height)\`;
+    const dynamicFallback = \`var(--ds-exact-template, \${fallback})\`;
+    const nestedExpression = \`color-mix(in srgb, \${"var(--ds-nested-expression)"} 20%, transparent)\`;
+  `);
+
+  assert.deepEqual([...reads].sort(), [
+    '--ds-exact-string',
+    '--ds-exact-template',
+    '--ds-nested-expression',
+  ]);
+  assert.equal(reads.has('--ds-comment-only'), false);
+  assert.equal(reads.has('--ds-select-trigger-'), false);
 });

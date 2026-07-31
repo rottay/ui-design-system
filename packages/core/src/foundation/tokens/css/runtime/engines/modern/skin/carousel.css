@@ -51,8 +51,24 @@
 
 /* ---- root frame: consolidated from the drained theme.css `.carousel` bridge ---- */
 .rottay-carousel.rottay-carousel--modern[data-part='root'] {
+  position: relative;
+  inline-size: 100%;
   border-radius: var(--ds-carousel-radius, 0px);
   overflow: hidden;
+}
+
+/* ---- layout drained from the engine's live utilities (Tailwind ban):
+        track frame + slide box. The arrows/dots positional utilities stay
+        inline — the engine tests pin them (`start-2`/`end-2`/`left-1/2`). ---- */
+.rottay-carousel.rottay-carousel--modern > [data-part='track'] {
+  position: relative;
+  inline-size: 100%;
+  overflow: hidden;
+}
+
+.rottay-carousel.rottay-carousel--modern > [data-part='track'] > [data-part='slide'] {
+  position: absolute;
+  inset: 0;
 }
 
 /* ---- RTL: mirror horizontal travel + horizontal arrow glyphs ---- */
@@ -74,8 +90,15 @@
         apply — an inline var() cannot see a media query, and !important is
         banned. Size participates in the canonical density scale (the
         Button-skin `--ds-density-effective-scale` idiom). Touch targets meet
-        the 44px coarse law, which stays an absolute unscaled floor. ---- */
-.rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-part='arrow'] {
+        the 44px coarse law, which stays an absolute unscaled floor.
+        Specificity parity without the doubled data-part (4th wave):
+        `data-direction` is always stamped (prev|next). ---- */
+.rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
   background: var(--ds-surface-card);
   color: var(--ds-color-text-primary);
   border-radius: 50%;
@@ -84,12 +107,89 @@
   inline-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale, 1));
   block-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale, 1));
   font-size: var(--ds-font-size-xs, 12px);
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
+
+/* Pointer-fine hover only (hover law); touch feedback is the press below. */
+@media (hover: hover) {
+  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:hover {
+    border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border));
+    color: var(--ds-color-primary);
+    box-shadow: var(--ds-elevation-2);
+  }
+  .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false']:hover {
+    background: var(--ds-surface-inset);
+    box-shadow:
+      0 0 0 1px var(--ds-carousel-dot-ring, var(--ds-color-alpha-black-20)),
+      0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+  }
+}
+
+.rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:active {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border));
+  color: var(--ds-color-primary);
+  transform: scale(var(--ds-state-press-scale, 0.98));
+}
+.rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:active {
+  transform: scale(var(--ds-state-press-scale, 0.98));
+}
+
+.rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:focus-visible,
+.rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
 @media (pointer: coarse) {
-  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-part='arrow'] {
+  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction] {
     inline-size: var(--ds-carousel-arrow-size-coarse, 44px);
     block-size: var(--ds-carousel-arrow-size-coarse, 44px);
   }
+
+  /* Dots keep their 8px visual size but meet the 44px floor through an
+     invisible centered hit area (the Badge/Tag close-button idiom). */
+  .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'] {
+    position: relative;
+  }
+  .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']::after {
+    content: '';
+    position: absolute;
+    inset: calc(50% - var(--ds-carousel-dot-touch-size, 44px) / 2);
+    border-radius: 9999px;
+  }
+}
+
+/* ---- dots container (position utilities stay inline, test-pinned) + dot
+        geometry drained from the engine's `w-2 h-2 rounded-full transition-all`
+        and the selected `w-4` elongation. ---- */
+.rottay-carousel.rottay-carousel--modern > [data-part='dots'] {
+  position: absolute;
+  display: flex;
+  gap: var(--ds-carousel-dots-gap, 0.25rem);
+  z-index: var(--ds-carousel-controls-z, 10);
+}
+
+.rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'] {
+  inline-size: var(--ds-carousel-dot-size, 0.5rem);
+  block-size: var(--ds-carousel-dot-size, 0.5rem);
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition:
+    inline-size var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+.rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='true'] {
+  inline-size: var(--ds-carousel-dot-selected-inline-size, 1rem);
 }
 
 /* ---- dots. K4-C Pass 2: the selected dot was `--ds-color-primary` on a
@@ -104,4 +204,40 @@
 .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false'] {
   background: var(--ds-carousel-dot-bg, var(--ds-surface-card));
   box-shadow: 0 0 0 1px var(--ds-carousel-dot-ring, var(--ds-color-alpha-black-20));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction],
+  .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'] {
+    transition: none;
+  }
+  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:active,
+  .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:active {
+    transform: none;
+  }
+}
+
+/* forced-colors: shadows and halo rings vanish, so the controls re-assert in
+   system colors. The selected dot keeps the system highlight pair; arrows
+   and unselected dots keep a framed system boundary. */
+@media (forced-colors: active) {
+  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+    color: ButtonText;
+  }
+  .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='true'] {
+    background: Highlight;
+    box-shadow: none;
+  }
+  .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false'] {
+    background: Canvas;
+    box-shadow: none;
+    outline: 1px solid ButtonText;
+  }
+  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:focus-visible,
+  .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:focus-visible {
+    outline-color: Highlight;
+  }
 }

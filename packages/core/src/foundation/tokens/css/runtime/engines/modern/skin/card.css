@@ -320,11 +320,26 @@
 .ds-card.ds-card--modern[data-part='root'][data-padding='lg'] {
   --ds-card-padding-current: var(--ds-card-padding-lg, var(--ds-card-lg-padding, 24px));
 }
+
+/* size axis: density scaling of the header copy and body text. `md`/`lg` keep
+   the baseline above; compact sizes de-escalate, amplified sizes scale up.
+   The `-current` channels leave the tenant's explicit `--ds-card-*-font-size`
+   untouched as each rule's fallback, so BrandTheme still wins by default. */
+.ds-card.ds-card--modern[data-part='root'][data-size='xs'],
+.ds-card.ds-card--modern[data-part='root'][data-size='sm'] {
+  --_ds-card-title-font-size-current: var(--ds-card-title-font-size-sm, var(--ds-font-size-base));
+  --_ds-card-body-font-size-current: var(--ds-card-body-font-size-sm, var(--ds-font-size-sm));
+}
+.ds-card.ds-card--modern[data-part='root'][data-size='xl'],
+.ds-card.ds-card--modern[data-part='root'][data-size='2xl'],
+.ds-card.ds-card--modern[data-part='root'][data-size='3xl'] {
+  --_ds-card-title-font-size-current: var(--ds-card-title-font-size-lg, var(--ds-font-size-xl));
+}
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] {
   min-inline-size: 0;
   padding: var(--ds-card-instance-padding, var(--ds-card-padding-current));
   color: var(--ds-card-body-color, inherit);
-  font-size: var(--ds-card-body-font-size, inherit);
+  font-size: var(--_ds-card-body-font-size-current, var(--ds-card-body-font-size, inherit));
   line-height: var(--ds-card-body-line-height, inherit);
   overflow-wrap: anywhere;
 }
@@ -392,7 +407,7 @@
   margin: 0;
   color: var(--ds-card-title-color, var(--ds-card-header-color, var(--ds-color-text-primary)));
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
-  font-size: var(--ds-card-title-font-size);
+  font-size: var(--_ds-card-title-font-size-current, var(--ds-card-title-font-size));
   font-weight: var(--ds-card-title-font-weight);
   line-height: var(--ds-card-title-line-height);
   letter-spacing: var(--ds-card-title-letter-spacing, var(--ds-letter-spacing-heading));
@@ -479,10 +494,10 @@
   border: var(--ds-card-border-width, 1px) solid var(--ds-card-border, var(--ds-color-border-subtle));
 }
 
-/* underline: no side/top borders, one bottom hairline, tighter radius, no lift. */
+/* underline: no side/top borders, one block-end hairline, tighter radius, no lift. */
 [data-anatomy-card='underline'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
   border: 0;
-  border-bottom: var(--ds-card-underline-border-width, 1px) solid var(--ds-card-border, var(--ds-color-border-subtle));
+  border-block-end: var(--ds-card-underline-border-width, 1px) solid var(--ds-card-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-card-radius-sm, 4px);
   box-shadow: none;
 }
@@ -496,6 +511,16 @@
 }
 [data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) {
   background-color: var(--ds-card-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent));
+}
+
+/* Nesting: a card rendered inside another card's body is grouping, not a new
+   surface — it keeps its frame but drops depth at rest so nested composition
+   cannot stack elevations. At (0,7,0) this beats the at-rest variant and
+   anatomy depth rules; the hover rule (0,8,0) still lifts on interaction,
+   and the selected/hover state treatments keep their outline and wash.
+   A tenant can restore nested depth through the channel. */
+.ds-card.ds-card--modern [data-part='body'] .ds-card.ds-card--modern[data-part='root'][data-size] {
+  box-shadow: var(--ds-card-nested-shadow, none);
 }
 
 /* Instance-level suppression and unavailable state are terminal even when a

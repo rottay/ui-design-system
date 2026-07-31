@@ -34,7 +34,7 @@ describe('AutoComplete modern advanced engine coverage', () => {
       </div>
     );
 
-    const input = screen.getByRole('textbox');
+    const input = screen.getByRole('combobox');
     fireEvent.focus(input);
     fireEvent.change(input, { target: { value: 'zz' } });
 
@@ -49,7 +49,7 @@ describe('AutoComplete modern advanced engine coverage', () => {
       expect(handleSelect).toHaveBeenCalledWith('Alpha', expect.objectContaining({ value: 'Alpha' }));
     });
 
-    fireEvent.click(screen.getByRole('button', { name: '✕' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Clear' }));
     expect(handleChange).toHaveBeenCalledWith('');
 
     fireEvent.focus(input);
@@ -78,7 +78,7 @@ describe('AutoComplete modern advanced engine coverage', () => {
       />
     );
 
-    const input = screen.getByRole('textbox');
+    const input = screen.getByRole('combobox');
     fireEvent.keyDown(input, { key: 'ArrowUp' });
     fireEvent.keyDown(input, { key: 'Enter' });
 

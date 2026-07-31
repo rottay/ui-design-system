@@ -1,0 +1,96 @@
+/**
+ * FileBrowserSurface skin (wave KIMI Modern Surfaces 2026-07-30).
+ *
+ * LAYER: NEW FILE — pending registration by the wave coordinator in
+ * `facade/entrypoints/base.css` and `facade/entrypoints/styles.css`
+ * (`layer(rottay-components)`), alongside the other surface skins.
+ *
+ * SCOPE: the surface composes PageShellSurface (page chrome), the
+ * PatternFileManager pattern (toolbar, breadcrumb, list/grid views, upload
+ * drop zone, selection, rename — painted by its own
+ * `runtime/engines/modern/skin/file-manager.css`), SurfaceActionBar, the
+ * shared error kit and the Skeleton primitive, each owning its chrome,
+ * density, interaction states, focus rings and forced-colors treatment. What
+ * remains surface-owned and is painted here: only the loading mirror's
+ * geometry — a toolbar row plus list rows or grid cards that mirror the
+ * pattern's footprint so the loading→data swap does not jump. The mirror's
+ * part sizes (1.25rem row icon, 2.25rem card icon, spacing-3 card padding,
+ * radius-lg card edge) deliberately copy the pattern skin's own geometry so
+ * the skeleton and the real body share a footprint; they are part geometry,
+ * density-stable like an avatar, not tokens. No color and no motion are
+ * declared in this file: the Skeleton primitive owns cadence and paint, the
+ * entrance choreography arrives via FadeIn/profile defaults, and spacing
+ * comes from the tenant spacing ramp. The `empty-slot` hook is stamped for
+ * landing but painted by the caller-provided node — the surface adds no
+ * frame of its own.
+ *
+ * SPECIFICITY: single class under the surface root (optionally + one
+ * always-stamped data attr); no repeated classes/attributes. Logical
+ * properties only, so RTL mirrors without extra rules.
+ */
+
+/* Loading mirror: toolbar row (breadcrumb inline-start, actions inline-end),
+   mirroring the pattern toolbar's margin so the swap keeps the rhythm. */
+.ds-surface.ds-file-browser .ds-file-browser__skeleton-toolbar {
+  margin-block-end: var(--ds-spacing-4, 1rem);
+}
+
+.ds-surface.ds-file-browser .ds-file-browser__skeleton-breadcrumb {
+  inline-size: 10rem;
+  max-inline-size: 45%;
+  block-size: 1rem;
+}
+
+.ds-surface.ds-file-browser .ds-file-browser__skeleton-action {
+  inline-size: 4.5rem;
+  block-size: 2rem;
+  border-radius: var(--ds-radius-md, 0.5rem);
+}
+
+/* List mirror: one row per eventual table row (icon + name line). The row
+   padding copies the pattern's td padding; the icon copies its 1.25rem. */
+.ds-surface.ds-file-browser .ds-file-browser__skeleton-row {
+  padding-block: var(--ds-spacing-2, 0.5rem);
+}
+
+.ds-surface.ds-file-browser .ds-file-browser__skeleton-row-icon {
+  flex-shrink: 0;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  border-radius: var(--ds-radius-md, 0.5rem);
+}
+
+.ds-surface.ds-file-browser .ds-file-browser__skeleton-row-line {
+  flex: 1 1 0%;
+  min-inline-size: 0;
+  block-size: 1rem;
+}
+
+/* Grid mirror: auto-fill tracks with a floor that never overflows narrow
+   viewports (min(8.75rem, 100%) ≈ the pattern's 2-column cut), gap copying
+   the pattern grid's spacing-3. */
+.ds-surface.ds-file-browser .ds-file-browser__skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(8.75rem, 100%), 1fr));
+  gap: var(--ds-spacing-3, 0.75rem);
+}
+
+.ds-surface.ds-file-browser .ds-file-browser__skeleton-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-spacing-2, 0.5rem);
+  padding: var(--ds-spacing-3, 0.75rem);
+  border-radius: var(--ds-radius-lg, 0.75rem);
+}
+
+.ds-surface.ds-file-browser .ds-file-browser__skeleton-card-icon {
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border-radius: var(--ds-radius-md, 0.5rem);
+}
+
+.ds-surface.ds-file-browser .ds-file-browser__skeleton-card-line {
+  inline-size: 60%;
+  block-size: 0.75rem;
+}

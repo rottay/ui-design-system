@@ -39,7 +39,7 @@ describe('Link modern engine contract', () => {
       </ModernLink>
     );
 
-    const link = screen.getByRole('link', { name: 'Reference' });
+    const link = screen.getByRole('link', { name: 'Reference (opens in new tab)' });
     expect(link).toHaveAttribute('data-external', 'true');
     const icon = link.querySelector('[data-part="external-icon"]');
     expect(icon).not.toBeNull();
@@ -54,7 +54,7 @@ describe('Link modern engine contract', () => {
       </ModernLink>
     );
 
-    const link = screen.getByRole('link', { name: 'Reference' });
+    const link = screen.getByRole('link', { name: 'Reference (opens in new tab)' });
     expect(link.querySelector('[data-part="external-icon"]')).toBeNull();
     expect(link).toHaveAttribute('target', '_blank');
   });

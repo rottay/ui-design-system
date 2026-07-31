@@ -77,7 +77,10 @@
   position: fixed;
   border-radius: var(--ds-radius-lg);
   pointer-events: none;
-  box-shadow: 0 0 0 9999px var(--ds-tour-mask-color);
+  /* The cutout spread rides its own channel (previously a literal 9999px
+     mega-spread); the mask colour stays the runtime `--ds-tour-mask-color`
+     stamped on the root. */
+  box-shadow: 0 0 0 var(--ds-tour-spotlight-spread, 9999px) var(--ds-tour-mask-color);
 }
 
 /* ---- step popover ---- */
@@ -103,10 +106,10 @@
 .rottay-tour--modern[data-part='root'] > [data-part='surface'][data-anchored='true'] {
   transform: none;
 }
-.rottay-tour--modern[data-part='root'] > [data-part='surface'][data-part='surface'][data-type='primary'] {
+.rottay-tour--modern[data-part='root'] > [data-part='surface'][data-type='primary'] {
   border: 2px solid var(--ds-color-primary);
 }
-.rottay-tour--modern[data-part='root'] > [data-part='surface'][data-part='surface']:not([data-type='primary']) {
+.rottay-tour--modern[data-part='root'] > [data-part='surface']:not([data-type='primary']) {
   border: 1px solid var(--ds-color-border-subtle);
 }
 
@@ -222,34 +225,55 @@
   color: var(--ds-tour-action-next-ink, var(--ds-material-overlay-foreground, var(--ds-color-text-on-primary)));
 }
 
-/* ---- interaction feedback (leveled in Pass 2): ghost prev deepens, solid
-        next lifts; the close button fills quietly. ---- */
-.rottay-tour--modern[data-part='root'] [data-part='action'][data-action='prev']:not(:disabled):hover {
-  background: var(--ds-tour-action-prev-bg-hover, color-mix(in srgb, currentColor 7%, transparent));
-}
-.rottay-tour--modern[data-part='root'] [data-part='action'][data-action='next']:not(:disabled):hover {
-  transform: translateY(-1px);
-  box-shadow: var(--ds-elevation-1);
-}
-.rottay-tour--modern[data-part='root'] [data-part='action'][data-action='next']:not(:disabled):active {
-  transform: translateY(0);
-  box-shadow: none;
-}
 .rottay-tour--modern[data-part='root'] [data-part='action']:not(:disabled):focus-visible,
 .rottay-tour--modern[data-part='root'] [data-part='close-button']:not(:disabled):focus-visible {
   outline: 2px solid var(--ds-tour-focus-ring, var(--ds-focus-ring-color, var(--ds-color-primary)));
   outline-offset: 2px;
 }
-.rottay-tour--modern[data-part='root'] [data-part='close-button']:not(:disabled):hover {
+
+/* ---- interaction feedback (leveled in Pass 2): ghost prev deepens, solid
+        next lifts; the close button fills quietly. Hovers are gated to real
+        hover devices (4th-tanda law); :active is the touch equivalent. ---- */
+@media (hover: hover) {
+  .rottay-tour--modern[data-part='root'] [data-part='action'][data-action='prev']:not(:disabled):hover {
+    background: var(--ds-tour-action-prev-bg-hover, color-mix(in srgb, currentColor 7%, transparent));
+  }
+  .rottay-tour--modern[data-part='root'] [data-part='action'][data-action='next']:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: var(--ds-elevation-1);
+  }
+  .rottay-tour--modern[data-part='root'] [data-part='close-button']:not(:disabled):hover {
+    color: var(--ds-tour-close-ink-hover, var(--ds-material-card-foreground, var(--ds-color-text-primary)));
+    background: var(--ds-tour-close-bg-hover, color-mix(in srgb, currentColor 8%, transparent));
+  }
+}
+.rottay-tour--modern[data-part='root'] [data-part='action'][data-action='prev']:not(:disabled):active {
+  background: var(--ds-tour-action-prev-bg-hover, color-mix(in srgb, currentColor 7%, transparent));
+}
+.rottay-tour--modern[data-part='root'] [data-part='action'][data-action='next']:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+.rottay-tour--modern[data-part='root'] [data-part='close-button']:not(:disabled):active {
   color: var(--ds-tour-close-ink-hover, var(--ds-material-card-foreground, var(--ds-color-text-primary)));
   background: var(--ds-tour-close-bg-hover, color-mix(in srgb, currentColor 8%, transparent));
 }
 
-/* forced-colors contract: backgrounds/shadows are stripped, hover must still read. */
+/* forced-colors contract: backgrounds/shadows are stripped, hover must still read.
+   The veil and the cutout shadow vanish too, so the TARGET stays fully
+   visible by construction; indicators keep a system-color boundary and the
+   current one reads as a system selection. */
 @media (forced-colors: active) {
   .rottay-tour--modern[data-part='root'] [data-part='action']:not(:disabled):hover,
   .rottay-tour--modern[data-part='root'] [data-part='close-button']:not(:disabled):hover {
     outline: 1px solid;
+  }
+  .rottay-tour--modern[data-part='root'] [data-part='indicator'] {
+    border: 1px solid ButtonText;
+  }
+  .rottay-tour--modern[data-part='root'] [data-part='indicator'][data-current='true'] {
+    background: Highlight;
+    border-color: Highlight;
   }
 }
 

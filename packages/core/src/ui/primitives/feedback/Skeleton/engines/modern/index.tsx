@@ -123,6 +123,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
     // Styling
     className = '',
     style,
+    'data-part': dataPart,
   } = props;
 
   // ---------------------------------------------------------------------------
@@ -168,7 +169,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
   if (variant === 'circular' || variant === 'rectangular' || variant === 'rounded') {
     return (
       <div
-        data-part="root"
+        data-part={dataPart ?? 'root'}
         data-animation={resolvedStyle}
         className={`rottay-skeleton rottay-skeleton--modern ${className}`}
         // Purely decorative placeholder: hidden from AT; the busy state is
@@ -200,7 +201,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
   // line) lives in the skin so density tokens can retune it.
   return (
     <div
-      data-part="root"
+      data-part={dataPart ?? 'root'}
       className={`rottay-skeleton-wrapper rottay-skeleton--modern ${className}`}
       aria-hidden="true"
       style={{ ...style, '--ds-skeleton-animation-name': animationName } as React.CSSProperties}

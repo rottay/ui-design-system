@@ -211,19 +211,20 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
       data-type="line"
       data-status={resolvedStatus}
       data-indeterminate={indeterminate ? 'true' : 'false'}
-      className={`w-full rottay-progress-shell rottay-progress-shell--modern ${className}`}
-      style={style}
+      className={`rottay-progress-shell rottay-progress-shell--modern ${className}`}
+      style={{ ...style, ...arcOverride }}
     >
       {/* Native <progress> element provides built-in accessibility (no ARIA
           needed) and works with browser defaults when CSS fails to load.
           The `value` attribute is omitted when indeterminate, which is the
-          native indeterminate state for assistive technologies. */}
+          native indeterminate state for assistive technologies. The
+          strokeColor hatch lives on the ROOT: `--ds-progress-resolved-fill`
+          resolves there per data-status, and a custom property set on the
+          child <progress> would never reach that resolution. */}
       <progress
         data-part="fill"
-        className="w-full"
         {...(indeterminate ? {} : { value: clampedPercent })}
         max="100"
-        style={arcOverride}
       />
 
       {/* Indeterminate sliding bar: canon keyframe + motion-authority cadence,

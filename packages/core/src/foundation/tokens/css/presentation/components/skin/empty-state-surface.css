@@ -1,0 +1,59 @@
+/**
+ * EmptyStateSurface skin (KIMI Modern wave 2026-07-30, SU19).
+ *
+ * LAYER: registered by the wave coordinator in `facade/entrypoints/base.css`
+ * and `facade/entrypoints/styles.css` alongside the other experience surface
+ * skins (`auth-surface.css`, `chat-surface.css`, `media-surface.css`), into
+ * `layer(rottay-components)`. This file does not control its own layering.
+ *
+ * SCOPE: the surface composes the shared `SurfaceEmptyState` kit (PT18
+ * pattern -- framed status region with visual well, copy hierarchy and a
+ * primary action tray), `SurfaceActionBar` and `PageShellSurface`. Each
+ * composed piece owns its chrome, interaction states and forced-colors
+ * treatment, so this file paints ONLY the two things the surface itself
+ * owns: the page/embedded frame coordination (expressed by retuning the
+ * pattern's own `--ds-empty-state-*` channels inside this scope, never by
+ * repainting pattern chrome) and the guidance content slot's measure and
+ * quiet ink. No forced-colors block on purpose: the only color set here is
+ * an inheritable text color, which the UA re-keys under forced colors, and
+ * the pattern's own forced-colors rules still restore the frame's border
+ * whenever it is structurally needed.
+ *
+ * SPECIFICITY: no class/attribute repetition anywhere. The root keys on the
+ * always-stamped `data-part='root'` + `data-chrome`; parts hang off the
+ * direct-child combinator so the nested PT18 parts (the pattern also stamps
+ * a `data-part='content'` inside its root) can never match a surface rule.
+ * `data-mobile` is stamped for hook parity with the sibling experience
+ * surfaces; the surface owns no mobile-only paint because the pattern's
+ * fluid padding (`clamp()`) and the wrapping action row already cover the
+ * 360px floor.
+ */
+
+/* ---- embedded mode: quiet unframed region ----
+   Without page chrome the surface renders inside another surface's panel.
+   Keeping the PT18 frame there would double-frame the state, so the frame
+   is retuned through the pattern's own channels: the border color goes
+   transparent (the border width stays, so page and embedded modes share the
+   same box metrics and never shift layout), the surface fill and shadow
+   defer to the parent's material. The visual well, copy hierarchy and
+   action tray keep the pattern's treatment untouched. */
+.ds-surface.ds-empty-state-surface[data-part='root'][data-chrome='embedded']
+  > .ds-pattern-empty-state[data-part='root'] {
+  --ds-empty-state-border-color: transparent;
+  --ds-empty-state-surface: transparent;
+  --ds-empty-state-shadow: none;
+}
+
+/* ---- guidance content slot: capped measure, quiet ink ----
+   Caller-provided guidance (onboarding steps, links, hints) sits below the
+   state block. It inherits the description's 52ch measure so long copy
+   wraps at the same optical width as the state text instead of sprawling
+   across the page column, and it reads as supporting text, never as a
+   second heading. Content longer than the measure wraps; nothing truncates. */
+.ds-surface.ds-empty-state-surface[data-part='root'] > [data-part='content'] {
+  max-inline-size: 52ch;
+  margin-inline: auto;
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-relaxed);
+}

@@ -3,6 +3,7 @@
     "loading": "Loading avatar...",
     "error": "Error loading image",
     "fallback": "No image",
+    "image_alt": "Avatar",
     "group": {
       "surplus": "+{count} more",
       "empty": "No users"
@@ -139,7 +140,8 @@
     "reset": "Reset"
   },
   "drawer": {
-    "close": "Close"
+    "close": "Close",
+    "actions": "Drawer actions"
   },
   "dropdown": {
     "no_options": "No options"
@@ -209,13 +211,16 @@
     "navPrevYear": "Previous year",
     "navPrevMonth": "Previous month",
     "navNextMonth": "Next month",
-    "navNextYear": "Next year"
+    "navNextYear": "Next year",
+    "gridLabel": "Dates grid",
+    "monthsGridLabel": "Months grid"
   },
   "colorpicker": {
     "clear": "Clear",
     "chooseColor": "Choose color",
     "hexLabel": "Hex color",
-    "selectColor": "Select color {color}"
+    "selectColor": "Select color {color}",
+    "invalidHex": "Enter a valid hex color (e.g. #1677ff)"
   },
   "qrcode": {
     "loading": "Loading",
@@ -231,8 +236,53 @@
   },
   "mentions": {
     "not_found": "No results",
+    "loading": "Loading…",
     "suggestions_label": "Mention suggestions",
     "input_label": "Mentions"
+  },
+  "otp": {
+    "digit_label": "Digit {index} of {length}"
+  },
+  "detailPanel": {
+    "back": "Go back",
+    "breadcrumb": "Breadcrumb",
+    "tabs": "Detail panel tabs"
+  },
+  "columnSettings": {
+    "title": "Columns",
+    "searchPlaceholder": "Find column...",
+    "emptySearch": "No columns match your search",
+    "reset": "Reset Layout",
+    "reorder": "Reorder column",
+    "pinLeft": "Pin left",
+    "pinRight": "Pin right",
+    "unpin": "Unpin",
+    "visibleSuffix": "visible"
+  },
+  "pricingTable": {
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "features": "Features",
+    "mostPopular": "Most Popular",
+    "loading": "Loading",
+    "included": "Included",
+    "excluded": "Not included",
+    "empty": "No plans available"
+  },
+  "activityLog": {
+    "filter": {
+      "allActions": "All actions",
+      "allUsers": "All users"
+    },
+    "empty": "No activity recorded",
+    "time": {
+      "justNow": "just now",
+      "minutesAgo": "{count}m ago",
+      "hoursAgo": "{count}h ago",
+      "daysAgo": "{count}d ago"
+    },
+    "onEntity": "on {entity}",
+    "onEntityWithId": "on {entity} #{id}"
   },
   "transfer": {
     "source_title": "Source",
@@ -242,6 +292,8 @@
     "item_unit": "item",
     "items_unit": "items",
     "select_all": "Select all",
+    "move_to_target": "Move to target",
+    "move_to_source": "Move to source",
     "move_right": ">",
     "move_left": "<"
   },
@@ -265,6 +317,9 @@
   },
   "backTop": {
     "back_to_top": "Back to top"
+  },
+  "anchor": {
+    "navigation": "Anchor navigation"
   },
   "floatbutton": {
     "actionLabel": "Floating action button",
@@ -321,7 +376,8 @@
       "approve": "Approve",
       "reject": "Reject",
       "escalate": "Escalate"
-    }
+    },
+    "empty": "All caught up"
   },
   "autocomplete": {
     "not_found": "No results",
@@ -340,7 +396,9 @@
     "placeholder": "Please select",
     "search_placeholder": "Search...",
     "not_found": "No data",
-    "clear": "Clear"
+    "clear": "Clear",
+    "column_label": "Level {level}",
+    "search_results": "Search results"
   },
   "stepper": {
     "navigation": "Progress steps"
@@ -363,7 +421,12 @@
       "empty_title": "Nothing to show yet",
       "empty_description": "This surface does not have any data to render right now.",
       "error_title": "Surface failed to render",
-      "retry": "Try again"
+      "retry": "Try again",
+      "capability_label": "Available when data is retrieved",
+      "capability_aria": "Registered surface capabilities",
+      "error_boundary_title": "{surface} encountered an error",
+      "error_boundary_generic_surface": "This section",
+      "error_description": "An error occurred while rendering this surface."
     },
     "list": {
       "empty_title": "No results available",
@@ -382,7 +445,8 @@
       "summary_title": "Summary"
     },
     "form": {
-      "discard_changes": "Discard unsaved form changes?"
+      "discard_changes": "Discard unsaved form changes?",
+      "actions_aria": "Form actions"
     },
     "search": {
       "placeholder": "Search",
@@ -391,13 +455,16 @@
       "empty_query_description_other": "Enter at least {count} characters to run the search.",
       "empty_results_title": "No results found",
       "empty_results_description": "Try adjusting the query or filters.",
-      "preview_title": "Preview"
+      "preview_title": "Preview",
+      "filters_title": "Filters",
+      "results_group_aria": "Search results"
     },
     "media": {
       "empty_title": "No media items",
       "empty_description": "Provide one or more media items to render the gallery.",
       "preview_title": "Preview",
-      "details_title": "Details"
+      "details_title": "Details",
+      "untitled_item": "Untitled media item"
     },
     "sidebar": {
       "expand": "Expand",
@@ -420,7 +487,11 @@
       "next": "Next",
       "previous_lanes": "Previous kanban lanes",
       "next_lanes": "Next kanban lanes",
-      "lane_range": "Lanes {start}–{end} of {total}"
+      "lane_range": "Lanes {start}–{end} of {total}",
+      "filters_title": "Filters",
+      "empty_title": "No items",
+      "empty_description": "There are no items on the board yet.",
+      "lanes_nav_aria": "Kanban lanes"
     },
     "operational": {
       "empty_title": "No operational modules configured",
@@ -428,7 +499,8 @@
       "primary_panel": "Primary panel",
       "secondary_panel": "Secondary panel",
       "queue": "Queue",
-      "live_feed": "Live feed"
+      "live_feed": "Live feed",
+      "stats_group_aria": "Operational metrics"
     },
     "wizard": {
       "empty_step_title": "Empty wizard step",
@@ -447,14 +519,302 @@
       "composer_title": "Composer",
       "placeholder": "Write a message",
       "send": "Send",
-      "typing": "Assistant is typing"
+      "typing": "Assistant is typing",
+      "composer_label": "Message input"
     },
     "editor": {
-      "title": "Editor"
+      "title": "Editor",
+      "input_label": "Content editor",
+      "preview_title": "Preview"
     },
     "visualization": {
       "empty_title": "No visualizations configured",
       "empty_description": "Add one or more views to render this surface."
+    },
+    "audit": {
+      "filters_title": "Filters",
+      "empty_title": "No audit entries",
+      "empty_description": "There are no audit log entries matching the current filters.",
+      "pagination_summary": "Page {current} · Total entries: {total}",
+      "export_group_aria": "Export audit log",
+      "export_format_aria": "Export as {format}"
+    },
+    "report": {
+      "templates_title": "Templates",
+      "templates_group_aria": "Report templates",
+      "filters_title": "Filters",
+      "summary_title": "Summary",
+      "chart_title": "Visualization",
+      "table_title": "Results",
+      "generate": "Generate",
+      "generating": "Generating report...",
+      "empty_title": "No report data",
+      "empty_description": "Select a template and generate a report to see results.",
+      "empty_rows_title": "No rows",
+      "empty_rows_description": "The report ran but returned no rows for the current filters.",
+      "no_templates_title": "No templates",
+      "no_templates_description": "No report templates are available.",
+      "export_group_aria": "Export report",
+      "export_pdf": "PDF",
+      "export_excel": "EXCEL",
+      "export_csv": "CSV"
+    },
+    "import_export": {
+      "import_title": "Import Data",
+      "import_description": "Upload a file to validate its rows, review any errors, and confirm the import.",
+      "import_not_configured_title": "Import not configured",
+      "import_not_configured_description": "Import functionality has not been set up.",
+      "import_failed_title": "Import failed",
+      "dropzone_hint": "Drop a file here or click to browse",
+      "accepted_formats": "Accepted formats: {formats}",
+      "processing_file": "Processing file...",
+      "template_hint": "Need a template?",
+      "template_download": "Download template",
+      "preview_valid": "Valid: {count}",
+      "preview_errors": "Errors: {count}",
+      "preview_total": "Total: {count}",
+      "validation_errors_title": "Validation Errors",
+      "error_row": "Row {row}, {field}: {message}",
+      "more_errors": "...and {count} more",
+      "no_valid_rows": "No valid rows to import. Upload a corrected file to continue.",
+      "back": "Back",
+      "confirm_import": "Confirm Import",
+      "import_success": "Import completed successfully",
+      "import_more": "Import More",
+      "export_title": "Export Data",
+      "export_description": "Choose a format and the fields to include in the exported file.",
+      "export_not_configured_title": "Export not configured",
+      "export_not_configured_description": "Export functionality has not been set up.",
+      "export_failed_title": "Export failed",
+      "format_label": "Format",
+      "format_group_aria": "Export format",
+      "export_format_aria": "Export as {format}",
+      "fields_label": "Fields",
+      "fields_selected": "{selected} of {total} selected",
+      "select_all": "Select all",
+      "clear_all": "Clear",
+      "export_action": "Export",
+      "history_title": "History",
+      "history_empty": "No import or export operations yet.",
+      "history_list_aria": "Import and export operations",
+      "history_records": "{count} records",
+      "type_import": "Import",
+      "type_export": "Export"
+    },
+    "guided_draft_form": {
+      "section_nav_label": "Section",
+      "section_nav_label_plural": "Sections",
+      "section_nav_aria": "Form sections",
+      "section_state_complete": "Complete",
+      "section_state_errors": "Has errors",
+      "draft_status_unsaved": "Unsaved changes",
+      "draft_status_saving": "Saving…",
+      "draft_status_saved": "Saved",
+      "draft_status_saved_at": "Saved {time}",
+      "draft_status_error": "Save failed",
+      "draft_recovery_title": "Unsaved draft found",
+      "draft_recovery_description": "Your work from a previous session is waiting.",
+      "draft_recovery_description_date": "Last edited {date}",
+      "draft_recovery_recover": "Recover",
+      "draft_recovery_discard": "Discard",
+      "templates_toggle_show": "Templates",
+      "templates_toggle_hide": "Hide templates",
+      "template_picker_aria": "Form templates",
+      "validation_summary_errors": "Errors: {count}",
+      "validation_summary_warnings": "Warnings: {count}",
+      "validation_issue_overflow": "Additional issues: {count}",
+      "progress_count": "{completed}/{total}",
+      "submit_bar_progress": "Sections complete: {completed} of {total}",
+      "submit": "Submit",
+      "submitting": "Submitting…",
+      "empty_sections_title": "No form sections",
+      "empty_sections_description": "This form does not have any sections configured yet."
+    },
+    "notification": {
+      "empty_title": "No notifications",
+      "empty_description": "You are all caught up.",
+      "mark_read": "Mark read",
+      "mark_all_read": "Mark all read",
+      "delete": "Delete",
+      "preferences_empty_title": "No preferences",
+      "preferences_empty_description": "No notification preferences are available.",
+      "preferences_default_category": "General",
+      "notifications_section": "Notifications",
+      "preferences_section": "Preferences"
+    },
+    "billing": {
+      "plan_current_badge": "Current plan",
+      "action_upgrade": "Upgrade",
+      "action_cancel": "Cancel",
+      "action_download": "Download",
+      "usage_title": "Usage",
+      "invoices_title": "Invoices",
+      "invoices_list_aria": "Invoice history",
+      "invoice_download_aria": "Download invoice {date}",
+      "payment_methods_title": "Payment Methods",
+      "payment_methods_list_aria": "Saved payment methods",
+      "payment_expiry": "Exp {expiry}",
+      "payment_default_badge": "Default",
+      "tab_plan": "Plan"
+    },
+    "integration": {
+      "keys_title": "API Keys",
+      "keys_list_aria": "API keys",
+      "keys_empty_title": "No API keys",
+      "keys_empty_description": "Create an API key to get started.",
+      "key_created": "Created {date}",
+      "key_revoke_aria": "Revoke API key {name}",
+      "action_create_key": "Create Key",
+      "action_revoke": "Revoke",
+      "webhooks_title": "Webhooks",
+      "webhooks_list_aria": "Webhooks",
+      "webhooks_empty_title": "No webhooks",
+      "webhooks_empty_description": "Create a webhook to receive event notifications.",
+      "webhook_events": "Events: {events}",
+      "webhook_action_pause": "Pause",
+      "webhook_action_resume": "Resume",
+      "webhook_pause_aria": "Pause webhook {url}",
+      "webhook_resume_aria": "Resume webhook {url}",
+      "webhook_delete_aria": "Delete webhook {url}",
+      "action_create_webhook": "Create Webhook",
+      "action_delete": "Delete",
+      "apps_title": "Connected Apps",
+      "apps_list_aria": "Connected apps",
+      "app_disconnect_aria": "Disconnect {name}",
+      "action_disconnect": "Disconnect"
+    },
+    "profile": {
+      "edit_action": "Edit",
+      "save_action": "Save",
+      "cancel_action": "Cancel",
+      "section_edit_aria": "Edit {section}",
+      "section_save_aria": "Save {section}",
+      "section_cancel_aria": "Cancel editing {section}",
+      "empty_title": "No profile sections",
+      "empty_description": "There are no profile sections configured.",
+      "action_change_password": "Change Password",
+      "action_delete_account": "Delete Account"
+    },
+    "command_center": {
+      "quick_actions": "Quick Actions",
+      "recent_activity": "Recent Activity",
+      "view_all": "View all",
+      "activity_empty": "No recent activity.",
+      "empty_title": "No data to display",
+      "empty_description": "Configure stats, actions, or sections to populate this dashboard.",
+      "system_actor": "System"
+    },
+    "settings": {
+      "empty_title": "No settings sections",
+      "empty_description": "There are no settings sections available."
+    },
+    "collection_workspace": {
+      "apply_filters": "Apply filters",
+      "boolean_no": "No",
+      "boolean_yes": "Yes",
+      "cancel": "Cancel",
+      "cards_per_batch": "Cards per batch",
+      "cards_showing": "Showing 1-{visible} of {total}",
+      "cards_unit": "Cards",
+      "collection_actions_aria": "Collection actions",
+      "density_label": "Density: {mode}",
+      "end_of_cards": "End of cards",
+      "export_aria": "Export",
+      "filters_title": "Advanced filters",
+      "filters_title_count": "Advanced filters ({count})",
+      "filters_trigger": "Filters",
+      "filters_trigger_count": "Filters ({count})",
+      "grid_renderer_missing": "Grid mode requires a card renderer (viewModes.cards.renderCard or mobileCard)",
+      "kanban_empty_column": "No items",
+      "load_more": "Load more",
+      "loading_details": "Loading details…",
+      "loading_label": "Loading…",
+      "meta_in_view": "{count} in view",
+      "meta_needs_attention": "Needs attention",
+      "meta_syncing": "Syncing data",
+      "more": "More",
+      "more_actions": "More actions",
+      "no_card_renderer": "No card renderer",
+      "not_set": "Not set",
+      "open_details": "Open details",
+      "open_item_aria": "Open {title} item {index}",
+      "page_of": "Page {current} of {total}",
+      "page_size_option": "{count} / page",
+      "pagination_next": "Next",
+      "pagination_next_aria": "Go to next page",
+      "pagination_prev_aria": "Go to previous page",
+      "pagination_previous": "Previous",
+      "per_batch": "/ batch",
+      "per_page": "/ page",
+      "preview_details_title": "{title} details",
+      "range_from_start_of": "1-{visible} of {total}",
+      "range_of": "{start}-{end} of {total}",
+      "range_results": "{count} results",
+      "record_label": "Record",
+      "record_number": "Record {index}",
+      "reset": "Reset",
+      "resize_rail_aria": "Resize detail panel",
+      "resize_rail_title": "Drag to resize detail panel",
+      "results_zero": "0 results",
+      "row_actions": "Row actions",
+      "rows_per_page": "Rows per page",
+      "rows_unit": "Rows",
+      "search_placeholder": "Search...",
+      "select_rows": "Select rows",
+      "selected_count": "{count} selected",
+      "shortcuts_label": "Shortcuts",
+      "smart_sets": "Smart sets",
+      "uncategorized": "Uncategorized"
+    },
+    "decision_inbox": {
+      "clear_selection": "Clear",
+      "close": "Close",
+      "confirm_ok": "Confirm",
+      "empty_description": "All items have been reviewed. New items will appear here when they require attention.",
+      "empty_title": "No pending decisions",
+      "items_selected": "{count} items selected",
+      "pending_count": "{count} pending",
+      "reason_label": "Reason",
+      "reason_placeholder_batch": "Enter reason...",
+      "reason_placeholder_review": "Enter reason for this decision...",
+      "review_details": "Review Details",
+      "sla_duration_short": "{hours}h {mins}m",
+      "sla_header": "SLA",
+      "sla_minutes_left": "{count}m left",
+      "sla_overdue": "Overdue",
+      "cancel": "Cancel",
+      "loading_label": "Loading…"
+    },
+    "record_workbench": {
+      "details_title": "Details",
+      "empty_tab_description": "This section has no content for this record yet.",
+      "empty_tab_title": "Nothing here yet",
+      "loading_label": "Loading record…",
+      "tabs_aria": "Record sections"
+    },
+    "file_browser": {
+      "empty_message": "No files or folders found.",
+      "loading_aria": "Loading files"
+    },
+    "activity": {
+      "pagination_summary": "Page {current} of {pages} · {total} entries",
+      "empty_message": "No activity recorded yet."
+    },
+    "team": {
+      "empty_title": "No team members",
+      "empty_description": "Invite your first team member to get started.",
+      "action_invite": "Invite Member",
+      "action_edit": "Edit",
+      "action_remove": "Remove",
+      "role_select_aria": "Role for {name}",
+      "member_joined": "Joined {date}",
+      "members_list_aria": "Team members"
+    },
+    "auth": {
+      "hero_region_label": "Brand showcase"
+    },
+    "pricing": {
+      "table_region_label": "Plan comparison"
     }
   },
   "checkbox": {
@@ -484,7 +844,38 @@
     "select": "Select",
     "banner": "You are viewing the {name} environment",
     "confirmTitle": "Switch to {name}",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "group_label": "Environment"
+  },
+  "commandPalette": {
+    "dialogLabel": "Command palette",
+    "placeholder": "Type a command...",
+    "empty": "No results found.",
+    "recent": "Recent"
+  },
+  "locale_switcher": {
+    "trigger_aria": "Language: {locale}"
+  },
+  "kanbanBoard": {
+    "add_item": "Add item",
+    "empty_board": "No columns"
+  },
+  "map_view": {
+    "placeholder": "Map placeholder",
+    "center": "Center: {lat}, {lng}",
+    "no_center": "No center set",
+    "zoom": "Zoom: {zoom}",
+    "marker_count_one": "{count} marker",
+    "marker_count_other": "{count} markers",
+    "empty": "No markers"
+  },
+  "treeView": {
+    "search_placeholder": "Search...",
+    "empty": "No items",
+    "empty_results": "No results found"
+  },
+  "loadingOverlay": {
+    "message": "Loading"
   },
   "fileManager": {
     "root": "Root",
@@ -528,12 +919,36 @@
     "select_placeholder": "Select...",
     "value_label": "Filter value",
     "field_label": "Filter field",
-    "operator_label": "Filter operator"
+    "operator_label": "Filter operator",
+    "empty": "No filters yet",
+    "range_from_aria": "Filter value from",
+    "range_to_aria": "Filter value to"
   },
   "form_builder": {
     "previous": "Previous",
     "next": "Next",
-    "step_counter": "Step {current} of {total}"
+    "step_counter": "Step {current} of {total}",
+    "empty": "No fields to display"
+  },
+  "invoice_template": {
+    "print": "Print",
+    "export": "Export",
+    "watermark": "Invoice",
+    "number_label": "Invoice #:",
+    "date_label": "Date:",
+    "due_label": "Due:",
+    "tax_id_label": "Tax ID:",
+    "bill_to": "Bill To",
+    "notes_label": "Notes",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "col_description": "Description",
+    "col_quantity": "Qty",
+    "col_unit_price": "Unit Price",
+    "col_total": "Total",
+    "empty_items": "No line items",
+    "tax": "Tax",
+    "tax_with_rate": "Tax ({rate}%)"
   },
   "layout": {
     "collapse_sidebar": "Collapse sidebar",
@@ -574,6 +989,7 @@
   "notificationCenter": {
     "title": "Notifications",
     "markAllRead": "Mark all read",
+    "markAsRead": "Mark as read",
     "clearAll": "Clear all",
     "empty": "No notifications",
     "dismiss": "Dismiss",
@@ -599,7 +1015,8 @@
     "complete": "Complete",
     "skip": "Skip",
     "progress": "Step {current} of {total}: {title}",
-    "validation_default": "Please complete this step before continuing."
+    "validation_default": "Please complete this step before continuing.",
+    "actions": "Wizard actions"
   },
   "taginput": {
     "placeholder": "Type and press Enter"
@@ -636,13 +1053,225 @@
     "tileBadgeShape": "Badge Shape",
     "tileLabelStyle": "Label Style",
     "tileHoverLift": "Hover Lift",
-    "tileEdgeAccent": "Edge Accent"
+    "tileEdgeAccent": "Edge Accent",
+    "sampleRowNameA": "Project Alpha",
+    "sampleRowNameB": "Project Beta",
+    "sampleRowAmountA": "$12,400",
+    "sampleRowAmountB": "$8,200"
   },
   "workspaceSwitcher": {
     "switch": "Switch workspace",
     "panel": "Workspaces",
     "select": "Select workspace",
     "create": "Create workspace",
-    "settings": "Settings for"
+    "settings": "Settings for",
+    "search_placeholder": "Search workspaces",
+    "empty": "No workspaces",
+    "empty_results": "No workspaces found",
+    "settings_for": "Settings for {name}"
+  },
+  "shortcutsOverlay": {
+    "title": "Keyboard Shortcuts",
+    "searchPlaceholder": "Search shortcuts...",
+    "empty": "No matching shortcuts.",
+    "close": "Close",
+    "general": "General"
+  },
+  "dataTerminalCard": {
+    "live": "LIVE",
+    "statChange": "CHANGE",
+    "statPeriod": "PERIOD",
+    "periodDefaultWeek": "This week",
+    "statTarget": "TARGET",
+    "actionView": "VIEW",
+    "actionAdd": "ADD",
+    "actionStats": "STATS",
+    "actionAnalytics": "ANALYTICS",
+    "statusOptimal": "OPTIMAL",
+    "statusModerate": "MODERATE",
+    "statusAttention": "ATTENTION",
+    "tracking": "TRACKING",
+    "periodDefaultPeriod": "this period",
+    "completion": "COMPLETION",
+    "details": "DETAILS",
+    "viewDetails": "VIEW DETAILS",
+    "metric": "METRIC",
+    "dataPoint": "DATA POINT"
+  },
+  "record": {
+    "notSet": "Not set",
+    "copyField": "Copy {label}",
+    "copiedField": "Copied {label}",
+    "actionRail": "Action rail"
+  },
+  "editFields": {
+    "requirement": {
+      "required": "Required",
+      "recommended": "Recommended",
+      "optional": "Optional",
+      "required_title": "Always shown. Saving depends on this value.",
+      "recommended_title": "Improves routing, reporting, or review quality. Safe to fill in later.",
+      "optional_title": "Safe to leave blank."
+    },
+    "footer": {
+      "cancel": "Cancel",
+      "save": "Save changes"
+    },
+    "toggle": {
+      "show_more": "Show more fields",
+      "hide_more": "Hide more fields"
+    },
+    "section": {
+      "number": "Section {number}"
+    }
+  },
+  "form_sections": {
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "activeFiltersBar": {
+    "regionLabel": "Active filters",
+    "active_count": "{count} active",
+    "remove_filter_named": "Remove filter {field}",
+    "clearAll": "Clear all",
+    "addFilter": "Add filter"
+  },
+  "columnMenu": {
+    "alwaysVisible": "Always visible in the table",
+    "apply": "Apply columns",
+    "clickToEdit": "click to edit",
+    "downSuffix": "down",
+    "dragToMove": "Drag to move",
+    "footerHint": "Column widths are also adjustable directly from the table header.",
+    "fromLeftSuffix": "from left",
+    "fromRightSuffix": "from right",
+    "headerDescription": "Configure the table surface before applying.",
+    "headerTitle": "Table columns",
+    "hiddenFromActions": "Hidden from the actions column",
+    "hiddenFromView": "Hidden from the current view",
+    "hiddenSuffix": "hidden",
+    "moveDown": "Move",
+    "moveUp": "Move",
+    "panelLabel": "Table columns",
+    "pinnedLeft": "Pinned left",
+    "pinnedRight": "Pinned right",
+    "pinToLeft": "Pin",
+    "pinToRight": "Pin",
+    "reset": "Reset",
+    "rowActionsDescription": "Choose which quick actions stay visible in the table.",
+    "rowActionsLabel": "Row actions",
+    "toLeftSuffix": "to left",
+    "toRightSuffix": "to right",
+    "triggerLabel": "Columns",
+    "unpinFromLeft": "Unpin",
+    "unpinFromRight": "Unpin",
+    "upSuffix": "up",
+    "visibleInActions": "Visible in the actions column",
+    "visibleInTable": "Visible in the table",
+    "visibleSuffix": "visible",
+    "widthPrefix": "Width"
+  },
+  "exportButton": {
+    "triggerLabel": "Export data",
+    "panelLabel": "Export formats",
+    "formatCsv": "Export as CSV",
+    "formatJson": "Export as JSON",
+    "formatClipboard": "Copy to clipboard",
+    "copied": "Copied!"
+  },
+  "scopeSwitcher": {
+    "groupLabel": "Scope"
+  },
+  "connectedCommandPalette": {
+    "commandsCategory": "Commands",
+    "emptyMessage": "No matching commands",
+    "globalCategory": "Global",
+    "helpCategory": "Help",
+    "keyboardShortcuts": "Keyboard shortcuts",
+    "keyboardShortcutsDescription": "View all keyboard shortcuts",
+    "placeholder": "Type a command or search...",
+    "shortcutsOverlayTitle": "Keyboard Shortcuts"
+  },
+  "fieldFiltersPanel": {
+    "activeSuffix": "active",
+    "allPrefix": "All",
+    "anyPrefix": "Any",
+    "appliesLive": "Applies live",
+    "quickSlices": "Quick slices",
+    "refineBy": "Refine by",
+    "subtitle": "Precision filters for the current slice.",
+    "title": "Advanced filters"
+  },
+  "selectionPreviewRail": {
+    "closePreview": "Close preview",
+    "copyKey": "Copy key",
+    "focusedPreview": "Focused preview",
+    "keyPrefix": "Key",
+    "matchReasonEyebrow": "Current search, scope, or filters matched this record.",
+    "no": "No",
+    "noData": "No data",
+    "openRecord": "Open record",
+    "rowPrefix": "Row",
+    "selectedRow": "Selected row",
+    "snapshotEmpty": "No preview fields are available for this record.",
+    "snapshotTitle": "Snapshot",
+    "whyThisRow": "Why this row?",
+    "yes": "Yes"
+  },
+  "savedViewsMenu": {
+    "columnsSuffix": "columns",
+    "copied": "Copied",
+    "copySuffix": "copy",
+    "current": "Current",
+    "custom": "Custom",
+    "customSuffix": "custom",
+    "customViewsSection": "Custom views",
+    "default": "Default",
+    "deletePrefix": "Delete",
+    "densitySuffix": "density",
+    "duplicate": "Duplicate",
+    "emptyDescription": "No custom scope, filters, or layout saved yet.",
+    "filterPlural": "filters",
+    "filterSingular": "filter",
+    "headerDescription": "Switch between curated workspace states without leaving the list.",
+    "headerTitle": "Saved views",
+    "noPersonaDescription": "Save the current slice or duplicate a system view to start a personal workspace.",
+    "noPersonaTitle": "No persona views yet",
+    "noViewsDescription": "Create curated filters and column layouts once save is wired for this workspace.",
+    "noViewsTitle": "No saved views yet",
+    "panelLabel": "Saved views",
+    "persona": "Persona",
+    "personaSuffix": "persona",
+    "personaViewsSection": "Persona views",
+    "queryPrefix": "Query",
+    "saveCurrent": "Save current",
+    "scopePrefix": "Scope",
+    "share": "Share",
+    "shareColumnsPrefix": "Columns",
+    "shareDensityPrefix": "Density",
+    "shareFiltersPrefix": "Filters",
+    "shareSortPrefix": "Sort",
+    "shareTypePrefix": "Type",
+    "shareViewPrefix": "Workspace view",
+    "sortedByPrefix": "Sorted by",
+    "system": "System",
+    "systemSuffix": "system",
+    "systemViewsSection": "System views",
+    "views": "Views"
+  },
+  "pageShell": {
+    "tabs": {
+      "label": "Page tabs"
+    }
+  },
+  "tabs": {
+    "previous": "Previous tabs",
+    "next": "Next tabs",
+    "more": "More tabs",
+    "loading": "Loading"
+  },
+  "viewModeSwitcher": {
+    "groupLabel": "View mode",
+    "disabledWithReason": "{label} (unavailable: {reason})"
   }
 }

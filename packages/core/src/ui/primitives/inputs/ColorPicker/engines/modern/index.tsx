@@ -125,6 +125,15 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
 
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [internalOpen, setInternalOpen] = useState(false);
+    /**
+     * Hex draft + validation: the text field lets the user type freely, but
+     * only a complete `#rgb`/`#rrggbb` commits to the value. An invalid draft
+     * stamps `data-invalid`/`aria-invalid` with a compact error message, and
+     * reverts to the committed value on Enter or blur instead of propagating
+     * a broken color to the swatch hatch.
+     */
+    const HEX_DRAFT_RE = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+    const [hexDraft, setHexDraft] = useState<string | null>(null);
 
     // Dual controlled/uncontrolled for both value and open state
     const isControlled = controlledValue !== undefined;
@@ -185,6 +194,31 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       onChange?.(color, hex);
     };
 
+    /** Commit a hex draft when it parses; otherwise keep editing. */
+    const commitHexDraft = (raw: string): boolean => {
+      if (HEX_DRAFT_RE.test(raw)) {
+        handleChange(raw.toLowerCase());
+        setHexDraft(null);
+        return true;
+      }
+      return false;
+    };
+
+    /** Enter commits valid drafts and reverts invalid ones to the live value. */
+    const handleHexKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key !== 'Enter') return;
+      if (!commitHexDraft((event.target as HTMLInputElement).value)) {
+        setHexDraft(null);
+      }
+    };
+
+    /** Blur commits valid drafts and reverts invalid ones to the live value. */
+    const handleHexBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+      if (!commitHexDraft(event.target.value)) {
+        setHexDraft(null);
+      }
+    };
+
     /** Resets value to empty string and closes the dropdown. */
     const handleClear = () => {
       handleChange('');
@@ -219,15 +253,6 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       }
     }, [internalValue, isControlled]);
 
-    /** Returns Tailwind size classes for the color swatch button. */
-    const getSizeClass = () => {
-      switch (size) {
-        case 'small': return 'w-6 h-6';
-        case 'large': return 'w-10 h-10';
-        default: return 'w-8 h-8';
-      }
-    };
-
     /** Resolves the text shown beside the swatch (hex, rgb, or custom formatter). */
     const getDisplayText = () => {
       if (!showText) return null;
@@ -251,23 +276,23 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
           else if (ref) ref.current = node;
         }}
         data-part="root"
-        className={`relative inline-block rottay-colorpicker rottay-colorpicker--modern ${className || ''}`}
+        className={`rottay-colorpicker rottay-colorpicker--modern ${className || ''}`}
         style={style}
       >
         {/* Trigger area: opens/closes dropdown on click or hover depending on `trigger` prop */}
         <div
           data-part="trigger"
-          className={`flex items-center gap-2 cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          data-disabled={disabled ? 'true' : undefined}
           onClick={() => !disabled && (trigger === 'click' ? handleOpenChange(!isOpen) : null)}
           onMouseEnter={() => !disabled && trigger === 'hover' && handleOpenChange(true)}
           onMouseLeave={() => !disabled && trigger === 'hover' && handleOpenChange(false)}
         >
           <div
             data-part="swatch"
-            className={`${getSizeClass()} rounded`}
+            data-size={size}
             style={{ '--ds-colorpicker-swatch-color': currentValue || 'var(--ds-color-white)' } as React.CSSProperties}
           />
-          {displayText && <span data-part="display-text" className="text-sm">{displayText}</span>}
+          {displayText && <span data-part="display-text">{displayText}</span>}
         </div>
 
         {isOpen && (
@@ -275,7 +300,10 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
             ref={dropdownRef}
             data-part="dropdown"
             data-edge={alignEdge}
-            className={`absolute z-50 mt-1 p-3 rounded-lg ${placement?.includes('top') ? 'bottom-full mb-1' : ''} ${alignEdge === 'end' ? 'end-0' : ''}`}
+            data-placement={placement}
+            // Placement/edge classes stay inline: the engine tests pin
+            // `bottom-full` (top placement) and `end-0` (edge collision).
+            className={`${placement?.includes('top') ? 'bottom-full mb-1' : ''} ${alignEdge === 'end' ? 'end-0' : ''}`}
           >
             {/* Color input */}
             <input
@@ -283,47 +311,47 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
               data-part="native-color-input"
               value={currentValue}
               onChange={(e) => handleChange(e.target.value)}
-              className="w-full cursor-pointer border-0"
               style={{ height: 'var(--ds-color-picker-height, 10rem)' }}
               disabled={disabled}
               aria-label={colorPickerLabel('colorpicker.chooseColor', 'Choose color')}
             />
 
             {/* Hex input */}
-            <div className="mt-2">
+            <div data-part="hex-field">
               <input
                 type="text"
                 data-part="hex-input"
-                value={currentValue}
-                onChange={(e) => handleChange(e.target.value)}
-                className="w-full"
-                style={{
-                  padding: '4px var(--ds-input-sm-padding-x, 10px)',
-                  fontSize: 'var(--ds-input-sm-font-size, 13px)',
-                  height: 'var(--ds-input-sm-height, 32px)',
-                  boxSizing: 'border-box',
-                }}
+                data-invalid={hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft) ? 'true' : undefined}
+                value={hexDraft ?? currentValue}
+                onChange={(e) => setHexDraft(e.target.value)}
+                onKeyDown={handleHexKeyDown}
+                onBlur={handleHexBlur}
                 placeholder="#000000"
                 disabled={disabled}
                 aria-label={colorPickerLabel('colorpicker.hexLabel', 'Hex color')}
+                aria-invalid={hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft) || undefined}
               />
+              {hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft) && (
+                <span data-part="hex-error" role="alert">
+                  {colorPickerLabel('colorpicker.invalidHex', 'Enter a valid hex color (e.g. #1677ff)')}
+                </span>
+              )}
             </div>
 
             {/* Presets */}
             {presets && presets.length > 0 && (
-              <div className="mt-3 pt-3">
+              <div data-part="presets">
                 {presets.map((preset, idx) => (
-                  <div key={idx} data-part="preset-group" className="mb-2">
+                  <div key={idx} data-part="preset-group">
                     {preset.label && (
-                      <div data-part="preset-label" className="text-xs mb-1">{preset.label}</div>
+                      <div data-part="preset-label">{preset.label}</div>
                     )}
-                    <div className="flex flex-wrap gap-1">
+                    <div data-part="preset-row">
                       {preset.colors.map((color) => (
                         <button
                           key={color}
                           type="button"
                           data-part="preset-swatch"
-                          className="w-5 h-5 rounded cursor-pointer hover:scale-110 transition-transform"
                           style={{ '--ds-colorpicker-preset-color': color } as React.CSSProperties}
                           aria-label={colorPickerLabel('colorpicker.selectColor', `Select color ${color}`, { color })}
                           onClick={() => handleChange(color)}
@@ -338,11 +366,10 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
 
             {/* Actions */}
             {allowClear && (
-              <div className="mt-2 pt-2">
+              <div data-part="clear-field">
                 <button
                   type="button"
                   data-part="clear-button"
-                  style={{ height: 'var(--ds-input-sm-height, 32px)', padding: '0 var(--ds-input-sm-padding-x, 10px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', cursor: 'pointer' }}
                   onClick={handleClear}
                   disabled={disabled}
                 >

@@ -167,10 +167,10 @@ describe('Modal advanced engine coverage', () => {
     // Sizing stays inline (viewport-derived); the fullscreen radius override is the
     // skin's, keyed on the state attribute the engine stamps.
     const modalBox = dialog.querySelector('[role="document"]') as HTMLDivElement;
-    expect(modalBox).toHaveStyle({
+    expect(dialog).toHaveStyle({
       width: '100vw',
-      maxWidth: 'none',
-      maxHeight: 'none',
+      maxWidth: '100vw',
+      maxHeight: '100vh',
     });
     expect(modalBox.getAttribute('data-fullscreen')).toBe('true');
 

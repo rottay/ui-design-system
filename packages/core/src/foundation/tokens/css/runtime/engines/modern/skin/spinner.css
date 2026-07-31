@@ -11,8 +11,9 @@
  *
  * OWNERSHIP: ring diameter and stroke per `data-size`, the spin cadence and
  * the label typography all live here — the engine stamps no inline style.
- * The cadence rides --ds-motion-slow, which the motion authority zeroes under
- * reduced motion; the explicit media guard below is the second net.
+ * The cadence rides --ds-spinner-duration (default: two --ds-motion-slow
+ * rungs), which the motion authority zeroes under reduced motion; the
+ * explicit media guard below is the second net.
  *
  * SPECIFICITY (P-48): the ring paints a border COLOR (track + colored head),
  * so its rule reaches (0,4,0) via the two root classes + the repeated
@@ -43,44 +44,71 @@
 
 .rottay-spinner.rottay-spinner--modern [data-part='indicator'][data-part='indicator'] {
   display: inline-block;
-  border: var(--ds-spinner-ring-width, 2px) solid var(--ds-color-border);
-  border-top-color: var(--ds-color-primary);
+  border: var(--_ds-spinner-ring-width, 2px) solid
+    var(--ds-spinner-track-color, var(--ds-color-border));
+  border-top-color: var(--ds-spinner-color, var(--ds-color-primary));
   /* A soft second segment gives the sweep premium depth instead of a flat
      single-pixel head. Logical, so the resting arc mirrors under RTL. */
-  border-inline-end-color: color-mix(in srgb, var(--ds-color-primary) 45%, var(--ds-color-border));
+  border-inline-end-color: var(
+    --ds-spinner-segment-color,
+    color-mix(
+      in srgb,
+      var(--ds-spinner-color, var(--ds-color-primary)) 45%,
+      var(--ds-spinner-track-color, var(--ds-color-border))
+    )
+  );
   border-radius: 50%;
-  animation: ds-spinner-modern-spin var(--ds-motion-slow) linear infinite;
+  /* A full 360deg sweep must stay linear (easing a closed loop reads as a
+     wobble); the non-mechanical feel comes from the two-segment arc. The
+     cadence defaults to two --ds-motion-slow rungs, so the motion
+     authority's reduced-motion zeroing still propagates. */
+  animation: ds-spinner-modern-spin
+    var(--ds-spinner-duration, calc(var(--ds-motion-slow) * 2))
+    var(--ds-spinner-spin-easing, linear) infinite;
 }
 
-/* Ring geometry per size: diameter + stroke, both tenant-tunable. */
-.rottay-spinner.rottay-spinner--modern[data-size='sm'] [data-part='indicator'][data-part='indicator'] {
+/* Ring geometry per size: diameter + stroke, both tenant-tunable. Stroke
+   stays ~1:10 of the diameter — neither thread nor donut. */
+.rottay-spinner.rottay-spinner--modern[data-size='sm'] [data-part='indicator'][role='status'] {
   inline-size: var(--ds-spinner-sm-size, 20px);
   block-size: var(--ds-spinner-sm-size, 20px);
-  --ds-spinner-ring-width: 2px;
+  --_ds-spinner-ring-width: var(--ds-spinner-sm-ring-width, 2px);
 }
-.rottay-spinner.rottay-spinner--modern[data-size='md'] [data-part='indicator'][data-part='indicator'] {
+.rottay-spinner.rottay-spinner--modern[data-size='md'] [data-part='indicator'][role='status'] {
   inline-size: var(--ds-spinner-md-size, 24px);
   block-size: var(--ds-spinner-md-size, 24px);
-  --ds-spinner-ring-width: 2px;
+  --_ds-spinner-ring-width: var(--ds-spinner-md-ring-width, 2px);
 }
-.rottay-spinner.rottay-spinner--modern[data-size='lg'] [data-part='indicator'][data-part='indicator'] {
+.rottay-spinner.rottay-spinner--modern[data-size='lg'] [data-part='indicator'][role='status'] {
   inline-size: var(--ds-spinner-lg-size, 32px);
   block-size: var(--ds-spinner-lg-size, 32px);
-  --ds-spinner-ring-width: 3px;
+  --_ds-spinner-ring-width: var(--ds-spinner-lg-ring-width, 3px);
 }
-.rottay-spinner.rottay-spinner--modern[data-size='xl'] [data-part='indicator'][data-part='indicator'] {
+.rottay-spinner.rottay-spinner--modern[data-size='xl'] [data-part='indicator'][role='status'] {
   inline-size: var(--ds-spinner-xl-size, 40px);
   block-size: var(--ds-spinner-xl-size, 40px);
-  --ds-spinner-ring-width: 3px;
+  --_ds-spinner-ring-width: var(--ds-spinner-xl-ring-width, 3px);
 }
 
 .rottay-spinner.rottay-spinner--modern [data-part='label'] {
-  color: var(--ds-color-text-secondary);
+  color: var(--ds-spinner-label-color, var(--ds-color-text-secondary));
   font-size: var(--ds-spinner-label-size, var(--ds-font-size-sm, 14px));
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-spinner.rottay-spinner--modern [data-part='indicator'][data-part='indicator'] {
+  .rottay-spinner.rottay-spinner--modern [data-part='indicator'][role='status'] {
     animation: none;
+  }
+}
+
+/* forced-colors strips the border colors to a single system ink, which would
+   flatten track and head into an indistinguishable ring. No opt-out: the
+   sweep is re-expressed with system colors only — GrayText track with a
+   Highlight head keeps the arc perceivable inside the forced palette. */
+@media (forced-colors: active) {
+  .rottay-spinner.rottay-spinner--modern [data-part='indicator'][role='status'] {
+    border-color: GrayText;
+    border-top-color: Highlight;
+    border-inline-end-color: GrayText;
   }
 }

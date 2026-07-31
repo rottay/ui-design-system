@@ -114,9 +114,10 @@
   }
 }
 
-@media (forced-colors: active) {
-  .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='required-mark'],
-  .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='error-message'] {
-    color: MarkText;
-  }
-}
+/* Forced colors: the forced palette already re-maps every text ink to
+   CanvasText; the semantic signal travels by SHAPE (the required asterisk,
+   the error message text, aria-invalid) — never by hue. This block
+   deliberately declares nothing: the previous `color: MarkText` mapping was
+   dropped because MarkText only guarantees contrast AGAINST a Mark
+   background, which this anatomy does not paint (on a dark Canvas the
+   required mark and error text could go invisible). */

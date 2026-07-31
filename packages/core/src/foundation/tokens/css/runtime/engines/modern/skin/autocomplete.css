@@ -37,7 +37,17 @@
   }
 }
 
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] {
+  position: relative;
+}
+
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input-wrapper'] {
+  position: relative;
+}
+
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input'] {
+  inline-size: 100%;
+  box-sizing: border-box;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
   background: var(--ds-color-bg-input);
@@ -47,8 +57,10 @@
     border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:where(:hover):not(:disabled) {
-  border-color: var(--ds-autocomplete-border-hover, var(--ds-color-border-hover));
+@media (hover: hover) {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:where(:hover):not(:disabled) {
+    border-color: var(--ds-autocomplete-border-hover, var(--ds-color-border-hover));
+  }
 }
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:focus-visible {
   border-color: var(--ds-autocomplete-border-focus, var(--ds-color-primary));
@@ -64,39 +76,63 @@
 }
 
 /* Clear button: positioning drained from the physical `right-2 top-1/2
-   -translate-y-1/2` utilities -- logical, RTL-free. */
+   -translate-y-1/2` utilities -- logical, RTL-free. Geometry drained from the
+   inline style (24px square, inline-flex centering). */
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button'] {
   position: absolute;
   inset-inline-end: var(--ds-spacing-2, 8px);
   inset-block-start: 50%;
   transform: translateY(-50%);
+  inline-size: var(--ds-autocomplete-clear-size, 24px);
+  block-size: var(--ds-autocomplete-clear-size, 24px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
   background: transparent;
   color: var(--ds-color-text-primary);
   border: none;
   border-radius: 50%;
   transition: color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button']:hover {
-  color: var(--ds-color-error);
+@media (hover: hover) {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button']:hover {
+    color: var(--ds-color-error);
+  }
 }
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button']:focus-visible {
   outline: none;
   box-shadow: var(--ds-autocomplete-shadow-focus, var(--ds-shadow-focus-ring));
 }
 
-/* Dropdown: geometry drained from the inline style. */
+/* Dropdown: geometry drained from the inline style. z rides the token scale
+   (pre-flag 7): dropdown tier, not a magic 50. The dark-aware luminance step
+   is its own layer directly above the fill (lane overlay register). */
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='dropdown'] {
   position: absolute;
   inset-inline: 0;
-  z-index: var(--ds-autocomplete-dropdown-z, 50);
+  z-index: var(--ds-autocomplete-dropdown-z, var(--ds-z-index-dropdown, 1000));
   margin: 0;
   margin-block-start: var(--ds-spacing-1, 4px);
   padding: var(--ds-spacing-1, 4px);
   max-block-size: var(--ds-autocomplete-dropdown-max-height, 240px);
   overflow-y: auto;
   list-style: none;
+  /* Quiet scrollport: thin scrollbar + luminance mask fade at both edges
+     (TimePicker precedent). */
+  scrollbar-width: var(--ds-autocomplete-dropdown-scrollbar-width, thin);
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    black var(--ds-spacing-2, 8px),
+    black calc(100% - var(--ds-spacing-2, 8px)),
+    transparent
+  );
   border-radius: var(--ds-radius-lg);
-  background: var(--ds-surface-card);
+  background:
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-surface-card);
   border: 1px solid var(--ds-color-border-subtle);
   box-shadow: var(--ds-elevation-2);
   animation: ds-autocomplete-slide-in var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
@@ -122,7 +158,11 @@
   white-space: nowrap;
   transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:where(:hover):not([data-disabled='true']),
+@media (hover: hover) {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:where(:hover):not([data-disabled='true']) {
+    background: var(--ds-color-bg-hover);
+  }
+}
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-active='true'] {
   background: var(--ds-color-bg-hover);
 }
@@ -136,6 +176,8 @@
 }
 
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='empty'] {
+  padding: var(--ds-spacing-2, 8px);
+  text-align: center;
   color: var(--ds-color-text-secondary);
 }
 
@@ -157,5 +199,25 @@
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'],
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button'] {
     transition: none;
+  }
+}
+
+/* Forced colors (system colors only): the active option reads as a system
+   selection; focus rings re-map to Highlight outlines (box-shadows are
+   dropped); disabled options read GrayText. */
+@media (forced-colors: active) {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-active='true'] {
+    background: Highlight;
+    color: HighlightText;
+  }
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:focus-visible,
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:focus-visible,
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+    box-shadow: none;
+  }
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+    color: GrayText;
   }
 }

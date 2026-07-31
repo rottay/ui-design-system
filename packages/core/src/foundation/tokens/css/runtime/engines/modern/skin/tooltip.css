@@ -69,7 +69,7 @@
   );
   --ds-tooltip-arrow-half-size-current: var(
     --ds-tooltip-arrow-half-size,
-    0.25rem
+    calc(var(--ds-tooltip-arrow-size, 0.375rem) / 2)
   );
   --ds-tooltip-closed-transform: translateY(
       var(--ds-tooltip-motion-distance, 0.1875rem)
@@ -539,6 +539,12 @@
 
 .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"]
   > [data-part="arrow"][data-part="arrow"] {
+  /* Geometry contract: the square is centered with HALF ITS OWN SIZE
+     (`--ds-tooltip-arrow-half-size-current`, default size/2) so the tracked
+     clamp and the centered placements land the tip exactly on the anchor
+     center; the seam overlap is a separate channel
+     (`--ds-tooltip-arrow-tip-length`, ≈ size·√2/2) so centering corrections
+     never reopen the seam. */
   position: absolute;
   z-index: 0;
   inline-size: var(--ds-tooltip-arrow-size, 0.375rem);
@@ -562,7 +568,7 @@
   > [data-part="arrow"] {
   inset-block-end: var(
     --ds-tooltip-arrow-overlap,
-    calc(0px - var(--ds-tooltip-arrow-half-size-current))
+    calc(0px - var(--ds-tooltip-arrow-tip-length, 0.25rem))
   );
   inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size-current));
   border-block-start: 0;
@@ -573,7 +579,7 @@
   > [data-part="arrow"] {
   inset-block-start: var(
     --ds-tooltip-arrow-overlap,
-    calc(0px - var(--ds-tooltip-arrow-half-size-current))
+    calc(0px - var(--ds-tooltip-arrow-tip-length, 0.25rem))
   );
   inset-inline-start: calc(50% - var(--ds-tooltip-arrow-half-size-current));
   border-block-end: 0;
@@ -585,7 +591,7 @@
   inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size-current));
   inset-inline-end: var(
     --ds-tooltip-arrow-overlap,
-    calc(0px - var(--ds-tooltip-arrow-half-size-current))
+    calc(0px - var(--ds-tooltip-arrow-tip-length, 0.25rem))
   );
   border-block-end: 0;
   border-inline-start: 0;
@@ -596,7 +602,7 @@
   inset-block-start: calc(50% - var(--ds-tooltip-arrow-half-size-current));
   inset-inline-start: var(
     --ds-tooltip-arrow-overlap,
-    calc(0px - var(--ds-tooltip-arrow-half-size-current))
+    calc(0px - var(--ds-tooltip-arrow-tip-length, 0.25rem))
   );
   border-block-start: 0;
   border-inline-end: 0;

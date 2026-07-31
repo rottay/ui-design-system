@@ -123,6 +123,13 @@
   min-inline-size: min(
     var(--ds-popover-min-width, 12rem),
     calc(
+      100vw - var(--ds-popover-viewport-gap, 0.75rem) -
+        var(--ds-popover-viewport-gap, 0.75rem)
+    )
+  );
+  min-inline-size: min(
+    var(--ds-popover-min-width, 12rem),
+    calc(
       100dvi - var(--ds-popover-viewport-gap, 0.75rem) -
         var(--ds-popover-viewport-gap, 0.75rem)
     )
@@ -475,6 +482,9 @@
   overflow: auto;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
+  /* quiet scrollbar: thin track alongside the stable gutter, so long content
+     scrolls without chrome weight (list-toolbar precedent) */
+  scrollbar-width: var(--ds-popover-body-scrollbar-width, thin);
   color: var(--ds-popover-content-color, var(--ds-popover-muted-ink));
   font: var(
     --ds-popover-body-type,

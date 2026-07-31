@@ -64,9 +64,12 @@
 }
 
 /* ---- interaction: consolidated verbatim from the drained theme.css `.btn`
-        hover/press/focus rules (K4-C) ---- */
-.rottay-float-button.rottay-float-button--modern[data-part='trigger']:hover:not(:disabled) {
-  transform: var(--ds-button-hover-transform, translateY(0) scale(1));
+        hover/press/focus rules (K4-C). Hover is hover-capable-only (4th-wave
+        law); the press rule below is the real :active equivalent. ---- */
+@media (hover: hover) {
+  .rottay-float-button.rottay-float-button--modern[data-part='trigger']:hover:not(:disabled) {
+    transform: var(--ds-button-hover-transform, translateY(0) scale(1));
+  }
 }
 .rottay-float-button.rottay-float-button--modern[data-part='trigger']:active:not(:disabled) {
   transform: var(--ds-button-active-transform, scale(0.98));
@@ -136,4 +139,80 @@
   line-height: var(--ds-floatbutton-badge-line-height, 16px);
   border-radius: 9999px;
   color: var(--ds-color-text-on-primary);
+}
+
+/* ---- description text (was the engine's `text-xs` utility). ---- */
+.rottay-float-button--modern [data-part='description'] {
+  font-size: var(--ds-font-size-xs, 0.75rem);
+}
+
+/* ---- Group root: fixed placement (the engine keeps ONLY the pinned logical
+        `end-6` inline-offset class). The block offset rides the spacing ramp
+        plus the safe-area gutter (sheet.css precedent), and the z rides the
+        family-local channel. `flex-col-reverse` keeps the trigger at the
+        visual bottom so items expand upward. ---- */
+.rottay-float-button--modern[data-part='root'] {
+  position: fixed;
+  inset-block-end: calc(
+    var(--ds-floatbutton-offset-block-end, var(--ds-spacing-6))
+    + env(safe-area-inset-bottom, 0px)
+  );
+  z-index: var(--ds-z-floatbutton, 1000);
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: var(--ds-spacing-2, 0.5rem);
+}
+
+/* ---- BackTop trigger: same fixed placement, keyed on its data-placement. ---- */
+.rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-placement='back-top'] {
+  position: fixed;
+  inset-block-end: calc(
+    var(--ds-floatbutton-offset-block-end, var(--ds-spacing-6))
+    + env(safe-area-inset-bottom, 0px)
+  );
+  z-index: var(--ds-z-floatbutton, 1000);
+}
+
+/* ---- Group panel: layout + the open/close motion (was `flex flex-col
+        items-center gap-2 transition-all duration-200`). The opacity/translate
+        VALUES stay pinned on the engine's class toggle; only the cadence
+        lives here, on canonical rungs. ---- */
+.rottay-float-button--modern [data-part='panel'] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-spacing-2, 0.5rem);
+  transition:
+    opacity var(--ds-floatbutton-panel-duration, var(--ds-motion-normal))
+      var(--ds-floatbutton-panel-timing, var(--ds-motion-ease-out)),
+    transform var(--ds-floatbutton-panel-duration, var(--ds-motion-normal))
+      var(--ds-floatbutton-panel-timing, var(--ds-motion-ease-out));
+}
+
+/* ---- reduced motion: panel opens instantly. ---- */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-float-button--modern [data-part='panel'] {
+    transition: none;
+  }
+}
+
+/* ---- forced colors: the trigger must keep a visible frame when its fill is
+        stripped, and badges re-express in system colors. ---- */
+@media (forced-colors: active) {
+  .rottay-float-button.rottay-float-button--modern[data-part='trigger'] {
+    border: 1px solid ButtonText;
+    forced-color-adjust: auto;
+  }
+
+  .rottay-float-button.rottay-float-button--modern[data-part='trigger']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+
+  .rottay-float-button--modern [data-part='badge'] {
+    background: ButtonText;
+    color: ButtonFace;
+  }
 }

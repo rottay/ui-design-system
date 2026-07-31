@@ -118,7 +118,16 @@
   line-height: var(--ds-line-height-2xl, 2rem);
 }
 .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'][data-trend='positive'] {
-  color: var(--ds-statistic-positive-color, var(--ds-color-success));
+  /* Same law as the warning trend below: raw success fails even large-text AA
+     on the governed light sources (rottay #22C55E = 2.28:1, under the 3:1
+     large bar). The fallback ink deepens with the Tag contrast-law mix
+     (success 60% toward the tenant-safe dark neutral ramp, measured 5.6:1
+     rottay / 7.5:1 bithire); an explicit `--ds-statistic-positive-color`
+     stays raw. */
+  color: var(
+    --ds-statistic-positive-color,
+    color-mix(in srgb, var(--ds-color-success) 60%, var(--ds-color-neutral-900, #171717) 40%)
+  );
 }
 .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'][data-trend='negative'] {
   color: var(--ds-statistic-negative-color, var(--ds-color-error));
@@ -127,12 +136,13 @@
   /* CONTRAST LAW (K3-A Pass 2, axe color-contrast/serious on bithire): the
      raw semantic warning fails even large-text AA on the tinted surface
      (bithire #D6A04E = 2.19:1 on #F4F8FB; TMM's darker #8A6B00 = 4.66:1
-     passes raw and only deepens here). The ink deepens 40% toward black,
-     deriving from the tenant's own resolved hue -- no ramp lookup (measured
-     worst source: bithire 60% = 5.41:1, clears normal-text AA too). */
+     passes raw and only deepens here). The ink deepens 40% toward the
+     tenant-safe dark neutral ramp (`--ds-color-neutral-900`), deriving from
+     the tenant's own resolved hue -- no ramp lookup (measured worst source:
+     bithire 60% = 5.41:1, clears normal-text AA too). */
   color: var(
     --ds-statistic-warning-color,
-    color-mix(in srgb, var(--ds-color-warning) 60%, var(--ds-color-black, #000) 40%)
+    color-mix(in srgb, var(--ds-color-warning) 60%, var(--ds-color-neutral-900, #171717) 40%)
   );
 }
 
@@ -187,5 +197,37 @@
 @media (prefers-reduced-motion: reduce) {
   .rottay-statistic.rottay-statistic--modern[data-part='root'] {
     transition: none;
+  }
+
+  /* The hover lift/saturate must not fire instantly either (calm frame law),
+     and the loading pulse settles to a static bar (the global guard covers
+     it too -- this rule keeps the family self-contained). */
+  .rottay-statistic.rottay-statistic--modern[data-part='root'][data-loading='false']:hover {
+    transform: none;
+    filter: none;
+  }
+  .rottay-statistic.rottay-statistic--modern[data-part='root'][data-loading='true'] {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  /* The value/title are text (auto-forced); the affix chips and the skeleton
+     bars re-assert in system colors so the anatomy stays readable. Trend
+     polarity survives only where the consumer wrote it (sign, copy) -- hue
+     alone never carried it. */
+  .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='title'],
+  .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'] {
+    color: CanvasText;
+  }
+  .rottay-statistic.rottay-statistic--modern[data-part='root'][data-has-prefix='true'] > [data-part='value'] > [data-part='prefix'],
+  .rottay-statistic.rottay-statistic--modern[data-part='root'][data-has-suffix='true'] > [data-part='value'] > [data-part='suffix'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='skeleton-line'] {
+    background: GrayText;
+    box-shadow: none;
   }
 }

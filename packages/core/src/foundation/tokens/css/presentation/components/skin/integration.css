@@ -1,9 +1,54 @@
-/** IntegrationSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+/**
+ * IntegrationSurface skin (WO-SKIN-06 / CK-I; SU05 wave 2026-07-30).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
+ *
+ * SCOPE: the surface composes PageShellSurface, Card, Tabs, Tag, Button,
+ * Typography and the shared state kits — each owns its own chrome, states
+ * and forced-colors treatment. Former paints were deliberately routed AWAY
+ * from this file, to the owner that already paints the concern:
+ *   - every text ink/size/weight/family (the old inline fontSize/fontWeight/
+ *     fontFamily drains) moved to the Typography primitive channels
+ *     (`size`/`weight`/`color`/`monospace`/`numeric` props — typography.css
+ *     sorts in `rottay-engines`, after this layer, so a skin rule for them
+ *     would lose anyway); the muted ink rule retired with them
+ *     (`color="muted"` carries it now);
+ *   - tabular figures on dates moved to the Typography `numeric` channel.
+ * What remains is the paint the surface itself owns: the row rhythm of the
+ * key/webhook/app lists (separators + block padding) and wrap resilience for
+ * secrets and endpoint URLs, which are long unbroken strings that must wrap
+ * instead of overflowing the row at narrow widths.
+ *
+ * SPECIFICITY: anatomy class + at most one always-stamped attribute. The
+ * doubled `[data-part='root'][data-part='root']` and
+ * `.ds-integration__divider.ds-integration__divider` selectors are gone
+ * (4th-tanda owner directive: no repetition — Text always stamps
+ * `data-part='root'`, and the divider class is unique per row). The divider
+ * row is a Flex (stamps no data-part), so its rules key on the anatomy
+ * class alone inside the surface scope.
+ *
+ * FORCED-COLORS: the one surface-owned structural paint (row separators)
+ * re-keys to a system color; text inks come from the Typography color
+ * channel and every composed part handles its own.
+ */
 
-.ds-surface.ds-integration .ds-integration__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+.ds-surface.ds-integration .ds-integration__divider {
+  padding-block: var(--ds-spacing-2, 8px);
 }
 
-.ds-surface.ds-integration .ds-integration__divider.ds-integration__divider {
-  border-bottom: 1px solid var(--ds-color-border);
+.ds-surface.ds-integration .ds-integration__divider:not(:last-child) {
+  border-block-end: 1px solid var(--ds-color-border, #1c1c20);
+}
+
+.ds-surface.ds-integration .ds-integration__secret[data-part='root'],
+.ds-surface.ds-integration .ds-integration__endpoint[data-part='root'] {
+  overflow-wrap: anywhere;
+}
+
+@media (forced-colors: active) {
+  .ds-surface.ds-integration .ds-integration__divider:not(:last-child) {
+    border-block-end-color: GrayText;
+  }
 }

@@ -7,14 +7,19 @@
  * panels and field renderers.
  *
  * @remarks
- * Premium polish integrates personality tokens (entrance animation, card
- * variant, section spacing) so every product profile gets a cohesive
- * settings experience without per-instance configuration.
+ * Composition: PageShellSurface chrome + Tabs + Card + shared state kits
+ * (loading skeleton, empty, error with retry). Visible copy resolves through
+ * `tSurfaceOr` under `surfaces.settings.*` with an English floor, and visual
+ * defaults cascade config -> product profile -> DS defaults via
+ * `useSurfaceProfileDefaultsWithOverrides` (entrance animation, card variant,
+ * section spacing, density).
  */
 
 import React from 'react';
 import { Card, Grid, Stack, Tabs, Text } from '../../../../../primitives';
 import { FadeIn } from '@/graphics/motion';
+import { NavigationSettingsIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-settings';
+import { densityScopeAttributes } from '@/infrastructure/runtime/foundation/density';
 import { filterSurfaceTabbedViews } from '../../../../runtime/helpers';
 import type { SettingsSurfaceConfig } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
@@ -22,14 +27,23 @@ import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/prof
 import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import {
   resolveStackSpacing,
-  resolveHeadingFontWeight,
   SurfaceAccentBarWrapper,
 } from '../../../../runtime/profile-defaults/personality';
 import { SurfaceActionBar, SurfaceTabbedLabel } from '../../../../runtime/helpers/rendering';
+import {
+  SurfaceEmptyState,
+  SurfaceErrorState,
+  SurfaceLoadingSkeleton,
+} from '../../../../runtime/helpers/states';
+import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 
 export interface SettingsSurfaceProps {
   config: SettingsSurfaceConfig;
   loading?: boolean;
+  /** Load/render failure surfaced as an error state (ListSurface prop precedent). */
+  error?: unknown;
+  /** Retry handler rendered inside the error state when provided. */
+  onRetry?: () => void | Promise<void>;
 }
 
 function isEmptyTabLabel(label: React.ReactNode): boolean {
@@ -44,12 +58,19 @@ function isEmptyTabLabel(label: React.ReactNode): boolean {
 export function SettingsSurface({
   config,
   loading = false,
+  error,
+  onRetry,
 }: SettingsSurfaceProps): React.ReactElement {
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
-  const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
+  const { shouldStack, isMobile } = useSurfaceResponsiveLayout(config.visual);
+  const { tSurfaceOr } = useSurfaceTranslations();
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
-  const headingWeight = resolveHeadingFontWeight(profileDefaults.headerWeight);
+  const isCompact = profileDefaults.density === 'compact';
   const actionsNode = <SurfaceActionBar actions={config.behavior.actions} access={config.access} />;
+  const chrome = {
+    ...config.presentation.chrome,
+    maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
+  };
 
   // Permission-filtered tabs prevent users from seeing settings categories
   // they cannot access, avoiding "access denied" dead ends inside the page.
@@ -71,17 +92,27 @@ export function SettingsSurface({
   const contentFrame = config.presentation.contentFrame ?? 'auto';
   const shouldRenderContentCard =
     contentFrame === 'card' || (contentFrame === 'auto' && !shouldUnboxTabs);
+  const hasVisibleTabs = visibleTabs.length > 0;
+  const resolvedView = !hasVisibleTabs ? 'empty' : shouldUnboxTabs ? 'single' : 'tabs';
+
+  // Error keeps the real page chrome and action bar so a retry never loses
+  // context (ListSurface precedent). The shared contract stays untouched:
+  // error/onRetry arrive as component props, like ListSurface/AuditSurface.
+  if (error) {
+    return (
+      <PageShellSurface chrome={chrome} actions={actionsNode} loading={false}>
+        <SurfaceErrorState error={error} onRetry={onRetry} />
+      </PageShellSurface>
+    );
+  }
 
   const renderTabContent = (tab: (typeof visibleTabs)[number]) => (
     <Stack spacing={sectionSpacing}>
       {tab.description && (
-        <Text
-          className="ds-settings__muted-text"
-          size="sm"
-          style={{
-            lineHeight: 1.5,
-          }}
-        >
+        // The muted ink rides the Typography `color` channel; the class is the
+        // pinned anatomy hook (SurfacesLongTailBatch) and stays as a pure
+        // landing target — no skin paint attached to it anymore.
+        <Text className="ds-settings__muted-text" size="sm" color="muted">
           {tab.description}
         </Text>
       )}
@@ -106,16 +137,29 @@ export function SettingsSurface({
     />
   );
 
-  const contentBody = (
+  /*
+    Loading keeps the real page chrome and renders a form-shaped body skeleton
+    inside the same card frame the loaded content uses: PatternPageShell's
+    `loading` early return never renders children, so a structural skeleton can
+    only exist here. Row count scales with density to mirror the final
+    sections footprint and avoid layout shift. The sidebar is a presentation
+    slot (like the chrome), so it stays mounted while the body skeletonizes.
+  */
+  const contentBody = loading ? (
+    <SurfaceLoadingSkeleton rows={isCompact ? 8 : 5} />
+  ) : !hasVisibleTabs ? (
+    <SurfaceEmptyState
+      title={tSurfaceOr('settings.empty_title', 'No settings sections')}
+      description={tSurfaceOr(
+        'settings.empty_description',
+        'There are no settings sections available.'
+      )}
+      icon={<NavigationSettingsIcon decorative size={32} />}
+    />
+  ) : (
     <Stack spacing={sectionSpacing}>
       {config.presentation.intro && (
-        <Text
-          className="ds-settings__muted-text"
-          size="sm"
-          style={{
-            lineHeight: 1.6,
-          }}
-        >
+        <Text className="ds-settings__muted-text" size="sm" color="muted">
           {config.presentation.intro}
         </Text>
       )}
@@ -146,6 +190,12 @@ export function SettingsSurface({
   const settingsContent = (
     <Grid
       className={`ds-surface ds-settings ds-settings--${shouldStack ? 'stacked' : 'wide'}`}
+      data-part="root"
+      data-view={resolvedView}
+      data-mobile={isMobile ? 'true' : 'false'}
+      data-loading={loading ? 'true' : 'false'}
+      {...densityScopeAttributes(profileDefaults.density)}
+      aria-busy={loading}
       columns={config.presentation.sidebar && !shouldStack ? 12 : 1}
       gap="lg"
     >
@@ -155,13 +205,13 @@ export function SettingsSurface({
 
       {config.presentation.sidebar && (
         <Grid.Item span={!shouldStack ? 4 : undefined}>
-          <Card
-            variant={profileDefaults.cardVariant}
-            style={{
-              position: shouldStack ? undefined : 'sticky',
-              top: shouldStack ? undefined : 16,
-            }}
-          >
+          {/*
+            Sticky offset lives in the skin, keyed on the always-stamped
+            `--wide` root modifier — never inline geometry. The slot content is
+            caller-owned, so the surface stamps no landmark role over it; a
+            caller rendering section navigation here owns its own `nav`.
+          */}
+          <Card className="ds-settings__sidebar" variant={profileDefaults.cardVariant}>
             <Card.Body>{config.presentation.sidebar}</Card.Body>
           </Card>
         </Grid.Item>
@@ -171,12 +221,9 @@ export function SettingsSurface({
 
   return (
     <PageShellSurface
-      chrome={{
-        ...config.presentation.chrome,
-        maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
-      }}
+      chrome={chrome}
       actions={actionsNode}
-      loading={loading}
+      loading={false}
     >
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
         {profileDefaults.animateEntrance ? (

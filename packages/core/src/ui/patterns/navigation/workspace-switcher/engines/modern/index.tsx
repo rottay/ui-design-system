@@ -5,17 +5,24 @@
  * Renders a workspace picker: a Button trigger and a listbox panel with rich
  * rows (avatar, name + active check, metadata, unread Badge, settings gear).
  *
- * COMPOSITION LAW (Lote 2): the trigger, the per-row settings gear and the
- * create action are the public Button primitive; the unread counter is the
- * public Badge primitive (caller `data-part` wins the root anatomy hook per
- * P-79, so `workspace-switcher.css` owns their paint). The raw `<button>`
- * elements are gone and their inline geometry moved to the skin. The panel
- * stays a pattern-owned `role="listbox"`: its rows carry avatar + metadata +
- * badge + settings, which the Dropdown primitive's label+icon menu items
- * cannot express — the keyboard contract (ArrowUp/Down virtual focus, Enter
- * selects, Escape dismisses) and the click-outside dismissal are preserved
- * verbatim. The active row's former LEFT ACCENT (`border-l-[3px]`) is
- * replaced by the skin's framed-surface treatment (product law).
+ * COMPOSITION LAW (Lote 2; PT28 uplift): the trigger, the per-row settings
+ * gear and the create action are the public Button primitive; the unread
+ * counter is the public Badge primitive (caller `data-part` wins the root
+ * anatomy hook per P-79, so `workspace-switcher.css` owns their paint);
+ * workspace/user AVATARS are the public Avatar primitive (the hand-rolled
+ * initials helper and the `avatar-fallback` paint are retired, and with
+ * them the `--ds-workspace-switcher-avatar-font-size/-font-weight`
+ * TENANT_CANDIDATE channels -- the primitive owns initials typography);
+ * the panel search is the public Input primitive and the empty states the
+ * public Empty primitive. The raw `<button>` elements are gone and their
+ * inline geometry moved to the skin. The panel stays a pattern-owned
+ * `role="listbox"`: its rows carry avatar + metadata + badge + settings,
+ * which the Dropdown primitive's label+icon menu items cannot express —
+ * the keyboard contract (ArrowUp/Down virtual focus with
+ * aria-activedescendant, Enter selects, Escape dismisses and returns focus
+ * to the trigger) and the click-outside dismissal are preserved. The
+ * active row's former LEFT ACCENT (`border-l-[3px]`) is replaced by the
+ * skin's framed-surface treatment (product law).
  *
  * @example
  * <ModernWorkspaceSwitcher
@@ -27,28 +34,18 @@
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import type { WorkspaceSwitcherProps, Workspace } from '../../contracts';
+import type { WorkspaceSwitcherProps } from '../../contracts';
 import { menuSectionTitleStyle } from '../../../../foundation/engine-styles/modern';
 import { Button } from '../../../../../primitives/inputs/Button';
 import { Badge } from '../../../../../primitives/display/Badge';
+import ModernAvatar from '../../../../../primitives/display/Avatar/engines/modern';
+import ModernInput from '../../../../../primitives/inputs/Input/engines/modern';
+import ModernEmpty from '../../../../../primitives/display/Empty/engines/modern';
 import { ActionAddIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-add';
 import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
 import { NavigationSettingsIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-settings';
 import { StatusVerifiedIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-verified';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-
-/**
- * Extracts up to two uppercase initials from a workspace or user name.
- * Used as a fallback when no logo/avatar image is available.
- */
-function getInitials(name: string): string {
-  return name
-    .split(' ')
-    .map(w => w[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
-}
 
 /**
  * Modern engine workspace switcher composed on DS primitives (see the module
@@ -79,14 +76,34 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
   const panelLabel = translation?.tOr('workspaceSwitcher.panel', 'Workspaces') ?? 'Workspaces';
   const selectLabel = translation?.tOr('workspaceSwitcher.select', 'Select workspace') ?? 'Select workspace';
   const createLabel = translation?.tOr('workspaceSwitcher.create', 'Create workspace') ?? 'Create workspace';
-  const settingsLabel = translation?.tOr('workspaceSwitcher.settings', 'Settings for') ?? 'Settings for';
+  const searchPlaceholder = translation?.tOr('workspaceSwitcher.search_placeholder', 'Search workspaces') ?? 'Search workspaces';
+  const emptyListLabel = translation?.tOr('workspaceSwitcher.empty', 'No workspaces') ?? 'No workspaces';
+  const emptyResultsLabel = translation?.tOr('workspaceSwitcher.empty_results', 'No workspaces found') ?? 'No workspaces found';
+  // ONE parametric message — never a translated fragment concatenated with
+  // the workspace name (i18n law).
+  const settingsLabelFor = (name: string) =>
+    translation?.tOr('workspaceSwitcher.settings_for', 'Settings for {name}', { name }) ?? `Settings for ${name}`;
 
   const [open, setOpen] = useState(false);
   // -1 means no keyboard focus; updated on ArrowUp/Down or mouse hover.
   const [focusIndex, setFocusIndex] = useState(-1);
+  // Client-side filter query for the panel search (composed Input).
+  const [query, setQuery] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
 
+  /** Returns focus to the composed trigger Button (facade ref forwarding is
+      not guaranteed, so the focus target is queried by its caller part). */
+  const focusTrigger = useCallback(() => {
+    containerRef.current
+      ?.querySelector<HTMLElement>('[data-part="trigger"]')
+      ?.focus();
+  }, []);
+
   const activeWorkspace = workspaces.find(w => w.id === activeWorkspaceId);
+  const normalizedQuery = query.trim().toLowerCase();
+  const visibleWorkspaces = normalizedQuery
+    ? workspaces.filter(w => w.name.toLowerCase().includes(normalizedQuery))
+    : workspaces;
 
   // Click-outside dismissal for the pattern-owned listbox panel.
   const handleClickOutside = useCallback(
@@ -104,8 +121,9 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
   }, [open, handleClickOutside]);
 
   // Full keyboard navigation for the dropdown. ArrowDown/ArrowUp move the
-  // virtual focus index within the workspace list. Enter selects the focused
-  // item and closes the dropdown. Escape dismisses without selecting.
+  // virtual focus index within the VISIBLE workspace list. Enter selects the
+  // focused item and closes the dropdown. Escape dismisses without
+  // selecting. Both close paths return focus to the trigger (popover law).
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (!open) return;
@@ -113,7 +131,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
         case 'ArrowDown':
           e.preventDefault();
           // Clamp to last item to prevent overflowing the list.
-          setFocusIndex(prev => Math.min(prev + 1, workspaces.length - 1));
+          setFocusIndex(prev => Math.min(prev + 1, visibleWorkspaces.length - 1));
           break;
         case 'ArrowUp':
           e.preventDefault();
@@ -122,19 +140,26 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           break;
         case 'Enter':
           e.preventDefault();
-          if (focusIndex >= 0 && focusIndex < workspaces.length) {
-            onSwitch(workspaces[focusIndex].id);
+          if (focusIndex >= 0 && focusIndex < visibleWorkspaces.length) {
+            onSwitch(visibleWorkspaces[focusIndex].id);
             setOpen(false);
+            focusTrigger();
           }
           break;
         case 'Escape':
           e.preventDefault();
           setOpen(false);
+          focusTrigger();
           break;
       }
     },
-    [open, focusIndex, workspaces, onSwitch],
+    [open, focusIndex, visibleWorkspaces, onSwitch, focusTrigger],
   );
+
+  // Filtering can shrink the list under the virtual focus; clamp it.
+  useEffect(() => {
+    setFocusIndex(prev => Math.min(prev, visibleWorkspaces.length - 1));
+  }, [visibleWorkspaces.length]);
 
   return (
     <div
@@ -157,16 +182,16 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
         aria-expanded={open}
       >
         <span data-part="avatar-frame" data-frame="trigger">
-          {activeWorkspace?.logo ? (
-            <img src={activeWorkspace.logo} alt={activeWorkspace.name} />
-          ) : (
-            <span data-part="avatar-fallback">
-              {activeWorkspace ? getInitials(activeWorkspace.name) : '?'}
-            </span>
-          )}
+          {/* Composed Avatar (P01): owns the image, the derived initials
+              fallback and its paint; '?' covers the no-workspace case. */}
+          <ModernAvatar
+            name={activeWorkspace?.name ?? '?'}
+            src={activeWorkspace?.logo}
+            size="sm"
+          />
         </span>
         {position === 'sidebar' && (
-          <span data-part="trigger-name">
+          <span data-part="trigger-name" title={activeWorkspace?.name}>
             {activeWorkspace?.name ?? selectLabel}
           </span>
         )}
@@ -180,20 +205,51 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           data-part="panel"
           role="listbox"
           aria-label={panelLabel}
+          aria-activedescendant={
+            focusIndex >= 0 && visibleWorkspaces[focusIndex]
+              ? `workspace-option-${visibleWorkspaces[focusIndex].id}`
+              : undefined
+          }
         >
           {/* Header */}
           <div data-part="header">
             <span style={menuSectionTitleStyle}>{panelLabel}</span>
           </div>
 
+          {/* Search: the composed Input filters client-side; arrows typed in
+              the box ride the container's listbox keyboard contract. */}
+          {workspaces.length > 0 && (
+            <div data-part="search">
+              <ModernInput
+                size="sm"
+                placeholder={searchPlaceholder}
+                aria-label={searchPlaceholder}
+                value={query}
+                onChange={(v) => {
+                  setQuery(String(v ?? ''));
+                  setFocusIndex(-1);
+                }}
+              />
+            </div>
+          )}
+
           {/* Workspace list */}
           <div data-part="list">
-            {workspaces.map((ws, idx) => {
+            {visibleWorkspaces.length === 0 ? (
+              // Empty (no workspaces at all, or no filter results): the
+              // composed Empty primitive owns the quiet hint -- never a mute
+              // empty list.
+              <div data-part="empty">
+                <ModernEmpty description={workspaces.length === 0 ? emptyListLabel : emptyResultsLabel} />
+              </div>
+            ) : (
+              visibleWorkspaces.map((ws, idx) => {
               const isActive = ws.id === activeWorkspaceId;
               const isFocused = idx === focusIndex;
               return (
                 <div
                   key={ws.id}
+                  id={`workspace-option-${ws.id}`}
                   role="option"
                   aria-selected={isActive}
                   data-part="item"
@@ -207,13 +263,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   onMouseEnter={() => setFocusIndex(idx)}
                 >
                   <span data-part="avatar-frame" data-frame="item">
-                    {ws.logo ? (
-                      <img src={ws.logo} alt={ws.name} />
-                    ) : (
-                      <span data-part="avatar-fallback">
-                        {getInitials(ws.name)}
-                      </span>
-                    )}
+                    <ModernAvatar name={ws.name} src={ws.logo} size="md" />
                   </span>
                   {/* Workspace name + metadata row. */}
                   <span data-part="item-copy">
@@ -230,7 +280,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                       {ws.plan && <span data-part="item-plan">{ws.plan}</span>}
                       {typeof ws.online === 'number' && (
                         <span data-part="item-online">
-                          {/* Green dot indicates active members. */}
+                          {/* Dot marks active members; the count carries the info. */}
                           <span data-part="online-dot" />
                           {ws.online}
                         </span>
@@ -262,13 +312,14 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                           onSettings(ws.id);
                         }}
                         data-testid={`workspace-settings-${ws.id}`}
-                        aria-label={`${settingsLabel} ${ws.name}`}
+                        aria-label={settingsLabelFor(ws.name)}
                       />
                     )}
                   </span>
                 </div>
               );
-            })}
+              })
+            )}
           </div>
 
           {/* Create workspace */}
@@ -300,13 +351,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
               <div data-part="divider" />
               <div data-part="current-user" data-testid="workspace-current-user">
                 <span data-part="avatar-frame" data-frame="user">
-                  {currentUser.avatar ? (
-                    <img src={currentUser.avatar} alt={currentUser.name} />
-                  ) : (
-                    <span data-part="avatar-fallback">
-                      {getInitials(currentUser.name)}
-                    </span>
-                  )}
+                  <ModernAvatar name={currentUser.name} src={currentUser.avatar} size="sm" />
                 </span>
                 <span data-part="current-user-copy">
                   <span data-part="current-user-name">{currentUser.name}</span>

@@ -1,12 +1,134 @@
 /**
- * AuthSurface skin (WO-SKIN-06 CK-I). Engine-agnostic and deliberately
- * unlayered. Text selectors clear Typography's (0,4,0) color floor.
+ * AuthSurface skin (WO-SKIN-06 CK-I; grown KIMI Modern wave 2026-07-30, SU16).
+ *
+ * LAYER: registered in `facade/entrypoints/base.css` (~l.600) and
+ * `facade/entrypoints/styles.css` (~l.621) into `layer(rottay-components)`,
+ * alongside the sibling experience surface skins. The old "deliberately
+ * unlayered" note and its `[data-part='root'][data-part='root']` repetition
+ * idiom (forbidden by the owner directive, 2026-07-28 fourth wave) are
+ * retired: no selector here repeats a class or an attribute.
+ *
+ * SCOPE: the surface composes public primitives and helpers (Heading, Text,
+ * Card, Grid, Stack, Box, SurfaceActionBar, the SurfaceErrorState kit), each
+ * owning its chrome, states and forced-colors treatment. This file paints
+ * ONLY what the surface itself owns:
+ *   - the page canvas (viewport floor + the sanctioned surface-tint role);
+ *   - the container geometry (default measure, centering, fluid padding);
+ *   - the 520px readable measure of the centered form column;
+ *   - the eyebrow kicker's tracking/transform on its additive hook;
+ *   - the loading mirror skeleton blocks, whose pulse rides the canonical
+ *     `ds-foundation-pulse` keyframes on the `--ds-motion-attention` channel
+ *     and goes quiet under reduced motion.
+ * The hero panel is governed tenant BRANDING, not decoration: this file
+ * deliberately paints NO background, gradient, texture or tint on it -- the
+ * Card material and the tenant channels own its chrome end to end. The
+ * eyebrow/subtitle INK travels through Typography's own `color` channel (the
+ * modern Typography skin is unlayered and always wins, so the primitive
+ * channel is the only durable path, SU22 idiom); the old muted-text color
+ * rule is REMOVED, not re-layered, and the pinned class hook stays in the
+ * DOM untouched.
+ *
+ * MATERIALS (spec section 5): the canvas keeps only the surface-tint role --
+ * a ~1.2% vertical luminance step derived from the tenant-safe neutral-900
+ * ramp (never mixed against black), aligned with the sibling marketing
+ * canvas. Auth is NOT a showcase placement: the mesh channel is not wired
+ * here, and no bespoke glow/gradient is introduced.
+ *
+ * SPECIFICITY: every selector keys on an always-stamped hook (the `ds-auth`
+ * root class plus a pinned `data-part`/`data-*` state attribute). The
+ * kicker's `letter-spacing`/`text-transform` hold because the unlayered
+ * modern Typography skin paints those channels only under
+ * `[data-text-style]`/`[data-tracking]`, which a plain Text never stamps
+ * (marketing precedent). No forced-colors block on purpose: the only fills
+ * set here are a decorative canvas veil and neutral skeleton fills, which
+ * the UA re-keys under forced colors; every interactive part is a composed
+ * primitive with its own forced-colors treatment.
  */
 
-.ds-surface.ds-auth[data-part='root'][data-part='root'] {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-neutral-900) 1%, var(--ds-color-bg-primary)), var(--ds-color-bg-primary));
+/* ---- page canvas ----
+   Surface-tint is role 1 of the spec's gradient law (a barely-there vertical
+   luminance step on hero surfaces); this public pre-auth page IS such a
+   first-impression surface (marketing precedent). */
+.ds-surface.ds-auth[data-part='root'] {
+  min-block-size: 100vh;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ds-color-neutral-900) 1.2%, var(--ds-color-bg-primary)),
+    var(--ds-color-bg-primary)
+  );
 }
 
-.ds-surface.ds-auth .ds-auth__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+/* ---- container geometry ----
+   Default 1120px measure, centered, with fluid padding per viewport. A
+   contract-declared `maxWidth` passes inline (instance value) and wins. */
+.ds-surface.ds-auth .ds-auth__container[data-part='container'] {
+  max-inline-size: 1120px;
+  margin-inline: auto;
+  padding-block: var(--ds-spacing-12, 48px);
+  padding-inline: var(--ds-spacing-6, 24px);
+}
+
+.ds-surface.ds-auth[data-mobile='true'] .ds-auth__container[data-part='container'] {
+  padding-block-start: var(--ds-spacing-7, 28px);
+  padding-block-end: var(--ds-spacing-10, 40px);
+  padding-inline: var(--ds-spacing-5, 20px);
+}
+
+/* ---- centered form measure ----
+   In the centered recipe the form column (and the error kit that replaces
+   it) holds a 520px readable measure instead of sprawling across the
+   container; the split recipe leaves both to their grid track. */
+.ds-surface.ds-auth[data-layout='centered'] .ds-auth__form-panel,
+.ds-surface.ds-auth[data-layout='centered'] .ds-error-state {
+  inline-size: 100%;
+  max-inline-size: 520px;
+  margin-inline: auto;
+}
+
+/* ---- eyebrow kicker ----
+   Uppercase + widest tracking are the editorial kicker signature. Painted
+   here (never inline) with the transform/tracking tokens; safe per the
+   SPECIFICITY note above. */
+.ds-surface.ds-auth .ds-auth__eyebrow[data-part='root'] {
+  letter-spacing: var(--ds-letter-spacing-widest, 0.1em);
+  text-transform: var(--ds-text-transform-uppercase, uppercase);
+}
+
+/* ---- loading mirror skeleton ----
+   Blocks mirror the loaded anatomy: two form-field rows and the primary
+   action pill inside the same form-panel frame, one hero block inside the
+   same hero card. Both frames and the header/footer/legal copy stay live,
+   so the swap to real content is a pure paint change, never a layout shift
+   (all geometry INTERNAL literals, dashboard/chat precedent). */
+.ds-surface.ds-auth [data-part='auth-skeleton-field'],
+.ds-surface.ds-auth [data-part='auth-skeleton-cta'],
+.ds-surface.ds-auth [data-part='auth-skeleton-hero'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
+  animation: ds-foundation-pulse
+    var(--ds-motion-attention, 1.5s)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-surface.ds-auth [data-part='auth-skeleton-field'] {
+  inline-size: 100%;
+  min-block-size: 40px;
+}
+
+.ds-surface.ds-auth [data-part='auth-skeleton-cta'] {
+  inline-size: 136px;
+  min-block-size: 40px;
+}
+
+.ds-surface.ds-auth [data-part='auth-skeleton-hero'] {
+  inline-size: 100%;
+  min-block-size: 360px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-auth [data-part='auth-skeleton-field'],
+  .ds-surface.ds-auth [data-part='auth-skeleton-cta'],
+  .ds-surface.ds-auth [data-part='auth-skeleton-hero'] {
+    animation: none;
+  }
 }

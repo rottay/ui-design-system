@@ -21,9 +21,13 @@
  * />
  */
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useBreakpoints } from "@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state";
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import ModernStatistic from '../../../../../primitives/display/Statistic/engines/modern';
+import { DataTrendIcon } from '@/graphics/icons/presentation/semantic/generated/roles/data-trend';
+import { DataTrendDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/data-trend-down';
 import type { StatsGridProps } from "../../contracts";
 import type { StatDef } from "../../../../../../foundation/contracts/runtime/components/patterns/core";
 import { resolveStatsGridMotion } from "../../foundation/personality";
@@ -73,7 +77,6 @@ function Sparkline({
       viewBox="0 0 80 28"
       width={80}
       height={28}
-      style={{ marginTop: 8, display: "block", overflow: "visible" }}
       aria-hidden="true"
     >
       <defs data-part="sparkline-defs">
@@ -101,47 +104,15 @@ function Sparkline({
 }
 
 /* ---------------------------------------------------------------------------
- * Animated value hook
+ * Trend indicator (pattern-owned anatomy; the Statistic primitive carries
+ * label/value/affix and the count-up, the pattern keeps its trend pill)
  * --------------------------------------------------------------------------- */
 
 /**
- * Animates a numeric value from 0 to target using cubic ease-out.
- * String values pass through unchanged since formatted strings cannot be interpolated.
+ * Renders the governed trend icon + percentage change in the appropriate
+ * semantic tint. The icon is the state shape (never a Unicode arrow and never
+ * color alone); the tint comes from the skin's data-change channels.
  */
-function useAnimatedValue(
-  target: number | string,
-  animate?: boolean,
-  duration = 600
-): number | string {
-  const [value, setValue] = useState<number | string>(
-    animate && typeof target === "number" ? 0 : target
-  );
-
-  useEffect(() => {
-    if (!animate || typeof target !== "number") {
-      setValue(target);
-      return;
-    }
-    const start = performance.now();
-    let raf: number;
-    const tick = (now: number) => {
-      const t = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - t, 3);
-      setValue(Math.round((target as number) * eased));
-      if (t < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [target, animate, duration]);
-
-  return value;
-}
-
-/* ---------------------------------------------------------------------------
- * Trend indicator
- * --------------------------------------------------------------------------- */
-
-/** Renders an arrow + percentage change in the appropriate semantic color. */
 function TrendIndicator({
   change,
   changeType,
@@ -149,29 +120,21 @@ function TrendIndicator({
   change: number;
   changeType?: StatDef["changeType"];
 }) {
-  const arrow =
+  const TrendIcon =
     changeType === "increase"
-      ? "\u2191"
+      ? DataTrendIcon
       : changeType === "decrease"
-      ? "\u2193"
-      : "";
+      ? DataTrendDownIcon
+      : null;
 
   return (
     <span
       className="ds-stats-grid__trend"
       data-part="trend"
       data-change={changeType ?? "neutral"}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 2,
-        padding: "2px 6px",
-        fontSize: 12,
-        fontWeight: 500,
-        lineHeight: 1,
-      }}
     >
-      {arrow} {Math.abs(change)}%
+      {TrendIcon && <TrendIcon size={12} decorative />}
+      {Math.abs(change)}%
     </span>
   );
 }
@@ -181,138 +144,72 @@ function TrendIndicator({
  * --------------------------------------------------------------------------- */
 
 /**
- * Individual statistic card with clear number hierarchy:
- * - Label: small, muted, secondary text
- * - Value: large, bold, primary text
- * - Trend: color-coded pill with arrow + percentage
- * - Sparkline: optional mini chart area
+ * Individual statistic card. The metric anatomy (title eyebrow, value,
+ * prefix/suffix, count-up animation) COMPOSES the certified Statistic
+ * primitive; the pattern keeps only its own surface (card + variants), the
+ * icon, the trend pill, the description and the sparkline.
  */
 function StatCard({
   stat,
   sparkline,
   variant,
   animate,
-  animationDuration,
   onClick,
 }: {
   stat: StatDef;
   sparkline?: boolean;
   variant: StatsGridProps["variant"];
   animate?: boolean;
-  animationDuration?: number;
   onClick?: () => void;
 }) {
-  const displayValue = useAnimatedValue(stat.value, animate, animationDuration);
-
   const cardStyle: React.CSSProperties = {
     "--ds-stats-grid-accent": stat.color,
-    padding: "20px 24px",
-    display: "flex",
-    flexDirection: "column",
-    gap: 4,
-    position: "relative",
-    minWidth: 0,
-    overflow: "hidden",
   } as React.CSSProperties;
 
-  // Interactivity remains behavioral; the transition itself lives in the skin.
-  const interactiveStyle: React.CSSProperties = onClick
-    ? { cursor: "pointer" }
-    : {};
-
+  // Interactivity stays behavioral (data-interactive); the cursor and the
+  // transition live in the skin.
   return (
     <div
       className="ds-stats-grid__card"
       data-part="card"
       data-variant={variant || "default"}
       data-interactive={onClick ? "true" : "false"}
-      style={{ ...cardStyle, ...interactiveStyle }}
+      style={cardStyle}
       onClick={onClick}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
       onKeyDown={onClick ? (e) => e.key === "Enter" && onClick() : undefined}
       aria-label={onClick ? `${stat.label}: ${stat.value}` : undefined}
     >
-      {/* Label row: icon + label */}
-      <div
-        data-part="label-row"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          marginBottom: 4,
-        }}
-      >
+      {/* Header row: pattern icon + the composed metric + the pattern's
+          trend pill on the far end. */}
+      <div data-part="label-row">
         {stat.icon && (
           <span
             className="ds-stats-grid__icon"
             data-part="icon"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 32,
-              height: 32,
-              fontSize: 16,
-              flexShrink: 0,
-            }}
           >
             {stat.icon}
           </span>
         )}
-        <span
-          className="ds-stats-grid__label"
-          data-part="label"
-          style={{
-            fontSize: 13,
-            fontWeight: 500,
-            letterSpacing: "0.01em",
-            lineHeight: 1.2,
-          }}
-        >
-          {stat.label}
-        </span>
-      </div>
-
-      {/* Value row: main value + trend */}
-      <div
-        data-part="value-row"
-        style={{
-          display: "flex",
-          alignItems: "baseline",
-          gap: 10,
-          flexWrap: "wrap",
-        }}
-      >
-        <span
-          className="ds-nums-tabular ds-stats-grid__value"
-          data-part="value"
-          style={{
-            fontSize: 28,
-            fontWeight: 700,
-            lineHeight: 1.1,
-            letterSpacing: "-0.02em",
-            maxWidth: "100%",
-            overflowWrap: "anywhere",
-          }}
-        >
-          {stat.prefix}
-          {displayValue}
-          {stat.suffix && (
-            <span
-              className="ds-stats-grid__suffix"
-              data-part="suffix"
-              style={{
-                fontSize: 14,
-                fontWeight: 400,
-                marginLeft: 4,
-              }}
-            >
-              {stat.suffix}
-            </span>
-          )}
-        </span>
-
+        <div data-part="statistic">
+          <ModernStatistic
+            title={stat.label}
+            value={stat.value}
+            prefix={stat.prefix}
+            suffix={stat.suffix}
+            animateValue={animate}
+            countFrom={0}
+            valueStyle={{
+              fontSize: "var(--ds-stats-grid-value-font-size, 1.75rem)",
+              fontWeight: "var(--ds-stats-grid-value-font-weight, 700)",
+              lineHeight: 1.1,
+              letterSpacing: "var(--ds-stats-grid-value-letter-spacing, -0.02em)",
+              maxWidth: "100%",
+              overflowWrap: "anywhere",
+            }}
+          />
+        </div>
         {stat.change != null && (
           <TrendIndicator change={stat.change} changeType={stat.changeType} />
         )}
@@ -323,11 +220,6 @@ function StatCard({
         <span
           className="ds-stats-grid__description"
           data-part="description"
-          style={{
-            fontSize: 12,
-            lineHeight: 1.4,
-            marginTop: 2,
-          }}
         >
           {stat.description}
         </span>
@@ -374,33 +266,24 @@ function LoadingSkeleton({
             key={i}
             className="ds-stats-grid-skeleton__item"
             data-part="skeleton"
-            style={{
-              padding: "20px 24px",
-              display: "flex",
-              flexDirection: "column",
-              gap: 12,
-            }}
           >
             {/* Label shimmer */}
             <div
               className="ds-stats-grid-skeleton__bar"
               data-part="skeleton-bar"
               data-kind="label"
-              style={{ width: "40%", height: 12 }}
             />
             {/* Value shimmer */}
             <div
               className="ds-stats-grid-skeleton__bar"
               data-part="skeleton-bar"
               data-kind="value"
-              style={{ width: "65%", height: 28 }}
             />
             {/* Trend shimmer */}
             <div
               className="ds-stats-grid-skeleton__bar"
               data-part="skeleton-bar"
               data-kind="trend"
-              style={{ width: "30%", height: 16 }}
             />
           </div>
         ))}
@@ -426,6 +309,14 @@ function LoadingSkeleton({
 export default function ModernStatsGrid(props: StatsGridProps) {
   const tokens = useTokens();
   const { isMobile, isTablet, prefersReducedMotion } = useBreakpoints();
+  // Component-owned strings with the English floor (echo-guarded): the empty
+  // state reuses the catalog's generic `empty.description` ("No data").
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+    return resolved;
+  };
   const {
     stats,
     renderStat,
@@ -467,6 +358,24 @@ export default function ModernStatsGrid(props: StatsGridProps) {
     return <LoadingSkeleton columns={columns} gap={gap} viewport={viewport} />;
   }
 
+  // Empty collection: a single quiet state block on the same root (never an
+  // accidental blank grid; no domain copy — the generic catalog empty copy).
+  if (stats.length === 0) {
+    return (
+      <div
+        className={["ds-pattern-stats-grid", "ds-engine-modern", className]
+          .filter(Boolean)
+          .join(" ")}
+        data-part="root"
+        data-loading="false"
+        data-variant={variant}
+        style={style}
+      >
+        <div data-part="empty">{tOr('empty.description', 'No data')}</div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={["ds-pattern-stats-grid", "ds-engine-modern", className]
@@ -485,7 +394,6 @@ export default function ModernStatsGrid(props: StatsGridProps) {
             sparkline={sparkline}
             variant={variant}
             animate={motion.animate}
-            animationDuration={motion.duration}
             onClick={onStatClick ? () => onStatClick(stat) : undefined}
           />
         );

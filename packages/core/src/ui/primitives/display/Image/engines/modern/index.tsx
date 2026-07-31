@@ -1,7 +1,12 @@
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the Image display primitive.
- * Renders images with utility-first Tailwind classes, a smooth opacity-based
- * load transition, optional hover overlays, and a zoom indicator icon.
+ * @fileoverview Modern engine for the Image display primitive, painted by the
+ * modern skin (`foundation/tokens/css/runtime/engines/modern/skin/image.css`).
+ * The engine tracks the loading/loaded/error lifecycle and stamps the data-*
+ * contract (radius, object-fit, bordered/shadow, interactive, status); all
+ * geometry and paint -- including the opacity reveal, the placeholder pulse
+ * and the zoom badge -- are skin-owned. The only inline declarations are the
+ * caller's measured values and the single pinned logical `end-2` utility on
+ * the zoom badge.
  *
  * @example
  * ```tsx
@@ -18,21 +23,14 @@ import type { ImageProps } from '../../contracts';
 import { IMAGE_DEFAULTS } from '../../contracts';
 import type { ImageRadius, ImageStatus } from '../../contracts';
 
-/** Maps the DS radius token to the corresponding Tailwind `rounded-*` class. */
-const RADIUS_CLASS_MAP: Record<ImageRadius, string> = {
-  none: 'rounded-none',
-  sm: 'rounded-sm',
-  md: 'rounded-md',
-  lg: 'rounded-lg',
-  full: 'rounded-full',
-};
-
 /**
- * Modern (DaisyUI/Tailwind) Image engine. Composes Tailwind utility classes
- * for responsive sizing, smooth load transitions, and optional hover overlays.
+ * Modern (skin-painted) Image engine. Tracks the loading lifecycle and
+ * composes the frame, the reveal and the overlays through the modern skin's
+ * data contract -- no Tailwind utilities remain (the zoom badge's logical
+ * `end-2` is the single pinned exception).
  *
  * @param props - Standard ImageProps shared across all engines.
- * @returns A Tailwind-styled container with `<img>`, overlay, and zoom indicator.
+ * @returns A skin-styled container with `<img>`, overlay, and zoom indicator.
  */
 export default function ModernImage(props: ImageProps): React.ReactElement {
   const {
@@ -87,44 +85,11 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     [onError]
   );
 
-  // Assemble Tailwind class strings from the DS-level prop values
-  const radiusClass = RADIUS_CLASS_MAP[radius] || RADIUS_CLASS_MAP.none;
-
-  const containerClasses = [
-    'rottay-image',
-    'rottay-image--modern',
-    'relative',
-    'inline-block',
-    'overflow-hidden',
-    radiusClass,
-    bordered && 'border',
-    (onClick || zoomable) && 'cursor-pointer',
-    'transition-all',
-    'duration-300',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
-
-  // Map the CSS object-fit value to Tailwind's utility class equivalent
-  const objectFitClass = {
-    cover: 'object-cover',
-    contain: 'object-contain',
-    fill: 'object-fill',
-    none: 'object-none',
-    'scale-down': 'object-scale-down',
-  }[objectFit] || 'object-cover';
-
-  // Start invisible (opacity-0) and fade in on load for a smooth reveal
-  const imageClasses = [
-    'w-full',
-    'h-full',
-    objectFitClass,
-    radiusClass,
-    'transition-opacity',
-    'duration-300',
-    status === 'loaded' ? 'opacity-100' : 'opacity-0',
-  ]
+  // Geometry and paint are skin-owned (image.css), keyed on the data-*
+  // contract below: radius, object-fit, bordered/shadow, interactive cursor
+  // and the load-status reveal. The only inline declarations are the
+  // caller's measured values (width/height/aspectRatio/objectPosition).
+  const containerClasses = ['rottay-image', 'rottay-image--modern', className]
     .filter(Boolean)
     .join(' ');
 
@@ -140,7 +105,6 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
   // `fill="currentColor"` resolves against the fallback panel's own colour.
   const DefaultFallbackIcon = () => (
     <svg
-      className="w-12 h-12"
       viewBox="0 0 48 48"
       fill="none"
       aria-hidden="true"
@@ -152,15 +116,30 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     </svg>
   );
 
+  const isInteractive = Boolean(onClick || zoomable);
+
   return (
     <div
       className={containerClasses}
       data-status={status}
+      data-radius={radius}
+      data-object-fit={objectFit}
       data-bordered={bordered ? 'true' : undefined}
       data-shadow={shadow ? 'true' : undefined}
       data-zoomable={zoomable ? 'true' : undefined}
+      data-interactive={isInteractive ? 'true' : undefined}
       style={containerStyle}
       onClick={onClick}
+      {...(onClick
+        ? {
+            onKeyDown: (event: React.KeyboardEvent<HTMLDivElement>) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onClick();
+              }
+            },
+          }
+        : {})}
       {...interactionHandlers}
       {...partAttributes('root', interaction)}
       role={onClick ? 'button' : undefined}
@@ -170,22 +149,16 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
           (ds-foundation-pulse), not a raw Tailwind `animate-pulse` utility;
           the global reduced-motion guard neutralizes it. */}
       {status === 'loading' && (
-        <div
-          data-part="placeholder"
-          className={`absolute inset-0 flex items-center justify-center ${radiusClass}`}
-        >
+        <div data-part="placeholder">
           {placeholder || (
-            <div className="rottay-image__pulse w-full h-full" />
+            <div className="rottay-image__pulse" />
           )}
         </div>
       )}
 
       {/* Error Fallback */}
       {status === 'error' && (
-        <div
-          data-part="fallback"
-          className={`absolute inset-0 flex items-center justify-center ${radiusClass}`}
-        >
+        <div data-part="fallback">
           {fallback || <DefaultFallbackIcon />}
         </div>
       )}
@@ -200,23 +173,23 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
         loading={lazy ? 'lazy' : 'eager'}
         onLoad={handleLoad}
         onError={handleError}
-        className={imageClasses}
         style={{ objectPosition }}
       />
 
       {/* Hover Overlay */}
       {hoverOverlay && isHovered && (
-        <div data-part="hover-overlay" className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${radiusClass}`}>
+        <div data-part="hover-overlay">
           {hoverOverlay}
         </div>
       )}
 
       {/* Zoom indicator for zoomable images — `end-2` is LOGICAL
-          (inset-inline-end), so the badge mirrors under RTL. `bottom-2`
-          stays physical: block direction does not flip in RTL. */}
+          (inset-inline-end), so the badge mirrors under RTL, and it is the one
+          utility the quality contract pins verbatim; every other property
+          (position, padding, radius, ink) is skin-owned. */}
       {zoomable && isHovered && (
-        <div data-part="zoom-indicator" className="absolute bottom-2 end-2 p-1.5 rounded-full">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div data-part="zoom-indicator" className="end-2">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
           </svg>
         </div>

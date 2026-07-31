@@ -5,12 +5,12 @@
  *
  * Manages the active locale, translation functions, and directionality.
  *
- * Translation resolution follows a three-tier chain — tenant overrides, the
- * active locale, then the CONFIGURED fallback locale — implemented once in
- * `resolveTranslationEntry`. When every tier misses, `t()` echoes the raw key
- * (a rendering floor, kept for compatibility) while `tOr()` returns the
- * caller's own floor. There is no fourth tier: the design system never hops to
- * English behind a configured fallback.
+ * Translation resolution follows one four-tier chain — tenant overrides, the
+ * active locale, the CONFIGURED fallback locale, then the complete English
+ * floor — implemented once in `resolveTranslationEntry`. The English floor is
+ * consulted only after the application's declared language policy misses.
+ * When every catalog misses, `t()` echoes the raw key (kept for compatibility)
+ * while `tOr()` returns the caller's own, more-specific floor.
  *
  * DIRECTIONALITY. `<html>` owns direction, and `<html>` belongs to the
  * application: only it exists in the server HTML before React runs, and only

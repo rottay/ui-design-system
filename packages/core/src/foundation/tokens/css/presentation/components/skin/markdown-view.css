@@ -34,7 +34,17 @@
     text-decoration-thickness var(--ds-motion-instant, 120ms) var(--ds-ease-standard, ease);
 }
 
-.ds-markdown-view[data-part='root'] a[data-part='link']:hover {
+@media (hover: hover) {
+  .ds-markdown-view[data-part='root'] a[data-part='link']:hover {
+    color: var(
+      --ds-markdown-link-ink-hover,
+      color-mix(in srgb, var(--ds-color-link) 72%, var(--ds-color-text-primary))
+    );
+    text-decoration-thickness: var(--ds-markdown-link-decoration-hover, 0.09em);
+  }
+}
+/* Touch/active equivalent of the hover treatment (4th-tanda law). */
+.ds-markdown-view[data-part='root'] a[data-part='link']:active {
   color: var(
     --ds-markdown-link-ink-hover,
     color-mix(in srgb, var(--ds-color-link) 72%, var(--ds-color-text-primary))
@@ -106,6 +116,19 @@
   letter-spacing: 0.02em;
 }
 
+/* Reading frame additions (Pass 2): the document keeps an opt-in measure
+ * channel (default `none` — no change to current layouts) and the table
+ * wrapper gains a quiet frame around its existing scroll region. The skin
+ * can own these because neither property is inline-styled on those parts
+ * (the component's inline-paint counter is decrease-only, so they live here). */
+.ds-markdown-view[data-part='root'] {
+  max-inline-size: var(--ds-markdown-view-measure, none);
+}
+.ds-markdown-view[data-part='root'] [data-part='table-wrapper'] {
+  border: var(--ds-markdown-table-frame, 1px solid var(--ds-color-border));
+  border-radius: var(--ds-markdown-table-frame-radius, var(--ds-radius-md));
+}
+
 @media (forced-colors: active) {
   .ds-markdown-view[data-part='root'] a[data-part='link'] {
     text-decoration-thickness: 2px;
@@ -113,5 +136,16 @@
   .ds-markdown-view[data-part='root'] a[data-part='link']:focus-visible {
     outline: 2px solid Highlight;
     box-shadow: none;
+  }
+  /* Inline code loses its inset fill when backgrounds are forced away; it
+     keeps a system-color frame (the skin's own frame and the UA-forced
+     borders of table cells/task checkbox resolve to system colors
+     automatically — only the checked FILL of the task indicator is lost,
+     which no system color can restore without forced-color-adjust: none). */
+  .ds-markdown-view[data-part='root'] [data-part='inline-code'] {
+    border: 1px solid ButtonText;
+  }
+  .ds-markdown-view[data-part='root'] [data-part='table-wrapper'] {
+    border-color: ButtonText;
   }
 }

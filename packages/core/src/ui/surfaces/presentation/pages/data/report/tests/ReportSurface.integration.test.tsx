@@ -129,7 +129,7 @@ describe('ReportSurface integration', () => {
 
     it('fires onTemplateSelect when clicking a template', async () => {
       const config = buildConfig();
-      renderSurface(<ReportSurface config={config} />);
+      renderSurface(<ReportSurface config={config} />, { engine: 'modern' });
 
       const userActivity = await screen.findByText('User Activity');
       // Click the parent clickable card

@@ -1,16 +1,131 @@
 /**
- * ChatSurface skin (WO-SKIN-06 CK-I). Engine-agnostic and deliberately
- * unlayered. The repeated private hook and root part keep the accent border
- * above every modern/rustic Textarea focus/status rule, matching inline style.
+ * ChatSurface skin (KIMI Modern wave 2026-07-30, SU17).
+ *
+ * LAYER: registered in `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)`,
+ * alongside the sibling experience surface skins.
+ *
+ * SCOPE: the surface composes public primitives, patterns and helpers
+ * (PageShell, Grid, Stack, Card, Textarea, Button, the assistant kit's
+ * MessageBubble/TypingIndicator, SurfaceSectionCard, the surface state
+ * kits) — each owns its chrome, interaction states and forced-colors
+ * treatment, so this file paints ONLY what the surface itself owns:
+ *   - the transcript scroll region (overflow, overscroll containment,
+ *     stable gutter, and the default max block size; a contract
+ *     `transcriptHeight` still wins through the sanctioned inline
+ *     instance channel);
+ *   - the send action's placement inside the composer (inline-end,
+ *     full width under the resolved mobile posture);
+ *   - the conversation-mirror skeleton blocks (`chat-skeleton-*`),
+ *     whose pulse rides the canonical `ds-foundation-pulse` keyframes on
+ *     the `--ds-motion-attention` channel and goes quiet under reduced
+ *     motion;
+ *   - the sticky mobile composer, including safe-area and
+ *     virtual-keyboard insets.
+ * No forced-colors block on purpose: the only fills set here are neutral
+ * surface fills (skeleton blocks, sticky composer backdrop), which the UA
+ * re-keys to Canvas under forced colors, and every interactive part
+ * already carries its own forced-colors treatment.
+ *
+ * SPECIFICITY: no class/attribute repetition anywhere. Every selector
+ * keys on an always-stamped hook: the `ds-chat` root class plus a
+ * `data-part` or a `data-*` state attribute. The retired
+ * `.ds-chat--accented` rule was dead code (no markup ever stamped that
+ * class) built on the forbidden repetition idiom; it is removed, not
+ * replaced — composer focus/status paint belongs to the Textarea
+ * primitive's own channels.
  */
 
-.ds-surface.ds-chat.ds-chat--accented .ds-chat__composer-input.ds-chat__composer-input.ds-chat__composer-input[data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
-  border-color: var(--ds-color-primary);
+/* ---- transcript scroll region ----
+   The transcript is the surface-owned scrollport: it scrolls
+   independently of the page, contains overscroll so reaching the oldest
+   or newest message never chains into the page scroll, and reserves a
+   stable gutter so an appearing scrollbar never shifts the bubbles. The
+   520px default preserves the surface's historic transcript height; a
+   contract `transcriptHeight` overrides it inline (inline style wins
+   over this rule by cascade). */
+.ds-surface.ds-chat .ds-chat__transcript[data-part='transcript'] {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  max-block-size: 520px;
 }
 
+/* ---- composer: send action placement ----
+   The send action sits at the composer's inline end (flex-end flips
+   with direction, so RTL mirrors it for free) and stretches full width
+   under the resolved mobile posture for a coarse-pointer target. */
+.ds-surface.ds-chat .ds-chat__send-button {
+  align-self: flex-end;
+}
+
+.ds-surface.ds-chat[data-mobile='true'] .ds-chat__send-button {
+  inline-size: 100%;
+}
+
+/* ---- conversation-mirror skeleton ----
+   Blocks sit on the same section cards and spacing rhythm as the loaded
+   anatomy, so the swap to real content is a pure paint change, never a
+   layout shift. Bubble blocks alternate alignment and length the way a
+   real two-party transcript does. */
+.ds-surface.ds-chat [data-part='chat-skeleton-bubble'],
+.ds-surface.ds-chat [data-part='chat-skeleton-block'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
+  animation: ds-foundation-pulse
+    var(--ds-motion-attention, 1.5s)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-surface.ds-chat [data-part='chat-skeleton-bubble'][data-align='end'] {
+  align-self: flex-end;
+}
+
+.ds-surface.ds-chat [data-part='chat-skeleton-bubble'][data-size='lg'] {
+  inline-size: 62%;
+  min-block-size: 64px;
+}
+
+.ds-surface.ds-chat [data-part='chat-skeleton-bubble'][data-size='md'] {
+  inline-size: 48%;
+  min-block-size: 56px;
+}
+
+.ds-surface.ds-chat [data-part='chat-skeleton-bubble'][data-size='sm'] {
+  inline-size: 38%;
+  min-block-size: 48px;
+}
+
+.ds-surface.ds-chat
+  [data-part='chat-skeleton-block'][data-size='composer-input'] {
+  inline-size: 100%;
+  min-block-size: 96px;
+}
+
+.ds-surface.ds-chat
+  [data-part='chat-skeleton-block'][data-size='send-button'] {
+  inline-size: 96px;
+  min-block-size: 36px;
+  align-self: flex-end;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-chat [data-part='chat-skeleton-bubble'],
+  .ds-surface.ds-chat [data-part='chat-skeleton-block'] {
+    animation: none;
+  }
+}
+
+/* ---- sticky mobile composer ----
+   On the phone posture the composer pins to the bottom edge, above the
+   shell's bottom inset and the safe area; when the virtual keyboard
+   opens, the inset collapses to the keyboard height so the composer
+   stays attached to the keyboard's top edge.
+   `--ds-virtual-keyboard-inset` arrives through the sanctioned inline
+   custom-property channel (instance value, pinned by the surface test). */
 .ds-surface.ds-chat .ds-chat__composer[data-part='composer'][data-mobile-sticky='true'] {
   position: sticky;
-  z-index: var(--ds-z-sticky);
+  z-index: var(--ds-z-sticky, 1100);
   inset-block-end: calc(
     var(
         --ds-shell-bottom-inset,
@@ -18,8 +133,8 @@
       ) +
       var(--ds-virtual-keyboard-inset, 0px)
   );
-  padding-block-end: var(--ds-space-xs);
-  background: var(--ds-color-bg-primary);
+  padding-block-end: var(--ds-spacing-2, 8px);
+  background: var(--ds-color-bg-primary, var(--ds-color-bg-secondary));
 }
 
 .ds-surface.ds-chat

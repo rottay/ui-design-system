@@ -19,7 +19,7 @@
  * @package @rottay/design-system
  */
 
-import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect, useId } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { MentionsProps, MentionsOption } from '../../contracts';
@@ -67,6 +67,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       status,
       placement = MENTIONS_DEFAULTS.placement,
       notFoundContent,
+      loading = false,
       filterOption = MENTIONS_DEFAULTS.filterOption,
       className,
       style,
@@ -84,6 +85,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
     };
     const emptyContent = notFoundContent ?? mentionsLabel('mentions.not_found', 'No results');
     const suggestionsLabel = mentionsLabel('mentions.suggestions_label', 'Mention suggestions');
+    const loadingContent = mentionsLabel('mentions.loading', 'Loading…');
     // Accessible name: explicit aria-label wins, then the visible placeholder,
     // then the localized default (axe `label` critical, K4-D remediation).
     const inputLabel = ariaLabel ?? placeholder ?? mentionsLabel('mentions.input_label', 'Mentions');
@@ -94,6 +96,11 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
     const [currentPrefix, setCurrentPrefix] = useState('');
     const [mentionStart, setMentionStart] = useState(-1);
     const [focusedIndex, setFocusedIndex] = useState(0);
+    // Listbox wiring: aria-controls points at the popup while open and
+    // aria-activedescendant at the arrow-navigated option, so AT announces
+    // the active suggestion (focus itself never leaves the textarea).
+    const mentionsId = useId().replace(/:/g, '');
+    const listboxId = `mentions-${mentionsId}-listbox`;
 
     // Controlled vs uncontrolled: parent-supplied `value` takes precedence
     const isControlled = controlledValue !== undefined;
@@ -140,6 +147,11 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       }
       return options.filter((opt) => filterOption(searchText, opt));
     }, [options, searchText, filterOption]);
+
+    const activeOptionId =
+      isOpen && !loading && filteredOptions.length > 0
+        ? `mentions-${mentionsId}-option-${focusedIndex}`
+        : undefined;
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       const newValue = e.target.value;
@@ -281,24 +293,32 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           role="textbox"
           aria-multiline="true"
           aria-haspopup="listbox"
+          aria-controls={isOpen ? listboxId : undefined}
+          aria-activedescendant={activeOptionId}
           aria-label={inputLabel}
           data-part="textarea"
           data-disabled={disabled || undefined}
+          data-readonly={readOnly || undefined}
           data-status={status || undefined}
           data-autosize={autoSize ? 'true' : undefined}
         />
 
         {isOpen && (
           <ul
+            id={listboxId}
             className={['rottay-mentions__popup', `rottay-mentions__popup--${placement}`, popupClassName].filter(Boolean).join(' ')}
             data-placement={placement}
             data-part="dropdown"
             role="listbox"
             aria-label={suggestionsLabel}
           >
-            {filteredOptions.length > 0 ? (
+            {loading ? (
+              <li role="option" aria-disabled="true" data-part="loading">
+                {loadingContent}
+              </li>
+            ) : filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
-                <li key={option.value} role="option" aria-selected={focusedIndex === index}>
+                <li key={option.value} role="option" aria-selected={focusedIndex === index} id={`mentions-${mentionsId}-option-${index}`}>
                   <button
                     type="button"
                     className={`${option.disabled ? 'disabled' : ''} ${focusedIndex === index ? 'active' : ''}`}

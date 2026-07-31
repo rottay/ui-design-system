@@ -125,25 +125,57 @@
   opacity: var(--ds-mentions-disabled-opacity, var(--ds-input-disabled-opacity, 0.6));
 }
 
+/* Readonly mirrors the certified Input floor channels (quiet, not disabled). */
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'][data-readonly='true']:not([data-disabled='true']) {
+  color: var(--ds-input-readonly-color, var(--ds-color-text-primary));
+  background: var(--ds-input-readonly-bg, var(--ds-mentions-input-bg, var(--ds-input-bg, var(--ds-surface-control))));
+  border-color: var(--ds-input-readonly-border, var(--ds-color-border));
+}
+
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'] {
   position: absolute;
+  /* z bridge (pre-flag 7): the legacy literal stays for the paint-ownership
+     test pin and old engines; the channel wins and maps the layer to the
+     governed popover scale. */
   z-index: 50;
+  z-index: var(--ds-mentions-dropdown-z, var(--ds-z-popover, 1600));
   inline-size: 100%;
   list-style: none;
   margin: 0;
   padding: var(--ds-dropdown-padding, 6px);
   max-block-size: var(--ds-dropdown-max-height, 192px);
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-color-border-secondary) transparent;
   border-radius: var(--ds-radius-lg);
   border: 1px solid var(--ds-color-border-subtle);
-  background: var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-2);
+  /* Sanctioned overlay material (dropdown.css idiom): the lift layer over the
+     card surface + hairline + elevation shadow -- never frost/glass. */
+  background:
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-surface-card);
+  box-shadow: var(--ds-dropdown-shadow, var(--ds-elevation-3));
+  /* Direction-aware entry (mount runs it once): bottom opens rise, top opens
+     settle down; reduced-motion cancels it below. */
+  animation: ds-mentions-dropdown-enter var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-enter, var(--ds-motion-ease-out, ease-out)) both;
+}
+@keyframes ds-mentions-dropdown-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--_ds-mentions-dropdown-enter-offset, 0.25rem));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'][data-placement='top'] {
+  --_ds-mentions-dropdown-enter-offset: -0.25rem;
   inset-block-end: 100%;
   margin-block-end: var(--ds-spacing-1, 4px);
 }
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'][data-placement='bottom'] {
+  --_ds-mentions-dropdown-enter-offset: 0.25rem;
   inset-block-start: 100%;
   margin-block-start: var(--ds-spacing-1, 4px);
 }
@@ -179,15 +211,55 @@
   opacity: var(--ds-mentions-option-disabled-opacity, var(--ds-button-disabled-opacity, 0.6));
 }
 
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='empty'] {
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='empty'],
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='loading'] {
   padding: var(--ds-spacing-3, 12px);
   text-align: center;
   color: var(--ds-color-text-secondary);
+}
+
+/* Coarse pointers: option rows meet the physical 44px touch floor. */
+@media (pointer: coarse) {
+  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'] {
+    min-block-size: var(--ds-mentions-option-touch-target-min, 44px);
+  }
+}
+
+@media (forced-colors: active) {
+  /* Field/dropdown grammar in system colors; the active option keeps a
+     system highlight so keyboard navigation stays perceivable. */
+  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'] {
+    border-color: ButtonText;
+    background: Field;
+    color: FieldText;
+  }
+  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'][data-disabled='true'] {
+    border-color: GrayText;
+    color: GrayText;
+    opacity: 1;
+  }
+  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option']:not([data-disabled='true']):hover,
+  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-active='true'] {
+    background: Highlight;
+    color: HighlightText;
+  }
+  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+    color: GrayText;
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'],
   .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'] {
     transition-duration: 0.01ms;
+  }
+  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'] {
+    animation: none;
   }
 }

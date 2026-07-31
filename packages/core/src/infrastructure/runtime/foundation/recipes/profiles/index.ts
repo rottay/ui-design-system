@@ -63,15 +63,15 @@ export function useRecipeProfile(): RecipeProfileDefinition | undefined {
   return useContext(RecipeProfileContext);
 }
 
-const EMPTY_DEFAULTS: RecipeProfileFamilyDefaults = Object.freeze({});
+const EMPTY_DEFAULTS = Object.freeze({});
 
 /**
  * Per-family axis defaults from the active profile. Explicit caller props
  * always win; engines apply these only where the caller left an axis unset.
  */
-export function useRecipeProfileDefaults(
-  family: RecipeProfileFamily
-): RecipeProfileFamilyDefaults {
+export function useRecipeProfileDefaults<Family extends RecipeProfileFamily>(
+  family: Family
+): RecipeProfileFamilyDefaults<Family> {
   const profile = useContext(RecipeProfileContext);
-  return profile?.families[family] ?? EMPTY_DEFAULTS;
+  return (profile?.families[family] ?? EMPTY_DEFAULTS) as RecipeProfileFamilyDefaults<Family>;
 }

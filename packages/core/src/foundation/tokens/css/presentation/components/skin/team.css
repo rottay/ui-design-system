@@ -1,9 +1,62 @@
-/** TeamSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+/**
+ * TeamSurface skin (WO-SKIN-06 / CK-I; SU08 wave 2026-07-30).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
+ *
+ * SCOPE: the surface composes PageShellSurface, Card, Grid, Tag, Select,
+ * Button, Typography and the shared state kits (loading skeleton / empty /
+ * error) — each owns its chrome, states and forced-colors treatment. Former
+ * paints were deliberately routed AWAY from this file, to the owner that
+ * already paints the concern:
+ *   - every text ink/size/weight (the old inline fontWeight/fontSize drains)
+ *     moved to the Typography primitive channels (`weight`/`size`/`color`
+ *     props — typography.css sorts in `rottay-engines`, after this layer, so
+ *     a skin rule for them would lose anyway); the muted ink rule retired
+ *     with them (`color="muted"` carries it now);
+ *   - long-name/email wrap needs no rule: Typography wraps `anywhere`
+ *     globally (runtime/engines/modern/skin/typography.css).
+ * What remains is the paint the surface itself owns:
+ *   1. the roster row rhythm (block padding + separators), ported from the
+ *      old inline `padding: 12px 0` to the density-aware spacing token and
+ *      restated with logical properties (the old rule was physical
+ *      `border-bottom`);
+ *   2. the role Select's minimum inline size, ported from the old inline
+ *      `minWidth: 120`. `--_ds-team-control-min-inline-size` keeps that
+ *      implementation geometry private. Its sibling
+ *      `--_ds-team-card-min-inline-size` (fallback 16rem) is consumed by the
+ *      cards-layout Grid `templateColumns` in index.tsx. Neither name is a
+ *      tenant dial or an application hook.
+ * The `ds-team__muted-text` class stays as a pure landing hook (pinned by
+ * SurfacesLongTailBatch.contract.test.tsx) — no paint attached.
+ *
+ * SPECIFICITY: anatomy class inside the surface scope, no selector
+ * repetition, no `!important`. The doubled
+ * `[data-part='root'][data-part='root']` and `.ds-team__divider.ds-team__divider`
+ * selectors are gone (4th-tanda owner directive: Text always stamps
+ * `data-part='root'`, and the divider class is unique per row — the row is a
+ * Flex, which stamps no data-part, so its rules key on the class alone).
+ *
+ * FORCED-COLORS: the one surface-owned structural paint (row separators)
+ * re-keys to GrayText; every composed part handles its own (same doctrine as
+ * skin/integration.css).
+ */
 
-.ds-surface.ds-team .ds-team__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+.ds-surface.ds-team .ds-team__divider {
+  padding-block: var(--ds-spacing-3, 12px);
 }
 
-.ds-surface.ds-team .ds-team__divider.ds-team__divider {
-  border-bottom: 1px solid var(--ds-color-border);
+.ds-surface.ds-team .ds-team__divider:not(:last-child) {
+  border-block-end: 1px solid var(--ds-color-border, #1c1c20);
+}
+
+.ds-surface.ds-team .ds-team__role-select {
+  min-inline-size: var(--_ds-team-control-min-inline-size, 7.5rem);
+}
+
+@media (forced-colors: active) {
+  .ds-surface.ds-team .ds-team__divider:not(:last-child) {
+    border-block-end-color: GrayText;
+  }
 }

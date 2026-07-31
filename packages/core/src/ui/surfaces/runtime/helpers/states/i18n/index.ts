@@ -35,14 +35,27 @@ import { useTranslation } from '@/infrastructure/runtime/i18n';
  */
 export function useSurfaceTranslations(): {
   tSurface: (key: string, params?: Record<string, string | number>) => string;
+  /**
+   * Same scoping as `tSurface` but with a caller-owned English floor, so a
+   * missing catalog key never echoes the raw key into visible copy or an
+   * aria-label. Prefer `tSurfaceOr` for any string that renders before the
+   * catalog entry is guaranteed present.
+   */
+  tSurfaceOr: (
+    key: string,
+    fallback: string,
+    params?: Record<string, string | number>
+  ) => string;
   locale: string;
 } {
-  const { t, locale } = useTranslation('components');
+  const { t, tOr, locale } = useTranslation('components');
 
   // Prefix every key with `surfaces.` so surface components only need to
   // provide the relative key path (e.g., 'list.noResults').
   return {
     tSurface: (key, params) => t(`surfaces.${key}`, params),
+    tSurfaceOr: (key, fallback, params) =>
+      tOr(`surfaces.${key}`, fallback, params),
     locale,
   };
 }

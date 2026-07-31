@@ -27,9 +27,8 @@
  * measuring; every other rule wins unlayered at (0,3,0) or higher.
  */
 
-@keyframes ds-toggle-modern-spin {
-  to { transform: rotate(1turn); }
-}
+/* The loading sweep rides the canonical `ds-foundation-spin` (the tree/table/
+   form convention); no per-family keyframe survives here. */
 
 /* Field wrapper --------------------------------------------------------- */
 .ds-toggle-field[data-part='field'] {
@@ -76,7 +75,9 @@
     opacity var(--ds-toggle-transition-duration, var(--ds-motion-normal)) var(--ds-motion-ease-out);
 }
 
-/* Size geometry + resolved thumb travel (density-scaled). */
+/* Size geometry + resolved thumb travel (density-scaled). Fallbacks mirror
+   the canonical presentation/components/toggle.css values exactly, so a
+   token-layer outage cannot shift the track geometry. */
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='xs'] [data-part='track'] {
   --ds-toggle-resolved-track-w: calc(var(--ds-toggle-xs-width, 1.75rem) * var(--ds-density-effective-scale, 1));
   --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xs-height, 1rem) * var(--ds-density-effective-scale, 1));
@@ -131,12 +132,23 @@
   background-color: var(--ds-toggle-error-track-bg, var(--ds-color-error));
 }
 
-/* hover (not disabled): quiet tone shift, unchecked and checked. */
-.ds-toggle.ds-toggle--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='track'] {
-  background-color: var(--ds-toggle-track-bg-hover, var(--ds-color-border));
+/* hover (not disabled): quiet tone shift, unchecked and checked. Pointer-fine
+   only (hover law): touch feedback is the :active repaint below plus the
+   thumb's press dip, never a sticky wash. */
+@media (hover: hover) {
+  .ds-toggle.ds-toggle--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='track'] {
+    background-color: var(--ds-toggle-track-bg-hover, var(--ds-color-border));
+  }
+  .ds-toggle.ds-toggle--modern[data-checked='true']:hover:not([data-disabled='true']):not([data-error='true']) [data-part='track'] {
+    filter: var(--ds-toggle-checked-hover-filter, brightness(1.06));
+  }
 }
-.ds-toggle.ds-toggle--modern[data-checked='true']:hover:not([data-disabled='true']):not([data-error='true']) [data-part='track'] {
-  filter: var(--ds-toggle-checked-hover-filter, brightness(1.06));
+
+/* Touch/keyboard parity: the unchecked track repaints on press with the same
+   governed channel; the checked press equivalent is the thumb dip below
+   (already per-state, including its RTL branch). */
+.ds-toggle.ds-toggle--modern[data-checked='false']:active:not([data-disabled='true']) [data-part='track'] {
+  background-color: var(--ds-toggle-track-bg-active, var(--ds-toggle-track-bg-hover, var(--ds-color-border)));
 }
 
 /* disabled: the whole control quiets, semantics stay on the input. */
@@ -254,7 +266,7 @@
 .ds-toggle.ds-toggle--modern [data-part='loading-indicator'] svg {
   inline-size: 100%;
   block-size: 100%;
-  animation: ds-toggle-modern-spin var(--ds-toggle-loading-duration, 900ms) linear infinite;
+  animation: ds-foundation-spin var(--ds-toggle-loading-duration, var(--ds-motion-glacial, 500ms)) linear infinite;
 }
 
 /* Spinner paint lives here, never in the runtime: the track ring and the
@@ -288,8 +300,18 @@
   font-weight: var(--ds-input-error-message-font-weight, var(--ds-font-weight-medium));
 }
 
-/* hidden accessibility input (visually clipped): no border. */
+/* hidden accessibility input (visually clipped): the whole clip idiom lives
+   here, not inline in the engine (single paint/layout owner, radio.css
+   precedent). */
 .ds-toggle.ds-toggle--modern input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
   border: 0;
 }
 
@@ -308,8 +330,10 @@
     transition-duration: 0.01ms;
   }
 
+  /* The loading sweep stops flat (the timeline.css convention); the global
+     reduced-motion guard already pins it, this keeps the family explicit. */
   .ds-toggle.ds-toggle--modern [data-part='loading-indicator'] svg {
-    animation-duration: 1.8s;
+    animation: none;
   }
 }
 

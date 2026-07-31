@@ -1,5 +1,5 @@
 /**
- * Modern DetailPanel skin (WO-ARC-09 checkpoint 5).
+ * Modern DetailPanel skin (WO-ARC-09 checkpoint 5; 4th-wave consolidation).
  *
  * DELIBERATELY UNLAYERED, same rationale as the other engine skins (P-47):
  * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
@@ -7,27 +7,42 @@
  * preflight + DaisyUI and still yields to a caller's inline `style`.
  *
  * SCOPE ROOT is the panel's outer `<div>`, which carries the pair
- * `ds-pattern-detail-panel ds-engine-modern` + `data-part='root'`; every painted
- * element is a descendant with its own `data-part`. The engine has two roots —
- * the content panel and the loading early-return — and both carry the class pair,
- * `data-part='root'`, and (loading only) `data-loading='true'`.
+ * `ds-pattern-detail-panel ds-engine-modern` + `data-part='root'` +
+ * `data-pattern='detail-panel'`; every painted element is a descendant with
+ * its own `data-part`. The engine has two roots -- the content panel and the
+ * loading early-return -- and both carry all three stamps.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
- * `border-color` on every element. A rule that paints `border` / `border-color`
- * must reach (0,4,0): the two root classes (0,2,0) + a `data-part` REPEATED on
- * the target, or a contract `data-variant`/`data-active`/`data-disabled`, for the
- * remaining (0,2,0). Rules that set only non-border paint (background, color,
- * box-shadow, outline, border-radius) beat preflight while unlayered at (0,3,0).
- * The 4th unit is never bought from an incidental attribute (`role`, `aria-label`,
- * `placeholder`). Pure `border: none` resets carry no color and are exempt.
+ * SPECIFICITY (P-48 + 4th-wave recount): the Platform-only Rottay artifact
+ * ships an unlayered `html[data-tenant]:not([data-theme]):not(.light) *` at
+ * (0,3,1) that sets `border-color` on every element. Every border-painting
+ * rule here reaches (0,4,0) WITHOUT repeating an attribute: the two scope
+ * classes lend (0,2,0) and the remaining (0,2,0) comes from the panel root's
+ * own always-present `[data-part='root']` (descendants) or the root's own
+ * `[data-pattern='detail-panel']` stamp (the root rule itself). FRAGILITY
+ * NOTE: if a future render drops either stamp, restore the stamp rather than
+ * re-doubling a part. The border-specificity lint in
+ * `PatternDetailPanel.real-engines.test.tsx` enforces the floor.
+ *
+ * COMPOSITION (pattern law): action buttons, the back button and the loading
+ * skeleton are the certified Button/Skeleton primitives -- their paint,
+ * hover/press/focus, forced-colors and touch floors live in those primitives'
+ * own skins. The rules below paint ONLY pattern-owned chrome: the panel
+ * surface, the header identity frame, the pattern's tab anatomy (pinned by
+ * the quality contract -- composing the Tabs primitive is a tests-side
+ * contract change, recorded as debt), breadcrumbs, and the danger action
+ * variant the Button contract does not offer (quiet destructive secondary).
  *
  * Interaction paint that the removed React hover/focus state used to own now
- * lives here as `:hover, :focus` rules, gated on `:not(:disabled)` because the
- * button element is natively `disabled` whenever the action is disabled OR
- * loading — the exact `isInteractive` gate the JSX evaluated.
+ * lives here as `:hover` (hover-capable only, 4th-wave law), `:focus`
+ * (pointer-agnostic) and `:active` (the touch equivalent), gated on
+ * `:not(:disabled)` because the button element is natively `disabled`
+ * whenever the action is disabled OR loading -- the exact `isInteractive`
+ * gate the JSX evaluated.
  *
- * Values are transcribed verbatim from `engines/modern.tsx`.
+ * Values are transcribed verbatim from `engines/modern.tsx` (inline styles
+ * drained: tab geometry, breadcrumbs, headings, header/footer layout and the
+ * body/sidebar flex contract -- the last inline layout is the sidebar's
+ * runtime width channel).
  */
 
 /* ---- root: card surface + radius (was containerStyle) ---- */
@@ -42,11 +57,11 @@
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
     var(--ds-workspace-card-shadow, var(--ds-shadow-sm));
-  animation: ds-detail-panel-arrive var(--ds-motion-calm, 220ms)
+  animation: ds-detail-panel-arrive var(--ds-motion-calm, var(--ds-motion-normal))
     var(--ds-motion-ease-out, ease-out) both;
 }
 
-.ds-pattern-detail-panel.ds-engine-modern[data-part='root'][data-part='root'] {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'][data-pattern='detail-panel'] {
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
 }
 
@@ -58,8 +73,19 @@
   container-name: ds-detail;
 }
 
-.ds-pattern-detail-panel.ds-engine-modern [data-part='header'][data-part='header'] {
-  min-width: 0;
+/* ---- panel-inner: the single padding context (was the inline padding on
+        both render roots) ---- */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] > [data-part='panel-inner'] {
+  padding: var(--ds-detail-panel-padding);
+}
+
+/* ---- header: card chrome + layout (was inline flex) ---- */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='header'] {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ds-detail-panel-content-gap);
+  min-inline-size: 0;
   padding: var(--ds-card-header-padding, var(--ds-spacing-4, 16px));
   border: 1px solid var(--ds-card-header-border, var(--ds-color-border));
   border-radius: var(--ds-card-radius, var(--ds-radius-lg));
@@ -82,14 +108,29 @@
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='header']:hover {
-  background-position: 100% 50%;
+@media (hover: hover) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='header']:hover {
+    background-position: 100% 50%;
+    border-color: var(--ds-workspace-card-border-hover, var(--ds-card-header-border, var(--ds-color-border)));
+    box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
+  }
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='header']:active {
   border-color: var(--ds-workspace-card-border-hover, var(--ds-card-header-border, var(--ds-color-border)));
   box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
 }
 
-.ds-pattern-detail-panel.ds-engine-modern [data-part='avatar'][data-part='avatar'] {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='identity'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-detail-panel-item-gap);
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='avatar'] {
   display: inline-grid;
+  flex-shrink: 0;
   place-items: center;
   padding: 3px;
   border: 1px solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
@@ -100,8 +141,24 @@
     0 10px 22px -16px color-mix(in srgb, var(--ds-color-primary) 52%, transparent);
 }
 
-.ds-pattern-detail-panel.ds-engine-modern [data-part='actions'][data-part='actions'] {
-  min-height: calc(var(--ds-control-height-sm, 32px) + 8px);
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='heading'] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='title-row'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-detail-panel-item-gap);
+}
+
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='actions'] {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--ds-detail-panel-item-gap);
+  min-block-size: calc(var(--ds-control-height-sm, 32px) + 8px);
   padding: 3px;
   border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
   border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
@@ -109,174 +166,257 @@
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
 }
 
-/* ---- action-button: shared chrome + per-variant base and merged hover/focus.
-        The JSX merged `vs.hover` over `vs.base` when `isInteractive`
-        (`(hovered || focused) && !disabled && !loading`); the button is natively
-        `disabled` on disabled||loading, so `:not(:disabled)` reproduces it. ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'] > .rottay-button {
-  outline: none;
-}
-
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='primary'] > .rottay-button {
+/* ---- action-button: the pattern layers its OWN variant chrome ONLY where it
+        diverges from the certified Button (danger-quiet, the destructive
+        secondary the Button contract does not offer) and where the quality
+        contract PINS the pattern's primary hover. Every other variant is the
+        primitive's own paint (see COMPOSITION in the header). ---- */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .rottay-button {
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary);
   border: 1px solid var(--ds-color-primary);
   box-shadow: var(--ds-elevation-1);
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='primary'] > .rottay-button:hover:not(:disabled),
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='primary'] > .rottay-button:focus:not(:disabled) {
+@media (hover: hover) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .rottay-button:hover:not(:disabled) {
+    background: var(--ds-color-primary-600);
+    border-color: var(--ds-color-primary-600);
+    box-shadow: var(--ds-elevation-2);
+  }
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .rottay-button:focus:not(:disabled) {
   background: var(--ds-color-primary-600);
   border-color: var(--ds-color-primary-600);
   box-shadow: var(--ds-elevation-2);
 }
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='primary'] > .rottay-button:active:not(:disabled) {
+  background: var(--ds-color-primary-600);
+  border-color: var(--ds-color-primary-600);
+}
 
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='danger'] > .rottay-button {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .rottay-button {
   background: transparent;
   color: var(--ds-color-error-600);
   border: 1px solid var(--ds-color-error-200);
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='danger'] > .rottay-button:hover:not(:disabled),
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='danger'] > .rottay-button:focus:not(:disabled) {
+@media (hover: hover) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .rottay-button:hover:not(:disabled) {
+    background: var(--ds-color-error-50);
+    border-color: var(--ds-color-error-300);
+  }
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .rottay-button:focus:not(:disabled) {
+  background: var(--ds-color-error-50);
+  border-color: var(--ds-color-error-300);
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'][data-variant='danger'] > .rottay-button:active:not(:disabled) {
   background: var(--ds-color-error-50);
   border-color: var(--ds-color-error-300);
 }
 
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='ghost'] > .rottay-button {
-  background: transparent;
-  color: var(--ds-color-text-secondary);
-  border: 1px solid transparent;
-}
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='ghost'] > .rottay-button:hover:not(:disabled),
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='ghost'] > .rottay-button:focus:not(:disabled) {
-  background: var(--ds-color-neutral-50);
-  color: var(--ds-color-text-primary);
-}
-
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='default'] > .rottay-button {
-  background: transparent;
-  color: var(--ds-color-text-secondary);
-  border: 1px solid var(--ds-color-border);
-}
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='default'] > .rottay-button:hover:not(:disabled),
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='default'] > .rottay-button:focus:not(:disabled) {
-  background: var(--ds-color-neutral-50);
-  color: var(--ds-color-text-primary);
-  border-color: var(--ds-color-neutral-300);
-}
+/* Ghost and default action variants now paint EXACTLY like the certified
+   Button's own ghost/default variants (the pattern's former overrides were
+   byte-for-byte the primitive's own hover surface and ink -- deleted as
+   duplication, see COMPOSITION in the header). */
 
 /* ---- action spinner (loading): the `animation: ds-foundation-spin` reference
         stays inline (sanctioned residual); its border ring moves here. ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='action-spinner'][data-part='action-spinner'] {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-spinner'] {
+  display: inline-block;
+  flex-shrink: 0;
+  inline-size: var(--ds-button-sm-icon-size);
+  block-size: var(--ds-button-sm-icon-size);
   border: 2px solid currentColor;
   border-top-color: transparent;
   border-radius: var(--ds-radius-full);
 }
 
-/* ---- back-button: ghost, with the `hovered || focused` treatment (no disabled
-        state on this button, so no gate). ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='back-button'] > .rottay-button {
-  color: var(--ds-color-text-secondary);
-  outline: none;
-}
-.ds-pattern-detail-panel.ds-engine-modern [data-part='back-button'] > .rottay-button:hover,
-.ds-pattern-detail-panel.ds-engine-modern [data-part='back-button'] > .rottay-button:focus {
-  background: var(--ds-color-neutral-100);
-  color: var(--ds-color-text-primary);
-}
+/* ---- back-button: ghost, painted by the Button primitive (the former
+        neutral-100 hover override was the Button ghost's own hover surface --
+        deleted as duplication). ---- */
 
-/* ---- tab-button: base + active underline + disabled + hover. The JSX hover gate
-        was `!isActive && !disabled`; disabled is native here. ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button'][data-part='tab-button'] {
+/* ---- tab-button: pattern tab anatomy (PINNED by the quality contract; the
+        Tabs primitive composition is a tests-side contract change). Geometry
+        drained from the JSX inline dump. ---- */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button'] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-tabs-item-gap);
+  min-block-size: var(--ds-tabs-md-height);
+  padding: var(--ds-tabs-md-padding);
   color: var(--ds-tab-color, var(--ds-color-text-secondary));
   background: transparent;
   border: 1px solid transparent;
   border-radius: var(--ds-tabs-item-radius, var(--ds-radius-md));
   outline: none;
+  font-size: var(--ds-tabs-md-font-size);
+  font-weight: var(--ds-tabs-item-font-weight);
+  line-height: var(--ds-line-height-body);
+  cursor: pointer;
+  transition:
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button'][data-active='true'] {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button'][data-active='true'] {
   color: var(--ds-tab-color-active, var(--ds-color-text-primary));
   background: var(--ds-tabs-active-bg, var(--ds-surface-card));
   border-color: var(--ds-tabs-list-border, var(--ds-color-border));
   box-shadow: var(--ds-tabs-active-shadow, var(--ds-elevation-1));
-  transform: translateY(-1px);
+  font-weight: var(--ds-tabs-item-font-weight-active);
+  transform: var(--ds-tabs-active-transform, translateY(-1px));
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button'][data-disabled='true'] {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button'][data-disabled='true'] {
   color: var(--ds-color-text-disabled);
+  cursor: not-allowed;
+  opacity: 0.5;
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button']:hover:not([data-active='true']):not(:disabled),
-.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button']:focus:not([data-active='true']):not(:disabled) {
+@media (hover: hover) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:hover:not([data-active='true']):not(:disabled) {
+    color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
+    background: var(--ds-tab-bg-hover, color-mix(in srgb, var(--ds-color-bg-secondary) 82%, transparent));
+    border-color: color-mix(in srgb, var(--ds-tabs-list-border, var(--ds-color-border)) 72%, transparent);
+  }
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:focus:not([data-active='true']):not(:disabled) {
   color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
   background: var(--ds-tab-bg-hover, color-mix(in srgb, var(--ds-color-bg-secondary) 82%, transparent));
   border-color: color-mix(in srgb, var(--ds-tabs-list-border, var(--ds-color-border)) 72%, transparent);
 }
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:active:not([data-active='true']):not(:disabled) {
+  color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
+  background: var(--ds-tab-bg-hover, color-mix(in srgb, var(--ds-color-bg-secondary) 82%, transparent));
+}
+
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-icon'] {
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: var(--ds-tabs-md-icon-size);
+}
 
 /* ---- tab-badge: active state keyed on the parent tab-button's data-active ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-badge'] {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-badge'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 18px;
+  padding: 1px 7px;
   border-radius: var(--ds-radius-full);
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent);
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-2xs);
+  font-weight: 600;
+  line-height: 1.4;
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button'][data-active='true'] [data-part='tab-badge'] {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button'][data-active='true'] [data-part='tab-badge'] {
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent);
   color: var(--ds-color-text-primary);
 }
 
 /* ---- breadcrumbs: separator, link (+ its hover), current (+ its `isLast`
-        emphasis, which is always the last element child of the nav). ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='breadcrumb-separator'] {
-  display: inline-flex;
+        emphasis, which is always the last element child of the nav). Layout
+        and geometry drained from the JSX inline styles. ---- */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumbs'] {
+  display: flex;
   align-items: center;
-  color: var(--ds-color-text-disabled);
-}
-.ds-pattern-detail-panel.ds-engine-modern [data-part='breadcrumbs'][data-part='breadcrumbs'] {
-  width: fit-content;
-  max-width: 100%;
-  padding: 4px 9px;
-  overflow-x: auto;
+  gap: var(--ds-spacing-2, 8px);
+  margin-block-end: var(--ds-spacing-3, 12px);
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  padding-block: 4px;
+  padding-inline: 9px;
+  overflow-inline: auto;
   border: 1px solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-full);
   background: var(--ds-breadcrumb-bg, color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
   scrollbar-width: none;
+  font-size: var(--ds-font-size-xs);
+  line-height: var(--ds-line-height-body);
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='breadcrumb-link'] {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-separator'] {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ds-color-text-disabled);
+  font-size: var(--ds-font-size-2xs);
+  user-select: none;
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-link'] {
   color: var(--ds-color-text-secondary);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='breadcrumb-link']:hover {
+@media (hover: hover) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-link']:hover {
+    color: var(--ds-color-text-primary);
+  }
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-link']:active {
   color: var(--ds-color-text-primary);
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='breadcrumb-current'] {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-current'] {
   color: var(--ds-color-text-secondary);
+  font-weight: 500;
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='breadcrumb-current']:last-child {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-current'][data-clickable='true'] {
+  cursor: pointer;
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-current'][data-last='true'] {
+  color: var(--ds-color-text-primary);
+  font-weight: 600;
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-current']:last-child {
   color: var(--ds-color-text-primary);
 }
 
 /* ---- title ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='title'] {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='title'] {
+  margin: 0;
   color: var(--ds-color-text-primary);
-  max-width: 34ch;
+  max-inline-size: 34ch;
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-font-size-xl);
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: var(--ds-line-height-heading);
+  letter-spacing: var(--ds-letter-spacing-heading);
   text-wrap: balance;
 }
 
-/* ---- status badge (modern ignores status.color — divergence preserved) ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='status-badge'][data-part='status-badge'] {
+/* ---- status badge (modern ignores status.color -- divergence preserved) ---- */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='status-badge'] {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border: 1px solid var(--ds-color-border-secondary);
   border-radius: var(--ds-radius-full);
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent);
   color: var(--ds-color-text-secondary);
-  border: 1px solid var(--ds-color-border-secondary);
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: var(--ds-line-height-body);
+  white-space: nowrap;
 }
 
 /* ---- subtitle ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='subtitle'] {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='subtitle'] {
+  margin: 4px 0 0;
   color: var(--ds-color-text-secondary);
-  max-width: 72ch;
+  max-inline-size: 72ch;
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-body);
   text-wrap: pretty;
 }
 
-/* ---- tab-list bottom border ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-list'][data-part='tab-list'] {
+/* ---- tab-list bottom border + layout ---- */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-list'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-tabs-gap);
+  margin-block-end: var(--ds-detail-panel-content-gap);
   padding: var(--ds-tabs-list-padding, 3px);
   background: var(--ds-tabs-list-bg, var(--ds-surface-inset));
   border: 1px solid var(--ds-tabs-list-border, var(--ds-color-border));
@@ -284,8 +424,8 @@
   box-shadow: inset 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
 }
 
-.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-panel'][data-part='tab-panel'] {
-  min-width: 0;
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel'] {
+  min-inline-size: 0;
   padding: var(--ds-workspace-card-padding, var(--ds-spacing-4, 16px));
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
@@ -293,85 +433,125 @@
   box-shadow: var(--ds-workspace-card-shadow, var(--ds-elevation-1));
 }
 
+/* ---- body / main / sidebar: the flex contract (was the inline layout the
+        !important fought; now the container query below wins by source order
+        at equal specificity, no !important anywhere). ---- */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='body'] {
+  display: flex;
+  flex-direction: row;
+  gap: var(--ds-detail-panel-content-gap);
+  margin-block-start: var(--ds-detail-panel-section-gap);
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='body'][data-sidebar-position='left'] {
+  flex-direction: row-reverse;
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='main'] {
+  flex: 1 1 0%;
+  min-inline-size: 0;
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar-slot'] {
+  flex-shrink: 0;
+  inline-size: var(--ds-detail-panel-sidebar-width, 300px);
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='body'][data-sidebar-position='left'] > [data-part='sidebar-slot'] {
+  order: 1;
+}
+
 /* ---- sidebar panel ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='sidebar'][data-part='sidebar'] {
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar'] {
+  padding: var(--ds-workspace-card-padding);
   background: var(--ds-workspace-card-bg, var(--ds-surface-panel));
-  border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
+  border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
   box-shadow: var(--ds-workspace-card-shadow, none);
 }
 
 @container ds-detail (max-width: 720px) {
-  .ds-pattern-detail-panel.ds-engine-modern [data-part='header'] {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='header'] {
     flex-direction: column;
   }
 
-  .ds-pattern-detail-panel.ds-engine-modern [data-part='tab-list'] {
-    overflow-x: auto;
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-list'] {
+    overflow-inline: auto;
     scrollbar-width: none;
   }
 
-  .ds-pattern-detail-panel.ds-engine-modern [data-part='body'] {
-    flex-direction: column !important;
+  /* The flex contract lives in CSS now, so the narrow collapse needs no
+     !important: same specificity as the base rules, later in the file. */
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='body'] {
+    flex-direction: column;
   }
 
-  .ds-pattern-detail-panel.ds-engine-modern [data-part='body'] > div {
-    width: 100% !important;
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='main'],
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar-slot'] {
+    inline-size: 100%;
   }
 
-  .ds-pattern-detail-panel.ds-engine-modern [data-part='actions'] {
-    width: 100%;
-    overflow-x: auto;
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='actions'] {
+    inline-size: 100%;
+    overflow-inline: auto;
   }
 
-  .ds-pattern-detail-panel.ds-engine-modern [data-part='actions'] > * {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='actions'] > * {
     flex: 1 0 max-content;
   }
 }
 
 /* ---- footer top border ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='footer'][data-part='footer'] {
-  border-top: 1px solid var(--ds-color-border);
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='footer'] {
+  margin-block-start: var(--ds-detail-panel-section-gap);
+  padding-block-start: var(--ds-detail-panel-content-gap);
+  border-block-start: 1px solid var(--ds-color-border);
 }
 
-/* ---- skeleton parts: per-part radius (was PULSE_STYLE + per-instance override)
-        + shared pulse background. The `animation: ds-foundation-pulse` reference
-        to the global keyframes stays inline (sanctioned residual). ---- */
-.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-breadcrumb'] {
-  border-radius: var(--ds-radius-sm);
-  background: var(--ds-color-neutral-100);
+/* ---- skeleton: the Skeleton PRIMITIVE owns shape, pulse and reduced-motion
+        (pattern-law composition); these rules own ONLY the loading layout
+        (spacing between parts), never the placeholder paint. ---- */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='skeleton-breadcrumb'] {
+  margin-block-end: 14px;
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-avatar'] {
-  border-radius: var(--ds-radius-full);
-  background: var(--ds-color-neutral-100);
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='skeleton-header'] {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-badge'] {
-  border-radius: var(--ds-radius-full);
-  background: var(--ds-color-neutral-100);
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='skeleton-avatar'] {
+  flex-shrink: 0;
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-title'] {
-  border-radius: var(--ds-radius-sm);
-  background: var(--ds-color-neutral-100);
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='skeleton-title-column'] {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 6px;
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-subtitle'] {
-  border-radius: var(--ds-radius-sm);
-  background: var(--ds-color-neutral-100);
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='skeleton-title-row'] {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-action'] {
-  border-radius: var(--ds-radius-md);
-  background: var(--ds-color-neutral-100);
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='skeleton-actions-row'] {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-tab'] {
-  border-radius: var(--ds-radius-sm);
-  background: var(--ds-color-neutral-100);
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='skeleton-tabbar'] {
+  display: flex;
+  gap: var(--ds-tabs-gap);
+  margin-block-start: var(--ds-detail-panel-section-gap);
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-content'] {
-  border-radius: var(--ds-radius-md);
-  background: var(--ds-color-neutral-100);
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='skeleton-body'] {
+  display: flex;
+  gap: var(--ds-detail-panel-content-gap);
+  margin-block-start: var(--ds-detail-panel-section-gap);
 }
-.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-sidebar'] {
-  border-radius: var(--ds-radius-lg);
-  background: var(--ds-color-neutral-100);
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='skeleton-content-column'] {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 12px;
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='skeleton-sidebar'] {
+  flex-shrink: 0;
 }
 
 @keyframes ds-detail-panel-arrive {
@@ -381,8 +561,36 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-detail-panel.ds-engine-modern[data-part='root'],
-  .ds-pattern-detail-panel.ds-engine-modern [data-part='header'] {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='header'] {
     animation: none;
     transition: none;
+  }
+}
+
+/* ---- forced colors: every card frame, the tab chrome and the breadcrumbs
+        pill keep a system-colored edge; the interactive parts (Button,
+        Skeleton) follow their own primitives' contracts. ---- */
+@media (forced-colors: active) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'][data-pattern='detail-panel'],
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='header'],
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='avatar'],
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='actions'],
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumbs'],
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='status-badge'],
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-list'],
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel'],
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar'] {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button'][data-active='true'] {
+    border-color: Highlight;
+  }
+
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:focus-visible,
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='breadcrumb-link']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
   }
 }

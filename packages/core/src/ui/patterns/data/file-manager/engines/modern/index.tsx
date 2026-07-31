@@ -6,10 +6,16 @@
  * breadcrumb navigation, drag-and-drop upload, multi-select, rename, and bulk delete.
  *
  * The pattern COMPOSES public DS primitives — Button (toolbar/view/item
- * actions), Checkbox (row selection), Spinner (loading) and Empty (empty
- * state) — and never recreates a control with its own HTML/CSS. Geometry and
- * the pattern's own paint live in the unlayered modern file-manager skin,
- * keyed on the `data-part`/`data-*` contract this file stamps.
+ * actions), Checkbox (row selection), Spinner (loading), Empty (empty
+ * state) and Breadcrumb (navigation trail — the hand-rolled ul/li with a
+ * CSS `li + li::before` separator is retired; the certified primitive owns
+ * the nav landmark, the governed auto-mirroring separator icon, real
+ * buttons for clickable crumbs and `aria-current` on the current one) — and
+ * never recreates a control with its own HTML/CSS. File/folder glyphs are
+ * the governed semantic icon roles (`content.folder` / `content.file`),
+ * never raw inline SVG. Geometry and the pattern's own paint live in the
+ * unlayered modern file-manager skin, keyed on the `data-part`/`data-*`
+ * contract this file stamps.
  *
  * The pattern is domain-agnostic: every own label (toolbar, breadcrumb root,
  * column headers, view toggle titles, rename prompt, empty floor) resolves
@@ -30,10 +36,13 @@ import type { FileManagerProps, FileItem, FileSystemItem } from '../../contracts
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { LayoutGridIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-grid';
 import { LayoutListIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-list';
+import { ContentFolderIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-folder';
+import { ContentFileIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-file';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
 import ModernCheckbox from '../../../../../primitives/inputs/Checkbox/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
 import ModernEmpty from '../../../../../primitives/display/Empty/engines/modern';
+import ModernBreadcrumb from '../../../../../primitives/navigation/Breadcrumb/engines/modern';
 
 /** Converts raw byte count to a human-friendly size string (B/KB/MB/GB). */
 function formatSize(bytes?: number): string {
@@ -194,16 +203,27 @@ export default function ModernFileManager(props: FileManagerProps) {
         {/* Toolbar */}
         <div data-part="toolbar">
           <div data-part="breadcrumb">
-            <ul>
-              <li><a data-part="breadcrumb-link" data-action="navigate-root" onClick={() => onNavigate?.(null)} className="cursor-pointer">{copy.root}</a></li>
-              {currentPath.map((segment, i) => (
-                <li key={segment}>
-                  {i < currentPath.length - 1
-                    ? <a data-part="breadcrumb-link" data-action="navigate-folder" onClick={() => onNavigate?.(segment)} className="cursor-pointer">{segment}</a>
-                    : <span data-part="breadcrumb-current">{segment}</span>}
-                </li>
-              ))}
-            </ul>
+            {/* Composed Breadcrumb primitive (P76): the last item is the
+                current one by contract (inert, aria-current="page"); every
+                earlier crumb carries an onClick and renders as a real
+                button. When the path is empty, Root IS the current crumb. */}
+            <ModernBreadcrumb
+              items={[
+                {
+                  key: '__root__',
+                  label: copy.root,
+                  onClick: onNavigate && currentPath.length > 0 ? () => onNavigate(null) : undefined,
+                },
+                ...currentPath.map((segment, i) => ({
+                  key: `path-${i}`,
+                  label: segment,
+                  onClick:
+                    onNavigate && i < currentPath.length - 1
+                      ? () => onNavigate(segment)
+                      : undefined,
+                })),
+              ]}
+            />
           </div>
           <div data-part="toolbar-actions">
             {selectedItems.length > 0 && onDelete && (
@@ -223,7 +243,6 @@ export default function ModernFileManager(props: FileManagerProps) {
                   ref={fileInputRef}
                   type="file"
                   multiple
-                  className="hidden"
                   data-part="file-input"
                   onChange={handleUploadChange}
                   data-testid="file-input"
@@ -300,34 +319,33 @@ export default function ModernFileManager(props: FileManagerProps) {
                         </span>
                       </td>
                       <td>
-                        <div className="flex items-center gap-2">
-                          {/* Folders use an inline SVG folder icon; files use a renderFileIcon override or generic file SVG. */}
+                        <div data-part="name-cell">
+                          {/* Folders and files use the governed semantic icon
+                              roles; files keep the renderFileIcon override. */}
                           {item.type === 'folder' ? (
-                            <svg data-part="folder-icon" data-file-kind="folder" xmlns="http://www.w3.org/2000/svg" className="ds-file-manager__folder-icon" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                            </svg>
+                            <span className="ds-file-manager__folder-icon" data-part="folder-icon" data-file-kind="folder">
+                              <ContentFolderIcon decorative size={20} />
+                            </span>
                           ) : (
                             <span className="ds-file-manager__file-icon" data-part="file-icon" data-file-kind={fileKindOf(item)}>
                               {renderFileIcon ? renderFileIcon(item as FileItem) : (
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                </svg>
+                                <ContentFileIcon decorative size={20} />
                               )}
                             </span>
                           )}
                           {item.type === 'folder' ? (
-                            <a data-part="folder-link" data-action="navigate-folder" className="ds-file-manager__folder-link" onClick={() => onNavigate?.(item.id)}>
+                            <a data-part="folder-link" data-action="navigate-folder" className="ds-file-manager__folder-link" title={item.name} onClick={() => onNavigate?.(item.id)}>
                               {item.name}
                             </a>
                           ) : (
-                            <span data-part="file-name">{item.name}</span>
+                            <span data-part="file-name" title={item.name}>{item.name}</span>
                           )}
                         </div>
                       </td>
                       <td>{item.type === 'file' ? formatSize((item as FileItem).size) : '--'}</td>
                       <td>{formatDate(item.modifiedAt)}</td>
                       <td>
-                        <div className="flex gap-1">
+                        <div data-part="item-actions">
                           {onRename && (
                             <ModernButton
                               variant="ghost"
@@ -378,15 +396,17 @@ export default function ModernFileManager(props: FileManagerProps) {
                 >
                   <div data-part="grid-card-body">
                     {item.type === 'folder' ? (
-                      <svg data-part="folder-icon" data-file-kind="folder" xmlns="http://www.w3.org/2000/svg" className="ds-file-manager__folder-icon" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                      </svg>
+                      <span className="ds-file-manager__folder-icon" data-part="folder-icon" data-file-kind="folder">
+                        <ContentFolderIcon decorative size={36} />
+                      </span>
                     ) : (
-                      <svg data-part="file-icon" data-file-kind={fileKindOf(item)} xmlns="http://www.w3.org/2000/svg" className="ds-file-manager__file-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                      </svg>
+                      <span className="ds-file-manager__file-icon" data-part="file-icon" data-file-kind={fileKindOf(item)}>
+                        {renderFileIcon ? renderFileIcon(item as FileItem) : (
+                          <ContentFileIcon decorative size={36} />
+                        )}
+                      </span>
                     )}
-                    <span data-part="item-name">{item.name}</span>
+                    <span data-part="item-name" title={item.name}>{item.name}</span>
                   </div>
                 </div>
               ))}

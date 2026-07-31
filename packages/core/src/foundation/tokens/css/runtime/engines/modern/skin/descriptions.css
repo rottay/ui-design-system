@@ -35,7 +35,9 @@
   min-width: 0;
   container-type: inline-size;
   color: var(--ds-descriptions-color, var(--ds-color-text-primary));
-  animation: ds-descriptions-enter var(--ds-motion-calm, 220ms)
+  /* --ds-motion-calm has no base-token definition today (only the
+     reduced-motion override), so the entrance binds to the reveal intent. */
+  animation: ds-descriptions-enter var(--ds-motion-calm, var(--ds-motion-reveal, 220ms))
     var(--ds-motion-ease-out, ease-out) both;
 }
 
@@ -66,19 +68,23 @@
   transition:
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    background-position var(--ds-motion-deliberate, 360ms)
+    /* --ds-motion-deliberate has no base definition either; the slow cadence
+       (320ms, closed set) is the authority's channel for this sweep. */
+    background-position var(--ds-motion-deliberate, var(--ds-motion-slow, 320ms))
       var(--ds-motion-ease-out, ease-out);
 }
 
-.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header']:hover {
-  background-position: 100% 50%;
-  border-color: var(
-    --ds-descriptions-header-border-hover,
-    color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border))
-  );
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
-    var(--ds-descriptions-header-shadow-hover, var(--ds-elevation-2));
+@media (hover: hover) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header']:hover {
+    background-position: 100% 50%;
+    border-color: var(
+      --ds-descriptions-header-border-hover,
+      color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border))
+    );
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
+      var(--ds-descriptions-header-shadow-hover, var(--ds-elevation-2));
+  }
 }
 
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='header'] > [data-part='title'] {
@@ -128,6 +134,8 @@
 
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='horizontal'] > [data-part='body'] > [data-part='rows'] {
   display: grid;
+  /* UA <dl> margins are reset: the grid gap/padding own the rhythm. */
+  margin: 0;
   grid-template-columns: repeat(
     var(--ds-descriptions-column-count, 3),
     minmax(0, 1fr)
@@ -154,19 +162,21 @@
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
-.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:hover {
-  transform: translateY(-1px);
-  border-color: var(
-    --ds-descriptions-row-border-hover,
-    color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border))
-  );
-  background: var(
-    --ds-descriptions-row-bg-hover,
-    color-mix(in srgb, var(--ds-surface-card) 91%, var(--ds-color-primary) 9%)
-  );
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent),
-    0 7px 18px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+@media (hover: hover) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:hover {
+    transform: translateY(-1px);
+    border-color: var(
+      --ds-descriptions-row-border-hover,
+      color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border))
+    );
+    background: var(
+      --ds-descriptions-row-bg-hover,
+      color-mix(in srgb, var(--ds-surface-card) 91%, var(--ds-color-primary) 9%)
+    );
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent),
+      0 7px 18px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+  }
 }
 
 /* ---- label + value (both layouts share one rule pair) ---- */
@@ -194,6 +204,10 @@
 }
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
   min-width: 0;
+  /* UA <dd> margin (incl. the 40px inline-start indent) is reset: the grid
+     tracks own the label/value split. */
+  margin: 0;
+  margin-inline-start: 0;
   color: var(--ds-descriptions-content-color, var(--ds-color-text-primary));
   font-size: var(--ds-descriptions-content-font-size, var(--ds-font-size-sm));
   font-weight: var(--ds-descriptions-content-font-weight, var(--ds-font-weight-medium, 500));
@@ -210,6 +224,7 @@
 
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] {
   display: grid;
+  margin: 0;
   gap: var(--ds-descriptions-grid-gap, 0.5rem);
   padding: var(--ds-descriptions-grid-padding, 0.75rem);
 }
@@ -217,7 +232,9 @@
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
   display: grid;
   grid-template-columns: minmax(7.5rem, 0.36fr) minmax(0, 1fr);
-  align-items: start;
+  /* Baseline (not start): the uppercase xs label and the sm value read as one
+     line pair; with start their cap heights misalign optically. */
+  align-items: baseline;
   gap: var(--ds-descriptions-column-gap, 1.5rem);
 }
 
@@ -248,7 +265,7 @@
     display: grid;
     grid-column: 1 / -1;
     grid-template-columns: subgrid;
-    align-items: start;
+    align-items: baseline;
   }
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
     width: auto;
@@ -256,6 +273,16 @@
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
     min-width: 0;
   }
+}
+
+/* ---- size axis: density. `data-size` was stamped but unpainted; small/middle
+        de-escalate the row inset through their own channels (default keeps the
+        base above). Font sizes stay put — density is an inset axis here. ---- */
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-size='small'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+  padding: var(--ds-descriptions-row-padding-sm, 0.5rem 0.625rem);
+}
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-size='middle'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+  padding: var(--ds-descriptions-row-padding-md, 0.625rem 0.75rem);
 }
 
 @container (max-width: 860px) {
@@ -301,5 +328,16 @@
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
     animation: none;
     transition: none;
+  }
+}
+
+/* Forced colors (system colors only): borders and text are forced
+   automatically; the row/header hover washes disappear, so hover keeps a
+   plain outline and the empty-value dash stays visible as text. */
+@media (forced-colors: active) {
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:hover,
+  .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header']:hover {
+    outline: 1px solid;
+    outline-offset: -1px;
   }
 }

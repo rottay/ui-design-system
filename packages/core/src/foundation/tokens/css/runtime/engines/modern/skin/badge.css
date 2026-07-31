@@ -64,12 +64,19 @@
       var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out));
 }
 
+/* Compact sizes render at 9–10px: at that scale the shared 500 weight reads
+   faint, so xs/sm step up one weight notch (channel-owned, tenant-flattenable).
+   md+ keep the single family weight. */
+.rottay-badge.rottay-badge--modern[data-part='root'][data-size='xs'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-size='sm'] {
+  font-weight: var(--ds-badge-compact-font-weight, 600);
+}
+
 .rottay-badge.rottay-badge--modern[data-part='root'][data-kind='chip'] {
   --ds-badge-max-inline-size: var(--ds-badge-chip-max-inline-size, 22rem);
   min-block-size: var(--ds-badge-chip-min-height, var(--ds-badge-resolved-height));
   border-radius: var(--ds-badge-chip-radius, var(--ds-badge-radius, var(--ds-radius-md)));
 }
-
 .rottay-badge.rottay-badge--modern[data-part='root'][data-kind='pill'] {
   --ds-badge-max-inline-size: var(--ds-badge-pill-max-inline-size, 22rem);
   min-block-size: var(--ds-badge-pill-min-height, var(--ds-badge-resolved-height));
@@ -207,8 +214,16 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  min-inline-size: var(--ds-badge-count-min-size, 1rem);
-  block-size: var(--ds-badge-count-size, 1rem);
+  /* Never taller than the badge that hosts it: a fixed 1rem chip pokes out of
+     an xs (0.875rem) badge, so the default tracks the resolved height. */
+  min-inline-size: var(
+    --ds-badge-count-min-size,
+    min(1rem, calc(var(--ds-badge-resolved-height, 1.25rem) - 0.25rem))
+  );
+  block-size: var(
+    --ds-badge-count-size,
+    min(1rem, calc(var(--ds-badge-resolved-height, 1.25rem) - 0.25rem))
+  );
   padding-inline: var(--ds-badge-count-padding-inline, 0.25rem);
   border: var(--ds-badge-count-border-width, 1px) solid
     var(--ds-badge-count-border, var(--ds-filter-pill-count-border, color-mix(in srgb, currentColor 16%, transparent)));
@@ -419,21 +434,21 @@
    tone tokens, so a tenant that never configures `chrome.badge` still gets a
    legible, treatment-faithful hover instead of an unpainted (transparent) one. */
 .rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='solid'] {
-  --ds-badge-hover-bg-fallback: color-mix(in srgb, var(--ds-badge-tone-solid-bg) 90%, var(--ds-color-black, #000) 10%);
+  --_ds-badge-hover-bg-fallback: color-mix(in srgb, var(--ds-badge-tone-solid-bg) 90%, var(--ds-color-neutral-900, #171717) 10%);
   --ds-badge-hover-ink-fallback: var(--ds-badge-tone-solid-color);
 }
 .rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='soft'] {
-  --ds-badge-hover-bg-fallback: color-mix(in srgb, var(--ds-badge-tone-soft-bg) 80%, var(--ds-badge-tone-soft-color) 20%);
+  --_ds-badge-hover-bg-fallback: color-mix(in srgb, var(--ds-badge-tone-soft-bg) 80%, var(--ds-badge-tone-soft-color) 20%);
   --ds-badge-hover-ink-fallback: var(--ds-badge-tone-soft-color);
 }
 .rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='outline'],
 .rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='ghost'] {
-  --ds-badge-hover-bg-fallback: color-mix(in srgb, currentColor 8%, transparent);
+  --_ds-badge-hover-bg-fallback: color-mix(in srgb, currentColor 8%, transparent);
   --ds-badge-hover-ink-fallback: var(--ds-badge-tone-soft-color);
 }
 
 .rottay-badge.rottay-badge--modern[data-state~='hovered'] {
-  background: var(--ds-badge-surface-hover, var(--ds-badge-hover-bg-fallback));
+  background: var(--ds-badge-surface-hover, var(--_ds-badge-hover-bg-fallback));
   color: var(--ds-badge-ink-hover, var(--ds-badge-hover-ink-fallback));
   border-color: var(
     --ds-badge-frame-hover,

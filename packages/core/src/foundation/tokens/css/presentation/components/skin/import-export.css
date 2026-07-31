@@ -1,25 +1,58 @@
-/** ImportExportSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+/**
+ * ImportExportSurface skin (WO-SKIN-06 / CK-I; SU04 wave 2026-07-30).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
+ *
+ * SCOPE: the surface composes PageShellSurface, Card, Upload.Dragger,
+ * Segmented, Checkbox, Tag, NavLink, Spinner and the shared state kits —
+ * each owns its own chrome, states and forced-colors treatment. Three
+ * former paints were deliberately routed AWAY from this file, to the owner
+ * that already paints the concern:
+ *   - the dropzone dashed border/geometry moved to the Upload primitive's
+ *     own skin (`upload.css` owns `[data-part='dropzone']` on the dragger);
+ *   - every text ink/size moved to the Typography primitive channels
+ *     (`color`/`size` props — typography.css sorts in `rottay-engines`,
+ *     after this layer, so a skin rule for them would lose anyway);
+ *   - the doubled `[data-part='root'][data-part='root']` / `.a.a`
+ *     selectors are gone (4th-tanda owner directive: no repetition).
+ * What remains is the paint the surface itself owns: the validation-errors
+ * card signal border (a status cue on a surface-owned region, not chrome of
+ * any composed part), the history row rhythm/separators, and tabular
+ * figures on muted copy so record counts never reflow the line.
+ *
+ * SPECIFICITY: anatomy class + at most one always-stamped attribute. The
+ * history row is a Flex (stamps no data-part), so its rule keys on the
+ * anatomy class alone inside the surface scope.
+ *
+ * FORCED-COLORS: the two surface-owned structural paints (signal border,
+ * row separators) re-key to system colors; text inks come from the
+ * Typography color channel and every composed part handles its own.
+ */
 
-.ds-surface.ds-import-export .ds-import-export__dropzone[data-part='root'][data-variant] {
-  border: 2px dashed var(--ds-color-border);
+.ds-surface.ds-import-export .ds-import-export__error-card[data-part='root'] {
+  border-color: var(--ds-color-error-500, var(--ds-color-error, #ef4444));
 }
 
-.ds-surface.ds-import-export .ds-import-export__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+.ds-surface.ds-import-export .ds-import-export__divider {
+  padding-block: var(--ds-spacing-2, 8px);
 }
 
-.ds-surface.ds-import-export .ds-import-export__error-card[data-part='root'][data-variant] {
-  border-color: var(--ds-color-error-500);
+.ds-surface.ds-import-export .ds-import-export__divider:not(:last-child) {
+  border-block-end: 1px solid var(--ds-color-border, #1c1c20);
 }
 
-.ds-surface.ds-import-export .ds-import-export__error-title[data-part='error-title'][data-part='error-title'] {
-  color: var(--ds-color-error-500);
+.ds-surface.ds-import-export .ds-import-export__muted-text[data-part='root'] {
+  font-variant-numeric: tabular-nums;
 }
 
-.ds-surface.ds-import-export .ds-import-export__success-message[data-part='success-message'][data-part='success-message'] {
-  color: var(--ds-color-success-500);
-}
+@media (forced-colors: active) {
+  .ds-surface.ds-import-export .ds-import-export__error-card[data-part='root'] {
+    border-color: CanvasText;
+  }
 
-.ds-surface.ds-import-export .ds-import-export__divider.ds-import-export__divider {
-  border-bottom: 1px solid var(--ds-color-border);
+  .ds-surface.ds-import-export .ds-import-export__divider:not(:last-child) {
+    border-block-end-color: GrayText;
+  }
 }

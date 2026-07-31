@@ -48,7 +48,7 @@
  * @category Overlay
  * @package @rottay/design-system
  */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useId, useRef } from 'react';
 import type { TourProps, TourStepProps } from '../../contracts';
 import { TOUR_DEFAULTS } from '../../contracts';
 import {
@@ -124,6 +124,66 @@ const ModernTourChrome = ({
   const translation = useOptionalTranslation('common');
   const spotlightRect = useTourSpotlightRect(targetEl, SPOTLIGHT_PADDING);
   const [surfaceEl, setSurfaceEl] = useState<HTMLDivElement | null>(null);
+
+  // APG dialog labelling + programmatic focus. The tour is a NON-modal
+  // dialog (the page behind stays interactive when mask=false): the surface
+  // carries role="dialog" with the step's title/description as name and
+  // description, and DOM focus moves to it on open and on every step change
+  // so keyboard users land on the active step immediately.
+  const dialogIds = useId();
+  const titleId = step?.title ? `${dialogIds}-title` : undefined;
+  const descriptionId = step?.description ? `${dialogIds}-description` : undefined;
+  const stepProgressLabel =
+    translation?.tOr('tour.step_progress', `Step ${currentStep + 1} of ${steps.length}`, {
+      current: currentStep + 1,
+      total: steps.length,
+    }) ?? `Step ${currentStep + 1} of ${steps.length}`;
+
+  useEffect(() => {
+    surfaceEl?.focus();
+  }, [surfaceEl, currentStep]);
+
+  // Keyboard contract: Escape closes (parity with the mask click), and the
+  // horizontal arrows walk the steps when the focus is inside the surface
+  // (forward = next along the reading direction; mirrored under RTL).
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        onClose?.();
+      }
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  const handleSurfaceKeyDown = (e: React.KeyboardEvent) => {
+    const rtl = portalScope.direction === 'rtl';
+    const forwardKey = rtl ? 'ArrowLeft' : 'ArrowRight';
+    const backwardKey = rtl ? 'ArrowRight' : 'ArrowLeft';
+    if (e.key === forwardKey) {
+      e.preventDefault();
+      // Advances the step; on the last step this is Finish (onNext's own contract).
+      onNext();
+    } else if (e.key === backwardKey && currentStep > 0) {
+      e.preventDefault();
+      onPrev();
+    }
+  };
+
+  // The active target must be visible before the spotlight and surface are
+  // measured around it. Reduced motion jumps instead of animating.
+  useEffect(() => {
+    if (!targetEl) return;
+    const prefersReducedMotion =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    targetEl.scrollIntoView({
+      block: 'center',
+      behavior: prefersReducedMotion ? 'instant' : 'smooth',
+    });
+  }, [targetEl]);
 
   // The `placement` prop is inert in this engine (the classic engine honors
   // it): the surface is fixed to bottom-center, the shipped behavior. The
@@ -208,6 +268,12 @@ const ModernTourChrome = ({
         data-type={type}
         data-anchored={targetEl ? 'true' : 'false'}
         data-ds-position-strategy={strategy}
+        role="dialog"
+        aria-modal="false"
+        aria-labelledby={titleId}
+        aria-describedby={descriptionId}
+        tabIndex={-1}
+        onKeyDown={handleSurfaceKeyDown}
         style={{
           zIndex: zIndex + 2,
           ...(targetEl
@@ -230,20 +296,22 @@ const ModernTourChrome = ({
 
         {/* Content */}
         {step?.cover && <div data-part="cover">{step.cover}</div>}
-        <h3 data-part="title">{step?.title}</h3>
+        <h3 id={titleId} data-part="title">{step?.title}</h3>
         {step?.description && (
-          <p data-part="description">{step.description}</p>
+          <p id={descriptionId} data-part="description">{step.description}</p>
         )}
 
         {/* Footer */}
         <div data-part="footer">
-          {/* Indicators */}
-          <div data-part="indicators">
+          {/* Indicators: a single accessible image with the step counter as
+              its name (dots are decorative; numbers are not localized) */}
+          <div data-part="indicators" role="img" aria-label={stepProgressLabel}>
             {steps.map((_, index) => (
               <div
                 key={index}
                 data-part="indicator"
                 data-current={index === currentStep ? 'true' : 'false'}
+                aria-hidden="true"
               />
             ))}
           </div>
@@ -326,6 +394,18 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
 
     const currentStep = controlledCurrent ?? internalCurrent;
     const step = steps[currentStep];
+
+    // Focus restore: the element that had focus when the tour opened gets it
+    // back when it closes (Escape, mask click, Finish or the close button).
+    const previousFocusRef = useRef<HTMLElement | null>(null);
+    useEffect(() => {
+      if (open) {
+        previousFocusRef.current = document.activeElement as HTMLElement | null;
+        return;
+      }
+      previousFocusRef.current?.focus?.();
+      previousFocusRef.current = null;
+    }, [open]);
 
     const handleChange = useCallback((newCurrent: number) => {
       setInternalCurrent(newCurrent);

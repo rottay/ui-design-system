@@ -1,8 +1,78 @@
 /**
- * EditorSurface skin (WO-SKIN-06 CK-I). Engine-agnostic and deliberately
- * unlayered; specificity clears Typography's color rule.
+ * EditorSurface skin (KIMI Modern wave 2026-07-30, SU18).
+ *
+ * LAYER: registered in `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)`,
+ * alongside the sibling experience surface skins.
+ *
+ * SCOPE: the surface composes public primitives and helpers (PageShell,
+ * Grid, Stack, Card, Textarea, Text, SurfaceSectionCard, the surface state
+ * kits) — each owns its chrome, interaction states and forced-colors
+ * treatment, so this file paints ONLY what the surface itself owns:
+ *   - the status-bar separator (hairline + compact spacing step) that sets
+ *     the status row apart from the editor canvas;
+ *   - the editor-mirror skeleton blocks (`editor-skeleton-block`), whose
+ *     pulse rides the canonical `ds-foundation-pulse` keyframes on the
+ *     `--ds-motion-attention` channel and goes quiet under reduced motion.
+ * The muted helper copy is painted by Typography's `color` channel (the
+ * durable path: the modern Typography skin always wins over a surface
+ * rule), so the old unlayered rule is retired, not replaced.
+ *
+ * SPECIFICITY: no class/attribute repetition anywhere. Every selector keys
+ * on an always-stamped hook: the `ds-editor` root class plus a `data-part`
+ * attribute. The retired
+ * `.ds-editor__muted-text[data-part='root'][data-part='root']` rule relied
+ * on the forbidden repetition idiom and sat unlayered to outmuscle
+ * Typography; its ink now travels through the `color="muted"` channel
+ * (SU22 idiom).
+ *
+ * No forced-colors block on purpose: the only fills set here are neutral
+ * skeleton fills, which the UA re-keys to Canvas under forced colors, and
+ * the hairline re-keys to a system color; every interactive part already
+ * carries its own forced-colors treatment.
  */
 
-.ds-surface.ds-editor .ds-editor__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+/* ---- status bar separator ----
+   The status row (word count, save status) reads as chrome of the editor
+   canvas: a hairline on the block-start edge plus the compact spacing step
+   set it apart from the input without inventing a new surface. */
+.ds-surface.ds-editor [data-part='status-bar'] {
+  border-block-start: 1px solid var(--ds-color-border, transparent);
+  padding-block-start: var(--ds-spacing-2, 8px);
+}
+
+/* ---- editor-mirror skeleton ----
+   Blocks sit on the same section card / preview card and spacing rhythm as
+   the loaded anatomy, so the swap to real content is a pure paint change,
+   never a layout shift. The input block mirrors the 12-row textarea, the
+   status block mirrors the status row, and the preview block mirrors the
+   rendered panel (all geometry INTERNAL literals, dashboard/chat
+   precedent). */
+.ds-surface.ds-editor [data-part='editor-skeleton-block'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
+  animation: ds-foundation-pulse
+    var(--ds-motion-attention, 1.5s)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='input'] {
+  inline-size: 100%;
+  min-block-size: 288px;
+}
+
+.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='status'] {
+  inline-size: 40%;
+  min-block-size: 16px;
+}
+
+.ds-surface.ds-editor [data-part='editor-skeleton-block'][data-size='preview'] {
+  inline-size: 100%;
+  min-block-size: 288px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-editor [data-part='editor-skeleton-block'] {
+    animation: none;
+  }
 }

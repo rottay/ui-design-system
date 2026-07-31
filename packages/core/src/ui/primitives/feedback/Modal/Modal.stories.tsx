@@ -189,7 +189,7 @@ export const CompareEngines: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Compare the same Modal rendered by Classic (Ant Design), Modern (DaisyUI), and Rustic (Vanilla CSS). Click each button to open the modal.',
+        story: 'Compare the same Modal rendered by Classic (Ant Design), Modern (Rottay native dialog), and Rustic (Vanilla CSS). Click each button to open the modal.',
       },
     },
   },

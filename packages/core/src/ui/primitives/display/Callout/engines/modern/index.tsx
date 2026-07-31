@@ -24,7 +24,7 @@ import React, { useState } from 'react';
 import type { CalloutProps } from '../../contracts';
 import type { CalloutVariant } from '../../contracts';
 import { CALLOUT_DEFAULTS, TONE_TO_CALLOUT_VARIANT } from '../../contracts';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
 import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
@@ -50,7 +50,7 @@ const VARIANT_ICONS: Record<CalloutVariant, React.ReactNode> = {
  * @returns A token-styled callout element, or null when dismissed.
  */
 export default function ModernCallout(props: CalloutProps): React.ReactElement | null {
-  const { t } = useTranslation('common');
+  const i18n = useOptionalTranslation('common');
   const {
     tone,
     variant: variantProp = CALLOUT_DEFAULTS.variant,
@@ -112,7 +112,7 @@ export default function ModernCallout(props: CalloutProps): React.ReactElement |
           type="button"
           data-part="close-button"
           onClick={handleClose}
-          aria-label={t('close')}
+          aria-label={i18n?.t('close') ?? 'Close'}
         >
           <ActionCloseIcon decorative size={16} />
         </button>

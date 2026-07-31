@@ -2,12 +2,34 @@
 
 /**
  * @fileoverview Modern EmptyState pattern.
- * A framed, responsive placeholder with semantic visual, clear copy hierarchy,
- * and a deliberate action tray. All aesthetic tenor is token-controlled.
+ *
+ * A framed, responsive placeholder with semantic visual, clear copy hierarchy
+ * and a deliberate action tray. All aesthetic tenor is token-controlled and
+ * lives in the modern skin (`runtime/engines/modern/skin/empty-state.css`).
+ *
+ * PATTERN ↔ PRIMITIVE RELATIONSHIP: this pattern is the RICH standalone
+ * placeholder kit (title heading, visual well with semantic fallback icon or
+ * caller image, up to two actions, size ramp). The certified Empty primitive
+ * (P09) is the minimal embeddable slot (image + description) that OTHER
+ * patterns compose inside their own empty branches — different scopes, no
+ * recreation. The composition gap that did exist here was the action tray:
+ * it rendered raw `<button>` elements. Those now compose the certified
+ * Button primitive (htmlType="button" keeps the anatomy-test pin); the
+ * pattern owns no control paint.
+ *
+ * Context variants (no-results / error / offline / permission), retry and
+ * collapsible error detail are NOT in the contract — documented, not
+ * invented. The pattern owns zero copy (title/description/labels are caller
+ * props), so there is no i18n surface.
+ *
+ * @module Patterns/EmptyState/Engines/Modern
+ * @category Patterns
+ * @package @rottay/design-system
  */
 
 import React from 'react';
 import type { EmptyStateProps } from '../../contracts';
+import { Button } from '../../../../../primitives/inputs/Button';
 import { CommunicationInboxIcon } from '@/graphics/icons/presentation/semantic/generated/roles/communication-inbox';
 
 const iconSizes = {
@@ -83,26 +105,30 @@ export default function ModernEmptyState(props: EmptyStateProps) {
         {(action || secondaryAction) && (
           <div className="ds-empty-state__actions" data-part="actions">
             {action && (
-              <button
-                type="button"
+              <Button
+                engine="modern"
+                htmlType="button"
+                variant={action.variant ?? 'default'}
                 className="ds-empty-state__action"
                 data-part="action"
                 data-variant={action.variant ?? 'default'}
                 onClick={action.onClick}
               >
                 {action.label}
-              </button>
+              </Button>
             )}
             {secondaryAction && (
-              <button
-                type="button"
+              <Button
+                engine="modern"
+                htmlType="button"
+                variant="default"
                 className="ds-empty-state__secondary-action"
                 data-part="secondary-action"
                 data-variant="default"
                 onClick={secondaryAction.onClick}
               >
                 {secondaryAction.label}
-              </button>
+              </Button>
             )}
           </div>
         )}

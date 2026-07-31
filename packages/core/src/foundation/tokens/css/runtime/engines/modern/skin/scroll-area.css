@@ -43,15 +43,22 @@
 
 /* ---- overflow contract (was engine utilities), keyed on data-orientation. ---- */
 .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-orientation='vertical'] {
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow-inline: hidden;
+  overflow-block: auto;
 }
 .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-orientation='horizontal'] {
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow-inline: auto;
+  overflow-block: hidden;
 }
 .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-orientation='both'] {
   overflow: auto;
+}
+
+/* ---- governed overscroll: an embedded scroll region contains its own
+        chaining by default (premium posture for nested scroll); the channel
+        lets a tenant opt back into chain-through. ---- */
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'] {
+  overscroll-behavior: var(--ds-scroll-area-overscroll-behavior, contain);
 }
 
 /* ---- scrollbar size channels (closed enum; values transcribed verbatim). ---- */
@@ -84,12 +91,23 @@
 .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true'] {
   scrollbar-color: transparent transparent;
 }
-.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:hover {
-  scrollbar-color: var(
-      --ds-scroll-area-thumb-bg,
-      color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent)
-    )
-    var(--ds-scroll-area-track-bg, transparent);
+@media (hover: hover) {
+  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:hover {
+    scrollbar-color: var(
+        --ds-scroll-area-thumb-bg,
+        color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent)
+      )
+      var(--ds-scroll-area-track-bg, transparent);
+  }
+}
+@media (hover: none) {
+  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true'] {
+    scrollbar-color: var(
+        --ds-scroll-area-thumb-bg,
+        color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent)
+      )
+      var(--ds-scroll-area-track-bg, transparent);
+  }
 }
 
 /* ---- WebKit scrollbar geometry. ---- */
@@ -104,7 +122,9 @@
   border-radius: var(--ds-scroll-area-scrollbar-radius);
 }
 
-/* ---- WebKit thumb: quiet token ink, deepened on hover. ---- */
+/* ---- WebKit thumb: quiet token ink, deepened on hover (hover-capable
+        pointers only); a held drag gets the same deepening via :active, so
+        touch never loses the affordance (4th-wave hover law). ---- */
 .rottay-scroll-area.rottay-scroll-area--modern[data-part='root']::-webkit-scrollbar-thumb {
   background: var(
     --ds-scroll-area-thumb-bg,
@@ -112,26 +132,59 @@
   );
   border-radius: var(--ds-scroll-area-scrollbar-radius);
 }
-.rottay-scroll-area.rottay-scroll-area--modern[data-part='root']::-webkit-scrollbar-thumb:hover {
+@media (hover: hover) {
+  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root']::-webkit-scrollbar-thumb:hover {
+    background: var(
+      --ds-scroll-area-thumb-bg-hover,
+      color-mix(in srgb, var(--ds-color-text-primary) 48%, transparent)
+    );
+  }
+}
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root']::-webkit-scrollbar-thumb:active {
   background: var(
     --ds-scroll-area-thumb-bg-hover,
     color-mix(in srgb, var(--ds-color-text-primary) 48%, transparent)
   );
 }
 
-/* ---- hover-reveal: the thumb stays hidden until the area is hovered. ---- */
+/* ---- hover-reveal: the thumb stays hidden until the area is hovered.
+        Where no hover exists there is nothing to reveal against, so the
+        thumb simply stays visible (the native thin bar is the touch
+        equivalent of the reveal). ---- */
 .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']::-webkit-scrollbar-thumb {
   background: transparent;
 }
-.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb {
-  background: var(
-    --ds-scroll-area-thumb-bg,
-    color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent)
-  );
+@media (hover: hover) {
+  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb {
+    background: var(
+      --ds-scroll-area-thumb-bg,
+      color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent)
+    );
+  }
+}
+@media (hover: none) {
+  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']::-webkit-scrollbar-thumb {
+    background: var(
+      --ds-scroll-area-thumb-bg,
+      color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent)
+    );
+  }
 }
 
 @media (forced-colors: active) {
   .rottay-scroll-area.rottay-scroll-area--modern[data-part='root']:focus-visible {
     outline: 2px solid Highlight;
+  }
+
+  /* The custom bar re-expresses in system colors when authored color is
+     stripped: thumb as a ButtonText mark over the page canvas. */
+  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'] {
+    scrollbar-color: ButtonText Canvas;
+  }
+  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root']::-webkit-scrollbar-thumb {
+    background: ButtonText;
+  }
+  .rottay-scroll-area.rottay-scroll-area--modern[data-part='root']::-webkit-scrollbar-track {
+    background: Canvas;
   }
 }

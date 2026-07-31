@@ -24,10 +24,14 @@
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * border-color floor at (0,3,1). Every rule that paints a border COLOR here
- * reaches (0,4,0) via a listType root modifier class, or (where no modifier
- * applies) a repeated `[data-part='x'][data-part='x']`. Non-border paint
- * (background, color, box-shadow, outline, border-radius) wins unlayered at
- * (0,3,0) or higher.
+ * reaches (0,4,0) via a listType root modifier class, a stable semantic BEM
+ * class on the target (`ds-upload__file-item` / `ds-upload__add-button`),
+ * `data-state='…'`, or the `[data-part='root']` ancestor attribute where
+ * the target has no attribute of its own (the trigger span). Attribute
+ * repetition is forbidden (4th-tanda law); the grep-verified count of
+ * `[data-part='x'][data-part='x']` selectors in this file is zero.
+ * Non-border paint (background, color, box-shadow, outline, border-radius)
+ * wins unlayered at (0,3,0) or higher.
  *
  * DEVIATIONS (reported, not silently taken):
  * 1. The dropzone/add-button Tailwind paint utilities (`border-2 border-dashed
@@ -77,10 +81,22 @@
 
 /* ---- file-item-overlay: only rendered by the picture-card/picture-circle
         branches, so no listType scope is needed -- the data-part itself is
-        variant-exclusive. ---- */
+        variant-exclusive. The overlay is ALWAYS in the DOM (hidden-action
+        law): visibility gates on pointer hover and on keyboard focus-within,
+        never on React state. ---- */
 .ds-upload.ds-upload--modern [data-part='file-item-overlay'],
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-overlay'] {
   background: var(--ds-upload-preview-overlay);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+.ds-upload.ds-upload--modern [data-part='file-item']:hover [data-part='file-item-overlay'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item']:hover [data-part='file-item-overlay'],
+.ds-upload.ds-upload--modern [data-part='file-item']:focus-within [data-part='file-item-overlay'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item']:focus-within [data-part='file-item-overlay'] {
+  opacity: 1;
+  pointer-events: auto;
 }
 /* Card overlay geometry (circle carries its own Tailwind geometry). */
 .ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item-overlay'],
@@ -105,13 +121,14 @@
 }
 /* Per-file error state (product law): semantic error hairline + error ink on
    the name -- the engine no longer carries the `border border-error`
-   utilities; the repeated data-part keeps (0,4,0) parity for border paint. */
-.ds-upload.ds-upload--modern:not(.ds-upload--picture-card) [data-part='file-item'][data-part='file-item'],
-.ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card) [data-part='file-item'][data-part='file-item'] {
+   utilities; the stable BEM hook keeps specificity without coupling paint to
+   the accessibility tree. */
+.ds-upload.ds-upload--modern:not(.ds-upload--picture-card) .ds-upload__file-item[data-part='file-item'],
+.ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card) .ds-upload__file-item[data-part='file-item'] {
   border: 1px solid transparent;
 }
-.ds-upload.ds-upload--modern:not(.ds-upload--picture-card) [data-part='file-item'][data-part='file-item'][data-status='error'],
-.ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card) [data-part='file-item'][data-part='file-item'][data-status='error'] {
+.ds-upload.ds-upload--modern:not(.ds-upload--picture-card) .ds-upload__file-item[data-part='file-item'][data-status='error'],
+.ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card) .ds-upload__file-item[data-part='file-item'][data-status='error'] {
   border-color: var(--ds-color-error);
 }
 .ds-upload.ds-upload--modern:not(.ds-upload--picture-card) [data-part='file-item'][data-status='error'] [data-part='file-name'],
@@ -156,8 +173,8 @@
     box-shadow var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out),
     transform var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item'][data-part='file-item'],
-.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item'][data-part='file-item'] {
+.ds-upload.ds-upload--modern.ds-upload--picture-card .ds-upload__file-item[data-part='file-item'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card .ds-upload__file-item[data-part='file-item'] {
   border: 1px solid var(--ds-color-border);
 }
 .ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item'][data-status='error'],
@@ -284,13 +301,18 @@
     border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
     background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-upload.ds-upload--modern [data-part='add-button'][data-part='add-button'] {
+.ds-upload.ds-upload--modern .ds-upload__add-button[data-part='add-button'] {
   border: 1px dashed var(--ds-upload-add-border, var(--ds-color-border));
 }
-.ds-upload.ds-upload--modern [data-part='add-button']:where(:hover):not([data-disabled='true']) {
-  background: var(--ds-upload-add-bg-hover, color-mix(in srgb, var(--ds-color-primary) 4%, transparent));
+@media (hover: hover) {
+  .ds-upload.ds-upload--modern .ds-upload__add-button[data-part='add-button']:where(:hover):not([data-disabled='true']) {
+    background: var(--ds-upload-add-bg-hover, color-mix(in srgb, var(--ds-color-primary) 4%, transparent));
+    border-color: var(--ds-upload-add-border-hover, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-color-border)));
+  }
 }
-.ds-upload.ds-upload--modern [data-part='add-button'][data-part='add-button']:where(:hover):not([data-disabled='true']) {
+/* Touch/active equivalent of the hover treatment. */
+.ds-upload.ds-upload--modern .ds-upload__add-button[data-part='add-button']:active:not([data-disabled='true']) {
+  background: var(--ds-upload-add-bg-hover, color-mix(in srgb, var(--ds-color-primary) 4%, transparent));
   border-color: var(--ds-upload-add-border-hover, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-color-border)));
 }
 .ds-upload.ds-upload--modern [data-part='add-button'][data-disabled='true'] {
@@ -309,7 +331,10 @@
   cursor: not-allowed;
   opacity: var(--ds-disabled-opacity, 0.5);
 }
-.ds-upload.ds-upload--modern [data-part='trigger'][data-part='trigger'] button {
+/* The trigger span carries no role of its own, so the border/chrome rules
+   buy the (0,4,0) floor with the stable `[data-part='root']` ancestor
+   attribute (Form precedent) instead of repeating `[data-part='trigger']`. */
+.ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button {
   block-size: 36px;
   padding-inline: 16px;
   font-size: var(--ds-upload-trigger-font-size, 14px);
@@ -322,11 +347,18 @@
     border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
     background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-upload.ds-upload--modern [data-part='trigger'][data-part='trigger'] button:where(:hover):not(:disabled) {
+@media (hover: hover) {
+  .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:where(:hover):not(:disabled) {
+    border-color: var(--ds-upload-trigger-border-hover, var(--ds-color-border-hover));
+    background: var(--ds-upload-trigger-bg-hover, var(--ds-surface-inset));
+  }
+}
+/* Touch/active equivalent of the hover treatment. */
+.ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:active:not(:disabled) {
   border-color: var(--ds-upload-trigger-border-hover, var(--ds-color-border-hover));
   background: var(--ds-upload-trigger-bg-hover, var(--ds-surface-inset));
 }
-.ds-upload.ds-upload--modern [data-part='trigger'][data-part='trigger'] button:disabled {
+.ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:disabled {
   cursor: not-allowed;
   opacity: var(--ds-disabled-opacity, 0.5);
 }
@@ -341,9 +373,16 @@
   outline-offset: 2px;
 }
 
-/* Remove-action hover (all list types). */
-.ds-upload.ds-upload--modern [data-part='file-item-action']:where(:hover),
-.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action']:where(:hover) {
+/* Remove-action states: hover wash gated by pointer capability, with the
+   touch/active equivalent (4th-tanda law). */
+@media (hover: hover) {
+  .ds-upload.ds-upload--modern [data-part='file-item-action']:where(:hover),
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action']:where(:hover) {
+    color: var(--ds-color-error);
+  }
+}
+.ds-upload.ds-upload--modern [data-part='file-item-action']:active,
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action']:active {
   color: var(--ds-color-error);
 }
 
@@ -367,16 +406,30 @@
     border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
     background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-part='dropzone'] {
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='idle'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='dragging'] {
   border: 1px dashed var(--ds-upload-dropzone-border, var(--ds-color-border));
 }
-.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone']:where(:hover):not([data-disabled='true']),
+@media (hover: hover) {
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone']:where(:hover):not([data-disabled='true']) {
+    background: var(--ds-upload-dropzone-bg-active, color-mix(in srgb, var(--ds-color-primary) 4%, transparent));
+  }
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state]:where(:hover):not([data-disabled='true']) {
+    border-color: var(--ds-upload-dropzone-border-active, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-color-border)));
+  }
+}
+/* Touch/active equivalent + the dragover state (ungated by pointer type):
+   border AND icon tint, never a rail. */
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone']:active:not([data-disabled='true']),
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='dragging'] {
   background: var(--ds-upload-dropzone-bg-active, color-mix(in srgb, var(--ds-color-primary) 4%, transparent));
 }
-.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-part='dropzone']:where(:hover):not([data-disabled='true']),
-.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-part='dropzone'][data-state='dragging'] {
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state]:active:not([data-disabled='true']),
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='dragging'] {
   border-color: var(--ds-upload-dropzone-border-active, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-color-border)));
+}
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='dragging'] svg {
+  color: var(--ds-color-primary);
 }
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-disabled='true'] {
   opacity: var(--ds-disabled-opacity, 0.5);
@@ -400,11 +453,30 @@
     min-inline-size: var(--ds-upload-touch-target-min, 44px);
     min-block-size: var(--ds-upload-touch-target-min, 44px);
   }
-  .ds-upload.ds-upload--modern [data-part='trigger'][data-part='trigger'] button {
+  .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button {
     min-block-size: var(--ds-upload-touch-target-min, 44px);
   }
 }
 
+/* Solo-hover on the row's trailing action (text + picture rows only):
+   desktop reveals it on row hover or keyboard focus-within (hidden-action
+   law); touch always shows it (coarse block below keeps the 44px floor, and
+   the base opacity stays 1 outside the hover-capable query). */
+@media (hover: hover) {
+  .ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item'] [data-part='file-item-action'],
+  .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item'] [data-part='file-item-action'] {
+    opacity: 0;
+    transition: opacity var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  }
+  .ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item']:hover [data-part='file-item-action'],
+  .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item']:hover [data-part='file-item-action'],
+  .ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item']:focus-within [data-part='file-item-action'],
+  .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item']:focus-within [data-part='file-item-action'] {
+    opacity: 1;
+  }
+}
+
+/* Reduced motion: every state transition in this skin quiets down. */
 @media (prefers-reduced-motion: reduce) {
   .ds-upload.ds-upload--modern [data-part='file-item'],
   .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item'],
@@ -412,7 +484,39 @@
   .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'],
   .ds-upload.ds-upload--modern [data-part='add-button'],
   .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'],
-  .ds-upload.ds-upload--modern [data-part='trigger'] button {
+  .ds-upload.ds-upload--modern [data-part='trigger'] button,
+  /* the solo-hover reveal's long selectors must be named explicitly or their
+     opacity transition would out-specify this reset */
+  .ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item'] [data-part='file-item-action'],
+  .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item'] [data-part='file-item-action'],
+  .ds-upload.ds-upload--modern [data-part='file-item-overlay'],
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-overlay'] {
     transition: none;
+  }
+}
+
+/* Forced colors (system colors only): scrims and washes disappear, so state
+   reads through system-color boundaries -- dragover Highlight edge, error
+   hairlines ButtonText, focus rings Highlight, the action dock ButtonFace. */
+@media (forced-colors: active) {
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='dragging'],
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone']:active:not([data-disabled='true']) {
+    border-color: Highlight;
+  }
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='dragging'] svg {
+    color: Highlight;
+  }
+  .ds-upload.ds-upload--modern [data-part='trigger'] button:focus-visible,
+  .ds-upload.ds-upload--modern [data-part='add-button']:focus-visible,
+  .ds-upload.ds-upload--modern [data-part='file-item-action']:focus-visible,
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action']:focus-visible,
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+  .ds-upload.ds-upload--modern [data-part='preview-close-button'],
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='preview-close-button'] {
+    background: ButtonFace;
+    color: ButtonText;
   }
 }

@@ -118,8 +118,13 @@ describe('command-palette -- data-part contract (CK-G)', () => {
     );
     const parts = await partsOf(container);
 
-    for (const part of ['root', 'backdrop', 'dialog', 'search', 'input', 'item', 'description', 'shortcut', 'group-label', 'footer']) {
+    const expectedParts = ['root', 'backdrop', 'dialog', 'search', 'item', 'description', 'shortcut', 'group-label', 'footer'];
+    if (engine === 'rustic') expectedParts.push('input');
+    for (const part of expectedParts) {
       expect(parts, `command-palette/${engine} must stamp data-part="${part}"`).toContain(part);
+    }
+    if (engine === 'modern') {
+      expect(container.querySelector('[data-part="search"] input[data-part="root"]')).not.toBeNull();
     }
 
     // activeIndex starts at 0 -> exactly the first row across all sections is
@@ -235,20 +240,24 @@ describe('environment-toggle -- data-part contract (CK-G)', () => {
     await openPanel(container, 'env-toggle-trigger');
     fireEvent.click(container.querySelector('[data-testid="env-option-prod"]') as Element);
 
-    await waitFor(() => {
-      expect(container.querySelector('[data-part="confirm-dialog"]')).not.toBeNull();
-    });
-    const parts = new Set(
-      Array.from(container.querySelectorAll('[data-part]')).map((el) => el.getAttribute('data-part') as string),
-    );
-    for (const part of ['confirm-dialog', 'confirm-cancel', 'confirm-submit']) {
-      expect(parts, `env-toggle/${engine} confirm must stamp data-part="${part}"`).toContain(part);
-    }
-    // Structural difference, pinned: modern renders a separate transparent
-    // confirm-backdrop sibling; rustic paints the scrim onto the overlay itself.
     if (engine === 'modern') {
-      expect(parts).toContain('confirm-backdrop');
+      // ConfirmDialog owns a portaled, native top-layer contract in Modern.
+      await waitFor(() => {
+        expect(document.querySelector('[data-part="surface"][role="alertdialog"]')).not.toBeNull();
+      });
+      expect(document.querySelector('[data-part="backdrop"][data-overlay-kind="modal"]')).not.toBeNull();
+      expect(document.querySelector('[data-part="action"][data-action="cancel"]')).not.toBeNull();
+      expect(document.querySelector('[data-part="action"][data-action="confirm"]')).not.toBeNull();
     } else {
+      await waitFor(() => {
+        expect(container.querySelector('[data-part="confirm-dialog"]')).not.toBeNull();
+      });
+      const parts = new Set(
+        Array.from(container.querySelectorAll('[data-part]')).map((el) => el.getAttribute('data-part') as string),
+      );
+      for (const part of ['confirm-dialog', 'confirm-cancel', 'confirm-submit']) {
+        expect(parts, `env-toggle/${engine} confirm must stamp data-part="${part}"`).toContain(part);
+      }
       expect(parts).toContain('confirm-overlay');
       expect(parts).toContain('confirm-message');
     }
@@ -279,6 +288,11 @@ describe('workspace-switcher -- data-part contract (CK-G)', () => {
     );
     await partsOf(container);
     await openPanel(container, 'workspace-trigger');
+    if (engine === 'modern') {
+      await waitFor(() => {
+        expect(container.querySelector('[data-part="badge"]')).not.toBeNull();
+      });
+    }
 
     const parts = new Set(
       Array.from(container.querySelectorAll('[data-part]')).map((el) => el.getAttribute('data-part') as string),
@@ -298,11 +312,11 @@ describe('workspace-switcher -- data-part contract (CK-G)', () => {
       expect(container.querySelector('[data-part="item"][data-focused="true"]')).not.toBeNull();
     });
 
-    // Engine asymmetry: modern paints the avatar fallback + meta via Tailwind
-    // (avatar-fallback stamped, meta/user-email not); rustic paints them via
-    // inline tokens (avatar/meta/user-email stamped).
+    // Engine asymmetry: Modern composes Avatar (root + fallback) inside an
+    // owned avatar-frame; Rustic remains on its frozen bespoke avatar part.
     if (engine === 'modern') {
-      expect(parts).toContain('avatar-fallback');
+      expect(parts).toContain('avatar-frame');
+      expect(parts).toContain('fallback');
     } else {
       expect(parts).toContain('avatar');
       expect(parts).toContain('meta');
@@ -325,10 +339,23 @@ describe('shortcuts-overlay -- data-part contract (CK-G)', () => {
       <PatternShortcutsOverlay open onOpenChange={noop} shortcuts={SHORTCUTS} footer={<span>tip</span>} />,
       engine,
     );
-    const parts = await partsOf(container);
+    await partsOf(container);
+    if (engine === 'modern') {
+      await waitFor(() => {
+        expect(container.querySelector('[data-part="category-label"]')).not.toBeNull();
+      });
+    }
+    const parts = new Set(
+      Array.from(container.querySelectorAll('[data-part]')).map((el) => el.getAttribute('data-part') as string),
+    );
 
-    for (const part of ['root', 'backdrop', 'dialog', 'header', 'close', 'search', 'input', 'category-label', 'item', 'kbd', 'footer']) {
+    const expectedParts = ['root', 'backdrop', 'dialog', 'header', 'close', 'search', 'category-label', 'item', 'kbd', 'footer'];
+    if (engine === 'rustic') expectedParts.push('input');
+    for (const part of expectedParts) {
       expect(parts, `shortcuts-overlay/${engine} must stamp data-part="${part}"`).toContain(part);
+    }
+    if (engine === 'modern') {
+      expect(container.querySelector('[data-part="search"] input[data-part="root"]')).not.toBeNull();
     }
     // Two categories -> two labels; two shortcut rows.
     expect(partCount(container, 'category-label')).toBe(2);

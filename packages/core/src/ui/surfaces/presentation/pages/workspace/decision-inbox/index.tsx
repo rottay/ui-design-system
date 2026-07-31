@@ -7,14 +7,16 @@
  * support ticket triage, impersonation request review.
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useId } from 'react';
 import type { ReactNode } from 'react';
 import type { ColumnDef } from '../../../../../../foundation/contracts/runtime/components/patterns/core';
 import type { CollectionWorkspaceConfig } from '../../../../foundation/contracts/adaptive/collection';
 import { useCollectionWorkspace } from '../../../../runtime/collection-workspace';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
+import { SurfaceEmptyState } from '../../../../runtime/helpers/states';
 import { PatternDataTable } from '../../../../../patterns/data/data-table';
 import { PatternFilterPanel } from '../../../../../patterns/forms/filter-panel';
+import { CommunicationInboxIcon } from '@/graphics/icons/presentation/semantic/generated/roles/communication-inbox';
 import { Box } from '../../../../../primitives/layout/Box';
 import { Stack } from '../../../../../primitives/layout/Stack';
 import { Flex } from '../../../../../primitives/layout/Flex';
@@ -23,11 +25,21 @@ import { Card } from '../../../../../primitives/display/Card';
 import { Badge } from '../../../../../primitives/display/Badge';
 import { Button } from '../../../../../primitives/inputs/Button';
 import { Textarea } from '../../../../../primitives/inputs/Textarea';
+import { Popconfirm } from '../../../../../primitives/overlay/Popconfirm';
 import { Skeleton } from '../../../../../primitives/feedback/Skeleton';
 
 function readDecisionRecordValue(value: unknown, key: PropertyKey): unknown {
   if (typeof value !== 'object' || value === null) return undefined;
   return Reflect.get(value, key);
+}
+
+/** Map the surface-level decision vocabulary onto the Button primitive variants. */
+function resolveDecisionButtonVariant(
+  variant: DecisionAction['variant'],
+): 'primary' | 'danger' | 'secondary' {
+  if (variant === 'primary') return 'primary';
+  if (variant === 'danger') return 'danger';
+  return 'secondary';
 }
 
 // ---------------------------------------------------------------------------
@@ -40,7 +52,13 @@ export interface DecisionAction {
   variant?: 'primary' | 'secondary' | 'danger' | 'default';
   icon?: ReactNode;
   requiresReason?: boolean;
+  /** Confirmation message. When set, the action fires through a Popconfirm
+   *  (destructive decisions get a danger confirm with cancel-first focus). */
   confirm?: string;
+  /** Busy state for async decision submission (spinner + interaction lock). */
+  loading?: boolean;
+  /** Permission/disabled state — the action stays visible but inert. */
+  disabled?: boolean;
 }
 
 export interface DecisionInboxSurfaceProps<T extends object> {
@@ -97,6 +115,7 @@ function SlaBadge({ deadline, warningMin = 60, criticalMin = 15 }: {
   warningMin?: number;
   criticalMin?: number;
 }) {
+  const { tSurfaceOr } = useSurfaceTranslations();
   if (!deadline) return null;
   const now = new Date();
   const diffMs = deadline.getTime() - now.getTime();
@@ -105,21 +124,21 @@ function SlaBadge({ deadline, warningMin = 60, criticalMin = 15 }: {
   if (diffMin < 0) {
     return (
       <Badge variant="error" badgeStyle="soft" size="xs">
-        Overdue
+        {tSurfaceOr('decision_inbox.sla_overdue', 'Overdue')}
       </Badge>
     );
   }
   if (diffMin <= criticalMin) {
     return (
       <Badge variant="error" badgeStyle="soft" size="xs">
-        {diffMin}m left
+        {tSurfaceOr('decision_inbox.sla_minutes_left', '{count}m left', { count: diffMin })}
       </Badge>
     );
   }
   if (diffMin <= warningMin) {
     return (
       <Badge variant="warning" badgeStyle="soft" size="xs">
-        {diffMin}m left
+        {tSurfaceOr('decision_inbox.sla_minutes_left', '{count}m left', { count: diffMin })}
       </Badge>
     );
   }
@@ -130,7 +149,7 @@ function SlaBadge({ deadline, warningMin = 60, criticalMin = 15 }: {
       className="ds-decision-inbox__muted-text"
       size="xs"
     >
-      {hours}h {mins}m
+      {tSurfaceOr('decision_inbox.sla_duration_short', '{hours}h {mins}m', { hours, mins })}
     </Text>
   );
 }
@@ -141,11 +160,16 @@ function SlaBadge({ deadline, warningMin = 60, criticalMin = 15 }: {
 
 function DecisionInboxSkeleton() {
   return (
-    <Stack spacing="md">
+    <Stack className="ds-decision-inbox__skeleton" data-part="skeleton" spacing="md" aria-hidden="true">
       {/* Header skeleton */}
       <Box>
         <Skeleton variant="text" width="35%" height={24} />
-        <Skeleton variant="text" width="50%" height={14} style={{ marginTop: 8 }} />
+        <Skeleton
+          className="ds-decision-inbox__skeleton-subtitle"
+          variant="text"
+          width="50%"
+          height={14}
+        />
       </Box>
 
       {/* Filter skeleton */}
@@ -165,7 +189,6 @@ function DecisionInboxSkeleton() {
               data-part="divider"
               data-divider-kind="skeleton-header"
               gap={4}
-              style={{ paddingBottom: 'var(--ds-spacing-sm, 8px)' }}
             >
               <Skeleton variant="text" width="25%" height={14} />
               <Skeleton variant="text" width="20%" height={14} />
@@ -181,9 +204,6 @@ function DecisionInboxSkeleton() {
                 key={i}
                 gap={4}
                 align="center"
-                style={{
-                  padding: 'var(--ds-spacing-sm, 8px) 0',
-                }}
               >
                 <Skeleton variant="text" width="25%" height={14} />
                 <Skeleton variant="text" width="20%" height={14} />
@@ -195,35 +215,6 @@ function DecisionInboxSkeleton() {
         </Card.Body>
       </Card>
     </Stack>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Empty state
-// ---------------------------------------------------------------------------
-
-function DecisionEmptyState() {
-  return (
-    <Card variant="outlined">
-      <Card.Body>
-        <Flex
-          align="center"
-          justify="center"
-          style={{
-            padding: 'var(--ds-spacing-xl, 32px) var(--ds-spacing-md, 16px)',
-            flexDirection: 'column',
-            gap: 'var(--ds-spacing-sm, 8px)',
-          }}
-        >
-          <Text size="lg" weight="medium" color="muted">
-            No pending decisions
-          </Text>
-          <Text size="sm" color="muted">
-            All items have been reviewed. New items will appear here when they require attention.
-          </Text>
-        </Flex>
-      </Card.Body>
-    </Card>
   );
 }
 
@@ -249,12 +240,14 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
     footerSlot,
   } = props;
 
+  const { tSurfaceOr } = useSurfaceTranslations();
+  const batchReasonId = useId();
+  const reviewReasonId = useId();
+
   const workspace = useCollectionWorkspace({
     config: workspaceConfig,
     defaultViewMode: 'table',
   });
-
-  const { isDesktop } = useBreakpoints();
 
   const [selectedItem, setSelectedItem] = useState<T | null>(null);
   const [reasonText, setReasonText] = useState('');
@@ -300,13 +293,57 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
     workspace.clearSelection();
   }, [workspace.selectedKeys, workspace.clearSelection, onBatchDecision, onDecision, decisions, reasonText]);
 
+  // Renders one decision action. Reason-gated decisions stay plain buttons
+  // (the first click reveals the reason field); once the reason requirement
+  // is satisfied — or never existed — a `confirm`-carrying decision routes
+  // through Popconfirm so destructive actions always get an explicit confirm.
+  const renderDecisionButton = (
+    decision: DecisionAction,
+    onTrigger: (action: string) => void,
+    stretch: boolean,
+  ): React.ReactElement => {
+    const needsReasonFirst = !!decision.requiresReason && !reasonText;
+    const wrappedInConfirm = !!decision.confirm && !needsReasonFirst;
+    const hookClass = stretch ? 'ds-decision-inbox__decision-action' : undefined;
+    const button = (
+      <Button
+        key={decision.key}
+        size="sm"
+        variant={resolveDecisionButtonVariant(decision.variant)}
+        onClick={wrappedInConfirm ? undefined : () => onTrigger(decision.key)}
+        icon={decision.icon}
+        loading={decision.loading}
+        disabled={decision.disabled}
+        className={hookClass}
+      >
+        {decision.label}
+      </Button>
+    );
+    if (!wrappedInConfirm) return button;
+    return (
+      <Popconfirm
+        key={decision.key}
+        title={decision.confirm}
+        okText={tSurfaceOr('decision_inbox.confirm_ok', 'Confirm')}
+        cancelText={tSurfaceOr('decision_inbox.cancel', 'Cancel')}
+        okType={decision.variant === 'danger' ? 'danger' : 'primary'}
+        okButtonLoading={decision.loading}
+        disabled={decision.disabled || decision.loading}
+        className={hookClass}
+        onConfirm={() => onTrigger(decision.key)}
+      >
+        {button}
+      </Popconfirm>
+    );
+  };
+
   // Build columns with SLA badge if configured
   const enrichedColumns = sla
     ? [
         ...columns,
         {
           key: '__sla',
-          header: 'SLA',
+          header: tSurfaceOr('decision_inbox.sla_header', 'SLA'),
           render: (_: unknown, row: T) => (
             <SlaBadge
               deadline={sla.getDeadline(row)}
@@ -320,7 +357,8 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
 
   const showReviewRail = reviewRail && selectedItem;
   const isLoading = workspaceConfig.loading;
-  const isEmpty = !isLoading && (!workspaceConfig.data || workspaceConfig.data.length === 0);
+  const errorContent = workspaceConfig.error;
+  const isEmpty = !isLoading && !errorContent && (!workspaceConfig.data || workspaceConfig.data.length === 0);
 
   // Show full-page skeleton on initial load when no data at all
   if (isLoading && (!workspaceConfig.data || workspaceConfig.data.length === 0)) {
@@ -330,9 +368,18 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
         data-part="root"
         data-loading="true"
         data-empty="false"
+        data-mobile={workspace.isMobile ? 'true' : 'false'}
         spacing="md"
+        aria-busy="true"
       >
         {headerSlot}
+        <Text
+          as="span"
+          className="ds-decision-inbox__loading-label"
+          data-part="loading-label"
+        >
+          {tSurfaceOr('decision_inbox.loading_label', 'Loading…')}
+        </Text>
         <DecisionInboxSkeleton />
         {footerSlot}
       </Stack>
@@ -345,6 +392,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
       data-part="root"
       data-loading={isLoading ? 'true' : 'false'}
       data-empty={isEmpty ? 'true' : 'false'}
+      data-mobile={workspace.isMobile ? 'true' : 'false'}
       spacing="md"
     >
       {headerSlot}
@@ -355,10 +403,9 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
           <Text className="ds-decision-inbox__title" data-part="title" size="xl" weight="semibold">{queueName}</Text>
           {subtitle && (
             <Text
-              className="ds-decision-inbox__muted-text"
+              className="ds-decision-inbox__muted-text ds-decision-inbox__subtitle"
               size="sm"
               color="muted"
-              style={{ marginTop: 'var(--ds-spacing-xs, 4px)' }}
             >
               {subtitle}
             </Text>
@@ -366,7 +413,9 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
         </Box>
         {workspaceConfig.data && workspaceConfig.data.length > 0 && (
           <Badge variant="default" badgeStyle="soft" size="sm">
-            {workspaceConfig.data.length} pending
+            {tSurfaceOr('decision_inbox.pending_count', '{count} pending', {
+              count: workspaceConfig.data.length,
+            })}
           </Badge>
         )}
       </Flex>
@@ -392,20 +441,34 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
           <Card.Body>
             <Flex align="center" gap={3} wrap="wrap">
               <Badge variant="primary" badgeStyle="soft" size="sm">
-                {workspace.selectedKeys.length} items selected
+                {tSurfaceOr('decision_inbox.items_selected', '{count} items selected', {
+                  count: workspace.selectedKeys.length,
+                })}
               </Badge>
-              <Box style={{ flex: 1 }} />
+              <Box className="ds-decision-inbox__selection-spacer" />
 
               {/* Reason input for batch (if pending action requires it) */}
               {pendingAction && (
-                <Textarea
-                  className="ds-decision-inbox__batch-reason"
-                  value={reasonText}
-                  onChange={(val) => setReasonText(val)}
-                  placeholder="Enter reason..."
-                  rows={1}
-                  style={{ minWidth: 200, maxWidth: 320 }}
-                />
+                <Flex
+                  className="ds-decision-inbox__batch-reason-field"
+                  data-part="batch-reason-field"
+                  direction="column"
+                  align="stretch"
+                  gap={1}
+                >
+                  <Text as="label" size="sm" weight="medium" htmlFor={batchReasonId}>
+                    {tSurfaceOr('decision_inbox.reason_label', 'Reason')}
+                  </Text>
+                  <Textarea
+                    id={batchReasonId}
+                    className="ds-decision-inbox__batch-reason"
+                    value={reasonText}
+                    onChange={(val) => setReasonText(val)}
+                    placeholder={tSurfaceOr('decision_inbox.reason_placeholder_batch', 'Enter reason...')}
+                    rows={1}
+                    autoFocus
+                  />
+                </Flex>
               )}
 
               <Button
@@ -413,43 +476,44 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
                 variant="secondary"
                 onClick={() => workspace.clearSelection()}
               >
-                Clear
+                {tSurfaceOr('decision_inbox.clear_selection', 'Clear')}
               </Button>
-              {decisions.map((decision) => (
-                <Button
-                  key={decision.key}
-                  size="sm"
-                  variant={
-                    decision.variant === 'primary'
-                      ? 'primary'
-                      : decision.variant === 'danger'
-                        ? 'danger'
-                        : 'secondary'
-                  }
-                  onClick={() => handleBatchDecision(decision.key)}
-                  icon={decision.icon}
-                >
-                  {decision.label}
-                </Button>
-              ))}
+              {decisions.map((decision) => renderDecisionButton(decision, handleBatchDecision, false))}
             </Flex>
           </Card.Body>
         </Card>
       )}
 
+      {/* Error state (app-owned node from the collection contract) */}
+      {errorContent && (
+        <Box className="ds-decision-inbox__error" data-part="error">
+          {errorContent}
+        </Box>
+      )}
+
       {/* Empty state */}
-      {isEmpty && !workspaceConfig.emptyState && <DecisionEmptyState />}
+      {isEmpty && (
+        workspaceConfig.emptyState ?? (
+          <SurfaceEmptyState
+            icon={<CommunicationInboxIcon decorative size={32} />}
+            title={tSurfaceOr('decision_inbox.empty_title', 'No pending decisions')}
+            description={tSurfaceOr(
+              'decision_inbox.empty_description',
+              'All items have been reviewed. New items will appear here when they require attention.',
+            )}
+          />
+        )
+      )}
 
       {/* Main content */}
-      {!isEmpty && (
+      {!isEmpty && !errorContent && (
         <Flex
+          className="ds-decision-inbox__content"
+          data-part="content"
           gap={4}
-          style={{
-            flexDirection: isDesktop ? 'row' : 'column',
-          }}
         >
           {/* Queue table */}
-          <Box style={{ flex: 1, minWidth: 0 }}>
+          <Box className="ds-decision-inbox__queue" data-part="queue">
             <PatternDataTable<T>
               data={workspaceConfig.data}
               columns={enrichedColumns}
@@ -471,24 +535,25 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
           {/* Review rail */}
           {showReviewRail && (
             <Box
-              style={{
-                width: isDesktop ? (reviewRail.width ?? '380px') : '100%',
-                flexShrink: 0,
-              }}
+              className="ds-decision-inbox__review-rail"
+              data-part="review-rail"
+              style={
+                reviewRail.width
+                  ? ({ '--_ds-instance-decision-inbox-rail-width': reviewRail.width } as React.CSSProperties)
+                  : undefined
+              }
             >
               <Card
                 className="ds-decision-inbox__review-card"
                 variant="outlined"
-                style={{
-                  position: isDesktop ? 'sticky' : 'relative',
-                  top: isDesktop ? 'var(--ds-spacing-md, 16px)' : undefined,
-                }}
               >
                 <Card.Body>
                   <Stack spacing="md">
                     {/* Rail header */}
                     <Flex align="center" justify="between">
-                      <Text size="sm" weight="semibold">Review Details</Text>
+                      <Text size="sm" weight="semibold">
+                        {tSurfaceOr('decision_inbox.review_details', 'Review Details')}
+                      </Text>
                       <Button
                         size="xs"
                         variant="secondary"
@@ -498,7 +563,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
                           setReasonText('');
                         }}
                       >
-                        Close
+                        {tSurfaceOr('decision_inbox.close', 'Close')}
                       </Button>
                     </Flex>
 
@@ -507,9 +572,6 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
                       className="ds-decision-inbox__divider"
                       data-part="divider"
                       data-divider-kind="review-rail"
-                      style={{
-                        height: 1,
-                      }}
                     />
 
                     {/* Custom review content */}
@@ -519,19 +581,25 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
                     {pendingAction && (
                       <Box>
                         <Text
+                          as="label"
                           size="sm"
                           weight="medium"
-                          style={{ marginBottom: 'var(--ds-spacing-xs, 4px)' }}
+                          htmlFor={reviewReasonId}
+                          className="ds-decision-inbox__reason-label"
                         >
-                          Reason
+                          {tSurfaceOr('decision_inbox.reason_label', 'Reason')}
                         </Text>
                         <Textarea
+                          id={reviewReasonId}
                           className="ds-decision-inbox__review-reason"
                           value={reasonText}
                           onChange={(val) => setReasonText(val)}
-                          placeholder="Enter reason for this decision..."
+                          placeholder={tSurfaceOr(
+                            'decision_inbox.reason_placeholder_review',
+                            'Enter reason for this decision...',
+                          )}
                           rows={3}
-                          style={{ width: '100%' }}
+                          autoFocus
                         />
                       </Box>
                     )}
@@ -541,31 +609,11 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
                       className="ds-decision-inbox__divider"
                       data-part="divider"
                       data-divider-kind="review-rail"
-                      style={{
-                        height: 1,
-                      }}
                     />
 
                     {/* Decision buttons */}
                     <Flex gap={2} wrap="wrap">
-                      {decisions.map((decision) => (
-                        <Button
-                          key={decision.key}
-                          size="sm"
-                          variant={
-                            decision.variant === 'primary'
-                              ? 'primary'
-                              : decision.variant === 'danger'
-                                ? 'danger'
-                                : 'secondary'
-                          }
-                          onClick={() => handleDecision(decision.key)}
-                          icon={decision.icon}
-                          style={{ flex: 1 }}
-                        >
-                          {decision.label}
-                        </Button>
-                      ))}
+                      {decisions.map((decision) => renderDecisionButton(decision, handleDecision, true))}
                     </Flex>
                   </Stack>
                 </Card.Body>

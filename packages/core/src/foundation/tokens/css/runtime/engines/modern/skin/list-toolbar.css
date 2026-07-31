@@ -424,12 +424,19 @@
     --ds-toolbar-count-radius,
     var(--ds-radius-pill, 999px)
   );
+  /* Per-pill active count reads quiet (soft): the trigger's own active border
+     and tint already carry the state; the global count badge in the search
+     suffix stays solid as the primary numeric signal. */
   background: var(
     --ds-filter-pill-count-active-bg,
-    var(--ds-filter-pill-active-color, var(--ds-color-primary))
+    color-mix(
+      in srgb,
+      var(--ds-filter-pill-active-color, var(--ds-color-primary)) 14%,
+      transparent
+    )
   );
   border: 1px solid var(--ds-filter-pill-count-active-border, transparent);
-  color: var(--ds-color-text-on-primary);
+  color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -454,6 +461,13 @@
     color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
   );
   color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+}
+
+/* Selected-option checkmark: layout only; the icon inherits the item color. */
+.ds-pattern-list-toolbar.ds-engine-modern
+  [data-part="filter-checkmark"] {
+  display: inline-flex;
+  align-items: center;
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -702,6 +716,11 @@
   gap: var(--ds-toolbar-control-gap, var(--ds-spacing-1, 0.25rem));
   scrollbar-width: thin;
   scrollbar-color: var(--ds-toolbar-border, var(--ds-color-border)) transparent;
+  /* Block clearance so a focused trigger's 3px ring is not clipped by the
+     rail's overflow; the rail is transparent, so the extra block size is
+     invisible in the row. */
+  padding-block: var(--ds-toolbar-rail-focus-clearance, 0.25rem);
+  margin-block: calc(var(--ds-toolbar-rail-focus-clearance, 0.25rem) * -1);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -1115,5 +1134,39 @@
     ).rottay-button[data-part="trigger"] {
     animation: none;
     transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  /* Active/selected state must survive color stripping: the pill trigger and
+     the dropdown selection rely on primary-tinted fills, so remap them to the
+     system highlight pair and let every control keep a visible border. */
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-trigger.rottay-button[data-part="trigger"],
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-chip[data-part="filter-chip"][data-part="filter-chip"],
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__icon-button.rottay-button[data-part="trigger"],
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__clear-all.rottay-button[data-part="trigger"] {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+    box-shadow: none;
+  }
+
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-trigger.rottay-button[data-part="trigger"][data-active="true"],
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part="trigger"][data-selected="true"],
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__density-option.rottay-button[data-part="trigger"][data-active="true"] {
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-chips-strip[data-part="filter-chips-strip"][data-part="filter-chips-strip"] {
+    background: Canvas;
+    color: CanvasText;
   }
 }

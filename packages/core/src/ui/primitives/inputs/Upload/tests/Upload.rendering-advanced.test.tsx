@@ -63,9 +63,11 @@ describe.each([
       // --ds-progress-arc-color channel, and the legacy strokeWidth+4 track
       // geometry rides --ds-progress-height.
       expect(progressbar).toHaveAttribute('value', '42');
-      expect(progressbar.style.getPropertyValue('--ds-progress-arc-color')).toBe('linear-gradient(to right, #111111, #999999)');
       const progressShell = progressbar.closest('[data-part="root"]');
       expect(progressShell).not.toBeNull();
+      expect(
+        (progressShell as HTMLElement).style.getPropertyValue('--ds-progress-arc-color'),
+      ).toBe('linear-gradient(to right, #111111, #999999)');
       expect((progressShell as HTMLElement).style.getPropertyValue('--ds-progress-height')).toBe('8px');
     } else {
       // Rustic keeps its own bar (contract parity; modern-only composition).

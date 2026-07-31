@@ -26,10 +26,13 @@
  * `ds-foundation-spin`. Under `prefers-reduced-motion: reduce` the decorative
  * pulse is silenced; the spinner stays (functional progress indication).
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
- * (0,3,1); with only ONE root class, the border rules reach (0,4,0) via a
- * thrice-repeated `[data-part='root']` (base) or twice plus a state attribute.
- * Non-border paint wins unlayered at (0,2,0)+.
+ * SPECIFICITY (P-48 + 4th-wave recount): the Platform-only Rottay artifact
+ * ships an unlayered border-color floor at (0,3,1). With only ONE root
+ * class, the border rules reach (0,4,0) via the always-stamped
+ * `[data-size]` + `[data-variant]` pair (and the state attribute on the
+ * active/error chains) -- no repeated `[data-part='root']` anywhere. The
+ * former thrice-repeated mint is gone; the fragility note lives on the
+ * border block below. Non-border paint wins unlayered at (0,2,0)+.
  */
 
 .ds-voice-input-button[data-part='root'] {
@@ -43,9 +46,23 @@
   background: transparent;
   color: var(--ds-color-text-muted);
   transition:
-    background-color var(--ds-motion-feedback) ease,
-    border-color var(--ds-motion-feedback) ease,
-    color var(--ds-motion-feedback) ease;
+    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
+    color var(--ds-motion-feedback) var(--ds-motion-ease-out);
+}
+
+/* Idle hover is hover-capable-only (4th-wave law); the held press answers
+   with the canonical press scale on every pointer. */
+@media (hover: hover) {
+  .ds-voice-input-button[data-part='root']:hover:not([data-active='true']):not([data-error='true']) {
+    background: var(
+      --ds-voice-input-bg-hover,
+      color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)
+    );
+  }
+}
+.ds-voice-input-button[data-part='root']:active {
+  transform: scale(var(--ds-state-press-scale, 0.98));
 }
 
 /* control + icon geometry per size preset (transcribed verbatim: no global
@@ -69,12 +86,15 @@
   block-size: 15px;
 }
 
-/* state animations (keyframes declared at the bottom of this file) */
+/* state animations (keyframes declared at the bottom of this file; durations
+   derive from the motion scale -- never literals) */
 .ds-voice-input-button[data-part='root'][data-status='listening'] {
-  animation: ds-voice-input-button-pulse 1.6s ease-out infinite;
+  animation: ds-voice-input-button-pulse
+    var(--ds-voice-input-pulse-duration, calc(var(--ds-motion-glacial) * 3))
+    var(--ds-motion-ease-out) infinite;
 }
 .ds-voice-input-button[data-part='root'][data-status='transcribing'] > .rottay-icon {
-  animation: ds-voice-input-button-spin 1s linear infinite;
+  animation: ds-voice-input-button-spin calc(var(--ds-motion-glacial) * 2) linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {
   .ds-voice-input-button[data-part='root'][data-status='listening'] {
@@ -90,21 +110,49 @@
     0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
   );
 }
+/* forced colors: the focus ring degrades to a system outline, and every
+   state keeps a FRAME (never hue alone): the base frame and the active
+   Highlight frame carry idle vs recording. */
 @media (forced-colors: active) {
   .ds-voice-input-button[data-part='root']:focus-visible {
     outline: 2px solid Highlight;
     box-shadow: none;
   }
+
+  .ds-voice-input-button[data-part='root'][data-size][data-variant] {
+    border-color: ButtonText;
+  }
+  .ds-voice-input-button[data-part='root'][data-variant][data-active='true'] {
+    border-color: Highlight;
+  }
+  .ds-voice-input-button[data-part='root'][data-variant][data-blocked='true'] {
+    border-color: GrayText;
+    color: GrayText;
+  }
 }
 
-/* border color: default (base) > active > error (error wins the tie, last). */
-.ds-voice-input-button[data-part='root'][data-part='root'][data-part='root'] {
+/* coarse pointers: the 28/34px presets miss the wave's 44px touch law; the
+   floor is physical px, never rem (the fluid 15px root erodes rem floors at
+   narrow widths -- measured on the live bundle, Axe R0). */
+@media (pointer: coarse) {
+  .ds-voice-input-button[data-part='root'] {
+    min-inline-size: 44px;
+    min-block-size: 44px;
+  }
+}
+
+/* border color: default (base) > active > error (error wins the tie, last).
+   4th-wave de-hack of the former thrice/twice-repeated `[data-part='root']`:
+   `[data-size]` and `[data-variant]` are stamped on EVERY render, so they
+   lend the specificity units with no repetition (FRAGILITY NOTE: restore the
+   stamps if a future render ever drops them -- never re-double the part). */
+.ds-voice-input-button[data-part='root'][data-size][data-variant] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
-.ds-voice-input-button[data-part='root'][data-part='root'][data-active='true'] {
+.ds-voice-input-button[data-part='root'][data-variant][data-active='true'] {
   border-color: color-mix(in srgb, var(--ds-color-primary) 44%, transparent);
 }
-.ds-voice-input-button[data-part='root'][data-part='root'][data-error='true'] {
+.ds-voice-input-button[data-part='root'][data-variant][data-error='true'] {
   border-color: color-mix(in srgb, var(--ds-color-error) 36%, transparent);
 }
 
@@ -125,6 +173,11 @@
 }
 .ds-voice-input-button[data-part='root'][data-error='true'] {
   color: var(--ds-color-error);
+}
+/* Permission denied reads muted (the tooltip carries the explanation; the
+   button stays operable so the browser can re-prompt). */
+.ds-voice-input-button[data-part='root'][data-blocked='true'] {
+  color: var(--ds-color-text-disabled);
 }
 
 @keyframes ds-voice-input-button-pulse {

@@ -1,72 +1,257 @@
-/** Modern KanbanBoard pattern skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+/**
+ * Modern KanbanBoard pattern skin (WO-SKIN-06 CK-E; PT34 rebuild),
+ * deliberately unlayered (P-47).
+ *
+ * COMPOSITION LAW (PT34): Button (add item, variant dashed), Badge (WIP
+ * count, neutral/danger tone by limit state), Spinner (loading) and Empty
+ * (empty board) own their own chrome and skins. The retired pieces: the
+ * hand-rolled native add button + raw plus SVG, the `--tw-ring-color` hack
+ * that painted a Tailwind ring utility (the drop ring is a REAL rule now),
+ * the pillBadgeSmStyle WIP span, and every drained Tailwind layout utility.
+ * The repeated `[data-part='card'][data-part='card']` /
+ * `[data-part='add-item'][data-part='add-item']` selectors are gone — border
+ * paint reaches (0,4,0) through the root's own `data-part` in the chain
+ * (4th-tanda law).
+ *
+ * STATE ACCENT AS DATA: `column.color` is consumer config riding the quoted
+ * `--ds-kanban-column-accent` channel — applied as a HORIZONTAL strip on the
+ * header's block-start edge (side rails / vertical accents are forbidden).
+ *
+ * MOTION: card chrome transitions ride `--ds-motion-*` channels; drag moves
+ * animate through the engine's FLIP hook (coordinated, never teleport); the
+ * drop ring fades on the same fast channel.
+ */
 
+/* ---- root: named container (snap cuts resolve against it) + loading frame ---- */
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root'] {
+  container: ds-kanban / inline-size;
+  min-inline-size: 0;
+}
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root'][data-loading='true'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 300px;
+}
+
+/* ---- toolbar slot (was mb-4) ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='toolbar'] {
+  margin-block-end: var(--ds-spacing-4);
+}
+
+/* ---- board: horizontal scroll strip; the consumer's gap rides the channel ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='board'] {
+  display: flex;
+  gap: var(--ds-kanban-column-gap, 16px);
+  padding-block-end: var(--ds-spacing-2);
+  overflow-x: auto;
+}
+
+/* ---- column (was flex flex-col flex-1 / w-12 + inline minWidth) ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='column'] {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-inline-size: var(--ds-kanban-column-min-width, 280px);
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='column'][data-collapsed='true'] {
+  flex: 0 0 auto;
+  inline-size: 48px;
+  min-inline-size: 48px;
+}
+
+/* ---- column header (was rounded-xl px-4 py-3 mb-2 + inline borderTop) ---- */
 .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
   > [data-part='board']
   > [data-part='column']
   > [data-part='column-header'] {
+  margin-block-end: var(--ds-spacing-2);
+  padding-block: var(--ds-spacing-3);
+  padding-inline: var(--ds-spacing-4);
+  border-block-start: 3px solid var(--ds-kanban-column-accent, transparent);
+  border-radius: var(--ds-radius-xl);
   background: var(--ds-surface-inset);
 }
-
-.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
-  > [data-part='board']
-  > [data-part='column'][data-over-limit='false']
-  > [data-part='column-header']
-  [data-part='wip-badge'] {
-  background: var(--ds-surface-panel);
-  color: var(--ds-color-text-secondary);
+.ds-pattern-kanban-board.ds-engine-modern [data-part='column-header-content'],
+.ds-pattern-kanban-board.ds-engine-modern [data-part='column-title-row'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2);
+  min-inline-size: 0;
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='column-title-row'] {
+  justify-content: flex-start;
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='column-title'] {
+  overflow: hidden;
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Count scans tabular down the header row (the composed Badge owns chrome). */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='wip-badge'] {
+  font-variant-numeric: tabular-nums;
 }
 
+/* ---- column body (was flex-1 rounded-xl p-2 min-h-[100px]) + the drop ring
+        (a real rule -- the retired --tw-ring-color hack painted a utility) ---- */
 .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
   > [data-part='board']
-  > [data-part='column'][data-over-limit='true']
-  > [data-part='column-header']
-  [data-part='wip-badge'] {
-  background: color-mix(in srgb, var(--ds-color-error) 15%, transparent);
-  color: var(--ds-color-error);
+  > [data-part='column']
+  > [data-part='column-body'] {
+  flex: 1 1 auto;
+  min-block-size: 100px;
+  padding: var(--ds-spacing-2);
+  border-radius: var(--ds-radius-xl);
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-
 .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
   > [data-part='board']
   > [data-part='column']
   > [data-part='column-body'][data-dropping='false'] {
   background: var(--ds-surface-card);
 }
-
 .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
   > [data-part='board']
   > [data-part='column']
   > [data-part='column-body'][data-dropping='true'] {
-  --tw-ring-color: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
 }
 
+/* ---- empty column slot (was flex items-center justify-center p-6) ---- */
 .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
   > [data-part='board']
   > [data-part='column']
   > [data-part='column-body']
   > [data-part='empty-column'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-6, 1.5rem);
   color: var(--ds-color-text-secondary);
 }
 
+/* ---- empty board frame (the composed Empty owns its paint) ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='empty-board'] {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--ds-spacing-12, 3rem);
+}
+
+/* ---- card list (was flex flex-col gap-2) + channeled vertical scroll ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='card-list'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+  max-block-size: var(--ds-kanban-column-max-height, none);
+  overflow-y: auto;
+}
+
+/* ---- card: chrome drained from utilities; the ghost source dims while
+        dragged; hover only where hovering is real (house hover law) ---- */
 .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
   > [data-part='board']
   > [data-part='column']
   > [data-part='column-body']
   > [data-part='card-list']
-  > [data-part='card'][data-part='card'] {
-  background: var(--ds-surface-card);
-  border-color: var(--ds-color-border);
-  box-shadow: var(--ds-elevation-1);
+  > [data-part='card'] {
+  border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-1);
+  transition:
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='card'][data-clickable='true'] {
+  cursor: pointer;
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='card'][data-clickable='false'] {
+  cursor: grab;
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='card'][data-dragging='true'] {
+  opacity: 0.4;
+}
+@media (hover: hover) {
+  .ds-pattern-kanban-board.ds-engine-modern [data-part='card']:hover {
+    box-shadow: var(--ds-elevation-2);
+  }
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='card']:active {
+  cursor: grabbing;
+}
+.ds-pattern-kanban-board.ds-engine-modern [data-part='card-content'] {
+  padding: var(--ds-spacing-3);
 }
 
-.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
-  > [data-part='board']
-  > [data-part='column']
-  > [data-part='column-body']
-  > [data-part='add-item'][data-part='add-item'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
-  border-radius: var(--ds-radius-md);
-  border: 1px dashed var(--ds-color-border);
+/* ---- add item: the composed dashed Button stretches to the column ---- */
+.ds-pattern-kanban-board.ds-engine-modern [data-part='add-item'] {
+  inline-size: 100%;
+  margin-block-start: var(--ds-spacing-2);
+}
+
+/* ---- narrow compositions: columns snap into place instead of straddling
+        cuts; each column keeps a readable near-full measure ---- */
+@container ds-kanban (inline-size < 40rem) {
+  .ds-pattern-kanban-board.ds-engine-modern [data-part='board'] {
+    scroll-snap-type: x mandatory;
+  }
+  .ds-pattern-kanban-board.ds-engine-modern [data-part='column'] {
+    min-inline-size: 85%;
+    scroll-snap-align: start;
+  }
+}
+
+/* ---- coarse pointers: the add-item button reaches the 44px floor ---- */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-kanban-board.ds-engine-modern [data-part='add-item'] {
+    min-block-size: var(--ds-kanban-touch-target, 2.75rem);
+  }
+}
+
+/* forced-colors: shadows, tints and the header state accent are forced away.
+   Cards keep a system frame; the DROP TARGET re-asserts as a Highlight
+   outline (the affordance is shape, never colour alone); the dragged ghost
+   keeps its opacity (opacity survives forced colours); the header accent
+   strip degrades to a neutral ButtonText hairline -- column identity reads
+   through the title text. Composed primitives (Button, Badge, Empty,
+   Spinner) own their own forced-colors contracts. */
+@media (forced-colors: active) {
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-header'] {
+    border-block-start-color: ButtonText;
+    background: Canvas;
+  }
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body'] {
+    background: Canvas;
+  }
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body'][data-dropping='true'] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+    > [data-part='board']
+    > [data-part='column']
+    > [data-part='column-body']
+    > [data-part='card-list']
+    > [data-part='card'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
 }

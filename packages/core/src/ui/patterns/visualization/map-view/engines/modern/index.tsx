@@ -1,11 +1,24 @@
 'use client';
 
 /**
- * @fileoverview MapView -- Modern engine (DaisyUI / Tailwind).
- * Renders a placeholder map area with a marker list beneath it, styled
- * entirely with Tailwind utility classes and DaisyUI loading spinners.
- * The map placeholder is a static container ready to be replaced by
- * Leaflet, Mapbox GL, or any other map library.
+ * @fileoverview MapView -- Modern engine (DS-token).
+ *
+ * ARCHITECTURE (documented, not changed): this pattern is an INTEGRATION
+ * PLACEHOLDER -- there is no map provider (no Leaflet/Mapbox GL/Google
+ * dependency, and none is added by this lane). The "map" region renders the
+ * viewport metadata (center/zoom/marker count) a provider would consume;
+ * the marker list below is the real interactive surface. When a provider
+ * lands, the map region swaps its children for the library canvas (map
+ * tiles are then DATA, like the marker color dot today).
+ *
+ * Composition law: the pattern composes the public Spinner primitive for the
+ * loading state and Button for marker selection, and recreates nothing --
+ * geometry and paint live in the
+ * modern `pattern-map-view.css` skin (the old Tailwind utility chain and the
+ * hand-rolled CSS spinner are retired). Own copy resolves through the
+ * optional `components` i18n channel with an English floor pinned byte-
+ * identical to the pre-i18n contract. Marker rows compose Button so selection
+ * stays keyboard-operable (focus + Enter/Space) without a local control.
  *
  * @example
  * <ModernMapView
@@ -17,18 +30,26 @@
 
 import React from 'react';
 import type { MapViewProps, MapMarker } from '../../contracts';
+import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
+import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { interpolateTranslation } from '@/foundation/i18n/runtime/resolution/translation';
 
 const ROOT_CLASS_NAME = 'ds-pattern-map-view ds-engine-modern';
 
 /**
- * Modern (DaisyUI/Tailwind) implementation of the MapView pattern.
- * Uses Tailwind utility classes for layout and DaisyUI's loading spinner.
- * Marker list items are rendered as divided rows with hover states.
+ * Modern (DS-token) implementation of the MapView integration placeholder.
  *
  * @param props - See {@link MapViewProps} for the full prop contract.
- * @returns The rendered map view with marker list.
+ * @returns The rendered map placeholder with its marker list.
  */
 export default function ModernMapView<T>(props: MapViewProps<T>) {
+  // Optional channel with an English floor: the view renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
+    i18n?.tOr(key, floor, params) ?? interpolateTranslation(floor, params);
+
   const {
     markers,
     center,
@@ -46,98 +67,110 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
     loading = false,
   } = props;
 
+  const centerLabel = center
+    ? tOr('map_view.center', 'Center: {lat}, {lng}', {
+        lat: center.lat.toFixed(4),
+        lng: center.lng.toFixed(4),
+      })
+    : tOr('map_view.no_center', 'No center set');
+  const zoomLabel = zoom != null ? tOr('map_view.zoom', 'Zoom: {zoom}', { zoom }) : null;
+  const countLabel =
+    markers.length === 1
+      ? tOr('map_view.marker_count_one', '{count} marker', { count: markers.length })
+      : tOr('map_view.marker_count_other', '{count} markers', { count: markers.length });
+
   return (
-    /* Flex row layout: optional fixed-width sidebar + fluid main area */
+    /* Row layout: optional fixed-width sidebar + fluid main area. Instance
+       dimensions (sidebar width, map height) stay inline -- they are
+       per-call consumer data, not paint. */
     <div
       data-part="root"
       data-loading={loading}
       data-empty={markers.length === 0}
-      className={[ROOT_CLASS_NAME, 'flex gap-4', className].filter(Boolean).join(' ')}
+      className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
       style={style}
     >
-      {/* Sidebar is shrink-0 so it keeps its explicit pixel width */}
       {sidebar && (
-        <div data-part="sidebar" className="shrink-0" style={{ width: sidebarWidth }}>{sidebar}</div>
+        <div data-part="sidebar" style={{ width: sidebarWidth }}>{sidebar}</div>
       )}
-      <div data-part="content" className="flex-1">
+      <div data-part="content">
         {toolbar}
-        {/* Loading state replaces the entire map + list with a centered DaisyUI spinner */}
         {loading ? (
-          <div data-part="loading" className="flex justify-center items-center" style={{ height }}>
-            <span data-part="spinner" style={{ display: 'inline-block', width: 32, height: 32, animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
+          <div data-part="loading" style={{ height }}>
+            {/* Spinner primitive owns ring, cadence (ds-foundation-spin) and
+                the status role -- the hand-rolled CSS spinner is retired. */}
+            <ModernSpinner size="md" data-part="spinner" />
           </div>
         ) : (
           <>
-            {/* Placeholder map area */}
             {/* Placeholder map area -- displays center/zoom/marker metadata.
-                 Replace this div's children with a real map library (Leaflet, Mapbox GL, etc.) */}
-            <div
-              data-part="map-placeholder"
-              className="rounded-lg flex items-center justify-center mb-4 border"
-              style={{ height }}
-            >
-              <div data-part="placeholder-content" className="text-center">
-                <div data-part="placeholder-label" data-detail="title" className="text-sm">Map placeholder</div>
-                <div data-part="placeholder-label" data-detail="location" className="text-xs mt-1">
-                  {center
-                    ? `Center: ${center.lat.toFixed(4)}, ${center.lng.toFixed(4)}`
-                    : 'No center set'}
-                  {zoom != null ? ` | Zoom: ${zoom}` : ''}
+                Replace this div's children with a real map library (Leaflet,
+                Mapbox GL, etc.); tiles are then DATA. */}
+            <div data-part="map-placeholder" style={{ height }}>
+              <div data-part="placeholder-content">
+                <div data-part="placeholder-label" data-detail="title">
+                  {tOr('map_view.placeholder', 'Map placeholder')}
                 </div>
-                <div data-part="placeholder-label" data-detail="count" className="text-xs">
-                  {markers.length} marker{markers.length !== 1 ? 's' : ''}
+                <div data-part="placeholder-label" data-detail="location">
+                  {centerLabel}
+                  {zoomLabel ? ` | ${zoomLabel}` : ''}
+                </div>
+                <div data-part="placeholder-label" data-detail="count">
+                  {countLabel}
                 </div>
               </div>
             </div>
 
-            {/* Marker list -- uses divide-y for row separators without manual border logic */}
+            {/* Marker list -- the interactive surface until a provider lands. */}
             {markers.length === 0 ? (
-              <div data-part="empty" className="text-center py-8 text-sm">No markers</div>
+              <div data-part="empty">{tOr('map_view.empty', 'No markers')}</div>
             ) : (
-              <div data-part="marker-list" className="divide-y rounded-lg overflow-hidden border" style={{ '--tw-divide-color': 'var(--ds-color-border)' } as React.CSSProperties}>
+              <div data-part="marker-list">
                 {markers.map((marker, i) => {
-                  /* Selected marker gets a primary tint background */
                   const isSelected = marker.id === selectedMarkerId;
                   return (
-                    <div
+                    /* Public Button: keyboard selection (focus + Enter/Space)
+                        and focus semantics come from the primitive. */
+                    <ModernButton
+                      variant="ghost"
+                      size="sm"
                       data-part="marker-row"
                       data-selected={isSelected}
                       data-last={i === markers.length - 1}
                       key={marker.id}
                       onClick={() => onMarkerClick?.(marker)}
-                      className="p-3 cursor-pointer"
                     >
-                      {/* Custom renderer takes priority; default shows icon, color dot, label, and coords */}
+                      {/* Custom renderer takes priority; default shows icon,
+                          color dot (consumer DATA, stays inline), label,
+                          coords. */}
                       {renderMarker ? (
                         renderMarker(marker)
                       ) : (
-                        <div className="flex items-center gap-2">
+                        <span data-part="marker-row-main">
                           {marker.icon}
-                          {/* Color indicator rendered as a small filled circle */}
                           {marker.color && (
                             <span
                               data-part="marker-color"
-                              className="w-3 h-3 rounded-full shrink-0"
                               style={{ background: marker.color }}
                             />
                           )}
-                          <div>
-                            {/* Label falls back to marker id when no label is provided */}
-                            <div data-part="marker-label" className={`text-sm ${isSelected ? 'font-semibold' : ''}`}>
+                          <span data-part="marker-text">
+                            <span data-part="marker-label">
                               {marker.label ?? marker.id}
-                            </div>
-                            {/* Coordinates formatted to 4 decimal places (~11m precision) */}
-                            <div data-part="coordinates" className="text-xs">
+                            </span>
+                            <span data-part="coordinates">
                               {marker.lat.toFixed(4)}, {marker.lng.toFixed(4)}
-                            </div>
-                          </div>
-                        </div>
+                            </span>
+                          </span>
+                        </span>
                       )}
-                      {/* Popup content appears below marker details when this row is selected */}
+                      {/* Popup content expands below the selected row -- a
+                          list-inline disclosure, not an overlay (Popover
+                          does not apply; focus stays on the row). */}
                       {isSelected && renderPopup && (
-                        <div data-part="popup" className="mt-2 pl-5">{renderPopup(marker)}</div>
+                        <span data-part="popup">{renderPopup(marker)}</span>
                       )}
-                    </div>
+                    </ModernButton>
                   );
                 })}
               </div>

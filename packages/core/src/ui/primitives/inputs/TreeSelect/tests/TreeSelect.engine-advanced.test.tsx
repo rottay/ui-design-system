@@ -119,7 +119,10 @@ describe.each([
 
     const lazyToggle = screen
       .getAllByRole('button')
-      .find((button) => ['▶', '▼'].includes(button.textContent ?? ''));
+      .find((button) =>
+        ['▶', '▼'].includes(button.textContent ?? '') ||
+        ['Expand', 'Collapse'].includes(button.getAttribute('aria-label') ?? '')
+      );
 
     if (!lazyToggle) {
       throw new Error('Expected lazy tree toggle button');

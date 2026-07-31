@@ -1,20 +1,188 @@
 /**
- * MarketingSurface skin (WO-SKIN-06 CK-I). Engine-agnostic and deliberately
- * unlayered; values are transcribed from the former surface-owned inline paint.
+ * MarketingSurface skin (WO-SKIN-06 CK-I; grown KIMI Modern wave 2026-07-30, SU20).
+ *
+ * LAYER: registered in `facade/entrypoints/base.css` (~l.612) and
+ * `facade/entrypoints/styles.css` (~l.633) into `layer(rottay-components)`,
+ * alongside the sibling experience surface skins. The old "deliberately
+ * unlayered" note and its `[data-part='root'][data-part='root']` repetition
+ * idiom (forbidden by the owner directive, 2026-07-28 fourth wave) are
+ * retired: no selector here repeats a class or an attribute.
+ *
+ * SCOPE: the surface composes public primitives and helpers (Heading, Text,
+ * Badge, Card, Grid, Stack, Flex, SurfaceActionBar, the surface state kits),
+ * each owning its chrome, states and forced-colors treatment. This file
+ * paints ONLY what the surface itself owns:
+ *   - the page canvas (viewport floor, sanctioned materials, bottom rhythm);
+ *   - the container geometry (max-inline-size, centering, fluid padding);
+ *   - the eyebrow kicker's tracking/transform on the pinned hook;
+ *   - the editorial measure caps of title and lede;
+ *   - the loading mirror skeleton blocks (hero + features shape), whose pulse
+ *     rides the canonical `ds-foundation-pulse` keyframes on the
+ *     `--ds-motion-attention` channel and goes quiet under reduced motion.
+ * The eyebrow/description INK travels through Typography's own `color`
+ * channel (`color="muted"` / `color="secondary"` → `data-color`): the modern
+ * Typography skin is unlayered and always wins, so the primitive channel is
+ * the only durable path (SU22 idiom). The two old color rules are REMOVED,
+ * not re-layered; the pinned class hooks stay in the DOM untouched.
+ *
+ * MATERIALS (spec section 5): the canvas keeps the surface-tint role (a ~1.2%
+ * vertical luminance step derived from the tenant-safe neutral-900 ramp,
+ * never mixed against black) and wires the `--ds-gradient-mesh` channel --
+ * marketing/showcase is its ONLY sanctioned placement and this surface IS the
+ * marketing page. The channel is consumed, never redeclared: tenants govern
+ * it (the bithire artifact redefines it; a zero-effect vertical sets it to
+ * `none`, which the fallback also covers when the premium layer is absent).
+ * The old bespoke radial glow and the 95px blueprint grid -- decorative
+ * effects with no material semantics -- are removed.
+ *
+ * SPECIFICITY: every selector keys on an always-stamped hook (the
+ * `ds-marketing` root class plus a pinned `data-part`/`data-*` state
+ * attribute). The kicker's `letter-spacing`/`text-transform` hold because
+ * the unlayered modern Typography skin paints those channels only under
+ * `[data-text-style]`/`[data-tracking]`, which a plain Text never stamps.
+ * No forced-colors block on purpose: the only fills set here are decorative
+ * canvas veils and neutral skeleton fills, which the UA re-keys under forced
+ * colors; every interactive part is a composed primitive with its own
+ * forced-colors treatment.
  */
 
-.ds-surface.ds-marketing[data-part='root'][data-part='root'] {
+/* ---- page canvas ----
+   The surface-tint gradient is role 1 of the spec's gradient law (a
+   barely-there vertical luminance step on hero surfaces); the mesh channel
+   is the showcase-only role, tenant-governed, with a `none` fallback. */
+.ds-surface.ds-marketing[data-part='root'] {
+  min-block-size: 100vh;
+  padding-block-end: var(--ds-spacing-20, 80px);
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-neutral-900) 1.2%, var(--ds-color-bg-primary)), var(--ds-color-bg-primary)),
-    radial-gradient(circle at top right, color-mix(in srgb, var(--ds-color-neutral-900) 4%, transparent), transparent 34%),
-    repeating-linear-gradient(90deg, transparent 0, transparent 95px, color-mix(in srgb, var(--ds-color-neutral-900) 1.8%, transparent) 96px),
-    repeating-linear-gradient(180deg, transparent 0, transparent 95px, color-mix(in srgb, var(--ds-color-neutral-900) 1.8%, transparent) 96px);
+    var(--ds-gradient-mesh, none),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-color-neutral-900) 1.2%, var(--ds-color-bg-primary)),
+      var(--ds-color-bg-primary)
+    );
 }
 
-.ds-surface.ds-marketing .ds-marketing__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+.ds-surface.ds-marketing[data-part='root'][data-mobile='true'] {
+  padding-block-end: var(--ds-spacing-10, 40px);
 }
 
-.ds-surface.ds-marketing .ds-marketing__description[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-secondary);
+/* ---- container geometry ----
+   Default 1260px measure, centered, with fluid padding per viewport. A
+   contract-declared `maxWidth` passes inline (instance value) and wins. */
+.ds-surface.ds-marketing .ds-marketing__container[data-part='container'] {
+  max-inline-size: 1260px;
+  margin-inline: auto;
+  padding-block-start: var(--ds-spacing-12, 48px);
+  padding-inline: var(--ds-spacing-6, 24px);
+}
+
+.ds-surface.ds-marketing[data-mobile='true'] .ds-marketing__container[data-part='container'] {
+  padding-block-start: var(--ds-spacing-7, 28px);
+  padding-inline: var(--ds-spacing-5, 20px);
+}
+
+/* ---- hero slot ---- */
+.ds-surface.ds-marketing .ds-marketing__hero[data-part='hero'] {
+  inline-size: 100%;
+}
+
+/* ---- eyebrow kicker ----
+   Uppercase + widest tracking are the editorial kicker signature. Painted
+   here (never inline) with the transform/tracking tokens; safe per the
+   SPECIFICITY note above. */
+.ds-surface.ds-marketing .ds-marketing__muted-text[data-part='root'] {
+  letter-spacing: var(--ds-letter-spacing-widest, 0.1em);
+  text-transform: var(--ds-text-transform-uppercase, uppercase);
+}
+
+/* ---- editorial measure ----
+   Long headlines and ledes wrap inside a readable measure instead of
+   sprawling across the column; the type itself comes from the display/body
+   roles via the primitive channels. `text-wrap: balance` evens the headline
+   line breaks -- the modern Typography skin never paints `text-wrap`, so
+   this layered rule holds (the `wrap` craft prop is stamped but unpainted,
+   a dead channel this file deliberately does not rely on). */
+.ds-surface.ds-marketing .ds-marketing__title[data-part='root'] {
+  max-inline-size: 620px;
+  text-wrap: balance;
+}
+
+.ds-surface.ds-marketing .ds-marketing__description[data-part='root'] {
+  max-inline-size: 640px;
+}
+
+/* ---- loading mirror skeleton ----
+   Blocks mirror the loaded anatomy: kicker bar, two display-scale title
+   lines, two lede lines, the CTA pill pair, one hero panel and a features
+   card row. They sit inside the same split/stacked recipe and spacing
+   rhythm as the loaded state, so the swap to real content is a pure paint
+   change, never a layout shift. */
+.ds-surface.ds-marketing [data-part='marketing-skeleton-eyebrow'],
+.ds-surface.ds-marketing [data-part='marketing-skeleton-title'],
+.ds-surface.ds-marketing [data-part='marketing-skeleton-lede'],
+.ds-surface.ds-marketing [data-part='marketing-skeleton-cta'],
+.ds-surface.ds-marketing [data-part='marketing-skeleton-hero'],
+.ds-surface.ds-marketing [data-part='marketing-skeleton-feature'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
+  animation: ds-foundation-pulse
+    var(--ds-motion-attention, 1.5s)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-surface.ds-marketing [data-part='marketing-skeleton-eyebrow'] {
+  inline-size: 96px;
+  min-block-size: 12px;
+}
+
+.ds-surface.ds-marketing [data-part='marketing-skeleton-title'] {
+  min-block-size: 44px;
+}
+
+.ds-surface.ds-marketing [data-part='marketing-skeleton-title'][data-line='1'] {
+  inline-size: 88%;
+}
+
+.ds-surface.ds-marketing [data-part='marketing-skeleton-title'][data-line='2'] {
+  inline-size: 64%;
+}
+
+.ds-surface.ds-marketing [data-part='marketing-skeleton-lede'] {
+  min-block-size: 16px;
+}
+
+.ds-surface.ds-marketing [data-part='marketing-skeleton-lede'][data-line='1'] {
+  inline-size: 96%;
+}
+
+.ds-surface.ds-marketing [data-part='marketing-skeleton-lede'][data-line='2'] {
+  inline-size: 72%;
+}
+
+.ds-surface.ds-marketing [data-part='marketing-skeleton-cta'] {
+  inline-size: 112px;
+  min-block-size: 40px;
+}
+
+.ds-surface.ds-marketing [data-part='marketing-skeleton-cta'][data-variant='primary'] {
+  inline-size: 136px;
+}
+
+.ds-surface.ds-marketing [data-part='marketing-skeleton-hero'] {
+  min-block-size: 360px;
+}
+
+.ds-surface.ds-marketing [data-part='marketing-skeleton-feature'] {
+  min-block-size: 168px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-marketing [data-part='marketing-skeleton-eyebrow'],
+  .ds-surface.ds-marketing [data-part='marketing-skeleton-title'],
+  .ds-surface.ds-marketing [data-part='marketing-skeleton-lede'],
+  .ds-surface.ds-marketing [data-part='marketing-skeleton-cta'],
+  .ds-surface.ds-marketing [data-part='marketing-skeleton-hero'],
+  .ds-surface.ds-marketing [data-part='marketing-skeleton-feature'] {
+    animation: none;
+  }
 }

@@ -180,7 +180,14 @@ export default function ModernTag(props: TagProps): React.ReactElement {
     >
       {icon && <span data-part="icon">{icon}</span>}
 
-      <span data-part="content">{children}</span>
+      {/* Truncated labels disclose their full text natively; composite
+          children own their own disclosure. */}
+      <span
+        data-part="content"
+        title={typeof children === 'string' ? children : undefined}
+      >
+        {children}
+      </span>
 
       {closable && (
         <button

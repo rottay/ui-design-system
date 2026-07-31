@@ -60,6 +60,6 @@ describe('ActivitySurface', () => {
     renderSurface(<ActivitySurface config={config} />);
 
     expect(await screen.findByText(/Page 1/)).toBeInTheDocument();
-    expect(await screen.findByText(/50 total/)).toBeInTheDocument();
+    expect(await screen.findByText(/50 entries/)).toBeInTheDocument();
   });
 });

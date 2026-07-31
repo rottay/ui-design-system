@@ -38,9 +38,10 @@
  * the tenant artifacts' unlayered `*` border-color floor at (0,3,1); the
  * target's own `data-part` is repeated to buy the extra attributes.
  *
- * The spinner rides `ds-spin`, which is physically defined in `engines/rustic/theme.css`
- * and resolves only because `engines/index.css` bundles all three engines' theme files
- * into every tenant. Recorded, not changed.
+ * The spinner rides the canonical `ds-foundation-spin` (Table/Tree/Form
+ * precedent) — the former `ds-spin` dependency on the rustic theme bundle is
+ * retired. The `[data-loading='true']` anchor buys the border shorthand's
+ * (0,4,0) with a DISTINCT attribute; repetition is forbidden (4th-tanda law).
  */
 
 /* ---- entrance keyframes: engine-namespaced so a future rustic twin cannot
@@ -106,8 +107,23 @@
   animation: ds-confirm-dialog-enter-modern var(--ds-motion-normal)
     var(--ds-motion-ease-out) both;
 }
-.rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='surface'][data-part='surface'] {
+.rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='surface'][role='alertdialog'] {
   border: 1px solid var(--ds-color-border-subtle);
+}
+
+/* ---- content row: icon + copy (layout drained from the `flex gap-3`,
+        `flex-shrink-0 mt-0.5` and `flex-1` utilities). ---- */
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='content'] {
+  display: flex;
+  gap: var(--ds-spacing-3, 12px);
+}
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='content'] > [data-part='icon'] {
+  flex-shrink: 0;
+  margin-block-start: 2px;
+}
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='content'] > [data-part='copy'] {
+  flex: 1;
+  min-inline-size: 0;
 }
 
 /* ---- icon tint: semantic variant channels ---- */
@@ -123,8 +139,8 @@
 
 /* ---- copy: typography is skin-owned (the engine stamps parts only) ---- */
 .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='title'] {
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
   margin-block-end: var(--ds-spacing-2);
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
@@ -186,8 +202,10 @@
   background: transparent;
   color: var(--ds-color-text-primary);
 }
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-action='cancel']:hover:not(:disabled) {
-  background: var(--ds-surface-highlight);
+@media (hover: hover) {
+  .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-action='cancel']:hover:not(:disabled) {
+    background: var(--ds-surface-highlight);
+  }
 }
 
 /* ---- confirm action: semantic variant fills ---- */
@@ -203,25 +221,40 @@
 .rottay-confirm-dialog--modern[data-part='backdrop'] [data-variant='danger'] [data-part='action'][data-action='confirm'] {
   background: var(--ds-color-error);
 }
-/* Hover = a quiet luminance lift on the filled action (spec section 4). */
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-action='confirm']:hover:not(:disabled) {
-  background-image: linear-gradient(
-    color-mix(in srgb, var(--ds-color-text-on-primary) var(--ds-state-hover-shift, 4%), transparent),
-    color-mix(in srgb, var(--ds-color-text-on-primary) var(--ds-state-hover-shift, 4%), transparent)
-  );
+/* Hover = a quiet luminance lift on the filled action (spec section 4),
+   gated to devices with real hover; the `:active` press scale above is the
+   touch/active equivalent (4th-tanda law). */
+@media (hover: hover) {
+  .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-action='confirm']:hover:not(:disabled) {
+    background-image: linear-gradient(
+      color-mix(in srgb, var(--ds-color-text-on-primary) var(--ds-state-hover-shift, 4%), transparent),
+      color-mix(in srgb, var(--ds-color-text-on-primary) var(--ds-state-hover-shift, 4%), transparent)
+    );
+  }
 }
 
-/* ---- loading spinner ring ---- */
+/* ---- loading spinner ring: canonical `ds-foundation-spin` (Table/Tree/Form
+        precedent) replaces the fragile cross-engine `ds-spin` dependency.
+        The button's width NEVER jumps when loading toggles: the spinner is
+        centered absolute over the label, which keeps its box but hides. ---- */
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-action='confirm'] {
+  position: relative;
+}
 .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='spinner'] {
-  display: inline-block;
+  position: absolute;
+  inset-inline: 0;
+  margin-inline: auto;
   inline-size: 1rem;
   block-size: 1rem;
   border-radius: 50%;
-  animation: ds-spin var(--ds-motion-glacial) linear infinite;
+  animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
 }
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='spinner'][data-part='spinner'] {
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-loading='true'] [data-part='spinner'] {
   border: 2px solid currentColor;
   border-top-color: transparent;
+}
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-loading='true'] [data-part='confirm-label'] {
+  visibility: hidden;
 }
 
 /* 44px hit area on coarse pointers, via block-size only — never by inflating

@@ -15,10 +15,13 @@
  * on `[data-bordered='true']`, exactly as the inline spread was. An ungated rule
  * would silently take the unbordered root away from the bridge.
  *
- * SPECIFICITY (P-48): rules carrying a border COLOUR must clear the tenant's
- * unlayered `html[data-tenant]:not([data-theme]):not(.light) *` floor at (0,3,1);
- * the two root classes plus the target's own repeated `data-part` take them past
- * (0,4,0).
+ * SPECIFICITY (P-48 + 4th-wave recount): rules carrying a border COLOUR must
+ * clear the tenant's unlayered floor at (0,3,1). The wrapper/overlay part
+ * chain already reaches (0,5,0)+ with NO repetition, so the spinner and the
+ * refresh button use plain selectors. The three status opacity countermands
+ * keep their doubled `[data-status='…'][data-status='…']` form because
+ * `QRCode.runtime-engines.test.tsx` PINS that exact selector text;
+ * de-duplicating them is a tests-side contract change (recorded as debt).
  *
  * The root's frame stays LONGHAND (`border-width` + `border-color`, no
  * `border-style`), which is what the inline object declared: preflight's
@@ -36,8 +39,16 @@
  * `engines/modern.tsx`.
  */
 
-/* ---- root, bordered only: the bridge owns the unbordered root ---- */
+/* ---- root: frame + geometry (the engine's `inline-block relative border
+        p-3 rounded-lg` utilities drained here; the bridge owns the unbordered
+        root, so the frame stays gated on `bordered`). ---- */
+.rottay-qrcode.rottay-qrcode--modern[data-part='root'] {
+  position: relative;
+  display: inline-block;
+}
+
 .rottay-qrcode.rottay-qrcode--modern[data-part='root'][data-bordered='true'] {
+  padding: var(--ds-qrcode-root-padding, 0.75rem);
   border-color: var(--ds-qrcode-border-color, var(--ds-color-border));
   border-width: var(--ds-qrcode-border-width, 1px);
   border-radius: var(--ds-qrcode-border-radius, var(--ds-radius-md));
@@ -85,22 +96,34 @@
   background: var(--ds-qrcode-status-scanned-overlay-bg, color-mix(in srgb, var(--ds-surface-card) 80%, transparent));
 }
 
-/* ---- loading spinner (geometry consolidated from the engine, K4-C) ---- */
+/* ---- loading spinner (geometry consolidated from the engine, K4-C; the
+        chain already reaches (0,5,0) via the wrapper and overlay parts, so no
+        repeated attribute is needed -- 4th-wave recount). ---- */
 .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='spinner'] {
   display: inline-block;
   inline-size: var(--ds-qrcode-spinner-size, 24px);
   block-size: var(--ds-qrcode-spinner-size, 24px);
-  animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
-}
-.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='spinner'][data-part='spinner'] {
   border: 2.5px solid var(--ds-qrcode-border-color, var(--ds-color-border));
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
+  animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
 }
 
 /* ---- expired: message + refresh ---- */
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay']:has(> [data-part='status-text']) {
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+}
 .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='status-text'] {
   color: var(--ds-qrcode-status-expired-text-color, var(--ds-color-text-secondary));
+  font-size: var(--ds-qrcode-status-text-font-size, var(--ds-font-size-sm));
   /* K4-C Pass 2: the text is a flex item sized to max-content — wider fonts
      (TMM's Optima at 1.04 scale) overflowed the QR box instead of wrapping,
      worst in RTL. Constrain it to the box and centre the wrapped lines. */
@@ -115,8 +138,6 @@
   padding: 0 var(--ds-qrcode-refresh-button-padding-x, 12px);
   font-size: var(--ds-qrcode-refresh-button-font-size, 13px);
   cursor: pointer;
-}
-.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button'][data-part='refresh-button'] {
   /* The declared design is a SOLID primary chip with light ink
      (`--ds-qrcode-refresh-button-bg: var(--ds-color-primary)` +
      `--ds-qrcode-refresh-button-color: #ffffff` from
@@ -124,22 +145,99 @@
      (bithire) / 5.47:1 (TMM) — AA. The round-1 CONTRAST LAW ink mix was
      REVERTED (K4-C round 2): it mixed the already-declared WHITE ink 30%
      toward dark text, degrading the passing pair to ~2.5:1. The real axe
-     cause was chrome opacity (see the root rule above), never the ink. */
+     cause was chrome opacity (see the root rule above), never the ink.
+     The selector needs no repeated attribute: the wrapper/overlay chain
+     already reaches (0,6,0) (4th-wave recount). */
   background: var(--ds-qrcode-refresh-button-bg, transparent);
   color: var(--ds-qrcode-refresh-button-color, var(--ds-color-primary));
   border-radius: var(--ds-qrcode-refresh-button-radius, var(--ds-radius-md));
   border: 1px solid var(--ds-color-primary);
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out);
+}
+
+/* Refresh hover is hover-capable-only (4th-wave law); a held press gets the
+   same hover surface plus the canonical press scale. */
+@media (hover: hover) {
+  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button']:hover {
+    background: var(--ds-qrcode-refresh-button-bg-hover, var(--ds-color-primary-hover));
+  }
+}
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button']:active {
+  transform: scale(var(--ds-state-press-scale, 0.98));
+  background: var(--ds-qrcode-refresh-button-bg-hover, var(--ds-color-primary-hover));
 }
 
 /* ---- scanned: the check glyph inherits this through `fill="currentColor"` ---- */
 .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='status-icon'] {
+  inline-size: var(--ds-qrcode-status-icon-size, 3rem);
+  block-size: var(--ds-qrcode-status-icon-size, 3rem);
   color: var(--ds-qrcode-status-scanned-icon-color, var(--ds-color-success));
 }
 
 /* ---- centre icon (padding consolidated from the engine, K4-C; width/height
         stay inline — they are the `iconSize` prop's runtime arithmetic) ---- */
 .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='icon'] {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  transform: translate(-50%, -50%);
   padding: var(--ds-qrcode-icon-padding, 4px);
   background: var(--ds-qrcode-icon-bg, var(--ds-surface-card));
   border-radius: var(--ds-qrcode-icon-border-radius, var(--ds-radius-sm));
+}
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='icon'] img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: contain;
+}
+
+/* ---- forced colors: overlays, chrome and the refresh chip re-express in
+        system colors. The QR symbol itself is DATA (canvas raster is
+        untouched by HC; SVG fills force to CanvasText-on-Canvas, a pair HC
+        guarantees high-contrast) — it stays machine-readable with NO
+        forced-color-adjust: none opt-out, by design (see report). ---- */
+@media (forced-colors: active) {
+  .rottay-qrcode.rottay-qrcode--modern[data-part='root'][data-bordered='true'] {
+    border-color: ButtonText;
+  }
+
+  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] {
+    background: Canvas;
+  }
+
+  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='spinner'] {
+    border-color: ButtonText;
+    border-top-color: Highlight;
+  }
+
+  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button'] {
+    background: ButtonText;
+    color: ButtonFace;
+    border-color: ButtonText;
+  }
+
+  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='status-icon'],
+  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='status-text'] {
+    color: CanvasText;
+  }
+}
+
+/* ---- reduced motion: the spinner rests as a static arc (the global guard
+        already zeroes --ds-motion-glacial; this is the second net). ---- */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='spinner'] {
+    animation: none;
+  }
+
+  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button'] {
+    transition: none;
+  }
 }

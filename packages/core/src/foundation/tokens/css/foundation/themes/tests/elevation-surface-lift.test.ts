@@ -27,7 +27,7 @@ const CARD_CSS = fromRoot(
   "src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
 );
 const MODAL_CSS = fromRoot(
-  "src/foundation/tokens/css/runtime/engines/modern/skin/modal.css",
+  "src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
 );
 const POPOVER_CSS = fromRoot(
   "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",

@@ -19,7 +19,13 @@
   align-items: flex-start;
   gap: var(--ds-alert-gap, clamp(var(--ds-spacing-sm), 1.4vw, var(--ds-spacing-md)));
   overflow: hidden;
-  padding: var(--ds-alert-padding, clamp(var(--ds-spacing-md), 2vw, var(--ds-spacing-lg)));
+  /* The responsive-compact engine writes `--ds-alert-responsive-padding`; an
+     undefined channel (tenant never set `--ds-alert-padding`) resolves to
+     guaranteed-invalid and the clamp default takes over. */
+  padding: var(
+    --ds-alert-responsive-padding,
+    var(--ds-alert-padding, clamp(var(--ds-spacing-md), 2vw, var(--ds-spacing-lg)))
+  );
   border: var(--ds-alert-border-width, 1px) solid color-mix(in srgb, var(--ds-alert-tone) 30%, var(--ds-color-border));
   border-radius: var(--ds-alert-radius, var(--ds-radius-lg));
   background-color: color-mix(in srgb, var(--ds-alert-tone) 7%, var(--ds-color-surface));
@@ -28,20 +34,17 @@
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 35%, transparent),
     var(--ds-alert-shadow, var(--ds-shadow-sm));
   color: var(--ds-color-text-primary);
-  animation: ds-alert-enter-modern var(--ds-motion-calm, 200ms) var(--ds-ease-standard) both;
+  animation: ds-alert-enter-modern var(--ds-motion-calm, var(--ds-motion-normal)) var(--ds-ease-standard, var(--ds-motion-ease-out)) both;
   transition:
-    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
-    box-shadow var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
-    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard);
+    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out));
 }
 
-.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-part='root']:hover {
-  border-color: color-mix(in srgb, var(--ds-alert-tone) 42%, var(--ds-color-border));
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 42%, transparent),
-    var(--ds-alert-shadow-hover, var(--ds-shadow-md));
-  transform: translateY(-1px);
-}
+/* A passive feedback surface must not lift on hover: the only interactive
+   part of an alert is its action, and false affordance is worse than none.
+   (`--ds-alert-shadow-hover` remains available to tenants composing an
+   interactive alert surface of their own.) */
 
 .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-compact='true'] {
   gap: var(--ds-spacing-sm);
@@ -122,32 +125,68 @@
   cursor: pointer;
   box-shadow: var(--ds-shadow-xs);
   transition:
-    background-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
-    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
-    color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
-    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard);
+    background-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out));
 }
 
-.rottay-alert-shell.rottay-alert-shell--modern > [data-part='action'][data-part='action']:hover {
-  border-color: color-mix(in srgb, var(--ds-alert-tone) 45%, var(--ds-color-border));
-  background: color-mix(in srgb, var(--ds-alert-tone) 9%, var(--ds-color-surface));
-  color: var(--ds-color-text-primary);
-  transform: scale(1.04);
+/* Hover only where hover exists: no sticky tinted button on touch pointers
+   (the button.css idiom, pre-flag 8). */
+@media (hover: hover) {
+  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:hover {
+    border-color: color-mix(in srgb, var(--ds-alert-tone) 45%, var(--ds-color-border));
+    background: color-mix(in srgb, var(--ds-alert-tone) 9%, var(--ds-color-surface));
+    color: var(--ds-color-text-primary);
+  }
 }
 
-.rottay-alert-shell.rottay-alert-shell--modern > [data-part='action'][data-part='action']:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--ds-alert-tone) 56%, transparent);
-  outline-offset: 2px;
+.rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:active {
+  transform: var(--ds-alert-action-active-transform, scale(0.94));
+}
+
+.rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:focus-visible {
+  outline: 0;
+  box-shadow: var(--ds-alert-action-focus-ring, var(--ds-focus-ring));
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-part='root'] {
+  .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone] {
     animation: none;
     transition: none;
   }
 
-  .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-part='root']:hover,
-  .rottay-alert-shell.rottay-alert-shell--modern > [data-part='action'][data-part='action']:hover {
+  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:hover,
+  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:active {
     transform: none;
+  }
+}
+
+/* Forced colors: tone washes are stripped, so severity must survive on the
+   semantic icon (CanvasText) and the framed surface — never on authored hue.
+   System colors only. */
+@media (forced-colors: active) {
+  .rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone] {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+
+  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > .rottay-alert-shell__icon[data-part='icon'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+
+  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action'] {
+    border-color: ButtonText;
+    box-shadow: none;
+  }
+
+  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
   }
 }

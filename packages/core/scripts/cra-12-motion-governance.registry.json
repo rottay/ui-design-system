@@ -170,9 +170,9 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 122,
+          "maxCount": 111,
           "maxFiles": 14,
-          "digest": "6b03c0fc1ed7bc5ebfe2dc6674ff384395cd22c72d68c55d9e1ba370ce06e015"
+          "digest": "56c4602ad5e8230ed545b9b476cb9a622701e19bbaede43ce0abc2a6d18c0b3c"
         },
         {
           "repo": "ui-design-system",
@@ -184,9 +184,9 @@
         {
           "repo": "ui-design-system",
           "scope": "test",
-          "maxCount": 25,
+          "maxCount": 24,
           "maxFiles": 6,
-          "digest": "25402e9838c53922d3f3c0945ed648ff2bec6c64104934acbc8ee7309d26a4fe"
+          "digest": "533132e9c12c94276cfe2946d607b3e2a006c9b8743722cae58b8c1ae6d47658"
         }
       ],
       "reanchor": {
@@ -276,9 +276,9 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 574,
-          "maxFiles": 229,
-          "digest": "19c74b4a01f22873f0c792aff2ea951122434ca6b10c5f9d190c4dd8352dffe3"
+          "maxCount": 561,
+          "maxFiles": 228,
+          "digest": "fb095e2dd37c8b39451af6445439416166288dc66dcf51f506304efd3da15971"
         },
         {
           "repo": "ui-design-system",
@@ -290,9 +290,9 @@
         {
           "repo": "ui-design-system",
           "scope": "test",
-          "maxCount": 48,
+          "maxCount": 47,
           "maxFiles": 16,
-          "digest": "19afe6c4fed0945ea8189705d27b846b46bb6eea5712bc3d5343e3cc86d44451"
+          "digest": "140abdf2886366b0bcb5177f02a60388c10acbaa153da278b4acae9a117c7909"
         }
       ],
       "reanchor": {
@@ -361,9 +361,9 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 73,
-          "maxFiles": 45,
-          "digest": "cb5c27a39f57aa01f83fef07eb47a75df31135de6726b00c768f0988b9e345d9"
+          "maxCount": 53,
+          "maxFiles": 31,
+          "digest": "9bbd5e526f70e869ac2daeb5da907bbefcd23eff79a60482793dcd1eec571550"
         },
         {
           "repo": "ui-design-system",

@@ -38,10 +38,11 @@
  * mode toggles carried the same inline `height: 32 / padding: 0 12px /
  * font-size: 13 / cursor: pointer` six times in the engine; it is transcribed
  * verbatim into the shared rule below (logical `padding-inline`), so the
- * component ships zero inline paint. The nav glyphs (`«`/`‹`/`›`/`»`) are
- * direction-hardcoded characters: under `[dir='rtl']` the flip rule mirrors
- * them with `scaleX(-1)`, so previous/next point outward in both writing
- * directions without a markup branch (same pattern as breadcrumb/menu skins).
+ * component ships zero inline paint. The nav glyphs are inline SVG chevrons
+ * (single for month, double for year -- never Unicode characters): under
+ * `[dir='rtl']` the flip rule mirrors them with `scaleX(-1)`, so
+ * previous/next point outward in both writing directions without a markup
+ * branch (same pattern as breadcrumb/menu skins).
  *
  * `>` CHAINS THROUGHOUT: `data-part` is a shared vocabulary and `dateCellRender`
  * / `monthCellRender` inject arbitrary caller content inside the cells, so a
@@ -80,6 +81,104 @@
      borderless card dissolved into the page). */
   border: 1px solid var(--ds-calendar-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-calendar-radius, var(--ds-radius-lg));
+  /* Drained layout (the former live `p-4` / `w-full` / `w-80` utilities):
+     fullscreen fills its container; compact reads the family width channel,
+     widening on coarse pointers so 7x44px tracks fit (the engine keeps the
+     pinned coarse utility string as an inert bridge). */
+  padding: var(--ds-calendar-padding, 1rem);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='true'] {
+  inline-size: 100%;
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] {
+  inline-size: var(--ds-calendar-compact-width, 20rem);
+}
+@media (pointer: coarse) {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] {
+    inline-size: var(--ds-calendar-compact-width-coarse, 22.75rem);
+  }
+}
+
+/* ---- header + grids: the drained layout (former `flex items-center
+        justify-between mb-4`, `gap-2`, `grid grid-cols-7 gap-1 mb-2`,
+        `grid grid-cols-3 gap-2` utilities). ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-block-end: var(--ds-calendar-header-margin-block-end, 1rem);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='weekday-row'] {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--ds-spacing-1, 4px);
+  margin-block-end: var(--ds-spacing-2, 8px);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--ds-spacing-1, 4px);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--ds-spacing-2, 8px);
+}
+
+/* ---- cell layout (former `aspect-square flex flex-col items-center
+        justify-center relative`, `opacity-30 cursor-not-allowed`,
+        `p-4 text-center` utilities). Day cells are square; year cells breathe. ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='cell-spacer'] {
+  aspect-ratio: 1;
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] > [data-part='cell'] {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  padding: 0;
+  cursor: pointer;
+  font-size: var(--ds-font-size-sm, 14px);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'][data-fullscreen='false'] > [data-part='grid'] > [data-part='cell'] {
+  font-size: var(--ds-font-size-xs, 12px);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='cell'] {
+  position: relative;
+  padding: var(--ds-calendar-year-cell-padding, 1rem);
+  cursor: pointer;
+  text-align: center;
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'][data-fullscreen='false'] > [data-part='grid'] > [data-part='cell'] {
+  font-size: var(--ds-font-size-xs, 12px);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-disabled] {
+  opacity: var(--ds-calendar-cell-disabled-opacity, 0.3);
+  cursor: not-allowed;
+}
+
+/* ---- injected cell content (former `absolute bottom-0 start-0 end-0 text-xs
+        truncate` / `mt-1 text-xs`): pinned to the day cell's block-end with
+        ellipsis; static flow under the month name in year view. ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] > [data-part='cell'] > [data-part='cell-content'] {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--ds-font-size-xs, 12px);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='cell'] > [data-part='cell-content'] {
+  margin-block-start: var(--ds-spacing-1, 4px);
+  font-size: var(--ds-font-size-xs, 12px);
 }
 
 /* ---- W10: header hairline -- separates the navigation chrome from the day
@@ -100,7 +199,7 @@
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'] {
   block-size: 32px;
   padding-inline: 12px;
-  font-size: 13px;
+  font-size: var(--ds-font-size-sm);
   white-space: nowrap;
   cursor: pointer;
   background: transparent;
@@ -132,16 +231,21 @@
   color: var(--ds-calendar-active-ink, var(--ds-color-white, #fff));
 }
 
-/* ---- RTL: the «/‹/›/» nav glyphs are direction-hardcoded characters; mirror
-        them so previous/next point outward in RTL too. ---- */
-[dir='rtl'] .rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='nav-button'] {
-  transform: scaleX(-1);
+/* The year control is a composition of two governed semantic navigation
+   icons. The icons themselves own RTL mirroring through the semantic facade. */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='double-nav-icon'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='double-nav-icon'] > svg + svg {
+  margin-inline-start: -0.4rem;
 }
 
 /* ---- coarse pointers (K4-B Pass 2: touch targets >= 44px on day cells).
-        Only the sizing channels live here; the compact root's width grows via
-        the engine's `pointer-coarse:` utility (utilities layer, same tier as
-        `w-80`) so 7x44px tracks + gaps + padding fit without clipping. ---- */
+        The compact root's coarse width is the skin rule in the root block
+        above (the engine's pinned utility string is an inert bridge at the
+        same 22.75rem value). ---- */
 @media (pointer: coarse) {
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
     min-block-size: 44px;
@@ -159,9 +263,11 @@
         TMM ≈ #E7F0ED over #FBF6EC (ΔRGB 20/6/1); glyph ink stays
         `--ds-color-text-primary` (>= 12:1 on both hover surfaces). The
         transition lives in the shared geometry rule above (W10). ---- */
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:disabled):hover,
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:disabled):hover {
-  background: var(--ds-calendar-nav-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
+@media (hover: hover) {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:not(:disabled):hover,
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle']:not([data-active='true']):not(:disabled):hover {
+    background: var(--ds-calendar-nav-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
+  }
 }
 
 /* ---- W10: keyboard focus -- every interactive part carries the canonical
@@ -193,6 +299,8 @@
   font-weight: var(--ds-font-weight-medium, 500);
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  text-align: center;
+  padding-block: var(--ds-spacing-2, 8px);
   color: var(--ds-color-text-secondary);
 }
 
@@ -241,8 +349,8 @@
     border-color: Highlight;
   }
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-disabled] {
-    /* opacity-30 is a utilities-layer rule and cannot be overridden from this
-       layer; the disabled channel in forced colors is GrayText ON TOP of it. */
+    /* The disabled channel in forced colors is GrayText ON TOP of the
+       (skin-owned) opacity channel. */
     color: GrayText;
   }
   /* W10: box-shadow focus rings are dropped under forced colors -- re-map the
@@ -269,11 +377,13 @@
    re-verified against the rendered DOM: root carries both classes, grid is a
    direct child, cells are direct children carrying data-selected/data-today
    and data-disabled only when disabled. */
-.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:hover:not([data-selected='true']):not([data-disabled]) {
-  background: var(
-    --ds-calendar-cell-hover,
-    var(--ds-color-interactive-bg-hover, color-mix(in srgb, var(--ds-color-primary) 8%, transparent))
-  );
+@media (hover: hover) {
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:hover:not([data-selected='true']):not([data-disabled]) {
+    background: var(
+      --ds-calendar-cell-hover,
+      var(--ds-color-interactive-bg-hover, color-mix(in srgb, var(--ds-color-primary) 8%, transparent))
+    );
+  }
 }
 
 /* ---- W10: press feedback on cells -- the WO-ENG-04 active channel, one

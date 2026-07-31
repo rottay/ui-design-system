@@ -144,9 +144,17 @@
 }
 .ds-assistant-status-indicator [data-part='dot'][data-status='thinking'] {
   background: var(--ds-color-info);
+  box-shadow: var(
+    --ds-assistant-active-signal-shadow,
+    var(--ds-shadow-glow-primary)
+  );
 }
 .ds-assistant-status-indicator [data-part='dot'][data-status='streaming'] {
   background: var(--ds-color-primary-500);
+  box-shadow: var(
+    --ds-assistant-active-signal-shadow,
+    var(--ds-shadow-glow-primary)
+  );
 }
 .ds-assistant-status-indicator [data-part='dot'][data-status='acting'] {
   background: var(--ds-color-warning);

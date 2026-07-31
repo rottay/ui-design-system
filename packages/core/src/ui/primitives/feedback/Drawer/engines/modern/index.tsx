@@ -20,6 +20,7 @@ import { DRAWER_DEFAULTS } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
+import { FocusTrap } from '../../../../runtime/overlay/focus-management/focus-trap';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 import { LayoutSidebarStartIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-sidebar-start';
@@ -276,7 +277,17 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
         />
       )}
 
-      {/* Drawer panel */}
+      {/* Drawer panel. The shared FocusTrap owns the modal focus contract the
+          layer stack deliberately delegates (initial focus into the panel,
+          Tab/Shift+Tab cycling, restore to the trigger on deactivate — the
+          layer's own restoreFocus stays off to avoid a double restore). The
+          wrapper is display:contents so it adds no layout box. */}
+      <FocusTrap
+        active={dataState === 'open'}
+        autoFocus
+        restoreFocus
+        style={{ display: 'contents' }}
+      >
       <div
         ref={presenceRef}
         id={id}
@@ -327,6 +338,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
           </div>
         )}
       </div>
+      </FocusTrap>
     </>
   );
 }

@@ -1,10 +1,9 @@
 /**
  * Modern WorkbenchHeader skin (WO-SKIN-06 CK-B).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * `base` layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
- * `style`.
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-engines)` (the old
+ * "unlayered" note predates the wiring). Caller inline styles still win.
  *
  * SCOPE ROOT is the header's outer `<div>`, carrying the pair
  * `ds-pattern-workbench-header ds-engine-modern` + `data-part='root'`; both the
@@ -13,19 +12,26 @@
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
- * `border-color` on every element. A rule painting `border` / `border-color` with
- * a real color (including `transparent`, which is NOT a reset) must reach (0,4,0):
- * two root classes (0,2,0) + a REPEATED `data-part`, or a `data-part` plus a
- * contract `data-variant` / `data-active`. Non-border paint (background, color,
- * box-shadow, border-radius, outline) beats preflight while unlayered at (0,3,0).
- * Pure `border: none` carries no color and is exempt.
+ * `border-color` on every element. A rule painting `border` / `border-color`
+ * with a real color (including `transparent`, which is NOT a reset) must reach
+ * (0,4,0). Repeating an attribute on one element is forbidden: descendant
+ * rules buy the fourth unit from the always-stamped root `data-part`
+ * ancestor, and the rule ON the root buys it from `data-loading`, which the
+ * engine always stamps ('true'|'false'). `border: none` resets are exempt.
  *
- * Interaction paint that the removed React hover/focus state used to own now lives
- * here. QuickActionButton merged `vs.hover` over `vs.base` when
+ * Interaction paint that the removed React hover/focus state used to own now
+ * lives here: hovers ride the `@media (hover: hover)` guard (house hover
+ * law) with unguarded `:active` twins; keyboard focus keeps its unguarded
+ * `:focus` rules. QuickActionButton merged `vs.hover` over `vs.base` when
  * `(hovered||focused) && !disabled`; the button is natively `disabled`, so
  * `:hover:not(:disabled), :focus:not(:disabled)` reproduces that gate. SavedViewTab
  * tracks `onFocus`/`onBlur` in addition to hover (a keyboard-focus affordance the
  * page-shell tab deliberately lacks), so it keys on `:hover` AND `:focus`.
+ *
+ * GLASS: `backdrop-filter` is opt-in through the
+ * `--ds-workbench-header-actions-backdrop` channel (default `none`) — a
+ * default-ON blur taxes every scroll frame and is not the sanctioned glass
+ * contract (same fix as cockpit-header PT29; Sheet glass precedent).
  *
  * OWNERSHIP (R2+R3): the engine stamps anatomy + state only; this file owns
  * 100% of layout and paint — typography, tab geometry, skeleton geometry and
@@ -73,16 +79,16 @@
   /* Layout migrated from the engine (R2+R3). */
   padding: var(--ds-workbench-header-padding);
 }
-.ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-part='root'] {
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-loading] {
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
 }
-.ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover {
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active {
   background-position: 100% 50%;
   border-color: var(--ds-workspace-card-border-hover, var(--ds-workspace-card-border, var(--ds-color-border)));
   box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
 }
 
-.ds-pattern-workbench-header.ds-engine-modern [data-part='header-icon'][data-part='header-icon'] {
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon'] {
   display: inline-grid;
   flex: 0 0 auto;
   width: var(--ds-workbench-header-icon-size, 40px);
@@ -97,7 +103,7 @@
     0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);
   transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover [data-part='header-icon'] {
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root']:active [data-part='header-icon'] {
   transform: translateY(-1px) scale(1.025);
 }
 
@@ -105,7 +111,7 @@
   margin-bottom: 4px;
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-family-mono, ui-monospace, monospace);
-  font-size: 10px;
+  font-size: var(--ds-font-size-2xs, 0.625rem);
   font-weight: var(--ds-font-weight-semibold, 600);
   letter-spacing: 0.11em;
   line-height: 1.2;
@@ -123,8 +129,8 @@
   border: 1px solid var(--ds-color-primary);
   box-shadow: var(--ds-elevation-1);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button:hover:not(:disabled),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button:focus:not(:disabled) {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button:focus:not(:disabled),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button:active:not(:disabled) {
   background: var(--ds-color-primary-600);
   border-color: var(--ds-color-primary-600);
   box-shadow: var(--ds-elevation-2);
@@ -134,8 +140,8 @@
   color: var(--ds-color-error-600);
   border: 1px solid var(--ds-color-error-200);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button:hover:not(:disabled),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button:focus:not(:disabled) {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button:focus:not(:disabled),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button:active:not(:disabled) {
   background: var(--ds-color-error-50);
   border-color: var(--ds-color-error-300);
 }
@@ -144,8 +150,8 @@
   color: var(--ds-color-text-secondary);
   border: 1px solid var(--ds-color-border);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button:hover:not(:disabled),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button:focus:not(:disabled) {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button:focus:not(:disabled),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button:active:not(:disabled) {
   background: var(--ds-color-neutral-50);
   color: var(--ds-color-text-primary);
   border-color: var(--ds-color-neutral-300);
@@ -176,20 +182,24 @@
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 74%, transparent);
 }
 
-.ds-pattern-workbench-header.ds-engine-modern [data-part='actions'][data-part='actions'] {
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='actions'] {
   min-height: calc(var(--ds-control-height-sm, 32px) + 8px);
   padding: 3px;
   border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
   border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
   background: color-mix(in srgb, var(--ds-toolbar-control-bg, var(--ds-surface-card)) 88%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
-  backdrop-filter: blur(var(--ds-glass-blur, 8px));
+  /* Glass is opt-in (default none): a default-ON blur taxes every scroll
+     frame; tenants enable it through this channel (PT29 fix, Sheet glass
+     precedent). */
+  backdrop-filter: var(--ds-workbench-header-actions-backdrop, none);
 }
 
-/* ---- saved-view tab: base (repeated data-part for the transparent 2px underline)
-        + active underline + hover/focus when not active. The `:focus` rule is the
-        keyboard affordance page-shell's tab deliberately omits. ---- */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-part='tab'] {
+/* ---- saved-view tab: base (the root ancestor buys the (0,4,0) for the
+        transparent 1px frame) + active underline + hover/focus when not
+        active. The `:focus` rule is the keyboard affordance page-shell's tab
+        deliberately omits. ---- */
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tab'] {
   color: var(--ds-tab-color, var(--ds-color-text-muted));
   background: transparent;
   border: 1px solid transparent;
@@ -203,15 +213,15 @@
   box-shadow: var(--ds-tabs-active-shadow, var(--ds-elevation-1));
   transform: translateY(-1px);
 }
-.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:hover:not([data-active='true']),
-.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus:not([data-active='true']) {
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus:not([data-active='true']),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:active:not([data-active='true']) {
   color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
   background: var(--ds-tab-bg-hover, var(--ds-color-neutral-50));
   border-color: color-mix(in srgb, var(--ds-tabs-list-border, var(--ds-color-border)) 72%, transparent);
 }
 
 /* ---- saved-views tab strip container (1px bottom border) ---- */
-.ds-pattern-workbench-header.ds-engine-modern [data-part='tabs'][data-part='tabs'] {
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tabs'] {
   padding: var(--ds-tabs-list-padding, 3px);
   background: var(--ds-tabs-list-bg, var(--ds-surface-inset));
   border: 1px solid var(--ds-tabs-list-border, var(--ds-color-border));
@@ -283,7 +293,8 @@
   text-wrap: pretty;
 }
 
-/* ---- exception badge layout/typography (migrated from the engine, R2+R3) ---- */
+/* ---- exception badge layout/typography (migrated from the engine, R2+R3);
+        the count is a metric, so it never jitters (tabular-nums). ---- */
 .ds-pattern-workbench-header.ds-engine-modern [data-part='exception'] {
   display: inline-flex;
   align-items: center;
@@ -291,6 +302,7 @@
   padding: 2px 10px;
   font-size: var(--ds-font-size-xs);
   font-weight: var(--ds-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
   line-height: var(--ds-line-height-body);
   white-space: nowrap;
 }
@@ -352,7 +364,7 @@
 }
 
 .ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'] {
-  animation: ds-foundation-pulse 1.5s ease-in-out infinite;
+  animation: ds-foundation-pulse var(--ds-motion-attention, 1.5s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
 .ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'][data-size='avatar'] {
@@ -408,6 +420,64 @@
 @keyframes ds-workbench-header-arrive {
   from { opacity: 0; transform: translateY(8px) scale(0.995); }
   to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ---- hover is pointer-fine only; every treatment keeps an unguarded
+        `:active` twin beside its base rule (touch press feedback matches),
+        and keyboard focus keeps its own unguarded `:focus` rules. ---- */
+@media (hover: hover) {
+  .ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover {
+    background-position: 100% 50%;
+    border-color: var(--ds-workspace-card-border-hover, var(--ds-workspace-card-border, var(--ds-color-border)));
+    box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
+  }
+
+  .ds-pattern-workbench-header.ds-engine-modern[data-part='root']:hover [data-part='header-icon'] {
+    transform: translateY(-1px) scale(1.025);
+  }
+
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] > .rottay-button:hover:not(:disabled) {
+    background: var(--ds-color-primary-600);
+    border-color: var(--ds-color-primary-600);
+    box-shadow: var(--ds-elevation-2);
+  }
+
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] > .rottay-button:hover:not(:disabled) {
+    background: var(--ds-color-error-50);
+    border-color: var(--ds-color-error-300);
+  }
+
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] > .rottay-button:hover:not(:disabled) {
+    background: var(--ds-color-neutral-50);
+    color: var(--ds-color-text-primary);
+    border-color: var(--ds-color-neutral-300);
+  }
+
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:hover:not([data-active='true']) {
+    color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
+    background: var(--ds-tab-bg-hover, var(--ds-color-neutral-50));
+    border-color: color-mix(in srgb, var(--ds-tabs-list-border, var(--ds-color-border)) 72%, transparent);
+  }
+}
+
+/* ---- forced colors: the pattern-owned frames read as ButtonText; the
+        keyboard-focused tab gets a Highlight outline; the active tab already
+        reads by shape (frame + weight + lift), the exception badge by
+        icon + count. ---- */
+@media (forced-colors: active) {
+  .ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-loading],
+  .ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='header-icon'],
+  .ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='actions'],
+  .ds-pattern-workbench-header.ds-engine-modern[data-part='root'] [data-part='tabs'],
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='exception'],
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-active='true'] {
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

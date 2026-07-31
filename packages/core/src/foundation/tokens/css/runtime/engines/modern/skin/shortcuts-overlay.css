@@ -1,71 +1,190 @@
 /**
- * ShortcutsOverlay — Modern engine skin. DELIBERATELY UNLAYERED (P-47):
- * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
- * rule cannot paint these elements; unlayered outranks preflight + DaisyUI and
- * still yields to a caller's inline `style`.
+ * Modern ShortcutsOverlay skin.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
- * border-color on every element. A rule that paints a border COLOR must reach
- * (0,4,0): the two root classes (0,2,0) + the target's `data-part` REPEATED
- * (0,2,0). `border: none`/`outline: none` resets carry no color and stay at
- * (0,3,0). Non-border paint wins unlayered at (0,3,0).
+ * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
+ * rottay-engines)` — this file does not control its own layering (the older
+ * "deliberately unlayered" note predates that wiring). Caller inline `style`
+ * still wins over every rule here.
  *
- * Values transcribed verbatim from engines/modern.tsx. This component is 100%
- * STATIC — no state selectors, no hatch, no keyframes.
+ * SCOPE ROOT: the overlay's outer `<div>` carries
+ * `ds-pattern-shortcuts-overlay ds-engine-modern` + `data-part='root'` (two
+ * distinct classes + one attribute, (0,3,0); repetition is prohibited — the
+ * old P-48 border-color floor is bought from this scope + a single target
+ * part, never a repeated attribute). NOT portaled: the dialog is a
+ * `position:fixed` DOM descendant of the tenant-scoped root.
+ *
+ * COMPOSITION: the close control is the certified Button, the search box
+ * the certified Input, key caps the certified Kbd, the scroll frame the
+ * certified ScrollArea (its own skin owns the scrollbar), and the empty
+ * state the certified Empty — those primitives own their paint (the
+ * pre-composition kbd/close/input/empty color rules were deleted with the
+ * raw elements). This file owns only the overlay chrome: root/backdrop/
+ * dialog geometry, header/search/footer rhythm + hairlines, category
+ * hierarchy and row layout.
+ *
+ * Z-INDEX: the arbitrary Tailwind `z-50` is re-mapped to the sanctioned
+ * `--ds-z-modal` rung — an overlay stacks with modal layers, not below them.
  */
 
+/* ---- root: fixed top-anchored overlay frame (was Tailwind
+        `fixed inset-0 z-50 flex items-start justify-center pt-[10vh]`) ---- */
+.ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ds-z-modal, 1500);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-block-start: 10vh;
+  padding-inline: var(--ds-spacing-3, 12px);
+  container-type: inline-size;
+}
+
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='backdrop'] {
+  position: absolute;
+  inset: 0;
   background: var(--ds-color-bg-overlay);
 }
 
+/* ---- dialog card (was `relative rounded-xl w-full max-w-lg
+        overflow-hidden`) ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
+  position: relative;
+  inline-size: 100%;
+  max-inline-size: 32rem;
+  overflow: hidden;
+  border-radius: var(--ds-radius-xl);
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-3);
-}
-
-.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='header'][data-part='header'] {
-  border-color: var(--ds-color-border);
-}
-
-.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='close'] {
-  background: transparent;
   color: var(--ds-color-text-primary);
-  border: none;
-  border-radius: 50%;
 }
 
-.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='search'][data-part='search'] {
-  border-color: var(--ds-color-border);
+/* ---- header: title + composed close Button over a quiet hairline ---- */
+.ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='header'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3, 12px);
+  padding-block: var(--ds-spacing-3, 12px);
+  padding-inline: var(--ds-spacing-5, 20px);
+  border-bottom: 1px solid var(--ds-color-border);
+}
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='title'] {
+  margin: 0;
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-base, 16px);
+  font-weight: var(--ds-font-weight-semibold, 600);
 }
 
-.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='input'] {
-  border: none;
-  background: transparent;
-  color: inherit;
+/* ---- search row (the composed Input owns its paint + focus ring) ---- */
+.ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='search'] {
+  padding-block: var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-spacing-5, 20px);
+  border-bottom: 1px solid var(--ds-color-border);
 }
 
+/* ---- list rhythm (the certified ScrollArea owns the scroll frame) ---- */
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='list'] {
+  padding-block: var(--ds-spacing-2, 8px);
+}
+
+/* ---- category groups: quiet uppercase label, hairline-free ---- */
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='group'] {
+  padding-block: var(--ds-spacing-1, 4px);
+}
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-row'] {
+  padding-block: var(--ds-spacing-1, 4px);
+  padding-inline: var(--ds-spacing-5, 20px);
+}
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-label'] {
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs, 12px);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
+  text-transform: uppercase;
 }
 
+/* ---- shortcut rows: description left, chord right ---- */
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='item'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3, 12px);
+  padding-block: 6px;
+  padding-inline: var(--ds-spacing-5, 20px);
+}
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='description'] {
+  min-inline-size: 0;
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-sm, 14px);
+}
+
+/* ---- chord: caps separated by a consistent gap (dir="ltr" is stamped by
+        the engine — key names never translate nor reorder). The composed
+        Kbd owns the key-cap paint; the wrapper keeps only geometry. ---- */
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='chord'] {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--ds-spacing-1, 4px);
+}
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='kbd'] {
-  background: var(--ds-surface-inset);
-  border-radius: var(--ds-radius-sm);
+  display: inline-flex;
 }
 
-.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='kbd'][data-part='kbd'] {
-  border: 1px solid var(--ds-color-border);
-}
-
+/* ---- empty state: rhythm only — the composed Empty owns its paint ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='empty'] {
-  color: var(--ds-color-text-secondary);
+  padding-block: var(--ds-spacing-8, 32px);
 }
 
+/* ---- footer (caller slot; the pattern owns rhythm + hairline) ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='footer'] {
+  padding-block: var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-spacing-5, 20px);
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs, 12px);
+}
+.ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border);
 }
 
-.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='footer'][data-part='footer'] {
-  border-color: var(--ds-color-border);
+/* ---- narrow overlay: full-width top sheet with a smaller top offset ---- */
+@container (inline-size < 40rem) {
+  .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] {
+    padding-block-start: var(--ds-spacing-8, 32px);
+  }
+  .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
+    max-inline-size: 100%;
+  }
+}
+
+/* ---- coarse pointers: the close control meets the physical 44px floor ---- */
+@media (pointer: coarse) {
+  .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='close'] {
+    min-inline-size: 44px;
+    min-block-size: 44px;
+  }
+}
+
+/* ---- forced colors: system colors only. The dialog gains a real frame
+        (elevation dies in forced colors), hairlines re-express as
+        ButtonText, and the category hierarchy flattens to GrayText. The
+        composed Button/Input/Kbd/ScrollArea/Empty own their own
+        forced-colors behavior — no opt-out anywhere. ---- */
+@media (forced-colors: active) {
+  .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
+    border: 1px solid ButtonText;
+    box-shadow: none;
+  }
+
+  .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='header'],
+  .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='search'],
+  .ds-pattern-shortcuts-overlay.ds-engine-modern[data-part='root'] [data-part='footer'] {
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-label'],
+  .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='footer'] {
+    color: GrayText;
+  }
 }

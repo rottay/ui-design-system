@@ -186,7 +186,7 @@ describe('ListToolbar modern i18n (W9)', () => {
       expect(await screen.findByRole('button', { name: 'Exportar' })).toBeInTheDocument();
     });
 
-    it('resolves fr (partial locale) through the documented fallback chain', async () => {
+    it('resolves the now-complete fr list-toolbar catalog before the fallback locale', async () => {
       mockMatchMedia(1280);
       render(
         <I18nProvider locale="fr" fallbackLocale="es">
@@ -194,9 +194,8 @@ describe('ListToolbar modern i18n (W9)', () => {
         </I18nProvider>,
       );
 
-      // fr has no listToolbar entries: the fallback locale (es) answers.
-      expect(await screen.findByRole('button', { name: 'Limpiar todo' })).toBeInTheDocument();
-      expect(await screen.findByPlaceholderText('Buscar...')).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: 'Tout effacer' })).toBeInTheDocument();
+      expect(await screen.findByPlaceholderText('Rechercher...')).toBeInTheDocument();
     });
 
     it('falls back to the historical English floor without a provider', async () => {

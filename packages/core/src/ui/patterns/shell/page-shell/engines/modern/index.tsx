@@ -155,7 +155,6 @@ function BackButton({
     <span
       data-part="back"
       data-has-label={label ? 'true' : 'false'}
-      style={{ display: 'contents' }}
     >
       <Button
         htmlType="button"
@@ -164,7 +163,6 @@ function BackButton({
         shape={label ? 'default' : 'circle'}
         onClick={onClick}
         aria-label={ariaLabel ?? label ?? fallbackLabel}
-        style={{ flexShrink: 0 }}
         icon={(
           <NavigationBackIcon size={15} decorative />
         )}
@@ -221,7 +219,10 @@ export default function ModernPageShell(props: PageShellProps) {
   const pageTabsLabel =
     i18nComponents?.tOr('pageShell.tabs.label', 'Page tabs') ?? 'Page tabs';
 
-  /* ---- Loading skeleton ---- */
+  /* ---- Loading skeleton: geometry lives in the skin keyed on data-block
+          (cockpit-header idiom); the pulse cadence rides the skin's motion
+          channel. The two action blocks keep their divergent radius on the
+          sanctioned inline custom-property channel. ---- */
   if (loading) {
     return (
       <div
@@ -230,70 +231,31 @@ export default function ModernPageShell(props: PageShellProps) {
         data-loading="true"
         aria-busy="true"
         style={{
-          padding: 'var(--ds-page-shell-header-padding)',
-          maxWidth: maxWidth ?? undefined,
-          margin: maxWidth ? '0 auto' : undefined,
+          '--ds-page-shell-max-width': maxWidth,
           ...style,
-        }}
+        } as React.CSSProperties}
       >
-        <div className="ds-pattern-page-shell__loading-skeleton" data-part="skeleton-group" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-page-shell-item-gap)' }}>
+        <div className="ds-pattern-page-shell__loading-skeleton" data-part="skeleton-group">
           {/* Breadcrumb skeleton */}
-          <div
-            data-part="skeleton"
-            style={{
-              width: 180,
-              height: 12,
-              animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
-            }}
-          />
+          <div data-part="skeleton" data-block="breadcrumb" />
           {/* Title skeleton */}
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: 'var(--ds-page-shell-section-gap)',
-            }}
-          >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-2, 8px)' }}>
-              <div
-                data-part="skeleton"
-                style={{
-                  // In-flow skeleton: 280px exceeds the content box a 360px
-                  // viewport offers, so it is bounded rather than pinned.
-                  width: '100%',
-                  maxWidth: 280,
-                  height: 28,
-                  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
-                }}
-              />
-              <div
-                data-part="skeleton"
-                style={{
-                  width: 200,
-                  height: 14,
-                  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
-                }}
-              />
+          <div data-part="skeleton-title-row">
+            <div data-part="skeleton-title-copy">
+              {/* In-flow skeleton: 280px exceeds the content box a 360px
+                  viewport offers, so it is bounded rather than pinned. */}
+              <div data-part="skeleton" data-block="title" />
+              <div data-part="skeleton" data-block="subtitle" />
             </div>
-            <div style={{ display: 'flex', gap: 'var(--ds-page-shell-action-gap)' }}>
+            <div data-part="skeleton-action-row">
               <div
                 data-part="skeleton"
-                style={{
-                  width: 80,
-                  height: 32,
-                  '--ds-page-shell-skeleton-radius': 'var(--ds-radius-md)',
-                  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
-                } as React.CSSProperties}
+                data-block="action-sm"
+                style={{ '--ds-page-shell-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
               />
               <div
                 data-part="skeleton"
-                style={{
-                  width: 100,
-                  height: 32,
-                  '--ds-page-shell-skeleton-radius': 'var(--ds-radius-md)',
-                  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
-                } as React.CSSProperties}
+                data-block="action-md"
+                style={{ '--ds-page-shell-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
               />
             </div>
           </div>
@@ -340,10 +302,12 @@ export default function ModernPageShell(props: PageShellProps) {
       data-part="root"
       data-loading="false"
       style={{
-        maxWidth: maxWidth ?? undefined,
-        margin: maxWidth ? '0 auto' : undefined,
+        /* The caller's max-width rides a quoted custom-property channel; the
+           skin applies it (with margin-inline: auto), so the engine carries
+           no layout inline. */
+        '--ds-page-shell-max-width': maxWidth,
         ...style,
-      }}
+      } as React.CSSProperties}
     >
       {/* ---- Page header area ---- */}
       {!hideHeader && (
@@ -352,21 +316,14 @@ export default function ModernPageShell(props: PageShellProps) {
           data-has-actions={actions ? 'true' : 'false'}
           data-has-tabs={tabs && tabs.length > 0 ? 'true' : 'false'}
           data-has-rich-content={headerContent ? 'true' : 'false'}
-          style={{
-            padding: 'var(--ds-page-shell-header-padding)',
-          }}
         >
-        {/* ---- Breadcrumb trail ---- */}
+        {/* ---- Breadcrumb trail (pattern-owned framed-pill grammar — see the
+                skin header; the Breadcrumb primitive was evaluated and the
+                cockpit-header framed-pill minimal contract applies) ---- */}
         {breadcrumbs && breadcrumbs.length > 0 && (
           <nav
             aria-label={breadcrumbLabel}
             data-part="breadcrumb"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--ds-spacing-2, 8px)',
-              marginBottom: 'var(--ds-spacing-3, 12px)',
-            }}
           >
             {breadcrumbs.map((bc, idx) => {
               const isLast = idx === breadcrumbs.length - 1;
@@ -375,9 +332,6 @@ export default function ModernPageShell(props: PageShellProps) {
                   {idx > 0 && (
                     <span
                       data-part="separator"
-                      style={{
-                        userSelect: 'none',
-                      }}
                       aria-hidden="true"
                     >
                       <NavigationForwardIcon size={11} decorative />
@@ -396,27 +350,9 @@ export default function ModernPageShell(props: PageShellProps) {
         )}
 
         {/* ---- Header row: back + title group | actions ---- */}
-        <div
-          data-part="header-row"
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-            gap: 'var(--ds-page-shell-section-gap)',
-            flexWrap: 'wrap',
-          }}
-        >
+        <div data-part="header-row">
           {/* Left cluster: back button + title group */}
-          <div
-            data-part="lead"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--ds-page-shell-item-gap)',
-              minWidth: 0,
-              flex: 1,
-            }}
-          >
+          <div data-part="lead">
             {back && (
               <BackButton
                 label={back.label}
@@ -433,19 +369,11 @@ export default function ModernPageShell(props: PageShellProps) {
             ) : null}
 
             {/* Title + badge + subtitle */}
-            <div data-part="titles" style={{ minWidth: 0, flex: 1 }}>
+            <div data-part="titles">
               {eyebrow ? (
                 <div data-part="eyebrow">{eyebrow}</div>
               ) : null}
-              <div
-                data-part="title-row"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 'var(--ds-page-shell-item-gap)',
-                  flexWrap: 'wrap',
-                }}
-              >
+              <div data-part="title-row">
                 <h1
                   data-part="title"
                 >
@@ -465,22 +393,14 @@ export default function ModernPageShell(props: PageShellProps) {
 
           {/* Right: action buttons */}
           {actions && (
-            <div
-              data-part="actions"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--ds-page-shell-action-gap)',
-                flexShrink: 0,
-              }}
-            >
+            <div data-part="actions">
               {actions}
             </div>
           )}
         </div>
 
         {headerContent && (
-          <div data-part="header-content" style={{ marginTop: 'var(--ds-page-shell-section-gap)' }}>
+          <div data-part="header-content">
             {headerContent}
           </div>
         )}
@@ -493,12 +413,6 @@ export default function ModernPageShell(props: PageShellProps) {
             aria-label={pageTabsLabel}
             data-part="tabs"
             onKeyDown={handleTabsKeyDown}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--ds-tabs-gap)',
-              marginTop: 'var(--ds-page-shell-section-gap)',
-            }}
           >
             {tabs.map((tab) => (
               <TabButton
@@ -511,18 +425,13 @@ export default function ModernPageShell(props: PageShellProps) {
           </div>
         ) : (
           /* Subtle separator when no tabs */
-          <div
-            data-part="rule"
-            style={{
-              marginTop: 'var(--ds-page-shell-section-gap)',
-            }}
-          />
+          <div data-part="rule" />
         )}
         </div>
       )}
 
       {/* ---- Content area ---- */}
-      <div data-part="content" style={{ padding: 'var(--ds-page-shell-content-padding)' }}>
+      <div data-part="content">
         {tabs && tabs.length > 0
           ? tabs.find((t) => t.key === activeTabKey)?.content
           : children}

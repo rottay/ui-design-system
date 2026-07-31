@@ -67,9 +67,11 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
   const loadingLabel = i18n?.tOr('loading', 'Loading') ?? 'Loading';
   const {
     size = SPINNER_DEFAULTS.size,
+    color,
     label,
     className = '',
     style,
+    children,
   } = props;
 
   // P-79 caller-wins: a pattern composing the Spinner as one named part of
@@ -84,13 +86,19 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
   // Geometry (ring diameter + stroke per size), color and cadence are all
   // skin-owned against `data-size`; the spin rides --ds-motion-slow, which
   // the motion authority zeroes under reduced motion — the ring then rests
-  // as a calm static arc.
+  // as a calm static arc. The public `color` prop rides the skin's
+  // `--ds-spinner-color` channel (a custom property is configuration, not
+  // inline paint); the caller's own `style` spreads last and keeps its
+  // documented precedence.
+  const channelStyle: React.CSSProperties | undefined = color
+    ? ({ '--ds-spinner-color': color, ...style } as React.CSSProperties)
+    : style;
   return (
     <div
       data-part={dataPart ?? 'root'}
       data-size={size}
       className={['rottay-spinner', 'rottay-spinner--modern', className].filter(Boolean).join(' ')}
-      style={style}
+      style={channelStyle}
     >
       <span
         data-part="indicator"
@@ -100,6 +108,7 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
       {label && (
         <span data-part="label">{label}</span>
       )}
+      {children}
     </div>
   );
 }

@@ -51,6 +51,7 @@
  */
 
 import type { ReactNode, CSSProperties } from "react";
+import type { EngineAwareProps } from "../../../../../foundation/contracts";
 
 // ============================================================================
 // Type Definitions
@@ -168,7 +169,9 @@ export interface SegmentedOption {
  * />
  * ```
  */
-export interface SegmentedProps {
+export interface SegmentedProps extends EngineAwareProps {
+  /** Caller-owned root anatomy hook (P-79). */
+  "data-part"?: string;
   // ---------------------------------------------------------------------------
   // Options Configuration
   // ---------------------------------------------------------------------------

@@ -83,18 +83,26 @@
   border-color: var(--ds-color-border-subtle);
 }
 
-/* ---- rounded on the inward-facing edge only; the sliding edge sits flush ---- */
+/* ---- rounded on the inward-facing edge only; the sliding edge sits flush.
+        Placement is a PHYSICAL contract side ('left'|'right' is the screen
+        edge, not a logical one -- it must NOT mirror under RTL), so the flush
+        edge's safe-area pad uses the physical env() inset of that same edge
+        (sheet.css's sanctioned physical safe-area idiom). ---- */
 .rottay-drawer--modern[data-part='surface'][data-placement='left'] {
   border-radius: 0 var(--ds-radius-lg) var(--ds-radius-lg) 0;
+  padding-left: env(safe-area-inset-left, 0px);
 }
 .rottay-drawer--modern[data-part='surface'][data-placement='right'] {
   border-radius: var(--ds-radius-lg) 0 0 var(--ds-radius-lg);
+  padding-right: env(safe-area-inset-right, 0px);
 }
 .rottay-drawer--modern[data-part='surface'][data-placement='top'] {
   border-radius: 0 0 var(--ds-radius-lg) var(--ds-radius-lg);
+  padding-block-start: env(safe-area-inset-top, 0px);
 }
 .rottay-drawer--modern[data-part='surface'][data-placement='bottom'] {
   border-radius: var(--ds-radius-lg) var(--ds-radius-lg) 0 0;
+  padding-block-end: env(safe-area-inset-bottom, 0px);
 }
 
 /* ---- no border on the edge flush against the viewport ---- */
@@ -143,8 +151,11 @@
   padding-inline: clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6));
   flex-shrink: 0;
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent);
-  backdrop-filter: blur(var(--ds-glass-blur-sm, 8px));
-  -webkit-backdrop-filter: blur(var(--ds-glass-blur-sm, 8px));
+  /* Glass is OPT-IN through the family contract (sheet.css idiom): unset, the
+     declaration is invalid at computed-value time and resolves to none --
+     never a default blur (pre-flag 3: the old blur(8px) default is retired). */
+  backdrop-filter: var(--ds-glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
 }
 
 .rottay-drawer--modern > [data-part='header'] > [data-part='heading-group'] {
@@ -190,12 +201,10 @@
   padding: clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6));
   color: var(--ds-color-text-primary);
   scrollbar-gutter: stable;
-  background:
-    radial-gradient(
-      circle at 88% 2%,
-      color-mix(in srgb, var(--ds-color-primary) 5%, transparent) 0%,
-      transparent 30%
-    );
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-color-border-secondary) transparent;
+  /* No decorative corner glow: the body is a reading surface; the panel's own
+     material carries the region (spec section 5 -- no gradient makeup). */
 }
 
 /* ---- close button. The `:hover` rule reproduces the deleted mouseenter/
@@ -237,6 +246,50 @@
 @media (prefers-reduced-motion: reduce) {
   .rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
     transition-duration: 0.01ms;
+  }
+}
+
+/* ---- coarse pointers: the close control meets the physical 44px floor
+        (physical px, never a rem floor -- the fluid root erodes rems). ---- */
+@media (pointer: coarse) {
+  .rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
+    min-inline-size: var(--ds-drawer-close-touch-target, 44px);
+    min-block-size: var(--ds-drawer-close-touch-target, 44px);
+  }
+}
+
+/* ---- forced colors: surface, frame, scrim and controls in system colors.
+        The scrim keeps a see-through system-color mix (a solid Canvas would
+        hide the page); the flush-edge zeroed borders stay zero. ---- */
+@media (forced-colors: active) {
+  .rottay-drawer-backdrop--modern[data-part='backdrop'] {
+    background-color: color-mix(in srgb, CanvasText 35%, transparent);
+    background-image: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .rottay-drawer.rottay-drawer--modern[data-part='surface'][data-placement] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+  .rottay-drawer.rottay-drawer--modern[data-part='surface'] > [data-part='header'],
+  .rottay-drawer.rottay-drawer--modern[data-part='surface'] > [data-part='footer'] {
+    border-color: ButtonText;
+    background: Canvas;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .rottay-drawer--modern > [data-part='header'] [data-part='header-icon'],
+  .rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+  .rottay-drawer--modern > [data-part='header'] [data-part='close-button']:focus-visible {
+    outline-color: Highlight;
   }
 }
 

@@ -27,8 +27,8 @@
   padding: 10px 8px;
   overflow: hidden;
   list-style: none;
-  font-family: var(--ds-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
-  color: var(--ds-menu-color, var(--ds-color-text-secondary));
+  font-family: var(--ds-menu-font-family, var(--ds-font-family-base));
+  color: var(--ds-menu-color, var(--ds-sidebar-text, var(--ds-color-text-secondary)));
   border-radius: var(--ds-menu-radius, var(--ds-radius-xl, 16px));
   box-shadow: var(--ds-menu-shadow, var(--ds-shadow-xs));
   transition:
@@ -69,13 +69,19 @@
 }
 
 .rottay-menu--modern.rottay-menu--light[data-part='root'] {
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--ds-card-bg, var(--ds-surface-card)) 97%, var(--ds-color-primary) 3%), var(--ds-card-bg, var(--ds-surface-card)));
+  background: color-mix(
+    in srgb,
+    var(--ds-card-bg, var(--ds-surface-card)) 97%,
+    var(--ds-color-primary) 3%
+  );
 }
 
 .rottay-menu--modern.rottay-menu--dark[data-part='root'] {
-  background:
-    linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 94%, white 6%), var(--ds-surface-panel));
+  background: color-mix(
+    in srgb,
+    var(--ds-surface-panel) 94%,
+    var(--ds-color-white) 6%
+  );
 }
 
 .rottay-menu--modern[data-part='root'] [data-part='item'],
@@ -90,8 +96,8 @@
   gap: var(--ds-menu-item-gap, var(--ds-sidebar-item-gap, 10px));
   padding-block: 0;
   border-radius: var(--ds-menu-item-radius, var(--ds-radius-lg, 12px));
-  color: var(--ds-menu-item-color, var(--ds-color-text-secondary));
-  font-weight: var(--ds-menu-item-font-weight, var(--ds-font-weight-medium, 500));
+  color: var(--ds-menu-item-color, var(--ds-sidebar-item-color, var(--ds-color-text-secondary)));
+  font-weight: var(--ds-menu-item-font-weight, var(--ds-sidebar-item-font-weight, var(--ds-font-weight-medium, 500)));
   line-height: 1.28;
   text-align: start;
   text-decoration: none;
@@ -149,19 +155,20 @@
 
 /* Selected rows carry extra ink weight. */
 .rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true'] {
-  font-weight: var(--ds-menu-item-font-weight-selected, var(--ds-font-weight-semibold, 600));
+  font-weight: var(--ds-menu-item-font-weight-selected, var(--ds-sidebar-item-font-weight-active, var(--ds-font-weight-semibold, 600)));
 }
 
 /* Disabled rows refuse interaction entirely. The row does NOT ride a blanket
    opacity: the steps family's axe measurements pinned the 0.5-opacity text
    composite at 3.05:1 (fail) on these same tokens, so the text keeps the
    measured AA-legible ink (text-secondary = 5.33:1 BitHire / 7.38:1 TMM) and
-   only the chrome (icon, disclosure arrow) dims. */
+   only the chrome (icon, disclosure arrow) dims. No `pointer-events: none`
+   either: it would kill the `not-allowed` cursor while activation is already
+   refused by the engine (`if (!item.disabled)`) and `tabIndex={-1}`. */
 .rottay-menu--modern[data-part='root'] [data-part='item'][data-disabled],
 .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-disabled] {
   color: var(--ds-menu-item-color-disabled, var(--ds-color-text-secondary));
   cursor: not-allowed;
-  pointer-events: none;
 }
 
 .rottay-menu--modern[data-part='root'] [data-part='item'][data-disabled] [data-part='icon'],
@@ -182,7 +189,10 @@
   color: var(--ds-menu-item-color-hover, var(--ds-color-text-primary));
   background: var(
     --ds-menu-item-bg-hover,
-    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-card-bg, var(--ds-surface-card))), color-mix(in srgb, var(--ds-color-primary) 2%, var(--ds-card-bg, var(--ds-surface-card))))
+    var(
+      --ds-sidebar-item-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-card-bg, var(--ds-surface-card)))
+    )
   );
   border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
   box-shadow: var(--ds-menu-item-shadow-hover, var(--ds-shadow-xs));
@@ -211,12 +221,15 @@
   color: var(--ds-menu-item-color-active, var(--ds-sidebar-item-color-active, var(--ds-color-primary)));
   background: var(
     --ds-menu-item-bg-active,
-    linear-gradient(135deg, color-mix(in srgb, var(--ds-color-primary) 13%, var(--ds-card-bg, var(--ds-surface-card))), color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card))))
+    var(
+      --ds-sidebar-item-bg-active,
+      color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-card-bg, var(--ds-surface-card)))
+    )
   );
   border-color: var(--ds-menu-item-border-active, color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-subtle)));
   box-shadow:
     var(--ds-menu-item-shadow-active, var(--ds-shadow-sm)),
-    inset 0 1px 0 color-mix(in srgb, white 52%, transparent);
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) 52%, transparent);
 }
 
 .rottay-menu--modern[data-part='root'] [data-part='trigger'][data-open='true'],
@@ -316,14 +329,14 @@
   padding-block: var(--ds-sidebar-group-padding-top, 6px) 3px;
   padding-inline: var(--ds-menu-item-padding-inline, var(--ds-sidebar-item-padding-inline, 16px));
   border-radius: var(--ds-radius-sm, 8px);
-  color: var(--ds-menu-group-color, var(--ds-color-text-muted));
+  color: var(--ds-menu-group-color, var(--ds-sidebar-group-color, var(--ds-color-text-muted)));
   font-size: var(--ds-menu-group-font-size, var(--ds-sidebar-group-font-size, 10.9px));
-  font-weight: var(--ds-menu-group-font-weight, var(--ds-font-weight-semibold, 600));
-  letter-spacing: 0.085em;
+  font-weight: var(--ds-menu-group-font-weight, var(--ds-sidebar-group-font-weight, var(--ds-font-weight-semibold, 600)));
+  letter-spacing: var(--ds-menu-group-letter-spacing, var(--ds-sidebar-group-letter-spacing, 0.085em));
   line-height: 1.1;
   text-transform: uppercase;
   user-select: none;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), transparent 72%);
+  background: color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
 }
 
 .rottay-menu--modern[data-part='root'] [data-part='divider'] {
@@ -336,7 +349,7 @@
 }
 
 .rottay-menu--modern[data-part='root'][data-mode='horizontal'] {
-  overflow-x: auto;
+  overflow-inline: auto;
   scrollbar-width: none;
 }
 
@@ -344,17 +357,25 @@
   display: none;
 }
 
-.rottay-menu--modern[data-part='root'][data-collapsed='true'] [data-part='label'],
+/* Collapsed rail: the icon becomes the whole row, so it must sit optically
+   centered — labels, disclosure arrows and group eyebrows leave the box
+   entirely (opacity would keep their space and off-center the icon). */
+.rottay-menu--modern[data-part='root'][data-collapsed='true'] [data-part='item'],
+.rottay-menu--modern[data-part='root'][data-collapsed='true'] [data-part='trigger'] {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.rottay-menu--modern[data-part='root'][data-collapsed='true'] [data-part='item'] [data-part='label'],
 .rottay-menu--modern[data-part='root'][data-collapsed='true'] [data-part='arrow-icon'],
 .rottay-menu--modern[data-part='root'][data-collapsed='true'] [data-part='group-label'] {
-  opacity: 0;
-  pointer-events: none;
+  display: none;
 }
 
 @keyframes ds-menu-panel-enter {
   from {
     opacity: 0;
-    transform: translateY(-3px);
+    transform: translateY(var(--ds-menu-panel-enter-distance, -3px));
   }
   to {
     opacity: 1;

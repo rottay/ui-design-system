@@ -3,9 +3,25 @@
  *
  * The silhouette intentionally reads as one product surface. Separation is
  * created with shared borders, tonal depth and spacing — never accent rails.
+ *
+ * SCOPE ROOT is `.ds-pattern-decision-panorama[data-part='root'][data-loading]`:
+ * the third unit rides the always-present `data-loading` attribute (stamped by
+ * every engine, 'true' or 'false') — if an engine ever drops that attribute,
+ * this scope silently loses its specificity. Class/attribute repetition is
+ * prohibited, so the always-present attribute is the sanctioned extra unit.
+ *
+ * MOTION: the aura breathe is ambient, an order of magnitude beyond the
+ * transition rungs, so its duration derives from the slowest rung
+ * (`calc(var(--ds-motion-glacial) * 10)` = 5s) behind family-local channels;
+ * the timing maps to the real `--ds-motion-ease-in-out` rung. Reduced motion
+ * still kills the loop outright below.
+ *
+ * FORCED COLORS: there is no data-viz here (no swatches, no chart ink), so no
+ * `forced-color-adjust: none` anywhere — hairlines, icon frames and the score
+ * re-express in system colors and the decorative aura steps out.
  */
 
-.ds-pattern-decision-panorama[data-part='root'][data-part='root'] {
+.ds-pattern-decision-panorama[data-part='root'][data-loading] {
   position: relative;
   width: 100%;
   min-width: 0;
@@ -197,7 +213,9 @@
   box-shadow:
     0 0 0 7px color-mix(in srgb, var(--ds-color-primary) 6%, transparent),
     0 20px 44px -16px color-mix(in srgb, var(--ds-color-primary) 32%, transparent);
-  animation: ds-decision-panorama-breathe 5s ease-in-out infinite;
+  animation: ds-decision-panorama-breathe
+    var(--ds-decision-panorama-aura-duration, calc(var(--ds-motion-glacial, 500ms) * 10))
+    var(--ds-decision-panorama-aura-timing, var(--ds-motion-ease-in-out)) infinite;
 }
 
 .ds-pattern-decision-panorama .ds-decision-panorama__visual > :not(.ds-decision-panorama__visual-aura) {
@@ -341,7 +359,7 @@
 }
 
 @container (max-width: 540px) {
-  .ds-pattern-decision-panorama[data-part='root'][data-part='root'] {
+  .ds-pattern-decision-panorama[data-part='root'][data-loading] {
     border-radius: var(--ds-radius-xl, 16px);
   }
 
@@ -383,5 +401,42 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-decision-panorama .ds-decision-panorama__visual-aura {
     animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  /* Separators and frames re-express in system ink. */
+  .ds-pattern-decision-panorama[data-part='root'][data-loading],
+  .ds-pattern-decision-panorama .ds-decision-panorama__context,
+  .ds-pattern-decision-panorama .ds-decision-panorama__decision,
+  .ds-pattern-decision-panorama .ds-decision-panorama__identity,
+  .ds-pattern-decision-panorama .ds-decision-panorama__fact,
+  .ds-pattern-decision-panorama .ds-decision-panorama__fact-icon,
+  .ds-pattern-decision-panorama .ds-decision-panorama__decision-heading,
+  .ds-pattern-decision-panorama .ds-decision-panorama__decision-meta,
+  .ds-pattern-decision-panorama .ds-decision-panorama__actions {
+    border-color: ButtonText;
+  }
+
+  /* The muted hierarchy flattens to system text roles. */
+  .ds-pattern-decision-panorama .ds-decision-panorama__eyebrow,
+  .ds-pattern-decision-panorama .ds-decision-panorama__identity-eyebrow,
+  .ds-pattern-decision-panorama .ds-decision-panorama__fact dt,
+  .ds-pattern-decision-panorama .ds-decision-panorama__fact small,
+  .ds-pattern-decision-panorama .ds-decision-panorama__subtitle,
+  .ds-pattern-decision-panorama .ds-decision-panorama__decision-summary,
+  .ds-pattern-decision-panorama .ds-decision-panorama__decision-meta {
+    color: GrayText;
+  }
+
+  /* Score and fact icon keep prominence by size and weight, not accent ink. */
+  .ds-pattern-decision-panorama .ds-decision-panorama__score,
+  .ds-pattern-decision-panorama .ds-decision-panorama__fact-icon {
+    color: CanvasText;
+  }
+
+  /* The decorative aura steps out; identity reads on typography alone. */
+  .ds-pattern-decision-panorama .ds-decision-panorama__visual-aura {
+    display: none;
   }
 }

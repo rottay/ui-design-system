@@ -1,33 +1,47 @@
 /**
  * Modern ApprovalWorkflow skin (WO-SKIN-06 / CK-D/R).
  *
- * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
- * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
- * preflight zeroes `border-width` on every element. A layered rule here could
- * not paint a border at all. Unlayered outranks preflight and still yields to a
- * consumer's inline `style` prop -- the exact precedence the inline objects held.
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-engines)` (the old
+ * "unlayered" note predates the wiring). Caller inline styles still win.
  *
  * BORDER-COLOR FLOOR (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
- * specificity (0,3,1). Any rule below that paints a real border colour therefore
- * repeats its own `data-part` to reach the (0,4,0) floor. `border: none` resets
- * are exempt.
+ * specificity (0,3,1). Border paint reaches (0,4,0) through the always-stamped
+ * root `data-part` ancestor (or `data-loading` on the root itself) — repeating
+ * an attribute on one element is forbidden. `border: none` resets are exempt.
  *
  * `data-part` is a shared VOCABULARY -- `step`, `footer`, `title` and `root` are
  * stamped by dozens of components. Every rule is anchored to this component's own
  * two scope classes, and the engine class keeps the rustic tree out.
+ *
+ * VERTICAL ACCENT LAW: the timeline connector is a NEUTRAL hairline for every
+ * status (the house bans vertical color accents; sanctioned precedents —
+ * tree connectors, Cascader columns — are neutral too). Status reads through
+ * the textual status Badge and the dot, never through a colored rail.
  */
 
-/* Elevation. `panelCardStyle` (patterns/_internal) still supplies background,
-   border and radius inline: it is shared with 10 other patterns and is not this
-   batch's to move. */
+/* Panel card (drained from the engine's shared `panelCardStyle` spread: the
+   pattern owns its own copy now; the other consumers of that object are
+   untouched) + elevation. */
 .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] {
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-1);
+}
+.ds-pattern-approval-workflow.ds-engine-modern[data-part='root'][data-loading] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+/* Body rhythm (drained from the shared `cardBodyStyle` spread: padding 20). */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='body'],
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton'] {
+  padding: var(--ds-spacing-5, 20px);
 }
 
 /* --- Header --------------------------------------------------------------- */
 
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='entity-badge'][data-part='entity-badge'] {
+.ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='entity-badge'] {
   border: 1px solid var(--ds-color-border);
   color: var(--ds-color-text-secondary);
 }
@@ -59,25 +73,9 @@
   background: var(--ds-color-warning);
 }
 
-/* --- Timeline connector ---------------------------------------------------- */
-
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='pending'] {
-  background: var(--ds-surface-panel);
-}
-
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='approved'] {
-  background: var(--ds-color-success);
-}
-
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='rejected'] {
-  background: var(--ds-color-error);
-}
-
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='escalated'] {
-  background: var(--ds-color-warning);
-}
-
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='skipped'] {
+/* --- Timeline connector: NEUTRAL for every status (vertical color accents
+        are banned; status reads through the textual Badge and the dot). ---- */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'] {
   background: var(--ds-surface-panel);
 }
 
@@ -173,8 +171,9 @@
 /* --- Footer ---------------------------------------------------------------- */
 
 /* The `border-t` utility supplied the width before the drain; the logical
-   block-start shorthand owns both now (doubled part keeps the (0,4,0) floor). */
-.ds-pattern-approval-workflow.ds-engine-modern [data-part='footer'][data-part='footer'] {
+   block-start shorthand owns both now (the root ancestor holds the (0,4,0)
+   floor). */
+.ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='footer'] {
   margin-block-start: var(--ds-approval-footer-margin-block-start, 16px);
   padding-block-start: var(--ds-approval-footer-padding-block-start, 16px);
   border-block-start: 1px solid var(--ds-color-border);
@@ -323,6 +322,49 @@
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button']:disabled {
   opacity: var(--ds-approval-disabled-opacity, 0.6);
   cursor: not-allowed;
+}
+
+/* --- Action hover/press: the base rules carried no pointer treatment at
+        all. Hover law: unguarded `:active` twins here (touch press feedback
+        matches), pointer-fine hover inside the guard. ---- */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve']:active:not(:disabled) {
+  background: var(--ds-color-success-600);
+}
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject']:active:not(:disabled) {
+  background: var(--ds-color-error-600);
+}
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate']:active:not(:disabled) {
+  background: color-mix(in srgb, var(--ds-color-warning) 8%, transparent);
+}
+
+@media (hover: hover) {
+  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve']:hover:not(:disabled) {
+    background: var(--ds-color-success-600);
+  }
+  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject']:hover:not(:disabled) {
+    background: var(--ds-color-error-600);
+  }
+  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate']:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--ds-color-warning) 8%, transparent);
+  }
+}
+
+/* --- Forced colors: every pattern-owned border reads as ButtonText; the
+        current pending dot (the "action required" cue, normally a pulse)
+        reads by a Highlight outline; approve/reject/escalate stay
+        distinguishable by their labels. ---- */
+@media (forced-colors: active) {
+  .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'][data-loading],
+  .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='entity-badge'],
+  .ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] [data-part='footer'],
+  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate'] {
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-current='true'][data-status='pending'] {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+  }
 }
 
 @media (hover: none), (pointer: coarse) {

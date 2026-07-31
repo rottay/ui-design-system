@@ -330,6 +330,15 @@
     outline-offset: -2px;
   }
 
+  /* Interactive feedback when elevation and fills are stripped: hover and
+     press keep a system-color frame (the resting state already has the
+     CanvasText border from the base rule). */
+  .ds-semantic-surface[data-interactive="true"]:hover,
+  .ds-semantic-surface[data-interactive="true"]:active {
+    outline: 1px solid;
+    outline-offset: -1px;
+  }
+
   .ds-semantic-surface[data-interactive="true"]:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 2px;

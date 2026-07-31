@@ -163,7 +163,7 @@ describe('CodeBlock remediation (K4-B)', () => {
     expect(skin).toContain("[data-part='scroll']:focus-visible");
     expect(skin).toContain('color-mix(in srgb, var(--ds-color-primary) 24%, transparent)');
     expect(skin).toContain('@media (forced-colors: active)');
-    expect(skin).not.toContain('!important');
+    expect(skin.replace(/\/\*[\s\S]*?\*\//g, '')).not.toContain('!important');
   });
 
   it('makes the scroll region keyboard-focusable with an accessible name when scrolling can engage (axe scrollable-region-focusable, R4)', () => {

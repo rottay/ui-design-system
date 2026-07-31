@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview ListSurface - Rottay Design System
@@ -10,14 +10,26 @@
  * renderers, and actions while the DS owns the layout and interaction shell.
  */
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Box, Button, Card, Flex, Grid, Stack, Text } from '../../../../../primitives';
-import { PatternDataTable, PatternFilterPanel, resolveRowKey } from '../../../../../patterns';
-import { PatternListToolbar } from '../../../../../patterns/data/list-toolbar';
-import type { ViewMode } from '../../../../../patterns/data/list-toolbar';
-import { FadeIn, recordTransitionName } from '@/graphics/motion';
-import { useCollectionStagger } from '../../../../../patterns/foundation/motion';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  Box,
+  Button,
+  Card,
+  Flex,
+  Grid,
+  Stack,
+  Text,
+} from "../../../../../primitives";
+import {
+  PatternDataTable,
+  PatternFilterPanel,
+  resolveRowKey,
+} from "../../../../../patterns";
+import { PatternListToolbar } from "../../../../../patterns/data/list-toolbar";
+import type { ViewMode } from "../../../../../patterns/data/list-toolbar";
+import { FadeIn, recordTransitionName } from "@/graphics/motion";
+import { useCollectionStagger } from "../../../../../patterns/foundation/motion";
+import { useBreakpoints } from "@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state";
 import {
   countActiveFilters,
   resolveSurfaceAction,
@@ -27,16 +39,24 @@ import {
   resolveColumnValue,
   resolveSurfaceButtonVariant,
   stringifySurfaceValue,
-} from '../../../../runtime/helpers';
-import type { EntityAdapter, ListSurfaceConfig, ListSurfaceView, SurfaceAction } from '../../../../foundation/contracts';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
+} from "../../../../runtime/helpers";
+import type {
+  EntityAdapter,
+  ListSurfaceConfig,
+  ListSurfaceView,
+  SurfaceAction,
+} from "../../../../foundation/contracts";
+import { PageShellSurface } from "../../../../composition/layout/page-shell";
+import { useSurfaceTranslations } from "../../../../runtime/helpers/states/i18n";
+import { useSurfaceProfileDefaultsWithOverrides } from "../../../../runtime/profile-defaults/overrides";
 import {
   resolveStackSpacing,
   SurfaceAccentBarWrapper,
-} from '../../../../runtime/profile-defaults/personality';
-import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
+} from "../../../../runtime/profile-defaults/personality";
+import {
+  SurfaceEmptyState,
+  SurfaceErrorState,
+} from "../../../../runtime/helpers/states";
 
 // ---------------------------------------------------------------------------
 // View-mode bridging helpers
@@ -45,18 +65,18 @@ import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helper
 // These helpers translate between the two vocabularies.
 
 function surfaceViewToToolbarMode(view: ListSurfaceView): ViewMode {
-  return view === 'table' ? 'list' : 'cards';
+  return view === "table" ? "list" : "cards";
 }
 
 function toolbarModeToSurfaceView(mode: ViewMode): ListSurfaceView {
-  return mode === 'list' ? 'table' : 'cards';
+  return mode === "list" ? "table" : "cards";
 }
 
 /** Render a single surface action using the normalized surface-to-button mapping. */
 function renderActionButton<TView>(
   action: SurfaceAction<TView>,
   item: TView,
-  options?: { size?: 'sm' | 'md' | 'lg'; stopPropagation?: boolean }
+  options?: { size?: "sm" | "md" | "lg"; stopPropagation?: boolean }
 ): React.ReactElement {
   return (
     <Button
@@ -67,7 +87,7 @@ function renderActionButton<TView>(
        * expressive without weakening the DS types.
        */
       variant={resolveSurfaceButtonVariant(action.variant)}
-      size={options?.size ?? 'sm'}
+      size={options?.size ?? "sm"}
       disabled={action.disabled}
       loading={action.loading}
       icon={action.icon}
@@ -92,7 +112,11 @@ function buildSurfaceCellRenderer<TView>(
   value: unknown,
   item: TView,
   index: number,
-  defaultRenderer?: (value: unknown, item: TView, index: number) => React.ReactNode
+  defaultRenderer?: (
+    value: unknown,
+    item: TView,
+    index: number
+  ) => React.ReactNode
 ): React.ReactNode {
   // Renderer resolution chain (most specific wins):
   // 1. presentation.renderCell keyed by fieldId (domain-specific override)
@@ -100,7 +124,8 @@ function buildSurfaceCellRenderer<TView>(
   // 3. Column's own default renderer from the column config
   // 4. stringifySurfaceValue fallback (toString with null safety)
   const presentationRenderer =
-    config.presentation.renderCell?.[fieldId] ?? config.presentation.renderCell?.[columnKey];
+    config.presentation.renderCell?.[fieldId] ??
+    config.presentation.renderCell?.[columnKey];
 
   if (presentationRenderer) {
     return presentationRenderer(value, item, index);
@@ -128,7 +153,7 @@ function DefaultCardView<TView>({
   columns: ReturnType<typeof filterSurfaceColumns<TView>>;
   rowActions: SurfaceAction<TView>[];
   cardMinWidth: number;
-  cardVariant: 'outlined' | 'elevated' | 'filled' | 'ghost';
+  cardVariant: "outlined" | "elevated" | "filled" | "ghost";
   animateEntrance: boolean;
 }): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
@@ -144,8 +169,8 @@ function DefaultCardView<TView>({
         <Card.Body>
           {config.presentation.emptyState ?? (
             <SurfaceEmptyState
-              title={tSurface('list.empty_title')}
-              description={tSurface('list.empty_description')}
+              title={tSurface("list.empty_title")}
+              description={tSurface("list.empty_description")}
             />
           )}
         </Card.Body>
@@ -160,7 +185,10 @@ function DefaultCardView<TView>({
       className={applyStagger ? stagger.containerClassName : undefined}
       style={
         applyStagger
-          ? ({ '--ds-stagger-step': stagger.stepCss, '--ds-stagger-max': stagger.maxCss } as React.CSSProperties)
+          ? ({
+              "--ds-stagger-step": stagger.stepCss,
+              "--ds-stagger-max": stagger.maxCss,
+            } as React.CSSProperties)
           : undefined
       }
     >
@@ -176,16 +204,21 @@ function DefaultCardView<TView>({
         // table behavior; an index-derived name is unique within this page
         // but does not carry record identity across a sort, filter, or
         // navigation.
-        const itemTransitionName = recordTransitionName(resolveRowKey(item, config.behavior.rowKey, index));
+        const itemTransitionName = recordTransitionName(
+          resolveRowKey(item, config.behavior.rowKey, index)
+        );
 
         if (customCard) {
           return (
             <Box
               key={index}
-              data-ds-stagger-item={applyStagger ? '' : undefined}
+              data-ds-stagger-item={applyStagger ? "" : undefined}
               style={
                 applyStagger
-                  ? ({ viewTransitionName: itemTransitionName, '--ds-stagger-index': index } as React.CSSProperties)
+                  ? ({
+                      viewTransitionName: itemTransitionName,
+                      "--ds-stagger-index": index,
+                    } as React.CSSProperties)
                   : { viewTransitionName: itemTransitionName }
               }
             >
@@ -201,10 +234,13 @@ function DefaultCardView<TView>({
             hoverable={!!config.behavior.onRowClick}
             clickable={!!config.behavior.onRowClick}
             onClick={() => config.behavior.onRowClick?.(item, index)}
-            data-ds-stagger-item={applyStagger ? '' : undefined}
+            data-ds-stagger-item={applyStagger ? "" : undefined}
             style={
               applyStagger
-                ? ({ viewTransitionName: itemTransitionName, '--ds-stagger-index': index } as React.CSSProperties)
+                ? ({
+                    viewTransitionName: itemTransitionName,
+                    "--ds-stagger-index": index,
+                  } as React.CSSProperties)
                 : { viewTransitionName: itemTransitionName }
             }
           >
@@ -217,19 +253,12 @@ function DefaultCardView<TView>({
 
                     return (
                       <Box key={column.key}>
-                        <Text
-                          className="ds-list__card-label"
-                          style={{
-                            fontSize: 12,
-                            fontWeight: 600,
-                            marginBottom: 4,
-                          }}
-                        >
+                        {/* Label geometry/color live in the ListSurface skin
+                            (ds-list__card-label hook) — nothing inline. */}
+                        <Text className="ds-list__card-label">
                           {column.header}
                         </Text>
-                        <Text
-                          className="ds-list__card-value"
-                        >
+                        <Text className="ds-list__card-value">
                           {buildSurfaceCellRenderer(
                             config,
                             column.key,
@@ -247,7 +276,11 @@ function DefaultCardView<TView>({
                 {rowActions.length > 0 && (
                   <Box onClick={(event) => event.stopPropagation()}>
                     <Flex gap={8} wrap="wrap">
-                    {rowActions.map((action) => renderActionButton(action, item, { stopPropagation: true }))}
+                      {rowActions.map((action) =>
+                        renderActionButton(action, item, {
+                          stopPropagation: true,
+                        })
+                      )}
                     </Flex>
                   </Box>
                 )}
@@ -278,17 +311,22 @@ export function ListSurface<TRaw, TView extends object>({
   error,
   onRetry,
 }: ListSurfaceProps<TRaw, TView>): React.ReactElement {
-  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
+  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
+    config.visual?.profileOverrides
+  );
   const { tSurface } = useSurfaceTranslations();
   const { isMobile } = useBreakpoints();
   // Visual defaults cascade: explicit surface config -> product profile -> DS defaults.
   // This three-tier resolution lets apps override per-page while the product
   // profile provides a consistent baseline.
-  const resolvedDefaultView = config.visual.defaultView ?? profileDefaults.listView;
-  const resolvedMobileView = config.visual.mobileDefaultView ?? 'cards';
+  const resolvedDefaultView =
+    config.visual.defaultView ?? profileDefaults.listView;
+  const resolvedMobileView = config.visual.mobileDefaultView ?? "cards";
   const resolvedCompact = config.visual.compact ?? profileDefaults.listCompact;
-  const resolvedCardMinWidth = config.visual.cardMinWidth ?? profileDefaults.listCardMinWidth;
-  const [activeView, setActiveView] = useState<ListSurfaceView>(resolvedDefaultView);
+  const resolvedCardMinWidth =
+    config.visual.cardMinWidth ?? profileDefaults.listCardMinWidth;
+  const [activeView, setActiveView] =
+    useState<ListSurfaceView>(resolvedDefaultView);
 
   useEffect(() => {
     /**
@@ -326,12 +364,9 @@ export function ListSurface<TRaw, TView extends object>({
   const hasToolbar = !!config.toolbar;
 
   // Bridge the toolbar view-mode change back into the surface's view state.
-  const handleToolbarViewModeChange = useCallback(
-    (mode: ViewMode) => {
-      setActiveView(toolbarModeToSurfaceView(mode));
-    },
-    [],
-  );
+  const handleToolbarViewModeChange = useCallback((mode: ViewMode) => {
+    setActiveView(toolbarModeToSurfaceView(mode));
+  }, []);
 
   // Build the toolbar's primaryAction descriptor from the surface's resolved action.
   const toolbarPrimaryAction = useMemo(() => {
@@ -361,25 +396,31 @@ export function ListSurface<TRaw, TView extends object>({
       {shouldShowViewSwitch && (
         <Flex gap={8}>
           <Button
-            variant={resolveSurfaceButtonVariant(activeView === 'table' ? 'primary' : 'secondary')}
+            variant={resolveSurfaceButtonVariant(
+              activeView === "table" ? "primary" : "secondary"
+            )}
             size="sm"
-            onClick={() => setActiveView('table')}
+            onClick={() => setActiveView("table")}
           >
-            {tSurface('list.view_table')}
+            {tSurface("list.view_table")}
           </Button>
           <Button
-            variant={resolveSurfaceButtonVariant(activeView === 'cards' ? 'primary' : 'secondary')}
+            variant={resolveSurfaceButtonVariant(
+              activeView === "cards" ? "primary" : "secondary"
+            )}
             size="sm"
-            onClick={() => setActiveView('cards')}
+            onClick={() => setActiveView("cards")}
           >
-            {tSurface('list.view_cards')}
+            {tSurface("list.view_cards")}
           </Button>
         </Flex>
       )}
 
       {primaryAction && (
         <Button
-          variant={resolveSurfaceButtonVariant(primaryAction.variant ?? 'primary')}
+          variant={resolveSurfaceButtonVariant(
+            primaryAction.variant ?? "primary"
+          )}
           disabled={primaryAction.disabled}
           loading={primaryAction.loading}
           onClick={() => primaryAction.onClick?.(undefined as void)}
@@ -391,11 +432,17 @@ export function ListSurface<TRaw, TView extends object>({
     </Flex>
   );
 
-  const resolvedSectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
+  const resolvedSectionSpacing = resolveStackSpacing(
+    profileDefaults.sectionSpacing
+  );
 
   if (error) {
     return (
-      <PageShellSurface chrome={config.presentation.chrome} actions={headerActions} loading={false}>
+      <PageShellSurface
+        chrome={config.presentation.chrome}
+        actions={headerActions}
+        loading={false}
+      >
         <SurfaceErrorState error={error} onRetry={onRetry} />
       </PageShellSurface>
     );
@@ -406,8 +453,8 @@ export function ListSurface<TRaw, TView extends object>({
       className="ds-surface ds-list"
       data-part="root"
       data-view={effectiveView}
-      data-mobile={isMobile ? 'true' : 'false'}
-      data-loading={loading ? 'true' : 'false'}
+      data-mobile={isMobile ? "true" : "false"}
+      data-loading={loading ? "true" : "false"}
       spacing={resolvedSectionSpacing}
     >
       {/* --------------------------------------------------------------- */}
@@ -441,11 +488,12 @@ export function ListSurface<TRaw, TView extends object>({
       {/* Extra toolbar slots (kept for backward compatibility / injection) */}
       {config.presentation.toolbarStart}
 
-      {config.behavior.filters && config.behavior.filters.length > 0 && (
-        config.visual.filterPanelChrome === 'plain' ? (
+      {config.behavior.filters &&
+        config.behavior.filters.length > 0 &&
+        (config.visual.filterPanelChrome === "plain" ? (
           <Box
             style={{
-              padding: isMobile ? '0 4px' : '0 2px',
+              padding: isMobile ? "0 4px" : "0 2px",
             }}
           >
             <PatternFilterPanel
@@ -453,16 +501,22 @@ export function ListSurface<TRaw, TView extends object>({
               values={config.behavior.filterValues ?? {}}
               onChange={(values) => config.behavior.onFilterChange?.(values)}
               onReset={config.behavior.onFilterReset}
-              showReset={!!config.behavior.onFilterReset && activeFilterCount > 0}
+              showReset={
+                !!config.behavior.onFilterReset && activeFilterCount > 0
+              }
               showApply={!!config.behavior.onFilterApply}
               onApply={config.behavior.onFilterApply}
               activeCount={activeFilterCount}
               title={
                 isMobile || config.behavior.filters.length > 1
-                  ? tSurface('list.filters_title')
+                  ? tSurface("list.filters_title")
                   : undefined
               }
-              layout={isMobile ? (config.visual.mobileFiltersLayout ?? 'stacked') : 'inline'}
+              layout={
+                isMobile
+                  ? config.visual.mobileFiltersLayout ?? "stacked"
+                  : "inline"
+              }
             />
           </Box>
         ) : (
@@ -473,23 +527,28 @@ export function ListSurface<TRaw, TView extends object>({
                 values={config.behavior.filterValues ?? {}}
                 onChange={(values) => config.behavior.onFilterChange?.(values)}
                 onReset={config.behavior.onFilterReset}
-                showReset={!!config.behavior.onFilterReset && activeFilterCount > 0}
+                showReset={
+                  !!config.behavior.onFilterReset && activeFilterCount > 0
+                }
                 showApply={!!config.behavior.onFilterApply}
                 onApply={config.behavior.onFilterApply}
                 activeCount={activeFilterCount}
                 title={
                   isMobile || config.behavior.filters.length > 1
-                    ? tSurface('list.filters_title')
+                    ? tSurface("list.filters_title")
                     : undefined
                 }
-                layout={isMobile ? (config.visual.mobileFiltersLayout ?? 'stacked') : 'inline'}
+                layout={
+                  isMobile
+                    ? config.visual.mobileFiltersLayout ?? "stacked"
+                    : "inline"
+                }
               />
             </Card.Body>
           </Card>
-        )
-      )}
+        ))}
 
-      {effectiveView === 'table' ? (
+      {effectiveView === "table" ? (
         <PatternDataTable<TView>
           data={mappedItems}
           columns={permittedColumns
@@ -534,7 +593,9 @@ export function ListSurface<TRaw, TView extends object>({
             rowActions.length > 0
               ? (item: TView) => (
                   <Flex gap={8} justify="end" wrap="wrap">
-                    {rowActions.map((action) => renderActionButton(action, item))}
+                    {rowActions.map((action) =>
+                      renderActionButton(action, item)
+                    )}
                   </Flex>
                 )
               : undefined
@@ -542,8 +603,8 @@ export function ListSurface<TRaw, TView extends object>({
           emptyState={
             config.presentation.emptyState ?? (
               <SurfaceEmptyState
-                title={tSurface('list.empty_title')}
-                description={tSurface('list.empty_description')}
+                title={tSurface("list.empty_title")}
+                description={tSurface("list.empty_description")}
               />
             )
           }
@@ -563,11 +624,15 @@ export function ListSurface<TRaw, TView extends object>({
   );
 
   return (
-    <PageShellSurface chrome={config.presentation.chrome} actions={headerActions} loading={loading}>
+    <PageShellSurface
+      chrome={config.presentation.chrome}
+      actions={headerActions}
+      loading={loading}
+    >
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
         {/* Coarse view-transition seam wrapping the list body. Inert outside an
             active view transition. */}
-        <Box style={{ viewTransitionName: 'ds-vt-list-body' }}>
+        <Box style={{ viewTransitionName: "ds-vt-list-body" }}>
           {profileDefaults.animateEntrance ? (
             <FadeIn durationMs={profileDefaults.entranceDuration}>
               {listContent}

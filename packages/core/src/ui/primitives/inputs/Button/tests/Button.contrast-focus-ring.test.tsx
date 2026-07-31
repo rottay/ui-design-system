@@ -75,7 +75,9 @@ describe('Button modern: focus ring contrast (W8)', () => {
 
   it('resolves --ds-button-focus-ring to the canonical --ds-focus-ring double ring', () => {
     expect(PRESENTATION).toContain('--ds-button-focus-ring: var(--ds-focus-ring);');
-    expect(DEFAULT_THEME).toContain('--ds-button-focus-ring: var(--ds-focus-ring);');
+    // Component-family defaults have one root owner. The foundation theme
+    // publishes the shared ring, while button.css owns the family alias.
+    expect(DEFAULT_THEME).not.toContain('--ds-button-focus-ring:');
   });
 
   it('double-ring structure: page-ground gap separates the ring from saturated fills', () => {

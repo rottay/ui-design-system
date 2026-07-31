@@ -1,11 +1,31 @@
 'use client';
 
 /**
- * @fileoverview Modern (token-driven) engine for the CommandPalette pattern.
- * Renders a searchable command list in a custom fixed-position overlay (not a
- * framework modal) with backdrop click-to-close, keyboard navigation, and
- * styled kbd elements for shortcut display. The overlay is conditionally
- * unmounted rather than hidden to avoid stacking invisible listeners.
+ * @fileoverview Modern engine for the CommandPalette pattern.
+ *
+ * A searchable command list in a custom fixed-position overlay (not a
+ * framework modal) with backdrop click-to-close, FULL APG combobox wiring
+ * (role=combobox + aria-expanded/controls/activedescendant on the input,
+ * listbox/options, arrows to move, Enter to select, Escape to close and
+ * return focus), a focus trap, and argument mode for parameterized commands.
+ * The overlay is conditionally unmounted rather than hidden to avoid
+ * stacking invisible listeners.
+ *
+ * COMPOSITION LAW: the search box is the certified Input primitive (its
+ * contract exposes the combobox aria props and forwards onKeyDown/ref — it
+ * was built for exactly this), shortcut hints compose Kbd, the argument
+ * breadcrumb composes Tag inside its pinned data-part wrapper, and the
+ * no-results state composes Empty. ScrollArea is deliberately NOT composed:
+ * the listbox element must keep its own role/id for `aria-controls`, and
+ * ScrollArea's viewport does not forward them — documented, contract
+ * minimal intact. Match highlighting is likewise NOT implemented on
+ * purpose: the family tests pin exact label text (`findByText('Open
+ * report')` under an active query), which any segmented match markup would
+ * break — pin documented, tests untouched.
+ *
+ * Copy runs through the guarded i18n channel with documented English floors
+ * (the defaults double as test pins: 'Type a command...', 'No results
+ * found.', 'Recent', 'Command palette'); caller props always win.
  *
  * @example
  * <ModernCommandPalette
@@ -20,13 +40,22 @@ import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { CommandPaletteProps, CommandItem } from '../../contracts';
 import { useCommandArgumentMode } from '../../runtime/argument-mode';
-import { menuSectionTitleStyle } from '../../../../foundation/engine-styles/modern';
+import Input from '../../../../../primitives/inputs/Input/engines/modern';
+import Empty from '../../../../../primitives/display/Empty/engines/modern';
+import Tag from '../../../../../primitives/display/Tag/engines/modern';
+import Kbd from '../../../../../primitives/display/Kbd/engines/modern';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
-// The grouped section label's color is owned by the skin so a tenant's
-// `--ds-search-category-color` override reaches it; an inline color would beat the
-// unlayered skin, so the label spreads this color-free copy of the shared title style.
-// (The Recent heading keeps the full `menuSectionTitleStyle`, muted, unchanged.)
-const { color: _menuSectionTitleColor, ...menuSectionTitleBase } = menuSectionTitleStyle;
+/** Hook-local `tOr`: catalogue value with an English floor, never a raw key. */
+function useCommandPaletteTranslation() {
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+    return resolved;
+  };
+  return { tOr };
+}
 
 /**
  * Modern (token-driven) command palette with full keyboard navigation.
@@ -34,12 +63,13 @@ const { color: _menuSectionTitleColor, ...menuSectionTitleBase } = menuSectionTi
  * @returns A fixed overlay with backdrop and a rounded dialog card, or null when closed.
  */
 export default function ModernCommandPalette(props: CommandPaletteProps) {
+  const { tOr } = useCommandPaletteTranslation();
   const {
     open,
     onOpenChange,
     items,
-    placeholder = 'Type a command...',
-    emptyMessage = 'No results found.',
+    placeholder,
+    emptyMessage,
     onSearch,
     footer,
     recentItems,
@@ -48,6 +78,12 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
     style,
     loading = false,
   } = props;
+
+  /* Localized owned copy (callers can still override every string by prop). */
+  const dialogLabel = tOr('commandPalette.dialogLabel', 'Command palette');
+  const placeholderText = placeholder ?? tOr('commandPalette.placeholder', 'Type a command...');
+  const emptyText = emptyMessage ?? tOr('commandPalette.empty', 'No results found.');
+  const recentLabel = tOr('commandPalette.recent', 'Recent');
 
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
@@ -117,7 +153,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
 
   // Store the element that had focus before the palette opened so we
   // can return focus when it closes. Reset search and auto-focus the
-  // input. The var(--ds-motion-instant) delay is needed because the DOM element must be
+  // input. The short delay is needed because the DOM element must be
   // mounted before focus() can succeed.
   useEffect(() => {
     if (open) {
@@ -212,47 +248,82 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   // keyboard activeIndex always maps to the correct visual row.
   let itemIndex = -1;
 
+  /** One option row (recent section and grouped sections share the anatomy). */
+  const renderItem = (item: CommandItem, idx: number) => (
+    <div
+      key={item.id}
+      id={`command-palette-option-${idx}`}
+      role="option"
+      aria-selected={activeIndex === idx}
+      aria-disabled={item.disabled || undefined}
+      data-part="item"
+      data-active={activeIndex === idx}
+      onClick={() => handleSelect(item)}
+    >
+      <div data-part="item-main">
+        {item.icon}
+        <div data-part="item-text">
+          <div data-part="label">{item.label}</div>
+          {item.description && (
+            <div data-part="description">{item.description}</div>
+          )}
+        </div>
+      </div>
+      {/* Shortcut hint: certified Kbd inside its anatomy wrapper (the Kbd
+          engine owns its key-cap paint and does not forward data-part). */}
+      {item.shortcut && (
+        <span data-part="shortcut">
+          <Kbd size="sm">{item.shortcut}</Kbd>
+        </span>
+      )}
+    </div>
+  );
+
   return (
-    <div ref={dialogRef} onKeyDown={handleFocusTrap} className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] ds-pattern-command-palette ds-engine-modern" data-part="root" data-mode={mode} style={style} role="dialog" aria-modal="true" aria-label="Command palette">
+    <div
+      ref={dialogRef}
+      onKeyDown={handleFocusTrap}
+      className="ds-pattern-command-palette ds-engine-modern"
+      data-part="root"
+      data-mode={mode}
+      style={style}
+      role="dialog"
+      aria-modal="true"
+      aria-label={dialogLabel}
+    >
       {/* Backdrop: scrim + sanctioned glass layer; painted by the engine skin. */}
       <div
-        className="absolute inset-0"
         data-part="backdrop"
         onClick={() => onOpenChange(false)}
       />
       {/* Dialog */}
-      <div className={`relative rounded-xl w-full max-w-lg overflow-hidden ${className}`} data-part="dialog">
-        {/* Search */}
-        <div className="p-3" data-part="search" style={mode === 'argument' ? { display: 'flex', alignItems: 'center', gap: 'var(--ds-spacing-2, 8px)' } : undefined}>
+      <div className={className} data-part="dialog">
+        {/* Search: argument mode adds the breadcrumb chip beside the input
+            (the flex layout switch is skin-owned off root[data-mode]). */}
+        <div data-part="search">
           {mode === 'argument' && pendingItem && (
-            <span
-              data-part="argument-chip"
-              style={{
-                flexShrink: 0,
-                padding: '2px 8px',
-                fontSize: 'var(--ds-font-size-xs, 12px)',
-                fontWeight: 500,
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {pendingItem.label}
+            /* The pinned chip wrapper keeps data-part + exact textContent;
+               the certified Tag inside owns the pill paint. */
+            <span data-part="argument-chip">
+              <Tag tone="neutral" size="sm">
+                {pendingItem.label}
+              </Tag>
             </span>
           )}
-          <input
+          {/* Certified Input: its contract carries the combobox aria props
+              first-class and forwards ref + onKeyDown — the APG wiring lands
+              on the real textbox. */}
+          <Input
             ref={inputRef}
-            type="text"
-            data-part="input"
-            className="w-full text-lg focus:outline-none"
-            style={{ padding: 'var(--ds-spacing-2, 8px) 0', fontSize: 'var(--ds-font-size-lg, 16px)' }}
-            placeholder={mode === 'argument' ? pendingItem?.parameter?.placeholder ?? '' : placeholder}
             value={mode === 'argument' ? argumentValue : query}
-            onChange={(e) => {
+            placeholder={mode === 'argument' ? pendingItem?.parameter?.placeholder ?? '' : placeholderText}
+            onChange={(newValue) => {
               if (mode === 'argument') {
-                setArgumentValue(e.target.value);
+                setArgumentValue(newValue);
                 return;
               }
-              setQuery(e.target.value);
-              onSearch?.(e.target.value);
+              setQuery(newValue);
+              onSearch?.(newValue);
             }}
             onKeyDown={handleKeyDown}
             role="combobox"
@@ -263,55 +334,32 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
         </div>
         {/* Argument mode replaces the result list with the parameter prompt. */}
         {mode === 'argument' && pendingItem ? (
-          <div className="px-4 py-3">
-            <div data-part="argument-prompt" className="text-sm">
+          <div data-part="argument-panel">
+            <div data-part="argument-prompt">
               {pendingItem.parameter?.prompt}
             </div>
             {argumentError && (
               <div
                 data-part="argument-error"
                 role="alert"
-                className="text-xs"
-                style={{ marginTop: 'var(--ds-spacing-1, 4px)' }}
               >
                 {argumentError}
               </div>
             )}
           </div>
         ) : (
-        <div className="overflow-y-auto py-2" style={{ maxHeight }} role="listbox" id="command-palette-listbox">
+        /* ScrollArea is NOT composed here: the listbox must keep role+id for
+           aria-controls and its viewport does not forward them. maxHeight
+           stays inline (runtime prop, the ScrollArea precedent). */
+        <div data-part="list" style={{ maxHeight }} role="listbox" id="command-palette-listbox">
           {/* Show the "Recent" section only when there is no active query,
               giving users quick access to previously used commands. */}
           {showRecent && (
-            <div className="px-3 pb-2">
-              <div style={{ ...menuSectionTitleStyle, marginBottom: 4 }}>Recent</div>
+            <div data-part="recent">
+              <div data-part="section-label">{recentLabel}</div>
               {visibleRecent.map((item) => {
                 itemIndex++;
-                const idx = itemIndex;
-                return (
-                  <div
-                    key={item.id}
-                    id={`command-palette-option-${idx}`}
-                    role="option"
-                    aria-selected={activeIndex === idx}
-                    aria-disabled={item.disabled || undefined}
-                    data-part="item"
-                    data-active={activeIndex === idx}
-                    onClick={() => handleSelect(item)}
-                    className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    <div className="flex items-center gap-2">
-                      {item.icon}
-                      <div>
-                        <div className="font-medium text-sm">{item.label}</div>
-                        {item.description && (
-                          <div className="text-xs" data-part="description">{item.description}</div>
-                        )}
-                      </div>
-                    </div>
-                    {item.shortcut && <kbd data-part="shortcut" style={{ padding: '2px 6px', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>{item.shortcut}</kbd>}
-                  </div>
-                );
+                return renderItem(item, itemIndex);
               })}
             </div>
           )}
@@ -320,19 +368,10 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
           {Object.entries(grouped).map(([group, groupItems]) => (
             <div key={group}>
               {group && (
-              <div
-                data-part="group-label"
-                style={{
-                  ...menuSectionTitleBase,
-                  paddingLeft: 20,
-                  paddingRight: 20,
-                  paddingTop: 12,
-                  paddingBottom: 4,
-                }}
-              >
-                {group}
-              </div>
-            )}
+                <div data-part="group-label">
+                  {group}
+                </div>
+              )}
               {groupItems.map((item) => {
                 if (item.kind === 'error') {
                   return (
@@ -340,54 +379,29 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
                       key={item.id}
                       data-part="error"
                       role="status"
-                      className="px-4 py-2"
                     >
-                      <div className="font-medium text-sm">{item.label}</div>
+                      <div data-part="label">{item.label}</div>
                       {item.description && (
-                        <div className="text-xs" data-part="description">{item.description}</div>
+                        <div data-part="description">{item.description}</div>
                       )}
                     </div>
                   );
                 }
                 itemIndex++;
-                const idx = itemIndex;
-                return (
-                  <div
-                    key={item.id}
-                    id={`command-palette-option-${idx}`}
-                    role="option"
-                    aria-selected={activeIndex === idx}
-                    aria-disabled={item.disabled || undefined}
-                    data-part="item"
-                    data-active={activeIndex === idx}
-                    onClick={() => handleSelect(item)}
-                    className={`flex items-center justify-between px-4 py-2 cursor-pointer ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  >
-                    <div className="flex items-center gap-2">
-                      {item.icon}
-                      <div>
-                        <div className="font-medium text-sm">{item.label}</div>
-                        {item.description && (
-                          <div className="text-xs" data-part="description">{item.description}</div>
-                        )}
-                      </div>
-                    </div>
-                    {item.shortcut && <kbd data-part="shortcut" style={{ padding: '2px 6px', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>{item.shortcut}</kbd>}
-                  </div>
-                );
+                return renderItem(item, itemIndex);
               })}
             </div>
           ))}
           {filtered.length === 0 && (
-            <div className="text-center py-8 text-sm" data-part="empty">
-              {emptyMessage}
+            <div data-part="empty">
+              <Empty image="simple" description={emptyText} />
             </div>
           )}
         </div>
         )}
-        {/* Footer */}
+        {/* Footer (caller slot: hints/links arrive already composed). */}
         {footer && (
-          <div className="px-4 py-2 text-xs" data-part="footer">
+          <div data-part="footer">
             {footer}
           </div>
         )}

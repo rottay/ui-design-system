@@ -39,9 +39,6 @@ const SLIDE_ANIMATION: Record<string, string> = {
   right: 'ds-sheet-slide-right-modern',
 };
 
-/** Default side-panel width for left/right. */
-const SIDE_PANEL_WIDTH = '380px';
-
 // ============================================================================
 // Close Button (shared visual with Modal/Drawer)
 // ============================================================================
@@ -183,8 +180,6 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
         top: 0,
         left: 0,
         bottom: 0,
-        width: SIDE_PANEL_WIDTH,
-        maxWidth: '100vw',
         ...panelStyle,
         ...surfaceStyle,
       };
@@ -196,8 +191,6 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
       top: 0,
       right: 0,
       bottom: 0,
-      width: SIDE_PANEL_WIDTH,
-      maxWidth: '100vw',
       ...panelStyle,
       ...surfaceStyle,
     };
@@ -266,47 +259,21 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
               overflow: 'hidden',
             }}
           >
-          {/* Handle bar -- bottom sheet only */}
+          {/* Handle bar -- bottom sheet only. Geometry lives in the skin;
+              the engine stamps parts only. */}
           {isBottom && showHandle && (
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                paddingTop: '12px',
-                paddingBottom: '4px',
-                flexShrink: 0,
-              }}
-            >
-              <div
-                data-part="handle"
-                style={{
-                  width: '40px',
-                  height: '4px',
-                }}
-              />
+            <div data-part="handle-area">
+              <div data-part="handle" />
             </div>
           )}
 
-          {/* Title area. Typography lives in the modern Sheet skin; the
-              engine stamps parts only. */}
+          {/* Title area. Layout and typography live in the modern Sheet skin;
+              the engine stamps parts only. */}
           {title && (
-            <div
-              data-part="header"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '12px 16px',
-                flexShrink: 0,
-              }}
-            >
+            <div data-part="header">
               <div
                 id={titleId}
                 data-part="title"
-                style={{
-                  flex: '1 1 auto',
-                  minWidth: 0,
-                }}
               >
                 {title}
               </div>
@@ -322,7 +289,6 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
               flex: '1 1 auto',
               minHeight: 0,
               overflowY: 'auto',
-              padding: '16px',
               ...bodyStyle,
             }}
           >

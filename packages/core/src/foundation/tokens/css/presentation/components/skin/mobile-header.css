@@ -5,9 +5,9 @@
  * Text, which resolve through the engine system themselves. One skin file, no
  * engine modifier class.
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * still yields to a caller's inline `style`.
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "unlayered" note predates the wiring).
  *
  * ELEMENT-LEVEL CLASSES, NOT BARE `data-part` DESCENDANTS: `data-part='trigger'`
  * and `data-part='label'` are shared vocabulary across a dozen components
@@ -17,26 +17,33 @@
  * component the caller drops into a slot. Each painted element therefore carries
  * its own class and is matched by a COMPOUND selector.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
- * (0,3,1). The root's `border-bottom` carries a real color, so it must reach
- * (0,4,0); with only ONE root class that is bought by a thrice-repeated
- * `[data-part='root']` (the voice-input-button precedent). The back button's
- * `border: none` is a color-free reset, exempt from the floor. Non-border paint
- * wins unlayered at (0,2,0)+.
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
+ * border-color floor at (0,3,1). The root's `border-bottom` carries a real
+ * color, so it must reach (0,4,0); with only ONE root class that is bought by
+ * `data-sticky`, which the engine always stamps ('true'|'false') — repeating
+ * an attribute is forbidden. The back button's `border: none` is a color-free
+ * reset, exempt from the floor.
+ *
+ * GLASS: the sticky posture's `backdrop-filter` is opt-in through the
+ * `--ds-mobile-header-sticky-backdrop` channel (default `none`) — a default-ON
+ * blur taxes every scroll frame (PT29/PT32/S06/S07 fix, Sheet glass precedent).
+ *
+ * RTL: the back glyph is the governed `navigation.back` icon with autoMirror —
+ * it flips itself; no manual scaleX rules live here.
  */
 
 .rottay-mobile-header[data-part='root'] {
   background: var(--ds-color-bg-primary);
 }
 
-/* sticky posture: the bar floats over scrolling content, so it earns a
-   translucent glass treatment instead of the flat resting fill */
+/* sticky posture: the bar floats over scrolling content; the frosted glass is
+   opt-in via the family channel (default none). */
 .rottay-mobile-header[data-part='root'][data-sticky='true'] {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent);
-  backdrop-filter: blur(var(--ds-glass-blur, 8px));
+  backdrop-filter: var(--ds-mobile-header-sticky-backdrop, none);
 }
 
-.rottay-mobile-header[data-part='root'][data-part='root'][data-part='root'] {
+.rottay-mobile-header[data-part='root'][data-sticky] {
   border-bottom: 1px solid var(--ds-color-border);
 }
 
@@ -51,10 +58,6 @@
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
-.rottay-mobile-header__back[data-part='trigger']:hover {
-  background: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
-}
-
 .rottay-mobile-header__back[data-part='trigger']:active {
   transform: scale(0.94);
 }
@@ -64,14 +67,29 @@
   box-shadow: var(--ds-mobile-header-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
 }
 
-/* the back glyph points in the reading-backward direction — flip it under RTL */
-[dir='rtl'] .rottay-mobile-header__back[data-part='trigger'] > svg {
-  transform: scaleX(-1);
+/* Hover is pointer-fine only (the `:active` press scale above is the real
+   touch feedback). */
+@media (hover: hover) {
+  .rottay-mobile-header__back[data-part='trigger']:hover {
+    background: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+  }
 }
 
 .rottay-mobile-header__title[data-part='label'] {
   color: var(--ds-color-text-primary);
   letter-spacing: -0.01em;
+}
+
+/* ---- forced colors: the bar's hairline reads as ButtonText and the back
+        action earns a frame (it is borderless at rest). ---- */
+@media (forced-colors: active) {
+  .rottay-mobile-header[data-part='root'][data-sticky] {
+    border-bottom-color: ButtonText;
+  }
+
+  .rottay-mobile-header__back[data-part='trigger'] {
+    border: 1px solid ButtonText;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

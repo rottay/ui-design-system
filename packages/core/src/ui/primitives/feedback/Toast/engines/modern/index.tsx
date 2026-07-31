@@ -47,7 +47,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import type { ToastProps, ToastVariant } from '../../contracts';
 import { TOAST_DEFAULTS, TOAST_ANIMATION } from '../../contracts';
 import { getToastAnimationStyle } from '../../runtime/animation';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
 import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
@@ -120,7 +120,11 @@ function getDefaultIcon(variant: ToastVariant): React.ReactNode {
  * ```
  */
 export default function ModernToast(props: ToastProps): React.ReactElement | null {
-  const { t } = useTranslation('common');
+  // Optional channel: a bare composition (no I18nProvider, e.g. direct engine
+  // renders) must still render -- the hard useTranslation hook throws without
+  // one. The close control keeps its documented English floor.
+  const i18n = useOptionalTranslation('common');
+  const closeLabel = i18n?.tOr('close', 'Close') ?? 'Close';
   const {
     variant = TOAST_DEFAULTS.variant,
     title,
@@ -248,6 +252,19 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
   const handleMouseEnter = pauseOnHover ? () => setIsPaused(true) : undefined;
   /** Handle mouse leave for pause on hover */
   const handleMouseLeave = pauseOnHover ? () => setIsPaused(false) : undefined;
+  /**
+   * Keyboard parity for the hover pause (WCAG 2.2.1): a toast must not
+   * auto-dismiss while the user is focused inside it. Focus bubbles in React,
+   * so plain handlers cover every focusable descendant; the blur only
+   * resumes when focus leaves the toast entirely.
+   */
+  const handleFocus = pauseOnHover ? () => setIsPaused(true) : undefined;
+  const handleBlur = pauseOnHover
+    ? (event: React.FocusEvent<HTMLDivElement>) => {
+        const next = event.relatedTarget as Node | null;
+        if (!next || !event.currentTarget.contains(next)) setIsPaused(false);
+      }
+    : undefined;
 
   // Explicit `icon` prop (including null to suppress) overrides the default.
   // Checking !== undefined distinguishes "no prop" from "intentionally null".
@@ -277,6 +294,8 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
     >
       <div data-part="layout">
         {displayIcon && <span data-part="icon">{displayIcon}</span>}
@@ -308,7 +327,7 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
             type="button"
             data-part="close-button"
             onClick={handleClose}
-            aria-label={t('close')}
+            aria-label={closeLabel}
           >
             <ActionCloseIcon decorative size={16} />
           </button>

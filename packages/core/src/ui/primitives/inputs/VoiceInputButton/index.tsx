@@ -139,6 +139,7 @@ export function VoiceInputButton({
         data-blocked={isBlocked ? 'true' : 'false'}
         onClick={handleClick}
         aria-label={resolvedAriaLabel}
+        aria-pressed={isActive}
         title={title}
       >
         {status === 'transcribing' ? (

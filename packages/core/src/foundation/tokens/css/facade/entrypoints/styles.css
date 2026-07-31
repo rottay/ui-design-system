@@ -50,7 +50,8 @@
    ============================================================================= */
 @import "../../presentation/components/avatar.css" layer(rottay-components);
 @import "../../presentation/components/badge.css" layer(rottay-components);
-@import "../../presentation/components/semantic-surface.css" layer(rottay-components);
+@import "../../presentation/components/semantic-surface.css"
+  layer(rottay-components);
 @import "../../presentation/components/button.css" layer(rottay-components);
 @import "../../presentation/components/input.css" layer(rottay-components);
 @import "../../presentation/components/card.css" layer(rottay-components);
@@ -75,6 +76,8 @@
 @import "../../presentation/components/collapse.css" layer(rottay-components);
 @import "../../presentation/components/tree.css" layer(rottay-components);
 @import "../../presentation/components/empty.css" layer(rottay-components);
+@import "../../presentation/components/statistic.css"
+  layer(rottay-components);
 @import "../../presentation/components/patterns.css" layer(rottay-components);
 @import "../../presentation/components/skin/decision-comparison.css"
   layer(rottay-components);
@@ -231,7 +234,6 @@
 @import "../../presentation/components/skin/skeleton-compounds.css"
   layer(rottay-components);
 /* Overlay family (WO-SKIN-03 checkpoint O). */
-@import "../../runtime/engines/modern/skin/modal.css" layer(rottay-engines);
 @import "../../runtime/engines/rustic/skin/modal.css" layer(rottay-engines);
 @import "../../presentation/components/skin/modal-compounds.css"
   layer(rottay-components);
@@ -254,7 +256,7 @@
 @import "../../runtime/engines/modern/skin/result.css" layer(rottay-engines);
 @import "../../runtime/engines/rustic/skin/result.css" layer(rottay-engines);
 
-/* WO-SKIN-04: the overlay + navigation families paint from unlayered skins. */
+/* WO-SKIN-04: the overlay + navigation families paint from layered skins. */
 @import "../../runtime/engines/modern/skin/affix.css" layer(rottay-engines);
 @import "../../runtime/engines/rustic/skin/affix.css" layer(rottay-engines);
 @import "../../runtime/engines/modern/skin/alert-dialog.css"
@@ -289,15 +291,14 @@
 @import "../../runtime/engines/rustic/skin/menu.css" layer(rottay-engines);
 @import "../../runtime/engines/modern/skin/overlay-modal.css"
   layer(rottay-engines);
-@import "../../runtime/engines/rustic/skin/overlay-modal.css"
-  layer(rottay-engines);
 @import "../../runtime/engines/modern/skin/pagination.css" layer(rottay-engines);
 @import "../../runtime/engines/rustic/skin/pagination.css" layer(rottay-engines);
 @import "../../runtime/engines/modern/skin/popconfirm.css" layer(rottay-engines);
 @import "../../runtime/engines/rustic/skin/popconfirm.css" layer(rottay-engines);
 @import "../../runtime/engines/modern/skin/popover.css" layer(rottay-engines);
 @import "../../runtime/engines/rustic/skin/popover.css" layer(rottay-engines);
-@import "../../runtime/engines/modern/skin/scroll-area.css" layer(rottay-engines);
+@import "../../runtime/engines/modern/skin/scroll-area.css"
+  layer(rottay-engines);
 @import "../../runtime/engines/modern/skin/segmented.css" layer(rottay-engines);
 @import "../../runtime/engines/rustic/skin/segmented.css" layer(rottay-engines);
 @import "../../runtime/engines/modern/skin/sheet.css" layer(rottay-engines);
@@ -333,7 +334,7 @@
 @import "../../presentation/components/skin/stepper-compounds.css"
   layer(rottay-components);
 
-/* WO-SKIN-05: the display + layout families paint from unlayered skins. */
+/* WO-SKIN-05: the display + layout families paint from layered skins. */
 @import "../../runtime/engines/modern/skin/avatar.css" layer(rottay-engines);
 @import "../../runtime/engines/rustic/skin/avatar.css" layer(rottay-engines);
 @import "../../runtime/engines/modern/skin/calendar.css" layer(rottay-engines);
@@ -508,15 +509,14 @@
 @import "../../presentation/components/skin/presence.css"
   layer(rottay-components);
 
-/* WO-SKIN-06 CK-C: workspace chrome paints from unlayered skins. */
+/* WO-SKIN-06 CK-C: workspace chrome paints from layered skins. */
 @import "../../runtime/engines/modern/skin/list-toolbar.css"
   layer(rottay-engines);
 @import "../../runtime/engines/modern/skin/saved-views.css"
   layer(rottay-engines);
 @import "../../runtime/engines/modern/skin/widget-board.css"
   layer(rottay-engines);
-@import "../../runtime/engines/modern/skin/tree-view.css"
-  layer(rottay-engines);
+@import "../../runtime/engines/modern/skin/tree-view.css" layer(rottay-engines);
 @import "../../runtime/engines/rustic/skin/saved-views.css"
   layer(rottay-engines);
 @import "../../presentation/components/skin/active-filters-bar.css"
@@ -538,7 +538,7 @@
 @import "../../presentation/components/skin/view-mode-switcher.css"
   layer(rottay-components);
 
-/* WO-SKIN-06 CK-H2: misc patterns paint from unlayered skins. */
+/* WO-SKIN-06 CK-H2: misc patterns paint from layered skins. */
 @import "../../runtime/engines/modern/skin/file-manager.css"
   layer(rottay-engines);
 @import "../../runtime/engines/rustic/skin/file-manager.css"
@@ -558,9 +558,13 @@
 @import "../../presentation/components/skin/token-inspector.css"
   layer(rottay-components);
 
-/* WO-SKIN-06 CK-I: surfaces long-tail paint from unlayered skins. */
+/* WO-SKIN-06 CK-I: surfaces long-tail paint from layered skins. */
 @import "../../runtime/engines/modern/skin/stats-grid.css" layer(rottay-engines);
 @import "../../runtime/engines/rustic/skin/stats-grid.css" layer(rottay-engines);
+@import "../../runtime/engines/modern/skin/record-facts.css"
+  layer(rottay-engines);
+@import "../../runtime/engines/modern/skin/column-settings.css"
+  layer(rottay-engines);
 @import "../../presentation/components/skin/surface-accent-bar.css"
   layer(rottay-components);
 @import "../../presentation/components/skin/surface-section-card.css"
@@ -594,6 +598,8 @@
 @import "../../presentation/components/skin/audit.css" layer(rottay-components);
 @import "../../presentation/components/skin/billing.css"
   layer(rottay-components);
+@import "../../presentation/components/skin/file-browser.css"
+  layer(rottay-components);
 @import "../../presentation/components/skin/import-export.css"
   layer(rottay-components);
 @import "../../presentation/components/skin/integration.css"
@@ -607,6 +613,7 @@
   layer(rottay-components);
 @import "../../presentation/components/skin/dashboard.css"
   layer(rottay-components);
+@import "../../presentation/components/skin/detail.css" layer(rottay-components);
 @import "../../presentation/components/skin/list.css" layer(rottay-components);
 @import "../../presentation/components/skin/report.css" layer(rottay-components);
 @import "../../presentation/components/skin/search.css" layer(rottay-components);
@@ -615,6 +622,8 @@
 @import "../../presentation/components/skin/auth-surface.css"
   layer(rottay-components);
 @import "../../presentation/components/skin/chat-surface.css"
+  layer(rottay-components);
+@import "../../presentation/components/skin/empty-state-surface.css"
   layer(rottay-components);
 @import "../../presentation/components/skin/kanban-surface.css"
   layer(rottay-components);
@@ -632,6 +641,8 @@
   layer(rottay-components);
 @import "../../presentation/components/skin/activity-surface.css"
   layer(rottay-components);
+@import "../../presentation/components/skin/operational-surface.css"
+  layer(rottay-components);
 
 /* Hidden-channel recovery: byte-exact component CSS, deliberately unlayered. */
 @import "../../presentation/components/skin/oauth-transition.css"
@@ -639,7 +650,7 @@
 @import "../../presentation/components/skin/loading-overlay.css"
   layer(rottay-components);
 
-/* WO-SKIN-06 CK-H1: tenant and branding previews paint from unlayered skins. */
+/* WO-SKIN-06 CK-H1: tenant and branding previews paint from layered skins. */
 @import "../../runtime/engines/modern/skin/tenant-preview.css"
   layer(rottay-engines);
 @import "../../runtime/engines/rustic/skin/tenant-preview.css"
@@ -651,7 +662,7 @@
 @import "../../presentation/components/skin/visual-excellence-preview.css"
   layer(rottay-components);
 
-/* WO-SKIN-06 CK-E: chart and visualization paint from unlayered skins. */
+/* WO-SKIN-06 CK-E: chart and visualization paint from layered skins. */
 @import "../../presentation/components/skin/chart-foundation.css"
   layer(rottay-components);
 @import "../../presentation/components/skin/chart-area.css"

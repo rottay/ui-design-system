@@ -49,8 +49,15 @@
   }
 }
 
-/* ---- trigger ---- */
+/* ---- root + trigger ---- */
+.ds-tree-select.ds-tree-select--modern[data-part="root"] {
+  position: relative;
+}
+
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"] {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
   background: var(--ds-color-bg-input, var(--ds-surface-control));
@@ -77,16 +84,51 @@
   color: var(--ds-color-text-secondary);
 }
 
+/* Trigger text takes the remaining track and truncates (drained from the
+   `flex-1 truncate` utility). */
+.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="value"],
+.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="placeholder"] {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Clear lives outside the combobox (APG: no nested interactives); the skin
+   overlays it between the value and the arrow zone (drained 24px inline
+   geometry). */
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="clear-button"] {
+  position: absolute;
+  inset-inline-end: var(--ds-tree-select-clear-inset-inline-end, 30px);
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  inline-size: var(--ds-tree-select-clear-size, 24px);
+  block-size: var(--ds-tree-select-clear-size, 24px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: 50%;
   border: none;
   transition: color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
+.ds-tree-select.ds-tree-select--modern[data-part="root"]:has([data-part="clear-button"]) [data-part="arrow-icon"] {
+  margin-inline-start: var(--ds-tree-select-clear-gap, 20px);
+}
+@media (hover: hover) {
+  .ds-tree-select.ds-tree-select--modern[data-part="root"]
+    [data-part="clear-button"]:hover {
+    color: var(--ds-color-error);
+  }
+}
+/* Touch/active equivalent of the hover treatment. */
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
-  [data-part="clear-button"]:hover {
+  [data-part="clear-button"]:active {
   color: var(--ds-color-error);
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
@@ -104,17 +146,21 @@
   transform: rotate(180deg);
 }
 
-/* ---- dropdown panel (in-tree): geometry drained from the inline style ---- */
+/* ---- dropdown panel (in-tree): geometry drained from the inline style. z
+        rides the token scale (dropdown tier); the dark-aware luminance step
+        is its own layer above the fill (lane overlay register). ---- */
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="dropdown"] {
   position: absolute;
   inset-inline: 0;
-  z-index: var(--ds-tree-select-dropdown-z, 50);
+  z-index: var(--ds-tree-select-dropdown-z, var(--ds-z-index-dropdown, 1000));
   margin-block-start: var(--ds-spacing-1, 4px);
   max-block-size: var(--ds-tree-select-dropdown-max-height, 240px);
   overflow-y: auto;
   border-radius: var(--ds-radius-lg);
-  background: var(--ds-surface-card);
+  background:
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-surface-card);
   box-shadow: var(--ds-elevation-2);
   border-color: var(--ds-color-border);
   border-width: 1px;
@@ -122,14 +168,22 @@
   animation: ds-tree-select-slide-in var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
+/* Search wrapper: padding drained from `p-2`; the sticky top bar (was the
+   `sticky top-0 z-10` utilities) keeps the field visible over long trees,
+   stacked one step above the local base (token scale). */
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="search-input-wrapper"] {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--ds-z-index-relative-above, 1);
+  padding: var(--ds-spacing-2, 8px);
   border-bottom: 1px solid var(--ds-color-border);
   background: var(--ds-surface-card);
 }
 
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="search-input"] {
+  inline-size: 100%;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
   background: var(--ds-color-bg-input, var(--ds-surface-control));
@@ -146,12 +200,24 @@
 }
 
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="empty"] {
+  padding: var(--ds-spacing-4, 16px);
+  text-align: center;
   color: var(--ds-color-text-secondary);
 }
 
-/* ---- tree node row ---- */
+/* Tree list rhythm (drained from the `p-2` utility). */
+.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="tree-list"] {
+  padding: var(--ds-spacing-2, 8px);
+}
+
+/* ---- tree node row (layout drained from `flex items-center py-1
+        cursor-pointer` and the toggle's inline geometry) ---- */
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="option"] {
+  display: flex;
+  align-items: center;
+  padding-block: var(--ds-spacing-1, 4px);
+  cursor: pointer;
   /* Base transparent frame so selection never shifts layout by 1px. */
   border: 1px solid transparent;
   border-radius: var(--ds-radius-sm, 6px);
@@ -161,8 +227,15 @@
     color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
+@media (hover: hover) {
+  .ds-tree-select.ds-tree-select--modern[data-part="root"]
+    [data-part="option"]:where(:hover):not([data-selected='true']):not([data-disabled='true']) {
+    background: var(--ds-color-bg-hover);
+  }
+}
+/* Touch/active equivalent of the hover wash. */
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
-  [data-part="option"]:where(:hover):not([data-selected='true']):not([data-disabled='true']) {
+  [data-part="option"]:active:not([data-selected='true']):not([data-disabled='true']) {
   background: var(--ds-color-bg-hover);
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
@@ -186,30 +259,47 @@
   font-weight: var(--ds-font-weight-medium, 500);
 }
 
-/* Long taxonomy labels truncate -- never wrap mid-word (content-integrity). */
+/* Long taxonomy labels truncate -- never wrap mid-word (content-integrity).
+   Layout drained from the `flex-1` utility. */
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="tree-node-label"] {
+  flex: 1;
   min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+/* Match highlight: quiet semibold primary ink (the `font-semibold` utility
+   is drained here). */
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="tree-node-highlight"] {
   color: var(--ds-color-primary);
+  font-weight: var(--ds-font-weight-semibold, 600);
 }
 
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="tree-node-toggle"] {
+  block-size: 24px;
+  padding-inline: var(--ds-spacing-2, 8px);
+  margin-inline-end: var(--ds-spacing-1, 4px);
+  cursor: pointer;
+  font-size: var(--ds-font-size-xs, 12px);
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: var(--ds-radius-md);
   border: none;
   transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
+@media (hover: hover) {
+  .ds-tree-select.ds-tree-select--modern[data-part="root"]
+    [data-part="tree-node-toggle"]:hover {
+    background: var(--ds-color-bg-hover);
+  }
+}
+/* Touch/active equivalent of the hover wash. */
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
-  [data-part="tree-node-toggle"]:hover {
+  [data-part="tree-node-toggle"]:active {
   background: var(--ds-color-bg-hover);
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
@@ -218,27 +308,28 @@
   box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-shadow-focus-ring));
 }
 
-/* Expand chevron: collapsed = points at inline-end, expanded = rotated down.
-   Under RTL the collapsed glyph mirrors (scaleX(-1)); the rotated-down state
-   is mirror-invariant but composes both transforms for correctness. */
+/* Expand chevron: governed icon — the facade's autoMirror flips it under
+   RTL, so the skin only owns the expansion rotation (collapsed = inline-end,
+   expanded = rotated down). The former manual `scaleX(-1)` rules are gone:
+   they would have double-mirrored the autoMirror. */
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="chevron"] {
+  display: inline-flex;
   transition: transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="chevron"][data-expanded='true'] {
   transform: rotate(90deg);
 }
-[dir='rtl'] .ds-tree-select.ds-tree-select--modern[data-part="root"]
-  [data-part="chevron"]:not([data-expanded='true']) {
-  transform: scaleX(-1);
-}
-[dir='rtl'] .ds-tree-select.ds-tree-select--modern[data-part="root"]
-  [data-part="chevron"][data-expanded='true'] {
-  transform: scaleX(-1) rotate(90deg);
+
+.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="leaf-spacer"] {
+  inline-size: 24px;
+  flex-shrink: 0;
 }
 
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="loading"] {
+  inline-size: 12px;
+  block-size: 12px;
   border: 2px solid var(--ds-color-border);
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
@@ -290,5 +381,42 @@
   .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="arrow-icon"],
   .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="clear-button"] {
     transition: none;
+  }
+}
+
+/* ---- forced colors (system colors only): the selected node reads as a
+        system selection; focus rings re-map to Highlight outlines (the
+        box-shadow rings drop); the tree connector and chevron inherit the
+        forced palette. ---- */
+@media (forced-colors: active) {
+  .ds-tree-select.ds-tree-select--modern[data-part="root"]
+    [data-part="option"][data-selected="true"] {
+    background: Highlight;
+    border-color: Highlight;
+    color: HighlightText;
+  }
+  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"]:focus-visible,
+  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="search-input"]:focus-visible,
+  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="option"]:focus-visible,
+  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="tree-node-toggle"]:focus-visible,
+  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="clear-button"]:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+    box-shadow: none;
+  }
+  .ds-tree-select.ds-tree-select--modern[data-part="root"]
+    [data-part="option"][data-disabled='true'] {
+    color: GrayText;
+  }
+  .ds-tree-select.ds-tree-select--modern[data-part="root"]
+    [data-part="tree-list"][data-tree-line="true"] {
+    border-inline-start-color: ButtonText;
+  }
+  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="chevron"] {
+    color: ButtonText;
+  }
+  .ds-tree-select.ds-tree-select--modern[data-part="root"]
+    [data-part="tree-node-highlight"] {
+    color: CanvasText;
   }
 }

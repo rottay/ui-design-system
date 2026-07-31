@@ -1,10 +1,18 @@
 /** User-owned widget board. Layout is structural; all paint is tenant-token driven. */
 
-.ds-pattern-widget-board[data-part="root"][data-part="root"] {
+.ds-pattern-widget-board[data-part="root"][data-loading] {
   width: 100%;
   min-width: 0;
   container-type: inline-size;
   container-name: ds-widget-board;
+  /* Single stacking axis (one tenant dial re-bases the whole stack); the
+     offsets preserve the exact house values header 1 < controls 5 <
+     resizing 6 < handle 7 < dragging 8. */
+  --_ds-widget-board-z-header: var(--ds-z-index-relative-above, 1);
+  --_ds-widget-board-z-controls: calc(var(--_ds-widget-board-z-header) + 4);
+  --_ds-widget-board-z-resizing: calc(var(--_ds-widget-board-z-controls) + 1);
+  --_ds-widget-board-z-handle: calc(var(--_ds-widget-board-z-controls) + 2);
+  --_ds-widget-board-z-dragging: calc(var(--_ds-widget-board-z-handle) + 1);
 }
 
 .ds-pattern-widget-board .ds-widget-board__toolbar {
@@ -43,7 +51,7 @@
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-pattern-widget-board .ds-widget-board__toolbar:hover {
+.ds-pattern-widget-board .ds-widget-board__toolbar:active {
   background-position: 100% 50%;
   border-color: color-mix(
     in srgb,
@@ -79,7 +87,7 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__toolbar:hover
+  .ds-widget-board__toolbar:active
   .ds-widget-board__toolbar-icon {
   transform: translateY(-1px) scale(1.025);
 }
@@ -125,23 +133,12 @@
   min-width: 0;
 }
 
-.ds-widget-board__catalog-surface {
-  width: min(92vw, 680px) !important;
-  border-inline-start: 1px solid
-    var(--ds-surface-card-border-strong, var(--ds-color-border-primary)) !important;
-  background: radial-gradient(
-      circle at 100% 0%,
-      color-mix(in srgb, var(--ds-color-primary) 8%, transparent),
-      transparent 34%
-    ),
-    var(--ds-surface-card-bg, var(--ds-color-bg-elevated)) !important;
-  box-shadow: -28px 0 72px -44px color-mix(in srgb, var(--ds-color-text-primary)
-        48%, transparent) !important;
-}
-
-.ds-widget-board__catalog-body {
-  padding: var(--ds-spacing-5, 20px) !important;
-}
+/* Catalog surface + body geometry moved to the engine's sanctioned
+   surfaceStyle/bodyStyle channels and its paint to
+   `runtime/engines/modern/skin/widget-board.css`: this shared skin sits in
+   an earlier cascade layer than the Sheet engine skins, so only those
+   routes win without `!important` (the rustic Sheet even stamps an inline
+   380px width). */
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
   .ds-widget-board__catalog-header {
@@ -195,7 +192,7 @@
 }
 
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
-  .ds-widget-board__catalog-item:hover {
+  .ds-widget-board__catalog-item:active {
   border-color: color-mix(
     in srgb,
     var(--ds-color-primary) 28%,
@@ -347,7 +344,7 @@
 .ds-pattern-widget-board
   .ds-widget-board__grid[data-narrow="true"]
   > .ds-widget-board__cell {
-  grid-column: 1 / -1 !important;
+  grid-column: 1 / -1;
 }
 
 .ds-pattern-widget-board .ds-widget-board__cell {
@@ -425,7 +422,7 @@
   animation-delay: 210ms;
 }
 
-.ds-pattern-widget-board .ds-widget-board__cell:hover {
+.ds-pattern-widget-board .ds-widget-board__cell:active {
   border-color: color-mix(
     in srgb,
     var(--ds-color-primary) 28%,
@@ -448,12 +445,175 @@
     0 10px 24px -22px color-mix(in srgb, var(--ds-color-text-primary) 34%, transparent);
 }
 
-.ds-pattern-widget-board[data-editing="true"] .ds-widget-board__cell:hover {
+.ds-pattern-widget-board[data-editing="true"] .ds-widget-board__cell:active {
   --ds-widget-board-hover-lift: 0px;
 }
 
+/* Hover is pointer-fine only. Every treatment below keeps a real `:active`
+   twin at its original cascade position (unguarded, so touch press feedback
+   matches), and the resize affordances keep unguarded
+   `:focus-visible` / `[data-active="true"]` compounds beside their rails.
+   The block sits before the resizing/dragging state rules so those states
+   still win their specificity ties while a gesture is running. */
+@media (hover: hover) {
+  .ds-pattern-widget-board .ds-widget-board__toolbar:hover {
+    background-position: 100% 50%;
+    border-color: color-mix(
+      in srgb,
+      var(--ds-color-primary) 22%,
+      var(--ds-surface-card-border-strong, var(--ds-color-border-primary))
+    );
+  }
+
+  .ds-pattern-widget-board
+    .ds-widget-board__toolbar:hover
+    .ds-widget-board__toolbar-icon {
+    transform: translateY(-1px) scale(1.025);
+  }
+
+  :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
+    .ds-widget-board__catalog-item:hover {
+    border-color: color-mix(
+      in srgb,
+      var(--ds-color-primary) 28%,
+      var(--ds-surface-card-border)
+    );
+    box-shadow: 0 14px 32px -25px color-mix(in srgb, var(--ds-color-text-primary)
+          38%, transparent);
+    transform: translateY(-1px);
+  }
+
+  .ds-pattern-widget-board .ds-widget-board__cell:hover {
+    border-color: color-mix(
+      in srgb,
+      var(--ds-color-primary) 28%,
+      var(--ds-surface-card-border)
+    );
+    box-shadow: inset 0 1px 0
+        color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent),
+      0 18px 38px -24px color-mix(in srgb, var(--ds-color-text-primary) 34%, transparent);
+    --ds-widget-board-hover-lift: -2px;
+  }
+
+  .ds-pattern-widget-board[data-editing="true"]
+    .ds-widget-board__cell:hover {
+    --ds-widget-board-hover-lift: 0px;
+  }
+
+  .ds-pattern-widget-board
+    .ds-widget-board__cell:hover
+    > .ds-widget-board__item-header {
+    background-position: 100% 50%;
+  }
+
+  .ds-pattern-widget-board
+    .ds-widget-board__cell:hover
+    .ds-widget-board__item-icon {
+    transform: translateY(-1px) scale(1.025);
+  }
+
+  .ds-pattern-widget-board .ds-widget-board__resize-handle:hover {
+    color: var(--ds-color-text-secondary);
+    outline: none;
+  }
+
+  .ds-pattern-widget-board
+    .ds-widget-board__resize-handle:hover
+    .ds-widget-board__resize-rail {
+    opacity: 1;
+    background: color-mix(
+      in srgb,
+      var(--ds-color-text-primary) 36%,
+      var(--ds-surface-card-border-strong)
+    );
+  }
+
+  .ds-pattern-widget-board
+    .ds-widget-board__resize-handle[data-edge^="inline"]:hover
+    .ds-widget-board__resize-rail {
+    transform: translateY(-50%) scaleY(1);
+  }
+
+  .ds-pattern-widget-board
+    .ds-widget-board__resize-handle:is(
+      [data-edge="block-start"],
+      [data-edge="block-end"]
+    ):hover
+    .ds-widget-board__resize-rail {
+    transform: translateX(-50%) scaleX(1);
+  }
+
+  .ds-pattern-widget-board
+    .ds-widget-board__resize-handle[data-edge*="-inline-"]:hover
+    .ds-widget-board__resize-rail {
+    background: transparent;
+    transform: scale(1);
+  }
+
+  .ds-pattern-widget-board
+    .ds-widget-board__resize-handle:hover
+    .ds-widget-board__resize-indicator {
+    opacity: 1;
+  }
+
+  .ds-pattern-widget-board
+    .ds-widget-board__resize-handle[data-edge^="inline"]:hover
+    .ds-widget-board__resize-indicator {
+    transform: translateY(-50%) translateX(0) scale(1);
+  }
+
+  .ds-pattern-widget-board
+    .ds-widget-board__resize-handle:is(
+      [data-edge="block-start"],
+      [data-edge="block-end"]
+    ):hover
+    .ds-widget-board__resize-indicator {
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+
+  .ds-pattern-widget-board
+    .ds-widget-board__resize-handle[data-edge*="-inline-"]:hover
+    .ds-widget-board__resize-indicator {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+/* Forced colors: frames read as ButtonText, the drop target and the focus
+   ring read as Highlight; decorative shadows and mixed paints drop out. */
+@media (forced-colors: active) {
+  .ds-pattern-widget-board .ds-widget-board__toolbar,
+  .ds-pattern-widget-board .ds-widget-board__cell,
+  .ds-pattern-widget-board .ds-widget-board__empty,
+  :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
+    .ds-widget-board__catalog-item,
+  :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
+    .ds-widget-board__catalog-empty {
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-widget-board .ds-widget-board__cell[data-dragging="true"],
+  .ds-pattern-widget-board .ds-widget-board__cell[data-drop-target="true"] {
+    border-color: Highlight;
+    outline-color: Highlight;
+  }
+
+  .ds-widget-board__catalog-surface[data-part="surface"] {
+    border-inline-start-color: ButtonText;
+  }
+
+  .ds-pattern-widget-board .ds-widget-board__resize-rail {
+    background: ButtonText;
+  }
+
+  .ds-pattern-widget-board .ds-widget-board__resize-handle:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+    box-shadow: none;
+  }
+}
+
 .ds-pattern-widget-board .ds-widget-board__cell[data-resizing="true"] {
-  z-index: 6;
+  z-index: var(--_ds-widget-board-z-resizing, 6);
   box-shadow: inset 0 0 0 1px
       color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent),
     0 22px 42px -30px color-mix(in srgb, var(--ds-color-text-primary) 44%, transparent);
@@ -463,7 +623,7 @@
 }
 
 .ds-pattern-widget-board .ds-widget-board__cell[data-dragging="true"] {
-  z-index: 8;
+  z-index: var(--_ds-widget-board-z-dragging, 8);
   opacity: 0.94;
   box-shadow: inset 0 1px 0
       color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent),
@@ -474,11 +634,10 @@
   will-change: transform;
 }
 
-.ds-pattern-widget-board[data-moving="true"],
-.ds-pattern-widget-board[data-moving="true"] * {
-  cursor: grabbing !important;
-  user-select: none;
-}
+/* The move-mode `cursor: grabbing` cascade lives in
+   `runtime/engines/modern/skin/widget-board.css`: the Button chrome it must
+   beat is painted in the later `rottay-engines` layer, unreachable from this
+   `rottay-components` skin without `!important`. */
 
 .ds-pattern-widget-board .ds-widget-board__cell[data-drop-target="true"] {
   border-color: color-mix(
@@ -508,7 +667,7 @@
 
 .ds-pattern-widget-board .ds-widget-board__item-header {
   position: relative;
-  z-index: 1;
+  z-index: var(--_ds-widget-board-z-header, 1);
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -541,7 +700,7 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__cell:hover
+  .ds-widget-board__cell:active
   > .ds-widget-board__item-header {
   background-position: 100% 50%;
 }
@@ -573,7 +732,7 @@
 }
 
 .ds-pattern-widget-board
-  .ds-widget-board__cell:hover
+  .ds-widget-board__cell:active
   .ds-widget-board__item-icon {
   transform: translateY(-1px) scale(1.025);
 }
@@ -647,7 +806,7 @@
    keep their own primitive chrome. */
 .ds-pattern-widget-board .ds-widget-board__cell-controls {
   position: relative;
-  z-index: 5;
+  z-index: var(--_ds-widget-board-z-controls, 5);
   display: flex;
   flex: 0 0 auto;
   align-items: center;
@@ -705,7 +864,7 @@
    sliders; their opposite edges provide the same pointer affordance. */
 .ds-pattern-widget-board .ds-widget-board__resize-handle {
   position: absolute;
-  z-index: 7;
+  z-index: var(--_ds-widget-board-z-handle, 7);
   display: block;
   padding: 0;
   overflow: visible;
@@ -793,8 +952,8 @@
 
 .ds-pattern-widget-board
   .ds-widget-board__resize-handle:where(
-    :hover,
     :focus-visible,
+    :active,
     [data-active="true"]
   ) {
   color: var(--ds-color-text-secondary);
@@ -849,8 +1008,8 @@
 
 .ds-pattern-widget-board
   .ds-widget-board__resize-handle:where(
-    :hover,
     :focus-visible,
+    :active,
     [data-active="true"]
   )
   .ds-widget-board__resize-rail {
@@ -864,8 +1023,8 @@
 
 .ds-pattern-widget-board
   .ds-widget-board__resize-handle[data-edge^="inline"]:where(
-    :hover,
     :focus-visible,
+    :active,
     [data-active="true"]
   )
   .ds-widget-board__resize-rail {
@@ -876,7 +1035,7 @@
   .ds-widget-board__resize-handle:is(
     [data-edge="block-start"],
     [data-edge="block-end"]
-  ):where(:hover, :focus-visible, [data-active="true"])
+  ):where(:focus-visible, :active, [data-active="true"])
   .ds-widget-board__resize-rail {
   transform: translateX(-50%) scaleX(1);
 }
@@ -923,7 +1082,7 @@
 
 .ds-pattern-widget-board
   .ds-widget-board__resize-handle[data-edge*="-inline-"]:where(
-    :hover,
+    :active,
     [data-active="true"]
   )
   .ds-widget-board__resize-rail {
@@ -1028,8 +1187,8 @@
 
 .ds-pattern-widget-board
   .ds-widget-board__resize-handle:where(
-    :hover,
     :focus-visible,
+    :active,
     [data-active="true"]
   )
   .ds-widget-board__resize-indicator {
@@ -1038,8 +1197,8 @@
 
 .ds-pattern-widget-board
   .ds-widget-board__resize-handle[data-edge^="inline"]:where(
-    :hover,
     :focus-visible,
+    :active,
     [data-active="true"]
   )
   .ds-widget-board__resize-indicator {
@@ -1050,14 +1209,14 @@
   .ds-widget-board__resize-handle:is(
     [data-edge="block-start"],
     [data-edge="block-end"]
-  ):where(:hover, :focus-visible, [data-active="true"])
+  ):where(:focus-visible, :active, [data-active="true"])
   .ds-widget-board__resize-indicator {
   transform: translateX(-50%) translateY(0) scale(1);
 }
 
 .ds-pattern-widget-board
   .ds-widget-board__resize-handle[data-edge*="-inline-"]:where(
-    :hover,
+    :active,
     [data-active="true"]
   )
   .ds-widget-board__resize-indicator {
@@ -1122,11 +1281,11 @@
 @container ds-widget-board (max-width: 839px) {
   .ds-pattern-widget-board .ds-widget-board__cell[data-size="sm"],
   .ds-pattern-widget-board .ds-widget-board__cell[data-size="md"] {
-    grid-column: span 6 !important;
+    grid-column: span 6;
   }
   .ds-pattern-widget-board .ds-widget-board__cell[data-size="lg"],
   .ds-pattern-widget-board .ds-widget-board__cell[data-size="wide"] {
-    grid-column: 1 / -1 !important;
+    grid-column: 1 / -1;
   }
 
   .ds-pattern-widget-board .ds-widget-board__resize-handle {
@@ -1147,11 +1306,11 @@
     width: 100%;
   }
   .ds-pattern-widget-board .ds-widget-board__grid {
-    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--ds-spacing-3, 12px);
   }
   .ds-pattern-widget-board .ds-widget-board__cell[data-size] {
-    grid-column: 1 / -1 !important;
+    grid-column: 1 / -1;
   }
 
   .ds-pattern-widget-board .ds-widget-board__item-header {
@@ -1187,10 +1346,6 @@
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
     .ds-widget-board__catalog {
     gap: var(--ds-spacing-3, 12px);
-  }
-
-  .ds-widget-board__catalog-body {
-    padding: var(--ds-spacing-4, 16px) !important;
   }
 
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)

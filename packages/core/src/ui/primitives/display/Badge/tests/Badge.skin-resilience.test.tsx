@@ -20,7 +20,7 @@ describe('Badge modern skin resilience', () => {
     );
     expect(hoverRule).not.toBeNull();
     expect(hoverRule![0]).toContain(
-      'background: var(--ds-badge-surface-hover, var(--ds-badge-hover-bg-fallback));'
+      'background: var(--ds-badge-surface-hover, var(--_ds-badge-hover-bg-fallback));'
     );
     expect(hoverRule![0]).toContain(
       'color: var(--ds-badge-ink-hover, var(--ds-badge-hover-ink-fallback));'
@@ -30,7 +30,7 @@ describe('Badge modern skin resilience', () => {
     for (const treatment of ['solid', 'soft', 'outline', 'ghost']) {
       expect(SKIN).toContain(`[data-badge-style='${treatment}']`);
     }
-    expect(SKIN).toContain('--ds-badge-hover-bg-fallback: color-mix(in srgb, var(--ds-badge-tone-solid-bg) 90%');
+    expect(SKIN).toContain('--_ds-badge-hover-bg-fallback: color-mix(in srgb, var(--ds-badge-tone-solid-bg) 90%');
     expect(SKIN).toContain('--ds-badge-hover-ink-fallback: var(--ds-badge-tone-solid-color);');
     expect(SKIN).toContain('--ds-badge-hover-ink-fallback: var(--ds-badge-tone-soft-color);');
   });

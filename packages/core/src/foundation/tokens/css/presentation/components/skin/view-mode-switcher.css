@@ -1,62 +1,40 @@
 /**
  * ViewModeSwitcher skin — engine-agnostic and deliberately unlayered.
- * The root border reaches (0,4,0) so it clears the tenant border floor.
  *
- * WAVE R2+R3 (Quiet Premium editorial): a recessed segmented control. The
- * selected segment is a raised paper card carrying the single worn-blue
- * accent; unselected segments stay flat and quiet until hover. Disabled
- * segments dim without a tint. Motion rides the --ds-motion-* channels and
- * is silenced under prefers-reduced-motion. Typography and the disabled
- * dim live here, never in the engine.
+ * COMPOSITION LAW (S25): the switcher is the certified Segmented primitive
+ * (scope-switcher S22 precedent — no per-option paint channel exists here).
+ * The retired hand-rolled icon-buttons took with them every segment rule
+ * (resting/hover/focus/selected/disabled paints) and the repeated-selector
+ * budget; `segmented.css` owns option chrome, the selected state and its
+ * own forced-colors contract. What this file owns: the root's recessed
+ * frame (geometry drained from the engine's inline styles) and the
+ * forced-colors boundary for it.
+ *
+ * SPECIFICITY (P-48): the root's border reaches the tenant floor (0,3,1)
+ * from the two scope classes + two DISTINCT attributes (the engine stamps
+ * `data-structure` for exactly this budget, headers/form S10 idiom) —
+ * never a repeated `[data-part]` (4th-tanda law; the former
+ * `[data-part='root']×2` is retired).
  */
 
-.ds-structure.ds-view-mode-switcher[data-part='root'][data-part='root'] {
+/* ---- root: recessed strip frame (padding/gap drained from inline) ---- */
+.ds-structure.ds-view-mode-switcher[data-part='root'] {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
   border-radius: 8px;
-  border: 1px solid var(--ds-color-border-secondary);
   background: var(--ds-color-bg-primary);
 }
-
-.ds-structure.ds-view-mode-switcher
-  > .ds-view-mode-switcher__button[data-part='button'] {
-  border-radius: 6px;
-  border: none;
-  outline: none;
-  background: transparent;
-  color: var(--ds-color-text-muted);
-  box-shadow: none;
-  transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
-}
-.ds-structure.ds-view-mode-switcher
-  > .ds-view-mode-switcher__button[data-part='button']:hover:not([data-selected='true']):not([data-disabled='true']) {
-  background: color-mix(in srgb, var(--ds-surface-card) 72%, transparent);
-  color: var(--ds-color-text-secondary);
-}
-.ds-structure.ds-view-mode-switcher
-  > .ds-view-mode-switcher__button[data-part='button']:focus-visible {
-  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
-}
-.ds-structure.ds-view-mode-switcher
-  > .ds-view-mode-switcher__button[data-part='button'][data-selected='true'] {
-  background: color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-surface-card));
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
-}
-.ds-structure.ds-view-mode-switcher
-  > .ds-view-mode-switcher__button[data-part='button'][data-selected='true']:not([data-disabled='true']) {
-  color: var(--ds-color-primary);
-}
-.ds-structure.ds-view-mode-switcher
-  > .ds-view-mode-switcher__button[data-part='button'][data-disabled='true'] {
-  color: var(--ds-color-text-disabled);
-  opacity: 0.5;
+.ds-structure.ds-view-mode-switcher[data-part='root'][data-structure='view-mode-switcher'] {
+  border: 1px solid var(--ds-color-border-secondary);
 }
 
-/* Reduced motion: segment changes are cross-fades; silence them. */
-@media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-view-mode-switcher
-    > .ds-view-mode-switcher__button[data-part='button'] {
-    transition: none;
+/* forced-colors: the recessed fill is forced away, so the strip keeps a
+   system boundary; the composed Segmented owns the selected segment's
+   forced-colors state. */
+@media (forced-colors: active) {
+  .ds-structure.ds-view-mode-switcher[data-part='root'] {
+    border-color: ButtonText;
+    background: Canvas;
   }
 }

@@ -5,6 +5,11 @@
  * Centralized design tokens for the entire system.
  * All variables use the --ds-* prefix for namespacing.
  *
+ * ROOT AUTHORITY LAW:
+ * - this file owns foundation channels and tenant-neutral fallbacks;
+ * - presentation/components/<family>.css owns family defaults and aliases;
+ * - a family channel must never be root-authored in both places.
+ *
  * @version 1.0.0
  * @author Rottay Design System
  */
@@ -221,6 +226,12 @@
 
   --ds-color-surface: var(--ds-color-bg-primary);
   --ds-color-surface-secondary: var(--ds-color-bg-secondary);
+  --ds-color-surface-raised: var(
+    --ds-material-raised-background,
+    var(--ds-surface-raised, var(--ds-surface-card-bg))
+  );
+  --ds-color-surface-subtle: var(--ds-surface-panel-bg);
+  --ds-color-text-subtle: var(--ds-color-text-muted);
   --ds-color-shadow: var(--ds-color-alpha-black-20);
   --ds-color-link: var(--ds-color-primary);
   --ds-color-link-hover: var(--ds-color-primary-hover);
@@ -839,175 +850,55 @@
      ───────────────────────────────────────────────────────────────────────────── */
 
   /* Button Sizes */
-  --ds-button-xs-height: 1.5rem;
-  --ds-button-xs-padding-x: 0.5rem;
-  --ds-button-xs-font-size: 0.75rem;
-  --ds-button-xs-radius: var(--ds-radius-sm);
 
-  --ds-button-sm-height: 2rem;
-  --ds-button-sm-padding-x: 0.75rem;
-  --ds-button-sm-font-size: 0.8125rem;
-  --ds-button-sm-radius: var(--ds-radius-sm);
 
-  --ds-button-md-height: 2.5rem;
-  --ds-button-md-padding-x: 1rem;
-  --ds-button-md-font-size: 0.875rem;
-  --ds-button-md-radius: var(--ds-radius-md);
 
-  --ds-button-lg-height: 2.75rem;
-  --ds-button-lg-padding-x: 1.25rem;
-  --ds-button-lg-font-size: 0.9375rem;
-  --ds-button-lg-radius: var(--ds-radius-md);
 
-  --ds-button-xl-height: 3rem;
-  --ds-button-xl-padding-x: 1.5rem;
-  --ds-button-xl-font-size: 1rem;
-  --ds-button-xl-radius: var(--ds-radius-lg);
 
   /* Button Primary Variant - Vercel Black */
-  --ds-button-primary-bg: #171717;
-  --ds-button-primary-bg-hover: #000000;
-  --ds-button-primary-bg-active: #000000;
-  --ds-button-primary-color: #ffffff;
-  --ds-button-primary-border: transparent;
-  --ds-button-primary-shadow: none;
   /* Hover = +1 elevation step (WO-ENG-04 interaction-state contract). */
-  --ds-button-primary-shadow-hover: var(--ds-elevation-2);
 
   /* Button Secondary Variant */
-  --ds-button-secondary-bg: #f5f5f5;
-  --ds-button-secondary-bg-hover: #e5e5e5;
-  --ds-button-secondary-bg-active: #d4d4d4;
-  --ds-button-secondary-color: #171717;
-  --ds-button-secondary-border: transparent;
 
   /* Button Default Variant - Vercel Outline */
-  --ds-button-default-bg: #ffffff;
-  --ds-button-default-bg-hover: #fafafa;
-  --ds-button-default-bg-active: #f5f5f5;
-  --ds-button-default-color: #171717;
-  --ds-button-default-color-hover: #000000;
-  --ds-button-default-color-active: #000000;
-  --ds-button-default-border: #e5e5e5;
-  --ds-button-default-border-hover: #d4d4d4;
-  --ds-button-default-border-active: #a3a3a3;
 
   /* Button Ghost Variant */
-  --ds-button-ghost-bg: transparent;
-  --ds-button-ghost-bg-hover: #f5f5f5;
-  --ds-button-ghost-bg-active: #e5e5e5;
-  --ds-button-ghost-color: #525252;
-  --ds-button-ghost-color-hover: #171717;
-  --ds-button-ghost-color-active: #000000;
-  --ds-button-ghost-border: transparent;
-  --ds-button-ghost-border-hover: transparent;
-  --ds-button-ghost-border-active: transparent;
 
   /* Button Text Variant */
-  --ds-button-text-bg: transparent;
-  --ds-button-text-bg-hover: #f5f5f5;
-  --ds-button-text-bg-active: #e5e5e5;
-  --ds-button-text-color: #171717;
-  --ds-button-text-color-hover: #000000;
-  --ds-button-text-color-active: #000000;
 
   /* Button Link Variant */
-  --ds-button-link-color: #171717;
-  --ds-button-link-color-hover: #000000;
-  --ds-button-link-color-active: #000000;
   --ds-button-link-decoration: none;
   --ds-button-link-decoration-hover: underline;
 
   /* Button Semantic Variants */
-  --ds-button-success-bg: #22c55e;
-  --ds-button-success-bg-hover: #16a34a;
-  --ds-button-success-bg-active: #15803d;
-  --ds-button-success-color: #ffffff;
-  --ds-button-success-border: transparent;
 
-  --ds-button-warning-bg: #f59e0b;
-  --ds-button-warning-bg-hover: #d97706;
-  --ds-button-warning-bg-active: #b45309;
-  --ds-button-warning-color: #ffffff;
-  --ds-button-warning-border: transparent;
 
-  --ds-button-error-bg: #ef4444;
-  --ds-button-error-bg-hover: #dc2626;
-  --ds-button-error-bg-active: #b91c1c;
-  --ds-button-error-color: #ffffff;
-  --ds-button-error-border: transparent;
 
-  --ds-button-info-bg: #3b82f6;
-  --ds-button-info-bg-hover: #2563eb;
-  --ds-button-info-bg-active: #1d4ed8;
-  --ds-button-info-color: #ffffff;
-  --ds-button-info-border: transparent;
 
   /* Button States */
-  --ds-button-disabled-bg: #f5f5f5;
-  --ds-button-disabled-color: #a3a3a3;
   --ds-button-disabled-border: #e5e5e5;
   /* Canonical disabled dim (WO-ENG-04 state contract). */
-  --ds-button-disabled-opacity: var(--ds-state-disabled-opacity);
 
   /* Button Common */
-  --ds-button-font-weight: 500;
   --ds-button-line-height: 1.25;
-  --ds-button-transition: var(--ds-transition-fast);
-  --ds-button-focus-ring: var(--ds-focus-ring);
   --ds-button-icon-gap: 0.5rem;
-  --ds-button-icon-only-padding: 0;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      INPUT
      ───────────────────────────────────────────────────────────────────────────── */
 
   /* Input Sizes */
-  --ds-input-xs-height: 1.5rem;
-  --ds-input-xs-padding-x: 0.5rem;
-  --ds-input-xs-font-size: 0.75rem;
 
-  --ds-input-sm-height: 2rem;
-  --ds-input-sm-padding-x: 0.625rem;
-  --ds-input-sm-font-size: 0.8125rem;
 
-  --ds-input-md-height: 2.5rem;
-  --ds-input-md-padding-x: 0.75rem;
-  --ds-input-md-font-size: 0.875rem;
 
-  --ds-input-lg-height: 2.75rem;
-  --ds-input-lg-padding-x: 0.875rem;
-  --ds-input-lg-font-size: 0.9375rem;
 
-  --ds-input-xl-height: 3rem;
-  --ds-input-xl-padding-x: 1rem;
-  --ds-input-xl-font-size: 1rem;
 
   /* Input Base */
-  --ds-input-bg: #ffffff;
-  --ds-input-bg-hover: #ffffff;
-  --ds-input-bg-focus: #ffffff;
-  --ds-input-bg-disabled: #fafafa;
 
-  --ds-input-color: #171717;
-  --ds-input-color-placeholder: #a3a3a3;
-  --ds-input-color-disabled: #a3a3a3;
 
-  --ds-input-border: #e5e5e5;
-  --ds-input-border-hover: #d4d4d4;
-  --ds-input-border-focus: #171717;
-  --ds-input-border-disabled: #e5e5e5;
 
-  --ds-input-radius: var(--ds-radius-md);
-  --ds-input-shadow-focus: 0 0 0 1px #171717;
 
   /* Input Status Colors */
-  --ds-input-success-border: #22c55e;
-  --ds-input-success-shadow-focus: 0 0 0 1px #22c55e;
-  --ds-input-warning-border: #f59e0b;
-  --ds-input-warning-shadow-focus: 0 0 0 1px #f59e0b;
-  --ds-input-error-border: #ef4444;
-  --ds-input-error-shadow-focus: 0 0 0 1px #ef4444;
 
   /* Input Filled Variant */
   --ds-input-filled-bg: #f5f5f5;
@@ -1015,27 +906,14 @@
   --ds-input-filled-bg-focus: #fafafa;
 
   /* Input Addon */
-  --ds-input-addon-bg: #fafafa;
-  --ds-input-addon-color: #525252;
-  --ds-input-addon-border: #e5e5e5;
 
   /* Input Clear Button */
-  --ds-input-clear-color: #a3a3a3;
-  --ds-input-clear-color-hover: #525252;
 
   /* Input Label */
-  --ds-input-label-color: #171717;
-  --ds-input-label-font-size: var(--ds-font-size-sm);
-  --ds-input-label-font-weight: 500;
-  --ds-input-label-margin-bottom: 0.375rem;
 
   /* Input Helper */
-  --ds-input-helper-color: #737373;
-  --ds-input-helper-font-size: var(--ds-font-size-sm);
-  --ds-input-error-color: #ef4444;
 
   /* Input Common */
-  --ds-input-transition: var(--ds-transition-fast);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      CARD
@@ -1048,47 +926,23 @@
   --ds-card-padding-xl: 2.5rem;
 
   /* Card Base - Vercel Clean */
-  --ds-card-bg: #ffffff;
-  --ds-card-bg-hover: #ffffff;
-  --ds-card-color: #171717;
   --ds-card-border: #e5e5e5;
-  --ds-card-radius: var(--ds-radius-lg);
 
   /* Card Shadows - Visible depth */
   --ds-card-shadow: var(--ds-shadow-sm);
-  --ds-card-shadow-hover: var(--ds-shadow-md);
   --ds-card-shadow-elevated: var(--ds-shadow-lg);
 
   /* Card Header */
-  --ds-card-header-padding: var(--ds-card-padding-md);
   --ds-card-header-border: #e5e5e5;
-  --ds-card-title-font-size: var(--ds-font-size-lg);
-  --ds-card-title-font-weight: 600;
-  --ds-card-title-color: #171717;
-  --ds-card-subtitle-font-size: var(--ds-font-size-sm);
-  --ds-card-subtitle-color: #737373;
   --ds-card-image-placeholder-bg: #f5f5f5;
   --ds-card-image-placeholder-color: #a3a3a3;
-  --ds-card-image-loading-track: #e5e5e5;
-  --ds-card-image-loading-active: var(--ds-color-primary-500);
-  --ds-card-cover-overlay-bg: linear-gradient(
-    to bottom,
-    transparent 0%,
-    transparent 50%,
-    rgba(0, 0, 0, 0.7) 100%
-  );
 
   /* Card Body */
-  --ds-card-body-padding: var(--ds-card-padding-md);
-  --ds-card-body-color: #525252;
 
   /* Card Footer */
-  --ds-card-footer-padding: var(--ds-card-padding-md);
   --ds-card-footer-border: #e5e5e5;
-  --ds-card-footer-bg: #fafafa;
 
   /* Card Common */
-  --ds-card-transition: var(--ds-transition-normal);
   --ds-divider-text-color: var(--ds-color-text-primary);
   --ds-page-shell-subtitle-color: var(--ds-color-text-secondary);
 
@@ -1097,49 +951,23 @@
      ───────────────────────────────────────────────────────────────────────────── */
 
   /* Modal Sizes */
-  --ds-modal-xs-width: 320px;
-  --ds-modal-sm-width: 400px;
-  --ds-modal-md-width: 500px;
-  --ds-modal-lg-width: 640px;
-  --ds-modal-xl-width: 800px;
-  --ds-modal-2xl-width: 960px;
-  --ds-modal-full-width: 100%;
 
   /* Modal Base */
-  --ds-modal-bg: #ffffff;
-  --ds-modal-color: #171717;
   --ds-modal-radius: var(--ds-radius-xl);
-  --ds-modal-shadow: var(--ds-shadow-2xl);
-  --ds-modal-padding: 1.5rem;
 
   /* Modal Overlay */
   --ds-overlay-bg: rgba(0, 0, 0, 0.5);
-  --ds-modal-overlay-bg: rgba(0, 0, 0, 0.5);
   --ds-modal-overlay-backdrop: blur(4px);
 
   /* Modal Header */
-  --ds-modal-header-padding: var(--ds-modal-padding);
   --ds-modal-header-border: #e5e5e5;
-  --ds-modal-title-font-size: var(--ds-font-size-xl);
-  --ds-modal-title-font-weight: 600;
-  --ds-modal-title-color: #171717;
-  --ds-modal-subtitle-color: #737373;
 
   /* Modal Body */
-  --ds-modal-body-padding: var(--ds-modal-padding);
-  --ds-modal-body-color: #525252;
 
   /* Modal Footer */
-  --ds-modal-footer-padding: var(--ds-modal-padding);
   --ds-modal-footer-border: #e5e5e5;
-  --ds-modal-footer-bg: #fafafa;
-  --ds-modal-footer-gap: 0.75rem;
 
   /* Modal Close */
-  --ds-modal-close-size: 2rem;
-  --ds-modal-close-color: #737373;
-  --ds-modal-close-color-hover: #171717;
-  --ds-modal-close-bg-hover: #f5f5f5;
 
   /* Message Close */
   --ds-message-close-color: #737373;
@@ -1154,26 +982,12 @@
      ───────────────────────────────────────────────────────────────────────────── */
 
   /* Avatar Sizes */
-  --ds-avatar-xs-size: 1.5rem;
-  --ds-avatar-xs-font-size: 0.625rem;
 
-  --ds-avatar-sm-size: 2rem;
-  --ds-avatar-sm-font-size: 0.75rem;
 
-  --ds-avatar-md-size: 2.5rem;
-  --ds-avatar-md-font-size: 0.875rem;
 
-  --ds-avatar-lg-size: 3rem;
-  --ds-avatar-lg-font-size: 1rem;
 
-  --ds-avatar-xl-size: 3.5rem;
-  --ds-avatar-xl-font-size: 1.125rem;
 
-  --ds-avatar-2xl-size: 4rem;
-  --ds-avatar-2xl-font-size: 1.25rem;
 
-  --ds-avatar-3xl-size: 6rem;
-  --ds-avatar-3xl-font-size: 1.75rem;
 
   /* Avatar Shapes */
   --ds-avatar-radius-circle: 50%;
@@ -1181,32 +995,18 @@
   --ds-avatar-radius-rounded: var(--ds-radius-md);
 
   /* Avatar Variants */
-  --ds-avatar-default-bg: #f5f5f5;
-  --ds-avatar-default-color: #525252;
   --ds-avatar-default-border: #e5e5e5;
 
-  --ds-avatar-primary-bg: #171717;
-  --ds-avatar-primary-color: #ffffff;
   --ds-avatar-primary-border: #171717;
 
-  --ds-avatar-secondary-bg: #f5f5f5;
-  --ds-avatar-secondary-color: #525252;
   --ds-avatar-secondary-border: #e5e5e5;
 
-  --ds-avatar-success-bg: #dcfce7;
-  --ds-avatar-success-color: #15803d;
   --ds-avatar-success-border: #bbf7d0;
 
-  --ds-avatar-warning-bg: #fef3c7;
-  --ds-avatar-warning-color: #b45309;
   --ds-avatar-warning-border: #fde68a;
 
-  --ds-avatar-error-bg: #fee2e2;
-  --ds-avatar-error-color: #b91c1c;
   --ds-avatar-error-border: #fecaca;
 
-  --ds-avatar-gradient-bg: linear-gradient(135deg, #171717 0%, #525252 100%);
-  --ds-avatar-gradient-color: #ffffff;
   --ds-avatar-gradient-border: transparent;
 
   /* Avatar Status */
@@ -1216,7 +1016,6 @@
   --ds-avatar-status-busy: #ef4444;
   --ds-avatar-status-size: 0.625rem;
   --ds-avatar-status-border: #ffffff;
-  --ds-avatar-status-border-width: 2px;
 
   /* Avatar Ring */
   --ds-avatar-ring-color: #171717;
@@ -1230,11 +1029,8 @@
   /* Avatar Group */
   --ds-avatar-group-spacing: -0.5rem;
   --ds-avatar-group-border-color: #ffffff;
-  --ds-avatar-group-overflow-bg: #e5e5e5;
-  --ds-avatar-group-overflow-color: #525252;
 
   /* Avatar Common */
-  --ds-avatar-transition: var(--ds-transition-fast);
   --ds-avatar-font-weight: 500;
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -1242,101 +1038,41 @@
      ───────────────────────────────────────────────────────────────────────────── */
 
   /* Badge Sizes */
-  --ds-badge-xs-height: 0.875rem;
-  --ds-badge-xs-min-width: 0.875rem;
-  --ds-badge-xs-font-size: 0.5625rem;
 
-  --ds-badge-sm-height: 1rem;
-  --ds-badge-sm-min-width: 1rem;
-  --ds-badge-sm-font-size: 0.625rem;
 
-  --ds-badge-md-height: 1.25rem;
-  --ds-badge-md-min-width: 1.25rem;
-  --ds-badge-md-font-size: 0.75rem;
 
-  --ds-badge-lg-height: 1.5rem;
-  --ds-badge-lg-min-width: 1.5rem;
-  --ds-badge-lg-font-size: 0.875rem;
 
-  --ds-badge-xl-height: 1.75rem;
-  --ds-badge-xl-min-width: 1.75rem;
-  --ds-badge-xl-font-size: 1rem;
 
   /* Badge Dot Sizes */
-  --ds-badge-dot-xs-size: 0.375rem;
-  --ds-badge-dot-sm-size: 0.5rem;
-  --ds-badge-dot-md-size: 0.625rem;
-  --ds-badge-dot-lg-size: 0.75rem;
-  --ds-badge-dot-xl-size: 0.875rem;
 
   /* Badge Variants */
-  --ds-badge-default-bg: #525252;
-  --ds-badge-default-color: #ffffff;
 
-  --ds-badge-primary-bg: #171717;
-  --ds-badge-primary-color: #ffffff;
 
-  --ds-badge-secondary-bg: #f5f5f5;
-  --ds-badge-secondary-color: #525252;
 
-  --ds-badge-success-bg: #22c55e;
-  --ds-badge-success-color: #ffffff;
 
-  --ds-badge-warning-bg: #f59e0b;
-  --ds-badge-warning-color: #ffffff;
 
-  --ds-badge-error-bg: #ef4444;
-  --ds-badge-error-color: #ffffff;
 
-  --ds-badge-info-bg: #3b82f6;
-  --ds-badge-info-color: #ffffff;
 
   /* Badge Common */
   --ds-badge-radius: var(--ds-radius-full);
   --ds-badge-border-radius: var(--ds-radius-full);
   --ds-badge-padding: 0 0.5rem;
-  --ds-badge-padding-x: 0.375rem;
-  --ds-badge-font-weight: 500;
   --ds-badge-text-color: #ffffff;
-  --ds-badge-border-width: 2px;
-  --ds-badge-border-color: #ffffff;
-  --ds-badge-transition: var(--ds-transition-fast);
-  --ds-badge-z-index: 1;
 
   /* Badge Radius Variants */
-  --ds-badge-radius-none: 0;
-  --ds-badge-radius-sm: var(--ds-radius-sm);
-  --ds-badge-radius-md: var(--ds-radius-md);
-  --ds-badge-radius-lg: var(--ds-radius-lg);
-  --ds-badge-radius-full: var(--ds-radius-full);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      TAG
      ───────────────────────────────────────────────────────────────────────────── */
 
   /* Tag Sizes */
-  --ds-tag-xs-height: 1rem;
-  --ds-tag-xs-padding: 0 0.375rem;
-  --ds-tag-xs-font-size: 0.6875rem;
 
-  --ds-tag-sm-height: 1.25rem;
-  --ds-tag-sm-padding: 0 0.5rem;
   --ds-tag-sm-padding-x: 0.5rem;
-  --ds-tag-sm-font-size: 0.75rem;
 
-  --ds-tag-md-height: 1.5rem;
-  --ds-tag-md-padding: 0 0.625rem;
   --ds-tag-md-padding-x: 0.625rem;
-  --ds-tag-md-font-size: 0.8125rem;
 
-  --ds-tag-lg-height: 1.75rem;
-  --ds-tag-lg-padding: 0 0.75rem;
   --ds-tag-lg-padding-x: 0.75rem;
-  --ds-tag-lg-font-size: 0.875rem;
 
-  --ds-tag-xl-height: 2rem;
-  --ds-tag-xl-padding: 0 0.875rem;
-  --ds-tag-xl-font-size: 1rem;
 
   /* Tag Variants - Vercel Style */
   --ds-tag-default-bg: #f5f5f5;
@@ -1365,15 +1101,8 @@
 
   /* Tag Common */
   --ds-tag-radius: var(--ds-radius-md);
-  --ds-tag-font-weight: 500;
-  --ds-tag-transition: var(--ds-transition-fast);
 
   /* Tag Radius Variants */
-  --ds-tag-radius-none: 0;
-  --ds-tag-radius-sm: var(--ds-radius-xs);
-  --ds-tag-radius-md: var(--ds-radius-sm);
-  --ds-tag-radius-lg: var(--ds-radius-md);
-  --ds-tag-radius-full: var(--ds-radius-full);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      ALERT
@@ -1458,7 +1187,6 @@
   --ds-checkbox-border-hover: #a3a3a3;
   --ds-checkbox-border-disabled: #e5e5e5;
   --ds-checkbox-radius: var(--ds-radius-xs);
-  --ds-checkbox-transition: var(--ds-transition-fast);
 
   /* Checkbox Checked State */
   --ds-checkbox-checked-bg: #171717;
@@ -1467,16 +1195,13 @@
 
   /* Checkbox Focus */
   --ds-checkbox-focus-ring: var(--ds-shadow-focus-ring);
-  --ds-checkbox-focus-ring-color: rgba(23, 23, 23, 0.1);
 
   /* Checkbox Error State */
-  --ds-checkbox-error-border: #ef4444;
   --ds-checkbox-error-color: #ef4444;
 
   /* Checkbox Label */
   --ds-checkbox-label-color: #171717;
   --ds-checkbox-label-color-disabled: #a3a3a3;
-  --ds-checkbox-label-gap: 0.5rem;
 
   /* Radio Sizes */
   --ds-radio-size-sm: 0.875rem;
@@ -1490,7 +1215,6 @@
   --ds-radio-border: #d4d4d4;
   --ds-radio-border-hover: #a3a3a3;
   --ds-radio-border-disabled: #e5e5e5;
-  --ds-radio-transition: var(--ds-transition-fast);
 
   /* Radio Checked State */
   --ds-radio-checked-bg: #ffffff;
@@ -1499,16 +1223,13 @@
 
   /* Radio Focus */
   --ds-radio-focus-ring: var(--ds-shadow-focus-ring);
-  --ds-radio-focus-ring-color: rgba(23, 23, 23, 0.1);
 
   /* Radio Error State */
-  --ds-radio-error-border: #ef4444;
   --ds-radio-error-color: #ef4444;
 
   /* Radio Label */
   --ds-radio-label-color: #171717;
   --ds-radio-label-color-disabled: #a3a3a3;
-  --ds-radio-label-gap: 0.5rem;
   --ds-radio-description-color: #737373;
 
   /* Radio Button Style */
@@ -1597,17 +1318,11 @@
   /* Select Base. The surface derives from the tenant's control surface; a white
      literal here painted every un-customized select white, including on this
      file's own dark ground. See `foundation/tokens/css/presentation/components/select.css`. */
-  --ds-select-bg: var(--ds-surface-control, var(--ds-color-bg-input, #ffffff));
-  --ds-select-bg-disabled: #fafafa;
-  --ds-select-color: #171717;
-  --ds-select-color-placeholder: #a3a3a3;
-  --ds-select-color-disabled: #a3a3a3;
   --ds-select-border: #e5e5e5;
   --ds-select-border-hover: #d4d4d4;
   --ds-select-border-focus: #171717;
   --ds-select-radius: var(--ds-radius-md);
   --ds-select-shadow-focus: 0 0 0 1px #171717;
-  --ds-select-transition: var(--ds-transition-fast);
 
   /* Select Status Colors */
   --ds-select-error-border: #ef4444;
@@ -1615,29 +1330,17 @@
   --ds-select-success-border: #22c55e;
 
   /* Select Filled Variant */
-  --ds-select-filled-bg: #f5f5f5;
 
   /* Select Dropdown */
-  --ds-select-dropdown-bg: #ffffff;
   --ds-select-dropdown-border: #e5e5e5;
-  --ds-select-dropdown-shadow: var(--ds-shadow-lg);
   --ds-select-dropdown-radius: var(--ds-radius-md);
 
   /* Select Option */
-  --ds-select-option-bg-hover: #f5f5f5;
-  --ds-select-option-bg-selected: #f5f5f5;
-  --ds-select-option-color-selected: #171717;
-  --ds-select-option-color-disabled: #a3a3a3;
 
   /* Select Tag (multiple mode) */
-  --ds-select-tag-bg: #f5f5f5;
-  --ds-select-tag-color: #525252;
   --ds-select-tag-radius: var(--ds-radius-sm);
 
   /* Select Arrow/Icon */
-  --ds-select-arrow-color: #a3a3a3;
-  --ds-select-clear-color: #a3a3a3;
-  --ds-select-clear-color-hover: #525252;
   --ds-select-check-color: #171717;
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -1731,7 +1434,6 @@
   --ds-textarea-border: #e5e5e5;
   --ds-textarea-border-hover: #d4d4d4;
   --ds-textarea-border-focus: #171717;
-  --ds-textarea-radius: var(--ds-radius-md);
   --ds-textarea-shadow-focus: 0 0 0 1px #171717;
   --ds-textarea-transition: var(--ds-transition-fast);
 
@@ -1888,36 +1590,18 @@
   --ds-toggle-track-bg: #d4d4d4;
   --ds-toggle-track-bg-checked: #171717;
   --ds-toggle-track-radius: 9999px;
-  --ds-toggle-transition: all 0.15s ease;
 
   /* Toggle Sizes */
-  --ds-toggle-sm-width: 32px;
-  --ds-toggle-sm-height: 18px;
-  --ds-toggle-sm-dot: 14px;
-  --ds-toggle-md-width: 44px;
-  --ds-toggle-md-height: 24px;
-  --ds-toggle-md-dot: 20px;
-  --ds-toggle-lg-width: 56px;
-  --ds-toggle-lg-height: 30px;
-  --ds-toggle-lg-dot: 26px;
 
   /* Toggle Dot */
-  --ds-toggle-dot-bg: #ffffff;
-  --ds-toggle-dot-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 
   /* Toggle Focus */
   --ds-toggle-focus-ring: var(--ds-shadow-focus-ring);
 
   /* Toggle Colors */
-  --ds-toggle-success-bg: #22c55e;
-  --ds-toggle-warning-bg: #f59e0b;
-  --ds-toggle-error-bg: #ef4444;
 
   /* Toggle Label */
-  --ds-toggle-label-color: #171717;
   --ds-toggle-label-font-size: var(--ds-font-size-sm);
-  --ds-toggle-description-color: #737373;
-  --ds-toggle-description-font-size: var(--ds-font-size-xs);
   --ds-toggle-error-color: #ef4444;
   --ds-toggle-inner-label-color: #ffffff;
   --ds-toggle-inner-label-font-size: 10px;
@@ -1981,7 +1665,6 @@
   /* ─────────────────────────────────────────────────────────────────────────────
      SKELETON
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-skeleton-bg: #e5e5e5;
   --ds-skeleton-highlight: #f5f5f5;
   /* The wave is a tenant-tinted premium shimmer over the panel/card surfaces.
      It references the surface aliases directly: routing it through
@@ -2003,10 +1686,6 @@
   --ds-spinner-track: #e5e5e5;
 
   --ds-spinner-xs-size: 1rem;
-  --ds-spinner-sm-size: 1.25rem;
-  --ds-spinner-md-size: 1.5rem;
-  --ds-spinner-lg-size: 2rem;
-  --ds-spinner-xl-size: 2.5rem;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      DIVIDER
@@ -2157,26 +1836,17 @@
   /* ─────────────────────────────────────────────────────────────────────────────
      TREE
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-tree-node-bg-hover: #f5f5f5;
-  --ds-tree-node-bg-selected: #f5f5f5;
-  --ds-tree-node-color: #525252;
-  --ds-tree-node-color-selected: #171717;
   --ds-tree-connector-color: #e5e5e5;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      TIMELINE
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-timeline-line-color: #e5e5e5;
   --ds-timeline-dot-bg: #171717;
   --ds-timeline-dot-border: #ffffff;
-  --ds-timeline-content-color: #525252;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      EMPTY STATE
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-empty-icon-color: #d4d4d4;
-  --ds-empty-title-color: #525252;
-  --ds-empty-description-color: #a3a3a3;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      RESULT
@@ -2217,10 +1887,6 @@
   /* ─────────────────────────────────────────────────────────────────────────────
      STATISTIC
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-statistic-title-color: #737373;
-  --ds-statistic-value-color: #171717;
-  --ds-statistic-prefix-color: #525252;
-  --ds-statistic-suffix-color: #525252;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      IMAGE
@@ -2237,10 +1903,7 @@
   --ds-list-item-bg-hover: #fafafa;
   --ds-list-item-border: #e5e5e5;
   --ds-list-item-padding: 0.75rem 1rem;
-  --ds-list-border-color: var(--ds-color-border);
-  --ds-list-split-color: var(--ds-color-border-subtle);
   --ds-list-skeleton-bg: var(--ds-color-bg-tertiary);
-  --ds-list-meta-description-color: var(--ds-color-text-secondary);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      FLOAT BUTTON

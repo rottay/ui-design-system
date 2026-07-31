@@ -1,8 +1,94 @@
 /**
- * PricingSurface skin (WO-SKIN-06 CK-I). Engine-agnostic and deliberately
- * unlayered; specificity clears Typography's color rule.
+ * PricingSurface skin (WO-SKIN-06 CK-I; grown KIMI Modern wave 2026-07-30, SU23).
+ *
+ * LAYER: registered in `facade/entrypoints/base.css` (~l.620) and
+ * `facade/entrypoints/styles.css` (~l.641) into `layer(rottay-components)`,
+ * alongside the sibling experience surface skins. The old "deliberately
+ * unlayered" note and its `[data-part='root'][data-part='root']` repetition
+ * idiom (forbidden by the owner directive, 2026-07-28 fourth wave) are
+ * retired: no selector here repeats a class or an attribute.
+ *
+ * SCOPE: the surface composes public primitives, helpers and ONE pattern --
+ * PageShellSurface (page frame and the h1 chrome), Text, Stack, Box,
+ * SurfaceActionBar, the SurfaceErrorState kit and PatternPricingTable. The
+ * comparison grid's entire chrome (plan cards, price hierarchy, tri-state
+ * feature cells, the highlighted plan frame + badge, the billing toggle,
+ * the narrow-container scroll with the sticky feature column, and the
+ * forced-colors re-keying) is pattern-owned in
+ * `runtime/engines/modern/skin/pricing-table.css`; this file paints ONLY
+ * what the surface itself owns:
+ *   - the intro copy's editorial measure on its pinned hook;
+ *   - the loading mirror skeleton blocks (toggle pill, plan-card grid,
+ *     feature rows), whose pulse rides the canonical `ds-foundation-pulse`
+ *     keyframes on the `--ds-motion-attention` channel and goes quiet under
+ *     reduced motion.
+ * The intro INK travels through Typography's own `color` channel (the modern
+ * Typography skin is unlayered and always wins, so the primitive channel is
+ * the only durable path, SU22 idiom); the old muted-text color rule is
+ * REMOVED, not re-layered, and the pinned class hook stays in the DOM
+ * untouched.
+ *
+ * SPECIFICITY: every selector keys on an always-stamped hook (the
+ * `ds-pricing` root class plus a pinned class or a `data-part` the surface
+ * itself stamps); no repetition anywhere. No forced-colors block on purpose:
+ * the only fills set here are neutral skeleton fills, which the UA re-keys
+ * under forced colors; every interactive part is a composed primitive or
+ * pattern part with its own forced-colors treatment.
  */
 
-.ds-surface.ds-pricing .ds-pricing__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+/* ---- intro measure ----
+   The intro is conversion copy on a public page: it holds an editorial
+   readable measure (marketing lede precedent) instead of sprawling across
+   the shell measure. Geometry only -- the ink is Typography's `color`
+   channel. */
+.ds-surface.ds-pricing .ds-pricing__muted-text[data-part='root'] {
+  max-inline-size: 640px;
+}
+
+/* ---- loading mirror skeleton ----
+   Blocks mirror the loaded anatomy: the opt-in billing toggle as a centered
+   pill, the plan columns as a card grid (`minmax(0,1fr)` tracks that wrap
+   to fewer columns on narrow viewports, mirroring how the real comparison
+   adapts), and the feature rows as full-width lines. The page chrome, intro
+   and footer stay live, so the swap to real content is a pure paint change,
+   never a layout shift (all geometry INTERNAL literals, dashboard/chat/auth
+   precedent). */
+.ds-surface.ds-pricing [data-part='pricing-skeleton-toggle'],
+.ds-surface.ds-pricing [data-part='pricing-skeleton-plan'],
+.ds-surface.ds-pricing [data-part='pricing-skeleton-row'] {
+  background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
+  animation: ds-foundation-pulse
+    var(--ds-motion-attention, 1.5s)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-surface.ds-pricing [data-part='pricing-skeleton-toggle'] {
+  inline-size: 180px;
+  min-block-size: 32px;
+  margin-inline: auto;
+  border-radius: 999px;
+}
+
+.ds-surface.ds-pricing [data-part='pricing-skeleton-plans'] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: var(--ds-spacing-4, 16px);
+}
+
+.ds-surface.ds-pricing [data-part='pricing-skeleton-plan'] {
+  min-block-size: 240px;
+  border-radius: var(--ds-radius-lg, 12px);
+}
+
+.ds-surface.ds-pricing [data-part='pricing-skeleton-row'] {
+  min-block-size: 44px;
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-pricing [data-part='pricing-skeleton-toggle'],
+  .ds-surface.ds-pricing [data-part='pricing-skeleton-plan'],
+  .ds-surface.ds-pricing [data-part='pricing-skeleton-row'] {
+    animation: none;
+  }
 }

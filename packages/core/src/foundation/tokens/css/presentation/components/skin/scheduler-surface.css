@@ -1,7 +1,32 @@
+/**
+ * SchedulerSurface skin (wave KIMI Modern Surfaces 2026-07-30, SU31).
+ *
+ * LAYER: registered in `facade/entrypoints/base.css:608` and `styles.css`
+ * into `layer(rottay-components)` — same wiring as skin/list.css. Engine
+ * chrome (button.css, card.css) sorts after this file in `rottay-engines`,
+ * which is exactly why the agenda row below is a NATIVE <button>: the DS
+ * Button recipe paint (variant background, sizing, inline-flex) would win
+ * the layer race over this row's grid/paint, and `!important` is forbidden.
+ *
+ * SCOPE: the surface composes PageShell, Card, PatternCalendarView and the
+ * state kits — each owns its chrome, states and forced-colors treatment, so
+ * this file paints ONLY what the surface owns: the mobile agenda list and
+ * its actionable event rows (`ds-scheduler__agenda-event`), the
+ * invalid-events warning text, and the mirror skeleton blocks
+ * (`scheduler-skeleton-block`), whose pulse rides the canonical
+ * `ds-foundation-pulse` keyframes on the `--ds-motion-attention` channel and
+ * goes quiet under reduced motion. Row fills are neutral surface tokens, so
+ * forced colors only re-keys the row borders (system colors); the composed
+ * Cards already force their own frames.
+ *
+ * SPECIFICITY: single-part hooks keying on always-stamped `data-part` /
+ * `data-size` attributes; no repetition, no `!important`.
+ */
+
 .ds-surface.ds-scheduler .ds-scheduler__agenda[data-part='mobile-agenda'] {
   display: grid;
   min-inline-size: 0;
-  gap: var(--ds-space-sm);
+  gap: var(--ds-spacing-2, 8px);
   padding: 0;
   margin: 0;
   list-style: none;
@@ -9,7 +34,8 @@
 
 .ds-surface.ds-scheduler
   .ds-scheduler__data-warning[data-part='invalid-events-warning'] {
-  margin: 0 0 var(--ds-space-sm);
+  margin-block: 0 var(--ds-spacing-2, 8px);
+  margin-inline: 0;
   color: var(--ds-color-warning);
   font-size: var(--ds-font-size-sm);
 }
@@ -21,13 +47,19 @@
   align-items: center;
   inline-size: 100%;
   min-block-size: var(--ds-touch-target-min, 44px);
-  gap: var(--ds-space-sm);
-  padding: var(--ds-space-sm);
+  gap: var(--ds-spacing-2, 8px);
+  padding: var(--ds-spacing-2, 8px);
+  font: inherit;
   color: var(--ds-color-text-primary);
   text-align: start;
   background: var(--ds-color-bg-secondary);
   border: 1px solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-md);
+  transition:
+    background-color var(--ds-motion-feedback, 150ms)
+      var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-feedback, 150ms)
+      var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-surface.ds-scheduler
@@ -35,8 +67,83 @@
   cursor: pointer;
 }
 
+/* Hover is pointer-fine only; `:active` below is the touch equivalent. */
+@media (hover: hover) {
+  .ds-surface.ds-scheduler
+    button.ds-scheduler__agenda-event[data-part='agenda-event']:hover {
+    background: var(--ds-color-bg-tertiary, var(--ds-color-bg-secondary));
+  }
+}
+
+.ds-surface.ds-scheduler
+  button.ds-scheduler__agenda-event[data-part='agenda-event']:active {
+  background: var(--ds-color-bg-tertiary, var(--ds-color-bg-secondary));
+}
+
 .ds-surface.ds-scheduler
   button.ds-scheduler__agenda-event[data-part='agenda-event']:focus-visible {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
   outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* ---- scheduler-mirror skeleton: blocks sit on the same 8/4 layout as the
+        real calendar card and timeline rail, so the swap to live content is
+        paint-only with no layout shift. ---- */
+.ds-surface.ds-scheduler [data-part='scheduler-skeleton-block'] {
+  border-radius: var(
+    --ds-skeleton-radius,
+    var(--ds-radius-md, 8px)
+  );
+  background: var(
+    --ds-skeleton-bg,
+    var(--ds-surface-panel, var(--ds-color-bg-secondary))
+  );
+  animation: ds-foundation-pulse
+    var(
+      --ds-skeleton-animation-duration,
+      var(--ds-motion-attention, 1.5s)
+    )
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-surface.ds-scheduler
+  [data-part='scheduler-skeleton-block'][data-size='header'] {
+  inline-size: 55%;
+  min-block-size: 32px;
+}
+
+.ds-surface.ds-scheduler
+  [data-part='scheduler-skeleton-block'][data-size='calendar'] {
+  min-block-size: 400px;
+}
+
+.ds-surface.ds-scheduler
+  [data-part='scheduler-skeleton-block'][data-size='aside'] {
+  min-block-size: 400px;
+}
+
+.ds-surface.ds-scheduler
+  [data-part='scheduler-skeleton-block'][data-size='agenda'] {
+  min-block-size: var(--ds-touch-target-min, 44px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-scheduler [data-part='scheduler-skeleton-block'] {
+    animation: none;
+  }
+}
+
+/* Forced colors: row borders re-key to system colors so the actionable row
+   (ButtonBorder) and the static row (CanvasText) stay distinguishable; the
+   neutral skeleton fills need no re-keying. */
+@media (forced-colors: active) {
+  .ds-surface.ds-scheduler
+    .ds-scheduler__agenda-event[data-part='agenda-event'] {
+    border-color: CanvasText;
+  }
+
+  .ds-surface.ds-scheduler
+    button.ds-scheduler__agenda-event[data-part='agenda-event'] {
+    border-color: ButtonBorder;
+  }
 }

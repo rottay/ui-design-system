@@ -50,6 +50,8 @@ import React, { useState, useEffect } from 'react';
 import type { FloatButtonProps, FloatButtonGroupProps, FloatButtonBackTopProps } from '../../contracts';
 import { FLOAT_BUTTON_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+import { NavigationCollapseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-collapse';
 
 /**
  * Accessible-name channel for icon-only triggers (K4-C axe remediation,
@@ -137,7 +139,7 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
     const content = (
       <>
         {icon}
-        {description && <span className="text-xs">{description}</span>}
+        {description && <span data-part="description">{description}</span>}
         {children}
         {badge?.dot && (
           <span data-part="badge" data-variant="dot" />
@@ -275,7 +277,9 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
 
     // flex-col-reverse places the trigger button at the visual bottom
     // so child items expand upward, matching FAB menu conventions.
-    // `end-6` is LOGICAL (inset-inline-end): the fixed placement mirrors RTL.
+    // `end-6` is LOGICAL (inset-inline-end) and stays: the quality contract
+    // pins it verbatim (and forbids the physical `right-6`); every other
+    // fixed-placement property is skin-owned (`float-button.css`).
     //
     // Accessible name (K4-C axe remediation): the trigger is icon-only by
     // design. A string tooltip names it; otherwise the guarded state-aware
@@ -287,18 +291,51 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
         ? tooltipText
         : tooltipText ?? fbLabel('floatbutton.closeGroup', 'Close action group')
       : tooltipText ?? fbLabel('floatbutton.openGroup', 'Open action group');
+
+    // APG disclosure keyboard contract: Escape closes and returns focus to
+    // the trigger; ArrowUp/ArrowDown cycle focus across the panel's buttons.
+    const panelRef = React.useRef<HTMLDivElement>(null);
+    const triggerRef = React.useRef<HTMLButtonElement>(null);
+    const closeAndFocusTrigger = () => {
+      if (controlledOpen === undefined) {
+        setInternalOpen(false);
+      }
+      onOpenChange?.(false);
+      triggerRef.current?.focus();
+    };
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === 'Escape' && isOpen) {
+        event.preventDefault();
+        closeAndFocusTrigger();
+        return;
+      }
+      if (!isOpen || (event.key !== 'ArrowUp' && event.key !== 'ArrowDown')) return;
+      const buttons = Array.from(
+        panelRef.current?.querySelectorAll<HTMLElement>('button, a') ?? []
+      );
+      if (buttons.length === 0) return;
+      event.preventDefault();
+      const currentIndex = buttons.indexOf(document.activeElement as HTMLElement);
+      const delta = event.key === 'ArrowDown' ? 1 : -1;
+      const nextIndex = currentIndex < 0
+        ? (delta > 0 ? 0 : buttons.length - 1)
+        : (currentIndex + delta + buttons.length) % buttons.length;
+      buttons[nextIndex]?.focus();
+    };
     return (
       <div
         ref={ref}
-        className={`fixed bottom-6 end-6 flex flex-col-reverse items-center gap-2 ${className}`}
+        className={`end-6 ${className}`}
         style={style}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onKeyDown={handleKeyDown}
         data-part="root"
         data-open={isOpen}
       >
         {/* Trigger button — footprint is skin-owned via data-shape (K4-C) */}
         <button
+          ref={triggerRef}
           type="button"
           onClick={trigger === 'click' ? handleToggle : undefined}
           className={getFloatButtonClassName()}
@@ -315,17 +352,23 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
           }}
           title={typeof tooltip === 'string' ? tooltip : undefined}
           aria-label={triggerAriaLabel}
+          aria-expanded={isOpen}
+          aria-haspopup="true"
         >
-          {isOpen ? (closeIcon ?? '×') : icon}
+          {isOpen ? (closeIcon ?? <ActionCloseIcon decorative size={16} />) : icon}
         </button>
 
-        {/* Child buttons with transition */}
+        {/* Child buttons with transition — the open/closed opacity+translate
+            class pair stays (pinned by the quality contract); the transition
+            itself is skin-owned on data-open. */}
         <div
-          className={`flex flex-col items-center gap-2 transition-all duration-200 ${
+          ref={panelRef}
+          className={`${
             isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
           }`}
           data-part="panel"
           data-open={isOpen}
+          role="group"
         >
           {children}
         </div>
@@ -421,10 +464,11 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
         ref={ref}
         type="button"
         onClick={scrollToTop}
-        // `end-6` is LOGICAL (inset-inline-end): the fixed placement mirrors
-        // RTL. Footprint is skin-owned via data-shape (K4-C).
-        className={`fixed bottom-6 end-6 transition-opacity duration-200 ${getFloatButtonClassName(className)}`}
+        // `end-6` is LOGICAL (inset-inline-end) and stays pinned; the fixed
+        // placement itself is skin-owned, keyed on data-placement='back-top'.
+        className={`end-6 ${getFloatButtonClassName(className)}`}
         data-part="trigger"
+        data-placement="back-top"
         data-variant={type}
         data-shape={shape}
         style={{
@@ -437,8 +481,8 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
         title={typeof tooltip === 'string' ? tooltip : undefined}
         aria-label={backTopAriaLabel}
       >
-        {icon ?? '↑'}
-        {description && <span className="text-xs">{description}</span>}
+        {icon ?? <NavigationCollapseIcon decorative size={16} />}
+        {description && <span data-part="description">{description}</span>}
       </button>
     );
   }

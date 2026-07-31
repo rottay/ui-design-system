@@ -2,123 +2,46 @@
  * @fileoverview StatsHeader — structures-tier "Pulse Cards" implementation.
  *
  * @description
- * Operational stat cards with counter animations, sparkline dots,
- * contextual insights, and gradient glow accents. Each card feels like
- * a live metric on an operations dashboard. It is a structures family — a
- * structural strip consumers
- * place above a data table or above dashboard content, not a generic
- * reusable pattern like `charts` or `data-table`.
+ * Operational stat cards above dashboard content. COMPOSITION LAW (S04):
+ * the metric core (label, value, prefix/suffix, count-up) is the certified
+ * Statistic primitive — the same composition stats-grid PT16 landed, so the
+ * hand-rolled useCountUp, the inline value typography and the bespoke
+ * label/affix spans are retired. The loading placeholder is the Skeleton
+ * primitive; the back-compat progress meter is the Progress primitive (the
+ * per-stat accent reaches it through its own `strokeColor` channel). The
+ * trend icons are the governed semantic roles (`data-trend` /
+ * `data-trend-down`), never raw inline SVG.
  *
- * This implementation is engine-agnostic because it composes DS
- * primitives (Box, Flex, Text) which themselves resolve through the
- * engine system.
+ * What the pattern keeps: the card chrome + glow (5-token `data-accent`
+ * consumer channels), the sparkline dots (decorative pattern-owned data
+ * viz, aria-hidden, hover ping in CSS), the change indicator (signed value
+ * + period, pattern-owned like stats-grid's trend pill), the insight line,
+ * and the container-query responsive frame (no JS breakpoints left).
  *
  * @category Structures
  */
 
 'use client';
 
-import { useState } from 'react';
 import type { CSSProperties } from 'react';
 
 import { Box, Flex } from '../../../../../primitives/layout';
-import { Text } from '../../../../../primitives/display';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
-import { useSmoothCounter, useReducedMotion } from '@/graphics/motion/react/runtime';
+import { Statistic, Text } from '../../../../../primitives/display';
+import { Progress, Skeleton } from '../../../../../primitives/feedback';
+import { DataTrendIcon } from '@/graphics/icons/presentation/semantic/generated/roles/data-trend';
+import { DataTrendDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/data-trend-down';
 
 import type { StatItem, StatsHeaderProps, AccentColor } from '../../contracts';
 
 // ============================================================================
-// useCountUp (canonical: delegates to useSmoothCounter from motion/react/runtime)
+// SPARKLINE DOTS (pattern-owned decorative data viz — hover ping is CSS-owned)
 // ============================================================================
 
-function useCountUp(target: number, duration: number = 600): number {
-  const reducedMotion = useReducedMotion();
-  const animated = useSmoothCounter(0, target, reducedMotion ? 0 : duration);
-  return reducedMotion ? target : Math.round(animated);
-}
-
-// ============================================================================
-// SKELETON
-// ============================================================================
-
-function SkeletonBar({ width, height }: { width: number; height: number }) {
-  return (
-    <Box
-      data-part="skeleton-bar"
-      style={{
-        width,
-        height,
-        animation: 'pulse-card-skeleton 1.5s ease-in-out infinite',
-      }}
-    />
-  );
-}
-
-function SkeletonDots() {
-  return (
-    <Flex align="center" gap={6} style={{ marginTop: 14 }}>
-      {Array.from({ length: 7 }).map((_, i) => (
-        <Box
-          key={`sk-dot-${i}`}
-          data-part="skeleton-dot"
-          style={{
-            width: 4,
-            height: 4,
-            animation: 'pulse-card-skeleton 1.5s ease-in-out infinite',
-            animationDelay: `${i * 80}ms`,
-          }}
-        />
-      ))}
-    </Flex>
-  );
-}
-
-function SkeletonCard() {
-  return (
-    <Box
-      data-part="skeleton-card"
-      style={{
-        flex: '1 1 0',
-        minWidth: 0,
-        padding: '20px 24px',
-        minHeight: 140,
-        position: 'relative' as const,
-        overflow: 'hidden',
-      }}
-    >
-      <Flex direction="column" gap={12}>
-        <SkeletonBar width={80} height={10} />
-        <SkeletonBar width={120} height={28} />
-        <SkeletonDots />
-        <SkeletonBar width={100} height={10} />
-      </Flex>
-      {/* Skeleton gradient glow */}
-      <Box
-        data-part="skeleton-glow"
-        style={{
-          position: 'absolute' as const,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 40,
-          pointerEvents: 'none' as const,
-        }}
-      />
-    </Box>
-  );
-}
-
-// ============================================================================
-// SPARKLINE DOTS
-// ============================================================================
-
-function SparklineDots({ dots, accent, hovered }: { dots: number[]; accent: AccentColor; hovered: boolean }) {
-  const reducedMotion = useReducedMotion();
+function SparklineDots({ dots, accent }: { dots: number[]; accent: AccentColor }) {
   const maxVal = Math.max(...dots, 1);
 
   return (
-    <Flex align="center" gap={6} style={{ marginTop: 14 }}>
+    <Flex align="center" gap={6} data-part="spark-dots" aria-hidden="true">
       {dots.slice(0, 7).map((val, i) => {
         const normalized = val / maxVal;
         const opacity = 0.15 + normalized * 0.85;
@@ -128,13 +51,8 @@ function SparklineDots({ dots, accent, hovered }: { dots: number[]; accent: Acce
             key={`dot-${i}`}
             data-part="spark-dot"
             data-accent={accent}
-            style={{
-              width: 4,
-              height: 4,
-              opacity,
-              transition: 'transform 200ms ease, opacity 200ms ease',
-              animation: hovered && !reducedMotion ? `pulse-dot-ping 400ms ease ${i * 50}ms` : 'none',
-            }}
+            data-dot-index={i}
+            style={{ opacity }}
           />
         );
       })}
@@ -143,63 +61,15 @@ function SparklineDots({ dots, accent, hovered }: { dots: number[]; accent: Acce
 }
 
 // ============================================================================
-// CHANGE INDICATOR
+// CHANGE INDICATOR (pattern-owned pill; the icon is the state shape)
 // ============================================================================
 
-/** Trending arrow icons rendered as lightweight inline SVGs. */
-function TrendingUpIcon({ size = 13 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
-      <polyline points="16 7 22 7 22 13" />
-    </svg>
-  );
-}
-
-function TrendingDownIcon({ size = 13 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polyline points="22 17 13.5 8.5 8.5 13.5 2 7" />
-      <polyline points="16 17 22 17 22 11" />
-    </svg>
-  );
-}
-
-function MinusIcon({ size = 13 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="5" y1="12" x2="19" y2="12" />
-    </svg>
-  );
-}
-
+/**
+ * Signed change value with the governed trend icon and the optional period
+ * line. The icon carries the direction (never colour alone); the skin's
+ * `data-change` channels carry the tint. Neutral renders no icon, same as
+ * the stats-grid trend pill.
+ */
 function ChangeIndicator({
   change,
   changeType = 'neutral',
@@ -214,37 +84,19 @@ function ChangeIndicator({
   const sign = changeType === 'increase' ? '+' : '';
   const displayText = changeLabel ?? `${sign}${change}`;
 
-  const IconComponent =
-    changeType === 'increase' ? TrendingUpIcon : changeType === 'decrease' ? TrendingDownIcon : MinusIcon;
+  const TrendIcon =
+    changeType === 'increase' ? DataTrendIcon : changeType === 'decrease' ? DataTrendDownIcon : null;
 
   return (
     <Flex direction="column" align="end" gap={2} data-part="change-indicator">
       <Flex align="center" gap={3} data-part="change-row" data-change={changeType}>
-        <IconComponent size={13} />
-        <Text
-          data-part="change-value"
-          data-change={changeType}
-          style={{
-            fontSize: 13,
-            fontWeight: 600,
-            fontVariantNumeric: 'tabular-nums',
-            lineHeight: 1,
-          }}
-        >
+        {TrendIcon && <TrendIcon decorative size={13} />}
+        <Text data-part="change-value" data-change={changeType}>
           {displayText}
         </Text>
       </Flex>
       {periodLabel && (
-        <Text
-          data-part="change-period"
-          style={{
-            fontSize: 10,
-            fontWeight: 500,
-            textTransform: 'uppercase' as const,
-            letterSpacing: '0.04em',
-            lineHeight: 1,
-          }}
-        >
+        <Text data-part="change-period">
           {periodLabel}
         </Text>
       )}
@@ -253,166 +105,50 @@ function ChangeIndicator({
 }
 
 // ============================================================================
-// PROGRESS BAR
-// ============================================================================
-
-function ProgressBar({ value, accent }: { value: number; accent: AccentColor }) {
-  const clamped = Math.max(0, Math.min(100, value));
-
-  return (
-    <Box
-      data-part="progress-track"
-      style={{
-        width: '100%',
-        height: 3,
-        overflow: 'hidden',
-        marginTop: 10,
-      }}
-    >
-      <Box
-        data-part="progress-fill"
-        data-accent={accent}
-        style={{
-          width: `${clamped}%`,
-          height: '100%',
-          transition: 'width 400ms ease',
-        }}
-      />
-    </Box>
-  );
-}
-
-// ============================================================================
 // STAT CARD
 // ============================================================================
 
-function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean }) {
-  const [hovered, setHovered] = useState(false);
-  const [pressed, setPressed] = useState(false);
+function StatCard({ stat }: { stat: StatItem }) {
   const accent = stat.accentColor ?? 'primary';
-  const isNumeric = typeof stat.value === 'number';
-  const numericTarget = isNumeric ? (stat.value as number) : 0;
-  const animatedValue = useCountUp(numericTarget, 600);
-
-  const displayValue = isNumeric ? animatedValue.toLocaleString() : stat.value;
-
   const isClickable = !!stat.onClick;
-
-  // The press/hover/rest priority chain is gated on `isClickable` (pressed only
-  // fires for clickable cards), which a plain CSS `:active` cannot reproduce; the
-  // gated state logic stays in JS and drives two custom properties the skin reads.
-  const cardStyle: CSSProperties = {
-    flex: '1 1 0',
-    minWidth: 0,
-    padding: compact ? '18px 18px' : '20px 24px',
-    transition: 'transform 200ms ease, box-shadow 200ms ease',
-    position: 'relative',
-    overflow: 'hidden',
-    minHeight: compact ? 120 : 140,
-    cursor: isClickable ? 'pointer' : 'default',
-    ...(pressed
-      ? ({
-          '--ds-stats-header-card-transform': 'scale(0.98)',
-          '--ds-stats-header-card-shadow': '0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent)',
-        } as CSSProperties)
-      : hovered
-      ? ({
-          '--ds-stats-header-card-transform': 'translateY(-2px)',
-          '--ds-stats-header-card-shadow':
-            '0 8px 24px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)',
-        } as CSSProperties)
-      : ({
-          '--ds-stats-header-card-transform': 'translateY(0)',
-          '--ds-stats-header-card-shadow': '0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent)',
-        } as CSSProperties)),
-  };
 
   return (
     <Box
       data-part="stat-card"
       data-accent={accent}
-      style={cardStyle}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => {
-        setHovered(false);
-        setPressed(false);
-      }}
-      onMouseDown={() => {
-        if (isClickable) setPressed(true);
-      }}
-      onMouseUp={() => setPressed(false)}
+      data-clickable={isClickable}
+      role={isClickable ? 'button' : undefined}
+      tabIndex={isClickable ? 0 : undefined}
+      onKeyDown={
+        isClickable
+          ? (e) => {
+              if (e.key !== 'Enter' && e.key !== ' ') return;
+              e.preventDefault();
+              stat.onClick?.();
+            }
+          : undefined
+      }
       onClick={stat.onClick}
     >
-      {/* Label row: label left, icon right */}
-      <Flex justify="between" align="center">
-        <Text
-          data-part="stat-label"
-          style={{
-            fontSize: 11,
-            fontWeight: 600,
-            textTransform: 'uppercase',
-            letterSpacing: '0.06em',
-            lineHeight: 1.4,
-          }}
-        >
-          {stat.label}
-        </Text>
-        {stat.icon && (
-          <Box
-            data-part="stat-icon"
-            style={{
-              opacity: 0.6,
-              display: 'flex',
-              alignItems: 'center',
-              lineHeight: 0,
-            }}
-          >
-            {stat.icon}
-          </Box>
-        )}
-      </Flex>
-
-      {/* Value row: value + prefix left, change right */}
-      <Flex justify="between" align="baseline" style={{ marginTop: 10 }}>
-        <Flex align="baseline" gap={4}>
-          {stat.prefix && (
-            <Text
-              data-part="stat-prefix"
-              style={{
-                fontSize: 20,
-                fontWeight: 500,
-                lineHeight: 1,
-              }}
-            >
-              {stat.prefix}
-            </Text>
-          )}
-          <Text
-            data-part="stat-value"
-            style={{
-              fontSize: compact ? 28 : 36,
-              fontWeight: 800,
-              fontVariantNumeric: 'tabular-nums',
+      {/* Top row: the composed metric + the pattern's change pill + the
+          corner icon. */}
+      <div data-part="stat-top">
+        <div data-part="statistic">
+          <Statistic
+            title={stat.label}
+            value={stat.value}
+            prefix={stat.prefix}
+            suffix={stat.suffix}
+            animateValue
+            countFrom={0}
+            valueStyle={{
+              fontSize: 'var(--ds-stats-header-value-font-size, 2.25rem)',
+              fontWeight: 'var(--ds-stats-header-value-font-weight, 800)',
               lineHeight: 1,
+              fontVariantNumeric: 'tabular-nums',
             }}
-          >
-            {displayValue}
-          </Text>
-          {stat.suffix && (
-            <Text
-              data-part="stat-suffix"
-              style={{
-                fontSize: compact ? 12 : 14,
-                fontWeight: 500,
-                lineHeight: 1,
-                marginLeft: 2,
-              }}
-            >
-              {stat.suffix}
-            </Text>
-          )}
-        </Flex>
-
+          />
+        </div>
         {stat.change !== undefined && (
           <ChangeIndicator
             change={stat.change}
@@ -421,44 +157,39 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
             periodLabel={stat.periodLabel}
           />
         )}
-      </Flex>
+        {stat.icon && (
+          <Box data-part="stat-icon" aria-hidden="true">
+            {stat.icon}
+          </Box>
+        )}
+      </div>
 
-      {/* Sparkline dots */}
+      {/* Sparkline dots (pattern-owned decorative data viz) */}
       {stat.sparkDots && stat.sparkDots.length > 0 && (
-        <SparklineDots dots={stat.sparkDots} accent={accent} hovered={hovered} />
+        <SparklineDots dots={stat.sparkDots} accent={accent} />
       )}
 
-      {/* Progress bar (secondary, backwards compat) */}
-      {stat.progress !== undefined && !stat.sparkDots && <ProgressBar value={stat.progress} accent={accent} />}
+      {/* Progress meter (secondary, backwards compat): the composed Progress
+          primitive; the per-stat accent rides its strokeColor channel. */}
+      {stat.progress !== undefined && !stat.sparkDots && (
+        <div data-part="stat-progress" data-accent={accent}>
+          <Progress
+            percent={Math.max(0, Math.min(100, stat.progress))}
+            showInfo={false}
+            strokeColor={`var(--ds-color-${accent})`}
+          />
+        </div>
+      )}
 
       {/* Contextual insight */}
       {stat.insight && (
-        <Text
-          data-part="stat-insight"
-          style={{
-            fontSize: 11,
-            fontWeight: 400,
-            fontStyle: 'italic',
-            marginTop: 8,
-            lineHeight: 1.4,
-          }}
-        >
+        <Text data-part="stat-insight">
           {stat.insight}
         </Text>
       )}
 
-      {/* Gradient glow from bottom */}
-      <Box
-        data-part="card-glow"
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 40,
-          pointerEvents: 'none',
-        }}
-      />
+      {/* Gradient glow from bottom (decorative) */}
+      <Box data-part="card-glow" aria-hidden="true" />
     </Box>
   );
 }
@@ -470,33 +201,32 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
 /**
  * StatsHeader - Pulse Cards
  *
- * Operational stat cards with counter animations, sparkline dots, contextual
- * insights, and gradient glow accents. Renders 3-5 cards in a responsive
- * horizontal row above data tables.
- *
- * This component is engine-agnostic: it uses DS primitives (Box, Flex, Text)
- * which themselves resolve through the engine system.
+ * Operational stat cards composed on the Statistic / Skeleton / Progress
+ * primitives. The responsive frame is container-driven: the root is the
+ * `ds-stats-header` container and the skin owns the 1/2/N-column cuts; the
+ * engine only publishes the wide-column count on a quoted channel.
  */
 function StatsHeaderImpl({ stats, loading = false }: StatsHeaderProps) {
-  const { isMobile, isTablet } = useBreakpoints();
-  const compact = isMobile || isTablet;
-  const columns = isMobile ? 1 : isTablet ? 2 : Math.max(Math.min(stats.length, 4), 1);
-
   return (
-    <Box className="ds-stats-header" data-part="root">
-      <Box
-        data-part="card-grid"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
-          gap: 12,
-          width: '100%',
-        }}
-      >
+    <Box
+      className="ds-stats-header"
+      data-part="root"
+      data-loading={loading ? 'true' : 'false'}
+      style={{
+        '--ds-stats-header-columns': Math.max(Math.min(stats.length, 4), 1),
+      } as CSSProperties}
+    >
+      <div data-part="card-grid">
         {loading
-          ? Array.from({ length: stats.length || 4 }).map((_, i) => <SkeletonCard key={`skeleton-${i}`} />)
-          : stats.map((stat) => <StatCard key={stat.key} stat={stat} compact={compact} />)}
-      </Box>
+          ? Array.from({ length: stats.length || 4 }).map((_, i) => (
+              <Box data-part="skeleton-card" key={`skeleton-${i}`}>
+                {/* The composed Skeleton mirrors the metric (title + value +
+                    supporting lines); its paint is skeleton.css's. */}
+                <Skeleton title paragraph={{ rows: 2 }} />
+              </Box>
+            ))
+          : stats.map((stat) => <StatCard key={stat.key} stat={stat} />)}
+      </div>
     </Box>
   );
 }

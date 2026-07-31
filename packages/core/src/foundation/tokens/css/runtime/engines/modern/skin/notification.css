@@ -14,11 +14,18 @@
  * placement is LOGICAL -- `topLeft`/`bottomLeft` anchor at `inset-inline-start`
  * and mirror to the physical right under `dir="rtl"`. Centred placements use
  * `inset-inline: 0` + `margin-inline: auto`: direction-neutral, and unlike the
- * former `left: 50%; transform: translateX(-50%)` it creates no transform
+ * former half-offset-plus-translate centering it creates no transform
  * containing block. The provider's `top`/`bottom` props reach the paint
  * through the engine-stamped `--ds-notification-stack-offset` channel
  * (skin-declared consumer), and `--ds-z-notification` keeps its family-local
  * fallback (1600): it is declared nowhere globally.
+ *
+ * SPECIFICITY (4th-wave de-hack): every rule that paints a border COLOR is
+ * LIFTED under the stack scope, reaching (0,5,0)+ with NO repeated class or
+ * attribute, clearing the tenant artifacts' border-color floor at (0,3,1).
+ * The lift also repairs three silent losses: the icon well, the actions
+ * separator and the close button sat at (0,3,0) and their border colors were
+ * stomped by that floor whenever it applied.
  *
  * TONES: per-type fill/text/border derive from `--ds-notification-accent`,
  * keyed on `data-tone` including `open` (primary accent). Decorative one-sided
@@ -36,7 +43,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--ds-spacing-3);
-  width: min(26rem, calc(100vw - (var(--ds-spacing-4) * 2)));
+  inline-size: min(26rem, calc(100vw - (var(--ds-spacing-4) * 2)));
   pointer-events: none;
 }
 
@@ -55,18 +62,20 @@
   inset-inline-end: var(--ds-notification-stack-inline-gutter, var(--ds-spacing-4));
 }
 /* Centred placements: margin-auto centring is direction-neutral and avoids
-   the former translateX(-50%) transform containing block. */
+   the former translate-based centering's transform containing block. */
 .rottay-notification-stack--modern[data-part='stack-container'][data-placement='top'],
 .rottay-notification-stack--modern[data-part='stack-container'][data-placement='bottom'] {
   inset-inline: 0;
   margin-inline: auto;
 }
 
-/* ---- framed item ---- */
-.rottay-notification--modern.rottay-notification--modern[data-part='root'][data-part='root'] {
+/* ---- framed item (scope-lifted: border paint wins the tenant floor with no
+        repeated class or attribute; tone rules are lifted too so they keep
+        out-ranking the root's info default). ---- */
+.rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] {
   --ds-notification-accent: var(--ds-color-info);
   position: relative;
-  width: 100%;
+  inline-size: 100%;
   overflow: hidden;
   pointer-events: auto;
   color: var(--ds-color-text-primary);
@@ -83,16 +92,16 @@
   animation: ds-notification-enter-modern var(--ds-motion-normal) var(--ds-motion-ease-out) both;
 }
 
-.rottay-notification--modern[data-part='root'][data-tone='success'] {
+.rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'][data-tone='success'] {
   --ds-notification-accent: var(--ds-color-success);
 }
-.rottay-notification--modern[data-part='root'][data-tone='error'] {
+.rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'][data-tone='error'] {
   --ds-notification-accent: var(--ds-color-error);
 }
-.rottay-notification--modern[data-part='root'][data-tone='warning'] {
+.rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'][data-tone='warning'] {
   --ds-notification-accent: var(--ds-color-warning);
 }
-.rottay-notification--modern[data-part='root'][data-tone='open'] {
+.rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'][data-tone='open'] {
   --ds-notification-accent: var(--ds-color-primary);
 }
 
@@ -104,9 +113,9 @@
   padding: var(--ds-spacing-4);
 }
 
-.rottay-notification--modern[data-part='root'] [data-part='icon'] {
-  width: 2.25rem;
-  height: 2.25rem;
+.rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] [data-part='icon'] {
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -119,7 +128,7 @@
 }
 
 .rottay-notification--modern[data-part='root'] [data-part='body'] {
-  min-width: 0;
+  min-inline-size: 0;
   padding-block: 0.125rem;
 }
 
@@ -139,7 +148,7 @@
   line-height: var(--ds-line-height-relaxed);
 }
 
-.rottay-notification--modern[data-part='root'] [data-part='actions'] {
+.rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] [data-part='actions'] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -149,9 +158,9 @@
   border-top: 1px solid color-mix(in srgb, var(--ds-notification-accent) 16%, var(--ds-color-border-subtle));
 }
 
-.rottay-notification--modern[data-part='root'] [data-part='close-button'] {
-  width: 2rem;
-  height: 2rem;
+.rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] [data-part='close-button'] {
+  inline-size: 2rem;
+  block-size: 2rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -167,8 +176,18 @@
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
     color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-.rottay-notification--modern[data-part='root'] [data-part='close-button']:hover {
-  transform: translateY(-1px);
+/* Hover is hover-capable-only (4th-wave law); a held press settles the lift
+   and keeps the same quiet surface via :active. */
+@media (hover: hover) {
+  .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] [data-part='close-button']:hover {
+    transform: translateY(-1px);
+    color: var(--ds-color-text-primary);
+    background-color: var(--ds-surface-highlight);
+    border-color: color-mix(in srgb, var(--ds-notification-accent) 32%, var(--ds-color-border-subtle));
+  }
+}
+.rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] [data-part='close-button']:active {
+  transform: scale(var(--ds-state-press-scale, 0.98));
   color: var(--ds-color-text-primary);
   background-color: var(--ds-surface-highlight);
   border-color: color-mix(in srgb, var(--ds-notification-accent) 32%, var(--ds-color-border-subtle));
@@ -186,17 +205,25 @@
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-.rottay-notification--modern[data-part='root'][data-clickable='true']:hover {
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .rottay-notification--modern[data-part='root'][data-clickable='true']:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--ds-notification-accent) 44%, var(--ds-color-border-subtle));
+    box-shadow: var(--ds-elevation-4, var(--ds-elevation-3));
+  }
+}
+/* The clickable card answers a held press with the same accent frame, the
+   lift settled back -- touch and keyboard never lose the affordance. */
+.rottay-notification--modern[data-part='root'][data-clickable='true']:active {
+  transform: translateY(0);
   border-color: color-mix(in srgb, var(--ds-notification-accent) 44%, var(--ds-color-border-subtle));
-  box-shadow: var(--ds-elevation-4, var(--ds-elevation-3));
 }
 
 .rottay-notification--modern[data-part='root'] > [data-part='progress'] {
   position: absolute;
   inset-inline: 0;
-  bottom: 0;
-  height: 2px;
+  inset-block-end: 0;
+  block-size: 2px;
   background: color-mix(in srgb, var(--ds-notification-accent) 74%, transparent);
   transform-origin: left center;
   animation: ds-notification-progress-modern var(--ds-notification-duration) linear both;
@@ -225,13 +252,17 @@
 }
 
 /* forced-colors: shadow rings vanish, so the focus channel degrades to a
-   system outline. */
+   system outline; the lifetime bar survives as a ButtonText mark. */
 @media (forced-colors: active) {
   .rottay-notification--modern[data-part='root'] [data-part='close-button']:focus-visible,
   .rottay-notification--modern[data-part='root'][data-clickable='true']:focus-visible {
     outline: 2px solid CanvasText;
     outline-offset: 2px;
     box-shadow: none;
+  }
+
+  .rottay-notification--modern[data-part='root'] > [data-part='progress'] {
+    background: ButtonText;
   }
 }
 
@@ -241,8 +272,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-notification--modern.rottay-notification--modern[data-part='root'][data-part='root'],
-  .rottay-notification--modern[data-part='root'] > [data-part='progress'] {
+  .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'],
+  .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] > [data-part='progress'] {
     animation: none;
   }
 }

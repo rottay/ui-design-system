@@ -105,9 +105,11 @@
         -- when not bordered, no border key was ever set, so no rule fires
         for that state). `:not(.rottay-collapse--borderless)` is both the
         gate for `bordered` (the two are complementary, see
-        `Collapse.types.ts`'s COLLAPSE_DEFAULTS) and the specificity unit
-        that clears the (0,4,0) border-color floor. ---- */
-.rottay-collapse:not(.rottay-collapse--borderless)[data-part='root'] [data-part='panel'][data-part='panel'] {
+        `Collapse.types.ts`'s COLLAPSE_DEFAULTS) and, with the class, the two
+        data attributes and the pseudo-class argument, the (0,4,0) that
+        clears the tenant border floor (0,3,1) -- a repeated data-part would
+        be redundant here, so none is used (4th-wave recount). ---- */
+.rottay-collapse:not(.rottay-collapse--borderless)[data-part='root'] [data-part='panel'] {
   border: var(--ds-collapse-root-default-idle-border-width, 1px) var(--ds-collapse-root-default-idle-border-style, solid) var(--ds-collapse-root-default-idle-border-color, var(--ds-color-border));
 }
 
@@ -230,15 +232,19 @@
     color var(--ds-collapse-transition-duration, var(--ds-motion-fast, 120ms))
       var(--ds-collapse-transition-timing, var(--ds-motion-ease-out));
 }
-.rottay-collapse[data-part='root'] [data-part='header']:hover:not([data-disabled='true']):not([data-collapsible='disabled']):not([data-collapsible='icon']) {
-  /* `--ds-color-bg-hover` is a dark inset under both first-party themes
-     (#18181c) — dark-on-dark with the hover ink. The hover surface mixes
-     from the paired card chrome instead (pagination.css adjudication:
-     text-primary on `--ds-card-bg` = 15.0:1 BitHire / 14.8:1 TMM). */
-  background: var(
-    --ds-collapse-header-default-hover-bg,
-    color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-card-bg, var(--ds-surface-card)))
-  );
+/* Hover is hover-capable-only (4th-wave law); the pressed rule below already
+   gives touch and keyboard the equivalent deepened surface on :active. */
+@media (hover: hover) {
+  .rottay-collapse[data-part='root'] [data-part='header']:hover:not([data-disabled='true']):not([data-collapsible='disabled']):not([data-collapsible='icon']) {
+    /* `--ds-color-bg-hover` is a dark inset under both first-party themes
+       (#18181c) — dark-on-dark with the hover ink. The hover surface mixes
+       from the paired card chrome instead (pagination.css adjudication:
+       text-primary on `--ds-card-bg` = 15.0:1 BitHire / 14.8:1 TMM). */
+    background: var(
+      --ds-collapse-header-default-hover-bg,
+      color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-card-bg, var(--ds-surface-card)))
+    );
+  }
 }
 .rottay-collapse[data-part='root'] [data-part='header']:active:not([data-disabled='true']):not([data-collapsible='disabled']):not([data-collapsible='icon']) {
   /* `--ds-color-bg-active` is consumed-but-UNDEFINED (orphan, spec §2): the
@@ -254,8 +260,17 @@
   border-radius: var(--ds-collapse-header-focus-ring-radius, var(--ds-radius-md));
 }
 
-/* collapsible='icon': the arrow carries the toggle role and the ring. */
-.rottay-collapse[data-part='root'] [data-part='arrow'][role='button']:hover {
+/* collapsible='icon': the arrow carries the toggle role, the cursor and the
+   ring. Hover is hover-capable-only; :active gives touch the same ink. */
+.rottay-collapse[data-part='root'] [data-part='arrow'][role='button'] {
+  cursor: var(--ds-collapse-header-default-idle-cursor, pointer);
+}
+@media (hover: hover) {
+  .rottay-collapse[data-part='root'] [data-part='arrow'][role='button']:hover {
+    color: var(--ds-collapse-arrow-hover-color, var(--ds-color-primary));
+  }
+}
+.rottay-collapse[data-part='root'] [data-part='arrow'][role='button']:active {
   color: var(--ds-collapse-arrow-hover-color, var(--ds-color-primary));
 }
 .rottay-collapse[data-part='root'] [data-part='arrow']:focus-visible {
@@ -272,5 +287,8 @@
   }
   .rottay-collapse[data-part='root'] [data-part='header'][data-disabled='true'] {
     color: GrayText;
+  }
+  .rottay-collapse:not(.rottay-collapse--borderless)[data-part='root'] [data-part='panel'] {
+    border-color: ButtonText;
   }
 }

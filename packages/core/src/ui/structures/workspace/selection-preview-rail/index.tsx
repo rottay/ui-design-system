@@ -35,11 +35,17 @@ import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 
 import {
-  ArrowUpRightIcon as ArrowUpRight,
-  CopyIcon as Copy,
-  PanelRightCloseIcon as PanelRightClose,
-  ScanSearchIcon as ScanSearch,
-} from '../../../../graphics/icons';
+  ActionOpenExternalIcon,
+} from '@/graphics/icons/presentation/semantic/generated/roles/action-open-external';
+import {
+  ActionCopyIcon,
+} from '@/graphics/icons/presentation/semantic/generated/roles/action-copy';
+import {
+  ActionCloseIcon,
+} from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+import {
+  ActionSearchIcon,
+} from '@/graphics/icons/presentation/semantic/generated/roles/action-search';
 
 import { Badge, Box, Button, Flex, Text } from '../../../primitives';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -275,13 +281,13 @@ export function SelectionPreviewRail<T extends object>({
                 position: 'absolute',
                 top: 12,
                 insetInlineEnd: 12,
-                zIndex: 1,
+                zIndex: 'var(--ds-z-index-relative-above, 1)',
               }}
             >
               <Button
                 variant="ghost"
                 size="sm"
-                icon={<PanelRightClose style={{ width: 16, height: 16 }} />}
+                icon={<ActionCloseIcon size={16} decorative />}
                 aria-label={tOr('selectionPreviewRail.closePreview', 'Close preview')}
                 onClick={onClose}
                 className="ds-selection-preview-rail__close"
@@ -347,7 +353,7 @@ export function SelectionPreviewRail<T extends object>({
               <Button
                 variant="ghost"
                 size="sm"
-                icon={<PanelRightClose style={{ width: 16, height: 16 }} />}
+                icon={<ActionCloseIcon size={16} decorative />}
                 aria-label={tOr('selectionPreviewRail.closePreview', 'Close preview')}
                 onClick={onClose}
                 style={{ width: 34, minWidth: 34, padding: 0 }}
@@ -399,7 +405,7 @@ export function SelectionPreviewRail<T extends object>({
                       flexShrink: 0,
                     }}
                   >
-                    <ScanSearch aria-hidden="true" style={{ width: 15, height: 15 }} />
+                    <ActionSearchIcon size={15} decorative />
                   </span>
                   <Box style={{ minWidth: 0 }}>
                     <Flex align="center" gap={8} wrap="wrap">
@@ -450,7 +456,7 @@ export function SelectionPreviewRail<T extends object>({
                 <Button
                   variant="primary"
                   size="sm"
-                  icon={<ArrowUpRight style={{ width: 15, height: 15 }} />}
+                  icon={<ActionOpenExternalIcon size={15} decorative />}
                   onClick={() => onOpenItem(item)}
                   style={{ gap: 6 }}
                 >
@@ -460,7 +466,7 @@ export function SelectionPreviewRail<T extends object>({
               <Button
                 variant="ghost"
                 size="sm"
-                icon={<Copy style={{ width: 15, height: 15 }} />}
+                icon={<ActionCopyIcon size={15} decorative />}
                 onClick={handleCopyKey}
                 style={{ gap: 6 }}
               >

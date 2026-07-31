@@ -1,65 +1,333 @@
 /**
- * Modern PricingTable skin (WO-SKIN-06 CK-H2).
+ * Modern PricingTable skin.
  *
- * DELIBERATELY UNLAYERED (P-47): named DS layers sort before Tailwind's
- * unnamed base layer. Every painted descendant lands on a private BEM class,
- * so `renderPlanHeader` cannot be painted through a coincidental data-part.
- * Border-color selectors reach at least (0,4,0) to clear the tenant floor.
+ * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
+ * rottay-engines)` — this file does not control its own layering.
  *
- * Shared `pillBadgeSmStyle` and `spinnerStyle()` remain inline. The pill spread
- * defines neither background nor color, preserving P-78 when local overrides
- * are supplied here. Values are transcribed verbatim from the modern engine.
+ * SCOPE ROOT is `.ds-pattern-pricing-table.ds-engine-modern[data-part='root']`
+ * (two distinct classes + one attribute, (0,3,0); repetition is prohibited).
+ * Every painted descendant lands on a private BEM class so `renderPlanHeader`
+ * output cannot be painted through a coincidental data-part.
+ *
+ * COMPOSITION LAW: the engine composes certified primitives for every control
+ * — Button (CTA, `block`), Checkbox (billing toggle), Tag (recommended
+ * badge), Tooltip (feature descriptions), Empty (no plans). Those primitives
+ * own their paint; this file paints ONLY the pattern chrome: grid geometry,
+ * card frames, price hierarchy, feature-cell states, category headers, the
+ * loading spinner and the sticky first column. The pre-composition rules that
+ * repainted badge/CTA backgrounds were removed with the raw elements.
+ *
+ * HIGHLIGHT LAW: the recommended plan reads as frame + badge (shape + text),
+ * never a vertical accent rail and never a glow — a 2px primary frame with a
+ * quiet tint. In forced colors the frame re-expresses as Highlight and the
+ * feature states read by icon shape (check vs cross), never by hue.
+ *
+ * RESPONSIVE: this is a comparison TABLE — its value is cross-plan row
+ * alignment, so narrow containers keep the grid and scroll horizontally with
+ * a sticky feature column instead of re-stacking into per-plan cards (which
+ * would either break row alignment or duplicate the DOM for assistive tech).
+ * Container queries compact padding and the price ramp; the CTA is already
+ * full-width via the Button `block` prop.
  */
 
-.ds-pattern-pricing-table.ds-engine-modern .ds-pricing-table__feature-value[data-part='feature-value'][data-feature-state='included'] {
-  color: var(--ds-color-success);
+/* ---- root ---- */
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] {
+  min-inline-size: 0;
+  color: var(--ds-color-text-primary);
+  container-type: inline-size;
 }
 
-.ds-pattern-pricing-table.ds-engine-modern .ds-pricing-table__feature-value[data-part='feature-value'][data-feature-state='excluded'] {
-  color: var(--ds-color-text-secondary);
+/* ---- loading: shaped placeholder (status role is stamped by the engine) ---- */
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'][data-loading='true'] {
+  display: grid;
+  place-items: center;
+  padding-block: var(--ds-spacing-12, 3rem);
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__spinner {
+  display: block;
+  inline-size: 24px;
+  block-size: 24px;
+  border: 2px solid var(--ds-pricing-table-hairline, var(--ds-color-border));
+  border-block-start-color: var(--ds-color-primary);
+  border-radius: 999px;
+  animation: ds-pricing-table-spin
+    var(--ds-pricing-table-spinner-duration, calc(var(--ds-motion-glacial, 500ms) * 2))
+    linear infinite;
+}
+@keyframes ds-pricing-table-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.ds-pattern-pricing-table.ds-engine-modern .ds-pricing-table__plan-badge[data-part='plan-badge'][data-variant='savings'] {
-  background: color-mix(in srgb, var(--ds-color-success) 15%, transparent);
-  color: var(--ds-color-success);
+/* ---- empty (composed Empty primitive) ---- */
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__empty {
+  padding-block: var(--ds-spacing-8, 2rem);
 }
 
-.ds-pattern-pricing-table.ds-engine-modern .ds-pricing-table__plan-badge[data-part='plan-badge'][data-variant='popular'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
+/* ---- billing toggle (composed Checkbox between its two labels) ---- */
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-3, 12px);
+  margin-block-end: var(--ds-spacing-8, 2rem);
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__toggle-label {
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-sm);
+  transition: color var(--ds-pricing-table-motion-duration, var(--ds-motion-fast))
+    var(--ds-pricing-table-motion-timing, var(--ds-motion-ease-out));
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root']
+  .ds-pricing-table__toggle-label[data-active='true'] {
+  color: var(--ds-color-text-primary);
+  font-weight: var(--ds-font-weight-semibold);
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__toggle-control {
+  display: inline-flex;
+  align-items: center;
 }
 
-.ds-pattern-pricing-table.ds-engine-modern .ds-pricing-table__plan-card[data-part='plan-card'][data-highlighted='true'] {
-  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+/* ---- scroll frame: horizontal overflow with the feature column pinned ---- */
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__scroll {
+  overflow-inline: auto;
+  scrollbar-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border)) transparent;
+  scrollbar-width: thin;
+}
+
+/* ---- comparison grid ---- */
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__table {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__features-head {
+  min-inline-size: var(--ds-pricing-table-features-head-min-inline-size, 12rem);
+  padding-block: var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-spacing-3, 12px);
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-semibold);
+  text-align: start;
+  vertical-align: bottom;
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__plan-head {
+  padding: var(--ds-spacing-2, 8px);
+  text-align: center;
+  vertical-align: top;
+}
+
+/* ---- plan card: quiet frame; the recommended plan gets frame + badge ---- */
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__plan-card {
+  display: grid;
+  justify-items: center;
+  gap: var(--ds-pricing-table-card-gap, var(--ds-spacing-2, 8px));
+  padding: var(--ds-pricing-table-card-padding, var(--ds-spacing-4, 16px));
+  border: 1px solid var(--ds-pricing-table-hairline, var(--ds-color-border));
   border-radius: var(--ds-radius-lg);
-  border: 2px solid var(--ds-color-primary);
+  background: var(--ds-surface-card, var(--ds-color-bg-elevated));
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root']
+  .ds-pricing-table__plan-card[data-highlighted='true'] {
+  border: var(--ds-pricing-table-highlight-frame-width, 2px) solid var(--ds-color-primary);
+  background: var(
+    --ds-pricing-table-highlight-bg,
+    color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card, var(--ds-color-bg-elevated)))
+  );
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__plan-badge {
+  margin-block-end: var(--ds-spacing-1, 4px);
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__plan-name {
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-lg);
+  font-weight: var(--ds-font-weight-bold);
 }
 
-.ds-pattern-pricing-table.ds-engine-modern .ds-pricing-table__plan-card[data-part='plan-card'][data-highlighted='false'] {
-  background: var(--ds-surface-card);
-  border-radius: var(--ds-radius-lg);
-  border: 1px solid var(--ds-color-border);
-}
-
-.ds-pattern-pricing-table.ds-engine-modern .ds-pricing-table__cta-button[data-part='cta-button'] {
-  border-radius: var(--ds-radius-md);
-  border: none;
-}
-
-.ds-pattern-pricing-table.ds-engine-modern .ds-pricing-table__cta-button[data-part='cta-button'][data-highlighted='true'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-}
-
-.ds-pattern-pricing-table.ds-engine-modern .ds-pricing-table__cta-button[data-part='cta-button'][data-highlighted='false'] {
-  background: transparent;
+/* ---- price hierarchy: currency / amount (tabular) / period ---- */
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__price {
+  unicode-bidi: isolate;
   color: var(--ds-color-text-primary);
 }
-
-.ds-pattern-pricing-table.ds-engine-modern .ds-pricing-table__category-header[data-part='category-header'] {
-  border-color: var(--ds-color-border);
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__price-currency {
+  font-size: var(--ds-font-size-lg);
+  font-weight: var(--ds-font-weight-semibold);
+  vertical-align: baseline;
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__price-amount {
+  font-size: var(--ds-pricing-table-price-amount-size, var(--ds-font-size-fluid-3xl));
+  font-weight: var(--ds-font-weight-extrabold, var(--ds-font-weight-bold));
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__price-period,
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__plan-description {
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs);
+  line-height: 1.45;
 }
 
-.ds-pattern-pricing-table.ds-engine-modern .ds-pricing-table__feature-label[data-part='feature-label'] {
-  border-bottom: 1px dotted var(--ds-color-border);
+/* ---- CTA (composed Button, block); only rhythm is owned here ---- */
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__cta {
+  align-self: stretch;
+  inline-size: 100%;
+  margin-block-start: var(--ds-spacing-2, 8px);
+}
+
+/* ---- category header: quiet section break, never an accent band ---- */
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__category-header {
+  padding-block: var(--ds-spacing-6, 24px) var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-spacing-3, 12px);
+  border-block-start: 1px solid var(--ds-pricing-table-hairline, var(--ds-color-border));
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-bold);
+  letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
+  text-align: start;
+  text-transform: uppercase;
+}
+
+/* ---- feature rows: hairline-separated, label start / values center ---- */
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-cell,
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__value-cell {
+  padding-block: var(--ds-spacing-3, 12px);
+  padding-inline: var(--ds-spacing-3, 12px);
+  border-block-end: 1px solid
+    color-mix(in srgb, var(--ds-pricing-table-hairline, var(--ds-color-border)) 60%, transparent);
+  font-size: var(--ds-font-size-sm);
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-cell {
+  color: var(--ds-color-text-primary);
+  text-align: start;
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__value-cell {
+  text-align: center;
+}
+
+/* ---- feature label with tooltip: dotted help affordance + focus ring ---- */
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label {
+  border-block-end: 1px dotted var(--ds-color-text-muted);
+  cursor: help;
+  transition:
+    color var(--ds-pricing-table-motion-duration, var(--ds-motion-fast))
+      var(--ds-pricing-table-motion-timing, var(--ds-motion-ease-out)),
+    border-color var(--ds-pricing-table-motion-duration, var(--ds-motion-fast))
+      var(--ds-pricing-table-motion-timing, var(--ds-motion-ease-out));
+}
+@media (hover: hover) {
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label:hover {
+    border-block-end-style: solid;
+    color: var(--ds-color-primary);
+  }
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label:focus-visible {
+  border-block-end-style: solid;
+  color: var(--ds-color-primary);
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* ---- tri-state feature value: shape first (check vs cross), ink second ---- */
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root']
+  .ds-pricing-table__feature-value[data-feature-state='included'] {
+  color: var(--ds-color-success);
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root']
+  .ds-pricing-table__feature-value[data-feature-state='excluded'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root']
+  .ds-pricing-table__feature-value[data-feature-state='custom'] {
+  color: var(--ds-color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- narrow containers: compact rhythm + sticky feature column while the
+        plan columns scroll (comparison semantics stay intact). ---- */
+@container (max-width: 640px) {
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__plan-card {
+    padding: var(--ds-spacing-3, 12px);
+  }
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__price-amount {
+    font-size: var(--ds-pricing-table-price-amount-size, var(--ds-font-size-fluid-2xl));
+  }
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-cell,
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__value-cell {
+    padding-block: var(--ds-spacing-2, 8px);
+    padding-inline: var(--ds-spacing-2, 8px);
+  }
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__features-head,
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-cell {
+    position: sticky;
+    z-index: 1;
+    inset-inline-start: 0;
+    background: var(
+      --ds-pricing-table-sticky-bg,
+      var(--ds-surface-card, var(--ds-color-bg-elevated))
+    );
+  }
+}
+
+/* ---- reduced motion: spinner and label transitions go instant. ---- */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__spinner {
+    animation: none;
+  }
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__toggle-label,
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label {
+    transition: none;
+  }
+}
+
+/* ---- forced colors: frames, hairlines and ink re-express in system colors;
+        the recommended plan reads as a Highlight frame, feature states read
+        by icon shape, and the spinner keeps its motion cue in system ink.
+        No data-viz here, so no forced-color-adjust opt-out anywhere. ---- */
+@media (forced-colors: active) {
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__plan-card {
+    border-color: ButtonText;
+    background: Canvas;
+  }
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root']
+    .ds-pricing-table__plan-card[data-highlighted='true'] {
+    border-color: Highlight;
+    background: Canvas;
+  }
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__category-header,
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-cell,
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__value-cell {
+    border-color: ButtonText;
+  }
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__features-head,
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-cell {
+    background: Canvas;
+  }
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root']
+    .ds-pricing-table__feature-value[data-feature-state='included'],
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root']
+    .ds-pricing-table__feature-value[data-feature-state='excluded'] {
+    color: CanvasText;
+  }
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__toggle-label,
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__price-period,
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__plan-description,
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__category-header {
+    color: GrayText;
+  }
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label {
+    border-block-end-color: ButtonText;
+  }
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label:focus-visible {
+    outline-color: Highlight;
+  }
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__spinner {
+    border-color: ButtonText;
+    border-block-start-color: Highlight;
+  }
 }

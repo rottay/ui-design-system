@@ -41,14 +41,14 @@
 
 .rottay-button-group[data-connected='true'][data-orientation='horizontal']
   > .rottay-button:first-child {
-  border-start-start-radius: var(--ds-button-resolved-radius);
-  border-end-start-radius: var(--ds-button-resolved-radius);
+  border-start-start-radius: var(--_ds-button-resolved-radius);
+  border-end-start-radius: var(--_ds-button-resolved-radius);
 }
 
 .rottay-button-group[data-connected='true'][data-orientation='horizontal']
   > .rottay-button:last-child {
-  border-start-end-radius: var(--ds-button-resolved-radius);
-  border-end-end-radius: var(--ds-button-resolved-radius);
+  border-start-end-radius: var(--_ds-button-resolved-radius);
+  border-end-end-radius: var(--_ds-button-resolved-radius);
 }
 
 .rottay-button-group[data-connected='true'][data-orientation='vertical']
@@ -58,14 +58,14 @@
 
 .rottay-button-group[data-connected='true'][data-orientation='vertical']
   > .rottay-button:first-child {
-  border-start-start-radius: var(--ds-button-resolved-radius);
-  border-start-end-radius: var(--ds-button-resolved-radius);
+  border-start-start-radius: var(--_ds-button-resolved-radius);
+  border-start-end-radius: var(--_ds-button-resolved-radius);
 }
 
 .rottay-button-group[data-connected='true'][data-orientation='vertical']
   > .rottay-button:last-child {
-  border-end-start-radius: var(--ds-button-resolved-radius);
-  border-end-end-radius: var(--ds-button-resolved-radius);
+  border-end-start-radius: var(--_ds-button-resolved-radius);
+  border-end-end-radius: var(--_ds-button-resolved-radius);
 }
 
 .rottay-button-group[data-connected='true'] > .rottay-button:is(:hover, :focus-visible),
@@ -74,17 +74,15 @@
   z-index: 1;
 }
 
-@media (max-width: 639px) {
-  .rottay-button-group[data-part='group']:not([data-connected='true']) {
-    inline-size: var(--ds-button-group-mobile-width);
-    flex-direction: var(--ds-button-group-mobile-direction);
-    gap: var(--ds-button-group-mobile-gap);
-  }
+.rottay-button-group[data-part='group'][data-mobile='true']:not([data-connected='true']) {
+  inline-size: var(--ds-button-group-mobile-width);
+  flex-direction: var(--ds-button-group-mobile-direction);
+  gap: var(--ds-button-group-mobile-gap);
+}
 
-  .rottay-button-group[data-part='group']:not([data-connected='true'])
-    > .rottay-button {
-    inline-size: 100%;
-  }
+.rottay-button-group[data-part='group'][data-mobile='true']:not([data-connected='true'])
+  > .rottay-button {
+  inline-size: 100%;
 }
 
 @media (forced-colors: active) {

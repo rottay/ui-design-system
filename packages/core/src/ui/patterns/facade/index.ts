@@ -14,3 +14,13 @@
 
 export { PatternFilterPanel } from '../forms/filter-panel';
 export type { FilterPanelProps } from '../forms/filter-panel';
+
+/**
+ * Modern-locked empty-state anatomy.
+ *
+ * Modern pattern engines use this synchronous implementation where their
+ * contract already pins Modern anatomy. The tier facade is the reviewed
+ * cross-group boundary; consumers never address the feedback group's private
+ * engine path directly.
+ */
+export { default as ModernEmptyState } from '../feedback/empty-state/engines/modern';

@@ -65,17 +65,22 @@
  *
  * @see {@link ModalProps} - Component props interface
  * @see {@link ClassicModal} - Ant Design alternative
- * @see {@link ModernModal} - DaisyUI alternative
+ * @see {@link ModernModal} - Rottay native-dialog alternative
  * @module Modal/Engines/Rustic
  * @category Feedback
  * @package @rottay/design-system
  */
 
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useId } from 'react';
 import type { ModalProps, ModalSize } from '../../contracts';
 import { MODAL_DEFAULTS } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
+import { FocusTrap } from '../../../../runtime/overlay/focus-management/focus-trap';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
+import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 // ============================================================================
 // Constants
@@ -109,6 +114,34 @@ const SIZE_STYLES: Record<ModalSize, { maxWidth: string; width?: string }> = {
   /** Full width with constraint */
   full: { maxWidth: '90vw', width: '100%' },
 };
+
+const MAX_HEIGHT_STYLES: Record<ModalSize, string> = {
+  xs: 'var(--ds-modal-xs-max-height, 70vh)',
+  sm: 'var(--ds-modal-sm-max-height, 75vh)',
+  md: 'var(--ds-modal-md-max-height, 80vh)',
+  lg: 'var(--ds-modal-lg-max-height, 85vh)',
+  xl: 'var(--ds-modal-xl-max-height, 90vh)',
+  '2xl': 'var(--ds-modal-2xl-max-height, 90vh)',
+  '3xl': 'var(--ds-modal-3xl-max-height, 90vh)',
+  '4xl': 'var(--ds-modal-4xl-max-height, 90vh)',
+  '5xl': 'var(--ds-modal-5xl-max-height, 90vh)',
+  full: 'var(--ds-modal-full-max-height, 100vh)',
+};
+
+const PADDING_STYLES = {
+  none: '0',
+  sm: 'var(--ds-modal-padding-sm, 12px)',
+  md: 'var(--ds-modal-padding-md, 16px)',
+  lg: 'var(--ds-modal-padding-lg, 24px)',
+} as const;
+
+const RADIUS_STYLES = {
+  none: '0',
+  sm: 'var(--ds-modal-radius-sm, var(--ds-radius-sm))',
+  md: 'var(--ds-modal-radius-md, var(--ds-radius-md))',
+  lg: 'var(--ds-modal-radius-lg, var(--ds-radius-lg))',
+  xl: 'var(--ds-modal-radius-xl, var(--ds-radius-xl))',
+} as const;
 
 // ============================================================================
 // Component
@@ -160,6 +193,10 @@ const SIZE_STYLES: Record<ModalSize, { maxWidth: string; width?: string }> = {
  * ```
  */
 export default function RusticModal(props: ModalProps): React.ReactElement {
+  const { t } = useTranslation('components');
+  const { isMobile } = useBreakpoints();
+  const overlayMotion = useMotionRecipePresentation('overlay.modal');
+
   // ---------------------------------------------------------------------------
   // Props Destructuring
   // ---------------------------------------------------------------------------
@@ -175,19 +212,35 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
 
     // Content
     title,
+    header,
     children,
     footer,
     hideFooter,
 
     // Behavior
     onClose,
+    onOpen,
     onOpenChange,
     closable = MODAL_DEFAULTS.closable,
     closeOnOverlayClick = MODAL_DEFAULTS.closeOnOverlayClick,
+    closeOnBackdropClick,
     closeOnEscape = MODAL_DEFAULTS.closeOnEscape,
+    preventScroll = MODAL_DEFAULTS.preventScroll,
 
     // Overlay
     overlayOpacity = MODAL_DEFAULTS.overlayOpacity,
+    showBackdrop = MODAL_DEFAULTS.showBackdrop,
+    blurBackdrop = MODAL_DEFAULTS.blurBackdrop,
+
+    // Presentation
+    placement = MODAL_DEFAULTS.placement,
+    fullScreen = false,
+    adaptiveFullscreen = MODAL_DEFAULTS.adaptiveFullscreen,
+    radius = MODAL_DEFAULTS.radius,
+    shadow = MODAL_DEFAULTS.shadow,
+    padding = MODAL_DEFAULTS.padding,
+    divider = MODAL_DEFAULTS.divider,
+    disableAnimation = MODAL_DEFAULTS.disableAnimation,
 
     // Confirmation
     okText = 'OK',
@@ -199,9 +252,21 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
     // Styling
     className = '',
     style,
+    id,
+    'data-testid': dataTestId,
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedBy,
+    description,
   } = props;
 
   const isOpen = Boolean(open);
+  const generatedId = useId();
+  const titleId = `${id ?? generatedId}-title`;
+  const descriptionId = `${id ?? generatedId}-description`;
+  const effectiveBackdropClose = closeOnBackdropClick ?? closeOnOverlayClick;
+  const adaptive = !fullScreen && adaptiveFullscreen && isMobile;
+  const effectiveFullscreen = fullScreen || adaptive;
+  const motionIsFinal = overlayMotion.recipe.state === 'final';
 
   useModalInertSiblings(isOpen);
 
@@ -213,19 +278,19 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
    * Handle cancel/close action.
    * Called when X button clicked, overlay clicked, or Escape pressed.
    */
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     onClose?.();
     onCancel?.();
     onOpenChange?.(false);
-  };
+  }, [onClose, onCancel, onOpenChange]);
 
   /**
    * Handle OK/confirm action.
    * Called when OK button is clicked.
    */
-  const handleOk = () => {
+  const handleOk = useCallback(() => {
     onOk?.();
-  };
+  }, [onOk]);
 
   // ---------------------------------------------------------------------------
   // Keyboard Handling
@@ -244,7 +309,16 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
 
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, closeOnEscape]);
+  }, [isOpen, closeOnEscape, handleCancel]);
+
+  useEffect(() => {
+    if (isOpen) {
+      onOpen?.();
+      onOpenChange?.(true);
+    } else {
+      onOpenChange?.(false);
+    }
+  }, [isOpen, onOpen, onOpenChange]);
 
   // ---------------------------------------------------------------------------
   // Body Scroll Lock
@@ -255,16 +329,22 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
    * Prevents background content from scrolling while modal is visible.
    */
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+    if (!isOpen || !preventScroll) return;
+
+    const originalOverflow = document.body.style.overflow;
+    const originalPaddingRight = document.body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+    document.body.style.overflow = 'hidden';
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
     }
-    // Cleanup on unmount
+
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
     };
-  }, [isOpen]);
+  }, [isOpen, preventScroll]);
 
   // ---------------------------------------------------------------------------
   // Early Return
@@ -288,6 +368,16 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
   // viewport height. The centered prop switches between vertical centering
   // (dialogs) and top-aligned (long form modals that need scroll room).
   // overlayOpacity is configurable per instance for different visual weights.
+  const resolvedPlacement =
+    placement === 'center' && centered === false ? 'top' : placement;
+  const placementStyle: React.CSSProperties = adaptive
+    ? { alignItems: 'stretch' }
+    : resolvedPlacement === 'top'
+      ? { alignItems: 'flex-start', paddingTop: '10vh' }
+      : resolvedPlacement === 'bottom'
+        ? { alignItems: 'flex-end', paddingBottom: '10vh' }
+        : { alignItems: 'center' };
+
   const overlayStyle: React.CSSProperties = {
     position: 'fixed',
     top: 0,
@@ -298,28 +388,42 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
     // the rgba() the overlay paints.
     '--ds-modal-scrim-opacity': overlayOpacity,
     display: 'flex',
-    alignItems: centered ? 'center' : 'flex-start',
     justifyContent: 'center',
-    padding: '20px',
+    padding: adaptive ? 0 : '20px',
     zIndex,
     overflowY: 'auto',
+    ...placementStyle,
   } as React.CSSProperties;
 
   // Surface paint lives in the unlayered rustic Modal skin; the three-level CSS
   // variable fallback chain (component token -> semantic token -> literal) moved
   // with it verbatim. Consumer `style` still wins as an inline declaration.
   const modalStyle: React.CSSProperties = {
-    position: 'relative',
-    width: '100%',
-    ...SIZE_STYLES[modalSize],
+    position: adaptive ? 'fixed' : 'relative',
+    inset: adaptive ? 0 : undefined,
+    display: 'flex',
+    flexDirection: 'column',
+    width: effectiveFullscreen ? '100vw' : '100%',
+    height: adaptive ? '100dvh' : undefined,
+    ...(effectiveFullscreen ? { maxWidth: 'none', maxHeight: 'none' } : SIZE_STYLES[modalSize]),
+    maxHeight: effectiveFullscreen ? 'none' : MAX_HEIGHT_STYLES[modalSize],
+    overflow: 'hidden',
+    ['--ds-overlay-modal-radius' as any]: effectiveFullscreen
+      ? '0'
+      : RADIUS_STYLES[radius ?? 'lg'],
+    ...overlayMotion.variables,
+    transition:
+      adaptive || disableAnimation || motionIsFinal
+        ? 'none'
+        : 'transform var(--ds-recipe-enter, 0.3s) var(--ds-recipe-curve, cubic-bezier(0.16, 1, 0.3, 1)), opacity var(--ds-recipe-enter, 0.3s) var(--ds-recipe-curve, cubic-bezier(0.16, 1, 0.3, 1))',
     ...style,
-  };
+  } as React.CSSProperties;
 
   /**
    * Header section styles.
    */
   const headerStyle: React.CSSProperties = {
-    padding: 'var(--ds-modal-header-padding, 16px 24px)',
+    padding: PADDING_STYLES[padding ?? 'lg'],
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -329,7 +433,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
    * Footer section styles.
    */
   const footerStyle: React.CSSProperties = {
-    padding: 'var(--ds-modal-footer-padding, 10px 16px)',
+    padding: PADDING_STYLES[padding ?? 'lg'],
     display: 'flex',
     justifyContent: 'flex-end',
     gap: 'var(--ds-modal-footer-gap, 12px)',
@@ -361,79 +465,107 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
     <Portal>
       <div
         data-part="root"
-        className={`rottay-modal-overlay rottay-modal-root--rustic ${className}`}
+        data-backdrop={showBackdrop ? 'true' : 'false'}
+        data-blur={blurBackdrop ? 'true' : 'false'}
+        className={`rottay-overlay rottay-modal-overlay rottay-modal-root--rustic ${className}`}
         style={overlayStyle}
-        onClick={closeOnOverlayClick ? handleCancel : undefined}
+        onClick={effectiveBackdropClose ? handleCancel : undefined}
       >
         {/* stopPropagation prevents overlay click handler from firing when
           user clicks inside the modal content. role="dialog" + aria-modal="true"
           informs assistive technologies this is a modal context, enabling
           proper focus trapping behavior in screen readers. */}
-      <div
-        data-part="surface"
-        data-open="true"
-        className="rottay-modal"
-        style={modalStyle}
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-      >
-        {/* Header section */}
-        {(title || closable) && (
-          <div data-part="header" style={headerStyle}>
-            {title && (
-              <h3 data-part="title" style={{ margin: 0, fontSize: '16px', fontWeight: 500 }}>
-                {title}
-              </h3>
-            )}
-            {closable && (
-              <button
-                data-part="close-button"
-                style={{
-                  fontSize: '20px',
-                  cursor: 'pointer',
-                }}
-                onClick={handleCancel}
-                aria-label="Close"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* Body section */}
-        <div data-part="body" style={{ padding: '24px' }}>{children}</div>
-
-        {/* Footer section */}
-        {!hideFooter && (
-          <div data-part="footer" style={footerStyle}>
-            {footer || (
-              <>
-                {onCancel && (
-                  <button data-part="action" data-action="cancel" style={cancelButtonStyle} onClick={handleCancel}>
-                    {cancelText}
-                  </button>
+        <FocusTrap active={isOpen} autoFocus restoreFocus>
+          <div
+            data-part="surface"
+            data-open="true"
+            data-fullscreen={effectiveFullscreen ? 'true' : 'false'}
+            data-adaptive-fullscreen={adaptive ? 'true' : 'false'}
+            data-shadow={shadow ? 'true' : 'false'}
+            {...overlayMotion.attributes}
+            className={`rottay-modal rottay-modal--rustic rottay-modal--${modalSize} rottay-overlay-modal-shell--rustic`}
+            style={modalStyle}
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            id={id}
+            data-testid={dataTestId}
+            aria-label={ariaLabel}
+            aria-labelledby={!ariaLabel && title && !header ? titleId : undefined}
+            aria-describedby={ariaDescribedBy ?? (description ? descriptionId : undefined)}
+          >
+            {(title || header || closable) && (
+              <div data-part="header" data-divider={divider ? 'true' : 'false'} style={headerStyle}>
+                {(header || title) && (
+                  <div data-part="title" style={{ flex: 1 }}>
+                    {header ?? (
+                      <h3
+                        id={titleId}
+                        style={{ margin: 0, fontSize: '16px', fontWeight: 500 }}
+                      >
+                        {title}
+                      </h3>
+                    )}
+                  </div>
                 )}
-                {/* Text-based loading indicator ("Loading...") instead of a
-                    spinner because Rustic avoids icon/animation dependencies.
-                    disabled prevents double-submission during async confirmation. */}
-                {onOk && (
+                {closable && (
                   <button
-                    data-part="action"
-                    data-action="ok"
-                    style={okButtonStyle}
-                    onClick={handleOk}
-                    disabled={confirmLoading}
+                    type="button"
+                    data-part="close-button"
+                    style={{ cursor: 'pointer' }}
+                    onClick={handleCancel}
+                    aria-label={t('modal.close')}
                   >
-                    {confirmLoading ? 'Loading...' : okText}
+                    <ActionCloseIcon decorative size={18} />
                   </button>
                 )}
-              </>
+              </div>
+            )}
+
+            <div
+              data-part="body"
+              style={{
+                flex: 1,
+                minHeight: 0,
+                overflowY: 'auto',
+                padding: PADDING_STYLES[padding ?? 'lg'],
+              }}
+            >
+              {description && (
+                <p id={descriptionId} data-part="description">
+                  {description}
+                </p>
+              )}
+              {children}
+            </div>
+
+            {!hideFooter && (footer || onCancel || onOk) && (
+              <div data-part="footer" data-divider={divider ? 'true' : 'false'} style={footerStyle}>
+                {footer || (
+                  <>
+                    {onCancel && (
+                      <button type="button" data-part="action" data-action="cancel" style={cancelButtonStyle} onClick={handleCancel}>
+                        {cancelText}
+                      </button>
+                    )}
+                    {onOk && (
+                      <button
+                        type="button"
+                        data-part="action"
+                        data-action="ok"
+                        style={okButtonStyle}
+                        onClick={handleOk}
+                        disabled={confirmLoading}
+                      >
+                        {confirmLoading ? t('modal.loading') : okText}
+                      </button>
+                    )}
+                  </>
+                )}
+              </div>
             )}
           </div>
-        )}
-      </div>
+        </FocusTrap>
       </div>
     </Portal>
   );

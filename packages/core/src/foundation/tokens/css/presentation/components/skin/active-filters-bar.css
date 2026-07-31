@@ -1,151 +1,160 @@
 /**
  * ActiveFiltersBar skin — engine-agnostic and deliberately unlayered.
  * Unlayered paint outranks Tailwind preflight while caller inline styles keep
- * their per-instance override precedence. Border paint reaches the tenant
- * border floor at (0,4,0); composed Text color and typography reach (0,5,0).
+ * their per-instance override precedence.
  *
- * WAVE R2+R3 (Quiet Premium editorial): the rail is a hairline-separated
- * strip of quiet chips. The count pill is the uppercase eyebrow, the chip
- * label is the tracked mini-eyebrow, and the value is the readable payload.
- * One worn-blue accent (the primary token) marks the count pill and the
- * add-filter CTA only. Hover/focus/active microinteractions ride the
- * --ds-motion-* channels and are silenced under prefers-reduced-motion.
- * Typography lives here, never in the engine.
+ * COMPOSITION LAW (S16): the filter chips are the certified Tag primitive
+ * (`closable`; the caller `data-part='chip'` wins the root anatomy hook per
+ * P-79), and clear-all / add-filter are the Button primitive — the retired
+ * hand-rolled chip chrome (gradient pill, custom remove button), the
+ * chip-remove hover/focus/active set and the clear-all/add-filter chrome
+ * sets are gone (duplication; each primitive's own skin owns its paint,
+ * including forced-colors). What this file owns: the rail's root frame, the
+ * count eyebrow pill (pattern chrome, NOT a filter chip), the label/value
+ * typography INSIDE the composed Tag, the layout geometry drained from the
+ * engine's inline styles (logical paddings only), the entrance transition
+ * and the forced-colors contract for the pattern-owned pieces.
+ *
+ * SPECIFICITY (P-48): border paint reaches the tenant floor at (0,4,0) and
+ * composed-Text color at (0,5,0) from the two root classes + the root's own
+ * `data-part` + the target's DISTINCT contract attributes in the descendant
+ * chain — never an identical class or attribute repeated (4th-tanda law;
+ * the former `[data-part='root']×2`, `pill×3`, `chip×2`, `chip-label×3`,
+ * `chip-value×3`, `chip-remove×2`, `clear-all×2`, `add-filter×2` selectors
+ * are retired).
  */
 
-/* root --------------------------------------------------------------------- */
-
-.ds-structure.ds-active-filters-bar[data-part='root'][data-part='root'] {
-  border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-primary) 6%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%));
+/* ---- root: quiet hairline strip (padding drained from the engine's inline
+        styles, keyed on the embedded variant; logical inline axis) ---- */
+.ds-structure.ds-active-filters-bar[data-part="root"] {
+  padding-block: var(--ds-active-filters-bar-padding-block, 10px 12px);
+  padding-inline: var(--ds-active-filters-bar-padding-inline, 16px);
+  animation: ds-active-filters-bar-enter
+    var(--ds-active-filters-bar-motion-duration, var(--ds-motion-normal))
+    var(--ds-motion-ease-out, ease-out) both;
 }
-.ds-structure.ds-active-filters-bar[data-part='root'][data-part='root'][data-embedded='true'] {
-  border-bottom: none;
-  background: transparent;
+.ds-structure.ds-active-filters-bar[data-part="root"][data-embedded="false"] {
+  border-bottom: var(
+    --ds-active-filters-bar-border,
+    1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)
+  );
+  background: var(
+    --ds-active-filters-bar-background,
+    linear-gradient(
+      180deg,
+      color-mix(
+        in srgb,
+        var(--ds-surface-card) 94%,
+        var(--ds-color-bg-primary) 6%
+      ),
+      color-mix(
+        in srgb,
+        var(--ds-surface-card) 90%,
+        var(--ds-color-bg-primary) 10%
+      )
+    )
+  );
+}
+.ds-structure.ds-active-filters-bar[data-part="root"][data-embedded="true"] {
+  padding-block: var(--ds-active-filters-bar-embedded-padding-block, 6px 10px);
 }
 
-/* count pill — the uppercase eyebrow ---------------------------------------- */
+/* ---- layout regions (geometry drained from the retired inline flex styles) ---- */
+.ds-structure.ds-active-filters-bar[data-part="root"]
+  [data-part="chips-region"] {
+  flex: 1 1 var(--ds-active-filters-bar-chips-basis, 560px);
+  min-inline-size: 0;
+}
+.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="actions"] {
+  flex: 0 0 auto;
+}
 
-.ds-structure.ds-active-filters-bar [data-part='pill'][data-part='pill'][data-part='pill'] {
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
-  background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
-  color: var(--ds-color-primary);
+/* ---- count pill — the uppercase eyebrow (pattern chrome: a status counter,
+        not a filter chip, so it is NOT the Tag primitive; the count scans
+        tabular) ---- */
+.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"] {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--ds-active-filters-bar-count-block-size, 24px);
+  padding-block: 0;
+  padding-inline: var(--ds-active-filters-bar-count-padding-inline, 9px);
+  border-radius: var(
+    --ds-active-filters-bar-count-radius,
+    var(--ds-radius-full, 9999px)
+  );
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-weight: 700;
   letter-spacing: 0.11em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
+  color: var(--ds-active-filters-bar-count-color, var(--ds-color-primary));
+  background: var(
+    --ds-active-filters-bar-count-background,
+    color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
+  );
+}
+.ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"] {
+  border: var(
+    --ds-active-filters-bar-count-border,
+    1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent)
+  );
 }
 
-/* filter chip ---------------------------------------------------------------- */
-
-.ds-structure.ds-active-filters-bar [data-part='chip'][data-part='chip'] {
-  border-radius: 999px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card)));
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
-}
-.ds-structure.ds-active-filters-bar [data-part='chip-label'][data-part='chip-label'][data-part='chip-label'] {
+/* ---- chip content typography INSIDE the composed Tag (the primitive owns
+        the chip chrome; the label is the tracked mini-eyebrow, the value is
+        the readable payload -- never microscopic body text) ---- */
+.ds-structure.ds-active-filters-bar[data-part="root"]
+  [data-part="chip"]
+  [data-part="chip-label"] {
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-weight: 700;
   letter-spacing: 0.08em;
+  line-height: 1;
   text-transform: uppercase;
+  white-space: nowrap;
 }
-.ds-structure.ds-active-filters-bar [data-part='chip-value'][data-part='chip-value'][data-part='chip-value'] {
+.ds-structure.ds-active-filters-bar[data-part="root"]
+  [data-part="chip"]
+  [data-part="chip-value"] {
   color: var(--ds-color-text-primary);
   font-size: var(--ds-font-size-xs);
   font-weight: 600;
-}
-.ds-structure.ds-active-filters-bar [data-part='chip-remove'][data-part='chip-remove'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
-  background: color-mix(in srgb, var(--ds-color-bg-primary) 54%, transparent);
-  border-radius: 9999px;
-  color: var(--ds-color-text-secondary);
-  transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
-}
-.ds-structure.ds-active-filters-bar [data-part='chip-remove'][data-part='chip-remove']:hover {
-  border-color: color-mix(in srgb, var(--ds-color-danger) 36%, transparent);
-  background: color-mix(in srgb, var(--ds-color-danger) 8%, transparent);
-  color: var(--ds-color-danger);
-}
-.ds-structure.ds-active-filters-bar [data-part='chip-remove'][data-part='chip-remove']:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
-}
-.ds-structure.ds-active-filters-bar [data-part='chip-remove'][data-part='chip-remove']:active {
-  background: color-mix(in srgb, var(--ds-color-danger) 14%, transparent);
+  line-height: 1;
+  white-space: nowrap;
 }
 
-/* clear-all / add-filter ------------------------------------------------------ */
-
-.ds-structure.ds-active-filters-bar [data-part='clear-all'][data-part='clear-all'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
-  background: color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent);
-  border-radius: 999px;
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-xs);
-  transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
-}
-.ds-structure.ds-active-filters-bar [data-part='clear-all'] > .rottay-typography[data-color] {
-  color: inherit;
-  font-size: var(--ds-font-size-xs);
-  font-weight: 600;
-}
-.ds-structure.ds-active-filters-bar [data-part='clear-all'][data-part='clear-all']:hover {
-  border-color: color-mix(in srgb, var(--ds-color-text-secondary) 30%, transparent);
-  background: color-mix(in srgb, var(--ds-color-bg-primary) 78%, transparent);
-  color: var(--ds-color-text-primary);
-}
-.ds-structure.ds-active-filters-bar [data-part='clear-all'][data-part='clear-all']:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
-}
-.ds-structure.ds-active-filters-bar [data-part='clear-all'][data-part='clear-all']:active {
-  background: color-mix(in srgb, var(--ds-color-bg-primary) 92%, transparent);
+/* ---- entrance: one coordinated fade-rise, silenced under reduced-motion ---- */
+@keyframes ds-active-filters-bar-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.ds-structure.ds-active-filters-bar [data-part='add-filter'][data-part='add-filter'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
-  background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
-  border-radius: 999px;
-  color: var(--ds-color-primary);
-  font-size: var(--ds-font-size-xs);
-  transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
-}
-.ds-structure.ds-active-filters-bar [data-part='add-filter'] > .rottay-typography[data-color] {
-  color: inherit;
-  font-size: var(--ds-font-size-xs);
-  font-weight: 700;
-}
-.ds-structure.ds-active-filters-bar [data-part='add-filter'][data-part='add-filter']:hover {
-  border-color: color-mix(in srgb, var(--ds-color-primary) 38%, transparent);
-  background: color-mix(in srgb, var(--ds-color-primary) 13%, transparent);
-}
-.ds-structure.ds-active-filters-bar [data-part='add-filter'][data-part='add-filter']:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
-}
-.ds-structure.ds-active-filters-bar [data-part='add-filter'][data-part='add-filter']:active {
-  background: color-mix(in srgb, var(--ds-color-primary) 17%, transparent);
-}
-
-/* Reduced motion: every microinteraction on this rail is a color/border
- * cross-fade; all of them go silent together. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-active-filters-bar [data-part='chip-remove'],
-  .ds-structure.ds-active-filters-bar [data-part='clear-all'],
-  .ds-structure.ds-active-filters-bar [data-part='add-filter'] {
-    transition: none;
+  .ds-structure.ds-active-filters-bar[data-part="root"] {
+    animation: none;
+  }
+}
+
+/* forced-colors: the root's gradient hairline is forced away, so the strip
+   and the count pill re-assert in system colors. The composed Tag chips and
+   the clear-all / add-filter Buttons keep their own forced-colors contracts;
+   the chip label/value text auto-maps (the label's uppercase tracking keeps
+   it distinguishable from the value without colour). */
+@media (forced-colors: active) {
+  .ds-structure.ds-active-filters-bar[data-part="root"][data-embedded="false"] {
+    border-bottom-color: ButtonText;
+    background: Canvas;
+  }
+  .ds-structure.ds-active-filters-bar[data-part="root"] [data-part="pill"] {
+    border-color: ButtonText;
+    background: Canvas;
+    color: CanvasText;
   }
 }

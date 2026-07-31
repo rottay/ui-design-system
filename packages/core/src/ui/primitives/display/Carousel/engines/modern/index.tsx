@@ -213,6 +213,67 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       if (pauseOnHover) setIsPaused(false);
     };
 
+    /**
+     * Keyboard parity for the hover pause (WCAG 2.2.1, the Toast precedent):
+     * autoplay must not advance while the user is focused inside the
+     * carousel. The blur only resumes when focus leaves the root entirely.
+     */
+    const handleFocus = () => {
+      if (pauseOnHover) setIsPaused(true);
+    };
+    const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+      const next = event.relatedTarget as Node | null;
+      if (pauseOnHover && (!next || !event.currentTarget.contains(next))) {
+        setIsPaused(false);
+      }
+    };
+
+    /**
+     * Arrow-key slide navigation (APG carousel): Left/Right move between
+     * slides in horizontal mode (mirrored under RTL — ArrowLeft means "the
+     * logical previous page"), Up/Down in vertical mode, Home/End jump to
+     * the edges. Keys originating inside a form control keep their native
+     * behavior (an input inside a slide wins).
+     */
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+      const target = event.target as HTMLElement;
+      if (target.closest('input, textarea, select, [contenteditable]')) return;
+
+      const isRtl = event.currentTarget.closest('[dir]')?.getAttribute('dir') === 'rtl';
+      switch (event.key) {
+        case 'ArrowLeft':
+          if (vertical) return;
+          event.preventDefault();
+          if (isRtl) next(); else prev();
+          return;
+        case 'ArrowRight':
+          if (vertical) return;
+          event.preventDefault();
+          if (isRtl) prev(); else next();
+          return;
+        case 'ArrowUp':
+          if (!vertical) return;
+          event.preventDefault();
+          prev();
+          return;
+        case 'ArrowDown':
+          if (!vertical) return;
+          event.preventDefault();
+          next();
+          return;
+        case 'Home':
+          event.preventDefault();
+          goTo(0);
+          return;
+        case 'End':
+          event.preventDefault();
+          goTo(slides.length - 1);
+          return;
+        default:
+          return;
+      }
+    };
+
     // Pre-compute the positional Tailwind classes for the dot container.
     // Each position needs both placement and centering plus a flex direction
     // for the dot row/column. `start-2`/`end-2` are LOGICAL (inset-inline-*),
@@ -243,25 +304,26 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
     return (
       <div
         ref={containerRef}
-        className={`rottay-carousel rottay-carousel--modern w-full relative ${className}`}
+        className={`rottay-carousel rottay-carousel--modern ${className}`}
         data-part="root"
         data-vertical={vertical ? 'true' : undefined}
         data-fade={fade ? 'true' : undefined}
         style={style}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        onKeyDown={handleKeyDown}
         {...landmarkProps}
       >
         {/* Slides Container */}
         <div
-          className="relative w-full overflow-hidden"
           data-part="track"
           style={{ height: style?.height || 'var(--ds-carousel-height, 300px)' }}
         >
           {slides.map((slide, index) => (
             <div
               key={index}
-              className="absolute w-full h-full"
               data-part="slide"
               data-selected={index === currentSlide ? 'true' : 'false'}
               style={{
@@ -279,7 +341,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
                   : vertical
                     ? `translateY(${(index - currentSlide) * 100}%)`
                     : `translateX(calc(${(index - currentSlide) * 100}% * var(--ds-carousel-rtl-factor, 1)))`,
-                transition: `all ${speed}ms var(--ds-motion-ease-out)`,
+                transition: `transform ${speed}ms var(--ds-motion-ease-out), opacity ${speed}ms var(--ds-motion-ease-out)`,
               } as React.CSSProperties}
               role="group"
               aria-roledescription="slide"
@@ -293,16 +355,16 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
 
         {/* Navigation Arrows — `start-2`/`end-2` are LOGICAL (inset-inline-*):
             both buttons mirror sides under RTL, and the skin flips the
-            horizontal glyphs via `:dir(rtl) scaleX(-1)`. */}
+            horizontal glyphs via `:dir(rtl) scaleX(-1)`. The positional
+            utilities stay inline on purpose: the engine tests pin them
+            (`start-2`/`end-2` present, never `left-2`/`right-2`) — paint and
+            geometry live in the skin regardless. */}
         {arrows && (
           <>
             <button
               className="absolute start-2 top-1/2 -translate-y-1/2 z-10"
               data-part="arrow"
               data-direction="prev"
-              // Size + font-size are skin-owned (coarse-pointer floor needs a
-              // media query an inline var() cannot see — K4-C Pass 2).
-              style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
               onClick={prev}
               aria-label={carouselLabel('carousel.previousSlide', 'Previous slide')}
               type="button"
@@ -313,7 +375,6 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
               className="absolute end-2 top-1/2 -translate-y-1/2 z-10"
               data-part="arrow"
               data-direction="next"
-              style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
               onClick={next}
               aria-label={carouselLabel('carousel.nextSlide', 'Next slide')}
               type="button"
@@ -323,20 +384,19 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
           </>
         )}
 
-        {/* Navigation Dots */}
+        {/* Navigation Dots — placement utilities stay inline for the same
+            test-pin reason; size/shape/rhythm are skin-owned. */}
         {dots && (
           <div
-            className={`absolute flex gap-1 z-10 ${dotsPositionClass}`}
+            className={dotsPositionClass}
             data-part="dots"
+            data-dots-position={dotPosition}
             role="tablist"
             aria-label={carouselLabel('carousel.navigation', 'Carousel navigation')}
           >
             {slides.map((_, index) => (
               <button
                 key={index}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  index === currentSlide ? 'w-4' : ''
-                }`}
                 data-part="dot"
                 data-selected={index === currentSlide ? 'true' : 'false'}
                 onClick={() => goTo(index)}

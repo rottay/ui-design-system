@@ -19,6 +19,9 @@ import type { TreeSelectProps, TreeSelectNode, TreeSelectValue } from '../../con
 import { TREESELECT_DEFAULTS } from '../../contracts';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -214,7 +217,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     return (
       <>
         {title.slice(0, idx)}
-        <span className="font-semibold" data-part="tree-node-highlight">{title.slice(idx, idx + searchValue.length)}</span>
+        <span data-part="tree-node-highlight">{title.slice(idx, idx + searchValue.length)}</span>
         {title.slice(idx + searchValue.length)}
       </>
     );
@@ -223,7 +226,6 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   return (
     <li>
       <div
-        className="flex items-center py-1 cursor-pointer"
         style={{
           // Logical indent (RTL flips it free) riding the governed channels:
           // per-level step + base offset, all skin-tunable.
@@ -233,9 +235,16 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         data-part="option"
         data-selected={isSelected || undefined}
         data-disabled={node.disabled || undefined}
-        role="option"
+        data-key={key}
+        data-level={level}
+        data-has-children={hasChildren ? 'true' : undefined}
+        data-expanded={hasChildren ? (isExpanded ? 'true' : 'false') : undefined}
+        role="treeitem"
         aria-selected={isSelected}
+        aria-expanded={hasChildren ? isExpanded : undefined}
+        aria-level={level + 1}
         aria-disabled={node.disabled || undefined}
+        aria-checked={checkable ? (isIndeterminate ? 'mixed' : isSelected) : undefined}
         tabIndex={node.disabled ? -1 : 0}
         onKeyDown={(e) => {
           if ((e.key === 'Enter' || e.key === ' ') && !node.disabled) {
@@ -253,17 +262,21 @@ const TreeNode: React.FC<TreeNodeProps> = ({
             data-part="tree-node-toggle"
             aria-label={isExpanded ? t('treeselect.collapse') : t('treeselect.expand')}
             aria-expanded={isExpanded}
+            tabIndex={-1}
           >
             {isLoading ? (
-              <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12 }} />
+              <span data-part="loading" />
             ) : (
-              /* Chevron glyph; direction (inline-end vs down) and the RTL
-                 mirror are skin-owned via data-expanded. */
-              <span data-part="chevron" data-expanded={isExpanded || undefined} className="inline-block">&#9654;</span>
+              /* Governed chevron; direction (inline-end vs down) and the RTL
+                 mirror ride the icon facade's autoMirror + the skin's
+                 data-expanded rotation. */
+              <span data-part="chevron" data-expanded={isExpanded || undefined}>
+                <NavigationForwardIcon decorative size={12} />
+              </span>
             )}
           </button>
         ) : (
-          <span className="w-6" />
+          <span data-part="leaf-spacer" aria-hidden="true" />
         )}
         {/* Checkbox */}
         {checkable && (
@@ -280,12 +293,14 @@ const TreeNode: React.FC<TreeNodeProps> = ({
             disabled={node.disabled || node.disableCheckbox}
             onChange={() => !node.disabled && onSelect(node)}
             onClick={(e) => e.stopPropagation()}
+            aria-label={typeof node.title === 'string' ? node.title : undefined}
+            tabIndex={-1}
           />
         )}
-        <span className="flex-1" data-part="tree-node-label">{renderTitle()}</span>
+        <span data-part="tree-node-label">{renderTitle()}</span>
       </div>
       {hasChildren && isExpanded && (
-        <ul data-part="tree-list" data-tree-line={treeLine || undefined}>
+        <ul data-part="tree-list" data-tree-line={treeLine || undefined} role="group">
           {node.children!.map((child) => (
             <TreeNode
               key={child.key ?? child.value}
@@ -409,6 +424,15 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
 
     const containerRef = useRef<HTMLDivElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    // Reading-direction probe (Tree/Segmented engine idiom).
+    const isRtl = (el: HTMLElement): boolean => {
+      const scoped = el.closest('[dir]');
+      if (scoped) return scoped.getAttribute('dir') === 'rtl';
+      return document.documentElement.dir === 'rtl';
+    };
 
     // Sync controlled expanded keys
     useEffect(() => {
@@ -525,6 +549,81 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       }
     }, [searchValue, filterFn, treeData]);
 
+    // APG treeview keyboard contract (Tree P20 idiom): ArrowUp/Down move DOM
+    // focus across the VISIBLE rows in DOM order; forward (ArrowRight in LTR)
+    // expands a collapsed parent (no-op on leaves/expanded); backward
+    // collapses an expanded parent or jumps to the parent row; Home/End jump
+    // to the edges; Escape closes and returns focus to the trigger.
+    // Forward/backward swap under RTL.
+    const handleDropdownKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        handleOpenChange(false);
+        triggerRef.current?.focus();
+        return;
+      }
+      const target = e.target as HTMLElement;
+      const row = target.closest?.('[data-part="option"]') as HTMLElement | null;
+      if (!row) return;
+      const rows = Array.from(
+        dropdownRef.current?.querySelectorAll<HTMLElement>('[data-part="option"]:not([data-disabled="true"])') ?? [],
+      );
+      const currentIndex = rows.indexOf(row);
+
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (rows.length === 0) return;
+        const nextIndex = currentIndex < 0
+          ? 0
+          : (currentIndex + (e.key === 'ArrowDown' ? 1 : -1) + rows.length) % rows.length;
+        rows[nextIndex]?.focus();
+        return;
+      }
+      if (e.key === 'Home') {
+        e.preventDefault();
+        rows[0]?.focus();
+        return;
+      }
+      if (e.key === 'End') {
+        e.preventDefault();
+        rows[rows.length - 1]?.focus();
+        return;
+      }
+
+      const rtl = isRtl(row);
+      const forwardKey = rtl ? 'ArrowLeft' : 'ArrowRight';
+      const backwardKey = rtl ? 'ArrowRight' : 'ArrowLeft';
+      const key = row.getAttribute('data-key');
+      const hasChildren = row.getAttribute('data-has-children') === 'true';
+      const expanded = row.getAttribute('data-expanded') === 'true';
+
+      if (e.key === forwardKey) {
+        if (!hasChildren || expanded || key === null) return;
+        e.preventDefault();
+        handleToggle(key);
+        return;
+      }
+      if (e.key === backwardKey) {
+        e.preventDefault();
+        if (expanded && key !== null) {
+          handleToggle(key);
+          return;
+        }
+        // Collapsed or leaf: move DOM focus to the parent row (nearest
+        // previous row with a lower data-level).
+        const level = Number(row.getAttribute('data-level') ?? 0);
+        if (level === 0) return;
+        for (let i = currentIndex - 1; i >= 0; i -= 1) {
+          const candidate = rows[i];
+          if (candidate && Number(candidate.getAttribute('data-level') ?? 0) < level) {
+            candidate.focus();
+            return;
+          }
+        }
+      }
+    };
+
     // Close the dropdown when the user clicks outside the component boundary.
     // The listener is only active while the dropdown is open.
     useEffect(() => {
@@ -573,12 +672,12 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={`ds-tree-select ds-tree-select--modern relative ${className || ''}`}
+        className={`ds-tree-select ds-tree-select--modern ${className || ''}`}
         style={style}
         data-part="root"
       >
         <div
-          className="flex items-center cursor-pointer"
+          ref={triggerRef}
           style={{
             boxSizing: 'border-box',
             ...getSizeStyle(),
@@ -599,41 +698,50 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
           data-disabled={disabled || undefined}
           role="combobox"
           aria-expanded={isOpen}
-          aria-haspopup="listbox"
+          aria-haspopup="tree"
           aria-label={displayPlaceholder}
           aria-disabled={disabled || undefined}
           tabIndex={disabled ? -1 : 0}
         >
           <span
-            className="flex-1 truncate"
             data-part={selectedKeys.size > 0 ? 'value' : 'placeholder'}
           >
             {selectedKeys.size > 0 ? getDisplayValue() : displayPlaceholder}
           </span>
-          {allowClear && selectedKeys.size > 0 && !disabled && (
-            <button
-              type="button"
-              style={{ width: 24, height: 24, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
-              onClick={handleClear}
-              data-part="clear-button"
-              aria-label={t('treeselect.clear')}
-            >
-              ✕
-            </button>
-          )}
-          {/* Chevron glyph; the open rotation is skin-owned via data-open. */}
-          <span data-part="arrow-icon" aria-hidden="true">&#9660;</span>
+          {/* Governed chevron; the open rotation is skin-owned via data-open. */}
+          <span data-part="arrow-icon" aria-hidden="true">
+            <NavigationDownIcon decorative size={12} />
+          </span>
         </div>
 
+        {/* Clear lives OUTSIDE the combobox trigger (APG: no nested
+            interactives); the skin overlays it at the trigger's inline end.
+            The `sr-only` ✕ text is a test-pinned bridge (engine-advanced
+            queries the clear button by its text content); the visible
+            affordance is the governed icon. */}
+        {allowClear && selectedKeys.size > 0 && !disabled && (
+          <button
+            type="button"
+            onClick={handleClear}
+            data-part="clear-button"
+            aria-label={t('treeselect.clear')}
+          >
+            <ActionCloseIcon decorative size={12} />
+            <span className="sr-only" aria-hidden="true">✕</span>
+          </button>
+        )}
+
         {isOpen && (
-          <div data-part="dropdown" role="listbox" aria-label={displayPlaceholder}>
+          /* The dropdown is a plain container (no role): APG forbids
+             interactive content inside a listbox, so the search input sits
+             OUTSIDE the tree, and the tree itself owns the roles. */
+          <div data-part="dropdown" ref={dropdownRef} onKeyDown={handleDropdownKeyDown}>
             {/* Search input */}
             {showSearch && (
-              <div className="p-2 sticky top-0 z-10" data-part="search-input-wrapper">
+              <div data-part="search-input-wrapper">
                 <input
                   ref={searchInputRef}
                   type="text"
-                  className="w-full"
                   data-part="search-input"
                   style={{
                     padding: '4px var(--ds-input-sm-padding-x, 10px)',
@@ -649,7 +757,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
               </div>
             )}
             {treeData.length > 0 ? (
-              <ul className="p-2" data-part="tree-list">
+              <ul data-part="tree-list" role="tree" aria-label={displayPlaceholder}>
                 {treeData.map((node) => (
                   <TreeNode
                     key={node.key ?? node.value}
@@ -670,7 +778,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
                 ))}
               </ul>
             ) : (
-              <div className="p-4 text-center" data-part="empty">
+              <div data-part="empty">
                 {displayNotFound}
               </div>
             )}

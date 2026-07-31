@@ -1,0 +1,73 @@
+/**
+ * OperationalSurface skin (wave KIMI Modern Surfaces 2026-07-30, SU30).
+ *
+ * LAYER: NEW FILE — pending registration by the coordinator in
+ * `facade/entrypoints/base.css` and `facade/entrypoints/styles.css`
+ * (`layer(rottay-components)`), same wiring as skin/list.css.
+ *
+ * SCOPE: the surface composes public primitives and patterns (PageShell,
+ * SectionCard, StatsGrid, LiveFeed, state kits) — each owns its own chrome,
+ * states and forced-colors treatment, so this file paints ONLY the
+ * operational-mirror skeleton blocks (`operational-skeleton-block`), whose
+ * pulse rides the canonical `ds-foundation-pulse` keyframes on the
+ * `--ds-motion-attention` channel and goes quiet under reduced motion. Their
+ * fills are neutral surface tokens, so forced colors needs no re-keying here
+ * (the composed Cards already force their own frames). The KPI strip, module
+ * cards and feed carry NO rule on purpose: their material comes from the
+ * profile cascade (`cardVariant`) applied to the composed components.
+ *
+ * SPECIFICITY: single-part hooks keying on always-stamped `data-part` /
+ * `data-size` attributes; no repetition, no `!important`.
+ */
+
+/* ---- operational-mirror skeleton: blocks sit on the same layout as the
+        real content (KPI row, 8/4 main/side split, top/bottom rails), so the
+        swap to live content is paint-only with no layout shift. ---- */
+.ds-surface.ds-operational [data-part='operational-skeleton-block'] {
+  border-radius: var(
+    --ds-skeleton-radius,
+    var(--ds-radius-md, 8px)
+  );
+  background: var(
+    --ds-skeleton-bg,
+    var(--ds-surface-panel, var(--ds-color-bg-secondary))
+  );
+  animation: ds-foundation-pulse
+    var(
+      --ds-skeleton-animation-duration,
+      var(--ds-motion-attention, 1.5s)
+    )
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-surface.ds-operational
+  [data-part='operational-skeleton-block'][data-size='stat'] {
+  min-block-size: 96px;
+}
+
+.ds-surface.ds-operational
+  [data-part='operational-skeleton-block'][data-size='title'] {
+  inline-size: 40%;
+  min-block-size: 20px;
+}
+
+.ds-surface.ds-operational
+  [data-part='operational-skeleton-block'][data-size='panel'] {
+  min-block-size: 280px;
+}
+
+.ds-surface.ds-operational
+  [data-part='operational-skeleton-block'][data-size='section'] {
+  min-block-size: 180px;
+}
+
+.ds-surface.ds-operational
+  [data-part='operational-skeleton-block'][data-size='rail'] {
+  min-block-size: 240px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-operational [data-part='operational-skeleton-block'] {
+    animation: none;
+  }
+}

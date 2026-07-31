@@ -191,7 +191,8 @@ export function isGeneratedPath(path, headText) {
  *
  *   unauthorized     — changed against the base with no allowlist entry
  *   drifted          — allowlisted, but the bytes are no longer the reviewed ones
- *   deletedAuthorized— an allowlisted file was deleted (deletion is a change too)
+ *   deletedAuthorized— a file pinned to authored bytes was later deleted without
+ *                      re-authorizing that exact absence (`blob: null`)
  *   generated        — a build product changed under a frozen engine
  *   stale            — an allowlist entry that no longer differs from the base
  *                      (tighten it out; never a failure)
@@ -215,7 +216,7 @@ export function evaluateFreeze({ changes, entries, read }) {
       continue;
     }
     if (content === null) {
-      deletedAuthorized.push(change);
+      if (entry.blob !== null) deletedAuthorized.push(change);
       continue;
     }
     if (sha256(content) !== entry.blob) {

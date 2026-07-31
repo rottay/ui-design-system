@@ -39,12 +39,11 @@
  * components will copy.
  */
 
-/* ---- keyframes: referenced by the spinner and expanded-row rules below.
-        Defined globally here, not per table instance. ---- */
-@keyframes ds-table-spin-modern {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+/* ---- keyframes: the spinner rides the CANONICAL `ds-foundation-spin` (from
+        foundation/animations/keyframes.css, same as progress/cascader/
+        detail-panel) -- the family-local duplicate is retired. The expanded-row
+        keyframe below stays local: it animates max-height + translateY on a
+        <td>, a one-shot mount reveal the canonical set does not cover. ---- */
 @keyframes ds-table-expand-modern {
   from { opacity: 0; max-height: 0; transform: translateY(-8px); }
   to { opacity: 1; max-height: 500px; transform: translateY(0); }
@@ -173,8 +172,10 @@
 .ds-table.ds-table--modern [data-part='resize-handle'][data-resizing='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 60%, transparent);
 }
-.ds-table.ds-table--modern [data-part='resize-handle']:not([data-resizing='true']):hover {
-  background: color-mix(in srgb, var(--ds-color-primary) 40%, transparent);
+@media (hover: hover) {
+  .ds-table.ds-table--modern [data-part='resize-handle']:not([data-resizing='true']):hover {
+    background: color-mix(in srgb, var(--ds-color-primary) 40%, transparent);
+  }
 }
 
 /* ---- filter row + its inputs ---- */
@@ -249,15 +250,19 @@
   font-variant-numeric: var(--ds-table-cell-numeric, tabular-nums);
 }
 
-/* ---- body row: selected fill, and the hover a non-selected hoverable row takes ---- */
+/* ---- body row: selected fill, and the hover a non-selected hoverable row
+        takes. Hover paints only where hover exists (button.css idiom): on
+        touch columns the wash would stick after the tap. ---- */
 .ds-table.ds-table--modern [data-part='row'][data-hoverable='true'] {
   transition: background-color var(--ds-motion-normal);
 }
 .ds-table.ds-table--modern [data-part='row'][data-selected='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
 }
-.ds-table.ds-table--modern [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover {
-  background: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, transparent));
+@media (hover: hover) {
+  .ds-table.ds-table--modern [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover {
+    background: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, transparent));
+  }
 }
 
 /* ---- body cell: bottom border in `bordered` mode, and the editable-cell hover ---- */
@@ -270,10 +275,12 @@
     outline-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-.ds-table.ds-table--modern [data-part='cell'][data-editable='true']:hover {
-  outline: 1px dashed color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
-  outline-offset: -1px;
-  background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
+@media (hover: hover) {
+  .ds-table.ds-table--modern [data-part='cell'][data-editable='true']:hover {
+    outline: 1px dashed color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+    outline-offset: -1px;
+    background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
+  }
 }
 
 /* ---- pinned/fixed columns: sticky positioning with an opaque fill so
@@ -349,7 +356,7 @@
   display: inline-block;
   width: 24px;
   height: 24px;
-  animation: ds-table-spin-modern var(--ds-motion-glacial) linear infinite;
+  animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
   border: 2px solid var(--ds-color-border);
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
@@ -445,5 +452,29 @@
 
   .ds-table.ds-table--modern [data-part='spinner'] {
     animation: none;
+  }
+}
+
+/* ---- forced colors (system colors only): background washes disappear, so
+        the selected row, the sort/expand/pagination focus rings and the
+        spinner keep system-color boundaries. ---- */
+@media (forced-colors: active) {
+  .ds-table.ds-table--modern [data-part='row'][data-selected='true'] {
+    outline: 1px solid Highlight;
+    outline-offset: -1px;
+  }
+  .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:focus-visible,
+  .ds-table.ds-table--modern [data-part='pagination-button']:focus-visible,
+  .ds-table.ds-table--modern [data-part='expand-button']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+  }
+  .ds-table.ds-table--modern [data-part='spinner'][role='status'] {
+    border-color: ButtonText;
+    border-top-color: Highlight;
+  }
+  .ds-table.ds-table--modern [data-part='resize-handle'][data-resizing='true'],
+  .ds-table.ds-table--modern [data-part='resize-handle']:not([data-resizing='true']):hover {
+    background: ButtonText;
   }
 }

@@ -1,7 +1,153 @@
-/** CommandCenterSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+/**
+ * CommandCenterSurface skin (WO-SKIN-06 / CK-I).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
+ *
+ * SCOPE: the surface composes Card, PatternStatsGrid, PatternActivityLog,
+ * NavLink, Heading/Text and the surface state kits — each owns its chrome,
+ * interaction states, focus ring and forced-colors treatment (the actionable
+ * quick-action Card already paints cursor, hover lift and its transition
+ * through its own `data-interactive` recipe, so this file adds none of it).
+ * What remains surface-owned and is painted here: header rhythm, the
+ * quick-action icon tile geometry/tint, the two layout grids and section
+ * spans, the recent-activity header row, the view-all touch target, the
+ * skeleton mirror's spacing, and the forced-colors re-key of the one tinted
+ * part. No motion is declared in this file: entrance choreography arrives via
+ * the `collection.insert` recipe (`.ds-collection-stagger`) and every other
+ * transition belongs to the composed components.
+ *
+ * SPECIFICITY: single class (optionally + one always-stamped data attr) under
+ * the surface root; no repeated classes/attributes. Logical properties only,
+ * so RTL mirrors without extra rules.
+ */
 
+/* Header rhythm ------------------------------------------------------------ */
+
+/* Text renders an inline span; block display makes the rhythm margin real
+   (the inline-style margin this replaces was inert on an inline box). */
+.ds-surface.ds-command-center .ds-command-center__greeting {
+  display: block;
+  margin-block-end: var(--ds-spacing-1, 4px);
+}
+
+/* UA heading margins are neutralized; the surface stack owns the rhythm. */
+.ds-surface.ds-command-center .ds-command-center__title {
+  margin-block: 0;
+}
+
+.ds-surface.ds-command-center .ds-command-center__section-heading,
+.ds-surface.ds-command-center .ds-command-center__section-title {
+  margin-block: 0 var(--ds-spacing-2, 8px);
+}
+
+/* Insight + quick-action tiles ---------------------------------------------- */
+
+.ds-surface.ds-command-center .ds-command-center__insight-body,
+.ds-surface.ds-command-center .ds-command-center__quick-action-body {
+  flex: 1 1 0%;
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-command-center .ds-command-center__insight-description,
+.ds-surface.ds-command-center .ds-command-center__quick-action-description {
+  display: block;
+  margin-block-start: var(--ds-spacing-1, 4px);
+}
+
+/* Icon tile: the one tinted part the surface owns. The 36px size is part
+   geometry (4px-scale aligned), deliberately density-stable like an avatar. */
 .ds-surface.ds-command-center .ds-command-center__quick-action-icon[data-part='quick-action-icon'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: 36px;
+  block-size: 36px;
   border-radius: var(--ds-radius-md, 8px);
   background: var(--ds-color-bg-tertiary, var(--ds-color-bg-secondary));
   color: var(--ds-color-text-secondary);
+}
+
+/* Layout grids ---------------------------------------------------------------- */
+
+.ds-surface.ds-command-center .ds-command-center__quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+  gap: var(--ds-spacing-sm, 8px);
+}
+
+.ds-surface.ds-command-center .ds-command-center__sections-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+  gap: var(--ds-spacing-md, 16px);
+}
+
+/* Spans apply only where the viewport can fit multiple columns; below the
+   guard a span would create implicit tracks and overflow narrow screens. */
+@media (min-width: 40em) {
+  .ds-surface.ds-command-center .ds-command-center__section-card[data-span='2'] {
+    grid-column: span 2;
+  }
+
+  .ds-surface.ds-command-center .ds-command-center__section-card[data-span='3'] {
+    grid-column: span 3;
+  }
+}
+
+/* Recent activity header row ---------------------------------------------------- */
+
+.ds-surface.ds-command-center .ds-command-center__recent-activity-header {
+  margin-block-end: var(--ds-spacing-sm, 8px);
+}
+
+.ds-surface.ds-command-center .ds-command-center__recent-activity-title {
+  flex: 1 1 0%;
+  min-inline-size: 0;
+  margin-block: 0;
+}
+
+/* Touch: the quiet view-all link reaches the 44px coarse-pointer hit area via
+   box growth, never by inflating its visual size. */
+@media (pointer: coarse) {
+  .ds-surface.ds-command-center .ds-command-center__view-all {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+  }
+}
+
+/* Skeleton mirror -------------------------------------------------------------- */
+
+.ds-surface.ds-command-center .ds-command-center__skeleton-grow {
+  flex: 1 1 0%;
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-command-center .ds-command-center__skeleton-greeting {
+  margin-block-end: var(--ds-spacing-2, 8px);
+}
+
+.ds-surface.ds-command-center .ds-command-center__skeleton-heading {
+  margin-block-end: var(--ds-spacing-3, 12px);
+}
+
+.ds-surface.ds-command-center .ds-command-center__skeleton-line {
+  margin-block-start: var(--ds-spacing-2, 8px);
+}
+
+.ds-surface.ds-command-center .ds-command-center__skeleton-body {
+  margin-block-start: var(--ds-spacing-3, 12px);
+}
+
+/* Forced colors ------------------------------------------------------------------ */
+
+/* Re-key the only surface-owned tint to system colors; every composed part
+   (Card, NavLink, Button, StatsGrid, ActivityLog) already handles its own. */
+@media (forced-colors: active) {
+  .ds-surface.ds-command-center .ds-command-center__quick-action-icon[data-part='quick-action-icon'] {
+    background: ButtonFace;
+    color: ButtonText;
+  }
 }

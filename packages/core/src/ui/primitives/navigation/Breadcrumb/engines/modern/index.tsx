@@ -23,6 +23,16 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
   const translation = useOptionalTranslation('common');
   const { items, separator, maxItems, className = '', style } = props;
 
+  // Localized chrome copy with an English floor: a missing catalogue entry
+  // echoes the full key back, which must never reach an aria-label.
+  const tOr = (key: string, fallback: string): string => {
+    const resolved = translation?.t(key);
+    if (!resolved || resolved === key || resolved === `common.${key}`) return fallback;
+    return resolved;
+  };
+  const navLabel = tOr('breadcrumb', 'Breadcrumb');
+  const ellipsisLabel = tOr('breadcrumb_more_items', 'More pages');
+
   const displayItems: BreadcrumbItem[] =
     maxItems && maxItems >= 3 && items.length > maxItems
       ? [...items.slice(0, 1), { key: 'ellipsis', label: '…' }, ...items.slice(-(maxItems - 2))]
@@ -37,12 +47,13 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
       data-part="root"
       data-truncated={displayItems.length !== items.length || undefined}
       data-count={displayItems.length}
-      aria-label={translation?.t('breadcrumb') ?? 'Breadcrumb'}
+      aria-label={navLabel}
     >
       <ol data-part="list">
         {displayItems.map((item, index) => {
           const isCurrent = index === displayItems.length - 1;
           const isEllipsis = item.key === 'ellipsis';
+          const labelTitle = typeof item.label === 'string' ? item.label : undefined;
 
           return (
             <React.Fragment key={item.key}>
@@ -61,7 +72,7 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
                     data-clickable="true"
                   >
                     {item.icon && <span data-part="icon">{item.icon}</span>}
-                    <span data-part="label">{item.label}</span>
+                    <span data-part="label" title={labelTitle}>{item.label}</span>
                   </a>
                 ) : item.onClick && !isCurrent ? (
                   <button
@@ -72,7 +83,7 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
                     data-clickable="true"
                   >
                     {item.icon && <span data-part="icon">{item.icon}</span>}
-                    <span data-part="label">{item.label}</span>
+                    <span data-part="label" title={labelTitle}>{item.label}</span>
                   </button>
                 ) : (
                   <span
@@ -80,10 +91,16 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
                     data-current={isCurrent ? 'true' : 'false'}
                     data-clickable={item.onClick ? 'true' : undefined}
                     aria-current={isCurrent ? 'page' : undefined}
+                    /* The truncation indicator is inert by contract (no expand
+                       action exists), but it is not decorative: it tells the
+                       trail is collapsed. `role="note"` gives its accessible
+                       name a valid host. */
+                    role={isEllipsis ? 'note' : undefined}
+                    aria-label={isEllipsis ? ellipsisLabel : undefined}
                     onClick={item.onClick}
                   >
                     {item.icon && <span data-part="icon">{item.icon}</span>}
-                    <span data-part="label">{item.label}</span>
+                    <span data-part="label" title={labelTitle}>{item.label}</span>
                   </span>
                 )}
               </li>

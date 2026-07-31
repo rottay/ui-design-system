@@ -23,44 +23,37 @@
  * authoritative while inline caller geometry remains the final local seam.
  */
 
-/* ---- line: with-text spans (was lineBeforeStyle/lineAfterStyle's
-        borderTop/borderLeft, both driven by `isHorizontal`). ---- */
+/* ---- line: with-text spans (horizontal only -- `hasChildren` in the engine
+        requires the horizontal orientation, so a vertical divider never
+        renders these parts; the vertical line lives on the root rule below). ---- */
 .rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"]
   [data-part="line-before"],
 .rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"]
   [data-part="line-after"] {
   border-top: var(
     --ds-divider-line,
-    1px solid var(--ds-divider-color, oklch(0.746 0 0))
+    1px solid var(--ds-divider-color, var(--ds-color-border-subtle, var(--ds-color-border)))
   );
   border-left: none;
-}
-.rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="vertical"]
-  [data-part="line-before"],
-.rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="vertical"]
-  [data-part="line-after"] {
-  border-left: var(
-    --ds-divider-line,
-    1px solid var(--ds-divider-color, oklch(0.746 0 0))
-  );
-  border-top: none;
 }
 
 /* ---- line: plain divider, merged onto the root itself (was the simple-
         divider return path's `{ ...containerStyle, ...lineStyle }`). Gated
         to `data-with-text='false'` -- the with-text root never carries this
-        channel (see header). ---- */
+        channel (see header). The vertical hairline is logical
+        (`border-inline-start`): the box hugs the line (engine `fit-content`),
+        so the mark stays centered in its own box and mirrors under RTL. ---- */
 .rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"][data-with-text="false"] {
   border-top: var(
     --ds-divider-line,
-    1px solid var(--ds-divider-color, oklch(0.746 0 0))
+    1px solid var(--ds-divider-color, var(--ds-color-border-subtle, var(--ds-color-border)))
   );
-  border-left: none;
+  border-inline-start: none;
 }
 .rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="vertical"][data-with-text="false"] {
-  border-left: var(
+  border-inline-start: var(
     --ds-divider-line,
-    1px solid var(--ds-divider-color, oklch(0.746 0 0))
+    1px solid var(--ds-divider-color, var(--ds-color-border-subtle, var(--ds-color-border)))
   );
   border-top: none;
 }
@@ -70,8 +63,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 0;
-  max-width: var(--ds-divider-label-max-width, 100%);
+  min-inline-size: 0;
+  max-inline-size: var(--ds-divider-label-max-width, 100%);
   white-space: normal;
   overflow-wrap: anywhere;
   text-align: center;
@@ -104,20 +97,20 @@
 
 .rottay-divider.rottay-divider--modern[data-part="root"] {
   transition: gap
-      var(--ds-divider-motion-duration, var(--ds-duration-fast, 120ms))
-      var(--ds-divider-motion-easing, var(--ds-motion-ease-standard, ease)),
-    margin var(--ds-divider-motion-duration, var(--ds-duration-fast, 120ms))
-      var(--ds-divider-motion-easing, var(--ds-motion-ease-standard, ease)),
-    opacity var(--ds-divider-motion-duration, var(--ds-duration-fast, 120ms))
-      var(--ds-divider-motion-easing, var(--ds-motion-ease-standard, ease));
+      var(--ds-divider-motion-duration, var(--ds-motion-fast))
+      var(--ds-divider-motion-easing, var(--ds-motion-ease-out)),
+    margin var(--ds-divider-motion-duration, var(--ds-motion-fast))
+      var(--ds-divider-motion-easing, var(--ds-motion-ease-out)),
+    opacity var(--ds-divider-motion-duration, var(--ds-motion-fast))
+      var(--ds-divider-motion-easing, var(--ds-motion-ease-out));
 }
 
 .rottay-divider.rottay-divider--modern[data-part="root"] [data-part^="line-"] {
   transition: border-color
-      var(--ds-divider-motion-duration, var(--ds-duration-fast, 120ms))
-      var(--ds-divider-motion-easing, var(--ds-motion-ease-standard, ease)),
-    opacity var(--ds-divider-motion-duration, var(--ds-duration-fast, 120ms))
-      var(--ds-divider-motion-easing, var(--ds-motion-ease-standard, ease));
+      var(--ds-divider-motion-duration, var(--ds-motion-fast))
+      var(--ds-divider-motion-easing, var(--ds-motion-ease-out)),
+    opacity var(--ds-divider-motion-duration, var(--ds-motion-fast))
+      var(--ds-divider-motion-easing, var(--ds-motion-ease-out));
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -125,5 +118,24 @@
   .rottay-divider.rottay-divider--modern[data-part="root"]
     [data-part^="line-"] {
     transition: none;
+  }
+}
+
+/* Forced colors: the hairline is structural -- it must survive color
+   stripping as a ButtonText mark, and the label inherits system ink. */
+@media (forced-colors: active) {
+  .rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"][data-with-text="false"] {
+    border-top-color: ButtonText;
+  }
+
+  .rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="vertical"][data-with-text="false"] {
+    border-inline-start-color: ButtonText;
+  }
+
+  .rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"]
+    [data-part="line-before"],
+  .rottay-divider.rottay-divider--modern[data-part="root"][data-orientation="horizontal"]
+    [data-part="line-after"] {
+    border-top-color: ButtonText;
   }
 }

@@ -28,8 +28,10 @@
  *   viewport with horizontal scroll on narrow -- a 3-level taxonomy (576px
  *   of columns) no longer overflows a 360px screen.
  * - A11Y: the trigger is a real combobox (role/tabIndex/aria-expanded +
- *   Enter/Space/ArrowDown/Escape); options carry `aria-current`; every
- *   suppressed outline has a `:focus-visible` ring replacement below.
+ *   Enter/Space/ArrowDown/Escape); each column is a role="listbox" of
+ *   role="option" rows (aria-selected); the clear button lives OUTSIDE the
+ *   combobox (no nested interactives); every suppressed outline has a
+ *   `:focus-visible` ring replacement below.
  * - Option rows gained their missing padding geometry and the
  *   hover/focus/disabled states (the dead DaisyUI `active`/`disabled` class
  *   tokens are gone from the engine).
@@ -61,25 +63,42 @@
   }
 }
 
-/* ---- trigger ---- */
+/* ---- root + trigger ---- */
+.ds-cascader.ds-cascader--modern[data-part="root"] {
+  position: relative;
+}
+
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"] {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
   background: var(--ds-color-bg-input, var(--ds-surface-control));
   color: var(--ds-color-text-primary);
   outline: none;
-  transition:
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+  transition: border-color var(--ds-motion-fast, 120ms)
+      var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"]:where(:hover):not([data-disabled='true']) {
+@media (hover: hover) {
+  .ds-cascader.ds-cascader--modern[data-part="root"]
+    [data-part="trigger"]:where(:hover):not([data-disabled="true"]) {
+    border-color: var(--ds-cascader-border-hover, var(--ds-color-border-hover));
+  }
+}
+/* Touch/active equivalent of the hover border. */
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="trigger"]:active:not([data-disabled="true"]) {
   border-color: var(--ds-cascader-border-hover, var(--ds-color-border-hover));
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"]:focus-visible {
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="trigger"]:focus-visible {
   border-color: var(--ds-cascader-border-focus, var(--ds-color-primary));
   box-shadow: var(--ds-cascader-shadow-focus, var(--ds-shadow-focus-ring));
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"][data-disabled='true'] {
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="trigger"][data-disabled="true"] {
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
@@ -88,17 +107,57 @@
   color: var(--ds-color-text-secondary);
 }
 
+/* Trigger text takes the remaining track and truncates with ellipsis
+   (drained from the `flex-1 truncate` utility). */
+.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="value"],
+.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="placeholder"] {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Clear lives outside the combobox (APG: no nested interactives); the skin
+   overlays it between the value and the arrow zone, and the arrow keeps a
+   gap so the two never collide (drained 24px inline geometry). */
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="clear-button"] {
+  position: absolute;
+  inset-inline-end: var(--ds-cascader-clear-inset-inline-end, 30px);
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  inline-size: var(--ds-cascader-clear-size, 24px);
+  block-size: var(--ds-cascader-clear-size, 24px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: 50%;
   border: none;
-  transition: color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: color var(--ds-motion-fast, 120ms)
+    var(--ds-motion-ease-out, ease-out);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="clear-button"]:hover {
+.ds-cascader.ds-cascader--modern[data-part="root"]:has(
+    [data-part="clear-button"]
+  )
+  [data-part="arrow-icon"] {
+  margin-inline-start: var(--ds-cascader-clear-gap, 20px);
+}
+@media (hover: hover) {
+  .ds-cascader.ds-cascader--modern[data-part="root"]
+    [data-part="clear-button"]:hover {
+    color: var(--ds-color-error);
+  }
+}
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="clear-button"]:active {
   color: var(--ds-color-error);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="clear-button"]:focus-visible {
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="clear-button"]:focus-visible {
   outline: none;
   box-shadow: var(--ds-cascader-shadow-focus, var(--ds-shadow-focus-ring));
 }
@@ -106,55 +165,79 @@
 /* Trigger chevron: open rotation drained from the `rotate-180` utility +
    inline transition. The glyph is vertically symmetric -- no RTL mirror. */
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="arrow-icon"] {
-  transition: transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: transform var(--ds-motion-fast, 120ms)
+    var(--ds-motion-ease-out, ease-out);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"][data-open='true'] [data-part="arrow-icon"] {
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="trigger"][data-open="true"]
+  [data-part="arrow-icon"] {
   transform: rotate(180deg);
 }
 
 /* ---- dropdown panel (in-tree): geometry drained from the inline style.
         The panel caps at the viewport and the column set scrolls inline on
-        narrow instead of overflowing. ---- */
+        narrow instead of overflowing. z rides the token scale (dropdown
+        tier); the dark-aware luminance step is its own layer above the fill
+        (lane overlay register). ---- */
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="dropdown"] {
   position: absolute;
   inset-inline-start: 0;
-  z-index: var(--ds-cascader-dropdown-z, 50);
+  z-index: var(--ds-cascader-dropdown-z, var(--ds-z-index-dropdown, 1000));
   margin-block-start: var(--ds-spacing-1, 4px);
   max-inline-size: calc(100vw - 2 * var(--ds-spacing-4, 16px));
   border-radius: var(--ds-radius-lg);
-  background: var(--ds-surface-card);
+  background: linear-gradient(
+      var(--ds-elevation-surface-3),
+      var(--ds-elevation-surface-3)
+    ),
+    var(--ds-surface-card);
   box-shadow: var(--ds-elevation-2);
   border-color: var(--ds-color-border);
   border-width: 1px;
   border-style: solid;
-  animation: ds-cascader-slide-in var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  animation: ds-cascader-slide-in var(--ds-motion-fast, 120ms)
+    var(--ds-motion-ease-out, ease-out);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="dropdown"] [data-part="option-list"] {
-  max-inline-size: calc(100vw - 2 * var(--ds-spacing-4, 16px) - 2 * var(--ds-spacing-1, 4px));
+/* The columns wrap is a horizontal track (drained from the `flex` utility). */
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="dropdown"]
+  div[data-part="option-list"] {
+  display: flex;
+}
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="dropdown"]
+  [data-part="option-list"] {
+  max-inline-size: calc(
+    100vw - 2 * var(--ds-spacing-4, 16px) - 2 * var(--ds-spacing-1, 4px)
+  );
   overflow-x: auto;
 }
 
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="search-input-wrapper"] {
+  padding: var(--ds-spacing-2, 8px);
   border-bottom: 1px solid var(--ds-color-border);
 }
 
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"] {
+  inline-size: 100%;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
   background: var(--ds-color-bg-input, var(--ds-surface-control));
   color: var(--ds-color-text-primary);
   outline: none;
-  transition:
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+  transition: border-color var(--ds-motion-fast, 120ms)
+      var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"]:focus-visible {
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="search-input"]:focus-visible {
   border-color: var(--ds-cascader-border-focus, var(--ds-color-primary));
   box-shadow: var(--ds-cascader-shadow-focus, var(--ds-shadow-focus-ring));
 }
 
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="empty"] {
+  padding: var(--ds-spacing-2, 8px);
   color: var(--ds-color-text-secondary);
 }
 
@@ -170,8 +253,11 @@
   max-block-size: var(--ds-cascader-column-max-height, 240px);
   overflow-y: auto;
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="menu-column"] + [data-part="menu-column"] {
-  animation: ds-cascader-panel-in var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="menu-column"]
+  + [data-part="menu-column"] {
+  animation: ds-cascader-panel-in var(--ds-motion-fast, 120ms)
+    var(--ds-motion-ease-out, ease-out);
 }
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="menu-column"]:not([data-last="true"]) {
@@ -188,8 +274,13 @@
 }
 
 /* ---- option row: geometry + full state set (hover/focus/disabled/selected).
-        The selected frame mirrors TreeSelect's quiet tint. ---- */
+        The selected frame mirrors TreeSelect's quiet tint. Layout drained from
+        the `flex justify-between` utility: the label truncates on the inline
+        track, the chevron/loading dock at the inline end. ---- */
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   inline-size: 100%;
   padding-block: var(--ds-spacing-1-5, var(--ds-spacing-1, 4px));
   padding-inline: var(--ds-spacing-2, 8px);
@@ -199,18 +290,34 @@
   color: var(--ds-color-text-primary);
   font-size: var(--ds-input-sm-font-size, 13px);
   cursor: pointer;
-  transition:
-    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: background var(--ds-motion-fast, 120ms)
+      var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms)
+      var(--ds-motion-ease-out, ease-out);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option"]:where(:hover):not([data-selected='true']):not([data-disabled='true']) {
+@media (hover: hover) {
+  .ds-cascader.ds-cascader--modern[data-part="root"]
+    [data-part="option"]:where(:hover):not([data-selected="true"]):not(
+      [data-disabled="true"]
+    ) {
+    background: var(--ds-color-bg-hover);
+  }
+}
+/* Touch/active equivalent of the hover wash (4th-tanda law: every hover
+   paints an equivalent active state). */
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="option"]:active:not([data-selected="true"]):not(
+    [data-disabled="true"]
+  ) {
   background: var(--ds-color-bg-hover);
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option"]:focus-visible {
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="option"]:focus-visible {
   outline: none;
   box-shadow: var(--ds-cascader-shadow-focus, var(--ds-shadow-focus-ring));
 }
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option"][data-disabled='true'] {
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="option"][data-disabled="true"] {
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
@@ -225,37 +332,41 @@
 }
 
 /* Option label truncation (never wraps mid-word). */
-.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option"] > .truncate {
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="option"]
+  > [data-part="option-label"] {
   min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* Child chevron: static, points at inline-end; mirrors under RTL
-   (TreeSelect idiom). */
+/* Child chevron: governed icon (icon facade autoMirror flips it under RTL --
+   no skin transform needed). */
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="chevron"] {
-  display: inline-block;
+  display: inline-flex;
   margin-inline-start: var(--ds-spacing-2, 8px);
   color: var(--ds-color-text-muted);
 }
-[dir='rtl'] .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="chevron"] {
-  transform: scaleX(-1);
-}
 
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading"] {
+  inline-size: 12px;
+  block-size: 12px;
   border: 2px solid var(--ds-color-border);
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
   /* Drained from the inline animation (reduced-motion now governs it). */
-  animation: ds-foundation-spin var(--ds-cascader-spinner-duration, var(--ds-motion-glacial, 500ms)) linear infinite;
+  animation: ds-foundation-spin
+    var(--ds-cascader-spinner-duration, var(--ds-motion-glacial, 500ms)) linear
+    infinite;
 }
 /* ---- coarse pointer: rows/trigger/clear reach the 44px floor via
         min-block-size (wins over inline heights, fine pointers untouched). ---- */
 @media (hover: none) and (pointer: coarse) {
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger'],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option'],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="clear-button"] {
+  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"],
+  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option"],
+  .ds-cascader.ds-cascader--modern[data-part="root"]
+    [data-part="clear-button"] {
     min-block-size: var(--ds-cascader-touch-target-min, 44px);
   }
 }
@@ -270,11 +381,48 @@
   .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading"] {
     animation: none;
   }
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger'],
+  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"],
   .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option'],
+  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option"],
   .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="arrow-icon"],
-  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="clear-button"] {
+  .ds-cascader.ds-cascader--modern[data-part="root"]
+    [data-part="clear-button"] {
     transition: none;
+  }
+}
+
+/* ---- forced colors (system colors only): the selected path option reads as
+        a system selection; focus rings re-map to Highlight outlines (the
+        box-shadow rings drop); the column hairline and chevron inherit the
+        forced palette. ---- */
+@media (forced-colors: active) {
+  .ds-cascader.ds-cascader--modern[data-part="root"]
+    [data-part="option"][data-selected="true"] {
+    background: Highlight;
+    border-color: Highlight;
+    color: HighlightText;
+  }
+  .ds-cascader.ds-cascader--modern[data-part="root"]
+    [data-part="trigger"]:focus-visible,
+  .ds-cascader.ds-cascader--modern[data-part="root"]
+    [data-part="search-input"]:focus-visible,
+  .ds-cascader.ds-cascader--modern[data-part="root"]
+    [data-part="option"]:focus-visible,
+  .ds-cascader.ds-cascader--modern[data-part="root"]
+    [data-part="clear-button"]:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+    box-shadow: none;
+  }
+  .ds-cascader.ds-cascader--modern[data-part="root"]
+    [data-part="option"][data-disabled="true"] {
+    color: GrayText;
+  }
+  .ds-cascader.ds-cascader--modern[data-part="root"]
+    [data-part="menu-column"]:not([data-last="true"]) {
+    border-inline-end-color: ButtonText;
+  }
+  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="chevron"] {
+    color: ButtonText;
   }
 }

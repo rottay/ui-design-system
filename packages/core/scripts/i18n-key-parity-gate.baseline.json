@@ -1,6 +1,6 @@
 {
   "_comment": "Locale classification + decrease-only shortfall ledger for i18n-key-parity-gate.mjs. `mandatoryLocales` ship at 100% of the reference key set (the union of every mandatory locale's leaf keys) -- any hole fails --check and there is NO baseline escape for them. `declaredPartialLocales` ship incomplete BY DECISION; their `missing` count is a decrease-only CEILING: growth fails --check, a NEW partial locale with no entry fails --check, and a shrink reports a tighten opportunity (run --seed to lower the ceiling). Every locale in SUPPORTED_LOCALES must appear in exactly one of the two lists.",
-  "referenceKeyCount": 456,
+  "referenceKeyCount": 1127,
   "mandatoryLocales": [
     "en",
     "es",
@@ -8,14 +8,14 @@
   ],
   "declaredPartialLocales": {
     "fr": {
-      "missing": 147,
-      "present": 309,
-      "reason": "French landed as a partial catalog: the `common`/`errors`/`validation` namespaces and the older `components` families are translated, the component families added after the initial French drop are not. Recorded as accepted debt at the WO-I18N landing so the hole can only shrink; French is not wired as a mandatory product locale."
+      "missing": 146,
+      "present": 981,
+      "reason": "French is a declared-partial, non-product locale. The 2026-07-30 Modern full-coverage wave expanded the mandatory EN/ES/AR contract from 456 to 1127 keys; French received 671 natural translations in the same wave and preserved the committed 147-key debt ceiling by shrinking it to 146. No English-copy placeholders were added to simulate translation."
     },
     "pt": {
       "missing": 147,
-      "present": 309,
-      "reason": "Portuguese landed as a partial catalog alongside French and carries the identical hole (same untranslated component families). Recorded as accepted debt at the WO-I18N landing so the hole can only shrink; Portuguese is not wired as a mandatory product locale."
+      "present": 980,
+      "reason": "Portuguese is a declared-partial, non-product locale. The 2026-07-30 Modern full-coverage wave expanded the mandatory EN/ES/AR contract from 456 to 1127 keys; Portuguese received 670 natural translations in the same wave and preserved the committed 147-key debt ceiling. No English-copy placeholders were added to simulate translation."
     }
   }
 }

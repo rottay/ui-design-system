@@ -2,6 +2,17 @@
  * @fileoverview Stack Modern Engine - Rottay Design System
  * @description Modern, token-aware implementation of the Stack component.
  *
+ * @remarks
+ * **Stack vs Flex (composition law):** Stack owns READING RHYTHM along one
+ * axis — a single governed gap from the preset spacing ramp (density-scaled),
+ * optional interleaved dividers that center inside that rhythm, and reverse
+ * order. Flex owns FREEFORM composition — ad-hoc clusters with uniform or
+ * split (row/column) gaps and no divider contract. Reach for Stack when the
+ * children form a sequence (form fields, list rows, page sections); reach
+ * for Flex when they form a cluster (toolbar rows, action groups, media
+ * objects). Nested Stacks inherit nothing: each instance re-declares its own
+ * direction/spacing attributes, so nesting is predictable by construction.
+ *
  * @module Stack/Engines/Modern
  * @category Layout
  * @package @rottay/design-system

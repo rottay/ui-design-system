@@ -50,6 +50,7 @@ describe('same tree under opposing recipe profiles (DS-S001)', () => {
     expect(technicalButton).toHaveAttribute('data-shape', 'default');
     expect(technicalButton).toHaveAttribute('data-size', 'sm');
     expect(technicalCard).toHaveAttribute('data-variant', 'outlined');
+    expect(technicalTag).toHaveAttribute('data-size', 'sm');
     expect(technicalTag).toHaveAttribute('data-radius', 'none');
     expect(technicalTag).toHaveAttribute('data-bordered', 'true');
     expect(technicalTag).toHaveAttribute('data-outlined', 'true');
@@ -67,6 +68,7 @@ describe('same tree under opposing recipe profiles (DS-S001)', () => {
     expect(editorialButton).toHaveAttribute('data-shape', 'round');
     expect(editorialButton).toHaveAttribute('data-size', 'lg');
     expect(editorialCard).toHaveAttribute('data-variant', 'elevated');
+    expect(editorialTag).toHaveAttribute('data-size', 'lg');
     expect(editorialTag).toHaveAttribute('data-radius', 'full');
     expect(editorialTag).not.toHaveAttribute('data-bordered');
     expect(editorialTag).not.toHaveAttribute('data-outlined');

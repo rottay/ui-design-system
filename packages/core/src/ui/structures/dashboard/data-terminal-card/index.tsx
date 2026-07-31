@@ -5,10 +5,40 @@
  * @description
  * Engine-free structures family for dashboard surfaces. Renders a single
  * metric card with a "Terminal / HUD / Circuit / Matrix" visual theme,
- * a trend indicator, an optional sparkline, and an optional href that
- * turns the whole card into a link via the DS navigation adapter.
- * Consumers compose multiple cards into a dashboard grid or drop a
- * single card into a widget slot.
+ * a trend indicator, an optional progress bar, and an href that turns the
+ * whole card into a link via the DS navigation adapter. Consumers compose
+ * multiple cards into a dashboard grid or drop a single card into a widget
+ * slot.
+ *
+ * ANATOMY (Pass 1, documented): terminal-chrome header + icon/label block +
+ * hero value + 3-stat grid (change/period/target) + progress bar + footer.
+ * The card composes ONLY layout primitives (Box/Flex/Text) and governed
+ * icons today.
+ *
+ * KNOWN DEBTS (checkpoint-level, documented — not half-fixed):
+ *  - Card P05 / Statistic P15 / Button P34 / Skeleton P30 are NOT composed:
+ *    the value/stat grammar, the card frame and the loading state are own
+ *    grammar (see stats-grid PT16 for the pattern-side metric grammar).
+ *  - QuickAction buttons are DEAD (the props contract exposes no action
+ *    callbacks; they preventDefault to keep the card-link intact). Their
+ *    labels are localized chrome, but the affordance itself is a contract
+ *    gap.
+ *  - ActivityIndicator "simulates data activity" — decorative, not data.
+ *  - The variant falls back to a Math.random page seed when neither the
+ *    prop nor the provider pins one (nondeterministic theming by design).
+ *  - Residual inline geometry (static layout/flex/padding) still lives in
+ *    the bodies; the paint tones and ALL animation/motion are skin-owned.
+ *
+ * MOTION LAW: every `animation`/`transition` declaration moved OUT of the
+ * inline styles into `presentation/components/skin/data-terminal-card.css`
+ * (channeled, reduced-motion-guarded durations derived from `--ds-motion-*`
+ * rungs) — an inline animation cannot be silenced without `!important`.
+ * Only runtime-computed values stay inline: the activity-bar stagger delay
+ * and the progress fill width.
+ *
+ * COPY LAW: all owned chrome copy resolves through the optional
+ * `components` i18n channel with an English floor; numbers format with the
+ * active locale. Consumer data (label/value/change/subtitle) is never copy.
  *
  * The component is framework-agnostic:
  *   - Navigation goes through `useNavigationLink()` from the DS runtime
@@ -29,6 +59,7 @@ import { useMemo, createContext, useContext, type CSSProperties, type ReactNode 
 import { Box, Text, Flex } from '@/ui/primitives';
 import { useNavigationLink } from '@/infrastructure/runtime/adapters/presentation/react/navigation';
 import { useDsFocusMode } from '@/infrastructure/runtime/adapters/presentation/react/focus-mode';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import {
   ActivityIcon as Activity,
   ArrowRightIcon as ArrowRight,
@@ -40,6 +71,15 @@ import {
 } from '../../../../graphics/icons';
 import type { ComponentType } from 'react';
 type DataTerminalIcon = ComponentType<any>;
+
+/** Hook-local translation: catalogue value with an English floor (never a
+    raw key), plus the active locale for number formatting. */
+function useDtcTranslation() {
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, floor: string): string => i18n?.tOr(key, floor) ?? floor;
+  const locale = i18n?.locale ?? 'default';
+  return { tOr, locale };
+}
 
 /**
  * Internal Link wrapper that resolves the consumer-supplied Link via the
@@ -111,8 +151,9 @@ function getProgressColor(progress: number): string {
   return DS.error;
 }
 
-// Live indicator component
+// Live indicator component (the pulse/ring animation is skin-owned)
 function LiveIndicator({ color = DS.success }: { color?: string }) {
+  const { tOr } = useDtcTranslation();
   return (
     <Flex align="center" gap={6} style={{ '--ds-dtc-live': color } as CSSProperties}>
       <Box
@@ -127,7 +168,6 @@ function LiveIndicator({ color = DS.success }: { color?: string }) {
           style={{
             position: 'absolute',
             inset: 0,
-            animation: 'dtc-live-pulse 2s ease-in-out infinite',
           }}
         />
         <Box
@@ -146,13 +186,13 @@ function LiveIndicator({ color = DS.success }: { color?: string }) {
           letterSpacing: '0.05em',
         }}
       >
-        LIVE
+        {tOr('dataTerminalCard.live', 'LIVE')}
       </Text>
     </Flex>
   );
 }
 
-// Activity indicator - simulates data activity
+// Activity indicator - simulates data activity (DECORATIVE, see header debts)
 // Heights are stable across renders to avoid impure Math.random() during render
 const ACTIVITY_BAR_HEIGHTS = [12, 9, 15, 10, 14];
 
@@ -166,7 +206,8 @@ function ActivityIndicator() {
           style={{
             width: 2,
             height: ACTIVITY_BAR_HEIGHTS[i],
-            animation: `dtc-data-tick 1s ease-in-out infinite ${i * 0.15}s`,
+            /* Only the runtime stagger stays inline; the cadence is skin-owned. */
+            animationDelay: `${i * 0.15}s`,
           }}
         />
       ))}
@@ -174,7 +215,7 @@ function ActivityIndicator() {
   );
 }
 
-// Quick action button
+// Quick action button (DEAD affordance — contract gap, see header debts)
 function QuickAction({ icon: Icon, label }: { icon: DataTerminalIcon; label: string }) {
   return (
     <Box
@@ -190,7 +231,6 @@ function QuickAction({ icon: Icon, label }: { icon: DataTerminalIcon; label: str
         gap: 4,
         padding: '5px 10px',
         cursor: 'pointer',
-        transition: 'all 0.2s ease',
       }}
     >
       <Icon data-part="quick-action-icon" style={{ width: 11, height: 11 }} />
@@ -208,7 +248,7 @@ function QuickAction({ icon: Icon, label }: { icon: DataTerminalIcon; label: str
   );
 }
 
-// Progress bar component
+// Progress bar component (motion is skin-owned; width stays inline as data)
 function ProgressBar({ progress, height = 4 }: { progress: number; height?: number }) {
   // Radius is `height / 2` — computed from a runtime prop, so it rides a
   // custom-property hatch the track sets and both track + fill read.
@@ -229,18 +269,16 @@ function ProgressBar({ progress, height = 4 }: { progress: number; height?: numb
         style={{
           height: '100%',
           width: `${progress}%`,
-          transition: 'width 1s cubic-bezier(0.4, 0, 0.2, 1)',
           position: 'relative',
           overflow: 'hidden',
         }}
       >
-        {/* Shimmer effect */}
+        {/* Shimmer effect (motion is skin-owned) */}
         <Box
           data-part="progress-shimmer"
           style={{
             position: 'absolute',
             inset: 0,
-            animation: 'dtc-wave 2s ease-in-out infinite',
           }}
         />
       </Box>
@@ -281,6 +319,7 @@ function CommandCard({
   progress = 0,
   subtitle,
 }: Omit<DataTerminalCardProps, 'variant' | 'hideOnFocus'>) {
+  const { tOr, locale } = useDtcTranslation();
   const isPositive = trend === 'up';
 
   return (
@@ -298,7 +337,6 @@ function CommandCard({
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          animation: 'dtc-fade-in 0.4s ease-out',
         }}
       >
         {/* Terminal header */}
@@ -328,7 +366,6 @@ function CommandCard({
               style={{
                 width: 8,
                 height: 8,
-                animation: 'dtc-heartbeat 1.5s ease-in-out infinite',
               }}
             />
           </Flex>
@@ -365,7 +402,6 @@ function CommandCard({
                 style={{
                   width: 8,
                   height: 2,
-                  animation: 'dtc-typing 1s step-end infinite',
                 }}
               />
             </Flex>
@@ -383,7 +419,7 @@ function CommandCard({
                 letterSpacing: '-0.02em',
               }}
             >
-              {typeof value === 'number' ? value.toLocaleString() : value}
+              {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
           </Box>
 
@@ -398,7 +434,7 @@ function CommandCard({
               marginTop: 12,
             }}
           >
-            <StatItem label="CHANGE">
+            <StatItem label={tOr('dataTerminalCard.statChange', 'CHANGE')}>
               <Flex align="center" gap={4}>
                 {isPositive ? (
                   <TrendingUp data-part="trend-icon" style={{ width: 14, height: 14 }} />
@@ -417,12 +453,12 @@ function CommandCard({
                 </Text>
               </Flex>
             </StatItem>
-            <StatItem label="PERIOD">
+            <StatItem label={tOr('dataTerminalCard.statPeriod', 'PERIOD')}>
               <Text data-part="period-value" style={{ fontSize: 12, fontFamily: 'monospace' }}>
-                {subtitle || 'This week'}
+                {subtitle || tOr('dataTerminalCard.periodDefaultWeek', 'This week')}
               </Text>
             </StatItem>
-            <StatItem label="TARGET">
+            <StatItem label={tOr('dataTerminalCard.statTarget', 'TARGET')}>
               <Text
                 data-part="target-value"
                 style={{
@@ -442,12 +478,12 @@ function CommandCard({
           </Box>
         </Box>
 
-        {/* Actions footer */}
+        {/* Actions footer (DEAD affordances — contract gap, see header) */}
         <Box data-part="actions-footer" style={{ padding: '10px 14px' }}>
           <Flex gap={8}>
-            <QuickAction icon={Eye} label="VIEW" />
-            <QuickAction icon={Plus} label="ADD" />
-            <QuickAction icon={BarChart3} label="STATS" />
+            <QuickAction icon={Eye} label={tOr('dataTerminalCard.actionView', 'VIEW')} />
+            <QuickAction icon={Plus} label={tOr('dataTerminalCard.actionAdd', 'ADD')} />
+            <QuickAction icon={BarChart3} label={tOr('dataTerminalCard.actionStats', 'STATS')} />
           </Flex>
         </Box>
       </Box>
@@ -468,8 +504,14 @@ function HUDCard({
   progress = 0,
   subtitle,
 }: Omit<DataTerminalCardProps, 'variant' | 'hideOnFocus'>) {
+  const { tOr, locale } = useDtcTranslation();
   const isPositive = trend === 'up';
-  const statusLabel = progress >= 80 ? 'OPTIMAL' : progress >= 50 ? 'MODERATE' : 'ATTENTION';
+  const statusLabel =
+    progress >= 80
+      ? tOr('dataTerminalCard.statusOptimal', 'OPTIMAL')
+      : progress >= 50
+        ? tOr('dataTerminalCard.statusModerate', 'MODERATE')
+        : tOr('dataTerminalCard.statusAttention', 'ATTENTION');
 
   return (
     <NavLinkAnchor href={path} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
@@ -486,22 +528,20 @@ function HUDCard({
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          animation: 'dtc-fade-in 0.4s ease-out',
         }}
       >
-        {/* Grid texture */}
+        {/* Grid texture (motion is skin-owned) */}
         <Box
           data-part="grid-texture"
           style={{
             position: 'absolute',
             inset: 0,
             opacity: 0.25,
-            animation: 'dtc-breathe 4s ease-in-out infinite',
             pointerEvents: 'none',
           }}
         />
 
-        {/* Scan line */}
+        {/* Scan line (motion is skin-owned) */}
         <Box
           data-part="scan-line"
           style={{
@@ -509,12 +549,11 @@ function HUDCard({
             left: 0,
             right: 0,
             height: 50,
-            animation: 'dtc-scan 5s linear infinite',
             pointerEvents: 'none',
           }}
         />
 
-        {/* Corner brackets */}
+        {/* Corner brackets (motion is skin-owned) */}
         <Box
           data-part="corner-bracket"
           style={{
@@ -523,7 +562,6 @@ function HUDCard({
             left: 10,
             width: 18,
             height: 18,
-            animation: 'dtc-pulse 3s ease-in-out infinite',
           }}
         />
         <Box
@@ -534,7 +572,6 @@ function HUDCard({
             right: 10,
             width: 18,
             height: 18,
-            animation: 'dtc-pulse 3s ease-in-out infinite 0.5s',
           }}
         />
         <Box
@@ -545,7 +582,6 @@ function HUDCard({
             left: 10,
             width: 18,
             height: 18,
-            animation: 'dtc-pulse 3s ease-in-out infinite 1s',
           }}
         />
         <Box
@@ -556,7 +592,6 @@ function HUDCard({
             right: 10,
             width: 18,
             height: 18,
-            animation: 'dtc-pulse 3s ease-in-out infinite 1.5s',
           }}
         />
 
@@ -598,7 +633,7 @@ function HUDCard({
                       display: 'block',
                     }}
                   >
-                    TRACKING
+                    {tOr('dataTerminalCard.tracking', 'TRACKING')}
                   </Text>
                   <Text
                     data-part="header-label"
@@ -620,7 +655,6 @@ function HUDCard({
                     style={{
                       width: 6,
                       height: 6,
-                      animation: 'dtc-heartbeat 1.5s ease-in-out infinite',
                     }}
                   />
                   <Text
@@ -659,7 +693,7 @@ function HUDCard({
                 lineHeight: 1,
               }}
             >
-              {typeof value === 'number' ? value.toLocaleString() : value}
+              {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
             <Flex align="center" gap={12} style={{ marginTop: 16 }}>
               <Box data-part="trend-badge" style={{ padding: '6px 12px' }}>
@@ -682,7 +716,7 @@ function HUDCard({
                 </Flex>
               </Box>
               <Text data-part="period-value" style={{ fontSize: 12, fontFamily: 'monospace' }}>
-                {subtitle || 'this period'}
+                {subtitle || tOr('dataTerminalCard.periodDefaultPeriod', 'this period')}
               </Text>
             </Flex>
           </Box>
@@ -701,7 +735,7 @@ function HUDCard({
                     marginBottom: 6,
                   }}
                 >
-                  COMPLETION
+                  {tOr('dataTerminalCard.completion', 'COMPLETION')}
                 </Text>
                 <Text
                   data-part="completion-value"
@@ -724,7 +758,6 @@ function HUDCard({
                   style={{
                     width: 14,
                     height: 14,
-                    animation: 'dtc-pulse 1s ease-in-out infinite',
                   }}
                 />
                 <Text
@@ -735,7 +768,7 @@ function HUDCard({
                     letterSpacing: '0.05em',
                   }}
                 >
-                  DETAILS
+                  {tOr('dataTerminalCard.details', 'DETAILS')}
                 </Text>
                 <ArrowRight data-part="details-arrow" style={{ width: 12, height: 12 }} />
               </Flex>
@@ -760,6 +793,7 @@ function CircuitCard({
   progress = 0,
   subtitle,
 }: Omit<DataTerminalCardProps, 'variant' | 'hideOnFocus'>) {
+  const { tOr, locale } = useDtcTranslation();
   const isPositive = trend === 'up';
   const progressColor = getProgressColor(progress);
 
@@ -778,7 +812,6 @@ function CircuitCard({
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          animation: 'dtc-fade-in 0.4s ease-out',
         }}
       >
         {/* Circuit pattern */}
@@ -792,7 +825,7 @@ function CircuitCard({
           }}
         />
 
-        {/* Data flow line */}
+        {/* Data flow line (motion is skin-owned) */}
         <Box
           data-part="flow-line"
           style={{
@@ -801,12 +834,11 @@ function CircuitCard({
             left: 0,
             width: 60,
             height: 2,
-            animation: 'dtc-slide 4s linear infinite',
             pointerEvents: 'none',
           }}
         />
 
-        {/* Node indicators */}
+        {/* Node indicators (motion is skin-owned) */}
         <Box
           data-part="node-dot"
           style={{
@@ -815,7 +847,6 @@ function CircuitCard({
             left: 12,
             width: 10,
             height: 10,
-            animation: 'dtc-pulse 2s ease-in-out infinite',
           }}
         />
         <Box
@@ -826,7 +857,6 @@ function CircuitCard({
             right: 12,
             width: 10,
             height: 10,
-            animation: 'dtc-heartbeat 1.5s ease-in-out infinite',
           }}
         />
         <Box
@@ -837,7 +867,6 @@ function CircuitCard({
             left: 12,
             width: 10,
             height: 10,
-            animation: 'dtc-pulse 2s ease-in-out infinite 1s',
           }}
         />
         <Box
@@ -848,7 +877,6 @@ function CircuitCard({
             right: 12,
             width: 10,
             height: 10,
-            animation: 'dtc-pulse 2s ease-in-out infinite 0.5s',
           }}
         />
 
@@ -890,7 +918,7 @@ function CircuitCard({
                       marginBottom: 2,
                     }}
                   >
-                    METRIC
+                    {tOr('dataTerminalCard.metric', 'METRIC')}
                   </Text>
                   <Text
                     data-part="header-label"
@@ -931,7 +959,7 @@ function CircuitCard({
                 lineHeight: 1,
               }}
             >
-              {typeof value === 'number' ? value.toLocaleString() : value}
+              {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
           </Box>
 
@@ -945,7 +973,7 @@ function CircuitCard({
               padding: '12px 0',
             }}
           >
-            <StatItem label="CHANGE">
+            <StatItem label={tOr('dataTerminalCard.statChange', 'CHANGE')}>
               <Flex align="center" gap={4}>
                 {isPositive ? (
                   <TrendingUp data-part="trend-icon" style={{ width: 14, height: 14 }} />
@@ -964,12 +992,12 @@ function CircuitCard({
                 </Text>
               </Flex>
             </StatItem>
-            <StatItem label="PERIOD">
+            <StatItem label={tOr('dataTerminalCard.statPeriod', 'PERIOD')}>
               <Text data-part="period-value" style={{ fontSize: 12, fontFamily: 'monospace' }}>
-                {subtitle || 'This week'}
+                {subtitle || tOr('dataTerminalCard.periodDefaultWeek', 'This week')}
               </Text>
             </StatItem>
-            <StatItem label="TARGET">
+            <StatItem label={tOr('dataTerminalCard.statTarget', 'TARGET')}>
               <Text
                 data-part="target-value"
                 style={{
@@ -988,10 +1016,10 @@ function CircuitCard({
             <ProgressBar progress={progress} height={5} />
           </Box>
 
-          {/* Actions footer */}
+          {/* Actions footer (DEAD affordances — contract gap, see header) */}
           <Flex gap={8}>
-            <QuickAction icon={Eye} label="VIEW" />
-            <QuickAction icon={BarChart3} label="ANALYTICS" />
+            <QuickAction icon={Eye} label={tOr('dataTerminalCard.actionView', 'VIEW')} />
+            <QuickAction icon={BarChart3} label={tOr('dataTerminalCard.actionAnalytics', 'ANALYTICS')} />
           </Flex>
         </Box>
       </Box>
@@ -1012,6 +1040,7 @@ function MatrixCard({
   progress = 0,
   subtitle,
 }: Omit<DataTerminalCardProps, 'variant' | 'hideOnFocus'>) {
+  const { tOr, locale } = useDtcTranslation();
   const isPositive = trend === 'up';
 
   return (
@@ -1029,10 +1058,9 @@ function MatrixCard({
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
-          animation: 'dtc-fade-in 0.4s ease-out',
         }}
       >
-        {/* Dot matrix texture */}
+        {/* Dot matrix texture (motion is skin-owned) */}
         <Box
           data-part="matrix-texture"
           style={{
@@ -1040,7 +1068,6 @@ function MatrixCard({
             inset: 0,
             opacity: 0.35,
             pointerEvents: 'none',
-            animation: 'dtc-flow 40s linear infinite',
           }}
         />
 
@@ -1082,7 +1109,7 @@ function MatrixCard({
                       marginBottom: 2,
                     }}
                   >
-                    DATA POINT
+                    {tOr('dataTerminalCard.dataPoint', 'DATA POINT')}
                   </Text>
                   <Text
                     data-part="header-label"
@@ -1122,7 +1149,7 @@ function MatrixCard({
                 letterSpacing: '-0.03em',
               }}
             >
-              {typeof value === 'number' ? value.toLocaleString() : value}
+              {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
           </Box>
 
@@ -1136,7 +1163,7 @@ function MatrixCard({
               padding: '12px 0',
             }}
           >
-            <StatItem label="CHANGE">
+            <StatItem label={tOr('dataTerminalCard.statChange', 'CHANGE')}>
               <Flex align="center" gap={4}>
                 {isPositive ? (
                   <TrendingUp data-part="trend-icon" style={{ width: 12, height: 12 }} />
@@ -1155,12 +1182,12 @@ function MatrixCard({
                 </Text>
               </Flex>
             </StatItem>
-            <StatItem label="PERIOD">
+            <StatItem label={tOr('dataTerminalCard.statPeriod', 'PERIOD')}>
               <Text data-part="period-value" style={{ fontSize: 11, fontFamily: 'monospace' }}>
-                {subtitle || 'This week'}
+                {subtitle || tOr('dataTerminalCard.periodDefaultWeek', 'This week')}
               </Text>
             </StatItem>
-            <StatItem label="TARGET">
+            <StatItem label={tOr('dataTerminalCard.statTarget', 'TARGET')}>
               <Text
                 data-part="target-value"
                 style={{
@@ -1191,7 +1218,7 @@ function MatrixCard({
                   letterSpacing: '0.05em',
                 }}
               >
-                VIEW DETAILS
+                {tOr('dataTerminalCard.viewDetails', 'VIEW DETAILS')}
               </Text>
               <ArrowRight data-part="details-arrow" style={{ width: 12, height: 12 }} />
             </Flex>
@@ -1255,6 +1282,7 @@ export function DataTerminalStat({
   icon: Icon,
   progress = 0,
 }: Omit<DataTerminalCardProps, 'path'>) {
+  const { locale } = useDtcTranslation();
   const isPositive = trend === 'up';
 
   return (
@@ -1262,6 +1290,7 @@ export function DataTerminalStat({
       className="ds-data-terminal-stat"
       data-part="root"
       data-trend={trend}
+      data-band={progress >= 80 ? 'high' : progress >= 50 ? 'mid' : 'low'}
       style={{
         position: 'relative',
         padding: 14,
@@ -1309,7 +1338,7 @@ export function DataTerminalStat({
               lineHeight: 1,
             }}
           >
-            {typeof value === 'number' ? value.toLocaleString() : value}
+            {typeof value === 'number' ? value.toLocaleString(locale) : value}
           </Text>
           <Flex align="center" gap={3}>
             {isPositive ? (

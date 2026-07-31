@@ -45,9 +45,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { SavedViewsBarProps, SavedView } from '../../contracts';
 import type { DropdownMenuItem } from '../../../../../primitives/overlay/Dropdown/contracts';
-import { Dropdown } from '../../../../../primitives/overlay/Dropdown';
-import { Button } from '../../../../../primitives/inputs/Button';
-import { Input } from '../../../../../primitives/inputs/Input';
+import Dropdown from '../../../../../primitives/overlay/Dropdown/engines/modern';
+import Button from '../../../../../primitives/inputs/Button/engines/modern';
+import Input from '../../../../../primitives/inputs/Input/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
 import { ActionEditIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-edit';
 import { ActionCopyIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-copy';
@@ -291,9 +291,9 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             {/* Name: a real Button select control, or the rename Input while editing */}
             {isEditing ? (
               <Input
-                engine="modern"
                 variant="unstyled"
                 size="sm"
+                data-part="rename-input"
                 className="ds-saved-views__input"
                 value={editingName}
                 onChange={(value) => setEditingName(value)}
@@ -310,7 +310,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
               />
             ) : (
               <Button
-                engine="modern"
                 variant="ghost"
                 size="sm"
                 data-part="pill-select"
@@ -363,7 +362,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                 menu={{ items: menuItems }}
               >
                 <Button
-                  engine="modern"
                   variant="ghost"
                   size="xs"
                   data-part="menu-trigger"
@@ -383,9 +381,9 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
       {isCreating ? (
         <div data-part="create-form" className="ds-saved-views__create-form">
           <Input
-            engine="modern"
             variant="unstyled"
             size="sm"
+            data-part="create-input"
             className="ds-saved-views__create-input"
             placeholder={newViewPlaceholder}
             value={newViewName}
@@ -409,7 +407,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
       ) : (
         canCreate && (
           <Button
-            engine="modern"
             variant="dashed"
             size="sm"
             data-part="create-button"

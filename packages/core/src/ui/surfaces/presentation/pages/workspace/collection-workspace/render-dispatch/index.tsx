@@ -4,6 +4,13 @@
  * Routes collection data to the correct pattern component based on the
  * active view mode: table, cards, grid, kanban, gallery, calendar.
  *
+ * Composition law: every view mode delegates to its sanctioned pattern
+ * (PatternDataTable / PatternGridView / PatternGalleryView /
+ * PatternKanbanBoard / PatternCalendarView). The dispatch owns only the
+ * config->pattern adapters, the cards grid (which has no pattern of its
+ * own) and the shared pagination footers; it never re-implements pattern
+ * chrome.
+ *
  * This component is internal to CollectionWorkspaceSurface and should
  * NOT be exported from the DS public API.
  */
@@ -12,7 +19,11 @@
 
 import React from 'react';
 import type { ReactNode } from 'react';
-import type { ColumnDef } from '../../../../../../../foundation/contracts/runtime/components/patterns/core';
+import type {
+  ColumnDef,
+  KanbanColumnDef,
+} from '../../../../../../../foundation/contracts/runtime/components/patterns/core';
+import type { CalendarEvent } from '../../../../../../../foundation/contracts/runtime/components/patterns/visualization';
 import type { CollectionViewMode, CollectionViewModeConfigs } from '../../../../../foundation/contracts/adaptive/collection';
 import type {
   SurfaceAccessInput,
@@ -22,7 +33,8 @@ import {
   isAllSurfaceAccess,
   resolveSurfaceCapabilityRegistry,
 } from '../../../../../runtime/helpers';
-import { SurfaceCapabilityAnatomy } from '../../../../../runtime/helpers/states';
+import { SurfaceCapabilityAnatomy, SurfaceEmptyState } from '../../../../../runtime/helpers/states';
+import { useSurfaceTranslations } from '../../../../../runtime/helpers/states/i18n';
 import type { DensityKey } from '../../../../../../patterns/data/list-toolbar/contracts';
 import type { BulkAction } from '../../../../../../../foundation/contracts/runtime/components/patterns/core';
 import type { SortConfig, PaginationConfig, FilterDef } from '../../../../../../../foundation/contracts/runtime/components/patterns/core';
@@ -33,8 +45,13 @@ import type {
 } from '../../../../../../patterns/data/data-table';
 import { PatternGridView } from '../../../../../../patterns/data/grid-view';
 import { PatternGalleryView } from '../../../../../../patterns/data/gallery-view';
+import { PatternKanbanBoard } from '../../../../../../patterns/visualization/kanban-board';
+import { PatternCalendarView } from '../../../../../../patterns/visualization/calendar-view';
 import { Box } from '../../../../../../primitives/layout/Box';
 import { Text } from '../../../../../../primitives/display/Typography';
+import { Button } from '../../../../../../primitives/inputs/Button';
+import { Select } from '../../../../../../primitives/inputs/Select';
+import { Skeleton } from '../../../../../../primitives/feedback/Skeleton';
 
 // ---------------------------------------------------------------------------
 // Props
@@ -129,6 +146,12 @@ function getColumnCapabilityId<T>(column: ColumnDef<T>): string {
   return fieldId?.trim() || column.key;
 }
 
+type SurfaceTranslator = (
+  key: string,
+  fallback: string,
+  params?: Record<string, string | number>,
+) => string;
+
 function CollectionErrorAnatomy<T extends object>({
   access,
   actions,
@@ -140,6 +163,7 @@ function CollectionErrorAnatomy<T extends object>({
   CollectionRenderDispatchProps<T>,
   'access' | 'actions' | 'capabilityRegistry' | 'columns' | 'error' | 'viewMode'
 >): React.ReactElement {
+  const { tSurfaceOr } = useSurfaceTranslations();
   const registeredColumns = isAllSurfaceAccess(access)
     ? columns
     : columns.filter((column) => column.visible !== false);
@@ -155,7 +179,11 @@ function CollectionErrorAnatomy<T extends object>({
       label: getColumnHeader(column as ColumnDef<unknown>),
     })),
     ...(actions && !hasExplicitRowActions
-      ? [{ kind: 'action' as const, id: 'row-actions', label: 'Row actions' }]
+      ? [{
+          kind: 'action' as const,
+          id: 'row-actions',
+          label: tSurfaceOr('collection_workspace.row_actions', 'Row actions'),
+        }]
       : []),
   ];
   const capabilities = resolveSurfaceCapabilityRegistry(registrations, access);
@@ -168,7 +196,6 @@ function CollectionErrorAnatomy<T extends object>({
       data-state="error"
       data-capability-count={capabilities.length}
       padding="lg"
-      style={{ display: 'grid', gap: 'var(--ds-spacing-4, 16px)' }}
     >
       <Box data-part="error-state" aria-live="polite">
         {error}
@@ -176,7 +203,7 @@ function CollectionErrorAnatomy<T extends object>({
 
       <SurfaceCapabilityAnatomy
         capabilities={capabilities}
-        ariaLabel="Registered collection capabilities"
+        ariaLabel={tSurfaceOr('states.capability_aria', 'Registered surface capabilities')}
       />
     </Box>
   );
@@ -186,6 +213,7 @@ function getColumnValue<T extends object>(
   row: T,
   column: ColumnDef<T>,
   index: number,
+  t: SurfaceTranslator,
 ): ReactNode {
   const rawValue = column.accessorFn
     ? column.accessorFn(row)
@@ -197,9 +225,15 @@ function getColumnValue<T extends object>(
     return column.render(rawValue, row, index);
   }
 
-  if (rawValue == null || rawValue === '') return 'Not set';
+  if (rawValue == null || rawValue === '') {
+    return t('collection_workspace.not_set', 'Not set');
+  }
   if (rawValue instanceof Date) return rawValue.toLocaleDateString();
-  if (typeof rawValue === 'boolean') return rawValue ? 'Yes' : 'No';
+  if (typeof rawValue === 'boolean') {
+    return rawValue
+      ? t('collection_workspace.boolean_yes', 'Yes')
+      : t('collection_workspace.boolean_no', 'No');
+  }
   if (typeof rawValue === 'object') return JSON.stringify(rawValue);
   return String(rawValue);
 }
@@ -240,6 +274,7 @@ function renderFallbackCard<T extends object>({
   href,
   activationLabel,
   onActivate,
+  t,
 }: {
   row: T;
   index: number;
@@ -248,82 +283,51 @@ function renderFallbackCard<T extends object>({
   href?: string;
   activationLabel: string;
   onActivate?: () => void;
+  t: SurfaceTranslator;
 }): ReactNode {
   const visibleColumns = columns
     .filter((column) => column.visible !== false)
     .slice(0, 6);
   const [primaryColumn, ...detailColumns] = visibleColumns;
   const primaryValue = primaryColumn
-    ? getColumnValue(row, primaryColumn, index)
-    : `Record ${index + 1}`;
+    ? getColumnValue(row, primaryColumn, index, t)
+    : t('collection_workspace.record_number', 'Record {index}', { index: index + 1 });
   const actionContent = actions?.(row, index);
 
   return (
     <Box
       className="ds-collection-render-dispatch__fallback-card"
       data-part="fallback-card"
-      style={{
-        minHeight: 172,
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 12,
-        padding: 14,
-        boxSizing: 'border-box',
-        overflow: 'hidden',
-      }}
     >
-      <Box style={{ minWidth: 0 }}>
+      <Box className="ds-collection-render-dispatch__fallback-heading">
         <Text
           className="ds-collection-render-dispatch__muted-text"
+          data-part="fallback-label"
           size="xs"
-          style={{
-            display: 'block',
-            fontSize: 10,
-            fontWeight: 800,
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-            marginBottom: 4,
-          }}
         >
-          {primaryColumn ? getColumnHeader(primaryColumn as ColumnDef<unknown>) : 'Record'}
+          {primaryColumn
+            ? getColumnHeader(primaryColumn as ColumnDef<unknown>)
+            : t('collection_workspace.record_label', 'Record')}
         </Text>
         <Text
           className="ds-collection-render-dispatch__fallback-title"
           data-part="title"
           weight="semibold"
-          style={{
-            display: 'block',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
         >
           {primaryValue}
         </Text>
       </Box>
 
       <Box
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-          gap: '10px 14px',
-          minWidth: 0,
-        }}
+        className="ds-collection-render-dispatch__fallback-grid"
+        data-part="fallback-grid"
       >
         {detailColumns.slice(0, 4).map((column) => (
-          <Box key={column.key} style={{ minWidth: 0 }}>
+          <Box key={column.key} className="ds-collection-render-dispatch__fallback-field">
             <Text
               className="ds-collection-render-dispatch__muted-text"
+              data-part="fallback-label"
               size="xs"
-              style={{
-                display: 'block',
-                fontSize: 10,
-                fontWeight: 750,
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-                marginBottom: 3,
-              }}
             >
               {getColumnHeader(column as ColumnDef<unknown>)}
             </Text>
@@ -331,14 +335,8 @@ function renderFallbackCard<T extends object>({
               className="ds-collection-render-dispatch__fallback-value"
               data-part="fallback-value"
               size="sm"
-              style={{
-                display: 'block',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}
             >
-              {getColumnValue(row, column, index)}
+              {getColumnValue(row, column, index, t)}
             </Text>
           </Box>
         ))}
@@ -349,15 +347,6 @@ function renderFallbackCard<T extends object>({
           className="ds-collection-render-dispatch__fallback-actions"
           data-part="fallback-actions"
           onClick={(event) => event.stopPropagation()}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 8,
-            flexWrap: 'wrap',
-            marginTop: 'auto',
-            paddingTop: 10,
-          }}
         >
           {actionContent}
           {href ? (
@@ -367,18 +356,19 @@ function renderFallbackCard<T extends object>({
               href={href}
               aria-label={activationLabel}
             >
-              Open details
+              {t('collection_workspace.open_details', 'Open details')}
             </a>
           ) : onActivate ? (
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="sm"
               className="ds-collection-render-dispatch__fallback-open-link"
               data-part="fallback-open-link"
               aria-label={activationLabel}
               onClick={onActivate}
             >
-              Open details
-            </button>
+              {t('collection_workspace.open_details', 'Open details')}
+            </Button>
           ) : null}
         </Box>
       ) : null}
@@ -386,7 +376,12 @@ function renderFallbackCard<T extends object>({
   );
 }
 
-function renderPaginationFooter(pagination?: PaginationConfig | false): ReactNode {
+function CollectionPaginationFooter({
+  pagination,
+}: {
+  pagination?: PaginationConfig | false;
+}): React.ReactElement | null {
+  const { tSurfaceOr } = useSurfaceTranslations();
   if (!pagination) return null;
 
   const pageSize = Math.max(1, pagination.pageSize);
@@ -401,103 +396,86 @@ function renderPaginationFooter(pagination?: PaginationConfig | false): ReactNod
   const canGoBack = current > 1;
   const canGoForward = current < totalPages;
 
-  const buttonStyle: React.CSSProperties = {
-    minWidth: 34,
-    height: 34,
-    padding: '0 12px',
-    cursor: 'pointer',
-    fontSize: 13,
-    fontWeight: 600,
-  };
-
-  const disabledButtonStyle: React.CSSProperties = {
-    ...buttonStyle,
-    cursor: 'not-allowed',
-  };
-
   return (
     <Box
       className="ds-surface ds-collection-render-dispatch ds-collection-render-dispatch__pagination"
       data-part="pagination"
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 'var(--ds-spacing-3, 12px)',
-        flexWrap: 'wrap',
-        padding: 'var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px)',
-        marginTop: 'var(--ds-spacing-4, 16px)',
-      }}
     >
       <Text
         className="ds-collection-render-dispatch__muted-text"
         size="sm"
       >
-        {start}-{end} of {total.toLocaleString()}
+        {total === 0
+          ? tSurfaceOr('collection_workspace.results_zero', '0 results')
+          : tSurfaceOr('collection_workspace.range_of', '{start}-{end} of {total}', {
+              start,
+              end,
+              total: total.toLocaleString(),
+            })}
       </Text>
 
-      <Box style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-        <button
+      <Box
+        className="ds-collection-render-dispatch__pagination-controls"
+        data-part="pagination-controls"
+      >
+        <Button
+          variant="default"
+          size="sm"
           className="ds-collection-render-dispatch__pagination-prev"
           data-part="pagination-prev"
           data-disabled={canGoBack ? 'false' : 'true'}
-          type="button"
           disabled={!canGoBack}
           onClick={() => pagination.onChange(current - 1, pageSize)}
-          style={canGoBack ? buttonStyle : disabledButtonStyle}
-          aria-label="Go to previous page"
+          aria-label={tSurfaceOr('collection_workspace.pagination_prev_aria', 'Go to previous page')}
         >
-          Previous
-        </button>
+          {tSurfaceOr('collection_workspace.pagination_previous', 'Previous')}
+        </Button>
         <Text
           className="ds-collection-render-dispatch__muted-text"
           size="sm"
         >
-          Page {current} of {totalPages}
+          {tSurfaceOr('collection_workspace.page_of', 'Page {current} of {total}', {
+            current,
+            total: totalPages,
+          })}
         </Text>
-        <button
+        <Button
+          variant="default"
+          size="sm"
           className="ds-collection-render-dispatch__pagination-next"
           data-part="pagination-next"
           data-disabled={canGoForward ? 'false' : 'true'}
-          type="button"
           disabled={!canGoForward}
           onClick={() => pagination.onChange(current + 1, pageSize)}
-          style={canGoForward ? buttonStyle : disabledButtonStyle}
-          aria-label="Go to next page"
+          aria-label={tSurfaceOr('collection_workspace.pagination_next_aria', 'Go to next page')}
         >
-          Next
-        </button>
+          {tSurfaceOr('collection_workspace.pagination_next', 'Next')}
+        </Button>
       </Box>
 
       {pageSizeOptions.length > 1 ? (
-        <label
+        <Box
+          as="label"
           className="ds-collection-render-dispatch__page-size"
           data-part="page-size"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            fontSize: 13,
-          }}
         >
-          Rows
-          <select
+          {tSurfaceOr('collection_workspace.rows_unit', 'Rows')}
+          <Select
+            size="sm"
             className="ds-collection-render-dispatch__page-size-select"
-            data-part="page-size-select"
+            aria-label={tSurfaceOr('collection_workspace.rows_per_page', 'Rows per page')}
             value={pageSize}
-            onChange={(event) => pagination.onChange(1, Number(event.currentTarget.value))}
-            style={{
-              height: 34,
-              padding: '0 28px 0 10px',
+            options={pageSizeOptions.map((option) => ({
+              value: option,
+              label: String(option),
+            }))}
+            onChange={(value) => {
+              const next = Array.isArray(value) ? value[0] : value;
+              const parsed = Number(next);
+              if (Number.isFinite(parsed) && parsed > 0) pagination.onChange(1, parsed);
             }}
-          >
-            {pageSizeOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </label>
+          />
+        </Box>
       ) : null}
     </Box>
   );
@@ -510,6 +488,7 @@ function CardsIncrementalFooter({
   pagination: PaginationConfig;
   visibleCount: number;
 }): React.ReactElement {
+  const { tSurfaceOr } = useSurfaceTranslations();
   const sentinelRef = React.useRef<HTMLElement | null>(null);
   const loadingRef = React.useRef(false);
   const pageSize = Math.max(1, pagination.pageSize);
@@ -554,53 +533,60 @@ function CardsIncrementalFooter({
       data-part="incremental-footer"
       data-can-load-more={canLoadMore ? 'true' : 'false'}
       ref={sentinelRef}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 10,
-        minHeight: 54,
-        marginTop: 'var(--ds-spacing-4, 16px)',
-        fontSize: 12,
-        fontWeight: 650,
-      }}
     >
       <Text
         className="ds-collection-render-dispatch__incremental-count"
         data-part="incremental-count"
         size="xs"
-        style={{ fontSize: 12, fontVariantNumeric: 'tabular-nums' }}
       >
-        {total === 0 ? '0 results' : `Showing 1-${visible} of ${total.toLocaleString()}`}
+        {total === 0
+          ? tSurfaceOr('collection_workspace.results_zero', '0 results')
+          : tSurfaceOr('collection_workspace.cards_showing', 'Showing 1-{visible} of {total}', {
+              visible,
+              total: total.toLocaleString(),
+            })}
       </Text>
       {canLoadMore ? (
-        <button
+        <Button
+          variant="default"
+          size="sm"
           className="ds-collection-render-dispatch__load-more"
           data-part="load-more"
-          type="button"
           onClick={loadMore}
-          style={{
-            minHeight: 32,
-            padding: '0 13px',
-            cursor: 'pointer',
-            fontSize: 12,
-            fontWeight: 760,
-          }}
         >
-          Load more
-        </button>
+          {tSurfaceOr('collection_workspace.load_more', 'Load more')}
+        </Button>
       ) : (
         <Text
           className="ds-collection-render-dispatch__incremental-end"
           data-part="incremental-end"
           size="xs"
-          style={{ fontSize: 12 }}
         >
-          End of cards
+          {tSurfaceOr('collection_workspace.end_of_cards', 'End of cards')}
         </Text>
       )}
     </Box>
   );
+}
+
+/** Number of skeleton cards rendered while the cards grid loads. */
+const CARDS_SKELETON_COUNT = 6;
+
+/**
+ * Resolves the cards grid template. Kept as a single source so the loading
+ * skeleton mirrors the ready grid exactly (no layout shift on swap). The
+ * resolved template stays an inline style: instance column counts are true
+ * per-instance geometry and tests pin the inline declaration.
+ */
+function resolveCardsGridTemplateColumns(
+  cardColumns: number | 'auto' | undefined,
+): string {
+  if (cardColumns) {
+    return cardColumns === 'auto'
+      ? 'repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr))'
+      : `repeat(${cardColumns}, minmax(0, 1fr))`;
+  }
+  return 'var(--ds-listing-grid-columns, repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr)))';
 }
 
 // ---------------------------------------------------------------------------
@@ -610,6 +596,7 @@ function CardsIncrementalFooter({
 export function CollectionRenderDispatch<T extends object>(
   props: CollectionRenderDispatchProps<T>,
 ): React.ReactElement {
+  const { tSurfaceOr } = useSurfaceTranslations();
   const {
     viewMode,
     viewModes,
@@ -685,7 +672,22 @@ export function CollectionRenderDispatch<T extends object>(
     // Grid uses cards config renderCard if grid doesn't have its own
     const cardRenderer = viewModes.cards?.renderCard ?? mobileCard;
     if (!cardRenderer) {
-      return <Box className="ds-surface ds-collection-render-dispatch" data-part="root" data-view-mode="grid" data-state="error" padding="lg"><Text className="ds-collection-render-dispatch__muted-text">Grid mode requires a card renderer (viewModes.cards.renderCard or mobileCard)</Text></Box>;
+      return (
+        <Box
+          className="ds-surface ds-collection-render-dispatch"
+          data-part="root"
+          data-view-mode="grid"
+          data-state="error"
+          padding="lg"
+        >
+          <Text className="ds-collection-render-dispatch__muted-text">
+            {tSurfaceOr(
+              'collection_workspace.grid_renderer_missing',
+              'Grid mode requires a card renderer (viewModes.cards.renderCard or mobileCard)',
+            )}
+          </Text>
+        </Box>
+      );
     }
     return (
       <PatternGridView<T>
@@ -732,6 +734,9 @@ export function CollectionRenderDispatch<T extends object>(
   }
 
   // ── Kanban mode ──
+  // Composes PatternKanbanBoard (the sanctioned kanban pattern): grouping
+  // adapts CollectionKanbanConfig to KanbanColumnDef; card movement, WIP
+  // limits, column accents, add-item and FLIP motion are pattern-owned.
   if (viewMode === 'kanban' && viewModes?.kanban) {
     const kc = viewModes.kanban;
     const groupField = kc.groupByField;
@@ -739,95 +744,84 @@ export function CollectionRenderDispatch<T extends object>(
     // Group data by field value
     const groupMap = new Map<string, T[]>();
     for (const item of data) {
-      const groupValue = String(readCollectionRecordValue(item, groupField) ?? 'Uncategorized');
+      const groupValue = String(
+        readCollectionRecordValue(item, groupField)
+          ?? tSurfaceOr('collection_workspace.uncategorized', 'Uncategorized'),
+      );
       if (!groupMap.has(groupValue)) groupMap.set(groupValue, []);
       groupMap.get(groupValue)!.push(item);
     }
 
     // Use static column definitions if provided, otherwise auto-detect from data
-    const columnDefs = kc.columns ?? Array.from(groupMap.keys()).map(id => ({ id, title: id }));
+    // Normalize to the exact KanbanColumnDef<T> contract: the union of
+    // static defs and auto-detected defs is widened once via annotation
+    // (not a cast), and optional color/limit are set by mutation so no
+    // `{}` spread ever reaches the pattern.
+    const columnDefs: Array<{ id: string; title: string; color?: string; limit?: number }> =
+      kc.columns ?? Array.from(groupMap.keys()).map((id) => ({ id, title: id }));
+    const kanbanColumns: KanbanColumnDef<T>[] = columnDefs.map((col) => {
+      const column: KanbanColumnDef<T> = {
+        id: col.id,
+        title: col.title,
+        items: groupMap.get(col.id) ?? [],
+      };
+      if (col.color) column.color = col.color;
+      if (col.limit !== undefined) column.limit = col.limit;
+      return column;
+    });
 
     return (
-      <Box
+      <PatternKanbanBoard
         className="ds-surface ds-collection-render-dispatch"
-        data-part="root"
-        data-view-mode="kanban"
-        data-loading={loading ? 'true' : 'false'}
-        style={{
-          display: 'flex',
-          gap: kc.columnGap ?? 'var(--ds-spacing-4, 16px)',
-          overflowX: 'auto',
-          padding: '4px 0',
-          minHeight: 200,
-        }}
-      >
-        {columnDefs.map((col: { id: string; title: string }) => {
-          const items = groupMap.get(col.id) ?? [];
-          return (
-            <Box
-              className="ds-collection-render-dispatch__kanban-column"
-              data-part="kanban-column"
-              data-column-id={col.id}
-              key={col.id}
-              style={{
-                minWidth: kc.columnMinWidth ?? 280,
-                maxWidth: 360,
-                flex: '0 0 auto',
-                padding: 'var(--ds-spacing-3, 12px)',
-              }}
-            >
-              <Box
-                className="ds-collection-render-dispatch__kanban-header"
-                data-part="kanban-header"
-                style={{
-                  marginBottom: 'var(--ds-spacing-3, 12px)',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                {kc.renderColumnHeader
-                  ? kc.renderColumnHeader(col.id, col.title, items.length)
-                  : (
-                    <Text style={{ fontWeight: 600, fontSize: 'var(--ds-font-size-sm, 14px)' }}>
-                      {col.title} <span className="ds-collection-render-dispatch__kanban-count" data-part="kanban-count" style={{ fontWeight: 400 }}>({items.length})</span>
-                    </Text>
-                  )
-                }
-              </Box>
-              <Box style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-2, 8px)' }}>
-                {items.length === 0 && (
-                  <Text className="ds-collection-render-dispatch__muted-text" data-tone="disabled" style={{ fontSize: 12, textAlign: 'center' as const, padding: 16 }}>
-                    No items
-                  </Text>
-                )}
-                {items.map((item) => (
-                  <Box key={resolveKey(item, rowKey)}>
-                    {kc.renderCard?.(item, col.id) ?? mobileCard?.(
-                      item,
-                      data.indexOf(item),
-                      createCardContext(item, data.indexOf(item)),
-                    ) ?? (
-                      <Text className="ds-collection-render-dispatch__muted-text">No card renderer</Text>
-                    )}
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-          );
-        })}
-        {loading && data.length === 0 && (
-          <Box className="ds-collection-render-dispatch__loading-state" data-part="loading-state" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: 32 }}>
-            <Text className="ds-collection-render-dispatch__muted-text">Loading...</Text>
-          </Box>
-        )}
-      </Box>
+        columns={kanbanColumns}
+        renderCard={(item, columnId) =>
+          kc.renderCard?.(item, columnId) ?? mobileCard?.(
+            item,
+            data.indexOf(item),
+            createCardContext(item, data.indexOf(item)),
+          ) ?? (
+            <Text className="ds-collection-render-dispatch__muted-text">
+              {tSurfaceOr('collection_workspace.no_card_renderer', 'No card renderer')}
+            </Text>
+          )
+        }
+        renderColumnHeader={
+          kc.renderColumnHeader
+            ? (column, itemCount) => kc.renderColumnHeader!(column.id, column.title, itemCount)
+            : undefined
+        }
+        itemKey={(item) => resolveKey(item, rowKey)}
+        onItemMove={kc.onCardMove ?? (() => {})}
+        onItemClick={onRowClick ? (item) => onRowClick(item, data.indexOf(item)) : undefined}
+        emptyColumn={
+          <Text className="ds-collection-render-dispatch__muted-text" size="sm">
+            {tSurfaceOr('collection_workspace.kanban_empty_column', 'No items')}
+          </Text>
+        }
+        columnGap={kc.columnGap}
+        columnMinWidth={kc.columnMinWidth}
+        onAddItem={kc.onAddItem}
+        addItemLabel={kc.addItemLabel}
+        loading={Boolean(loading && data.length === 0)}
+      />
     );
   }
 
   // ── Cards mode ──
   if (viewMode === 'cards') {
     const cardRenderer = viewModes?.cards?.renderCard ?? mobileCard;
+    const cardColumns = cardColumnsOverride ?? viewModes?.cards?.columns;
+    const gridTemplateColumns = resolveCardsGridTemplateColumns(cardColumns);
+    const gridInstanceStyle = {
+      gridTemplateColumns,
+      gap: viewModes?.cards?.gap ?? 'var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px))',
+      ['--ds-listing-grid-min-card-width' as string]:
+        viewModes?.cards?.minCardWidth
+          ? typeof viewModes.cards.minCardWidth === 'number'
+            ? `${viewModes.cards.minCardWidth}px`
+            : viewModes.cards.minCardWidth
+          : undefined,
+    } as React.CSSProperties;
 
     if (loading && data.length === 0) {
       return (
@@ -836,11 +830,26 @@ export function CollectionRenderDispatch<T extends object>(
           data-part="root"
           data-view-mode="cards"
           data-state="loading"
-          style={{
-            padding: '32px 20px',
-          }}
+          aria-busy="true"
+          style={gridInstanceStyle}
         >
-          <Text className="ds-collection-render-dispatch__muted-text">Loading...</Text>
+          <Text
+            as="span"
+            className="ds-collection-render-dispatch__loading-label"
+            data-part="loading-label"
+          >
+            {tSurfaceOr('collection_workspace.loading_label', 'Loading…')}
+          </Text>
+          {Array.from({ length: CARDS_SKELETON_COUNT }, (_, skeletonIndex) => (
+            <Box
+              key={skeletonIndex}
+              className="ds-collection-render-dispatch__skeleton-card"
+              data-part="skeleton-card"
+              aria-hidden="true"
+            >
+              <Skeleton variant="text" rows={3} active />
+            </Box>
+          ))}
         </Box>
       );
     }
@@ -851,19 +860,11 @@ export function CollectionRenderDispatch<T extends object>(
           data-part="root"
           data-view-mode="cards"
           data-state="empty"
-          style={{
-            overflow: 'hidden',
-          }}
         >
-          {emptyState ?? (
-            <Box className="ds-collection-render-dispatch__empty-state" data-part="empty-state" style={{ padding: '32px 20px' }}>
-              <Text className="ds-collection-render-dispatch__muted-text">No data</Text>
-            </Box>
-          )}
+          {emptyState ?? <SurfaceEmptyState />}
         </Box>
       );
     }
-    const cardColumns = cardColumnsOverride ?? viewModes?.cards?.columns;
     const explicitColumnCount = typeof cardColumns === 'number' ? cardColumns : undefined;
     const hasLoneFinalCard = Boolean(
       explicitColumnCount &&
@@ -879,24 +880,7 @@ export function CollectionRenderDispatch<T extends object>(
           data-part="root"
           data-view-mode="cards"
           data-state="ready"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: cardColumns
-              ? cardColumns === 'auto'
-                ? 'repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr))'
-                : `repeat(${cardColumns}, minmax(0, 1fr))`
-              : 'var(--ds-listing-grid-columns, repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr)))',
-            gap: viewModes?.cards?.gap ?? 'var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px))',
-            padding: '1px 1px 8px',
-            boxSizing: 'border-box',
-            alignItems: 'stretch',
-            ['--ds-listing-grid-min-card-width' as string]:
-              viewModes?.cards?.minCardWidth
-                ? typeof viewModes.cards.minCardWidth === 'number'
-                  ? `${viewModes.cards.minCardWidth}px`
-                  : viewModes.cards.minCardWidth
-                : undefined,
-          } as React.CSSProperties}
+          style={gridInstanceStyle}
         >
           {data.map((item, i) => {
             const isLoneFinalCard = hasLoneFinalCard && i === data.length - 1;
@@ -914,13 +898,6 @@ export function CollectionRenderDispatch<T extends object>(
               onClick={(event) => {
                 if (isNestedInteractiveCardTarget(event.target, event.currentTarget)) return;
                 onRowClick?.(item, i);
-              }}
-              style={{
-                cursor: focusEnabled || onRowClick ? 'pointer' : undefined,
-                gridColumn: isLoneFinalCard ? '1 / -1' : undefined,
-                minWidth: 0,
-                height: '100%',
-                position: 'relative',
               }}
             >
               {cardRenderer && hasActivation ? (
@@ -959,6 +936,7 @@ export function CollectionRenderDispatch<T extends object>(
                     href,
                     activationLabel,
                     onActivate: onRowClick ? () => onRowClick(item, i) : undefined,
+                    t: tSurfaceOr,
                   })}
             </Box>
             );
@@ -967,29 +945,72 @@ export function CollectionRenderDispatch<T extends object>(
         {props.pagination && props.pagination.loadMode === 'incremental' ? (
           <CardsIncrementalFooter pagination={props.pagination} visibleCount={data.length} />
         ) : (
-          renderPaginationFooter(props.pagination)
+          <CollectionPaginationFooter pagination={props.pagination} />
         )}
       </>
     );
   }
 
-  // ── Calendar mode (placeholder - apps wire PatternCalendarView) ──
+  // ── Calendar mode ──
+  // Composes PatternCalendarView: date-field mapping adapts the collection
+  // rows into CalendarEvent entries; event activation keeps the workspace's
+  // row-click contract (focus + preview rail parity).
   if (viewMode === 'calendar' && viewModes?.calendar) {
+    const cal = viewModes.calendar;
+    const resolveEventTitle = (item: T, index: number): string => {
+      if (cal.titleField) {
+        const titled = readCollectionRecordValue(item, cal.titleField);
+        if (titled != null && String(titled).trim()) return String(titled);
+      }
+      for (const column of columns) {
+        const value = readCollectionRecordValue(
+          item,
+          (column.accessorKey ?? column.key) as PropertyKey,
+        );
+        if (typeof value === 'string' && value.trim()) return value;
+      }
+      return resolveKey(item, rowKey) || String(index + 1);
+    };
+    const events: Array<CalendarEvent<T>> = data.map((item, index) => {
+      const colorValue = cal.colorField
+        ? readCollectionRecordValue(item, cal.colorField)
+        : undefined;
+      const event: CalendarEvent<T> = {
+        id: resolveKey(item, rowKey) || String(index),
+        title: resolveEventTitle(item, index),
+        start: readCollectionRecordValue(item, cal.startField) as Date | string,
+        end: cal.endField
+          ? (readCollectionRecordValue(item, cal.endField) as Date | string | undefined)
+          : undefined,
+        allDay: cal.defaultAllDay,
+        data: item,
+      };
+      if (typeof colorValue === 'string' && colorValue.trim()) {
+        event.color = colorValue;
+      }
+      return event;
+    });
+
     return (
-      <Box
+      <PatternCalendarView
         className="ds-surface ds-collection-render-dispatch"
-        data-part="root"
-        data-view-mode="calendar"
-        style={{
-          padding: 'var(--ds-spacing-6, 24px)',
-          textAlign: 'center',
-        }}
-      >
-        <Text>Calendar view: {data.length} items with date field "{String(viewModes.calendar.startField)}"</Text>
-        <Text className="ds-collection-render-dispatch__muted-text" data-tone="disabled" size="sm" style={{ marginTop: 8 }}>
-          Wire PatternCalendarView here for full calendar rendering
-        </Text>
-      </Box>
+        events={events}
+        view={cal.defaultView}
+        loading={Boolean(loading && data.length === 0)}
+        onDateClick={cal.onDateClick}
+        onEventClick={
+          onRowClick
+            ? (event) => {
+                if (event.data) onRowClick(event.data, data.indexOf(event.data));
+              }
+            : undefined
+        }
+        renderEvent={
+          cal.renderEvent
+            ? (event) => (event.data ? cal.renderEvent!(event.data, event) : null)
+            : undefined
+        }
+      />
     );
   }
 

@@ -20,10 +20,13 @@ import {
   useTranslation,
 } from '@/infrastructure/runtime/i18n';
 
-/** A key the mandatory locales carry and fr/pt do not, so the fallback tier is observable. */
-const FALLBACK_PROBE = 'components.calendar.navNextMonth';
-const FALLBACK_PROBE_EN = 'Next month';
-const FALLBACK_PROBE_ES = 'Mes siguiente';
+/**
+ * A key the mandatory locales carry and both partial catalogs currently omit.
+ * Its only purpose is to make the configured-fallback tier observable.
+ */
+const FALLBACK_PROBE = 'components.pagination.navigation';
+const FALLBACK_PROBE_EN = 'Pagination';
+const FALLBACK_PROBE_ES = 'Paginación';
 
 describe('I18nProvider — locale and direction', () => {
   it('renders English left-to-right', async () => {

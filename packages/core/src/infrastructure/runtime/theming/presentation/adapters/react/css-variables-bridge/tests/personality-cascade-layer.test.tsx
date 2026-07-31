@@ -1,8 +1,8 @@
 /**
  * @fileoverview Personality cascade-layer tests - Rottay Design System
  * @description Pins WHERE in the cascade the bridge writes, which is what
- * decides the winner between runtime personality and the static tenant
- * artifacts.
+ * makes runtime personality a subordinate namespaced data channel below the
+ * static tenant artifacts.
  *
  * Previously the bridge wrote an UNLAYERED `:root` rule. Unlayered
  * declarations outrank every cascade layer, so the bridge beat artifacts that
@@ -159,9 +159,14 @@ describe('personality cascade layer', () => {
       const layerBlock = sheet.cssRules[1] as {
         cssRules: { style: { getPropertyValue: (n: string) => string } }[];
       };
-      expect(layerBlock.cssRules[0].style.getPropertyValue('--ds-card-border')).toBe(
+      expect(
+        layerBlock.cssRules[0].style.getPropertyValue(
+          '--_ds-personality-resolved-card-border',
+        ),
+      ).toBe(
         'var(--ds-color-border-primary)',
       );
+      expect(layerBlock.cssRules[0].style.getPropertyValue('--ds-card-border')).toBe('');
     });
 
     it('reports the layered path in the DOM', () => {
@@ -180,9 +185,12 @@ describe('personality cascade layer', () => {
       const element = document.getElementById(STYLE_ID) as HTMLStyleElement;
       const rule = element.sheet?.cssRules[0] as CSSStyleRule;
       expect(rule.selectorText).toBe(':root');
-      expect(rule.style.getPropertyValue('--ds-card-border')).toBe(
+      expect(
+        rule.style.getPropertyValue('--_ds-personality-resolved-card-border'),
+      ).toBe(
         'var(--ds-color-border-primary)',
       );
+      expect(rule.style.getPropertyValue('--ds-card-border')).toBe('');
     });
 
     it('reports the fallback path in the DOM', () => {

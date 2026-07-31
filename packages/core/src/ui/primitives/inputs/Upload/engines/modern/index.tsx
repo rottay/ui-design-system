@@ -121,6 +121,14 @@ interface PreviewModalProps {
 /** Full-screen image preview overlay. Closes on Escape key or backdrop click. */
 const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
   const { t } = useTranslation('components');
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    // The dialog mounts with no other focusable surface: land focus on the
+    // close button so keyboard users have an immediate exit (Escape also
+    // works), instead of dropping focus on <body>.
+    closeRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -141,6 +149,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
     >
       <div className="relative max-w-[90vw] max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
         <button
+          ref={closeRef}
           type="button"
           data-part="preview-close-button"
           onClick={onClose}
@@ -217,7 +226,6 @@ const FileItem: React.FC<FileItemProps> = ({
   thumbUrls,
 }) => {
   const { t, locale } = useTranslation('components');
-  const [hovered, setHovered] = useState(false);
   const thumb = file.thumbUrl || file.url || readThumbUrl(thumbUrls, file.uid);
   const isImg = isImageFile(file);
   const isUploading = file.status === 'uploading';
@@ -235,14 +243,16 @@ const FileItem: React.FC<FileItemProps> = ({
   const previewLabel = translateOr(t, 'upload.preview', `Preview ${file.name}`, { name: file.name });
   const removeLabel = translateOr(t, 'upload.remove_named', `Remove ${file.name}`, { name: file.name });
 
-  // -- picture-card: 104x104 grid tile with hover overlay for actions --
+  // -- picture-card: 104x104 grid tile; the action overlay is ALWAYS rendered
+  // (never hover-gated in React): the skin gates its visibility with
+  // opacity/pointer-events on :hover and :focus-within, so keyboard users can
+  // tab to preview/remove (the hidden-action law needs focus-within reveal). --
   if (listType === 'picture-card') {
     const originNode = (
       <div
+        className="ds-upload__file-item"
         data-part="file-item"
         data-status={file.status || undefined}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
         role="listitem"
         aria-label={file.name}
       >
@@ -256,7 +266,7 @@ const FileItem: React.FC<FileItemProps> = ({
             <UploadProgress percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />
           </div>
         )}
-        {hovered && !isUploading && (
+        {!isUploading && (
           <div data-part="file-item-overlay">
             {isImg && (
               <button type="button" data-part="file-item-action" data-action="preview" onClick={() => onPreview?.(file)} aria-label={previewLabel}>
@@ -273,13 +283,12 @@ const FileItem: React.FC<FileItemProps> = ({
     return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
   }
 
-  // -- picture-circle: circular avatar variant of picture-card --
+  // -- picture-circle: circular avatar variant of picture-card (same
+  //    always-rendered overlay contract as picture-card) --
   if (listType === 'picture-circle') {
     const originNode = (
       <div
-        className={`relative group rounded-full overflow-hidden flex items-center justify-center border-2`}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
+        className="ds-upload__file-item relative group rounded-full overflow-hidden flex items-center justify-center border-2"
         role="listitem"
         aria-label={file.name}
         data-part="file-item"
@@ -295,7 +304,7 @@ const FileItem: React.FC<FileItemProps> = ({
             <UploadProgress percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />
           </div>
         )}
-        {hovered && !isUploading && (
+        {!isUploading && (
           <div data-part="file-item-overlay" className="absolute inset-0 rounded-full flex items-center justify-center gap-1">
             {isImg && (
               <button type="button" data-part="file-item-action" data-action="preview" onClick={() => onPreview?.(file)} aria-label={previewLabel}>
@@ -315,7 +324,7 @@ const FileItem: React.FC<FileItemProps> = ({
   // -- picture: horizontal row with a small thumbnail on the left --
   if (listType === 'picture') {
     const originNode = (
-      <div data-part="file-item" data-status={file.status || undefined} className="flex items-center gap-2 p-2" role="listitem" aria-label={file.name}>
+      <div data-part="file-item" data-status={file.status || undefined} className="ds-upload__file-item flex items-center gap-2 p-2" role="listitem" aria-label={file.name}>
         {isImg && thumb ? (
           <img src={thumb} alt={file.name} className="w-12 h-12 object-cover rounded flex-shrink-0 cursor-pointer" onClick={() => onPreview?.(file)} />
         ) : (
@@ -338,7 +347,7 @@ const FileItem: React.FC<FileItemProps> = ({
 
   // -- text (default): simple filename row with remove button --
   const originNode = (
-    <div data-part="file-item" data-status={file.status || undefined} className="flex items-center justify-between gap-2 p-2" role="listitem" aria-label={file.name}>
+    <div data-part="file-item" data-status={file.status || undefined} className="ds-upload__file-item flex items-center justify-between gap-2 p-2" role="listitem" aria-label={file.name}>
       <span data-part="file-icon">
         <ContentFileIcon decorative size={16} />
       </span>
@@ -490,7 +499,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
               htmlFor={inputId}
               data-part="add-button"
               data-disabled={disabled || undefined}
-              className={`flex items-center justify-center border-2 border-dashed hover:border-primary hover:bg-primary/5 transition-all duration-300 ${
+              className={`ds-upload__add-button flex items-center justify-center border-2 border-dashed hover:border-primary hover:bg-primary/5 transition-all duration-300 ${
                 listType === 'picture-circle' ? 'rounded-full' : 'rounded-lg'
               } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
               role="button"

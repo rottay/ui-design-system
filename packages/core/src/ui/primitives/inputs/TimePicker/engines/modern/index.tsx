@@ -11,11 +11,12 @@
  * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import type { TimePickerProps, TimeRangePickerProps } from '../../contracts';
+import type { TimePickerProps, TimeRangePickerProps, TimePickerPlacement } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 /**
  * Hook-local `tOr`: catalogue value with an English floor -- when the
@@ -72,6 +73,32 @@ interface TimePanelProps {
   onSelect: (h: number, m: number, s: number) => void;
   onNowClick?: () => void;
   showNow: boolean;
+}
+
+/**
+ * APG column keyboard contract: each column is a strip with a roving tab
+ * stop (the selected option). ArrowUp/ArrowDown move focus between options
+ * (wrapping), Home/End jump to the edges. Focus moves only -- selection
+ * commits on activation (click / Enter / Space via the native button),
+ * matching the DatePicker grid idiom.
+ */
+function handleColumnKeyDown(event: React.KeyboardEvent<HTMLDivElement>): void {
+  const { key } = event;
+  if (key !== 'ArrowDown' && key !== 'ArrowUp' && key !== 'Home' && key !== 'End') return;
+  const column = event.currentTarget;
+  const target = event.target as HTMLElement | null;
+  if (!target || target.closest('[data-part="time-option"]') === null) return;
+  const options = Array.from(column.querySelectorAll<HTMLElement>('[data-part="time-option"]'));
+  if (options.length === 0) return;
+  event.preventDefault();
+  const currentIndex = options.indexOf(target.closest('[data-part="time-option"]') as HTMLElement);
+  let nextIndex = 0;
+  if (key === 'Home') nextIndex = 0;
+  else if (key === 'End') nextIndex = options.length - 1;
+  else if (currentIndex >= 0) {
+    nextIndex = (currentIndex + (key === 'ArrowDown' ? 1 : -1) + options.length) % options.length;
+  }
+  options[nextIndex]?.focus();
 }
 
 const TimePanel: React.FC<TimePanelProps> = ({
@@ -162,13 +189,14 @@ const TimePanel: React.FC<TimePanelProps> = ({
       {/* Scrollable columns */}
       <div style={{ display: 'flex', padding: 'var(--ds-spacing-1, 4px)' }}>
         {/* Hours column */}
-        <div ref={hoursRef} data-part="time-column" style={colStyle}>
+        <div ref={hoursRef} data-part="time-column" style={colStyle} onKeyDown={handleColumnKeyDown}>
           {Array.from({ length: 24 }, (_, i) => (
             <button
               key={i}
               type="button"
               data-part="time-option"
               data-selected={i === hours || undefined}
+              tabIndex={i === hours ? 0 : -1}
               style={itemStyle}
               onClick={() => onSelect(i, minutes, seconds)}
             >
@@ -180,13 +208,14 @@ const TimePanel: React.FC<TimePanelProps> = ({
         <div style={dividerStyle} />
 
         {/* Minutes column */}
-        <div ref={minutesRef} data-part="time-column" style={colStyle}>
+        <div ref={minutesRef} data-part="time-column" style={colStyle} onKeyDown={handleColumnKeyDown}>
           {Array.from({ length: 60 }, (_, i) => (
             <button
               key={i}
               type="button"
               data-part="time-option"
               data-selected={i === minutes || undefined}
+              tabIndex={i === minutes ? 0 : -1}
               style={itemStyle}
               onClick={() => onSelect(hours, i, seconds)}
             >
@@ -199,13 +228,14 @@ const TimePanel: React.FC<TimePanelProps> = ({
         {showSeconds && (
           <>
             <div style={dividerStyle} />
-            <div ref={secondsRef} data-part="time-column" style={colStyle}>
+            <div ref={secondsRef} data-part="time-column" style={colStyle} onKeyDown={handleColumnKeyDown}>
               {Array.from({ length: 60 }, (_, i) => (
                 <button
                   key={i}
                   type="button"
                   data-part="time-option"
                   data-selected={i === seconds || undefined}
+                  tabIndex={i === seconds ? 0 : -1}
                   style={itemStyle}
                   onClick={() => onSelect(hours, minutes, i)}
                 >
@@ -257,6 +287,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     placeholder: placeholderProp,
     allowClear = true,
     showNow = true,
+    placement = 'bottomLeft',
     onChange,
     className = '',
     style,
@@ -317,19 +348,31 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     [ref],
   );
 
-  // Fixed position for portal popup
+  // Fixed position for portal popup. Top placements subtract the PANEL's
+  // measured height and *Right placements align the panel's inline end with
+  // the trigger's (DatePicker precedent); the panel ref lands with the same
+  // commit that opens it, so it is readable inside the effect.
   const [pos, setPos] = useState({ top: 0, left: 0 });
   useEffect(() => {
     if (!isOpen || !triggerRef.current) return;
     const update = () => {
       const rect = triggerRef.current!.getBoundingClientRect();
+      const panelRect = panelRef.current?.getBoundingClientRect();
       const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--ds-spacing-1') || '4', 10) || 4;
       // Responsive law: never let the panel overflow the viewport's inline
       // end. 208 is the worst-case panel footprint (three 44px option columns
       // + dividers + padding, coarse floors included).
       const PANEL_MAX_FOOTPRINT = 208;
-      const left = Math.max(gap, Math.min(rect.left, window.innerWidth - PANEL_MAX_FOOTPRINT - gap));
-      setPos({ top: rect.bottom + gap, left });
+      let top = rect.bottom + gap;
+      let left = rect.left;
+      if (placement.includes('top')) {
+        top = rect.top - gap - (panelRect?.height ?? 0);
+      }
+      if (placement.includes('Right')) {
+        left = rect.right - (panelRect?.width ?? PANEL_MAX_FOOTPRINT);
+      }
+      left = Math.max(gap, Math.min(left, window.innerWidth - PANEL_MAX_FOOTPRINT - gap));
+      setPos({ top, left });
     };
     update();
     window.addEventListener('scroll', update, true);
@@ -338,7 +381,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
       window.removeEventListener('scroll', update, true);
       window.removeEventListener('resize', update);
     };
-  }, [isOpen]);
+  }, [isOpen, placement]);
 
   // Click-outside dismissal
   useEffect(() => {
@@ -356,11 +399,16 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     return () => document.removeEventListener('mousedown', handler);
   }, [isOpen]);
 
-  // Escape key
+  // Escape key: closes and RETURNS FOCUS to the trigger input (DatePicker/
+  // Dropdown precedent) -- the panel unmounts on close, so without this the
+  // focus would drop to <body>.
   useEffect(() => {
     if (!isOpen) return;
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsOpen(false);
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+        inputRef.current?.focus();
+      }
     };
     document.addEventListener('keydown', handler);
     return () => document.removeEventListener('keydown', handler);
@@ -404,14 +452,13 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
 
   return (
     <>
-      <div ref={setTriggerRef} data-part="root" className={`rottay-timepicker rottay-timepicker--modern relative w-full ${className}`} style={style}>
+      <div ref={setTriggerRef} data-part="root" className={`rottay-timepicker rottay-timepicker--modern ${className}`} style={style}>
         <input
           ref={setInputRef}
           type="text"
           readOnly
           data-part="trigger-input"
           data-status={status ?? 'default'}
-          className="w-full cursor-pointer"
           style={{
             boxSizing: 'border-box',
             paddingInlineEnd: 48,
@@ -445,7 +492,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
             tabIndex={-1}
             aria-label={tOr('timepicker.clear', 'Clear')}
           >
-            ×
+            <ActionCloseIcon decorative size={14} />
           </button>
         )}
         <span
@@ -467,6 +514,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
           <PortalScope snapshot={portalScope}>
             <div
               ref={panelRef}
+              data-placement={placement}
               style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 'var(--ds-timepicker-z-index, 1050)' }}
             >
               <TimePanel
@@ -506,6 +554,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     placeholder: placeholderProp,
     separator = '→',
     showNow = true,
+    placement = 'bottomLeft',
     onChange,
     className = '',
     style,
@@ -580,11 +629,21 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     if (!isOpen || !triggerRef.current) return;
     const update = () => {
       const rect = triggerRef.current!.getBoundingClientRect();
+      const panelRect = panelRef.current?.getBoundingClientRect();
       const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--ds-spacing-1') || '4', 10) || 4;
-      // Responsive law: viewport clamp -- see TimePickerBase.
+      // Responsive law: viewport clamp + measured top/Right placement -- see
+      // TimePickerBase.
       const PANEL_MAX_FOOTPRINT = 208;
-      const left = Math.max(gap, Math.min(rect.left, window.innerWidth - PANEL_MAX_FOOTPRINT - gap));
-      setPos({ top: rect.bottom + gap, left });
+      let top = rect.bottom + gap;
+      let left = rect.left;
+      if (placement.includes('top')) {
+        top = rect.top - gap - (panelRect?.height ?? 0);
+      }
+      if (placement.includes('Right')) {
+        left = rect.right - (panelRect?.width ?? PANEL_MAX_FOOTPRINT);
+      }
+      left = Math.max(gap, Math.min(left, window.innerWidth - PANEL_MAX_FOOTPRINT - gap));
+      setPos({ top, left });
     };
     update();
     window.addEventListener('scroll', update, true);
@@ -593,7 +652,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
       window.removeEventListener('scroll', update, true);
       window.removeEventListener('resize', update);
     };
-  }, [isOpen]);
+  }, [isOpen, placement]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -610,14 +669,22 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     return () => document.removeEventListener('mousedown', handler);
   }, [isOpen]);
 
+  // Escape: closes and RETURNS FOCUS to the range input currently being
+  // filled (DatePicker precedent; the panel unmounts on close).
   useEffect(() => {
     if (!isOpen) return;
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsOpen(false);
+      if (e.key === 'Escape') {
+        setIsOpen(false);
+        const active = triggerRef.current?.querySelector<HTMLElement>(
+          `[data-range-input='${activeInput}']`,
+        );
+        active?.focus();
+      }
     };
     document.addEventListener('keydown', handler);
     return () => document.removeEventListener('keydown', handler);
-  }, [isOpen]);
+  }, [isOpen, activeInput]);
 
   const commitTime = useCallback((which: 'start' | 'end', time: { h: number; m: number; s: number }) => {
     const newValue = which === 'start'
@@ -667,7 +734,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
       <div
         ref={setTriggerRef}
         data-part="root"
-        className={`rottay-timepicker-range rottay-timepicker-range--modern flex items-center gap-2 w-full ${className}`}
+        className={`rottay-timepicker-range rottay-timepicker-range--modern ${className}`}
         style={style}
         id={id}
       >
@@ -690,7 +757,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
           aria-expanded={isOpen && activeInput === 'start'}
           aria-label={placeholder[0]}
         />
-        <span data-part="separator" className="shrink-0">{separator}</span>
+        <span data-part="separator">{separator}</span>
         <input
           type="text"
           readOnly
@@ -718,6 +785,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
           <PortalScope snapshot={portalScope}>
             <div
               ref={panelRef}
+              data-placement={placement}
               style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 'var(--ds-timepicker-z-index, 1050)' }}
             >
               <TimePanel

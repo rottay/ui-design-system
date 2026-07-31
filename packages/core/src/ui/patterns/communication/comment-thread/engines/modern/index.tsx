@@ -25,7 +25,7 @@ import ModernAvatar from '../../../../../primitives/display/Avatar/engines/moder
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
 import ModernTextarea from '../../../../../primitives/inputs/Textarea/engines/modern';
-import ModernEmptyState from '../../../../feedback/empty-state/engines/modern';
+import { ModernEmptyState } from '../../../../facade';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /** Shared i18n helper shape for the thread's localized copy. */
@@ -115,7 +115,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
     <div data-part="comment">
       <div data-part="comment-row">
         <div data-part="avatar-col">
-          <ModernAvatar size="sm" src={comment.author.avatar} name={comment.author.name} />
+          <ModernAvatar data-part="avatar" size="sm" src={comment.author.avatar} name={comment.author.name} />
         </div>
         <div data-part="comment-main">
           <div data-part="comment-head">
@@ -162,7 +162,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
                 <ModernButton
                   key={r.emoji}
                   data-part="reaction"
-                  data-active={r.active || undefined}
+                  data-active={r.active ? "true" : "false"}
                   variant={r.active ? 'primary' : 'ghost'}
                   size="xs"
                   onClick={() => onReaction?.(comment.id, r.emoji)}
@@ -280,10 +280,10 @@ export default function ModernCommentThread(props: CommentThreadProps) {
 
   if (loading) {
     return (
-      <div data-part="root" data-loading="true" className={`ds-pattern-comment-thread ds-engine-modern flex justify-center items-center py-12 ${className ?? ''}`} style={style}>
+      <div data-part="root" data-loading="true" className={`ds-pattern-comment-thread ds-engine-modern ${className ?? ''}`} style={style}>
         {/* Spinner primitive owns its paint and the status role/name
             ("Loading" floor) the tests assert. */}
-        <ModernSpinner size="md" />
+        <ModernSpinner data-part="spinner" size="md" />
       </div>
     );
   }
@@ -295,7 +295,7 @@ export default function ModernCommentThread(props: CommentThreadProps) {
       {onAdd && currentUser && (
         <div data-part="composer-row">
           <div data-part="avatar-col">
-            <ModernAvatar size="sm" src={currentUser.avatar} name={currentUser.name} />
+            <ModernAvatar data-part="avatar" size="sm" src={currentUser.avatar} name={currentUser.name} />
           </div>
           <div data-part="composer-main">
             <ModernTextarea

@@ -82,9 +82,24 @@
 }
 
 /* ---- gutter: hover + dragging affordance (was nothing -- the drag gesture
-        painted no feedback at all). Dragging wins over hover by source
-        order and reads as the tenant primary at full strength. ---- */
-.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']:hover {
+        painted no feedback at all). Hover is hover-capable-only; a held
+        press/drag-start gets the same quiet tint via :active, and the
+        persistent grip below is the touch affordance (4th-wave hover law).
+        Dragging reads as a primary TINT, never a loud full-strength bar. ---- */
+@media (hover: hover) {
+  .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']:hover {
+    background: var(
+      --ds-splitter-gutter-bg-hover,
+      color-mix(
+        in srgb,
+        var(--ds-color-primary) 30%,
+        var(--ds-material-panel-background, var(--ds-surface-panel))
+      )
+    );
+  }
+}
+
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']:active {
   background: var(
     --ds-splitter-gutter-bg-hover,
     color-mix(
@@ -94,9 +109,40 @@
     )
   );
 }
+
 .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true'],
 .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true']:hover {
-  background: var(--ds-splitter-gutter-bg-dragging, var(--ds-color-primary));
+  background: var(
+    --ds-splitter-gutter-bg-dragging,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 55%,
+      var(--ds-material-panel-background, var(--ds-surface-panel))
+    )
+  );
+}
+
+/* ---- gutter grip: the always-visible quiet affordance (three-tone hairline
+        dash, optically centered), so the handle reads as a handle even where
+        no hover exists. Perpendicular to the gutter's long axis. ---- */
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(
+    --ds-splitter-gutter-grip-color,
+    color-mix(in srgb, var(--ds-color-text-primary) 32%, transparent)
+  );
+}
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='horizontal']::after {
+  inline-size: 2px;
+  block-size: var(--ds-splitter-gutter-grip-length, 16px);
+}
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='vertical']::after {
+  inline-size: var(--ds-splitter-gutter-grip-length, 16px);
+  block-size: 2px;
 }
 
 /* ---- gutter: keyboard focus ring (the K3-C engine made gutters real
@@ -125,9 +171,22 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'] {
+    transition: none;
+  }
+}
+
 @media (forced-colors: active) {
   .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'] {
     background: ButtonFace;
+  }
+  .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true'],
+  .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-dragging='true']:hover {
+    background: Highlight;
+  }
+  .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']::after {
+    background: ButtonText;
   }
   .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']:focus-visible {
     outline: 2px solid Highlight;

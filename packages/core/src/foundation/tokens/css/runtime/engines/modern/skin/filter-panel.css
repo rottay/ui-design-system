@@ -1,10 +1,9 @@
 /**
  * Modern FilterPanel skin (WO-ARC-09 checkpoint 3; Lote-2 composition uplift).
  *
- * DELIBERATELY UNLAYERED, for the reason button.css states in full: every
- * `rottay-*` layer sorts before Tailwind's `base` layer, so a layered rule
- * loses to preflight regardless of specificity (P-47). Unlayered outranks
- * preflight + DaisyUI and still yields to a caller's inline `style`.
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-engines)` (the old
+ * "unlayered" note predates the wiring). Caller inline styles still win.
  *
  * COMPOSITION LAW (Lote 2): the pattern COMPOSES public DS primitives —
  * Select, Input, InputNumber, Switch, Checkbox, Button, Badge, Spinner —
@@ -24,15 +23,20 @@
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule that sets `border` / `border-color`
- * must reach (0,4,0): the two root classes (0,2,0) + the `data-part` REPEATED on
- * the target (0,2,0). Pure `border: none` resets carry no color and are exempt.
+ * must reach (0,4,0). The option-icon-badge swatches live in the Select's
+ * PORTAL (no panel-root ancestor reachable), so their fourth unit is the
+ * `aria-hidden` attribute the engine always stamps on the badge — repeating
+ * an attribute on one element is forbidden, and role/aria-label/placeholder
+ * are banned by the source-gated contract.
  *
  * SOURCE-GATED CONTRACT RULES (FilterPanel.real-engines.test.tsx reads this
  * file): the `[data-part='reset-button']:hover` rule and a
- * `[data-part='input']…:focus` selector must exist. The input slot's
- * `:focus-within` variant is in the geometry rule below: the composed
- * Input/InputNumber owns its chrome and focus ring, so the slot deliberately
- * paints nothing on focus — the selector documents the pass-through.
+ * `[data-part='input']…:focus` selector must exist. The hover rides inside the
+ * `@media (hover: hover)` guard (house hover law) with an unguarded `:active`
+ * twin; the input slot's `:focus-within` variant is in the geometry rule
+ * below: the composed Input/InputNumber owns its chrome and focus ring, so
+ * the slot deliberately paints nothing on focus — the selector documents the
+ * pass-through.
  */
 
 /* ---- root: named container (the composition defines the cut) ---- */
@@ -90,10 +94,19 @@
   transform: rotate(-90deg);
 }
 
-/* ---- reset (clear-all) ghost Button: the source-gated pointer hover ---- */
-.ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button']:hover {
+/* ---- reset (clear-all) ghost Button: the source-gated pointer treatment.
+        Hover law: the hover variant lives inside the (hover: hover) guard
+        below; this unguarded :active twin gives touch the same feedback. ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button']:active {
   color: var(--ds-color-error);
   background: var(--ds-surface-highlight);
+}
+
+@media (hover: hover) {
+  .ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button']:hover {
+    color: var(--ds-color-error);
+    background: var(--ds-surface-highlight);
+  }
 }
 
 /* ---- fields container: the two layouts (geometry drained from the engine) ---- */
@@ -103,7 +116,7 @@
   align-items: center;
   gap: var(--ds-filter-panel-inline-gap, var(--ds-spacing-3));
   position: relative;
-  z-index: 1;
+  z-index: var(--ds-z-index-relative-above, 1);
   overflow: visible;
 }
 .ds-pattern-filter-panel.ds-engine-modern [data-part='fields'][data-layout='stacked'] {
@@ -120,7 +133,7 @@
   align-items: center;
   gap: var(--ds-filter-panel-field-gap, var(--ds-spacing-2));
   position: relative;
-  z-index: 1;
+  z-index: var(--ds-z-index-relative-above, 1);
 }
 .ds-pattern-filter-panel.ds-engine-modern [data-part='field-control'] {
   flex: 1 1 var(--ds-filter-panel-inline-control-width, 0px);
@@ -233,8 +246,9 @@
         (`ds-pattern-filter-panel__option-icon`) plus `data-part` + `data-tone`,
         so its rules stand alone. Geometry moved here from the engine's inline
         styles. Non-border paint reaches (0,3,0) via class + data-part +
-        data-tone; the per-tone border folds in at (0,4,0) with one data-part
-        repeat. ---- */
+        data-tone; the per-tone border folds in at (0,4,0) with the always-
+        stamped `aria-hidden` as the fourth unit (no ancestor is reachable
+        from the portal, and repeating an attribute is forbidden). ---- */
 .ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'] {
   display: inline-flex;
   align-items: center;
@@ -242,35 +256,48 @@
   flex-shrink: 0;
   inline-size: 1.375rem;
   block-size: 1.375rem;
-  border-radius: 8px;
+  border-radius: var(--ds-radius-md, 8px);
 }
-.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='neutral'] {
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='neutral'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 64%, transparent);
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='primary'] {
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='primary'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
   color: var(--ds-color-primary);
 }
-.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='success'] {
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='success'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-success) 24%, transparent);
   background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
   color: var(--ds-color-success);
 }
-.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='warning'] {
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='warning'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-warning) 28%, transparent);
   background: color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
   color: var(--ds-color-warning);
 }
-.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='danger'] {
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='danger'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-error) 24%, transparent);
   background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
   color: var(--ds-color-error);
 }
-.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='info'] {
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone='info'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 24%, transparent);
   background: color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 10%, transparent);
   color: var(--ds-color-info, var(--ds-color-primary));
+}
+
+/* ---- forced colors: the pattern-owned borders read as ButtonText (the
+        sidebar rail and the option-icon-badge tone frames); every composed
+        primitive forces its own chrome. ---- */
+@media (forced-colors: active) {
+  .ds-pattern-filter-panel.ds-engine-modern[data-part='root'][data-sidebar='true'] {
+    border-inline-end-color: ButtonText;
+  }
+
+  .ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][aria-hidden][data-tone] {
+    border-color: ButtonText;
+  }
 }

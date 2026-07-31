@@ -110,11 +110,14 @@ describe('Forms-family data-part contract (WO-SKIN-06 checkpoint CK-D/F)', () =>
         expect(container.querySelectorAll('[data-part="rule"]').length).toBe(5);
         expect(container.querySelector('[data-part="rule-logic-label"]')?.textContent).toBe('Where');
 
-        expect(container.querySelectorAll('[data-part="field-select"]').length).toBe(5);
-        expect(container.querySelectorAll('[data-part="operator-select"]').length).toBe(5);
+        const fieldPart = engine === 'modern' ? 'rule-field' : 'field-select';
+        const operatorPart = engine === 'modern' ? 'rule-operator' : 'operator-select';
+        const valuePart = engine === 'modern' ? 'rule-value' : 'value-input';
+        expect(container.querySelectorAll(`[data-part="${fieldPart}"]`).length).toBe(5);
+        expect(container.querySelectorAll(`[data-part="${operatorPart}"]`).length).toBe(5);
 
         const fieldTypes = new Set(
-          Array.from(container.querySelectorAll('[data-part="value-input"]')).map((el) =>
+          Array.from(container.querySelectorAll(`[data-part="${valuePart}"]`)).map((el) =>
             el.getAttribute('data-field-type'),
           ),
         );
@@ -204,10 +207,10 @@ describe('Forms-family data-part contract (WO-SKIN-06 checkpoint CK-D/F)', () =>
         await waitForPart(container, 'root');
 
         if (engine === 'modern') {
-          expect(container.querySelector('[data-part="step-button"][data-active="true"]')).not.toBeNull();
-          expect(container.querySelector('[data-part="step-indicator"][data-completed="true"]')).not.toBeNull();
-          expect(container.querySelector('[data-part="step-label"][data-active="true"]')).not.toBeNull();
-          expect(container.querySelectorAll('[data-part="step-connector"]').length).toBe(2);
+          expect(container.querySelector('[data-part="item"][data-status="process"]')).not.toBeNull();
+          expect(container.querySelector('[data-part="item"][data-status="finish"]')).not.toBeNull();
+          expect(container.querySelectorAll('[data-part="step-list"] [data-part="label"]').length).toBe(3);
+          expect(container.querySelectorAll('[data-part="step-list"] [data-part="trigger"]').length).toBe(3);
           expect(container.querySelector('[data-part="wizard-step-counter"]')?.textContent).toContain('Step 2 of 3');
         } else {
           // Rustic's step tab is a two-state (past-or-current vs future)
@@ -355,22 +358,21 @@ describe('Forms-family data-part contract (WO-SKIN-06 checkpoint CK-D/F)', () =>
 
         await waitForPart(container, 'root');
         expect(container.querySelector('[data-part="step-rail"][data-orientation="horizontal"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="step"][data-active="true"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="step"][data-completed="true"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="step-indicator"][data-active="true"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="step-title"]')).not.toBeNull();
         if (engine === 'modern') {
-          // Modern's step-title color is a real 3-way switch
-          // (active/completed/neither); rustic's `stepLabel(active)` is a
-          // 2-way switch with no completed-specific paint, so data-completed
-          // is correctly absent there (Standing Decision #1: only a state
-          // that SELECTS style gets a data attribute).
-          expect(container.querySelector('[data-part="step-title"][data-completed="true"]')).not.toBeNull();
+          // Modern delegates the rail to the canonical Steps primitive.
+          expect(container.querySelector('[data-part="item"][data-status="process"]')).not.toBeNull();
+          expect(container.querySelector('[data-part="item"][data-status="finish"]')).not.toBeNull();
+          expect(container.querySelectorAll('[data-part="step-rail"] [data-part="label"]').length).toBe(steps.length);
+          expect(container.querySelectorAll('[data-part="step-rail"] [data-part="description"]').length).toBe(1);
         } else {
+          expect(container.querySelector('[data-part="step"][data-active="true"]')).not.toBeNull();
+          expect(container.querySelector('[data-part="step"][data-completed="true"]')).not.toBeNull();
+          expect(container.querySelector('[data-part="step-indicator"][data-active="true"]')).not.toBeNull();
+          expect(container.querySelector('[data-part="step-title"]')).not.toBeNull();
           expect(container.querySelector('[data-part="step-title"]')?.hasAttribute('data-completed')).toBe(false);
+          expect(container.querySelectorAll('[data-part="step-connector"]').length).toBe(3);
+          expect(container.querySelector('[data-part="step-connector"][data-completed="true"]')).not.toBeNull();
         }
-        expect(container.querySelectorAll('[data-part="step-connector"]').length).toBe(3);
-        expect(container.querySelector('[data-part="step-connector"][data-completed="true"]')).not.toBeNull();
         expect(container.querySelector('[data-part="progress-track"]')).not.toBeNull();
         expect(container.querySelector('[data-part="progress-fill"]')).not.toBeNull();
         expect(container.querySelector('[data-part="prev-button"]')).not.toBeNull();
@@ -411,8 +413,13 @@ describe('Forms-family data-part contract (WO-SKIN-06 checkpoint CK-D/F)', () =>
 
       await waitForPart(container, 'root');
       expect(container.querySelector('[data-part="step-rail"][data-orientation="vertical"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="step-label-group"]')).not.toBeNull();
-      expect(container.querySelector('[data-part="step-description"]')?.textContent).toBe('Second step');
+      if (engine === 'modern') {
+        expect(container.querySelector('[data-part="step-rail"] [data-part="description"]')?.textContent).toBe('Second step');
+        expect(container.querySelectorAll('[data-part="step-rail"] [data-part="description"]').length).toBe(1);
+      } else {
+        expect(container.querySelector('[data-part="step-label-group"]')).not.toBeNull();
+        expect(container.querySelector('[data-part="step-description"]')?.textContent).toBe('Second step');
+      }
       expect(container.querySelector('[data-part="content"]')).not.toBeNull();
     });
 

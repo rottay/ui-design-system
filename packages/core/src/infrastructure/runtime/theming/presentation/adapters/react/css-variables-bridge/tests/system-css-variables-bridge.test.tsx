@@ -4,11 +4,10 @@
  * documented merge chain (DS base -> vertical baseline -> BrandTheme ->
  * generated artifacts) by stamping personality variables inline on
  * document.documentElement, the highest specificity CSS offers. Inline beat
- * every tenant declaration, including the scoped `html[data-tenant='x']
- * [data-theme='dark']` rules ThemeProvider injects for generatedChromeCss.
- * These tests pin: (1) nothing is ever stamped inline, (2) a tenant-scoped
- * rule can override a personality default, (3) personality still supplies
- * the default when no tenant rule exists, (4) cleanup on unmount.
+ * every tenant declaration. These tests now additionally pin that the bridge
+ * publishes only namespaced data; canonical component aliases belong to the
+ * static personality projection, so the bridge can no longer become a second
+ * tenant paint authority.
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
@@ -65,7 +64,20 @@ describe('SystemCssVariablesBridge', () => {
 
     const rule = styleElement?.sheet?.cssRules[0] as CSSStyleRule | undefined;
     expect(rule?.selectorText).toBe(':root');
-    expect(rule?.style.getPropertyValue('--ds-card-border')).toBe('var(--ds-color-border-primary)');
+    expect(rule?.style.getPropertyValue('--ds-card-border')).toBe('');
+    expect(
+      rule?.style.getPropertyValue('--_ds-personality-resolved-card-border'),
+    ).toBe('var(--ds-color-border-primary)');
+    const names = rule?.style
+      ? Array.from({ length: rule.style.length }, (_, index) => rule.style.item(index))
+      : [];
+    expect(
+      names.every(
+        (name) =>
+          name.startsWith('--ds-personality-') ||
+          name.startsWith('--_ds-personality-resolved-'),
+      ),
+    ).toBe(true);
   });
 
   it('lets a tenant-scoped chrome rule override the personality default (the WO-ENG-19 regression)', () => {
@@ -86,7 +98,7 @@ describe('SystemCssVariablesBridge', () => {
     expect(computed.getPropertyValue('--ds-card-border').trim()).toBe('#4D0033');
   });
 
-  it('still supplies the personality default when the tenant declares no chrome for that variable', () => {
+  it('supplies namespaced personality data without claiming the canonical channel', () => {
     document.documentElement.setAttribute('data-tenant', 'acme');
     document.documentElement.setAttribute('data-theme', 'dark');
     // No chrome <style> at all for this tenant -- personality must still apply.
@@ -100,7 +112,10 @@ describe('SystemCssVariablesBridge', () => {
 
     const styleElement = document.getElementById('ds-personality-tokens') as HTMLStyleElement | null;
     const rule = styleElement?.sheet?.cssRules[0] as CSSStyleRule | undefined;
-    expect(rule?.style.getPropertyValue('--ds-card-border')).toBe('var(--ds-color-border-primary)');
+    expect(rule?.style.getPropertyValue('--ds-card-border')).toBe('');
+    expect(
+      rule?.style.getPropertyValue('--_ds-personality-resolved-card-border'),
+    ).toBe('var(--ds-color-border-primary)');
   });
 
   it('removes the stylesheet on unmount so tenant switches do not leak values', () => {

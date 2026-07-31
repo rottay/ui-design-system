@@ -1,37 +1,44 @@
 /**
- * FieldFiltersPanel skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * FieldFiltersPanel skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/field-filters-panel.css — the structures/
  * shared-file home of the WO-ARC-09 contract; no --modern/--rustic
  * discriminator because the component renders one DOM under every engine.
  *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
+ *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
- * `border-color` on every element. A rule here that sets `border` /
- * `border-color` must reach (0,4,0): the two root classes (0,2,0) + the
- * data-part REPEATED on the target (0,2,0) — repeat-data-part per the P-64
- * law, never an incidental attribute. Non-border paint wins unlayered at
- * (0,3,0): two root classes + one attribute.
+ * `border-color` on every element. Border paint reaches (0,4,0) through the
+ * always-stamped root `data-part` ancestor — repeating a class or attribute
+ * is forbidden (the source-gated contract bans role/aria-label/placeholder
+ * as the fourth unit and audits this file's specificity). Text rules add the
+ * always-stamped `data-size` for b>=5 over Typography's `[data-color]`.
  *
  * CONTROL LANDINGS: `.ds-field-filters-panel__control` is passed as
  * `className` to the panel's Select/Input controls and lands on the element
  * each engine gives the caller: the modern Select/Input OUTER wrapper (no
  * engine paint, no skin targets it), the rustic Select container (same), and
  * the rustic Input `[data-part='root']` — the one landing the rustic input
- * skin itself paints. That skin's `[data-state~='focused']` rules reach
- * (0,6,0); the panel's control paint replaced an inline style that beat them,
- * so the rustic-input rule below must outrank (0,6,0) on every channel it
- * carries or focus would repaint a control this panel has always frozen
- * (pre-existing suppression, preserved byte-exact; filed as a proposal, not
- * fixed here).
+ * skin itself paints. The suppression rule below keeps the pine of the
+ * source-gated contract (b>=7, self-selecting via `[data-part='root']`,
+ * declaring border/background/box-shadow/border-radius) through the real
+ * ancestor chain (root > filter-card > control-slot), WITHOUT the old
+ * class×2 + data-part×4 repetition. LAYER TRUTH: this file sorts in
+ * `rottay-components`, BEFORE `rottay-engines`, so against the rustic input
+ * skin the layer — never the specificity — decides; the honest fix for the
+ * rustic focus repaint is a `--ds-input-*` channel in the rustic input skin
+ * (outside this write-set, filed as debt), not more selector weight here.
  */
 
 /* root ------------------------------------------------------------------- */
 
 .ds-structure.ds-field-filters-panel[data-part='root'] {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 97%, white 3%), color-mix(in srgb, var(--ds-surface-card) 93%, var(--ds-color-bg-primary) 7%));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 97%, var(--ds-color-bg-elevated) 3%), color-mix(in srgb, var(--ds-surface-card) 93%, var(--ds-color-bg-primary) 7%));
 }
 
-.ds-structure.ds-field-filters-panel[data-part='root'][data-part='root'] {
+.ds-structure.ds-field-filters-panel[data-part='root'][data-active-count] {
   border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
 }
 
@@ -42,7 +49,7 @@
   background: color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent);
 }
 
-.ds-structure.ds-field-filters-panel [data-part='title-pill'][data-part='title-pill'] {
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='title-pill'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
 
@@ -51,7 +58,7 @@
   background: color-mix(in srgb, var(--ds-color-bg-primary) 48%, transparent);
 }
 
-.ds-structure.ds-field-filters-panel [data-part='presets-pill'][data-part='presets-pill'] {
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='presets-pill'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
 
@@ -59,11 +66,11 @@
 
 .ds-structure.ds-field-filters-panel [data-part='signal'] {
   border-radius: 12px;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent);
 }
 
 .ds-structure.ds-field-filters-panel [data-part='signal'][data-tone='neutral'] {
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, white 6%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-elevated) 6%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%));
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
   color: var(--ds-color-text-secondary);
 }
@@ -78,12 +85,12 @@
 
 .ds-structure.ds-field-filters-panel [data-part='preset-chip'] {
   border-radius: 999px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, white 8%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-elevated) 8%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%));
   color: var(--ds-color-text-secondary);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent);
 }
 
-.ds-structure.ds-field-filters-panel [data-part='preset-chip'][data-part='preset-chip'] {
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='preset-chip'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
 }
 
@@ -93,7 +100,7 @@
   color: var(--ds-color-primary);
 }
 
-.ds-structure.ds-field-filters-panel [data-part='preset-chip-icon'][data-part='preset-chip-icon'] {
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='preset-chip-icon'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
 }
 
@@ -101,11 +108,11 @@
 
 .ds-structure.ds-field-filters-panel [data-part='filter-card'] {
   border-radius: 18px;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 95%, white 5%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 95%, var(--ds-color-bg-elevated) 5%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent);
 }
 
-.ds-structure.ds-field-filters-panel [data-part='filter-card'][data-part='filter-card'] {
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
 }
 
@@ -115,7 +122,7 @@
   color: var(--ds-color-text-secondary);
 }
 
-.ds-structure.ds-field-filters-panel [data-part='filter-card-icon'][data-part='filter-card-icon'] {
+.ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-icon'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
 }
 
@@ -124,10 +131,10 @@
 .ds-structure.ds-field-filters-panel .ds-field-filters-panel__control {
   border-radius: 12px;
   background: color-mix(in srgb, var(--ds-color-bg-primary) 72%, var(--ds-surface-card));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent);
 }
 
-.ds-structure.ds-field-filters-panel .ds-field-filters-panel__control.ds-field-filters-panel__control {
+.ds-structure.ds-field-filters-panel[data-part='root'] .ds-field-filters-panel__control {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);
 }
 
@@ -136,12 +143,14 @@
    border/background rules (0,5,0); anything weaker here repaints the control
    the moment it gains or loses focus. Only the rustic input root among the
    panel's control landings carries [data-part='root']. */
-.ds-structure.ds-field-filters-panel
-  .ds-field-filters-panel__control.ds-field-filters-panel__control[data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
+.ds-structure.ds-field-filters-panel[data-part='root']
+  [data-part='filter-card']
+  [data-part='control-slot']
+  .ds-field-filters-panel__control[data-part='root'] {
   border-radius: 12px;
   background: color-mix(in srgb, var(--ds-color-bg-primary) 72%, var(--ds-surface-card));
   border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent);
 }
 
 /* ---------------------------------------------------------------------------
@@ -151,17 +160,17 @@
 --------------------------------------------------------------------------- */
 
 /* header eyebrow + subtitle */
-.ds-structure.ds-field-filters-panel [data-part='title-pill'][data-part='title-pill'][data-part='title-pill'] {
+.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='title-pill'][data-size] {
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-weight: 700;
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
-.ds-structure.ds-field-filters-panel [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
+.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='subtitle'][data-size] {
   font-size: var(--ds-font-size-xs);
   line-height: 1.45;
 }
-.ds-structure.ds-field-filters-panel [data-part='presets-pill'][data-part='presets-pill'][data-part='presets-pill'] {
+.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='presets-pill'][data-size] {
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-weight: 700;
   letter-spacing: 0.11em;
@@ -169,7 +178,7 @@
 }
 
 /* inline signal — tabular-nums so the live count never jitters */
-.ds-structure.ds-field-filters-panel [data-part='signal-label'][data-part='signal-label'][data-part='signal-label'] {
+.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='signal-label'][data-size] {
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-weight: 700;
   letter-spacing: 0.09em;
@@ -177,7 +186,8 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* preset chip: label type + deliberate hover/focus/active on --ds-motion-* */
+/* preset chip: label type + deliberate hover/focus/active on --ds-motion-*;
+   the hover rides the (hover: hover) guard (its :active twin stays below). */
 .ds-structure.ds-field-filters-panel [data-part='preset-chip'] {
   font-size: var(--ds-font-size-xs);
   font-weight: 700;
@@ -188,15 +198,17 @@
     box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
     color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-structure.ds-field-filters-panel [data-part='preset-chip']:hover {
-  border-color: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%));
-  color: var(--ds-color-text-primary);
+@media (hover: hover) {
+  .ds-structure.ds-field-filters-panel [data-part='preset-chip']:hover {
+    border-color: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+    background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%));
+    color: var(--ds-color-text-primary);
+  }
 }
 .ds-structure.ds-field-filters-panel [data-part='preset-chip']:focus-visible {
   outline: none;
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 4%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 4%, transparent),
     0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
 }
 .ds-structure.ds-field-filters-panel [data-part='preset-chip']:active {
@@ -204,15 +216,30 @@
 }
 
 /* filter card eyebrow + description */
-.ds-structure.ds-field-filters-panel [data-part='filter-card-label'][data-part='filter-card-label'][data-part='filter-card-label'] {
+.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='filter-card-label'][data-size] {
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-weight: 700;
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
-.ds-structure.ds-field-filters-panel [data-part='filter-card-description'][data-part='filter-card-description'][data-part='filter-card-description'] {
+.ds-structure.ds-field-filters-panel [data-part='root'] [data-part='filter-card-description'][data-size] {
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   line-height: 1.35;
+}
+
+/* ---- forced colors: every structure-owned frame reads as ButtonText; the
+        active filter count already reads by its label text. ---- */
+@media (forced-colors: active) {
+  .ds-structure.ds-field-filters-panel[data-part='root'][data-active-count],
+  .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='title-pill'],
+  .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='presets-pill'],
+  .ds-structure.ds-field-filters-panel [data-part='signal'],
+  .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='preset-chip'],
+  .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='preset-chip-icon'],
+  .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card'],
+  .ds-structure.ds-field-filters-panel[data-part='root'] [data-part='filter-card-icon'] {
+    border-color: ButtonText;
+  }
 }
 
 /* Reduced motion: the preset-chip cross-fades go silent. */

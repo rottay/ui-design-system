@@ -145,6 +145,18 @@ export function WidgetBoardEngine({
     useState<WidgetResizeSession | null>(null);
   const [rowSpans, setRowSpans] = useState<Record<string, number>>({});
   const [catalogQuery, setCatalogQuery] = useState("");
+  /*
+   * The skin's container queries (839px: sm/md→span 6, lg/wide→full;
+   * 639px: single column) cannot override this engine's INLINE gridColumn
+   * placement without `!important` (forbidden). The engine mirrors the same
+   * tiers from the measured section width and simply STOPS stamping
+   * gridColumn when a collapse tier applies, so the skin's rules govern
+   * cleanly. Row spans stay inline (no CSS rule contests them). `full` is
+   * also the no-ResizeObserver posture, which is today's desktop behavior.
+   */
+  const [collapseTier, setCollapseTier] = useState<"full" | "mid" | "single">(
+    "full"
+  );
   const resizeSessionRef = useRef<WidgetResizeSession | null>(null);
   const dragSessionRef = useRef<WidgetDragSession | null>(null);
   const layoutRef = useRef(items);
@@ -254,6 +266,32 @@ export function WidgetBoardEngine({
     }
     return () => observer.disconnect();
   }, [editing, narrow, visibleIds]);
+
+  /*
+   * Breakpoint mirror for the skin's container queries (see `collapseTier`
+   * above): the grid spans the root container's full inline size, so its
+   * measured width is the query's width. The thresholds are the skin's own
+   * 839px/639px steps; without ResizeObserver the tier stays `full`, which
+   * is exactly today's desktop behavior (and the jsdom test posture).
+   */
+  useLayoutEffect(() => {
+    const grid = gridRef.current;
+    if (!grid || typeof ResizeObserver === "undefined") return;
+    const applyWidth = (width: number): void => {
+      // Hidden panels, hydration and DOM test harnesses can report zero
+      // before layout exists. Zero is not a container breakpoint: keep the
+      // last honest posture until the board has a measurable inline size.
+      if (!Number.isFinite(width) || width <= 0) return;
+      const next = width <= 639 ? "single" : width <= 839 ? "mid" : "full";
+      setCollapseTier((current) => (current === next ? current : next));
+    };
+    applyWidth(grid.getBoundingClientRect().width);
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) applyWidth(entry.contentRect.width);
+    });
+    observer.observe(grid);
+    return () => observer.disconnect();
+  }, [visibleIds]);
 
   const compactPlacementOrder = useMemo(() => {
     if (narrow) return visible;
@@ -962,6 +1000,17 @@ export function WidgetBoardEngine({
           showHandle={false}
           surfaceClassName="ds-widget-board__catalog-surface"
           bodyClassName="ds-widget-board__catalog-body"
+          /*
+           * Geometry travels the sanctioned style channels, not the shared
+           * skin: that skin sits in an earlier cascade layer than the Sheet
+           * engine skins, and the rustic Sheet stamps an inline 380px width —
+           * only these channels win in every engine without `!important`.
+           * The surface's paint (background, border, shadow) stays in CSS
+           * (`runtime/engines/modern/skin/widget-board.css`) so tenants can
+           * still override it.
+           */
+          surfaceStyle={{ width: "min(92vw, 680px)" }}
+          bodyStyle={{ padding: "var(--ds-spacing-5, 20px)" }}
           aria-label={labels.catalogHeading ?? labels.addWidget}
         >
           <section
@@ -1115,9 +1164,19 @@ export function WidgetBoardEngine({
             const cellStyle: CSSProperties | undefined = narrow
               ? undefined
               : {
-                  gridColumn: `${placement?.columnStart ?? 1} / span ${
-                    SIZE_SPAN[effectiveSize]
-                  }`,
+                  /*
+                   * Below the skin's 839px/639px container-query steps the
+                   * skin owns column placement (span 6 / full width); the
+                   * engine stops stamping gridColumn so the plain skin rules
+                   * govern without `!important`. Row spans stay inline: no
+                   * skin rule contests them.
+                   */
+                  gridColumn:
+                    collapseTier === "full"
+                      ? `${placement?.columnStart ?? 1} / span ${
+                          SIZE_SPAN[effectiveSize]
+                        }`
+                      : undefined,
                   gridRow: `${placement?.rowStart ?? 1} / span ${
                     rowSpans[item.id] ?? 10
                   }`,

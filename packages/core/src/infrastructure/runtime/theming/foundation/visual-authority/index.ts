@@ -24,8 +24,9 @@
  * - A `compiled-artifact` DECLARATION carries the artifact's `coverage`, its
  *   digest/compiler version and its `normalizedAppearance`. Coverage is the
  *   suppression set: the provider silences exactly those emitters and nothing
- *   more. `personality` is deliberately outside v1 coverage, so the bridge
- *   stays mounted and COMPLETES the channels the artifact does not cover.
+ *   more. `personality` is deliberately outside v1 coverage, so its namespaced
+ *   data bridge stays mounted; one static projection owns its canonical
+ *   component aliases.
  *
  * - An appearance payload is an echo when it canonicalizes identically to the
  *   artifact's `normalizedAppearance`. The comparison is STRUCTURAL, never
@@ -50,7 +51,10 @@ import type {
   TenantThemeArtifact,
   TenantVisualChannel,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
-import { TENANT_VISUAL_CHANNELS } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
+import {
+  TENANT_THEME_V1_COVERAGE,
+  TENANT_VISUAL_CHANNELS,
+} from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import { canonicalizeJsonValue } from '@/foundation/kernel/serialization';
 
 /** Single owner of tenant visual CSS variables. */
@@ -315,12 +319,19 @@ export function resolveVisualAuthority(
   }
 
   if (hasBundledArtifact) {
-    // The bundled artifact owns tenant chrome; the bridge owns personality.
-    // Disjoint by construction -- the artifacts declare no personality vars.
+    // A first-party vertical bundle already carries the same v1 artifact
+    // channels as a typed DB envelope. Treating this path as provider-owned
+    // kept the bundled artifact AND ThemeProvider alive for branding,
+    // overrides, appearance and chrome, so source order—not the authority
+    // contract—picked the winner.
+    //
+    // Personality remains intentionally uncovered. Its runtime bridge only
+    // publishes namespaced personality inputs; the static projection owns the
+    // canonical component aliases, so it is not a second tenant painter.
     return {
-      authority: 'provider',
+      authority: 'compiled-artifact',
       origin: 'bundled-vertical',
-      suppressedChannels: NO_SUPPRESSION,
+      suppressedChannels: TENANT_THEME_V1_COVERAGE,
       conflict: null,
     };
   }

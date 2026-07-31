@@ -68,7 +68,7 @@
   animation: ds-popconfirm-enter-modern var(--ds-motion-normal)
     var(--ds-motion-ease-out) both;
 }
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'][data-part='surface'] {
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'][data-open] {
   border: 1px solid var(--ds-color-border-subtle);
 }
 
@@ -99,103 +99,18 @@
   line-height: var(--ds-line-height-relaxed);
 }
 
-/* ---- footer: end-aligned action row ---- */
+/* ---- footer: end-aligned action row. Both actions compose the Button
+        primitive (ghost cancel; variant by okType): chrome, hover/active/
+        focus, disabled, the width-stable busy frame, the coarse 44px floor
+        and forced-colors are owned by the primitive's own skin — this file
+        keeps only the row layout (the AlertDialog P85 composition precedent,
+        which also retires the local spinner and its cross-family `ds-spin`
+        dependency). ---- */
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='footer'] {
   display: flex;
   justify-content: flex-end;
   gap: var(--ds-spacing-2);
   margin-block-start: var(--ds-spacing-4);
-}
-
-/* ---- actions: shared geometry + the state contract (spec section 4) ---- */
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'] {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--ds-spacing-2);
-  min-block-size: var(--ds-popconfirm-action-height, 2rem);
-  padding-inline: var(--ds-spacing-3);
-  cursor: pointer;
-  border: none;
-  border-radius: var(--ds-radius-md);
-  font-family: var(--ds-font-family-base);
-  font-size: var(--ds-popconfirm-action-font-size, var(--ds-font-size-sm));
-  transition:
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
-}
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='action']:focus-visible {
-  outline: none;
-  box-shadow: var(--ds-shadow-focus-ring);
-}
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='action']:active:not(:disabled) {
-  transform: scale(var(--ds-state-press-scale));
-}
-/* The confirm-pending state (loading) is skin-owned: the engine only sets the
-   `disabled` attribute. `cursor: wait` communicates the in-flight cost of the
-   action; the dim keeps it legible, not hidden. */
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='action']:disabled {
-  cursor: wait;
-  opacity: var(--ds-state-disabled-opacity);
-}
-
-/* ---- cancel action: ghost treatment ---- */
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-action='cancel'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
-}
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-action='cancel']:hover:not(:disabled) {
-  background: var(--ds-surface-highlight);
-}
-
-/* ---- confirm action, by okType: semantic fills ---- */
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-ok-type='danger'] {
-  background: var(--ds-color-error);
-  color: var(--ds-color-text-on-primary);
-}
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-ok-type='primary'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-}
-.rottay-popconfirm--modern[data-part='trigger']
-  [data-part='action'][data-action='confirm']:not([data-ok-type='danger']):not([data-ok-type='primary']) {
-  background: transparent;
-  color: var(--ds-color-text-primary);
-}
-/* Hover on the default/ghost confirm lifts the surface luminance. */
-.rottay-popconfirm--modern[data-part='trigger']
-  [data-part='action'][data-action='confirm']:not([data-ok-type='danger']):not([data-ok-type='primary']):hover:not(:disabled) {
-  background: var(--ds-surface-highlight);
-}
-/* Hover on the filled confirms is a quiet luminance veil (spec section 4). */
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-ok-type='danger']:hover:not(:disabled),
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-ok-type='primary']:hover:not(:disabled) {
-  background-image: linear-gradient(
-    color-mix(in srgb, var(--ds-color-text-on-primary) var(--ds-state-hover-shift, 4%), transparent),
-    color-mix(in srgb, var(--ds-color-text-on-primary) var(--ds-state-hover-shift, 4%), transparent)
-  );
-}
-
-/* ---- loading spinner ring ---- */
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='spinner'] {
-  display: inline-block;
-  inline-size: 0.875rem;
-  block-size: 0.875rem;
-  border-radius: 50%;
-  animation: ds-spin var(--ds-motion-glacial) linear infinite;
-}
-.rottay-popconfirm--modern[data-part='trigger'] [data-part='spinner'][data-part='spinner'] {
-  border: 2px solid currentColor;
-  border-top-color: transparent;
-}
-
-/* 44px hit area on coarse pointers, via block-size only — never by inflating
-   the visual size beyond the density contract. */
-@media (pointer: coarse) {
-  .rottay-popconfirm--modern[data-part='trigger'] [data-part='action'] {
-    min-block-size: var(--ds-popconfirm-touch-target, 2.75rem);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -204,21 +119,17 @@
     animation-timing-function: linear;
     transform: none;
   }
-
-  .rottay-popconfirm--modern[data-part='trigger'] [data-part='action'] {
-    transition: none;
-  }
-  .rottay-popconfirm--modern[data-part='trigger'] [data-part='action']:active:not(:disabled) {
-    transform: none;
-  }
 }
 
-/* Forced colors: shadow rings vanish, so the focus channel degrades to a
-   system outline. */
+/* Forced colors: lift, elevation and shadow rings vanish, so the panel keeps
+   a framed system boundary and the warning icon re-asserts in system ink. */
 @media (forced-colors: active) {
-  .rottay-popconfirm--modern[data-part='trigger'] [data-part='action']:focus-visible {
-    outline: 2px solid CanvasText;
-    outline-offset: 2px;
+  .rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'][data-open] {
+    border-color: ButtonText;
+    background: Canvas;
     box-shadow: none;
+  }
+  .rottay-popconfirm--modern[data-part='trigger'] [data-part='icon'] {
+    color: CanvasText;
   }
 }

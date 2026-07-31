@@ -29,12 +29,13 @@
   align-items: center;
   gap: var(--ds-segmented-gap, 2px);
   min-width: 0;
-  padding: var(--ds-segmented-padding, 3px);
+  padding: var(--ds-segmented-padding, 4px);
   /* Narrow frames: the group scrolls inside its container instead of clipping
      options without an affordance (pagination.css's controls-row precedent).
-     The 3px track padding keeps the option lift and the focus ring inside the
-     scrollport; `overflow-y: hidden` is a legal pair with `overflow-x: auto`
-     (neither is `visible`). */
+     The 4px track padding matches the full focus-ring extent (offset 2px +
+     width 2px from --ds-focus-ring), so neither the ring nor the option lift
+     clips against the scrollport; `overflow-y: hidden` is a legal pair with
+     `overflow-x: auto` (neither is `visible`). */
   max-inline-size: 100%;
   overflow-x: auto;
   overflow-y: hidden;
@@ -120,6 +121,9 @@
   justify-content: center;
   gap: var(--ds-segmented-current-gap);
   min-width: 0;
+  /* Long options truncate against a bound instead of stretching the whole
+     track into scroll; block mode already constrains via flex. */
+  max-inline-size: var(--ds-segmented-item-max-inline-size, 16rem);
   height: var(--ds-segmented-current-height);
   padding: 0 var(--ds-segmented-current-padding-x);
   border: none;
@@ -216,14 +220,10 @@
   /* Selected reads as a QUIET TINT (product law), never a lifted pill: the
      tabs.css segmented-recipe precedent flattens the active transform
      (`--ds-tabs-active-transform, none`). The hover lift stays on the
-     unselected options only. */
+     unselected options only. The option carries the whole signal: the icon
+     keeps the option's ink instead of growing a second tinted/lifted surface
+     of its own (single-axis reading). */
   transform: var(--ds-segmented-item-transform-selected, none);
-}
-
-.rottay-segmented--modern[data-part='root'] [data-part='option']:hover [data-part='icon'],
-.rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='true'] [data-part='icon'] {
-  transform: translateY(-1px);
-  background: color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
 }
 
 .rottay-segmented--modern[data-part='root'] [data-part='option']:focus-visible {
@@ -261,5 +261,12 @@
   .rottay-segmented--modern[data-part='root'] [data-part='option'],
   .rottay-segmented--modern[data-part='root'] [data-part='icon'] {
     transition: none;
+  }
+
+  /* The lifts/dips are motion too: without their transitions they would fire
+     instantly on every hover/press, which is worse than a calm frame. */
+  .rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='false']:hover,
+  .rottay-segmented--modern[data-part='root'] [data-part='option']:not([data-disabled='true']):active {
+    transform: none;
   }
 }

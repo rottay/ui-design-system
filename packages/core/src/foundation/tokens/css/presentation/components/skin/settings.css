@@ -1,7 +1,37 @@
-/** SettingsSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+/**
+ * SettingsSurface skin (WO-SKIN-06 / CK-I).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)`.
+ *
+ * SCOPE: the surface composes PageShellSurface, Tabs, Card, Grid, Typography
+ * and the shared state kits (loading skeleton / empty / error) — each owns
+ * its chrome, states and forced-colors treatment. This file paints ONLY what
+ * the surface itself owns:
+ *   1. the sidebar card's sticky offset in the wide (non-stacked) layout —
+ *      keyed on the always-stamped `--wide` root modifier; it replaces the
+ *      old inline `style={{ position, top }}` (forbidden inline geometry)
+ *      and now scales with the tenant density via the spacing token;
+ *   2. the footer card's inset differentiation (pre-existing semantic:
+ *      supporting footer content sits on the secondary surface).
+ * The muted INK of `ds-settings__muted-text` is NOT painted here: it rides
+ * the Typography `color="muted"` channel (SU01/SU06 idiom); the class stays
+ * as a pure landing hook (pinned by SurfacesLongTailBatch.contract.test.tsx).
+ * Reading rhythm (line-height) is governed by the Typography engine — the
+ * old inline 1.5/1.6 overrides were removed, not recreated here, because
+ * typography.css sorts after this file and would win the cascade anyway.
+ *
+ * SPECIFICITY: single class + always-stamped primitive attributes
+ * (`data-part`, `data-variant`). No selector repetition, no `!important`.
+ *
+ * FORCED-COLORS: no FC block on purpose — the UA re-keys this surface-owned
+ * paint to system colors and every composed part handles its own (same
+ * doctrine as skin/list.css).
+ */
 
-.ds-surface.ds-settings .ds-settings__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+.ds-surface.ds-settings--wide .ds-settings__sidebar[data-part='root'] {
+  position: sticky;
+  inset-block-start: var(--ds-spacing-4, 16px);
 }
 
 .ds-surface.ds-settings .ds-settings__footer-card[data-part='root'][data-variant] {

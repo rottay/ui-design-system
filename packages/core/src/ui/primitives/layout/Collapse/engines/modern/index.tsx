@@ -30,9 +30,10 @@
  * @category Layout
  * @package @rottay/design-system
  */
-import React, { useState, createContext, useContext, Children, cloneElement, isValidElement } from 'react';
+import React, { useState, createContext, useContext, Children, cloneElement, isValidElement, useId } from 'react';
 import type { CollapseProps, CollapsePanelProps } from '../../contracts';
 import { COLLAPSE_DEFAULTS } from '../../contracts';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 
 /**
  * Collapse expand/collapse transition, expressed on `grid-template-rows`
@@ -109,11 +110,14 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
 
     // Panel requires a parent Collapse to provide context; bail if orphaned
     const context = useContext(CollapseContext);
+    const reactId = useId();
     if (!context) return null;
 
     // Use explicit panelKey when provided, otherwise derive from render index
     const key = panelKey ?? `panel-${index}`;
     const isActive = context.activeKeys.includes(key);
+    // APG accordion: the toggle points at the region it controls.
+    const contentId = `collapse-content-${reactId.replace(/:/g, '')}`;
 
     // `collapsible='disabled'` renders every header inert; a disabled panel is
     // inert on its own. `collapsible='icon'` moves the toggle affordance to
@@ -153,29 +157,26 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
     // Arrow indicator rotates 90deg when panel is expanded (skin-owned). In
     // `collapsible='icon'` mode the arrow IS the toggle control, so it carries
     // the button role + expanded state; otherwise it is decorative and the
-    // header owns the toggle semantics.
+    // header owns the toggle semantics. The glyph is the governed semantic
+    // forward chevron (no unicode arrows), mirrored in RTL by the skin.
     const arrowIcon = showArrow && (
       <span
         className="rottay-collapse-arrow"
         data-part="arrow"
         data-expanded={isActive ? 'true' : 'false'}
+        aria-hidden={iconOnly && !inert ? undefined : true}
         {...(iconOnly && !inert
           ? {
               role: 'button',
               tabIndex: 0,
               'aria-expanded': isActive,
+              'aria-controls': contentId,
               onClick: handleArrowClick,
               onKeyDown: handleArrowKeyDown,
             }
           : {})}
-        style={{
-          fontSize: 'var(--ds-collapse-arrow-font-size, 12px)',
-          ...(iconOnly && !inert
-            ? { cursor: 'var(--ds-collapse-header-default-idle-cursor, pointer)' }
-            : {}),
-        }}
       >
-        {'\u25B6'}
+        <NavigationForwardIcon decorative size={12} />
       </span>
     );
 
@@ -232,6 +233,7 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
                   role: 'button',
                   tabIndex: inert ? -1 : 0,
                   'aria-expanded': isActive,
+                  'aria-controls': contentId,
                   'aria-disabled': inert ? true : undefined,
                   onKeyDown: handleKeyDown,
                 })}
@@ -254,6 +256,7 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
           className="rottay-collapse-content"
           data-part="content"
           data-expanded={isActive ? 'true' : 'false'}
+          id={contentId}
           style={{
             gridTemplateRows: isActive ? '1fr' : '0fr',
           }}

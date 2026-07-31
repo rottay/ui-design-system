@@ -265,14 +265,17 @@ describe('DesignSystemProvider under a compiled tenant envelope', () => {
       return variables;
     });
 
-    // Personality is outside v1 coverage, so the bridge COMPLETES the channel.
+    // Personality is outside v1 coverage, so its namespaced data bridge stays
+    // mounted without becoming a second canonical painter.
     expect(TENANT_THEME_V1_COVERAGE).not.toContain('personality');
     expect(Object.keys(personality).some((name) => name.startsWith('--ds-personality-'))).toBe(
       true,
     );
-    // The channel is wider than the `--ds-personality-*` prefix: it also
-    // carries the component variables derived from those tokens.
-    expect(Object.keys(personality).every((name) => name.startsWith('--ds-'))).toBe(true);
+    // The bridge is a data channel, not a parallel component painter. The
+    // static personality projection owns every canonical component alias.
+    expect(
+      Object.keys(personality).every((name) => name.startsWith('--ds-personality-')),
+    ).toBe(true);
     expect(
       Object.keys(personality).filter((name) => THEMANAGEMENT.variables[name] !== undefined),
     ).toEqual([]);
@@ -353,7 +356,7 @@ describe('DesignSystemProvider under a compiled tenant envelope', () => {
 });
 
 describe('DesignSystemProvider without a compiled envelope', () => {
-  it('leaves a bundled vertical exactly as it was: provider-owned, nothing suppressed', async () => {
+  it('treats a bundled vertical as compiled paint while retaining personality data', async () => {
     const rendered = render(
       <DesignSystemProvider
         tenantConfig={{
@@ -373,11 +376,16 @@ describe('DesignSystemProvider without a compiled envelope', () => {
     );
     await readSemantics(rendered);
 
-    // The bridge is the only emitter of the personality family for a bundled
-    // vertical; unmounting it would blank the whole family.
+    // Personality is intentionally outside artifact v1 coverage, but it now
+    // publishes namespaced data only.
     await waitFor(() => {
       expect(document.getElementById(PERSONALITY_STYLE_ID)).not.toBeNull();
     });
-    expect(document.documentElement.style.getPropertyValue('--ds-color-primary')).toBe('#3355FF');
+    expect(document.documentElement.style.getPropertyValue('--ds-color-primary')).toBe('');
+    expect(
+      Object.keys(personalityVariables()).every((name) =>
+        name.startsWith('--ds-personality-'),
+      ),
+    ).toBe(true);
   });
 });

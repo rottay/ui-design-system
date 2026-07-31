@@ -39,6 +39,16 @@
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/modal.css": {
+      "blob": "73fcf840db3e48cc948ca3c1a48619020b835e5cdef35577b380e6662ce12e8d",
+      "reason": "Move Rustic Modal backdrop and blur paint out of inline styles while reusing the canonical --ds-glass-blur-sm hook; no new public channel and no API change.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/overlay-modal.css": {
+      "blob": null,
+      "reason": "Remove superseded Rustic overlay Modal skin after overlay/Modal became a compatibility adapter to the single feedback/Modal owner; no Rustic visual change beyond eliminating the unreachable duplicate system.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/saved-views.css": {
       "blob": "832409c6eb211b0b0b94614b7445ea06e5c14594b28e4611f0ff6e6164614f86",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
@@ -169,6 +179,16 @@
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/ui/primitives/feedback/Modal/engines/classic/index.tsx": {
+      "blob": "4f65b9da29d984fb3ed14f25235c609d1ef15dc7f6dd1722c0be84ced87002c1",
+      "reason": "Preserve the canonical Modal identity and ARIA contract through Ant panelRef after consolidating Modal ownership; adapter-only parity fix, no Classic paint change.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/primitives/feedback/Modal/engines/rustic/index.tsx": {
+      "blob": "6a61784b883a37055ecf8f4ca410219dbcd91a7ec820de1ae3ac817de3e7bc1b",
+      "reason": "Preserve the consolidated legacy Rustic Modal API while removing internal inline paint; behavior covered by Modal lifecycle, motion, and branch tests.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/ui/primitives/feedback/Notification/engines/rustic/index.tsx": {
       "blob": "b17e40a1f04db2cbd02b93bd9d86990165c088ab94db75a62580ed89752051bb",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
@@ -292,6 +312,16 @@
     "packages/core/src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx": {
       "blob": "0bac165747e284704adb5e3888939a36f7d1ac8f0309a9ca554bc9725dc7fada",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/primitives/overlay/Modal/engines/classic/index.tsx": {
+      "blob": "84bee705d0cd9223f133016cc5eadbe1053bd4ae7aadc57e0061fff7a12559c5",
+      "reason": "Replace duplicate Classic Modal implementation with a compatibility adapter to the canonical feedback/Modal owner; structural deduplication with public engine path retained.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/primitives/overlay/Modal/engines/rustic/index.tsx": {
+      "blob": "31fd1f105c30217716c3f9f381646dacee7545c5754793af7dda41b14517f9ff",
+      "reason": "Replace duplicate Rustic Modal implementation with a compatibility adapter to the canonical feedback/Modal owner; structural deduplication with public engine path retained.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/ui/primitives/overlay/Popover/engines/classic/index.tsx": {

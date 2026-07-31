@@ -2,9 +2,21 @@
 
 /**
  * @fileoverview Modern (token-driven) engine for the KanbanBoard pattern.
- * Renders a horizontally-scrollable drag-and-drop board using card structural classes,
- * badge, and button utility classes. Drop-target columns highlight with a
- * primary-tinted ring to give users clear visual feedback during drag.
+ * Renders a horizontally-scrollable drag-and-drop board whose controls are
+ * COMPOSED DS primitives — Button (add item), Badge (WIP count with
+ * neutral/danger tone by limit state), Spinner (loading) and Empty (empty
+ * board) — never recreations. Drop-target columns highlight with a
+ * primary-tinted ring (shape, never a permanent dashed border and never a
+ * vertical accent); the column-header state accent is consumer config DATA
+ * riding the `--ds-kanban-column-accent` channel (a horizontal strip under
+ * the header surface -- side rails are forbidden).
+ *
+ * Card moves use FLIP layout motion (useFlipLayout): a card re-parenting
+ * across columns gets a coordinated transition instead of teleporting.
+ * Geometry and paint live in the modern pattern-kanban-board skin; layout
+ * numbers from the consumer (columnGap / columnMinWidth) ride quoted
+ * custom-property channels. Own copy resolves through the optional
+ * `components` i18n channel with an English floor.
  *
  * @example
  * <KanbanBoard
@@ -18,20 +30,34 @@
 
 import React, { useCallback, useState } from 'react';
 import type { KanbanBoardProps } from '../../contracts';
-import { pillBadgeSmStyle } from '../../../../foundation/engine-styles/modern';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
+import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
+import ModernBadge from '../../../../../primitives/display/Badge/engines/modern';
+import ModernEmpty from '../../../../../primitives/display/Empty/engines/modern';
+import { ActionAddIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-add';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useFlipLayout } from '@/graphics/motion/react/runtime';
 
 const ROOT_CLASS_NAME = 'ds-pattern-kanban-board ds-engine-modern';
 
+/** Normalizes a consumer number|string layout value to a CSS length. */
+function toCssLength(value: number | string): string {
+  return typeof value === 'number' ? `${value}px` : value;
+}
+
 /**
- * Modern Kanban board built on Tailwind utility classes with DS token styling.
+ * Modern Kanban board composed on DS primitives (see the module docblock).
  * Generic over `T` so any item shape can be used with a string key extractor.
  *
  * @param props - See {@link KanbanBoardProps} for full prop documentation.
  * @returns A flex-based board with DS token-styled columns and cards.
  */
 export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
+  // Optional channel with an English floor: the board renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, floor: string): string => i18n?.tOr(key, floor) ?? floor;
+
   const {
     columns,
     renderCard,
@@ -44,11 +70,14 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     columnGap = 16,
     columnMinWidth = 280,
     onAddItem,
-    addItemLabel = 'Add item',
+    addItemLabel: addItemLabelProp,
     loading,
     className,
     style,
   } = props;
+
+  const addItemLabel = addItemLabelProp ?? tOr('kanbanBoard.add_item', 'Add item');
+  const emptyBoardLabel = tOr('kanbanBoard.empty_board', 'No columns');
 
   // Two pieces of drag state: `dragData` mirrors what we put in dataTransfer
   // (needed because the browser API restricts reading dataTransfer during
@@ -121,7 +150,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
       <div
         data-part="root"
         data-loading="true"
-        className={[ROOT_CLASS_NAME, 'flex items-center justify-center min-h-[300px]', className].filter(Boolean).join(' ')}
+        className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
         style={style}
       >
         <ModernSpinner size="lg" data-part="spinner" />
@@ -130,16 +159,30 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   }
 
   return (
-    <div data-part="root" data-loading="false" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
-      {toolbar && <div data-part="toolbar" className="mb-4">{toolbar}</div>}
-      <div
-        data-part="board"
-        className="flex overflow-x-auto pb-2"
-        style={{ gap: columnGap }}
-      >
+    <div
+      data-part="root"
+      data-loading="false"
+      className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
+      style={{
+        /* Consumer layout numbers ride quoted channels; the skin applies
+           them (gap between columns, per-column min width). */
+        '--ds-kanban-column-gap': toCssLength(columnGap),
+        '--ds-kanban-column-min-width': toCssLength(columnMinWidth),
+        ...style,
+      } as React.CSSProperties}
+    >
+      {toolbar && <div data-part="toolbar">{toolbar}</div>}
+      {columns.length === 0 ? (
+        /* Empty board: the composed Empty primitive owns the quiet hint. */
+        <div data-part="empty-board">
+          <ModernEmpty description={emptyBoardLabel} />
+        </div>
+      ) : (
+      <div data-part="board">
         {columns.map((column) => {
-          // WIP limit uses DS error token (red) when at or over capacity to
-          // signal that further additions violate the team's WIP policy.
+          // WIP limit signals the team's WIP policy through the composed
+          // Badge's danger tone (shape + number, never colour alone: the
+          // count/limit text carries the state).
           const isOverLimit =
             column.limit !== undefined && column.items.length >= column.limit;
           // Track whether this column is the active drop target so we can
@@ -153,62 +196,62 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
               data-over-limit={isOverLimit}
               data-dropping={isDropping}
               key={column.id}
-              className={`flex flex-col ${column.collapsed ? 'w-12' : 'flex-1'}`}
-              style={{ minWidth: column.collapsed ? 48 : columnMinWidth }}
             >
-              {/* Column header */}
+              {/* Column header: the state accent is consumer config DATA on a
+                  quoted channel (horizontal strip, never a vertical rail). */}
               <div
                 data-part="column-header"
-                className="rounded-xl px-4 py-3 mb-2"
-                style={{
-                  borderTop: column.color
-                    ? `3px solid ${column.color}`
-                    : undefined,
-                }}
+                style={
+                  column.color
+                    ? ({ '--ds-kanban-column-accent': column.color } as React.CSSProperties)
+                    : undefined
+                }
               >
                 {renderColumnHeader ? (
                   renderColumnHeader(column, column.items.length)
                 ) : (
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
+                  <div data-part="column-header-content">
+                    <div data-part="column-title-row">
                       {column.icon}
-                      <span data-part="column-title" className="font-semibold text-sm">
+                      <span data-part="column-title">
                         {column.title}
                       </span>
-                      <div
+                      {/* WIP count: the composed Badge owns chrome; the tone
+                          is the limit state (danger at/over capacity). */}
+                      <ModernBadge
+                        size="sm"
+                        tone={isOverLimit ? 'danger' : 'neutral'}
                         data-part="wip-badge"
-                        style={pillBadgeSmStyle}
-                      >
-                        {column.items.length}
-                        {column.limit !== undefined && ` / ${column.limit}`}
-                      </div>
+                        content={
+                          column.limit !== undefined
+                            ? `${column.items.length} / ${column.limit}`
+                            : column.items.length
+                        }
+                      />
                     </div>
                   </div>
                 )}
               </div>
 
-              {/* Column body -- uses a primary ring + tinted bg when this
-                  column is the active drop target so users can see exactly
-                  where the item will land. */}
+              {/* Column body -- primary ring + tinted bg when this column is
+                  the active drop target (skin-owned), so users can see
+                  exactly where the item will land. */}
               {!column.collapsed && (
                 <div
                   data-part="column-body"
                   data-dropping={isDropping}
                   data-empty={column.items.length === 0}
-                  className={`flex-1 rounded-xl p-2 min-h-[100px] transition-colors ${
-                    isDropping ? 'ring-2' : ''
-                  }`}
                   onDragOver={(e) =>
                     handleDragOver(e, column.id, column.items.length)
                   }
                   onDrop={(e) => handleDrop(e, column.id, column.items.length)}
                 >
                   {column.items.length === 0 && emptyColumn ? (
-                    <div data-part="empty-column" className="flex items-center justify-center p-6">
+                    <div data-part="empty-column">
                       {emptyColumn}
                     </div>
                   ) : (
-                    <div data-part="card-list" className="flex flex-col gap-2">
+                    <div data-part="card-list">
                       {/* Each card is both a drag source (draggable) and a
                           drop target (onDragOver/onDrop) to allow reordering
                           within the same column or moving across columns. */}
@@ -229,19 +272,8 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                           onDrop={(e) => handleDrop(e, column.id, index)}
                           onDragEnd={handleDragEnd}
                           onClick={() => onItemClick?.(item, column.id)}
-                          className={`hover:shadow-md transition-all rounded-lg border ${
-                            // Pointer cursor signals clickable cards; grab
-                            // cursor signals draggable-only cards.
-                            onItemClick ? 'cursor-pointer' : 'cursor-grab'
-                          } ${
-                            // Dim the source card to 40% opacity while it is
-                            // being dragged so the user sees the "picked up" state.
-                            dragData?.itemId === itemKey(item)
-                              ? 'opacity-40'
-                              : 'opacity-100'
-                          }`}
                         >
-                          <div data-part="card-content" style={{ padding: 12 }}>
+                          <div data-part="card-content">
                             {renderCard(item, column.id)}
                           </div>
                         </div>
@@ -250,27 +282,15 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                   )}
 
                   {onAddItem && (
-                    <button
+                    <ModernButton
+                      variant="dashed"
+                      size="sm"
                       data-part="add-item"
-                      style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4, width: '100%', marginTop: 8 }}
+                      icon={<ActionAddIcon decorative size={14} />}
                       onClick={() => onAddItem(column.id)}
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 4v16m8-8H4"
-                        />
-                      </svg>
                       {addItemLabel}
-                    </button>
+                    </ModernButton>
                   )}
                 </div>
               )}
@@ -278,6 +298,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
           );
         })}
       </div>
+      )}
     </div>
   );
 }

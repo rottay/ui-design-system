@@ -33,7 +33,7 @@ vi.mock('@/infrastructure/runtime/responsive', () => ({
 // Mock: Modal
 // ---------------------------------------------------------------------------
 
-vi.mock('@/ui/primitives/overlay/Modal', () => {
+vi.mock('@/ui/primitives/feedback/Modal', () => {
   const MockModalBody = ({ children, className, style }: any) => (
     <div data-testid="modal-body" className={className} style={style}>{children}</div>
   );

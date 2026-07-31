@@ -239,7 +239,10 @@ describe('CK-I patterns/data anatomy', () => {
     for (const change of ['increase', 'decrease', 'neutral']) {
       expect(q(view.container, `[data-part="trend"][data-change="${change}"]`)).toHaveLength(1);
     }
-    for (const part of ['label-row', 'label', 'value', 'suffix', 'description', 'sparkline', 'sparkline-line']) {
+    // Modern composes the certified Statistic primitive (`title`, `value`,
+    // `suffix`); Rustic retains its frozen bespoke `label` part.
+    const metricLabelPart = engine === 'modern' ? 'title' : 'label';
+    for (const part of ['label-row', metricLabelPart, 'value', 'suffix', 'description', 'sparkline', 'sparkline-line']) {
       expect(q(view.container, `[data-part="${part}"]`).length, `${engine}: ${part}`).toBeGreaterThan(0);
     }
     if (engine === 'modern') {

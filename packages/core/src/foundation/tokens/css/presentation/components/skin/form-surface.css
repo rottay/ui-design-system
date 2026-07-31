@@ -1,41 +1,64 @@
 /**
- * FormSurface skin (WO-SKIN-06 / CK-D/R). Engine-agnostic.
+ * FormSurface skin (WO-SKIN-06 / CK-D/R, premium pass 2026-07-30).
  *
- * DELIBERATELY UNLAYERED: every `@layer rottay-*` sorts before Tailwind's unnamed
- * `base` layer, whose preflight zeroes `border-width`. A layered rule here could
- * not paint a border at all.
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring). `rottay-components`
+ * sorts BEFORE `rottay-engines`, so paint the composed engines apply
+ * themselves outranks any selector weight here: the legacy description
+ * repetition rule was already dead and is retired — description ink now lives
+ * in the Typography `color="subtle"` prop (the exact `--ds-color-text-muted`
+ * value the dead rule intended), engine-owned and tenant-remappable.
  *
- * A SURFACE OWNS NO DOM (P-79). `Grid` and `Card` never forward a
- * consumer-supplied `data-part` -- neither has a rest-spread in its prop
- * destructuring -- yet `BaseComponentProps` declares the prop on every component,
- * so `tsc` accepts a stamp that reaches nothing and a rule anchored on it would
- * silently match zero elements. This surface's anatomy is therefore the
- * classNames it puts on the primitives it composes: `.ds-surface.ds-form` on the
- * Grid, `.ds-form__error-card` on the Card. Only the `Flex` it renders itself
- * carries `data-part='actions'`.
+ * SCOPE: the surface composes public primitives and patterns (PageShell,
+ * Grid, Card, Text, Button, FormBuilder, ActionDock) — each owns its own
+ * chrome, states and forced-colors treatment. This file paints ONLY what the
+ * surface owns:
  *
- * `.ds-form__error-card` must OUTRANK card.css's own
- * `.ds-card.ds-card--modern[data-part='root'][data-variant='outlined']` at
- * (0,4,0), because the inline `borderColor` it replaces did. `[data-part='root']`
- * and `[data-variant]` are the Card's OWN stamps (the two attributes card.css
- * itself keys on, so both are guaranteed present); together with the three
- * classes they reach (0,5,0). A Card cannot be re-stamped from outside, so
- * anchoring on its root part is safe here in a way it would not be on a Box.
+ *   - Reserved scroll space (`ds-form--sticky-actions`): keeps the form
+ *     scrollable through its final field/action while the fixed mobile
+ *     ActionDock is mounted. `--ds-form-action-dock-reserved-space` is a
+ *     PRE-EXISTING hook (not a new token).
+ *
+ *   - Error banner card (`ds-form__error-card`): border tint through the Card
+ *     engine's bordered border channel. The composed Card already consumes
+ *     `--ds-card-bordered-border-color` (outlined variant, card.css), so this
+ *     retunes an existing channel — it is NOT a new token. It lands wherever
+ *     the resolved tenant variant paints a border, the same reach the legacy
+ *     `border-color` rule had.
+ *
+ *   - Aside sticky posture (`ds-form__aside-card`): desktop-only follow
+ *     scroll, keyed on the surface-stamped `data-stacked` hook. Moved here
+ *     from an inline `position/top` style; logical `inset-block-start`.
+ *
+ * The legacy ActionDock scrim gradient is retired: `action-dock.css` (same
+ * layer, earlier import) now paints the dock as a frosted chrome sheet
+ * (translucent bg, backdrop blur, edge highlight, placement-aware shadow) —
+ * the surface gradient won by specificity+order and hid that premium
+ * treatment behind an opaque wash.
+ *
+ * ANATOMY: the Grid modern engine rest-spreads HTML attributes, so the
+ * surface-stamped hooks (`data-part='root'`, `data-mobile`, `data-stacked`,
+ * `data-loading`, class `ds-surface ds-form`) all land on the grid root; the
+ * old P-79 note (Grid/Card never forward data-part) predates that engine.
+ *
+ * SPECIFICITY: single-pass selectors only (attribute/class repetition is
+ * forbidden). No forced-colors block on purpose: the only surface-owned paint
+ * is the border channel, and forced colors are applied to the Card's border
+ * by the UA with system colors.
  */
-
-.ds-surface.ds-form [data-part='description'][data-part='description'] {
-  color: var(--ds-color-text-muted);
-}
 
 /* A fixed ActionDock leaves the form scrollable through its final field/action. */
 .ds-surface.ds-form.ds-form--sticky-actions {
   padding-block-end: var(--ds-form-action-dock-reserved-space, 6rem);
 }
 
-.ds-form__action-dock.rottay-action-dock[data-part='root'][data-placement][data-mode] {
-  background: linear-gradient(to top, var(--ds-color-bg-primary) 85%, transparent);
+.ds-surface.ds-form .ds-form__error-card {
+  --ds-card-bordered-border-color: var(--ds-color-error);
 }
 
-.ds-surface.ds-form .ds-form__error-card[data-part='root'][data-variant] {
-  border-color: var(--ds-color-error);
+/* Desktop aside follows scroll on long forms; stacked layouts stay static. */
+.ds-surface.ds-form[data-stacked='false'] .ds-form__aside-card {
+  position: sticky;
+  inset-block-start: var(--ds-spacing-4, 1rem);
 }

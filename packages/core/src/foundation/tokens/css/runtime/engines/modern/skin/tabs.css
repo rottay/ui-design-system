@@ -8,35 +8,35 @@
  */
 
 .rottay-tabs.rottay-tabs--modern[data-part='root'] {
-  --ds-tabs-current-height: var(--ds-tabs-md-height, 36px);
-  --ds-tabs-current-padding: var(--ds-tabs-md-padding, 0 var(--ds-spacing-4, 16px));
-  --ds-tabs-current-font-size: var(--ds-tabs-md-font-size, var(--ds-font-size-sm, 14px));
-  --ds-tabs-current-icon-size: var(--ds-tabs-md-icon-size, 16px);
+  --_ds-tabs-current-height: var(--ds-tabs-responsive-height, var(--ds-tabs-md-height, 36px));
+  --_ds-tabs-current-padding: var(--ds-tabs-responsive-padding, var(--ds-tabs-md-padding, 0 var(--ds-spacing-4, 16px)));
+  --_ds-tabs-current-font-size: var(--ds-tabs-responsive-font-size, var(--ds-tabs-md-font-size, var(--ds-font-size-sm, 14px)));
+  --_ds-tabs-current-icon-size: var(--ds-tabs-responsive-icon-size, var(--ds-tabs-md-icon-size, 16px));
   position: relative;
-  min-width: 0;
+  min-inline-size: 0;
   color: var(--ds-tab-color, var(--ds-color-text-primary));
   container: ds-tabs / inline-size;
 }
 
 .rottay-tabs.rottay-tabs--modern[data-part='root'][data-size='sm'] {
-  --ds-tabs-current-height: var(--ds-tabs-sm-height, 32px);
-  --ds-tabs-current-padding: var(--ds-tabs-sm-padding, 0 var(--ds-spacing-3, 12px));
-  --ds-tabs-current-font-size: var(--ds-tabs-sm-font-size, var(--ds-font-size-xs, 12px));
-  --ds-tabs-current-icon-size: var(--ds-tabs-sm-icon-size, 14px);
+  --_ds-tabs-current-height: var(--ds-tabs-sm-height, 32px);
+  --_ds-tabs-current-padding: var(--ds-tabs-sm-padding, 0 var(--ds-spacing-3, 12px));
+  --_ds-tabs-current-font-size: var(--ds-tabs-sm-font-size, var(--ds-font-size-xs, 12px));
+  --_ds-tabs-current-icon-size: var(--ds-tabs-sm-icon-size, 14px);
 }
 
 .rottay-tabs.rottay-tabs--modern[data-part='root'][data-size='lg'] {
-  --ds-tabs-current-height: var(--ds-tabs-lg-height, 40px);
-  --ds-tabs-current-padding: var(--ds-tabs-lg-padding, 0 var(--ds-spacing-4, 16px));
-  --ds-tabs-current-font-size: var(--ds-tabs-lg-font-size, var(--ds-font-size-base, 15px));
-  --ds-tabs-current-icon-size: var(--ds-tabs-lg-icon-size, 18px);
+  --_ds-tabs-current-height: var(--ds-tabs-lg-height, 40px);
+  --_ds-tabs-current-padding: var(--ds-tabs-lg-padding, 0 var(--ds-spacing-4, 16px));
+  --_ds-tabs-current-font-size: var(--ds-tabs-lg-font-size, var(--ds-font-size-base, 15px));
+  --_ds-tabs-current-icon-size: var(--ds-tabs-lg-icon-size, 18px);
 }
 
 /* Rail owns constrained-container affordances without changing tab geometry. */
 .rottay-tabs--modern[data-part='root'] [data-part='tab-rail'] {
   position: relative;
   display: flex;
-  min-width: 0;
+  min-inline-size: 0;
   align-items: center;
   isolation: isolate;
 }
@@ -44,17 +44,17 @@
 .rottay-tabs--modern[data-part='root'] [data-part='tab-list'] {
   position: relative;
   display: flex;
-  width: var(--ds-tabs-list-width, max-content);
-  max-width: var(--ds-tabs-list-max-width, 100%);
-  min-width: 0;
+  inline-size: var(--ds-tabs-list-width, max-content);
+  max-inline-size: var(--ds-tabs-list-max-width, 100%);
+  min-inline-size: 0;
   flex: 0 1 auto;
   align-items: center;
   gap: var(--ds-tabs-gap, 4px);
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow-inline: auto;
+  overflow-block: hidden;
   scrollbar-width: none;
   scroll-behavior: smooth;
-  scroll-snap-type: x proximity;
+  scroll-snap-type: inline proximity;
   scrollbar-gutter: stable;
   -webkit-overflow-scrolling: touch;
 }
@@ -74,7 +74,7 @@
 }
 
 .rottay-tabs--modern[data-part='root'][data-overflow='wrap'] [data-part='tab-list'] {
-  width: 100%;
+  inline-size: 100%;
   flex-wrap: wrap;
   overflow: visible;
   scroll-snap-type: none;
@@ -86,7 +86,7 @@
   position: absolute;
   z-index: 2;
   inset-block: 0;
-  width: var(--ds-tabs-overflow-fade-width, 28px);
+  inline-size: var(--ds-tabs-overflow-fade-width, 28px);
   content: '';
   pointer-events: none;
   opacity: 0;
@@ -139,9 +139,9 @@
 /* Bounded recipe trays. */
 .rottay-tabs--modern[data-part='root'][data-recipe='underline']
   [data-part='tab-list'][data-part='tab-list'] {
-  width: var(--ds-tabs-underline-list-width, 100%);
+  inline-size: var(--ds-tabs-underline-list-width, 100%);
   flex: 1 1 auto;
-  border-bottom: 1px solid var(--ds-tabs-border, var(--ds-color-border-subtle));
+  border-block-end: 1px solid var(--ds-tabs-border, var(--ds-color-border-subtle));
   background: var(
     --ds-tabs-underline-list-bg,
     linear-gradient(
@@ -224,7 +224,9 @@
     --ds-tabs-pills-list-bg,
     color-mix(in srgb, var(--ds-surface-inset) 88%, transparent)
   );
-  backdrop-filter: blur(var(--ds-tabs-list-blur, 10px));
+  /* Glass is tenant opt-in via the `chrome.tabs.listBlur` contract: the
+     default is blur(0), never baked-in frosting. */
+  backdrop-filter: blur(var(--ds-tabs-list-blur, 0px));
 }
 
 /* Destination anatomy: all static geometry/type is tenant-owned. */
@@ -232,14 +234,14 @@
   position: relative;
   display: inline-flex;
   box-sizing: border-box;
-  min-width: 0;
-  max-width: var(--ds-tabs-item-max-width, 18rem);
-  height: var(--ds-tabs-current-height);
+  min-inline-size: 0;
+  max-inline-size: var(--ds-tabs-item-max-width, 18rem);
+  block-size: var(--_ds-tabs-current-height);
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   gap: var(--ds-tabs-item-gap, 8px);
-  padding: var(--ds-tabs-current-padding);
+  padding: var(--_ds-tabs-current-padding);
   border: 1px solid transparent;
   outline: none;
   background: none;
@@ -248,7 +250,7 @@
      hierarchy through the bounded --ds-tab-color / text-secondary channels. */
   color: var(--ds-tab-color, var(--ds-color-text-secondary));
   font-family: var(--ds-tabs-item-font-family, var(--ds-font-family-body));
-  font-size: var(--ds-tabs-current-font-size);
+  font-size: var(--_ds-tabs-current-font-size);
   font-weight: var(--ds-tabs-item-font-weight, var(--ds-font-weight-medium, 500));
   line-height: var(--ds-tabs-item-line-height, 1.15);
   letter-spacing: var(--ds-tabs-item-letter-spacing, -0.006em);
@@ -302,7 +304,7 @@
 }
 
 .rottay-tabs--modern[data-part='root'][data-recipe='underline'] [data-part='tab-button'] {
-  margin-bottom: -1px;
+  margin-block-end: -1px;
   border-radius: var(--ds-tabs-line-item-radius, var(--ds-tabs-item-radius, var(--ds-radius-md)));
 }
 
@@ -319,7 +321,7 @@
   position: relative;
   z-index: 1;
   display: block;
-  min-width: 0;
+  min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -328,8 +330,8 @@
   position: relative;
   z-index: 1;
   display: inline-flex;
-  width: var(--ds-tabs-current-icon-size);
-  height: var(--ds-tabs-current-icon-size);
+  inline-size: var(--_ds-tabs-current-icon-size);
+  block-size: var(--_ds-tabs-current-icon-size);
   box-sizing: content-box;
   flex: 0 0 auto;
   align-items: center;
@@ -526,19 +528,11 @@
     --ds-tabs-pills-active-border,
     var(--ds-tab-border-active, var(--ds-color-primary))
   );
-  background: var(
-    --ds-tabs-pills-active-bg,
-    linear-gradient(
-      135deg,
-      var(--ds-color-primary),
-      color-mix(in srgb, var(--ds-color-primary) 82%, var(--ds-color-text-primary) 18%)
-    )
-  );
+  /* A filled pill reads loud through ink-on-primary alone: flat solid fill
+     and neutral elevation, no gradient sheen, no primary glow. */
+  background: var(--ds-tabs-pills-active-bg, var(--ds-color-primary));
   color: var(--ds-tabs-pills-active-color, var(--ds-color-text-on-primary));
-  box-shadow: var(
-    --ds-tabs-pills-active-shadow,
-    0 5px 14px color-mix(in srgb, var(--ds-color-primary) 20%, transparent)
-  );
+  box-shadow: var(--ds-tabs-pills-active-shadow, var(--ds-elevation-1));
   transform: var(--ds-tabs-active-transform, translateY(-1px));
 }
 
@@ -554,8 +548,8 @@
   position: relative;
   z-index: 1;
   display: inline-flex;
-  min-width: var(--ds-tabs-badge-min-width, 18px);
-  height: var(--ds-tabs-badge-height, 18px);
+  min-inline-size: var(--ds-tabs-badge-min-width, 18px);
+  block-size: var(--ds-tabs-badge-height, 18px);
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
@@ -618,10 +612,8 @@
     )
   );
   border-radius: var(--ds-tabs-indicator-radius, 9999px 9999px 0 0);
-  box-shadow: var(
-    --ds-tabs-indicator-shadow,
-    0 -2px 8px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
-  );
+  /* A hairline, not a beacon: glow is tenant opt-in through the channel. */
+  box-shadow: var(--ds-tabs-indicator-shadow, none);
   transition: transform
     var(--ds-tabs-motion-duration, var(--ds-motion-rearrange, var(--ds-motion-normal)))
     var(--ds-tabs-motion-easing, var(--ds-motion-ease-move, ease-out));
@@ -634,8 +626,8 @@
   position: relative;
   z-index: 3;
   display: inline-flex;
-  width: var(--ds-tabs-overflow-control-size, 32px);
-  height: var(--ds-tabs-overflow-control-size, 32px);
+  inline-size: var(--ds-tabs-overflow-control-size, 32px);
+  block-size: var(--ds-tabs-overflow-control-size, 32px);
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
@@ -648,7 +640,7 @@
     var(--ds-surface-raised, var(--ds-surface-card))
   );
   color: var(--ds-tabs-overflow-control-color, var(--ds-color-text-secondary));
-  font-size: var(--ds-tabs-current-icon-size);
+  font-size: var(--_ds-tabs-current-icon-size);
   cursor: pointer;
   box-shadow: var(--ds-tabs-overflow-control-shadow, var(--ds-elevation-1));
   transition:
@@ -795,25 +787,25 @@
 /* Long translations stay legible; compact containers reveal overflow controls. */
 @container ds-tabs (max-width: 420px) {
   .rottay-tabs--modern[data-part='root'] [data-part='tab-rail'] {
-    --ds-tabs-current-padding: var(--ds-tabs-mobile-padding, 0 var(--ds-spacing-2-5, 10px));
+    --_ds-tabs-current-padding: var(--ds-tabs-mobile-padding, 0 var(--ds-spacing-2-5, 10px));
     --ds-tabs-gap: var(--ds-tabs-mobile-gap, 2px);
   }
 
   .rottay-tabs--modern[data-part='root'] [data-part='tab-button'] {
-    max-width: var(--ds-tabs-mobile-item-max-width, 12rem);
+    max-inline-size: var(--ds-tabs-mobile-item-max-width, 12rem);
   }
 }
 
 @media (pointer: coarse) {
   .rottay-tabs--modern[data-part='root'] [data-part='tab-button'] {
-    min-height: max(44px, var(--ds-tabs-current-height));
+    min-block-size: max(44px, var(--_ds-tabs-current-height));
   }
 
   .rottay-tabs--modern[data-part='root'] [data-part='overflow-previous'],
   .rottay-tabs--modern[data-part='root'] [data-part='overflow-next'],
   .rottay-tabs--modern[data-part='root'] [data-part='overflow-more'] {
-    min-width: 44px;
-    min-height: 44px;
+    min-inline-size: 44px;
+    min-block-size: 44px;
   }
 }
 

@@ -110,8 +110,15 @@ describe('file-manager -- data-part contract (CK-H2)', () => {
 
     const root = await waitForSelector(container, '[data-part="root"][data-loading="false"][data-view-mode="list"]');
     expectEngineScope(root, 'file-manager', engine);
-    for (const part of ['toolbar', 'breadcrumb', 'breadcrumb-link', 'breadcrumb-current', 'view-toggle', 'file-input', 'content', 'row', 'checkbox', 'folder-icon', 'file-icon', 'folder-link', 'file-name', 'item-action']) {
+    for (const part of ['toolbar', 'breadcrumb', 'view-toggle', 'file-input', 'content', 'row', 'checkbox', 'folder-icon', 'file-icon', 'folder-link', 'file-name', 'item-action']) {
       expect(q(container, `[data-part="${part}"]`).length, `${engine}: ${part}`).toBeGreaterThanOrEqual(1);
+    }
+    if (engine === 'modern') {
+      expect(q(container, '[data-part="breadcrumb"] button[data-part="crumb"]')).toHaveLength(2);
+      expect(q(container, '[data-part="breadcrumb"] [data-part="crumb"][aria-current="page"]')).toHaveLength(1);
+    } else {
+      expect(q(container, '[data-part="breadcrumb-link"]').length).toBeGreaterThanOrEqual(1);
+      expect(q(container, '[data-part="breadcrumb-current"]')).toHaveLength(1);
     }
 
     expect(q(container, '[data-part="row"]')).toHaveLength(5);
@@ -252,13 +259,18 @@ describe('pricing-table -- data-part contract (CK-H2)', () => {
         const root = await waitForSelector(container, `[data-part="root"][data-loading="false"][data-cycle="${cycle}"]`);
         expectEngineScope(root, 'pricing-table', engine);
         expect(q(container, `[data-part="toggle"][data-cycle="${cycle}"]`)).toHaveLength(1);
-        expect(q(container, '[data-part="toggle-input"]')).toHaveLength(1);
+        if (engine === 'modern') {
+          expect(q(container, '[data-part="toggle-control"] input[type="checkbox"]')).toHaveLength(1);
+        } else {
+          expect(q(container, '[data-part="toggle-input"]')).toHaveLength(1);
+        }
         expect(q(container, '[data-part="plan-card"][data-highlighted="true"]')).toHaveLength(1);
         expect(q(container, '[data-part="plan-card"][data-highlighted="false"]')).toHaveLength(1);
         expect(q(container, '[data-part="plan-badge"][data-variant="savings"]')).toHaveLength(1);
         expect(q(container, '[data-part="plan-badge"][data-variant="popular"]')).toHaveLength(1);
-        expect(q(container, '[data-part="cta-button"][data-highlighted="true"]')).toHaveLength(1);
-        expect(q(container, '[data-part="cta-button"][data-highlighted="false"]')).toHaveLength(1);
+        const ctaPart = engine === 'modern' ? 'cta' : 'cta-button';
+        expect(q(container, `[data-part="${ctaPart}"][data-highlighted="true"]`)).toHaveLength(1);
+        expect(q(container, `[data-part="${ctaPart}"][data-highlighted="false"]`)).toHaveLength(1);
         expect(q(container, '[data-part="feature-row"]')).toHaveLength(3);
         expect(q(container, '[data-part="category-header"]')).toHaveLength(2);
         for (const state of ['included', 'excluded', 'custom']) {

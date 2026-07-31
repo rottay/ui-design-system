@@ -1,67 +1,56 @@
 /**
  * ScopeSwitcher skin — engine-agnostic and deliberately unlayered.
- * Border paint clears the tenant floor at (0,4,0), and composed Text color
- * clears the Typography engine skin at (0,5,0).
  *
- * WAVE R2+R3 (Quiet Premium editorial): a quiet pill strip. Resting pills
- * are paper with a hairline; the active pill earns the single worn-blue
- * accent, a slightly heavier weight, and a soft ambient shadow. Count
- * badges are tabular-nums mini-pills. Hover/focus/active microinteractions
- * ride the --ds-motion-* channels and go silent under reduced motion.
- * Typography lives here, never in the engine.
+ * COMPOSITION LAW (S22): the scope switcher is the certified Segmented
+ * primitive (radiogroup semantics, roving keyboard, option chrome and the
+ * active fill all belong to `segmented.css`) — the retired hand-rolled
+ * pills took with them every pill rule (resting gradient, hover, focus,
+ * active tint) and the repeated-selector budget they were bought with.
+ * What this file owns: the root frame (section strip vs inline
+ * transparent), the count badge paint INSIDE the composed option label
+ * (tabular figures, active tint by data-active), the scroll region for
+ * narrow compositions, and the forced-colors contract for those owned
+ * pieces.
+ *
+ * SPECIFICITY (P-48): the root's hairline reaches the tenant floor from the
+ * two scope classes + the root's own `data-part` + `data-inline` — two
+ * DISTINCT attributes, never an identical one repeated (4th-tanda law; the
+ * former `[data-part='root']×2`, `pill×2` ×6 and `pill-label×3` selectors
+ * are retired). The `white` color-mix literals of the retired pill gradients
+ * violated the zero-literals law and are gone with them.
  */
 
-.ds-structure.ds-scope-switcher[data-part='root'][data-part='root'] {
+/* ---- root: quiet hairline strip (padding drained from the engine's inline
+        styles, keyed on the inline variant; scroll region for narrow
+        compositions) ---- */
+.ds-structure.ds-scope-switcher[data-part='root'] {
+  padding-block: 8px;
+  padding-inline: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.ds-structure.ds-scope-switcher[data-part='root'][data-inline='false'] {
   border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 95%, var(--ds-color-bg-primary) 5%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
 }
-.ds-structure.ds-scope-switcher[data-part='root'][data-part='root'][data-inline='true'] {
-  border-bottom: none;
-  background: transparent;
+.ds-structure.ds-scope-switcher[data-part='root'][data-inline='true'] {
+  padding-block: 0;
+  padding-inline: 0;
 }
 
-.ds-structure.ds-scope-switcher [data-part='pill'][data-part='pill'] {
-  border-radius: 9999px;
-  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 80%, transparent);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 90%, white 10%), color-mix(in srgb, var(--ds-surface-card) 86%, var(--ds-color-bg-primary) 14%));
-  color: var(--ds-color-text-secondary);
-  outline: none;
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
-  font-size: var(--ds-font-size-sm);
-  font-weight: 600;
-  transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
-}
-.ds-structure.ds-scope-switcher [data-part='pill'][data-part='pill']:hover:not([data-active='true']) {
-  border-color: color-mix(in srgb, var(--ds-color-text-secondary) 26%, transparent);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, white 4%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
-  color: var(--ds-color-text-primary);
-}
-.ds-structure.ds-scope-switcher [data-part='pill'][data-part='pill']:focus-visible {
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 4%, transparent),
-    0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
-}
-.ds-structure.ds-scope-switcher [data-part='pill'][data-part='pill']:active:not([data-active='true']) {
-  background: color-mix(in srgb, var(--ds-surface-card) 86%, var(--ds-color-bg-primary) 14%);
-}
-.ds-structure.ds-scope-switcher [data-part='pill'][data-part='pill'][data-active='true'] {
-  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 42%, transparent);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)));
-  color: var(--ds-color-text-primary);
-  font-weight: 700;
-  box-shadow: 0 6px 16px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
-}
-.ds-structure.ds-scope-switcher [data-part='pill-label'][data-part='pill-label'][data-part='pill-label'] {
-  color: inherit;
-  font-size: var(--ds-font-size-xs);
-  font-weight: inherit;
-}
-
-.ds-structure.ds-scope-switcher [data-part='count-badge'] {
+/* ---- count badge INSIDE the composed Segmented option label: the pattern's
+        own mini-pill (the primitive owns the option chrome; the count scans
+        tabular and reads through number + tint, never tint alone) ---- */
+.ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'] {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 18px;
+  block-size: 18px;
+  margin-inline-start: var(--ds-spacing-1, 4px);
+  padding-block: 0;
+  padding-inline: 6px;
   border-radius: 999px;
   background: color-mix(in srgb, var(--ds-color-bg-primary) 60%, transparent);
   color: var(--ds-color-text-muted);
@@ -70,14 +59,23 @@
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
-.ds-structure.ds-scope-switcher [data-part='count-badge'][data-active='true'] {
+.ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'][data-active='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
   color: var(--ds-color-primary);
 }
 
-/* Reduced motion: pill state changes are pure cross-fades; silence them. */
-@media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-scope-switcher [data-part='pill'] {
-    transition: none;
+/* forced-colors: the root's gradient hairline is forced away, so the strip
+   re-asserts in system colors and the count badge keeps a framed neutral
+   boundary (its number carries the information). The composed Segmented
+   keeps its own forced-colors contract (active option by system state). */
+@media (forced-colors: active) {
+  .ds-structure.ds-scope-switcher[data-part='root'][data-inline='false'] {
+    border-bottom-color: ButtonText;
+    background: Canvas;
+  }
+  .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'] {
+    outline: 1px solid ButtonText;
+    background: Canvas;
+    color: CanvasText;
   }
 }

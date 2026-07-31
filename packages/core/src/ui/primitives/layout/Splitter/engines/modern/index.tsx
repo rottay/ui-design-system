@@ -3,7 +3,10 @@
 /**
  * @fileoverview Splitter Modern Engine - Rottay Design System
  * @description Modern (token-driven) implementation of the Splitter compound component.
- * Uses Tailwind CSS utilities with custom mouse event handling for drag-to-resize.
+ * Skin-owned structure and interactive paint; pointer-event drag-to-resize
+ * handled by the engine, keyboard operation by the canonical ResizeHandle
+ * primitive (`primitives/foundation/ResizeHandle` -- never a rebuilt native
+ * control, Lote 6).
  *
  * @remarks
  * The Modern engine provides:
@@ -75,8 +78,8 @@ export const Panel = React.forwardRef<HTMLDivElement, SplitterPanelProps & { siz
         style={{
           flex: `0 0 ${clampedSize}%`,
           // Prevent content from forcing the panel wider than its flex-basis
-          minWidth: 0,
-          minHeight: 0,
+          minInlineSize: 0,
+          minBlockSize: 0,
           ...style,
         }}
       >
@@ -124,6 +127,11 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
       const childCount = Children.count(children);
       return Array(childCount).fill(100 / childCount);
     });
+    // The drag stream updates sizes many times per gesture; the pointerup
+    // closure was captured at pointerdown, so `onResizeEnd` must read the
+    // freshest sizes, never the render-closure ones.
+    const sizesRef = useRef(sizes);
+    sizesRef.current = sizes;
     const isDragging = useRef(false);
     // The index of the gutter being dragged (-1 = idle), purely for the
     // data-dragging anatomy attribute -- the drag math binds the gutter
@@ -218,7 +226,7 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
         if (isDragging.current) {
           isDragging.current = false;
           setDraggingIndex(-1);
-          onResizeEnd?.(sizes);
+          onResizeEnd?.(sizesRef.current);
         }
         document.removeEventListener('pointermove', handlePointerMove);
         document.removeEventListener('pointerup', handlePointerUp);
@@ -226,7 +234,7 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
 
       document.addEventListener('pointermove', handlePointerMove);
       document.addEventListener('pointerup', handlePointerUp);
-    }, [isVertical, onResizeStart, onResizeEnd, sizes, applyPointerPercentage]);
+    }, [isVertical, onResizeStart, onResizeEnd, applyPointerPercentage]);
 
     // Keyboard resize (WAI separator pattern): the ResizeHandle primitive owns
     // key-to-intent translation, including the RTL mirroring of the horizontal

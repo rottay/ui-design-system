@@ -38,6 +38,10 @@ import {
 } from '../../runtime/table-features';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
+import { ActionSortIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-sort';
+import { NavigationUpIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-up';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 
 /**
  * Modern Table engine painted by the modern skin (`table.css`).
@@ -344,10 +348,14 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               <span
                 data-part="sort-indicator"
                 data-order={isCurrentSort ? sortState.order : 'none'}
+                aria-hidden="true"
               >
+                {/* Governed icons, never Unicode glyphs: an up-arrow for the
+                    active direction (the skin rotates it 180deg for descend),
+                    the direction-neutral sort icon as the affordance. */}
                 {isCurrentSort
-                  ? '▲'
-                  : '⇅'}
+                  ? <NavigationUpIcon decorative size={12} />
+                  : <ActionSortIcon decorative size={12} />}
               </span>
             )}
             {/* Resize handle -- only on leaf columns (colSpan <= 1) because
@@ -454,7 +462,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                       onClick={() => handleToggleExpand(record, actualIndex)}
                       aria-label={isExpanded ? t('table.collapse_row') : t('table.expand_row')}
                     >
-                      <span data-part="expand-indicator" data-expanded={isExpanded ? 'true' : undefined}>{'▶'}</span>
+                      <span data-part="expand-indicator" data-expanded={isExpanded ? 'true' : undefined} aria-hidden="true">
+                        <NavigationForwardIcon decorative size={12} />
+                      </span>
                     </button>
                   )
                 ) : null}
@@ -706,7 +716,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               onClick={() => setCurrentPage(currentPage - 1)}
               aria-label={t('table.previous_page')}
             >
-              &#171;
+              <NavigationBackIcon decorative size={12} />
             </button>
             <button data-part="pagination-button" data-current="true" aria-current="page">
               {t('table.page', { current: currentPage })}
@@ -717,7 +727,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               onClick={() => setCurrentPage(currentPage + 1)}
               aria-label={t('table.next_page')}
             >
-              &#187;
+              <NavigationForwardIcon decorative size={12} />
             </button>
           </div>
         </div>

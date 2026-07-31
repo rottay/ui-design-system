@@ -113,8 +113,11 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         {/* Content section */}
         <div data-part="body">
           {layout === 'horizontal' ? (
-            // Horizontal: CSS grid with configurable columns; items can span multiple cells
-            <div
+            // Horizontal: CSS grid with configurable columns; items can span multiple cells.
+            // Semantics: a description LIST — <dl> with <dt>/<dd> pairs (the div row
+            // wrapper is spec-legal inside <dl>); the role attributes stay for the
+            // pinned test contract.
+            <dl
               data-part="rows"
               role="list"
             >
@@ -134,31 +137,31 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                       '--ds-descriptions-item-span': span,
                     } as React.CSSProperties}
                   >
-                    <div
+                    <dt
                       className="rottay-descriptions-label"
                       data-part="label"
                       style={{ ...styles?.label, ...itemProps.styles?.label }}
                     >
                       {itemProps.label}
                       {colon ? ':' : ''}
-                    </div>
-                    <div
+                    </dt>
+                    <dd
                       className="rottay-descriptions-content"
                       data-part="content"
                       data-empty={itemProps.children == null || itemProps.children === ''}
                       style={{ ...styles?.content, ...itemProps.styles?.content }}
                     >
                       {itemProps.children}
-                    </div>
+                    </dd>
                   </div>
                 );
               })}
-            </div>
+            </dl>
           ) : (
             // Vertical: label column on the inline-start side, value on the
             // inline-end side; the skin owns the track split (with a subgrid
-            // upgrade where supported).
-            <div data-part="rows" role="list">
+            // upgrade where supported). Same <dl>/<dt>/<dd> semantics.
+            <dl data-part="rows" role="list">
               {itemElements.map((child, index) => {
                 const itemProps = child.props as DescriptionsItemProps;
 
@@ -171,26 +174,26 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                     data-span={itemProps.span || 1}
                     role="listitem"
                   >
-                    <div
+                    <dt
                       className="rottay-descriptions-label"
                       data-part="label"
                       style={{ ...styles?.label, ...itemProps.styles?.label }}
                     >
                       {itemProps.label}
                       {colon ? ':' : ''}
-                    </div>
-                    <div
+                    </dt>
+                    <dd
                       className="rottay-descriptions-content"
                       data-part="content"
                       data-empty={itemProps.children == null || itemProps.children === ''}
                       style={{ ...styles?.content, ...itemProps.styles?.content }}
                     >
                       {itemProps.children}
-                    </div>
+                    </dd>
                   </div>
                 );
               })}
-            </div>
+            </dl>
           )}
         </div>
       </div>

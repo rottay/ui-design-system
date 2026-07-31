@@ -137,6 +137,10 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
     colName: tOr('tenantPreview.colName', 'Name'),
     colStatus: tOr('tenantPreview.colStatus', 'Status'),
     colAmount: tOr('tenantPreview.colAmount', 'Amount'),
+    sampleRowNameA: tOr('tenantPreview.sampleRowNameA', 'Project Alpha'),
+    sampleRowNameB: tOr('tenantPreview.sampleRowNameB', 'Project Beta'),
+    sampleRowAmountA: tOr('tenantPreview.sampleRowAmountA', '$12,400'),
+    sampleRowAmountB: tOr('tenantPreview.sampleRowAmountB', '$8,200'),
     yes: tOr('tenantPreview.yes', 'Yes'),
     no: tOr('tenantPreview.no', 'No'),
     disabled: tOr('tenantPreview.disabled', 'Disabled'),
@@ -312,11 +316,13 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
               {components.includes('card') && (
                 <div>
                   <div data-part="sub-label">{copy.card}</div>
-                  <ModernCard size="sm" title={copy.sampleCardTitle}>
-                    <p data-part="preview-card-body">
-                      {copy.sampleCardBody}
-                    </p>
-                  </ModernCard>
+                  <div data-part="sample-card">
+                    <ModernCard size="sm" title={copy.sampleCardTitle}>
+                      <p data-part="preview-card-body">
+                        {copy.sampleCardBody}
+                      </p>
+                    </ModernCard>
+                  </div>
                 </div>
               )}
 
@@ -376,22 +382,22 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                       </thead>
                       <tbody>
                         <tr>
-                          <td data-part="preview-table-cell">Project Alpha</td>
+                          <td data-part="preview-table-cell">{copy.sampleRowNameA}</td>
                           <td data-part="preview-table-cell">
                             <ModernBadge variant="primary" data-part="badge" data-status="active">
                               {copy.badgeActive}
                             </ModernBadge>
                           </td>
-                          <td data-part="preview-table-cell" data-align="end">$12,400</td>
+                          <td data-part="preview-table-cell" data-align="end">{copy.sampleRowAmountA}</td>
                         </tr>
                         <tr>
-                          <td data-part="preview-table-cell">Project Beta</td>
+                          <td data-part="preview-table-cell">{copy.sampleRowNameB}</td>
                           <td data-part="preview-table-cell">
                             <ModernBadge variant="default" data-part="badge" data-status="pending">
                               {copy.badgePending}
                             </ModernBadge>
                           </td>
-                          <td data-part="preview-table-cell" data-align="end">$8,200</td>
+                          <td data-part="preview-table-cell" data-align="end">{copy.sampleRowAmountB}</td>
                         </tr>
                       </tbody>
                     </table>

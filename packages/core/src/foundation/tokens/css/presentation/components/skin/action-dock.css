@@ -38,7 +38,24 @@
  * the elevation shadow alone cannot do it: shadow + background collapse
  * entirely under forced colors. The hairline is logical, tokenized, and
  * forced-colors mode inherits it (the UA forces the border color to
- * CanvasText), so no forced-colors retouch exists here.
+ * CanvasText), so no forced-colors retouch exists here — and the family
+ * tests PIN that absence (they assert the file never opens a forced-colors
+ * media block), so the degradation contract is: UA forcing + hairline +
+ * primitive-owned chrome.
+ *
+ * GLASS: the frosted surface blur is the pinned W10 design contract
+ * (`blur(var(--ds-glass-blur, 8px))` is asserted verbatim) and rides the
+ * `--ds-action-dock-backdrop-filter` channel with the reduced-effects
+ * intensity collapsing it — the no-glass-default law is satisfied through
+ * the channel, and the pin forbids changing the default here.
+ *
+ * RESERVATION: the root publishes `--ds-action-dock-reserved-block-end`
+ * (bottom placement) and `--ds-action-dock-reserved-block-start` (top) so a
+ * page container can keep its content clear of the fixed dock — the dock
+ * never covers content that consumes the hook. AppShell S01 owns the
+ * app-level band coordination (`--ds-shell-bottom-inset`, consumed and
+ * pinned below); bottom-tab-bar S02 owns the mobile nav band. The dock
+ * never stacks with either — each band is a distinct consumer.
  *
  * SURFACE (W10 second pass): the dock reads as a frosted chrome sheet, not a
  * flat fill — the background defaults to a translucent `bg-primary` mix and a
@@ -86,6 +103,14 @@
 }
 
 .rottay-action-dock[data-part='root'][data-placement='bottom'] {
+  /* Public reservation hook (the S02 `--ds-bottom-tab-bar-reserved-block-end`
+     precedent): pages keep their content clear of the fixed dock with
+     `padding-block-end: var(--ds-action-dock-reserved-block-end)`. The 60px
+     base tracks the dock geometry (12+12+36) — update it if that changes. */
+  --ds-action-dock-reserved-block-end: calc(
+    60px + var(--ds-action-dock-safe-area-bottom, var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px)))
+  );
+
   padding-block-start: var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem));
   padding-block-end: max(
     var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem)),
@@ -117,6 +142,11 @@
 }
 
 .rottay-action-dock[data-part='root'][data-placement='top'] {
+  /* Top-placement mirror of the bottom reservation hook. */
+  --ds-action-dock-reserved-block-start: calc(
+    60px + var(--ds-action-dock-safe-area-top, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))
+  );
+
   inset-block-start: 0;
   padding-block-start: max(
     var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem)),

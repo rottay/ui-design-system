@@ -944,6 +944,81 @@ describe('CollectionWorkspaceSurface', () => {
       .toBeInTheDocument();
   });
 
+  it('gives phone collection controls a full-width rail instead of squeezing it beside utilities', () => {
+    const { container } = renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            presentation: { enhancedInteractions: true },
+            controls: {
+              density: {
+                enabled: true,
+                value: 'compact',
+                onChange: vi.fn(),
+              },
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+    );
+
+    const controlsRow = container.querySelector<HTMLElement>(
+      '[data-part="controls-row"]',
+    );
+    const controlsRail = controlsRow?.firstElementChild as HTMLElement | null;
+    const utilities = container.querySelector<HTMLElement>(
+      '[data-part="utilities"]',
+    );
+
+    expect(controlsRail).not.toBeNull();
+    expect(controlsRail?.style.flex).toBe('1 1 100%');
+    expect(controlsRail?.style.width).toBe('100%');
+    expect(utilities?.style.width).toBe('100%');
+    expect(utilities?.style.justifyContent).toBe('flex-end');
+  });
+
+  it('gives phone scopes and saved views independent rows instead of collapsing the view selector', async () => {
+    const { container } = renderSurface(
+      <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+        <CollectionWorkspaceSurface
+          {...buildProps({
+            presentation: { enhancedInteractions: true },
+            controls: {
+              scopes: {
+                enabled: true,
+                scopes: [
+                  { key: 'all', label: 'All', count: 146 },
+                  { key: 'active', label: 'Active', count: 134 },
+                ],
+                activeScope: 'all',
+              },
+              savedViews: {
+                enabled: true,
+                views: [{ id: 'all-candidates', name: 'All candidates', config: {} }],
+              },
+            },
+          })}
+        />
+      </ResponsiveContext.Provider>,
+      { engine: 'modern' },
+    );
+
+    await waitFor(() => {
+      expect(
+        container.querySelector('.ds-collection-workspace__views-strip-row'),
+      ).not.toBeNull();
+      expect(container.querySelector('[data-part="saved-views-host"]')).not.toBeNull();
+    });
+
+    const stripRow = container.querySelector<HTMLElement>(
+      '.ds-collection-workspace__views-strip-row',
+    );
+    const savedViewsHost = container.querySelector<HTMLElement>('[data-part="saved-views-host"]');
+    expect(stripRow).toHaveAttribute('data-wrap', 'wrap');
+    expect(savedViewsHost).not.toBeNull();
+    expect(await within(savedViewsHost!).findByText('All candidates')).toBeInTheDocument();
+  });
+
   it('projects phone chrome into a minimal header and one compact action dock', async () => {
     const onAddCandidate = vi.fn();
     const onRunMatching = vi.fn();
@@ -2361,7 +2436,9 @@ describe('CollectionWorkspaceSurface', () => {
     );
 
     expect(await screen.findByTestId('data-error')).toHaveTextContent('Prisma read failed');
-    expect(screen.getByText('Available when data recovers')).toBeInTheDocument();
+    expect(
+      screen.getByText('Available when data is retrieved'),
+    ).toBeInTheDocument();
     expect(
       container.querySelector('[data-capability-kind="column"][data-capability-id="name"]'),
     ).toHaveTextContent('Name');

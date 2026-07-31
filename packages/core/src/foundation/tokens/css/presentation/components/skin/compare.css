@@ -1,14 +1,90 @@
-/** CompareSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+/**
+ * CompareSurface skin (WO-SKIN-06 / CK-I; SU09 refine).
+ *
+ * LAYER: imported by both public facade entrypoints into
+ * `layer(rottay-components)`.
+ *
+ * The retired selector `.ds-compare__muted-text[data-part='root'][data-part='root']`
+ * was doubly broken: an identical attribute repeated (4th-tanda law) AND a part
+ * the muted spans never carried — the rule never matched, so the muted ink
+ * silently came from the Typography default instead of this channel. The muted
+ * and label texts now carry their own `data-part` hooks (engine-stamped) and
+ * every rule buys its budget from the two scope classes + the root's own
+ * `data-part` in the descendant chain, never from repetition. The bold
+ * hierarchy (row labels 600, subject/section titles 700) and the
+ * heading/divider paddings are drained from the engine's inline styles.
+ *
+ * The comparison TABLE and the stacked Cards are composed primitives with
+ * their own skins and forced-colors contracts; this file owns only the
+ * surface's section chrome.
+ */
 
-.ds-surface.ds-compare .ds-compare__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+/* ---- section heading (padding drained from inline) ---- */
+.ds-surface.ds-compare[data-part="root"] .ds-compare__section-heading {
+  padding: var(--ds-compare-section-padding, var(--ds-spacing-4, 16px));
+  border-radius: var(--ds-compare-section-radius, var(--ds-radius-lg));
+  background: var(
+    --ds-compare-section-background,
+    var(--ds-color-surface-secondary)
+  );
 }
 
-.ds-surface.ds-compare .ds-compare__section-heading {
-  border-radius: var(--ds-radius-lg);
-  background: var(--ds-color-surface-secondary);
+/* ---- divider between per-subject blocks in the stacked layout (padding
+        drained to the logical block axis) ---- */
+.ds-surface.ds-compare[data-part="root"]
+  .ds-compare__divider[data-part="divider"] {
+  padding-block-start: var(
+    --ds-compare-divider-spacing,
+    var(--ds-spacing-3, 12px)
+  );
+  border-block-start: var(--ds-compare-divider-width, 1px) solid
+    var(--ds-compare-divider-color, var(--ds-color-border-subtle));
 }
 
-.ds-surface.ds-compare .ds-compare__divider[data-part='divider'] {
-  border-top: 1px solid var(--ds-color-border-subtle);
+/* ---- text hierarchy (typography drained from the engine's inline
+        fontWeight styles) ---- */
+.ds-surface.ds-compare[data-part="root"] [data-part="row-label"],
+.ds-surface.ds-compare[data-part="root"] .ds-compare__row-label {
+  font-weight: var(
+    --ds-compare-row-label-weight,
+    var(--ds-font-weight-semibold, 600)
+  );
+}
+
+.ds-surface.ds-compare[data-part="root"] [data-part="subject-label"],
+.ds-surface.ds-compare[data-part="root"] [data-part="section-title"],
+.ds-surface.ds-compare[data-part="root"] .ds-compare__subject-label,
+.ds-surface.ds-compare[data-part="root"] .ds-compare__section-title {
+  font-weight: var(
+    --ds-compare-heading-weight,
+    var(--ds-font-weight-bold, 700)
+  );
+}
+
+.ds-surface.ds-compare[data-part="root"] [data-part="muted-text"],
+.ds-surface.ds-compare[data-part="root"] .ds-compare__muted-text {
+  color: var(--ds-compare-muted-color, var(--ds-color-text-muted));
+}
+
+.ds-surface.ds-compare[data-part="root"]
+  .ds-compare__table-viewport[data-part="table-viewport"] {
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+}
+
+/* forced-colors: the section chrome re-asserts in system colors -- the
+   heading keeps a framed boundary and the divider hairline degrades to
+   ButtonText. The muted ink auto-maps; the label hierarchy survives through
+   weight (forced colours never strips font-weight). The composed Table and
+   Cards keep their own forced-colors contracts. */
+@media (forced-colors: active) {
+  .ds-surface.ds-compare[data-part="root"] .ds-compare__section-heading {
+    border: 1px solid ButtonText;
+    background: Canvas;
+  }
+  .ds-surface.ds-compare[data-part="root"]
+    .ds-compare__divider[data-part="divider"] {
+    border-block-start-color: ButtonText;
+  }
 }

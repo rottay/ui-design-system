@@ -13,11 +13,11 @@
  * SINGLE PAINT OWNER PER CONTROL (Lote 2 law): the pattern COMPOSES public
  * primitives -- Select (field/operator/value), Input/InputNumber (text/number
  * values), DatePicker (date values), Switch (boolean values), Button (add /
- * remove / logic-toggle / clear / dropdown options) and Spinner (loading).
- * This file therefore paints NO control chrome at all: no borders, fills or
- * state paint on inputs or buttons -- each primitive's own skin owns that,
- * including focus rings, disabled states and coarse-pointer floors. What this
- * file owns is exactly what the pattern owns:
+ * remove / logic-toggle / clear / dropdown options), Empty (initial empty
+ * hint) and Spinner (loading). This file therefore paints NO control chrome
+ * at all: no borders, fills or state paint on inputs or buttons -- each
+ * primitive's own skin owns that, including focus rings, disabled states and
+ * coarse-pointer floors. What this file owns is exactly what the pattern owns:
  *   - the layout anatomy (rule rows, group nesting, action rows, dropdown
  *     positioning) -- the engine stamps only `data-part` wrappers;
  *   - the two text parts that are NOT controls (`rule-logic-label`,
@@ -25,7 +25,9 @@
  *   - the nested-group hierarchy treatment (inset fill + indentation; the
  *     quiet law forbids a left vertical accent, so there is no rail);
  *   - the add-filter dropdown SURFACE (it is pattern composition chrome, not
- *     a primitive).
+ *     a primitive);
+ *   - the loading centering frame (drained from the engine's retired
+ *     Tailwind utilities) and the empty-state frame.
  *
  * RESPONSIVE LAW: the root is a named container (`ds-filter-builder`); rows
  * flex-wrap intrinsically and the logic-label column goes full-width under
@@ -35,7 +37,8 @@
  * SPECIFICITY (P-48): border-COLOR paint must reach (0,4,0) to clear the
  * tenant `html[data-tenant]:not([data-theme]):not(.light) *` floor at (0,3,1).
  * The only border paint left here (dropdown frame) buys it from the two root
- * classes + the repeated `data-part` / `:not()` argument.
+ * classes + the target's `data-part` + its `role` attribute -- two DIFFERENT
+ * attributes, never an identical repetition (4th-tanda law).
  */
 
 .ds-pattern-filter-builder.ds-engine-modern[data-part='root'] {
@@ -44,6 +47,22 @@
   inline-size: 100%;
   min-inline-size: 0;
   color: var(--ds-color-text-primary);
+}
+
+/* ---- loading root: centering frame drained from the engine's retired
+        `flex items-center justify-center min-h-[100px]` utilities ---- */
+.ds-pattern-filter-builder.ds-engine-modern[data-part='root'][data-loading='true'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 100px;
+}
+
+/* ---- initial empty hint: the composed Empty primitive owns its paint ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='empty'] {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--ds-spacing-4, 16px);
 }
 
 /* ---- rule row: layout only. Every control inside is a primitive that
@@ -173,7 +192,7 @@
   border-radius: var(--ds-radius-lg, 12px);
   box-shadow: var(--ds-elevation-2);
 }
-.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-dropdown'][data-part='add-filter-dropdown'] {
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-dropdown'][role='listbox'] {
   border: 1px solid var(--ds-color-border);
 }
 
@@ -208,5 +227,24 @@
   .ds-pattern-filter-builder.ds-engine-modern [data-part='clear-button'],
   .ds-pattern-filter-builder.ds-engine-modern [data-part='logic-toggle'] {
     min-block-size: var(--ds-filter-builder-touch-target-min, 44px);
+  }
+}
+
+/* forced-colors: the nested-group inset fill and the dropdown shadow are
+   forced away, so hierarchy and the overlay re-assert as system-color
+   boundaries (NEUTRAL frames only -- the quiet law's no-rail rule holds here
+   too: hierarchy under forced colours reads through indentation plus the
+   boundary, never a colored accent). Every control is a composed primitive
+   that owns its own forced-colors contract. */
+@media (forced-colors: active) {
+  .ds-pattern-filter-builder.ds-engine-modern [data-part='group']:not([data-root]) {
+    border: 1px solid ButtonText;
+    background: Canvas;
+  }
+  .ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-dropdown'],
+  .ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-dropdown'][role='listbox'] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    box-shadow: none;
   }
 }

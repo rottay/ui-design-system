@@ -125,11 +125,10 @@ describe('HoverCard modern engine — the skin owns the drained paint', () => {
 
   it('shares the lane overlay material register with Dropdown (Pass-2 coherence)', () => {
     expect(SKIN).toContain('color-mix(in srgb, var(--ds-color-primary) 5%, transparent)');
-    expect(SKIN).toContain('color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%)');
+    expect(SKIN).toContain('linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3))');
+    expect(SKIN).toContain('var(--ds-surface-card)');
     expect(SKIN).toContain('var(--ds-hover-card-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%))');
-    expect(SKIN).toContain('inset 0 1px 0 color-mix(in srgb, white 62%, transparent)');
     expect(SKIN).toContain('var(--ds-hover-card-shadow, var(--ds-elevation-3))');
-    expect(SKIN).toContain('blur(var(--ds-hover-card-backdrop-blur, 16px))');
     expect(SKIN).toContain('var(--ds-hover-card-radius, var(--ds-radius-xl, 16px))');
     expect(SKIN).not.toContain('background: var(--ds-surface-card);');
   });

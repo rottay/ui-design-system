@@ -78,7 +78,7 @@ describe('SearchSurface', () => {
   it('selects a result and routes result actions through the selected item', async () => {
     const config = buildConfig();
 
-    renderSurface(<SearchSurface config={config} />);
+    renderSurface(<SearchSurface config={config} />, { engine: 'modern' });
 
     fireEvent.click(await screen.findByText('Andre Silva'));
 

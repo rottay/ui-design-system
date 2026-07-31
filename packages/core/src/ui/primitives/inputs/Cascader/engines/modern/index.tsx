@@ -21,6 +21,9 @@ import type { CascaderProps, CascaderOption, CascaderValue, CascaderFieldNames }
 import { CASCADER_DEFAULTS } from '../../contracts';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 
 /**
  * Hook-local `tOr`: catalogue value with an English floor -- when the
@@ -161,6 +164,18 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
 
     const containerRef = useRef<HTMLDivElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    // After a keyboard-driven expansion, DOM focus lands on the first option
+    // of the freshly appended column (see handleDropdownKeyDown).
+    const pendingColumnFocusRef = useRef(false);
+
+    // Reading-direction probe (Tree/Segmented engine idiom).
+    const isRtl = (el: HTMLElement): boolean => {
+      const scoped = el.closest('[dir]');
+      if (scoped) return scoped.getAttribute('dir') === 'rtl';
+      return document.documentElement.dir === 'rtl';
+    };
 
     const handleOpenChange = useCallback((newOpen: boolean) => {
       if (controlledOpen === undefined) {
@@ -317,6 +332,87 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       handleOpenChange(false);
     };
 
+    // Focus the first option of a freshly appended column after a
+    // keyboard-driven expansion (the column only exists post-render).
+    useEffect(() => {
+      if (!pendingColumnFocusRef.current) return;
+      pendingColumnFocusRef.current = false;
+      const columns = dropdownRef.current?.querySelectorAll('[data-part="menu-column"]');
+      const last = columns?.[columns.length - 1];
+      last?.querySelector<HTMLElement>('[data-part="option"]')?.focus();
+    }, [activeColumns]);
+
+    // APG multi-column keyboard contract: ArrowUp/Down cycle the options of
+    // the CURRENT column; forward (ArrowRight in LTR) expands the focused
+    // option and moves focus into the new column; backward collapses to the
+    // selected option of the previous column; Escape closes and returns
+    // focus to the trigger. Forward/backward swap under RTL (the column flow
+    // mirrors). Options stay native buttons -- this only moves DOM focus.
+    const handleDropdownKeyDown = (e: React.KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        handleOpenChange(false);
+        triggerRef.current?.focus();
+        return;
+      }
+      const target = e.target as HTMLElement;
+      const optionEl = target.closest?.('[data-part="option"]') as HTMLElement | null;
+      if (!optionEl) return;
+
+      const columnEl = optionEl.closest('ul');
+      if (!columnEl) return;
+
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        const columnOptions = Array.from(
+          columnEl.querySelectorAll<HTMLElement>('[data-part="option"]:not(:disabled)'),
+        );
+        if (columnOptions.length === 0) return;
+        const currentIndex = columnOptions.indexOf(optionEl);
+        const nextIndex = currentIndex < 0
+          ? 0
+          : (currentIndex + (e.key === 'ArrowDown' ? 1 : -1) + columnOptions.length) % columnOptions.length;
+        columnOptions[nextIndex]?.focus();
+        return;
+      }
+
+      // Column drills only apply to the cascading layout (not search results).
+      if (!optionEl.closest('[data-part="menu-column"]')) return;
+      const columnsWrap = optionEl.closest('[data-part="option-list"]');
+      if (!columnsWrap) return;
+      const columnIndex = Array.from(
+        columnsWrap.querySelectorAll(':scope > [data-part="menu-column"]'),
+      ).indexOf(columnEl as Element);
+      if (columnIndex < 0) return;
+      const rtl = isRtl(optionEl);
+      const forwardKey = rtl ? 'ArrowLeft' : 'ArrowRight';
+      const backwardKey = rtl ? 'ArrowRight' : 'ArrowLeft';
+
+      if (e.key === forwardKey) {
+        const rawIndex = Array.from(columnEl.querySelectorAll('[data-part="option"]')).indexOf(optionEl);
+        const option = arrayValueAt(activeColumns[columnIndex] ?? [], rawIndex);
+        if (!option) return;
+        const expandable =
+          (getChildren(option, fieldNames)?.length ?? 0) > 0 ||
+          (!isLeaf(option, fieldNames) && !!loadData);
+        if (!expandable) return;
+        e.preventDefault();
+        pendingColumnFocusRef.current = true;
+        void expandOption(option, columnIndex);
+        return;
+      }
+      if (e.key === backwardKey) {
+        if (columnIndex === 0) return;
+        e.preventDefault();
+        const prevColumn = columnsWrap.querySelectorAll(':scope > [data-part="menu-column"]')[columnIndex - 1];
+        const focusTarget =
+          prevColumn?.querySelector<HTMLElement>('[data-part="option"][data-selected="true"]') ??
+          prevColumn?.querySelector<HTMLElement>('[data-part="option"]');
+        focusTarget?.focus();
+      }
+    };
+
     // Close the dropdown when clicking outside the container
     useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
@@ -356,12 +452,12 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={`ds-cascader ds-cascader--modern relative ${className || ''}`}
+        className={`ds-cascader ds-cascader--modern ${className || ''}`}
         style={style}
         data-part="root"
       >
         <div
-          className="flex items-center cursor-pointer"
+          ref={triggerRef}
           style={{
             boxSizing: 'border-box',
             ...getSizeStyle(),
@@ -388,36 +484,43 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
           tabIndex={disabled ? -1 : 0}
         >
           <span
-            className="flex-1 truncate"
             data-part={selectedPath.length > 0 ? 'value' : 'placeholder'}
           >
             {selectedPath.length > 0 ? getDisplayValue() : placeholder}
           </span>
-          {allowClear && selectedPath.length > 0 && !disabled && (
-            <button
-              type="button"
-              style={{ width: 24, height: 24, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
-              onClick={handleClear}
-              data-part="clear-button"
-              aria-label={tOr('cascader.clear', 'Clear')}
-            >
-              ✕
-            </button>
-          )}
-          {/* Chevron glyph; the open rotation is skin-owned via data-open. */}
-          <span data-part="arrow-icon" aria-hidden="true">&#9660;</span>
+          {/* Governed chevron; the open rotation is skin-owned via data-open. */}
+          <span data-part="arrow-icon" aria-hidden="true">
+            <NavigationDownIcon decorative size={12} />
+          </span>
         </div>
+
+        {/* Clear lives OUTSIDE the combobox trigger: APG forbids interactive
+            controls nested inside the interactive combobox element. The skin
+            overlays it at the trigger's inline end. */}
+        {allowClear && selectedPath.length > 0 && !disabled && (
+          <button
+            type="button"
+            onClick={handleClear}
+            data-part="clear-button"
+            aria-label={tOr('cascader.clear', 'Clear')}
+          >
+            <ActionCloseIcon decorative size={12} />
+          </button>
+        )}
 
         {isOpen && (
           <>
-            <div data-part="dropdown" role="listbox" aria-label={placeholder}>
+            {/* The dropdown is a plain container (no role): APG forbids
+                interactive content inside a listbox, so the search input sits
+                OUTSIDE any listbox and each column is its own listbox of
+                role="option" rows. */}
+            <div data-part="dropdown" ref={dropdownRef} onKeyDown={handleDropdownKeyDown}>
             {/* Search input */}
             {showSearch && (
-              <div className="p-2" data-part="search-input-wrapper">
+              <div data-part="search-input-wrapper">
                 <input
                   ref={searchInputRef}
                   type="text"
-                  className="w-full"
                   data-part="search-input"
                   style={{
                     padding: '4px var(--ds-input-sm-padding-x, 10px)',
@@ -435,35 +538,38 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
 
             {isSearchMode ? (
               <>
-                {/* Flat search results */}
-                <ul data-part="option-list">
+                {/* Flat search results: one listbox of matching leaf paths. */}
+                <ul data-part="option-list" role="listbox" aria-label={tOr('cascader.search_results', 'Search results')}>
                   {filteredFlatOptions.length > 0 ? (
                     filteredFlatOptions.map((fo, idx) => (
                       <li key={idx}>
                         <button
                           type="button"
-                          className="flex justify-between"
                           onClick={() => handleSearchSelect(fo)}
                           data-part="option"
+                          role="option"
+                          aria-selected={false}
                         >
-                          <span className="truncate">{fo.labels.join(' / ')}</span>
+                          <span data-part="option-label">{fo.labels.join(' / ')}</span>
                         </button>
                       </li>
                     ))
                   ) : (
-                    <li className="p-2" data-part="empty">{notFoundContent}</li>
+                    <li data-part="empty">{notFoundContent}</li>
                   )}
                 </ul>
               </>
             ) : (
               <>
                 {/* Normal cascading columns */}
-                <div className="flex" data-part="option-list">
+                <div data-part="option-list">
                   {activeColumns.map((column, colIndex) => (
                     <ul
                       key={colIndex}
                       data-part="menu-column"
                       data-last={colIndex === activeColumns.length - 1 || undefined}
+                      role="listbox"
+                      aria-label={tOr('cascader.column_label', `Level ${colIndex + 1}`)}
                     >
                       {column.length > 0 ? (
                         column.map((option) => {
@@ -477,23 +583,25 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                             <li key={String(optValue)}>
                               <button
                                 type="button"
-                                className="flex justify-between"
                                 disabled={option.disabled}
                                 onClick={() => handleOptionClick(option, colIndex)}
                                 onMouseEnter={() => handleOptionHover(option, colIndex)}
                                 data-part="option"
                                 data-selected={isSelected || undefined}
                                 data-disabled={option.disabled || undefined}
-                                aria-current={isSelected || undefined}
+                                role="option"
+                                aria-selected={!!isSelected}
                               >
-                                <span className="truncate">{optLabel}</span>
+                                <span data-part="option-label">{optLabel}</span>
                                 {isLoading ? (
-                                  <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12 }} />
+                                  <span data-part="loading" />
                                 ) : (
                                   (optChildren && optChildren.length > 0 || (!isLeaf(option, fieldNames) && loadData)) && (
-                                    /* Static child chevron; the RTL mirror is
-                                       skin-owned (TreeSelect idiom). */
-                                    <span data-part="chevron" aria-hidden="true">›</span>
+                                    /* Governed chevron; the icon facade mirrors
+                                       it under RTL (autoMirror). */
+                                    <span data-part="chevron" aria-hidden="true">
+                                      <NavigationForwardIcon decorative size={12} />
+                                    </span>
                                   )
                                 )}
                               </button>
@@ -501,7 +609,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                           );
                         })
                       ) : (
-                        <li className="p-2" data-part="empty">{notFoundContent}</li>
+                        <li data-part="empty">{notFoundContent}</li>
                       )}
                     </ul>
                   ))}

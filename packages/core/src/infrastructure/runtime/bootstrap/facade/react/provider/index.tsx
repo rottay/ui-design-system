@@ -152,9 +152,12 @@ export interface DesignSystemProviderProps {
    * compiled appearance echoed back through the config, and leaves uncovered
    * channels (personality) to their subordinate emitters.
    *
-   * A bare `'provider'` (default) preserves the runtime/bundled behavior. A
-   * bare `'compiled-artifact'` string remains legal but unverifiable: any
-   * provider payload is reported as a conflict and every channel is suppressed.
+   * With no declaration, first-party bundled verticals derive
+   * `compiled-artifact` authority and DB tenants without an envelope derive
+   * `provider` authority. A bare `'provider'` is therefore an explicit preview
+   * escape hatch, not the bundled default. A bare `'compiled-artifact'` string
+   * remains legal but unverifiable: any provider payload is reported as a
+   * conflict and every channel is suppressed.
    */
   visualAuthority?: VisualAuthority | VisualAuthorityDeclaration;
   /**
@@ -717,11 +720,11 @@ export function DesignSystemProvider({
                       <CommandRegistryProvider>
                         <AntdConfigProvider>
                           {/*
-                            Personality is a subordinate product/vertical
-                            baseline, never a second tenant authority. The
-                            bridge stays mounted whenever the artifact does not
-                            cover `personality`, so it COMPLETES that channel
-                            without ever contesting a covered one.
+                            Personality is a subordinate product/vertical data
+                            axis, never a second tenant authority. The bridge
+                            stays mounted whenever the artifact does not cover
+                            `personality`, but publishes namespaced inputs only;
+                            the static projection owns canonical aliases.
                           */}
                           {suppressedChannels.includes('personality') ? null : (
                             <SystemCssVariablesBridge />

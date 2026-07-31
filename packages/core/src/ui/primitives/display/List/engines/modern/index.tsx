@@ -22,6 +22,7 @@
 import React from 'react';
 import type { ListProps, ListItemProps, ListItemMetaProps } from '../../contracts';
 import { LIST_DEFAULTS } from '../../contracts';
+import { Empty } from '../../../../facade';
 
 /** Modern List Item Meta. Renders avatar + title + description with a flex row. */
 export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
@@ -31,12 +32,12 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
     return (
       <div
         ref={ref}
-        className={`rottay-list-item-meta rottay-list-item-meta--modern flex items-start ${className}`}
+        className={`rottay-list-item-meta rottay-list-item-meta--modern ${className}`}
         data-part="meta"
         style={style}
       >
-        {avatar && <div className="flex-shrink-0" data-part="meta-avatar">{avatar}</div>}
-        <div className="flex-1 min-w-0" data-part="meta-content">
+        {avatar && <div data-part="meta-avatar">{avatar}</div>}
+        <div data-part="meta-content">
           {title && (
             <div data-part="meta-title">
               {title}
@@ -63,18 +64,18 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
     return (
       <li
         ref={ref}
-        className={`rottay-list-item rottay-list-item--modern flex items-center justify-between ${className}`}
+        className={`rottay-list-item rottay-list-item--modern ${className}`}
         data-part="item"
         style={style}
       >
-        <div className="flex-1 min-w-0" data-part="item-content">{children}</div>
+        <div data-part="item-content">{children}</div>
         {extra && (
-          <div className="flex-shrink-0" data-part="item-extra">
+          <div data-part="item-extra">
             {extra}
           </div>
         )}
         {actions && actions.length > 0 && (
-          <div className="flex items-center" data-part="item-actions">
+          <div data-part="item-actions">
             {actions.map((action, index) => (
               <span key={index} data-part="item-action">{action}</span>
             ))}
@@ -106,6 +107,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
       split = LIST_DEFAULTS.split,
       itemLayout = LIST_DEFAULTS.itemLayout,
       grid,
+      locale,
       children,
       className = '',
       style,
@@ -121,18 +123,21 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
       return (
         <div
           ref={ref}
+          // `animate-pulse` stays as a test-pinned bridge string; the skin's
+          // own motion-channel pulse OVERRIDES the vendor animation by layer
+          // ownership, so the paint/motion authority is the skin (motion law).
           className={`rottay-list rottay-list--modern animate-pulse ${className}`}
           data-part="root"
           data-loading="true"
           style={style}
         >
           {[1, 2, 3].map((i) => (
-            <div key={i} className="py-3" data-part="skeleton-row">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full" data-part="skeleton-avatar" />
-                <div className="flex-1">
-                  <div className="h-4 rounded w-1/3 mb-2" data-part="skeleton-line" />
-                  <div className="h-3 rounded w-2/3" data-part="skeleton-line" />
+            <div key={i} data-part="skeleton-row">
+              <div data-part="skeleton-row-inner">
+                <div data-part="skeleton-avatar" />
+                <div data-part="skeleton-lines">
+                  <div data-part="skeleton-line" />
+                  <div data-part="skeleton-line" />
                 </div>
               </div>
             </div>
@@ -140,6 +145,11 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
         </div>
       );
     }
+
+    // Empty data-driven list: the contract's emptyText/locale.emptyText render
+    // through the composed public Empty primitive (single paint owner), never
+    // a hand-rolled empty box.
+    const isDataDrivenEmpty = dataSource && renderItem && dataSource.length === 0;
 
     return (
       <div
@@ -158,27 +168,34 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
         )}
         {/* When grid is set, switch to CSS Grid; otherwise render as a standard vertical list.
             The grid tracks/gutter are a data-driven projection of the `grid` prop,
-            so they stay inline. */}
-        <ul
-          className={`${grid ? 'grid' : ''}`}
-          data-part="list"
-          style={grid ? {
-            gridTemplateColumns: `repeat(${grid.column || 1}, 1fr)`,
-            gap: grid.gutter || 16,
-          } : undefined}
-        >
-          {React.Children.map(listContent, (child, index) => (
-            <React.Fragment key={index}>
-              {child}
-              {split && index < React.Children.count(listContent) - 1 && !grid && (
-                // The divider must be an <li>: axe's `list` rule requires a
-                // <ul>'s direct children to be <li>/<script>/<template> only.
-                // aria-hidden keeps it out of the accessible list count.
-                <li data-part="divider" aria-hidden="true" />
-              )}
-            </React.Fragment>
-          ))}
-        </ul>
+            so they stay inline. The `grid` utility class is a test-pinned
+            bridge string and stays. */}
+        {isDataDrivenEmpty ? (
+          <div data-part="empty">
+            <Empty description={locale?.emptyText} />
+          </div>
+        ) : (
+          <ul
+            className={`${grid ? 'grid' : ''}`}
+            data-part="list"
+            style={grid ? {
+              gridTemplateColumns: `repeat(${grid.column || 1}, 1fr)`,
+              gap: grid.gutter || 16,
+            } : undefined}
+          >
+            {React.Children.map(listContent, (child, index) => (
+              <React.Fragment key={index}>
+                {child}
+                {split && index < React.Children.count(listContent) - 1 && !grid && (
+                  // The divider must be an <li>: axe's `list` rule requires a
+                  // <ul>'s direct children to be <li>/<script>/<template> only.
+                  // aria-hidden keeps it out of the accessible list count.
+                  <li data-part="divider" aria-hidden="true" />
+                )}
+              </React.Fragment>
+            ))}
+          </ul>
+        )}
         {footer && (
           <div data-part="footer">
             {footer}

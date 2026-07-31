@@ -11,7 +11,13 @@
   }
 }
 
-.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-part='root'] {
+/* The root paints a border COLOR, so it must clear the tenant floor (0,3,1).
+   It reaches (0,4,0) with NO repetition via the two scope classes plus
+   `[data-part='root']` and the always-stamped `[data-tone]` -- FRAGILITY
+   NOTE: the 4th unit rides `data-tone`, which the engine stamps on every
+   render today; if a future render ever omits it, restore that stamp rather
+   than re-doubling an attribute. */
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone] {
   --ds-callout-tone: var(--ds-color-info);
   position: relative;
   isolation: isolate;
@@ -31,17 +37,25 @@
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 38%, transparent),
     var(--ds-callout-shadow, var(--ds-shadow-sm));
   color: var(--ds-color-text-primary);
-  animation: ds-callout-enter-modern var(--ds-motion-calm, 200ms) var(--ds-ease-standard) both;
+  animation: ds-callout-enter-modern var(--ds-motion-calm, var(--ds-motion-normal)) var(--ds-ease-standard, var(--ds-motion-ease-out)) both;
   transition:
-    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
-    box-shadow var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
-    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard);
+    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out));
 }
 
-.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-part='root']:hover {
+/* Hover only where hover exists (4th-wave law); a held press keeps the
+   accent frame with the lift settled, so touch gets the same answer. */
+@media (hover: hover) {
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone]:hover {
+    border-color: color-mix(in srgb, var(--ds-callout-tone) 40%, var(--ds-color-border));
+    box-shadow: var(--ds-callout-shadow-hover, var(--ds-shadow-md));
+    transform: translateY(-1px);
+  }
+}
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone]:active {
   border-color: color-mix(in srgb, var(--ds-callout-tone) 40%, var(--ds-color-border));
-  box-shadow: var(--ds-callout-shadow-hover, var(--ds-shadow-md));
-  transform: translateY(-1px);
+  transform: translateY(0);
 }
 
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='warning'] {
@@ -56,7 +70,9 @@
   --ds-callout-tone: var(--ds-color-success);
 }
 
-.rottay-callout-shell.rottay-callout-shell--modern > .rottay-callout-shell__icon[data-part='icon'][data-part='icon'] {
+/* The anatomy class already contributes the 4th specificity unit for every
+   border-painting descendant -- no repeated data-part anywhere (4th wave). */
+.rottay-callout-shell.rottay-callout-shell--modern > .rottay-callout-shell__icon[data-part='icon'] {
   display: grid;
   inline-size: var(--ds-callout-icon-well-size, 2.75rem);
   block-size: var(--ds-callout-icon-well-size, 2.75rem);
@@ -96,7 +112,7 @@
   line-height: var(--ds-line-height-relaxed);
 }
 
-.rottay-callout-shell.rottay-callout-shell--modern .rottay-callout-shell__action[data-part='action'][data-part='action'] {
+.rottay-callout-shell.rottay-callout-shell--modern .rottay-callout-shell__action[data-part='action'] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -109,7 +125,7 @@
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 32%, transparent);
 }
 
-.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button'][data-part='close-button'] {
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button'] {
   display: inline-grid;
   inline-size: var(--ds-control-height-sm, 2rem);
   block-size: var(--ds-control-height-sm, 2rem);
@@ -123,32 +139,74 @@
   cursor: pointer;
   box-shadow: var(--ds-shadow-xs);
   transition:
-    background-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
-    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
-    color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
-    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard);
+    background-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out));
 }
 
-.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button'][data-part='close-button']:hover {
+@media (hover: hover) {
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']:hover {
+    border-color: color-mix(in srgb, var(--ds-callout-tone) 44%, var(--ds-color-border));
+    background: color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface));
+    color: var(--ds-color-text-primary);
+    transform: scale(1.04);
+  }
+}
+
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']:active {
+  transform: scale(var(--ds-state-press-scale, 0.98));
   border-color: color-mix(in srgb, var(--ds-callout-tone) 44%, var(--ds-color-border));
   background: color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface));
   color: var(--ds-color-text-primary);
-  transform: scale(1.04);
 }
 
-.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button'][data-part='close-button']:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--ds-callout-tone) 58%, transparent);
-  outline-offset: 2px;
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']:focus-visible {
+  outline: 0;
+  box-shadow: var(--ds-callout-action-focus-ring, var(--ds-focus-ring));
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-part='root'] {
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone] {
     animation: none;
     transition: none;
   }
 
-  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-part='root']:hover,
-  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button'][data-part='close-button']:hover {
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone]:hover,
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone]:active,
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']:hover,
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']:active {
     transform: none;
+  }
+}
+
+/* Forced colors: the tone washes and shadow rings are stripped, so the frame,
+   the well, the action tray and the close affordance re-express in system
+   colors -- severity survives through the semantic glyph, never the hue. */
+@media (forced-colors: active) {
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone] {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+
+  .rottay-callout-shell.rottay-callout-shell--modern > .rottay-callout-shell__icon[data-part='icon'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+
+  .rottay-callout-shell.rottay-callout-shell--modern .rottay-callout-shell__action[data-part='action'],
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button'] {
+    border-color: ButtonText;
+    box-shadow: none;
+  }
+
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
   }
 }

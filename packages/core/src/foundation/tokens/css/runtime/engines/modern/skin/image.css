@@ -1,5 +1,6 @@
 /**
- * Modern Image skin (WO-SKIN-05 checkpoint D1).
+ * Modern Image skin (WO-SKIN-05 checkpoint D1; full geometry drain from the
+ * engine's Tailwind utilities).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
  * Tailwind's base layer, so a layered rule cannot paint a component at all.
@@ -7,42 +8,118 @@
  * caller's inline `style`.
  *
  * SCOPE ROOT carries `rottay-image rottay-image--modern` (fresh mints,
- * grep-verified free across CSS and CSS-in-JS): this engine published no
- * first-party classname, only Tailwind utilities.
+ * grep-verified free across CSS and CSS-in-JS). Radius, object-fit, bordered
+ * and interactive state arrive as `data-radius` / `data-object-fit` /
+ * `data-bordered` / `data-interactive` / `data-status` stamps -- every
+ * property the engine used to borrow from Tailwind (`relative`, `inline-block`,
+ * `overflow-hidden`, `rounded-*`, `border`, `w-full`, `h-full`, `object-*`,
+ * `absolute`, `flex`, `transition-*`, `duration-*`) lives here now. The ONE
+ * surviving utility is the zoom badge's `end-2`, pinned verbatim by
+ * `Image.real-engines.test.tsx` (logical inset-inline-end, mirrors RTL).
  *
- * The bordered root sets border-COLOR ONLY, exactly as the object did. Its WIDTH
- * comes from Tailwind's `border` utility class, added to the root by the same
- * `bordered` flag — a layered rule this unlayered colour does not disturb. Adding a
- * width here would be inventing one.
+ * SPECIFICITY (P-48): the bordered root paints a full border (colour AND
+ * width -- the Tailwind `border` utility is gone) and clears the tenant's
+ * unlayered floor at (0,3,1) via the two scope classes plus
+ * `[data-part='root']` plus the always-meaningful `[data-bordered='true']`:
+ * (0,4,0), no repeated attribute anywhere.
  *
- * SPECIFICITY (P-48): a border colour must clear the tenant's unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` floor at (0,3,1); the
- * repeated `[data-part='root']` buys the fourth unit.
- *
- * Every part rule uses a CHILD combinator: `data-part` is a shared vocabulary, and
- * the `placeholder`, `fallback` and `hoverOverlay` props are consumer slots that can
- * hold any component.
- *
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * Every part rule uses a CHILD combinator: `data-part` is a shared vocabulary,
+ * and the `placeholder`, `fallback` and `hoverOverlay` props are consumer
+ * slots that can hold any component.
  */
 
-.rottay-image.rottay-image--modern[data-part='root'][data-part='root'][data-bordered='true'] {
-  border-color: var(--ds-color-border);
+/* ---- root: frame, radius and interactive affordance (was engine utilities). ---- */
+.rottay-image.rottay-image--modern[data-part='root'] {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.rottay-image.rottay-image--modern[data-part='root'][data-radius='none'] {
+  border-radius: 0;
+}
+.rottay-image.rottay-image--modern[data-part='root'][data-radius='sm'] {
+  border-radius: var(--ds-radius-sm);
+}
+.rottay-image.rottay-image--modern[data-part='root'][data-radius='md'] {
+  border-radius: var(--ds-radius-md);
+}
+.rottay-image.rottay-image--modern[data-part='root'][data-radius='lg'] {
+  border-radius: var(--ds-radius-lg);
+}
+.rottay-image.rottay-image--modern[data-part='root'][data-radius='full'] {
+  border-radius: var(--ds-radius-full);
+}
+
+.rottay-image.rottay-image--modern[data-part='root'][data-bordered='true'] {
+  border: 1px solid var(--ds-color-border);
 }
 .rottay-image.rottay-image--modern[data-part='root'][data-shadow='true'] {
   box-shadow: var(--ds-elevation-2);
 }
 
+.rottay-image.rottay-image--modern[data-part='root'][data-interactive='true'] {
+  cursor: pointer;
+}
+
+.rottay-image.rottay-image--modern[data-part='root']:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-image-focus-ring, var(--ds-focus-ring));
+}
+
+/* ---- the image itself: fills the frame, reveals on load (was `w-full h-full
+        object-* opacity-0/100 transition-opacity duration-300`). ---- */
+.rottay-image.rottay-image--modern [data-part='img'] {
+  inline-size: 100%;
+  block-size: 100%;
+  opacity: 0;
+  transition: opacity
+    var(--ds-image-reveal-duration, var(--ds-motion-normal))
+    var(--ds-image-reveal-timing, var(--ds-motion-ease-out));
+}
+.rottay-image.rottay-image--modern[data-status='loaded'] [data-part='img'] {
+  opacity: 1;
+}
+.rottay-image.rottay-image--modern[data-object-fit='cover'] [data-part='img'] {
+  object-fit: cover;
+}
+.rottay-image.rottay-image--modern[data-object-fit='contain'] [data-part='img'] {
+  object-fit: contain;
+}
+.rottay-image.rottay-image--modern[data-object-fit='fill'] [data-part='img'] {
+  object-fit: fill;
+}
+.rottay-image.rottay-image--modern[data-object-fit='none'] [data-part='img'] {
+  object-fit: none;
+}
+.rottay-image.rottay-image--modern[data-object-fit='scale-down'] [data-part='img'] {
+  object-fit: scale-down;
+}
+
 /* ---- loading: the panel, and the default pulse block inside it (a consumer's own
         `placeholder` node never carries the pulse class). K4-C drained the raw
         Tailwind `animate-pulse` utility: the pulse now rides the global
-        `ds-foundation-pulse` keyframes (same 1 -> 0.5 opacity swing, same 2s
-        cubic-bezier(0.4,0,0.6,1) timing Tailwind used), and the global
-        reduced-motion guard in runtime/personality.css neutralizes it. ---- */
+        `ds-foundation-pulse` keyframes, and the global reduced-motion guard in
+        runtime/personality.css neutralizes it; the local guard below is the
+        second net. `border-radius: inherit` keeps the panel's corners in sync
+        with the frame instead of repeating the radius map. ---- */
+.rottay-image.rottay-image--modern > [data-part='placeholder'],
+.rottay-image.rottay-image--modern > [data-part='fallback'],
+.rottay-image.rottay-image--modern > [data-part='hover-overlay'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+}
+
 .rottay-image.rottay-image--modern > [data-part='placeholder'] {
   background: var(--ds-surface-inset);
 }
 .rottay-image.rottay-image--modern > [data-part='placeholder'] > .rottay-image__pulse {
+  inline-size: 100%;
+  block-size: 100%;
   background: var(--ds-surface-panel);
   animation: ds-foundation-pulse var(--ds-image-pulse-duration, 2s) cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -53,12 +130,63 @@
   background: var(--ds-surface-inset);
   color: var(--ds-color-text-secondary);
 }
+.rottay-image.rottay-image--modern > [data-part='fallback'] svg {
+  inline-size: var(--ds-image-fallback-icon-size, 3rem);
+  block-size: var(--ds-image-fallback-icon-size, 3rem);
+}
 
 /* ---- hover ---- */
 .rottay-image.rottay-image--modern > [data-part='hover-overlay'] {
   background: var(--ds-color-alpha-black-40);
 }
 .rottay-image.rottay-image--modern > [data-part='zoom-indicator'] {
+  position: absolute;
+  padding: var(--ds-image-zoom-indicator-padding, 0.375rem);
+  border-radius: var(--ds-radius-full);
   background: var(--ds-color-alpha-black-50);
   color: var(--ds-color-white);
+}
+.rottay-image.rottay-image--modern > [data-part='zoom-indicator'] svg {
+  inline-size: 1rem;
+  block-size: 1rem;
+  display: block;
+}
+
+/* ---- forced colors: overlay inks strip to nothing useful, so the frame,
+        the panels and the zoom badge re-express in system colors. ---- */
+@media (forced-colors: active) {
+  .rottay-image.rottay-image--modern[data-part='root'][data-bordered='true'] {
+    border-color: ButtonText;
+  }
+
+  .rottay-image.rottay-image--modern > [data-part='placeholder'],
+  .rottay-image.rottay-image--modern > [data-part='fallback'] {
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .rottay-image.rottay-image--modern > [data-part='fallback'] {
+    border: 1px dashed ButtonText;
+  }
+
+  .rottay-image.rottay-image--modern > [data-part='zoom-indicator'] {
+    background: ButtonText;
+    color: ButtonFace;
+  }
+
+  .rottay-image.rottay-image--modern[data-part='root']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+}
+
+/* ---- reduced motion: the reveal is instant and the pulse rests (second net
+        behind the personality guard). ---- */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-image.rottay-image--modern [data-part='img'],
+  .rottay-image.rottay-image--modern > [data-part='placeholder'] > .rottay-image__pulse {
+    animation: none;
+    transition: none;
+  }
 }

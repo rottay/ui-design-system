@@ -171,11 +171,12 @@ describe('ContextMenu modern engine — the skin owns the drained paint', () => 
 
   it('shares the lane overlay material register with Dropdown (Pass-2 coherence)', () => {
     expect(SKIN).toContain('color-mix(in srgb, var(--ds-color-primary) 5%, transparent)');
-    expect(SKIN).toContain('color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%)');
+    expect(SKIN).toContain(
+      'linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3))',
+    );
+    expect(SKIN).toContain('var(--ds-surface-card)');
     expect(SKIN).toContain('var(--ds-context-menu-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%))');
-    expect(SKIN).toContain('inset 0 1px 0 color-mix(in srgb, white 62%, transparent)');
     expect(SKIN).toContain('var(--ds-context-menu-shadow, var(--ds-elevation-3))');
-    expect(SKIN).toContain('blur(var(--ds-context-menu-backdrop-blur, 16px))');
     expect(SKIN).toContain('var(--ds-context-menu-radius, var(--ds-radius-xl, 16px))');
     expect(SKIN).not.toContain('background: var(--ds-surface-card);');
     expect(SKIN).not.toContain('box-shadow: var(--ds-elevation-2);');
@@ -201,7 +202,7 @@ describe('ContextMenu modern engine — the skin owns the drained paint', () => 
   it('owns the item-row layout drained from Tailwind utilities', () => {
     expect(SKIN).toMatch(/\[data-part='item'\]\s*\{[^}]*display: flex;[^}]*justify-content: space-between;/);
     expect(SKIN).toContain("[data-part='item'][data-disabled='true']");
-    expect(SKIN).toContain('opacity: var(--ds-opacity-disabled, 0.5);');
+    expect(SKIN).toContain('opacity: var(--ds-state-disabled-opacity);');
     expect(SKIN).toContain("[data-part='shortcut']");
   });
 

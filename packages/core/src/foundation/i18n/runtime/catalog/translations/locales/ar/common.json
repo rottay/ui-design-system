@@ -12,6 +12,9 @@
   "next": "التالي",
   "previous": "السابق",
   "finish": "إنهاء",
+  "tour": {
+    "step_progress": "الخطوة {current} من {total}"
+  },
   "submit": "إرسال",
   "search": "بحث",
   "filter": "تصفية",
@@ -61,6 +64,8 @@
   "logout": "تسجيل الخروج",
   "login": "تسجيل الدخول",
   "breadcrumb": "مسار التنقل",
+  "breadcrumb_more_items": "المزيد من الصفحات",
+  "opens_in_new_tab": "(يفتح في علامة تبويب جديدة)",
   "key_metrics": "المؤشرات الرئيسية",
   "shortcuts": "الاختصارات",
   "dashboard_status_live": "مباشر",
@@ -70,5 +75,6 @@
   "dashboard_status_warning": "تحذير",
   "show_password": "إظهار كلمة المرور",
   "hide_password": "إخفاء كلمة المرور",
-  "password_strength": "قوة كلمة المرور"
+  "password_strength": "قوة كلمة المرور",
+  "unsaved_changes": "تغييرات غير محفوظة"
 }

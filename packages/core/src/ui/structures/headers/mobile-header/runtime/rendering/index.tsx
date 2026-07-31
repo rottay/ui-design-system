@@ -31,32 +31,10 @@ import type { CSSProperties } from 'react';
 import { Box } from '@/ui/primitives/layout/Box';
 import { Flex } from '@/ui/primitives/layout/Flex';
 import { Text } from '@/ui/primitives/display/Typography';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 import type { MobileHeaderProps } from '../../contracts';
-
-// ---------------------------------------------------------------------------
-// Back arrow SVG (inline to avoid icon library dependency)
-// ---------------------------------------------------------------------------
-
-function BackArrowIcon() {
-  return (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M19 12H5" />
-      <path d="M12 19l-7-7 7-7" />
-    </svg>
-  );
-}
 
 // ---------------------------------------------------------------------------
 // Component
@@ -103,7 +81,9 @@ export function MobileHeader({
         data-testid="mobile-header-back"
         data-part="trigger"
       >
-        <BackArrowIcon />
+        {/* Governed glyph: navigation.back ships autoMirror, so the chevron
+            flips itself under RTL (the skin's manual scaleX(-1) is retired). */}
+        <NavigationBackIcon size={24} decorative />
       </Box>
     ) : null
   );
@@ -117,7 +97,10 @@ export function MobileHeader({
       ? {
           position: 'sticky',
           top: 0,
-          zIndex: 40,
+          /* The sticky stack rides a family channel (the inline position is
+             pinned by the engine contract test, so the token travels
+             inline with it); the fallback preserves the historical 40. */
+          zIndex: 'var(--ds-mobile-header-sticky-z, 40)',
         }
       : {}),
     ...style,
@@ -170,6 +153,7 @@ export function MobileHeader({
           {title && (
             <Text
               className="rottay-mobile-header__title"
+              title={title}
               style={{
                 fontSize: 17,
                 fontWeight: 600,

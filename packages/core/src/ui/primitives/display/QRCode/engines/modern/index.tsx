@@ -65,14 +65,14 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
     switch (status) {
       case 'loading':
         return (
-          <div data-part="overlay" className="absolute inset-0 flex items-center justify-center" role="status" aria-label={qrcodeLabel('qrcode.loading', 'Loading QR code')}>
+          <div data-part="overlay" role="status" aria-label={qrcodeLabel('qrcode.loading', 'Loading QR code')}>
             <span data-part="spinner" aria-hidden="true" />
           </div>
         );
       case 'expired':
         return (
-          <div data-part="overlay" className="absolute inset-0 flex flex-col items-center justify-center gap-2" role="alert">
-            <span data-part="status-text" className="text-sm">{qrcodeLabel('qrcode.expired', 'QR Code expired')}</span>
+          <div data-part="overlay" role="alert">
+            <span data-part="status-text">{qrcodeLabel('qrcode.expired', 'QR Code expired')}</span>
             {onRefresh && (
               <button
                 data-part="refresh-button"
@@ -87,10 +87,9 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
         );
       case 'scanned':
         return (
-          <div data-part="overlay" className="absolute inset-0 flex items-center justify-center" role="status" aria-label={qrcodeLabel('qrcode.scanned', 'QR code scanned')}>
+          <div data-part="overlay" role="status" aria-label={qrcodeLabel('qrcode.scanned', 'QR code scanned')}>
             <svg
               data-part="status-icon"
-              className="w-12 h-12"
               fill="currentColor"
               viewBox="0 0 20 20"
               aria-hidden="true"
@@ -108,25 +107,19 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
     }
   };
 
-  const containerClasses = [
-    'inline-block relative',
-    bordered ? 'border p-3 rounded-lg' : '',
-    className,
-  ].filter(Boolean).join(' ');
-
   const containerInlineStyle: React.CSSProperties = {
     ...style,
   };
 
   return (
     <div
-      className={`rottay-qrcode rottay-qrcode--modern ${containerClasses}`}
+      className={`rottay-qrcode rottay-qrcode--modern ${className}`}
       style={containerInlineStyle}
       data-part="root"
       data-status={status}
       data-bordered={bordered ? 'true' : undefined}
     >
-      <div ref={paintOwnerRef} className="relative" data-part="canvas-wrapper" style={{ width: size, height: size }}>
+      <div ref={paintOwnerRef} data-part="canvas-wrapper" style={{ width: size, height: size }}>
         <EncodedQRCodeSymbol
           ownerRef={paintOwnerRef}
           value={value}
@@ -140,7 +133,6 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
         />
         {icon && status === 'active' && (
           <div
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-1 rounded"
             data-part="icon"
             // width/height ride the `iconSize` prop (runtime arithmetic, stays
             // JS-bound); the padding is owned by the skin (K4-C single owner).
@@ -149,7 +141,6 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
             <img
               src={icon}
               alt=""
-              className="w-full h-full object-contain"
             />
           </div>
         )}

@@ -431,10 +431,12 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           </span>
         )}
 
-        {/* Title */}
+        {/* Title. Truncated long labels keep a native disclosure via the
+            `title` attribute when the title is a plain string. */}
         <span
           data-part="tree-node-label"
           data-filtered-out={!isFiltered && filteredKeys ? 'true' : undefined}
+          title={nodeTitle || undefined}
         >
           {displayTitle}
         </span>
@@ -875,6 +877,22 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
           if (node && !node.disabled) {
             handleSelect(anchorKey, node);
           }
+          break;
+        }
+        case 'Home': {
+          e.preventDefault();
+          const firstKey = arrayValueAt(visibleKeys, 0);
+          if (firstKey === undefined) break;
+          setFocusedKey(firstKey);
+          nodeRefs.current.get(firstKey)?.querySelector<HTMLElement>('[data-tree-node-key]')?.focus();
+          break;
+        }
+        case 'End': {
+          e.preventDefault();
+          const lastKey = arrayValueAt(visibleKeys, visibleKeys.length - 1);
+          if (lastKey === undefined) break;
+          setFocusedKey(lastKey);
+          nodeRefs.current.get(lastKey)?.querySelector<HTMLElement>('[data-tree-node-key]')?.focus();
           break;
         }
       }

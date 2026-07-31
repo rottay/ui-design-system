@@ -267,7 +267,9 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
         </span>
       )}
       {avatar && <span data-part="avatar">{avatar}</span>}
-      {icon && <span data-part="icon">{icon}</span>}
+      {/* The spinner takes the leading slot while loading: rendering the
+          configured icon beside it would read as two competing signals. */}
+      {icon && !loading && <span data-part="icon">{icon}</span>}
       {dot && <span data-part="dot" aria-hidden="true" />}
       {label !== undefined && !(!isFamilyLabel && dot && children === undefined && text === undefined) && (
         <span data-part="label">{label}</span>

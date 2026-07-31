@@ -10,8 +10,9 @@
  *
  * BORDER-COLOR FLOOR (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
- * specificity (0,3,1). Any rule below that paints a real border colour repeats
- * its own `data-part` to reach the (0,4,0) floor.
+ * specificity (0,3,1). A rule painting a real border colour reaches (0,4,0) from
+ * the two scope classes + two DISTINCT attributes in the chain (`data-kind`,
+ * `data-saving`, `id`) -- never by repeating an identical one (4th-tanda law).
  *
  * SELECTOR LAW. `data-part` is a shared VOCABULARY, and this family shares four
  * of its part names -- `section`, `section-header`, `section-title`,
@@ -32,7 +33,30 @@
 
 /* --- InlineEditor ---------------------------------------------------------- */
 
-.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-icon'][data-part='editor-icon'] {
+.ds-structure.ds-edit-fields[data-part='group'] {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] {
+  padding-block-end: 14px;
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-lead'] {
+  flex: 1 1 420px;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-copy'] {
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-icon'] {
+  display: grid;
+  flex-shrink: 0;
+  inline-size: 32px;
+  block-size: 32px;
+  place-items: center;
   border-radius: 8px;
   color: var(--ds-color-primary);
   background: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card, var(--ds-color-bg-elevated)));
@@ -41,6 +65,9 @@
 
 .ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-eyebrow'] {
   color: var(--ds-color-text-muted);
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-title'] {
@@ -49,15 +76,67 @@
 
 .ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-description'] {
   color: var(--ds-color-text-secondary);
+  line-height: 1.45;
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-actions'] {
+  flex: 0 1 auto;
+  min-inline-size: 0;
 }
 
 /* --- InlineEditGrid -------------------------------------------------------- */
 
-.ds-structure.ds-edit-fields[data-part='grid'][data-part='grid'] {
+.ds-structure.ds-edit-fields[data-part='grid'] {
+  container: ds-edit-fields-grid / inline-size;
+  display: grid;
+  grid-template-columns: var(--ds-edit-fields-grid-columns, repeat(3, minmax(0, 1fr)));
+  gap: var(--ds-edit-fields-grid-gap, 14px);
+  align-items: start;
+  inline-size: 100%;
+  padding-block: 14px;
+}
+
+/* Fields stack with no gaps under the narrow cut (the consumer's wide
+   `columns` value still applies above the cut through the channel). */
+@container ds-edit-fields-grid (inline-size < 30rem) {
+  .ds-structure.ds-edit-fields[data-part='grid'] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.ds-structure.ds-edit-fields[data-part='grid'][data-kind] {
   border-top: 1px solid var(--ds-color-border-secondary);
 }
 
 /* --- InlineEditSection ----------------------------------------------------- */
+
+.ds-structure.ds-edit-fields[data-part='section'] {
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] {
+  padding-block-end: 10px;
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-lead'] {
+  flex: 1 1 360px;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-copy'],
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-actions'] {
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-icon'] {
+  display: flex;
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-number'] {
+  font-family: var(--ds-font-family-mono, monospace);
+  letter-spacing: 0.08em;
+}
 
 .ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-icon'],
 .ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-number'],
@@ -65,11 +144,62 @@
   color: var(--ds-color-text-muted);
 }
 
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-description'] {
+  line-height: 1.4;
+}
+
 .ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-title'] {
   color: var(--ds-color-text-primary);
 }
 
 /* --- InlineEditField ------------------------------------------------------- */
+
+.ds-structure.ds-edit-fields[data-part='field'] {
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] {
+  display: grid;
+  gap: 0;
+  margin-block-end: 8px;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'][data-has-hint='true'] {
+  gap: 3px;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-number'] {
+  font-family: var(--ds-font-family-mono, monospace);
+  line-height: 1;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-icon'] {
+  display: flex;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-label'] {
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-label'][data-linked='true'] {
+  cursor: pointer;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement'] {
+  display: inline-flex;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement-copy'] {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-hint'] {
+  min-inline-size: 0;
+  line-height: 1.35;
+}
 
 /* `field-label-row` carries no consumer slot: every node under it is rendered by
    this component, so the descendant hops below cannot escape. */
@@ -85,6 +215,9 @@
 }
 
 .ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement-dot'] {
+  flex-shrink: 0;
+  inline-size: 5px;
+  block-size: 5px;
   border-radius: 999px;
 }
 
@@ -104,18 +237,54 @@
   background: var(--ds-color-text-muted);
 }
 
-/* Repeated part: Typography's own skin colours every `Text` at (0,4,0) via
-   `[data-color='default']`. A rule that only TIES that would be decided by
-   stylesheet order. Every `color` rule in this file that targets a `Text` node
-   therefore reaches b >= 5. */
-.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-error'][data-part='field-error'] {
+/* The error copy must clear Typography's own skin, which colours every `Text`
+   at (0,4,0) via `[data-color='default']`: the chain below reaches (0,5,0)
+   from the two scope classes + field + field-error + its `id` -- never a
+   repeated attribute (4th-tanda law). */
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-error'][id] {
+  display: block;
+  margin-block-start: 5px;
   color: var(--ds-color-error);
+  line-height: 1.4;
+}
+
+/* --- InlineEditControl ------------------------------------------------------ */
+
+.ds-structure.ds-edit-fields[data-part='control'] {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+/* --- MoreFieldsToggle ------------------------------------------------------- */
+
+.ds-structure.ds-edit-fields[data-part='toggle'] {
+  display: flex;
+  justify-content: center;
+  inline-size: 100%;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='toggle'][data-expanded='true'] {
+  justify-content: flex-end;
 }
 
 /* --- InlineEditFooter ------------------------------------------------------ */
 
-.ds-structure.ds-edit-fields[data-part='footer'][data-part='footer'] {
+.ds-structure.ds-edit-fields[data-part='footer'][data-saving] {
+  padding-block-start: 14px;
+  margin-block-start: 14px;
   border-top: 1px solid var(--ds-color-border-secondary);
+  transition: border-color var(--ds-motion-normal) var(--ds-motion-ease-out);
+}
+
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] {
+  flex: 1 1 280px;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-actions'] {
+  min-inline-size: 0;
 }
 
 .ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-note'],
@@ -128,4 +297,26 @@
    root reports it on `data-error`. */
 .ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > [data-part='footer-support'] > [data-part='footer-summary'] {
   color: var(--ds-color-error);
+}
+
+/* forced-colors: tints and hairlines are forced away. The editor icon well and
+   the requirement dots keep system-colour marks (the requirement state reads
+   through the pill COPY, never the dot's colour -- and the copy now reaches
+   AT); hairlines degrade to ButtonText; the error text and the invalid
+   label stay distinguishable because `aria-invalid` and the error message id
+   carry the state to AT even when its ink auto-maps. Composed primitives
+   (Button, Tooltip) own their own forced-colors contracts. */
+@media (forced-colors: active) {
+  .ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-icon'] {
+    border-color: ButtonText;
+    background: Canvas;
+    color: ButtonText;
+  }
+  .ds-structure.ds-edit-fields[data-part='grid'][data-kind],
+  .ds-structure.ds-edit-fields[data-part='footer'][data-saving] {
+    border-top-color: ButtonText;
+  }
+  .ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement'][data-requirement] > [data-part='field-requirement-dot'] {
+    background: ButtonText;
+  }
 }

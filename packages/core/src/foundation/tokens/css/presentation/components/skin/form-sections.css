@@ -2,19 +2,26 @@
  * form-sections skin (WO-SKIN-06 / CK-D/R). Engine-agnostic: this structures
  * family renders ONE DOM tree under every engine, so one file serves all four.
  *
- * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
- * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
- * preflight zeroes `border-width` on every element. A layered rule here could not
- * paint a border at all. Unlayered outranks preflight and still yields to a
- * consumer's inline `style` prop -- the precedence the inline objects held.
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
  *
  * TWO SPECIFICITY FLOORS, not one:
  *  - BORDER-COLOR (P-48): the Platform-only Rottay artifact ships an unlayered
  *    `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
- *    (0,3,1). Every rule below that paints a real border colour reaches (0,4,0).
+ *    (0,3,1). Every rule below that paints a real border colour reaches (0,4,0)
+ *    WITHOUT repeating a class or attribute: the section chain already buys
+ *    (0,6,0); the div-vs-button header split uses `:not([aria-expanded])`
+ *    (the collapsible button always stamps it); the facts-card root qualifies
+ *    its own element; Text colours add the always-stamped `data-size` for b>=5.
  *  - TEXT COLOUR: Typography's own skin colours EVERY `Text` at (0,4,0) via
  *    `[data-color='default']`. A `color` rule on a `Text` that merely ties that
  *    would be decided by stylesheet order, so every one below reaches b >= 5.
+ *
+ * MOTION: the accordion cadence (grid-rows, content opacity/transform, toggle
+ * rotate) lives here on `--ds-motion-*` channels keyed on the stamped
+ * `data-open` / `data-collapsible` — the engine no longer carries inline
+ * transitions, so the reduced-motion guard reaches everything.
  *
  * ==========================================================================
  * THE COLLAPSIBLE HEADER HAS NO BOTTOM BORDER, AND THAT IS NOT A BUG (P-78).
@@ -45,6 +52,11 @@
  */
 
 /* --- Tone token sets ------------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] {
+  container-type: inline-size;
+  container-name: ds-form-sections;
+}
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] {
   --ds-form-sections-surface: var(--ds-surface-card, var(--ds-color-bg-elevated));
@@ -116,6 +128,10 @@
   border: 1px solid var(--ds-form-sections-border);
   background: var(--ds-form-sections-muted-surface);
   box-shadow: none;
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'][data-open='true'] {
@@ -129,6 +145,9 @@
   border: 1px solid var(--ds-form-sections-border);
   background: var(--ds-form-sections-muted-surface);
   box-shadow: none;
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] {
@@ -179,30 +198,33 @@
 }
 
 /* See the P-78 note in this file's header: the collapsible header is a <button>
-   and has NEVER had a bottom border. These two rules are not interchangeable. */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > div[data-part='section-header'][data-part='section-header'] {
+   and has NEVER had a bottom border. These two rules are not interchangeable —
+   the div branch is matched by `:not([aria-expanded])` because the collapsible
+   button ALWAYS stamps aria-expanded (no attribute is ever repeated). */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > div[data-part='section-header']:not([aria-expanded]) {
   border-bottom: 1px solid var(--ds-form-sections-divider);
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > button[data-part='section-header'] {
   border: none;
+  text-align: start;
 }
 
 /* --- Section index --------------------------------------------------------- */
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-index'][data-part='section-index'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-index'] {
   border-radius: 9px;
   border: 1px solid var(--ds-form-sections-border);
   background: transparent;
   color: var(--ds-color-text-tertiary);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-open='true']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-index'][data-part='section-index'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-open='true']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-index'] {
   border-color: var(--ds-form-sections-active-border);
   background: var(--ds-form-sections-muted-surface);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-index'][data-part='section-index'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-index'] {
   border-color: var(--ds-form-sections-divider);
   background: transparent;
 }
@@ -219,7 +241,7 @@
 
 /* --- Section summary badge -------------------------------------------------- */
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-summary'][data-part='section-summary'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-summary'] {
   border-radius: 999px;
   border: 1px solid var(--ds-form-sections-badge-border);
   background: var(--ds-form-sections-badge-bg);
@@ -257,24 +279,24 @@
 
 /* --- Toggle ----------------------------------------------------------------- */
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'][data-part='section-toggle'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
   border-radius: 9px;
   border: 1px solid var(--ds-form-sections-border);
   background: transparent;
   transform: rotate(0deg);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-toggle'][data-open='true'][data-part='section-toggle'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-toggle'][data-open='true'] {
   border-color: var(--ds-form-sections-active-border);
 }
 
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-toggle'][data-part='section-toggle'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-toggle'] {
   border-color: var(--ds-form-sections-divider);
 }
 
 /* Part repeated so this OUTRANKS the resting `rotate(0deg)` above rather than
    tying it and depending on declaration order. */
-.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'][data-part='section-toggle'][data-open='true'] {
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'][data-open='true'] {
   transform: rotate(180deg);
 }
 
@@ -293,33 +315,110 @@
   transform: translateY(0);
 }
 
+/* --- Accordion cadence (drained from the engine's inline transitions; the
+        engine stamps data-open / data-collapsible only) ----------------------- */
+
+.ds-structure.ds-form-sections [data-part='section-grid'] {
+  grid-template-rows: 0fr;
+}
+.ds-structure.ds-form-sections [data-part='section-grid'][data-open='true'] {
+  grid-template-rows: 1fr;
+}
+.ds-structure.ds-form-sections [data-part='section-grid'][data-collapsible='true'] {
+  transition: grid-template-rows var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'][data-collapsible='true'] {
+  opacity: 0;
+  transition:
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'][data-collapsible='true'][data-open='true'] {
+  opacity: 1;
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
+  transition:
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+/* --- Section header pointer treatment (the collapsible header is a button;
+        hover law: unguarded :active twin + guarded hover) --------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > button[data-part='section-header']:active {
+  background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent);
+}
+@media (hover: hover) {
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > button[data-part='section-header']:hover {
+    background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent);
+  }
+}
+
+/* --- Narrow cut: the header wraps its trailing cluster under the title ------ */
+
+@container ds-form-sections (inline-size < 30rem) {
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] {
+    flex-wrap: wrap;
+  }
+}
+
+/* --- Forced colors: every frame reads as ButtonText; the open section reads
+        by its header background, the toggle by its rotated chevron. ----------- */
+
+@media (forced-colors: active) {
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'],
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='soft'],
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided']:not(:first-child),
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > div[data-part='section-header']:not([aria-expanded]),
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-index'],
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-summary'],
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'],
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'],
+  div.ds-structure.ds-form-sections[data-part='facts-card'],
+  div[data-part='facts-card'] [data-part='facts-card-item'] {
+    border-color: ButtonText;
+  }
+}
+
+/* --- Reduced motion: the whole accordion cadence goes quiet ------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-form-sections [data-part='section-grid'][data-collapsible='true'],
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'][data-collapsible='true'],
+  .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
+    transition: none;
+  }
+}
+
 /* --- FormFactsCard ----------------------------------------------------------- */
 
 /* A standalone sibling card: it has no tone, so it takes the `default` tone's
    surface, border and divider as literals rather than reading the tone tokens
    above (which are declared on `[data-part='section']`, not on this root). */
-.ds-structure.ds-form-sections[data-part='facts-card'][data-part='facts-card'] {
+div.ds-structure.ds-form-sections[data-part='facts-card'] {
   border-radius: 16px;
   border: 1px solid var(--ds-color-border-secondary);
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-eyebrow'][data-part='facts-card-eyebrow'],
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-label'][data-part='facts-card-item-label'] {
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-eyebrow'][data-size],
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-label'][data-size] {
   color: var(--ds-color-text-muted);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-title'][data-part='facts-card-title'],
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-value'][data-part='facts-card-item-value'] {
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-title'][data-size],
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-value'][data-size] {
   color: var(--ds-color-text-primary);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-description'][data-part='facts-card-description'],
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-helper'][data-part='facts-card-item-helper'] {
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-description'][data-size],
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-helper'][data-size] {
   color: var(--ds-color-text-secondary);
 }
 
-.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item'][data-part='facts-card-item'] {
+.ds-structure.ds-form-sectionsdiv[data-part='facts-card'] [data-part='facts-card-item'] {
   border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent);
 }

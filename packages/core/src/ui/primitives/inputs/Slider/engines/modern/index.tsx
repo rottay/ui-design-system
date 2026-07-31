@@ -129,9 +129,11 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     const handleRangeChange = (index: 0 | 1) => (e: React.ChangeEvent<HTMLInputElement>) => {
       const newPartValue = Number(e.target.value);
       const current = currentValue as [number, number];
+      // Range semantics: the start thumb never passes the end thumb (and vice
+      // versa) -- keyboard steps clamp at the opposite value.
       const newValue: [number, number] = index === 0
-        ? [newPartValue, current[1]]
-        : [current[0], newPartValue];
+        ? [Math.min(newPartValue, current[1]), current[1]]
+        : [current[0], Math.max(newPartValue, current[0])];
       handleChange(newValue);
     };
 
@@ -153,34 +155,29 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       return (
         <div
           ref={ref}
-          className={`ds-slider ds-slider--modern relative ${vertical ? 'h-full w-4' : 'w-full h-4'} ${className || ''}`}
+          className={`ds-slider ds-slider--modern ${className || ''}`}
           data-part="root"
+          data-range="true"
           data-disabled={disabled ? 'true' : 'false'}
           data-orientation={vertical ? 'vertical' : 'horizontal'}
           style={style}
         >
           {/* Track */}
-          <div
-            data-part="rail"
-            className={`absolute rounded-full ${vertical ? 'w-1 h-full left-1/2 -translate-x-1/2' : 'h-1 w-full top-1/2 -translate-y-1/2'}`}
-          />
+          <div data-part="rail" />
 
           {/* Active range */}
           <div
             data-part="track"
-            className="absolute rounded-full"
             style={vertical ? {
               left: '50%',
               bottom: `${startPercent}%`,
               height: `${endPercent - startPercent}%`,
-              width: '4px',
             } : {
               top: '50%',
               // Logical offset: Chromium flips the native range scale under
               // dir=rtl, so the overlay grammar must follow the inline axis.
               insetInlineStart: `${startPercent}%`,
               width: `${endPercent - startPercent}%`,
-              height: '4px',
             }}
           />
 
@@ -192,6 +189,10 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
            * can paint the keyboard ring on the visible handle via
            * `input:focus-visible + [data-part='handle']` (the overlay inputs
            * themselves are opacity-0 — a ring on them would be invisible).
+           * Pointer hit-testing lives on each input's OWN thumb pseudo (the
+           * skin sets pointer-events:none on the box, auto on the pseudo), so
+           * a thumb never swallows the other thumb's drag -- even when the
+           * values coincide.
            */}
           {/* Start input + handle */}
           <input
@@ -206,12 +207,11 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             disabled={disabled}
             data-part="native-input"
             data-variant="overlay"
-            className="absolute inset-0 opacity-0 cursor-pointer"
             aria-label={tOr('slider.start_value', 'Minimum value')}
+            aria-orientation={vertical ? 'vertical' : 'horizontal'}
           />
           <div
             data-part="handle"
-            className="absolute w-4 h-4 rounded-full border-2 shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             style={vertical ? { left: '50%', bottom: `${startPercent}%` } : { top: '50%', insetInlineStart: `${startPercent}%` }}
           />
 
@@ -228,12 +228,11 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             disabled={disabled}
             data-part="native-input"
             data-variant="overlay"
-            className="absolute inset-0 opacity-0 cursor-pointer"
             aria-label={tOr('slider.end_value', 'Maximum value')}
+            aria-orientation={vertical ? 'vertical' : 'horizontal'}
           />
           <div
             data-part="handle"
-            className="absolute w-4 h-4 rounded-full border-2 shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             style={vertical ? { left: '50%', bottom: `${endPercent}%` } : { top: '50%', insetInlineStart: `${endPercent}%` }}
           />
 
@@ -249,7 +248,6 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
                 key={key}
                 data-part="mark-label"
                 data-axis={vertical ? 'y' : 'x'}
-                className="absolute text-xs"
                 style={vertical ? {
                   left: '100%',
                   bottom: `${percent}%`,
@@ -272,7 +270,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     return (
       <div
         ref={ref}
-        className={`ds-slider ds-slider--modern relative ${vertical ? 'h-full w-4' : 'w-full'} ${className || ''}`}
+        className={`ds-slider ds-slider--modern ${className || ''}`}
         data-part="root"
         data-disabled={disabled ? 'true' : 'false'}
         data-orientation={vertical ? 'vertical' : 'horizontal'}
@@ -289,8 +287,8 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           onTouchEnd={handleMouseUp}
           disabled={disabled}
           data-part="native-input"
-          className="w-full"
           aria-label={ariaLabel ?? tOr('slider.label', 'Slider')}
+          aria-orientation={vertical ? 'vertical' : 'horizontal'}
           /* Runtime fill hatch: the skin's runnable-track gradient reads this
              to paint the primary portion (the only legitimate runtime value,
              mirroring the Upload dropzone-height contract). */
@@ -308,7 +306,6 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
               key={key}
               data-part="mark-label"
               data-axis="x"
-              className="absolute text-xs"
               style={{
                 top: '100%',
                 insetInlineStart: `${markPercent}%`,

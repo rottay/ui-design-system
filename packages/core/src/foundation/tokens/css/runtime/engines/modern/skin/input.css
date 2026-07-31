@@ -19,13 +19,16 @@
     --ds-input-responsive-radius,
     var(--ds-radius-input, var(--ds-radius-md))
   );
-  --ds-input-resolved-gap: var(--ds-input-gap, var(--ds-spacing-2));
+  --_ds-input-resolved-gap: var(
+    --ds-input-responsive-gap,
+    var(--ds-input-gap, var(--ds-spacing-2))
+  );
   box-sizing: border-box;
   display: flex;
   align-items: center;
   inline-size: 100%;
   min-inline-size: 0;
-  gap: var(--ds-input-resolved-gap);
+  gap: var(--_ds-input-resolved-gap);
   color: var(--ds-input-color, var(--ds-color-text-primary));
   caret-color: var(--ds-input-caret-color, var(--ds-input-border-focus, var(--ds-color-primary)));
   background: var(--ds-input-bg, var(--ds-surface-control));
@@ -81,7 +84,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::placeholder {
 
 .rottay-input.rottay-input--modern[data-part='root'] > .rottay-input__control::selection,
 input.rottay-input.rottay-input--modern[data-part='root']::selection {
-  color: var(--ds-input-selection-color, var(--ds-input-color));
+  color: var(--ds-input-selection-color, var(--ds-input-color, var(--ds-color-text-primary)));
   background: var(--ds-input-selection-bg, Highlight);
 }
 
@@ -190,7 +193,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
    generated media rules and therefore need no application-authored CSS. */
 .rottay-input.rottay-input--modern[data-part='root'][data-size='xs']:not([data-size-responsive]) {
   --ds-input-resolved-radius: var(--ds-input-xs-radius, var(--ds-input-xs-border-radius));
-  --ds-input-resolved-gap: var(--ds-input-xs-gap, var(--ds-input-affix-gap));
+  --_ds-input-resolved-gap: var(--ds-input-xs-gap, var(--ds-input-affix-gap));
   block-size: calc(
     var(--ds-input-xs-height) * var(--ds-density-effective-scale, 1)
   );
@@ -201,7 +204,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 
 .rottay-input.rottay-input--modern[data-part='root'][data-size='sm']:not([data-size-responsive]) {
   --ds-input-resolved-radius: var(--ds-input-sm-radius, var(--ds-input-sm-border-radius));
-  --ds-input-resolved-gap: var(--ds-input-sm-gap, var(--ds-input-affix-gap));
+  --_ds-input-resolved-gap: var(--ds-input-sm-gap, var(--ds-input-affix-gap));
   block-size: calc(
     var(--ds-input-sm-height) * var(--ds-density-effective-scale, 1)
   );
@@ -212,7 +215,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 
 .rottay-input.rottay-input--modern[data-part='root'][data-size='md']:not([data-size-responsive]) {
   --ds-input-resolved-radius: var(--ds-input-md-radius, var(--ds-input-md-border-radius));
-  --ds-input-resolved-gap: var(--ds-input-md-gap, var(--ds-input-affix-gap));
+  --_ds-input-resolved-gap: var(--ds-input-md-gap, var(--ds-input-affix-gap));
   block-size: calc(
     var(--ds-input-md-height) * var(--ds-density-effective-scale, 1)
   );
@@ -223,7 +226,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 
 .rottay-input.rottay-input--modern[data-part='root'][data-size='lg']:not([data-size-responsive]) {
   --ds-input-resolved-radius: var(--ds-input-lg-radius, var(--ds-input-lg-border-radius));
-  --ds-input-resolved-gap: var(--ds-input-lg-gap, var(--ds-input-affix-gap));
+  --_ds-input-resolved-gap: var(--ds-input-lg-gap, var(--ds-input-affix-gap));
   block-size: calc(
     var(--ds-input-lg-height) * var(--ds-density-effective-scale, 1)
   );
@@ -234,7 +237,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 
 .rottay-input.rottay-input--modern[data-part='root'][data-size='xl']:not([data-size-responsive]) {
   --ds-input-resolved-radius: var(--ds-input-xl-radius, var(--ds-input-xl-border-radius));
-  --ds-input-resolved-gap: var(--ds-input-xl-gap, var(--ds-input-affix-gap));
+  --_ds-input-resolved-gap: var(--ds-input-xl-gap, var(--ds-input-affix-gap));
   block-size: calc(
     var(--ds-input-xl-height) * var(--ds-density-effective-scale, 1)
   );
@@ -267,13 +270,13 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 }
 
 /* Interaction and semantic states */
-.rottay-input.rottay-input--modern[data-part='root'][data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-variant='unstyled']) {
+.rottay-input.rottay-input--modern[data-part='root'][data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not([data-variant='unstyled']) {
   background: var(--ds-input-bg-hover, var(--ds-input-bg));
   border-color: var(--ds-input-border-hover, var(--ds-color-border-hover));
   box-shadow: var(--ds-input-shadow-hover, var(--ds-input-shadow-rest, none)), var(--ds-input-inset-shadow, none);
 }
 
-.rottay-input.rottay-input--modern[data-part='root'][data-variant='filled'][data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']) {
+.rottay-input.rottay-input--modern[data-part='root'][data-variant='filled'][data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']) {
   background: var(--ds-input-filled-bg-hover, var(--ds-input-bg-hover));
 }
 
@@ -283,7 +286,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
   box-shadow: var(--ds-input-shadow-focus, var(--ds-focus-ring));
 }
 
-.rottay-input.rottay-input--modern[data-part='root'][data-variant='filled'][data-state~='focused']:not([data-invalid='true']):not([data-warning='true']) {
+.rottay-input.rottay-input--modern[data-part='root'][data-variant='filled'][data-state~='focused']:not([data-invalid='true']):not([data-warning='true']):not([data-success='true']) {
   background: var(--ds-input-filled-bg-focus, var(--ds-input-bg-focus));
 }
 
@@ -374,16 +377,17 @@ input.rottay-input.rottay-input--modern[data-part='root']:-webkit-autofill {
 
 .rottay-input-field[data-part='field'] > [data-part='count'][data-invalid='true'] {
   /* State hues follow the solid-fill contrast grammar: raw 500-level hues fail
-     on light surfaces, so the fallback deepens toward black (error >= 5.7:1). */
-  color: var(--ds-input-count-color-error, var(--ds-input-error-color, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-black, #000) 22%)));
+     on light surfaces, so the fallback deepens toward the tenant-safe dark
+     neutral ramp (`--ds-color-neutral-900`) (error >= 5.7:1). */
+  color: var(--ds-input-count-color-error, var(--ds-input-error-color, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900, #171717) 22%)));
 }
 
-.rottay-input-field[data-part='field'] > [data-part='count'][data-count-state='warning'] {
-  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-black, #000) 45%));
+.rottay-input-field[data-part='field'] > [data-part='count'][data-count-state='warning'],
+.rottay-input-field[data-part='field'] > [data-part='count'][data-count-state='limit'] {
+  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900, #171717) 45%));
 }
 
 .rottay-input-field[data-part='field'] > [data-part='count'][data-count-state='limit'] {
-  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-black, #000) 45%));
   font-weight: var(--ds-input-count-limit-font-weight, var(--ds-font-weight-semibold));
 }
 
@@ -396,7 +400,7 @@ input.rottay-input.rottay-input--modern[data-part='root']:-webkit-autofill {
 
 @container (inline-size < 18rem) {
   .rottay-input.rottay-input--modern[data-part='root'] {
-    --ds-input-resolved-gap: var(--ds-input-compact-gap, var(--ds-spacing-1));
+    --_ds-input-resolved-gap: var(--ds-input-compact-gap, var(--ds-spacing-1));
   }
 
   .rottay-input.rottay-input--modern[data-part='root'] [data-part='affix-prefix'],
@@ -427,11 +431,13 @@ input.rottay-input.rottay-input--modern[data-part='root']:-webkit-autofill {
   .rottay-input.rottay-input--modern[data-part='root'] [data-part='clear-button'],
   .rottay-input.rottay-input--modern[data-part='root'] [data-part='visibility-toggle'],
   .rottay-input.rottay-input--modern[data-part='root'] [data-part='search-button'] {
-    transition-duration: 0.01ms;
+    transition: none;
   }
 
+  /* Keep a slowed spin rather than a frozen frame so the loading posture
+     stays legible; the duration derives from the loading channel. */
   .rottay-input.rottay-input--modern[data-part='root'] [data-part='loading-indicator'] svg {
-    animation-duration: 1.8s;
+    animation-duration: calc(var(--ds-input-loading-duration, 720ms) * 2.5);
   }
 }
 

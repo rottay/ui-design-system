@@ -205,6 +205,10 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   const responsiveEntries: ResponsivePropEntry<TabsSize>[] = [];
 
   if (responsiveSize) {
+    // Writes `--ds-tabs-responsive-*` channels, never `--ds-tabs-current-*`:
+    // the skin root owns the current-* chain (0,3,0) and would beat the
+    // generated `[data-responsive-id]` rules (0,1,0). Its fallback chain
+    // prefers the responsive channels, so both paths share SIZE_CONFIG.
     const addResponsiveSizeChannel = (
       cssProperty: string,
       channel: keyof (typeof SIZE_CONFIG)['md']
@@ -215,10 +219,10 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
         resolve: (value: TabsSize) => (SIZE_CONFIG[value] ?? SIZE_CONFIG.md)[channel],
       });
     };
-    addResponsiveSizeChannel('--ds-tabs-current-height', 'height');
-    addResponsiveSizeChannel('--ds-tabs-current-padding', 'padding');
-    addResponsiveSizeChannel('--ds-tabs-current-font-size', 'fontSize');
-    addResponsiveSizeChannel('--ds-tabs-current-icon-size', 'iconSize');
+    addResponsiveSizeChannel('--ds-tabs-responsive-height', 'height');
+    addResponsiveSizeChannel('--ds-tabs-responsive-padding', 'padding');
+    addResponsiveSizeChannel('--ds-tabs-responsive-font-size', 'fontSize');
+    addResponsiveSizeChannel('--ds-tabs-responsive-icon-size', 'iconSize');
   }
 
   const responsiveElementId = sizeIsResponsive ? `tabs-${tabsId}` : '';

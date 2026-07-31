@@ -87,7 +87,7 @@ describe('Tabs modern i18n (R2+R3)', () => {
         </I18nProvider>
       );
 
-      expect(screen.getByRole('status')).toHaveTextContent('قيد التحميل');
+      expect(screen.getByRole('status')).toHaveTextContent('جارٍ التحميل');
     });
 
     it('keeps accessibilityLabels precedence over the catalog', () => {

@@ -131,6 +131,7 @@
         "ContextMenu",
         "CopyToCheck",
         "CountUp",
+        "DAYS_SHORT",
         "DEFAULT_COLORS",
         "DEFAULT_COMPACT_CONFIG",
         "DEFAULT_FALLBACK_LOCALE",
@@ -269,6 +270,8 @@
         "MODAL_PROMOTE_TRANSITION_NAME",
         "MODAL_RADIUS_MAP",
         "MODAL_SIZE_MAP",
+        "MONTHS_FULL",
+        "MONTHS_SHORT",
         "Magnetic",
         "MarkdownView",
         "MarketingSurface",
@@ -602,6 +605,7 @@
         "actionsColumn",
         "apcaContrast",
         "appearanceMatchesArtifact",
+        "applyFormat",
         "applyModeOverlay",
         "applySkinPack",
         "applyStreamCommit",
@@ -656,6 +660,7 @@
         "createRecipeVariant",
         "createSubComponent",
         "createTenantConfig",
+        "daysInMonthCount",
         "decayedFrecency",
         "deepMergeTokenOverrides",
         "defaultViewModeIcons",
@@ -676,9 +681,12 @@
         "filterSurfaceFields",
         "filterSurfaceRowActions",
         "filterSurfaceTabbedViews",
+        "firstDayOfMonth",
         "formatCurrency",
         "formatDate",
         "formatDateRange",
+        "formatDateStr",
+        "formatDisplay",
         "formatFileSize",
         "formatList",
         "formatNumber",
@@ -686,7 +694,9 @@
         "formatRelativeTime",
         "formatShortcutKey",
         "formatTime",
+        "formatTimeStr",
         "fr",
+        "generateCalendarGrid",
         "generateClipboardText",
         "generateCsv",
         "generateFilterId",
@@ -701,6 +711,7 @@
         "getDefaultTenantConfig",
         "getEngine",
         "getHighlighter",
+        "getKeyboardNavDate",
         "getKnownTenantConfig",
         "getKnownTenantSlugs",
         "getOAuthTransitionApp",
@@ -727,6 +738,7 @@
         "isAllSurfaceAccess",
         "isBundledTenant",
         "isDarkSurfacePalette",
+        "isDateInRange",
         "isFieldVisibleForRow",
         "isFilterGroup",
         "isFilterRule",
@@ -734,6 +746,7 @@
         "isOAuthProvider",
         "isOAuthTransitionVariantId",
         "isResolvedSurfaceAccess",
+        "isSameDay",
         "isValidBranding",
         "isValidEngine",
         "isValidEngineName",
@@ -747,6 +760,8 @@
         "normalizeSurfaceDensity",
         "normalizeSurfaceError",
         "notification",
+        "pad2",
+        "parseDateValue",
         "parseInline",
         "parseMarkdown",
         "parseTenantThemeConfig",
@@ -817,6 +832,7 @@
         "startDirectionalViewTransition",
         "startDsViewTransition",
         "stringifySurfaceValue",
+        "stripTime",
         "surfaceSectionCardRecipe",
         "tabPanelTransitionName",
         "tabPanelTransitionStyle",
@@ -1008,7 +1024,9 @@
           "antd"
         ],
         "AlertDialog": [
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "Anchor": [
           "antd"
@@ -1047,11 +1065,14 @@
           "motion"
         ],
         "AuthSurface": [
+          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
+          "d3",
           "motion"
         ],
         "AutoComplete": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "Avatar": [
@@ -1105,6 +1126,7 @@
           "motion"
         ],
         "Calendar": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "CalendarHeatMap": [
@@ -1123,6 +1145,7 @@
           "antd"
         ],
         "Cascader": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "ChatSurface": [
@@ -1135,7 +1158,11 @@
         "Checkbox": [
           "antd"
         ],
+        "CodeBlock": [
+          "@phosphor-icons/react"
+        ],
         "Collapse": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "CollectionHeader": [
@@ -1174,6 +1201,7 @@
           "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
+          "d3",
           "motion"
         ],
         "CompareSurface": [
@@ -1192,6 +1220,7 @@
           "antd"
         ],
         "ConnectedCommandPalette": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "ContextMenu": [
@@ -1233,11 +1262,14 @@
           "motion"
         ],
         "DatePicker": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "DecisionInboxSurface": [
+          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
+          "d3",
           "motion"
         ],
         "defaultViewModeIcons": [
@@ -1340,6 +1372,7 @@
           "antd"
         ],
         "FloatButton": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "Form": [
@@ -1399,8 +1432,10 @@
           "motion"
         ],
         "GuidedDraftFormSurface": [
+          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
+          "d3",
           "motion"
         ],
         "HeaderSurface": [
@@ -1477,6 +1512,7 @@
           "antd"
         ],
         "InputNumber": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "IntegrationSurface": [
@@ -1494,6 +1530,7 @@
           "motion"
         ],
         "Layout": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "LineChart": [
@@ -1505,7 +1542,9 @@
           "antd"
         ],
         "List": [
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "ListSurface": [
           "@ant-design/icons",
@@ -1534,8 +1573,10 @@
           "motion"
         ],
         "MarketingSurface": [
+          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
+          "d3",
           "motion"
         ],
         "MediaSurface": [
@@ -1590,13 +1631,35 @@
           "motion"
         ],
         "MobileHeader": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "Modal": [
           "@phosphor-icons/react",
-          "antd"
+          "antd",
+          "motion"
+        ],
+        "MODAL_MAX_HEIGHT_MAP": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "MODAL_PADDING_MAP": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "MODAL_PROMOTE_TRANSITION_NAME": [
+          "motion"
+        ],
+        "MODAL_RADIUS_MAP": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
+        "MODAL_SIZE_MAP": [
+          "@phosphor-icons/react",
+          "antd",
           "motion"
         ],
         "MoreFieldsToggle": [
@@ -1649,6 +1712,11 @@
           "d3",
           "motion"
         ],
+        "OVERLAY_MODAL_DEFAULTS": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
         "OverlayModal": [
           "@phosphor-icons/react",
           "antd",
@@ -1692,7 +1760,9 @@
         ],
         "PatternApprovalWorkflow": [
           "@ant-design/icons",
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "PatternBrandStudio": [
           "@phosphor-icons/react",
@@ -1700,6 +1770,7 @@
           "motion"
         ],
         "PatternCalendarView": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternCockpitHeader": [
@@ -1713,11 +1784,14 @@
           "motion"
         ],
         "PatternCommandPalette": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternCommentThread": [
           "@ant-design/icons",
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "PatternDataTable": [
           "@phosphor-icons/react",
@@ -1731,18 +1805,22 @@
         ],
         "PatternEmptyState": [
           "@phosphor-icons/react",
-          "antd"
+          "antd",
+          "motion"
         ],
         "PatternEnvironmentToggle": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternFileManager": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternFilterBuilder": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternFilterPanel": [
@@ -1766,10 +1844,12 @@
         ],
         "PatternInvoiceTemplate": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternKanbanBoard": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd",
           "motion"
         ],
@@ -1780,10 +1860,13 @@
         ],
         "PatternLiveFeed": [
           "@ant-design/icons",
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "PatternLocaleSwitcher": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternMapView": [
@@ -1796,6 +1879,7 @@
         ],
         "PatternNotificationCenter": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternOperationalLedger": [
@@ -1810,11 +1894,17 @@
         ],
         "PatternPricingTable": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd"
+        ],
+        "PatternRecordFacts": [
+          "@phosphor-icons/react"
         ],
         "PatternSavedViewsBar": [
           "@ant-design/icons",
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "PatternShiftMatrix": [
           "@phosphor-icons/react",
@@ -1822,20 +1912,28 @@
           "motion"
         ],
         "PatternShortcutsOverlay": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternStatsGrid": [
           "@ant-design/icons",
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "PatternStepWizard": [
+          "@phosphor-icons/react",
           "antd"
+        ],
+        "PatternTenantPreview": [
+          "@phosphor-icons/react"
         ],
         "PatternTimeline": [
           "antd"
         ],
         "PatternTreeView": [
           "@ant-design/icons",
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternUserProfileCard": [
@@ -1854,7 +1952,9 @@
         ],
         "PatternWorkspaceSwitcher": [
           "@ant-design/icons",
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "PieChart": [
           "antd",
@@ -1862,7 +1962,9 @@
           "motion"
         ],
         "Popconfirm": [
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "Popover": [
           "antd"
@@ -1934,6 +2036,9 @@
           "antd",
           "motion"
         ],
+        "RecordFacts": [
+          "@phosphor-icons/react"
+        ],
         "RecordField": [
           "@phosphor-icons/react",
           "antd",
@@ -1961,8 +2066,10 @@
           "motion"
         ],
         "RecordWorkbenchSurface": [
+          "@ant-design/icons",
           "@phosphor-icons/react",
           "antd",
+          "d3",
           "motion"
         ],
         "ReportSurface": [
@@ -2242,6 +2349,7 @@
           "motion"
         ],
         "Table": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "TableToolbar": [
@@ -2296,6 +2404,7 @@
           "antd"
         ],
         "TimePicker": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "Toast": [
@@ -2324,7 +2433,9 @@
           "antd"
         ],
         "Transfer": [
-          "antd"
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
         ],
         "Tree": [
           "antd"
@@ -2335,6 +2446,7 @@
           "motion"
         ],
         "TreeSelect": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "TypingIndicator": [
@@ -2551,9 +2663,9 @@
         "ChartScaffold",
         "ChartTooltip",
         "CheckboxGroup",
-        "CodeBlock",
         "CommandRegistryProvider",
         "Container",
+        "DAYS_SHORT",
         "DEFAULT_COLORS",
         "DEFAULT_COMPACT_CONFIG",
         "DEFAULT_FALLBACK_LOCALE",
@@ -2623,10 +2735,8 @@
         "MENTIONS_DEFAULTS",
         "MENU_DEFAULTS",
         "MOBILE_HEADER_DEFAULTS",
-        "MODAL_MAX_HEIGHT_MAP",
-        "MODAL_PADDING_MAP",
-        "MODAL_RADIUS_MAP",
-        "MODAL_SIZE_MAP",
+        "MONTHS_FULL",
+        "MONTHS_SHORT",
         "MarkdownView",
         "MenuDivider",
         "MenuGroup",
@@ -2645,7 +2755,6 @@
         "OPERATOR_DEFINITIONS",
         "OTPINPUT_DEFAULTS",
         "OTPInput",
-        "OVERLAY_MODAL_DEFAULTS",
         "OnboardingSurface",
         "Overlay",
         "PASSWORD_INPUT_DEFAULTS",
@@ -2656,8 +2765,6 @@
         "PatternDecisionComparison",
         "PatternDecisionPanorama",
         "PatternFeatureWorkspaceFrame",
-        "PatternRecordFacts",
-        "PatternTenantPreview",
         "PatternVirtualList",
         "Portal",
         "PortalScope",
@@ -2675,7 +2782,6 @@
         "RESPONSIVE_BREAKPOINT_ORDER",
         "RadioGroup",
         "RecipeProfileProvider",
-        "RecordFacts",
         "ResizeHandle",
         "ResponsiveContext",
         "ResponsiveProvider",
@@ -2770,6 +2876,7 @@
         "actionsColumn",
         "apcaContrast",
         "appearanceMatchesArtifact",
+        "applyFormat",
         "applyModeOverlay",
         "applySkinPack",
         "applyStreamCommit",
@@ -2823,6 +2930,7 @@
         "createRecipeVariant",
         "createSubComponent",
         "createTenantConfig",
+        "daysInMonthCount",
         "decayedFrecency",
         "deepMergeTokenOverrides",
         "deriveTenantColorRamps",
@@ -2840,9 +2948,12 @@
         "filterSurfaceFields",
         "filterSurfaceRowActions",
         "filterSurfaceTabbedViews",
+        "firstDayOfMonth",
         "formatCurrency",
         "formatDate",
         "formatDateRange",
+        "formatDateStr",
+        "formatDisplay",
         "formatFileSize",
         "formatList",
         "formatNumber",
@@ -2850,7 +2961,9 @@
         "formatRelativeTime",
         "formatShortcutKey",
         "formatTime",
+        "formatTimeStr",
         "fr",
+        "generateCalendarGrid",
         "generateClipboardText",
         "generateCsv",
         "generateFilterId",
@@ -2865,6 +2978,7 @@
         "getDefaultTenantConfig",
         "getEngine",
         "getHighlighter",
+        "getKeyboardNavDate",
         "getKnownTenantConfig",
         "getKnownTenantSlugs",
         "getOAuthTransitionApp",
@@ -2890,6 +3004,7 @@
         "isAllSurfaceAccess",
         "isBundledTenant",
         "isDarkSurfacePalette",
+        "isDateInRange",
         "isFieldVisibleForRow",
         "isFilterGroup",
         "isFilterRule",
@@ -2897,6 +3012,7 @@
         "isOAuthProvider",
         "isOAuthTransitionVariantId",
         "isResolvedSurfaceAccess",
+        "isSameDay",
         "isValidBranding",
         "isValidEngine",
         "isValidEngineName",
@@ -2907,6 +3023,8 @@
         "mergeOperatorsByType",
         "mergePartialPersonality",
         "normalizeSurfaceError",
+        "pad2",
+        "parseDateValue",
         "parseInline",
         "parseMarkdown",
         "parseTenantThemeConfig",
@@ -2968,6 +3086,7 @@
         "setServerHeaders",
         "sha256TenantThemeValue",
         "stringifySurfaceValue",
+        "stripTime",
         "tenantThemeAnatomyAttributes",
         "tenantThemeArtifactRootAttributes",
         "toBreakpoint",

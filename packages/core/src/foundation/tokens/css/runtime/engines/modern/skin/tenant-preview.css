@@ -1,9 +1,9 @@
 /**
  * Modern TenantPreview skin (WO-SKIN-06 CK-H1; Lote-2 composition uplift).
  *
- * DELIBERATELY UNLAYERED (P-47): layered component rules sort before
- * Tailwind's base layer. Every rule is owned by the existing two-class
- * TenantPreview scope, while caller-provided inline styles still win.
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-engines)` (the old
+ * "unlayered" note predates the wiring). Caller inline styles still win.
  *
  * COMPOSITION LAW (Lote 2): the component samples are REAL DS primitives —
  * Button, Input, Badge, Card — painted by the tenant tokens the preview
@@ -13,13 +13,19 @@
  * personality grid. The former sample-button/input/badge/card paint is
  * retired (duplication). Sample slots keep their historical data-parts.
  *
- * SPECIFICITY (P-48): rules carrying a real border colour repeat the target
- * part (or use an equivalent fourth class/attribute unit) to clear the
- * tenant's unlayered `*` border-colour floor at (0,3,1).
+ * SPECIFICITY (P-48): rules that must clear the tenant's unlayered `*`
+ * border-colour floor at (0,3,1) reach (0,4,0)+ through the always-stamped
+ * root `data-part` ancestor — repeating an attribute on one element is
+ * forbidden.
+ *
+ * RESPONSIVE: the root is a named container (`ds-tenant-preview`); the
+ * narrow cut wraps the header so long tenant names survive below 20rem.
  */
 
 /* ---- root frame ---- */
 .ds-pattern-tenant-preview.ds-engine-modern[data-part="root"] {
+  container-type: inline-size;
+  container-name: ds-tenant-preview;
   background: var(--ds-surface-card);
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-1);
@@ -39,8 +45,8 @@
   gap: var(--ds-spacing-3);
   padding-block-end: var(--ds-spacing-4);
 }
-.ds-pattern-tenant-preview.ds-engine-modern
-  [data-part="header"][data-part="header"] {
+.ds-pattern-tenant-preview.ds-engine-modern[data-part="root"]
+  [data-part="header"] {
   border-block-end: 1px solid var(--ds-color-border);
 }
 
@@ -57,8 +63,8 @@
   object-fit: cover;
 }
 
-.ds-pattern-tenant-preview.ds-engine-modern
-  [data-part="tenant-name"][data-part="tenant-name"] {
+.ds-pattern-tenant-preview.ds-engine-modern[data-part="root"]
+  [data-part="tenant-name"] {
   margin: 0;
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-base);
@@ -67,8 +73,8 @@
   line-height: var(--ds-line-height-tight);
 }
 
-.ds-pattern-tenant-preview.ds-engine-modern
-  [data-part="tenant-slug"][data-part="tenant-slug"] {
+.ds-pattern-tenant-preview.ds-engine-modern[data-part="root"]
+  [data-part="tenant-slug"] {
   margin: 0;
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-xs, 0.75rem);
@@ -80,7 +86,7 @@
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-xs, 0.75rem);
   font-weight: var(--ds-font-weight-semibold);
-  letter-spacing: var(--ds-letter-spacing-wide, 0.05em);
+  letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
   text-transform: uppercase;
 }
 .ds-pattern-tenant-preview.ds-engine-modern [data-part="sub-label"] {
@@ -170,14 +176,15 @@
   [data-part="preview-table-cell"][data-align="end"] {
   text-align: end;
 }
-.ds-pattern-tenant-preview.ds-engine-modern
-  [data-part="preview-table-cell"][data-variant="head"][data-part="preview-table-cell"] {
+.ds-pattern-tenant-preview.ds-engine-modern[data-part="root"]
+  [data-part="sample-table"]
+  [data-part="preview-table-cell"][data-variant="head"] {
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-xs, 0.75rem);
   font-weight: var(--ds-font-weight-semibold);
 }
-.ds-pattern-tenant-preview.ds-engine-modern
-  [data-part="table-head"][data-part="table-head"] {
+.ds-pattern-tenant-preview.ds-engine-modern[data-part="root"]
+  [data-part="table-head"] {
   border-block-end: 1px solid var(--ds-color-border);
 }
 .ds-pattern-tenant-preview.ds-engine-modern
@@ -217,4 +224,36 @@
 .ds-pattern-tenant-preview.ds-engine-modern [data-part="personality-tile-value"] {
   font-size: var(--ds-font-size-xs, 0.75rem);
   font-weight: var(--ds-font-weight-medium);
+}
+
+/* ---- narrow cut: the header wraps first (logo + long tenant name); every
+        other region is intrinsically fluid (flex rows wrap, the personality
+        grid auto-fills, the table scrolls inline). ---- */
+@container ds-tenant-preview (inline-size < 20rem) {
+  .ds-pattern-tenant-preview.ds-engine-modern [data-part="header"] {
+    flex-wrap: wrap;
+  }
+}
+
+/* ---- forced colors: the swatches are consumer config DATA whose sole
+        purpose is a faithful palette preview (ColorPicker-class evidence):
+        forcing them to system colors would make the preview lie about the
+        tenant's theme, so they keep their computed fill. The pattern-owned
+        chrome hairlines read as ButtonText; every composed primitive's own
+        frame/ring is already forced by its primitive skin. ---- */
+@media (forced-colors: active) {
+  .ds-pattern-tenant-preview.ds-engine-modern [data-part="swatch"] {
+    forced-color-adjust: none;
+  }
+
+  .ds-pattern-tenant-preview.ds-engine-modern[data-part="root"]
+    [data-part="header"],
+  .ds-pattern-tenant-preview.ds-engine-modern[data-part="root"]
+    [data-part="table-head"],
+  .ds-pattern-tenant-preview.ds-engine-modern
+    [data-part="sample-table"]
+    tbody
+    > tr:first-child {
+    border-color: ButtonText;
+  }
 }

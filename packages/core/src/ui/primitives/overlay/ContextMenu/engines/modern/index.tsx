@@ -125,6 +125,7 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const [menuEl, setMenuEl] = useState<HTMLUListElement | null>(null);
   const menuRef = useRef<HTMLUListElement | null>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
   const { shouldRender, dataState, ref: presenceRef } = usePresence(isOpen);
 
   // The <ul> is BOTH the presence-animated node and the positioned overlay, so
@@ -148,26 +149,43 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
     flip: true,
   });
 
+  // Every open path funnels here: pointer (contextmenu event) or keyboard
+  // (Shift+F10 / the Menu key), so the direction capture stays single-source.
+  const openMenu = useCallback((x: number, y: number, sourceEl: HTMLElement) => {
+    setPoint({ x, y });
+    setDirection(
+      sourceEl.closest<HTMLElement>('[dir]')?.dir === 'rtl' ||
+        window.getComputedStyle(sourceEl).direction === 'rtl'
+        ? 'rtl'
+        : 'ltr'
+    );
+    setIsOpen(true);
+  }, []);
+
   // The cursor's viewport point is where the zero-size anchor is pinned; the
   // shared positioning runtime owns the resulting geometry.
   const handleContextMenu = useCallback((e: React.MouseEvent) => {
     if (disabled) return;
     e.preventDefault();
-    const triggerEl = e.currentTarget as HTMLElement;
-    setPoint({ x: e.clientX, y: e.clientY });
-    setDirection(
-      triggerEl.closest<HTMLElement>('[dir]')?.dir === 'rtl' ||
-        window.getComputedStyle(triggerEl).direction === 'rtl'
-        ? 'rtl'
-        : 'ltr'
-    );
-    setIsOpen(true);
-  }, [disabled]);
+    openMenu(e.clientX, e.clientY, e.currentTarget as HTMLElement);
+  }, [disabled, openMenu]);
+
+  // Keyboard parity for the pointer's right-click: Shift+F10 or the Menu key
+  // opens the menu centered on the focused trigger (the native posture).
+  const handleTriggerKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (disabled) return;
+    if (e.key === 'ContextMenu' || (e.key === 'F10' && e.shiftKey)) {
+      e.preventDefault();
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+      openMenu(rect.left + rect.width / 2, rect.top + rect.height / 2, e.currentTarget as HTMLElement);
+    }
+  }, [disabled, openMenu]);
 
   // Close the menu and propagate the selected item key to the consumer
   const handleItemClick = useCallback((key: string) => {
     onSelect?.(key);
     setIsOpen(false);
+    triggerRef.current?.focus();
   }, [onSelect]);
 
   // Dismiss the menu when clicking anywhere outside of it
@@ -186,6 +204,45 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
     };
   }, [isOpen]);
 
+  // APG menu keyboard contract: on open the first enabled item takes focus;
+  // arrows cycle (wrapping), Home/End jump to the edges, Escape closes and
+  // returns focus to the context trigger. Typeahead is registered debt.
+  useEffect(() => {
+    if (isOpen) {
+      menuRef.current
+        ?.querySelector<HTMLElement>('[role="menuitem"]:not(:disabled)')
+        ?.focus();
+    }
+  }, [isOpen]);
+
+  const handleMenuKeyDown = useCallback((e: React.KeyboardEvent<HTMLUListElement>) => {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      setIsOpen(false);
+      triggerRef.current?.focus();
+      return;
+    }
+    const menuItems = Array.from(
+      menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]:not(:disabled)') ?? []
+    );
+    if (menuItems.length === 0) return;
+    const currentIndex = menuItems.indexOf(document.activeElement as HTMLElement);
+    let nextIndex: number | undefined;
+    if (e.key === 'ArrowDown') {
+      nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % menuItems.length;
+    } else if (e.key === 'ArrowUp') {
+      nextIndex = currentIndex < 0 ? menuItems.length - 1 : (currentIndex - 1 + menuItems.length) % menuItems.length;
+    } else if (e.key === 'Home') {
+      nextIndex = 0;
+    } else if (e.key === 'End') {
+      nextIndex = menuItems.length - 1;
+    }
+    if (nextIndex !== undefined) {
+      e.preventDefault();
+      menuItems[nextIndex]?.focus();
+    }
+  }, []);
+
   const surfaceStyle: React.CSSProperties = {
     // Tokenized overlay stack (spec section 9): context menus share the popover
     // tier (matches the canonical --ds-z-index-context-menu alias), not a magic
@@ -201,10 +258,13 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
 
   return (
     <div
+      ref={triggerRef}
       data-part="trigger"
       data-open={isOpen ? 'true' : 'false'}
       className={`rottay-context-menu--modern ${className || ''}`}
       onContextMenu={handleContextMenu}
+      onKeyDown={handleTriggerKeyDown}
+      tabIndex={disabled ? -1 : 0}
     >
       {trigger}
       {shouldRender && (
@@ -225,6 +285,7 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
             data-ds-position-strategy={strategy}
             className={overlayClassName || undefined}
             style={surfaceStyle}
+            onKeyDown={handleMenuKeyDown}
           >
             {items.map((item) => (
               <MenuItem key={item.key} item={item} onClick={handleItemClick} />

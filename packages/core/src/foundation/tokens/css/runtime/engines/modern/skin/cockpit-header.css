@@ -1,10 +1,9 @@
 /**
  * Modern CockpitHeader skin (WO-SKIN-06 CK-B).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * `base` layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
- * `style`.
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-engines)` (the old
+ * "unlayered" note predates the wiring). Caller inline styles still win.
  *
  * SCOPE ROOT is the pattern's outer `<div>`, which carries the pair
  * `ds-pattern-cockpit-header ds-engine-modern` + `data-part='root'`; both the
@@ -15,12 +14,20 @@
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule that paints `border` / `border-color`
  * with a real color (including `transparent`, which is NOT a reset) must reach
- * (0,4,0): the two root classes (0,2,0) + a REPEATED `data-part`, or a `data-part`
- * plus a contract `data-variant`. Non-border paint (background, color, box-shadow,
- * border-radius) beats preflight while unlayered at (0,3,0).
+ * (0,4,0). Repeating an attribute on one element is forbidden: descendant
+ * rules buy the fourth unit from the always-stamped root `data-part`
+ * ancestor, and rules ON the root buy it from `data-sticky`, which the
+ * engine always stamps ('true'|'false').
  *
- * Interaction paint that the removed React hover/focus state used to own now lives
- * here as `:hover, :focus` rules.
+ * Interaction paint that the removed React hover/focus state used to own now
+ * lives here: hovers ride the `@media (hover: hover)` guard (house hover
+ * law) with unguarded `:active` twins; keyboard focus keeps its unguarded
+ * `:focus` rules.
+ *
+ * GLASS: `backdrop-filter` is opt-in through the
+ * `--ds-cockpit-header-actions-backdrop` channel (default `none`) — a
+ * default-ON blur taxes every scroll frame and is not the sanctioned glass
+ * contract (precedent: Sheet's explicit `--ds-glass-*` channels).
  *
  * OWNERSHIP (R2+R3): the engine stamps anatomy + state only; this file owns
  * 100% of layout and paint — typography, sticky positioning, compact padding,
@@ -77,13 +84,13 @@
 }
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky='true'] {
   position: sticky;
-  top: 0;
+  top: var(--ds-cockpit-header-sticky-top, env(safe-area-inset-top, 0px));
   z-index: var(--ds-cockpit-header-sticky-z, 100);
 }
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-part='root'] {
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky] {
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border-subtle));
 }
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover {
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active {
   background-position: 100% 50%;
   border-color: var(--ds-workspace-card-border-hover, var(--ds-workspace-card-border, var(--ds-color-border-subtle)));
   box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
@@ -100,7 +107,7 @@
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
   color: var(--ds-color-text-muted);
 }
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='breadcrumb'][data-part='breadcrumb'] {
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='breadcrumb'] {
   width: fit-content;
   max-width: 100%;
   padding: 4px 9px;
@@ -111,7 +118,7 @@
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
   scrollbar-width: none;
 }
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:active {
   color: var(--ds-color-text-secondary);
 }
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
@@ -128,7 +135,7 @@
   color: var(--ds-color-text-muted);
 }
 
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='header-icon'][data-part='header-icon'] {
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon'] {
   display: inline-grid;
   flex: 0 0 auto;
   width: var(--ds-cockpit-header-icon-size, 40px);
@@ -143,7 +150,7 @@
     0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);
   transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover [data-part='header-icon'] {
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:active [data-part='header-icon'] {
   transform: translateY(-1px) scale(1.025);
 }
 
@@ -159,13 +166,14 @@
 }
 
 /* ---- back button: ghost with a visible border only when highlighted. Rest
-        `border: 1px solid transparent` is NOT a reset, so it repeats the
-        data-part to reach the (0,4,0) border floor. Highlight = hover||focus. ---- */
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back'] > .rottay-button {
+        `border: 1px solid transparent` is NOT a reset, so the rule reaches the
+        (0,4,0) border floor through the root ancestor. Highlight = hover
+        (guarded below) || focus || active. ---- */
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button {
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back'] > .rottay-button:hover,
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back'] > .rottay-button:focus {
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button:focus,
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button:active {
   border-color: var(--ds-color-border);
   background: var(--ds-color-neutral-50);
   color: var(--ds-color-text-primary);
@@ -215,14 +223,16 @@
   text-wrap: pretty;
 }
 
-.ds-pattern-cockpit-header.ds-engine-modern [data-part='actions'][data-part='actions'] {
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='actions'] {
   min-height: calc(var(--ds-control-height-sm, 32px) + 8px);
   padding: 3px;
   border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
   border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
   background: color-mix(in srgb, var(--ds-toolbar-control-bg, var(--ds-surface-card)) 88%, transparent);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
-  backdrop-filter: blur(var(--ds-glass-blur, 8px));
+  /* Glass is opt-in (default none): a default-ON blur taxes every scroll
+     frame; tenants enable it through this channel (Sheet glass precedent). */
+  backdrop-filter: var(--ds-cockpit-header-actions-backdrop, none);
 }
 
 /* ---- loading skeleton blocks: uniform pulse background; per-block radius rides
@@ -382,7 +392,7 @@
 }
 
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'] {
-  animation: ds-foundation-pulse 1.5s ease-in-out infinite;
+  animation: ds-foundation-pulse var(--ds-motion-attention, 1.5s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'][data-size='crumb'] {
@@ -433,21 +443,21 @@
  * `default`/absent = the base header above (surface card + bottom rule).
  *
  * The cockpit header is this engine's primary app header. Rules prefix the
- * anatomy attribute and REPEAT `[data-part='root']`, reaching (0,5,0): one
- * attribute over the (0,4,0) bottom-border rule and level with the (0,5,0)
- * sticky-elevation rule, which they follow in source order so the anatomy
- * treatment wins its box-shadow tie without `!important`.
+ * anatomy attribute and add the always-stamped `[data-sticky]`, reaching
+ * (0,5,0): one attribute over the (0,4,0) bottom-border rule and level with
+ * the (0,5,0) sticky-elevation rule, which they follow in source order so
+ * the anatomy treatment wins its box-shadow tie without `!important`.
  * ======================================================================== */
 
 /* layout flat: header merges with the canvas -- drop the bottom rule and any
    sticky elevation. */
-[data-anatomy-layout='flat'] .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-part='root'] {
+[data-anatomy-layout='flat'] .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky] {
   border-bottom: 0;
   box-shadow: none;
 }
 
 /* layout floating: header lifts into an inset, rounded, elevated card. */
-[data-anatomy-layout='floating'] .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-part='root'] {
+[data-anatomy-layout='floating'] .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky] {
   border-bottom: 0;
   border-radius: var(--ds-radius-lg, 12px);
   box-shadow: var(--ds-elevation-2);
@@ -457,6 +467,44 @@
 @keyframes ds-cockpit-header-arrive {
   from { opacity: 0; transform: translateY(8px) scale(0.995); }
   to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ---- hover is pointer-fine only; every treatment keeps an unguarded
+        `:active` twin at its original cascade position (touch press
+        feedback matches), and keyboard focus keeps its own rules. ---- */
+@media (hover: hover) {
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover {
+    background-position: 100% 50%;
+    border-color: var(--ds-workspace-card-border-hover, var(--ds-workspace-card-border, var(--ds-color-border-subtle)));
+    box-shadow: var(--ds-workspace-card-shadow-hover, var(--ds-elevation-2));
+  }
+
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root']:hover [data-part='header-icon'] {
+    transform: translateY(-1px) scale(1.025);
+  }
+
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
+    color: var(--ds-color-text-secondary);
+  }
+
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='back'] > .rottay-button:hover {
+    border-color: var(--ds-color-border);
+    background: var(--ds-color-neutral-50);
+    color: var(--ds-color-text-primary);
+  }
+}
+
+/* ---- forced colors: the pattern-owned frames read as ButtonText; status
+        pills keep their text (state already reads by shape+text); the
+        interactive crumb is a real link, so the UA forces LinkText. ---- */
+@media (forced-colors: active) {
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky],
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='breadcrumb'],
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='header-icon'],
+  .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] [data-part='actions'],
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='status'] {
+    border-color: ButtonText;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -84,11 +84,23 @@
     transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-in-out, ease-in-out);
 }
 
+/* Star glyphs fill the star box (drained from the `w-full h-full` utilities). */
+.ds-rate.ds-rate--modern [data-part='star'] svg {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
 /* Interactive postures (gated on the root state channels). */
 .ds-rate.ds-rate--modern[data-part='root']:not([data-disabled='true']):not([data-readonly='true']) [data-part='star'] {
   cursor: pointer;
 }
-.ds-rate.ds-rate--modern[data-part='root']:not([data-disabled='true']):not([data-readonly='true']) [data-part='star']:hover {
+@media (hover: hover) {
+  .ds-rate.ds-rate--modern[data-part='root']:not([data-disabled='true']):not([data-readonly='true']) [data-part='star']:hover {
+    transform: scale(var(--ds-rate-hover-scale, 1.1));
+  }
+}
+/* Touch/active equivalent of the hover scale (4th-tanda law). */
+.ds-rate.ds-rate--modern[data-part='root']:not([data-disabled='true']):not([data-readonly='true']) [data-part='star']:active {
   transform: scale(var(--ds-rate-hover-scale, 1.1));
 }
 
@@ -114,8 +126,32 @@
   overflow: hidden;
 }
 
-/* Half-star background track: constant inactive color via the root hatch. */
+/* Half-star wrap: the relative positioning context for track + foreground
+   (drained from the `relative inline-flex w-full h-full` utilities). */
+.ds-rate.ds-rate--modern [data-part='star-half-wrap'] {
+  position: relative;
+  display: inline-flex;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+/* Half-star hit overlay: the leading-half pointer zone (drained from the
+   `absolute start-0 top-0 w-1/2 h-full z-10` utilities; z rides the token
+   scale's relative step). */
+.ds-rate.ds-rate--modern [data-part='star-half-hit'] {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 50%;
+  block-size: 100%;
+  z-index: var(--ds-z-index-relative-above, 1);
+}
+
+/* Half-star background track: constant inactive color via the root hatch
+   (positioning drained from the `absolute inset-0` utilities). */
 .ds-rate.ds-rate--modern .rottay-rate-star-track {
+  position: absolute;
+  inset: 0;
   color: var(--ds-rate-star-inactive);
 }
 
@@ -144,7 +180,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-rate.ds-rate--modern [data-part='star'],
-  .ds-rate.ds-rate--modern[data-part='root']:not([data-disabled='true']):not([data-readonly='true']) [data-part='star']:hover {
+  .ds-rate.ds-rate--modern[data-part='root']:not([data-disabled='true']):not([data-readonly='true']) [data-part='star']:hover,
+  /* the touch/active equivalent must be named explicitly or its scale would
+     out-specify the plain-star reset above */
+  .ds-rate.ds-rate--modern[data-part='root']:not([data-disabled='true']):not([data-readonly='true']) [data-part='star']:active {
     transition: none;
     transform: none;
   }

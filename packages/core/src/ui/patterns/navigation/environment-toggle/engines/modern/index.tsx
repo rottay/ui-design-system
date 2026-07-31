@@ -11,10 +11,17 @@
  * The pattern COMPOSES public DS primitives — Button (trigger and every
  * option across the three variants) and ConfirmDialog (the production
  * confirmation, previously a hand-rolled modal) — and never recreates a
- * control with its own HTML/CSS. Option STATE paint (active accent, joined
- * segmented corners, banner) stays in the unlayered modern skin, keyed on
- * the `data-part`/`data-*` contract this file stamps. Own copy resolves
- * through the optional `components` i18n channel with an English floor.
+ * control with its own HTML/CSS. The Segmented primitive was evaluated for
+ * the default variant and NOT composed: it cannot carry the per-option
+ * environment accent (`EnvironmentDef.color` is consumer config data riding
+ * an inline channel per option; SegmentedOption exposes className but no
+ * style channel), so the joined-buttons anatomy stays pattern-owned while
+ * its APG radiogroup keyboard contract (roving tab stop, RTL-aware arrows,
+ * Home/End, role=radio + aria-checked) is mirrored here. Option STATE paint
+ * (active accent, joined segmented corners, banner) stays in the unlayered
+ * modern skin, keyed on the `data-part`/`data-*` contract this file stamps.
+ * Own copy resolves through the optional `components` i18n channel with an
+ * English floor.
  *
  * @example
  * <ModernEnvironmentToggle
@@ -26,9 +33,9 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { EnvironmentToggleProps } from '../../contracts';
-import { pillBadgeSmStyle } from '../../../../foundation/engine-styles/modern';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { NavigationExpandIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-expand';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
 import ModernConfirmDialog from '../../../../../primitives/overlay/ConfirmDialog/engines/modern';
 
@@ -74,12 +81,19 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
 
   const copy = {
     select: tOr('environmentToggle.select', 'Select'),
+    groupLabel: tOr('environmentToggle.group_label', 'Environment'),
     banner: activeEnv
       ? tOr('environmentToggle.banner', 'You are viewing the {name} environment', { name: activeEnv.name })
       : '',
     confirmTitle: tOr('environmentToggle.confirmTitle', 'Switch to {name}', { name: confirmEnvName }),
     cancel: tOr('environmentToggle.cancel', 'Cancel'),
   };
+
+  // Roving tab stop (APG radiogroup): the checked option is tabbable; when
+  // nothing is checked (unknown active id), the first option takes the stop.
+  const tabStopId = environments.some(e => e.id === activeEnvironment)
+    ? activeEnvironment
+    : environments[0]?.id;
 
   /** Closes dropdown when user clicks outside the dropdown container */
   const handleClickOutside = useCallback(
@@ -115,6 +129,32 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
     [activeEnvironment, productionId, confirmProductionSwitch, onChange],
   );
 
+  /** APG radiogroup keyboard contract for the segmented/pills variants:
+      arrows (RTL-aware), Home and End move focus AND select, mirroring the
+      certified Segmented primitive's keyboard contract. */
+  const handleRadioGroupKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (!['ArrowRight', 'ArrowLeft', 'Home', 'End'].includes(event.key)) return;
+      const group = event.currentTarget;
+      const options = Array.from(group.querySelectorAll<HTMLElement>('[role="radio"]'));
+      const currentIndex = options.findIndex(o => o === group.ownerDocument.activeElement);
+      if (currentIndex === -1) return;
+      event.preventDefault();
+      const rtl = getComputedStyle(group).direction === 'rtl';
+      let nextIndex = currentIndex;
+      if (event.key === 'Home') nextIndex = 0;
+      else if (event.key === 'End') nextIndex = options.length - 1;
+      else {
+        const delta = (event.key === 'ArrowRight') !== rtl ? 1 : -1;
+        nextIndex = (currentIndex + delta + options.length) % options.length;
+      }
+      options[nextIndex]?.focus();
+      const nextEnv = environments[nextIndex];
+      if (nextEnv) handleSwitch(nextEnv.id);
+    },
+    [environments, handleSwitch],
+  );
+
   /** Renders the appropriate toggle control based on the variant prop */
   const renderToggle = () => {
     /* Dropdown variant: positioned menu with click-outside dismissal */
@@ -127,6 +167,8 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
             data-part="trigger"
             onClick={() => setDropdownOpen(!dropdownOpen)}
             data-testid="env-toggle-trigger"
+            aria-haspopup="true"
+            aria-expanded={dropdownOpen}
           >
             <span
               data-part="dot"
@@ -136,7 +178,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
             {activeEnv?.badge && (
               <span
                 data-part="badge"
-                style={{ ...pillBadgeSmStyle, '--ds-envtoggle-accent': activeEnv.color } as React.CSSProperties}
+                style={{ '--ds-envtoggle-accent': activeEnv.color } as React.CSSProperties}
               >
                 {activeEnv.badge}
               </span>
@@ -159,12 +201,10 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
                   <span data-part="dot" style={{ '--ds-envtoggle-accent': env.color } as React.CSSProperties} />
                   <span data-part="option-name">{env.name}</span>
                   {env.badge && (
-                    <span data-part="badge" style={{ ...pillBadgeSmStyle, padding: '1px 5px', fontSize: 10, '--ds-envtoggle-accent': env.color } as React.CSSProperties}>{env.badge}</span>
+                    <span data-part="badge" style={{ '--ds-envtoggle-accent': env.color } as React.CSSProperties}>{env.badge}</span>
                   )}
                   {env.id === activeEnvironment && (
-                    <svg xmlns="http://www.w3.org/2000/svg" data-part="check" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <StatusSuccessIcon decorative size={16} data-part="check" />
                   )}
                 </ModernButton>
               ))}
@@ -174,10 +214,18 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
       );
     }
 
-    /* Pills variant: individual buttons with environment color applied to active button */
+    /* Pills variant: radiogroup of individual buttons; the active option
+       rides the per-environment accent hatch (config data). */
     if (variant === 'pills') {
       return (
-        <div data-part="toggle" data-variant="pills" data-testid="env-toggle-trigger">
+        <div
+          data-part="toggle"
+          data-variant="pills"
+          data-testid="env-toggle-trigger"
+          role="radiogroup"
+          aria-label={copy.groupLabel}
+          onKeyDown={handleRadioGroupKeyDown}
+        >
           {environments.map(env => (
             <ModernButton
               key={env.id}
@@ -185,6 +233,9 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
               size="sm"
               data-part="option"
               data-active={env.id === activeEnvironment}
+              role="radio"
+              aria-checked={env.id === activeEnvironment}
+              tabIndex={env.id === tabStopId ? 0 : -1}
               style={{ '--ds-envtoggle-accent': env.color } as React.CSSProperties}
               onClick={() => handleSwitch(env.id)}
               data-testid={`env-option-${env.id}`}
@@ -192,7 +243,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
               {env.icon}
               {env.name}
               {env.badge && (
-                <span data-part="badge" style={{ ...pillBadgeSmStyle, padding: '1px 5px', fontSize: 10, opacity: 0.8 }}>{env.badge}</span>
+                <span data-part="badge" style={{ '--ds-envtoggle-accent': env.color } as React.CSSProperties}>{env.badge}</span>
               )}
             </ModernButton>
           ))}
@@ -200,9 +251,17 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
       );
     }
 
-    /* Default: segmented control -- buttons share borders for a joined look */
+    /* Default: segmented control -- radiogroup of buttons sharing borders
+       for the joined look (skin-owned logical radii). */
     return (
-      <div data-part="toggle" data-variant="toggle" data-testid="env-toggle-trigger">
+      <div
+        data-part="toggle"
+        data-variant="toggle"
+        data-testid="env-toggle-trigger"
+        role="radiogroup"
+        aria-label={copy.groupLabel}
+        onKeyDown={handleRadioGroupKeyDown}
+      >
         {environments.map((env, idx) => (
           <ModernButton
             key={env.id}
@@ -211,15 +270,18 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
             data-part="option"
             data-active={env.id === activeEnvironment}
             data-position={idx === 0 ? 'first' : idx === environments.length - 1 ? 'last' : 'middle'}
+            role="radio"
+            aria-checked={env.id === activeEnvironment}
+            tabIndex={env.id === tabStopId ? 0 : -1}
             style={{ '--ds-envtoggle-accent': env.color } as React.CSSProperties}
             onClick={() => handleSwitch(env.id)}
             data-testid={`env-option-${env.id}`}
           >
-            <span className="flex items-center gap-1.5">
+            <span data-part="option-content">
               {env.icon}
               {env.name}
               {env.badge && (
-                <span data-part="badge" style={{ ...pillBadgeSmStyle, padding: '1px 5px', fontSize: 10 }}>{env.badge}</span>
+                <span data-part="badge" style={{ '--ds-envtoggle-accent': env.color } as React.CSSProperties}>{env.badge}</span>
               )}
             </span>
           </ModernButton>
@@ -230,21 +292,21 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
 
   return (
     <div className={`ds-pattern-environment-toggle ds-engine-modern ${className ?? ''}`} data-part="root" style={style}>
-      {/* Banner -- pulsing dot + message in env color; only for non-production environments.
-          The soft tint rides the consumer-supplied accent hatch (config data). */}
+      {/* Banner -- dot + message in env color; only for non-production environments.
+          The soft tint rides color-mix on the consumer-supplied accent hatch
+          (config data, format-agnostic -- the retired `color + '15'` hex-alpha
+          suffix only worked for 6-digit hex input). */}
       {showBanner && !isProduction && activeEnv && (
         <div
           data-part="banner"
           style={{
             '--ds-envtoggle-accent': activeEnv.color,
-            '--ds-envtoggle-accent-soft': activeEnv.color + '15',
           } as React.CSSProperties}
           data-testid="env-banner"
         >
-          {/* Pulsing dot for visual attention (cadence rides the Tailwind
-              animate-pulse utility; the skin owns dot geometry and fill) */}
+          {/* Pulsing dot for visual attention (cadence is skin-owned, riding
+              the canonical ds-foundation-pulse keyframes) */}
           <span
-            className="animate-pulse"
             data-part="banner-dot"
             style={{ '--ds-envtoggle-accent': activeEnv.color } as React.CSSProperties}
           />

@@ -119,6 +119,12 @@ ResponsiveSlot.displayName = 'ResponsiveSlot';
 // Device-alias rendering (phone / tablet / desktop)
 // ---------------------------------------------------------------------------
 
+/** Sparse slot sets must not emit colocated style tags and wrapper nodes that
+ *  render nothing — a slot is only wrapped when it actually has content. */
+function isRenderable(content: React.ReactNode): boolean {
+  return content !== undefined && content !== null;
+}
+
 /**
  * Renders slots using device-alias breakpoints with cascade:
  * - phone: always the base
@@ -145,8 +151,12 @@ function renderDeviceSlots(props: ResponsiveSlotProps): React.ReactElement {
     // phone + tablet share content, desktop is different
     return (
       <>
-        <ResponsiveVisibility mode="show" below="desktop">{phoneContent}</ResponsiveVisibility>
-        <ResponsiveVisibility mode="show" from="desktop">{desktopContent}</ResponsiveVisibility>
+        {isRenderable(phoneContent) && (
+          <ResponsiveVisibility mode="show" below="desktop">{phoneContent}</ResponsiveVisibility>
+        )}
+        {isRenderable(desktopContent) && (
+          <ResponsiveVisibility mode="show" from="desktop">{desktopContent}</ResponsiveVisibility>
+        )}
       </>
     );
   }
@@ -155,8 +165,12 @@ function renderDeviceSlots(props: ResponsiveSlotProps): React.ReactElement {
     // tablet + desktop share content, phone is different
     return (
       <>
-        <ResponsiveVisibility mode="show" on="phone">{phoneContent}</ResponsiveVisibility>
-        <ResponsiveVisibility mode="show" from="tablet">{tabletContent}</ResponsiveVisibility>
+        {isRenderable(phoneContent) && (
+          <ResponsiveVisibility mode="show" on="phone">{phoneContent}</ResponsiveVisibility>
+        )}
+        {isRenderable(tabletContent) && (
+          <ResponsiveVisibility mode="show" from="tablet">{tabletContent}</ResponsiveVisibility>
+        )}
       </>
     );
   }
@@ -164,9 +178,15 @@ function renderDeviceSlots(props: ResponsiveSlotProps): React.ReactElement {
   // All three are different
   return (
     <>
-      <ResponsiveVisibility mode="show" on="phone">{phoneContent}</ResponsiveVisibility>
-      <ResponsiveVisibility mode="show" on="tablet">{tabletContent}</ResponsiveVisibility>
-      <ResponsiveVisibility mode="show" on="desktop">{desktopContent}</ResponsiveVisibility>
+      {isRenderable(phoneContent) && (
+        <ResponsiveVisibility mode="show" on="phone">{phoneContent}</ResponsiveVisibility>
+      )}
+      {isRenderable(tabletContent) && (
+        <ResponsiveVisibility mode="show" on="tablet">{tabletContent}</ResponsiveVisibility>
+      )}
+      {isRenderable(desktopContent) && (
+        <ResponsiveVisibility mode="show" on="desktop">{desktopContent}</ResponsiveVisibility>
+      )}
     </>
   );
 }

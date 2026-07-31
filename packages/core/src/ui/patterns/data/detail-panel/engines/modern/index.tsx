@@ -23,67 +23,46 @@
 import React, { useState } from 'react';
 import type { DetailPanelProps, DetailAction } from '../../contracts';
 import Button from '../../../../../primitives/inputs/Button/engines/modern';
+import Skeleton from '../../../../../primitives/feedback/Skeleton/engines/modern';
 import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
-
-/* ------------------------------------------------------------------ */
-/* Shared style constants                                              */
-/* ------------------------------------------------------------------ */
-
-const TRANSITION_FAST =
-  'var(--ds-motion-fast) var(--ds-motion-ease-out)';
-
-const PULSE_STYLE: React.CSSProperties = {
-  animation: 'ds-foundation-pulse 1.5s ease-in-out infinite',
-};
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /* ------------------------------------------------------------------ */
 /* SkeletonBlock                                                       */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Pattern-law composition: the Skeleton primitive owns the placeholder shape
+ * (variant, pulse, reduced-motion); this wrapper only keeps the pattern's
+ * per-part anatomy hook for LAYOUT spacing (margins/flex), never shape paint.
+ */
+const SKELETON_PART_VARIANT = {
+  'skeleton-action': 'rounded',
+  'skeleton-avatar': 'circular',
+  'skeleton-badge': 'rounded',
+  'skeleton-breadcrumb': 'rounded',
+  'skeleton-content': 'rectangular',
+  'skeleton-sidebar': 'rectangular',
+  'skeleton-subtitle': 'rounded',
+  'skeleton-tab': 'rounded',
+  'skeleton-title': 'rounded',
+} as const;
+
 function SkeletonBlock(props: {
   width: number | string;
   height: number;
-  part:
-    | 'skeleton-action'
-    | 'skeleton-avatar'
-    | 'skeleton-badge'
-    | 'skeleton-breadcrumb'
-    | 'skeleton-content'
-    | 'skeleton-sidebar'
-    | 'skeleton-subtitle'
-    | 'skeleton-tab'
-    | 'skeleton-title';
+  part: keyof typeof SKELETON_PART_VARIANT;
   style?: React.CSSProperties;
 }) {
   return (
-    <div
-      data-part={
-        props.part === 'skeleton-action'
-          ? 'skeleton-action'
-          : props.part === 'skeleton-avatar'
-            ? 'skeleton-avatar'
-            : props.part === 'skeleton-badge'
-              ? 'skeleton-badge'
-              : props.part === 'skeleton-breadcrumb'
-                ? 'skeleton-breadcrumb'
-                : props.part === 'skeleton-content'
-                  ? 'skeleton-content'
-                  : props.part === 'skeleton-sidebar'
-                    ? 'skeleton-sidebar'
-                    : props.part === 'skeleton-subtitle'
-                      ? 'skeleton-subtitle'
-                      : props.part === 'skeleton-tab'
-                        ? 'skeleton-tab'
-                        : 'skeleton-title'
-      }
-      style={{
-        width: props.width,
-        height: props.height,
-        ...PULSE_STYLE,
-        ...props.style,
-      }}
-    />
+    <div data-part={props.part} style={props.style}>
+      <Skeleton
+        variant={SKELETON_PART_VARIANT[props.part]}
+        width={props.width}
+        height={props.height}
+      />
+    </div>
   );
 }
 
@@ -139,7 +118,7 @@ function ActionButton({ action }: { action: DetailAction }) {
 /**
  * Clean back navigation button with ghost styling.
  */
-function BackButton({ onClick }: { onClick: () => void }) {
+function BackButton({ onClick, label }: { onClick: () => void; label: string }) {
   return (
     <span data-part="back-button" style={{ display: 'contents' }}>
       <Button
@@ -148,14 +127,12 @@ function BackButton({ onClick }: { onClick: () => void }) {
         size="sm"
         shape="circle"
         onClick={onClick}
-        aria-label="Go back"
+        aria-label={label}
         style={{ flexShrink: 0 }}
         icon={(
           <NavigationBackIcon size={15} decorative />
         )}
-      >
-        <span className="ds-sr-only">Go back</span>
-      </Button>
+      />
     </span>
   );
 }
@@ -198,43 +175,15 @@ function TabButton({
       tabIndex={isActive ? 0 : -1}
       disabled={disabled}
       onClick={onClick}
-      style={{
-        position: 'relative',
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 'var(--ds-tabs-item-gap)',
-        minHeight: 'var(--ds-tabs-md-height)',
-        padding: 'var(--ds-tabs-md-padding)',
-        fontSize: 'var(--ds-tabs-md-font-size)',
-        fontWeight: isActive
-          ? 'var(--ds-tabs-item-font-weight-active)'
-          : 'var(--ds-tabs-item-font-weight)',
-        lineHeight: 'var(--ds-line-height-body)',
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        opacity: disabled ? 0.5 : 1,
-        transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}, box-shadow ${TRANSITION_FAST}, transform ${TRANSITION_FAST}`,
-      }}
     >
       {icon && (
-        <span style={{ display: 'inline-flex', fontSize: 'var(--ds-tabs-md-icon-size)', flexShrink: 0 }}>
+        <span data-part="tab-icon">
           {icon}
         </span>
       )}
       {label}
       {badge != null && (
-        <span
-          data-part="tab-badge"
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '1px 7px',
-            fontSize: 11,
-            fontWeight: 600,
-            lineHeight: 1.4,
-            minWidth: 18,
-          }}
-        >
+        <span data-part="tab-badge">
           {badge}
         </span>
       )}
@@ -251,21 +200,15 @@ function TabButton({
  */
 function Breadcrumbs({
   items,
+  navLabel,
 }: {
   items: { label: string; href?: string; onClick?: () => void }[];
+  navLabel: string;
 }) {
   return (
     <nav
-      aria-label="Breadcrumb"
+      aria-label={navLabel}
       data-part="breadcrumbs"
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 'var(--ds-spacing-2, 8px)',
-        marginBottom: 'var(--ds-spacing-3, 12px)',
-        fontSize: 'var(--ds-font-size-xs)',
-        lineHeight: 'var(--ds-line-height-body)',
-      }}
     >
       {items.map((crumb, idx) => {
         const isLast = idx === items.length - 1;
@@ -276,10 +219,6 @@ function Breadcrumbs({
             {idx > 0 && (
               <span
                 data-part="breadcrumb-separator"
-                style={{
-                  userSelect: 'none',
-                  fontSize: 11,
-                }}
                 aria-hidden="true"
               >
                 <NavigationForwardIcon size={10} decorative />
@@ -290,21 +229,14 @@ function Breadcrumbs({
                 href={crumb.href}
                 onClick={crumb.onClick}
                 data-part="breadcrumb-link"
-                style={{
-                  fontWeight: 500,
-                  textDecoration: 'none',
-                  transition: `color ${TRANSITION_FAST}`,
-                }}
               >
                 {crumb.label}
               </a>
             ) : (
               <span
                 data-part="breadcrumb-current"
-                style={{
-                  fontWeight: isLast ? 600 : 500,
-                  cursor: isClickable ? 'pointer' : 'default',
-                }}
+                data-clickable={isClickable ? 'true' : 'false'}
+                data-last={isLast ? 'true' : 'false'}
                 onClick={crumb.onClick}
               >
                 {crumb.label}
@@ -371,6 +303,20 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
   );
   const activeTab = controlledActiveTab ?? internalActiveTab;
 
+  // Chrome copy: catalogued when an I18nProvider is mounted, the documented
+  // English floor otherwise (a missing key echoes the full key back, which
+  // the endsWith guard detects). Pattern-owned strings, never page copy.
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, fallback: string): string => {
+    const translated = i18n?.t(key);
+    return translated && !translated.endsWith(key) ? translated : fallback;
+  };
+  const labels = {
+    back: tOr('detailPanel.back', 'Go back'),
+    breadcrumb: tOr('detailPanel.breadcrumb', 'Breadcrumb'),
+    tabs: tOr('detailPanel.tabs', 'Detail panel tabs'),
+  };
+
   // Only update internal state when uncontrolled. Always fire onTabChange
   // so controlled consumers can sync their own state.
   const handleTabChange = (key: string) => {
@@ -384,32 +330,26 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
       <div
         className={`ds-pattern-detail-panel ds-engine-modern ${className ?? ''}`}
         data-part="root"
+        data-pattern="detail-panel"
         data-loading="true"
         style={style}
       >
-        <div style={{ padding: 'var(--ds-detail-panel-padding)' }}>
+        <div data-part="panel-inner">
           {/* Breadcrumb skeleton */}
-          <SkeletonBlock part="skeleton-breadcrumb" width={180} height={12} style={{ marginBottom: 14 }} />
+          <SkeletonBlock part="skeleton-breadcrumb" width={180} height={12} />
 
           {/* Header skeleton */}
           <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 14,
-            }}
+            data-part="skeleton-header"
           >
             {/* Avatar skeleton */}
             <SkeletonBlock
               part="skeleton-avatar"
               width={48}
               height={48}
-              style={{
-                flexShrink: 0,
-              }}
             />
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div data-part="skeleton-title-column">
+              <div data-part="skeleton-title-row">
                 <SkeletonBlock part="skeleton-title" width={180} height={22} />
                 <SkeletonBlock
                   part="skeleton-badge"
@@ -419,7 +359,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
               </div>
               <SkeletonBlock part="skeleton-subtitle" width={140} height={14} />
             </div>
-            <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+            <div data-part="skeleton-actions-row">
               <SkeletonBlock
                 part="skeleton-action"
                 width={80}
@@ -434,15 +374,15 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
           </div>
 
           {/* Tab bar skeleton */}
-          <div style={{ marginTop: 'var(--ds-detail-panel-section-gap)', display: 'flex', gap: 'var(--ds-tabs-gap)' }}>
+          <div data-part="skeleton-tabbar">
             <SkeletonBlock part="skeleton-tab" width={72} height={34} />
             <SkeletonBlock part="skeleton-tab" width={72} height={34} />
             <SkeletonBlock part="skeleton-tab" width={72} height={34} />
           </div>
 
           {/* Content skeleton */}
-          <div style={{ marginTop: 'var(--ds-detail-panel-section-gap)', display: 'flex', gap: 'var(--ds-detail-panel-content-gap)' }}>
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div data-part="skeleton-body">
+            <div data-part="skeleton-content-column">
               <SkeletonBlock part="skeleton-content" width="100%" height={120} />
               <SkeletonBlock part="skeleton-content" width="100%" height={80} />
             </div>
@@ -450,9 +390,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
               part="skeleton-sidebar"
               width={sidebarWidth}
               height={200}
-              style={{
-                flexShrink: 0,
-              }}
             />
           </div>
         </div>
@@ -467,51 +404,33 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
     <div
       className={`ds-pattern-detail-panel ds-engine-modern ${className ?? ''}`}
       data-part="root"
+      data-pattern="detail-panel"
       style={style}
     >
-      <div style={{ padding: 'var(--ds-detail-panel-padding)' }}>
+      <div data-part="panel-inner">
         {/* ---- Breadcrumbs ---- */}
         {breadcrumbs && breadcrumbs.length > 0 && (
-          <Breadcrumbs items={breadcrumbs} />
+          <Breadcrumbs items={breadcrumbs} navLabel={labels.breadcrumb} />
         )}
 
         {/* ---- Header ---- */}
         <div
           data-part="header"
           data-has-actions={actions || headerExtra ? 'true' : 'false'}
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-            gap: 'var(--ds-detail-panel-content-gap)',
-          }}
         >
           {/* Left: back + avatar + title group */}
           <div
             data-part="identity"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--ds-detail-panel-item-gap)',
-              flex: 1,
-              minWidth: 0,
-            }}
           >
-            {onBack && <BackButton onClick={onBack} />}
+            {onBack && <BackButton onClick={onBack} label={labels.back} />}
 
             {avatar && (
-              <div data-part="avatar" style={{ flexShrink: 0 }}>{avatar}</div>
+              <div data-part="avatar">{avatar}</div>
             )}
 
-            <div style={{ minWidth: 0, flex: 1 }}>
+            <div data-part="heading">
               <div
                 data-part="title-row"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 'var(--ds-detail-panel-item-gap)',
-                  flexWrap: 'wrap',
-                }}
               >
                 {/* Only render the heading when a title is actually provided.
                     When DetailPanel is wrapped by PageShell, title is suppressed
@@ -519,14 +438,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                 {title != null && title !== '' && (
                   <h2
                     data-part="title"
-                    style={{
-                      margin: 0,
-                      fontSize: 'var(--ds-font-size-xl)',
-                      fontWeight: 'var(--ds-font-weight-semibold)',
-                      lineHeight: 'var(--ds-line-height-heading)',
-                      letterSpacing: 'var(--ds-letter-spacing-heading)',
-                      textWrap: 'balance',
-                    }}
                   >
                     {title}
                   </h2>
@@ -536,15 +447,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                 {status && (
                   <span
                     data-part="status-badge"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      padding: '2px 10px',
-                      fontSize: 'var(--ds-font-size-xs)',
-                      fontWeight: 'var(--ds-font-weight-semibold)',
-                      lineHeight: 'var(--ds-line-height-body)',
-                      whiteSpace: 'nowrap',
-                    }}
                   >
                     {status.label}
                   </span>
@@ -555,12 +457,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
               {subtitle && (
                 <p
                   data-part="subtitle"
-                  style={{
-                    margin: '4px 0 0',
-                    fontSize: 'var(--ds-font-size-sm)',
-                    lineHeight: 'var(--ds-line-height-body)',
-                    textWrap: 'pretty',
-                  }}
                 >
                   {subtitle}
                 </p>
@@ -572,12 +468,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
           {(actions || headerExtra) && (
             <div
               data-part="actions"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 'var(--ds-detail-panel-item-gap)',
-                flexShrink: 0,
-              }}
             >
               {headerExtra}
               {actions?.map((a) => <ActionButton key={a.key} action={a} />)}
@@ -588,28 +478,17 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
         {/* ---- Body: tabs + content + sidebar ---- */}
         <div
           data-part="body"
-          style={{
-            display: 'flex',
-            gap: 'var(--ds-detail-panel-content-gap)',
-            marginTop: 'var(--ds-detail-panel-section-gap)',
-            flexDirection: sidebarPosition === 'left' ? 'row-reverse' : 'row',
-          }}
+          data-sidebar-position={sidebarPosition}
         >
           {/* Main content area */}
-          <div data-part="main" style={{ flex: 1, minWidth: 0 }}>
+          <div data-part="main">
             {/* Tab navigation */}
             {tabs && tabs.length > 0 && (
               <>
                 <div
                   role="tablist"
-                  aria-label="Detail panel tabs"
+                  aria-label={labels.tabs}
                   data-part="tab-list"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 'var(--ds-tabs-gap)',
-                    marginBottom: 'var(--ds-detail-panel-content-gap)',
-                  }}
                   onKeyDown={(e) => {
                     const enabledTabs = tabs.filter((t) => !t.disabled);
                     if (enabledTabs.length === 0) return;
@@ -662,17 +541,11 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
           {/* Sidebar */}
           {sidebar && (
             <div
-              style={{
-                width: sidebarWidth,
-                flexShrink: 0,
-                order: sidebarPosition === 'left' ? 1 : undefined,
-              }}
+              data-part="sidebar-slot"
+              style={{ '--ds-detail-panel-sidebar-width': `${sidebarWidth}px` } as React.CSSProperties}
             >
               <div
                 data-part="sidebar"
-                style={{
-                  padding: 'var(--ds-workspace-card-padding)',
-                }}
               >
                 {sidebar}
               </div>
@@ -684,10 +557,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
         {footer && (
           <div
             data-part="footer"
-            style={{
-              marginTop: 'var(--ds-detail-panel-section-gap)',
-              paddingTop: 'var(--ds-detail-panel-content-gap)',
-            }}
           >
             {footer}
           </div>

@@ -13,7 +13,7 @@
 
 .rottay-button.rottay-button--modern[data-part='trigger'] {
   --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
-  --ds-button-resolved-radius: var(--ds-button-md-radius);
+  --_ds-button-resolved-radius: var(--ds-button-md-radius);
   --ds-button-resolved-height: var(--ds-button-md-height);
   --ds-button-resolved-padding-y: var(--ds-button-md-padding-y);
 
@@ -48,7 +48,7 @@
 
   border-width: var(--ds-button-border-width);
   border-style: solid;
-  border-radius: var(--ds-button-resolved-radius);
+  border-radius: var(--_ds-button-resolved-radius);
   outline: none;
 
   transition:
@@ -213,7 +213,7 @@
 
 .rottay-button.rottay-button--modern[data-size='xs']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-xs-icon-size);
-  --ds-button-resolved-radius: var(--ds-button-xs-radius);
+  --_ds-button-resolved-radius: var(--ds-button-xs-radius);
   --ds-button-resolved-height: var(--ds-button-xs-height);
   --ds-button-resolved-padding-y: var(--ds-button-xs-padding-y);
   padding-inline: calc(
@@ -226,7 +226,7 @@
 
 .rottay-button.rottay-button--modern[data-size='sm']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-sm-icon-size);
-  --ds-button-resolved-radius: var(--ds-button-sm-radius);
+  --_ds-button-resolved-radius: var(--ds-button-sm-radius);
   --ds-button-resolved-height: var(--ds-button-sm-height);
   --ds-button-resolved-padding-y: var(--ds-button-sm-padding-y);
   padding-inline: calc(
@@ -239,7 +239,7 @@
 
 .rottay-button.rottay-button--modern[data-size='md']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-md-icon-size);
-  --ds-button-resolved-radius: var(--ds-button-md-radius);
+  --_ds-button-resolved-radius: var(--ds-button-md-radius);
   --ds-button-resolved-height: var(--ds-button-md-height);
   --ds-button-resolved-padding-y: var(--ds-button-md-padding-y);
   padding-inline: calc(
@@ -252,7 +252,7 @@
 
 .rottay-button.rottay-button--modern[data-size='lg']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-lg-icon-size);
-  --ds-button-resolved-radius: var(--ds-button-lg-radius);
+  --_ds-button-resolved-radius: var(--ds-button-lg-radius);
   --ds-button-resolved-height: var(--ds-button-lg-height);
   --ds-button-resolved-padding-y: var(--ds-button-lg-padding-y);
   padding-inline: calc(
@@ -265,7 +265,7 @@
 
 .rottay-button.rottay-button--modern[data-size='xl']:not([data-size-responsive]) {
   --ds-button-resolved-icon-size: var(--ds-button-xl-icon-size);
-  --ds-button-resolved-radius: var(--ds-button-xl-radius);
+  --_ds-button-resolved-radius: var(--ds-button-xl-radius);
   --ds-button-resolved-height: var(--ds-button-xl-height);
   --ds-button-resolved-padding-y: var(--ds-button-xl-padding-y);
   padding-inline: calc(

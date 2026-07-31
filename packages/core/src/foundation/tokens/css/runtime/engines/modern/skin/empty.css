@@ -67,7 +67,9 @@
 }
 
 .rottay-empty.rottay-empty--modern > .rottay-empty__description[data-part='description'][data-part='description'] {
-  max-inline-size: var(--ds-empty-description-width, 34rem);
+  /* Reading measure, not a layout width: ~40ch keeps the copy at a prose
+     cadence (the previous 34rem ran to ~68ch, past comfortable reading). */
+  max-inline-size: var(--ds-empty-description-width, 40ch);
   margin: 0;
   color: var(--ds-color-text-secondary);
   font-family: var(--ds-font-family-base);
@@ -87,4 +89,21 @@
   gap: var(--ds-empty-footer-gap, var(--ds-spacing-sm));
   min-block-size: var(--ds-control-height-md);
   margin-block-start: var(--ds-spacing-xs);
+}
+
+/* Forced colors: the tinted well collapses to Canvas and the 7%/22% mixes
+   vanish, so the frame and the illustration are re-asserted in system colors
+   — the placeholder must stay visible as a placeholder. */
+@media (forced-colors: active) {
+  .rottay-empty.rottay-empty--modern[data-part='root'][data-image] {
+    border-color: ButtonText;
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  .rottay-empty.rottay-empty--modern[data-image] > .rottay-empty__visual[data-part='image'] {
+    border-color: ButtonText;
+    background: Canvas;
+    color: CanvasText;
+  }
 }

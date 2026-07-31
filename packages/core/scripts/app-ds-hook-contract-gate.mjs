@@ -25,19 +25,20 @@
  *
  * THE THREE CLASSIFICATIONS
  * -------------------------
- *   PUBLIC_HOOK_SCOPED  the property is a public hook (the DS reads it and owns
- *                       no value for it) and the write is under a non-root
- *                       scope. This is the supported customization path.
+ *   PUBLIC_HOOK_SCOPED  the property is an explicitly promoted public hook and
+ *                       the write is under a non-root scope. This is the
+ *                       supported customization path.
  *   ROOT_EQUIVALENT     the write lands on the document root, a root-state
  *                       attribute, or a universal subject — the app is
  *                       authoring DS root state. Forbidden by law; existing
  *                       instances are grandfathered and decrease-only.
  *   UNKNOWN_HOOK        the write is properly scoped but the property is not a
  *                       public hook: it is a DS foundation token, a variable
- *                       the white-label chrome compiler owns at `:root`, or a
- *                       name the DS has never heard of. Each carries a `reason`
- *                       so the remedy is unambiguous. Grandfathered,
- *                       decrease-only.
+ *                       the white-label compiler owns at `:root`, an
+ *                       DS-owned component token, an unadjudicated read,
+ *                       or a name the DS has never heard of. Each carries a
+ *                       `reason` so the remedy is
+ *                       unambiguous. Grandfathered, decrease-only.
  *
  * `--rt-*` declarations are the app's own namespace and are always legal; the
  * report counts them so the healthy channel stays visible next to the debt.
@@ -202,7 +203,11 @@ export function classifyStylesheet({ css, manifest, postcss }) {
           ? 'tenant-channel'
           : manifest.foundationTokens.has(node.prop)
             ? 'foundation-token'
-            : 'undeclared';
+            : manifest.componentTokenSet?.has(node.prop)
+              ? 'component-token'
+              : manifest.unadjudicatedReadSet?.has(node.prop)
+                ? 'unadjudicated-read'
+                : 'undeclared';
         findings.push({
           property: node.prop,
           kind: CLASSIFICATIONS.unknownHook,
@@ -361,6 +366,10 @@ export function formatReport(result, { verbose = false } = {}) {
           ? 'white-label compiler owns this at :root; a scoped app write overrides the tenant'
           : reason === 'foundation-token'
             ? 'DS root-declares this; assigning it repaints every reader below the scope'
+            : reason === 'component-token'
+              ? 'a DS component supplies this channel; it is not an application contract'
+            : reason === 'unadjudicated-read'
+              ? 'the DS reads this name, but no owner has promoted it as application API'
             : reason === 'hook-value-literal'
               ? 'a declared slot pinned to brand paint the tenant can no longer re-theme'
               : 'the DS neither reads nor declares it — namespace squatting, belongs in --rt-*';
@@ -396,8 +405,8 @@ export function formatReport(result, { verbose = false } = {}) {
     lines.push('');
     lines.push('  ROOT_EQUIVALENT  move the write off root/tenant/vertical scope, or publish the');
     lines.push('                   value through BrandTheme / the tenant Appearance document.');
-    lines.push('  UNKNOWN_HOOK     tenant-channel and foundation-token properties are DS-owned: use');
-    lines.push('                   the governed channel. Undeclared names are app-owned: use --rt-*.');
+    lines.push('  UNKNOWN_HOOK     tenant/foundation/component channels are DS-owned and');
+    lines.push('                   unadjudicated reads are debt: use a declared hook or --rt-*.');
     lines.push('  HOOK_VALUE_LITERAL  assign the hook a var()/color-mix() chain over DS tokens, not a');
     lines.push('                   raw colour. If the colour is genuinely app-owned, put it in --rt-*.');
     lines.push('  Baselining new findings is not a remedy; the baseline is decrease-only.');
@@ -441,11 +450,41 @@ export function serializeBaseline(observed) {
  * present-but-unexported artifact is the failure C3 point 5 names directly — the
  * contract exists only for people who can open this repository.
  */
+/**
+ * Compare the current unadjudicated reads with the last published contract.
+ *
+ * Schema 3 migration: `publicHooks` used to contain every unowned read plus
+ * explicit promotions. Subtracting the current promoted set reconstructs the
+ * legacy debt ceiling without blessing any newly observed name. Schema 4 and
+ * later carry the debt explicitly in `unadjudicatedReads`.
+ */
+export function compareUnadjudicatedReadBaseline(manifest, publishedContract) {
+  if (!publishedContract || typeof publishedContract !== 'object') {
+    return { baseline: null, additions: [], removals: [] };
+  }
+
+  const source = Array.isArray(publishedContract.unadjudicatedReads)
+    ? publishedContract.unadjudicatedReads
+    : Array.isArray(publishedContract.publicHooks)
+      ? publishedContract.publicHooks.filter((property) => !manifest.promotedSet.has(property))
+      : null;
+  if (source === null) return { baseline: null, additions: [], removals: [] };
+
+  const baseline = new Set(source);
+  const observed = manifest.unadjudicatedReadSet;
+  return {
+    baseline,
+    additions: [...observed].filter((property) => !baseline.has(property)).sort(),
+    removals: [...baseline].filter((property) => !observed.has(property)).sort(),
+  };
+}
+
 export function checkManifestFreshness({ manifest, manifestPath, packageJson }) {
   const problems = [];
   const expected = serializeHookManifest(manifest);
 
   let committed = null;
+  let publishedContract = null;
   try {
     committed = readFileSync(manifestPath, 'utf8');
   } catch {
@@ -454,6 +493,30 @@ export function checkManifestFreshness({ manifest, manifestPath, packageJson }) 
       detail:
         `no published contract at ${manifestPath}\n` +
         '    run `pnpm hooks:generate` and commit the result.',
+    });
+  }
+  if (committed !== null) {
+    try {
+      publishedContract = JSON.parse(committed);
+    } catch (error) {
+      problems.push({
+        code: 'MANIFEST_INVALID',
+        detail:
+          `${manifestPath} is not valid JSON: ${error.message}\n` +
+          '    refusing to publish without a readable decrease-only baseline.',
+      });
+    }
+  }
+  const unadjudicated = compareUnadjudicatedReadBaseline(manifest, publishedContract);
+  if (unadjudicated.additions.length > 0) {
+    problems.push({
+      code: 'UNADJUDICATED_GROWTH',
+      detail:
+        `${unadjudicated.additions.length} new unowned DS read(s) are absent from the ` +
+        'decrease-only published baseline:\n' +
+        unadjudicated.additions.map((property) => `      ${property}`).join('\n') +
+        '\n    declare a private --_ds-* implementation property, reuse a canonical token, ' +
+        'or add a complete owner-reviewed PROMOTIONS entry. Never widen the baseline.',
     });
   }
   if (committed !== null && committed !== expected) {
@@ -525,21 +588,42 @@ export async function main(argv = process.argv.slice(2)) {
   const postcssModule = await import('postcss');
   const postcss = postcssModule.default ?? postcssModule;
   const manifest = deriveHookManifest({ coreRoot: CORE_ROOT, postcss });
+  const isPublishedManifestMode =
+    args.mode === 'manifest-write' || args.mode === 'manifest-check';
 
-  if (args.manifestPath) {
+  // `--emit-manifest` is an ad-hoc output in ordinary gate modes. In published
+  // manifest modes it identifies the target whose PREVIOUS bytes are the
+  // decrease-only baseline; writing before freshness comparison would let
+  // `--manifest-write --emit-manifest <target>` erase the very baseline that
+  // must reject unadjudicated growth.
+  if (args.manifestPath && !isPublishedManifestMode) {
     writeFileSync(args.manifestPath, serializeHookManifest(manifest), 'utf8');
     process.stderr.write(`app-ds-hook-contract: wrote public hook manifest to ${args.manifestPath}\n`);
   }
 
-  if (args.mode === 'manifest-write' || args.mode === 'manifest-check') {
+  if (isPublishedManifestMode) {
     const target = args.manifestPath ?? DEFAULT_MANIFEST_PATH;
     const packageJson = JSON.parse(readFileSync(resolve(CORE_ROOT, 'package.json'), 'utf8'));
     const freshness = checkManifestFreshness({ manifest, manifestPath: target, packageJson });
     if (args.mode === 'manifest-write') {
+      const ratchetProblems = freshness.problems.filter(
+        (problem) =>
+          problem.code === 'UNADJUDICATED_GROWTH' ||
+          problem.code === 'MANIFEST_INVALID' ||
+          problem.code === 'MANIFEST_MISSING',
+      );
+      if (ratchetProblems.length > 0) {
+        process.stderr.write(
+          'app-ds-hook-contract: REFUSED — no trustworthy decrease-only baseline\n' +
+            ratchetProblems.map((problem) => `  ${problem.code}: ${problem.detail}`).join('\n') +
+            '\n',
+        );
+        return 1;
+      }
       writeFileSync(target, freshness.expected, 'utf8');
       process.stderr.write(
-        `app-ds-hook-contract: published ${manifest.hooks.length} public hooks ` +
-          `(${manifest.yields.promoted} declared slots) to ${target}\n`,
+        `app-ds-hook-contract: published ${manifest.hooks.length} explicit public hooks ` +
+          `(${manifest.unadjudicatedReads.length} unadjudicated reads fenced) to ${target}\n`,
       );
       const exportProblems = freshness.problems.filter((problem) =>
         problem.code.startsWith('EXPORT_'),
@@ -556,8 +640,9 @@ export async function main(argv = process.argv.slice(2)) {
     }
     if (freshness.ok) {
       process.stderr.write(
-        `app-ds-hook-contract: published contract is current (${manifest.hooks.length} public hooks, ` +
-          `${manifest.yields.promoted} declared slots, exported as "${MANIFEST_EXPORT_SUBPATH}")\n`,
+        `app-ds-hook-contract: published contract is current (${manifest.hooks.length} explicit ` +
+          `public hooks, ${manifest.unadjudicatedReads.length} unadjudicated reads fenced, ` +
+          `exported as "${MANIFEST_EXPORT_SUBPATH}")\n`,
       );
       return 0;
     }

@@ -78,7 +78,9 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
   };
 
   return (
-    <ul
+    /* A timeline is a chronological sequence: the list is ORDERED (ol), not
+       ul. The skin resets list styling, so the change is purely semantic. */
+    <ol
       className={`${SCOPE_CLASSES}${className ? ` ${className}` : ''}`}
       data-part="root"
       data-mode={mode}
@@ -134,7 +136,7 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
           </div>
         </li>
       )}
-    </ul>
+    </ol>
   );
 }
 

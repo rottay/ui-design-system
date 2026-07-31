@@ -1,10 +1,11 @@
 'use client';
 
 /**
- * @fileoverview DatePicker Modern Engine (DaisyUI/Tailwind) - Rottay Design System.
- * Full calendar UI built from DaisyUI classes and native DOM -- no Ant Design,
- * no dayjs dependency. Renders date/month/year grids with keyboard navigation,
- * range highlighting, optional time selection, and ARIA dialog semantics.
+ * @fileoverview DatePicker Modern Engine - Rottay Design System.
+ * Full token- and skin-driven calendar UI built from native DOM -- no Ant
+ * Design, DaisyUI, or dayjs dependency. Renders date/month/year grids with
+ * keyboard navigation, range highlighting, optional time selection, and ARIA
+ * dialog semantics.
  * Positioning uses a lightweight hook instead of floating-ui.
  *
  * @example
@@ -28,6 +29,11 @@ import type { DatePickerMode, DatePickerProps, RangePickerProps } from '../../co
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+import { TimeDateIcon } from '@/graphics/icons/presentation/semantic/generated/roles/time-date';
+import { TimeTimestampIcon } from '@/graphics/icons/presentation/semantic/generated/roles/time-timestamp';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 import {
   DAYS_SHORT,
   MONTHS_FULL,
@@ -55,70 +61,22 @@ const sizeStyleMap: Record<'sm' | 'md' | 'lg', React.CSSProperties> = {
   lg: { height: 'var(--ds-input-lg-height, 2.75rem)', fontSize: 'var(--ds-input-lg-font-size, 15px)', padding: '8px var(--ds-input-lg-padding-x, 14px)' },
 };
 
-const sizeClassMap: Record<'sm' | 'md' | 'lg', string> = {
-  sm: 'input-sm',
-  md: '',
-  lg: 'input-lg',
-};
-
-const statusClassMap: Record<string, string> = {
-  error: 'input-error',
-  warning: 'input-warning',
-};
-
-function getInputClassName(size: 'sm' | 'md' | 'lg', status?: string): string {
-  return [
-    'input',
-    'w-full',
-    'cursor-pointer',
-    sizeClassMap[size] ?? '',
-    status ? statusClassMap[status] : '',
-  ].filter(Boolean).join(' ');
-}
-
-// ---------------------------------------------------------------------------
-// SVG Icons (inline to avoid extra deps)
-// Modern engine uses inline SVGs instead of an icon library so that it stays
-// self-contained -- no @ant-design/icons or heroicons dependency required.
-// ---------------------------------------------------------------------------
-
-const CalendarIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-    <line x1="16" y1="2" x2="16" y2="6" />
-    <line x1="8" y1="2" x2="8" y2="6" />
-    <line x1="3" y1="10" x2="21" y2="10" />
-  </svg>
+// All functional glyphs resolve through the semantic icon corpus. The double
+// year affordance composes two logical navigation roles so tenant icon packs
+// and RTL behavior remain authoritative.
+const PreviousIcon = () => <NavigationBackIcon decorative size={16} />;
+const NextIcon = () => <NavigationForwardIcon decorative size={16} />;
+const PreviousYearIcon = () => (
+  <span data-part="double-nav-icon" aria-hidden="true">
+    <NavigationBackIcon decorative size={13} />
+    <NavigationBackIcon decorative size={13} />
+  </span>
 );
-
-const ChevronLeft = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <polyline points="15 18 9 12 15 6" />
-  </svg>
-);
-
-const ChevronRight = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <polyline points="9 18 15 12 9 6" />
-  </svg>
-);
-
-const ClockIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <circle cx="12" cy="12" r="10" />
-    <polyline points="12 6 12 12 16 14" />
-  </svg>
+const NextYearIcon = () => (
+  <span data-part="double-nav-icon" aria-hidden="true">
+    <NavigationForwardIcon decorative size={13} />
+    <NavigationForwardIcon decorative size={13} />
+  </span>
 );
 
 // ---------------------------------------------------------------------------
@@ -128,10 +86,15 @@ const ClockIcon = () => (
 // Custom positioning hook replaces a floating-ui dependency. It calculates
 // absolute coordinates from the trigger's bounding rect and recomputes on
 // scroll (captured phase to catch nested scrollable containers) and resize.
+// Top placements subtract the PANEL's measured height: without it the panel's
+// top edge parked at the trigger's top edge and the panel painted DOWN over
+// the field (the measured panel ref arrives with the same commit that opens
+// it, so it is readable inside the effect).
 function usePopoverPosition(
   triggerRef: React.RefObject<HTMLElement | null>,
   isOpen: boolean,
   placement: string = 'bottomLeft',
+  panelRef?: React.RefObject<HTMLElement | null>,
 ) {
   const [pos, setPos] = useState({ top: 0, left: 0 });
 
@@ -147,7 +110,8 @@ function usePopoverPosition(
       let left = rect.left;
 
       if (placement.includes('top')) {
-        top = rect.top - gap;
+        const panelHeight = panelRef?.current?.getBoundingClientRect().height ?? 0;
+        top = rect.top - gap - panelHeight;
       }
       if (placement.includes('Right')) {
         left = rect.right;
@@ -172,7 +136,7 @@ function usePopoverPosition(
       window.removeEventListener('scroll', update, true);
       window.removeEventListener('resize', update);
     };
-  }, [isOpen, placement, triggerRef]);
+  }, [isOpen, placement, triggerRef, panelRef]);
 
   return pos;
 }
@@ -199,7 +163,7 @@ const TimePickerPanel: React.FC<TimePickerPanelProps> = ({
   const { t } = useTranslation('components');
   return (
   <div data-part="time-column" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-spacing-2, 8px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)' }}>
-    <ClockIcon />
+    <TimeTimestampIcon decorative size={14} />
     <select
       style={{ padding: '2px var(--ds-spacing-2, 8px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', height: 'var(--ds-input-sm-height, 32px)' }}
       value={hours}
@@ -346,7 +310,8 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
   // ---------------------------------------------------------------------------
   // Shared structural geometry for portal-rendered panels. Paint/state live in
   // the standalone panel skin because portal content sits outside the trigger
-  // root. DaisyUI oklch vars are set on :root and still cascade to portals.
+  // root. Tenant semantic channels are set on the DS root and still cascade
+  // into the governed portal scope.
   // Panel width and the slide-in animation are skin-owned (per `data-mode`
   // channel + reduced-motion coverage); only token-based geometry stays here.
   // ---------------------------------------------------------------------------
@@ -399,11 +364,11 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
       <div data-part="panel" data-mode="month" className="rottay-datepicker-panel rottay-datepicker-panel--modern" style={panelStyle}>
         <div data-part="header" style={headerStyle}>
           <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
-            <ChevronLeft />
+            <PreviousIcon />
           </button>
           <span data-part="panel-title" style={{ fontSize: 'var(--ds-input-md-font-size, 14px)' }}>{viewYear}</span>
           <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
-            <ChevronRight />
+            <NextIcon />
           </button>
         </div>
         <div data-part="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--ds-spacing-1, 4px)' }}>
@@ -450,13 +415,13 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
       <div data-part="panel" data-mode="year" className="rottay-datepicker-panel rottay-datepicker-panel--modern" style={panelStyle}>
         <div data-part="header" style={headerStyle}>
           <button type="button" data-part="nav-button" style={navBtnStyle} onClick={() => onViewChange(viewYear - 10, viewMonth)} aria-label={t('datepicker.previous_decade')}>
-            <ChevronLeft />
+            <PreviousIcon />
           </button>
           <span data-part="panel-title" style={{ fontSize: 'var(--ds-input-md-font-size, 14px)' }}>
             {startYear} - {startYear + 9}
           </span>
           <button type="button" data-part="nav-button" style={navBtnStyle} onClick={() => onViewChange(viewYear + 10, viewMonth)} aria-label={t('datepicker.next_decade')}>
-            <ChevronRight />
+            <NextIcon />
           </button>
         </div>
         <div data-part="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--ds-spacing-1, 4px)' }}>
@@ -506,10 +471,10 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
       <div data-part="header" style={headerStyle}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
-            «
+            <PreviousYearIcon />
           </button>
           <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handlePrevMonth} aria-label={t('datepicker.previous_month')}>
-            <ChevronLeft />
+            <PreviousIcon />
           </button>
         </div>
         <span data-part="panel-title" style={{ fontSize: 'var(--ds-input-md-font-size, 14px)' }}>
@@ -517,10 +482,10 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handleNextMonth} aria-label={t('datepicker.next_month')}>
-            <ChevronRight />
+            <NextIcon />
           </button>
           <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
-            »
+            <NextYearIcon />
           </button>
         </div>
       </div>
@@ -631,7 +596,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
 // ---------------------------------------------------------------------------
 
 /**
- * Modern (DaisyUI/Tailwind) DatePicker engine.
+ * Modern token- and skin-driven DatePicker engine.
  *
  * Renders a read-only input that opens a `CalendarPanel` popover on click.
  * Supports controlled and uncontrolled usage, date/month/year picker modes,
@@ -640,7 +605,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
  *
  * @param props - Rottay DatePickerProps (engine-agnostic interface).
  * @param ref   - Forwarded to the text input element.
- * @returns The rendered DaisyUI-styled DatePicker with calendar popover.
+ * @returns The rendered DatePicker with its governed calendar popover.
  */
 const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
   (props, ref) => {
@@ -734,8 +699,8 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       [ref],
     );
 
-    // Popover position
-    const popPos = usePopoverPosition(triggerRef, isOpen, placement);
+    // Popover position (measured: top placements subtract the panel height)
+    const popPos = usePopoverPosition(triggerRef, isOpen, placement, panelRef);
 
     // Open/close
     const setOpen = useCallback(
@@ -766,10 +731,16 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
 
     // Global Escape key listener -- separate from click-outside so both
     // keyboard and pointer users get a consistent dismiss experience.
+    // Escape also RETURNS FOCUS to the trigger input (Dropdown/Popover
+    // precedent): the panel unmounts on close, so without this the focus
+    // would drop to <body>.
     useEffect(() => {
       if (!isOpen) return;
       const handler = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') setOpen(false);
+        if (e.key === 'Escape') {
+          setOpen(false);
+          inputRef.current?.focus();
+        }
       };
       document.addEventListener('keydown', handler);
       return () => document.removeEventListener('keydown', handler);
@@ -851,14 +822,12 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
     // Size styles
     const canonicalSize = toCanonicalSize(size) ?? 'md';
     const dateSizeStyle = sizeStyleMap[canonicalSize];
-    const dateInputClassName = getInputClassName(canonicalSize, status);
-
     return (
       <>
         <div
           ref={setTriggerRef}
           data-part="root"
-          className={`relative w-full rottay-datepicker rottay-datepicker--modern ${className}`}
+          className={`rottay-datepicker rottay-datepicker--modern ${className}`}
           style={style}
         >
           <input
@@ -870,7 +839,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
             readOnly
             data-part="trigger-input"
             data-status={status ?? 'default'}
-            className={dateInputClassName}
+            data-size={canonicalSize}
             style={{
               boxSizing: 'border-box',
               paddingInlineEnd: 48,
@@ -905,7 +874,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
               tabIndex={-1}
               aria-label={t('datepicker.clear_date')}
             >
-              ×
+              <ActionCloseIcon decorative size={14} />
             </button>
           )}
           <span
@@ -913,7 +882,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
             style={{ position: 'absolute', insetInlineEnd: 'var(--ds-spacing-2, 8px)', top: '50%', pointerEvents: 'none', display: 'flex' }}
             aria-hidden="true"
           >
-            <CalendarIcon />
+            <TimeDateIcon decorative size={16} />
           </span>
         </div>
 
@@ -930,6 +899,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
             <PortalScope snapshot={portalScope}>
           <div
             ref={panelRef}
+            data-placement={placement}
             style={{
               position: 'fixed',
               top: popPos.top,
@@ -978,7 +948,7 @@ DatePickerBase.displayName = 'DatePicker.Modern';
 // ---------------------------------------------------------------------------
 
 /**
- * Modern (DaisyUI/Tailwind) RangePicker engine.
+ * Modern token- and skin-driven RangePicker engine.
  *
  * Renders two read-only inputs (start/end) with a shared `CalendarPanel`.
  * Selection follows a ping-pong pattern: the first click sets the start
@@ -988,7 +958,7 @@ DatePickerBase.displayName = 'DatePicker.Modern';
  *
  * @param props - Rottay RangePickerProps (engine-agnostic interface).
  * @param ref   - Forwarded to the wrapper div element.
- * @returns The rendered DaisyUI-styled RangePicker with calendar popover.
+ * @returns The rendered RangePicker with its governed calendar popover.
  */
 const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
   (props, ref) => {
@@ -1066,7 +1036,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
       else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
     }, [ref]);
 
-    const popPos = usePopoverPosition(triggerRef, isOpen, placement);
+    const popPos = usePopoverPosition(triggerRef, isOpen, placement, panelRef);
 
     const setOpen = useCallback(
       (next: boolean) => {
@@ -1092,15 +1062,22 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
       return () => document.removeEventListener('mousedown', handler);
     }, [isOpen, setOpen]);
 
-    // Escape
+    // Escape: closes and RETURNS FOCUS to the range input currently being
+    // filled (the panel unmounts on close; without this focus drops to <body>).
     useEffect(() => {
       if (!isOpen) return;
       const handler = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') setOpen(false);
+        if (e.key === 'Escape') {
+          setOpen(false);
+          const active = triggerRef.current?.querySelector<HTMLElement>(
+            `[data-range-input='${activeInput}']`,
+          );
+          active?.focus();
+        }
       };
       document.addEventListener('keydown', handler);
       return () => document.removeEventListener('keydown', handler);
-    }, [isOpen, setOpen]);
+    }, [isOpen, setOpen, activeInput]);
 
     // Emit change
     const emitChange = useCallback(
@@ -1158,8 +1135,6 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
 
     const canonicalSize = toCanonicalSize(size) ?? 'md';
     const rangeSizeStyle = sizeStyleMap[canonicalSize];
-    const rangeInputClassName = getInputClassName(canonicalSize, status);
-
     const rangeInputBaseStyle: React.CSSProperties = {
       boxSizing: 'border-box' as const,
       width: '100%',
@@ -1172,7 +1147,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
         <div
           ref={setTriggerRef}
           data-part="root"
-          className={`flex items-center gap-2 w-full rottay-datepicker-range rottay-datepicker-range--modern ${className}`}
+          className={`rottay-datepicker-range rottay-datepicker-range--modern ${className}`}
           style={style}
           id={id}
         >
@@ -1182,8 +1157,8 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
             data-part="trigger-input"
             data-range-input="start"
             data-status={status ?? 'default'}
+            data-size={canonicalSize}
             data-active={(activeInput === 'start' && isOpen) || undefined}
-            className={rangeInputClassName}
             style={rangeInputBaseStyle}
             value={startText}
             disabled={disabled}
@@ -1198,15 +1173,15 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
             aria-expanded={isOpen}
             aria-label={displayPlaceholder[0]}
           />
-          <span data-part="separator" className="shrink-0">{separator}</span>
+          <span data-part="separator">{separator}</span>
           <input
             type="text"
             readOnly
             data-part="trigger-input"
             data-range-input="end"
             data-status={status ?? 'default'}
+            data-size={canonicalSize}
             data-active={(activeInput === 'end' && isOpen) || undefined}
-            className={rangeInputClassName}
             style={rangeInputBaseStyle}
             value={endText}
             disabled={disabled}
@@ -1241,6 +1216,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
             <PortalScope snapshot={portalScope}>
           <div
             ref={panelRef}
+            data-placement={placement}
             style={{
               position: 'fixed',
               top: popPos.top,

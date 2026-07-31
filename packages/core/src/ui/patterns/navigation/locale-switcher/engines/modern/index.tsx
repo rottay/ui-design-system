@@ -14,81 +14,22 @@
  * />
  */
 
-import React, { useState, useRef, useEffect, useCallback, type CSSProperties } from 'react';
-import type { LocaleSwitcherProps, LocaleDef } from '../../contracts';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import type { LocaleSwitcherProps } from '../../contracts';
 import { DEFAULT_LOCALES } from '../../runtime/default-locales';
-import { popupPanelStyle } from '../../../../foundation/engine-styles/modern';
+import { StatusVerifiedIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-verified';
+import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
-/* ------------------------------------------------------------------ */
-/*  Check-mark SVG path for the active locale indicator                */
-/* ------------------------------------------------------------------ */
-const CheckIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={14}
-    height={14}
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    data-part="check"
-    style={{ flexShrink: 0 }}
-    aria-hidden="true"
-  >
-    <path
-      fillRule="evenodd"
-      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-      clipRule="evenodd"
-    />
-  </svg>
-);
-
-/* ------------------------------------------------------------------ */
-/*  Chevron-down SVG for the trigger button                            */
-/* ------------------------------------------------------------------ */
-const ChevronIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={12}
-    height={12}
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    style={{ opacity: 0.5, flexShrink: 0 }}
-    aria-hidden="true"
-  >
-    <path
-      fillRule="evenodd"
-      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-      clipRule="evenodd"
-    />
-  </svg>
-);
-
-/* ------------------------------------------------------------------ */
-/*  Trigger button base styles                                         */
-/* ------------------------------------------------------------------ */
-const triggerBaseStyle: CSSProperties = {
-  cursor: 'pointer',
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: 6,
-  fontFamily: 'inherit',
-  lineHeight: 1,
-  transition: 'border-color var(--ds-motion-fast) ease-out, background var(--ds-motion-fast) ease-out',
-};
-
-const triggerSmStyle: CSSProperties = {
-  ...triggerBaseStyle,
-  height: 28,
-  padding: '0 8px',
-  fontSize: 13,
-};
-
-const triggerMdStyle: CSSProperties = {
-  ...triggerBaseStyle,
-  height: 32,
-  padding: '0 10px',
-  fontSize: 14,
-};
+/**
+ * NOTE (P88): the menu is a pattern-owned listbox because the Dropdown
+ * primitive (P88) is BLOCKED_ARCH in the current wave and the Select
+ * primitive's option contract does not carry autoglottonym rows with an
+ * active-check anatomy. When P88 lands, this panel composes it (precedent:
+ * saved-views). The APG keyboard contract below (roving focusIndex,
+ * ArrowUp/Down, Enter/Space, Escape, click-outside, aria-activedescendant)
+ * is the same one Dropdown certifies, so the swap is mechanical.
+ */
 
 /**
  * Modern (token-driven) implementation of the LocaleSwitcher pattern.
@@ -97,6 +38,13 @@ const triggerMdStyle: CSSProperties = {
  * keyboard navigation (ArrowUp, ArrowDown, Enter, Escape).
  */
 export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
+  // Optional channel with an English floor: the switcher renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key. Locale
+  // NAMES are autoglottonyms from the locales prop -- never translated.
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
+    i18n?.tOr(key, floor, params) ?? floor;
+
   const {
     locale,
     onChange,
@@ -214,41 +162,43 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
   );
 
   /* ---------------------------------------------------------------- */
-  /*  Render                                                           */
+  /*  Render — geometry and paint live in the modern skin, keyed on    */
+  /*  data-part/data-size; nothing structural stays inline.            */
   /* ---------------------------------------------------------------- */
-  const triggerStyle = size === 'sm' ? triggerSmStyle : triggerMdStyle;
-
   return (
     <div
       ref={containerRef}
       className={`ds-pattern-locale-switcher ds-engine-modern ${className ?? ''}`}
       data-part="root"
-      style={{ position: 'relative', display: 'inline-block', ...style }}
+      data-loading={loading ? 'true' : 'false'}
+      style={style}
       onKeyDown={handleKeyDown}
     >
       {/* Trigger button */}
       <button
         type="button"
         data-part="trigger"
-        style={triggerStyle}
+        data-size={size}
         onClick={() => {
           setOpen(prev => !prev);
           if (!open) setFocusIndex(-1);
         }}
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={`Language: ${activeLocale?.label ?? locale}`}
+        aria-label={tOr('locale_switcher.trigger_aria', 'Language: {locale}', {
+          locale: activeLocale?.label ?? locale,
+        })}
         data-testid="locale-switcher-trigger"
       >
         {showFlag && activeLocale?.flag && (
-          <span aria-hidden="true" style={{ fontSize: size === 'sm' ? 14 : 16, lineHeight: 1 }}>
+          <span aria-hidden="true" data-part="flag">
             {activeLocale.flag}
           </span>
         )}
         {showLabel && (
           <span>{activeLocale?.label ?? locale}</span>
         )}
-        <ChevronIcon />
+        <NavigationDownIcon size={12} decorative />
       </button>
 
       {/* Dropdown menu */}
@@ -258,17 +208,6 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
           role="listbox"
           data-part="panel"
           aria-activedescendant={focusIndex >= 0 ? `locale-option-${locales[focusIndex].code}` : undefined}
-          style={{
-            ...popupPanelStyle,
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            marginTop: 4,
-            zIndex: 50,
-            minWidth: 180,
-            maxHeight: 280,
-            overflowY: 'auto',
-          }}
           data-testid="locale-switcher-menu"
         >
           {locales.map((loc, idx) => {
@@ -287,29 +226,21 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
                 data-focused={isFocused}
                 data-locale-option
                 data-testid={`locale-option-${loc.code}`}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  padding: '8px 12px',
-                  fontSize: 14,
-                  cursor: 'pointer',
-                  transition: 'background var(--ds-motion-fast) ease-out',
-                  width: '100%',
-                  textAlign: 'left',
-                  fontWeight: isActive ? 600 : 400,
-                }}
                 onMouseEnter={() => setFocusIndex(idx)}
                 onMouseLeave={() => { if (focusIndex === idx) setFocusIndex(-1); }}
                 onClick={() => handleSelect(loc.code)}
               >
                 {showFlag && loc.flag && (
-                  <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1, flexShrink: 0 }}>
+                  <span aria-hidden="true" data-part="flag">
                     {loc.flag}
                   </span>
                 )}
-                <span style={{ flex: 1 }}>{loc.label}</span>
-                {isActive && <CheckIcon />}
+                <span data-part="option-label">{loc.label}</span>
+                {isActive && (
+                  <span data-part="check">
+                    <StatusVerifiedIcon size={14} decorative />
+                  </span>
+                )}
               </button>
             );
           })}

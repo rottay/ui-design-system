@@ -1,5 +1,10 @@
 /**
- * Modern Timeline pattern skin (WO-SKIN-06 CK-E), deliberately unlayered.
+ * Modern Timeline pattern skin.
+ *
+ * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
+ * rottay-engines)` — this file does not control its own layering (the older
+ * "deliberately unlayered" note predates that wiring). Caller inline `style`
+ * still wins over every rule here.
  *
  * SINGLE PAINT OWNER. The engine no longer emits the DaisyUI `timeline`,
  * `timeline-vertical`, `timeline-start`, `timeline-middle`, `timeline-end` or
@@ -7,20 +12,25 @@
  * marker/badge paint it already owned. The sibling primitive
  * (`skin/timeline.css`) made the same move; this is the pattern's half.
  *
- * The geometry below is a channel-for-channel transcription of the retired
- * `timeline timeline-vertical` rules, resolved through the SAME `--ds-*`
- * tokens `framework-token-projection.css` fed those Daisy variables from --
- * `--color-base-100` was `--ds-color-bg-primary`, `--color-base-300` was
- * `--ds-color-bg-tertiary`, `--radius-box` was `--ds-radius-lg`,
- * `--radius-selector` was `--ds-radius-sm`, `--border` was
- * `--ds-border-width-1`. Nothing is re-tuned here, so a tenant that
- * white-labelled the rail through those tokens keeps the value it had.
+ * RELATIONSHIP TO TIMELINE P18: this pattern is an activity-feed rail with
+ * date grouping, avatars, type badges and an alternate zigzag mode whose
+ * anatomy AND skin ownership are pinned by the family tests — composing the
+ * P18 primitive here is a contract-level migration, not a lane fix (overlap
+ * documented for the registry; the grammars converge on purpose).
  *
- * SIDE MAPPING IS INVERTED BETWEEN THE TWO SLOTS, and that is the shipped
- * contract, not a slip: for a right-side item the CARD took `timeline-start`
- * (track 1) while its timestamp slot took `timeline-end` (track 3), and for a
- * left-side item the pair swapped. `data-side` carries the item's side; each
- * rule below resolves the track that side implied for that particular part.
+ * CONNECTOR LAW: connectors are NEUTRAL 1px hairlines — the previous 4px
+ * default (a Daisy transcription) is re-tuned to 1px behind the same
+ * `--ds-timeline-line-width` channel, so a tenant that white-labelled the
+ * rail keeps the channel and can restore the old value. Never an accent
+ * rail.
+ *
+ * HOVER LAW: clickable cards (`role=button`) get their hover only under
+ * `@media (hover: hover)` with a matching `:active`; the focus ring is
+ * `:focus-visible`-only.
+ *
+ * INK DERIVATION: the card shadows mix against `--ds-color-text-primary`
+ * (universal ink) — the old `--ds-color-neutral-900, #000` chain used a
+ * tenant-only token with a hard `#000` floor, both off-limits.
  *
  * The `.ds-timeline-modern__*` private classes are load-bearing. `data-part`
  * is a shared vocabulary and `renderItem` may hand the item arbitrary caller
@@ -31,10 +41,21 @@
  * SPECIFICITY (P-48): rules painting a border COLOR reach at least (0,5,0)
  * from the two root classes + `data-part='root'` + the private class + the
  * target's own `data-part`, clearing the tenant `*` border-color floor
- * at (0,3,1).
+ * at (0,3,1). Class/attribute repetition is prohibited; the root scope buys
+ * the floor instead.
+ *
+ * SIDE MAPPING IS INVERTED BETWEEN THE TWO SLOTS, and that is the shipped
+ * contract, not a slip: for a right-side item the CARD took `timeline-start`
+ * (track 1) while its timestamp slot took `timeline-end` (track 3), and for a
+ * left-side item the pair swapped. `data-side` carries the item's side; each
+ * rule below resolves the track that side implied for that particular part.
  */
 
 /* ---- rail: the retired `timeline timeline-vertical` pair ---- */
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] {
+  container: ds-pattern-timeline / inline-size;
+}
+
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__list[data-part='list'] {
   position: relative;
   display: flex;
@@ -53,12 +74,12 @@
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
 }
 
-/* ---- connectors: `.timeline > li > hr` under the vertical variant. Daisy's
+/* ---- connectors: neutral 1px hairline (see CONNECTOR LAW). Daisy's
         `border: none` is the colorless reset preflight's `hr` top border
         needs; the rail's own thickness and colour follow. ---- */
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'] {
   border: none;
-  width: var(--ds-timeline-line-width, 4px);
+  width: var(--ds-timeline-line-width, 1px);
   height: 100%;
   grid-column-start: 2;
   background: var(--ds-timeline-line-color, var(--ds-color-bg-tertiary));
@@ -84,8 +105,8 @@
 }
 
 /* ---- track placement. `timeline-start` spans column 1 and pulls toward the
-        rail; `timeline-end` spans column 3 and pushes away from it. Both are
-        logical, so RTL mirrors the layout with no extra rules. ---- */
+        rail; `timeline-end` spans column 3 and pushes away from it. Grid
+        tracks and logical alignment mirror under RTL with no extra rules. ---- */
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp-slot[data-part='timestamp-slot'][data-side='left'],
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-side='right'] {
   grid-area: 1 / 1 / 4 / 2;
@@ -113,7 +134,7 @@
   padding-inline: 1rem;
   padding-block: 0.5rem;
   font-size: var(--ds-font-size-xs, 0.75rem);
-  box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--ds-color-neutral-900, #000) 5%, transparent);
+  box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
 }
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'] {
@@ -196,9 +217,9 @@
   letter-spacing: var(--ds-timeline-timestamp-letter-spacing, -0.01em);
 }
 
-/* ---- clickable card: pointer affordance + hover lift + visible focus ring.
-        The engine stamps `data-clickable` and owns the activation handlers;
-        every state paints here. ---- */
+/* ---- clickable card: pointer affordance + hover (hover-capable-only) +
+        visible focus ring. The engine stamps `data-clickable` and owns the
+        activation handlers; every state paints here. ---- */
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true'] {
   cursor: pointer;
   transition:
@@ -206,9 +227,15 @@
     border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:hover {
+@media (hover: hover) {
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:hover {
+    border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-bg-tertiary));
+    box-shadow: var(--ds-shadow-md, 0 4px 6px -1px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent));
+  }
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:active {
   border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-bg-tertiary));
-  box-shadow: var(--ds-shadow-md, 0 4px 6px -1px color-mix(in srgb, var(--ds-color-neutral-900, #000) 10%, transparent));
 }
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:focus-visible {
@@ -231,7 +258,9 @@
   letter-spacing: var(--ds-timeline-date-heading-letter-spacing, 0.02em);
 }
 
-/* ---- empty state ---- */
+/* ---- empty state (the family tests pin the floor text ON the
+        [data-part='empty'] element itself, so the Empty primitive is NOT
+        composed here — its description element cannot carry this part) ---- */
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__empty[data-part='empty'] {
   padding-block: var(--ds-timeline-empty-padding-block, 3rem);
   color: var(--ds-color-text-muted);
@@ -251,14 +280,37 @@
 }
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']
-  > .ds-timeline-modern__spinner[data-part='spinner'][data-part='spinner'] {
+  > .ds-timeline-modern__spinner[data-part='spinner'] {
   display: inline-block;
   inline-size: 1.5rem;
   block-size: 1.5rem;
   animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
   border: 3px solid var(--ds-color-border);
-  border-top-color: var(--ds-color-primary);
+  border-block-start-color: var(--ds-color-primary);
   border-radius: 50%;
+}
+
+/* ---- narrow containers: the zigzag collapses to a single rail at the
+        inline-start edge with every card on the wide track — no two-track
+        squeeze, no accidental gaps. ---- */
+@container ds-pattern-timeline (max-width: 30rem) {
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item[data-part='item'] {
+    justify-items: stretch;
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker[data-part='marker'] {
+    grid-column-start: 1;
+  }
+
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp-slot[data-part='timestamp-slot'][data-side='left'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp-slot[data-part='timestamp-slot'][data-side='right'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-side='left'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-side='right'] {
+    grid-area: 1 / 2 / 4 / 3;
+    justify-self: stretch;
+  }
 }
 
 /* ---- reduced motion: the infinite spinner settles to a static ring ---- */
@@ -311,4 +363,55 @@ html[data-ds-motion='reduced']
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='error'] {
   background: color-mix(in srgb, var(--ds-color-error) 15%, transparent);
   color: var(--ds-color-error);
+}
+
+/* ---- forced colors: system colors only. Hairlines (connectors, card
+        frames) re-express as ButtonText; the semantic hues on markers and
+        type badges flatten, and the badge TEXT (success/warning/error/info)
+        plus the title carry the meaning — the marker was decorative all
+        along (aria-hidden). No data-viz opt-out anywhere. ---- */
+@media (forced-colors: active) {
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'] {
+    background: ButtonText;
+  }
+
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp-slot[data-part='timestamp-slot'][data-side='right'] {
+    border-color: ButtonText;
+    box-shadow: none;
+  }
+
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='success'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='warning'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='error'] {
+    color: CanvasText;
+  }
+
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='default'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='info'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='success'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='warning'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='error'] {
+    border: 1px solid ButtonText;
+    background: transparent;
+    color: CanvasText;
+  }
+
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp[data-part='timestamp'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-heading[data-part='date-heading'],
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__empty[data-part='empty'] {
+    color: GrayText;
+  }
+
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']
+    > .ds-timeline-modern__spinner[data-part='spinner'] {
+    border-color: ButtonText;
+    border-block-start-color: Highlight;
+  }
 }

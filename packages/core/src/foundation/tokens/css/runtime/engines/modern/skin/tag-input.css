@@ -28,9 +28,12 @@
  * `outline: none`, so the container carries the visible focus posture).
  *
  * SPECIFICITY (P-48): the container's `border` paints a color, so its rules
- * reach (0,4,0) via the repeated `[data-part='root']`. Everything else here
- * is non-border paint (background, color, border-radius) and wins unlayered
- * at (0,3,0).
+ * reach (0,4,0) with two DISTINCT attributes -- `[data-part='root']` plus
+ * the always-stamped `[data-size]` (or `[data-error]` on the error rule).
+ * Attribute repetition is forbidden (4th-tanda law); the count of
+ * `[data-part='root'][data-part='root']` selectors here is zero. Everything
+ * else here is non-border paint (background, color, border-radius) and wins
+ * unlayered at (0,3,0).
  */
 
 .ds-tag-input-shell.ds-tag-input-shell--modern {
@@ -81,13 +84,19 @@
   min-block-size: calc(var(--ds-tag-input-lg-height, 48px) * var(--ds-density-effective-scale, 1));
 }
 
-.ds-tag-input.ds-tag-input--modern[data-part='root'][data-part='root'] {
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-size] {
   border: 1px solid var(--ds-color-border);
 }
-.ds-tag-input.ds-tag-input--modern[data-part='root'][data-part='root']:where(:hover):not([data-disabled='true']):not([data-error='true']) {
+@media (hover: hover) {
+  .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]:where(:hover):not([data-disabled='true']):not([data-error='true']) {
+    border-color: var(--ds-tag-input-border-hover, var(--ds-color-border-hover));
+  }
+}
+/* Touch/active equivalent of the hover border (4th-tanda law). */
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]:active:not([data-disabled='true']):not([data-error='true']) {
   border-color: var(--ds-tag-input-border-hover, var(--ds-color-border-hover));
 }
-.ds-tag-input.ds-tag-input--modern[data-part='root'][data-part='root'][data-error='true'] {
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-error='true'] {
   border: 1px solid var(--ds-color-error);
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root']:focus-within {
@@ -132,5 +141,29 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-tag-input.ds-tag-input--modern[data-part='root'] {
     transition: none;
+  }
+}
+
+/* Forced colors (system colors only): washes and hues are forced away, so
+   the container frame, the keyboard ring and the error state read through
+   system-color boundaries; the error message travels as TEXT (shape, not
+   hue). */
+@media (forced-colors: active) {
+  .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size] {
+    border-color: ButtonText;
+  }
+  .ds-tag-input.ds-tag-input--modern[data-part='root'][data-error='true'] {
+    border-color: ButtonText;
+  }
+  .ds-tag-input.ds-tag-input--modern[data-part='root']:focus-within {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+    box-shadow: none;
+  }
+  .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]:active:not([data-disabled='true']) {
+    border-color: Highlight;
+  }
+  .ds-tag-input.ds-tag-input--modern ~ * [data-part='error-message'] {
+    color: CanvasText;
   }
 }

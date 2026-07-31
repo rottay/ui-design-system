@@ -88,10 +88,13 @@ describe('ModernTabs responsive size', () => {
 
     expect(root).toHaveAttribute('data-size', 'responsive');
     expect(root).toHaveAttribute('data-responsive-id');
-    expect(styleTag?.textContent).toContain('--ds-tabs-current-height:');
-    expect(styleTag?.textContent).toContain('--ds-tabs-current-padding:');
-    expect(styleTag?.textContent).toContain('--ds-tabs-current-font-size:');
-    expect(styleTag?.textContent).toContain('--ds-tabs-current-icon-size:');
+    // Responsive rules configure the public responsive inputs. The skin
+    // resolves them into private `--_ds-tabs-current-*` intermediates so
+    // callers cannot couple themselves to the internal cascade.
+    expect(styleTag?.textContent).toContain('--ds-tabs-responsive-height:');
+    expect(styleTag?.textContent).toContain('--ds-tabs-responsive-padding:');
+    expect(styleTag?.textContent).toContain('--ds-tabs-responsive-font-size:');
+    expect(styleTag?.textContent).toContain('--ds-tabs-responsive-icon-size:');
     expect(styleTag?.textContent).toContain('@media (min-width: 1024px)');
   });
 });

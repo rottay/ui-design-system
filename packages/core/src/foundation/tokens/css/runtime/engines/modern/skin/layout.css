@@ -104,11 +104,16 @@
  * the drained utility had a physical axis (`px-4` -> padding-inline).
  * ======================================================================== */
 
-/* ---- root: full-height flex column; row with sider at the md breakpoint. ---- */
+/* ---- root: full-height flex column; row with sider at the md breakpoint.
+        The viewport lock is the legitimate shell case (the shell owns the
+        viewport and the content scrolls internally -- no double chrome).
+        `100dvh` wins where supported so mobile URL chrome no longer eats
+        the shell; the `vh` line stays as the legacy fallback. ---- */
 .rottay-layout.rottay-layout--modern[data-part='root'] {
   display: flex;
   flex-direction: column;
   min-block-size: var(--ds-layout-root-min-block-size, 100vh);
+  min-block-size: var(--ds-layout-root-min-block-size, 100dvh);
 }
 /* With a sider the shell goes row and COLLAPSES BY CONTENT, not by viewport:
    no width-driven query (the audit's viewportMqInSkins law). The content asks
@@ -136,10 +141,14 @@
   padding-inline: var(--ds-layout-header-padding-inline, var(--ds-spacing-4, 16px));
 }
 
-/* ---- sider: no shrink, own scroll, token-motion collapse transition. ---- */
+/* ---- sider: no shrink, own scroll, token-motion collapse transition. The
+        width transition is deliberate: a single-axis layout reflow on one
+        sidebar is the canonical shell-collapse technique (grid-template-columns
+        would animate the same layout property with a full shell restructure);
+        the cadence is channeled and reduced-motion kills it below. ---- */
 .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] {
   flex-shrink: 0;
-  overflow-y: auto;
+  overflow-block: auto;
   transition: width var(--ds-layout-sider-collapse-duration, var(--ds-motion-slow, 320ms))
     var(--ds-layout-sider-collapse-timing, var(--ds-motion-ease-out));
 }
@@ -163,7 +172,15 @@
     background var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
-.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:hover {
+/* Hover only where hover exists; touch pointers get the same quiet feedback
+   on press, so no pointer class loses the affordance (4th-wave hover law). */
+@media (hover: hover) {
+  .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:hover {
+    background: var(--ds-layout-sider-trigger-bg-hover, var(--ds-surface-highlight));
+  }
+}
+
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:active {
   background: var(--ds-layout-sider-trigger-bg-hover, var(--ds-surface-highlight));
 }
 
@@ -189,6 +206,24 @@
 @media (pointer: coarse) {
   .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger'] {
     min-block-size: 44px;
+  }
+}
+
+/* Forced colors: the shell's cut lines and the collapse affordance must
+   survive color stripping -- sider hairline on the content edge, a bordered
+   trigger, and a Highlight focus ring. System colors only. */
+@media (forced-colors: active) {
+  .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] {
+    border-inline-end: 1px solid ButtonText;
+  }
+
+  .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger'] {
+    border: 1px solid ButtonText;
+  }
+
+  .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
   }
 }
 
@@ -230,23 +265,28 @@
   border-radius: var(--ds-radius-full, 9999px);
 }
 
+/* Shadows ride the DS elevation scale only -- the tenant re-themes depth from
+   one place, and no Tailwind shadow literal sneaks back in. The scale stops
+   at 5 today, so 2xl resolves to the top rung until the token layer grows a
+   sixth (the reference is a safe guaranteed-invalid fallback, not a new
+   channel). */
 .rottay-box.rottay-box--modern[data-shadow='xs'] {
-  box-shadow: var(--ds-elevation-1, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+  box-shadow: var(--ds-elevation-1);
 }
 .rottay-box.rottay-box--modern[data-shadow='sm'] {
-  box-shadow: var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1));
+  box-shadow: var(--ds-elevation-2);
 }
 .rottay-box.rottay-box--modern[data-shadow='md'] {
-  box-shadow: var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1));
+  box-shadow: var(--ds-elevation-3);
 }
 .rottay-box.rottay-box--modern[data-shadow='lg'] {
-  box-shadow: var(--ds-elevation-4, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1));
+  box-shadow: var(--ds-elevation-4);
 }
 .rottay-box.rottay-box--modern[data-shadow='xl'] {
-  box-shadow: var(--ds-elevation-5, 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1));
+  box-shadow: var(--ds-elevation-5);
 }
 .rottay-box.rottay-box--modern[data-shadow='2xl'] {
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--ds-elevation-6, var(--ds-elevation-5));
 }
 
 /* ===========================================================================
@@ -260,20 +300,24 @@
  * container WIDTH is set inline by the component (`Layout.Sider` width prop /
  * the app-shell `--ds-shell-inline-start-inset`) and is NOT overridable here, so
  * `inline-size` is best-effort (it wins only where the host drives width from
- * CSS). Rules REPEAT `[data-part='sider']` to reach (0,5,0), one attribute over
- * the (0,4,0) theme rules. `data-anatomy-layout` covers this engine's shell
- * `Layout.Header`; the cockpit-header pattern carries its own copy.
+ * CSS). Cascade position (4th-wave de-hack): `engines/index.css` (which bundles
+ * `modern/theme.css`) and this file are BOTH imported at `layer(rottay-engines)`,
+ * with this file LATER (`entrypoints/base.css:74` vs `:338`), so the (0,4,0)
+ * anatomy selectors below tie the (0,4,0) theme bridge and win by source order
+ * -- no repeated-attribute specificity hack is load-bearing. `data-anatomy-layout`
+ * covers this engine's shell `Layout.Header`; the cockpit-header pattern carries
+ * its own copy.
  * ======================================================================== */
 
 /* sidebar panel: the wide, comfortable default; roomy item rhythm, left-read. */
-[data-anatomy-sidebar='panel'] .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-part='sider'] {
+[data-anatomy-sidebar='panel'] .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] {
   --ds-sidebar-item-padding-inline: var(--ds-spacing-3, 12px);
   --ds-sidebar-item-gap: var(--ds-spacing-2, 8px);
   padding-inline: var(--ds-sidebar-shell-padding-inline, var(--ds-spacing-2, 8px));
 }
 
 /* sidebar rail: narrow, icon-first; tight rhythm, centred, best-effort width. */
-[data-anatomy-sidebar='rail'] .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-part='sider'] {
+[data-anatomy-sidebar='rail'] .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] {
   --ds-sidebar-item-padding-inline: 0px;
   --ds-sidebar-item-gap: var(--ds-spacing-1, 4px);
   align-items: center;

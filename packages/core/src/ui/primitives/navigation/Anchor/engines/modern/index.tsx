@@ -46,6 +46,7 @@
 import React, { useState, useEffect, createContext, useContext, useCallback, Children, isValidElement } from 'react';
 import type { AnchorProps, AnchorLinkProps } from '../../contracts';
 import { ANCHOR_DEFAULTS } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ============================================================================
 // Context
@@ -216,6 +217,16 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
     const [internalActiveKey, setInternalActiveKey] = useState('');
     const activeKey = controlledActiveKey ?? internalActiveKey;
 
+    // Landmark name: catalog-first with the documented English floor (the
+    // `anchor.navigation` key lands with the locale JSONs; the echo guard
+    // falls back until then). Bare compositions never crash on a missing
+    // provider (the useOptionalTranslation contract).
+    const i18n = useOptionalTranslation('components');
+    const navigationLabel = (() => {
+      const translated = i18n?.t('anchor.navigation');
+      return translated && !translated.endsWith('navigation') ? translated : 'Anchor navigation';
+    })();
+
     // ---------------------------------------------------------------------------
     // Helpers
     // ---------------------------------------------------------------------------
@@ -302,6 +313,8 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
           data-part="root"
           data-direction={direction}
           data-affix={affix ? 'true' : 'false'}
+          role="navigation"
+          aria-label={navigationLabel}
         >
           {children}
         </div>

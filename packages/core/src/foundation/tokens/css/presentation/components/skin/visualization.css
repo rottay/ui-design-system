@@ -1,9 +1,33 @@
-/** VisualizationSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+/**
+ * VisualizationSurface skin (WO-SKIN-06 / CK-I).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
+ *
+ * SCOPE: the surface composes public primitives and patterns (PageShell,
+ * StatsGrid, Tabs, Card) — each owns its own chrome, states and forced-colors
+ * treatment, so this file paints ONLY:
+ *   - the compact-chart density projection (`data-chart-density='compact'`):
+ *     smaller axis/value labels, plus the IN-SCOPE retune of the
+ *     `--ds-chart-legend-*` channels the chart renderers already consume
+ *     (sanctioned retune of existing channels — no new public channel);
+ *   - the visualization-mirror skeleton blocks
+ *     (`visualization-skeleton-block`), whose pulse rides the canonical
+ *     `ds-foundation-pulse` keyframes on the `--ds-motion-attention` channel
+ *     and goes quiet under reduced motion. Their fills are neutral surface
+ *     tokens, so forced colors needs no re-keying here (the composed Cards
+ *     already force their own frames).
+ * The view-description supporting copy carries NO rule on purpose: its
+ * size/mute ride the Text primitive's own props — typography.css sorts in
+ * `rottay-engines` (after this file) and would defeat a components-layer
+ * color, which is exactly why the retired repetition selector was inert.
+ *
+ * SPECIFICITY: single-part hooks keying on always-stamped `data-part` /
+ * `data-size` attributes; no repetition, no `!important`.
+ */
 
-.ds-surface.ds-visualization .ds-visualization__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
-}
-
+/* ---- compact mobile charts: the app-side renderers consume these channels ---- */
 .ds-surface.ds-visualization
   .ds-visualization__view[data-part='visualization-view'][data-chart-density='compact']
   [data-part='chart-renderer']
@@ -21,4 +45,57 @@
   --ds-chart-legend-margin-top: var(--ds-spacing-2);
   --ds-chart-legend-item-gap: var(--ds-spacing-1);
   --ds-chart-legend-font-size: var(--ds-font-size-xs);
+}
+
+/* ---- visualization-mirror skeleton: blocks sit on the same layout as the
+        real content (KPI row, tab strip + chart inside the views card, aside
+        rail), preventing a loading-time layout shift. ---- */
+.ds-surface.ds-visualization [data-part='visualization-skeleton-block'] {
+  border-radius: var(
+    --ds-skeleton-radius,
+    var(--ds-radius-md, 8px)
+  );
+  background: var(
+    --ds-skeleton-bg,
+    var(--ds-surface-panel, var(--ds-color-bg-secondary))
+  );
+  animation: ds-foundation-pulse
+    var(
+      --ds-skeleton-animation-duration,
+      var(--ds-motion-attention, 1.5s)
+    )
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-surface.ds-visualization
+  [data-part='visualization-skeleton-block'][data-size='stat'] {
+  min-block-size: 96px;
+}
+
+.ds-surface.ds-visualization
+  [data-part='visualization-skeleton-block'][data-size='tab'] {
+  inline-size: 96px;
+  min-block-size: 32px;
+}
+
+.ds-surface.ds-visualization
+  [data-part='visualization-skeleton-block'][data-size='description'] {
+  inline-size: 48%;
+  min-block-size: 12px;
+}
+
+.ds-surface.ds-visualization
+  [data-part='visualization-skeleton-block'][data-size='chart'] {
+  min-block-size: 280px;
+}
+
+.ds-surface.ds-visualization
+  [data-part='visualization-skeleton-block'][data-size='aside'] {
+  min-block-size: 320px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-visualization [data-part='visualization-skeleton-block'] {
+    animation: none;
+  }
 }

@@ -69,5 +69,12 @@
   "dashboard_status_warning": "Aviso",
   "show_password": "Mostrar senha",
   "hide_password": "Ocultar senha",
-  "password_strength": "Força da senha"
+  "password_strength": "Força da senha",
+  "finish": "Concluir",
+  "tour": {
+    "step_progress": "Etapa {current} de {total}"
+  },
+  "breadcrumb_more_items": "Mais itens da trilha de navegação",
+  "opens_in_new_tab": "Abre em uma nova aba",
+  "unsaved_changes": "Alterações não salvas"
 }

@@ -8,9 +8,11 @@
  * @remarks
  * This surface owns page chrome, responsive two-column layout, and action
  * presentation while delegating actual field rendering to `PatternFormBuilder`.
+ * Loading keeps the shell chrome mounted so the builder's own form-shaped
+ * skeleton (title, field rows, action bar) is what the user sees.
  */
 
-import { Button, Card, Grid, Stack, Text, Flex } from '../../../../../primitives';
+import { Box, Button, Card, Grid, Stack, Text, Flex } from '../../../../../primitives';
 import { ActionDock } from '../../../../../structures/workspace/action-dock';
 import { PatternFormBuilder } from '../../../../../patterns';
 import { FadeIn } from '@/graphics/motion';
@@ -23,7 +25,6 @@ import { useSurfaceResponsiveLayout } from '../../../../runtime/responsive';
 import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 import {
   resolveStackSpacing,
-  resolveLabelTextTransform,
   SurfaceAccentBarWrapper,
 } from '../../../../runtime/profile-defaults/personality';
 import { SurfaceErrorState } from '../../../../runtime/helpers/states';
@@ -37,13 +38,16 @@ export interface FormSurfaceProps {
 
 /** Page-level form shell with error handling, action normalization, and optional aside content. */
 export function FormSurface({ config, loading = false, error, onRetry }: FormSurfaceProps): React.ReactElement {
-  const { tSurface } = useSurfaceTranslations();
+  const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { shouldStack, isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout(config.visual);
+  // Stamped state attributes follow the resolved viewport so SSR/first-paint
+  // markup never claims a mobile posture the media query has not confirmed.
+  const resolvedMobile = hasResolvedViewport && isMobile;
   const dirtyState = config.behavior.dirtyState;
   const { requestDiscard } = useUnsavedChangesGuard({
     isDirty: dirtyState?.isDirty ?? false,
-    message: dirtyState?.message ?? tSurface('form.discard_changes'),
+    message: dirtyState?.message ?? tSurfaceOr('form.discard_changes', 'Discard unsaved form changes?'),
     confirmDiscard: dirtyState?.confirmDiscard,
     onDiscard: dirtyState?.onDiscard,
     onBlocked: dirtyState?.onBlocked,
@@ -52,10 +56,6 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
   // restricted fields never appear in the DOM at all.
   const visibleFields = filterSurfaceFields(config.behavior.fields, config.access);
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
-  // Label text transform (uppercase, capitalize, sentence) comes from the
-  // product personality profile, keeping form labels consistent across
-  // every form surface without per-instance configuration.
-  const labelTransform = resolveLabelTextTransform(profileDefaults.labelStyle);
   const cancelAction = resolveSurfaceAction(config.behavior.cancelAction, config.access);
   const submitAction = resolveSurfaceAction(config.behavior.submitAction, config.access);
   const chrome = {
@@ -75,23 +75,28 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
   }
 
   // Mobile persistence uses the canonical viewport-aware ActionDock; the
-  // surface skin owns its scrim and reserves scroll space for the fixed bar.
-  const actionsSticky = Boolean(hasResolvedViewport && isMobile && config.visual.mobileActionsSticky);
+  // surface skin owns the reserved scroll space for the fixed bar.
+  const actionsSticky = Boolean(resolvedMobile && config.visual.mobileActionsSticky);
 
+  // Both actions ride the Button primitive's own `block` mode on mobile
+  // (full-width, engine-owned geometry) instead of inline flex styles.
   const actionButtons = (
     <>
       {cancelAction && (
         <Button
           variant={resolveSurfaceButtonVariant(cancelAction.variant)}
-          disabled={cancelAction.disabled}
+          // Contract-documented use (wizard precedent): cancel locks while
+          // async submit work is in flight, so the user cannot navigate away
+          // mid-submission.
+          disabled={cancelAction.disabled || submitAction?.loading}
           loading={cancelAction.loading}
           icon={cancelAction.icon}
+          block={isMobile}
           onClick={() => {
             if (requestDiscard('cancel')) {
               cancelAction.onClick?.(undefined as void);
             }
           }}
-          style={isMobile ? { flex: 1, justifyContent: 'center' } : undefined}
         >
           {cancelAction.label}
         </Button>
@@ -103,7 +108,7 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
           disabled={config.behavior.disabled || submitAction.disabled}
           loading={submitAction.loading}
           icon={submitAction.icon}
-          style={isMobile ? { flex: 1, justifyContent: 'center' } : undefined}
+          block={isMobile}
         >
           {submitAction.label}
         </Button>
@@ -117,7 +122,7 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
       position="bottom"
       className="ds-form__action-dock"
       data-testid="form-surface-action-dock"
-      aria-label="Form actions"
+      aria-label={tSurfaceOr('form.actions_aria', 'Form actions')}
     >
       {actionButtons}
     </ActionDock>
@@ -135,33 +140,34 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
       className={['ds-surface ds-form', actionsSticky ? 'ds-form--sticky-actions' : undefined]
         .filter(Boolean)
         .join(' ')}
+      data-part="root"
+      data-mobile={resolvedMobile ? 'true' : 'false'}
+      data-stacked={shouldStack ? 'true' : 'false'}
+      data-loading={loading ? 'true' : 'false'}
+      aria-busy={loading || undefined}
       columns={showAside && !shouldStack ? 12 : 1}
       gap={sectionSpacing}
-      style={{ width: '100%' }}
     >
       <Grid.Item span={showAside && !shouldStack ? 8 : undefined}>
-        <Card variant={profileDefaults.cardVariant} style={{ width: '100%' }}>
+        <Card variant={profileDefaults.cardVariant}>
           <Card.Body>
             <Stack spacing={sectionSpacing}>
               {config.presentation.description && (
-                <Text
-                  data-part="description"
-                  size="sm"
-                  style={{
-                    lineHeight: 1.5,
-                  }}
-                >
+                <Text data-part="description" as="p" size="sm" color="subtle">
                   {config.presentation.description}
                 </Text>
               )}
 
               {config.presentation.error && (
-                <Card className="ds-form__error-card" variant={profileDefaults.cardVariant}>
-                  <Card.Body>{config.presentation.error}</Card.Body>
-                </Card>
+                <Box data-part="error-banner" role="alert">
+                  <Card className="ds-form__error-card" variant={profileDefaults.cardVariant}>
+                    <Card.Body>{config.presentation.error}</Card.Body>
+                  </Card>
+                </Box>
               )}
 
-              {/* The form builder owns field generation; the surface owns page framing and submit actions. */}
+              {/* The form builder owns field generation and the form-shaped
+                  loading skeleton; the surface owns page framing and submit actions. */}
               <PatternFormBuilder
                 fields={visibleFields}
                 layout={resolvedLayout}
@@ -181,6 +187,7 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
                 stepLabels={config.behavior.stepLabels}
                 currentStep={config.behavior.currentStep}
                 onStepChange={config.behavior.onStepChange}
+                loading={loading}
               />
             </Stack>
           </Card.Body>
@@ -189,14 +196,7 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
 
       {showAside && (
         <Grid.Item span={!shouldStack ? 4 : undefined}>
-          <Card
-            className="ds-form__aside-card"
-            variant={profileDefaults.cardVariant}
-            style={{
-              position: shouldStack ? undefined : 'sticky',
-              top: shouldStack ? undefined : 16,
-            }}
-          >
+          <Card className="ds-form__aside-card" variant={profileDefaults.cardVariant}>
             <Card.Body>{config.presentation.aside}</Card.Body>
           </Card>
         </Grid.Item>
@@ -205,7 +205,10 @@ export function FormSurface({ config, loading = false, error, onRetry }: FormSur
   );
 
   return (
-    <PageShellSurface chrome={chrome} loading={loading}>
+    // Loading keeps the shell chrome mounted (title/breadcrumbs survive) so the
+    // FormBuilder's own skeleton -- title, field rows, action bar shaped like
+    // the form -- is what the user sees instead of the generic page skeleton.
+    <PageShellSurface chrome={chrome} loading={false}>
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
         {profileDefaults.animateEntrance ? (
           <FadeIn durationMs={profileDefaults.entranceDuration}>{formContent}</FadeIn>

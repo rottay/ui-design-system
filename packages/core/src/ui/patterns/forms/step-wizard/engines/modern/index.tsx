@@ -172,18 +172,17 @@ export default function ModernStepWizard(props: StepWizardProps) {
         style={style}
       >
         <div data-part="body">
-          {/* Shimmer bar for step indicators -- animation is skin-owned so
-              reduced-motion can silence it (inline would win). */}
+          {/* Shimmer bar for step indicators -- animation and geometry are
+              skin-owned so reduced-motion and density govern (inline would
+              win over both). */}
           <div
             data-part="skeleton-progress"
             className="ds-step-wizard-skeleton__progress"
-            style={{ height: 8, marginBottom: 24 }}
           />
           {/* Shimmer block for content */}
           <div
             data-part="skeleton-content"
             className="ds-step-wizard-skeleton__content"
-            style={{ height: 200 }}
           />
         </div>
       </div>
@@ -214,19 +213,19 @@ export default function ModernStepWizard(props: StepWizardProps) {
 
   const navigationContent = (
     <div data-part="nav-bar">
-      {/* Left side: Previous */}
+      {/* Left side: Previous -- always rendered, disabled on the first step
+          (honest affordance: the control never appears/disappears between
+          steps, so the nav bar keeps its geometry). */}
       <div>
-        {current > 0 && (
-          <ModernButton
-            data-part="prev-button"
-            variant="outline"
-            size="md"
-            disabled={navDisabled}
-            onClick={() => setCurrent(current - 1)}
-          >
-            {prevLabel}
-          </ModernButton>
-        )}
+        <ModernButton
+          data-part="prev-button"
+          variant="outline"
+          size="md"
+          disabled={current === 0 || navDisabled}
+          onClick={() => setCurrent(current - 1)}
+        >
+          {prevLabel}
+        </ModernButton>
       </div>
 
       {/* Right side: Footer + Skip + Next/Complete */}
@@ -253,6 +252,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
               variant="primary"
               size="md"
               disabled={navDisabled || completeDisabled}
+              loading={isValidating}
               onClick={handleComplete}
             >
               {completeLabel}
@@ -264,6 +264,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
             variant="primary"
             size="md"
             disabled={navDisabled}
+            loading={isValidating}
             onClick={handleAdvance}
           >
             {nextLabel}
@@ -338,9 +339,11 @@ export default function ModernStepWizard(props: StepWizardProps) {
               />
             </div>
 
-            {/* Content area */}
+            {/* Content area -- keyed per step so the skin's enter cadence
+                replays on every transition (geometry preserved: the slot
+                keeps its min-block-size). */}
             <div data-part="main">
-              <div data-part="content">
+              <div data-part="content" key={currentDef?.key}>
                 {currentDef?.content}
               </div>
               {errorDisplay}
@@ -349,8 +352,9 @@ export default function ModernStepWizard(props: StepWizardProps) {
           </div>
         ) : (
           <>
-            {/* Horizontal: content below the step indicators */}
-            <div data-part="content">
+            {/* Horizontal: content below the step indicators (same keyed
+                enter cadence as the vertical split). */}
+            <div data-part="content" key={currentDef?.key}>
               {currentDef?.content}
             </div>
             {errorDisplay}

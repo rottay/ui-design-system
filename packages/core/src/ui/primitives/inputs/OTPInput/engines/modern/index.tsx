@@ -22,6 +22,7 @@
 
 import React, { useState, useCallback, useRef, useId, useEffect } from 'react';
 import { arrayValueAt, setArrayValueAt } from '@/foundation/kernel/collections';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { OTPInputProps } from '../../contracts';
 import { OTPINPUT_DEFAULTS } from '../../contracts';
 
@@ -38,6 +39,9 @@ function focusInputAt(inputs: readonly (HTMLInputElement | null)[], index: numbe
  * @returns A skin-painted flex row of single-character inputs.
  */
 export default function ModernOTPInput(props: OTPInputProps): React.ReactElement {
+  // Optional provider + English floor (the floor must stay byte-identical to
+  // the historical label: the quality contract pins `Digit N of M`).
+  const i18n = useOptionalTranslation('components');
   const {
     length = OTPINPUT_DEFAULTS.length,
     value: controlledValue,
@@ -166,7 +170,13 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
             }}
             onKeyDown={(e) => handleKeyDown(index, e)}
             onPaste={handlePaste}
-            aria-label={`Digit ${index + 1} of ${length}`}
+            // The first slot invites the platform's one-time-code autofill;
+            // the paste handler above distributes it across every slot.
+            autoComplete={index === 0 ? 'one-time-code' : 'off'}
+            aria-label={
+              i18n?.t('otp.digit_label', { index: index + 1, length }) ??
+              `Digit ${index + 1} of ${length}`
+            }
           />
         ))}
       </div>

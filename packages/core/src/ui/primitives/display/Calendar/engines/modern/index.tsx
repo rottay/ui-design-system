@@ -1,32 +1,29 @@
 'use client';
 
 /**
- * @fileoverview Modern Calendar engine -- Tailwind utilities + unlayered skin.
+ * @fileoverview Modern Calendar engine -- unlayered skin owns paint AND layout.
  *
- * Lightweight calendar built with a CSS Grid layout, Tailwind layout utilities,
- * and native `Date` objects (no dayjs dependency, no Daisy classes). Supports
- * month view (7-column day grid) and year view (3-column month grid), controlled
- * and uncontrolled value modes, date disabling via `disabledDate`/`validRange`,
- * and custom cell renderers for both day and month cells.
+ * Lightweight calendar built with a CSS Grid layout and native `Date` objects
+ * (no dayjs dependency, no Daisy classes). Supports month view (7-column day
+ * grid) and year view (3-column month grid), controlled and uncontrolled value
+ * modes, date disabling via `disabledDate`/`validRange`, custom cell renderers
+ * for both day and month cells, and WAI-ARIA grid keyboard navigation (roving
+ * tab stop; arrows +/-1/+/-7 days, +/-1/+/-3 months; PageUp/PageDown; Home/End;
+ * Left/Right mirrored in RTL).
  *
- * Paint and header-control geometry live in the modern skin
+ * Paint, header-control geometry AND grid layout live in the modern skin
  * (`runtime/engines/modern/skin/calendar.css`), keyed by `data-part` +
- * `data-selected`/`data-today`/`data-disabled`/`data-active`: the skin is the
- * single paint owner (selected/today/hover/press surfaces, focus rings,
- * nav-button geometry, the today-ring's border width, and the `[dir='rtl']`
- * nav-glyph flip). W10 moved the cell/root radii off the Tailwind
- * `rounded-lg` utility (fixed 8px, deaf to `--ds-radius-scale`) into the
- * skin, where they ride the tenant-scaled `--ds-radius-*` steps, and resolved
- * the K4-B deferred motion re-ownership: the skin now owns the state
- * transition on the repainted channels (guarded by prefers-reduced-motion).
- * The utilities below own layout only; directional utilities are logical
- * (`start-0`/`end-0`). Cells still carry NO `transition-*` utility (K4-B
- * round 2): Tailwind's `utilities` layer sorts above the skin's
- * `rottay-engines` layer, so a utility transition cannot be overridden by the
- * skin and defers the skin-owned hover paint through a fade-from-transparent;
- * the transition lives in the unlayered skin instead.
+ * `data-selected`/`data-today`/`data-disabled`/`data-active`/`data-fullscreen`:
+ * the skin is the single owner (selected/today/hover/press surfaces, focus
+ * rings, nav-button geometry, the today-ring's border width, the `[dir='rtl']`
+ * root/header/grid/cell layout). The former Tailwind layout
+ * utilities (`p-4`, `grid grid-cols-7`, `aspect-square`, ...) are drained; the
+ * only class string left is the test-pinned inert `pointer-coarse:` bridge for
+ * the compact coarse width, which the skin paints at the same value.
+ * Navigation glyphs come from the semantic icon corpus and inherit tenant
+ * icon packs plus logical RTL mirroring.
  *
- * Engine: **Tailwind CSS + skin (calendar.css)**
+ * Engine: **skin (calendar.css) + data-part hooks**
  *
  * @example
  * ```tsx
@@ -37,9 +34,37 @@
  * @category Display
  * @package @rottay/design-system
  */
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+import { getKeyboardNavDate } from '../../../../foundation/calendar';
 import type { CalendarProps, CalendarMode } from '../../contracts';
+
+// Navigation glyphs always come from the semantic icon corpus. Year movement
+// composes two instances of the same logical role; tenant icon packs and RTL
+// mirroring therefore remain authoritative without a calendar-local SVG set.
+const PreviousIcon = () => <NavigationBackIcon decorative size={16} />;
+const NextIcon = () => <NavigationForwardIcon decorative size={16} />;
+const PreviousYearIcon = () => (
+  <span data-part="double-nav-icon" aria-hidden="true">
+    <NavigationBackIcon decorative size={13} />
+    <NavigationBackIcon decorative size={13} />
+  </span>
+);
+const NextYearIcon = () => (
+  <span data-part="double-nav-icon" aria-hidden="true">
+    <NavigationForwardIcon decorative size={13} />
+    <NavigationForwardIcon decorative size={13} />
+  </span>
+);
+
+/** Reading-direction probe (Segmented/Tree engine idiom). */
+function isRtlContext(el: HTMLElement): boolean {
+  const scoped = el.closest('[dir]');
+  if (scoped) return scoped.getAttribute('dir') === 'rtl';
+  return document.documentElement.dir === 'rtl';
+}
 
 // English day/month fallback labels. Names resolve through the guarded
 // `components` i18n channel (`calendar.weekdays.*` / `calendar.months.*` /
@@ -213,29 +238,108 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     d1.getMonth() === d2.getMonth() &&
     d1.getDate() === d2.getDate();
 
-  // Fullscreen fills the parent container; compact mode constrains to w-80
-  // (320px) for use in popovers, sidebars, or date picker dropdowns. On coarse
-  // pointers the compact root widens to 364px (22.75rem) so the skin's 44px
-  // day-cell touch targets fit (7 tracks + gaps + padding) without clipping.
-  const containerClass = fullscreen ? 'w-full' : 'w-80 pointer-coarse:w-[22.75rem]';
+  // -- APG grid keyboard navigation -------------------------------------------
+  // Roving tab stop per grid: day cells track a focused DATE (default: the
+  // selected day, else today when visible, else the 1st); year-view cells
+  // track a focused month index. Arrows ±1/±7 (day) and ±1/±3 (year),
+  // PageUp/PageDown, Home/End -- the day arithmetic is shared with DatePicker
+  // (`getKeyboardNavDate`). In RTL the column flow mirrors, so Left/Right
+  // swap. Focus moves programmatically after the roving stop updates.
+  const dayGridRef = useRef<HTMLDivElement>(null);
+  const yearGridRef = useRef<HTMLDivElement>(null);
+  const keyboardNavRef = useRef(false);
+  const [focusedDate, setFocusedDate] = useState<Date | null>(null);
+  const [focusedMonthIndex, setFocusedMonthIndex] = useState<number | null>(null);
+
+  const anchorDate = focusedDate
+    ?? (isSameDay(currentDate, new Date(viewYear, viewMonth, currentDate.getDate())) ? currentDate : null)
+    ?? (today.getFullYear() === viewYear && today.getMonth() === viewMonth ? today : null)
+    ?? new Date(viewYear, viewMonth, 1);
+  const anchorMonthIndex = focusedMonthIndex
+    ?? (currentDate.getFullYear() === viewYear ? currentDate.getMonth() : 0);
+
+  const focusCurrentStop = useCallback((grid: HTMLDivElement | null) => {
+    grid?.querySelector<HTMLElement>("[data-part='cell'][tabindex='0']")?.focus();
+  }, []);
+
+  const handleDayGridKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      const rtl = isRtlContext(e.currentTarget as HTMLElement);
+      const key = rtl && e.key === 'ArrowRight'
+        ? 'ArrowLeft'
+        : rtl && e.key === 'ArrowLeft'
+          ? 'ArrowRight'
+          : e.key;
+      const next = getKeyboardNavDate(anchorDate, key);
+      if (!next) return;
+      e.preventDefault();
+      keyboardNavRef.current = true;
+      setFocusedDate(next);
+      if (next.getFullYear() !== viewYear || next.getMonth() !== viewMonth) {
+        setViewYear(next.getFullYear());
+        setViewMonth(next.getMonth());
+      }
+    },
+    [anchorDate, viewYear, viewMonth],
+  );
+
+  const handleYearGridKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      const rtl = isRtlContext(e.currentTarget as HTMLElement);
+      const key = rtl && e.key === 'ArrowRight'
+        ? 'ArrowLeft'
+        : rtl && e.key === 'ArrowLeft'
+          ? 'ArrowRight'
+          : e.key;
+      let nextIndex: number | null = null;
+      if (key === 'ArrowRight') nextIndex = Math.min(anchorMonthIndex + 1, 11);
+      else if (key === 'ArrowLeft') nextIndex = Math.max(anchorMonthIndex - 1, 0);
+      else if (key === 'ArrowDown') nextIndex = Math.min(anchorMonthIndex + 3, 11);
+      else if (key === 'ArrowUp') nextIndex = Math.max(anchorMonthIndex - 3, 0);
+      else if (key === 'Home') nextIndex = 0;
+      else if (key === 'End') nextIndex = 11;
+      if (nextIndex === null || nextIndex === anchorMonthIndex) return;
+      e.preventDefault();
+      keyboardNavRef.current = true;
+      setFocusedMonthIndex(nextIndex);
+    },
+    [anchorMonthIndex],
+  );
+
+  // Move DOM focus only when the roving stop changed via the keyboard (a
+  // pointer click already owns its focus).
+  useEffect(() => {
+    if (!keyboardNavRef.current) return;
+    keyboardNavRef.current = false;
+    focusCurrentStop(mode === 'month' ? dayGridRef.current : yearGridRef.current);
+  }, [focusedDate, focusedMonthIndex, viewYear, viewMonth, mode, focusCurrentStop]);
+
+  // Fullscreen fills the parent container; compact mode constrains to 320px
+  // for use in popovers, sidebars, or date picker dropdowns. The compact
+  // widths are skin-owned (`data-fullscreen`); the pinned coarse utility
+  // string stays as an inert bridge (pass1-premium pin) while the skin's
+  // coarse rule paints the same 22.75rem.
+  const containerClass = fullscreen ? '' : 'pointer-coarse:w-[22.75rem]';
 
   return (
     <div
       ref={ref}
-      className={`rottay-calendar rottay-calendar--modern p-4 ${containerClass} ${className}`}
+      className={`rottay-calendar rottay-calendar--modern ${containerClass} ${className}`}
       data-part="root"
       data-mode={mode}
+      data-fullscreen={fullscreen ? 'true' : 'false'}
       style={style}
       id={id}
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-4" data-part="header">
-        <div className="flex items-center gap-2">
-          <button data-part="nav-button" data-direction="prev-year" aria-label={navLabels.prevYear} onClick={handlePrevYear}>«</button>
-          {mode === 'month' && <button data-part="nav-button" data-direction="prev-month" aria-label={navLabels.prevMonth} onClick={handlePrevMonth}>‹</button>}
+      <div data-part="header">
+        <div>
+          <button type="button" data-part="nav-button" data-direction="prev-year" aria-label={navLabels.prevYear} onClick={handlePrevYear}><PreviousYearIcon /></button>
+          {mode === 'month' && <button type="button" data-part="nav-button" data-direction="prev-month" aria-label={navLabels.prevMonth} onClick={handlePrevMonth}><PreviousIcon /></button>}
         </div>
-        <div className="flex items-center gap-2">
+        <div>
           <button
+            type="button"
             data-part="mode-toggle"
             data-mode="month"
             data-active={mode === 'month' ? 'true' : 'false'}
@@ -244,6 +348,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             {months[viewMonth]} {viewYear}
           </button>
           <button
+            type="button"
             data-part="mode-toggle"
             data-mode="year"
             data-active={mode === 'year' ? 'true' : 'false'}
@@ -252,28 +357,34 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             {yearToggleLabel}
           </button>
         </div>
-        <div className="flex items-center gap-2">
-          {mode === 'month' && <button data-part="nav-button" data-direction="next-month" aria-label={navLabels.nextMonth} onClick={handleNextMonth}>›</button>}
-          <button data-part="nav-button" data-direction="next-year" aria-label={navLabels.nextYear} onClick={handleNextYear}>»</button>
+        <div>
+          {mode === 'month' && <button type="button" data-part="nav-button" data-direction="next-month" aria-label={navLabels.nextMonth} onClick={handleNextMonth}><NextIcon /></button>}
+          <button type="button" data-part="nav-button" data-direction="next-year" aria-label={navLabels.nextYear} onClick={handleNextYear}><NextYearIcon /></button>
         </div>
       </div>
 
       {mode === 'month' ? (
         <>
           {/* Day headers */}
-          <div className="grid grid-cols-7 gap-1 mb-2">
+          <div data-part="weekday-row">
             {days.map((day) => (
-              <div key={day} className="text-center text-sm font-medium py-2" data-part="weekday-header">
+              <div key={day} data-part="weekday-header">
                 {fullscreen ? day : day.charAt(0)}
               </div>
             ))}
           </div>
 
-          {/* Days grid */}
-          <div className="grid grid-cols-7 gap-1" data-part="grid">
+          {/* Days grid (APG: roving stop + arrow/PageUp/Home navigation) */}
+          <div
+            ref={dayGridRef}
+            data-part="grid"
+            role="grid"
+            aria-label={calendarLabel('calendar.gridLabel', 'Dates grid')}
+            onKeyDown={handleDayGridKeyDown}
+          >
             {/* Empty cells for days before month starts */}
             {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-              <div key={`empty-${i}`} className="aspect-square" />
+              <div key={`empty-${i}`} data-part="cell-spacer" aria-hidden="true" />
             ))}
 
             {/* Day cells */}
@@ -283,25 +394,26 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
               const isToday = isSameDay(date, today);
               const isSelected = isSameDay(date, currentDate);
               const isDisabled = isDateDisabled(date);
+              const isAnchor = isSameDay(date, anchorDate);
 
               return (
                 <button
                   key={day}
+                  type="button"
                   data-part="cell"
+                  role="gridcell"
                   data-selected={isSelected ? 'true' : 'false'}
                   data-today={isToday ? 'true' : 'false'}
                   data-disabled={isDisabled || undefined}
-                  className={`
-                    aspect-square flex flex-col items-center justify-center
-                    relative
-                    ${isDisabled ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'}
-                  `}
+                  aria-selected={isSelected}
+                  aria-label={date.toDateString()}
+                  tabIndex={isAnchor && !isDisabled ? 0 : -1}
                   onClick={() => handleDateClick(day)}
                   disabled={isDisabled}
                 >
-                  <span className={fullscreen ? 'text-sm' : 'text-xs'}>{day}</span>
+                  <span>{day}</span>
                   {dateCellRender && (
-                    <div className="absolute bottom-0 start-0 end-0 text-xs truncate" data-part="cell-content">
+                    <div data-part="cell-content">
                       {dateCellRender(date)}
                     </div>
                   )}
@@ -311,8 +423,14 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
           </div>
         </>
       ) : (
-        /* Year view - show months */
-        <div className="grid grid-cols-3 gap-2" data-part="grid">
+        /* Year view - show months (APG: roving stop + arrow/Home navigation) */
+        <div
+          ref={yearGridRef}
+          data-part="grid"
+          role="grid"
+          aria-label={calendarLabel('calendar.monthsGridLabel', 'Months grid')}
+          onKeyDown={handleYearGridKeyDown}
+        >
           {months.map((month, i) => {
             const date = new Date(viewYear, i, 1);
             const isCurrentMonth = i === today.getMonth() && viewYear === today.getFullYear();
@@ -321,15 +439,18 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             return (
               <button
                 key={month}
+                type="button"
                 data-part="cell"
+                role="gridcell"
                 data-selected={isSelected ? 'true' : 'false'}
                 data-today={isCurrentMonth ? 'true' : 'false'}
-                className="p-4 text-center"
+                aria-selected={isSelected}
+                tabIndex={i === anchorMonthIndex ? 0 : -1}
                 onClick={() => handleMonthClick(i)}
               >
-                <span className={fullscreen ? 'text-sm' : 'text-xs'}>{month}</span>
+                <span>{month}</span>
                 {monthCellRender && (
-                  <div className="mt-1 text-xs" data-part="cell-content">
+                  <div data-part="cell-content">
                     {monthCellRender(date)}
                   </div>
                 )}

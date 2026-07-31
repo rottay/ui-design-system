@@ -4,6 +4,7 @@
 
 import type { CSSProperties, ReactNode } from 'react';
 
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
 import { Box } from '@/ui/primitives/layout/Box';
 import { Flex } from '@/ui/primitives/layout/Flex';
@@ -18,6 +19,7 @@ export interface StickyWizardActionsProps {
  */
 export function StickyWizardActions({ children }: StickyWizardActionsProps) {
   const { virtualKeyboardInset, isVirtualKeyboardOpen } = useResponsive();
+  const i18n = useOptionalTranslation('components');
   const style = {
     '--ds-virtual-keyboard-inset': `${Math.max(0, virtualKeyboardInset)}px`,
   } as CSSProperties;
@@ -28,7 +30,7 @@ export function StickyWizardActions({ children }: StickyWizardActionsProps) {
       style={style}
       data-testid="step-wizard-action-dock"
       role="toolbar"
-      aria-label="Wizard actions"
+      aria-label={i18n?.tOr('step_wizard.actions', 'Wizard actions') ?? 'Wizard actions'}
       data-part="root"
       data-placement="bottom"
       data-mode="fixed"

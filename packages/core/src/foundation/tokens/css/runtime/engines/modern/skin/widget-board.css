@@ -1,25 +1,24 @@
 /**
  * Modern WidgetBoard skin (Lote 6 — additive).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
- * Tailwind's `base` layer, so layered paint loses to preflight regardless of
- * specificity. Unlayered rules outrank preflight and still yield to caller
- * inline styles.
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-engines)`, AFTER the
+ * Sheet and Button engine skins — so its rules win their same-layer ties by
+ * source order, and they can reach what the shared presentation skin
+ * (`rottay-components`, an earlier layer) cannot without `!important`.
  *
  * SCOPE: the board's surface paint (cells, toolbar, catalog cards, drag /
  * resize chrome) already lives in the SHARED presentation skin
  * (`presentation/components/skin/widget-board.css`), consumed byte-identical
- * by the classic/modern/rustic engines — this file owns ONLY the parts the
- * Lote-6 catalog search adds: the `catalog-search` row and the
- * `catalog-no-results` empty state. The search field is the public Input
- * primitive (`size="sm"`): its chrome is painted by `input.css`; this file
- * owns only the row's geometry within the catalog.
- *
- * WIRING (PENDING — coordinator-owned): this file is NOT yet imported by
- * `facade/entrypoints/styles.css` / `base.css` (outside the lane write-set).
- * Until the two standard `@import "../../runtime/engines/modern/skin/widget-board.css";`
- * lines land, the search row renders functional but unspaced (the Input
- * primitive's own chrome still paints).
+ * by the classic/modern/rustic engines — this file owns ONLY:
+ *  1. the Lote-6 catalog search row and `catalog-no-results` empty state
+ *     (the Input primitive's own chrome is painted by `input.css`);
+ *  2. the catalog Sheet surface PAINT (background / border / shadow), which
+ *     must outrank the Sheet engine skins; its GEOMETRY (width, body
+ *     padding) travels the engine's sanctioned surfaceStyle/bodyStyle
+ *     channels instead, because the rustic Sheet stamps an inline width;
+ *  3. the move-mode `grabbing` cursor cascade, which must outrank the
+ *     Button primitive's `cursor: pointer` chrome in this same layer.
  */
 
 /* ---- catalog search row: quiet geometry above the add-widget grid. ---- */
@@ -34,4 +33,34 @@
 :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
   .ds-widget-board__catalog-empty[data-part='catalog-no-results'] {
   min-block-size: var(--ds-widget-board-catalog-no-results-min-height, 96px);
+}
+
+/* ---- catalog Sheet surface paint: the Sheet engine skins (modern sheet.css
+        and rustic sheet.css) style the surface in this same layer at up to
+        (0,5,0) via their doubled data-part selector; this (0,5,0) hook
+        (class + part + open + placement + the always-present dialog role)
+        ties them and wins by later import order. Width and body padding are
+        NOT here: they travel the engine's surfaceStyle/bodyStyle channels
+        because the rustic Sheet stamps an inline 380px width. ---- */
+.ds-widget-board__catalog-surface[data-part='surface'][data-open='true'][data-placement='right'][role='dialog'] {
+  border-inline-start: 1px solid
+    var(--ds-surface-card-border-strong, var(--ds-color-border-primary));
+  background: radial-gradient(
+      circle at 100% 0%,
+      color-mix(in srgb, var(--ds-color-primary) 8%, transparent),
+      transparent 34%
+    ),
+    var(--ds-surface-card-bg, var(--ds-color-bg-elevated));
+  box-shadow: -28px 0 72px -44px color-mix(in srgb, var(--ds-color-text-primary)
+        48%, transparent);
+}
+
+/* ---- move mode: the whole board reads as a grab surface, outranking the
+        Button primitive's `cursor: pointer` (0,3,0, this layer) through the
+        always-stamped data-loading hook — no `!important`, no double. ---- */
+.ds-pattern-widget-board[data-part='root'][data-moving='true'][data-loading],
+.ds-pattern-widget-board[data-part='root'][data-moving='true'][data-loading]
+  * {
+  cursor: grabbing;
+  user-select: none;
 }

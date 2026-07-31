@@ -1,22 +1,173 @@
-/** DecisionInboxSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+/**
+ * DecisionInboxSurface skin (WO-SKIN-06 / CK-I, SU34 pass 2026-07-30).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)`.
+ *
+ * SCOPE: paints ONLY what the surface owns — the queue header spacing, the
+ * selection (batch) bar accent, the drained skeleton geometry, the
+ * content/rail layout switch (mobile column vs desktop row + sticky review
+ * card), the reason-field geometry and the divider hairlines. Composed
+ * primitives/patterns (PatternDataTable, PatternFilterPanel, Card, Button,
+ * Textarea, Badge, Skeleton, SurfaceEmptyState) keep their own chrome.
+ *
+ * SPECIFICITY: single class + single attribute hooks; no repetition, no
+ * !important. LAYER TRUTH (same as list.css): typography.css sorts in
+ * `rottay-engines` (after this file), so wherever the Typography skin paints
+ * a color it governs regardless of selector weight here; the
+ * `__muted-text` rule is the color source only where Typography leaves the
+ * part unpainted.
+ *
+ * MOTION: no motion owned by this surface (mount/dismount only; the motion
+ * authority owns cadence through the composed primitives).
+ */
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__muted-text[data-part='root'][data-part='root'] {
+/* -------------------------------------------------------------------------- */
+/* Queue header                                                                */
+/* -------------------------------------------------------------------------- */
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__muted-text[data-part='root'] {
   color: var(--ds-color-text-muted);
 }
 
+.ds-surface.ds-decision-inbox .ds-decision-inbox__subtitle[data-part='root'] {
+  display: block;
+  margin-block-start: var(--ds-spacing-xs, 4px);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Loading skeleton (geometry drained from inline styles)                      */
+/* -------------------------------------------------------------------------- */
+
+/* Visually-hidden live label beside aria-busy (sr-only idiom, same as
+   collection-workspace-render-dispatch.css). */
+.ds-surface.ds-decision-inbox .ds-decision-inbox__loading-label[data-part='loading-label'] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__skeleton-subtitle {
+  display: block;
+  margin-block-start: var(--ds-spacing-2, 8px);
+}
+
 .ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='skeleton-header'] {
-  border-bottom: 1px solid var(--ds-color-border-secondary);
+  padding-block-end: var(--ds-spacing-sm, 8px);
+  border-block-end: 1px solid var(--ds-color-border-secondary);
 }
 
 .ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='skeleton-row'] {
-  border-bottom: 1px solid var(--ds-color-border-subtle, var(--ds-color-border-secondary));
+  padding-block: var(--ds-spacing-sm, 8px);
+  border-block-end: 1px solid var(--ds-color-border-subtle, var(--ds-color-border-secondary));
 }
 
+/* -------------------------------------------------------------------------- */
+/* Selection (batch) bar                                                       */
+/* -------------------------------------------------------------------------- */
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__selection-bar[data-part='root'] {
+  border-color: var(--ds-color-primary);
+  background: var(--ds-color-primary-bg, var(--ds-color-bg-tertiary));
+}
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__selection-spacer {
+  flex: 1 1 auto;
+}
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__batch-reason {
+  min-inline-size: 200px;
+  max-inline-size: 320px;
+  inline-size: 100%;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Content layout: column on mobile, row + review rail on desktop              */
+/* -------------------------------------------------------------------------- */
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__content[data-part='content'] {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.ds-surface.ds-decision-inbox[data-mobile='false'] .ds-decision-inbox__content[data-part='content'] {
+  flex-direction: row;
+}
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__queue[data-part='queue'] {
+  flex: 1 1 0%;
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__review-rail[data-part='review-rail'] {
+  inline-size: 100%;
+  flex-shrink: 0;
+}
+
+/* The caller-supplied rail width arrives through a private runtime-instance
+   bridge for the existing `reviewRail.width` prop. It is not a public hook. */
+.ds-surface.ds-decision-inbox[data-mobile='false'] .ds-decision-inbox__review-rail[data-part='review-rail'] {
+  inline-size: var(--_ds-instance-decision-inbox-rail-width, 380px);
+}
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__review-card {
+  position: relative;
+}
+
+.ds-surface.ds-decision-inbox[data-mobile='false'] .ds-decision-inbox__review-card {
+  position: sticky;
+  inset-block-start: var(--ds-spacing-md, 16px);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Review rail parts                                                           */
+/* -------------------------------------------------------------------------- */
+
 .ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='review-rail'] {
+  block-size: 1px;
   background: var(--ds-color-border-secondary);
 }
 
-.ds-surface.ds-decision-inbox .ds-decision-inbox__selection-bar.ds-decision-inbox__selection-bar[data-part='root'] {
-  border-color: var(--ds-color-primary);
-  background: var(--ds-color-primary-bg, var(--ds-color-bg-tertiary));
+.ds-surface.ds-decision-inbox .ds-decision-inbox__reason-label[data-part='root'] {
+  display: block;
+  margin-block-end: var(--ds-spacing-xs, 4px);
+}
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__review-reason {
+  inline-size: 100%;
+}
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__decision-action {
+  flex: 1 1 0%;
+}
+
+/* Touch law: decision actions reach the 44px hit floor on coarse pointers
+   without inflating the visual size on fine pointers. */
+@media (pointer: coarse) {
+  .ds-surface.ds-decision-inbox .ds-decision-inbox__decision-action {
+    min-block-size: 44px;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Forced colors: re-key the surface-owned paint onto system colors            */
+/* -------------------------------------------------------------------------- */
+
+@media (forced-colors: active) {
+  .ds-surface.ds-decision-inbox .ds-decision-inbox__selection-bar[data-part='root'] {
+    border-color: Highlight;
+    background: Canvas;
+  }
+
+  .ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'] {
+    background: ButtonBorder;
+    border-color: ButtonBorder;
+  }
 }

@@ -1,31 +1,136 @@
-/** SearchSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+/**
+ * SearchSurface skin (WO-SKIN-06 / CK-I).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
+ *
+ * SCOPE: the surface composes public primitives and patterns (PageShell,
+ * Input.Search, FilterPanel, Card, EmptyState kit) — each owns its own
+ * chrome, states and forced-colors treatment. In particular the selected
+ * result card is painted by the Card skin itself (`data-selectable` +
+ * `data-selected` get the primary border/outline/elevation there), so this
+ * file paints ONLY:
+ *   - the tenant chrome channels the compiler already emits for search
+ *     (`--ds-search-result-*`, `--ds-search-empty-bg`), re-keyed onto the
+ *     channels the composed Card consumes (`--ds-card-*` retune in scope —
+ *     a channel the component already consumes, not a new variable). The
+ *     self-referential fallback (`var(--ds-card-bg)` inside its own
+ *     definition) is the shipped passthrough pattern moved from inline
+ *     style to the skin: unset tenant channel -> cyclic -> element falls
+ *     back to the inherited/global `--ds-card-*` value untouched.
+ *   - result title/meta ink (`--ds-search-result-title-color` and
+ *     `--ds-search-result-meta-color`), live through the Typography
+ *     component's semantic default-color channel rather than competing with
+ *     its `color` property in this earlier cascade layer. The description
+ *     keeps its explicit muted Text posture.
+ *     app-rendered meta Box. LAYER TRUTH: typography.css sorts in
+ *     `rottay-engines` (after this layer) and paints every Text root, so
+ *     against the description Text this rule is the source only where
+ *     Typography leaves the part unpainted — the description's muted look
+ *     travels through the Text `color` prop instead. The sibling
+ *   - the leading result icon tint (muted ink at rest, primary when its
+ *     card is the selected one — the only search-owned selection cue the
+ *     Card skin does not already provide);
+ *   - the custom-renderer wrapper cursor (the surface owns click-to-select
+ *     around app-rendered results);
+ *   - the search-mirror skeleton blocks (`search-skeleton-*`), whose pulse
+ *     rides the canonical `ds-foundation-pulse` keyframes on the
+ *     `--ds-motion-attention` channel and goes quiet under reduced motion.
+ *     Their fills are neutral surface tokens, so forced colors needs no
+ *     re-keying here (the composed Cards already force their own frames).
+ *
+ * SPECIFICITY: single-class hooks plus the always-stamped state attribute
+ * (`data-selected`); no repetition, no `!important`. (The retired
+ * quadruple-class and double-attribute selectors predate the owner's
+ * specificity law; they were also inert against the Card/Typography skins,
+ * which sort in a later layer — the cascade outcome is preserved, now
+ * through the channels those skins actually consume.)
+ */
 
-/* These rules replace always-winning inline card paint, so their specificity
-   stays above the interactive Card primitive's hover/state selectors. */
-.ds-surface.ds-search .ds-search__result-card.ds-search__result-card.ds-search__result-card.ds-search__result-card[data-part='root'][data-variant] {
-  background-color: var(--ds-search-result-bg, var(--ds-card-bg));
-  border-color: var(--ds-search-result-border, var(--ds-card-border-color, var(--ds-color-border-subtle)));
-  box-shadow: var(--ds-search-result-shadow, var(--ds-card-shadow, none));
+/* Tenant chrome re-keyed onto the Card's own channels. */
+.ds-surface.ds-search .ds-search__result-card {
+  --ds-card-bg: var(--ds-search-result-bg, var(--ds-card-bg));
+  --ds-card-border-color: var(--ds-search-result-border, var(--ds-card-border-color));
+  --ds-card-shadow: var(--ds-search-result-shadow, var(--ds-card-shadow));
+  --ds-card-bg-hover: var(--ds-search-result-bg-hover, var(--ds-card-bg-hover));
 }
 
-.ds-surface.ds-search .ds-search__result-card.ds-search__result-card.ds-search__result-card.ds-search__result-card.ds-search__result-card--selected[data-part='root'][data-variant] {
-  background-color: var(--ds-search-result-bg-hover, var(--ds-search-result-bg, var(--ds-card-bg)));
-  border-color: var(--ds-color-primary-500);
+.ds-surface.ds-search .ds-search__result-icon {
+  flex-shrink: 0;
+  color: var(--ds-color-text-muted);
 }
 
-.ds-surface.ds-search .ds-search__result-title[data-part='root'][data-part='root'] {
-  color: var(--ds-search-result-title-color, var(--ds-color-text-primary));
+.ds-surface.ds-search
+  .ds-search__result-card[data-selected="true"]
+  .ds-search__result-icon {
+  color: var(--ds-color-primary);
 }
 
-.ds-surface.ds-search .ds-search__result-meta[data-part='root'][data-part='root'] {
+/* Typography remains the paint owner; Search only supplies its semantic
+   default-color input for this composed title instance. */
+.ds-surface.ds-search .ds-search__result-title {
+  --ds-type-color-default: var(
+    --ds-search-result-title-color,
+    var(--ds-color-text-primary)
+  );
+}
+
+/* Meta ink: governs the app-rendered meta Box; Typography owns the
+   description Text (see SCOPE). */
+.ds-surface.ds-search .ds-search__result-meta {
   color: var(--ds-search-result-meta-color, var(--ds-color-text-muted));
 }
 
-.ds-surface.ds-search .ds-search__empty-state[data-part='empty-state'][data-state] {
+/* Custom result renderer: the surface owns click-to-select around app
+   content, so it also owns the cursor affordance. */
+.ds-surface.ds-search [data-part="result-custom"] {
+  cursor: pointer;
+}
+
+/* Empty-state landing hook (query/results): wrapper chrome behind the
+   composed pattern; the tenant channel keeps its consumer. */
+.ds-surface.ds-search .ds-search__empty-state[data-part="empty-state"][data-state] {
   border-radius: var(--ds-radius-lg);
   background: var(--ds-search-empty-bg, transparent);
 }
 
-.ds-surface.ds-search .ds-search__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+/* ---- search-mirror skeleton: blocks sit on the same layout as the real
+        content (command bar above, results + preview on the 7/5 grid),
+        preventing a loading-time layout shift. ---- */
+.ds-surface.ds-search [data-part="search-skeleton-block"] {
+  border-radius: var(--ds-skeleton-radius, var(--ds-radius-md, 8px));
+  background: var(
+    --ds-skeleton-bg,
+    var(--ds-surface-panel, var(--ds-color-bg-secondary))
+  );
+  animation: ds-foundation-pulse
+    var(--ds-skeleton-animation-duration, var(--ds-motion-attention, 1.5s))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-surface.ds-search
+  [data-part="search-skeleton-block"][data-size="input"] {
+  min-block-size: 40px;
+}
+
+.ds-surface.ds-search
+  [data-part="search-skeleton-block"][data-size="filter"] {
+  min-block-size: 72px;
+}
+
+.ds-surface.ds-search
+  [data-part="search-skeleton-block"][data-size="result"] {
+  min-block-size: 88px;
+}
+
+.ds-surface.ds-search
+  [data-part="search-skeleton-block"][data-size="preview"] {
+  min-block-size: 320px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-search [data-part="search-skeleton-block"] {
+    animation: none;
+  }
 }

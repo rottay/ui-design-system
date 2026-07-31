@@ -30,6 +30,7 @@
 
 import React from 'react';
 import { ActionOpenExternalIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-open-external';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { LinkProps } from '../../contracts';
 import { LINK_DEFAULTS } from '../../contracts';
 
@@ -84,6 +85,15 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
     ? { target: '_blank', rel: 'noopener noreferrer' }
     : {};
 
+  /**
+   * External announcements: the icon is a visual affordance, so screen-reader
+   * users get the same information as text. Catalog-first with the documented
+   * English floor (the key lands with the locale JSONs; the echo guard falls
+   * back until then).
+   */
+  const i18n = useOptionalTranslation('common');
+  const newTabText = i18n?.tOr('opens_in_new_tab', '(opens in new tab)') ?? '(opens in new tab)';
+
   return (
     <a
       href={disabled ? undefined : href}
@@ -105,6 +115,7 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
           <ActionOpenExternalIcon size={12} decorative />
         </span>
       )}
+      {external && <span className="ds-sr-only">{newTabText}</span>}
     </a>
   );
 }

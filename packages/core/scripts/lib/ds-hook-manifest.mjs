@@ -19,29 +19,36 @@
  * the DS sources that actually declare custom-property ownership, and states
  * that substitution openly rather than silently.
  *
- * THE THREE ANCHORS (all authored DS source; none generated)
- * ---------------------------------------------------------
- * A1  TENANT CHANNEL — the chrome-variable emission table
- *     `src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts`
- *     Every `--ds-*` used as an assignment key there is written at ROOT at
- *     runtime by the governed white-label compiler on behalf of a tenant. An
- *     application that authors the same property in static CSS under any
- *     scoped selector WINS over `:root` and silently overrides the tenant's
- *     brand. These are therefore not application hooks.
+ * THE FIVE OWNERSHIP CLASSES (all derived from authored DS source)
+ * ----------------------------------------------------------------
+ * A1  TENANT CHANNEL — every concrete `--ds-*` output of the governed
+ *     white-label compilers: chrome, static BrandTheme and DB appearance.
+ *     These are written at ROOT on behalf of a tenant. An application that
+ *     authors the same property in static CSS under any scoped selector WINS
+ *     over `:root` and silently overrides the tenant's brand. They are
+ *     therefore closed channels, never application hooks.
  *
  * A2  FOUNDATION TOKEN — root-equivalent declarations in authored DS CSS.
  *     The DS owns the value. An app assigning one re-derives a DS-owned token,
  *     and every descendant that reads it repaints — the exact "repaint an
  *     entire subtree" hazard C3 names.
  *
- * A3  PUBLIC HOOK — read by the DS (`var(--ds-x, …)`) in authored DS CSS or in
- *     `src/ui` component sources, and owned by NEITHER A1 nor A2. The DS
- *     consumes the property but never supplies its value, which is precisely
- *     the documented component-variable pattern
- *     (`var(--ds-{component}-{property}, var(--ds-{generic-fallback}))`,
- *     ui-design-system/CLAUDE.md). A read with no owner is an open extension
- *     point; that is what an application may legally assign under its own
- *     scope.
+ * A3  UNADJUDICATED READ — read by the DS (`var(--ds-x, …)`) but owned by
+ *     neither A1 nor A2 and not explicitly promoted. This is debt, not API.
+ *     Existing names are decrease-only; a new name is a blocking finding.
+ *
+ * A4  PUBLIC HOOK — an A3-shaped read explicitly promoted in PROMOTIONS with
+ *     owner, scope, type, fallback and white-label terms. Promotion is the only
+ *     path into the application customization contract. Merely writing
+ *     `var(--ds-x, fallback)` cannot create public API.
+ *
+ * A5  COMPONENT TOKEN — supplied below root by a component stylesheet/source.
+ *     It is a DS-owned component channel, not a tenant dial and not application
+ *     API. An explicit A4 promotion may expose a component slot; absent that
+ *     owner decision it stays closed.
+ *
+ * Private implementation properties use `--_ds-*`. They are deliberately
+ * invisible to this manifest and may never be assigned by an application.
  *
  * WHY GENERATED ARTIFACTS ARE EXCLUDED (the circularity trap)
  * ----------------------------------------------------------
@@ -68,6 +75,11 @@
 
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve, sep } from 'node:path';
+import ts from 'typescript';
+import {
+  parseEmitterMappings,
+  parseTypeRegistry,
+} from './theme-channel-parity-graph.mjs';
 
 // ---------------------------------------------------------------------------
 // Selector analysis
@@ -518,8 +530,254 @@ function expandTemplate(template, scope) {
 /** Generated snapshots, fixtures and tests never speak for DS ownership. */
 const EXCLUDED_PATH = /(?:^|[\\/])(?:facade[\\/]artifacts|__tests__|tests|__fixtures__|fixtures|stories|node_modules|dist)(?:[\\/]|$)/;
 
-const CUSTOM_PROPERTY_READ = /var\(\s*(--ds-[a-z0-9-]+)/g;
-const CUSTOM_PROPERTY_DECLARATION = /(?:^|[;{\s])(--ds-[a-z0-9-]+)\s*:/g;
+/**
+ * Parse exact `var(--ds-*)` calls and retain whether the call carries its own
+ * fallback. This is deliberately a small CSS-value scanner rather than a
+ * source regex:
+ *
+ * - quoted prose is ignored;
+ * - dynamic names such as `--ds-control-${size}` are rejected;
+ * - nested var() calls are each reported independently;
+ * - a comma only counts as a fallback at the current var() depth.
+ *
+ * The distinction is architectural, not cosmetic. A public hook is optional:
+ * if a consumer reads it without a fallback, some authored DS source must
+ * supply it in the same runtime. Otherwise a legal application that does not
+ * customize the hook can receive an invalid declaration.
+ */
+export function customPropertyReadDetails(value) {
+  const reads = [];
+  let quote = null;
+  let escaped = false;
+
+  for (let index = 0; index < value.length; index += 1) {
+    const char = value[index];
+    if (quote) {
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+      if (char === '\\') {
+        escaped = true;
+        continue;
+      }
+      if (char === quote) quote = null;
+      continue;
+    }
+    if (char === '"' || char === "'") {
+      quote = char;
+      continue;
+    }
+    if (!value.startsWith('var(', index)) continue;
+
+    let cursor = index + 4;
+    while (/\s/.test(value[cursor] ?? '')) cursor += 1;
+    const propertyMatch = /^(--ds-[a-z0-9-]+)/.exec(value.slice(cursor));
+    if (!propertyMatch) continue;
+    const property = propertyMatch[1];
+    cursor += property.length;
+    while (/\s/.test(value[cursor] ?? '')) cursor += 1;
+    if (value[cursor] !== ',' && value[cursor] !== ')') continue;
+
+    let depth = 1;
+    let hasFallback = false;
+    let nestedQuote = null;
+    let nestedEscaped = false;
+    for (let nested = index + 4; nested < value.length; nested += 1) {
+      const nestedChar = value[nested];
+      if (nestedQuote) {
+        if (nestedEscaped) {
+          nestedEscaped = false;
+          continue;
+        }
+        if (nestedChar === '\\') {
+          nestedEscaped = true;
+          continue;
+        }
+        if (nestedChar === nestedQuote) nestedQuote = null;
+        continue;
+      }
+      if (nestedChar === '"' || nestedChar === "'") {
+        nestedQuote = nestedChar;
+        continue;
+      }
+      if (nestedChar === '(') depth += 1;
+      else if (nestedChar === ')') {
+        depth -= 1;
+        if (depth === 0) break;
+      } else if (nestedChar === ',' && depth === 1) {
+        hasFallback = true;
+      }
+    }
+    reads.push({ property, hasFallback });
+  }
+  return reads;
+}
+
+function unwrapStaticExpression(node) {
+  let current = node;
+  while (
+    current &&
+    (
+      ts.isAsExpression(current) ||
+      ts.isTypeAssertionExpression(current) ||
+      ts.isParenthesizedExpression(current) ||
+      (ts.isSatisfiesExpression && ts.isSatisfiesExpression(current))
+    )
+  ) {
+    current = current.expression;
+  }
+  return current;
+}
+
+function staticStringValue(node) {
+  const current = unwrapStaticExpression(node);
+  if (
+    current &&
+    (ts.isStringLiteralLike(current) || ts.isNoSubstitutionTemplateLiteral(current))
+  ) {
+    return current.text;
+  }
+  return null;
+}
+
+function createSourceFile(source, fileName) {
+  return ts.createSourceFile(
+    fileName,
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    fileName.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
+  );
+}
+
+/**
+ * Exact custom-property suppliers authored in TypeScript/TSX:
+ *
+ * - object/style keys (`{ '--ds-x': value }`);
+ * - `style.setProperty('--ds-x', value)`;
+ * - indexed assignment (`vars['--ds-x'] = value`).
+ *
+ * Comments, type prose and interpolated names are not suppliers. These local
+ * component token maps must be visible to the hook-safety contract; otherwise
+ * a computed slot such as Collapse's state variables is falsely reported as
+ * missing even though the component stamps it at runtime.
+ */
+export function componentSourceSuppliers(source, fileName = 'component.tsx') {
+  const sourceFile = createSourceFile(source, fileName);
+  const suppliers = new Set();
+
+  const add = (candidate) => {
+    if (candidate?.startsWith('--ds-')) suppliers.add(candidate);
+  };
+
+  const visit = (node) => {
+    if (ts.isPropertyAssignment(node)) {
+      add(
+        ts.isComputedPropertyName(node.name)
+          ? staticStringValue(node.name.expression)
+          : staticStringValue(node.name),
+      );
+    }
+    if (
+      ts.isCallExpression(node) &&
+      ts.isPropertyAccessExpression(node.expression) &&
+      node.expression.name.text === 'setProperty'
+    ) {
+      add(staticStringValue(node.arguments[0]));
+    }
+    if (
+      ts.isBinaryExpression(node) &&
+      node.operatorToken.kind === ts.SyntaxKind.EqualsToken &&
+      ts.isElementAccessExpression(node.left)
+    ) {
+      add(staticStringValue(node.left.argumentExpression));
+    }
+    ts.forEachChild(node, visit);
+  };
+
+  visit(sourceFile);
+  return suppliers;
+}
+
+/**
+ * Extract exact CSS custom-property reads from authored TypeScript/TSX strings.
+ *
+ * Source-wide regexes are not a trustworthy parser here: they see comments and
+ * documentation as runtime reads, and a template such as
+ * `var(--ds-select-trigger-${size}-height)` as the invalid public hook
+ * `--ds-select-trigger-`. The public manifest is an API, so only exact names
+ * present in runtime string/template segments may enter it.
+ *
+ * Template expressions are inspected segment by segment. This retains exact
+ * reads whose fallback value is dynamic (`var(--ds-card-bg, ${fallback})`) but
+ * deliberately refuses to invent a partial name when interpolation occurs
+ * inside the custom-property identifier.
+ */
+export function componentSourceReads(source, fileName = 'component.tsx') {
+  const sourceFile = createSourceFile(source, fileName);
+  const reads = new Set();
+
+  const scanLiteral = (value) => {
+    for (const read of customPropertyReadDetails(value)) reads.add(read.property);
+  };
+
+  const visit = (node) => {
+    if (ts.isStringLiteralLike(node)) {
+      scanLiteral(node.text);
+      return;
+    }
+    if (ts.isTemplateExpression(node)) {
+      scanLiteral(node.head.text);
+      for (const span of node.templateSpans) {
+        visit(span.expression);
+        scanLiteral(span.literal.text);
+      }
+      return;
+    }
+    ts.forEachChild(node, visit);
+  };
+
+  visit(sourceFile);
+  return reads;
+}
+
+/** Same AST boundary as `componentSourceReads`, retaining fallback posture. */
+export function componentSourceReadDetails(source, fileName = 'component.tsx') {
+  const sourceFile = createSourceFile(source, fileName);
+  const reads = [];
+
+  const scanLiteral = (value) => reads.push(...customPropertyReadDetails(value));
+  const visit = (node) => {
+    if (ts.isStringLiteralLike(node)) {
+      scanLiteral(node.text);
+      return;
+    }
+    if (ts.isTemplateExpression(node)) {
+      scanLiteral(node.head.text);
+      for (const span of node.templateSpans) {
+        visit(span.expression);
+        scanLiteral(span.literal.text);
+      }
+      return;
+    }
+    ts.forEachChild(node, visit);
+  };
+
+  visit(sourceFile);
+  return reads;
+}
+
+/**
+ * Extract real var(--ds-*) calls from a CSS declaration value.
+ *
+ * PostCSS has already removed comments from the declaration tree. This small
+ * scanner additionally ignores quoted content such as
+ * `content: "var(--ds-example)"`, which is prose rather than a CSS read.
+ */
+function cssDeclarationReads(value) {
+  return customPropertyReadDetails(value).map((read) => read.property);
+}
 
 /**
  * Anchor descriptors. `minimum` is the yield below which the source is presumed
@@ -538,6 +796,27 @@ export const ANCHORS = Object.freeze({
     // compiler got smaller.
     interpolatedFamilyMinimum: 30,
     describes: 'governed white-label chrome emission table (written at :root per tenant)',
+  }),
+  brandThemeEmitter: Object.freeze({
+    id: 'brand-theme-emitter',
+    path: 'src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts',
+    kind: 'file',
+    describes:
+      'canonical static BrandTheme compiler (palette, typography, material, motion and chrome root channels)',
+  }),
+  appearanceEmitter: Object.freeze({
+    id: 'appearance-emitter',
+    path: 'src/infrastructure/compilers/kernel/runtime/appearance/index.ts',
+    kind: 'file',
+    describes:
+      'canonical DB appearance compiler (tenant-authored runtime root channels)',
+  }),
+  themeContracts: Object.freeze({
+    id: 'theme-contracts',
+    path: 'src/foundation/contracts',
+    kind: 'directory',
+    describes:
+      'typed BrandTheme/TenantAppearance ownership graph used to expand mapped compiler emissions',
   }),
   styleRoots: Object.freeze({
     id: 'authored-ds-css',
@@ -744,6 +1023,11 @@ export const PROMOTIONS = Object.freeze([
       '--ds-button-secondary-border',
       '--ds-button-secondary-border-hover',
       '--ds-button-secondary-color',
+      '--ds-button-default-hover-bg',
+      '--ds-button-secondary-hover-bg',
+      '--ds-button-danger-bg',
+      '--ds-button-danger-hover-bg',
+      '--ds-button-danger-border',
       '--ds-button-error-bg',
       '--ds-button-error-bg-hover',
       '--ds-button-error-border',
@@ -825,6 +1109,114 @@ export const PROMOTIONS = Object.freeze([
       'A detail frame suppresses the workspace overlay so the record content is the ' +
       'only figure on the page. Suppression is a layout decision the frame variant ' +
       'exists to express.',
+  }),
+  Object.freeze({
+    id: 'application-shell-composition',
+    properties: Object.freeze([
+      '--ds-shell-navigation-border',
+      '--ds-shell-navigation-border-inline-end',
+      '--ds-shell-navigation-radius',
+      '--ds-shell-navigation-shadow',
+      '--ds-shell-navigation-body-padding',
+      '--ds-shell-navigation-logo-padding',
+      '--ds-shell-navigation-footer-padding',
+      '--ds-shell-header-inset-block-start',
+      '--ds-shell-header-inset-inline',
+      '--ds-shell-header-padding-inline',
+      '--ds-shell-header-background',
+      '--ds-shell-header-border',
+      '--ds-shell-header-border-block-end',
+      '--ds-shell-header-radius',
+      '--ds-shell-header-shadow',
+      '--ds-shell-bottom-inset',
+    ]),
+    owner: 'the application shell, navigation and header structures',
+    slot: 'one vertical application-shell scope',
+    valueType: 'DS spacing/radius/elevation/surface tokens and structural lengths; no raw colours',
+    fallback: 'the shell structure defaults resolved from tenant channels',
+    sinceVersion: '2.19.36',
+    whiteLabelCompat: 'derives-from-palette',
+    subtreeRepaint:
+      'the navigation and header chrome of the one application shell that owns the scope.',
+    rationale:
+      'A vertical may compose its navigation as inset, flush or floating without ' +
+      'forking the shell. Paint remains chained through tenant surface, border and ' +
+      'elevation channels; the application only selects the composition posture.',
+  }),
+  Object.freeze({
+    id: 'record-and-empty-state-geometry',
+    properties: Object.freeze([
+      '--ds-record-facts-header-height',
+      '--ds-record-facts-header-padding',
+      '--ds-record-facts-compact-item-height',
+      '--ds-record-facts-compact-item-padding',
+      '--ds-empty-state-card-padding-block',
+      '--ds-empty-state-card-padding-inline',
+    ]),
+    owner: 'RecordFacts and EmptyState presentation families',
+    slot: 'one record-facts or empty-state surface scope',
+    valueType: 'DS spacing tokens or structural <length> values',
+    fallback: 'the component family geometry',
+    sinceVersion: '2.19.36',
+    whiteLabelCompat: 'not-tenant-emitted',
+    subtreeRepaint: 'geometry of the one record or empty-state surface; no paint changes.',
+    rationale:
+      'Record density and empty-state copy length are content-dependent composition ' +
+      'decisions. Exposing their local geometry keeps products on the canonical ' +
+      'components without giving the application ownership of global spacing tokens.',
+  }),
+  Object.freeze({
+    id: 'action-dock-and-sheet-geometry',
+    properties: Object.freeze([
+      '--ds-action-dock-gap',
+      '--ds-action-dock-safe-area-bottom',
+      '--ds-action-dock-z-index',
+      '--ds-sheet-max-height',
+    ]),
+    owner: 'ActionDock and Sheet overlay structures',
+    slot: 'one mobile action-dock or sheet scope',
+    valueType: 'DS spacing/z-index channels or structural <length> values',
+    fallback: 'the component safe-area, stacking and sheet-size defaults',
+    sinceVersion: '2.19.36',
+    whiteLabelCompat: 'not-tenant-emitted',
+    subtreeRepaint: 'the one mobile dock or sheet instance in the scope.',
+    rationale:
+      'Safe areas, host stacking contexts and available mobile height belong to the ' +
+      'embedding product. The hooks keep those constraints local while preserving the ' +
+      'canonical dock and sheet implementations.',
+  }),
+  Object.freeze({
+    id: 'filter-panel-inline-composition',
+    properties: Object.freeze([
+      '--ds-filter-panel-inline-wrap',
+      '--ds-filter-panel-inline-flex',
+      '--ds-filter-panel-inline-min-width',
+      '--ds-filter-panel-inline-control-width',
+    ]),
+    owner: 'the FilterPanel inline layout',
+    slot: 'one inline filter-panel scope',
+    valueType: 'CSS flex/wrap keywords and structural lengths',
+    fallback: 'the responsive FilterPanel layout defaults',
+    sinceVersion: '2.19.36',
+    whiteLabelCompat: 'not-tenant-emitted',
+    subtreeRepaint: 'inline control geometry of the one filter panel; no paint changes.',
+    rationale:
+      'The host collection determines how many filters share a row. These hooks expose ' +
+      'that composition decision without allowing the app to restyle FilterPanel chrome.',
+  }),
+  Object.freeze({
+    id: 'progress-semantic-accent',
+    properties: Object.freeze(['--ds-progress-arc-color']),
+    owner: 'the circular Progress primitive arc',
+    slot: 'one semantic metric or progress scope',
+    valueType: '<color> resolving through a DS/tenant semantic colour token',
+    fallback: 'the Progress semantic accent',
+    sinceVersion: '2.19.36',
+    whiteLabelCompat: 'derives-from-palette',
+    subtreeRepaint: 'the arc of the one progress indicator in the scope.',
+    rationale:
+      'Progress communicates different semantic roles in one page. The product selects ' +
+      'the role while the tenant palette continues to provide the actual colour.',
   }),
 ]);
 
@@ -914,12 +1306,21 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
   if (!postcss) throw new Error('deriveHookManifest requires an injected postcss');
 
   const chromePath = assertAnchorExists(coreRoot, ANCHORS.tenantChannel);
+  const brandThemeEmitterPath = assertAnchorExists(coreRoot, ANCHORS.brandThemeEmitter);
+  const appearanceEmitterPath = assertAnchorExists(coreRoot, ANCHORS.appearanceEmitter);
+  const themeContractsRoot = assertAnchorExists(coreRoot, ANCHORS.themeContracts);
   const stylesRoot = assertAnchorExists(coreRoot, ANCHORS.styleRoots);
   const componentRoot = assertAnchorExists(coreRoot, ANCHORS.componentReads);
 
-  // A1 — tenant channel. Assignment KEYS only: `vars["--ds-card-bg"] =` and
-  // object-literal keys. A `--ds-*` appearing inside a value string is a read,
-  // not an emission, and must not be mistaken for one.
+  // A1 — tenant channel. The chrome emitter still gets its stricter local
+  // derivation because it builds many names through helpers and interpolation.
+  // The full static/DB compiler graph is then unioned in through the shared
+  // typed parser used by theme-channel-parity-gate. Reusing that parser is a
+  // deliberate single-system choice: public-hook ownership and theme parity
+  // cannot disagree about what a compiler emits.
+  //
+  // Assignment KEYS only: `vars["--ds-card-bg"] =` and object-literal keys. A
+  // `--ds-*` inside a value string is a read, not an emission.
   // The quote must CLOSE immediately after the property name (backreference
   // \1). Without that, a template literal carrying CSS text —
   // `` `--ds-listing-grid-gap: ${value};` `` — reads as an emission key and
@@ -939,20 +1340,39 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
   const interpolated = deriveInterpolatedEmissions(chromeSource);
   for (const name of interpolated.names) tenantChannel.add(name);
 
+  const contractFiles = collectFiles(themeContractsRoot, ['.ts']);
+  const contractSources = contractFiles.map((file) => ({
+    file,
+    text: readFileSync(file, 'utf8'),
+  }));
+  const { registry, ambiguous } = parseTypeRegistry(contractSources);
+  const compilerSources = [chromePath, brandThemeEmitterPath, appearanceEmitterPath].map(
+    (file) => ({ file, text: readFileSync(file, 'utf8') }),
+  );
+  const compilerGraph = parseEmitterMappings(compilerSources, registry);
+  const compilerPatterns = new Set();
+  for (const emission of compilerGraph.emissions) {
+    if (emission.name) tenantChannel.add(emission.name);
+    if (emission.pattern) compilerPatterns.add(emission.pattern);
+  }
+
   // A2 — authored DS stylesheets: root-equivalent declarations are DS-owned.
   const styleFiles = collectFiles(stylesRoot, ['.css']);
   const foundationTokens = new Set();
   const scopedDeclarations = new Set();
+  const componentSuppliers = new Set();
   const reads = new Set();
   for (const file of styleFiles) {
     const css = readFileSync(file, 'utf8');
-    for (const match of css.matchAll(CUSTOM_PROPERTY_READ)) reads.add(match[1]);
     try {
-      scanStylesheet(postcss, css, (property, selectors) => {
+      const stylesheet = scanStylesheet(postcss, css, (property, selectors) => {
         const rootEquivalent =
           selectors.length === 0 || selectors.some((selector) => isRootEquivalentSelector(selector));
         if (rootEquivalent) foundationTokens.add(property);
         else scopedDeclarations.add(property);
+      });
+      stylesheet.walkDecls((declaration) => {
+        for (const property of cssDeclarationReads(declaration.value ?? '')) reads.add(property);
       });
     } catch (error) {
       throw new Error(
@@ -961,13 +1381,17 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
     }
   }
 
-  // A3 — component sources contribute reads only. A `var()` in a TSX style
-  // object cannot be a root declaration, so it can only ever widen the set of
-  // properties the DS consumes without owning.
+  // A3/A5 — component sources contribute exact reads and exact local
+  // suppliers. A read with no supplier remains unadjudicated; a supplied
+  // component channel is DS-owned and closed unless PROMOTIONS explicitly
+  // exposes it.
   const componentFiles = collectFiles(componentRoot, ['.ts', '.tsx']);
   for (const file of componentFiles) {
     const source = readFileSync(file, 'utf8');
-    for (const match of source.matchAll(CUSTOM_PROPERTY_READ)) reads.add(match[1]);
+    for (const property of componentSourceReads(source, file)) reads.add(property);
+    for (const property of componentSourceSuppliers(source, file)) {
+      componentSuppliers.add(property);
+    }
   }
 
   // Owner-reviewed promotions (see PROMOTIONS). The derivation refuses to promote
@@ -981,17 +1405,40 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
       else refusedPromotions.push({ property, family: family.id });
     }
   }
-  const hooks = [...new Set([...reads].filter(
-    (property) => !foundationTokens.has(property) && !tenantChannel.has(property),
-  ).concat(promoted))].sort();
+  const promotedSet = new Set(promoted);
+  const componentTokens = new Set(
+    [...reads].filter(
+      (property) =>
+        scopedDeclarations.has(property) ||
+        componentSuppliers.has(property),
+    ),
+  );
+  const unownedReads = [...reads].filter(
+    (property) =>
+      !foundationTokens.has(property) &&
+      !tenantChannel.has(property) &&
+      !componentTokens.has(property),
+  );
+  const hooks = [...promotedSet].sort();
+  const unadjudicatedReads = [...new Set(
+    unownedReads.filter((property) => !promotedSet.has(property)),
+  )].sort();
 
   const yields = {
     tenantChannel: tenantChannel.size,
+    compilerConcreteEmissions: compilerGraph.emissions.filter((emission) => emission.name).length,
+    compilerEmissionPatterns: compilerPatterns.size,
+    themeContractFiles: contractFiles.length,
+    ambiguousThemeContractTypes: ambiguous.length,
+    unresolvedCompilerEmissions: compilerGraph.unresolved.length,
     interpolatedFamilies: interpolated.families.length,
     interpolatedNames: interpolated.names.size,
     foundationTokens: foundationTokens.size,
+    componentTokens: componentTokens.size,
+    componentSuppliers: componentSuppliers.size,
     reads: reads.size,
     hooks: hooks.length,
+    unadjudicatedReads: unadjudicatedReads.length,
     promoted: promoted.length,
     styleFiles: styleFiles.length,
     componentFiles: componentFiles.length,
@@ -1017,6 +1464,22 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
         '\n    Either the read moved and PROMOTIONS must follow it, or the entry is stale.',
     );
   }
+  if (contractFiles.length === 0) {
+    shortfalls.push(`${ANCHORS.themeContracts.id}: no authored contract sources found`);
+  }
+  if (ambiguous.length > 0) {
+    shortfalls.push(
+      `${ANCHORS.themeContracts.id}: ambiguous type ownership for ${ambiguous.join(', ')}`,
+    );
+  }
+  if (compilerGraph.unresolved.length > 0) {
+    shortfalls.push(
+      `compiler ownership graph has ${compilerGraph.unresolved.length} unresolved emissions`,
+    );
+  }
+  if (yields.compilerConcreteEmissions === 0) {
+    shortfalls.push('no concrete static/DB compiler emissions found');
+  }
   if (yields.tenantChannel < ANCHORS.tenantChannel.minimum) {
     shortfalls.push(
       `${ANCHORS.tenantChannel.id}: ${yields.tenantChannel} emitted names (< ${ANCHORS.tenantChannel.minimum})`,
@@ -1033,7 +1496,6 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
     );
   }
   if (yields.foundationTokens === 0) shortfalls.push('no root-declared foundation tokens found');
-  if (yields.hooks === 0) shortfalls.push('no public hooks derived');
   if (shortfalls.length > 0) {
     throw new Error(
       'hook-manifest ANCHOR DRIFT: a derivation source yielded implausibly little.\n' +
@@ -1044,15 +1506,20 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
   }
 
   return {
-    schemaVersion: 2,
+    schemaVersion: 4,
     hooks,
     hookSet: new Set(hooks),
+    unadjudicatedReads,
+    unadjudicatedReadSet: new Set(unadjudicatedReads),
     foundationTokens: new Set(foundationTokens),
     tenantChannel,
+    componentTokens,
+    componentTokenSet: new Set(componentTokens),
     scopedDeclarations,
     promotions,
-    promotedSet: new Set(promoted),
+    promotedSet,
     interpolatedFamilies: interpolated.families,
+    compilerEmissionPatterns: [...compilerPatterns].sort(),
     yields,
   };
 }
@@ -1098,25 +1565,34 @@ export function serializeHookManifest(manifest) {
       })),
       derivation: {
         publicHook:
-          'read by the DS via var() and owned by neither the tenant chrome channel nor a ' +
-          'DS root declaration — or an owner-reviewed promotion, declared below',
+          'read by the DS via var() and explicitly promoted with a complete owner-reviewed ' +
+          'slot declaration; no implicit read becomes application API',
+        unadjudicatedRead:
+          'read by the DS via var() but owned by neither a governed tenant compiler channel ' +
+          'nor a DS root/internal declaration and not explicitly promoted; decrease-only debt, not API',
+        componentToken:
+          'supplied below root by authored component CSS/source; a DS-owned component channel, ' +
+          'not tenant configuration or application API',
         foundationToken: 'root-declared in authored DS CSS; the DS owns the value',
         tenantChannel:
-          'emitted at :root by the white-label chrome compiler on behalf of a tenant, ' +
-          'including the families it builds by string interpolation',
+          'emitted at :root by the governed chrome, static BrandTheme or DB appearance ' +
+          'compiler on behalf of a tenant; concrete outputs are derived with the same typed ' +
+          'graph as theme-channel parity, plus chrome interpolation families',
       },
       contract: {
         mayAssign:
-          'a property listed in publicHooks, under an explicit application/feature scope',
+          'only a property listed in publicHooks, under an explicit application/feature scope',
         mustNotAssign:
-          'anything in foundationTokens or tenantChannel, and nothing at all on a root ' +
-          'or root-equivalent selector',
+          'anything in foundationTokens, tenantChannel, componentTokens or unadjudicatedReads; private ' +
+          '--_ds-* properties; and nothing at all on a root or root-equivalent selector',
         appNamespace: '--rt-* is application-owned and always legal, including at root',
         valueConstraint: PROMOTED_HOOK_VALUE_CONSTRAINT.describes,
       },
       counts: manifest.yields,
       declaredSlots: declarations,
       publicHooks: manifest.hooks,
+      unadjudicatedReads: manifest.unadjudicatedReads,
+      componentTokens: [...manifest.componentTokens].sort(),
       foundationTokens: [...manifest.foundationTokens].sort(),
       tenantChannel: [...manifest.tenantChannel].sort(),
     },

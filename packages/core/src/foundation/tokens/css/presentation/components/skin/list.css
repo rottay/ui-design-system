@@ -1,9 +1,38 @@
-/** ListSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+/**
+ * ListSurface skin (WO-SKIN-06 / CK-I).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
+ *
+ * SCOPE: the surface composes public primitives and patterns (PageShell,
+ * ListToolbar, FilterPanel, DataTable, Card) — each owns its own chrome,
+ * states and forced-colors treatment, so this file paints ONLY the stock
+ * card view's label/value typography (the two `ds-list__card-*` hooks the
+ * DefaultCardView stamps). It carries no forced-colors block on purpose:
+ * there is no surface-owned paint to re-key (forced text colors are forced
+ * by the UA and every composed part already handles its own).
+ *
+ * SPECIFICITY: the label/value are composed `Text` primitives, which always
+ * stamp `data-part='root'` and `data-size` (Typography modern engine). The
+ * rules key on the always-stamped `data-size` — repeating an attribute is
+ * forbidden. LAYER TRUTH: typography.css sorts in `rottay-engines` (after
+ * this file), so wherever the Typography skin paints a color itself it
+ * governs regardless of selector weight here; these rules are the color
+ * source only where Typography leaves the part unpainted, exactly the
+ * outcome the retired repetition produced.
+ */
 
-.ds-surface.ds-list .ds-list__card-label[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+.ds-surface.ds-list .ds-list__card-label[data-part="root"][data-size] {
+  margin-block-end: var(--ds-list-card-label-spacing, var(--ds-spacing-1, 4px));
+  color: var(--ds-list-card-label-color, var(--ds-color-text-muted));
+  font-size: var(--ds-list-card-label-size, var(--ds-font-size-xs, 12px));
+  font-weight: var(
+    --ds-list-card-label-weight,
+    var(--ds-font-weight-semibold, 600)
+  );
 }
 
-.ds-surface.ds-list .ds-list__card-value[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-primary);
+.ds-surface.ds-list .ds-list__card-value[data-part="root"][data-size] {
+  color: var(--ds-list-card-value-color, var(--ds-color-text-primary));
 }

@@ -1,9 +1,13 @@
 /**
- * SelectionPreviewRail skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * SelectionPreviewRail skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/selection-preview-rail.css — the second
  * consumer of the structures/ shared-file home after field-filters-panel.css;
  * no --modern/--rustic discriminator because the component renders one DOM
  * under every engine.
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
  *
  * TWO ROOTS (never merged): the component returns one of two mutually-exclusive
  * trees. `[data-part='root'][data-preview='custom']` wraps a consumer-supplied
@@ -15,21 +19,23 @@
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
- * `border-color` on every element. A rule here that paints a `border` /
- * `border-color` must reach (0,4,0): on the root that is the two root classes +
- * `[data-part='root'][data-preview]` (0,4,0); on a descendant part it is the two
- * root classes + the data-part REPEATED per the P-64 law (0,4,0), never an
- * incidental attribute. Non-border paint (background / box-shadow / border-radius /
- * color) wins unlayered at (0,3,0): two root classes + one attribute.
+ * `border-color` on every element. Border paint reaches (0,4,0) through the
+ * always-stamped root `data-part` + contract `data-preview` on the roots, and
+ * the root ancestor on descendants — repeating a class or attribute is
+ * forbidden. Text rules add the always-stamped `data-size` for b>=5 over
+ * Typography's `[data-color]` rule.
  *
- * CLOSE-BUTTON SUPPRESSION: the customPreview close is a `variant="ghost"` Button
- * whose inline style froze `background` + `backdrop-filter` over the engine's own
- * button skin in every state. That skin paints the ghost background at rest (0,4,0)
- * and on hover (0,5,0) in both modern and rustic; no button rule paints
- * backdrop-filter. The Button primitive spreads its own `data-part='trigger'` after
- * caller props, so the landing hook is `className` (the FFP __control mechanism),
- * and the suppression rule escalates to (0,6,0) by repeating the close class four
- * times so it outranks rest AND hover exactly as the inline object did.
+ * CLOSE-BUTTON RULE (source-gated): the customPreview close is a
+ * `variant="ghost"` Button whose historical inline style froze `background` +
+ * `backdrop-filter` over the engine's own button skin. The contract test
+ * requires this rule at b>=6 declaring BOTH channels; it reaches b6 through
+ * the real ancestor chain (root[data-preview='custom'] > custom-sticky-card >
+ * __close) without the old class×4 repetition. The blur is now OPT-IN through
+ * the `--ds-selection-preview-rail-close-backdrop` channel (default `none`) —
+ * a default-ON blur is banned (PT29/PT32/S06/S07/S11/S17 fix). LAYER TRUTH:
+ * button.css sorts in `rottay-engines` (after this file), so the ghost's own
+ * chrome still governs rest/hover unless a tenant opts into the channel —
+ * this rule's background only matters where the engine paints nothing.
  *
  * NAMED CONTAINER (W6-A): `container-name: ds-rail` is declared on BOTH roots
  * with the identical value -- exactly one of the two ever renders per instance,
@@ -49,7 +55,7 @@
 
 .ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default'] {
   border-inline-start: 1px solid var(--ds-color-border-subtle);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, white 6%), var(--ds-surface-card));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-elevated) 6%), var(--ds-surface-card));
   container-type: inline-size;
   container-name: ds-rail;
 }
@@ -58,38 +64,40 @@
 
 .ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card'] {
   border-radius: var(--ds-radius-xl, 16px);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 90%, white 10%), var(--ds-surface-card));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 90%, var(--ds-color-bg-elevated) 10%), var(--ds-surface-card));
   box-shadow: 0 18px 44px color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent);
 }
 
-.ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card'][data-part='custom-sticky-card'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='custom-sticky-card'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
 }
 
-/* The ghost close button: its inline style froze background + backdrop-filter in
-   every state. The engine button skin paints ghost background at (0,5,0) on hover,
-   so this rule escalates to (0,6,0) via the repeated close class to hold in rest
-   AND hover, exactly as the inline object did. */
-.ds-structure.ds-selection-preview-rail
-  .ds-selection-preview-rail__close.ds-selection-preview-rail__close.ds-selection-preview-rail__close.ds-selection-preview-rail__close {
+/* The ghost close button: b6 through the real ancestor chain (contract test
+   requires b>=6 + both channels declared); the blur is opt-in (default none). */
+.ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom']
+  [data-part='custom-sticky-card']
+  .ds-selection-preview-rail__close {
   background: color-mix(in srgb, var(--ds-surface-card) 80%, transparent);
-  backdrop-filter: blur(8px);
+  backdrop-filter: var(--ds-selection-preview-rail-close-backdrop, none);
 }
 
 /* default branch — identity card --------------------------------------------- */
 
 .ds-structure.ds-selection-preview-rail [data-part='identity-card'] {
   border-radius: var(--ds-radius-xl, 16px);
-  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 88%, white 12%), var(--ds-surface-card));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 88%, var(--ds-color-bg-elevated) 12%), var(--ds-surface-card));
   box-shadow: 0 18px 48px color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
 }
 
-.ds-structure.ds-selection-preview-rail [data-part='identity-card'][data-part='identity-card'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-card'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
 }
 
+/* The identity card's top rule is a SOFT surface tint, never a solid accent
+   bar (the house bans structural color accents; the sanctioned idiom is the
+   7–8% card-header tint — widget-board toolbar, cockpit root). */
 .ds-structure.ds-selection-preview-rail [data-part='identity-card-accent'] {
-  background: linear-gradient(90deg, var(--ds-color-primary), color-mix(in srgb, var(--ds-color-primary) 28%, transparent));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 2%, transparent));
 }
 
 /* default branch — match-reason panel ---------------------------------------- */
@@ -99,7 +107,7 @@
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 4%, transparent));
 }
 
-.ds-structure.ds-selection-preview-rail [data-part='match-reason-panel'][data-part='match-reason-panel'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-panel'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
 }
 
@@ -116,15 +124,15 @@
   box-shadow: 0 10px 30px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
 }
 
-.ds-structure.ds-selection-preview-rail [data-part='snapshot-card'][data-part='snapshot-card'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-card'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
 }
 
-.ds-structure.ds-selection-preview-rail [data-part='snapshot-header'][data-part='snapshot-header'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header'] {
   border-bottom: 1px solid var(--ds-color-border-subtle);
 }
 
-.ds-structure.ds-selection-preview-rail [data-part='snapshot-row'][data-part='snapshot-row'] {
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row'] {
   border-top: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 60%, transparent);
 }
 
@@ -136,30 +144,48 @@
    uppercase; body copy keeps a relaxed 1.5 read.
 --------------------------------------------------------------------------- */
 
-.ds-structure.ds-selection-preview-rail [data-part='identity-title'][data-part='identity-title'][data-part='identity-title'] {
+.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='identity-title'][data-size] {
   letter-spacing: -0.02em;
   line-height: 1.12;
 }
-.ds-structure.ds-selection-preview-rail [data-part='identity-subtitle'][data-part='identity-subtitle'][data-part='identity-subtitle'] {
+.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='identity-subtitle'][data-size] {
   line-height: 1.4;
 }
-.ds-structure.ds-selection-preview-rail [data-part='match-reason-eyebrow'][data-part='match-reason-eyebrow'][data-part='match-reason-eyebrow'] {
+.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='match-reason-eyebrow'][data-size] {
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.ds-structure.ds-selection-preview-rail [data-part='match-reason-body'][data-part='match-reason-body'][data-part='match-reason-body'] {
+.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='match-reason-body'][data-size] {
   line-height: 1.5;
 }
-.ds-structure.ds-selection-preview-rail [data-part='snapshot-row-label'][data-part='snapshot-row-label'][data-part='snapshot-row-label'] {
+.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='snapshot-row-label'][data-size] {
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
-.ds-structure.ds-selection-preview-rail [data-part='snapshot-empty'][data-part='snapshot-empty'][data-part='snapshot-empty'] {
+.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='snapshot-empty'][data-size] {
   line-height: 1.45;
 }
-.ds-structure.ds-selection-preview-rail [data-part='fallback-empty'][data-part='fallback-empty'][data-part='fallback-empty'] {
+.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='fallback-empty'][data-size] {
   font-style: italic;
 }
-.ds-structure.ds-selection-preview-rail [data-part='fallback-string'][data-part='fallback-string'][data-part='fallback-string'] {
+.ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='fallback-string'][data-size] {
   line-height: 1.45;
+}
+
+/* ---- forced colors: every structure-owned frame reads as ButtonText (the
+        rail's own hairline is logical and stays); the match-reason panel
+        reads by its badge + icon, not by its tint. ---- */
+@media (forced-colors: active) {
+  .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='custom-sticky-card'],
+  .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-card'],
+  .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-panel'],
+  .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-card'],
+  .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header'],
+  .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row'] {
+    border-color: ButtonText;
+  }
+
+  .ds-structure.ds-selection-preview-rail [data-part='identity-card-accent'] {
+    background: ButtonText;
+  }
 }

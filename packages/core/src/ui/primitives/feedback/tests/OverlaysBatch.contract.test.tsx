@@ -96,14 +96,9 @@ describe('Overlays-family data-part contract (WO-SKIN-03 checkpoint O)', () => {
         }
         expect(surface.querySelectorAll('[data-part="header"]')).toHaveLength(1);
         expect(surface.querySelectorAll('[data-part="title"]')).toHaveLength(1);
-        // Rustic's engine never destructures/renders the `description` prop
-        // at all (only `title`) -- a genuine cross-engine capability gap the
-        // inventory documents, not a stamping omission.
-        if (engine === 'modern') {
-          expect(surface.querySelectorAll('[data-part="description"]')).toHaveLength(1);
-        } else {
-          expect(surface.querySelectorAll('[data-part="description"]')).toHaveLength(0);
-        }
+        // The Rustic compatibility adapter now shares the canonical Modal
+        // implementation, so description anatomy is consistent across engines.
+        expect(surface.querySelectorAll('[data-part="description"]')).toHaveLength(1);
         expect(surface.querySelectorAll('[data-part="body"]')).toHaveLength(1);
         expect(surface.querySelectorAll('[data-part="footer"]')).toHaveLength(1);
         expect(surface.querySelectorAll('[data-part="close-button"]')).toHaveLength(1);

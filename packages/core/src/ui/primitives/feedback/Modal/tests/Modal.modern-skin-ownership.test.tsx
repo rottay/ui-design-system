@@ -1,8 +1,8 @@
 /**
  * feedback/Modal modern engine — skin ownership + i18n floor pins (R2+R3 batch E).
  *
- * The modern engine stamps parts and state; the modern skin
- * (`modern/skin/modal.css`) owns section layout AND typography. These pins
+ * The modern engine stamps parts and state; the canonical modern skin
+ * (`modern/skin/overlay-modal.css`) owns section layout AND typography. These pins
  * fail if paint/typography creeps back inline, and if the English
  * accessibility floor breaks when no I18nProvider is mounted.
  */

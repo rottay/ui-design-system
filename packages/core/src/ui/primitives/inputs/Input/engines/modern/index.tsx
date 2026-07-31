@@ -14,13 +14,15 @@
  * declaration on the shell.
  *
  * **Token Usage:**
- * - Surface: `--ds-surface-control` (field background)
- * - Border: `--ds-color-border` (resting), `--ds-color-primary` (focus)
- * - Radius: `--ds-radius-md` (8px default)
- * - Focus ring: the `box-shadow` halo in `runtime/personality.css`, keyed on
- *   `:focus-visible` -- text inputs match it on a pointer click too, per spec.
- * - Motion: `--ds-motion-fast` (var(--ds-motion-fast)), `--ds-motion-ease-out`
- * - Text: `--ds-color-text-primary`, `--ds-color-text-muted` (placeholder)
+ * - Surface: `--ds-input-bg` (falls back to `--ds-surface-control`)
+ * - Border: `--ds-input-border` (resting), `--ds-input-border-focus` (focus)
+ * - Radius: `--ds-input-responsive-radius` → `--ds-radius-input` → `--ds-radius-md`
+ * - Focus ring: `--ds-input-shadow-focus` (fallback `--ds-focus-ring`), keyed
+ *   on `data-state~='focused'` -- a text field's border is not a
+ *   keyboard-only affordance, so pointer clicks earn the ring too.
+ * - Motion: `--ds-input-transition-duration` / `--ds-input-transition-timing`
+ *   channels with `--ds-motion-fast` / `--ds-motion-ease-out` fallbacks
+ * - Text: `--ds-input-color`, `--ds-input-color-placeholder`
  *
  * @see {@link Input} for the main component
  * @see {@link ClassicInput} for Ant Design implementation
@@ -129,6 +131,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     autoComplete,
     autoFocus,
     'data-testid': dataTestId,
+    'data-part': dataPart,
     'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
     'aria-invalid': ariaInvalid,
@@ -149,25 +152,32 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   if (sizeIsResponsive) {
     const resolvedSize = (value: InputSize) => INPUT_SIZE_MAP[value as keyof typeof INPUT_SIZE_MAP] || INPUT_SIZE_MAP.md;
+    // No `!important` and no physical `height`: the skin's per-size rules are
+    // already excluded via `:not([data-size-responsive])`, so the generated
+    // `[data-responsive-id]` declarations only compete with the semantic
+    // variants (flushed/unstyled padding resets), which must keep winning.
+    // Gap and radius ride custom-property channels the skin's base rule
+    // consumes, so they resolve without specificity games.
     responsiveEntries.push({
-      cssProperty: 'height',
+      cssProperty: 'block-size',
       value: sizeProp,
-      resolve: (v: InputSize) => `${resolvedSize(v).height} !important`,
+      resolve: (v: InputSize) =>
+        `calc(${resolvedSize(v).height} * var(--ds-density-effective-scale, 1))`,
     } as ResponsivePropEntry<any>);
     responsiveEntries.push({
       cssProperty: 'font-size',
       value: sizeProp,
-      resolve: (v: InputSize) => `${resolvedSize(v).fontSize} !important`,
+      resolve: (v: InputSize) => resolvedSize(v).fontSize,
     } as ResponsivePropEntry<any>);
     responsiveEntries.push({
       cssProperty: 'padding-inline',
       value: sizeProp,
-      resolve: (v: InputSize) => `${resolvedSize(v).paddingX} !important`,
+      resolve: (v: InputSize) => resolvedSize(v).paddingX,
     } as ResponsivePropEntry<any>);
     responsiveEntries.push({
       cssProperty: 'line-height',
       value: sizeProp,
-      resolve: (v: InputSize) => `var(--ds-input-${v}-line-height) !important`,
+      resolve: (v: InputSize) => `var(--ds-input-${v}-line-height)`,
     } as ResponsivePropEntry<any>);
     responsiveEntries.push({
       cssProperty: '--ds-input-responsive-radius',
@@ -175,9 +185,9 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       resolve: (v: InputSize) => `var(--ds-input-${v}-radius, var(--ds-input-${v}-border-radius))`,
     } as ResponsivePropEntry<any>);
     responsiveEntries.push({
-      cssProperty: 'gap',
+      cssProperty: '--ds-input-responsive-gap',
       value: sizeProp,
-      resolve: (v: InputSize) => `var(--ds-input-${v}-gap, var(--ds-input-affix-gap)) !important`,
+      resolve: (v: InputSize) => `var(--ds-input-${v}-gap, var(--ds-input-affix-gap))`,
     } as ResponsivePropEntry<any>);
   }
 
@@ -311,6 +321,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         aria-required={ariaRequired ?? (required || undefined)}
         className={className}
         style={style}
+        data-part={dataPart ?? 'root'}
         data-testid={dataTestId}
         onChange={handleChange}
       />
@@ -428,7 +439,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           }}
           onPointerEnter={interactionHandlers.onPointerEnter}
           onPointerLeave={interactionHandlers.onPointerLeave}
-          {...partAttributes('root', interaction)}
+          {...partAttributes(dataPart ?? 'root', interaction)}
           {...skinAttributes}
           {...responsiveAttrs}
         >
@@ -469,7 +480,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         className={shellClassName}
         onPointerEnter={interactionHandlers.onPointerEnter}
         onPointerLeave={interactionHandlers.onPointerLeave}
-        {...partAttributes('root', interaction)}
+        {...partAttributes(dataPart ?? 'root', interaction)}
         {...skinAttributes}
       />
       {messages}

@@ -65,8 +65,8 @@ describe('Transfer runtime engine coverage', () => {
     expect(screen.getByText('Alpha custom')).toBeInTheDocument();
     expect(screen.queryByText('Gamma custom')).not.toBeInTheDocument();
 
-    const addButton = screen.getByRole('button', { name: 'Add' });
-    const removeButton = screen.getByRole('button', { name: 'Remove' });
+    const addButton = screen.getByRole('button', { name: 'Move to target' });
+    const removeButton = screen.getByRole('button', { name: 'Move to source' });
     expect(addButton).toBeDisabled();
 
     const sourcePanel = getModernPanel(container, 'Available');

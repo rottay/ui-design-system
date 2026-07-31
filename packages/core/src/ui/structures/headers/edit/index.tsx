@@ -2,8 +2,8 @@
 
 /**
  * @fileoverview EditHeader — structures-tier edit-form header with back
- * navigation, breadcrumb trail, hero title cluster, status badge, save/
- * cancel actions, and optional structured action rail.
+ * navigation, breadcrumb trail, hero title cluster, status badge, dirty
+ * indicator, save/cancel actions, and optional structured action rail.
  *
  * @description
  * Engine-free structures family for entity-edit pages. Pairs with the
@@ -29,24 +29,33 @@
  * Features:
  *   - Back button (uses NavigationLinkProvider Link adapter when
  *     mounted, falls back to native `<a>`)
- *   - Breadcrumb trail (same Link adapter resolution)
+ *   - Breadcrumb trail (same Link adapter resolution; OWN grammar — the
+ *     §4 anatomy tests pin `breadcrumb-link/separator/item`, so composing
+ *     the Breadcrumb primitive is a contract-level migration, documented)
  *   - Optional entityId chip (monospace, truncated to 8 chars)
  *   - Hero title cluster: optional eyebrow chip, title, optional status
  *     pill, optional subtitle
+ *   - Dirty indicator (dot + localized label, additive `dirty` prop)
  *   - Optional icon badge (supplier-independent icon, displayed in a colored box; the
  *     `colorVariant` prop controls the box tone)
  *   - Action rail with Save / Cancel built-ins, optional structured
  *     `actions[]` (using SharedHeaderActionDescriptor from the shared
  *     header-actions helper), and an `extraActions` ReactNode slot
- *   - `saving` state on the Save button
+ *   - `saving` state on the Save button (the certified Button owns the
+ *     width-stable loading posture — the ConfirmDialog precedent)
  *   - `loading` state for the entire header (renders a centered Spinner
  *     placeholder)
  *   - Optional context-rail / children slot inside a card below the hero
  *   - 4 archetype variants (control, editorial, technical, governance)
  *     each with their own gradient + grid background pattern
  *
- * The family stays domain-agnostic. All copy is consumer-supplied; the
- * component knows nothing about tenants, users, or any specific entity.
+ * DOCUMENTED NON-GOALS (not in the contract, not invented): cancel/discard
+ * confirmation via Popconfirm (cancel fires the callback directly), a
+ * Ctrl+S save shortcut (no keybinding contract), sticky-on-scroll chrome
+ * (the header is static page chrome).
+ *
+ * The family stays domain-agnostic. All record copy is consumer-supplied;
+ * only chrome labels ride the i18n channel (English floor).
  */
 
 import { type CSSProperties, type ReactNode } from 'react';
@@ -92,6 +101,9 @@ export interface EditHeaderProps {
   loading?: boolean;
   /** Save button loading state */
   saving?: boolean;
+  /** Unsaved-changes indicator: renders a dot + localized label chip next to
+   * the title. Additive contract — the header never infers dirtiness itself. */
+  dirty?: boolean;
   /** Breadcrumb items */
   breadcrumb?: Array<{ label: string; href?: string }>;
   /** Save action */
@@ -163,6 +175,7 @@ export function EditHeader({
   colorVariant = 'secondary',
   loading = false,
   saving = false,
+  dirty = false,
   breadcrumb,
   onSave,
   onCancel,
@@ -185,6 +198,7 @@ export function EditHeader({
   const cancelLabel = i18n?.tOr('cancel', 'Cancel') ?? 'Cancel';
   const saveLabel = i18n?.tOr('save_changes', 'Save Changes') ?? 'Save Changes';
   const entityIdLabel = i18n?.tOr('entity_id', 'ID') ?? 'ID';
+  const dirtyLabel = i18n?.tOr('unsaved_changes', 'Unsaved changes') ?? 'Unsaved changes';
   const renderHrefAnchor = (href: string, content: ReactNode, style?: CSSProperties) => {
     if (NavLink) {
       return (
@@ -207,15 +221,8 @@ export function EditHeader({
     return (
       <Box
         data-part="root"
+        className="ds-structure ds-edit-header"
         data-loading="true"
-        style={{
-          position: 'relative',
-          overflow: 'hidden',
-          padding: 48,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
       >
         <Spinner size="lg" />
       </Box>
@@ -226,17 +233,9 @@ export function EditHeader({
     <Box
       data-part="root"
       className="ds-structure ds-edit-header"
-      style={{
-        width: '100%',
-        overflow: 'hidden',
-      }}
+      data-loading={false}
     >
-      <Box
-        data-part="top-bar"
-        style={{
-          padding: '12px 24px',
-        }}
-      >
+      <Box data-part="top-bar">
         <Flex justify="between" align="center">
           <Flex align="center" gap={20}>
             {renderHrefAnchor(
@@ -245,22 +244,17 @@ export function EditHeader({
                 data-part="back-button"
                 align="center"
                 gap={8}
-                style={{
-                  padding: '8px 12px',
-                  cursor: 'pointer',
-                }}
               >
                 <ArrowLeftIcon data-part="back-icon" style={{ width: 14, height: 14 }} />
                 <Text data-part="back-label" size="xs" weight="medium">
                   {resolvedBackLabel}
                 </Text>
               </Flex>,
-              { textDecoration: 'none' },
             )}
 
             {breadcrumb && breadcrumb.length > 0 && (
               <>
-                <Box data-part="breadcrumb-divider" style={{ width: 1, height: 16 }} />
+                <Box data-part="breadcrumb-divider" />
                 <Flex align="center" gap={8}>
                   {breadcrumb.map((item, index) => (
                     <Flex key={index} align="center" gap={8}>
@@ -273,7 +267,6 @@ export function EditHeader({
                           <Text data-part="breadcrumb-link" size="xs">
                             {item.label}
                           </Text>,
-                          { textDecoration: 'none' },
                         )
                       ) : (
                         <Text data-part="breadcrumb-item" size="xs">
@@ -292,10 +285,6 @@ export function EditHeader({
               <Text
                 data-part="entity-id"
                 size="xs"
-                style={{
-                  fontFamily: 'var(--ds-font-family-mono, monospace)',
-                  padding: '4px 10px',
-                }}
               >
                 {entityIdLabel}: {entityId.slice(0, 8)}
               </Text>
@@ -304,18 +293,13 @@ export function EditHeader({
         </Flex>
       </Box>
 
-      <Box data-part="hero-panel" data-archetype={archetype} style={{ padding: '28px' }}>
+      <Box data-part="hero-panel" data-archetype={archetype}>
         <Flex justify="between" align="center" gap={20} wrap="wrap">
-          <Flex align="center" gap={20}>
+          <Flex align="center" gap={20} data-part="hero-copy">
             {Icon && (
               <Box
                 data-part="icon-badge"
                 style={{
-                  width: 52,
-                  height: 52,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
                   '--ds-header-icon-tone-bg': iconTone.bg,
                   '--ds-header-icon-tone-bd': iconTone.bd,
                   '--ds-header-icon-tone-fg': iconTone.fg,
@@ -330,31 +314,33 @@ export function EditHeader({
                   data-part="eyebrow"
                   size="xs"
                   weight="bold"
-                  style={{
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.12em',
-                    fontFamily: 'var(--ds-font-family-mono, monospace)',
-                  }}
                 >
                   {eyebrow}
                 </Text>
               ) : null}
-              <Flex align="center" gap={12}>
-                <Text data-part="title" style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.03em' }}>
+              <Flex align="center" gap={12} wrap="wrap">
+                <Text data-part="title">
                   {title}
                 </Text>
                 {status && (
                   <Box
                     data-part="status-pill"
                     style={{
-                      padding: '4px 12px',
                       '--ds-edit-header-status-tone-bg': statusTone.bg,
                       '--ds-edit-header-status-tone-bd': statusTone.bd,
                       '--ds-edit-header-status-tone-fg': statusTone.fg,
                     } as CSSProperties}
                   >
-                    <Text data-part="status-pill-text" size="xs" weight="medium" style={{ textTransform: 'capitalize' }}>
+                    <Text data-part="status-pill-text" size="xs" weight="medium">
                       {status.label}
+                    </Text>
+                  </Box>
+                )}
+                {dirty && (
+                  <Box data-part="dirty-chip">
+                    <Box data-part="dirty-dot" aria-hidden="true" />
+                    <Text data-part="dirty-label" size="xs" weight="medium">
+                      {dirtyLabel}
                     </Text>
                   </Box>
                 )}
@@ -365,7 +351,7 @@ export function EditHeader({
             </Stack>
           </Flex>
 
-          <Flex data-part="actions" gap={12} wrap="wrap" style={{ marginInlineStart: 'auto' }}>
+          <Flex data-part="actions" gap={12} wrap="wrap">
             {actions.map((action, index) => {
               const ActionIcon = resolveSharedHeaderActionIcon(action);
 
@@ -408,16 +394,10 @@ export function EditHeader({
         </Flex>
 
         {contextRail || children ? (
-          <Box
-            data-part="context-card"
-            style={{
-              marginTop: 22,
-              padding: '16px 18px 18px',
-            }}
-          >
+          <Box data-part="context-card">
             {contextRail ? <Box data-part="context-rail">{contextRail}</Box> : null}
             {children ? (
-              <Box data-part="context-card-children" style={{ marginTop: contextRail ? 18 : 0 }}>
+              <Box data-part="context-card-children">
                 {children}
               </Box>
             ) : null}

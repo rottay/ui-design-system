@@ -69,13 +69,15 @@ describe('resolveTranslationEntry', () => {
       catalog: TRANSLATION_CATALOG,
     }).tier).toBe('locale');
 
-    // French has no `calendar.navNextMonth`; the configured Spanish fallback does.
+    // This probe is intentionally absent from both partial catalogs (fr/pt)
+    // and present in the mandatory catalogs. Do not couple fallback behavior
+    // to a key that translators may legitimately complete.
     expect(resolveTranslationEntry({
-      key: 'components.calendar.navNextMonth',
+      key: 'components.pagination.navigation',
       locale: 'fr',
       fallbackLocale: 'es',
       catalog: TRANSLATION_CATALOG,
-    })).toEqual({ tier: 'fallback', value: 'Mes siguiente' });
+    })).toEqual({ tier: 'fallback', value: 'Paginación' });
   });
 
   it('marks a miss as a tier rather than encoding it in the string', () => {
@@ -97,14 +99,14 @@ describe('resolveTranslationEntry', () => {
     // tier, so "the app's languages had it" and "English rescued it" stay
     // distinguishable.
     const resolution = resolveTranslationEntry({
-      key: 'components.calendar.navNextMonth',
+      key: 'components.pagination.navigation',
       locale: 'fr',
       fallbackLocale: 'pt',
       catalog: TRANSLATION_CATALOG,
     });
 
     expect(resolution.tier).toBe('floor');
-    expect(resolution.value).toBe('Next month');
+    expect(resolution.value).toBe('Pagination');
   });
 
   it('lets the configured fallback answer BEFORE the floor is consulted', () => {
@@ -112,14 +114,14 @@ describe('resolveTranslationEntry', () => {
     // declared a language policy, and Spanish still decides every key Spanish
     // has copy for. The floor is a last resort, never a competitor.
     const resolution = resolveTranslationEntry({
-      key: 'components.calendar.navNextMonth',
+      key: 'components.pagination.navigation',
       locale: 'fr',
       fallbackLocale: 'es',
       catalog: TRANSLATION_CATALOG,
     });
 
     expect(resolution.tier).toBe('fallback');
-    expect(resolution.value).toBe('Mes siguiente');
+    expect(resolution.value).toBe('Paginación');
   });
 
   it('still reports a miss for a key absent from EVERY catalog', () => {

@@ -134,6 +134,26 @@ test('evaluateFreeze: deleting an authorized file is a violation; a generated fi
   assert.deepEqual(verdict.generated.map((c) => c.path), [OTHER_FROZEN_FILE]);
 });
 
+test('evaluateFreeze: an explicitly authorized deletion is stable, while an unlisted deletion stays red', () => {
+  const verdict = evaluateFreeze({
+    changes: [
+      { status: 'D', path: FROZEN_FILE, untracked: false },
+      { status: 'D', path: OTHER_FROZEN_FILE, untracked: false },
+    ],
+    entries: {
+      [FROZEN_FILE]: {
+        blob: null,
+        reason: 'reviewed deletion of a superseded duplicate owner',
+      },
+    },
+    read: () => null,
+  });
+  assert.equal(verdict.deletedAuthorized.length, 0);
+  assert.deepEqual(verdict.unauthorized.map((change) => change.path), [
+    OTHER_FROZEN_FILE,
+  ]);
+});
+
 test('evaluateFreeze: an entry whose path no longer differs from the base is stale, not a failure', () => {
   const verdict = evaluateFreeze({
     changes: [],
@@ -496,7 +516,10 @@ test('the real baseline is schema v2, pinned to the sealed base, and every entry
   assert.ok(entries.length > 0);
   for (const [path, entry] of entries) {
     assert.ok(FROZEN.test(path), `${path} is not a frozen path`);
-    assert.match(entry.blob, /^[0-9a-f]{64}$/, `${path} has no content pin`);
+    assert.ok(
+      entry.blob === null || /^[0-9a-f]{64}$/.test(entry.blob),
+      `${path} has neither a content pin nor an explicit deletion pin`,
+    );
     assert.ok(entry.reason.length >= 12, `${path} has no written reason`);
   }
 });

@@ -89,6 +89,13 @@ function paintsBorder(body: string): boolean {
   return false;
 }
 
+/** True when a declaration block paints the target rather than sizing/positioning it. */
+function paintsSurface(body: string): boolean {
+  return /(?:^|;)\s*(?:background(?:-color|-image)?|border(?:-[\w-]+)?|box-shadow|color|opacity|filter|outline(?:-[\w-]+)?)\s*:/i.test(
+    body,
+  );
+}
+
 describe.each(Object.keys(SKINS))('dropdown skin %s -- structural contract', (label) => {
   const rules = cssRules(SKINS[label]);
 
@@ -178,16 +185,22 @@ describe('dropdown skins -- Select container is left to the field-filters-panel'
   for (const label of ['modern/select', 'rustic/select']) {
     it(`${label}: no rule paints a bare container -- every selector's target is a non-root data-part`, () => {
       const offenders: string[] = [];
-      for (const { selector } of cssRules(SKINS[label])) {
+      for (const { selector, body } of cssRules(SKINS[label])) {
         for (const part of selector.split(',')) {
           const p = part.trim();
           // the RIGHTMOST compound is the painted target; the container is the
           // root part -- a target ending at [data-part='root'] paints the box
           // the FFP owns.
-          if (/\[data-part='root'\]\s*$/.test(p)) offenders.push(p);
+          if (/\[data-part='root'\]\s*$/.test(p) && paintsSurface(body)) offenders.push(p);
           // a bare `.rottay-select`/`.ds-select` with no data-part anywhere is
           // also the container.
-          if (/\.(?:rottay|ds)-select[\w-]*/.test(p) && !/\[data-part/.test(p)) offenders.push(p);
+          if (
+            /\.(?:rottay|ds)-select[\w-]*/.test(p) &&
+            !/\[data-part/.test(p) &&
+            paintsSurface(body)
+          ) {
+            offenders.push(p);
+          }
         }
       }
       expect(offenders, `these paint the Select container, which the FFP suppression owns:\n${offenders.join('\n')}`).toEqual([]);

@@ -1,13 +1,11 @@
-/** StatsHeader keyframes formerly emitted once per rendered instance. */
-
-@keyframes pulse-card-skeleton {
-  0%, 100% {
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 0.2;
-  }
-}
+/** StatsHeader keyframes formerly emitted once per rendered instance.
+ *
+ * `pulse-card-skeleton` is retired: the loading placeholder is now the
+ * composed Skeleton primitive, which owns its own canonical cadence
+ * (ds-skeleton-shimmer / ds-skeleton-pulse). Only the sparkline hover ping
+ * remains — it is driven purely from CSS (`:hover` on the parent card,
+ * staggered on the `--ds-stats-header-ping-duration` channel).
+ */
 
 @keyframes pulse-dot-ping {
   0% {

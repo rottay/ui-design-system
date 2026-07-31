@@ -2,16 +2,22 @@
 
 /**
  * @fileoverview Affix Modern Engine - Rottay Design System
- * @description Tailwind CSS-based implementation of the Affix component with DS token styling.
- * Provides a lightweight sticky solution using Tailwind CSS utilities.
+ * @description Token-driven, skin-painted implementation of the Affix component.
+ * Pure CSS sticky positioning when no onChange is needed; measured fixed
+ * positioning with a geometry-preserving placeholder when it is. The affixed
+ * surface and its transition are owned by the modern skin (`skin/affix.css`);
+ * position/offsets stay inline as runtime-measured values. The caller's
+ * z-index travels through `--ds-affix-runtime-z-index`, while the skin owns
+ * the actual `z-index` declaration and its tenant-token fallback.
  *
  * @remarks
- * The Modern engine offers a lightweight, utility-first implementation
- * of the Affix component using Tailwind CSS. This approach:
- * - Minimizes bundle size with CSS utilities
- * - Provides smooth transitions via Tailwind classes
- * - Offers easy customization through utility classes
- * - Maintains full onChange callback support
+ * - No Tailwind utilities: the z-index class mapping is gone (the inline
+ *   zIndex always wins, so the classes were dead weight).
+ * - No inline surface paint: background/elevation of the affixed state live
+ *   in the skin (the quality contract pins `style.background`/`boxShadow`
+ *   empty).
+ * - Never hardcode bg/shadow utilities on children: the affixed surface is
+ *   token-owned.
  *
  * @example Modern Engine Usage
  * ```tsx
@@ -40,7 +46,6 @@
  * ```
  *
  * @see {@link AffixProps} for component props
- * @see {@link https://tailwindcss.com/docs/position#sticky-positioning} Tailwind sticky docs
  *
  * @module Affix/Engines/Modern
  * @category Navigation
@@ -109,23 +114,23 @@ function getTargetRect(target: Window | HTMLElement): DOMRect {
 // ============================================================================
 
 /**
- * Modern engine implementation using Tailwind CSS utilities.
+ * Modern engine implementation (skin-painted, token-driven).
  *
  * @description
  * Provides a lightweight sticky solution with onChange callback support.
  * Uses pure CSS sticky positioning when onChange is not needed, and
- * switches to JavaScript-based fixed positioning for precise tracking.
+ * switches to JavaScript-measured fixed positioning for precise tracking.
  *
  * @remarks
  * Key features of the Modern implementation:
- * - Tailwind CSS utility classes for z-index
- * - Smooth shadow transitions when affixed
+ * - Runtime z-index custom property (default rides `--ds-z-affix`)
+ * - Skin-owned affixed surface and transition (`affix.css`)
  * - Optimized scroll handling with requestAnimationFrame
  * - Minimal JavaScript when onChange is not used
  *
  * @param props - {@link AffixProps}
  * @param ref - Forwarded ref to the affix element
- * @returns React element with Tailwind-styled sticky positioning
+ * @returns React element with token-styled sticky positioning
  *
  * @example
  * ```tsx
@@ -160,6 +165,18 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
     const [state, setState] = useState<AffixState>({ affixed: false });
     const lastAffixedRef = useRef<boolean>(false);
 
+    // The caller's zIndex is runtime input, but the property owner remains
+    // the skin. Passing the value through a family-scoped custom property
+    // preserves caller customization without creating a second inline-paint
+    // authority. The default still rides the tenant's `--ds-z-affix` channel.
+    const resolvedZIndex: string | number =
+      zIndex === AFFIX_DEFAULTS.zIndex
+        ? `var(--ds-z-affix, ${AFFIX_DEFAULTS.zIndex})`
+        : zIndex;
+    const runtimeVariables = {
+      '--ds-affix-runtime-z-index': resolvedZIndex,
+    } as React.CSSProperties;
+
     // ========================================================================
     // Measurement Logic
     // ========================================================================
@@ -192,7 +209,6 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
             bottom: offsetBottom,
             left: placeholderRect.left,
             width: placeholderRect.width,
-            zIndex,
           };
           placeholderStyle = {
             width: placeholderRect.width,
@@ -209,7 +225,6 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
             top: offsetTop + targetRect.top,
             left: placeholderRect.left,
             width: placeholderRect.width,
-            zIndex,
           };
           placeholderStyle = {
             width: placeholderRect.width,
@@ -225,7 +240,7 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
       }
 
       setState({ affixed, fixedStyle, placeholderStyle });
-    }, [offsetTop, offsetBottom, target, onChange, zIndex]);
+    }, [offsetTop, offsetBottom, target, onChange, resolvedZIndex]);
 
     // ========================================================================
     // Event Listeners
@@ -274,18 +289,6 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
     }, [measure, target, onChange]);
 
     // ========================================================================
-    // Tailwind Classes
-    // ========================================================================
-
-    // Map numeric zIndex to Tailwind utility classes so Tailwind can purge
-    // unused z-index values. Arbitrary values fall through to inline style.
-    const zIndexClass = zIndex === 10 ? 'z-10' :
-                        zIndex === 20 ? 'z-20' :
-                        zIndex === 30 ? 'z-30' :
-                        zIndex === 40 ? 'z-40' :
-                        zIndex === 50 ? 'z-50' : '';
-
-    // ========================================================================
     // Render - Simple Sticky Mode
     // ========================================================================
 
@@ -298,14 +301,14 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
           ? { bottom: offsetBottom }
           : { top: offsetTop }
         ),
-        zIndex,
+        ...runtimeVariables,
         ...style,
       };
 
       return (
         <div
           ref={ref}
-          className={`rottay-affix rottay-affix--modern ${zIndexClass} ${className}`.trim()}
+          className={`rottay-affix rottay-affix--modern ${className}`.trim()}
           style={stickyStyle}
           data-part="root"
         >
@@ -334,8 +337,12 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
               ref.current = node;
             }
           }}
-          className={`rottay-affix rottay-affix--modern ${zIndexClass} ${className}`.trim()}
-          style={state.affixed ? { ...state.fixedStyle, ...style } : style}
+          className={`rottay-affix rottay-affix--modern ${className}`.trim()}
+          style={
+            state.affixed
+              ? { ...runtimeVariables, ...state.fixedStyle, ...style }
+              : { ...runtimeVariables, ...style }
+          }
           data-part="root"
           data-sticky={state.affixed || undefined}
         >

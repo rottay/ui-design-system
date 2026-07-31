@@ -1,9 +1,51 @@
 /**
- * ActivitySurface pagination skin (WO-SKIN-06 CK-I). PatternActivityLog and
- * pagination are sibling scope islands, so this selector anchors on the
- * pagination island itself rather than inventing a false descendant root.
+ * ActivitySurface skin (wave KIMI Modern Surfaces 2026-07-30, SU28).
+ *
+ * LAYER: registered in `facade/entrypoints/base.css` and `styles.css` into
+ * `layer(rottay-components)` — same wiring as skin/list.css. Engine chrome
+ * (pagination.css, typography.css) sorts after this file in `rottay-engines`,
+ * so this skin never repaints composed chrome; it only sizes and separates.
+ *
+ * SCOPE: the surface composes PageShell, PatternActivityLog (PT02 — the feed,
+ * its filter bar, its composed Empty and its mirror skeleton all stay
+ * pattern-owned), the canonical Pagination primitive and Text — each owns its
+ * paint, motion and forced-colors treatment. This file paints ONLY what the
+ * surface owns: the pagination footer island
+ * (`ds-activity__pagination[data-part='pagination']`), a sibling scope island
+ * of the pattern root, keyed on itself rather than on a false descendant
+ * anchor (WO-SKIN-06 CK-I). The island gets a hairline + inset separation
+ * from the feed; under coarse pointers the primitive's page/nav buttons get
+ * the 44px touch floor (sizing only, their paint stays with pagination.css).
+ * The muted summary text is painted by the Text primitive's own
+ * `color="muted"` prop, so the legacy color rule that lived here is gone.
+ *
+ * SPECIFICITY: single-part hooks keying on always-stamped classes/attributes;
+ * no repetition, no `!important`.
  */
 
-.ds-surface.ds-activity.ds-activity__pagination > .ds-activity__muted-text[data-part='root'] {
-  color: var(--ds-color-text-muted);
+.ds-surface.ds-activity.ds-activity__pagination[data-part='pagination'] {
+  padding-block-start: var(--ds-spacing-4, 16px);
+  border-block-start: 1px solid
+    var(--ds-color-border-subtle, var(--ds-color-border));
+}
+
+/* Touch law: coarse pointers get the 44px floor on the composed primitive's
+   controls (sizing floor only — the primitive's skin owns their paint). */
+@media (pointer: coarse) {
+  .ds-surface.ds-activity.ds-activity__pagination[data-part='pagination']
+    [data-part='pagination-nav-button'],
+  .ds-surface.ds-activity.ds-activity__pagination[data-part='pagination']
+    [data-part='pagination-page-button'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+    min-inline-size: var(--ds-touch-target-min, 44px);
+  }
+}
+
+/* Forced colors: the footer hairline re-keys to a system color so the feed /
+   meta-navigation separation survives (static separator -> CanvasText; the
+   composed Pagination already forces its own control frames). */
+@media (forced-colors: active) {
+  .ds-surface.ds-activity.ds-activity__pagination[data-part='pagination'] {
+    border-block-start-color: CanvasText;
+  }
 }

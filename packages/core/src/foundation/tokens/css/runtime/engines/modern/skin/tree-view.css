@@ -17,11 +17,14 @@
  * the untouched engine-styles helper (WO-SKIN-06 adjudication, same as
  * `live-feed.css`).
  *
- * WIRING (PENDING — coordinator-owned): this file is NOT yet imported by
- * `facade/entrypoints/styles.css` / `base.css` (outside the lane write-set).
- * Until the two standard `@import "../../runtime/engines/modern/skin/tree-view.css";`
- * lines land, the search row renders flush against the tree and the
- * skeleton bars render as plain blocks (functional, unpulsed).
+ * WIRING: registered in `facade/entrypoints/base.css` and `styles.css`
+ * (the earlier coordinator-pending note was retired once the two standard
+ * stale self-import examples landed in generated bundles).
+ *
+ * The empty-state frame (`data-part='empty'`) wraps the composed Empty
+ * primitive, which owns its own paint. The tree itself keeps its own
+ * forced-colors contract in `tree.css`; this file carries forced-colors
+ * only for the pattern-owned skeleton.
  */
 
 /* ---- body: the pattern's inner padding (was an inline style). ---- */
@@ -67,6 +70,13 @@
   inline-size: 70%;
 }
 
+/* ---- empty-state frame (the composed Empty primitive owns its paint) ---- */
+.ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='empty'] {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--ds-spacing-8, 2rem);
+}
+
 @keyframes ds-tree-view-skeleton-pulse {
   from {
     opacity: 1;
@@ -77,6 +87,20 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list'] {
+    animation: none;
+  }
+}
+
+/* forced-colors: the pattern-owned pieces re-assert in system colors -- the
+   skeleton bars as GrayText with the pulse stopped. The tree itself (rows,
+   connectors, toggles, checkboxes, selection frames) is the composed
+   primitive and keeps its own forced-colors contract in tree.css; the
+   composed Input and Empty likewise own theirs. */
+@media (forced-colors: active) {
+  .ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton'] {
+    background: GrayText;
+  }
   .ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list'] {
     animation: none;
   }

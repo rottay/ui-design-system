@@ -1,17 +1,15 @@
 /**
- * Modern overlay/Modal skin (WO-SKIN-04 checkpoint P).
+ * Canonical Modern Modal skin.
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all. Unlayered
- * outranks preflight + DaisyUI and still yields to a caller's inline `style`.
+ * Shipped once inside `layer(rottay-engines)`. The component no longer relies
+ * on Tailwind/Daisy precedence; tenant and application customization resolve
+ * through the canonical token and caller-style contracts.
  *
- * NOT the same component as `primitives/feedback/Modal`, whose skin is
- * `engines/modern/skin/modal.css` and whose compounds are
- * `components/skin/modal-compounds.css`. The two families share the `data-part`
- * vocabulary, so every rule here is anchored to
- * `.rottay-overlay-modal-shell--modern`, unique to this component. The bare
- * `rottay-modal` token is NOT free (feedback/Modal rustic carries it on its own
- * surface) and must never scope a rule.
+ * `primitives/feedback/Modal` is the single public owner. The legacy
+ * `overlay/Modal` path is only an adapter to that owner. Every rule remains
+ * anchored to `.rottay-overlay-modal-shell--modern`, the canonical Modern
+ * engine shell; compound Modal sections retain their independent
+ * `components/skin/modal-compounds.css` contract.
  *
  * PORTAL: both engines mount through the shared `Portal` util into
  * `#rottay-portal-root` on `document.body`, so this tree is NOT a descendant of
@@ -78,21 +76,87 @@
         0. Glass is sanctioned on overlay backdrops only. `--ds-modal-overlay-bg`
         is a live BrandTheme token (chrome.modal.overlayBg). ---- */
 .rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='backdrop'] {
-  background-color: var(--ds-modal-overlay-bg, color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent));
+  background-color: var(
+    --ds-modal-instance-overlay-bg,
+    var(
+      --ds-modal-overlay-bg,
+      color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent)
+    )
+  );
 }
 .rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='backdrop'][data-blur='true'] {
   background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
-  backdrop-filter: var(--ds-glass-backdrop-filter);
-  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
+  backdrop-filter: var(--ds-modal-overlay-backdrop, var(--ds-glass-backdrop-filter));
+  -webkit-backdrop-filter: var(--ds-modal-overlay-backdrop, var(--ds-glass-backdrop-filter));
 }
 
-/* ---- surface (panel) ---- */
+/* ---- surface (panel). Sizes resolve per stamped `data-size` through the
+        `--ds-modal-width-*` channels (the defaults are this engine's premium
+        width ladder, previously an inline literal map); viewport caps and the
+        fullscreen/adaptive overrides live here too, so the engine stamps state
+        only. ---- */
 .rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'] {
-  background: var(--ds-modal-bg, var(--ds-surface-card));
+  max-inline-size: var(--ds-modal-max-inline-size, 90vw);
+  max-block-size: var(--ds-modal-max-block-size, 85vh);
+  background-color: var(--ds-modal-bg, var(--ds-surface-card));
+  background-image:
+    linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4)),
+    var(--ds-gradient-surface, none);
   color: var(--ds-modal-color, inherit);
   border-radius: var(--ds-overlay-modal-radius);
   box-shadow: none;
   outline: none;
+}
+.rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'][data-size='xs'] {
+  inline-size: var(--ds-modal-width-xs, 360px);
+}
+.rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'][data-size='sm'] {
+  inline-size: var(--ds-modal-width-sm, 440px);
+}
+.rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'][data-size='md'] {
+  inline-size: var(--ds-modal-width-md, 560px);
+}
+.rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'][data-size='lg'] {
+  inline-size: var(--ds-modal-width-lg, 720px);
+}
+.rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'][data-size='xl'] {
+  inline-size: var(--ds-modal-width-xl, 900px);
+}
+.rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'][data-size='2xl'] {
+  inline-size: var(--ds-modal-width-2xl, 960px);
+}
+.rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'][data-size='3xl'] {
+  inline-size: var(--ds-modal-width-3xl, 1120px);
+}
+.rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'][data-size='4xl'] {
+  inline-size: var(--ds-modal-width-4xl, 1280px);
+}
+.rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'][data-size='5xl'] {
+  inline-size: var(--ds-modal-width-5xl, 1440px);
+}
+.rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'][data-size='full'] {
+  inline-size: var(--ds-modal-width-full, 95vw);
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface'][data-fullscreen='true'] {
+  inline-size: 100vw;
+  max-inline-size: none;
+  max-block-size: none;
+}
+/* Adaptive fullscreen (phone posture): the dynamic viewport when supported,
+   with a 100vh fallback for older engines — kept in CSS so the fallback
+   coexists without `!important` or a second viewport subscription. */
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface'][data-adaptive-fullscreen='true'] {
+  block-size: 100vh;
+  max-block-size: 100vh;
+}
+@supports (height: 100dvh) {
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface'][data-adaptive-fullscreen='true'] {
+    block-size: 100dvh;
+    max-block-size: 100dvh;
+  }
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-shadow='true']:not([data-adaptive-fullscreen='true']) {
@@ -108,11 +172,9 @@
   border: none;
 }
 
-/* ---- header: the border is unconditional. This engine's `divider` prop resolved
-        to the same value on BOTH branches of its ternary, so it paints nothing and
-        the rule must not be gated on it. Section LAYOUT lives here too (the
-        engine stamps parts only): the flex frame and paddings moved out of the
-        engine's inline styles so one owner holds the section chrome. ---- */
+/* ---- header: the canonical divider hatch is stamped on the surface so the
+        public Modal's `divider` prop remains authoritative. Section layout
+        lives here too; the engine stamps parts only. ---- */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
   > [data-part='header'][data-part='header'] {
@@ -123,7 +185,8 @@
   padding-block: var(--ds-modal-section-padding-block, var(--ds-spacing-4));
   padding-inline: var(--ds-modal-section-padding-inline, var(--ds-spacing-6));
   flex-shrink: 0;
-  border-bottom: 1px solid var(--ds-modal-header-border, var(--ds-color-border-subtle));
+  border-block-end: var(--ds-modal-section-border, none);
+  background-color: var(--ds-modal-header-bg, transparent);
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
@@ -137,8 +200,8 @@
   > [data-part='surface']
   > [data-part='header'] [data-part='title'] {
   display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
   color: var(--ds-modal-title-color, var(--ds-color-text-primary));
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-modal-title-size, var(--ds-font-size-lg));
@@ -155,15 +218,18 @@
   line-height: var(--ds-line-height-relaxed);
 }
 
-/* ---- body ---- */
+/* ---- body: the scroll region. A quiet thin scrollbar (list-toolbar
+        precedent) keeps long content usable without chrome weight. ---- */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
   > [data-part='body'] {
+  background-color: var(--ds-modal-body-bg, var(--ds-color-surface));
   color: var(--ds-modal-body-color, inherit);
+  scrollbar-width: var(--ds-modal-body-scrollbar-width, thin);
 }
 
-/* ---- footer: also unconditional in this engine (no `divider` gate at all).
-        Layout is skin-owned like the header's. ---- */
+/* ---- footer: shares the same canonical divider hatch as the header.
+        Layout remains skin-owned. ---- */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
   > [data-part='footer'][data-part='footer'] {
@@ -174,7 +240,72 @@
   padding-block: var(--ds-modal-section-padding-block, var(--ds-spacing-4));
   padding-inline: var(--ds-modal-section-padding-inline, var(--ds-spacing-6));
   flex-shrink: 0;
-  border-top: 1px solid var(--ds-modal-footer-border, var(--ds-color-border-subtle));
+  border-block-start: var(--ds-modal-section-border, none);
+  background-color: var(--ds-modal-footer-bg, transparent);
+}
+
+/* ---- canonical generated actions. Custom footers remain caller-owned;
+        only the `data-part='action'` controls emitted for onOk/onCancel match. ---- */
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'] {
+  min-block-size: var(--ds-control-height-md);
+  padding-block: var(--ds-modal-action-padding-block, var(--ds-spacing-2));
+  padding-inline: var(--ds-modal-action-padding-inline, var(--ds-spacing-4));
+  cursor: pointer;
+  border-radius: var(--ds-radius-md);
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-modal-action-font-size, var(--ds-font-size-sm));
+  font-weight: var(--ds-font-weight-semibold);
+  transition:
+    background-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
+    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
+    box-shadow var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
+    opacity var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
+    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard);
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='cancel'] {
+  border: 1px solid var(--ds-color-border);
+  background: var(--ds-color-surface);
+  color: var(--ds-color-text-primary);
+  box-shadow: var(--ds-shadow-xs);
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='ok'] {
+  border: 1px solid var(--ds-color-primary);
+  background-color: var(--ds-color-primary);
+  background-image: var(--ds-gradient-primary, none);
+  color: var(--ds-color-text-on-primary);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 22%, transparent),
+    0 7px 16px color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action']:disabled {
+  cursor: wait;
+  opacity: var(--ds-modal-action-disabled-opacity, 0.7);
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action']:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--ds-shadow-md);
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
+  outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
 /* ---- close button: the removed imperative hover becomes a :hover rule;
@@ -219,8 +350,44 @@
 @media (prefers-reduced-motion: reduce) {
   .rottay-overlay-modal-shell--modern[data-part='root']
     > [data-part='surface']
+    > [data-part='footer']
+    > [data-part='action'],
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface']
     > [data-part='header']
     > [data-part='close-button'] {
     transition: none;
+  }
+}
+
+/* Coarse pointers: the close button meets the 44px physical floor;
+   min sizing composes with the `--ds-modal-close-size` square instead of
+   fighting it (ActionDock contract). */
+@media (pointer: coarse) {
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface']
+    > [data-part='footer']
+    > [data-part='action'],
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface']
+    > [data-part='header']
+    > [data-part='close-button'] {
+    min-inline-size: max(44px, var(--ds-size-touch-target, 44px));
+    min-block-size: max(44px, var(--ds-size-touch-target, 44px));
+  }
+}
+
+/* Forced colors: the scrim and glass disappear; the surface and its close
+   control keep a visible system-color boundary. */
+@media (forced-colors: active) {
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface'][data-part='surface'] {
+    border: 1px solid CanvasText;
+  }
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface']
+    > [data-part='header']
+    > [data-part='close-button'] {
+    border: 1px solid ButtonText;
   }
 }

@@ -111,6 +111,37 @@ function describeTrigger(
   );
 }
 
+/**
+ * APG menu keyboard contract for one menu level: ArrowUp/ArrowDown cycle the
+ * enabled items of THIS <ul> (wrapping), Home/End jump to the edges. Events
+ * bubbling out of a nested submenu are ignored by the ancestor handler (the
+ * target's closest role="menu" is the nested list), so each level navigates
+ * its own items. Items stay natively tabbable buttons; this adds directional
+ * movement without changing the tab order.
+ */
+function handleMenuKeyDown(event: React.KeyboardEvent<HTMLUListElement>): void {
+  const { key } = event;
+  if (key !== 'ArrowDown' && key !== 'ArrowUp' && key !== 'Home' && key !== 'End') return;
+  const menu = event.currentTarget;
+  const target = event.target as HTMLElement | null;
+  if (!target || target.closest('[role="menu"]') !== menu) return;
+  const items = Array.from(
+    menu.querySelectorAll<HTMLElement>(
+      ':scope > [data-part="item-shell"] > [data-part="item"]:not(:disabled)',
+    ),
+  );
+  if (items.length === 0) return;
+  event.preventDefault();
+  const currentIndex = items.indexOf(target.closest('[data-part="item"]') as HTMLElement);
+  let nextIndex = 0;
+  if (key === 'Home') nextIndex = 0;
+  else if (key === 'End') nextIndex = items.length - 1;
+  else if (currentIndex >= 0) {
+    nextIndex = (currentIndex + (key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+  }
+  items[nextIndex]?.focus();
+}
+
 const MenuItem: React.FC<{
   item: DropdownMenuItem;
   selectedKeys: string[];
@@ -208,7 +239,7 @@ const MenuItem: React.FC<{
       </button>
 
       {hasChildren && submenuOpen ? (
-        <ul role="menu" data-part="submenu" aria-orientation="vertical">
+        <ul role="menu" data-part="submenu" aria-orientation="vertical" onKeyDown={handleMenuKeyDown}>
           {item.children?.map((child) => (
             <MenuItem
               key={child.key}
@@ -416,7 +447,18 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
         ...(portalHost
           ? (popupPosition ?? { visibility: 'hidden' })
           : inTreePlacementStyle(placement)),
-        animation: `${dataState === 'open' ? 'ds-dropdown-popover-enter-modern' : 'ds-dropdown-popover-exit-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
+        // Direction-aware choreography: a surface opening ABOVE the trigger
+        // travels from below (and exits downward), mirroring the bottom
+        // placement's travel. Keyframes live in the modern skin.
+        animation: `${
+          dataState === 'open'
+            ? placement.startsWith('top')
+              ? 'ds-dropdown-popover-enter-top-modern'
+              : 'ds-dropdown-popover-enter-modern'
+            : placement.startsWith('top')
+              ? 'ds-dropdown-popover-exit-top-modern'
+              : 'ds-dropdown-popover-exit-modern'
+        } ${MOTION_DURATION} ${MOTION_EASING} both`,
         ...overlayStyle,
       }}
       onClick={(event) => event.stopPropagation()}
@@ -424,7 +466,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
       onMouseLeave={() => triggers.includes('hover') && scheduleHoverClose()}
     >
       {arrow ? <span data-part="arrow" aria-hidden="true" /> : null}
-      <ul role="menu" data-part="menu" aria-orientation="vertical">
+      <ul role="menu" data-part="menu" aria-orientation="vertical" onKeyDown={handleMenuKeyDown}>
         {menu?.items?.map((item) => (
           <MenuItem
             key={item.key}

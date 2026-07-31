@@ -5,12 +5,17 @@
  * Stripe Dashboard controls. Native `<select>` fallback for simple cases.
  *
  * **Token Usage:**
- * - Surface: `--ds-surface-control` (trigger), `--ds-surface-card` (dropdown)
- * - Border: `--ds-color-border`, focus: `--ds-color-primary`
- * - Radius: `--ds-radius-md` (trigger), `--ds-radius-lg` (dropdown), `--ds-radius-sm` (items)
- * - Elevation: `--ds-elevation-3` (dropdown shadow)
- * - Focus ring: `--ds-focus-ring-width`, `--ds-focus-ring-offset`, `--ds-focus-ring-color`
- * - Motion: `--ds-motion-fast` (var(--ds-motion-fast)), `--ds-motion-ease-out`
+ * - Surface: `--ds-select-bg` → `--ds-surface-control` (trigger),
+ *   `--ds-select-dropdown-bg` → `--ds-surface-card` (dropdown)
+ * - Border: `--ds-select-border-color*`, focus: `--ds-select-border-color-focus`
+ * - Radius: `--ds-select-radius` (trigger), `--ds-select-dropdown-radius` (panel)
+ * - Elevation: `--ds-select-dropdown-shadow` → `--ds-elevation-3` (panel)
+ * - Focus ring: `--ds-select-shadow-focus` → `--ds-focus-ring` halo
+ * - Motion: `--ds-motion-fast`, `--ds-motion-ease-out`; panel entrance rides
+ *   `ds-select-appear` with the placement-aware `--ds-select-enter-y` channel
+ * - Responsive sizes: `--ds-select-trigger-responsive-*` channels consumed by
+ *   the skin's trigger fallback chains (scalar and responsive paths share the
+ *   `--ds-select-trigger-{xs..xl}-*` geometry)
  *
  * @module ModernSelect
  * @category Inputs
@@ -33,7 +38,7 @@ import React, {
 
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { SelectProps, SelectOption, SelectSize } from '../../contracts';
-import { SELECT_DEFAULTS, SIZE_MAP } from '../../contracts';
+import { SELECT_DEFAULTS } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import {
@@ -210,15 +215,30 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const sizeIsResponsive = isResponsiveValue(sizeProp);
 
   if (sizeIsResponsive) {
+    // Responsive sizes ride the skin's own `--ds-select-trigger-*` channels so
+    // the scalar and responsive paths can never diverge. Custom properties
+    // resolve without specificity games: when a channel is undefined the
+    // generated declaration is invalid at computed-value time and the skin's
+    // fallback chain takes over.
     responsiveEntries.push({
-      cssProperty: 'height',
+      cssProperty: '--ds-select-trigger-responsive-height',
       value: sizeProp,
-      resolve: (v: SelectSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).height,
+      resolve: (v: SelectSize) => `var(--ds-select-trigger-${v}-height)`,
     } as ResponsivePropEntry<any>);
     responsiveEntries.push({
-      cssProperty: 'font-size',
+      cssProperty: '--ds-select-trigger-responsive-padding-x',
       value: sizeProp,
-      resolve: (v: SelectSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).fontSize,
+      resolve: (v: SelectSize) => `var(--ds-select-trigger-${v}-padding-x)`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: '--ds-select-trigger-responsive-font-size',
+      value: sizeProp,
+      resolve: (v: SelectSize) => `var(--ds-select-trigger-${v}-font-size)`,
+    } as ResponsivePropEntry<any>);
+    responsiveEntries.push({
+      cssProperty: '--ds-select-trigger-responsive-line-height',
+      value: sizeProp,
+      resolve: (v: SelectSize) => `var(--ds-select-trigger-${v}-line-height)`,
     } as ResponsivePropEntry<any>);
   }
 
@@ -444,6 +464,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   // Keyboard navigation
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
+      if (disabled) return;
       if (!isOpen) {
         if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -504,7 +525,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           break;
       }
     },
-    [isOpen, focusedIndex, selectableIndices, renderableItems, handleSelect]
+    [isOpen, focusedIndex, selectableIndices, renderableItems, handleSelect, disabled]
   );
 
   // Reset focused index when dropdown opens/closes
@@ -720,7 +741,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         data-size={size}
         data-loading={loading || undefined}
         data-disabled={disabled || undefined}
-        style={{ ...style, position: 'relative' }}
+        style={style}
       >
         {responsiveCSS && responsiveCSS.css && <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />}
         <select
@@ -870,13 +891,14 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       data-size={size}
       data-mode={multiple ? 'multiple' : 'single'}
       data-searchable={isSearchable || undefined}
-      style={{ ...style, position: 'relative', width: '100%' }}
+      style={style}
       onKeyDown={handleKeyDown}
     >
       {responsiveCSS && responsiveCSS.css && <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />}
       {/* Trigger */}
       <div
         {...triggerHtmlProps}
+        {...(responsiveCSS ? responsiveCSS.attrs : {})}
         className="rottay-select__trigger"
         data-part="trigger"
         data-variant={variant}
@@ -891,13 +913,14 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             }
           }
         }}
-        tabIndex={0}
+        tabIndex={disabled ? undefined : 0}
         role="combobox"
         aria-expanded={isOpen}
         aria-haspopup="listbox"
         aria-controls={isOpen ? listboxId : undefined}
         aria-activedescendant={isOpen && focusedIndex >= 0 ? `${selectId}-option-${focusedIndex}` : undefined}
         aria-required={customRequired ? true : undefined}
+        aria-disabled={disabled || undefined}
         onFocus={onFocus as any}
         onBlur={onBlur as any}
       >

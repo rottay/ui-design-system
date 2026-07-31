@@ -365,6 +365,7 @@ describe('CK-I layout and workspace anatomy (I-3)', () => {
           metadata={[{ key: 'owner', label: 'Owner', value: 'Daniel' }]}
         />
       </div>,
+      { engine: 'modern' },
     );
 
     await waitForSelectors(container, [
@@ -386,8 +387,10 @@ describe('CK-I layout and workspace anatomy (I-3)', () => {
     expect(q(container, '.ds-collection-render-dispatch__card-item[data-part="card-item"]')).toHaveLength(3);
     expect(q(container, '.ds-collection-render-dispatch__card-item[data-lone-final="true"]')).toHaveLength(1);
     expect(q(container, '[data-part="pagination-prev"][data-disabled="true"]')).toHaveLength(1);
-    expect(q(container, '[data-part="pagination-next"][data-disabled="false"]')).toHaveLength(1);
-    expect(q(container, '.ds-collection-render-dispatch__page-size-select[data-part="page-size-select"]')).toHaveLength(1);
+    const paginationNext = q(container, '.ds-collection-render-dispatch__pagination-next');
+    expect(paginationNext).toHaveLength(1);
+    expect(paginationNext[0]).not.toBeDisabled();
+    expect(q(container, '.ds-collection-render-dispatch__page-size-select')).toHaveLength(1);
     for (const tone of ['info', 'warning', 'success', 'error']) {
       expect(q(container, `.ds-command-center__insight-tile[data-part="insight-tile"][data-tone="${tone}"]`)).toHaveLength(1);
     }
@@ -624,6 +627,8 @@ describe('CK-I admin/data thin-tail anatomy (I-4)', () => {
       '.ds-team__divider',
       '.ds-team__muted-text[data-part="root"]',
       '.ds-compare__section-heading',
+      // The semantic slot keeps a BEM landing hook across all engines while
+      // Modern additionally forwards the caller-owned data-part (P-79).
       '.ds-compare__muted-text[data-part="root"]',
       '.ds-dashboard__muted-text[data-part="root"]',
       '.ds-list__card-label[data-part="root"]',

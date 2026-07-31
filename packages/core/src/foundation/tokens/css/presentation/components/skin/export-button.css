@@ -2,41 +2,67 @@
  * ExportButton skin — engine-agnostic and deliberately unlayered so it beats
  * layered base/preflight paint (P-47).
  * The dropdown is portaled under document.body and therefore owns a standalone
- * two-class panel scope. Border selectors repeat data-part for the tenant
- * border-color floor (P-48); the toast remains under the trigger-side root.
+ * two-class panel scope.
  *
- * WAVE R2+R3 (Quiet Premium editorial): the panel is warm elevated paper
- * with a hairline and a deliberate two-stop ambient shadow; menu items are
- * quiet rows with a soft hover wash, a visible focus ring, and supporting-
- * scale typography. The success toast is the one semaphore accent, guarded
- * under prefers-reduced-motion. Menu-item motion rides --ds-motion-*.
+ * COMPOSITION LAW (S19): the trigger and the menu items are the Button
+ * primitive (the interim menu while Dropdown P88 is blocked), so every item
+ * chrome rule (background, hover wash, focus ring, borders) is retired —
+ * each primitive's own skin owns its paint, including forced-colors. What
+ * this file owns: the root anchor geometry, the copied-toast frame and its
+ * fade vocabulary (the one semaphore accent), the portaled panel's frame
+ * and z/layer channels, and the full-width menu-item layout.
+ *
+ * SPECIFICITY (P-48): border paint reaches the tenant floor from the two
+ * scope classes + two DISTINCT attributes (`data-part` + `data-open`, or the
+ * descendant toast chain) — never an identical attribute repeated
+ * (4th-tanda law; the former `panel×2`, `menu-item×2`, `toast-label×3` and
+ * `menu-label×3` selectors are retired). Color fallbacks are token-only:
+ * the retired `#16a34a` / `#fff` / `#e2e2e2` / `#1a1a1a` / `#666` literals
+ * violated the zero-literals law.
+ *
  * RTL: the end-aligned panel flip is mirrored via :dir(rtl).
  */
 
-/* trigger-side toast ------------------------------------------------------ */
-
-.ds-structure.ds-export-button [data-part='toast'] {
-  border-radius: 6px;
-  background: var(--ds-color-bg-success, #16a34a);
-  color: var(--ds-color-text-on-success, #fff);
-  transform: translateX(-50%);
-  animation: ds-export-toast-fade 1.8s ease forwards;
-  font-size: var(--ds-font-size-xs);
-  font-weight: 600;
+/* ---- root: the trigger's anchor (geometry drained from inline) ---- */
+.ds-structure.ds-export-button[data-part='root'] {
+  position: relative;
+  display: inline-flex;
 }
 
-.ds-structure.ds-export-button
-  [data-part='toast-label'][data-part='toast-label'][data-part='toast-label'] {
+/* ---- trigger-side toast (geometry drained from inline; success accent with
+        icon + text, announced via role=status in the engine) ---- */
+.ds-structure.ds-export-button[data-part='root'] [data-part='toast'] {
+  position: absolute;
+  inset-block-start: -32px;
+  inset-inline-start: 50%;
+  z-index: var(--ds-export-button-toast-z, 9999);
+  padding-block: 4px;
+  padding-inline: 10px;
+  border-radius: 6px;
+  background: var(--ds-color-bg-success);
+  color: var(--ds-color-text-on-success);
+  font-size: var(--ds-font-size-xs);
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translateX(-50%);
+  animation: ds-export-toast-fade var(--ds-export-button-toast-duration, 1.8s) ease forwards;
+}
+
+.ds-structure.ds-export-button[data-part='root'] [data-part='toast'] [data-part='toast-label'] {
   color: inherit;
   font-size: var(--ds-font-size-xs);
   font-weight: 600;
 }
 
-/* standalone portaled dropdown ------------------------------------------- */
+/* ---- standalone portaled dropdown (measured top/left stay inline) ---- */
 
 .ds-structure.ds-export-button-panel[data-part='panel'] {
+  z-index: var(--ds-export-button-panel-z, 9998);
+  min-inline-size: var(--ds-export-button-panel-min-width, 200px);
+  padding: 4px;
   border-radius: 8px;
-  background: var(--ds-color-bg-elevated, #fff);
+  background: var(--ds-color-bg-elevated);
   box-shadow: 0 4px 12px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), 0 1px 3px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
   transform: translateX(-100%);
 }
@@ -44,42 +70,15 @@
   transform: translateX(100%);
 }
 
-.ds-structure.ds-export-button-panel[data-part='panel'][data-part='panel'] {
-  border: 1px solid var(--ds-color-border, #e2e2e2);
+.ds-structure.ds-export-button-panel[data-part='panel'][data-open='true'] {
+  border: 1px solid var(--ds-color-border);
 }
 
-.ds-structure.ds-export-button-panel [data-part='menu-item'] {
-  border-radius: 6px;
-  background: transparent;
-  color: var(--ds-color-text-primary, #1a1a1a);
-  outline: none;
-  font-size: var(--ds-font-size-sm);
-  font-weight: 500;
-  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
-}
-
-.ds-structure.ds-export-button-panel [data-part='menu-item'][data-part='menu-item'] {
-  border: none;
-}
-
-.ds-structure.ds-export-button-panel [data-part='menu-item']:hover,
-.ds-structure.ds-export-button-panel [data-part='menu-item']:focus {
-  background: var(--ds-color-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, transparent));
-}
-.ds-structure.ds-export-button-panel [data-part='menu-item']:focus-visible {
-  box-shadow: inset 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
-}
-
-.ds-structure.ds-export-button-panel [data-part='menu-icon'] {
-  border-radius: 4px;
-  color: var(--ds-color-text-secondary, #666);
-}
-
-.ds-structure.ds-export-button-panel
-  [data-part='menu-label'][data-part='menu-label'][data-part='menu-label'] {
-  color: inherit;
-  font-size: var(--ds-font-size-sm);
-  font-weight: 500;
+/* ---- menu items: the composed ghost Buttons stretch to full rows (their
+        chrome, hover wash and focus ring are button.css-owned) ---- */
+.ds-structure.ds-export-button-panel[data-part='panel'] [data-part='menu-item'] {
+  inline-size: 100%;
+  justify-content: flex-start;
 }
 
 @keyframes ds-export-toast-fade {
@@ -89,13 +88,28 @@
   100% { opacity: 0; transform: translateX(-50%) translateY(-4px); }
 }
 
-/* Reduced motion: the toast appears/disappears instantly and the menu-item
- * hover wash stops cross-fading. */
+/* Reduced motion: the toast appears/disappears instantly. */
 @media (prefers-reduced-motion: reduce) {
-  .ds-structure.ds-export-button [data-part='toast'] {
+  .ds-structure.ds-export-button[data-part='root'] [data-part='toast'] {
     animation: none;
   }
-  .ds-structure.ds-export-button-panel [data-part='menu-item'] {
-    transition: none;
+}
+
+/* forced-colors: the panel's ambient shadow and the toast's success fill are
+   forced away, so both re-frame in system colors. The toast stays readable
+   as feedback through its icon + text (never colour alone); the portaled
+   panel keeps a system boundary; the composed Buttons (trigger and items)
+   own their own forced-colors contracts. */
+@media (forced-colors: active) {
+  .ds-structure.ds-export-button[data-part='root'] [data-part='toast'] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    color: CanvasText;
+  }
+  .ds-structure.ds-export-button-panel[data-part='panel'],
+  .ds-structure.ds-export-button-panel[data-part='panel'][data-open='true'] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    box-shadow: none;
   }
 }

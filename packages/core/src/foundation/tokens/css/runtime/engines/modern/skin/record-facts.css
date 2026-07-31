@@ -1,0 +1,73 @@
+/**
+ * Modern RecordFacts skin (PT14 remediation layer).
+ *
+ * The shared presentation skin (`presentation/components/skin/record-facts.css`,
+ * layer rottay-components) owns the baseline anatomy paint for every engine —
+ * the three engines render one shared foundation engine today. This file is the
+ * modern-only remediation layer and loads in layer rottay-engines, which sorts
+ * AFTER rottay-components, so these rules win without `!important` and without
+ * touching classic/rustic paint. Engine-specific rules scope on
+ * `.ds-engine-modern`, which only the modern engine wrapper stamps on the root.
+ */
+
+/* ---- empty-state frame: the composed Empty primitive (P09) paints itself;
+        the pattern only grants it the full twelve-track row. Unscoped on
+        purpose: the part is shared anatomy (the foundation engine renders it
+        for every engine), only its paint is primitive-owned. ---- */
+.ds-pattern-record-facts .ds-record-facts__empty {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+/* ---- long values wrap word-first (the shared skin's `anywhere` breaks
+        mid-word even when a word boundary fits) and numerals stay tabular so
+        dense metric values align column-to-column (CRA-01 law; the value is a
+        consumer ReactNode, so the `ds-nums-tabular` utility cannot reach it
+        and the channel lives here) ---- */
+.ds-pattern-record-facts.ds-engine-modern .ds-record-facts__value,
+.ds-pattern-record-facts.ds-engine-modern .ds-record-facts__supporting {
+  overflow-wrap: break-word;
+  font-variant-numeric: tabular-nums;
+}
+
+/* forced-colors: gradients, tints and shadows are forced away, so the section
+   re-asserts in system colors and the fact grid keeps its segmentation with
+   non-shifting outlines. Labels stay distinguishable from values by typography
+   (uppercase mono eyebrow vs semibold body size/weight) — forced colors never
+   strips font-family, size, weight or case. The icon wells keep a framed
+   system boundary; skeleton bars re-assert as GrayText with the shimmer
+   stopped. */
+@media (forced-colors: active) {
+  .ds-pattern-record-facts.ds-engine-modern[data-part="root"] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__header {
+    border-bottom-color: ButtonText;
+    background: Canvas;
+  }
+  .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__grid {
+    background: Canvas;
+  }
+  .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__fact,
+  .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__skeleton {
+    outline: 1px solid ButtonText;
+    outline-offset: -1px;
+    background: Canvas;
+  }
+  .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__section-icon,
+  .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__fact-icon {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+    color: ButtonText;
+  }
+  .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__skeleton-line {
+    background: GrayText;
+  }
+  .ds-pattern-record-facts.ds-engine-modern .ds-record-facts__skeleton-line::after {
+    background: none;
+    animation: none;
+  }
+}

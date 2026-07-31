@@ -124,6 +124,21 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
   /** Calculate total number of pages */
   const totalPages = Math.ceil(total / pageSize);
 
+  /**
+   * Narrow frames let the joined controls row scroll (see the skin). When the
+   * page changes, keep the current page button inside the scrollport instead
+   * of stranding it off-edge; `inline: 'nearest'` is a no-op when it already
+   * fits, and the optional call keeps jsdom (no layout) safe.
+   */
+  const controlsRef = React.useRef<HTMLDivElement | null>(null);
+  React.useEffect(() => {
+    controlsRef.current
+      ?.querySelector<HTMLElement>(
+        '[data-part="pagination-page-button"][data-current="true"]'
+      )
+      ?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
+  }, [current]);
+
   // ============================================================================
   // Event Handlers
   // ============================================================================
@@ -211,13 +226,13 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
       )}
 
       {/* Pagination controls */}
-      <div data-part="pagination-controls">
+      <div data-part="pagination-controls" ref={controlsRef}>
         {/* Previous button: glyph-only, so the accessible name comes from
             i18n; the semantic chevron auto-mirrors in RTL. */}
         <button
           type="button"
           onClick={() => handlePageChange(current - 1)}
-          disabled={disabled || current === 1}
+          disabled={disabled || current <= 1}
           data-part="pagination-nav-button"
           data-direction="prev"
           aria-label={translate('pagination.previous', EN_FALLBACK.previous)}
@@ -250,7 +265,7 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
         <button
           type="button"
           onClick={() => handlePageChange(current + 1)}
-          disabled={disabled || current === totalPages}
+          disabled={disabled || current >= totalPages}
           data-part="pagination-nav-button"
           data-direction="next"
           aria-label={translate('pagination.next', EN_FALLBACK.next)}

@@ -1,26 +1,40 @@
 /**
- * WizardSurface skin (WO-SKIN-06 / CK-D/R). Engine-agnostic.
+ * WizardSurface skin (WO-SKIN-06 / CK-D/R, premium pass 2026-07-30).
  *
- * DELIBERATELY UNLAYERED: every `@layer rottay-*` sorts before Tailwind's unnamed
- * `base` layer, whose preflight zeroes `border-width`. A layered rule here could
- * not paint a border at all.
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring). `rottay-components`
+ * sorts BEFORE `rottay-engines`, so paint the composed engines apply
+ * themselves outranks any selector weight here: the two legacy repetition
+ * rules were already dead and are retired.
  *
- * A SURFACE OWNS NO DOM (P-79). `Grid` and `Card` never forward a
- * consumer-supplied `data-part`, so this surface's anatomy is the classNames it
- * puts on them: `.ds-surface.ds-wizard` on the Grid, `.ds-wizard__error-card` on
- * the Card. See `form-surface.css` for the full specificity argument -- the same
- * (0,5,0) floor applies here, for the same reason.
+ * SCOPE: the surface composes public primitives and patterns (PageShell,
+ * Grid, Card, Text, Button, StepWizard, FormBuilder) — each owns its own
+ * chrome, states and forced-colors treatment. This file paints ONLY what the
+ * surface owns:
  *
- * The error card uses `--ds-color-error-500`, while FormSurface's uses
- * `--ds-color-error`. That divergence is pre-existing and transcribed verbatim:
- * reconciling it is a visual-parity decision with its own baselines, not a
- * byte-exact migration's call.
+ *   - Error banner card (`ds-wizard__error-card`): border tint through the
+ *     Card engine's bordered border channel. The composed Card already
+ *     consumes `--ds-card-bordered-border-color` (outlined variant,
+ *     card.css), so this retunes an existing channel — it is NOT a new
+ *     token. It lands wherever the resolved tenant variant paints a border,
+ *     the same reach the legacy `border-color` rule had.
+ *
+ *   Description ink moved to the Typography `color="subtle"` prop (the exact
+ *   `--ds-color-text-muted` value the dead rule intended) — engine-owned and
+ *   tenant-remappable, no skin rule needed.
+ *
+ * SPECIFICITY: single-pass selectors only (attribute/class repetition is
+ * forbidden). No forced-colors block on purpose: the only surface-owned
+ * paint is the border channel, and forced colors are applied to the Card's
+ * border by the UA with system colors.
+ *
+ * The legacy rule tinted with `--ds-color-error-500`; the form-family idiom
+ * (form-surface.css, guided-draft-form.css) is `--ds-color-error`. The
+ * premium pass aligns on the family channel — the divergence the old header
+ * deferred is resolved here.
  */
 
-.ds-surface.ds-wizard [data-part='description'][data-part='description'] {
-  color: var(--ds-color-text-muted);
-}
-
-.ds-surface.ds-wizard .ds-wizard__error-card[data-part='root'][data-variant] {
-  border-color: var(--ds-color-error-500);
+.ds-surface.ds-wizard .ds-wizard__error-card {
+  --ds-card-bordered-border-color: var(--ds-color-error);
 }

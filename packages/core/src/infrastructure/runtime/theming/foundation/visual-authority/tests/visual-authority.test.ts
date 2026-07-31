@@ -139,9 +139,9 @@ describe('resolveVisualAuthority', () => {
     });
 
     it('keeps the bridge mounted because personality is outside v1 coverage', () => {
-      // Personality is a subordinate product/vertical baseline that COMPLETES
-      // the channels the artifact does not cover; it is never a second tenant
-      // authority. Suppressing it here would blank the whole family.
+      // Personality is a subordinate product/vertical data axis. Its
+      // namespaced bridge remains mounted while the static projection retains
+      // sole ownership of canonical component aliases.
       const resolution = resolveVisualAuthority({
         ...BASE,
         declaration: DECLARATION,
@@ -298,11 +298,11 @@ describe('resolveVisualAuthority', () => {
 
   describe('derivation when no declaration is supplied', () => {
     it.each(['rottay', 'bithire', 'evnto'])(
-      'gives the %s bundled vertical provider authority with no suppression',
+      'gives the %s bundled vertical compiled authority over v1 paint',
       (slug) => {
-        // The bundled artifact owns tenant chrome but declares zero
-        // `--ds-personality-*` variables; suppressing anything here would
-        // blank the family the bridge is the only emitter for.
+        // The first-party bundle is already a compiled artifact. Leaving the
+        // provider paint channels open would run the static and runtime
+        // emitters together and let source order choose the winner.
         const resolution = resolveVisualAuthority({
           ...BASE,
           slug,
@@ -310,12 +310,27 @@ describe('resolveVisualAuthority', () => {
           payload: payload({ visualBranding: true, tokenOverrides: true }),
         });
 
-        expect(resolution.authority).toBe('provider');
+        expect(resolution.authority).toBe('compiled-artifact');
         expect(resolution.origin).toBe('bundled-vertical');
-        expect(resolution.suppressedChannels).toEqual([]);
+        expect(resolution.suppressedChannels).toEqual(TENANT_THEME_V1_COVERAGE);
+        expect(resolution.suppressedChannels).not.toContain('personality');
         expect(resolution.conflict).toBeNull();
       },
     );
+
+    it('requires an explicit provider declaration to reopen a bundled paint path', () => {
+      const resolution = resolveVisualAuthority({
+        ...BASE,
+        slug: 'bithire',
+        hasBundledArtifact: true,
+        declaration: { authority: 'provider' },
+        payload: payload({ visualBranding: true, tokenOverrides: true }),
+      });
+
+      expect(resolution.authority).toBe('provider');
+      expect(resolution.origin).toBe('explicit');
+      expect(resolution.suppressedChannels).toEqual([]);
+    });
 
     it('separates a DB-sourced tenant from a tenant with no payload at all', () => {
       const db = resolveVisualAuthority({ ...BASE, payload: payload({ appearance: ECHO }) });

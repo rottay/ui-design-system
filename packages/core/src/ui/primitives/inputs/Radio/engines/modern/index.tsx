@@ -79,7 +79,8 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
         data-label-placement={labelPlacement}
         htmlFor={inputId}
       >
-        {/* Visually hidden native input: accessibility + form participation */}
+        {/* Visually hidden native input: accessibility + form participation.
+            The clip geometry lives in the skin (single paint/layout owner). */}
         <input
           id={inputId}
           type="radio"
@@ -92,16 +93,6 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
           onChange={handleChange}
           aria-checked={isChecked}
           aria-invalid={error || undefined}
-          style={{
-            position: 'absolute',
-            width: 1,
-            height: 1,
-            padding: 0,
-            margin: -1,
-            overflow: 'hidden',
-            clip: 'rect(0, 0, 0, 0)',
-            whiteSpace: 'nowrap',
-          }}
         />
 
         {/* Custom visual indicator */}

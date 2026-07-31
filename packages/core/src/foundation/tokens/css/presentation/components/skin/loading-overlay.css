@@ -1,8 +1,28 @@
 /**
  * LoadingOverlay skin — engine-agnostic and deliberately unlayered.
- * Layout, opacity, animation timing and consumer-owned logo paint remain in
- * the component. This file owns only the structure's static paint and its two
- * animation vocabularies.
+ * The two animation vocabularies (logo pulse, trailing dots) keep their
+ * shorthands inline in the component BY FROZEN CONTRACT (the pre-step test
+ * pins their exact strings in the source); this file owns the keyframes,
+ * the static paint, the geometry drained from the component's inline
+ * styles, and the forced-colors contract.
+ *
+ * FROZEN STRINGS (pre-step contract test, text-pinned byte-exactly — do not
+ * reword): the `background` rgba fallback literal, the
+ * `backdrop-filter: blur(2px);` line, `border-radius: inherit;`, and the
+ * muted-ink declaration, which must appear EXACTLY ONCE in this file (the
+ * test counts it — this comment deliberately avoids restating it). The
+ * blur is the family's registered PRE-FLAG (glass default-ON): it survives
+ * ONLY because the test pins the literal — the minimal migration contract
+ * is to re-pin the test to the opt-in channel form
+ * `backdrop-filter: var(--ds-loading-overlay-backdrop, none);`
+ * (cockpit-header precedent) and only then change this line. Same for the
+ * rgba fallback (zero-literals law vs frozen pin).
+ *
+ * Selector hygiene: the former doubled class (`.ds-loading-overlay
+ * .ds-loading-overlay`) and quadrupled `[data-part]` attributes are
+ * retired — the descendant chain carries the needed specificity without
+ * repeating an identical selector (4th-tanda law). The pinned declaration
+ * strings are untouched by that cleanup.
  */
 
 @keyframes ds-loading-overlay-pulse {
@@ -15,13 +35,48 @@
   40% { opacity: 1; }
 }
 
-.ds-loading-overlay.ds-loading-overlay[data-part='root'] {
+.ds-loading-overlay[data-part='root'] {
+  /* Geometry drained from the component's inline styles. */
+  position: absolute;
+  inset: 0;
+  z-index: var(--ds-loading-overlay-z, 10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Scrim see-through by channel (dims the whole overlay, content included,
+     exactly as the drained inline 0.92 did). */
+  opacity: var(--ds-loading-overlay-scrim-opacity, 0.92);
   background: var(--ds-color-bg-primary, rgba(15,23,42,0.85));
   backdrop-filter: blur(2px);
   border-radius: inherit;
 }
 
-.ds-loading-overlay [data-part='message'][data-part='message'][data-part='message'][data-part='message'],
-.ds-loading-overlay [data-part='dot'][data-part='dot'][data-part='dot'][data-part='dot'] {
+.ds-loading-overlay[data-part='root'] [data-part='message'],
+.ds-loading-overlay[data-part='root'] [data-part='dot'] {
   color: var(--ds-color-text-muted);
+}
+
+/* Message typography drained from the component's inline styles (mono +
+   tracking is the family vocabulary). */
+.ds-loading-overlay[data-part='root'] [data-part='message'] {
+  font-family: var(--ds-font-mono, monospace);
+  letter-spacing: 0.05em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-loading-overlay[data-part='root'] [data-part='logo'],
+  .ds-loading-overlay[data-part='root'] [data-part='dot'] {
+    animation: none;
+  }
+}
+
+/* forced-colors: the scrim background and the backdrop blur are forced
+   away, so the overlay re-asserts as a full system-canvas layer -- the
+   message and dots stay readable (text auto-maps) and the animations stop
+   with the pulse vocabulary halted. */
+@media (forced-colors: active) {
+  .ds-loading-overlay[data-part='root'] {
+    background: Canvas;
+    opacity: 1;
+  }
 }

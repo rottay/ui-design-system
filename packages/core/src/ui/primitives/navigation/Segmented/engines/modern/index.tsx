@@ -117,6 +117,7 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
       ariaLabel,
       className = "",
       style,
+      "data-part": dataPart,
     } = props;
 
     // ---------------------------------------------------------------------------
@@ -230,7 +231,7 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
         ref={ref}
         className={`rottay-segmented rottay-segmented--modern ${className}`.trim()}
         style={style}
-        data-part="root"
+        data-part={dataPart ?? "root"}
         data-size={size}
         data-block={block || undefined}
         data-disabled={disabled || undefined}

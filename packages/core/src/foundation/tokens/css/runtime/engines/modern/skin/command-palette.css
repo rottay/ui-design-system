@@ -1,122 +1,280 @@
 /**
- * Modern CommandPalette skin (WO-SKIN-06 CK-G).
+ * Modern CommandPalette skin.
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * `base` layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
- * `style` (the root/dialog forward the caller's `style`/`className`).
+ * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
+ * rottay-engines)` — this file does not control its own layering (the older
+ * "deliberately unlayered" note predates that wiring). Caller inline `style`
+ * still wins over every rule here.
  *
  * SCOPE ROOT: the palette's outer `<div>` carries
- * `ds-pattern-command-palette ds-engine-modern` + `data-part='root'`; every painted
- * element is a descendant with its own `data-part`. NOT portaled — the dialog is a
- * `position:fixed` DOM descendant of the tenant-scoped root, so descendant selectors
- * from the scope class reach it (no portal-root escape).
+ * `ds-pattern-command-palette ds-engine-modern` + `data-part='root'` (two
+ * distinct classes + one attribute, (0,3,0); repetition is prohibited — the
+ * old P-48 border-color floor is bought from this scope + a single target
+ * part, never a repeated attribute). NOT portaled: the dialog is a
+ * `position:fixed` DOM descendant of the tenant-scoped root, so descendant
+ * selectors reach it.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
- * `border-color` on every element. A rule that paints a border COLOR must reach
- * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
- * Non-border paint wins unlayered at (0,3,0). A `border: none` reset carries no color
- * and is exempt.
+ * COMPOSITION: the search box is the certified Input primitive, shortcut
+ * hints are the certified Kbd, the argument chip wraps the certified Tag and
+ * the empty state wraps the certified Empty — those primitives own their
+ * paint (the pre-composition kbd/chip/empty color rules were deleted with
+ * the raw elements). This file owns the overlay chrome: root/backdrop/
+ * dialog geometry, the listbox scroll frame, row layout + keyboard/pointer
+ * states, section labels, the argument panel and the footer hairline.
  *
- * TOKENS: modern reads GENERIC tokens (--ds-color, --ds-surface, --ds-elevation)
- * and never the --ds-command-palette-* namespace — that namespace is rustic-only, and
- * mapping modern onto it would newly make modern tenant-themeable through a channel it
- * has never honored. Two vocabularies, one per engine; the split is preserved verbatim.
+ * Z-INDEX: the arbitrary Tailwind `z-50` is re-mapped to the sanctioned
+ * `--ds-z-modal` rung — a command palette stacks with modal overlays, not
+ * below them.
  *
- * INTERACTION: the keyboard-active row keys on `[data-active='true']`; pointer hover
- * keys on `:hover:not([data-active='true'])` so it never repaints the keyboard-selected
- * row — the exact `activeIndex !== idx` guard the removed onMouseEnter/Leave writes had.
- *
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * INTERACTION: the keyboard-active row keys on `[data-active='true']`;
+ * pointer hover is hover-capable-only (`@media (hover: hover)`) AND keyed on
+ * `:not([data-active='true'])` so it never repaints the keyboard-selected
+ * row — the exact `activeIndex !== idx` guard the removed onMouseEnter/Leave
+ * writes had. In forced colors the active row re-expresses as
+ * Highlight/HighlightText so the keyboard cursor stays visible.
  */
 
-/* backdrop: scrim + sanctioned glass layer. Frost tint + backdrop blur scale with
-   --ds-effect-intensity, collapsing to a plain scrim at 0; glass is sanctioned on
-   overlay backdrops only (spec section 5). */
+/* ---- root: fixed top-anchored overlay frame (was Tailwind
+        `fixed inset-0 z-50 flex items-start justify-center pt-[15vh]`) ---- */
+.ds-pattern-command-palette.ds-engine-modern[data-part='root'] {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ds-z-modal, 1500);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-block-start: 15vh;
+  padding-inline: var(--ds-spacing-3, 12px);
+  container-type: inline-size;
+}
+
+/* backdrop: scrim + sanctioned glass layer. Frost tint + backdrop blur scale
+   with --ds-effect-intensity, collapsing to a plain scrim at 0; glass is
+   sanctioned on overlay backdrops only (spec section 5). */
 .ds-pattern-command-palette.ds-engine-modern [data-part='backdrop'] {
+  position: absolute;
+  inset: 0;
   background-color: var(--ds-color-bg-overlay);
   background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
   backdrop-filter: var(--ds-glass-backdrop-filter);
   -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
 }
 
-/* dialog card (radius rides the `rounded-xl` Tailwind utility on the element). */
+/* ---- dialog card (was `relative rounded-xl w-full max-w-lg
+        overflow-hidden`) ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='dialog'] {
+  position: relative;
+  inline-size: 100%;
+  max-inline-size: 32rem;
+  overflow: hidden;
+  border-radius: var(--ds-radius-xl);
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-2);
+  color: var(--ds-color-text-primary);
 }
 
-/* search wrapper bottom rule */
-.ds-pattern-command-palette.ds-engine-modern [data-part='search'][data-part='search'] {
+/* ---- search row: always a flex line so the argument chip can sit beside
+        the composed Input (which owns its own paint). ---- */
+.ds-pattern-command-palette.ds-engine-modern[data-part='root'] [data-part='search'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  padding: var(--ds-spacing-3, 12px);
   border-bottom: 1px solid var(--ds-color-border);
 }
-
-/* search input (the `border: none` reset is color-free → exempt from the floor;
-   outline is reset via the element's `focus:outline-none` Tailwind class, not here). */
-.ds-pattern-command-palette.ds-engine-modern [data-part='input'] {
-  border: none;
-  background: transparent;
-  color: inherit;
+.ds-pattern-command-palette.ds-engine-modern [data-part='search'] > :last-child {
+  flex: 1 1 auto;
+  min-inline-size: 0;
 }
 
-/* grouped section label. The "Recent" heading is intentionally NOT keyed here: it
-   carries no data-part and keeps the shared section-title muted color inline, while
-   the grouped label reads --ds-search-category-color (a live per-tenant override). */
+/* ---- listbox: internal scroll with the lane's thin, ink-derived bar
+        (ScrollArea is not composed — see the engine header). ---- */
+.ds-pattern-command-palette.ds-engine-modern [data-part='list'] {
+  overflow-y: auto;
+  padding-block: var(--ds-spacing-2, 8px);
+  scrollbar-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border)) transparent;
+  scrollbar-width: thin;
+}
+
+/* ---- sections: recent block + group labels (geometry transcribed from the
+        retired menuSectionTitleStyle spread) ---- */
+.ds-pattern-command-palette.ds-engine-modern [data-part='recent'] {
+  padding-inline: var(--ds-spacing-3, 12px);
+  padding-block-end: var(--ds-spacing-2, 8px);
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='section-label'],
 .ds-pattern-command-palette.ds-engine-modern [data-part='group-label'] {
+  padding-block: 6px 4px;
+  padding-inline: var(--ds-spacing-3, 12px);
+  margin-block-end: var(--ds-spacing-1, 4px);
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs, 12px);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='group-label'] {
+  padding-block: var(--ds-spacing-3, 12px) var(--ds-spacing-1, 4px);
+  padding-inline: var(--ds-spacing-5, 20px);
+  margin-block-end: 0;
+  /* a live per-tenant override channel (fallback: muted) */
   color: var(--ds-search-category-color, var(--ds-color-text-muted));
 }
 
-/* row: keyboard-active and pointer-hover-while-not-active both resolve to the inset
-   surface; the `:not([data-active='true'])` guard keeps a hovered pointer off the
-   keyboard-selected row (a plain :hover would light two rows at once). */
-.ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'],
-.ds-pattern-command-palette.ds-engine-modern [data-part='item']:hover:not([data-active='true']) {
+/* ---- option rows: keyboard-active and pointer-hover-while-not-active both
+        resolve to the inset surface; hover is hover-capable-only and the
+        `:not([data-active='true'])` guard keeps a hovered pointer off the
+        keyboard-selected row (a plain :hover would light two rows at once). ---- */
+.ds-pattern-command-palette.ds-engine-modern [data-part='item'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2, 8px);
+  padding-block: var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-spacing-3, 12px);
+  border-radius: var(--ds-radius-lg);
+  cursor: pointer;
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='recent'] [data-part='item'] {
+  padding-inline: var(--ds-spacing-3, 12px);
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='item'][aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] {
   background: var(--ds-surface-inset);
 }
+@media (hover: hover) {
+  .ds-pattern-command-palette.ds-engine-modern [data-part='item']:hover:not([data-active='true']) {
+    background: var(--ds-surface-inset);
+  }
+}
 
-/* row description */
+/* ---- row content: icon + text column, ellipsis-safe ---- */
+.ds-pattern-command-palette.ds-engine-modern [data-part='item-main'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  min-inline-size: 0;
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='item-text'] {
+  min-inline-size: 0;
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='label'] {
+  overflow: hidden;
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-sm, 14px);
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .ds-pattern-command-palette.ds-engine-modern [data-part='description'] {
+  overflow: hidden;
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs, 12px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* shortcut kbd badge (padding/font ride inline props on the element) */
+/* ---- shortcut hint: layout only — the composed Kbd owns the key-cap paint ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='shortcut'] {
-  border-radius: var(--ds-radius-sm);
-  background: var(--ds-surface-inset);
-}
-.ds-pattern-command-palette.ds-engine-modern [data-part='shortcut'][data-part='shortcut'] {
-  border: 1px solid var(--ds-color-border);
+  flex-shrink: 0;
+  margin-inline-start: var(--ds-spacing-2, 8px);
 }
 
-/* empty state */
+/* ---- empty state: rhythm only — the composed Empty owns its paint ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='empty'] {
-  color: var(--ds-color-text-secondary);
+  padding-block: var(--ds-spacing-8, 32px);
 }
 
-/* footer */
-.ds-pattern-command-palette.ds-engine-modern [data-part='footer'] {
-  color: var(--ds-color-text-secondary);
-}
-.ds-pattern-command-palette.ds-engine-modern [data-part='footer'][data-part='footer'] {
-  border-top: 1px solid var(--ds-color-border);
+/* ---- per-section provider error row (kind='error': rendered, never
+        selectable) ---- */
+.ds-pattern-command-palette.ds-engine-modern [data-part='error'] {
+  padding-block: var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-spacing-4, 16px);
+  color: var(--ds-color-error, var(--ds-color-text-secondary));
 }
 
-/* argument mode: pending-command chip + parameter prompt + validation error.
-   Layout (flex/padding/font) rides inline on the elements; paint lives here. */
+/* ---- argument mode: panel, prompt, validation error. The chip is layout
+        only — the composed Tag inside owns the pill paint. ---- */
+.ds-pattern-command-palette.ds-engine-modern [data-part='argument-panel'] {
+  padding-block: var(--ds-spacing-3, 12px);
+  padding-inline: var(--ds-spacing-4, 16px);
+}
 .ds-pattern-command-palette.ds-engine-modern [data-part='argument-chip'] {
-  border-radius: var(--ds-radius-sm, 6px);
-  background: var(--ds-color-bg-secondary);
-  color: var(--ds-color-text-secondary);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='argument-prompt'] {
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm, 14px);
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='argument-error'] {
+  margin-block-start: var(--ds-spacing-1, 4px);
   color: var(--ds-color-error, var(--ds-color-text-primary));
+  font-size: var(--ds-font-size-xs, 12px);
 }
 
-/* per-section provider error row (kind='error': rendered, never selectable) */
-.ds-pattern-command-palette.ds-engine-modern [data-part='error'] {
-  color: var(--ds-color-error, var(--ds-color-text-secondary));
+/* ---- footer (caller slot; the pattern owns rhythm + hairline) ---- */
+.ds-pattern-command-palette.ds-engine-modern [data-part='footer'] {
+  padding-block: var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-spacing-4, 16px);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs, 12px);
+}
+.ds-pattern-command-palette.ds-engine-modern[data-part='root'] [data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/* ---- narrow overlay: full-width top sheet with a smaller top offset ---- */
+@container (inline-size < 40rem) {
+  .ds-pattern-command-palette.ds-engine-modern[data-part='root'] {
+    padding-block-start: var(--ds-spacing-8, 32px);
+  }
+  .ds-pattern-command-palette.ds-engine-modern [data-part='dialog'] {
+    max-inline-size: 100%;
+  }
+}
+
+/* ---- coarse pointers: option rows meet the physical 44px floor ---- */
+@media (pointer: coarse) {
+  .ds-pattern-command-palette.ds-engine-modern [data-part='item'] {
+    min-block-size: 44px;
+  }
+}
+
+/* ---- forced colors: system colors only. The keyboard cursor row MUST stay
+        visible, so the active option re-expresses as Highlight; hairlines,
+        labels and the dialog frame follow in system ink. No data-viz here,
+        so no forced-color-adjust opt-out anywhere. ---- */
+@media (forced-colors: active) {
+  .ds-pattern-command-palette.ds-engine-modern [data-part='dialog'] {
+    border: 1px solid ButtonText;
+  }
+
+  .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] {
+    background: Highlight;
+    color: HighlightText;
+  }
+  .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] [data-part='label'],
+  .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] [data-part='description'] {
+    color: HighlightText;
+  }
+
+  .ds-pattern-command-palette.ds-engine-modern[data-part='root'] [data-part='search'],
+  .ds-pattern-command-palette.ds-engine-modern[data-part='root'] [data-part='footer'] {
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-command-palette.ds-engine-modern [data-part='item'][aria-disabled='true'],
+  .ds-pattern-command-palette.ds-engine-modern [data-part='section-label'],
+  .ds-pattern-command-palette.ds-engine-modern [data-part='group-label'] {
+    color: GrayText;
+  }
+
+  .ds-pattern-command-palette.ds-engine-modern [data-part='error'],
+  .ds-pattern-command-palette.ds-engine-modern [data-part='argument-error'] {
+    color: CanvasText;
+  }
 }

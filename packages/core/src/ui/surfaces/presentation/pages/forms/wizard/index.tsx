@@ -8,7 +8,7 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Card, Flex, Grid, Stack, Text } from '../../../../../primitives';
+import { Box, Button, Card, Flex, Grid, Stack, Text } from '../../../../../primitives';
 import { PatternFormBuilder, PatternStepWizard } from '../../../../../patterns';
 import { FadeIn, SlideIn } from '@/graphics/motion';
 import { useUnsavedChangesGuard } from '../../../../../../infrastructure/runtime/application/forms';
@@ -37,7 +37,7 @@ function renderWizardStepContent(
   context: WizardSurfaceStepRenderContext,
   config: WizardSurfaceConfig,
   onValidationChange: (errors: Record<string, string>) => void,
-  tSurface: (key: string, params?: Record<string, string | number>) => string,
+  tSurfaceOr: (key: string, fallback: string, params?: Record<string, string | number>) => string,
   options: {
     cardVariant: 'outlined' | 'elevated' | 'filled' | 'ghost';
     animateEntrance: boolean;
@@ -60,8 +60,8 @@ function renderWizardStepContent(
   if (!contentNode && visibleFields.length === 0) {
     return (
       <SurfaceEmptyState
-        title={tSurface('wizard.empty_step_title')}
-        description={tSurface('wizard.empty_step_description')}
+        title={tSurfaceOr('wizard.empty_step_title', 'Empty wizard step')}
+        description={tSurfaceOr('wizard.empty_step_description', 'This step does not expose any visible content.')}
       />
     );
   }
@@ -113,14 +113,14 @@ export interface WizardSurfaceProps {
 }
 
 export function WizardSurface({ config, loading = false, error, onRetry }: WizardSurfaceProps): React.ReactElement {
-  const { tSurface } = useSurfaceTranslations();
+  const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { shouldStack, isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout(config.visual);
   const resolvedMobile = hasResolvedViewport && isMobile;
   const dirtyState = config.behavior.dirtyState;
   const { requestDiscard } = useUnsavedChangesGuard({
     isDirty: dirtyState?.isDirty ?? false,
-    message: dirtyState?.message ?? tSurface('wizard.discard_changes'),
+    message: dirtyState?.message ?? tSurfaceOr('wizard.discard_changes', 'Discard unsaved wizard changes?'),
     confirmDiscard: dirtyState?.confirmDiscard,
     onDiscard: dirtyState?.onDiscard,
     onBlocked: dirtyState?.onBlocked,
@@ -199,7 +199,7 @@ export function WizardSurface({ config, loading = false, error, onRetry }: Wizar
 
             config.behavior.onValidationChange?.(errors);
           },
-          tSurface,
+          tSurfaceOr,
           {
             cardVariant: profileDefaults.cardVariant,
             animateEntrance: profileDefaults.animateEntrance,
@@ -214,7 +214,7 @@ export function WizardSurface({ config, loading = false, error, onRetry }: Wizar
     goToStep,
     resolvedValues,
     setValues,
-    tSurface,
+    tSurfaceOr,
     profileDefaults.cardVariant,
     profileDefaults.animateEntrance,
     profileDefaults.entranceDuration,
@@ -241,11 +241,15 @@ export function WizardSurface({ config, loading = false, error, onRetry }: Wizar
   const saveDraftAction = resolveSurfaceAction(config.behavior.saveDraftAction, config.access);
   const submitAction = resolveSurfaceAction(config.behavior.submitAction, config.access);
 
+  // Draft/cancel actions ride the Button primitive's own icon slot: the engine
+  // owns the icon-label gap (logical, density-scaled), so no inline geometry
+  // and no physical margins live here.
   const wizardFooter = (
     <Flex gap={8} wrap="wrap" justify="end">
       {cancelAction && (
         <Button
           variant={resolveSurfaceButtonVariant(cancelAction.variant)}
+          icon={cancelAction.icon}
           disabled={cancelAction.disabled}
           loading={cancelAction.loading}
           onClick={() => {
@@ -254,20 +258,19 @@ export function WizardSurface({ config, loading = false, error, onRetry }: Wizar
             }
           }}
         >
-          {cancelAction.icon}
-          <Text style={{ marginLeft: cancelAction.icon ? 8 : 0 }}>{cancelAction.label}</Text>
+          {cancelAction.label}
         </Button>
       )}
 
       {saveDraftAction && (
         <Button
           variant={resolveSurfaceButtonVariant(saveDraftAction.variant)}
+          icon={saveDraftAction.icon}
           disabled={config.behavior.disabled || saveDraftAction.disabled}
           loading={saveDraftAction.loading}
           onClick={() => saveDraftAction.onClick?.(resolvedValues)}
         >
-          {saveDraftAction.icon}
-          <Text style={{ marginLeft: saveDraftAction.icon ? 8 : 0 }}>{saveDraftAction.label}</Text>
+          {saveDraftAction.label}
         </Button>
       )}
 
@@ -293,8 +296,8 @@ export function WizardSurface({ config, loading = false, error, onRetry }: Wizar
       <PageShellSurface chrome={chrome} loading={loading}>
         {config.presentation.emptyState ?? (
           <SurfaceEmptyState
-            title={tSurface('wizard.empty_title')}
-            description={tSurface('wizard.empty_description')}
+            title={tSurfaceOr('wizard.empty_title', 'No wizard steps available')}
+            description={tSurfaceOr('wizard.empty_description', 'This flow does not have any steps configured yet.')}
           />
         )}
       </PageShellSurface>
@@ -310,15 +313,29 @@ export function WizardSurface({ config, loading = false, error, onRetry }: Wizar
       : config.presentation.aside;
 
   const wizardContent = (
-    <Grid className="ds-surface ds-wizard" columns={asideNode && !shouldStack ? 12 : 1} gap={sectionSpacing}>
+    <Grid
+      className="ds-surface ds-wizard"
+      data-part="root"
+      data-mobile={resolvedMobile ? 'true' : 'false'}
+      data-loading={loading ? 'true' : 'false'}
+      aria-busy={loading || undefined}
+      columns={asideNode && !shouldStack ? 12 : 1}
+      gap={sectionSpacing}
+    >
       <Grid.Item span={asideNode && !shouldStack ? 8 : undefined}>
         <Stack spacing={sectionSpacing}>
-          {config.presentation.description && <Text data-part="description">{config.presentation.description}</Text>}
+          {config.presentation.description && (
+            <Text data-part="description" as="p" color="subtle">
+              {config.presentation.description}
+            </Text>
+          )}
 
           {config.presentation.error && (
-            <Card className="ds-wizard__error-card" variant={profileDefaults.cardVariant}>
-              <Card.Body>{config.presentation.error}</Card.Body>
-            </Card>
+            <Box data-part="error-banner" role="alert">
+              <Card className="ds-wizard__error-card" variant={profileDefaults.cardVariant}>
+                <Card.Body>{config.presentation.error}</Card.Body>
+              </Card>
+            </Box>
           )}
 
           <PatternStepWizard
@@ -338,7 +355,10 @@ export function WizardSurface({ config, loading = false, error, onRetry }: Wizar
                 // StepWizard pattern which displays it inline.
                 validate: async () => {
                   if (validationErrors && Object.keys(validationErrors).length > 0) {
-                    return Object.values(validationErrors)[0] ?? tSurface('wizard.step_error_fallback');
+                    return (
+                      Object.values(validationErrors)[0] ??
+                      tSurfaceOr('wizard.step_error_fallback', 'Please review this step.')
+                    );
                   }
 
                   const result = await step.validate?.();
@@ -355,14 +375,16 @@ export function WizardSurface({ config, loading = false, error, onRetry }: Wizar
             orientation={resolvedMobile ? 'horizontal' : config.visual.orientation}
             progressPosture={resolvedMobile && config.visual.compactStepsOnMobile ? 'counter' : 'rail'}
             formatProgressLabel={({ current, total, title }) =>
-              tSurface('wizard.step_counter', { current, total, title })
+              tSurfaceOr('wizard.step_counter', 'Step {current} of {total}: {title}', { current, total, title })
             }
             actionPosture={resolvedMobile && config.visual.mobileActionsSticky ? 'sticky-bottom' : 'inline'}
             nextLabel={config.behavior.nextLabel}
             prevLabel={config.behavior.prevLabel}
-            completeLabel={submitAction?.label ?? tSurface('wizard.complete')}
+            completeLabel={submitAction?.label ?? tSurfaceOr('wizard.complete', 'Complete')}
             skipLabel={config.behavior.skipLabel}
-            actionsDisabled={config.behavior.disabled}
+            // Contract-documented use: navigation locks while async submit work
+            // is in flight, so the user cannot step away mid-submission.
+            actionsDisabled={config.behavior.disabled || submitAction?.loading}
             completeDisabled={submitAction?.disabled || submitAction?.loading}
             showCompleteAction={!!submitAction}
             footer={wizardFooter}
@@ -382,7 +404,10 @@ export function WizardSurface({ config, loading = false, error, onRetry }: Wizar
   );
 
   return (
-    <PageShellSurface chrome={chrome} loading={loading}>
+    // Loading keeps the shell chrome mounted (title/breadcrumbs survive) so the
+    // StepWizard's own skeleton -- progress + content shaped like the wizard --
+    // is what the user sees instead of the generic page skeleton.
+    <PageShellSurface chrome={chrome} loading={false}>
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
         {profileDefaults.animateEntrance ? (
           <FadeIn durationMs={profileDefaults.entranceDuration}>{wizardContent}</FadeIn>

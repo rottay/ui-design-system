@@ -40,14 +40,18 @@
   font-weight: 500;
   cursor: pointer;
   transition:
-    background var(--ds-code-block-motion-duration, var(--ds-duration-fast, 120ms)) ease,
-    color var(--ds-code-block-motion-duration, var(--ds-duration-fast, 120ms)) ease,
-    border-color var(--ds-code-block-motion-duration, var(--ds-duration-fast, 120ms)) ease;
+    background var(--ds-code-block-motion-duration, var(--ds-motion-fast, 120ms)) ease,
+    color var(--ds-code-block-motion-duration, var(--ds-motion-fast, 120ms)) ease,
+    border-color var(--ds-code-block-motion-duration, var(--ds-motion-fast, 120ms)) ease;
 }
 
-.ds-code-block[data-part='root'] [data-part='copy-button']:not(:disabled):hover {
-  background: var(--ds-code-block-copy-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
-  color: var(--ds-code-block-copy-ink-hover, var(--ds-color-text-primary));
+/* Pointer-fine hover only (hover law); the press below is the touch and
+   keyboard equivalent. The test-pinned selector string is preserved. */
+@media (hover: hover) {
+  .ds-code-block[data-part='root'] [data-part='copy-button']:not(:disabled):hover {
+    background: var(--ds-code-block-copy-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
+    color: var(--ds-code-block-copy-ink-hover, var(--ds-color-text-primary));
+  }
 }
 
 .ds-code-block[data-part='root'] [data-part='copy-button']:active:not(:disabled) {
@@ -94,7 +98,9 @@
 
 @media (forced-colors: active) {
   .ds-code-block[data-part='root'] [data-part='copy-button'] {
-    border-color: ButtonBorder;
+    /* `ButtonBorder` is not a CSS system color (it never resolved); the frame
+       reads the canonical button-text ink instead. */
+    border-color: ButtonText;
   }
   .ds-code-block[data-part='root'] [data-part='copy-button']:not(:disabled):hover {
     background: Highlight;
@@ -104,5 +110,24 @@
   .ds-code-block[data-part='root'] [data-part='scroll']:focus-visible {
     outline: 2px solid Highlight;
     box-shadow: none;
+  }
+
+  /* Line-highlight bands carry STATE (which lines are flagged), and the
+     system palette reserves exactly this pair for it. The band rides a custom
+     property precisely so this remap wins WITHOUT !important (the family test
+     contract bans it): forced colors leave the variable alone, so
+     `background: var(--ds-code-block-line-highlight-bg)` resolves to Mark. */
+  .ds-code-block[data-part='root'] [data-part='line'][data-highlighted='true'] {
+    --ds-code-block-line-highlight-bg: Mark;
+    color: MarkText;
+  }
+
+  /* Syntax highlighting is DATA (adapter-supplied token colors, the
+     ColorPicker swatch precedent): collapsing it to one system ink would
+     strip the component's function — distinguishing code structure by token
+     kind. The opt-out is scoped to the highlighted token spans only; every
+     chrome part above stays on system colors. */
+  .ds-code-block[data-part='root'] [data-part='token'] {
+    forced-color-adjust: none;
   }
 }

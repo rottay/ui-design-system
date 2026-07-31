@@ -26,7 +26,7 @@
 
 'use client';
 
-import React, { useState, useCallback, useRef, useId } from 'react';
+import React, { useState, useCallback, useRef, useId, useEffect, useLayoutEffect } from 'react';
 import type { TextareaProps } from '../../contracts';
 import { TEXTAREA_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -66,6 +66,8 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
     onFocus,
     onBlur,
     onClear,
+    onPressEnter,
+    onResize,
     className,
     style,
     name,
@@ -124,6 +126,55 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
           ? 'warning'
           : undefined;
 
+  // autoSize: grow with the content and cap at maxRows (contract: true |
+  // {minRows,maxRows}). Runtime-measured geometry is the one sanctioned
+  // inline mechanism; the no-autoSize path keeps the root style-free
+  // (pinned by Textarea.modern-engine). minRows rides the native `rows`
+  // attribute, which the browser already enforces as the floor.
+  const autoSizeMaxRows = typeof autoSize === 'object' ? autoSize.maxRows : undefined;
+  useLayoutEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+    if (!autoSize) {
+      // Toggled off after measuring: hand geometry back to the skin/rows.
+      if (el.style.blockSize) el.style.blockSize = '';
+      if (el.style.overflowY) el.style.overflowY = '';
+      return;
+    }
+    el.style.blockSize = 'auto';
+    const computed = getComputedStyle(el);
+    const borderBlock =
+      (parseFloat(computed.borderBlockStartWidth) || 0) +
+      (parseFloat(computed.borderBlockEndWidth) || 0);
+    let next = el.scrollHeight + borderBlock;
+    let overflowY = 'hidden';
+    if (autoSizeMaxRows) {
+      const lineHeight = parseFloat(computed.lineHeight) || 20;
+      const paddingBlock =
+        (parseFloat(computed.paddingBlockStart) || 0) +
+        (parseFloat(computed.paddingBlockEnd) || 0);
+      const max = Math.ceil(lineHeight * autoSizeMaxRows + paddingBlock + borderBlock);
+      if (next > max) {
+        next = max;
+        overflowY = 'auto';
+      }
+    }
+    el.style.blockSize = `${next}px`;
+    el.style.overflowY = overflowY;
+  }, [currentValue, autoSize, autoSizeMaxRows]);
+
+  // onResize reports both autoSize-driven growth and manual drag resizes from
+  // a single source (the observer fires on mount with the initial geometry).
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el || !onResize || typeof ResizeObserver === 'undefined') return undefined;
+    const observer = new ResizeObserver(() => {
+      onResize({ width: el.offsetWidth, height: el.offsetHeight });
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [onResize]);
+
   return (
     <div
       className={`ds-textarea-field ${className || ''}`.trim()}
@@ -153,6 +204,9 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') onPressEnter?.();
+        }}
         name={name}
         autoComplete={autoComplete}
         autoFocus={autoFocus}

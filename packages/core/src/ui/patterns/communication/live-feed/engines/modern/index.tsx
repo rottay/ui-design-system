@@ -1,36 +1,43 @@
 'use client';
 
 /**
- * @fileoverview Modern (token-driven) engine for the LiveFeed pattern.
- * Renders a real-time feed inside a DS token card with optional auto-refresh
- * polling, a "new items" banner, and load-more pagination.
+ * @fileoverview Modern engine for the LiveFeed pattern.
  *
- * COMPOSITION LAW (Lote 2): every control is a DS primitive — the refresh,
- * banner and load-more buttons are the public Button (caller `data-part`
- * wins the root anatomy hook per P-79, so `live-feed.css` owns their
- * paint), and the busy spinners are the Spinner primitive's modern engine.
- * The raw `<button>` elements, the hand-rolled spinner spans and the
- * Tailwind layout utilities are gone; the geometry they carried inline
- * moved to `live-feed.css`. Copy is localized through
- * `useOptionalTranslation('components')` with the documented English floor.
+ * A scrollable, auto-refreshing feed: header with refresh, an "N new items"
+ * banner, the item list, an infinite-scroll sentinel and load-more. Every
+ * control COMPOSES a certified primitive -- Button (refresh / banner /
+ * load-more), the Spinner modern engine (busy icons) and Empty (default
+ * empty state); the engine stamps only anatomy (`data-part` /
+ * `data-skeleton`) and every visual decision lives in the modern skin
+ * (`runtime/engines/modern/skin/live-feed.css`).
  *
- * New items receive the `ds-pulse-changed` single-flash utility to signal freshness.
+ * PINS (tests untouched, contract minimal intact):
+ * - `LiveFeed.pulse.test.tsx` queries the list rows as
+ *   `.flex.flex-col.gap-2 > div`, so the list keeps those Tailwind layout
+ *   utilities; it also requires `ds-pulse-changed` (single-flash,
+ *   reduced-motion-guarded in foundation/animations/transitions.css) on
+ *   `isNew` rows and an EMPTY className on the rest.
+ * - `PatternLiveFeed.engine-advanced.test.tsx` requires an `.animate-pulse`
+ *   node inside the modern loading skeleton, the refresh control as the
+ *   FIRST button in DOM order, and the banner reachable by
+ *   `getByRole('button', { name: /new items/i })`.
  *
- * @example
- * <ModernLiveFeed
- *   items={[{ key: '1', text: 'Payment confirmed', isNew: true }]}
- *   renderItem={(item) => <div className="p-2">{item.text}</div>}
- *   autoRefresh={10000}
- *   hasMore
- *   onLoadMore={() => fetchPage(page + 1)}
- * />
+ * A11Y: the list is `aria-live="polite"` so arriving items are announced to
+ * assistive tech (the contract owns no pause affordance; the polling
+ * interval is caller-controlled via `autoRefresh`).
+ *
+ * Copy runs through the guarded i18n channel with documented English floors.
+ *
+ * @module Patterns/LiveFeed/Engines/Modern
+ * @category Patterns
+ * @package @rottay/design-system
  */
 
 import React, { useEffect, useRef } from 'react';
 import type { LiveFeedProps, FeedItem } from '../../contracts';
-import { panelCardStyle, cardBodyStyle, pillBadgeSmStyle } from '../../../../foundation/engine-styles/modern';
 import { useInfiniteScroll } from '../../../../runtime/virtualization/infinite-scroll';
 import { Button } from '../../../../../primitives/inputs/Button';
+import { Empty } from '../../../../../primitives/display/Empty';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
 import { ActionRefreshIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-refresh';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -101,11 +108,13 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
   });
 
   // Skeleton loading state: only shown when there are zero items and loading is true.
-  // Subsequent refreshes keep existing items visible (no flicker).
+  // Subsequent refreshes keep existing items visible (no flicker). The
+  // `animate-pulse` class is a test pin (see header); the skin owns the real
+  // channeled shimmer, so the class is only the query hook.
   if (loading && items.length === 0) {
     return (
-      <div data-part="root" className={`ds-pattern-live-feed ds-engine-modern ${className ?? ''}`} style={{ ...panelCardStyle, ...style }}>
-        <div data-part="skeleton-list" style={cardBodyStyle}>
+      <div data-part="root" className={`ds-pattern-live-feed ds-engine-modern ${className ?? ''}`} style={style}>
+        <div data-part="skeleton-list" className="animate-pulse">
           <div data-part="skeleton" data-skeleton="title" />
           {[1, 2, 3].map((i) => (
             <div key={i} data-part="skeleton" data-skeleton="row" />
@@ -116,8 +125,8 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
   }
 
   return (
-    <div data-part="root" className={`ds-pattern-live-feed ds-engine-modern ${className ?? ''}`} style={{ ...panelCardStyle, ...style }}>
-      <div style={cardBodyStyle}>
+    <div data-part="root" className={`ds-pattern-live-feed ds-engine-modern ${className ?? ''}`} style={style}>
+      <div data-part="body">
         {/* Header */}
         {(header || onRefresh) && (
           <div data-part="header-row">
@@ -146,7 +155,7 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
             data-part="banner"
             onClick={onShowNewItems}
           >
-            <span data-part="badge" style={pillBadgeSmStyle}>{newItemsCount}</span>
+            <span data-part="badge">{newItemsCount}</span>
             {newItemsCount === 1
               ? translation?.tOr('liveFeed.newItem', 'new item') ?? 'new item'
               : translation?.tOr('liveFeed.newItems', 'new items') ?? 'new items'}
@@ -158,13 +167,18 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
             they are runtime-measured values (the ScrollArea precedent), not paint. */}
         <div ref={scrollContainerRef} style={{ maxHeight: maxHeight ?? undefined, overflow: maxHeight ? 'auto' : undefined }}>
           {displayItems.length === 0 ? (
-            emptyState ?? <div data-part="empty">{emptyLabel}</div>
+            emptyState ?? (
+              <div data-part="empty">
+                <Empty image="simple" description={emptyLabel} />
+              </div>
+            )
           ) : (
             /* The Tailwind layout classes on the list are PINNED by
                LiveFeed.pulse.test.tsx (`.flex.flex-col.gap-2 > div` row
                queries) — they stay as layout utilities until the test is
-               re-pointed at `data-part='list'`. */
-            <div data-part="list" className="flex flex-col gap-2">
+               re-pointed at `data-part='list'`. The list is a polite live
+               region: arriving items are announced to assistive tech. */
+            <div data-part="list" className="flex flex-col gap-2" aria-live="polite">
               {/* ds-pulse-changed (foundation/animations/transitions.css) flashes
                   ONCE on insertion to signal a freshly-arrived item. Each item
                   has a stable key, so the flash plays when its DOM node is first

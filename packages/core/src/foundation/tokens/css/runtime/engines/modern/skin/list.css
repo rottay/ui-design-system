@@ -52,15 +52,57 @@
   font-size: var(--ds-list-lg-font-size, 16px);
 }
 
-/* loading posture (the skeleton shape utilities stay in the engine) */
+/* loading posture (the vendor `animate-pulse` string is a test-pinned bridge:
+   THIS animation declaration wins over the utilities-layer pulse by layer
+   ownership, so the cadence rides the motion authority -- 4× glacial = the
+   vendor pulse's 2s -- and reduced-motion can silence it) */
 .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] {
+  /* Static posture when motion is off; the pulse animates over it. */
   opacity: var(--ds-list-loading-opacity, 0.6);
+  animation: ds-list-skeleton-pulse-modern var(--ds-list-skeleton-pulse-duration, calc(var(--ds-motion-glacial, 500ms) * 4)) var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-row'] {
+  padding-block: var(--ds-list-skeleton-row-padding-block, 12px);
+}
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-row-inner'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-list-skeleton-row-gap, 12px);
+}
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-lines'] {
+  flex: 1;
+  min-inline-size: 0;
 }
 
-/* loading skeleton: avatar disc + text bars share one fill */
+/* loading skeleton: avatar disc + text bars share one fill (layout drained
+   from the `w-10 h-10 rounded-full` / `h-4 rounded w-1/3 mb-2` / `h-3 rounded
+   w-2/3` / `flex-1` utilities) */
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-avatar'] {
+  inline-size: var(--ds-list-skeleton-avatar-size, 40px);
+  block-size: var(--ds-list-skeleton-avatar-size, 40px);
+  flex-shrink: 0;
+  border-radius: var(--ds-radius-full, 9999px);
+}
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line'] {
+  border-radius: var(--ds-list-skeleton-line-radius, var(--ds-radius-sm, 4px));
+}
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line']:first-child {
+  inline-size: 33.333%;
+  block-size: var(--ds-list-skeleton-line-height, 16px);
+  margin-block-end: var(--ds-list-skeleton-line-gap, 8px);
+}
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line']:last-child {
+  inline-size: 66.666%;
+  block-size: var(--ds-list-skeleton-line-height-sm, 12px);
+}
 .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-avatar'],
 .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line'] {
   background: var(--ds-list-item-hover-background-color, var(--ds-surface-panel));
+}
+
+@keyframes ds-list-skeleton-pulse-modern {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 /* header + footer: geometry + surface always; the separator line (width,
@@ -92,17 +134,26 @@
 /* ============================== List.Item ================================ */
 
 .rottay-list-item.rottay-list-item--modern[data-part='item'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: var(--ds-list-default-padding-vertical, 12px) var(--ds-list-default-padding-horizontal, 16px);
   background: var(--ds-list-item-background-color, transparent);
   color: var(--ds-list-text-color, inherit);
   transition: background var(--ds-list-transition-duration, var(--ds-motion-normal)) var(--ds-list-transition-timing, ease-in-out);
 }
-/* extra + actions sit on the inline-END side: logical margins, so the
-   separation flips with direction instead of pinning to the physical left */
+.rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-content'] {
+  flex: 1;
+  min-inline-size: 0;
+}
 .rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-extra'] {
+  flex-shrink: 0;
   margin-inline-start: var(--ds-list-extra-margin-left, 16px);
 }
 .rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-actions'] {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
   margin-inline-start: var(--ds-list-extra-margin-left, 16px);
   gap: var(--ds-list-actions-gap, 8px);
   color: var(--ds-list-actions-color, var(--ds-color-primary));
@@ -111,7 +162,16 @@
 /* ============================ List.Item.Meta ============================= */
 
 .rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] {
+  display: flex;
+  align-items: flex-start;
   gap: var(--ds-list-meta-avatar-margin-right, 12px);
+}
+.rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-avatar'] {
+  flex-shrink: 0;
+}
+.rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] {
+  flex: 1;
+  min-inline-size: 0;
 }
 .rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-title'] {
   font-size: var(--ds-list-meta-title-font-size, inherit);
@@ -136,4 +196,31 @@
       var(--ds-color-text-primary) 30%
     )
   );
+}
+
+/* ---- reduced motion: the skeleton pulse and the item transition go quiet
+        (the static loading opacity keeps the posture). ---- */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] {
+    animation: none;
+  }
+  .rottay-list-item.rottay-list-item--modern[data-part='item'] {
+    transition: none;
+  }
+}
+
+/* ---- forced colors (system colors only): the bordered frame, header/footer
+        separators and split dividers keep system-color boundaries; the
+        skeleton bars stay perceivable as shapes. ---- */
+@media (forced-colors: active) {
+  .rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'],
+  .rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='header'],
+  .rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='footer'],
+  .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'] > [data-part='divider'] {
+    border-color: ButtonText;
+  }
+  .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-avatar'],
+  .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line'] {
+    border: 1px solid ButtonText;
+  }
 }

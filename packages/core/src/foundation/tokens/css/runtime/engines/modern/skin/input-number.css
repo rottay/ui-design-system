@@ -103,6 +103,53 @@
   padding-inline-end: var(--ds-input-number-trailing-space, 64px);
 }
 
+/* Numeric value grammar: tabular figures that do not jitter while stepping,
+   end-aligned against the stepper cluster (the numeric-field axis; the text
+   Input floor stays start-aligned). */
+.ds-input-number.ds-input-number--modern[data-part='root'] {
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+/* Readonly mirrors the certified Input floor channels (quiet, not disabled). */
+.ds-input-number.ds-input-number--modern[data-part='root'][data-readonly='true']:not([data-disabled='true']) {
+  color: var(--ds-input-readonly-color, var(--ds-color-text-primary));
+  background: var(--ds-input-readonly-bg, var(--ds-input-bg, var(--ds-surface-control)));
+}
+.ds-input-number.ds-input-number--modern[data-part='root'][data-size][data-readonly='true']:not([data-disabled='true']) {
+  border-color: var(--ds-input-readonly-border, var(--ds-color-border));
+}
+
+/* Wrapper layout (was Tailwind utilities in the engine): the group row, the
+   relative field frame and the logical affix insets all live here so the
+   skin stays the single layout owner. */
+[data-part='group']:has(> [data-part='field'] > .ds-input-number.ds-input-number--modern[data-part='root']) {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-1, 0.25rem);
+}
+
+[data-part='field']:has(> .ds-input-number.ds-input-number--modern[data-part='root']) {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  min-inline-size: 0;
+}
+
+.ds-input-number.ds-input-number--modern[data-part='root'] ~ [data-part='trailing'] {
+  position: absolute;
+  inset-inline-end: var(--ds-input-number-trailing-inset, 0.5rem);
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-1, 0.25rem);
+}
+
+.ds-input-number.ds-input-number--modern[data-part='root'] ~ [data-part='trailing'] > [data-part='steppers'] {
+  display: flex;
+  flex-direction: column;
+}
+
 .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-color-border);
 }
@@ -127,15 +174,23 @@
 }
 
 [data-part='addon-before']:has(~ div > .ds-input-number.ds-input-number--modern[data-part='root']) {
+  padding: var(--ds-spacing-1, 0.25rem) var(--ds-spacing-2, 0.5rem);
+  border-start-start-radius: var(--ds-radius-md);
+  border-end-start-radius: var(--ds-radius-md);
   background: var(--ds-surface-inset);
   color: var(--ds-color-text-secondary);
 }
 div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-part='addon-after'] {
+  padding: var(--ds-spacing-1, 0.25rem) var(--ds-spacing-2, 0.5rem);
+  border-start-end-radius: var(--ds-radius-md);
+  border-end-end-radius: var(--ds-radius-md);
   background: var(--ds-surface-inset);
   color: var(--ds-color-text-secondary);
 }
 
 [data-part='prefix']:has(~ .ds-input-number.ds-input-number--modern[data-part='root']) {
+  position: absolute;
+  inset-inline-start: var(--ds-input-number-prefix-inset, 0.5rem);
   color: var(--ds-color-text-secondary);
 }
 .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='suffix'] {
@@ -170,11 +225,66 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   outline-offset: 1px;
 }
 
+/* Bounds-exhausted steppers go quiet instead of pretending to act. */
+.ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button']:disabled {
+  color: var(--ds-color-text-disabled);
+  background: transparent;
+  cursor: default;
+}
+
+/* Quiet hairline between the two halves of the stepper column. */
+.ds-input-number.ds-input-number--modern[data-part='root'] ~ [data-part='trailing']
+  [data-part='stepper-button'] + [data-part='stepper-button'] {
+  border-block-start: 1px solid
+    var(--ds-input-number-stepper-separator, var(--ds-color-border-subtle));
+}
+
+/* The legacy ▲▼ glyphs stay in the DOM only because real-engines.test.tsx
+   queries them by text (see engine comment); they never paint. */
+.ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-legacy-glyph'] {
+  display: none;
+}
+
 /* Coarse-pointer floor: physical px, never rem (the fluid 15px root erodes
    rem floors at narrow widths -- measured on the live bundle, Axe R0). */
 @media (pointer: coarse) {
   .ds-input-number.ds-input-number--modern[data-part='root'] {
     min-block-size: var(--ds-input-number-touch-target-min, 44px);
+  }
+
+  /* The stacked stepper pair cannot each reach 44px inside a 44px field: the
+     column splits the touch zone evenly (22px per half) instead of inflating
+     the input; the keyboard ArrowUp/Down path remains the APG-primary one. */
+  .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button'] {
+    min-block-size: calc(var(--ds-input-number-touch-target-min, 44px) / 2);
+  }
+}
+
+@media (forced-colors: active) {
+  /* Field grammar in system colors; status hues collapse to the frame (the
+     state semantics stay on aria-invalid, never on hue alone). */
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-size],
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-size][data-status='error'],
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-size][data-status='warning'] {
+    border-color: ButtonText;
+    background: Field;
+    color: FieldText;
+  }
+
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-size][data-disabled='true'] {
+    border-color: GrayText;
+    color: GrayText;
+    opacity: 1;
+  }
+
+  .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button'] {
+    color: ButtonText;
+  }
+  .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button']:disabled {
+    color: GrayText;
+  }
+  .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button']:focus-visible {
+    outline-color: Highlight;
   }
 }
 

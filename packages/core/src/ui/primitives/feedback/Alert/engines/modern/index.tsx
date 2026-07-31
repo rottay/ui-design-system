@@ -70,7 +70,7 @@ import React, { useState, useId } from 'react';
 import type { AlertProps, AlertType } from '../../contracts';
 import { ALERT_DEFAULTS, TONE_TO_ALERT_TYPE } from '../../contracts';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
 import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
@@ -139,7 +139,9 @@ const TYPE_ICONS: Record<AlertType, React.ReactNode> = {
  * ```
  */
 export default function ModernAlert(props: AlertProps): React.ReactElement | null {
-  const { t } = useTranslation('common');
+  // Optional provider + English floor (Spinner/Input idiom): bare compositions
+  // must not crash without an I18nProvider.
+  const i18n = useOptionalTranslation('common');
   // ---------------------------------------------------------------------------
   // State
   // ---------------------------------------------------------------------------
@@ -181,15 +183,17 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
   const compactIsResponsive = isResponsiveValue(compactProp);
 
   if (compactIsResponsive) {
+    // One channel, no physical literals: the skin's root padding chain prefers
+    // `--ds-alert-responsive-padding`. A bare `[data-responsive-id]`
+    // declaration (0,1,0) would lose to the skin's compact rule (0,4,0) —
+    // which is also why the old literal padding/font-size entries were dead.
     responsiveEntries.push({
-      cssProperty: 'padding',
+      cssProperty: '--ds-alert-responsive-padding',
       value: compactProp,
-      resolve: (v: boolean) => v ? '0.5rem 0.75rem' : '1rem',
-    } as ResponsivePropEntry<any>);
-    responsiveEntries.push({
-      cssProperty: 'font-size',
-      value: compactProp,
-      resolve: (v: boolean) => v ? '0.8125rem' : '0.875rem',
+      resolve: (v: boolean) =>
+        v
+          ? 'var(--ds-alert-compact-padding, var(--ds-spacing-sm) var(--ds-spacing-md))'
+          : 'var(--ds-alert-padding)',
     } as ResponsivePropEntry<any>);
   }
 
@@ -264,7 +268,7 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
           type="button"
           data-part="action"
           onClick={handleClose}
-          aria-label={t('close')}
+          aria-label={i18n?.t('close') ?? 'Close'}
         >
           <ActionCloseIcon decorative size={16} />
         </button>

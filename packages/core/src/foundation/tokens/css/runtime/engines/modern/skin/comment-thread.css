@@ -1,11 +1,13 @@
 /**
  * Modern CommentThread skin (Lote 2 rebuild).
  *
- * DELIBERATELY UNLAYERED (P-76): every `rottay-*` layer sorts before Tailwind's
- * `base` layer, so a layered rule cannot paint these elements at all.
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-engines)`; its geometry
+ * targets `data-part` wrappers no preflight rule contests.
  *
  * SCOPE ROOT: the root `<div>` carries `ds-pattern-comment-thread ds-engine-modern`
- * + `data-part='root'` (plus `data-loading` on the loading early-return).
+ * + `data-part='root'` (plus `data-loading='true'` on the loading early-return,
+ * whose centering geometry lives here -- the engine stamps no layout classes).
  *
  * SINGLE PAINT OWNER PER CONTROL (Lote 2 law): the pattern COMPOSES public
  * primitives -- Avatar (author/composer), Textarea (composer/reply/edit),
@@ -26,8 +28,10 @@
  * narrow cut collapses the rail indent and lets the head row wrap, so the
  * thread survives below 400px. The composition defines the cut.
  *
- * SPECIFICITY (P-48): the only border paint left (the rail) reaches (0,4,0)
- * via the two root classes + the repeated `data-part`.
+ * SPECIFICITY (P-48): the only border paint left (the rail) must clear the
+ * tenant `html[data-tenant]…*` border-color floor at (0,3,1); it reaches
+ * (0,4,0) through the always-stamped root `data-part` ancestor -- repeating
+ * an attribute on one element is forbidden.
  */
 
 .ds-pattern-comment-thread.ds-engine-modern[data-part='root'] {
@@ -36,6 +40,16 @@
   inline-size: 100%;
   min-inline-size: 0;
   color: var(--ds-color-text-primary);
+}
+
+/* ---- loading: quiet centered Spinner (the engine stamps only data-loading;
+        the old `flex justify-center items-center py-12` utility chain drains
+        here -- padding keeps the token's density scaling). ---- */
+.ds-pattern-comment-thread.ds-engine-modern[data-part='root'][data-loading='true'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--ds-spacing-12, 48px);
 }
 
 /* ---- comment structure: row + main column ---- */
@@ -131,7 +145,8 @@
   margin-block-start: var(--ds-spacing-2, 8px);
   padding-inline-start: var(--ds-comment-thread-rail-padding, var(--ds-spacing-3, 12px));
 }
-.ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line'][data-part='nested-line'] {
+.ds-pattern-comment-thread.ds-engine-modern[data-part='root']
+  [data-part='nested-line'] {
   border-inline-start: var(--ds-comment-thread-rail-width, 1px) solid
     var(--ds-comment-thread-rail-color, var(--ds-color-border));
 }
@@ -159,5 +174,14 @@
   .ds-pattern-comment-thread.ds-engine-modern [data-part='reply-cancel'],
   .ds-pattern-comment-thread.ds-engine-modern [data-part='submit'] {
     min-block-size: var(--ds-comment-thread-touch-target-min, 44px);
+  }
+}
+
+/* ---- forced colors: the threading rail is the only pattern-owned paint;
+        it reads as ButtonText (every control's own frame/ring is already
+        forced by its primitive skin). ---- */
+@media (forced-colors: active) {
+  .ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line'] {
+    border-inline-start-color: ButtonText;
   }
 }

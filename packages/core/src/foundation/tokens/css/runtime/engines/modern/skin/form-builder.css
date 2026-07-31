@@ -1,60 +1,49 @@
 /**
- * Modern FormBuilder skin (WO-SKIN-06 checkpoint CK-D/F).
+ * Modern FormBuilder skin.
  *
- * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
- * unnamed `base` layer, so a layered rule loses to preflight regardless of
- * specificity. Unlayered outranks preflight and still yields to a caller's inline
- * `style` -- which two rules below DEPEND on; see constraints 1 and 2.
+ * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
+ * rottay-engines)` — this file does not control its own layering (the older
+ * "deliberately unlayered" note predates that wiring). Caller inline `style`
+ * still wins over every rule here, which the root max-inline-size DEPENDS on.
  *
- * SCOPE ROOT is the `<form>` carrying `ds-pattern-form-builder ds-engine-modern`
- * + `data-part='root'`. The loading early-return is a `<div>` carrying the same
- * pair + `data-loading='true'`.
+ * SCOPE ROOT is the `<form>` carrying `ds-pattern-form-builder
+ * ds-engine-modern` + `data-part='root'` (the loading early-return is a
+ * `<div>` with the same pair + `data-loading='true'`). Class/attribute
+ * repetition is prohibited: the (0,4,0) border-color floor noted by the old
+ * P-48 is now bought from the root scope (0,3,0) + a single target part
+ * (0,1,0) instead of a repeated attribute.
  *
- * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
- * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
- * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
- * `data-part` REPEATED (0,2,0), or + a contract attribute (`data-active`,
- * `data-completed`). Non-border paint wins unlayered at (0,3,0). Pure
- * `border: none` / `background: none` resets carry no colour and are exempt.
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to
+ * clear the tenant `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1).
  *
- * THREE RUNTIME CONSTRAINTS, all load-bearing:
+ * RUNTIME-STYLE BOUNDARY (what stays inline in the engine, and why):
+ * - `grid-template-columns` on `[data-part='fields']` and `grid-column:
+ *   span N` on `[data-part='field']` are runtime-computed and PINNED by
+ *   `PatternFormBuilder.responsive.test.tsx` (`[style*="grid-template-
+ *   columns: repeat(N"]` / `[style*="grid-column: span N"]` queries).
+ * - The collapse `max-height`/`opacity` and the caller `gap` are runtime
+ *   values (the ScrollArea/maxHeight precedent).
+ * - THE COLOR SWATCH KEEPS ITS INLINE `background` — ON PURPOSE. It paints
+ *   `String(val)`, the hex the user actually picked: a value computed FROM
+ *   DATA, not selected from a token set, so it can never be enumerated in
+ *   CSS. The checkpoint's contract test PINS this (`FormsBatch.contract.
+ *   test.tsx:255-256` asserts the swatch paints `background` inline AND that
+ *   it does NOT contain `var(--ds-`). By the same evidence (user-picked
+ *   color data, the ColorPicker case) the swatch keeps its color under
+ *   forced colors via an explicit, documented `forced-color-adjust: none`.
  *
- * 1. THE COLOR SWATCH KEEPS ITS INLINE `background` -- ON PURPOSE. It paints
- *    `String(val)`, the hex the user actually picked: a value computed FROM DATA,
- *    not selected from a token set, so it can never be enumerated in CSS. The
- *    checkpoint's contract test PINS this (`FormsBatch.contract.test.tsx:255-256`
- *    asserts the swatch paints `background` inline AND that it does NOT contain
- *    `var(--ds-`), which also forbids the custom-property hatch. Only the swatch's
- *    static `border` and `border-radius` moved here.
+ * SKELETON ANATOMY: six bars share `data-part='skeleton-bar'` and differ by
+ * `data-variant` (title/description/label/field/action/action-wide) — the
+ * variant is the only thing that tells their geometries apart; do not
+ * "simplify" the rules into one (the label bar's tighter radius is real).
  *
- * 2. SIX ELEMENTS SHARE `data-part='skeleton-bar'` AND ONE HAS A DIFFERENT RADIUS.
- *    Five use `--ds-radius-md`; the field-LABEL shimmer uses `--ds-radius-sm`.
- *    Nothing in the stamped anatomy distinguished them, so `data-variant='label'`
- *    now does. Do not "simplify" the two rules into one -- the tighter radius on
- *    the label bar is real and the majority rule would swallow it.
- *
- * 3. `readonly-value` RESOLVES ITS COLOUR IN TWO PLACES. The base object painted
- *    `--ds-color-text-primary`; the `empty` and `file` cases spread it and then
- *    OVERWROTE `color` with `--ds-color-text-muted` (P-78: a later key silently
- *    beating an earlier spread). Both halves move together below -- lifting only
- *    the base would have handed those two cases back the primary colour with every
- *    value unchanged.
- *
- * KEYFRAME NAMESPACE: the skeleton shimmer's `@keyframes formBuilderPulse` was
- * injected per-mount from a `<style>` child. Moved here and renamed to the
- * component+engine namespace so it cannot shadow, or be shadowed by, the global
- * `pulse` or any sibling engine's copy.
- *
- * LOTE 2 REBUILD (lane-A): the hand-rolled wizard step rail (step-button /
- * connector / indicator / label) is the public `Steps` navigation primitive
- * now, and every action (section disclosure, wizard prev/next) is a `Button`
- * primitive -- this file no longer paints any step or button chrome (the old
- * rules were deleted, not moved). What it owns: head/section typography
- * (drained from inline literals), the skeleton shimmer (animation drained),
- * disclosure geometry + hairline, collapse cadence, wizard/action-bar layout,
- * the container query and the coarse/reduced-motion floors.
- *
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * COMPOSITION: field chrome belongs to the FormField primitive, wizard
+ * chrome to Steps, every action to Button, empty schema to Empty — this
+ * file paints only the pattern chrome: head/section typography, skeleton
+ * shimmer, readonly values, disclosure geometry + hairline, collapse
+ * cadence, fields-layout rhythm, wizard/action-bar layout, the container
+ * query and the coarse/reduced-motion floors.
  */
 
 @keyframes ds-form-builder-modern-pulse {
@@ -67,7 +56,15 @@
   }
 }
 
-/* ---- title + description (typography drained from inline literals) ---- */
+/* ---- root: named container + caller-overridable measure ---- */
+.ds-pattern-form-builder.ds-engine-modern[data-part='root'] {
+  inline-size: 100%;
+  max-inline-size: var(--ds-form-builder-max-inline-size, 720px);
+  container-type: inline-size;
+  container-name: ds-form-builder;
+}
+
+/* ---- title + description ---- */
 .ds-pattern-form-builder.ds-engine-modern [data-part='head'] {
   margin-block-end: var(--ds-spacing-6, 24px);
 }
@@ -85,43 +82,96 @@
   line-height: var(--ds-line-height-snug, 1.375);
 }
 
-/* ---- loading skeleton. Five of the six bars share a radius; the field-LABEL
-        shimmer is tighter, and `data-variant` is the only thing that tells them
-        apart -- see constraint 2. Animation drained from inline (reduced-motion
-        now governs it). ---- */
+/* ---- loading skeleton: animation drained from inline (reduced-motion
+        governs); bar geometry lives on data-variant (see SKELETON ANATOMY). ---- */
 .ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'] {
   border-radius: var(--ds-radius-md);
   background: var(--ds-surface-panel);
-  animation: ds-form-builder-modern-pulse var(--ds-form-builder-skeleton-duration, 2s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
+  animation: ds-form-builder-modern-pulse
+    var(--ds-form-builder-skeleton-duration, calc(var(--ds-motion-glacial, 500ms) * 4))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'][data-variant='title'] {
+  block-size: 20px;
+  inline-size: 40%;
+  margin-block-end: var(--ds-spacing-2, 8px);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'][data-variant='description'] {
+  block-size: 14px;
+  inline-size: 65%;
+  margin-block-end: 28px;
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-field'] {
+  margin-block-end: var(--ds-spacing-6, 24px);
 }
 .ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'][data-variant='label'] {
+  block-size: 14px;
+  inline-size: 100px;
+  margin-block-end: var(--ds-spacing-2, 8px);
   border-radius: var(--ds-radius-sm);
 }
+.ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'][data-variant='field'] {
+  block-size: 40px;
+  inline-size: 100%;
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'][data-variant='action'],
+.ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'][data-variant='action-wide'] {
+  block-size: 36px;
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'][data-variant='action'] {
+  inline-size: 80px;
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'][data-variant='action-wide'] {
+  inline-size: 100px;
+}
 
-/* ---- read-only values. Base colour + the two cases that overrode it (constraint 3). ---- */
+/* ---- read-only values: geometry drained from the old readOnlyTextStyle
+        spread; base colour + the two cases that overrode it. ---- */
 .ds-pattern-form-builder.ds-engine-modern [data-part='readonly-value'] {
+  display: inline-block;
+  min-block-size: 36px;
+  padding-block: var(--ds-spacing-2, 8px);
   color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-sm, 14px);
+  line-height: 20px;
 }
 .ds-pattern-form-builder.ds-engine-modern [data-part='readonly-value'][data-field-type='empty'],
 .ds-pattern-form-builder.ds-engine-modern [data-part='readonly-value'][data-field-type='file'] {
   color: var(--ds-color-text-muted);
 }
+.ds-pattern-form-builder.ds-engine-modern [data-part='readonly-value'][data-field-type='color'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+}
 
-/* ---- the colour swatch's static chrome. Its `background` stays inline -- constraint 1. ---- */
-.ds-pattern-form-builder.ds-engine-modern [data-part='color-swatch'][data-part='color-swatch'] {
+/* ---- the colour swatch's static chrome. Its `background` stays inline
+        (user-picked data — see RUNTIME-STYLE BOUNDARY). ---- */
+.ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='color-swatch'] {
+  inline-size: 20px;
+  block-size: 20px;
   border-radius: var(--ds-radius-sm);
   border: 1px solid var(--ds-color-border);
 }
 
 /* ---- upload trigger ---- */
-.ds-pattern-form-builder.ds-engine-modern [data-part='upload-trigger'][data-part='upload-trigger'] {
+.ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='upload-trigger'] {
+  display: inline-block;
+  padding-block: 6px;
+  padding-inline: var(--ds-spacing-4, 16px);
   color: var(--ds-color-text-primary);
   background: var(--ds-surface-canvas);
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
+  font-size: var(--ds-font-size-sm, 14px);
+  cursor: pointer;
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='upload-trigger'][data-disabled='true'] {
+  cursor: not-allowed;
 }
 
-/* ---- per-field help + error text (typography drained from inline) ---- */
+/* ---- per-field help + error text (the labelled-field chrome itself —
+        label, required mark, error slot — belongs to FormField). ---- */
 .ds-pattern-form-builder.ds-engine-modern [data-part='field-description'] {
   margin-block-start: var(--ds-spacing-1, 4px);
   color: var(--ds-color-text-muted);
@@ -135,17 +185,37 @@
   line-height: var(--ds-line-height-snug, 1.375);
 }
 
+/* ---- field wrapper + layout containers. Display rhythm per data-layout;
+        the runtime column count / spans / gap stay inline (pins). ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='field'] {
+  inline-size: 100%;
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='fields'][data-layout='grid'] {
+  display: grid;
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='fields'][data-layout='horizontal'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='fields'][data-layout='vertical'] {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- empty schema (composed Empty primitive): rhythm only ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='empty'] {
+  padding-block: var(--ds-form-builder-empty-padding-block, var(--ds-spacing-8, 32px));
+}
+
 /* ---- wizard step rail: the public Steps primitive renders inside; the
-        pattern owns only the row offset. (The old step-button/connector/
-        indicator/label rules are gone -- Steps' own skin is the single paint
-        owner for every step chrome.) ---- */
+        pattern owns only the row offset. ---- */
 .ds-pattern-form-builder.ds-engine-modern [data-part='step-list'] {
   margin-block-end: var(--ds-form-builder-step-list-offset, var(--ds-spacing-8, 32px));
 }
 
-/* ---- sections. The header reset `border` before setting `border-bottom`; the
-        order is preserved because a shorthand must not clobber the longhand. ---- */
-.ds-pattern-form-builder.ds-engine-modern [data-part='section-divider'] {
+/* ---- sections. ---- */
+.ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='section-divider'] {
   block-size: 1px;
   margin-block: var(--ds-form-builder-section-divider-gap, 28px);
   background: var(--ds-color-border);
@@ -166,7 +236,7 @@
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-header'][data-collapsed='true'] {
   margin-block-end: 0;
 }
-.ds-pattern-form-builder.ds-engine-modern [data-part='section-header'][data-part='section-header'] {
+.ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='section-header'] {
   border-bottom: 1px solid var(--ds-color-border);
 }
 
@@ -184,9 +254,9 @@
   line-height: var(--ds-line-height-snug, 1.375);
 }
 
-/* ---- collapse chevron: the rotation is STATE-SELECTED off `data-collapsed`;
-        the transition moved here from inline so reduced-motion governs it. ---- */
+/* ---- collapse chevron: the rotation is STATE-SELECTED off `data-collapsed`. ---- */
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-chevron'] {
+  flex-shrink: 0;
   color: var(--ds-color-text-muted);
   transform: rotate(0deg);
   transition: transform var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
@@ -196,8 +266,9 @@
 }
 
 /* ---- section content collapse: runtime max-height/opacity stay inline;
-        the cadence is skin-owned so reduced-motion can silence it. ---- */
+        the cadence + overflow are skin-owned so reduced-motion can silence it. ---- */
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-content'] {
+  overflow: hidden;
   transition:
     max-height var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out),
     opacity var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
@@ -213,7 +284,7 @@
   margin-block-start: var(--ds-form-builder-wizard-nav-offset, 28px);
   padding-block-start: var(--ds-spacing-5, 20px);
 }
-.ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav'][data-part='wizard-nav'] {
+.ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav']:has(> div) {
   border-top: 1px solid var(--ds-color-border);
 }
 .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav-end'] {
@@ -240,19 +311,14 @@
   margin-block-start: var(--ds-spacing-8, 32px);
   padding-block-start: var(--ds-spacing-5, 20px);
 }
-.ds-pattern-form-builder.ds-engine-modern [data-part='action-bar'][data-part='action-bar'] {
+.ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='action-bar'] {
   border-top: 1px solid var(--ds-color-border);
 }
 
 /* ---- responsive + coarse + reduced-motion ------------------------------- */
 
-/* The root is the composition's named container; autoAdaptive stays JS-driven
-   (useBreakpoints) and this container query only handles the nav bar wrap. */
-.ds-pattern-form-builder.ds-engine-modern[data-part='root'] {
-  container-type: inline-size;
-  container-name: ds-form-builder;
-}
-
+/* autoAdaptive stays JS-driven (useBreakpoints); this container query only
+   handles the nav bar wrap. */
 @container ds-form-builder (inline-size < 30rem) {
   .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav'] {
     flex-direction: column;
@@ -279,5 +345,42 @@
   .ds-pattern-form-builder.ds-engine-modern [data-part='section-chevron'],
   .ds-pattern-form-builder.ds-engine-modern [data-part='section-header'] {
     transition: none;
+  }
+}
+
+/* ---- forced colors: system colors only. The one documented opt-out is the
+        colour swatch — it shows the hex the user actually picked (data, the
+        ColorPicker evidence); forcing it to a system colour would lie about
+        the value. Everything else re-expresses in system ink. ---- */
+@media (forced-colors: active) {
+  .ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='color-swatch'] {
+    forced-color-adjust: none;
+  }
+
+  .ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='section-divider'] {
+    background: ButtonText;
+  }
+
+  .ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='section-header'],
+  .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav']:has(> div),
+  .ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='action-bar'] {
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'] {
+    background: GrayText;
+  }
+
+  .ds-pattern-form-builder.ds-engine-modern[data-part='root'] [data-part='upload-trigger'] {
+    background: ButtonFace;
+    border-color: ButtonText;
+    color: ButtonText;
+  }
+
+  .ds-pattern-form-builder.ds-engine-modern [data-part='field-error'],
+  .ds-pattern-form-builder.ds-engine-modern [data-part='readonly-value'],
+  .ds-pattern-form-builder.ds-engine-modern [data-part='readonly-value'][data-field-type='empty'],
+  .ds-pattern-form-builder.ds-engine-modern [data-part='readonly-value'][data-field-type='file'] {
+    color: CanvasText;
   }
 }

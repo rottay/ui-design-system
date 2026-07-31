@@ -1,15 +1,21 @@
 /**
- * Modern CalendarView pattern skin (WO-SKIN-06 CK-E; Lote-2 composition uplift).
+ * Modern CalendarView pattern skin.
  *
- * Deliberately unlayered. All selectors are owned by the modern pattern root;
- * border-colour declarations clear the tenant floor through root/part state.
+ * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
+ * rottay-engines)` — this file does not control its own layering (the older
+ * "deliberately unlayered" note predates that wiring). Caller inline `style`
+ * still wins over every rule here.
  *
- * COMPOSITION LAW (Lote 2): the toolbar composes Button primitives (previous /
- * next / today) and a Select primitive (view switch), and loading composes
- * the Spinner primitive — they own their chrome, states and focus rings. This
+ * SCOPE ROOT is `.ds-pattern-calendar-view.ds-engine-modern[data-part='root']`
+ * (two distinct classes + one attribute, (0,3,0); class/attribute repetition
+ * is prohibited — the border-colour rules reach the tenant floor from this
+ * scope + a single target part, never a repeated attribute).
+ *
+ * COMPOSITION LAW: the toolbar composes Button primitives (previous / next /
+ * today) and a Select primitive (view switch), and loading composes the
+ * Spinner primitive — they own their chrome, states and focus rings. This
  * stylesheet paints only what the PATTERN owns: grid frame, weekday header,
- * day cells, date labels and event chips. The former button/select resets
- * and the spinner ring are retired (duplication).
+ * day cells, date labels and event chips.
  *
  * GRID DISPLAY: the `grid grid-cols-7` utilities stay on the element —
  * the public test contract pins `[style*=grid-template-columns],.grid-cols-7`.
@@ -18,6 +24,19 @@
  * EVENT ACCENT HATCH: `CalendarEvent.color` is consumer-supplied config data;
  * it rides the quoted `--ds-calendar-event-accent` custom property the engine
  * stamps per chip, and the single rule below owns the fill (one paint owner).
+ * In forced colors the accent data deliberately DISAPPEARS (documented
+ * decision): events read by their title text inside a system-ink frame —
+ * there is no forced-color-adjust opt-out, the chip is not a color picker.
+ *
+ * HOVER LAW: day cells and event chips are interactive, so their hover is
+ * hover-capable-only (`@media (hover: hover)`) with a matching `:active`;
+ * the chip's `filter` transition finally has the state it was declared for.
+ * Event chips are real keyboard targets (role=button), so they get a
+ * `:focus-visible` ring.
+ *
+ * TODAY: marked by SHAPE (an inset ring on the date label) plus ink and
+ * weight — never by hue alone; in forced colors the ring re-expresses as
+ * Highlight.
  *
  * LOGICAL: cell borders are `border-inline-end`/`border-block-end` (the
  * retired `border-r` mirrored nothing under RTL) and the date label aligns
@@ -56,8 +75,10 @@
   display: inline-flex;
 }
 
-/* ---- grid frame (display/columns are the pinned utilities; frame is ours) ---- */
-.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'][data-part='grid'] {
+/* ---- grid frame + seven-column geometry ---- */
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'] {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-lg);
   overflow: hidden;
@@ -76,7 +97,7 @@
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='weekday'][data-part='weekday'] {
+  > [data-part='weekday'] {
   border-block-end: 1px solid var(--ds-color-border);
 }
 
@@ -89,13 +110,13 @@
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell'][data-part='day-cell'] {
+  > [data-part='day-cell'] {
   border-inline-end: 1px solid var(--ds-color-border);
   border-block-end: 1px solid var(--ds-color-border);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell'][data-part='day-cell'][data-last-column='true'] {
+  > [data-part='day-cell'][data-last-column='true'] {
   border-inline-end: none;
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
@@ -103,6 +124,19 @@
   > [data-part='day-cell'][data-empty='false'] {
   background: var(--ds-surface-card);
   cursor: pointer;
+  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+@media (hover: hover) {
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    > [data-part='day-cell'][data-empty='false']:hover {
+    background: var(--ds-surface-inset);
+  }
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell'][data-empty='false']:active {
+  background: var(--ds-surface-inset);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
@@ -110,7 +144,7 @@
   background: var(--ds-surface-inset);
 }
 
-/* ---- date label (today = primary accent + semibold) ---- */
+/* ---- date label (today = shape ring + primary ink + semibold) ---- */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
   > [data-part='day-cell']
@@ -123,6 +157,8 @@
   > [data-part='grid']
   > [data-part='day-cell']
   > [data-part='date-label'][data-today='true'] {
+  border-radius: var(--ds-radius-sm);
+  box-shadow: inset 0 0 0 1px var(--ds-color-primary);
   color: var(--ds-color-primary);
   font-weight: var(--ds-font-weight-semibold);
 }
@@ -143,6 +179,27 @@
   color: var(--ds-color-text-on-primary);
   font-size: var(--ds-font-size-xs, 0.75rem);
   transition: filter var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+@media (hover: hover) {
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    > [data-part='day-cell']
+    [data-part='event']:hover {
+    filter: brightness(1.06);
+  }
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell']
+  [data-part='event']:active {
+  filter: brightness(0.94);
+}
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell']
+  [data-part='event']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
@@ -177,8 +234,66 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
+    > [data-part='day-cell'],
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
     > [data-part='day-cell']
     [data-part='event'] {
     transition: none;
+  }
+}
+
+/* ---- forced colors: system colors only. The event accent is consumer DATA
+        and deliberately disappears (documented above): chips read by title
+        text inside a system-ink frame. The today marker keeps its shape via
+        a Highlight ring; grid hairlines re-express as ButtonText. ---- */
+@media (forced-colors: active) {
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'],
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    > [data-part='weekday'],
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    > [data-part='day-cell'] {
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    > [data-part='weekday'],
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    > [data-part='day-cell'][data-empty='true'] {
+    background: Canvas;
+  }
+
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    > [data-part='day-cell']
+    > [data-part='date-label'][data-today='true'] {
+    box-shadow: inset 0 0 0 1px Highlight;
+    color: CanvasText;
+  }
+
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    > [data-part='day-cell']
+    [data-part='event'] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    color: CanvasText;
+  }
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    > [data-part='day-cell']
+    [data-part='event']:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    > [data-part='day-cell']
+    [data-part='overflow-count'] {
+    color: GrayText;
   }
 }

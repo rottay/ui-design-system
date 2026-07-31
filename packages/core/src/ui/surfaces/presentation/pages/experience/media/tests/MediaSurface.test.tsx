@@ -56,7 +56,7 @@ describe('MediaSurface', () => {
   it('changes selection and routes item actions through the active media item', async () => {
     const config = buildConfig();
 
-    renderSurface(<MediaSurface config={config} />);
+    renderSurface(<MediaSurface config={config} />, { engine: 'modern' });
 
     fireEvent.click(await screen.findByText('Crowd Closeup'));
 
@@ -99,7 +99,7 @@ describe('MediaSurface', () => {
       },
     });
 
-    renderSurface(<MediaSurface config={controlledConfig} />);
+    renderSurface(<MediaSurface config={controlledConfig} />, { engine: 'modern' });
 
     fireEvent.click(await screen.findByText('Crowd Closeup'));
 
@@ -165,7 +165,7 @@ describe('MediaSurface', () => {
           },
         })}
       />,
-      { responsiveContext: RESOLVED_PHONE_TEST_CONTEXT }
+      { engine: 'modern', responsiveContext: RESOLVED_PHONE_TEST_CONTEXT }
     );
 
     expect(screen.getAllByText('Main Stage Hero').length).toBeGreaterThanOrEqual(1);

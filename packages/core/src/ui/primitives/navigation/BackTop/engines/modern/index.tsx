@@ -73,6 +73,13 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
     // engine renders in tests/Storybook isolation) fall back to the
     // documented English accessibility string instead of throwing.
     const i18n = useOptionalTranslation('components');
+    // Localized aria-label with an English floor: a missing catalogue entry
+    // echoes the full key back, which must never reach an aria-label.
+    const resolvedLabel = i18n?.t('backTop.back_to_top');
+    const ariaLabel =
+      resolvedLabel && resolvedLabel !== 'backTop.back_to_top' && resolvedLabel !== 'components.backTop.back_to_top'
+        ? resolvedLabel
+        : 'Back to top';
 
     const {
       target,
@@ -132,14 +139,21 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
     // ========================================================================
 
     /**
-     * Handles button click - scrolls to top and triggers callback.
+     * Handles button click - scrolls to top and triggers callback. The
+     * motion authority gates the animation: under reduced motion the jump is
+     * instant (the smooth behavior animates regardless of OS preference).
      */
     const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
       const t = getTarget();
+      const prefersReducedMotion =
+        typeof window !== 'undefined' &&
+        typeof window.matchMedia === 'function' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const behavior: ScrollBehavior = prefersReducedMotion ? 'instant' : 'smooth';
       if (t === window) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior });
       } else {
-        (t as HTMLElement).scrollTo({ top: 0, behavior: 'smooth' });
+        (t as HTMLElement).scrollTo({ top: 0, behavior });
       }
       onClick?.(e);
     };
@@ -156,13 +170,14 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
       <button
         ref={ref}
         type="button"
-        // `end-8` is LOGICAL (inset-inline-end): the button parks at the
-        // inline-end corner in both writing directions. Sizing, chrome and
-        // interaction states are skin-owned (`back-top.css`).
-        className={`rottay-backtop rottay-backtop--modern fixed bottom-8 end-8 z-50 ${className}`}
+        // `end-8` is LOGICAL (inset-inline-end) and test-pinned -- it stays as
+        // a bridge string while the skin OVERRIDES its inline-end paint at the
+        // same 2rem value (single geometry owner, pinned-class precedent).
+        // Position, block-end inset and z-index are skin-owned.
+        className={`rottay-backtop rottay-backtop--modern end-8 ${className}`}
         style={style}
         onClick={handleClick}
-        aria-label={i18n?.t('backTop.back_to_top') ?? 'Back to top'}
+        aria-label={ariaLabel}
         data-part="trigger"
       >
         {/* Default governed semantic glyph; consumers can override with

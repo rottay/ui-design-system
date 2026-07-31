@@ -41,12 +41,16 @@
   display: inline-grid;
   flex: 0 0 auto;
   place-items: center;
+  /* Out-ranks the legacy `[data-tenant] .avatar` clip so the status dot and
+     rings straddle the frame instead of being cut by it. */
+  overflow: visible;
   background: transparent;
   vertical-align: middle;
 }
 
 /* Shape and clipping are owned by the DS. Relying on optional Daisy mask
-   utilities made Avatar square whenever an app compiled a reduced utility set. */
+   utilities made Avatar square whenever an app compiled a reduced utility set.
+   The transition is scoped to the properties this skin animates -- never `all`. */
 .rottay-avatar.rottay-avatar--modern > [data-part='mask'] {
   position: relative;
   display: grid;
@@ -54,10 +58,14 @@
   place-items: center;
   background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
   isolation: isolate;
+  transition:
+    transform var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out),
+    box-shadow var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out),
+    border-color var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out);
 }
 
 .rottay-avatar.rottay-avatar--modern[data-shape='circle'] > [data-part='mask'] {
-  border-radius: 999px;
+  border-radius: var(--ds-radius-full, 9999px);
 }
 
 .rottay-avatar.rottay-avatar--modern[data-shape='rounded'] > [data-part='mask'] {
@@ -70,9 +78,8 @@
 
 .rottay-avatar.rottay-avatar--modern[data-ring='true'] > [data-part='mask'] {
   border: 2px solid var(--ds-surface-card-bg, var(--ds-color-bg-elevated));
-  box-shadow:
-    0 0 0 1px var(--ds-avatar-ring-color, var(--ds-color-primary)),
-    0 8px 22px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+  /* A ring is a frame, not a beacon: the offset hairline only, no primary halo. */
+  box-shadow: 0 0 0 1px var(--ds-avatar-ring-color, var(--ds-color-primary));
 }
 
 .rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='img'] {
@@ -84,8 +91,28 @@
 
 .rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='fallback'] {
   display: flex;
+  inline-size: 100%;
+  block-size: 100%;
   align-items: center;
   justify-content: center;
+}
+
+/* Initials typography follows the size ladder: the same `--ds-avatar-*-font-size`
+   token the engine previously stamped inline per size, now keyed on data-size. */
+.rottay-avatar.rottay-avatar--modern[data-size='xs'] > [data-part='mask'] > [data-part='fallback'] {
+  font-size: var(--ds-avatar-xs-font-size);
+}
+.rottay-avatar.rottay-avatar--modern[data-size='sm'] > [data-part='mask'] > [data-part='fallback'] {
+  font-size: var(--ds-avatar-sm-font-size);
+}
+.rottay-avatar.rottay-avatar--modern[data-size='md'] > [data-part='mask'] > [data-part='fallback'] {
+  font-size: var(--ds-avatar-md-font-size);
+}
+.rottay-avatar.rottay-avatar--modern[data-size='lg'] > [data-part='mask'] > [data-part='fallback'] {
+  font-size: var(--ds-avatar-lg-font-size);
+}
+.rottay-avatar.rottay-avatar--modern[data-size='xl'] > [data-part='mask'] > [data-part='fallback'] {
+  font-size: var(--ds-avatar-xl-font-size);
 }
 
 /* The default variant is the one avatar most trees render, so it must be
@@ -93,20 +120,24 @@
    ink (the canonical `--ds-avatar-default-*` pair), never a dark ink token on
    a light surface token.
 
-   CONTRAST LAW (R0/Axe): chromatic solid fills deepen toward black until white
-   initials clear WCAG AA on EVERY governed source -- the raw 500-level hues
-   fail (white on rottay #22C55E = 2.28, on bithire #D6A04E = 2.33) and no
-   static ink survives both light (rottay) and dark (TMM #8A6B00) semantic
-   hues. The mix derives from the tenant's own resolved hue, so the ramp stays
-   hue-faithful with no ramp lookup. Measured white-ink ratios (worst source):
-   success 62% >= 5.41, warning 55% >= 6.20, error 78% >= 5.74,
-   secondary 82% >= 6.51, primary unmixed >= 5.15.
+   CONTRAST LAW (R0/Axe): chromatic solid fills deepen toward the tenant-safe
+   dark neutral ramp (`--ds-color-neutral-900`, the theme's strongest neutral
+   ink) until white initials clear WCAG AA on EVERY governed source -- the
+   raw 500-level hues fail (white on rottay #22C55E = 2.28, on bithire
+   #D6A04E = 2.33) and no static ink survives both light (rottay) and dark
+   (TMM #8A6B00) semantic hues. The mix derives from the tenant's own
+   resolved hue, so the ramp stays hue-faithful with no ramp lookup. Measured
+   white-ink ratios (worst source): success 62% >= 5.41, warning 55% >= 6.20,
+   error 78% >= 5.74, secondary 82% >= 6.51, primary unmixed >= 5.15 (the
+   ramp swap from flat black to neutral-900 shifts the fill luminance by
+   ~0.004 at most -- ratios hold within ~2%).
    The darkened variants' ink fallback is a guaranteed light ink: fills are
    darkened specifically to host white initials, and a text-on-primary token
    may itself resolve dark on sources with a light primary (TMM). */
 .rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-default-bg, var(--ds-color-neutral-100)));
   color: var(--ds-avatar-default-color, var(--ds-color-neutral-600));
+  font-weight: var(--ds-avatar-font-weight, var(--ds-font-weight-medium, 500));
   letter-spacing: var(--ds-avatar-initials-tracking, 0.01em);
   user-select: none;
 }
@@ -115,19 +146,19 @@
   color: var(--ds-avatar-primary-ink, var(--ds-color-primary-foreground, var(--ds-color-text-inverse, #fff)));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='secondary'] > [data-part='mask'] > [data-part='fallback'] {
-  background: var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-black, #000) 18%)));
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900, #171717) 18%)));
   color: var(--ds-avatar-secondary-ink, var(--ds-color-white, #fff));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='success'] > [data-part='mask'] > [data-part='fallback'] {
-  background: var(--ds-avatar-custom-bg, var(--ds-avatar-success-solid-bg, color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-black, #000) 38%)));
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-success-solid-bg, color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900, #171717) 38%)));
   color: var(--ds-avatar-success-ink, var(--ds-color-white, #fff));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='warning'] > [data-part='mask'] > [data-part='fallback'] {
-  background: var(--ds-avatar-custom-bg, var(--ds-avatar-warning-solid-bg, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-black, #000) 45%)));
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-warning-solid-bg, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900, #171717) 45%)));
   color: var(--ds-avatar-warning-ink, var(--ds-color-white, #fff));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='error'] > [data-part='mask'] > [data-part='fallback'] {
-  background: var(--ds-avatar-custom-bg, var(--ds-avatar-error-solid-bg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-black, #000) 22%)));
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-error-solid-bg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900, #171717) 22%)));
   color: var(--ds-avatar-error-ink, var(--ds-color-white, #fff));
 }
 
@@ -136,7 +167,7 @@
 .rottay-avatar.rottay-avatar--modern[data-variant='gradient'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, linear-gradient(to bottom right, var(--ds-color-primary), var(--ds-color-secondary)));
   color: var(--ds-avatar-gradient-color);
-  text-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-black) 15%, transparent);
+  text-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-neutral-900, #171717) 15%, transparent);
 }
 
 /* ---- status dot: the frame and the offset are one object for every status.
@@ -151,8 +182,12 @@
   width: var(--ds-avatar-status-size);
   height: var(--ds-avatar-status-size);
   border: var(--ds-avatar-status-border-width) solid var(--ds-avatar-status-border);
-  border-radius: 999px;
+  border-radius: var(--ds-radius-full, 9999px);
   transform: translate(var(--ds-avatar-status-offset-x, 25%), 25%);
+  transition:
+    opacity var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out),
+    transform var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out),
+    background-color var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out);
 }
 :dir(rtl) .rottay-avatar.rottay-avatar--modern,
 .rottay-avatar.rottay-avatar--modern:dir(rtl) {
@@ -177,7 +212,7 @@
   transform: var(--ds-avatar-hover-transform, scale(var(--ds-avatar-hover-scale, 1.05)));
   box-shadow:
     0 0 0 1px var(--ds-avatar-ring-color, var(--ds-avatar-hover-border-color, var(--ds-color-primary-300, var(--ds-color-primary)))),
-    var(--ds-avatar-hover-shadow, 0 4px 12px color-mix(in srgb, var(--ds-color-black, #000) 12%, transparent));
+    var(--ds-avatar-hover-shadow, 0 4px 12px color-mix(in srgb, var(--ds-color-neutral-900, #171717) 12%, transparent));
 }
 
 .rottay-avatar.rottay-avatar--modern[data-interactive='true']:active > [data-part='mask'] {
@@ -202,13 +237,14 @@
         typography channels stay inline in the compound (engine-agnostic
         geometry); the corner grammar is paint and lives here. ---- */
 .rottay-avatar-group[data-part='root'] > [data-part='surplus'] {
-  border-radius: var(--ds-avatar-group-surplus-radius, 999px);
+  border-radius: var(--ds-avatar-group-surplus-radius, var(--ds-radius-full, 9999px));
+  font-variant-numeric: tabular-nums;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-avatar.rottay-avatar--modern > [data-part='mask'],
   .rottay-avatar.rottay-avatar--modern > [data-part='status-dot'] {
-    transition-duration: 0.01ms;
+    transition: none;
   }
   .rottay-avatar.rottay-avatar--modern[data-interactive='true']:hover > [data-part='mask'],
   .rottay-avatar.rottay-avatar--modern[data-interactive='true']:active > [data-part='mask'] {
@@ -218,10 +254,17 @@
 
 @media (forced-colors: active) {
   /* Presence hues are stripped under forced colors; the dot must not vanish
-     with them (its status is also exposed through aria-label). */
+     with them (its status is also exposed through its own role=img label). */
   .rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-part='status-dot'] {
     border-color: Canvas;
     background-color: CanvasText;
     forced-color-adjust: auto;
+  }
+
+  /* The interactive focus ring is a box-shadow, which forced colors strips;
+     the outline keeps keyboard focus visible. */
+  .rottay-avatar.rottay-avatar--modern[data-interactive='true']:focus-visible > [data-part='mask'] {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
   }
 }

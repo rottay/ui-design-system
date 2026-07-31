@@ -1,7 +1,11 @@
 /**
  * Modern StatsGrid skin (WO-SKIN-06 CK-I).
- * Deliberately unlayered. Modern keeps its generic surface-token vocabulary;
- * --ds-stats-grid-* remains rustic-only exactly as before this extraction.
+ * Deliberately unlayered. Modern keeps its generic surface-token vocabulary
+ * and exposes only these opt-in channels: `--ds-stats-grid-accent` (per-stat
+ * accent hatch), `--ds-stats-grid-card-padding`, `--ds-stats-grid-icon-size`
+ * and the `--ds-stats-grid-value-*` metric channels forwarded to the composed
+ * Statistic primitive. The rest of the `--ds-stats-grid-*` vocabulary remains
+ * rustic-only exactly as before this extraction.
  */
 
 .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card {
@@ -35,9 +39,109 @@
 .ds-pattern-stats-grid.ds-engine-modern
   .ds-stats-grid__card[data-variant="glass"] {
   background: color-mix(in srgb, var(--ds-surface-card) 80%, transparent);
-  backdrop-filter: blur(12px);
+  /* PRE-FLAG remediation: the default-ON blur(12px) literal is retired in
+     favor of the family glass contract (Sheet/Drawer idiom): unset, the
+     declaration is invalid at computed-value time and resolves to none —
+     the variant keeps its translucent surface and only tenants that opt into
+     `--ds-glass-backdrop-filter` get the frost. */
+  backdrop-filter: var(--ds-glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
   border: 1px solid color-mix(in srgb, var(--ds-color-border) 50%, transparent);
   border-radius: var(--ds-radius-lg);
+}
+
+/* ---- card geometry drained from the engine's inline styles ---- */
+.ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-1, 0.25rem);
+  min-width: 0;
+  overflow: hidden;
+  padding: var(--ds-stats-grid-card-padding, 1.25rem 1.5rem);
+}
+.ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card[data-interactive="true"] {
+  cursor: pointer;
+}
+
+.ds-pattern-stats-grid.ds-engine-modern [data-part="label-row"] {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ds-spacing-2, 0.5rem);
+  margin-block-end: var(--ds-spacing-1, 0.25rem);
+}
+
+.ds-pattern-stats-grid.ds-engine-modern [data-part="statistic"] {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-stats-grid-icon-size, 2rem);
+  block-size: var(--ds-stats-grid-icon-size, 2rem);
+  font-size: var(--ds-font-size-md, 1rem);
+}
+
+.ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__description {
+  margin-block-start: calc(var(--ds-spacing-1, 0.25rem) / 2);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  line-height: 1.4;
+}
+
+/* Pattern-owned trend pill: geometry drained from the engine's inline
+   styles; the state tint stays on the data-change channels below. */
+.ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__trend {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  align-self: flex-start;
+  gap: 2px;
+  margin-block-start: var(--ds-spacing-1, 0.25rem);
+  padding: 2px 6px;
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* ---- empty state (same quiet block the family's loading mirrors) ---- */
+.ds-pattern-stats-grid.ds-engine-modern [data-part="empty"] {
+  padding: var(--ds-spacing-6, 1.5rem);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  text-align: center;
+}
+
+/* ---- skeleton geometry drained from the engine's inline styles (it mirrors
+        the card's padding so skeleton and content share the same frame) ---- */
+.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-3, 0.75rem);
+  padding: var(--ds-stats-grid-card-padding, 1.25rem 1.5rem);
+}
+.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"][data-kind="label"] {
+  inline-size: 40%;
+  block-size: 12px;
+}
+.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"][data-kind="value"] {
+  inline-size: 65%;
+  block-size: 28px;
+}
+.ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"][data-kind="trend"] {
+  inline-size: 30%;
+  block-size: 16px;
+}
+
+/* ---- sparkline layout (the path data itself stays engine-computed) ---- */
+.ds-pattern-stats-grid.ds-engine-modern [data-part="sparkline"] {
+  display: block;
+  margin-block-start: var(--ds-spacing-2, 0.5rem);
+  overflow: visible;
 }
 
 .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__icon {
@@ -46,16 +150,12 @@
   color: var(--ds-stats-grid-accent, var(--ds-color-text-secondary));
 }
 
-.ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__label {
-  color: var(--ds-color-text-secondary);
-}
-
-.ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__value {
-  color: var(--ds-stats-grid-accent, var(--ds-color-text-primary));
-}
-
-.ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__suffix {
-  color: var(--ds-color-text-secondary);
+/* Interactive cards are focusable (role=button), so they need a visible
+   focus channel -- the canonical DS focus ring token. */
+.ds-pattern-stats-grid.ds-engine-modern
+  .ds-stats-grid__card[data-interactive="true"]:focus-visible {
+  outline: 2px solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: 2px;
 }
 
 .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__description {
@@ -100,4 +200,39 @@
   background-size: 200% 100%;
   animation: ds-skeleton-shimmer 1.5s ease-in-out infinite;
   border-radius: var(--ds-radius-sm);
+}
+
+/* forced-colors: surfaces, shadows and state tints are forced away, so the
+   cards, the icon and the trend pill re-assert a system-color boundary. The
+   trend state still reads through the governed icon shape (never color
+   alone); plain text auto-maps to CanvasText. The sparkline is aria-hidden
+   decorative data-viz and degrades neutral with no opt-out. */
+@media (forced-colors: active) {
+  .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__icon {
+    outline: 1px solid ButtonText;
+    background: Canvas;
+    color: ButtonText;
+  }
+  .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__trend {
+    outline: 1px solid ButtonText;
+    background: Canvas;
+    color: CanvasText;
+  }
+  .ds-pattern-stats-grid.ds-engine-modern
+    .ds-stats-grid__card[data-interactive="true"]:focus-visible {
+    outline-color: Highlight;
+  }
+  .ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton"] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"] {
+    background: GrayText;
+  }
 }

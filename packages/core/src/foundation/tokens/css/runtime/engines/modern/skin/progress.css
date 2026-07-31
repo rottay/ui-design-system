@@ -141,6 +141,7 @@
   margin-block-start: var(--ds-progress-label-gap, var(--ds-spacing-xs, 0.25rem));
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-sm, 14px);
+  font-variant-numeric: tabular-nums;
   text-align: center;
 }
 
@@ -162,7 +163,8 @@
   place-content: center;
   vertical-align: middle;
   border-radius: 50%;
-  transition: --ds-progress-circle-value var(--ds-motion-normal) linear;
+  transition: --ds-progress-circle-value var(--ds-motion-normal)
+    var(--ds-motion-ease-out, ease-out);
 }
 
 /* Ring: fill arc over the full track, masked down to the ring thickness. */
@@ -211,6 +213,7 @@
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: calc(var(--ds-progress-circle-size-resolved) * 0.22);
+  font-variant-numeric: tabular-nums;
   font-weight: var(--ds-font-weight-semibold);
   line-height: 1;
 }
@@ -219,8 +222,8 @@
    stays visible on any HC theme (K2-V sweep finding: Upload's text-list
    progress rendered invisible under forced-colors). Track -> ButtonFace
    with a ButtonText edge, value -> Highlight; the indeterminate sliding
-   bar takes the same ink. The circle ring's conic gradient keeps its
-   token path (HC re-trace is a separate evidence cell, not this block). */
+   bar takes the same ink. The circle's painted pseudos opt out below so
+   the conic arc survives the background-image strip. */
 @media (forced-colors: active) {
   .rottay-progress-shell.rottay-progress-shell--modern [data-part='fill'] {
     background: ButtonFace;
@@ -241,5 +244,14 @@
 
   .rottay-progress-shell.rottay-progress-shell--modern [data-part='indeterminate'][data-part='indeterminate'] {
     background: Highlight;
+  }
+
+  /* Forced colors also strips background IMAGES, which would erase the
+     conic ring and its cap entirely. No opt-out: the circle is re-expressed
+     with system colors — a CanvasText ring outline keeps the shape
+     perceivable; the center label already follows system inks. */
+  .rottay-progress-shell.rottay-progress-shell--modern[data-type='circle'] {
+    outline: 2px solid CanvasText;
+    outline-offset: -2px;
   }
 }

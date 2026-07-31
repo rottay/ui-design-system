@@ -20,7 +20,22 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import type { TransferProps, TransferItem } from '../../contracts';
 import { TRANSFER_DEFAULTS } from '../../contracts';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ModernCheckbox } from '../../../../facade';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+
+/** Catalog lookup with an honest English floor: a bare composition (no
+ * I18nProvider above it -- direct engine renders, tests) must still render,
+ * and a missing catalog key (the provider echoes it back) falls to English. */
+function useTransferTranslation() {
+  const i18n = useOptionalTranslation('components');
+  return (key: string, fallback: string): string => {
+    const resolved = i18n?.t(key);
+    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+    return resolved;
+  };
+}
 
 interface TransferListProps {
   side: 'source' | 'target';
@@ -66,7 +81,7 @@ const TransferList: React.FC<TransferListProps> = ({
   listStyle,
   pagination,
 }) => {
-  const { t } = useTranslation('components');
+  const tOr = useTransferTranslation();
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredItems = useMemo(() => {
@@ -120,17 +135,20 @@ const TransferList: React.FC<TransferListProps> = ({
       {/* Header */}
       <div data-part="panel-header">
         {showSelectAll && (
-          <input
-            type="checkbox"
-            data-part="panel-select-all"
-            aria-label={t('transfer.select_all')}
-            checked={allSelected}
-            ref={(el) => {
-              if (el) el.indeterminate = someSelected && !allSelected;
-            }}
-            onChange={handleSelectAll}
-            disabled={disabled || selectableItems.length === 0}
-          />
+          /* The select-all control composes the Checkbox primitive (never a
+             native input). The accessible name rides the primitive's own
+             label slot (sr-only copy), and the wrapper keeps the public
+             data-part + name contract for tests and tooling. */
+          <span data-part="panel-select-all" aria-label={tOr('transfer.select_all', 'Select all')}>
+            <ModernCheckbox
+              size="sm"
+              label={<span className="ds-sr-only">{tOr('transfer.select_all', 'Select all')}</span>}
+              checked={allSelected}
+              indeterminate={someSelected && !allSelected}
+              onChange={handleSelectAll}
+              disabled={disabled || selectableItems.length === 0}
+            />
+          </span>
         )}
         <span data-part="panel-title">{title}</span>
         <span data-part="panel-count">
@@ -144,7 +162,7 @@ const TransferList: React.FC<TransferListProps> = ({
           <input
             type="text"
             data-part="panel-search"
-            placeholder={locale?.searchPlaceholder || t('transfer.search_placeholder')}
+            placeholder={locale?.searchPlaceholder || tOr('transfer.search_placeholder', 'Search')}
             value={searchValue}
             onChange={(e) => onSearch(e.target.value)}
             disabled={disabled}
@@ -155,31 +173,34 @@ const TransferList: React.FC<TransferListProps> = ({
       {/* Items */}
       <div data-part="panel-list">
         {paginatedItems.length > 0 ? (
-          <ul>
+          /* A checkbox GROUP per panel (one real, named Checkbox primitive per
+             row): valid APG without the nested-interactive trap a listbox of
+             checkbox-bearing options would create. See the family ficha for
+             the listbox conversion contract. */
+          <ul role="group" aria-label={typeof title === 'string' ? title : undefined}>
             {paginatedItems.map((item) => (
               <li key={item.key}>
-                <label
+                <div
                   data-part="panel-item"
                   data-selected={selectedKeys.has(item.key) || undefined}
                   data-disabled={item.disabled || undefined}
                 >
-                  <input
-                    type="checkbox"
-                    data-part="panel-item-checkbox"
-                    checked={selectedKeys.has(item.key)}
-                    onChange={() => handleSelect(item.key)}
-                    disabled={disabled || item.disabled}
-                  />
-                  <span>
-                    {render ? render(item) : item.title}
+                  <span data-part="panel-item-checkbox">
+                    <ModernCheckbox
+                      size="sm"
+                      label={render ? render(item) : item.title}
+                      checked={selectedKeys.has(item.key)}
+                      onChange={() => handleSelect(item.key)}
+                      disabled={disabled || item.disabled}
+                    />
                   </span>
-                </label>
+                </div>
               </li>
             ))}
           </ul>
         ) : (
           <div data-part="panel-empty">
-            {locale?.notFoundContent || t('transfer.not_found')}
+            {locale?.notFoundContent || tOr('transfer.not_found', 'No data')}
           </div>
         )}
       </div>
@@ -191,9 +212,10 @@ const TransferList: React.FC<TransferListProps> = ({
             type="button"
             data-part="pagination-button"
             disabled={currentPage <= 1}
+            aria-label={tOr('pagination.previous', 'Previous page')}
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           >
-            ‹
+            <NavigationBackIcon decorative size={14} />
           </button>
           <span>
             {currentPage} / {totalPages}
@@ -202,9 +224,10 @@ const TransferList: React.FC<TransferListProps> = ({
             type="button"
             data-part="pagination-button"
             disabled={currentPage >= totalPages}
+            aria-label={tOr('pagination.next', 'Next page')}
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           >
-            ›
+            <NavigationForwardIcon decorative size={14} />
           </button>
         </div>
       )}
@@ -248,6 +271,8 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
       className,
       style,
     } = props;
+
+    const tOr = useTransferTranslation();
 
     const [internalTargetKeys, setInternalTargetKeys] = useState<Set<string>>(
       new Set(defaultTargetKeys)
@@ -345,9 +370,12 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
             data-part="move-button"
             data-direction="right"
             disabled={disabled || sourceSelectedKeys.size === 0}
+            aria-label={tOr('transfer.move_to_target', 'Move to target')}
             onClick={() => handleMove('right')}
           >
-            {operations![0]}
+            {operations![0] === TRANSFER_DEFAULTS.operations?.[0]
+              ? <NavigationForwardIcon decorative size={16} />
+              : operations![0]}
           </button>
           {!oneWay && (
             <button
@@ -355,9 +383,12 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
               data-part="move-button"
               data-direction="left"
               disabled={disabled || targetSelectedKeys.size === 0}
+              aria-label={tOr('transfer.move_to_source', 'Move to source')}
               onClick={() => handleMove('left')}
             >
-              {operations![1]}
+              {operations![1] === TRANSFER_DEFAULTS.operations?.[1]
+                ? <NavigationBackIcon decorative size={16} />
+                : operations![1]}
             </button>
           )}
         </div>

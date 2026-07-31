@@ -19,7 +19,7 @@
 
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useId, useState } from 'react';
 import type { ConfirmDialogProps } from '../../contracts';
 import { CONFIRM_DIALOG_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
@@ -102,6 +102,12 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
 
   const confirmLabel = confirmLabelProp ?? tOr('confirmDialog.confirm', CONFIRM_DIALOG_DEFAULTS.confirmLabel);
   const cancelLabel = cancelLabelProp ?? tOr('confirmDialog.cancel', CONFIRM_DIALOG_DEFAULTS.cancelLabel);
+
+  // APG alertdialog labelling: the title/description own the accessible name
+  // and description of the surface (ids are stamped only when rendered).
+  const labelledById = useId();
+  const titleId = title ? `${labelledById}-title` : undefined;
+  const descriptionId = description ? `${labelledById}-description` : undefined;
 
   // Allow consumers to override the default variant icon
   const displayIcon = icon || VARIANT_ICON_MAP[variant];
@@ -225,20 +231,22 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
                 data-variant={variant}
                 role="alertdialog"
                 aria-modal="true"
+                aria-labelledby={titleId}
+                aria-describedby={descriptionId}
                 style={{ position: 'relative' }}
               >
-                <div className="flex gap-3">
+                <div data-part="content">
                   {displayIcon && (
-                    <div data-part="icon" className="flex-shrink-0 mt-0.5">
+                    <div data-part="icon">
                       {displayIcon}
                     </div>
                   )}
-                  <div className="flex-1">
+                  <div data-part="copy">
                     {title && (
-                      <h3 data-part="title">{title}</h3>
+                      <h3 id={titleId} data-part="title">{title}</h3>
                     )}
                     {description && (
-                      <p data-part="description">{description}</p>
+                      <p id={descriptionId} data-part="description">{description}</p>
                     )}
                   </div>
                 </div>
@@ -263,7 +271,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
                     disabled={loading}
                   >
                     {loading && <span data-part="spinner" />}
-                    {confirmLabel}
+                    <span data-part="confirm-label">{confirmLabel}</span>
                   </button>
                 </div>
               </div>

@@ -123,15 +123,13 @@ async function expectTenantScopeSurvivedPortal(surface: HTMLElement): Promise<vo
   expect(scope.getAttribute('data-tenant')).toBe(SCOPE_TENANT);
 }
 
-/** Per-engine surface selector for Modal: modern's scope class lives on the
- * root (`<dialog>`), with `surface` as a nested descendant div; rustic fuses
- * root and surface into one node, so the scope class and `data-part` land on
- * the same element (checkpoint contract P1's `rottay-overlay-modal-shell--*`
- * decision). */
+/** Per-engine surface selector for the canonical Modal owner. Both engines
+ * stamp a distinct root and nested surface; Modern's root is the native
+ * `<dialog>`, while Rustic's root is the portaled fixed-position shell. */
 function modalSurfaceSelector(engine: 'modern' | 'rustic'): string {
   return engine === 'modern'
     ? ".rottay-overlay-modal-shell--modern [data-part='surface']"
-    : ".rottay-overlay-modal-shell--rustic[data-part='surface']";
+    : ".rottay-modal-root--rustic [data-part='surface']";
 }
 
 describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () => {
@@ -165,9 +163,10 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
           expect(document.querySelectorAll(".rottay-overlay-modal-shell--modern[data-part='root']").length).toBe(1);
           expect(document.querySelectorAll(".rottay-overlay-modal-shell--modern [data-part='backdrop']").length).toBe(1);
         } else {
-          // Rustic fuses root+backdrop into the shared Overlay util's own
-          // div (data-part="backdrop"); there is no separate rustic root.
-          expect(document.querySelectorAll("[data-part='backdrop']").length).toBe(1);
+          // Rustic uses its root shell as the scrim. It deliberately has no
+          // second backdrop node, but still exposes one canonical root.
+          expect(document.querySelectorAll(".rottay-modal-root--rustic[data-part='root']").length).toBe(1);
+          expect(document.querySelectorAll(".rottay-modal-root--rustic [data-part='backdrop']").length).toBe(0);
         }
 
         expect(surface.querySelectorAll("[data-part='header']")).toHaveLength(1);

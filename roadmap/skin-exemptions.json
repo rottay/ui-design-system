@@ -43,8 +43,8 @@
         "why": "The exporter copies runtime-computed paint into two CSSStyleDeclaration paths and five SVG presentation-attribute paths, including variable-backed attributes already present on the clone. It preserves rendered chart fidelity for export; a static skin cannot know the property/value pairs."
       },
       "patterns/customization/tenant-preview/engines/modern/index.tsx": {
-        "floor": 21,
-        "why": "buildPaletteSteps() mixes a 10-step palette from the tenant's chosen hex (mixColor(base, '#fff'|'#000', ratio)), then renders it as swatches, buttons and badges."
+        "floor": 13,
+        "why": "The tenant preview still has 13 counter-visible runtime paint sites: the derived palette swatches and contrast samples are calculated from arbitrary consumer-authored tenant colours. Static skin paint cannot know these values; component chrome has otherwise migrated to canonical primitives and token channels."
       },
       "patterns/customization/tenant-preview/engines/rustic/index.tsx": {
         "floor": 13,
@@ -140,17 +140,9 @@
         "runtimeSvgFloor": 1,
         "why": "The crosshair dot's `.attr('fill', (d) => d.color)` paints the per-datum colour supplied to the D3 overlay. CK-E's direct inventory identifies this exact B-runtime setter; runtimeSvgFloor protects it in the AST channel."
       },
-      "patterns/visualization/kanban-board/engines/modern/index.tsx": {
-        "floor": 1,
-        "why": "Column header `borderTop: column.color ? \\`3px solid ${column.color}\\` : undefined` -- per-column caller-supplied accent color, no enum."
-      },
       "patterns/visualization/kanban-board/engines/rustic/index.tsx": {
         "floor": 1,
         "why": "Same shape as modern: column header `borderTop`, keyed on the caller-supplied `column.color`."
-      },
-      "patterns/visualization/calendar-view/engines/modern/index.tsx": {
-        "floor": 1,
-        "why": "Event chip `background: ev.color ?? 'var(--ds-color-primary)'` -- per-event caller-supplied color."
       },
       "patterns/visualization/calendar-view/engines/rustic/index.tsx": {
         "floor": 1,

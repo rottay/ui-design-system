@@ -18,6 +18,16 @@
 import React, { useState, useEffect, useCallback } from "react";
 import type { AvatarProps } from "../../contracts";
 import { AVATAR_DEFAULTS, TONE_TO_AVATAR_VARIANT } from "../../contracts";
+import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
+
+/** Accessible-name fallbacks for the status dot; the i18n catalogue wins when
+ * a provider is mounted, the English floor keeps standalone renders honest. */
+const STATUS_A11Y: Record<string, { key: string; fallback: string }> = {
+  online: { key: "avatar.status.online", fallback: "Online" },
+  offline: { key: "avatar.status.offline", fallback: "Offline" },
+  away: { key: "avatar.status.away", fallback: "Away" },
+  busy: { key: "avatar.status.busy", fallback: "Busy" },
+};
 
 /**
  * Derives up to two uppercase initials from a display name or alt text.
@@ -50,6 +60,9 @@ function getInitials(name?: string, alt?: string): string {
  * @returns A React element using the modern Avatar anatomy
  */
 export default function ModernAvatar(props: AvatarProps): React.ReactElement {
+  // Optional provider + English floor, the same idiom as Spinner/Progress:
+  // bare compositions (tests, lightweight consumers) must not crash.
+  const i18n = useOptionalTranslation("components");
   const {
     src,
     alt,
@@ -72,6 +85,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
     ringColor,
     className = "",
     style,
+    'data-part': dataPart,
   } = props;
 
   // tone (semantic) takes precedence over the deprecated variant prop; the skin's
@@ -141,7 +155,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
   return (
     <div
       className={containerClass}
-      data-part="root"
+      data-part={dataPart ?? "root"}
       data-variant={variant}
       data-shape={shape}
       data-size={size}
@@ -155,26 +169,31 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
       onKeyDown={handleKeyDown}
       style={{
         ...sizeStyle,
+        // PINNED (Avatar.modern-engine-advanced): the interactive cursor rides
+        // the root's inline style.
         cursor: isInteractive ? "pointer" : undefined,
-        overflow: "visible",
         ...style,
       }}
     >
-      {/* Root and mask intentionally share the same resolved size. The transition
-          is scoped to the properties the skin animates -- never `all`. */}
+      {/* Root and mask intentionally share the same resolved size; transitions
+          live in the skin with the rest of the motion ownership. */}
       <div
         data-part="mask"
         style={{
           ...sizeStyle,
           ...ringStyle,
-          transition: `transform var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out), box-shadow var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out), border-color var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out)`,
         }}
       >
         {src && !imageError ? (
+          // Without a useful name the image is decorative: `alt=""` +
+          // aria-hidden keeps screen readers from announcing a generic
+          // placeholder (owner directive 2026-07-28); a caller-provided
+          // `alt`/`name` always wins.
           <img
             data-part="img"
             src={src}
-            alt={alt || name || "avatar"}
+            alt={alt || name || ""}
+            aria-hidden={alt || name ? undefined : true}
             onError={handleError}
             onLoad={handleLoad}
           />
@@ -182,11 +201,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
           <div
             data-part="fallback"
             style={{
-              width: "100%",
-              height: "100%",
               ...customBgStyle,
-              fontSize: `var(--ds-avatar-${size}-font-size)`,
-              fontWeight: `var(--ds-avatar-font-weight)` as any,
               // An explicit textColor is a caller's value, like `style`: it stays
               // inline and outranks the skin's per-variant ink.
               ...(textColor ? { color: textColor } : {}),
@@ -196,18 +211,20 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
           </div>
         )}
       </div>
-      {/* Status dot. Position, frame, offset and per-status fill are painted by
-          the skin with logical properties; the engine only stamps the contract. */}
+      {/* Status dot. Position, size, frame, offset, per-status fill and motion
+          are painted by the skin with logical properties; the engine stamps
+          the contract and the accessible presence name. */}
       {status && (
         <span
           data-part="status-dot"
           data-status={status}
-          style={{
-            width: "var(--ds-avatar-status-size)",
-            height: "var(--ds-avatar-status-size)",
-            transition: `opacity var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out), transform var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out), background-color var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out)`,
-            opacity: 1,
-          }}
+          role="img"
+          aria-label={
+            STATUS_A11Y[status]
+              ? i18n?.tOr(STATUS_A11Y[status].key, STATUS_A11Y[status].fallback) ??
+                STATUS_A11Y[status].fallback
+              : status
+          }
         />
       )}
     </div>

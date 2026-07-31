@@ -128,7 +128,6 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
           aria-required={required || undefined}
           aria-busy={loading || undefined}
           aria-describedby={describedBy}
-          style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap' }}
           {...rest}
         />
         <span data-part="track" aria-hidden="true">

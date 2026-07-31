@@ -2,16 +2,26 @@
 
 /**
  * @fileoverview Space Modern Engine - Rottay Design System
- * @description Modern (DaisyUI/Tailwind) implementation of the Space component.
- * Uses Tailwind CSS utility classes with inline gap styles.
+ * @description Modern, token-driven implementation of the Space component.
+ * The engine projects only the instance gap channel
+ * (`--ds-space-instance-gap`, from the contract's token map or a safe pixel
+ * value) and stamps the anatomy (`data-direction`/`data-align`/`data-wrap`);
+ * the shared declarative skin (`presentation/components/skin/layout-primitives.css`,
+ * Space section) owns layout, alignment and motion. No Tailwind utility
+ * classes.
  *
  * @remarks
- * The Modern engine generates:
- * - `inline-flex` for inline display
- * - `flex-row` or `flex-col` based on direction
- * - `flex-wrap` when wrapping is enabled
- * - `items-*` classes for alignment
- * - Inline `gap` style for spacing (supports all size formats)
+ * **When to use Space vs Stack (kept in sync with the layout sisters):**
+ * - **Stack** is the modern one-dimensional rhythm: spacing presets on the
+ *   `--ds-spacing-*` ramp with density scaling, optional hairline dividers,
+ *   full width semantics.
+ * - **Space** is the legacy inline variant of the same idea: `inline-flex`
+ *   with the `--ds-space-{small,middle,large}-size` presets (compat aliases
+ *   of the ramp), `align` including `baseline`, optional `split` separators
+ *   interleaved between children. New code should reach for Stack; Space
+ *   stays for API compatibility.
+ * - **Box/Flex/Grid** cover single-element escape hatch, explicit axis and
+ *   two-dimensional tracks respectively.
  *
  * Split separators are handled by inserting elements between children.
  *
@@ -19,7 +29,6 @@
  * ```tsx
  * import { Space } from '@rottay/design-system';
  *
- * // Generates: class="inline-flex flex-row items-center flex-wrap"
  * <Space engine="modern" size="middle" wrap>
  *   <Tag>Tag 1</Tag>
  *   <Tag>Tag 2</Tag>
@@ -46,12 +55,13 @@ type SpaceInstanceStyle = React.CSSProperties & {
 
 /**
  * Modern engine implementation of the Space component.
- * Builds Tailwind utility classes for flex layout while using inline `gap`
- * styles for spacing, since Tailwind's gap utilities cannot accept dynamic
- * pixel values or CSS variable tokens at runtime.
+ * Projects the resolved gap onto the `--ds-space-instance-gap` channel the
+ * declarative skin consumes: the size prop can be a number, an array tuple,
+ * or a preset token -- the contract's map keeps presets on token channels
+ * while raw numbers become safe pixels.
  *
  * @param props - Space configuration (size, direction, wrap, align, split)
- * @returns A plain div with Tailwind classes and inline gap style
+ * @returns A div stamped with the space anatomy and the instance gap channel
  */
 export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
   (props, ref) => {

@@ -131,12 +131,33 @@
   border-color: var(--ds-radio-error-border-color, var(--ds-color-error));
 }
 
-/* hover (not disabled): unchecked, checked. */
+/* hover (not disabled): the unchecked ring STRENGTHENS toward the ink (the
+   previous fallback read `--ds-color-border`, which is QUIETER than the
+   resting border-secondary on the governed dark source — a backwards hover);
+   the checked ring deepens its own hue instead of jumping to primary. */
 .ds-radio.ds-radio--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='circle'] {
-  border-color: var(--ds-radio-border, var(--ds-color-border));
+  border-color: var(
+    --ds-radio-border-hover,
+    color-mix(in srgb, var(--ds-color-text-secondary) 40%, var(--ds-color-border-secondary))
+  );
 }
 .ds-radio.ds-radio--modern[data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
   border-color: var(--ds-color-primary-hover);
+}
+.ds-radio.ds-radio--modern[data-color='default'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+  border-color: color-mix(in srgb, var(--ds-radio-default-bg, var(--ds-color-neutral-600)) 82%, var(--ds-color-neutral-900, #171717));
+}
+.ds-radio.ds-radio--modern[data-color='secondary'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+  border-color: color-mix(in srgb, var(--ds-radio-secondary-bg, var(--ds-color-secondary)) 82%, var(--ds-color-neutral-900, #171717));
+}
+.ds-radio.ds-radio--modern[data-color='success'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+  border-color: color-mix(in srgb, var(--ds-radio-success-bg, var(--ds-color-success)) 82%, var(--ds-color-neutral-900, #171717));
+}
+.ds-radio.ds-radio--modern[data-color='warning'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+  border-color: color-mix(in srgb, var(--ds-radio-warning-bg, var(--ds-color-warning)) 82%, var(--ds-color-neutral-900, #171717));
+}
+.ds-radio.ds-radio--modern[data-color='error'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+  border-color: color-mix(in srgb, var(--ds-radio-error-bg, var(--ds-color-error)) 82%, var(--ds-color-neutral-900, #171717));
 }
 
 /* focus ring from the hidden input's :focus-visible. */
@@ -219,8 +240,17 @@
   color: var(--ds-color-text-disabled);
 }
 
-/* hidden accessibility input (visually clipped): no border. */
+/* hidden accessibility input (visually clipped): geometry lives here too, so
+   the engine carries zero inline layout (single paint/layout owner). */
 .ds-radio.ds-radio--modern input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
   border: 0;
 }
 

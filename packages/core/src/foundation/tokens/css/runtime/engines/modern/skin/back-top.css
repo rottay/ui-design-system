@@ -28,6 +28,15 @@
  */
 
 .rottay-backtop.rottay-backtop--modern[data-part='trigger'] {
+  /* Position/geometry drained from the `fixed bottom-8 z-50` utilities; the
+     pinned `end-8` bridge string keeps the same inline-end default here, so
+     the skin is the single owner and the utility is inert. The block-end
+     inset adds the device safe area so the button never parks under the home
+     indicator. */
+  position: fixed;
+  inset-block-end: calc(var(--ds-backtop-inset-block-end, 2rem) + env(safe-area-inset-bottom, 0px));
+  inset-inline-end: var(--ds-backtop-inset-inline-end, 2rem);
+  z-index: var(--ds-backtop-z-index, var(--ds-z-index-fixed, 1200));
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -41,6 +50,9 @@
   background: var(--ds-backtop-bg, var(--ds-color-primary));
   color: var(--ds-backtop-color, var(--ds-color-text-on-primary));
   box-shadow: var(--ds-backtop-shadow, var(--ds-elevation-2));
+  /* The engine UNMOUNTS below the threshold, so only the ENTRANCE is
+     choreographed (there is no exit state to animate). */
+  animation: ds-backtop-enter-modern var(--ds-backtop-enter-duration, var(--ds-motion-normal, 200ms)) var(--ds-motion-ease-out, ease-out) both;
   transition:
     transform var(--ds-backtop-transition-duration, var(--ds-motion-fast, 120ms))
       var(--ds-backtop-transition-timing, var(--ds-motion-ease-out)),
@@ -50,19 +62,35 @@
       var(--ds-backtop-transition-timing, var(--ds-motion-ease-out));
 }
 
-/* ---- hover: a quiet lift (the premium reading of the drained
-        `hover:scale-110` docblock) + deepened elevation. ---- */
-.rottay-backtop.rottay-backtop--modern[data-part='trigger']:hover {
-  transform: var(--ds-backtop-hover-transform, translateY(-2px));
-  box-shadow: var(
-    --ds-backtop-shadow-hover,
-    var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1))
-  );
+@keyframes ds-backtop-enter-modern {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* ---- pressed: the lift releases back to rest. ---- */
+/* ---- hover: a quiet lift (the premium reading of the drained
+        `hover:scale-110` docblock) + deepened elevation, gated to devices
+        with real hover (4th-tanda law). ---- */
+@media (hover: hover) {
+  .rottay-backtop.rottay-backtop--modern[data-part='trigger']:hover {
+    transform: var(--ds-backtop-hover-transform, translateY(-2px));
+    box-shadow: var(
+      --ds-backtop-shadow-hover,
+      var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1))
+    );
+  }
+}
+
+/* ---- pressed: the touch/active equivalent -- a small dip below rest, so a
+        coarse-pointer tap gets the same cause-and-effect feedback the hover
+        lift gives on fine pointers. ---- */
 .rottay-backtop.rottay-backtop--modern[data-part='trigger']:active {
-  transform: var(--ds-backtop-pressed-transform, translateY(0));
+  transform: var(--ds-backtop-pressed-transform, translateY(1px));
   box-shadow: var(--ds-backtop-shadow, var(--ds-elevation-2));
 }
 
@@ -80,5 +108,15 @@
   }
   .rottay-backtop.rottay-backtop--modern[data-part='trigger']:focus-visible {
     outline: 2px solid Highlight;
+  }
+}
+
+/* ---- reduced motion: the entrance and every state transition collapse to
+        the settled state immediately. ---- */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-backtop.rottay-backtop--modern[data-part='trigger'] {
+    animation: none;
+    transition: none;
+    transform: none;
   }
 }

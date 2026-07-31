@@ -26,9 +26,11 @@
 import type { ReactNode } from 'react';
 
 import {
-  SlidersHorizontalIcon as SlidersHorizontal,
-  SparklesIcon as Sparkles,
-} from '../../../../graphics/icons';
+  ActionFilterIcon,
+} from '@/graphics/icons/presentation/semantic/generated/roles/action-filter';
+import {
+  AiSparklesIcon,
+} from '@/graphics/icons/presentation/semantic/generated/roles/ai-sparkles';
 
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { Box, Flex, Input, Select, Text } from '../../../primitives';
@@ -95,6 +97,7 @@ export function FieldFiltersPanel({
     <Box
       className="ds-structure ds-field-filters-panel"
       data-part="root"
+      data-active-count={activeCount}
       style={{
         padding: '12px 16px 14px',
       }}
@@ -281,7 +284,7 @@ function PresetChip({
           justifyContent: 'center',
         }}
       >
-        <Sparkles style={{ width: 10, height: 10 }} />
+        <AiSparklesIcon size={10} decorative />
       </Box>
       {label}
     </Box>
@@ -387,7 +390,7 @@ function FilterCard({
 
 function defaultFilterVisual(fallbackLabel: string, refineByPrefix: string): FieldFilterVisual {
   return {
-    icon: <SlidersHorizontal style={{ width: 15, height: 15 }} />,
+    icon: <ActionFilterIcon size={15} decorative />,
     description: `${refineByPrefix} ${fallbackLabel.toLowerCase()}.`,
   };
 }

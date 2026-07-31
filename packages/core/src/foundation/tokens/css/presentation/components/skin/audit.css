@@ -1,5 +1,35 @@
-/** AuditSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+/**
+ * AuditSurface skin (WO-SKIN-06 / CK-I; SU01 wave 2026-07-30).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
+ *
+ * SCOPE: the surface composes PageShellSurface, PatternFilterPanel,
+ * PatternDataTable, Card and the shared state kits — each owns its own
+ * chrome, states and forced-colors treatment. Two former inline drains were
+ * deliberately routed AWAY from this file, to the owner that already paints
+ * the concern:
+ *   - the table viewport geometry (maxHeight/overflow) moved to
+ *     PatternDataTable's own bounded scroll region (`maxHeight` prop →
+ *     `data-part="scroll"`, pattern-owned; the ListSurface idiom);
+ *   - the pagination summary's size/ink moved to the Typography primitive
+ *     (`size="xs" color="muted"` props) — typography.css sorts in
+ *     `rottay-engines`, after this layer, so a skin rule for those
+ *     properties would lose by layer order anyway.
+ * What remains is the ONE paint the surface owns: the numeric rhythm of the
+ * pagination summary (tabular figures keep page/total counts from
+ * re-flowing the line as numbers change across paginations).
+ *
+ * SPECIFICITY: anatomy class + one always-stamped attribute; no repetition
+ * (the retired `[data-part='root'][data-part='root']` doubled attribute is
+ * gone — the Text primitive always stamps `data-part='root'`).
+ *
+ * FORCED-COLORS: no surface-owned color to re-key (the summary ink comes
+ * from the Typography color channel and every composed part handles its
+ * own), so no FC block — same documented omission as list.css.
+ */
 
-.ds-surface.ds-audit .ds-audit__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+.ds-surface.ds-audit .ds-audit__muted-text[data-part='root'] {
+  font-variant-numeric: tabular-nums;
 }

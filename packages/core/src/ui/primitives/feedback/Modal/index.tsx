@@ -3,7 +3,8 @@
 /**
  * @fileoverview Modal - overlay dialog with focus trap and scroll prevention.
  * Compound sub-components: Header, Body, Footer, CloseButton.
- * Multi-engine: Classic (Ant Design), Modern (DaisyUI), Rustic (Vanilla).
+ * Multi-engine: Classic (Ant Design), Modern (Rottay native dialog), Rustic
+ * (vanilla compatibility engine).
  *
  * @example
  * ```tsx
@@ -50,7 +51,7 @@ export const Modal = Object.assign(
   // Create the engine-switchable base component
   createEngineComponent<ModalProps>('Modal', {
     classic: () => import('./engines/classic'),  // Ant Design
-    modern: () => import('./engines/modern'),     // DaisyUI / Tailwind
+    modern: () => import('./engines/modern'),     // Rottay native dialog / top layer
     rustic: () => import('./engines/rustic'),      // Vanilla HTML/CSS
   }),
   // Attach compound sub-components (Modal.Header, .Body, .Footer, .CloseButton)

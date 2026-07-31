@@ -35,10 +35,20 @@
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'],
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'],
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'] {
-  background: var(--ds-skeleton-bg, var(--ds-color-neutral-100));
+  /* The fallback chain ends in surfaces, not a bare neutral: if the token
+     layers ever fail to load, the block still reads as quiet panel material
+     under either theme instead of a hard grey flash. */
+  background: var(
+    --ds-skeleton-bg,
+    var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100)))
+  );
+  /* Cadence/easing fall back to the motion scale, not literals: the canon
+     `--ds-skeleton-animation-duration` (1.5s) stays the primary channel and
+     `--ds-motion-attention` is the governed stand-in. */
   animation: var(--ds-skeleton-animation-name, ds-skeleton-shimmer)
-    var(--ds-skeleton-animation-duration, 1.5s)
-    var(--ds-skeleton-animation-easing, ease-in-out) infinite;
+    var(--ds-skeleton-animation-duration, var(--ds-motion-attention, 1.5s))
+    var(--ds-skeleton-animation-easing, var(--ds-motion-ease-standard, ease-in-out))
+    infinite;
 }
 
 /* ---- shimmer style: sweeping gradient (higher specificity via data-animation) ---- */
@@ -46,7 +56,23 @@
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'][data-animation='shimmer'],
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'][data-animation='shimmer'],
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'][data-animation='shimmer'] {
-  background: var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%));
+  /* The governed `--ds-skeleton-wave-gradient` (default.css) already rides
+     surface-panel/card with an 8% primary tint; this third-string fallback
+     mirrors the same surface chain so a token-layer outage cannot resurrect
+     a raw grey wave. */
+  background: var(
+    --ds-skeleton-wave-gradient,
+    linear-gradient(
+      90deg,
+      var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100))) 25%,
+      color-mix(
+        in srgb,
+        var(--ds-color-primary) 8%,
+        var(--ds-surface-card-bg, var(--ds-surface-card))
+      ) 50%,
+      var(--ds-surface-panel-bg, var(--ds-surface-panel, var(--ds-color-neutral-100))) 75%
+    )
+  );
   background-size: 200% 100%;
 }
 
@@ -96,4 +122,37 @@
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'],
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'] {
   border-radius: var(--ds-skeleton-line-radius, var(--ds-radius-sm, 4px));
+}
+
+/* ---- RTL: the wave sweeps against the reading direction by default
+        (background-position runs on the physical x axis), so the canon
+        keyframes are played in reverse under rtl. Reversing the opacity
+        pulse is a no-op visually, so one rule serves both styles. ---- */
+:dir(rtl) .rottay-skeleton.rottay-skeleton--modern[data-part='root'],
+:dir(rtl) .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'],
+:dir(rtl) .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'],
+:dir(rtl) .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'],
+.rottay-skeleton.rottay-skeleton--modern[data-part='root']:dir(rtl),
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar']:dir(rtl),
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title']:dir(rtl),
+.rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line']:dir(rtl) {
+  animation-direction: reverse;
+}
+
+/* ---- forced colors: fills are stripped to Canvas, which would erase the
+        placeholder entirely. GrayText keeps a visible, calm silhouette
+        (the system placeholder color) and the background shorthand also
+        clears any gradient image. Motion keeps working: the pulse still
+        animates opacity, which forced colors does not adjust. ---- */
+@media (forced-colors: active) {
+  .rottay-skeleton.rottay-skeleton--modern[data-part='root'],
+  .rottay-skeleton.rottay-skeleton--modern[data-part='root'][data-animation='shimmer'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'][data-animation='shimmer'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'][data-animation='shimmer'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'],
+  .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'][data-animation='shimmer'] {
+    background: GrayText;
+  }
 }

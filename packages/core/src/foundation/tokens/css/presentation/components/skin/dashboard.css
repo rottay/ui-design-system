@@ -1,5 +1,82 @@
-/** DashboardSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+/**
+ * DashboardSurface skin (WO-SKIN-06 / CK-I).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
+ *
+ * SCOPE: the surface composes public primitives and patterns (PageShell,
+ * StatsGrid, Card, Grid) — each owns its own chrome, states and forced-colors
+ * treatment, so this file paints ONLY:
+ *   - section title/description hooks (composed Text primitives, keyed
+ *     on the always-stamped `data-size` — repeating an attribute is forbidden;
+ *     typography.css sorts in `rottay-engines` and governs wherever it paints
+ *     a color itself, exactly the outcome the retired repetition produced);
+ *   - the board-mirror skeleton blocks (`dashboard-skeleton-*`), whose pulse
+ *     rides the canonical `ds-foundation-pulse` keyframes on the
+ *     `--ds-motion-attention` channel and goes quiet under reduced motion.
+ *     Their fills are neutral surface tokens, so forced colors needs no
+ *     re-keying here (the composed Cards already force their own frames).
+ */
 
-.ds-surface.ds-dashboard .ds-dashboard__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+.ds-surface.ds-dashboard
+  .ds-dashboard__section-title[data-part="root"][data-size] {
+  font-weight: var(
+    --ds-dashboard-section-title-weight,
+    var(--ds-typography-heading-font-weight, 600)
+  );
+}
+
+.ds-surface.ds-dashboard[data-heading-weight="lighter"]
+  .ds-dashboard__section-title[data-part="root"][data-size] {
+  font-weight: var(--ds-font-weight-medium, 500);
+}
+
+.ds-surface.ds-dashboard[data-heading-weight="heavier"]
+  .ds-dashboard__section-title[data-part="root"][data-size] {
+  font-weight: var(--ds-font-weight-extrabold, 800);
+}
+
+.ds-surface.ds-dashboard
+  .ds-dashboard__muted-text[data-part="root"][data-size] {
+  color: var(
+    --ds-dashboard-section-description-color,
+    var(--ds-color-text-muted)
+  );
+}
+
+/* ---- board-mirror skeleton: blocks sit on the same grid and spans as the
+        real content, preventing a loading-time layout shift. ---- */
+.ds-surface.ds-dashboard [data-part="dashboard-skeleton-block"] {
+  border-radius: var(--ds-dashboard-skeleton-radius, var(--ds-radius-md, 8px));
+  background: var(
+    --ds-dashboard-skeleton-background,
+    var(--ds-surface-panel, var(--ds-color-bg-secondary))
+  );
+  animation: ds-foundation-pulse
+    var(--ds-dashboard-skeleton-duration, var(--ds-motion-attention, 1.5s))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-surface.ds-dashboard
+  [data-part="dashboard-skeleton-block"][data-size="stat"] {
+  min-block-size: var(--ds-dashboard-skeleton-stat-height, 96px);
+}
+
+.ds-surface.ds-dashboard
+  [data-part="dashboard-skeleton-block"][data-size="section-title"] {
+  inline-size: var(--ds-dashboard-skeleton-title-width, 42%);
+  min-block-size: var(--ds-dashboard-skeleton-title-height, 20px);
+}
+
+.ds-surface.ds-dashboard
+  [data-part="dashboard-skeleton-block"][data-size="section-line"] {
+  inline-size: 100%;
+  min-block-size: var(--ds-dashboard-skeleton-line-height, 12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-dashboard [data-part="dashboard-skeleton-block"] {
+    animation: none;
+  }
 }

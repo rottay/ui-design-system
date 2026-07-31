@@ -5,11 +5,23 @@
  * Renders a month grid with event chips, composing public DS primitives
  * (Button for navigation/today, Select for the view switch, Spinner for
  * loading) — the pattern never recreates a control with its own HTML/CSS.
- * Geometry and the pattern's own paint live in the unlayered modern
+ * Geometry and the pattern's own paint live in the modern
  * pattern-calendar-view skin, keyed on the `data-part`/`data-*` contract
  * this file stamps. Own copy resolves through the optional `components`
  * i18n channel with an English floor; weekday and month names follow the
- * active locale via Intl.
+ * active locale via Intl, and the grid's week start follows the locale's
+ * own `Intl.Locale.getWeekInfo()` (Sunday floor).
+ *
+ * PINS: the previous/next controls are the TEXT buttons
+ * '<' / '>' (`getByText('<')` / `getByText('>')`) — governed chevron icons
+ * are blocked by that pin; both carry localized aria-labels. The month grid
+ * layout is owned by the Modern skin through its `data-part="grid"` contract.
+ * An empty events array still renders the full grid, so no Empty state is
+ * composed.
+ *
+ * DEBT: the contract offers month/week/day views; this engine renders the
+ * month grid for every mode — the Select surface stays per contract and
+ * the week/day time-slot engines are documented follow-up, not half-built.
  *
  * @example
  * <ModernCalendarView
@@ -28,24 +40,43 @@ import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/mo
 
 const ROOT_CLASS_NAME = 'ds-pattern-calendar-view ds-engine-modern';
 
-/** Jan 4 2026 is a Sunday: weekday short names derive from the active locale. */
-function weekdayNames(locale: string): string[] {
+/**
+ * Week start for the active locale, from the sanctioned Intl runtime:
+ * `Intl.Locale.getWeekInfo().firstDay` (1 = Monday … 7 = Sunday), floored to
+ * Sunday (7) when the runtime predates weekInfo or the locale is the
+ * 'default' placeholder. Never a hardcoded locale table.
+ */
+function weekStartDay(locale: string): number {
+  try {
+    const loc = new Intl.Locale(
+      locale === 'default' ? navigator.language : locale,
+    ) as Intl.Locale & { getWeekInfo?: () => { firstDay?: number } };
+    return loc.getWeekInfo?.().firstDay ?? 7;
+  } catch {
+    return 7;
+  }
+}
+
+/** Jan 4 2026 is a Sunday: weekday short names derive from the active locale,
+    rotated so the row starts on the locale's own week start. */
+function weekdayNames(locale: string, weekStart: number): string[] {
+  const sunday = weekStart % 7; // 7 (Sunday) -> 0, matching Date.getDay()
   return Array.from({ length: 7 }, (_, i) =>
-    new Date(2026, 0, 4 + i).toLocaleDateString(locale, { weekday: 'short' }),
+    new Date(2026, 0, 4 + ((sunday + i) % 7)).toLocaleDateString(locale, { weekday: 'short' }),
   );
 }
 
 /**
- * Build a 7-column grid for the given month. Leading nulls pad the days
- * before the 1st (Sunday-aligned); trailing nulls complete the last row
- * to exactly 7 columns, preventing layout shift between months.
+ * Build a 7-column grid for the given month, aligned to the locale's week
+ * start. Leading nulls pad the days before the 1st; trailing nulls complete
+ * the last row to exactly 7 columns, preventing layout shift between months.
  */
-function getMonthGrid(date: Date) {
+function getMonthGrid(date: Date, weekStart: number) {
   const year = date.getFullYear();
   const month = date.getMonth();
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
-  const startOffset = firstDay.getDay();
+  const startOffset = (firstDay.getDay() - (weekStart % 7) + 7) % 7;
   const totalDays = lastDay.getDate();
 
   const cells: (Date | null)[] = [];
@@ -102,8 +133,9 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
     viewDay: tOr('calendarView.viewDay', 'Day'),
   };
 
-  const cells = useMemo(() => getMonthGrid(currentDate), [currentDate]);
-  const dayNames = useMemo(() => weekdayNames(locale), [locale]);
+  const weekStart = useMemo(() => weekStartDay(locale), [locale]);
+  const cells = useMemo(() => getMonthGrid(currentDate, weekStart), [currentDate, weekStart]);
+  const dayNames = useMemo(() => weekdayNames(locale, weekStart), [locale, weekStart]);
 
   // Index events by date string for O(1) lookup per cell during render.
   // Only keyed by start date -- multi-day events appear on their start day only.
@@ -201,10 +233,8 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
           <ModernSpinner size="md" data-part="spinner" />
         </div>
       ) : (
-        /* The `grid grid-cols-7` utilities are pinned by the public test
-           contract (`[style*=grid-template-columns],.grid-cols-7`); border,
-           radius and overflow live in the skin. */
-        <div data-part="grid" className="grid grid-cols-7">
+        /* Grid geometry and frame are skin-owned through the public anatomy. */
+        <div data-part="grid">
           {dayNames.map((d) => (
             <div data-part="weekday" key={d}>
               {d}
@@ -236,7 +266,20 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                       <div
                         data-part="event"
                         key={ev.id}
+                        /* Event chips are the primary interactive content, so
+                           they are real keyboard targets (Enter/Space fire the
+                           same callback as click). Full APG grid navigation
+                           across day cells is documented debt, not half-built. */
+                        role="button"
+                        tabIndex={0}
                         onClick={(e) => { e.stopPropagation(); onEventClick?.(ev); }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onEventClick?.(ev);
+                          }
+                        }}
                         /* Per-event color is consumer config data: it rides the
                            accent hatch (quoted key) and the skin owns the fill. */
                         style={{ '--ds-calendar-event-accent': ev.color } as React.CSSProperties}

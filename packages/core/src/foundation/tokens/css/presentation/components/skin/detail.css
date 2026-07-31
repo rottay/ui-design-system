@@ -1,0 +1,17 @@
+/**
+ * DetailSurface skin.
+ *
+ * The surface composes PageShell and DetailPanel; those owners keep their own
+ * chrome. This file owns only the state wrapper and the layout-inert ready
+ * anatomy shared by error, empty, loading, and ready states.
+ */
+
+.ds-surface.ds-detail-surface[data-part="root"][data-state="error"] {
+  display: grid;
+  gap: var(--ds-detail-state-gap, var(--ds-spacing-4, 16px));
+}
+
+.ds-surface.ds-detail-surface[data-part="root"][data-state="ready"],
+.ds-surface.ds-detail-surface[data-part="root"][data-state="loading"] {
+  display: contents;
+}

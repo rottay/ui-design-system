@@ -1,5 +1,5 @@
 /**
- * Modern Watermark skin (WO-SKIN-04 checkpoint P).
+ * Modern Watermark skin (WO-SKIN-04 checkpoint P; geometry drain).
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * base layer, so a layered rule cannot paint these elements at all.
@@ -8,14 +8,44 @@
  * content — the repeating text or image tile — is drawn to an off-screen `<canvas>`
  * (`ctx.font`, `ctx.fillStyle`, `ctx.fillText`, `ctx.rotate`) and exported through
  * `canvas.toDataURL()` into a React-state `backgroundImage`. None of that is a CSS
- * property, so `background-image` CANNOT move here and stays JS-bound; only
- * `background-repeat` is a static value a skin can own.
+ * property, so `background-image` CANNOT move here and stays JS-bound; the static
+ * layout (root context, pattern placement, non-interactivity, layer opacity) lives
+ * here, drained from the engine's `relative` / `absolute inset-0
+ * pointer-events-none` utilities.
  *
- * PORTAL: neither engine portals — this is an in-place `absolute inset-0` layer, not a
+ * FORCED COLORS: the watermark is a decorative provenance layer, not
+ * information — unlike ColorPicker swatches (where the color IS the meaning),
+ * the tenant's mark losing its hue costs nothing the document needs. The UA
+ * already strips the raster background-image under forced colors; the rule
+ * below makes that deterministic instead of relying on UA variance, so no
+ * `forced-color-adjust: none` opt-out is taken.
+ *
+ * PRINT: no rule — the contract has no print axis, so the layer prints
+ * exactly as the tenant authored it (provenance marks like "DRAFT" often
+ * WANT to print). Recorded as a contract candidate, not a skin decision.
+ *
+ * PORTAL: neither engine portals — this is an in-place absolute layer, not a
  * floating overlay.
  */
 
+.rottay-watermark--modern[data-part='root'] {
+  position: relative;
+}
+
 .rottay-watermark--modern[data-part='root'] > [data-part='pattern'] {
+  position: absolute;
+  inset: 0;
+  /* Never a trap: the layer cannot intercept the UI beneath it. */
+  pointer-events: none;
+  /* One knob for how loud the mark reads; the tenant's authored color stays
+     the source of truth and this multiplies it (never double-dims by default). */
+  opacity: var(--ds-watermark-opacity, 1);
   background-repeat: repeat;
   background-position: var(--ds-watermark-offset);
+}
+
+@media (forced-colors: active) {
+  .rottay-watermark--modern[data-part='root'] > [data-part='pattern'] {
+    display: none;
+  }
 }

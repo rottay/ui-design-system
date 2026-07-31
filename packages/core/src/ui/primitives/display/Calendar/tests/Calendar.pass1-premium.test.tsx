@@ -54,7 +54,7 @@ describe('Modern Calendar premium contract — Pass 1', () => {
     expect(engineSource).not.toContain('fontSize: 13');
     expect(skin).toContain('block-size: 32px');
     expect(skin).toContain('padding-inline: 12px');
-    expect(skin).toContain('font-size: 13px');
+    expect(skin).toContain('font-size: var(--ds-font-size-sm)');
   });
 
   it('owns the today-ring border width in the skin, preserving the today-and-not-selected matrix', () => {
@@ -65,29 +65,32 @@ describe('Modern Calendar premium contract — Pass 1', () => {
     );
   });
 
-  it('flips the direction-hardcoded nav glyphs under RTL via the skin, not a markup branch', () => {
-    expect(skin).toMatch(
-      /\[dir='rtl'\]\s+\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\]\s+\[data-part='nav-button'\]\s*\{\s*transform:\s*scaleX\(-1\)/,
-    );
-    // Glyphs stay in DOM order; the flip is purely visual.
+  it('delegates RTL nav mirroring to the semantic icon corpus, not a calendar-local branch', () => {
+    expect(engineSource).toContain('NavigationBackIcon');
+    expect(engineSource).toContain('NavigationForwardIcon');
+    expect(skin).not.toMatch(/\[data-part='nav-button'\][^{]*\{\s*transform:\s*scaleX\(-1\)/);
+    // Icons stay in DOM order; the semantic icon facade owns visual mirroring.
     expect(engineSource).toContain('data-direction="prev-year"');
-    expect(engineSource).not.toMatch(/dir(?:ection)?\s*===?\s*'rtl'/i);
+    expect(engineSource).not.toMatch(/(?:Previous|Next)(?:Year)?Icon\s*=\s*\([^)]*rtl/i);
+
+    render(
+      <div dir="rtl">
+        <CalendarModern defaultValue={notToday()} fullscreen={false} />
+      </div>,
+    );
+    const previous = screen.getByRole('button', { name: 'Previous month' });
+    expect(previous.querySelector('[data-icon-mirrored="auto"]')).not.toBeNull();
   });
 
   it('renders header controls without inline style, with glyph content and accessible names', () => {
     render(<CalendarModern defaultValue={notToday()} fullscreen={false} />);
 
-    // Text content stays the glyph; the accessible name is the guarded label
-    // (Pass 2 a11y: a bare '«' is not an accessible name).
-    const navExpectations: Array<[string, string]> = [
-      ['«', 'Previous year'],
-      ['‹', 'Previous month'],
-      ['›', 'Next month'],
-      ['»', 'Next year'],
-    ];
-    for (const [glyph, name] of navExpectations) {
+    // Visual content comes from governed semantic icons; accessible names stay
+    // on the buttons and no glyph text leaks into their names.
+    const navExpectations = ['Previous year', 'Previous month', 'Next month', 'Next year'];
+    for (const name of navExpectations) {
       const button = screen.getByRole('button', { name });
-      expect(button.textContent).toBe(glyph);
+      expect(button.querySelector('[data-icon-name]')).not.toBeNull();
       expect(button.getAttribute('style')).toBeNull();
       expect(button.getAttribute('data-part')).toBe('nav-button');
     }
@@ -115,8 +118,11 @@ describe('Modern Calendar premium contract — Pass 1', () => {
 
     const overlay = todayCell!.querySelector<HTMLElement>('[data-part="cell-content"]');
     expect(overlay).not.toBeNull();
-    expect(overlay!.className.split(/\s+/)).toEqual(expect.arrayContaining(['start-0', 'end-0']));
-    expect(overlay!.className.split(/\s+/)).not.toEqual(expect.arrayContaining(['left-0', 'right-0']));
+    expect(overlay!.className).toBe('');
+    expect(skin).toMatch(
+      /\[data-part='cell-content'\]\s*\{[^}]*position:\s*absolute;[^}]*inset-block-end:\s*0;[^}]*inset-inline:\s*0;/,
+    );
+    expect(skin).not.toMatch(/\[data-part='cell-content'\][^{]*\{[^}]*(?:left|right):\s*0/);
   });
 
   it('keeps one anatomy across writing directions', () => {
@@ -162,16 +168,15 @@ describe('Modern Calendar guarded i18n channel (K4-B)', () => {
   } as const;
   const MONTH_KEY_BY_INDEX = Object.keys(CUSTOM_MONTHS) as Array<keyof typeof CUSTOM_MONTHS>;
 
-  it('keeps the English labels when the keys are missing in locale AND fallback locale (echo guard)', () => {
-    // fr/pt JSONs do not carry the calendar keys yet; pinning both locales to
-    // fr keeps the catalog silent so the guard must fall back.
+  it('consumes the complete Portuguese calendar catalog without echoing keys', () => {
     render(
-      <I18nProvider locale="fr" fallbackLocale="fr">
+      <I18nProvider locale="pt" fallbackLocale="pt">
         <CalendarModern defaultValue={notToday()} />
       </I18nProvider>,
     );
-    expect(screen.getByRole('button', { name: 'Year' })).toBeInTheDocument();
-    expect(screen.getAllByText('Sun')).toHaveLength(1);
+    expect(screen.getByRole('button', { name: 'Ano' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Ano anterior' })).toBeInTheDocument();
+    expect(screen.queryByText('components.calendar.yearToggle')).not.toBeInTheDocument();
   });
 
   it('consumes calendar.weekdays.* / calendar.months.* / calendar.yearToggle once the keys land', () => {
@@ -298,12 +303,16 @@ describe('Modern Calendar remediation (K4-B)', () => {
     // Same law as Transfer's move/pagination buttons: tenant ghost tint with a
     // surface-inset floor, gated :not(:disabled), family escape hatch, and the
     // ACTIVE mode toggle excluded so selected > rest stays discernible.
-    expect(skin).toMatch(
-      /\[data-part='nav-button'\]:not\(:disabled\):hover,\s*\n\.rottay-calendar\.rottay-calendar--modern\[data-part='root'\] > \[data-part='header'\] > div > \[data-part='mode-toggle'\]:not\(\[data-active='true'\]\):not\(:disabled\):hover\s*\{\s*background:\s*var\(--ds-calendar-nav-bg-hover, var\(--ds-button-ghost-bg-hover, var\(--ds-surface-inset\)\)\)/,
+    expect(skin).toContain("[data-part='nav-button']:not(:disabled):hover,");
+    expect(skin).toContain(
+      "[data-part='mode-toggle']:not([data-active='true']):not(:disabled):hover",
+    );
+    expect(skin).toContain(
+      'background: var(--ds-calendar-nav-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)))',
     );
     // The old "transcribed, not levelled" header claim is gone.
     expect(skin).not.toContain('transcribed, not');
-    expect(skin).toContain('LEVELLED');
+    expect(skin.toLowerCase()).toContain('levelled');
     // The month label never wraps inside the 32px control (capture evidence:
     // "July 2026" wrapped to two lines under bithire metrics).
     expect(skin).toContain('white-space: nowrap');

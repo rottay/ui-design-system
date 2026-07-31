@@ -27,6 +27,7 @@
 import React from 'react';
 
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { CheckIcon } from '../../../../graphics/icons';
 import { CODE_BLOCK_DEFAULTS } from './contracts';
 import type { CodeBlockProps, HighlightTokenLine } from './contracts';
 import { useHighlighter } from './runtime/highlighter';
@@ -244,7 +245,7 @@ export function CodeBlock({
           aria-label={copied ? copiedLabel : copyLabel}
         >
           <span aria-hidden="true" data-part="copy-tick" data-copied={copied ? 'true' : 'false'}>
-            {copied ? '✓' : ''}
+            {copied ? <CheckIcon size={12} strokeWidth={2.4} aria-hidden /> : ''}
           </span>
           <span>{copied ? copiedLabel : copyLabel}</span>
         </button>
@@ -267,6 +268,10 @@ export function CodeBlock({
           overflowX: wrap ? 'hidden' : 'auto',
           overflowY: maxHeight ? 'auto' : undefined,
           maxHeight,
+          // Channeled scrollbar: quiet thin track that follows the tenant's
+          // border token instead of the UA default chrome.
+          scrollbarWidth: 'thin',
+          scrollbarColor: 'var(--ds-color-border-secondary) transparent',
         }}
       >
         <pre
@@ -294,7 +299,7 @@ export function CodeBlock({
                   style={{
                     display: 'flex',
                     background: highlighted
-                      ? 'color-mix(in srgb, var(--ds-color-warning) 14%, transparent)'
+                      ? 'var(--ds-code-block-line-highlight-bg, color-mix(in srgb, var(--ds-color-warning) 14%, transparent))'
                       : undefined,
                     whiteSpace: wrap ? 'pre-wrap' : 'pre',
                     wordBreak: wrap ? 'break-word' : undefined,
@@ -310,6 +315,9 @@ export function CodeBlock({
                         marginInlineEnd: 'var(--ds-spacing-3)',
                         textAlign: 'end',
                         userSelect: 'none',
+                        // Line numbers align in columns across widths (tabular
+                        // figures; the gutter is decorative and hidden from AT).
+                        fontVariantNumeric: 'tabular-nums',
                         // CONTRAST LAW (K4-B remediation, axe color-contrast/
                         // serious): raw tertiary ink fails AA on the inset
                         // surface (3.27:1 measured on the bithire light pair;

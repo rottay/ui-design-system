@@ -1,5 +1,27 @@
-/** ProfileSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
-
-.ds-surface.ds-profile .ds-profile__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
-}
+/**
+ * ProfileSurface skin (WO-SKIN-06 / CK-I, premium wave 2026-07-30).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
+ *
+ * SCOPE: the surface composes public primitives and kits (PageShell, Card,
+ * Button, Input, Textarea, Typography, Skeleton/Empty/Error state kits) —
+ * each owns its chrome, states and forced-colors treatment. The one rule
+ * this file used to carry (muted ink on `ds-profile__muted-text`) migrated
+ * to the Typography primitive's own `color="muted"` channel, and long
+ * values are already safe because typography.css paints
+ * `overflow-wrap: anywhere` on every Modern Text (typography.css:30). This
+ * file therefore intentionally carries NO paint rules today: the BEM hooks
+ * (`ds-profile__section-card`, `ds-profile__muted-text`,
+ * `ds-profile__field-value`) remain as pinned anatomy/landing hooks only.
+ *
+ * SPECIFICITY: the retired selector keyed on a doubled attribute
+ * (`[data-part='root'][data-part='root']`) — repetition is forbidden in
+ * Modern selectors (owner directive, 4th tanda) and the ink it set is now
+ * owned by the primitive, so the rule was removed rather than re-keyed.
+ *
+ * FORCED COLORS: no block on purpose — there is no surface-owned paint to
+ * re-key (forced text colors are forced by the UA and every composed part
+ * already handles its own).
+ */

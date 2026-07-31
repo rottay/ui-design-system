@@ -107,11 +107,10 @@
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel-select-all'] {
-  inline-size: 16px;
-  block-size: 16px;
+  /* The wrapper only positions the composed Checkbox primitive -- the box
+     geometry/accent is the primitive's own skin (single paint owner). */
+  display: inline-flex;
   flex: none;
-  cursor: pointer;
-  accent-color: var(--ds-color-primary);
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel-title'] {
@@ -131,6 +130,7 @@
   margin-inline-start: auto;
   padding-inline-start: var(--ds-spacing-2, 8px);
   font-size: var(--ds-font-size-sm, 14px);
+  font-variant-numeric: tabular-nums;
   color: var(--ds-color-text-secondary);
 }
 
@@ -188,11 +188,32 @@
   cursor: pointer;
   transition: background-color var(--ds-motion-fast), color var(--ds-motion-fast);
 }
+/* Selected rows hold a quiet governed wash (the filter-pill active idiom);
+   hover stays off selected rows so the wash never flickers under the pointer. */
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item'][data-selected='true'] {
+  background: var(
+    --ds-transfer-item-bg-selected,
+    color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
+  );
+}
 /* Row hover (K4-D Pass 2): clickable rows must acknowledge the pointer --
    the rustic sibling has always repainted on hover; same ghost-row grammar
-   as the move/pagination buttons. */
-.rottay-transfer.rottay-transfer--modern [data-part='panel-item']:not([data-disabled='true']):hover {
-  background: var(--ds-transfer-item-bg-hover, var(--ds-surface-inset));
+   as the move/pagination buttons. Pointer-fine only (hover:hover): touch
+   feedback is the :active press below, never a sticky wash (pre-flag 8). */
+@media (hover: hover) {
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-item']:not([data-disabled='true']):not([data-selected='true']):hover {
+    background: var(--ds-transfer-item-bg-hover, var(--ds-surface-inset));
+  }
+  .rottay-transfer.rottay-transfer--modern [data-part='move-button']:not(:disabled):hover,
+  .rottay-transfer.rottay-transfer--modern [data-part='pagination-button']:not(:disabled):hover {
+    background: var(--ds-transfer-button-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
+  }
+}
+/* Touch/keyboard parity for the hover feedback: a real, visible press. */
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item']:not([data-disabled='true']):active,
+.rottay-transfer.rottay-transfer--modern [data-part='move-button']:not(:disabled):active,
+.rottay-transfer.rottay-transfer--modern [data-part='pagination-button']:not(:disabled):active {
+  background: var(--ds-transfer-control-bg-active, var(--ds-surface-highlight));
 }
 .rottay-transfer.rottay-transfer--modern [data-part='panel-item'][data-disabled='true'] {
   opacity: 0.5;
@@ -207,10 +228,11 @@
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel-item-checkbox'] {
-  inline-size: 16px;
-  block-size: 16px;
-  cursor: pointer;
-  accent-color: var(--ds-color-primary);
+  /* Same composition law as the select-all: the wrapper reserves layout and
+     lets long tenant slugs wrap; the check chrome is the primitive's. */
+  display: inline-flex;
+  flex: 1 1 auto;
+  min-inline-size: 0;
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel-empty'] {
@@ -233,7 +255,7 @@
 .rottay-transfer.rottay-transfer--modern [data-part='pagination-button'] {
   block-size: 24px;
   padding: 0 8px;
-  font-size: 12px;
+  font-size: var(--ds-font-size-xs);
   cursor: pointer;
   background: transparent;
   color: var(--ds-color-text-primary);
@@ -241,13 +263,8 @@
   border: none;
   transition: background-color var(--ds-motion-fast), color var(--ds-motion-fast);
 }
-/* Certified ghost-button hover grammar (K4-D round 4): the brand tint over
-   the tenant's control surface -- bithire ≈ #EBF1F7 on its #F4F8FB canvas
-   (ΔRGB 9/7/4), TMM ≈ #E7F0ED on #FBF6EC (ΔRGB 20/6/1); glyph ink stays
-   `--ds-color-text-primary` (>= 12:1 on both hover surfaces). */
-.rottay-transfer.rottay-transfer--modern [data-part='pagination-button']:not(:disabled):hover {
-  background: var(--ds-transfer-pagination-button-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
-}
+/* The ghost-button hover repaint lives in the shared `media (hover: hover)`
+   block above (single grammar for row + buttons). */
 /* RTL: the hardcoded ‹/› glyphs are physical; mirror them so prev/next
  * keep pointing at the logical page direction. */
 [dir='rtl'] .rottay-transfer.rottay-transfer--modern [data-part='pagination-button'] {
@@ -274,17 +291,21 @@
   padding: 0;
   font-size: var(--ds-input-sm-font-size, 13px);
   cursor: pointer;
-  transition: all var(--ds-motion-normal);
+  /* Never `all`: only the channels this skin actually repaints. */
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: 50%;
   border: none;
 }
-/* Certified ghost-button hover grammar (K4-D round 4), same repaint as the
-   pagination buttons: brand tint over the tenant's control surface, gated
-   off disabled (a disabled move button must not tease interactivity). */
-.rottay-transfer.rottay-transfer--modern [data-part='move-button']:not(:disabled):hover {
-  background: var(--ds-transfer-move-button-bg-hover, var(--ds-button-ghost-bg-hover, var(--ds-surface-inset)));
+/* The move-button hover repaint shares the `media (hover: hover)` block
+   above; the RTL mirror flips the physical </> glyphs toward the logical
+   target/source panels (the panels themselves mirror with direction). */
+[dir='rtl'] .rottay-transfer.rottay-transfer--modern [data-part='move-button'] {
+  transform: scaleX(-1);
 }
 
 /* Disabled posture (K4-D Pass 2 adjudication): until now enabled and
@@ -328,5 +349,45 @@
   .rottay-transfer.rottay-transfer--modern [data-part='pagination-button'],
   .rottay-transfer.rottay-transfer--modern [data-part='panel-item'] {
     transition-duration: 0.01ms;
+  }
+}
+
+@media (forced-colors: active) {
+  /* Panels and their separators re-assert in system colors; the selection
+     wash becomes the system highlight pair (the check FORM comes from the
+     primitive's own forced-colors handling). Specificity parity without the
+     doubled data-part idiom (4th wave): lift to the panel scope or use an
+     always-present attribute. */
+  .rottay-transfer.rottay-transfer--modern [data-part='panel'][data-panel],
+  .rottay-transfer.rottay-transfer--modern [data-part='panel'][data-panel] > [data-part='panel-header'],
+  .rottay-transfer.rottay-transfer--modern [data-part='panel'][data-panel] > div:has(> [data-part='panel-search']),
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-search'][type='text'],
+  .rottay-transfer.rottay-transfer--modern [data-part='panel'][data-panel] > [data-part='panel-pagination'] {
+    border-color: ButtonText;
+    background: Canvas;
+    color: CanvasText;
+  }
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-search'] {
+    background: Field;
+    color: FieldText;
+  }
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-item'][data-selected='true'],
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-item']:not([data-disabled='true']):active {
+    background: Highlight;
+    color: HighlightText;
+  }
+  .rottay-transfer.rottay-transfer--modern [data-part='move-button'],
+  .rottay-transfer.rottay-transfer--modern [data-part='pagination-button'] {
+    color: ButtonText;
+  }
+  .rottay-transfer.rottay-transfer--modern [data-part='move-button']:disabled,
+  .rottay-transfer.rottay-transfer--modern [data-part='pagination-button']:disabled {
+    color: GrayText;
+    opacity: 1;
+  }
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-count'],
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-pagination'] > span,
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-empty'] {
+    color: CanvasText;
   }
 }

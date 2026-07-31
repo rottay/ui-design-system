@@ -281,7 +281,13 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
           <div data-part="titles">
             {eyebrow && !isCompact ? <div data-part="eyebrow">{eyebrow}</div> : null}
             <div data-part="title-row">
-              <h2 data-part="title">
+              {/* String titles also advertise their full text on hover: the
+                  34ch measure + balanced wrap can still clip long names in
+                  narrow containers. */}
+              <h2
+                data-part="title"
+                title={typeof title === 'string' ? title : undefined}
+              >
                 {title}
               </h2>
 

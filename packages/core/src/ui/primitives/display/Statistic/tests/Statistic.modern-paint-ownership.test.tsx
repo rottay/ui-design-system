@@ -117,9 +117,10 @@ describe('Statistic modern — Daisy drained, skin owns the paint', () => {
       /\[data-part='title'\][^{]*\{[^}]*color-mix\(\s*in srgb,\s*var\(--ds-statistic-title-color,\s*var\(--ds-color-text-secondary\)\)\s*70%,\s*var\(--ds-color-text-primary\)\s*30%\s*\)/
     );
     // Warning trend: bithire's raw #D6A04E failed even large-text AA (2.19) --
-    // deepened 40% toward black, deriving from the tenant's own hue.
+    // deepened 40% toward the tenant-safe dark neutral ramp (never a black
+    // mix), deriving from the tenant's own hue.
     expect(SKIN).toMatch(
-      /\[data-trend='warning'\][^{]*\{[^}]*color-mix\(\s*in srgb,\s*var\(--ds-color-warning\)\s*60%,\s*var\(--ds-color-black,\s*#000\)\s*40%\s*\)/
+      /\[data-trend='warning'\][^{]*\{[^}]*color-mix\(\s*in srgb,\s*var\(--ds-color-warning\)\s*60%,\s*var\(--ds-color-neutral-900,\s*#171717\)\s*40%\s*\)/
     );
   });
 });

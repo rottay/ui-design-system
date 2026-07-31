@@ -5,11 +5,24 @@
  * switching between predefined data subsets.
  *
  * @description
- * Engine-free structures family that renders a horizontal row of scope pills (e.g.
- * "All", "Active", "Archived"). Each pill carries a label and an optional
- * count badge, and the active pill is highlighted with the primary tint.
- * Supports two visual variants: `section` (the default standalone bar) and
- * `inline` (compact, used inside toolbars or table headers).
+ * Engine-free structures family for switching between DATA scopes (e.g.
+ * "All", "Active", "Archived" — consumer-supplied data subsets, NOT
+ * deployment environments; the sibling pattern `environment-toggle` PT25
+ * owns deployment-environment switching with its confirmation/banner
+ * semantics — different domain, different contract).
+ *
+ * COMPOSITION LAW (S22): the scope switcher IS the certified Segmented
+ * primitive — the hand-rolled Box-as-button pills (aria-pressed, no roving)
+ * are retired, and with them the APG gap: the primitive owns
+ * role=radiogroup/radio, aria-checked, the roving tab stop and the
+ * RTL-aware arrow contract. Unlike environment-toggle (which kept its own
+ * anatomy because Segmented cannot carry a per-option STYLE channel), this
+ * family needs no per-option paint channel: the active fill is uniform and
+ * the count badge rides INSIDE the option's ReactNode label, so the
+ * composition is lossless. What the pattern keeps: the root frame (section
+ * vs inline variants), the count badge paint (tabular figures), the scroll
+ * region, the i18n group label, and the forced-colors contract for those
+ * owned pieces.
  *
  * The family stays domain-agnostic. Scope keys, labels, counts, and
  * filter predicates are consumer-supplied via the ScopeDefinition shape;
@@ -18,7 +31,8 @@
  */
 
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import { Box, Flex, Text } from '../../../primitives';
+import { Box } from '../../../primitives';
+import ModernSegmented from '../../../primitives/navigation/Segmented/engines/modern';
 
 /** Definition of a single scope pill rendered by the strip. */
 export interface ScopeDefinition {
@@ -65,76 +79,30 @@ export function ScopeSwitcher({
       data-part="root"
       data-inline={isInline}
       className="ds-structure ds-scope-switcher"
-      role="group"
-      aria-label={tOr('scopeSwitcher.groupLabel', 'Scope')}
-      style={{
-        padding: isInline ? 0 : '8px 16px',
-        overflowX: 'auto',
-        WebkitOverflowScrolling: 'touch',
-      }}
     >
-      <Flex
-        align="center"
-        gap={isInline ? 5 : 8}
-        data-ds-scope-switcher-row="true"
-        style={{
-          minWidth: isInline ? 'max-content' : 'min-content',
-          flexWrap: isInline ? 'nowrap' : 'wrap',
-        }}
-      >
-        {scopes.map((scope) => {
-          const isActive = scope.key === activeScope;
-          const hasCount = typeof scope.count === 'number';
-
-          return (
-            <Box
-              key={scope.key}
-              as="button"
-              data-part="pill"
-              data-active={isActive}
-              aria-pressed={isActive}
-              onClick={() => onScopeChange(scope.key)}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: isInline ? 5 : 8,
-                height: isInline ? 30 : 32,
-                padding: isInline ? '0 7px' : '0 12px',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                flexShrink: 0,
-              }}
-            >
-              <Text
-                data-part="pill-label"
-                size="sm"
-                style={{
-                  lineHeight: 1,
-                }}
-              >
-                {scope.label}
-              </Text>
-              {hasCount && (
-                <Box
-                  data-part="count-badge"
-                  data-active={isActive}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    minWidth: 18,
-                    height: 18,
-                    padding: isInline ? '0 4px' : '0 6px',
-                    flexShrink: 0,
-                  }}
-                >
+      {/* Composed Segmented (P81): radiogroup semantics, roving keyboard and
+          option chrome belong to the primitive; the count badge is the
+          pattern's own content inside the option label. */}
+      <ModernSegmented
+        data-part="switcher"
+        options={scopes.map((scope) => ({
+          value: scope.key,
+          label: (
+            <>
+              {scope.label}
+              {typeof scope.count === 'number' && (
+                <span data-part="count-badge" data-active={scope.key === activeScope}>
                   {scope.count}
-                </Box>
+                </span>
               )}
-            </Box>
-          );
-        })}
-      </Flex>
+            </>
+          ),
+        }))}
+        value={activeScope}
+        onChange={(value) => onScopeChange(String(value))}
+        size={isInline ? 'small' : 'middle'}
+        ariaLabel={tOr('scopeSwitcher.groupLabel', 'Scope')}
+      />
     </Box>
   );
 }

@@ -50,9 +50,10 @@ describe('Affix runtime engines', () => {
     expect(affix).toHaveStyle({
       position: 'sticky',
       top: '24px',
-      zIndex: '50',
     });
-    expect(affix.className).toContain('z-50');
+    expect(affix.style.zIndex).toBe('');
+    expect(affix.style.getPropertyValue('--ds-affix-runtime-z-index')).toBe('50');
+    expect(affix.className).not.toContain('z-50');
     expect(affix.className).toContain('sticky-shell');
   });
 

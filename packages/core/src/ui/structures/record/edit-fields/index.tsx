@@ -49,20 +49,42 @@
 
 import {
   useId,
-  useState,
   type CSSProperties,
   type ElementType,
   type ReactNode,
 } from 'react';
 
 import { Box, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /* -------------------------------------------------------------------------- */
-/* Shared tokens                                                              */
+/* Shared chrome copy (i18n channel with an English floor)                    */
 /* -------------------------------------------------------------------------- */
 
-const fastTransition = 'var(--ds-motion-fast) var(--ds-motion-ease-out)';
-const normalTransition = 'var(--ds-motion-normal) var(--ds-motion-ease-out)';
+/**
+ * Chrome copy with an English floor: the family renders standalone (no
+ * I18nProvider) without crashing, and never echoes a raw key. All defaults
+ * below (requirement pills, toggle labels, footer actions, section number)
+ * resolve through this channel; explicit props always win.
+ */
+function useEditFieldsCopy() {
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
+    i18n?.tOr(key, floor, params) ?? floor;
+  return {
+    required: tOr('editFields.requirement.required', 'Required'),
+    recommended: tOr('editFields.requirement.recommended', 'Recommended'),
+    optional: tOr('editFields.requirement.optional', 'Optional'),
+    requiredTitle: tOr('editFields.requirement.required_title', 'Always shown. Saving depends on this value.'),
+    recommendedTitle: tOr('editFields.requirement.recommended_title', 'Improves routing, reporting, or review quality. Safe to fill in later.'),
+    optionalTitle: tOr('editFields.requirement.optional_title', 'Safe to leave blank.'),
+    cancel: tOr('editFields.footer.cancel', 'Cancel'),
+    save: tOr('editFields.footer.save', 'Save changes'),
+    showMore: tOr('editFields.toggle.show_more', 'Show more fields'),
+    hideMore: tOr('editFields.toggle.hide_more', 'Hide more fields'),
+    sectionNumber: (n: string) => tOr('editFields.section.number', 'Section {number}', { number: n }),
+  };
+}
 
 /* -------------------------------------------------------------------------- */
 /* Types                                                                      */
@@ -196,7 +218,7 @@ export function InlineEditorGroup({
       spacing={0}
       className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
       data-part="group"
-      style={{ minWidth: 0, width: '100%', ...style }}
+      style={style}
     >
       {children}
     </Stack>
@@ -231,34 +253,22 @@ export function InlineEditor({
       style={style}
     >
       {!headerless ? (
-        <Flex data-part="editor-header" align="start" justify="between" gap={14} wrap="wrap" style={{ paddingBottom: 14 }}>
-          <Flex align="start" gap={12} style={{ minWidth: 0, flex: '1 1 420px' }}>
+        <Flex data-part="editor-header" align="start" justify="between" gap={14} wrap="wrap">
+          <Flex align="start" gap={12} data-part="editor-lead">
             {Icon ? (
               <Box
                 data-part="editor-icon"
                 aria-hidden
-                style={{
-                  width: 32,
-                  height: 32,
-                  flexShrink: 0,
-                  display: 'grid',
-                  placeItems: 'center',
-                }}
               >
                 <Icon size={16} />
               </Box>
             ) : null}
-            <Stack spacing={4} style={{ minWidth: 0 }}>
+            <Stack spacing={4} data-part="editor-copy">
               {eyebrow ? (
                 <Text
                   data-part="editor-eyebrow"
                   size="xs"
                   weight="bold"
-                  style={{
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
-                    lineHeight: 1,
-                  }}
                 >
                   {eyebrow}
                 </Text>
@@ -267,14 +277,14 @@ export function InlineEditor({
                 {title}
               </Text>
               {description ? (
-                <Text data-part="editor-description" size="sm" style={{ lineHeight: 1.45 }}>
+                <Text data-part="editor-description" size="sm">
                   {description}
                 </Text>
               ) : null}
             </Stack>
           </Flex>
           {meta || actions ? (
-            <Flex data-part="editor-actions" align="center" justify="end" gap={8} wrap="wrap" style={{ minWidth: 0, flex: '0 1 auto' }}>
+            <Flex data-part="editor-actions" align="center" justify="end" gap={8} wrap="wrap">
               {meta}
               {actions}
             </Flex>
@@ -314,14 +324,12 @@ export function InlineEditGrid({
       hidden={kind === 'advanced' && !expanded ? true : undefined}
       aria-hidden={kind === 'advanced' && !expanded ? true : undefined}
       style={{
-        display: 'grid',
-        gridTemplateColumns: columns,
-        gap,
-        width: '100%',
-        alignItems: 'start',
-        paddingBlock: 14,
+        /* Consumer layout values ride quoted channels; the skin applies them
+           and owns the narrow container cut. */
+        '--ds-edit-fields-grid-columns': columns,
+        '--ds-edit-fields-grid-gap': `${gap}px`,
         ...style,
-      }}
+      } as CSSProperties}
     >
       {children}
     </Box>
@@ -343,32 +351,29 @@ export function InlineEditSection({
   style,
   contentStyle,
 }: InlineEditSectionProps): React.ReactElement {
+  const copy = useEditFieldsCopy();
   return (
     <Box
       className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
       data-part="section"
-      style={{ width: '100%', minWidth: 0, ...style }}
+      style={style}
     >
-      <Flex data-part="section-header" align="center" justify="between" gap={12} wrap="wrap" style={{ paddingBottom: 10 }}>
-        <Flex align="center" gap={10} style={{ minWidth: 0, flex: '1 1 360px' }}>
+      <Flex data-part="section-header" align="center" justify="between" gap={12} wrap="wrap">
+        <Flex align="center" gap={10} data-part="section-lead">
           {Icon ? (
-            <Box data-part="section-icon" aria-hidden style={{ display: 'flex' }}>
+            <Box data-part="section-icon" aria-hidden>
               <Icon size={15} />
             </Box>
           ) : null}
-          <Stack spacing={3} style={{ minWidth: 0 }}>
-            <Flex align="center" gap={8} wrap="wrap" style={{ minWidth: 0 }}>
+          <Stack spacing={3} data-part="section-copy">
+            <Flex align="center" gap={8} wrap="wrap">
               {sectionNumber ? (
                 <Text
                   data-part="section-number"
                   size="xs"
                   weight="bold"
-                  style={{
-                    fontFamily: 'var(--ds-font-family-mono, monospace)',
-                    letterSpacing: '0.08em',
-                  }}
                 >
-                  Section {sectionNumber}
+                  {copy.sectionNumber(sectionNumber)}
                 </Text>
               ) : null}
               <Text data-part="section-title" size="sm" weight="bold">
@@ -376,14 +381,14 @@ export function InlineEditSection({
               </Text>
             </Flex>
             {description ? (
-              <Text data-part="section-description" size="xs" style={{ lineHeight: 1.4 }}>
+              <Text data-part="section-description" size="xs">
                 {description}
               </Text>
             ) : null}
           </Stack>
         </Flex>
         {actions ? (
-          <Flex data-part="section-actions" align="center" justify="end" gap={6} wrap="wrap" style={{ minWidth: 0 }}>
+          <Flex data-part="section-actions" align="center" justify="end" gap={6} wrap="wrap">
             {actions}
           </Flex>
         ) : null}
@@ -415,10 +420,9 @@ export function InlineEditControl({
       className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
       data-part="control"
       data-width={width}
+      /* The per-width style is a pinned runtime value (the public test
+         asserts the inline `style.width` per variant), so it stays inline. */
       style={{
-        minWidth: 0,
-        maxWidth: '100%',
-        boxSizing: 'border-box',
         ...controlWidthStyles[width],
         ...style,
       }}
@@ -431,12 +435,6 @@ export function InlineEditControl({
 /* -------------------------------------------------------------------------- */
 /* InlineEditField                                                           */
 /* -------------------------------------------------------------------------- */
-
-const requirementDefaultCopy: Record<InlineEditFieldRequirement, string> = {
-  required: 'Required',
-  recommended: 'Recommended',
-  optional: 'Optional',
-};
 
 const spanColumn: Record<InlineEditFieldSpan, string> = {
   1: 'span 1',
@@ -465,19 +463,22 @@ export function InlineEditField({
   style,
   controlStyle,
 }: InlineEditFieldProps): React.ReactElement {
+  const copy = useEditFieldsCopy();
   const autoId = useId();
   const hintId = hint ? `${autoId}-hint` : undefined;
   const resolvedErrorId = hasError && errorMessage ? errorMessageId ?? `${autoId}-error` : errorMessageId;
   const describedBy = [hintId, hasError ? resolvedErrorId : undefined].filter(Boolean).join(' ') || undefined;
   const shouldShowRequirement = showRequirement ?? requirement !== 'optional';
-  const requirementCopy = requirementLabel ?? requirementDefaultCopy[requirement];
+  const requirementCopy =
+    requirementLabel ??
+    (requirement === 'required' ? copy.required : requirement === 'recommended' ? copy.recommended : copy.optional);
   const requirementTooltip =
     requirementTitle ??
     (requirement === 'required'
-      ? 'Always shown. Saving depends on this value.'
+      ? copy.requiredTitle
       : requirement === 'recommended'
-        ? 'Improves routing, reporting, or review quality. Safe to fill in later.'
-        : 'Safe to leave blank.');
+        ? copy.recommendedTitle
+        : copy.optionalTitle);
 
   return (
     <Box
@@ -485,45 +486,31 @@ export function InlineEditField({
       data-part="field"
       data-requirement={requirement}
       data-error={Boolean(hasError)}
-      style={{ gridColumn: spanColumn[span], minWidth: 0, ...style }}
+      /* The span → grid-column mapping is a pinned runtime value (the public
+         test asserts the inline `style.gridColumn`), so it stays inline. */
+      style={{ gridColumn: spanColumn[span], ...style }}
     >
-      <Box
-        data-part="field-label-row"
-        style={{
-          display: 'grid',
-          gap: hint ? 3 : 0,
-          marginBottom: 8,
-          minWidth: 0,
-        }}
-      >
+      <Box data-part="field-label-row" data-has-hint={Boolean(hint)}>
         <Flex align="center" gap={8} wrap="wrap">
           {fieldNumber ? (
             <Text
               data-part="field-number"
               aria-hidden
               size="xs"
-              style={{
-                fontFamily: 'var(--ds-font-family-mono, monospace)',
-                lineHeight: 1,
-              }}
             >
               {fieldNumber}
             </Text>
           ) : null}
           {Icon ? (
-            <Box data-part="field-icon" aria-hidden style={{ display: 'flex' }}>
+            <Box data-part="field-icon" aria-hidden>
               <Icon size={14} />
             </Box>
           ) : null}
           <Box
             as="label"
             data-part="field-label"
+            data-linked={Boolean(htmlFor)}
             htmlFor={htmlFor}
-            style={{
-              fontSize: 'var(--ds-font-size-sm, 0.875rem)',
-              fontWeight: 'var(--ds-font-weight-semibold, 600)',
-              cursor: htmlFor ? 'pointer' : undefined,
-            }}
             {...(hasError ? { 'aria-invalid': 'true' as const } : {})}
             {...(describedBy ? { 'aria-describedby': describedBy } : {})}
           >
@@ -531,17 +518,14 @@ export function InlineEditField({
           </Box>
           {shouldShowRequirement ? (
             <Tooltip content={requirementTooltip}>
-              <Flex data-part="field-requirement" data-requirement={requirement} align="center" gap={5} aria-hidden style={{ display: 'inline-flex' }}>
+              {/* The pill copy MUST reach AT (the dot alone would be a
+                  colour-only signal); only the dot stays aria-hidden. */}
+              <Flex data-part="field-requirement" data-requirement={requirement} align="center" gap={5}>
                 <Box
                   data-part="field-requirement-dot"
                   aria-hidden
-                  style={{
-                    width: 5,
-                    height: 5,
-                    flexShrink: 0,
-                  }}
                 />
-                <Text data-part="field-requirement-copy" size="xs" weight="bold" style={{ textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <Text data-part="field-requirement-copy" size="xs" weight="bold">
                   {requirementCopy}
                 </Text>
               </Flex>
@@ -549,7 +533,7 @@ export function InlineEditField({
           ) : null}
         </Flex>
         {hint ? (
-          <Text data-part="field-hint" id={hintId} size="xs" style={{ lineHeight: 1.35, minWidth: 0 }}>
+          <Text data-part="field-hint" id={hintId} size="xs">
             {hint}
           </Text>
         ) : null}
@@ -562,7 +546,6 @@ export function InlineEditField({
           data-part="field-error"
           id={resolvedErrorId}
           size="xs"
-          style={{ lineHeight: 1.4, marginTop: 5, display: 'block' }}
         >
           {errorMessage}
         </Text>
@@ -579,24 +562,27 @@ export function MoreFieldsToggle({
   expanded,
   onToggle,
   controls,
-  showLabel = 'Show more fields',
-  hideLabel = 'Hide more fields',
+  showLabel,
+  hideLabel,
   sticky = false,
   stickyOffset = 72,
   className,
   style,
 }: MoreFieldsToggleProps): React.ReactElement {
+  const copy = useEditFieldsCopy();
+  const resolvedShowLabel = showLabel ?? copy.showMore;
+  const resolvedHideLabel = hideLabel ?? copy.hideMore;
+
   return (
     <Box
       className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
       data-part="toggle"
       data-expanded={expanded}
       data-sticky={sticky}
+      /* The sticky dock (position/top) is a pinned runtime value (the public
+         test asserts the inline `style.position`/`style.top`), so it stays
+         inline; the rest of the frame is skin-owned. */
       style={{
-        display: 'flex',
-        justifyContent: expanded ? 'flex-end' : 'center',
-        width: '100%',
-        minWidth: 0,
         ...(sticky && expanded ? { position: 'sticky', top: stickyOffset, zIndex: 1 } : null),
         ...style,
       }}
@@ -608,10 +594,9 @@ export function MoreFieldsToggle({
         onClick={onToggle}
         aria-expanded={expanded}
         aria-controls={controls}
-        aria-label={expanded ? hideLabel : showLabel}
-        style={{ transition: `transform ${fastTransition}` }}
+        aria-label={expanded ? resolvedHideLabel : resolvedShowLabel}
       >
-        {expanded ? hideLabel : showLabel}
+        {expanded ? resolvedHideLabel : resolvedShowLabel}
       </Button>
     </Box>
   );
@@ -628,8 +613,8 @@ export function InlineEditFooter({
   hiddenDirtySummary,
   impactPreview,
   error,
-  cancelLabel = 'Cancel',
-  saveLabel = 'Save changes',
+  cancelLabel,
+  saveLabel,
   onCancel,
   onSave,
   cancelDisabled,
@@ -638,6 +623,9 @@ export function InlineEditFooter({
   className,
   style,
 }: InlineEditFooterProps): React.ReactElement {
+  const copy = useEditFieldsCopy();
+  const resolvedCancelLabel = cancelLabel ?? copy.cancel;
+  const resolvedSaveLabel = saveLabel ?? copy.save;
   const hasStructuredActions = Boolean(onCancel || onSave);
   const footerSummary = error ?? dirtySummary ?? hiddenDirtySummary ?? summary;
   const hasFooterSupport = Boolean(footerSummary || impactPreview);
@@ -654,15 +642,10 @@ export function InlineEditFooter({
       data-error={Boolean(error)}
       aria-live="polite"
       aria-busy={isSaving ? true : undefined}
-      style={{
-        paddingTop: 14,
-        marginTop: 14,
-        transition: `border-color ${normalTransition}`,
-        ...style,
-      }}
+      style={style}
     >
       {hasFooterSupport ? (
-        <Stack data-part="footer-support" spacing={2} style={{ minWidth: 0, flex: '1 1 280px' }}>
+        <Stack data-part="footer-support" spacing={2}>
           {summary && error ? (
             <Text data-part="footer-note" size="xs">
               {summary}
@@ -681,7 +664,7 @@ export function InlineEditFooter({
           {impactPreview ? <Box data-part="footer-impact-preview">{impactPreview}</Box> : null}
         </Stack>
       ) : null}
-      <Flex align="center" justify="end" gap={8} wrap="wrap" style={{ minWidth: 0 }}>
+      <Flex align="center" justify="end" gap={8} wrap="wrap" data-part="footer-actions">
         {hasStructuredActions ? (
           <>
             <Button
@@ -691,7 +674,7 @@ export function InlineEditFooter({
               onClick={onCancel}
               disabled={cancelDisabled || isSaving}
             >
-              {cancelLabel}
+              {resolvedCancelLabel}
             </Button>
             <Button
               htmlType="button"
@@ -701,7 +684,7 @@ export function InlineEditFooter({
               disabled={saveDisabled || isSaving}
               loading={isSaving}
             >
-              {saveLabel}
+              {resolvedSaveLabel}
             </Button>
           </>
         ) : (

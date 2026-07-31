@@ -5,10 +5,11 @@
  * still yields to a caller's inline `style`.
  *
  * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
- * two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0), or a
- * contract attribute (`[data-active]`), to beat the tenant's unlayered `…*`
- * border-color floor at (0,3,1). `border: none` resets carry no color and stay
- * at (0,3,0). Non-border paint wins unlayered at (0,3,0).
+ * two root classes (0,2,0) + the root's own `data-part` + the target's
+ * `data-part` in the descendant chain, or a distinct contract attribute
+ * (`[data-active]`) -- never an identical attribute REPEATED (4th-tanda
+ * law). `border: none` resets carry no color and stay at (0,3,0).
+ * Non-border paint wins unlayered at (0,3,0).
  *
  * The `[data-part='panel']` rules re-express what `popupPanelStyle` supplied by
  * spread: the spread set `boxShadow: var(--ds-elevation-2)` INLINE and the JSX
@@ -32,22 +33,17 @@
   border-radius: var(--ds-radius-md);
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-fallback'] {
-  background: var(--ds-color-primary);
-  color: var(--ds-color-text-on-primary);
-}
-
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel'] {
   background: var(--ds-surface-card);
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-3);
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel'][data-part='panel'] {
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='panel'] {
   border: 1px solid var(--ds-color-border-subtle);
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='header'][data-part='header'] {
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='header'] {
   border-bottom: 1px solid var(--ds-color-border);
 }
 
@@ -86,7 +82,7 @@
   border-radius: 50%;
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='divider'][data-part='divider'] {
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='divider'] {
   border-top: 1px solid var(--ds-color-border);
 }
 
@@ -96,7 +92,7 @@
   border-radius: var(--ds-radius-md);
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'][data-part='create'] {
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='create'] {
   border: 1px solid var(--ds-color-border);
 }
 
@@ -142,7 +138,10 @@
   opacity: 0.5;
 }
 
-/* ---- avatar frames (sizes transcribed from the drained w-*/h-* utilities) ---- */
+/* ---- avatar frames: the composed Avatar primitive fills the frame and owns
+        the image + initials fallback + its paint (the pattern's former
+        avatar-fallback rules and their --ds-workspace-switcher-avatar-font-*
+        TENANT_CANDIDATE channels are retired with the hand-rolled helper) ---- */
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-frame'] {
   display: inline-flex;
   flex-shrink: 0;
@@ -150,6 +149,11 @@
   justify-content: center;
   overflow: hidden;
   border-radius: var(--ds-radius-lg);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-frame'] > * {
+  inline-size: 100%;
+  block-size: 100%;
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'][data-position='sidebar'] [data-part='avatar-frame'][data-frame='trigger'] {
@@ -173,24 +177,19 @@
   border-radius: var(--ds-radius-full, 9999px);
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-frame'] img {
-  inline-size: 100%;
-  block-size: 100%;
-  object-fit: cover;
+/* ---- panel search + empty frames (the composed Input/Empty own their
+        paint; the pattern owns only the slots) ---- */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='search'] {
+  padding-block: 4px;
+  padding-inline: 12px;
 }
-
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-fallback'] {
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='search'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='empty'] {
   display: flex;
-  inline-size: 100%;
-  block-size: 100%;
-  align-items: center;
   justify-content: center;
-  font-size: var(--ds-workspace-switcher-avatar-font-size, 12px);
-  font-weight: var(--ds-workspace-switcher-avatar-font-weight, var(--ds-font-weight-bold, 700));
-}
-
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-frame'][data-frame='item'] [data-part='avatar-fallback'] {
-  font-size: 14px;
+  padding-block: var(--ds-spacing-4, 16px);
 }
 
 /* ---- panel + positioning (logical: sidebar opens inline-end, topbar below) ---- */
@@ -235,8 +234,17 @@
   transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:hover:not([data-active='true']) {
-  background: var(--ds-workspace-switcher-item-bg-hover, var(--ds-surface-highlight));
+/* Hover reveals only where hovering is a real input mode (hover law); touch
+   gets the persistent gear via the (hover: none) block below. The keyboard
+   reveals (virtual focus + own focus ring) are NEVER hover-gated. */
+@media (hover: hover) {
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:hover:not([data-active='true']) {
+    background: var(--ds-workspace-switcher-item-bg-hover, var(--ds-surface-highlight));
+  }
+
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:hover [data-part='settings'] {
+    opacity: 1;
+  }
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-copy'] {
@@ -254,7 +262,7 @@
 
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-name'] {
   overflow: hidden;
-  font-size: 14px;
+  font-size: var(--ds-font-size-sm);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -270,7 +278,7 @@
   align-items: center;
   gap: 8px;
   color: var(--ds-workspace-switcher-meta-color, var(--ds-color-text-muted));
-  font-size: 12px;
+  font-size: var(--ds-font-size-xs);
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item-plan'] {
@@ -303,13 +311,13 @@
   inline-size: 24px;
   block-size: 24px;
   padding: 0;
-  font-size: 12px;
+  font-size: var(--ds-font-size-xs);
   cursor: pointer;
   opacity: 0;
   transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
-.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:hover [data-part='settings'],
+/* Keyboard reveals (virtual focus + own focus ring) -- never hover-gated. */
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'][data-focused='true'],
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:focus-visible {
   opacity: 1;
@@ -327,7 +335,7 @@
   block-size: 32px;
   padding-block: 0;
   padding-inline: 12px;
-  font-size: 13px;
+  font-size: var(--ds-font-size-sm);
   cursor: pointer;
 }
 
@@ -348,7 +356,7 @@
 
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='current-user-name'] {
   overflow: hidden;
-  font-size: 12px;
+  font-size: var(--ds-font-size-xs);
   font-weight: var(--ds-font-weight-medium, 500);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -357,7 +365,7 @@
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='current-user-email'] {
   overflow: hidden;
   color: var(--ds-workspace-switcher-meta-color, var(--ds-color-text-muted));
-  font-size: 12px;
+  font-size: var(--ds-font-size-xs);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -395,5 +403,50 @@
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'],
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'] {
     transition: none;
+  }
+}
+
+/* forced-colors: shadows, tints and the reveal opacity are forced away. The
+   panel re-frames in system colors; hairlines degrade to ButtonText; the
+   ACTIVE row keeps the system Highlight outline (selection never reads as
+   colour alone -- the check icon and the semibold name also survive); the
+   virtually-focused row keeps a ButtonText outline; the settings gear is
+   always visible (its hover reveal is meaningless under forced colours);
+   the online dot keeps a system mark (the count carries the info).
+   Composed primitives (Button, Badge, Avatar, Input, Empty) own their own
+   forced-colors contracts. */
+@media (forced-colors: active) {
+  .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='panel'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='header'],
+  .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='search'],
+  .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='divider'] {
+    border-color: ButtonText;
+  }
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-active='true'] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-focused='true'] {
+    outline: 1px solid ButtonText;
+    outline-offset: -1px;
+    background: Canvas;
+  }
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='check'] {
+    color: CanvasText;
+  }
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='online-dot'] {
+    background: ButtonText;
+  }
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'] {
+    opacity: 1;
+  }
+  .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='create'] {
+    border-color: ButtonText;
   }
 }

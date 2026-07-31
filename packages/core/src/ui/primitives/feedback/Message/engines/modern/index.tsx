@@ -68,7 +68,7 @@ import type {
 } from '../../contracts';
 import { MESSAGE_DEFAULTS } from '../../contracts';
 import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
 import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
@@ -415,7 +415,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
   closeIcon,
   onRemove,
 }) => {
-  const { t } = useTranslation('common');
+  const i18n = useOptionalTranslation('common');
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -433,10 +433,11 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     }, MESSAGE_EXIT_DURATION_MS);
   }, [id, onRemove, onClose]);
 
-  // Auto-close countdown with hover pause (Toast family parity): hovering
-  // freezes BOTH the JS countdown (remaining-time tracked, never a full
-  // restart) and the skin's progress bar (data-paused), so a user reading a
-  // long message never loses it mid-sentence.
+  // Auto-close countdown with hover AND focus pause (Toast family parity):
+  // hovering or tabbing into the card freezes BOTH the JS countdown
+  // (remaining-time tracked, never a full restart) and the skin's progress
+  // bar (data-paused), so a user reading or operating a long message never
+  // loses it mid-sentence.
   const [isPaused, setIsPaused] = useState(false);
   const remainingRef = useRef<number>(duration > 0 ? duration * 1000 : 0);
   const startedAtRef = useRef(0);
@@ -462,7 +463,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     };
   }, [duration, isPaused, beginExit]);
 
-  // The exit timer is independent of the hover-aware countdown above: it only
+  // The exit timer is independent of the pause-aware countdown above: it only
   // needs cancelling on unmount.
   useEffect(() => () => {
     if (exitTimerRef.current) {
@@ -470,7 +471,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     }
   }, []);
 
-  const handleMouseEnter = () => {
+  const pauseCountdown = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
       timerRef.current = null;
@@ -478,7 +479,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     }
     setIsPaused(true);
   };
-  const handleMouseLeave = () => setIsPaused(false);
+  const resumeCountdown = () => setIsPaused(false);
 
   // Manual close must cancel the auto-close timer first to prevent
   // a double-removal race condition (user clicks close, then timer fires).
@@ -522,8 +523,10 @@ export const MessageItem: React.FC<MessageItemProps> = ({
       } as React.CSSProperties}
       role="alert"
       aria-live="polite"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={pauseCountdown}
+      onMouseLeave={resumeCountdown}
+      onFocus={pauseCountdown}
+      onBlur={resumeCountdown}
     >
       <span data-part="icon">{icon || icons[type]}</span>
       <span data-part="body">{content}</span>
@@ -534,7 +537,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
           type="button"
           data-part="close-button"
           onClick={handleClose}
-          aria-label={t('close')}
+          aria-label={i18n?.t('close') ?? 'Close'}
         >
           {closeIcon || <ActionCloseIcon decorative size={14} />}
         </button>

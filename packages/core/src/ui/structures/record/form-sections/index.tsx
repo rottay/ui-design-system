@@ -38,7 +38,8 @@
 
 import { type CSSProperties, type ReactNode, useEffect, useMemo, useState } from 'react';
 
-import { ChevronDownIcon as ChevronDown } from '../../../../graphics/icons';
+import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 import { Box, Flex, Stack, Text } from '../../../primitives';
 
@@ -124,18 +125,10 @@ function getSectionShellStyles(resolvedAppearance: FormSectionsAppearance): CSSP
     };
   }
 
-  if (resolvedAppearance === 'soft') {
-    return {
-      width: '100%',
-      overflow: 'hidden',
-      transition: 'border-color 180ms ease, background 180ms ease',
-    };
-  }
-
+  /* Card/soft shell transitions live in the skin on --ds-motion-* channels. */
   return {
     width: '100%',
     overflow: 'hidden',
-    transition: 'border-color 180ms ease, box-shadow 180ms ease, background 180ms ease',
   };
 }
 
@@ -150,6 +143,12 @@ export function FormSections({
   appearance,
   tone,
 }: FormSectionsProps) {
+  // Optional channel with an English floor: the structure renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
+  const requiredLabel = i18n?.tOr('form_sections.required', 'Required') ?? 'Required';
+  const optionalLabel = i18n?.tOr('form_sections.optional', 'Optional') ?? 'Optional';
+
   const [internalKeys, setInternalKeys] = useState<string[]>(
     buildInitialKeys(sections, defaultActiveKeys, accordion),
   );
@@ -234,8 +233,8 @@ export function FormSections({
                   >
                     {section.title}
                   </Text>
-                  {section.required ? <SectionChip label="Required" tone="required" /> : null}
-                  {section.optional ? <SectionChip label="Optional" tone="optional" /> : null}
+                  {section.required ? <SectionChip label={requiredLabel} tone="required" /> : null}
+                  {section.optional ? <SectionChip label={optionalLabel} tone="optional" /> : null}
                 </Flex>
 
                 {section.description ? (
@@ -287,10 +286,9 @@ export function FormSections({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    transition: 'transform 180ms ease, border-color 180ms ease',
                   }}
                 >
-                  <ChevronDown data-part="section-toggle-icon" style={{ width: 15, height: 15 }} />
+                  <NavigationDownIcon size={15} decorative data-part="section-toggle-icon" />
                 </Box>
               ) : null}
             </Flex>
@@ -315,7 +313,6 @@ export function FormSections({
                 style={{
                   ...headerShellStyle,
                   cursor: 'pointer',
-                  textAlign: 'left',
                 }}
               >
                 {sectionHeader}
@@ -326,21 +323,24 @@ export function FormSections({
               </Box>
             )}
 
+            {/* Collapse cadence is skin-owned (grid-rows + opacity/transform
+                keyed on the section's data-open, reduced-motion reachable);
+                the engine stamps state only. */}
             <Box
+              data-part="section-grid"
+              data-open={isOpen}
+              data-collapsible={collapsible}
               style={{
                 display: 'grid',
-                gridTemplateRows: isOpen ? '1fr' : '0fr',
-                transition: collapsible ? 'grid-template-rows 240ms ease' : 'none',
               }}
             >
               <Box style={{ overflow: 'hidden' }}>
                 <Box
                   data-part="section-content"
                   data-open={isOpen}
+                  data-collapsible={collapsible}
                   style={{
                     padding: contentPadding,
-                    opacity: isOpen ? 1 : 0,
-                    transition: collapsible ? 'opacity 180ms ease, transform 180ms ease' : 'none',
                   }}
                 >
                   {section.children}
@@ -438,7 +438,7 @@ export function FormFactsCard({
                 weight="medium"
                 style={{
                   maxWidth: 180,
-                  textAlign: 'right',
+                  textAlign: 'end',
                   wordBreak: 'break-word',
                   fontFamily: item.mono ? 'var(--ds-font-family-mono, monospace)' : undefined,
                 }}

@@ -11,6 +11,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 
 import { DesignSystemProvider } from '../../../../infrastructure/runtime/bootstrap';
 import type { EngineName, ProductProfileKey, TenantConfig } from '../../../../foundation/contracts';
+import { PERSONALITY_CANONICAL_PROJECTION } from '../../../../foundation/tokens/ts/runtime/personality';
 import {
   Badge,
   Button,
@@ -102,19 +103,21 @@ function renderWithProfile(
 }
 
 /**
- * Reads a personality token from the `:root` rule the bridge owns.
+ * Reads the personality input from the `:root` rule the bridge owns.
  *
- * Personality is the LOWEST layer of the visual merge chain, so its tokens live
- * in a stylesheet a tenant-scoped selector can outrank. They are deliberately
- * not inline on `<html>`: inline is the highest precedence CSS offers, and a
- * boolean the tenant never typed would win over a color the tenant did.
- * Reading these back off `documentElement.style` would therefore only ever pass
- * for the bug the bridge exists to prevent.
+ * The bridge publishes namespaced inputs, never canonical component channels.
+ * `runtime/personality.css` is the sole projection from those private inputs
+ * back to public component channels, keeping the product-profile axis from
+ * becoming a second paint authority beside a tenant artifact.
  */
 function personalityToken(name: string): string {
   const styleElement = document.getElementById('ds-personality-tokens') as HTMLStyleElement | null;
   const rule = styleElement?.sheet?.cssRules?.[0] as CSSStyleRule | undefined;
-  return rule?.style.getPropertyValue(name) ?? '';
+  const projectedName =
+    PERSONALITY_CANONICAL_PROJECTION[
+      name as keyof typeof PERSONALITY_CANONICAL_PROJECTION
+    ] ?? name;
+  return rule?.style.getPropertyValue(projectedName) ?? '';
 }
 
 /** Tenant branding stays inline on `<html>`; only personality moved. */

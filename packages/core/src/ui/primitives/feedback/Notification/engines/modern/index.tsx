@@ -69,7 +69,7 @@ import type {
 } from '../../contracts';
 import { NOTIFICATION_DEFAULTS } from '../../contracts';
 import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
-import { useTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
 import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
@@ -438,14 +438,15 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   role,
   onRemove,
 }) => {
-  const { t } = useTranslation('common');
+  const i18n = useOptionalTranslation('common');
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ========================================================================
-  // Auto-close countdown with hover pause (Toast family parity): hovering
-  // freezes BOTH the JS countdown (remaining-time tracked, never a full
-  // restart) and the skin's progress bar (data-paused), so a user reading a
-  // long notification never loses it mid-sentence.
+  // Auto-close countdown with hover AND focus pause (Toast family parity):
+  // hovering or tabbing into the card freezes BOTH the JS countdown
+  // (remaining-time tracked, never a full restart) and the skin's progress
+  // bar (data-paused), so a user reading or operating a long notification
+  // never loses it mid-sentence.
   // ========================================================================
 
   const [isPaused, setIsPaused] = useState(false);
@@ -476,7 +477,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     };
   }, [id, duration, isPaused, onRemove, onClose]);
 
-  const handleMouseEnter = () => {
+  const pauseCountdown = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
       timerRef.current = null;
@@ -484,7 +485,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     }
     setIsPaused(true);
   };
-  const handleMouseLeave = () => setIsPaused(false);
+  const resumeCountdown = () => setIsPaused(false);
 
   // ========================================================================
   // Event Handlers
@@ -540,8 +541,10 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
         ...style,
       } as React.CSSProperties}
       onClick={onClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={pauseCountdown}
+      onMouseLeave={resumeCountdown}
+      onFocus={pauseCountdown}
+      onBlur={resumeCountdown}
       onKeyDown={onClick ? (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
@@ -580,7 +583,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
               e.stopPropagation();
               handleClose();
             }}
-            aria-label={t('close')}
+            aria-label={i18n?.t('close') ?? 'Close'}
           >
             {closeIcon || <ActionCloseIcon decorative size={16} />}
           </button>

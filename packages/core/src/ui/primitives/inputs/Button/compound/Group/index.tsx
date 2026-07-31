@@ -64,6 +64,7 @@
 import React from 'react';
 import type { ReactNode, CSSProperties } from 'react';
 import type { ButtonSize, ButtonVariant, ButtonShape } from '../../contracts';
+import { usePhoneBreakpoint } from '@/infrastructure/runtime/responsive/composition/react/provider/phone-state';
 
 export interface ButtonGroupProps {
   /** Group children (Button components) */
@@ -103,6 +104,7 @@ export function ButtonGroup({
   style,
   'aria-label': ariaLabel,
 }: ButtonGroupProps): React.ReactElement {
+  const isMobile = usePhoneBreakpoint();
   const groupStyle = {
     ...(spacing == null
       ? {}
@@ -133,6 +135,7 @@ export function ButtonGroup({
       data-part="group"
       data-orientation={orientation}
       data-connected={connected ? 'true' : 'false'}
+      data-mobile={isMobile ? 'true' : 'false'}
       data-size={size}
     >
       {enhancedChildren}

@@ -33,7 +33,10 @@ import {
   TENANT_THEME_OVERRIDE_TOKENS,
   TENANT_THEME_V1_COVERAGE,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
-import { resolvePersonalityCssVariables } from '@/foundation/tokens/ts/runtime/personality';
+import {
+  PERSONALITY_CANONICAL_PROJECTION,
+  resolvePersonalityBridgeCssVariables,
+} from '@/foundation/tokens/ts/runtime/personality';
 import {
   compileTenantThemeConfig,
   getTenantThemeVerticalEnvelope,
@@ -46,8 +49,12 @@ import {
   buildPersonalityRootRuleText,
 } from '@/infrastructure/runtime/theming/foundation/cascade-layers';
 
-/** A key the personality bridge derives; a tenant cannot publish it today. */
-const CONTESTED = '--ds-card-border';
+/**
+ * Namespaced input behind the canonical `--ds-card-border` projection. The
+ * bridge may publish this data key; neither static nor DB tenant contracts may
+ * publish it.
+ */
+const CONTESTED = PERSONALITY_CANONICAL_PROJECTION['--ds-card-border'];
 const ARTIFACT_VALUE = '4px solid #ff0000';
 
 const TENANT_DOCUMENT = {
@@ -72,7 +79,7 @@ const ARTIFACT = compileTenantThemeConfig(
   { verticalEnvelope: getTenantThemeVerticalEnvelope('bithire') },
 );
 
-const BRIDGE_VARIABLES = resolvePersonalityCssVariables({
+const BRIDGE_VARIABLES = resolvePersonalityBridgeCssVariables({
   colors: { primary: '#4f46e5' },
   personality: DEFAULT_PERSONALITY,
   transitions: {
@@ -152,7 +159,14 @@ describe('personality subordination — contention is unreachable by contract', 
     // must be substantial and must contain their signature members.
     expect(BRIDGE_KEYS.length).toBeGreaterThan(40);
     expect(BRIDGE_KEYS).toContain(CONTESTED);
-    expect(BRIDGE_KEYS.some((key) => key.startsWith('--ds-personality-'))).toBe(true);
+    expect(
+      BRIDGE_KEYS.every(
+        (key) =>
+          key.startsWith('--ds-personality-') ||
+          key.startsWith('--_ds-personality-resolved-'),
+      ),
+    ).toBe(true);
+    expect(BRIDGE_KEYS).not.toContain('--ds-card-border');
     expect(TENANT_THEME_OVERRIDE_TOKENS.length).toBeGreaterThan(40);
     expect(Object.keys(ARTIFACT.variables).length).toBeGreaterThan(10);
   });
@@ -175,6 +189,25 @@ describe('personality subordination — contention is unreachable by contract', 
     // what keeps the two apart, not suppression.
     expect(TENANT_THEME_V1_COVERAGE).not.toContain('personality');
     expect(ARTIFACT.coverage).not.toContain('personality');
+  });
+
+  it('gives every former canonical bridge output one static projection owner', () => {
+    const projection = readFileSync(
+      resolve(
+        process.cwd(),
+        'src/foundation/tokens/css/runtime/personality.css',
+      ),
+      'utf8',
+    );
+
+    for (const [canonical, namespaced] of Object.entries(
+      PERSONALITY_CANONICAL_PROJECTION,
+    )) {
+      expect(BRIDGE_KEYS).toContain(namespaced);
+      expect(BRIDGE_KEYS).not.toContain(canonical);
+      expect(projection).toContain(`${canonical}: var(`);
+      expect(projection).toContain(namespaced);
+    }
   });
 });
 

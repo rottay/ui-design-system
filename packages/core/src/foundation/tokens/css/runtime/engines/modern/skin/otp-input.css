@@ -27,9 +27,14 @@
  * root's `data-disabled`), and the error wrapper gap + message typography
  * (`margin-block-start`, logical). No inline styles remain on any part.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
- * the slot border reaches (0,4,0) via the repeated `[data-part='slot']`.
- * Non-border paint wins unlayered at (0,3,0).
+ * SPECIFICITY (P-48 + 4th-wave recount): the Platform-only Rottay artifact
+ * ships an unlayered border floor at (0,3,1). The base slot border clears it
+ * at (0,4,0) via the two scope classes plus the root's always-present
+ * `[data-part='root']` and the slot's own part attribute -- no repetition.
+ * The filled/error chains below keep their doubled `[data-part='slot']`
+ * form because `OTPInput.real-engines.test.tsx` PINS that exact selector
+ * text; de-duplicating them is a tests-side contract change (recorded as
+ * debt, owner: tests).
  *
  * CONTROL SURFACE (K4-D remediation round 2, axe color-contrast/serious on
  * themanagement-db): the slot background reads the certified Input family's
@@ -70,8 +75,22 @@
     border-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
     box-shadow var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out));
 }
-.ds-otp-input.ds-otp-input--modern [data-part='slot'][data-part='slot'] {
+/* The base border reaches (0,4,0) via the two scope classes plus the root's
+   always-present `[data-part='root']` and the slot's own `[data-part='slot']`
+   -- no repeated attribute is needed (4th-wave de-hack of the former doubled
+   `[data-part='slot'][data-part='slot']`; the filled/error rules below keep
+   their contract-pinned form, see the header). */
+.ds-otp-input.ds-otp-input--modern[data-part='root'] [data-part='slot'] {
   border: 1px solid var(--ds-color-border);
+}
+/* Slot hover affordance (4th-wave hover law): hover-capable pointers read
+   one border step stronger, mirroring the certified Input's hover border.
+   Focus and error stay sovereign; the real :active equivalent is the focus
+   halo itself (a press focuses the slot). */
+@media (hover: hover) {
+  .ds-otp-input.ds-otp-input--modern[data-part='root'] [data-part='slot']:hover:not(:focus):not([data-error='true']) {
+    border-color: var(--ds-otp-slot-border-hover, var(--ds-color-border-hover));
+  }
 }
 /* Filled slots read one step stronger than empty (state distinction, K4-D
    Pass 2); the focus/error chains below stay sovereign. */
@@ -121,7 +140,7 @@
 }
 .ds-otp-input.ds-otp-input--modern ~ * [data-part='error-message'] {
   font-size: var(--ds-otp-error-font-size, 12px);
-  line-height: 16px;
+  line-height: var(--ds-otp-error-line-height, var(--ds-line-height-snug));
   /* CONTRAST LAW (K4-D remediation, axe color-contrast/serious): the raw
      error channel fails AA for 12px TEXT on the page surface of a governed
      source (bithire #C5504C on #F4F8FB = 4.25:1; TMM DB #C0392B on #FBF6EC =
@@ -152,6 +171,27 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-otp-input.ds-otp-input--modern [data-part='slot'] {
-    transition-duration: 0.01ms;
+    transition: none;
+  }
+}
+
+/* Forced colors: the focus halo (a box-shadow) is stripped, so keyboard
+   focus degrades to a Highlight outline; slot frames and the disabled
+   posture re-express in system colors. */
+@media (forced-colors: active) {
+  .ds-otp-input.ds-otp-input--modern[data-part='root'] [data-part='slot'] {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+  }
+
+  .ds-otp-input.ds-otp-input--modern[data-part='root'] [data-part='slot']:focus {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+
+  .ds-otp-input.ds-otp-input--modern[data-part='root'][data-disabled='true'] [data-part='slot'] {
+    color: GrayText;
+    border-color: GrayText;
   }
 }

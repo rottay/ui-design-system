@@ -80,12 +80,16 @@ function declarationMap(
   );
 }
 
-function ruleContracts(css: string, selector: string): Array<Record<string, string>> {
+function ruleContracts(
+  css: string,
+  selector: string,
+  rootOnly = true,
+): Array<Record<string, string>> {
   const matches: Array<Record<string, string>> = [];
   const normalizedSelector = selector.replace(/\s+/g, ' ').trim();
   postcss.parse(css).walkRules((rule) => {
     if (
-      rule.parent?.type !== 'root' ||
+      (rootOnly && rule.parent?.type !== 'root') ||
       !rule.selectors.some((candidate) => candidate.replace(/\s+/g, ' ').trim() === normalizedSelector)
     ) return;
     matches.push(declarationMap(rule.nodes.filter((node) => node.type === 'decl')));
@@ -93,8 +97,8 @@ function ruleContracts(css: string, selector: string): Array<Record<string, stri
   return matches;
 }
 
-function ruleContract(css: string, selector: string): Record<string, string> {
-  const matches = ruleContracts(css, selector);
+function ruleContract(css: string, selector: string, rootOnly = true): Record<string, string> {
+  const matches = ruleContracts(css, selector, rootOnly);
   expect(matches, `selector ${selector}`).toHaveLength(1);
   return matches[0];
 }
@@ -171,7 +175,7 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
     });
 
     // The relocated modern ScrollArea payload, in its new single owner.
-    expect(paintCount(RELOCATED.scrollAreaModern)).toBe(11);
+    expect(paintCount(RELOCATED.scrollAreaModern)).toBe(15);
   });
 
   it('pins every DataTable interaction selector and animation body', () => {
@@ -447,7 +451,7 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
     // same visual fallback. The shared file keeps the size enum plus the
     // classic and rustic paint asserted below.
     const modernThumb =
-      'var(--ds-scroll-area-thumb-bg, color-mix(in srgb, var(--ds-color-text-primary, oklch(0.27 0.01 240)) 28%, transparent))';
+      'var(--ds-scroll-area-thumb-bg, color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent))';
 
     expect(
       ruleContract(RELOCATED.scrollAreaModern, `${MODERN_SCROLL_AREA}::-webkit-scrollbar-track`)
@@ -462,10 +466,14 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       'border-radius': 'var(--ds-scroll-area-scrollbar-radius)',
     });
     expect(
-      ruleContract(RELOCATED.scrollAreaModern, `${MODERN_SCROLL_AREA}::-webkit-scrollbar-thumb:hover`)
+      ruleContract(
+        RELOCATED.scrollAreaModern,
+        `${MODERN_SCROLL_AREA}::-webkit-scrollbar-thumb:hover`,
+        false,
+      )
     ).toEqual({
       background:
-        'var(--ds-scroll-area-thumb-bg-hover, color-mix(in srgb, var(--ds-color-text-primary, oklch(0.27 0.01 240)) 48%, transparent))',
+        'var(--ds-scroll-area-thumb-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 48%, transparent))',
     });
     expect(
       ruleContract(
@@ -478,7 +486,8 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
     expect(
       ruleContract(
         RELOCATED.scrollAreaModern,
-        `${MODERN_SCROLL_AREA}[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb`
+        `${MODERN_SCROLL_AREA}[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb`,
+        false,
       )
     ).toEqual({
       background: modernThumb,

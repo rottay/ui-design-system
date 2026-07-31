@@ -100,17 +100,21 @@ describe('Input modern skin: counter contrast channels (R0/Axe round 2)', () => 
     const invalid = SKIN.match(/\[data-part='count'\]\[data-invalid='true'\] \{[^}]*\}/);
     expect(invalid).not.toBeNull();
     expect(invalid![0]).toContain(
-      'color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-black, #000) 22%)'
+      'color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900, #171717) 22%)'
     );
     // The explicit error channels keep precedence over the mix fallback.
     expect(invalid![0]).toContain('--ds-input-count-color-error,');
     expect(invalid![0]).toContain('--ds-input-error-color,');
 
     for (const state of ['warning', 'limit']) {
-      const rule = SKIN.match(new RegExp(`\\[data-count-state='${state}'\\] \\{[^}]*\\}`));
+      const rule = SKIN.match(
+        new RegExp(
+          `[^{}]*\\[data-count-state='${state}'\\][^{}]*\\{[^}]*\\}`,
+        ),
+      );
       expect(rule, `missing count-state ${state} rule`).not.toBeNull();
       expect(rule![0]).toContain(
-        'color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-black, #000) 45%)'
+        'color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900, #171717) 45%)'
       );
     }
   });

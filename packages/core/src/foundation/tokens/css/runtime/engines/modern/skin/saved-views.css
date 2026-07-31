@@ -86,7 +86,7 @@
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill[data-part='pill'][data-part='pill'] {
+  .ds-saved-views__pill[data-part='pill'][data-active] {
   border: 1px solid var(--ds-color-border);
 }
 
@@ -97,8 +97,15 @@
   border-color: var(--ds-color-primary);
 }
 
+@media (hover: hover) {
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__pill[data-part='pill'][data-active='false']:hover {
+    background: var(--ds-surface-highlight);
+  }
+}
+/* Touch/active equivalent of the hover wash (4th-tanda law). */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill[data-part='pill'][data-active='false']:hover {
+  .ds-saved-views__pill[data-part='pill'][data-active='false']:active {
   background: var(--ds-surface-highlight);
 }
 
@@ -217,6 +224,11 @@
 
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__pill:hover .ds-saved-views__menu-trigger[data-part='menu-trigger'],
+/* focus-within reveals the trigger as soon as ANY control inside the pill
+   takes focus (the hidden-action law: keyboard users must see the affordance
+   before reaching it, not only when they land on it). */
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__pill:focus-within .ds-saved-views__menu-trigger[data-part='menu-trigger'],
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-open='true'],
 .ds-pattern-saved-views.ds-engine-modern
@@ -224,13 +236,23 @@
   opacity: 1;
 }
 
+@media (hover: hover) {
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='false']:hover {
+    background: var(--ds-surface-highlight);
+  }
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='true']:hover {
+    background: var(--ds-color-alpha-white-20);
+  }
+}
+/* Touch/active equivalents of the hover washes. */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='false']:hover {
+  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='false']:active {
   background: var(--ds-surface-highlight);
 }
-
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='true']:hover {
+  .ds-saved-views__menu-trigger[data-part='menu-trigger'][data-active='true']:active {
   background: var(--ds-color-alpha-white-20);
 }
 
@@ -271,9 +293,9 @@
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__input[data-part='field'][data-part='field'] .rottay-input,
+  .ds-saved-views__input[data-part='field'] .rottay-input.rottay-input--modern,
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-input[data-part='field'][data-part='field'] .rottay-input {
+  .ds-saved-views__create-input[data-part='field'] .rottay-input.rottay-input--modern {
   border: 1px solid var(--ds-color-border);
 }
 
@@ -317,12 +339,19 @@
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-button[data-part='create-button'][data-part='create-button'] {
+  .ds-saved-views__create-button[data-part='create-button'][type='button'] {
   border: 1px dashed var(--ds-color-border);
 }
 
+@media (hover: hover) {
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__create-button[data-part='create-button']:hover {
+    background: var(--ds-surface-highlight);
+  }
+}
+/* Touch/active equivalent of the hover wash. */
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__create-button[data-part='create-button']:hover {
+  .ds-saved-views__create-button[data-part='create-button']:active {
   background: var(--ds-surface-highlight);
 }
 
@@ -377,9 +406,9 @@
 /* ---- forced colors: the pill frame and the active pill survive. ---- */
 @media (forced-colors: active) {
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__pill[data-part='pill'][data-part='pill'],
+    .ds-saved-views__pill[data-part='pill'][data-active],
   .ds-pattern-saved-views.ds-engine-modern
-    .ds-saved-views__create-button[data-part='create-button'][data-part='create-button'] {
+    .ds-saved-views__create-button[data-part='create-button'][type='button'] {
     forced-color-adjust: auto;
     border-color: ButtonText;
   }
@@ -388,5 +417,14 @@
     .ds-saved-views__pill[data-part='pill'][data-active='true'] {
     background: Highlight;
     color: HighlightText;
+  }
+
+  /* The drop indicator's inset shadow is stripped: the drag target keeps a
+     system-color boundary instead. */
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__pill[data-part='pill'][data-drop-target='true'] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+    box-shadow: none;
   }
 }

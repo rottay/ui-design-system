@@ -52,29 +52,86 @@
  * (0,3,0).
  */
 
+/* Root layout (drained from the engine's Tailwind utilities: `relative`,
+   `w-full`, `h-4`, `h-full w-4`). Range children are all absolutely
+   positioned, so the horizontal range root keeps the thumb-height box. */
+.ds-slider.ds-slider--modern[data-part='root'] {
+  position: relative;
+}
+.ds-slider.ds-slider--modern[data-orientation='horizontal'] {
+  inline-size: 100%;
+}
+.ds-slider.ds-slider--modern[data-part='root'][data-range='true'][data-orientation='horizontal'] {
+  block-size: var(--ds-slider-thumb-size, 16px);
+}
+.ds-slider.ds-slider--modern[data-orientation='vertical'] {
+  block-size: 100%;
+  inline-size: var(--ds-slider-thumb-size, 16px);
+}
+
 .ds-slider.ds-slider--modern [data-part='rail'] {
   background: var(--ds-slider-rail-bg, color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent));
+  position: absolute;
+  border-radius: var(--ds-radius-full, 9999px);
+}
+.ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='rail'] {
+  inset-block-start: 50%;
+  inline-size: 100%;
+  block-size: var(--ds-slider-track-size, 4px);
+  transform: translateY(-50%);
+}
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='rail'] {
+  inset-inline-start: 50%;
+  block-size: 100%;
+  inline-size: var(--ds-slider-track-size, 4px);
+  transform: translateX(-50%);
 }
 
 .ds-slider.ds-slider--modern [data-part='track'] {
   background: var(--ds-color-primary);
+  position: absolute;
+  border-radius: var(--ds-radius-full, 9999px);
 }
 .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='track'] {
+  inline-size: var(--ds-slider-track-size, 4px);
   transform: translateX(-50%);
 }
 .ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='track'] {
+  block-size: var(--ds-slider-track-size, 4px);
   transform: translateY(-50%);
 }
 
+/* Handle geometry (drained: `absolute w-4 h-4 rounded-full border-2 shadow
+   pointer-events-none`). Centering rides the `translate` PROPERTY, which
+   composes with the press `transform: scale()` instead of being overridden
+   by it; the --tw-translate-* vars are the pinned mirror channel. */
 .ds-slider.ds-slider--modern [data-part='handle'] {
+  position: absolute;
+  inline-size: var(--ds-slider-thumb-size, 16px);
+  block-size: var(--ds-slider-thumb-size, 16px);
+  border-radius: var(--ds-radius-full, 9999px);
   background: var(--ds-color-primary);
+  box-shadow: var(--ds-slider-thumb-shadow, var(--ds-shadow-sm));
+  pointer-events: none;
   transition:
     background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
     transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-slider.ds-slider--modern [data-part='handle'][data-part='handle'] {
-  border-color: var(--ds-color-bg-primary, white);
+  border: 2px solid var(--ds-color-bg-primary);
+}
+.ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='handle'] {
+  --tw-translate-x: -50%;
+  --tw-translate-y: -50%;
+  translate: var(--tw-translate-x) var(--tw-translate-y);
+}
+/* Vertical anchors at `bottom`, so the centering shift is +50% (the drained
+   class carried -50% -- a full thumb-height of mis-centering). */
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='handle'] {
+  --tw-translate-x: -50%;
+  --tw-translate-y: 50%;
+  translate: var(--tw-translate-x) var(--tw-translate-y);
 }
 
 /* Disabled posture (K2-V sweep, sighted defect): the range mode's custom
@@ -94,7 +151,10 @@
 }
 
 .ds-slider.ds-slider--modern [data-part='mark-label'] {
+  position: absolute;
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-slider-mark-font-size, var(--ds-font-size-xs));
+  font-variant-numeric: tabular-nums;
 }
 .ds-slider.ds-slider--modern [data-part='mark-label'][data-axis='x'] {
   margin-block-start: var(--ds-slider-mark-gap, 8px);
@@ -115,19 +175,44 @@
 /* Range-mode overlays: invisible event surfaces only. Each handle is the
    adjacent next sibling of its input (engine DOM pairing), so the keyboard
    ring lands on the VISIBLE handle -- a ring on the opacity-0 input itself
-   would be invisible (the K1 checkbox `input:focus-visible ~ part` idiom). */
+   would be invisible (the K1 checkbox `input:focus-visible ~ part` idiom).
+   The box NEVER catches the pointer: hit-testing lives on each input's own
+   thumb pseudo, so the two stacked inputs cannot swallow each other's drag
+   (the classic dual-range pointer lock), keyboard tab focus unaffected. */
 .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay'] {
-  pointer-events: auto;
+  position: absolute;
+  inset: 0;
+  -webkit-appearance: none;
+  appearance: none;
   margin: 0;
+  background: transparent;
+  opacity: 0;
+  cursor: pointer;
+  pointer-events: none;
+}
+.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:disabled {
+  cursor: not-allowed;
+}
+.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  inline-size: var(--ds-slider-thumb-size, 16px);
+  block-size: var(--ds-slider-thumb-size, 16px);
+  pointer-events: auto;
+}
+.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']::-moz-range-thumb {
+  inline-size: var(--ds-slider-thumb-size, 16px);
+  block-size: var(--ds-slider-thumb-size, 16px);
+  pointer-events: auto;
 }
 .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:focus-visible + [data-part='handle'] {
   box-shadow: var(--ds-slider-thumb-shadow-focus, var(--ds-focus-ring));
 }
 .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):hover + [data-part='handle'] {
-  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary, white)));
+  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
 }
 .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):active + [data-part='handle'] {
-  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary, white)));
+  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
   /* Scale only: Tailwind v4 centers the handle through the `translate`
      PROPERTY, which composes with `transform` -- re-applying translateX/Y
      here double-shifted the handle 8px on press (K2-V sweep, verified on the
@@ -142,6 +227,7 @@
   -webkit-appearance: none;
   appearance: none;
   margin: 0;
+  inline-size: 100%;
   block-size: var(--ds-slider-thumb-size, 16px);
   background: transparent;
   cursor: pointer;
@@ -187,7 +273,7 @@
     transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-thumb {
-  border: 2px solid var(--ds-color-bg-primary, white);
+  border: 2px solid var(--ds-color-bg-primary);
 }
 
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-track {
@@ -215,22 +301,22 @@
     transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-thumb {
-  border: 2px solid var(--ds-color-bg-primary, white);
+  border: 2px solid var(--ds-color-bg-primary);
 }
 
 /* Thumb interaction states (single mode). */
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):hover::-webkit-slider-thumb {
-  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary, white)));
+  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):hover::-moz-range-thumb {
-  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary, white)));
+  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):active::-webkit-slider-thumb {
-  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary, white)));
+  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
   transform: scale(0.94);
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):active::-moz-range-thumb {
-  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary, white)));
+  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
   transform: scale(0.94);
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):focus-visible::-webkit-slider-thumb {
@@ -250,6 +336,18 @@
   .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']) {
     block-size: var(--ds-slider-touch-target-min, 44px);
   }
+  /* The range overlay's invisible thumb pseudo is the hit region: it grows to
+     the floor while the visible handle keeps its authored size. */
+  .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']::-webkit-slider-thumb,
+  .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']::-moz-range-thumb {
+    inline-size: var(--ds-slider-touch-target-min, 44px);
+    block-size: var(--ds-slider-touch-target-min, 44px);
+  }
+  /* Vertical overlays: the grown pseudo re-centers over the visible handle. */
+  .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='native-input'][data-variant='overlay']::-webkit-slider-thumb,
+  .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='native-input'][data-variant='overlay']::-moz-range-thumb {
+    margin-inline-start: calc((var(--ds-slider-thumb-size, 16px) - var(--ds-slider-touch-target-min, 44px)) / 2);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -257,5 +355,47 @@
   .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-thumb,
   .ds-slider.ds-slider--modern [data-part='handle'] {
     transition: none;
+  }
+}
+
+/* Forced colors: the fill gradient and all shadows are stripped, so every
+   part re-expresses in system colors -- rail framed, fill Highlight, thumb
+   ButtonText, focus outline Highlight. WebKit keeps no fill portion here
+   (gradients cannot be re-expressed without authored color); the value stays
+   perceivable through the thumb position, and Gecko keeps its
+   ::-moz-range-progress Highlight fill. */
+@media (forced-colors: active) {
+  .ds-slider.ds-slider--modern [data-part='rail'] {
+    background: Canvas;
+    border: 1px solid ButtonText;
+  }
+  .ds-slider.ds-slider--modern [data-part='track'] {
+    background: Highlight;
+  }
+  .ds-slider.ds-slider--modern [data-part='handle'] {
+    background: ButtonText;
+    border-color: Canvas;
+    box-shadow: none;
+  }
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-runnable-track,
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-track {
+    background: Canvas;
+    border: 1px solid ButtonText;
+  }
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-progress {
+    background: Highlight;
+  }
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-thumb,
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-thumb {
+    background: ButtonText;
+    border-color: Canvas;
+    box-shadow: none;
+  }
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):focus-visible::-webkit-slider-thumb,
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):focus-visible::-moz-range-thumb,
+  .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:focus-visible + [data-part='handle'] {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
   }
 }

@@ -109,14 +109,12 @@ export function ConnectedCommandPalette({
     const isMac = typeof navigator !== 'undefined' && /mac|iphone|ipad|ipod/i.test(navigator.userAgent);
 
     function handleKeyDown(e: KeyboardEvent) {
-      // Suppress in typing contexts
-      const target = e.target as HTMLElement | null;
-      const tagName = target?.tagName?.toLowerCase();
-      if (tagName === 'input' || tagName === 'textarea' || tagName === 'select' || target?.isContentEditable) {
-        // Still allow Cmd+K even in inputs (standard behavior in VS Code, Linear, etc.)
-        // Only check if the shortcut matches
-      }
-
+      // Typing-context law: mod+key chords fire even inside inputs (the VS
+      // Code / Linear standard), so no editable suppression happens here.
+      // Single-character shortcuts like the `?` cheatsheet key are a
+      // different story — those are suppressed by the command registry's
+      // own editable-aware listener (see useRegisterCommands above and the
+      // pinned "does not open the cheatsheet while typing" test).
       let wantsMeta = false;
       let wantsCtrl = false;
       let mainKey = '';

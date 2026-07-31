@@ -450,6 +450,7 @@ export function CollectionHeader({
                   <Button
                     key={action.key}
                     size="sm"
+                    radius="full"
                     variant={
                       action.variant === 'primary'
                         ? 'primary'
@@ -460,8 +461,16 @@ export function CollectionHeader({
                     onClick={action.onClick}
                     className={`ds-collection-header__quick-action ds-collection-header__quick-action--${action.variant ?? 'default'}`}
                     style={{
+                      /* Caller-inline sizing (always wins, no layer fight):
+                         the cluster's buttons never shrink below their
+                         natural width. Pill geometry travels the public
+                         Button prop instead of reaching into a private
+                         resolved channel. */
+                      flexShrink: 0,
+                      minWidth: 'max-content',
+                      width: 'auto',
                       minHeight: 'var(--ds-spacing-8, 32px)',
-                      paddingInline: action.variant === 'primary' ? 'var(--ds-spacing-3, 12px)' : 'var(--ds-spacing-3, 12px)',
+                      paddingInline: 'var(--ds-spacing-3, 12px)',
                       fontSize: 'var(--ds-font-size-xs, 12px)',
                     }}
                   >

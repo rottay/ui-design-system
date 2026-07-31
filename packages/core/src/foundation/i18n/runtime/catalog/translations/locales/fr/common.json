@@ -11,6 +11,10 @@
   "back": "Retour",
   "next": "Suivant",
   "previous": "Précédent",
+  "finish": "Terminer",
+  "tour": {
+    "step_progress": "Étape {current} sur {total}"
+  },
   "submit": "Soumettre",
   "search": "Rechercher",
   "filter": "Filtrer",
@@ -60,6 +64,8 @@
   "logout": "Déconnexion",
   "login": "Connexion",
   "breadcrumb": "Fil d’Ariane",
+  "breadcrumb_more_items": "Plus de pages",
+  "opens_in_new_tab": "(s’ouvre dans un nouvel onglet)",
   "key_metrics": "Indicateurs clés",
   "shortcuts": "Raccourcis",
   "dashboard_status_live": "En direct",
@@ -69,5 +75,6 @@
   "dashboard_status_warning": "Avertissement",
   "show_password": "Afficher le mot de passe",
   "hide_password": "Masquer le mot de passe",
-  "password_strength": "Robustesse du mot de passe"
+  "password_strength": "Robustesse du mot de passe",
+  "unsaved_changes": "Modifications non enregistrées"
 }

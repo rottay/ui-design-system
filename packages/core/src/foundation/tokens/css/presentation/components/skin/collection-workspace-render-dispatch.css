@@ -1,42 +1,201 @@
 /**
- * CollectionRenderDispatch skin (WO-SKIN-06 / CK-I). Engine-agnostic and
- * deliberately unlayered. The hand-rolled pagination is preserved exactly;
- * replacing it with the Pagination primitive is a later refactor.
+ * CollectionRenderDispatch skin (WO-SKIN-06 / CK-I, SU32 pass 2026-07-30).
+ *
+ * LAYER: imported by the facade entrypoints into `layer(rottay-components)`
+ * (sibling of collection-workspace.css).
+ *
+ * SCOPE: paints ONLY what the dispatch owns — the cards grid (the one view
+ * mode without a pattern), its skeleton/empty frames, the fallback card, the
+ * shared pagination footers and the error anatomy. Kanban and calendar are
+ * composed patterns (PatternKanbanBoard / PatternCalendarView) and keep
+ * their own chrome; the old hand-rolled kanban/calendar rules are gone with
+ * the hand-rolled markup.
+ *
+ * SPECIFICITY: single class + single attribute hooks; no repetition, no
+ * !important. LAYER TRUTH: typography.css sorts in `rottay-engines` (after
+ * this file), so `.ds-collection-render-dispatch__muted-text` is the color
+ * source only where Typography leaves the part unpainted.
+ *
+ * The pagination footer is intentionally preserved (replacing it with the
+ * Pagination primitive is a later, contract-level refactor); its controls
+ * are DS Button/Select primitives skinned here through the preserved hooks.
  */
 
-.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__fallback-card[data-part='fallback-card'] {
+/* Cards grid — display/padding live here; the column template, gap and
+   min-card-width stay inline (instance geometry pinned by tests). */
+.ds-surface.ds-collection-render-dispatch[data-part="root"][data-view-mode="cards"][data-state="ready"],
+.ds-surface.ds-collection-render-dispatch[data-part="root"][data-view-mode="cards"][data-state="loading"] {
+  display: grid;
+  box-sizing: border-box;
+  align-items: stretch;
+  padding: 1px 1px var(--ds-spacing-2, 8px);
+}
+
+.ds-surface.ds-collection-render-dispatch[data-part="root"][data-view-mode="cards"][data-state="loading"] {
+  padding-block: var(--ds-spacing-8, 32px);
+  padding-inline: var(--ds-spacing-5, 20px);
+}
+
+.ds-surface.ds-collection-render-dispatch[data-part="root"][data-view-mode="cards"][data-state="empty"] {
+  overflow: hidden;
+}
+
+.ds-surface.ds-collection-render-dispatch[data-part="root"][data-view-mode="cards"][data-state="loading"],
+.ds-surface.ds-collection-render-dispatch[data-part="root"][data-view-mode="cards"][data-state="empty"] {
+  border-radius: var(--ds-collection-card-radius, var(--ds-radius-xl, 16px));
+  border: 1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, var(--ds-color-border)));
+  background: var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-card-bg, var(--ds-surface-card))));
+}
+
+/* Loading skeleton mirrors the real grid (same inline template) so the swap
+   does not shift layout; the Skeleton primitive owns the shimmer + RM. */
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__skeleton-card[data-part="skeleton-card"] {
+  min-block-size: calc(var(--ds-spacing-40, 160px) + var(--ds-spacing-3, 12px));
+  padding: calc(var(--ds-spacing-3, 12px) + calc(var(--ds-spacing-1, 4px) * 0.5));
+  border-radius: var(--ds-collection-card-radius, var(--ds-radius-lg, 12px));
+  border: 1px solid var(--ds-collection-card-border, var(--ds-color-border-secondary, var(--ds-color-border)));
+  background: var(--ds-collection-card-bg, var(--ds-surface-card, var(--ds-color-bg-primary)));
+}
+
+/* Visually-hidden loading announcement (aria-busy companion). */
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__loading-label[data-part="loading-label"] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Error anatomy (capability inventory beside the caller-provided error). */
+.ds-surface.ds-collection-render-dispatch[data-part="root"][data-state="error"] {
+  display: grid;
+  gap: var(--ds-spacing-4, 16px);
+}
+
+/* Card item: geometry drained from inline; state hooks already stamped. */
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__card-item[data-part="card-item"] {
+  position: relative;
+  min-inline-size: 0;
+  block-size: 100%;
+}
+
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__card-item[data-part="card-item"][data-activatable="true"] {
+  cursor: pointer;
+}
+
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__card-item[data-part="card-item"][data-lone-final="true"] {
+  grid-column: 1 / -1;
+}
+
+/* Fallback card (no app renderer provided). */
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__fallback-card[data-part="fallback-card"] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-3, 12px);
+  min-block-size: calc(var(--ds-spacing-40, 160px) + var(--ds-spacing-3, 12px));
+  block-size: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: calc(var(--ds-spacing-3, 12px) + calc(var(--ds-spacing-1, 4px) * 0.5));
   border-radius: var(--ds-collection-card-radius, var(--ds-radius-lg, 12px));
   border: 1px solid var(--ds-collection-card-border, var(--ds-color-border-secondary, var(--ds-color-border)));
   background: var(--ds-collection-card-bg, var(--ds-surface-card, var(--ds-color-bg-primary)));
   box-shadow: var(--ds-collection-card-shadow, 0 10px 24px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent));
 }
 
-.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__muted-text[data-part='root'][data-part='root'] {
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__muted-text {
   color: var(--ds-color-text-muted);
 }
 
-.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__muted-text[data-part='root'][data-part='root'][data-tone='disabled'] {
-  color: var(--ds-color-text-disabled);
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__fallback-heading {
+  min-inline-size: 0;
 }
 
-.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__fallback-title[data-part='title'][data-part='title'] {
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__muted-text[data-part="fallback-label"] {
+  display: block;
+  margin-block-end: var(--ds-spacing-1, 4px);
+  font-size: var(--ds-font-size-xs, 12px);
+  font-weight: var(--ds-font-weight-extrabold, 800);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__fallback-grid[data-part="fallback-grid"]
+  .ds-collection-render-dispatch__muted-text[data-part="fallback-label"] {
+  font-weight: var(--ds-font-weight-bold, 700);
+  letter-spacing: 0.04em;
+  margin-block-end: calc(var(--ds-spacing-1, 4px) * 0.75);
+}
+
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__fallback-title[data-part="title"] {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--ds-color-text-primary);
 }
 
-.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__fallback-value[data-part='fallback-value'][data-part='fallback-value'] {
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__fallback-grid[data-part="fallback-grid"] {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: calc(var(--ds-spacing-2, 8px) * 1.25)
+    calc(var(--ds-spacing-3, 12px) + calc(var(--ds-spacing-1, 4px) * 0.5));
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__fallback-field {
+  min-inline-size: 0;
+}
+
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__fallback-value[data-part="fallback-value"] {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--ds-color-text-secondary, var(--ds-color-text-primary));
 }
 
-.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__fallback-actions[data-part='fallback-actions'][data-part='fallback-actions'] {
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__fallback-actions[data-part="fallback-actions"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2, 8px);
+  flex-wrap: wrap;
+  margin-block-start: auto;
+  padding-block-start: calc(var(--ds-spacing-2, 8px) * 1.25);
   border-top: 1px solid var(--ds-color-border-subtle, var(--ds-color-border-secondary));
 }
 
-.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__card-item[data-part='card-item']:has(.ds-collection-render-dispatch__card-activation[data-part='card-activation']:focus-visible) {
+/* Screen-reader activation overlay on activatable cards (anchor or button;
+   the button variant is test-pinned and stays a native element for now). */
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible) {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
-.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__card-activation[data-part='card-activation'] {
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__card-activation[data-part="card-activation"] {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
@@ -50,15 +209,44 @@
   pointer-events: none;
 }
 
-.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__fallback-open-link[data-part='fallback-open-link'] {
+/* Quiet activation feedback on activatable fallback cards: a one-pixel lift
+   on hover (transform-only, motion channels) with press as the touch
+   equivalent. App-rendered cards own their own chrome. */
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__card-item[data-part="card-item"][data-activatable="true"]
+  .ds-collection-render-dispatch__fallback-card[data-part="fallback-card"] {
+  transition: transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+}
+
+@media (hover: hover) {
+  .ds-surface.ds-collection-render-dispatch
+    .ds-collection-render-dispatch__card-item[data-part="card-item"][data-activatable="true"]:hover
+    .ds-collection-render-dispatch__fallback-card[data-part="fallback-card"] {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary, var(--ds-color-border)));
+    box-shadow: var(--ds-collection-card-shadow-hover, 0 14px 28px color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent));
+  }
+}
+
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__card-item[data-part="card-item"][data-activatable="true"]:active
+  .ds-collection-render-dispatch__fallback-card[data-part="fallback-card"] {
+  transform: translateY(0);
+}
+
+/* Fallback "Open details" affordance: skinned identically whether it renders
+   as the native anchor or as the DS Button replacement. */.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"] {
   display: inline-flex;
   align-items: center;
   min-block-size: var(--ds-size-touch-target, 44px);
   padding-inline: var(--ds-spacing-sm, 8px);
   color: var(--ds-color-primary);
-  font-size: var(--ds-font-size-sm, 0.875rem);
-  font-weight: 650;
   font-family: inherit;
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
   text-decoration: none;
   background: transparent;
   border: 0;
@@ -66,75 +254,106 @@
   cursor: pointer;
 }
 
-.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__fallback-open-link[data-part='fallback-open-link']:focus-visible {
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"]:focus-visible {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
-.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__pagination[data-part='pagination'] {
+/* Pagination footer (hand-rolled, preserved; controls are DS primitives). */
+.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__pagination[data-part="pagination"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3, 12px);
+  flex-wrap: wrap;
+  padding: var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px);
+  margin-block-start: var(--ds-spacing-4, 16px);
   border-radius: var(--ds-radius-lg, 12px);
-  border: 1px solid var(--ds-color-border, #d4d4d8);
-  background: var(--ds-color-bg-primary, #fff);
+  border: 1px solid var(--ds-color-border, var(--ds-color-border-secondary));
+  background: var(--ds-color-bg-primary, var(--ds-surface-card));
 }
 
-.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__pagination[data-part='pagination'] .ds-collection-render-dispatch__pagination-prev[data-disabled],
-.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__pagination[data-part='pagination'] .ds-collection-render-dispatch__pagination-next[data-disabled] {
+.ds-surface.ds-collection-render-dispatch
+  .ds-collection-render-dispatch__pagination-controls[data-part="pagination-controls"] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  flex-wrap: wrap;
+}
+
+.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__pagination[data-part="pagination"]
+  :is(.ds-collection-render-dispatch__pagination-prev, .ds-collection-render-dispatch__pagination-next) {
   border-radius: var(--ds-radius-md, 8px);
-  border: 1px solid var(--ds-color-border, #d4d4d8);
-  background: var(--ds-color-bg-primary, #fff);
-  color: var(--ds-color-text-primary, #18181b);
 }
 
-.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__pagination[data-part='pagination'] .ds-collection-render-dispatch__pagination-prev[data-disabled='true'],
-.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__pagination[data-part='pagination'] .ds-collection-render-dispatch__pagination-next[data-disabled='true'] {
+.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__pagination[data-part="pagination"]
+  :is(.ds-collection-render-dispatch__pagination-prev, .ds-collection-render-dispatch__pagination-next)[data-disabled="true"] {
   opacity: 0.45;
 }
 
-.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__pagination[data-part='pagination'] .ds-collection-render-dispatch__page-size[data-part='page-size'] {
+.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__pagination[data-part="pagination"]
+  .ds-collection-render-dispatch__page-size[data-part="page-size"] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  font-size: var(--ds-font-size-sm, 0.875rem);
   color: var(--ds-color-text-muted);
 }
 
-.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__pagination[data-part='pagination'] .ds-collection-render-dispatch__page-size-select[data-part='page-size-select'] {
-  border-radius: var(--ds-radius-md, 8px);
-  border: 1px solid var(--ds-color-border, #d4d4d8);
-  background: var(--ds-color-bg-primary, #fff);
-  color: var(--ds-color-text-primary, #18181b);
+.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__pagination[data-part="pagination"]
+  .ds-collection-render-dispatch__page-size-select {
+  display: inline-flex;
 }
 
-.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part='incremental-footer'] {
+/* Incremental footer (cards load-more sentinel). */
+.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--ds-spacing-2, 8px) * 1.25);
+  min-block-size: calc(var(--ds-spacing-12, 48px) + calc(var(--ds-spacing-1, 4px) * 1.5));
+  margin-block-start: var(--ds-spacing-4, 16px);
+  font-size: var(--ds-font-size-xs, 12px);
+  font-weight: var(--ds-font-weight-semibold, 600);
   color: var(--ds-color-text-muted);
 }
 
-.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part='incremental-footer'] .ds-collection-render-dispatch__incremental-count[data-part='incremental-count'][data-part='incremental-count'],
-.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part='incremental-footer'] .ds-collection-render-dispatch__incremental-end[data-part='incremental-end'][data-part='incremental-end'] {
+.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
+  .ds-collection-render-dispatch__incremental-count[data-part="incremental-count"],
+.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
+  .ds-collection-render-dispatch__incremental-end[data-part="incremental-end"] {
+  font-size: var(--ds-font-size-xs, 12px);
   color: inherit;
 }
 
-.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part='incremental-footer'] .ds-collection-render-dispatch__load-more[data-part='load-more'] {
+.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
+  .ds-collection-render-dispatch__incremental-count[data-part="incremental-count"] {
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
+  .ds-collection-render-dispatch__load-more[data-part="load-more"] {
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-secondary));
-  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg, white));
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg, var(--ds-surface-card)));
   color: var(--ds-color-primary);
 }
 
-.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__kanban-column[data-part='kanban-column'] {
-  background: var(--ds-color-bg-secondary, var(--ds-surface-inset));
-  border-radius: var(--ds-radius-lg, 12px);
-}
+/* Forced colors: surface-owned affordances re-keyed to system colors. */
+@media (forced-colors: active) {
+  .ds-surface.ds-collection-render-dispatch
+    .ds-collection-render-dispatch__card-item[data-part="card-item"]:has(.ds-collection-render-dispatch__card-activation[data-part="card-activation"]:focus-visible) {
+    outline: 2px solid Highlight;
+  }
 
-.ds-surface.ds-collection-render-dispatch .ds-collection-render-dispatch__kanban-count[data-part='kanban-count'] {
-  color: var(--ds-color-text-muted);
-}
+  .ds-surface.ds-collection-render-dispatch
+    .ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"] {
+    color: LinkText;
+  }
 
-.ds-surface.ds-collection-render-dispatch[data-part='root'][data-view-mode='cards'][data-state='loading'],
-.ds-surface.ds-collection-render-dispatch[data-part='root'][data-view-mode='cards'][data-state='empty'] {
-  border-radius: var(--ds-collection-card-radius, var(--ds-radius-xl, 16px));
-  border: 1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, var(--ds-color-border)));
-  background: var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-card-bg, var(--ds-surface-card))));
-}
-
-.ds-surface.ds-collection-render-dispatch[data-part='root'][data-view-mode='calendar'] {
-  border: 1px dashed var(--ds-color-border);
-  border-radius: var(--ds-radius-lg, 12px);
-  color: var(--ds-color-text-muted);
+  .ds-surface.ds-collection-render-dispatch
+    .ds-collection-render-dispatch__skeleton-card[data-part="skeleton-card"] {
+    border-color: ButtonText;
+  }
 }

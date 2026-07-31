@@ -16,18 +16,31 @@
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
  * `border-color` on every element. A rule painting `border` / `border-color` with
  * a real color (including `transparent`, which is NOT a reset) must reach (0,4,0):
- * two root classes (0,2,0) + a REPEATED `data-part`, or a `data-part` plus a
- * contract `data-active`. Non-border paint (background, color, border-radius) beats
- * preflight while unlayered at (0,3,0). Pure `border: none` carries no color and is
- * exempt.
+ * two root classes (0,2,0) + the root's own `data-part='root'` + the target's
+ * `data-part` in the descendant chain, or a `data-part` plus a contract
+ * `data-active` -- never an identical attribute REPEATED (4th-tanda law).
+ * Non-border paint (background, color, border-radius) beats preflight while
+ * unlayered at (0,3,0). Pure `border: none` carries no color and is exempt.
+ *
+ * GLASS (PT31 pre-flag): the actions cluster's `backdrop-filter` is opt-in
+ * through the `--ds-page-shell-actions-backdrop` channel (default `none`) --
+ * the retired `blur(var(--ds-glass-blur, 8px))` default-ON taxed every scroll
+ * frame and is not the sanctioned glass contract (cockpit-header PT29
+ * precedent, itself following Sheet's explicit `--ds-glass-*` channels).
  *
  * Interaction paint that the removed React hover/focus state used to own now lives
- * here as `:hover` / `:focus` rules. The shell-grid `background-image` is scoped to
- * the non-loading root (the loading root never painted it); it stays invisible
- * until a tenant sets `--ds-shell-grid-size`/`--ds-shell-grid-line`. Skeleton blocks
- * share one `data-part` but differ in radius, so each carries its radius on an
- * inline `--ds-page-shell-skeleton-radius` custom property (default sm). The
- * `animation: ds-foundation-pulse` reference to the global keyframe stays inline.
+ * here as `:hover` / `:focus` rules. Hovers ride the `@media (hover: hover)`
+ * guard (house hover law) with unguarded `:active` twins where a press state
+ * reads; keyboard focus keeps its unguarded `:focus` rules. The shell-grid
+ * `background-image` is scoped to the non-loading root (the loading root never
+ * painted it); it stays invisible until a tenant sets
+ * `--ds-shell-grid-size`/`--ds-shell-grid-line`. Skeleton blocks share one
+ * `data-part` but differ in geometry, so each carries a `data-block` attribute
+ * (skin-owned geometry, cockpit-header idiom) and, where it deviates from the
+ * default, its radius on the sanctioned inline
+ * `--ds-page-shell-skeleton-radius` custom-property data channel (uncounted).
+ * The only remaining inline styles in the engine are the caller's own `style`
+ * prop and the `--ds-page-shell-max-width` channel on the root.
  *
  * Values were transcribed verbatim from `engines/modern.tsx`; the wave R2+R3
  * pass moved the remaining inline typography (title, subtitle, crumbs, tabs,
@@ -48,13 +61,21 @@
   container-name: ds-page;
 }
 
+/* ---- root measure: the caller's maxWidth rides the channel (default none;
+        margin-inline: auto is a no-op without a measure) ---- */
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] {
+  max-width: var(--ds-page-shell-max-width, none);
+  margin-inline: auto;
+}
+
 /* ---- premium page identity panel. The paint deliberately resolves through
         existing BrandTheme toolbar/card/surface channels so every DB tenant can
         change its tenor without a page-level stylesheet. ---- */
-.ds-pattern-page-shell.ds-engine-modern [data-part='header'][data-part='header'] {
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header'] {
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  padding: var(--ds-page-shell-header-padding);
   border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
   border-radius: var(--ds-page-header-radius, var(--ds-radius-xl));
   background: var(
@@ -83,7 +104,7 @@
     var(--ds-motion-ease-out, ease-out) both;
 }
 
-.ds-pattern-page-shell.ds-engine-modern [data-part='header'][data-part='header']::after {
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header']::after {
   position: absolute;
   z-index: 0;
   inset: 0;
@@ -102,22 +123,30 @@
     ease-in-out infinite;
 }
 
-.ds-pattern-page-shell.ds-engine-modern [data-part='header'][data-part='header'] > * {
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header'] > * {
   position: relative;
   z-index: 1;
 }
 
-.ds-pattern-page-shell.ds-engine-modern [data-part='header']:hover {
-  background-position: 100% 50%;
-  border-color: color-mix(
-    in srgb,
-    var(--ds-color-primary) 24%,
-    var(--ds-toolbar-border, var(--ds-color-border-primary))
-  );
-  box-shadow: var(--ds-page-header-shadow-hover, var(--ds-elevation-2));
+/* Header hover is decorative sheen-shift: it rides the hover guard (house
+   hover law); there is no press state on a page panel. */
+@media (hover: hover) {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='header']:hover {
+    background-position: 100% 50%;
+    border-color: color-mix(
+      in srgb,
+      var(--ds-color-primary) 24%,
+      var(--ds-toolbar-border, var(--ds-color-border-primary))
+    );
+    box-shadow: var(--ds-page-header-shadow-hover, var(--ds-elevation-2));
+  }
+
+  .ds-pattern-page-shell.ds-engine-modern [data-part='header']:hover [data-part='header-icon'] {
+    transform: translateY(-1px) scale(1.025);
+  }
 }
 
-.ds-pattern-page-shell.ds-engine-modern [data-part='header-icon'][data-part='header-icon'] {
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header-icon'] {
   display: inline-grid;
   flex: 0 0 auto;
   width: var(--ds-page-header-icon-size, 40px);
@@ -131,10 +160,6 @@
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),
     0 8px 18px -13px color-mix(in srgb, var(--ds-color-primary) 58%, transparent);
   transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
-}
-
-.ds-pattern-page-shell.ds-engine-modern [data-part='header']:hover [data-part='header-icon'] {
-  transform: translateY(-1px) scale(1.025);
 }
 
 .ds-pattern-page-shell.ds-engine-modern [data-part='eyebrow'] {
@@ -159,7 +184,7 @@
   text-wrap: pretty;
 }
 
-.ds-pattern-page-shell.ds-engine-modern [data-part='actions'][data-part='actions'] {
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='actions'] {
   min-height: calc(var(--ds-control-height-sm, 32px) + 8px);
   padding: 3px;
   border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
@@ -172,10 +197,13 @@
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
     0 8px 18px -16px color-mix(in srgb, var(--ds-color-text-primary) 30%, transparent);
-  backdrop-filter: blur(var(--ds-glass-blur, 8px));
+  /* Glass is opt-in (default none): a default-ON blur taxed every scroll
+     frame; tenants enable it through this channel (cockpit-header PT29
+     precedent, Sheet glass contract). */
+  backdrop-filter: var(--ds-page-shell-actions-backdrop, none);
 }
 
-.ds-pattern-page-shell.ds-engine-modern [data-part='header-content'][data-part='header-content'] {
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header-content'] {
   padding-top: var(--ds-page-shell-section-gap);
   border-top: 1px solid var(--ds-toolbar-divider, var(--ds-color-border-subtle));
 }
@@ -187,9 +215,16 @@
   background-size: var(--ds-shell-grid-size, 0px) var(--ds-shell-grid-size, 0px);
 }
 
-/* ---- breadcrumb crumb: interactive <a> (muted, secondary on hover) and static
-        <span> (last=secondary, otherwise muted). ---- */
-.ds-pattern-page-shell.ds-engine-modern [data-part='breadcrumb'][data-part='breadcrumb'] {
+/* ---- breadcrumb: pattern-owned framed-pill grammar (the Breadcrumb P76
+        primitive was evaluated; the cockpit-header framed-pill minimal
+        contract covers this exact anatomy need, so the pill frame and the
+        data-interactive/data-last crumb paint stay pattern-owned). Layout
+        drained from the engine's inline styles. ---- */
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='breadcrumb'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  margin-block-end: var(--ds-spacing-3, 12px);
   width: fit-content;
   max-width: 100%;
   padding: 4px 9px;
@@ -215,8 +250,13 @@
   text-decoration: none;
   transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
-  color: var(--ds-color-text-secondary);
+@media (hover: hover) {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
+    color: var(--ds-color-text-secondary);
+  }
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:active {
+  color: var(--ds-color-text-primary);
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
   color: var(--ds-color-text-secondary);
@@ -233,23 +273,36 @@
   align-items: center;
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-xs, 12px);
+  user-select: none;
 }
 
 /* ---- back button: borderless ghost, highlighted on hover||focus. No painting
-        border, so no (0,4,0) repeat is needed. ---- */
+        border, so no (0,4,0) chain is needed. The wrapper melts into the lead
+        row (drained from the inline display:contents / flexShrink). ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='back'] {
+  display: contents;
+}
 .ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .rottay-button {
+  flex-shrink: 0;
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .rottay-button:hover,
+@media (hover: hover) {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .rottay-button:hover {
+    background: var(--ds-color-neutral-100);
+    color: var(--ds-color-text-primary);
+  }
+}
 .ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .rottay-button:focus {
   background: var(--ds-color-neutral-100);
   color: var(--ds-color-text-primary);
 }
 
-/* ---- tab: base (repeated data-part for the transparent 2px underline) + active
-        underline + hover (only when not active, matching the JS guard). Typography
-        and geometry live here (the engine owns structure/state only). ---- */
-.ds-pattern-page-shell.ds-engine-modern [data-part='tab'][data-part='tab'] {
+/* ---- tab: base (the root chain buys (0,4,0) for the transparent 2px
+        underline frame -- transparent is NOT a reset here) + active underline
+        + guarded hover (only when not active, matching the JS guard).
+        Typography and geometry live here (the engine owns structure/state
+        only). ---- */
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='tab'] {
   position: relative;
   min-height: var(--ds-tabs-md-height);
   padding: var(--ds-tabs-md-padding);
@@ -276,14 +329,19 @@
   box-shadow: var(--ds-tabs-active-shadow, var(--ds-elevation-1));
   transform: translateY(-1px);
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='tab']:hover:not([data-active='true']) {
+@media (hover: hover) {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='tab']:hover:not([data-active='true']) {
+    color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
+    background: var(--ds-tab-bg-hover, var(--ds-color-neutral-50));
+    border-color: color-mix(
+      in srgb,
+      var(--ds-tabs-list-border, var(--ds-color-border-subtle)) 72%,
+      transparent
+    );
+  }
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='tab']:active:not([data-active='true']) {
   color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
-  background: var(--ds-tab-bg-hover, var(--ds-color-neutral-50));
-  border-color: color-mix(
-    in srgb,
-    var(--ds-tabs-list-border, var(--ds-color-border-subtle)) 72%,
-    transparent
-  );
 }
 .ds-pattern-page-shell.ds-engine-modern [data-part='tab']:focus-visible {
   outline: none;
@@ -310,8 +368,13 @@
   line-height: var(--ds-line-height-body);
 }
 
-/* ---- separators: tab strip and the no-tabs rule (both 1px bottom border). ---- */
-.ds-pattern-page-shell.ds-engine-modern [data-part='tabs'][data-part='tabs'] {
+/* ---- separators: tab strip and the no-tabs rule (both 1px bottom border).
+        Layout drained from the engine's inline styles. ---- */
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='tabs'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-tabs-gap);
+  margin-top: var(--ds-page-shell-section-gap);
   padding: var(--ds-tabs-list-padding, 3px);
   background: var(--ds-tabs-list-bg, var(--ds-surface-inset));
   border: 1px solid var(--ds-tabs-list-border, var(--ds-color-border-subtle));
@@ -322,15 +385,103 @@
     0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 80%, transparent);
   scrollbar-width: none;
 }
-.ds-pattern-page-shell.ds-engine-modern [data-part='rule'][data-part='rule'] {
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='rule'] {
+  margin-top: var(--ds-page-shell-section-gap);
   border-bottom: 1px solid var(--ds-color-border-subtle);
 }
 
-/* ---- loading skeleton blocks: uniform pulse background; per-block radius rides
-        the inline custom property (default sm). ---- */
+/* ---- header layout anatomy (drained from the engine's inline styles) ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='header-row'] {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--ds-page-shell-section-gap);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='lead'] {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: var(--ds-page-shell-item-gap);
+  min-width: 0;
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='titles'] {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='title-row'] {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-page-shell-item-gap);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='actions'] {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--ds-page-shell-action-gap);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='header-content'] {
+  margin-top: var(--ds-page-shell-section-gap);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='content'] {
+  padding: var(--ds-page-shell-content-padding);
+}
+
+/* ---- loading skeleton: layout frame (drained) + per-block geometry keyed on
+        data-block (cockpit-header idiom) + the pulse cadence on the motion
+        channel (the retired inline `1.5s` literal) ---- */
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'][data-loading='true'] {
+  padding: var(--ds-page-shell-header-padding);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-group'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-page-shell-item-gap);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-title-row'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-page-shell-section-gap);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-title-copy'] {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--ds-spacing-2, 8px);
+  min-width: 0;
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton-action-row'] {
+  display: flex;
+  gap: var(--ds-page-shell-action-gap);
+}
 .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'] {
   border-radius: var(--ds-page-shell-skeleton-radius, var(--ds-radius-sm));
   background: var(--ds-color-neutral-100);
+  animation: ds-foundation-pulse var(--ds-motion-attention, 1.5s) ease-in-out infinite;
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='breadcrumb'] {
+  inline-size: 180px;
+  block-size: 12px;
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='title'] {
+  inline-size: 100%;
+  max-inline-size: 280px;
+  block-size: 28px;
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='subtitle'] {
+  inline-size: 200px;
+  max-inline-size: 100%;
+  block-size: 14px;
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='action-sm'] {
+  inline-size: 80px;
+  block-size: 32px;
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'][data-block='action-md'] {
+  inline-size: 100px;
+  block-size: 32px;
 }
 
 @container ds-page (max-width: 640px) {
@@ -367,6 +518,56 @@
 
   .ds-pattern-page-shell.ds-engine-modern [data-part='header'],
   .ds-pattern-page-shell.ds-engine-modern [data-part='header']::after {
+    animation: none;
+  }
+}
+
+/* forced-colors: the identity panel's gradients, sheen and shadows are forced
+   away, so every frame re-asserts in system colors and the sheen layer is
+   removed outright. The ACTIVE tab keeps the system Highlight pair (the tab
+   state never reads as colour alone -- aria-selected carries it too); the
+   skeleton bars re-assert as GrayText with the pulse stopped; hairlines
+   degrade to ButtonText. The back Button is a composed primitive with its
+   own forced-colors contract. */
+@media (forced-colors: active) {
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+    animation: none;
+  }
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header']::after {
+    display: none;
+  }
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header-icon'],
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='actions'],
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='breadcrumb'],
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='tabs'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header-icon'] {
+    color: ButtonText;
+  }
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header-content'],
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='rule'] {
+    border-color: ButtonText;
+  }
+  .ds-pattern-page-shell.ds-engine-modern [data-part='tab'][data-active='true'] {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+    box-shadow: none;
+    transform: none;
+  }
+  .ds-pattern-page-shell.ds-engine-modern [data-part='tab']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+    box-shadow: none;
+  }
+  .ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'] {
+    background: GrayText;
     animation: none;
   }
 }

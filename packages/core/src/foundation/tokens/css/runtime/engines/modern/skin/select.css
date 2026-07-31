@@ -41,6 +41,13 @@
 
 /* ---- Trigger shell: layout + the Input-family control grammar. ---- */
 
+/* Root owns the anchoring context for the absolute native arrow/loading parts
+   and fills its parent (both branches render a block-level shell). */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] {
+  position: relative;
+  inline-size: 100%;
+}
+
 .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'],
 .ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'] {
   box-sizing: border-box;
@@ -48,12 +55,24 @@
   min-inline-size: 0;
   align-items: center;
   gap: var(--ds-select-trigger-gap, var(--ds-spacing-2, 8px));
-  min-block-size: var(--ds-select-trigger-height, 36px);
-  padding-inline: var(--ds-select-trigger-padding-x, 12px);
+  min-block-size: var(
+    --ds-select-trigger-responsive-height,
+    var(--ds-select-trigger-height, 36px)
+  );
+  padding-inline: var(
+    --ds-select-trigger-responsive-padding-x,
+    var(--ds-select-trigger-padding-x, 12px)
+  );
   color: var(--ds-select-color, var(--ds-color-text-primary));
   font-family: var(--ds-select-font-family, inherit);
-  font-size: var(--ds-select-trigger-font-size, 14px);
-  line-height: var(--ds-select-trigger-line-height, 20px);
+  font-size: var(
+    --ds-select-trigger-responsive-font-size,
+    var(--ds-select-trigger-font-size, 14px)
+  );
+  line-height: var(
+    --ds-select-trigger-responsive-line-height,
+    var(--ds-select-trigger-line-height, 20px)
+  );
   border-radius: var(--ds-select-radius, var(--ds-radius-input, var(--ds-radius-md)));
   background: var(--ds-select-bg, var(--ds-surface-control));
   box-shadow: var(--ds-select-shadow, none);
@@ -92,8 +111,9 @@
 }
 
 /* ---- Public size geometry (the Input scale: 28/32/36/40/44). Responsive
-       sizes ride the engine's generated media rules, which set the same
-       properties and therefore need no application-authored CSS. ---- */
+       sizes write the `--ds-select-trigger-responsive-*` channels in the
+       engine's generated media rules; the trigger's fallback chains above
+       consume them, so both paths share this geometry. ---- */
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-size='xs'] [data-part='trigger'] {
   --ds-select-trigger-height: var(--ds-select-trigger-xs-height, 28px);
@@ -287,7 +307,7 @@
     color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
     background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-spring, ease-out);
+    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove'][data-part='tag-remove'],
@@ -318,21 +338,24 @@
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='arrow-icon'] {
   flex: none;
   color: var(--ds-select-arrow-color, var(--ds-color-text-muted));
-  transform: rotate(0deg);
+  transform: rotate(var(--ds-select-arrow-rotate, 0deg));
   transition:
     color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-spring, ease-out);
+    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-open='true'] [data-part='arrow-icon'] {
   color: var(--ds-select-arrow-color-open, var(--ds-color-primary));
-  transform: rotate(180deg);
+  transform: rotate(var(--ds-select-arrow-rotate-open, 180deg));
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='native-arrow'] {
   position: absolute;
   inset-block-start: 50%;
-  inset-inline-end: var(--ds-select-native-arrow-inset, 0.75rem);
+  inset-inline-end: var(
+    --ds-select-trigger-responsive-padding-x,
+    var(--ds-select-native-arrow-inset, 0.75rem)
+  );
   display: inline-grid;
   place-items: center;
   color: var(--ds-select-arrow-color, var(--ds-color-text-muted));
@@ -381,7 +404,7 @@
   font-family: var(--ds-select-font-family, var(--ds-font-family-base));
   border-radius: var(--ds-select-dropdown-radius, var(--ds-radius-lg, 12px));
   background: var(--ds-select-dropdown-bg, var(--ds-surface-card));
-  box-shadow: var(--ds-select-dropdown-shadow, var(--ds-elevation-3, 0 16px 40px rgb(15 23 42 / 0.14)));
+  box-shadow: var(--ds-select-dropdown-shadow, var(--ds-elevation-3));
   backdrop-filter: var(--ds-select-backdrop-filter, none);
   transform-origin: center top;
   animation: ds-select-appear var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
@@ -484,7 +507,7 @@
   margin-block-start: 0.55rem;
 }
 
-.ds-select-shell__dropdown[data-part='dropdown'] [data-part='group-label'][data-divider='true'][data-divider='true'] {
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='group-label'][data-divider][data-divider='true'] {
   border-block-start: 1px solid var(--ds-select-group-divider, var(--ds-color-border-subtle));
 }
 
@@ -556,7 +579,7 @@
   inline-size: 1.05rem;
   block-size: 1.05rem;
   place-items: center;
-  color: var(--ds-color-text-on-primary, var(--ds-color-white, #fff));
+  color: var(--ds-color-text-on-primary, var(--ds-color-white));
   border-radius: var(--ds-radius-sm, 6px);
   background: var(--ds-surface-card);
   transition:
@@ -614,7 +637,7 @@
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-description'] {
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-xs, 0.75rem);
-  font-weight: var(--ds-font-weight-regular, 400);
+  font-weight: var(--ds-font-weight-normal, 400);
   line-height: 1.35;
 }
 
@@ -652,7 +675,22 @@
 
 @media (pointer: coarse) {
   .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'] {
-    min-block-size: max(var(--ds-select-trigger-height, 36px), var(--ds-select-touch-target-min, 44px));
+    min-block-size: max(
+      var(--ds-select-trigger-responsive-height, var(--ds-select-trigger-height, 36px)),
+      var(--ds-select-touch-target-min, 44px)
+    );
+  }
+
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button'] {
+    min-inline-size: var(--ds-select-touch-target-min, 44px);
+    min-block-size: var(--ds-select-touch-target-min, 44px);
+  }
+
+  /* The tag remove lives inside a 1.42rem pill: a 44px floor would blow the
+     chip up, so it meets the smaller WCAG 2.5.8 target instead. */
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove'] {
+    min-inline-size: var(--ds-select-tag-remove-touch-min, 1.5rem);
+    min-block-size: var(--ds-select-tag-remove-touch-min, 1.5rem);
   }
 
   .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] {
@@ -670,16 +708,18 @@
   .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-icon'],
   .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-checkbox'] {
     animation: none;
-    transition-duration: 0.01ms;
+    transition: none;
   }
 
+  /* Keep a slowed spin rather than a frozen frame so the loading posture
+     stays legible; the duration derives from the motion scale. */
   .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-spinner'] {
-    animation-duration: 1.8s;
+    animation-duration: calc(var(--ds-motion-glacial, 500ms) * 2);
   }
 }
 
 @media (forced-colors: active) {
-  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-part='trigger'] {
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-variant] {
     forced-color-adjust: auto;
     border-color: ButtonText;
   }

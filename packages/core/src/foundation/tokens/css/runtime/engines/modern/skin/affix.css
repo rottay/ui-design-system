@@ -26,6 +26,10 @@
 /* ---- affixed transition (was the engine's `transition-all duration-200`
         utility); narrow channels only, riding the canonical motion tokens. ---- */
 .rottay-affix.rottay-affix--modern[data-part='root'] {
+  z-index: var(
+    --ds-affix-runtime-z-index,
+    var(--ds-z-affix, var(--ds-z-index-affix, 100))
+  );
   transition:
     background-color var(--ds-affix-transition-duration, var(--ds-motion-normal, 200ms))
       var(--ds-affix-transition-timing, var(--ds-motion-ease-out)),
@@ -49,4 +53,24 @@
   box-shadow: var(--ds-affix-affixed-shadow, var(--ds-elevation-1));
   border-radius: var(--ds-affix-affixed-radius, 0);
   backdrop-filter: var(--ds-affix-affixed-backdrop, none);
+}
+
+/* ---- reduced motion: the affixed surface arrives instantly (the position
+        change itself is scroll-driven geometry, never animated). ---- */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-affix.rottay-affix--modern[data-part='root'] {
+    transition: none;
+  }
+}
+
+/* ---- forced colors: the fixed bar must not bleed the content scrolling
+        underneath -- a system canvas plus a ButtonText cut hairline on the
+        content-facing edge, and no authored shadow. ---- */
+@media (forced-colors: active) {
+  .rottay-affix.rottay-affix--modern[data-part='root'][data-sticky] {
+    background: Canvas;
+    border-block-end: 1px solid ButtonText;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
 }

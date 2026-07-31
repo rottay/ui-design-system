@@ -69,10 +69,14 @@
   pointer-events: none;
   z-index: 10;
 }
+/* The drop indicator is a DRAG affordance, not a connector: it must not
+   resolve to the connectors' sanctioned NEUTRAL line color (that flattens it
+   to near-invisibility against the row). Its own channel defaults to the
+   primary accent — one of the scarce places the accent is structural. */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] > div {
   height: 2px;
   border-radius: 9999px;
-  background: var(--ds-tree-line-color, var(--ds-color-primary));
+  background: var(--ds-tree-drop-indicator-color, var(--ds-color-primary));
   animation: rottay-drop-indicator var(--ds-motion-slow) ease-out;
 }
 
@@ -126,8 +130,13 @@
   box-shadow: inset 0 0 0 2px var(--ds-color-primary);
 }
 
-.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:hover:not([data-selected='true']):not([data-disabled]) {
-  background: var(--ds-tree-node-bg-hover, color-mix(in srgb, var(--ds-surface-inset) 50%, transparent));
+/* Row hover paints only where hover exists (button.css idiom, pre-flag 8):
+   on touch the wash would stick after the tap. The two-layer hover contract
+   with theme.css's wrapper rule is unchanged (see the header). */
+@media (hover: hover) {
+  .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:hover:not([data-selected='true']):not([data-disabled]) {
+    background: var(--ds-tree-node-bg-hover, color-mix(in srgb, var(--ds-surface-inset) 50%, transparent));
+  }
 }
 
 /* The engine's focusedKey state ring (roving focus after the first arrow
@@ -196,8 +205,9 @@
   transform: scaleX(-1);
 }
 
-/* ---- async loading: the spinner arc spins on the tenant's deliberate
-        cadence (was Tailwind's `animate-spin` utility). ---- */
+/* ---- async loading: the spinner arc rides the CANONICAL `ds-foundation-spin`
+        (Table/progress precedent) on the motion authority's slow cadence; the
+        family-local duplicate keyframe is retired. ---- */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='loading'] {
   display: inline-flex;
   inline-size: var(--ds-tree-loading-size, 16px);
@@ -206,19 +216,13 @@
   align-items: center;
   justify-content: center;
   margin-inline-end: 4px;
-  animation: ds-tree-loading-spin var(--ds-tree-loading-duration, var(--ds-motion-deliberate, 720ms))
+  animation: ds-foundation-spin var(--ds-tree-loading-duration, var(--ds-motion-glacial, 500ms))
     linear infinite;
 }
 
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='loading'] > svg {
   inline-size: 100%;
   block-size: 100%;
-}
-
-@keyframes ds-tree-loading-spin {
-  to {
-    transform: rotate(1turn);
-  }
 }
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='switcher-spacer'] {
   width: var(--ds-tree-switcher-size, 24px);

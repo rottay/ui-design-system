@@ -1,21 +1,25 @@
 /**
- * EditHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: foundation/tokens/css/presentation/components/skin/edit-header.css — EditHeader renders one DOM
- * tree under every engine (no engines/ split), so it has a single skin.
+ * EditHeader skin — engine-agnostic.
+ * Home: foundation/tokens/css/presentation/components/skin/edit-header.css —
+ * EditHeader renders one DOM tree under every engine (no engines/ split), so
+ * it has a single skin.
+ *
+ * LAYERING: imported by `facade/entrypoints/base.css` into
+ * `layer(rottay-components)` — this file does not control its own layering
+ * (the older "deliberately unlayered" note predates that wiring).
  *
  * SCOPE ROOT is the header's outer element, which carries the pair
- * `ds-structure ds-edit-header` + `data-part='root'` (the main and the loading
- * early-return both carry the class pair, `data-part='root'`, and — loading only —
- * `data-loading='true'`).
- *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
- * `border-color` on every element. A rule that paints a border COLOR must reach
- * (0,4,0): two root classes (0,2,0) + a `data-part` REPEATED for the remaining
- * (0,2,0). Non-border paint wins unlayered at (0,3,0). A `color` on a composed
- * `Text` must exceed the typography skin's (0,4,0) `[data-color='…']` rule, so it
- * buys (0,5,0) from the two root classes + the target `data-part` repeated three
- * times.
+ * `ds-structure ds-edit-header` + `data-part='root'` + ALWAYS-PRESENT
+ * `data-loading` ('false' on the main root, 'true' on the early return — the
+ * engine stamps it on both branches now). Class/attribute repetition is
+ * prohibited, so the old repeated-`data-part` specificity is bought from
+ * always-present attributes instead (fragility documented):
+ *   - ROOT border color (0,4,0): the two classes + `data-part='root'` +
+ *     `data-loading`.
+ *   - Descendant border color (0,4,0): root scope (0,3,0) + the target part.
+ *   - `color` on a composed `Text` (0,5,0): root scope + an intermediate
+ *     part (`top-bar`/`hero-panel`, both always present with `data-archetype`
+ *     on the latter) + the target part.
  *
  * SHARED WITH FormHeader (contract §2 — proven byte-identical): `buildPatternStyle`
  * (the archetype hero-panel gradient) and `getVariantTone` (the icon-badge tone)
@@ -32,8 +36,16 @@
  * consumes at (0,5,0), because a `Text` will not inherit `color` past the
  * typography skin.
  *
- * The archetype 4-way is STATE-SELECTED over static tokens → a `[data-archetype='…']`
- * rule on the stamped attribute. `data-archetype` defaults to `control`.
+ * GLASS LAW: the context card's `backdrop-filter: blur(8px)` was default-ON
+ * glass — it now rides `--ds-edit-header-context-card-filter` with a `none`
+ * default; a tenant opts the blur back in through the channel.
+ *
+ * MOTION: the enter animation rides the real `--ds-motion-slow` rung (the old
+ * `--ds-motion-calm` is a tenant-artifact ghost outside foundation).
+ *
+ * BREADCRUMB: own grammar (the §4 anatomy tests pin
+ * `breadcrumb-link/separator/item`); composing the Breadcrumb primitive is a
+ * contract-level migration, documented in the engine header.
  */
 
 /* ─── SHARED EDIT+FORM: hero-panel archetype gradient (buildPatternStyle) ─── */
@@ -102,6 +114,11 @@
 
 .ds-structure.ds-edit-header [data-part='icon-badge'],
 .ds-structure.ds-form-header [data-part='icon-badge'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 52px;
+  block-size: 52px;
   border-radius: 14px;
   background: var(--ds-header-icon-tone-bg);
   color: var(--ds-header-icon-tone-fg);
@@ -109,38 +126,58 @@
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 62%, transparent),
     0 8px 18px -14px color-mix(in srgb, var(--ds-color-text-primary) 38%, transparent);
 }
-.ds-structure.ds-edit-header [data-part='icon-badge'][data-part='icon-badge'],
-.ds-structure.ds-form-header [data-part='icon-badge'][data-part='icon-badge'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='icon-badge'],
+.ds-structure.ds-form-header[data-part='root'] [data-part='icon-badge'] {
   border: 1px solid var(--ds-header-icon-tone-bd);
 }
 
 /* ─── SHARED EDIT+FORM: back-button microinteraction + keyboard focus ────────
-   (per-file base rules above set the resting border token; these add the
-   motion + hover/focus states on top of either) */
+   Hover is hover-capable-only with a matching :active; the chip lifts 1px
+   (an interactive affordance on a real link, never decorative motion). */
 
 .ds-structure.ds-edit-header [data-part='back-button'],
 .ds-structure.ds-form-header [data-part='back-button'] {
+  padding-block: 8px;
+  padding-inline: 12px;
+  cursor: pointer;
   transition:
     background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-.ds-structure.ds-edit-header [data-part='back-button']:hover,
-.ds-structure.ds-form-header [data-part='back-button']:hover {
-  background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .ds-structure.ds-edit-header [data-part='back-button']:hover,
+  .ds-structure.ds-form-header [data-part='back-button']:hover {
+    background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
+    transform: translateY(-1px);
+  }
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button']:hover,
+  .ds-structure.ds-form-header[data-part='root'] [data-part='back-button']:hover {
+    border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
+  }
 }
-/* the repeated data-part buys (0,5,0) so the hover border-COLOR clears both
-   the tenant floor (0,3,1) and the resting border rule (0,4,0) */
-.ds-structure.ds-edit-header [data-part='back-button'][data-part='back-button']:hover,
-.ds-structure.ds-form-header [data-part='back-button'][data-part='back-button']:hover {
-  border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
+.ds-structure.ds-edit-header [data-part='back-button']:active,
+.ds-structure.ds-form-header [data-part='back-button']:active {
+  background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
 }
 /* the back button is a Flex inside an <a> — the ring lands on the chip */
 .ds-structure.ds-edit-header a:focus-visible [data-part='back-button'],
 .ds-structure.ds-form-header a:focus-visible [data-part='back-button'] {
   box-shadow: var(--ds-header-back-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
+}
+/* anchors around the back chip and breadcrumb links carry no underline (the
+   reset moved out of the inline NavLink style) */
+.ds-structure.ds-edit-header a:has(> [data-part='back-button']),
+.ds-structure.ds-form-header a:has(> [data-part='back-button']),
+.ds-structure.ds-edit-header a:has(> [data-part='breadcrumb-link']),
+.ds-structure.ds-form-header a:has(> [data-part='breadcrumb-link']) {
+  text-decoration: none;
+}
+/* the back arrow is directional: it mirrors under RTL */
+[dir='rtl'] .ds-structure.ds-edit-header [data-part='back-icon'],
+[dir='rtl'] .ds-structure.ds-form-header [data-part='back-icon'] {
+  transform: scaleX(-1);
 }
 
 /* ─── SHARED EDIT+FORM: enter motion (defined once, consumed by both roots) ─ */
@@ -154,17 +191,23 @@
 
 /* root card (main + loading early-return share the class pair) */
 .ds-structure.ds-edit-header[data-part='root'] {
+  inline-size: 100%;
+  overflow: hidden;
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
   border-radius: 20px;
   box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
-  animation: ds-header-enter var(--ds-motion-calm) var(--ds-motion-ease-out, ease-out) both;
+  animation: ds-header-enter var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out) both;
 }
-.ds-structure.ds-edit-header[data-part='root'][data-part='root'] {
+.ds-structure.ds-edit-header[data-part='root'][data-loading] {
   border: 1px solid var(--ds-color-border-secondary);
 }
 /* the loading early-return shares background + border with the main root but has
    NO radius/shadow; suppress the two the main rule would otherwise add to it */
 .ds-structure.ds-edit-header[data-part='root'][data-loading='true'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
   border-radius: 0;
   box-shadow: none;
   animation: none;
@@ -172,58 +215,80 @@
 
 /* top bar */
 .ds-structure.ds-edit-header [data-part='top-bar'] {
+  padding-block: 12px;
+  padding-inline: 24px;
   background: var(--ds-color-bg-secondary);
 }
-.ds-structure.ds-edit-header [data-part='top-bar'][data-part='top-bar'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] {
   border-bottom: 1px solid var(--ds-color-border-secondary);
 }
 
-/* back button (no hover — the dead <style> block that never painted was deleted) */
+/* back button (no className hook — §4 anatomy is data-part only) */
 .ds-structure.ds-edit-header [data-part='back-button'] {
   border-radius: 10px;
   background: transparent;
 }
-.ds-structure.ds-edit-header [data-part='back-button'][data-part='back-button'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='back-button'] {
   border: 1px solid var(--ds-color-border-secondary);
 }
 .ds-structure.ds-edit-header [data-part='back-icon'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-structure.ds-edit-header [data-part='back-label'][data-part='back-label'][data-part='back-label'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='back-label'] {
   color: var(--ds-color-text-secondary);
 }
 
-/* breadcrumb */
+/* breadcrumb (own grammar — see header) */
 .ds-structure.ds-edit-header [data-part='breadcrumb-divider'] {
+  inline-size: 1px;
+  block-size: 16px;
   background: var(--ds-color-border-secondary);
 }
-.ds-structure.ds-edit-header [data-part='breadcrumb-separator'][data-part='breadcrumb-separator'][data-part='breadcrumb-separator'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='breadcrumb-separator'] {
   color: var(--ds-color-text-muted);
 }
-.ds-structure.ds-edit-header [data-part='breadcrumb-link'][data-part='breadcrumb-link'][data-part='breadcrumb-link'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='breadcrumb-link'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-structure.ds-edit-header [data-part='breadcrumb-item'][data-part='breadcrumb-item'][data-part='breadcrumb-item'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='breadcrumb-item'] {
   color: var(--ds-color-text-secondary);
 }
 
 /* entity id chip */
 .ds-structure.ds-edit-header [data-part='entity-id'] {
+  padding-block: 4px;
+  padding-inline: 10px;
   border-radius: 999px;
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 64%, transparent);
+  font-family: var(--ds-font-family-mono, monospace);
 }
-.ds-structure.ds-edit-header [data-part='entity-id'][data-part='entity-id'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='entity-id'] {
   border: 1px solid var(--ds-color-border-secondary);
 }
-.ds-structure.ds-edit-header [data-part='entity-id'][data-part='entity-id'][data-part='entity-id'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'] [data-part='entity-id'] {
   color: var(--ds-color-text-secondary);
 }
 
-/* eyebrow / subtitle */
-.ds-structure.ds-edit-header [data-part='eyebrow'][data-part='eyebrow'][data-part='eyebrow'] {
-  color: var(--ds-color-text-muted);
+/* hero panel geometry + copy hierarchy */
+.ds-structure.ds-edit-header [data-part='hero-panel'] {
+  padding: 28px;
 }
-.ds-structure.ds-edit-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
+.ds-structure.ds-edit-header [data-part='hero-copy'] {
+  min-inline-size: 0;
+}
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='eyebrow'] {
+  color: var(--ds-color-text-muted);
+  font-family: var(--ds-font-family-mono, monospace);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.ds-structure.ds-edit-header [data-part='title'] {
+  font-size: var(--ds-edit-header-title-font-size, var(--ds-font-size-3xl));
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  overflow-wrap: break-word;
+}
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='subtitle'] {
   color: var(--ds-color-text-secondary);
 }
 
@@ -231,20 +296,54 @@
    rides --ds-edit-header-status-tone-* set inline on the pill; the text will not
    inherit color past its own typography skin, so it reads the --…-fg at (0,5,0) */
 .ds-structure.ds-edit-header [data-part='status-pill'] {
+  padding-block: 4px;
+  padding-inline: 12px;
   border-radius: 999px;
   background: var(--ds-edit-header-status-tone-bg);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent);
 }
-.ds-structure.ds-edit-header [data-part='status-pill'][data-part='status-pill'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'] {
   border: 1px solid var(--ds-edit-header-status-tone-bd);
 }
-.ds-structure.ds-edit-header [data-part='status-pill-text'][data-part='status-pill-text'][data-part='status-pill-text'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='status-pill-text'] {
   color: var(--ds-edit-header-status-tone-fg);
   letter-spacing: 0.04em;
+  text-transform: capitalize;
+}
+
+/* dirty chip: dot (shape) + label (text), never hue alone */
+.ds-structure.ds-edit-header [data-part='dirty-chip'] {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-block: 4px;
+  padding-inline: 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
+}
+.ds-structure.ds-edit-header[data-part='root'] [data-part='dirty-chip'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-warning) 26%, var(--ds-color-border-secondary));
+}
+.ds-structure.ds-edit-header [data-part='dirty-dot'] {
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: 50%;
+  background: var(--ds-color-warning);
+}
+.ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='dirty-label'] {
+  color: color-mix(in srgb, var(--ds-color-warning) 78%, var(--ds-color-text-primary) 22%);
+}
+
+/* actions rail: never compresses — the copy yields first */
+.ds-structure.ds-edit-header [data-part='actions'] {
+  flex: 0 0 auto;
+  margin-inline-start: auto;
 }
 
 /* context card below the hero */
 .ds-structure.ds-edit-header [data-part='context-card'] {
+  margin-block-start: 22px;
+  padding: 16px 18px 18px;
   border-radius: 18px;
   background:
     radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent) 0%, transparent 34%),
@@ -253,12 +352,15 @@
     linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px),
     linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px);
   background-size: 100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px;
-  background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+  background-position: 0 0, 0 0, 0 0, 0 0;
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
-  backdrop-filter: blur(8px);
+  backdrop-filter: var(--ds-edit-header-context-card-filter, none);
 }
-.ds-structure.ds-edit-header [data-part='context-card'][data-part='context-card'] {
+.ds-structure.ds-edit-header[data-part='root'] [data-part='context-card'] {
   border: 1px solid var(--ds-color-border-secondary);
+}
+.ds-structure.ds-edit-header [data-part='context-rail'] + [data-part='context-card-children'] {
+  margin-block-start: 18px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -266,5 +368,45 @@
   .ds-structure.ds-edit-header [data-part='back-button'] {
     animation: none;
     transition: none;
+  }
+}
+
+/* ─── forced colors: system colors only. Frames re-express as ButtonText;
+   the status/dirty tones flatten and their LABELS carry the meaning (the
+   dirty dot keeps its shape); the focus ring re-expresses as Highlight.
+   Backdrop filters are ignored by forced colors anyway, and the channel
+   already defaults to none. ─── */
+@media (forced-colors: active) {
+  .ds-structure.ds-edit-header[data-part='root'][data-loading],
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='top-bar'],
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='back-button'],
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='entity-id'],
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='icon-badge'],
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='status-pill'],
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='dirty-chip'],
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='context-card'] {
+    border-color: ButtonText;
+  }
+
+  .ds-structure.ds-edit-header [data-part='icon-badge'],
+  .ds-structure.ds-edit-header [data-part='status-pill'],
+  .ds-structure.ds-edit-header [data-part='dirty-chip'] {
+    background: Canvas;
+    box-shadow: none;
+  }
+
+  .ds-structure.ds-edit-header [data-part='icon-badge'],
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='status-pill-text'],
+  .ds-structure.ds-edit-header[data-part='root'] [data-part='hero-panel'][data-archetype] [data-part='dirty-label'] {
+    color: CanvasText;
+  }
+
+  .ds-structure.ds-edit-header [data-part='dirty-dot'] {
+    background: CanvasText;
+  }
+
+  .ds-structure.ds-edit-header a:focus-visible [data-part='back-button'] {
+    outline: 2px solid Highlight;
+    box-shadow: none;
   }
 }

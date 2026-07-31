@@ -1,19 +1,33 @@
 /**
- * CollectionHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * CollectionHeader skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/collection-header.css — CollectionHeader renders
  * one DOM tree under every engine (no engines/ split), so it has a single skin.
  *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring). Being an EARLIER layer
+ * than the Button engine skin is exactly why this file must never repaint
+ * button chrome: the composed Button is the single paint owner of its own
+ * variants/states (button.css, `rottay-engines`). Pill geometry is requested
+ * through the Button contract (`radius="full"`), never by reaching into the
+ * primitive's resolved channels.
+ *
  * SCOPE ROOT carries `ds-structure ds-collection-header` + `data-part='root'` +
- * `data-embedded`.
+ * `data-embedded` ('true'|'false', always stamped).
  *
  * SPECIFICITY (P-48): the tenant `html[data-tenant]…*` border-color floor sits at
- * (0,3,1); a border-COLOR rule buys (0,4,0) from the two root classes + the target
- * `data-part` repeated (or `data-part` + a real contract attribute like `data-tone`).
- * Non-border paint wins unlayered at (0,3,0). A `color` on a composed `Text`
- * (eyebrow, subtitle) must exceed the typography skin's (0,4,0) `[data-color='…']`
- * rule, so it buys (0,5,0) from the two root classes + the `data-part` ×3. The
- * `Box as="h2"` title and the Box chips are NOT typography, so their color wins at
- * (0,3,0) and their text children inherit it.
+ * (0,3,1); border-COLOR paint reaches (0,4,0) through the always-stamped root
+ * `data-part` ancestor — repeating a class or attribute is forbidden. A `color`
+ * on a composed `Text` (eyebrow, subtitle) must exceed the typography skin's
+ * (0,4,0) `[data-color='…']` rule, so it adds the always-stamped
+ * `data-embedded` / contract `data-variant` for (0,5,0). The `Box as="h2"`
+ * title and the Box chips are NOT typography, so their color wins at (0,3,0)
+ * and their text children inherit it.
+ *
+ * GLASS: `backdrop-filter` is opt-in through the
+ * `--ds-collection-header-actions-backdrop` channel (default `none`) — a
+ * default-ON blur taxes every scroll frame (PT29/PT32 fix, Sheet glass
+ * precedent).
  *
  * STATE: `surfaceVariant==='embedded'` → the stamped `data-embedded` (on the root,
  * eyebrow, and quick-actions; the shortcut chips carry no `data-embedded`, so their
@@ -21,13 +35,6 @@
  * `titleTreatment` / `compactLayout` / `layoutVariant` are STATE-SELECTED over
  * static tokens → keyed on the stamped `data-title-treatment` / `data-compact-layout`
  * / `data-editorial-tech`. `item.tone` → `data-tone`.
- *
- * QUICK-ACTION BUTTON: a composed `Button` paints its own radius/shadow via
- * button.css keyed on `data-*` (up to (0,5,0) for the hovered-state shadow), and
- * Button DROPS `data-part` in the modern engine (P-79). The pill radius + variant
- * shadow are therefore keyed on the BEM classes the component puts on the Button,
- * repeated to reach (0,6,0) so they win over button.css at every interaction state
- * exactly as the caller's inline style did.
  */
 
 /* root -------------------------------------------------------------------------- */
@@ -63,7 +70,6 @@
 
 .ds-structure.ds-collection-header[data-part='root'][data-embedded='false']::after {
   position: absolute;
-  z-index: 0;
   inset: 0;
   pointer-events: none;
   content: '';
@@ -71,15 +77,15 @@
   background: linear-gradient(108deg, transparent 22%, color-mix(in srgb, var(--ds-color-bg-elevated) 78%, var(--ds-color-primary) 5%) 48%, transparent 74%);
   background-position: 130% 50%;
   background-size: 240% 100%;
-  animation: ds-collection-header-sheen var(--ds-collection-header-sheen-duration, 17s) ease-in-out infinite;
+  animation: ds-collection-header-sheen var(--ds-collection-header-sheen-duration, 17s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
 .ds-structure.ds-collection-header[data-part='root'] > * {
   position: relative;
-  z-index: 1;
+  z-index: var(--ds-z-index-relative-above, 1);
 }
 
-.ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:hover {
+.ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:active {
   background-position: 100% 50%;
   border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-collection-header-border, var(--ds-color-border-primary)));
   box-shadow: var(--ds-collection-header-shadow-hover, var(--ds-elevation-2));
@@ -91,7 +97,7 @@
   border-radius: 999px;
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 76%, transparent);
 }
-.ds-structure.ds-collection-header [data-part='eyebrow'][data-part='eyebrow'] {
+.ds-structure.ds-collection-header[data-part='root'] [data-part='eyebrow'] {
   border: 1px solid var(--ds-color-border-subtle);
 }
 .ds-structure.ds-collection-header [data-part='eyebrow'][data-embedded='true'] {
@@ -100,7 +106,7 @@
 .ds-structure.ds-collection-header [data-part='eyebrow'][data-embedded='false'] {
   background: var(--ds-surface-panel);
 }
-.ds-structure.ds-collection-header [data-part='eyebrow'][data-part='eyebrow'][data-part='eyebrow'] {
+.ds-structure.ds-collection-header[data-part='root'] [data-part='eyebrow'][data-embedded] {
   color: var(--ds-color-text-muted);
 }
 
@@ -180,18 +186,18 @@
 .ds-structure.ds-collection-header [data-part='editorial-tech-rule'] {
   background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 76%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 40%, transparent) 40%, color-mix(in srgb, var(--ds-color-border-subtle) 18%, transparent) 72%, transparent 100%);
 }
-/* subtitle-row: the default-branch subtitle wrapper. The repeated data-part buys
+/* subtitle-row: the default-branch subtitle wrapper. The root ancestor buys
    (0,4,0) so its top border clears the tenant border-color floor at (0,3,1). */
-.ds-structure.ds-collection-header [data-part='subtitle-row'][data-part='subtitle-row'] {
+.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'] {
   border-top: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent);
 }
 
-/* subtitle (Text) — two variants ------------------------------------------------ */
-
-.ds-structure.ds-collection-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'][data-variant='editorial-tech'] {
+/* subtitle (Text) — two variants; the root ancestor + the contract
+   data-variant reach (0,5,0) over the typography skin's [data-color] rule. */
+.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle'][data-variant='editorial-tech'] {
   color: color-mix(in srgb, var(--ds-color-text-secondary) 88%, var(--ds-color-primary) 12%);
 }
-.ds-structure.ds-collection-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'][data-variant='default'] {
+.ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle'][data-variant='default'] {
   color: var(--ds-color-text-secondary);
 }
 
@@ -199,12 +205,13 @@
 
 .ds-structure.ds-collection-header [data-part='quick-actions'] {
   border-radius: var(--ds-radius-md, 8px);
-  backdrop-filter: blur(var(--ds-glass-blur, 8px));
+  /* Glass is opt-in (default none): PT29/PT32 fix, Sheet glass precedent. */
+  backdrop-filter: var(--ds-collection-header-actions-backdrop, none);
   transition:
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-.ds-structure.ds-collection-header [data-part='quick-actions'][data-part='quick-actions'] {
+.ds-structure.ds-collection-header[data-part='root'] [data-part='quick-actions'] {
   border: 1px solid var(--ds-color-border-subtle);
 }
 .ds-structure.ds-collection-header [data-part='quick-actions'][data-embedded='true'][data-editorial-tech='true'] {
@@ -220,41 +227,16 @@
   box-shadow: var(--ds-elevation-1);
 }
 
-.ds-structure.ds-collection-header [data-part='quick-actions']:hover {
+.ds-structure.ds-collection-header [data-part='quick-actions']:active {
   transform: translateY(-1px);
 }
 
-/* quick-action Button — BEM classes repeated to (0,6,0) to override button.css --- */
-
-.ds-structure.ds-collection-header .ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action {
-  border-radius: 999px;
-  flex: 0 0 auto !important;
-  min-width: max-content !important;
-  width: auto !important;
-}
-.ds-structure.ds-collection-header .ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action--primary {
-  background-color: var(--ds-button-primary-bg, var(--ds-color-primary)) !important;
-  background-image: var(--ds-gradient-primary, none) !important;
-  border-color: var(--ds-button-primary-border-color, transparent) !important;
-  box-shadow: var(--ds-button-primary-shadow, var(--ds-elevation-1)) !important;
-  color: var(--ds-button-primary-color, var(--ds-color-text-inverse)) !important;
-}
-.ds-structure.ds-collection-header .ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action--secondary,
-.ds-structure.ds-collection-header .ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action--default {
-  background: var(--ds-button-default-bg, var(--ds-surface-card)) !important;
-  border-color: var(--ds-button-default-border-color, var(--ds-color-border)) !important;
-  box-shadow: none !important;
-  color: var(--ds-button-default-color, var(--ds-color-text-primary)) !important;
-}
-.ds-structure.ds-collection-header .ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action--primary:hover {
-  background-color: var(--ds-button-primary-bg-hover, var(--ds-color-primary-hover)) !important;
-  box-shadow: var(--ds-button-primary-shadow-hover, var(--ds-elevation-2)) !important;
-}
-.ds-structure.ds-collection-header .ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action--secondary:hover,
-.ds-structure.ds-collection-header .ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action--default:hover {
-  background: var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle)) !important;
-  box-shadow: var(--ds-button-default-shadow-hover, var(--ds-elevation-1)) !important;
-}
+/* quick-action Button: the composed primitive is the single paint owner of
+   its variant chrome and interaction states (button.css, a later layer — the
+   old BEM block duplicated that paint with quadrupled classes + !important
+   and is retired). The structure requests pill geometry through the Button
+   prop contract. Flex sizing (no shrink, natural width) rides the caller's
+   inline layout style. */
 
 /* shortcuts label + shortcut pills (Box; embedded keyed off the ROOT ancestor) -- */
 
@@ -262,7 +244,7 @@
   border-radius: 999px;
   color: var(--ds-color-text-muted);
 }
-.ds-structure.ds-collection-header [data-part='shortcuts-label'][data-part='shortcuts-label'] {
+.ds-structure.ds-collection-header[data-part='root'] [data-part='shortcuts-label'] {
   border: 1px solid var(--ds-color-border-subtle);
 }
 .ds-structure.ds-collection-header[data-embedded='true'] [data-part='shortcuts-label'] {
@@ -276,7 +258,7 @@
   border-radius: 999px;
   color: var(--ds-color-text-muted);
 }
-.ds-structure.ds-collection-header [data-part='shortcut-pill'][data-part='shortcut-pill'] {
+.ds-structure.ds-collection-header[data-part='root'] [data-part='shortcut-pill'] {
   border: 1px solid var(--ds-color-border-subtle);
 }
 .ds-structure.ds-collection-header[data-embedded='true'] [data-part='shortcut-pill'] {
@@ -294,6 +276,44 @@
 @keyframes ds-collection-header-sheen {
   0%, 74%, 100% { background-position: 130% 50%; }
   87% { background-position: -130% 50%; }
+}
+
+/* ---- hover is pointer-fine only; both treatments keep an unguarded
+        `:active` twin at their original cascade position. ---- */
+@media (hover: hover) {
+  .ds-structure.ds-collection-header[data-part='root'][data-embedded='false']:hover {
+    background-position: 100% 50%;
+    border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-collection-header-border, var(--ds-color-border-primary)));
+    box-shadow: var(--ds-collection-header-shadow-hover, var(--ds-elevation-2));
+  }
+
+  .ds-structure.ds-collection-header [data-part='quick-actions']:hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* ---- forced colors: every pattern-owned frame reads as ButtonText. The
+        dotted title recipe paints glyphs via background-clip + transparent
+        fill (inline), which would vanish under forced colors — restore the
+        plain system-colored text for that treatment. ---- */
+@media (forced-colors: active) {
+  .ds-structure.ds-collection-header[data-part='root'][data-embedded='false'],
+  .ds-structure.ds-collection-header[data-part='root'] [data-part='eyebrow'],
+  .ds-structure.ds-collection-header [data-part='meta-item'],
+  .ds-structure.ds-collection-header[data-part='root'] [data-part='quick-actions'],
+  .ds-structure.ds-collection-header[data-part='root'] [data-part='subtitle-row'],
+  .ds-structure.ds-collection-header[data-part='root'] [data-part='shortcuts-label'],
+  .ds-structure.ds-collection-header[data-part='root'] [data-part='shortcut-pill'] {
+    border-color: ButtonText;
+  }
+
+  .ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'] {
+    color: CanvasText;
+    background-image: none;
+    filter: none;
+    -webkit-text-fill-color: CanvasText;
+    -webkit-text-stroke-width: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

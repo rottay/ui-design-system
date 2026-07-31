@@ -294,9 +294,10 @@ describe('PatternCalendarView', () => {
         engine,
       );
 
-      // All engines use a CSS grid with 7 columns
+      // All engines expose the grid through governed anatomy; each engine
+      // skin owns the seven-column layout without utility-class coupling.
       const grid = container.querySelector(
-        '[style*="grid-template-columns"],.grid-cols-7',
+        '[data-part="grid"],[style*="grid-template-columns"],.grid-cols-7',
       );
       expect(grid).not.toBeNull();
     },

@@ -29,9 +29,9 @@
 
 import React from 'react';
 import type { ApprovalWorkflowProps, ApprovalStep, ApprovalStatus } from '../../contracts';
-import { panelCardStyle, cardBodyStyle } from '../../../../foundation/engine-styles/modern';
 import { Button } from '../../../../../primitives/inputs/Button';
 import { Badge } from '../../../../../primitives/display/Badge';
+import { ModernEmptyState } from '../../../../facade';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 const STATUS_TONE: Record<ApprovalStatus, 'neutral' | 'success' | 'danger' | 'warning'> = {
@@ -193,9 +193,9 @@ export default function ModernApprovalWorkflow(props: ApprovalWorkflowProps) {
         className={['ds-pattern-approval-workflow', 'ds-engine-modern', className].filter(Boolean).join(' ')}
         data-part="root"
         data-loading="true"
-        style={{ ...panelCardStyle, ...style }}
+        style={style}
       >
-        <div data-part="skeleton" style={cardBodyStyle}>
+        <div data-part="skeleton">
           <div data-part="skeleton-line" data-width="third" />
           <div data-part="skeleton-steps">
             {[1, 2, 3].map((i) => (
@@ -218,9 +218,9 @@ export default function ModernApprovalWorkflow(props: ApprovalWorkflowProps) {
       className={['ds-pattern-approval-workflow', 'ds-engine-modern', className].filter(Boolean).join(' ')}
       data-part="root"
       data-loading="false"
-      style={{ ...panelCardStyle, ...style }}
+      style={style}
     >
-      <div style={cardBodyStyle}>
+      <div data-part="body">
         {/* Header with workflow title and optional entity identifier badge */}
         <div data-part="header">
           <h3 data-part="title">{title}</h3>
@@ -237,22 +237,29 @@ export default function ModernApprovalWorkflow(props: ApprovalWorkflowProps) {
           )}
         </div>
 
-        {/* Timeline: one StepNode per approval step, ordered sequentially */}
-        <div data-part="timeline">
-          {steps.map((step, i) => (
-            <StepNode
-              key={step.key}
-              step={step}
-              isCurrent={i === currentStep}
-              isLast={i === steps.length - 1}
-              onApprove={onApprove}
-              onReject={onReject}
-              onEscalate={onEscalate}
-              actionsDisabled={actionsDisabled}
-              t={t}
-            />
-          ))}
-        </div>
+        {/* Timeline: one StepNode per approval step, ordered sequentially.
+            An empty chain reads as the canonical empty kit (all caught up). */}
+        {steps.length === 0 ? (
+          <div data-part="empty">
+            <ModernEmptyState title={t('approvalWorkflow.empty', 'All caught up')} />
+          </div>
+        ) : (
+          <div data-part="timeline">
+            {steps.map((step, i) => (
+              <StepNode
+                key={step.key}
+                step={step}
+                isCurrent={i === currentStep}
+                isLast={i === steps.length - 1}
+                onApprove={onApprove}
+                onReject={onReject}
+                onEscalate={onEscalate}
+                actionsDisabled={actionsDisabled}
+                t={t}
+              />
+            ))}
+          </div>
+        )}
 
         {footer && (
           <div data-part="footer">{footer}</div>

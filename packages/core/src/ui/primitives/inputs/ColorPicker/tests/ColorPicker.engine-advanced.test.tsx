@@ -68,7 +68,9 @@ describe('ColorPicker runtime engine coverage', () => {
       '#654321'
     );
 
-    fireEvent.change(screen.getByPlaceholderText('#000000'), { target: { value: '#333333' } });
+    const hexInput = screen.getByPlaceholderText('#000000');
+    fireEvent.change(hexInput, { target: { value: '#333333' } });
+    fireEvent.blur(hexInput);
     expect(handleChange).toHaveBeenCalledWith(expect.any(Object), '#333333');
 
     fireEvent.click(container.querySelectorAll('button')[0] as HTMLButtonElement);

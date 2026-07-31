@@ -5,15 +5,29 @@
  * Box/Flex/Text, which resolve through the engine system themselves. One skin
  * file, no engine modifier class.
  *
+ * LAYERING: imported by `facade/entrypoints/base.css` into
+ * `layer(rottay-components)` — this file does not control its own layering
+ * (the older "deliberately unlayered" note predates that wiring). The one
+ * inline style left in the engine is the caller's own `style` prop on the
+ * root, which still wins.
+ *
  * OWNERSHIP (R2+R3): the engine stamps anatomy + state only (`data-part`,
  * `data-selected`, `data-wide`); this file owns 100% of layout and paint —
  * fixed positioning, safe-area inset, tab geometry, typography, the active
- * icon pill, badge, motion. The one inline style left in the engine is the
- * caller's own `style` prop on the root, which still wins (unlayered skin
- * yields to inline style).
+ * icon pill, badge, motion.
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule cannot paint these elements at all.
+ * BADGE COMPOSITION PIN: the tab badge is NOT the certified Badge primitive
+ * because the family tests pin its exact anatomy (`data-part='badge'` +
+ * `data-part='badge-text'` + `data-wide` + the '99+' cap text) — the
+ * primitive cannot carry that contract. The custom pill stays (shape +
+ * text, tabular count, cut-out ring); pin documented, tests untouched.
+ *
+ * PAGE-RESERVATION HOOK: the bar is fixed chrome, so pages must keep their
+ * content clear of it — the root publishes
+ * `--ds-bottom-tab-bar-reserved-block-end` (content geometry + the live
+ * `env(safe-area-inset-bottom)`) for a page container's `padding-block-end`.
+ * The bar never covers content that consumes the hook; AppShell S01 owns
+ * the app-level chrome coordination (integration documented, not edited).
  *
  * ELEMENT-LEVEL CLASSES, NOT BARE `data-part` DESCENDANTS: `data-part='icon'` /
  * `'label'` / `'badge'` are shared vocabulary across the component fleet, and
@@ -21,34 +35,46 @@
  * painted element therefore carries its own class and is matched by a COMPOUND
  * selector.
  *
- * ACTIVE COLOR: the selected/idle ink fans out to three explicit sites (tab
- * button, icon, label — none relying on inheritance), keyed on the tab
- * button's `data-selected`, so the cascade cannot be changed by a future
- * `color` landing on an intermediate node.
+ * ACTIVE STATE: selection reads as weight + framed pill + ink, never tint
+ * alone. The selected/idle ink fans out to three explicit sites (tab button,
+ * icon, label — none relying on inheritance), keyed on the tab button's
+ * `data-selected`, so the cascade cannot be changed by a future `color`
+ * landing on an intermediate node.
  *
  * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * border-color floor at (0,3,1). The root's `border-top` carries a real color,
- * so it must reach (0,4,0) — bought by a thrice-repeated `[data-part='root']`.
+ * so it must reach (0,4,0) — bought from the class + `data-part` +
+ * always-present `data-testid` + `aria-label` (repetition is prohibited).
  * The tab button's `border: none` is a color-free reset, exempt from the
- * floor. Non-border paint (background, color, border-radius, box-shadow) wins
- * unlayered at (0,2,0)+.
+ * floor. Non-border paint (background, color, border-radius, box-shadow)
+ * wins at (0,2,0)+.
  */
 
 /* ---- root: fixed navigation bar, safe-area aware. Positioning was inline
         in the engine pre-R2+R3; the skin owns it now. ---- */
 .rottay-bottom-tab-bar[data-part='root'] {
+  /* Public reservation hook: pages keep their content clear of the fixed bar
+     with `padding-block-end: var(--ds-bottom-tab-bar-reserved-block-end)`.
+     The 50px base tracks the bar's content geometry (6+26+2+14+2) — update
+     it if that geometry changes. */
+  --ds-bottom-tab-bar-reserved-block-end: calc(50px + env(safe-area-inset-bottom, 0px));
+
   position: fixed;
   inset-inline: 0;
   inset-block-end: 0;
   z-index: var(--ds-bottom-tab-bar-z, 40);
   padding-block-end: env(safe-area-inset-bottom, 0px);
   background: var(--ds-color-bg-primary);
-  box-shadow: var(--ds-bottom-tab-bar-shadow, var(--ds-elevation-2, 0 -4px 16px rgb(15 23 42 / 0.08)));
-  animation: ds-bottom-tab-bar-enter var(--ds-motion-calm)
+  box-shadow: var(--ds-bottom-tab-bar-shadow, var(--ds-elevation-2));
+  animation: ds-bottom-tab-bar-enter var(--ds-motion-slow, 320ms)
     var(--ds-motion-ease-out, ease-out) both;
 }
 
-.rottay-bottom-tab-bar[data-part='root'][data-part='root'][data-part='root'] {
+/* The root's `border-top` must reach (0,4,0) to clear the tenant floor;
+   repetition is prohibited, so the two extra units ride the always-present
+   `data-testid` + `aria-label` hooks (stamped by the engine on every render —
+   if either ever goes away, this rule silently loses to the floor). */
+.rottay-bottom-tab-bar[data-part='root'][data-testid='bottom-tab-bar'][aria-label] {
   border-top: 1px solid var(--ds-color-border);
 }
 
@@ -75,7 +101,7 @@
   cursor: pointer;
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
-  transition: color var(--ds-motion-fast) var(--ds-ease-standard, ease);
+  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button']:focus-visible {
@@ -90,10 +116,12 @@
   color: var(--ds-color-text-muted);
 }
 
-.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover,
-.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover .rottay-bottom-tab-bar__icon,
-.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover .rottay-bottom-tab-bar__label {
-  color: var(--ds-color-text-secondary);
+@media (hover: hover) {
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover,
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover .rottay-bottom-tab-bar__icon,
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover .rottay-bottom-tab-bar__label {
+    color: var(--ds-color-text-secondary);
+  }
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'],
@@ -115,16 +143,18 @@
   padding-inline: 10px;
   border-radius: var(--ds-radius-full, 9999px);
   transition:
-    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap {
   background: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
 }
 
-.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:not(:active):hover .rottay-bottom-tab-bar__icon-wrap {
-  background: color-mix(in srgb, var(--ds-color-text-muted) 8%, transparent);
+@media (hover: hover) {
+  .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:not(:active):hover .rottay-bottom-tab-bar__icon-wrap {
+    background: color-mix(in srgb, var(--ds-color-text-muted) 8%, transparent);
+  }
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button']:active .rottay-bottom-tab-bar__icon-wrap {
@@ -162,11 +192,13 @@
 
 /* On-token pair for the error pill. DOCUMENTED ESCAPE HATCH: no
    `--ds-color-text-on-error` token exists yet (shared-token proposal
-   reported); the `#fff` floor matches the export-button.css
-   `--ds-color-text-on-success` precedent. */
+   reported); the fallback rides the universal on-accent pair
+   `--ds-color-text-on-primary` instead of the old hard `#fff` floor. The
+   count is numeric data — tabular figures keep the pill width stable. */
 .rottay-bottom-tab-bar__badge-text[data-part='badge-text'] {
-  color: var(--ds-color-text-on-error, #fff);
+  color: var(--ds-color-text-on-error, var(--ds-color-text-on-primary));
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-variant-numeric: tabular-nums;
   font-weight: 600;
   line-height: 16px;
 }
@@ -179,7 +211,7 @@
   font-weight: 400;
   letter-spacing: 0.01em;
   line-height: 14px;
-  transition: color var(--ds-motion-fast) var(--ds-ease-standard, ease);
+  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
 .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label {

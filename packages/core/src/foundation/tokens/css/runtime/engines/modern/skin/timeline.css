@@ -45,6 +45,11 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  /* The skin is the single paint owner: it cannot lean on framework preflight
+     for the list reset (stepper.css precedent). */
+  margin: 0;
+  padding: 0;
+  list-style: none;
   color: var(--ds-timeline-content-color, inherit);
   font-size: var(--ds-timeline-content-font-size, inherit);
   line-height: var(--ds-timeline-content-line-height, normal);
@@ -106,6 +111,18 @@
   grid-row-start: 2;
   grid-column-start: 2;
   color: var(--ds-timeline-content-color, var(--ds-text-primary, var(--ds-color-text-primary)));
+}
+
+/* ---- custom dot slot: freeform by contract, but bounded to the dot's
+        optical scale so a consumer glyph cannot break the rail's rhythm ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='dot'] > :not([data-part='dot-marker']) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  max-inline-size: var(--ds-timeline-custom-dot-size, 1.25rem);
+  max-block-size: var(--ds-timeline-custom-dot-size, 1.25rem);
+  overflow: hidden;
+  font-size: var(--ds-timeline-custom-dot-size, 1.25rem);
 }
 
 /* ---- per-item label: the temporal eyebrow. Quiet Premium treatment: small
@@ -210,4 +227,25 @@ html[data-ds-motion='reduced']
 html[data-ds-motion='reduced']
   .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='content'] > [data-part='spinner'] {
   animation: none;
+}
+
+/* ---- forced colors: tone fills strip away, so the rail, the dots and the
+        pending spinner re-assert in system colors. The dot stays a solid
+        marker (ButtonText), pending keeps the system highlight, and the
+        connector -- always a neutral hairline, never a state hue -- reads
+        ButtonText. ---- */
+@media (forced-colors: active) {
+  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='connector'] {
+    background: ButtonText;
+  }
+  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='dot'] > [data-part='dot-marker'] {
+    background: ButtonText;
+  }
+  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'] {
+    background: Highlight;
+  }
+  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='content'] > [data-part='spinner'] {
+    border-color: ButtonText;
+    border-top-color: Highlight;
+  }
 }

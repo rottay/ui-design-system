@@ -2,14 +2,25 @@
 
 /**
  * @fileoverview Container Modern Engine - Rottay Design System.
- * Tailwind CSS implementation that maps Container props to utility classes
- * (e.g., `max-w-screen-lg`, `mx-auto`, `p-4`). Falls back to inline styles
- * when numeric values are passed for maxWidth or padding.
+ * Token-driven implementation: the engine projects only the instance values
+ * (`--ds-container-instance-*` custom properties) and stamps the anatomy
+ * (`data-part`/`data-centered`/`data-fluid`); the shared declarative skin
+ * (`presentation/components/skin/layout-primitives.css`, Container section)
+ * owns structure, paint and motion. No Tailwind utility classes.
+ *
+ * @remarks
+ * **When to use Container vs the layout sisters (kept in sync with Box/Flex/Grid):**
+ * - **Box** is the polymorphic single-element escape hatch.
+ * - **Stack/Flex** own child rhythm along one axis; **Grid** owns two axes.
+ * - **Container** owns the page-level measure: a max-inline-size on the
+ *   tenant container scale (`--ds-container-{sm..2xl}`), logical auto
+ *   margins when centered, and scale padding — the quiet canvas a view is
+ *   framed inside. It composes AROUND the sisters, never instead of them.
  *
  * @example
  * ```tsx
  * <Container engine="modern" maxWidth="lg" padding="md" center>
- *   {/* renders: class="w-full box-border max-w-screen-lg mx-auto p-4" *\/}
+ *   {children}
  * </Container>
  * ```
  *
@@ -41,15 +52,16 @@ type ContainerInstanceStyle = React.CSSProperties & {
 };
 
 /**
- * Modern (Tailwind) Container component.
+ * Modern Container component.
  *
- * Builds a class string from named presets for maxWidth and padding, then
- * merges any user-provided className. When the consumer passes a raw number
- * instead of a named preset, the value is applied as an inline style since
- * Tailwind classes cannot represent arbitrary pixel values.
+ * Projects the named presets for maxWidth and padding onto the
+ * `--ds-container-instance-*` custom properties the declarative skin
+ * consumes; raw numbers become safe pixel values on the same channel
+ * (arbitrary values a preset cannot name). The skin owns structure, paint
+ * and motion, so every tenant restyles the same markup through Appearance.
  *
  * @param props - {@link ContainerProps} with maxWidth, padding, center, fluid, and styling overrides.
- * @returns A container div styled with Tailwind utility classes.
+ * @returns A container div whose only inline declarations are the instance channels and the caller's style.
  */
 export const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
   (props, ref) => {

@@ -12,13 +12,17 @@
  * `data-part='root'` + `data-direction`/`data-affix`) so the root's
  * sticky/flex structure is skin-owned too.
  *
- * MIXED BORDER MECHANISM — the active accent bar is assembled from two sources
- * and only ONE of them was ever inline. The 2px width comes from the engine's
- * `border-s-2` class (border-INLINE-start since K3-C — logical, so the bar
- * flips to the correct side under `dir="rtl"`); the INACTIVE color comes from
- * the engine's `border-transparent` class (present only when inactive); the
- * ACTIVE color is the rule below. Writing an inactive `border-color` rule
- * would NOT be a no-op: it would newly out-rank the tenant's unlayered
+ * MIXED BORDER MECHANISM — the inline-start geometry is assembled from two
+ * sources: the 2px width comes from the engine's `border-s-2` class
+ * (border-INLINE-start since K3-C — logical, so the marker flips to the
+ * correct side under `dir="rtl"`); the INACTIVE color comes from the
+ * engine's `border-transparent` class (present only when inactive); the
+ * ACTIVE state used to paint that border with the primary hue. The owner's
+ * no-vertical-color-accent law (filter-builder precedent) retires that:
+ * the active marker is now NEUTRAL (`--ds-color-border-secondary`) and the
+ * accent expression lives in typographic weight + accent ink + a quiet
+ * background wash. Writing an inactive `border-color` rule would NOT be a
+ * no-op: it would newly out-rank the tenant's unlayered
  * `* { border-color }` floor, which today beats the layered
  * `.border-transparent` utility. The inactive channel is therefore left
  * exactly as it is.
@@ -37,7 +41,8 @@
  */
 
 /* ---- root: sticky affix + horizontal flex structure (was engine utilities).
-        The `top` offset stays inline on the element (runtime prop value). ---- */
+        The `top` offset stays inline on the element (runtime prop value).
+        Vertical roots own their scroll when a tenant bounds the list height. ---- */
 .rottay-anchor.rottay-anchor--modern[data-part='root'][data-affix='true'] {
   position: sticky;
 }
@@ -47,6 +52,12 @@
 }
 .rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='horizontal'] [data-part='link-wrapper'] {
   display: inline-block;
+}
+.rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='vertical'] {
+  max-block-size: var(--ds-anchor-list-max-block-size, none);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-color-border-secondary) transparent;
 }
 
 /* ---- link: base structure + rhythm (was `block py-1 px-3 text-sm
@@ -70,16 +81,35 @@
   color: var(--ds-anchor-item-color, var(--ds-color-text-secondary));
 }
 
+/* ACTIVE INDICATOR LAW (owner's no-vertical-color-accent rule, filter-builder
+   precedent): the active link never gets a COLOR rail. The inline-start
+   geometry the engine stamps (`border-s-2`) stays — it is now a NEUTRAL
+   marker (border-secondary, one of the sanctioned forms), and the accent
+   expression lives in typographic weight + accent ink + a quiet background
+   wash. The channel keeps its name so tenant overrides still win; its
+   default simply stops being the accent hue. */
 .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='true'] {
+  border-color: var(--ds-anchor-item-accent-selected, var(--ds-color-border-secondary));
+  background: var(
+    --ds-anchor-item-bg-selected,
+    color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
+  );
   color: var(--ds-anchor-item-color-selected, var(--ds-color-primary));
-  border-color: var(--ds-anchor-item-accent-selected, var(--ds-color-primary));
   font-weight: var(--ds-anchor-item-font-weight-selected, 500);
 }
 
 /* ---- link: hover (new in K3-C — the skin painted no hover at all). The
-        selected link keeps its own color; hover only lifts the idle link. ---- */
-.rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false']:hover {
+        selected link keeps its own color; hover only lifts the idle link.
+        Pointer-fine only (hover law); touch feedback is the press below. ---- */
+@media (hover: hover) {
+  .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false']:hover {
+    color: var(--ds-anchor-item-color-hover, var(--ds-color-text-primary));
+  }
+}
+
+.rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false']:active {
   color: var(--ds-anchor-item-color-hover, var(--ds-color-text-primary));
+  background: var(--ds-anchor-item-bg-active, var(--ds-surface-inset));
 }
 
 /* ---- link: keyboard focus ring (new in K3-C). ---- */
@@ -99,8 +129,13 @@
   .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'] {
     forced-color-adjust: auto;
   }
+  /* The active item must stay distinguishable without its accent ink or
+     wash: the system highlight pair carries it, and the neutral marker
+     keeps a system frame. */
   .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='true'] {
-    border-color: LinkText;
+    border-color: ButtonText;
+    background: Highlight;
+    color: HighlightText;
   }
   .rottay-anchor-link.rottay-anchor-link--modern[data-part='item']:focus-visible {
     outline: 2px solid Highlight;

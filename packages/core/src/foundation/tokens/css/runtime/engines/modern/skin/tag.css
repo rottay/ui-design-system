@@ -39,18 +39,29 @@
  */
 
 /* ---- base geometry + typography (formerly engine inline styles) ---- */
-.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'] {
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-variant] {
   display: inline-flex;
   align-items: center;
   box-sizing: border-box;
-  max-inline-size: 100%;
+  /* Long labels truncate against a bound instead of stretching their row;
+     the full text remains one hover away via the content's title. */
+  max-inline-size: var(--ds-tag-max-inline-size, 16rem);
   overflow: hidden;
   gap: var(--ds-tag-icon-gap, 0.25rem);
   font-weight: var(--ds-tag-font-weight, 500);
+  /* Numeric tag content (counts, versions) aligns like the Badge floor. */
+  font-variant-numeric: tabular-nums;
   line-height: var(--ds-tag-line-height, 1);
   white-space: nowrap;
   text-overflow: ellipsis;
   vertical-align: middle;
+}
+
+/* xs/sm render at 11–12px: one weight notch up keeps them legible next to
+   the md+ tags (Badge compact-weight precedent; flattenable via channel). */
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-variant][data-size='xs'],
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-variant][data-size='sm'] {
+  font-weight: var(--ds-tag-compact-font-weight, 600);
 }
 
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-size='xs'] {
@@ -99,14 +110,18 @@
 /* ---- solid fill: the variant map. The bare rule carries `default`, which is the
         map's own fallback for an unrecognised variant.
 
-        CONTRAST LAW (R0/Axe): chromatic solid fills deepen toward black until
-        white ink clears WCAG AA on EVERY governed source -- the raw 500-level
-        hues fail (white on rottay #22C55E = 2.28, on bithire #D6A04E = 2.33)
-        and no static ink survives both light (rottay) and dark (TMM #8A6B00)
-        semantic hues. The mix derives from the tenant's own resolved hue, so
-        the ramp stays hue-faithful with no ramp lookup. Measured white-ink
-        ratios (worst source): success 62% >= 5.41, warning 55% >= 6.20,
-        error 78% >= 5.74, secondary 82% >= 6.51, primary unmixed >= 5.15. ---- */
+        CONTRAST LAW (R0/Axe): chromatic solid fills deepen toward the
+        tenant-safe dark neutral ramp (`--ds-color-neutral-900`, the theme's
+        strongest neutral ink) until white ink clears WCAG AA on EVERY
+        governed source -- the raw 500-level hues fail (white on rottay
+        #22C55E = 2.28, on bithire #D6A04E = 2.33) and no static ink survives
+        both light (rottay) and dark (TMM #8A6B00) semantic hues. The mix
+        derives from the tenant's own resolved hue, so the ramp stays
+        hue-faithful with no ramp lookup. Measured white-ink ratios (worst
+        source): success 62% >= 5.41, warning 55% >= 6.20, error 78% >= 5.74,
+        secondary 82% >= 6.51, primary unmixed >= 5.15 (the ramp swap from
+        flat black to neutral-900 shifts fill luminance by ~0.004 at most --
+        ratios hold within ~2%). ---- */
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root']:not([data-outlined]) {
   background: var(--ds-tag-custom-bg, var(--ds-color-alpha-black-100));
   color: var(--ds-color-text-primary);
@@ -116,19 +131,19 @@
   color: var(--ds-tag-primary-ink, var(--ds-color-text-on-primary, var(--ds-color-white, #fff)));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='secondary']:not([data-outlined]) {
-  background: var(--ds-tag-custom-bg, var(--ds-tag-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-black, #000) 18%)));
+  background: var(--ds-tag-custom-bg, var(--ds-tag-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900, #171717) 18%)));
   color: var(--ds-tag-secondary-ink, var(--ds-color-white, #fff));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='success']:not([data-outlined]) {
-  background: var(--ds-tag-custom-bg, var(--ds-tag-success-solid-bg, color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-black, #000) 38%)));
+  background: var(--ds-tag-custom-bg, var(--ds-tag-success-solid-bg, color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900, #171717) 38%)));
   color: var(--ds-tag-success-ink, var(--ds-color-white, #fff));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='warning']:not([data-outlined]) {
-  background: var(--ds-tag-custom-bg, var(--ds-tag-warning-solid-bg, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-black, #000) 45%)));
+  background: var(--ds-tag-custom-bg, var(--ds-tag-warning-solid-bg, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900, #171717) 45%)));
   color: var(--ds-tag-warning-ink, var(--ds-color-white, #fff));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='error']:not([data-outlined]) {
-  background: var(--ds-tag-custom-bg, var(--ds-tag-error-solid-bg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-black, #000) 22%)));
+  background: var(--ds-tag-custom-bg, var(--ds-tag-error-solid-bg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900, #171717) 22%)));
   color: var(--ds-tag-error-ink, var(--ds-color-white, #fff));
 }
 
@@ -172,15 +187,15 @@
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='success'][data-outlined='true'] {
   border: 1px solid var(--ds-color-success);
-  color: var(--ds-tag-success-outlined-ink, color-mix(in srgb, var(--ds-color-success) 60%, var(--ds-color-black, #000) 40%));
+  color: var(--ds-tag-success-outlined-ink, color-mix(in srgb, var(--ds-color-success) 60%, var(--ds-color-neutral-900, #171717) 40%));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='warning'][data-outlined='true'] {
   border: 1px solid var(--ds-color-warning);
-  color: var(--ds-tag-warning-outlined-ink, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-black, #000) 45%));
+  color: var(--ds-tag-warning-outlined-ink, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900, #171717) 45%));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='error'][data-outlined='true'] {
   border: 1px solid var(--ds-color-error);
-  color: var(--ds-tag-error-outlined-ink, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-black, #000) 22%));
+  color: var(--ds-tag-error-outlined-ink, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900, #171717) 22%));
 }
 
 /* ---- bordered: an INSET ring, never a real border, so the frame costs no box

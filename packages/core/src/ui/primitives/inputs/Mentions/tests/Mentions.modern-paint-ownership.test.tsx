@@ -134,8 +134,14 @@ describe('Mentions modern -- geometry lives in the skin, hooks in the DOM', () =
   });
 
   it('skin pins: empty state owns padding + centering (former p-3 text-center utilities)', () => {
-    expect(/\[data-part='empty'\]\s*\{[^}]*padding:\s*var\(--ds-spacing-3,\s*12px\)/.test(SKIN)).toBe(true);
-    expect(/\[data-part='empty'\]\s*\{[^}]*text-align:\s*center/.test(SKIN)).toBe(true);
+    // Empty and loading intentionally share one quiet-state block. Pin the
+    // complete selector group so either state cannot silently lose geometry
+    // while a loose declaration grep stays green.
+    const quietStateBlock =
+      /\[data-part='empty'\],\s*\.ds-mentions\.ds-mentions--modern\[data-part='root'\]\s+\[data-part='loading'\]\s*\{[^}]*\}/
+        .exec(SKIN)?.[0] ?? '';
+    expect(quietStateBlock).toContain('padding: var(--ds-spacing-3');
+    expect(quietStateBlock).toContain('text-align: center');
   });
 
   it('skin pins: control surface reads the certified --ds-input-bg channel, never the generic bg-input (TMM near-black regression)', () => {

@@ -44,9 +44,10 @@ export interface Notification {
   read: boolean;
 
   /**
-   * Display timestamp for the notification (e.g. "5 min ago", "Yesterday").
-   * Passed as a pre-formatted string -- the component does not perform
-   * date formatting.
+   * Display timestamp for the notification (ISO 8601). Engines format it
+   * into a relative reading ("3m ago") through the i18n copy channel
+   * (English floor, one parametric message per unit), falling back to a
+   * locale date for older entries.
    */
   timestamp: string;
 

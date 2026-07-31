@@ -124,7 +124,7 @@ describe.each([
     );
 
     if (_engine === 'modern') {
-      expect(screen.getByRole('status', { name: 'Loading' })).toBeInTheDocument();
+      expect(screen.getByRole('status', { name: 'Loading...' })).toBeInTheDocument();
     } else {
       expect(screen.getByText('Loading...')).toBeInTheDocument();
     }

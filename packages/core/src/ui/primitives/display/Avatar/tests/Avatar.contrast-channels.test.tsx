@@ -14,7 +14,8 @@ const SKIN = readFileSync(
  * WCAG 2.x relative-luminance contrast math, mirroring the ratios Axe enforces
  * (SERIOUS color-contrast: >= 4.5:1 for normal text; avatar initials at md and
  * below are normal text). The solid-fill grammar deepens each chromatic hue
- * toward black until white ink clears the threshold on every governed source.
+ * toward the canonical darkest neutral until white ink clears the threshold
+ * on every governed source.
  */
 function channelLuminance(channel: number): number {
   const s = channel / 255;
@@ -106,7 +107,7 @@ describe('Avatar modern skin: solid-fallback contrast channels (R0/Axe)', () => 
       expect(rule![0]).toContain(`--ds-avatar-${variant}-solid-bg`);
       expect(rule![0]).toContain(`--ds-avatar-${variant}-ink`);
       expect(rule![0]).toContain(
-        `color-mix(in srgb, var(--ds-color-${variant}) ${100 - SOLID_MIX[variant]}%, var(--ds-color-black, #000) ${SOLID_MIX[variant]}%)`
+        `color-mix(in srgb, var(--ds-color-${variant}) ${100 - SOLID_MIX[variant]}%, var(--ds-color-neutral-900, #171717) ${SOLID_MIX[variant]}%)`
       );
       // The caller's backgroundColor hatch stays the first term of the background.
       expect(rule![0]).toMatch(/background:\s*var\(--ds-avatar-custom-bg,/);

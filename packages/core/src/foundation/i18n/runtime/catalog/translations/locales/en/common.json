@@ -12,6 +12,9 @@
   "next": "Next",
   "previous": "Previous",
   "finish": "Finish",
+  "tour": {
+    "step_progress": "Step {current} of {total}"
+  },
   "submit": "Submit",
   "search": "Search",
   "filter": "Filter",
@@ -61,6 +64,8 @@
   "logout": "Logout",
   "login": "Login",
   "breadcrumb": "Breadcrumb",
+  "breadcrumb_more_items": "More pages",
+  "opens_in_new_tab": "(opens in new tab)",
   "key_metrics": "Key metrics",
   "shortcuts": "Shortcuts",
   "dashboard_status_live": "Live",
@@ -70,5 +75,6 @@
   "dashboard_status_warning": "Warning",
   "show_password": "Show password",
   "hide_password": "Hide password",
-  "password_strength": "Password strength"
+  "password_strength": "Password strength",
+  "unsaved_changes": "Unsaved changes"
 }

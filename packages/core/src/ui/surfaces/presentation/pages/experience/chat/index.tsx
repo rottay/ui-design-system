@@ -19,10 +19,22 @@
  * or a message `artifact` part, with the app supplying domain copy and
  * callbacks. This surface is the single conversation host: no `AgentChatSurface`
  * is introduced (monorepo non-negotiable).
+ *
+ * States: `loading` renders a surface-owned mirror skeleton (message-bubble
+ * blocks plus a composer block inside the same section cards, so the swap to
+ * real content is paint-only -- the page-shell loading early-return is
+ * intentionally not engaged); `error` composes the shared `SurfaceErrorState`
+ * kit with retry under the live page chrome; `behavior.sending` drives the
+ * composer's async/busy posture (disabled input + loading send button). The
+ * transcript carries NO live-region role on purpose: the chat contract does
+ * not declare live-region semantics (owner directive: never infer
+ * `role="log"`/`alert`/`status` without an explicit contract), and the
+ * pattern-owned `TypingIndicator` already announces itself with its own
+ * `role="status"`.
  */
 
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Card, Grid, Stack, Text, Textarea } from '../../../../../primitives';
+import { Box, Button, Card, Grid, Stack, Textarea } from '../../../../../primitives';
 import {
   MessageBubble,
   TypingIndicator,
@@ -39,7 +51,7 @@ import {
 import type { ChatSurfaceConfig, ChatSurfaceMessage } from '../../../../foundation/contracts';
 import { PageShellSurface } from '../../../../composition/layout/page-shell';
 import { SurfaceActionBar, SurfaceSectionCard } from '../../../../runtime/helpers/rendering';
-import { SurfaceEmptyState } from '../../../../runtime/helpers/states';
+import { SurfaceEmptyState, SurfaceErrorState } from '../../../../runtime/helpers/states';
 import { useResponsive } from '@/infrastructure/runtime/responsive';
 
 /** Default transcript renderer used when consumers do not provide a custom message slot. */
@@ -113,17 +125,61 @@ function normalizeMessageParts(message: ChatSurfaceMessage): AssistantMessagePar
   return parts;
 }
 
+/**
+ * Loading placeholder that mirrors the conversation anatomy. The bubble
+ * blocks alternate alignment and length like a real transcript and the
+ * composer block keeps the input/send geometry, all inside the same section
+ * cards as the loaded state, so the swap to real content is a pure paint
+ * change, never a layout shift. Geometry and pulse live in the chat skin;
+ * the blocks are decorative (`aria-hidden`) while the root carries
+ * `aria-busy`.
+ */
+function ChatLoadingSkeleton(): React.ReactElement {
+  const { tSurfaceOr } = useSurfaceTranslations();
+
+  return (
+    <>
+      <SurfaceSectionCard title={tSurfaceOr('chat.conversation_title', 'Conversation')}>
+        <Stack data-part="transcript-skeleton" spacing="md" aria-hidden="true">
+          <Box data-part="chat-skeleton-bubble" data-align="start" data-size="lg" />
+          <Box data-part="chat-skeleton-bubble" data-align="end" data-size="md" />
+          <Box data-part="chat-skeleton-bubble" data-align="start" data-size="sm" />
+        </Stack>
+      </SurfaceSectionCard>
+      <Box
+        className="ds-chat__composer"
+        data-part="composer"
+        data-mobile-sticky="false"
+        data-keyboard-open="false"
+      >
+        <SurfaceSectionCard title={tSurfaceOr('chat.composer_title', 'Composer')}>
+          <Stack spacing="md" aria-hidden="true">
+            <Box data-part="chat-skeleton-block" data-size="composer-input" />
+            <Box data-part="chat-skeleton-block" data-size="send-button" />
+          </Stack>
+        </SurfaceSectionCard>
+      </Box>
+    </>
+  );
+}
+
 export interface ChatSurfaceProps {
   config: ChatSurfaceConfig;
   loading?: boolean;
+  /** Load failure of the conversation payload; renders the shared error kit under the live page chrome. */
+  error?: unknown;
+  /** Retry handler wired to the error state's retry action. */
+  onRetry?: () => void | Promise<void>;
 }
 
 /** Full chat surface composed from transcript, composer, optional sidebar, and shell chrome. */
 export function ChatSurface({
   config,
   loading = false,
+  error,
+  onRetry,
 }: ChatSurfaceProps): React.ReactElement {
-  const { tSurface } = useSurfaceTranslations();
+  const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
   const { shouldStack, isMobile, hasResolvedViewport } = useSurfaceResponsiveLayout(config.visual);
   const { virtualKeyboardInset, isVirtualKeyboardOpen } = useResponsive();
@@ -168,132 +224,168 @@ export function ChatSurface({
     }
   };
 
-  /**
-   * Resolve typing indicator speed to a CSS animation-duration value.
-   * Personality pulse speed drives how fast the dots animate.
-   */
-  const typingSpeed = profileDefaults.pulseSpeed === 'fast'
-    ? '0.8s'
-    : profileDefaults.pulseSpeed === 'slow'
-      ? '1.8s'
-      : '1.2s';
+  const useSplit = showSidebar && !shouldStack;
+  // `sidebarWidth` is contract-declared: when set, the split leaves the fixed
+  // 12-column 8/4 recipe and gives the sidebar its own track; the main column
+  // stays fluid (`minmax(0, 1fr)`) so long content can never overflow it.
+  const sidebarTrack =
+    config.visual.sidebarWidth === undefined || config.visual.sidebarWidth === null
+      ? undefined
+      : typeof config.visual.sidebarWidth === 'number'
+        ? `${config.visual.sidebarWidth}px`
+        : config.visual.sidebarWidth;
+
+  // Error state renders under the live page chrome so header actions (e.g.
+  // refresh) stay usable, mirroring the dashboard surface idiom.
+  if (error) {
+    return (
+      <PageShellSurface
+        chrome={{
+          ...config.presentation.chrome,
+          maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
+        }}
+        actions={<SurfaceActionBar actions={config.behavior.actions} access={config.access} />}
+      >
+        <SurfaceErrorState error={error} onRetry={onRetry} />
+      </PageShellSurface>
+    );
+  }
 
   // The chat layout uses a 12-column grid with 8/4 split when a sidebar is
-  // present and viewport is wide enough. On mobile or when no sidebar
-  // content is provided, it collapses to a single column.
+  // present and viewport is wide enough (or a contract-declared sidebar
+  // track). On mobile or when no sidebar content is provided, it collapses
+  // to a single column.
   const chatContent = (
     <Grid
-      className={`ds-surface ds-chat ds-chat--${showSidebar && !shouldStack ? 'split' : 'stacked'}${loading ? ' ds-chat--loading' : ''}`}
+      className={`ds-surface ds-chat ds-chat--${useSplit ? 'split' : 'stacked'}${loading ? ' ds-chat--loading' : ''}`}
+      data-part="root"
+      data-layout={useSplit ? 'split' : 'stacked'}
+      data-mobile={resolvedMobile ? 'true' : 'false'}
+      data-loading={loading ? 'true' : 'false'}
+      aria-busy={loading ? 'true' : undefined}
       data-mobile-sidebar={showSidebar ? 'visible' : 'hidden'}
       data-mobile-composer={stickyComposer ? 'sticky' : 'inline'}
-      columns={showSidebar && !shouldStack ? 12 : 1}
+      columns={useSplit ? 12 : 1}
+      templateColumns={useSplit && sidebarTrack ? `minmax(0, 1fr) minmax(0, ${sidebarTrack})` : undefined}
       gap={sectionSpacing}
     >
-      <Grid.Item span={showSidebar && !shouldStack ? 8 : undefined}>
+      <Grid.Item span={useSplit && !sidebarTrack ? 8 : undefined}>
         <Stack spacing={sectionSpacing}>
           {config.presentation.headerContent}
 
-          <SurfaceSectionCard title={tSurface('chat.conversation_title')}>
-            {config.behavior.messages.length === 0 ? (
-              config.presentation.emptyState ?? (
-                <SurfaceEmptyState
-                  title={tSurface('chat.empty_title')}
-                  description={tSurface('chat.empty_description')}
-                />
-              )
-            ) : (
-              <Stack
-                className="ds-chat__transcript"
-                data-part="transcript"
-                spacing="md"
-                style={{
-                  maxHeight: config.visual.transcriptHeight ?? 520,
-                  overflowY: 'auto',
-                }}
-                role="log"
-                aria-live="polite"
-                aria-relevant="additions text"
-              >
-                {/* When entrance motion is enabled, transcript messages reveal as a coordinated group. */}
-                {profileDefaults.animateEntrance ? (
-                  <StaggerChildren
-                    staggerDelayMs={profileDefaults.staggerDelay}
-                    durationMs={profileDefaults.entranceDuration}
-                  >
-                    {config.behavior.messages.map((message, index) => (
-                      <React.Fragment key={message.id}>
-                        {config.presentation.renderMessage?.(message, index) ?? (
-                          <DefaultMessage
-                            message={message}
-                            renderPart={config.presentation.renderPart}
-                          />
-                        )}
-                      </React.Fragment>
-                    ))}
-                  </StaggerChildren>
-                ) : (
-                  config.behavior.messages.map((message, index) => (
-                    <React.Fragment key={message.id}>
-                      {config.presentation.renderMessage?.(message, index) ?? (
-                        <DefaultMessage
-                          message={message}
-                          renderPart={config.presentation.renderPart}
-                        />
-                      )}
-                    </React.Fragment>
-                  ))
-                )}
-                {config.behavior.assistantTyping ? (
-                  <Box className="ds-chat__typing" data-part="typing-indicator" style={{ '--ds-typing-speed': typingSpeed } as React.CSSProperties}>
-                    <TypingIndicator
-                      label={config.behavior.typingLabel ?? tSurface('chat.typing')}
+          {loading ? (
+            /* Mirror skeleton: the section frames and page chrome stay live
+               and the swap to real content is paint-only. The page-shell
+               loading early-return is intentionally NOT engaged (dashboard
+               idiom) because it would drop the conversation anatomy. */
+            <ChatLoadingSkeleton />
+          ) : (
+            <>
+              <SurfaceSectionCard title={tSurfaceOr('chat.conversation_title', 'Conversation')}>
+                {config.behavior.messages.length === 0 ? (
+                  config.presentation.emptyState ?? (
+                    <SurfaceEmptyState
+                      title={tSurfaceOr('chat.empty_title', 'No messages yet')}
+                      description={tSurfaceOr('chat.empty_description', 'Send the first message to start the conversation.')}
                     />
-                  </Box>
-                ) : null}
-              </Stack>
-            )}
-          </SurfaceSectionCard>
+                  )
+                ) : (
+                  <Stack
+                    className="ds-chat__transcript"
+                    data-part="transcript"
+                    spacing="md"
+                    style={
+                      config.visual.transcriptHeight !== undefined
+                        ? // Contract-declared instance geometry. The skin owns
+                          // the default max-block-size and the scroll behavior
+                          // (overflow, overscroll containment, stable gutter).
+                          { maxBlockSize: config.visual.transcriptHeight }
+                        : undefined
+                    }
+                  >
+                    {/* When entrance motion is enabled, transcript messages reveal as a coordinated group. */}
+                    {profileDefaults.animateEntrance ? (
+                      <StaggerChildren
+                        staggerDelayMs={profileDefaults.staggerDelay}
+                        durationMs={profileDefaults.entranceDuration}
+                      >
+                        {config.behavior.messages.map((message, index) => (
+                          <React.Fragment key={message.id}>
+                            {config.presentation.renderMessage?.(message, index) ?? (
+                              <DefaultMessage
+                                message={message}
+                                renderPart={config.presentation.renderPart}
+                              />
+                            )}
+                          </React.Fragment>
+                        ))}
+                      </StaggerChildren>
+                    ) : (
+                      config.behavior.messages.map((message, index) => (
+                        <React.Fragment key={message.id}>
+                          {config.presentation.renderMessage?.(message, index) ?? (
+                            <DefaultMessage
+                              message={message}
+                              renderPart={config.presentation.renderPart}
+                            />
+                          )}
+                        </React.Fragment>
+                      ))
+                    )}
+                    {config.behavior.assistantTyping ? (
+                      <Box className="ds-chat__typing" data-part="typing-indicator">
+                        <TypingIndicator
+                          label={config.behavior.typingLabel ?? tSurfaceOr('chat.typing', 'Assistant is typing')}
+                        />
+                      </Box>
+                    ) : null}
+                  </Stack>
+                )}
+              </SurfaceSectionCard>
 
-          <Box
-            className="ds-chat__composer"
-            data-part="composer"
-            data-mobile-sticky={stickyComposer ? 'true' : 'false'}
-            data-keyboard-open={isVirtualKeyboardOpen ? 'true' : 'false'}
-            style={
-              {
-                '--ds-virtual-keyboard-inset': `${Math.max(0, virtualKeyboardInset)}px`,
-              } as React.CSSProperties
-            }
-          >
-            <SurfaceSectionCard title={tSurface('chat.composer_title')}>
-              <Stack spacing="md">
-                <Textarea
-                  className="ds-chat__composer-input"
-                  value={draft}
-                  onChange={(nextValue) => setDraft(nextValue)}
-                  placeholder={config.presentation.composerPlaceholder ?? tSurface('chat.placeholder')}
-                  rows={config.visual.composerRows ?? 4}
-                  disabled={config.behavior.sending}
-                />
-                <Button
-                  className="ds-chat__send-button"
-                  variant="primary"
-                  onClick={() => void handleSend()}
-                  loading={config.behavior.sending}
-                  disabled={!draft.trim() || config.behavior.sending}
-                >
-                  {config.behavior.sendLabel ?? tSurface('chat.send')}
-                </Button>
-              </Stack>
-            </SurfaceSectionCard>
-          </Box>
+              <Box
+                className="ds-chat__composer"
+                data-part="composer"
+                data-mobile-sticky={stickyComposer ? 'true' : 'false'}
+                data-keyboard-open={isVirtualKeyboardOpen ? 'true' : 'false'}
+                style={
+                  {
+                    '--ds-virtual-keyboard-inset': `${Math.max(0, virtualKeyboardInset)}px`,
+                  } as React.CSSProperties
+                }
+              >
+                <SurfaceSectionCard title={tSurfaceOr('chat.composer_title', 'Composer')}>
+                  <Stack spacing="md">
+                    <Textarea
+                      className="ds-chat__composer-input"
+                      value={draft}
+                      onChange={(nextValue) => setDraft(nextValue)}
+                      placeholder={config.presentation.composerPlaceholder ?? tSurfaceOr('chat.placeholder', 'Write a message')}
+                      aria-label={config.presentation.composerPlaceholder ?? tSurfaceOr('chat.composer_label', 'Message input')}
+                      rows={config.visual.composerRows ?? 4}
+                      disabled={config.behavior.sending}
+                    />
+                    <Button
+                      className="ds-chat__send-button"
+                      variant="primary"
+                      onClick={() => void handleSend()}
+                      loading={config.behavior.sending}
+                      disabled={!draft.trim() || config.behavior.sending}
+                    >
+                      {config.behavior.sendLabel ?? tSurfaceOr('chat.send', 'Send')}
+                    </Button>
+                  </Stack>
+                </SurfaceSectionCard>
+              </Box>
+            </>
+          )}
 
           {config.presentation.footer}
         </Stack>
       </Grid.Item>
 
       {showSidebar && (
-        <Grid.Item span={!shouldStack ? 4 : undefined}>
+        <Grid.Item span={useSplit && !sidebarTrack ? 4 : undefined}>
           <Card className="ds-chat__sidebar" variant={profileDefaults.cardVariant}>
             <Card.Body>{config.presentation.sidebar}</Card.Body>
           </Card>
@@ -303,13 +395,17 @@ export function ChatSurface({
   );
 
   return (
+    /* The shell's loading early-return is intentionally not engaged: the
+       surface owns a mirror skeleton that preserves the conversation anatomy
+       (dashboard idiom), so the page chrome and section frames stay live and
+       the swap to real content is paint-only. */
     <PageShellSurface
       chrome={{
         ...config.presentation.chrome,
         maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
       }}
       actions={<SurfaceActionBar actions={config.behavior.actions} access={config.access} />}
-      loading={loading}
+      loading={false}
     >
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
         {profileDefaults.animateEntrance ? (

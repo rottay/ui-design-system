@@ -1,13 +1,28 @@
 /**
- * LocaleSwitcher — Modern engine skin. DELIBERATELY UNLAYERED (P-47):
- * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
- * rule cannot paint these elements; unlayered outranks preflight + DaisyUI and
- * still yields to a caller's inline `style`.
+ * LocaleSwitcher — Modern engine skin.
  *
- * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
- * two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0), to beat
- * the tenant's unlayered `…*` border-color floor at (0,3,1). `border: none`
- * resets carry no color and stay at (0,3,0). Non-border paint wins at (0,3,0).
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-engines)` (the old
+ * "unlayered" note predates the wiring). Caller inline styles still win.
+ *
+ * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-locale-switcher
+ * ds-engine-modern` + `data-part='root'` (+ `data-loading`). The engine
+ * stamps data-parts only; ALL geometry and paint live here (the old inline
+ * size maps, the panel's popup object and the per-option style literals are
+ * drained into the rules below, values transcribed verbatim; z-index moved
+ * from an arbitrary 50 to the token scale).
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0)
+ * to beat the tenant's unlayered `…*` border-color floor at (0,3,1) — here
+ * through the always-stamped root `data-part` ancestor; repeating an
+ * attribute on one element is forbidden. `border: none` resets carry no
+ * color and stay at (0,3,0). Non-border paint wins at (0,3,0).
+ *
+ * KEYBOARD / HOVER: the option's focus model is APG activedescendant — the
+ * engine moves `data-focused` with both pointer and keys, so the background
+ * rule keyed on it already serves every input mode (no `:hover` selector is
+ * needed on options). The trigger is a plain button: its hover rides the
+ * (hover: hover) guard with an unguarded `:active` twin.
  *
  * The option's three-way background was `isFocused ? hoverBg : isActive ?
  * insetBg : transparent`, so focus outranks active: the [data-focused] rule is
@@ -15,35 +30,138 @@
  * both. Modern's focus/active values genuinely differ (hoverBg carries a
  * fallback, insetBg does not) — the divergence is preserved, not normalized
  * (rustic collapses both to one token; that asymmetry is intentional).
- *
- * Values transcribed verbatim from engines/modern.tsx.
  */
 
+/* ---- root geometry (drained from the engine's inline wrapper) ---- */
+.ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] {
+  position: relative;
+  display: inline-block;
+}
+.ds-pattern-locale-switcher.ds-engine-modern[data-part='root'][data-loading='true'] {
+  cursor: progress;
+}
+
+/* ---- trigger ---- */
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding-block: 0;
+  padding-inline: var(--ds-spacing-2, 8px);
+  border-radius: var(--ds-radius-md);
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  font-family: inherit;
+  font-size: var(--ds-font-size-sm, 14px);
+  line-height: 1;
+  block-size: 32px;
+  cursor: pointer;
+  transition: border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'][data-size='sm'] {
+  padding-inline: var(--ds-spacing-2, 8px);
+  block-size: 28px;
+  font-size: var(--ds-font-size-sm);
+}
+.ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger'] {
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+}
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']:focus-visible {
+  outline: none;
+  box-shadow: var(
+    --ds-shadow-focus-ring,
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+  );
+}
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']:active {
+  background: var(--ds-surface-highlight);
+}
+@media (hover: hover) {
+  .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger']:hover {
+    background: var(--ds-surface-highlight);
+  }
+}
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] > svg {
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+/* ---- flag glyph (emoji; geometry only) ---- */
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='flag'] {
+  font-size: var(--ds-font-size-lg);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'][data-size='sm'] [data-part='flag'] {
+  font-size: var(--ds-font-size-sm);
+}
+
+/* ---- panel (the old inline popup object, re-anchored logically so it
+        opens from the inline-start edge under RTL) ---- */
+.ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel'] {
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline-start: 0;
+  z-index: var(--ds-z-index-dropdown, 1000);
+  min-inline-size: 180px;
+  max-block-size: 280px;
+  margin-block-start: var(--ds-spacing-1, 4px);
+  padding: var(--ds-spacing-1, 4px);
+  overflow-y: auto;
+  border: 1px solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-2);
+}
+
+/* ---- options ---- */
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  inline-size: 100%;
+  padding: var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px);
+  border: none;
+  border-radius: var(--ds-radius-md);
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-sm, 14px);
+  text-align: start;
+  cursor: pointer;
+  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='option-label'] {
+  flex: 1;
+}
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-active='true'] {
+  background: var(--ds-surface-inset);
+  font-weight: var(--ds-font-weight-semibold, 600);
+}
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-focused='true'] {
+  background: var(--ds-surface-inset, var(--ds-color-neutral-100));
+}
+
+/* ---- active check (active state reads by shape + weight, never color
+        alone) ---- */
 .ds-pattern-locale-switcher.ds-engine-modern [data-part='check'] {
+  display: inline-flex;
+  flex-shrink: 0;
   color: var(--ds-color-primary);
 }
 
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
-  border-radius: var(--ds-radius-md);
-}
+/* ---- forced colors: the panel/trigger frames read as ButtonText; the
+        keyboard/pointer focus row gets a Highlight outline (the active
+        locale already reads by check shape + weight). ---- */
+@media (forced-colors: active) {
+  .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger'],
+  .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel'] {
+    border-color: ButtonText;
+  }
 
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'][data-part='trigger'] {
-  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
-}
-
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
-  border: none;
-  border-radius: var(--ds-radius-md);
-}
-
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-active='true'] {
-  background: var(--ds-surface-inset);
-}
-
-.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-focused='true'] {
-  background: var(--ds-surface-inset, var(--ds-color-neutral-100));
+  .ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-focused='true'] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
 }

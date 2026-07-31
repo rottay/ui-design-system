@@ -8,9 +8,12 @@
  *
  * COMPOSITION LAW (Lote 2): the pattern COMPOSES public DS primitives —
  * Button (toolbar / view-toggle / item actions), Checkbox (row selection),
- * Spinner (loading) and Empty (empty state) — which own their own chrome,
- * density, states and skins. This stylesheet paints only what the PATTERN
- * owns: layout geometry, the breadcrumb, the folder-link affordance, the
+ * Spinner (loading), Empty (empty state) and Breadcrumb (navigation trail,
+ * PT12: the hand-rolled ul/li and its `li + li::before` separator are
+ * retired — the primitive owns the nav landmark, separator icon, crumb
+ * interaction and aria-current) — which own their own chrome, density,
+ * states and skins. This stylesheet paints only what the PATTERN owns:
+ * layout geometry, the breadcrumb slot, the folder-link affordance, the
  * per-kind icon colours, the list table, the grid cards and the drop-zone
  * feedback. The former button fills, checkbox sizing and spinner ring are
  * retired (duplication).
@@ -60,35 +63,35 @@
   gap: var(--ds-spacing-2);
 }
 
-/* ---- breadcrumb: the ul/li had NO layout owner (the retired engine relied
-        on an unstyled list); the pattern owns a plain flex breadcrumb with a
-        muted separator. ---- */
+/* ---- breadcrumb slot: the composed Breadcrumb primitive (P76) owns the
+        nav landmark, separator, crumb paint and aria-current; the pattern
+        keeps only the flex slot so the trail can shrink inside the toolbar
+        instead of crushing the actions. ---- */
 .ds-pattern-file-manager.ds-engine-modern [data-part='breadcrumb'] {
-  font-size: var(--ds-font-size-sm);
   min-inline-size: 0;
 }
-.ds-pattern-file-manager.ds-engine-modern [data-part='breadcrumb'] ul {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--ds-spacing-1, 0.25rem);
-  margin: 0;
-  padding: 0;
-  list-style: none;
+
+/* ---- behavior-only file input (the pinned testid chrome): never visible ---- */
+.ds-pattern-file-manager.ds-engine-modern [data-part='file-input'] {
+  display: none;
 }
-.ds-pattern-file-manager.ds-engine-modern [data-part='breadcrumb'] li {
+
+/* ---- name cell + row actions: geometry drained from the retired Tailwind
+        utilities (flex items-center gap-2 / flex gap-1) ---- */
+.ds-pattern-file-manager.ds-engine-modern [data-part='name-cell'] {
   display: flex;
   align-items: center;
-  gap: var(--ds-spacing-1, 0.25rem);
+  gap: var(--ds-spacing-2);
   min-inline-size: 0;
 }
-.ds-pattern-file-manager.ds-engine-modern [data-part='breadcrumb'] li + li::before {
-  content: '/';
-  color: var(--ds-color-text-muted);
+.ds-pattern-file-manager.ds-engine-modern [data-part='item-actions'] {
+  display: flex;
+  gap: var(--ds-spacing-1);
 }
-.ds-pattern-file-manager.ds-engine-modern [data-part='breadcrumb-current'] {
-  color: var(--ds-color-text-primary);
-  font-weight: var(--ds-font-weight-medium);
+.ds-pattern-file-manager.ds-engine-modern [data-part='file-name'] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ---- folder anchor: the retired `link link-hover` affordance, owned here.
@@ -140,6 +143,7 @@
   inline-size: 1.25rem;
   block-size: 1.25rem;
 }
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-icon[data-part='folder-icon'] > svg,
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'] > svg {
   inline-size: 100%;
   block-size: 100%;
@@ -225,6 +229,13 @@
     grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 }
+/* Narrow containers: cards go full-width so names and the press target
+   never crush (mobile law — actions stay visible, nothing hover-gated). */
+@container ds-file-manager (max-width: 22rem) {
+  .ds-pattern-file-manager.ds-engine-modern [data-part='grid'] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 
 /* ---- grid card: an action surface (role=button in the engine), so it owns
         the full state triad -- hover hairline, focus ring, selected fill. ---- */
@@ -244,19 +255,26 @@
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false'] {
   background: var(--ds-surface-card);
 }
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-part='grid-card'][data-selected='false'] {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='false'] {
   border: 1px solid var(--ds-color-border);
 }
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false']:hover {
-  background: var(--ds-surface-highlight);
+/* Hover reveals only where hovering is a real input mode (hover law);
+   the press feedback is a real :active, available on every pointer. */
+@media (hover: hover) {
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false']:hover {
+    background: var(--ds-surface-highlight);
+  }
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='false']:hover {
+    border-color: color-mix(in srgb, var(--ds-color-primary) 35%, var(--ds-color-border));
+  }
 }
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-part='grid-card'][data-selected='false']:hover {
-  border-color: color-mix(in srgb, var(--ds-color-primary) 35%, var(--ds-color-border));
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false']:active {
+  background: var(--ds-surface-inset);
 }
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
 }
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-part='grid-card'][data-selected='true'] {
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='true'] {
   border: 2px solid var(--ds-color-primary);
 }
 .ds-pattern-file-manager.ds-engine-modern [data-part='grid-card-body'] {
@@ -296,5 +314,44 @@
   .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'],
   .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'] {
     transition: none;
+  }
+}
+
+/* forced-colors: shadows, tints and per-kind icon colours are forced away.
+   The root re-frames in system colors; the SELECTED grid card keeps the
+   system Highlight pair so selection never reads as colour alone (the
+   composed Checkbox carries row selection in list view regardless); focus
+   rings degrade from box-shadow to a real outline; the drag-over affordance
+   keeps a system boundary. Per-kind icon colour loss is decorative only --
+   the file name/extension carries the type information. Composed primitives
+   (Button, Checkbox, Breadcrumb, Empty, Spinner) own their own forced-colors
+   contracts. */
+@media (forced-colors: active) {
+  .ds-pattern-file-manager.ds-engine-modern[data-part='root'] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+  }
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='false'] {
+    border-color: ButtonText;
+    background: Canvas;
+  }
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='true'] {
+    border-color: Highlight;
+    background: Highlight;
+    color: HighlightText;
+  }
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card']:focus-visible,
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+    box-shadow: none;
+  }
+  .ds-pattern-file-manager.ds-engine-modern [data-part='content'][data-drag-over='true'] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+    background: Canvas;
+  }
+  .ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] thead th {
+    border-bottom: 1px solid ButtonText;
   }
 }

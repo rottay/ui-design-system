@@ -310,7 +310,7 @@ function FilterButton({
         {isActive && activeLabel && (
           <Badge
             tone="primary"
-            badgeStyle="solid"
+            badgeStyle="soft"
             size="xs"
             content={1}
             data-part="filter-badge"
@@ -345,7 +345,7 @@ function FilterDropdownItem({
       onClick={onClick}
       role="option"
       aria-selected={selected}
-      suffix={selected ? <Box as="span" data-part="filter-checkmark" style={{ display: 'inline-flex' }}><Check size={13} aria-hidden="true" /></Box> : undefined}
+      suffix={selected ? <Box as="span" data-part="filter-checkmark"><Check size={13} aria-hidden="true" /></Box> : undefined}
     >
       {label}
     </Button>
@@ -888,6 +888,7 @@ export default function ModernListToolbar({
               placeholder={searchPlaceholder}
               value={search}
               onChange={handleSearchChange}
+              clearable
               prefix={
                 <Search
                   data-part="search-icon"
@@ -973,6 +974,7 @@ export default function ModernListToolbar({
               placeholder={searchPlaceholder}
               value={search}
               onChange={handleSearchChange}
+              clearable
               prefix={
                 <Search
                   data-part="search-icon"

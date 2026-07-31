@@ -150,7 +150,7 @@ describe('Textarea modern skin: counter contrast channels (R0/Axe round 2)', () 
       const hue = state === 'error' ? 'error' : 'warning';
       const pct = state === 'error' ? 22 : 45;
       expect(rule![0]).toContain(
-        `color-mix(in srgb, var(--ds-color-${hue}) ${100 - pct}%, var(--ds-color-black, #000) ${pct}%)`
+        `color-mix(in srgb, var(--ds-color-${hue}) ${100 - pct}%, var(--ds-color-neutral-900, #171717) ${pct}%)`
       );
     }
   });

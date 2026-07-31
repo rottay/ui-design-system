@@ -2725,10 +2725,10 @@ function countViewportMediaQueriesInSkins() {
   let count = 0;
   for (const file of skins) {
     const css = readFileSync(file, 'utf8');
-    for (const match of css.matchAll(/@media([^{]*)\{/g)) {
-      const condition = match[1];
-      if (/\b(min-width|max-width|width)\b/.test(condition)) count += 1;
-    }
+    const root = postcss.parse(css, { from: file });
+    root.walkAtRules('media', (rule) => {
+      if (/\b(min-width|max-width|width)\b/.test(rule.params)) count += 1;
+    });
   }
   return count;
 }

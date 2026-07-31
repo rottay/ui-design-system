@@ -3,6 +3,11 @@
  *
  * Composes: KPI strip + quick actions + recent activity + flexible body sections.
  * For: admin dashboards, manager cockpits, recruiter hubs, event control rooms.
+ *
+ * The surface COORDINATES composed primitives/patterns (Card, PatternStatsGrid,
+ * PatternActivityLog, NavLink, SurfaceEmptyState) and owns no chrome of its own:
+ * every paint decision lives in `skin/command-center.css`, keyed on the BEM
+ * hooks and `data-*` contract stamped below.
  */
 
 import React from 'react';
@@ -10,14 +15,22 @@ import type { ReactNode } from 'react';
 import { Box } from '../../../../../primitives/layout/Box';
 import { Stack } from '../../../../../primitives/layout/Stack';
 import { Flex } from '../../../../../primitives/layout/Flex';
-import { Text } from '../../../../../primitives/display/Typography';
+import { Heading, Text } from '../../../../../primitives/display/Typography';
 import { Card } from '../../../../../primitives/display/Card';
 import { Button } from '../../../../../primitives/inputs/Button';
+import { NavLink } from '../../../../../primitives/navigation';
 import { Skeleton } from '../../../../../primitives/feedback/Skeleton';
 import { PatternStatsGrid } from '../../../../../patterns/data/stats-grid';
 import type { StatDef } from '../../../../../../foundation/contracts/runtime/components/patterns/core';
 import { PatternActivityLog } from '../../../../../patterns/communication/activity-log';
 import type { Activity } from '../../../../../patterns/communication/activity-log/contracts';
+import { useCollectionStagger } from '../../../../../patterns/foundation/motion';
+import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
+import { SurfaceEmptyState } from '../../../../runtime/helpers/states';
+import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -117,10 +130,10 @@ function mapStatsToStatDefs(stats: StatItem[]): StatDef[] {
   }));
 }
 
-function mapActivityItems(items: ActivityItem[]): Activity[] {
+function mapActivityItems(items: ActivityItem[], systemActorName: string): Activity[] {
   return items.map((item) => ({
     id: item.id,
-    user: item.user ?? { name: 'System' },
+    user: item.user ?? { name: systemActorName },
     action: item.text,
     timestamp: item.timestamp,
     // icon is available on ActivityItem for custom renderActivity implementations
@@ -128,11 +141,25 @@ function mapActivityItems(items: ActivityItem[]): Activity[] {
   }));
 }
 
+/** Governed tone iconography for insight tiles: the semantic role icons carry
+ *  their own tone ink (`defaultTone`), so the tile needs no per-tone paint and
+ *  never a one-sided chromatic rail (`insight-accent` stays absent by pin). */
+const INSIGHT_ICON_BY_TONE: Record<
+  InsightItem['type'],
+  typeof StatusInfoIcon
+> = {
+  info: StatusInfoIcon,
+  warning: StatusWarningIcon,
+  success: StatusSuccessIcon,
+  error: StatusErrorIcon,
+};
+
 // ---------------------------------------------------------------------------
 // Sub-components
 // ---------------------------------------------------------------------------
 
 function InsightCard({ insight }: { insight: InsightItem }) {
+  const ToneIcon = INSIGHT_ICON_BY_TONE[insight.type];
   return (
     <Card className="ds-command-center__insight-card" variant="outlined">
       <Card.Body>
@@ -143,14 +170,21 @@ function InsightCard({ insight }: { insight: InsightItem }) {
           align="center"
           gap={3}
         >
-          <Box style={{ flex: 1, minWidth: 0 }}>
+          <span
+            className="ds-command-center__insight-icon"
+            data-part="insight-icon"
+            data-tone={insight.type}
+            aria-hidden="true"
+          >
+            <ToneIcon decorative size={16} />
+          </span>
+          <Box className="ds-command-center__insight-body">
             <Text className="ds-command-center__insight-title" data-part="insight-title" size="sm" weight="medium">{insight.title}</Text>
             {insight.description && (
               <Text
-                className="ds-command-center__muted-text"
+                className="ds-command-center__insight-description ds-command-center__muted-text"
                 size="xs"
                 color="muted"
-                style={{ marginTop: 'var(--ds-spacing-xs, 4px)' }}
               >
                 {insight.description}
               </Text>
@@ -171,13 +205,26 @@ function InsightCard({ insight }: { insight: InsightItem }) {
   );
 }
 
-function QuickActionCard({ action }: { action: QuickAction }) {
+function QuickActionCard({
+  action,
+  staggerIndex,
+  staggerAnimated,
+}: {
+  action: QuickAction;
+  staggerIndex: number;
+  staggerAnimated: boolean;
+}) {
   return (
     <Card
       className="ds-command-center__quick-action-card"
       variant="outlined"
-      style={{ cursor: 'pointer', transition: 'box-shadow 0.15s ease, border-color 0.15s ease' }}
       onClick={action.onClick}
+      data-ds-stagger-item={staggerAnimated ? '' : undefined}
+      style={
+        staggerAnimated
+          ? ({ '--ds-stagger-index': staggerIndex } as React.CSSProperties)
+          : undefined
+      }
     >
       <Card.Body>
         <Flex align="center" gap={3}>
@@ -185,26 +232,17 @@ function QuickActionCard({ action }: { action: QuickAction }) {
             <Box
               className="ds-command-center__quick-action-icon"
               data-part="quick-action-icon"
-              style={{
-                width: 36,
-                height: 36,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}
             >
               {action.icon}
             </Box>
           )}
-          <Box style={{ flex: 1, minWidth: 0 }}>
+          <Box className="ds-command-center__quick-action-body">
             <Text className="ds-command-center__quick-action-title" data-part="quick-action-title" size="sm" weight="medium">{action.label}</Text>
             {action.description && (
               <Text
-                className="ds-command-center__muted-text"
+                className="ds-command-center__quick-action-description ds-command-center__muted-text"
                 size="xs"
                 color="muted"
-                style={{ marginTop: 'var(--ds-spacing-xs, 4px)' }}
               >
                 {action.description}
               </Text>
@@ -222,9 +260,9 @@ function QuickActionSkeleton() {
       <Card.Body>
         <Flex align="center" gap={3}>
           <Skeleton variant="rounded" width={36} height={36} />
-          <Box style={{ flex: 1 }}>
+          <Box className="ds-command-center__skeleton-grow">
             <Skeleton variant="text" width="60%" height={14} />
-            <Skeleton variant="text" width="40%" height={12} style={{ marginTop: 6 }} />
+            <Skeleton className="ds-command-center__skeleton-line" variant="text" width="40%" height={12} />
           </Box>
         </Flex>
       </Card.Body>
@@ -237,10 +275,10 @@ function InsightSkeleton() {
     <Card variant="outlined">
       <Card.Body>
         <Flex align="center" gap={3}>
-          <Skeleton variant="rounded" width={4} height={32} />
-          <Box style={{ flex: 1 }}>
+          <Skeleton variant="rounded" width={16} height={16} />
+          <Box className="ds-command-center__skeleton-grow">
             <Skeleton variant="text" width="50%" height={14} />
-            <Skeleton variant="text" width="70%" height={12} style={{ marginTop: 6 }} />
+            <Skeleton className="ds-command-center__skeleton-line" variant="text" width="70%" height={12} />
           </Box>
         </Flex>
       </Card.Body>
@@ -273,7 +311,7 @@ function SectionSkeleton() {
     <Card variant="outlined">
       <Card.Body>
         <Skeleton variant="text" width="30%" height={16} />
-        <Skeleton variant="text" rows={3} style={{ marginTop: 12 }} />
+        <Skeleton className="ds-command-center__skeleton-body" variant="text" rows={3} />
       </Card.Body>
     </Card>
   );
@@ -297,6 +335,14 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
     loading,
   } = props;
 
+  const { tSurfaceOr } = useSurfaceTranslations();
+
+  // Entrance choreography for the quick-action collection (collection.insert
+  // recipe). Gated by the active motion policy: a reduced/calm context renders
+  // every card at its final state. `--ds-stagger-index` is the sanctioned
+  // custom-property passthrough, not inline paint.
+  const stagger = useCollectionStagger(quickActions?.length ?? 0);
+
   const hasNoContent =
     !loading &&
     (!stats || stats.length === 0) &&
@@ -312,6 +358,7 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
       data-loading={loading ? 'true' : 'false'}
       data-empty={hasNoContent ? 'true' : 'false'}
       spacing="lg"
+      aria-busy={loading || undefined}
     >
       {headerSlot}
 
@@ -319,22 +366,28 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
       <Box className="ds-command-center__header" data-part="header">
         {loading ? (
           <>
-            <Skeleton variant="text" width="30%" height={14} style={{ marginBottom: 8 }} />
+            <Skeleton className="ds-command-center__skeleton-greeting" variant="text" width="30%" height={14} />
             <Skeleton variant="text" width="45%" height={24} />
           </>
         ) : (
           <>
             {greeting && (
               <Text
-                className="ds-command-center__muted-text"
+                className="ds-command-center__greeting ds-command-center__muted-text"
                 size="sm"
                 color="muted"
-                style={{ marginBottom: 'var(--ds-spacing-xs, 4px)' }}
               >
                 {greeting}
               </Text>
             )}
-            <Text className="ds-command-center__title" data-part="title" size="xl" weight="semibold">{title}</Text>
+            <Heading
+              className="ds-command-center__title"
+              data-part="title"
+              level="h1"
+              textStyle="pageTitle"
+            >
+              {title}
+            </Heading>
           </>
         )}
       </Box>
@@ -346,7 +399,7 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
         </Stack>
       )}
       {insights && insights.length > 0 && (
-        <Stack spacing="sm">
+        <Stack as="section" spacing="sm" data-part="insights">
           {insights.map((insight) => (
             <InsightCard key={insight.id} insight={insight} />
           ))}
@@ -366,14 +419,8 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
       {/* Quick actions grid */}
       {loading && (!quickActions || quickActions.length === 0) && (
         <Box>
-          <Skeleton variant="text" width="20%" height={14} style={{ marginBottom: 12 }} />
-          <Box
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-              gap: 'var(--ds-spacing-sm, 8px)',
-            }}
-          >
+          <Skeleton className="ds-command-center__skeleton-heading" variant="text" width="20%" height={14} />
+          <Box className="ds-command-center__quick-actions-grid">
             <QuickActionSkeleton />
             <QuickActionSkeleton />
             <QuickActionSkeleton />
@@ -381,25 +428,36 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
         </Box>
       )}
       {quickActions && quickActions.length > 0 && (
-        <Box>
-          <Text
-            className="ds-command-center__muted-text"
-            size="sm"
-            weight="medium"
-            color="muted"
-            style={{ marginBottom: 'var(--ds-spacing-sm, 8px)' }}
+        <Box className="ds-command-center__quick-actions" data-part="quick-actions">
+          <Heading
+            level="h2"
+            textStyle="sectionTitle"
+            className="ds-command-center__section-heading"
           >
-            Quick Actions
-          </Text>
+            {tSurfaceOr('command_center.quick_actions', 'Quick Actions')}
+          </Heading>
           <Box
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-              gap: 'var(--ds-spacing-sm, 8px)',
-            }}
+            className={
+              stagger.animated
+                ? `ds-command-center__quick-actions-grid ${stagger.containerClassName}`
+                : 'ds-command-center__quick-actions-grid'
+            }
+            style={
+              stagger.animated
+                ? ({
+                    '--ds-stagger-step': stagger.stepCss,
+                    '--ds-stagger-max': stagger.maxCss,
+                  } as React.CSSProperties)
+                : undefined
+            }
           >
-            {quickActions.map((action) => (
-              <QuickActionCard key={action.key} action={action} />
+            {quickActions.map((action, index) => (
+              <QuickActionCard
+                key={action.key}
+                action={action}
+                staggerIndex={index}
+                staggerAnimated={stagger.animated}
+              />
             ))}
           </Box>
         </Box>
@@ -408,7 +466,7 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
       {/* Recent activity */}
       {loading && (!recentActivity || recentActivity.items.length === 0) && (
         <Box>
-          <Skeleton variant="text" width="25%" height={14} style={{ marginBottom: 12 }} />
+          <Skeleton className="ds-command-center__skeleton-heading" variant="text" width="25%" height={14} />
           <ActivitySkeleton />
         </Box>
       )}
@@ -417,34 +475,40 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
           <Card.Body>
             <Flex
               align="center"
-              style={{ marginBottom: 'var(--ds-spacing-sm, 8px)' }}
+              className="ds-command-center__recent-activity-header"
             >
-              <Text size="sm" weight="medium" style={{ flex: 1 }}>Recent Activity</Text>
+              <Heading
+                level="h2"
+                textStyle="sectionTitle"
+                className="ds-command-center__recent-activity-title"
+              >
+                {tSurfaceOr('command_center.recent_activity', 'Recent Activity')}
+              </Heading>
               {recentActivity.viewAllHref && !recentActivity.onViewAll && (
-                <a href={recentActivity.viewAllHref} style={{ textDecoration: 'none' }}>
-                  <Button size="xs" variant="link">
-                    View all
-                  </Button>
-                </a>
+                <NavLink
+                  className="ds-command-center__view-all"
+                  href={recentActivity.viewAllHref}
+                >
+                  {tSurfaceOr('command_center.view_all', 'View all')}
+                </NavLink>
               )}
               {recentActivity.onViewAll && (
                 <Button
                   size="xs"
                   variant="link"
-                  onClick={() => {
-                    if (recentActivity.onViewAll) {
-                      recentActivity.onViewAll();
-                    }
-                  }}
+                  onClick={recentActivity.onViewAll}
                 >
-                  View all
+                  {tSurfaceOr('command_center.view_all', 'View all')}
                 </Button>
               )}
             </Flex>
             <PatternActivityLog
               loading={loading}
-              activities={mapActivityItems(recentActivity.items.slice(0, 5))}
-              emptyMessage="No recent activity."
+              activities={mapActivityItems(
+                recentActivity.items.slice(0, 5),
+                tSurfaceOr('command_center.system_actor', 'System'),
+              )}
+              emptyMessage={tSurfaceOr('command_center.activity_empty', 'No recent activity.')}
             />
           </Card.Body>
         </Card>
@@ -452,43 +516,30 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
 
       {/* Body sections */}
       {loading && (!sections || sections.length === 0) && (
-        <Box
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(min(280px, 100%), 1fr))',
-            gap: 'var(--ds-spacing-md, 16px)',
-          }}
-        >
+        <Box className="ds-command-center__sections-grid">
           <SectionSkeleton />
           <SectionSkeleton />
           <SectionSkeleton />
         </Box>
       )}
       {sections && sections.length > 0 && (
-        <Box
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(min(280px, 100%), 1fr))',
-            gap: 'var(--ds-spacing-md, 16px)',
-          }}
-        >
+        <Box className="ds-command-center__sections-grid">
           {sections.map((section) => (
             <Card
               key={section.key}
               variant="outlined"
-              style={{
-                gridColumn: section.span ? `span ${section.span}` : undefined,
-              }}
+              className="ds-command-center__section-card"
+              data-span={section.span}
             >
               <Card.Body>
                 {section.title && (
-                  <Text
-                    size="sm"
-                    weight="medium"
-                    style={{ marginBottom: 'var(--ds-spacing-sm, 8px)' }}
+                  <Heading
+                    level="h2"
+                    textStyle="sectionTitle"
+                    className="ds-command-center__section-title"
                   >
                     {section.title}
-                  </Text>
+                  </Heading>
                 )}
                 {section.render()}
               </Card.Body>
@@ -501,20 +552,13 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
       {hasNoContent && (
         <Card variant="outlined">
           <Card.Body>
-            <Flex
-              align="center"
-              justify="center"
-              style={{
-                padding: 'var(--ds-spacing-xl, 32px) var(--ds-spacing-md, 16px)',
-                flexDirection: 'column',
-                gap: 'var(--ds-spacing-sm, 8px)',
-              }}
-            >
-              <Text size="lg" weight="medium" color="muted">No data to display</Text>
-              <Text size="sm" color="muted">
-                Configure stats, actions, or sections to populate this dashboard.
-              </Text>
-            </Flex>
+            <SurfaceEmptyState
+              title={tSurfaceOr('command_center.empty_title', 'No data to display')}
+              description={tSurfaceOr(
+                'command_center.empty_description',
+                'Configure stats, actions, or sections to populate this dashboard.',
+              )}
+            />
           </Card.Body>
         </Card>
       )}

@@ -201,15 +201,13 @@ describe('VoiceInputButton guarded i18n channel (K4-B)', () => {
     cleanup();
   });
 
-  it('keeps the English fallbacks when the keys are missing in locale AND fallback locale (echo guard)', async () => {
-    // fr/pt JSONs do not carry the voiceInput keys yet; pinning both locales
-    // to fr keeps the catalog silent so the guard must fall back.
+  it('resolves the Portuguese start label from the complete locale catalog', async () => {
     render(
-      <I18nProvider locale="fr" fallbackLocale="fr">
+      <I18nProvider locale="pt" fallbackLocale="pt">
         <VoiceInputButton lang="en-US" onTranscript={vi.fn()} />
       </I18nProvider>,
     );
-    await screen.findByRole('button', { name: 'Start voice input' });
+    await screen.findByRole('button', { name: 'Iniciar entrada de voz' });
   });
 
   it('consumes components.voiceInput.start once the key lands', async () => {
@@ -267,11 +265,9 @@ describe('VoiceInputButton guarded i18n channel (K4-B)', () => {
     expect(result.current.errorMessage).toBe('No se detectó ninguna voz');
   });
 
-  it('keeps the hook-owned English error fallback when the key is missing in locale AND fallback locale (echo guard)', async () => {
-    // fr/pt JSONs do not carry the voiceInput keys yet; pinning both locales
-    // to fr keeps the catalog silent so the guard must fall back.
+  it('resolves the hook-owned network error from the Portuguese catalog', async () => {
     const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <I18nProvider locale="fr" fallbackLocale="fr">
+      <I18nProvider locale="pt" fallbackLocale="pt">
         {children}
       </I18nProvider>
     );
@@ -284,7 +280,7 @@ describe('VoiceInputButton guarded i18n channel (K4-B)', () => {
       FakeSpeechRecognition.lastInstance?.onerror?.({ error: 'network' });
     });
     expect(result.current.errorMessage).toBe(
-      'Voice transcription had a network issue. Try again or type your query.',
+      'Houve um problema de rede na transcrição de voz. Tente novamente ou digite sua consulta.',
     );
   });
 });

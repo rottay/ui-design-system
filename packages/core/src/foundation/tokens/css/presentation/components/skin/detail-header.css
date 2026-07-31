@@ -3,7 +3,9 @@
  * Home: foundation/tokens/css/presentation/components/skin/detail-header.css — DetailHeader renders one DOM
  * tree under every engine (no engines/ split), so it has a single skin.
  *
- * SCOPE ROOT carries `ds-structure ds-detail-header` + `data-part='root'`.
+ * SCOPE ROOT carries `ds-structure ds-detail-header` + `data-part='root'` and
+ * now also stamps `data-archetype`, so every archetype-selected value (hero
+ * background, title size, tab-active wash) resolves in pure CSS.
  *
  * SPECIFICITY (P-48): the tenant `html[data-tenant]…*` border-color floor sits at
  * (0,3,1); a border-COLOR rule buys (0,4,0) from the two root classes + the target
@@ -14,17 +16,21 @@
  * target `data-part` ×3. The `Box as="h1"` title and the icons are NOT typography,
  * so their color wins at (0,3,0).
  *
- * STATE: the 4-way archetype ternary (`buildPatternStyle`) is STATE-SELECTED over
- * static tokens → a `[data-archetype='…']` rule on the stamped `data-part='hero-panel'`.
- * DetailHeader's archetype numbers DIVERGE from Edit/Form's and it alone varies the
- * hero background + fade mask per archetype, so these are its OWN token set. Tab
- * active/inactive is keyed on the stamped `data-active`.
+ * GEOMETRY: all static geometry (paddings, sizes, trackings) lives here behind
+ * `--ds-detail-header-*` channels; the engine stamps parts and state only.
+ * Wrappers composed from `Flex`/`Stack` keep their flex composition inline —
+ * that is primitive composition, not reusable paint.
  *
- * TAB-ACTIVE HATCH: `archetypeTone.tabActiveBackground` is archetype-selected, but
- * the tab strip is a SIBLING of the hero-panel — no `data-archetype` node is an
- * ancestor of the tab, so a pure CSS rule cannot reach the per-archetype value. It
- * rides `--ds-detail-header-tab-active-bg`, set inline on the tab (uncounted); the
- * active rule consumes it, the inactive tab is transparent.
+ * STATE: the 4-way archetype selection (`buildPatternStyle` × getArchetypeStyles)
+ * is STATE-SELECTED over static tokens → `[data-archetype='…']` rules keyed on the
+ * stamped parts. DetailHeader's archetype numbers DIVERGE from Edit/Form's and it
+ * alone varies the hero background + fade mask per archetype, so these are its OWN
+ * token set. Tab active/inactive is keyed on the stamped `data-active`.
+ *
+ * TAB-ACTIVE: the tab strip is a SIBLING of the hero-panel, but the root stamps
+ * `data-archetype`, so per-archetype rules reach it through the root. The
+ * `--ds-detail-header-tab-active-bg` channel remains as the tenant override in
+ * every rule's fallback chain.
  */
 
 /* ─── hero-panel archetype gradient (buildPatternStyle × getArchetypeStyles) ─ */
@@ -90,13 +96,18 @@
 .ds-structure.ds-detail-header[data-part='root'] {
   position: relative;
   isolation: isolate;
+  inline-size: 100%;
+  margin-block-end: var(--ds-detail-header-root-margin-block-end, 24px);
+  overflow: hidden;
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
   border-radius: var(--ds-detail-header-radius, 22px);
   box-shadow: var(--ds-detail-header-shadow, 0 14px 36px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent));
   transition:
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
-  animation: ds-detail-header-enter var(--ds-motion-calm) var(--ds-motion-ease-out, ease-out) both;
+  /* --ds-motion-calm has no base-token definition today (only the reduced-motion
+     override), so the enter animation binds to the reveal intent instead. */
+  animation: ds-detail-header-enter var(--ds-motion-calm, var(--ds-motion-reveal, 200ms)) var(--ds-motion-ease-out, ease-out) both;
   container-type: inline-size;
   container-name: ds-detail-header;
 }
@@ -105,8 +116,8 @@
 }
 
 .ds-structure.ds-detail-header [data-part='top-bar'] {
+  padding: var(--ds-detail-header-top-bar-padding, 12px 24px);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 92%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-bg-secondary) 78%, var(--ds-surface-card)));
-  backdrop-filter: blur(var(--ds-glass-blur, 8px));
 }
 .ds-structure.ds-detail-header [data-part='top-bar'][data-part='top-bar'] {
   border-bottom: 1px solid var(--ds-color-border-secondary);
@@ -114,7 +125,14 @@
 
 /* ─── back button + breadcrumb divider ─────────────────────────────────────── */
 
+/* the back chip renders inside an <a> (or the framework Link adapter): strip
+   the link underline on that anchor only, never on breadcrumb links */
+.ds-structure.ds-detail-header a:has(> [data-part='back-button']) {
+  text-decoration: none;
+}
+
 .ds-structure.ds-detail-header [data-part='back-button'] {
+  padding: var(--ds-detail-header-back-button-padding, 7px 12px);
   border-radius: 11px;
   background: transparent;
   transition:
@@ -126,12 +144,20 @@
   border: 1px solid var(--ds-color-border-secondary);
 }
 .ds-structure.ds-detail-header [data-part='back-icon'] {
+  inline-size: 14px;
+  block-size: 14px;
   color: var(--ds-color-text-secondary);
+}
+/* the back glyph points in the reading-backward direction — flip it under RTL */
+[dir='rtl'] .ds-structure.ds-detail-header [data-part='back-icon'] {
+  transform: scaleX(-1);
 }
 .ds-structure.ds-detail-header [data-part='back-label'][data-part='back-label'][data-part='back-label'] {
   color: var(--ds-color-text-secondary);
 }
 .ds-structure.ds-detail-header [data-part='breadcrumb-divider'] {
+  inline-size: 1px;
+  block-size: 18px;
   background: var(--ds-color-border-secondary);
 }
 
@@ -150,6 +176,10 @@
 /* ─── avatar (image + initials variants) ───────────────────────────────────── */
 
 .ds-structure.ds-detail-header [data-part='avatar'] {
+  inline-size: var(--ds-detail-header-avatar-size, 68px);
+  block-size: var(--ds-detail-header-avatar-size, 68px);
+  overflow: hidden;
+  flex-shrink: 0;
   border-radius: 18px;
   box-shadow:
     0 0 0 4px color-mix(in srgb, var(--ds-surface-card) 78%, transparent),
@@ -157,25 +187,38 @@
   transition: transform var(--ds-motion-normal) var(--ds-motion-ease-spring, ease-out);
 }
 .ds-structure.ds-detail-header [data-part='avatar'][data-variant='initials'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent);
 }
 .ds-structure.ds-detail-header [data-part='avatar'][data-variant='image'],
 .ds-structure.ds-detail-header [data-part='avatar'][data-variant='initials'] {
   border: 1px solid var(--ds-color-border-secondary);
 }
-/* the initials glyph is a Text with no stamp of its own; it keeps the typography
-   default color, which resolves to var(--ds-color-text-primary) — the exact value
-   the inline paint set — so no rule is needed here (its inline color was dropped) */
+.ds-structure.ds-detail-header [data-part='avatar'] img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.ds-structure.ds-detail-header [data-part='avatar-initials'][data-part='avatar-initials'][data-part='avatar-initials'] {
+  font-size: var(--ds-detail-header-avatar-initials-size, 24px);
+  font-weight: 700;
+}
 
 /* ─── hero copy: eyebrow / title (Box as h1) / subtitle ────────────────────── */
 
 .ds-structure.ds-detail-header [data-part='eyebrow'][data-part='eyebrow'][data-part='eyebrow'] {
   color: var(--ds-color-text-muted);
+  font-family: var(--ds-font-family-mono, monospace);
+  letter-spacing: var(--ds-detail-header-eyebrow-tracking, 0.14em);
+  text-transform: uppercase;
 }
 /* the title is a `Box as="h1"` (NOT typography), so its display type lives here
    and wins unlayered at (0,3,0); the per-archetype size keys on the stamped
    data-archetype (editorial 34 / technical 30 / control+governance 32). */
 .ds-structure.ds-detail-header [data-part='title'] {
+  margin: 0;
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-detail-header-title-size, 32px);
@@ -192,30 +235,19 @@
 }
 .ds-structure.ds-detail-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
   color: var(--ds-color-text-secondary);
+  line-height: var(--ds-detail-header-subtitle-leading, 1.65);
+  max-inline-size: var(--ds-detail-header-subtitle-max-inline-size, 780px);
+}
+
+.ds-structure.ds-detail-header [data-part='context-rail'] {
+  margin-block-start: var(--ds-detail-header-context-rail-margin-block-start, 2px);
 }
 
 .ds-structure.ds-detail-header [data-part='hero-panel'] {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-}
-
-.ds-structure.ds-detail-header [data-part='hero-panel']::after {
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  pointer-events: none;
-  content: '';
-  opacity: var(--ds-detail-header-sheen-opacity, 0.2);
-  background: linear-gradient(108deg, transparent 24%, color-mix(in srgb, var(--ds-color-bg-elevated) 78%, var(--ds-color-primary) 5%) 48%, transparent 72%);
-  background-position: 130% 50%;
-  background-size: 240% 100%;
-  animation: ds-detail-header-sheen var(--ds-detail-header-sheen-duration, 18s) ease-in-out infinite;
-}
-
-.ds-structure.ds-detail-header [data-part='hero-panel'] > * {
-  position: relative;
-  z-index: 1;
+  padding: var(--ds-detail-header-hero-panel-padding, 28px);
 }
 
 .ds-structure.ds-detail-header[data-part='root']:hover [data-part='avatar'] {
@@ -228,6 +260,8 @@
    (a 5-layer stack); the later key silently overwrote the earlier, so only the
    5-layer stack ever painted (P-78). Transcribed as that stack, not the dead one. */
 .ds-structure.ds-detail-header [data-part='metadata-card'] {
+  margin-block-start: var(--ds-detail-header-metadata-card-margin-block-start, 24px);
+  padding: var(--ds-detail-header-metadata-card-padding, 16px 18px 18px);
   border-radius: 18px;
   background:
     radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent) 0%, transparent 34%),
@@ -238,16 +272,21 @@
   background-size: 100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px;
   background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
-  backdrop-filter: blur(8px);
 }
 .ds-structure.ds-detail-header [data-part='metadata-card'][data-part='metadata-card'] {
   border: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-structure.ds-detail-header [data-part='metadata-card-children']:not(:first-child) {
+  margin-block-start: var(--ds-detail-header-metadata-card-children-margin-block-start, 18px);
 }
 
 /* the chip carries the muted color so its leading icon (a consumer node with no
    stamp) inherits currentColor; the label overrides to muted at (0,5,0) and the
    value keeps the typography default (text-primary) */
 .ds-structure.ds-detail-header [data-part='metadata-chip'] {
+  min-inline-size: 0;
+  padding: var(--ds-detail-header-metadata-chip-padding, 9px 12px);
   border-radius: 14px;
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 58%, transparent);
   color: var(--ds-color-text-muted);
@@ -261,6 +300,20 @@
 }
 .ds-structure.ds-detail-header [data-part='metadata-chip-label'][data-part='metadata-chip-label'][data-part='metadata-chip-label'] {
   color: var(--ds-color-text-muted);
+  font-family: var(--ds-font-family-mono, monospace);
+  letter-spacing: var(--ds-detail-header-metadata-chip-label-tracking, 0.12em);
+  text-transform: uppercase;
+}
+.ds-structure.ds-detail-header [data-part='metadata-chip-value'][data-part='metadata-chip-value'][data-part='metadata-chip-value'] {
+  word-break: break-word;
+}
+/* mono values are machine data (ids, hashes, dates): monospace + tabular
+   figures keep columns of digits aligned, break-all keeps long ids inside the
+   chip */
+.ds-structure.ds-detail-header [data-part='metadata-chip-value'][data-part='metadata-chip-value'][data-part='metadata-chip-value'][data-mono='true'] {
+  font-family: var(--ds-font-family-mono, monospace);
+  font-variant-numeric: tabular-nums;
+  word-break: break-all;
 }
 
 .ds-structure.ds-detail-header [data-part='metadata-chip']:hover {
@@ -272,6 +325,7 @@
 /* ─── tab strip ────────────────────────────────────────────────────────────── */
 
 .ds-structure.ds-detail-header [data-part='tab-strip'] {
+  padding: var(--ds-detail-header-tab-strip-padding, 10px 18px 0);
   background: color-mix(in srgb, var(--ds-color-bg-secondary) 96%, transparent);
 }
 .ds-structure.ds-detail-header [data-part='tab-strip'][data-part='tab-strip'] {
@@ -279,6 +333,8 @@
 }
 
 .ds-structure.ds-detail-header [data-part='tab'] {
+  padding: var(--ds-detail-header-tab-padding, 10px 12px 12px);
+  cursor: pointer;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   background: transparent;
@@ -291,9 +347,32 @@
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-detail-header [data-part='tab'][data-active='true'] {
-  background: var(--ds-detail-header-tab-active-bg);
+  background: var(
+    --ds-detail-header-tab-active-bg,
+    color-mix(in srgb, var(--ds-color-bg-primary) 28%, transparent)
+  );
   transform: translateY(1px);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 78%, transparent);
+}
+/* per-archetype active wash, reached through the root stamp (the tab strip is
+   a sibling of the hero-panel); the channel stays first in every fallback */
+.ds-structure.ds-detail-header[data-part='root'][data-archetype='editorial'] [data-part='tab'][data-active='true'] {
+  background: var(
+    --ds-detail-header-tab-active-bg,
+    color-mix(in srgb, var(--ds-color-bg-primary) 32%, transparent)
+  );
+}
+.ds-structure.ds-detail-header[data-part='root'][data-archetype='technical'] [data-part='tab'][data-active='true'] {
+  background: var(
+    --ds-detail-header-tab-active-bg,
+    color-mix(in srgb, var(--ds-color-bg-primary) 36%, transparent)
+  );
+}
+.ds-structure.ds-detail-header[data-part='root'][data-archetype='governance'] [data-part='tab'][data-active='true'] {
+  background: var(
+    --ds-detail-header-tab-active-bg,
+    color-mix(in srgb, var(--ds-color-bg-primary) 42%, transparent)
+  );
 }
 /* border shorthand + explicit border-bottom:none in ONE rule so the reset wins */
 .ds-structure.ds-detail-header [data-part='tab'][data-active='true'] {
@@ -318,6 +397,10 @@
   box-shadow: var(--ds-detail-header-tab-focus-ring, var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)));
 }
 
+.ds-structure.ds-detail-header [data-part='tab-icon'] {
+  inline-size: 14px;
+  block-size: 14px;
+}
 .ds-structure.ds-detail-header [data-part='tab-icon'][data-active='true'] {
   color: var(--ds-color-text-primary);
 }
@@ -331,8 +414,12 @@
   color: var(--ds-color-text-secondary);
 }
 .ds-structure.ds-detail-header [data-part='tab-count'] {
+  padding: var(--ds-detail-header-tab-count-padding, 2px 6px);
   border-radius: 999px;
   background: color-mix(in srgb, var(--ds-color-bg-primary) 36%, transparent);
+}
+.ds-structure.ds-detail-header [data-part='tab-count-text'][data-part='tab-count-text'][data-part='tab-count-text'] {
+  font-variant-numeric: tabular-nums;
 }
 .ds-structure.ds-detail-header [data-part='tab-count-text'][data-part='tab-count-text'][data-part='tab-count-text'][data-active='true'] {
   color: var(--ds-color-text-primary);
@@ -341,19 +428,59 @@
   color: var(--ds-color-text-secondary);
 }
 
+/* ─── narrow containers ────────────────────────────────────────────────────── */
+
+/* the root is an inline-size container, so compact layouts de-escalate chrome
+   (padding, display type, avatar) without coupling to the viewport */
+@container ds-detail-header (max-width: 640px) {
+  .ds-structure.ds-detail-header [data-part='top-bar'] {
+    padding: var(--ds-detail-header-top-bar-padding-compact, 10px 16px);
+  }
+  .ds-structure.ds-detail-header [data-part='hero-panel'] {
+    padding: var(--ds-detail-header-hero-panel-padding-compact, 20px);
+  }
+  .ds-structure.ds-detail-header[data-part='root'] [data-part='title'] {
+    font-size: var(--ds-detail-header-title-size-compact, 26px);
+    letter-spacing: var(--ds-detail-header-title-tracking-compact, -0.03em);
+  }
+  .ds-structure.ds-detail-header [data-part='avatar'] {
+    inline-size: var(--ds-detail-header-avatar-size-compact, 56px);
+    block-size: var(--ds-detail-header-avatar-size-compact, 56px);
+  }
+  .ds-structure.ds-detail-header [data-part='metadata-card'] {
+    padding: var(--ds-detail-header-metadata-card-padding-compact, 14px);
+  }
+}
+
+/* ─── coarse pointers ──────────────────────────────────────────────────────── */
+
+/* every direct action in the top bar meets the 44px physical floor;
+   min-block-size composes with Button's own height instead of fighting its
+   specificity (same contract as ActionDock) */
+@media (pointer: coarse) {
+  .ds-structure.ds-detail-header [data-part='back-button'],
+  .ds-structure.ds-detail-header [data-part='actions'] :where(button, a) {
+    min-block-size: max(44px, var(--ds-size-touch-target, 44px));
+  }
+}
+
+/* ─── forced colors ────────────────────────────────────────────────────────── */
+
+/* background washes disappear under forced colors; the active tab keeps a
+   visible system-color boundary */
+@media (forced-colors: active) {
+  .ds-structure.ds-detail-header [data-part='tab'][data-active='true'] {
+    border-color: ButtonText;
+  }
+}
+
 @keyframes ds-detail-header-enter {
   from { opacity: 0; transform: translateY(8px) scale(0.995); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-@keyframes ds-detail-header-sheen {
-  0%, 76%, 100% { background-position: 130% 50%; }
-  88% { background-position: -130% 50%; }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-detail-header[data-part='root'],
-  .ds-structure.ds-detail-header [data-part='hero-panel']::after,
   .ds-structure.ds-detail-header [data-part='avatar'],
   .ds-structure.ds-detail-header [data-part='metadata-chip'],
   .ds-structure.ds-detail-header [data-part='tab'] {

@@ -24,16 +24,16 @@ import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 const ROOT_CLASS_NAME = 'ds-pattern-timeline ds-engine-modern';
 
-/** Formats a timestamp for display inside a timeline item. */
-function formatTimestamp(ts: string | Date): string {
+/** Formats a timestamp for display inside a timeline item (active locale). */
+function formatTimestamp(ts: string | Date, locale: string): string {
   const date = typeof ts === 'string' ? new Date(ts) : ts;
-  return date.toLocaleString();
+  return date.toLocaleString(locale);
 }
 
 /** Extracts a locale-formatted date string used as a grouping key. */
-function formatDateKey(ts: string | Date): string {
+function formatDateKey(ts: string | Date, locale: string): string {
   const date = typeof ts === 'string' ? new Date(ts) : ts;
-  return date.toLocaleDateString();
+  return date.toLocaleDateString(locale);
 }
 
 /**
@@ -50,6 +50,9 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   // Optional channel with an English floor: the pattern renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
+  /* Timestamps and group keys follow the active locale (floor: the runtime
+     default, matching the historical behaviour). */
+  const locale = i18n?.locale ?? 'default';
   const {
     items,
     renderItem,
@@ -71,12 +74,12 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
     if (!groupByDate) return null;
     const groups: Record<string, TimelineItem<T>[]> = {};
     for (const item of items) {
-      const key = formatDateKey(item.timestamp);
+      const key = formatDateKey(item.timestamp, locale);
       if (!groups[key]) groups[key] = [];
       groups[key].push(item);
     }
     return groups;
-  }, [items, groupByDate]);
+  }, [items, groupByDate, locale]);
 
   /** Builds the default render for a single timeline item. In alternate mode,
    *  odd-indexed items are placed on the right side by flipping `data-side`.
@@ -103,12 +106,12 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
 
     return (
       <>
-        {index !== 0 && <hr data-part="connector" data-edge="leading" className="ds-timeline-modern__connector" />}
+        {index !== 0 && <hr data-part="connector" data-edge="leading" aria-hidden="true" className="ds-timeline-modern__connector" />}
         {showTimestamp && (
           <div data-part="timestamp-slot" data-side={isRight ? 'right' : 'left'} className="ds-timeline-modern__timestamp-slot">
             {!isRight && (
               <time data-part="timestamp" className="ds-timeline-modern__timestamp">
-                {formatTimestamp(item.timestamp)}
+                {formatTimestamp(item.timestamp, locale)}
               </time>
             )}
           </div>
@@ -146,12 +149,12 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
           <div data-part="item-title" className="ds-timeline-modern__item-title">{item.title}</div>
           {isRight && showTimestamp && (
             <time data-part="timestamp" className="ds-timeline-modern__timestamp">
-              {formatTimestamp(item.timestamp)}
+              {formatTimestamp(item.timestamp, locale)}
             </time>
           )}
           {item.description && <p data-part="item-description" className="ds-timeline-modern__item-description">{item.description}</p>}
         </div>
-        {index !== total - 1 && <hr data-part="connector" data-edge="trailing" className="ds-timeline-modern__connector" />}
+        {index !== total - 1 && <hr data-part="connector" data-edge="trailing" aria-hidden="true" className="ds-timeline-modern__connector" />}
       </>
     );
   };

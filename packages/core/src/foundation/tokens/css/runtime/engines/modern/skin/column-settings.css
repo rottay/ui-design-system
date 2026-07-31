@@ -1,0 +1,226 @@
+/**
+ * Modern ColumnSettings skin.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's `base` layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-column-settings.ds-column-settings--modern[data-part='root']`.
+ * The engine composes the certified Checkbox/Input/Button/Tooltip/Empty
+ * primitives for every control -- this file paints ONLY the pattern's own
+ * chrome: header/footer hairlines, the counter, list geometry and internal
+ * scroll, row layout and hover law, grip affordance, label states and the
+ * pin-side indicator. Values are transcribed from the classic engine's former
+ * inline styles to family-local `--ds-column-settings-*` channels with
+ * fallbacks; the one `rgba(0,0,0,0.06)` hairline literal is now the
+ * `--ds-color-border-subtle` token.
+ *
+ * HOVER LAW: row hover is hover-capable-only (`@media (hover: hover)`); the
+ * held press gets the same quiet surface via `:active`, and the grip keeps a
+ * persistent affordance (visible at rest, never hover-revealed).
+ */
+
+/* ---- root ---- */
+.ds-column-settings.ds-column-settings--modern[data-part='root'] {
+  inline-size: 100%;
+  min-inline-size: 0;
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- header: title + counter over a quiet hairline ---- */
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='header'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2, 8px);
+  padding-block: var(--ds-column-settings-header-padding-block, 10px)
+    var(--ds-column-settings-header-padding-block-end, 8px);
+  padding-inline: var(--ds-column-settings-header-padding-inline, 12px);
+  border-block-end: 1px solid var(--ds-column-settings-hairline, var(--ds-color-border-subtle));
+}
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='title'] {
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-semibold);
+}
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='counter'] {
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- search row ---- */
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='search'] {
+  padding-block: var(--ds-column-settings-search-padding-block, 8px);
+  padding-inline: var(--ds-column-settings-search-padding-inline, 12px);
+}
+
+/* ---- list: internal scroll with the lane's thin, ink-derived bar ---- */
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='list'] {
+  max-block-size: var(--ds-column-settings-list-max-block-size, 320px);
+  padding-block: var(--ds-column-settings-list-padding-block, 4px);
+  overflow-block: auto;
+  overflow-inline: hidden;
+  scrollbar-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border)) transparent;
+  scrollbar-width: thin;
+}
+
+/* ---- row: quiet hover surface, hairline-free. ---- */
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-column-settings-row-gap, var(--ds-spacing-2, 8px));
+  padding-block: var(--ds-column-settings-row-padding-block, 6px);
+  padding-inline: var(--ds-column-settings-row-padding-inline, 12px);
+  border-radius: var(--ds-column-settings-row-radius, var(--ds-radius-sm));
+  transition:
+    background-color var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+      var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out)),
+    color var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+      var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
+}
+@media (hover: hover) {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row']:hover {
+    background: var(
+      --ds-column-settings-row-bg-hover,
+      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+    );
+  }
+}
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row']:active {
+  background: var(
+    --ds-column-settings-row-bg-hover,
+    color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+  );
+}
+
+/* ---- grip: persistent affordance (visible at rest), keyboard-sortable ---- */
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ds-radius-sm);
+  background: transparent;
+  color: var(--ds-color-text-muted);
+  cursor: grab;
+  opacity: 0.5;
+  transition:
+    color var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+      var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out)),
+    opacity var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+      var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
+}
+@media (hover: hover) {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:hover:not(:disabled) {
+    color: var(--ds-color-text-primary);
+    opacity: 1;
+  }
+}
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:active:not(:disabled) {
+  cursor: grabbing;
+  color: var(--ds-color-text-primary);
+  opacity: 1;
+}
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+  opacity: 1;
+}
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:disabled {
+  cursor: default;
+  opacity: 0.3;
+}
+
+/* ---- label: visibility state by ink, ellipsis-safe ---- */
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='label'] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-column-settings-label-font-size, var(--ds-font-size-sm));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color var(--ds-column-settings-motion-duration, var(--ds-motion-fast))
+    var(--ds-column-settings-motion-timing, var(--ds-motion-ease-out));
+}
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'][data-visible='false'] [data-part='label'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- pin toggle: small ghost target by default, 44px under coarse ---- */
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'] .rottay-button {
+  flex: 0 0 auto;
+}
+
+/* ---- pin side indicator: shape (letter) + tracking + ink, never hue alone ---- */
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='pin-side'] {
+  color: var(--ds-color-primary);
+  font-size: var(--ds-column-settings-pin-side-font-size, 10px);
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
+  text-transform: uppercase;
+}
+
+/* ---- empty state (composed Empty primitive) ---- */
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='empty'] {
+  padding-block: var(--ds-column-settings-empty-padding-block, 8px);
+  padding-inline: var(--ds-column-settings-empty-padding-inline, 12px);
+}
+
+/* ---- footer: reset action over a quiet hairline ---- */
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='footer'] {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--ds-column-settings-footer-padding-block, 8px);
+  padding-inline: var(--ds-column-settings-footer-padding-inline, 12px);
+  border-block-start: 1px solid var(--ds-column-settings-hairline, var(--ds-color-border-subtle));
+}
+.ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='footer'] .rottay-button {
+  inline-size: 100%;
+  justify-content: center;
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs);
+}
+
+/* ---- coarse pointers: rows and their small controls meet the physical
+        44px floor (never a rem floor -- the fluid root erodes it). ---- */
+@media (pointer: coarse) {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'] {
+    min-block-size: 44px;
+  }
+
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip'] {
+    min-inline-size: 44px;
+    min-block-size: 44px;
+  }
+}
+
+/* ---- reduced motion: every state change is instant. ---- */
+@media (prefers-reduced-motion: reduce) {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'],
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip'],
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='label'] {
+    transition: none;
+  }
+}
+
+/* ---- forced colors: hairlines, the grip and the visible/hidden ink
+        re-express in system colors; the pin-side keeps its letterform. ---- */
+@media (forced-colors: active) {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='header'],
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='footer'] {
+    border-color: ButtonText;
+  }
+
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='row'][data-visible='false'] [data-part='label'] {
+    color: GrayText;
+  }
+
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+}

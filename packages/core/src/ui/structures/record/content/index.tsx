@@ -11,6 +11,28 @@
  * strip, then a stack of form-sections, then a read-field grid inside
  * one of those sections, then an action footer at the bottom.
  *
+ * ANATOMY (Pass 1, documented): there are no tabs, collapsible sections,
+ * main+aside layout, or skeleton loading in THIS family — those live in
+ * the sibling `form-sections` / detail-panel grammars. The blocks here
+ * are the summary strip, the read-field grid + field, the action bar and
+ * the panel. Scroll ownership: the page scrolls; no block owns a scroll
+ * frame.
+ *
+ * OWNED COPY rides the optional `components` i18n channel with English
+ * floors (`record.notSet`, `record.copyField`, `record.copiedField`,
+ * `record.actionRail`); the copy aria-label floors keep the exact
+ * `Copy {label}` / `Copied {label}` templates the copy-confirm tests pin.
+ *
+ * SPECIFICITY HOOK: every block root stamps `data-structure='record'` as
+ * its always-present attribute, so the skin can buy the (0,4,0) border
+ * floor without ever repeating a class or an attribute.
+ *
+ * INLINE BOUNDARY: the only inline styles left are runtime-computed
+ * values (the field-grid `gridTemplateColumns` prop, the field's
+ * `grid-column: span N`, consumer `style` passthrough) and the copy
+ * timer state. All static geometry lives in
+ * `presentation/components/skin/record.css`.
+ *
  * Exports:
  *   - `RecordSummaryStrip` — horizontal/grid summary card with 5
  *     visual variants (default, editorial, technical, governance,
@@ -62,12 +84,21 @@ import { CopyToCheck } from '../../../../graphics/motion';
 
 import { Box, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
 import { useNavigationLink } from '../../../../infrastructure/runtime/adapters/presentation/react/navigation';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import {
   type SharedHeaderActionDescriptor,
   resolveSharedHeaderActionIcon,
   resolveSharedHeaderActionTooltip,
   resolveSharedHeaderActionVariant,
 } from '../../../patterns/foundation/header-actions';
+
+/** Hook-local `tOr`: catalogue value with an English floor, never a raw key. */
+function useRecordTranslation() {
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
+    i18n?.tOr(key, floor, params) ?? floor;
+  return { tOr };
+}
 
 export interface RecordSummaryItem {
   label: string;
@@ -91,36 +122,6 @@ export function RecordSummaryStrip({
 }) {
   const visibleItems = items.filter((item) => item.value !== undefined && item.value !== null && item.value !== '');
 
-  // Box metrics only. Every colour, border and background this strip paints
-  // resolves from `data-variant` in `foundation/tokens/css/presentation/components/skin/record.css`.
-  const variantStyles = {
-    default: {
-      gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-      padding: 18,
-      gap: 16,
-    },
-    editorial: {
-      gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-      padding: 18,
-      gap: 16,
-    },
-    technical: {
-      gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-      padding: 18,
-      gap: 16,
-    },
-    governance: {
-      gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-      padding: 18,
-      gap: 16,
-    },
-    metrics: {
-      gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-      padding: 20,
-      gap: 18,
-    },
-  }[variant];
-
   if (!visibleItems.length) {
     return null;
   }
@@ -129,48 +130,32 @@ export function RecordSummaryStrip({
     <Box
       className="ds-structure ds-record"
       data-part="summary-strip"
+      data-structure="record"
       data-variant={variant}
-      style={{
-        width: '100%',
-        padding: variantStyles.padding,
-        ...style,
-      }}
+      style={style}
     >
-      <Box
-        style={{
-          display: 'grid',
-          gridTemplateColumns: variantStyles.gridTemplateColumns,
-          gap: variantStyles.gap,
-        }}
-      >
+      {/* Grid rhythm + per-variant columns/padding/gap are skin-owned off
+          data-variant (they were an inline variantStyles map). */}
+      <Box data-part="summary-grid">
         {visibleItems.map((item) => (
-          <Stack key={item.label} data-part="summary-item" spacing={4} style={{ minWidth: 0 }}>
+          <Stack key={item.label} data-part="summary-item" spacing={4}>
             <Text
               data-part="summary-item-label"
               size="xs"
               weight="bold"
-              style={{
-                textTransform: 'uppercase',
-                letterSpacing: '0.12em',
-                fontFamily: 'var(--ds-font-family-mono, monospace)',
-              }}
             >
               {item.label}
             </Text>
             <Text
               data-part="summary-item-value"
+              data-mono={item.mono ? 'true' : undefined}
               size={variant === 'metrics' ? 'md' : 'sm'}
               weight="medium"
-              style={{
-                wordBreak: 'break-word',
-                fontFamily: item.mono ? 'var(--ds-font-family-mono, monospace)' : undefined,
-                fontSize: variant === 'metrics' ? 16 : undefined,
-              }}
             >
               {item.value}
             </Text>
             {item.helper ? (
-              <Text data-part="summary-item-helper" size="xs" style={{ lineHeight: 1.5 }}>
+              <Text data-part="summary-item-helper" size="xs">
                 {item.helper}
               </Text>
             ) : null}
@@ -194,12 +179,11 @@ export function RecordFieldGrid({
     <Box
       className="ds-structure ds-record"
       data-part="field-grid"
+      data-structure="record"
+      /* gridTemplateColumns stays inline: it is the caller's runtime `columns`
+         prop. Display/gap/alignment are skin-owned. */
       style={{
-        display: 'grid',
         gridTemplateColumns: columns,
-        gap: 14,
-        width: '100%',
-        alignItems: 'start',
         ...style,
       }}
     >
@@ -249,7 +233,7 @@ export function RecordField({
   value,
   mono = false,
   span = 1,
-  emptyLabel = 'Not set',
+  emptyLabel,
   helper,
   href,
   copyValue,
@@ -264,6 +248,8 @@ export function RecordField({
   copyValue?: string;
 }) {
   const NavLink = useNavigationLink();
+  const { tOr } = useRecordTranslation();
+  const resolvedEmptyLabel = emptyLabel ?? tOr('record.notSet', 'Not set');
 
   // Copy-to-clipboard confirm feedback: the icon morphs copy -> check on click,
   // then reverts. CopyToCheck is opacity/transform-only and honors reduced
@@ -284,18 +270,13 @@ export function RecordField({
     copyRevertTimer.current = setTimeout(() => setCopied(false), 1400);
   }, [copyValue]);
 
-  const resolved = renderFieldValue(value, emptyLabel);
+  const resolved = renderFieldValue(value, resolvedEmptyLabel);
   const primitiveValue = typeof resolved.content === 'string' || typeof resolved.content === 'number';
   const valueNode = primitiveValue ? (
     <Text
       data-part="field-value"
       size="sm"
       weight="medium"
-      style={{
-        fontFamily: mono ? 'var(--ds-font-family-mono, monospace)' : undefined,
-        wordBreak: mono ? 'break-all' : 'break-word',
-        lineHeight: 1.6,
-      }}
     >
       {resolved.content}
     </Text>
@@ -322,11 +303,11 @@ export function RecordField({
   const maybeLinkedValue =
     href && !resolved.empty ? (
       NavLink ? (
-        <NavLink className="ds-record__field-link" href={href} style={{ textDecoration: 'none' }}>
+        <NavLink className="ds-record__field-link" href={href}>
           {linkInner}
         </NavLink>
       ) : (
-        <a className="ds-record__field-link" href={href} style={{ textDecoration: 'none' }}>
+        <a className="ds-record__field-link" href={href}>
           {linkInner}
         </a>
       )
@@ -338,12 +319,12 @@ export function RecordField({
     <Box
       className="ds-structure ds-record"
       data-part="field"
+      data-structure="record"
       data-empty={resolved.empty}
       data-mono={mono}
+      /* grid-column stays inline: runtime `span` prop. */
       style={{
         gridColumn: `span ${span}`,
-        minWidth: 0,
-        padding: '12px 14px',
       }}
     >
       <Stack spacing={6}>
@@ -351,25 +332,20 @@ export function RecordField({
           data-part="field-label"
           size="xs"
           weight="bold"
-          style={{
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            fontFamily: 'var(--ds-font-family-mono, monospace)',
-          }}
         >
           {label}
         </Text>
 
         <Flex align="start" justify="between" gap={12}>
-          <Box style={{ minWidth: 0, flex: 1 }}>{maybeLinkedValue}</Box>
+          <Box data-part="field-body">{maybeLinkedValue}</Box>
           {copyValue ? (
-            <Tooltip content={copied ? 'Copied' : `Copy ${label.toLowerCase()}`}>
+            <Tooltip content={copied ? tOr('record.copiedField', 'Copied {label}', { label: label.toLowerCase() }) : tOr('record.copyField', 'Copy {label}', { label: label.toLowerCase() })}>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleCopy}
-                style={{ flexShrink: 0 }}
-                aria-label={copied ? `Copied ${label.toLowerCase()}` : `Copy ${label.toLowerCase()}`}
+                data-part="field-copy"
+                aria-label={copied ? tOr('record.copiedField', 'Copied {label}', { label: label.toLowerCase() }) : tOr('record.copyField', 'Copy {label}', { label: label.toLowerCase() })}
               >
                 <CopyToCheck copied={copied} size={13} />
               </Button>
@@ -378,7 +354,7 @@ export function RecordField({
         </Flex>
 
         {helper ? (
-          <Text data-part="field-helper" size="xs" style={{ lineHeight: 1.5 }}>
+          <Text data-part="field-helper" size="xs">
             {helper}
           </Text>
         ) : null}
@@ -398,6 +374,7 @@ export function RecordActionBar({
   actionItems?: RecordActionItem[];
   style?: CSSProperties;
 }) {
+  const { tOr } = useRecordTranslation();
   const resolvedActionItems = actionItems?.filter(Boolean) || [];
   const renderedActions =
     resolvedActionItems.length > 0
@@ -427,31 +404,24 @@ export function RecordActionBar({
     <Flex
       className="ds-structure ds-record"
       data-part="action-bar"
+      data-structure="record"
       justify="between"
       align="end"
       gap={16}
       wrap="wrap"
-      style={{
-        paddingTop: 14,
-        ...style,
-      }}
+      style={style}
     >
-      <Box data-part="action-bar-meta" style={{ minWidth: 0, flex: 1 }}>
+      <Box data-part="action-bar-meta">
         {typeof meta === 'string' ? (
           <Stack spacing={4}>
             <Text
               data-part="action-bar-meta-label"
               size="xs"
               weight="bold"
-              style={{
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                fontFamily: 'var(--ds-font-family-mono, monospace)',
-              }}
             >
-              Action rail
+              {tOr('record.actionRail', 'Action rail')}
             </Text>
-            <Text data-part="action-bar-meta-text" size="sm" style={{ lineHeight: 1.6 }}>
+            <Text data-part="action-bar-meta-text" size="sm">
               {meta}
             </Text>
           </Stack>
@@ -459,7 +429,7 @@ export function RecordActionBar({
           meta
         )}
       </Box>
-      <Flex gap={12} wrap="wrap" style={{ justifyContent: 'flex-end' }}>
+      <Flex data-part="action-bar-actions" gap={12} wrap="wrap">
         {renderedActions}
       </Flex>
     </Flex>
@@ -477,11 +447,8 @@ export function RecordPanel({
     <Box
       className="ds-structure ds-record"
       data-part="panel"
-      style={{
-        width: '100%',
-        padding: 18,
-        ...style,
-      }}
+      data-structure="record"
+      style={style}
     >
       {children}
     </Box>

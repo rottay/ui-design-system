@@ -81,18 +81,23 @@
   inset-block-start: calc(var(--ds-steps-current-item-size) / 2 - 1px);
   inset-inline-start: calc(-50% + var(--ds-steps-current-item-size) / 2 + 4px);
   inset-inline-end: calc(50% + var(--ds-steps-current-item-size) / 2 + 4px);
-  block-size: var(--ds-steps-connector-width, 2px);
+  block-size: var(--ds-steps-connector-width, 1px);
   border-radius: var(--ds-radius-full, 9999px);
   background: var(--ds-steps-connector-color, var(--ds-color-border-secondary));
-  transition: background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+  transition: background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out));
 }
 
-/* A connector leads INTO its step: finished and in-progress steps paint the
-   line behind them with the primary ink (the pre-drain `--step-neutral`
-   mapping, preserved). */
+/* A connector leads INTO its step, but the line itself is always a NEUTRAL
+   hairline (connector law): the state lives on the circle's icon/numeral and
+   the label ink, never on the bar. The `--ds-steps-connector-color-active`
+   channel survives as a tenant escape hatch; its default is the neutral
+   connector color. */
 .rottay-steps--modern[data-part='root'] [data-part='item'][data-status='finish']::before,
 .rottay-steps--modern[data-part='root'] [data-part='item'][data-status='process']::before {
-  background: var(--ds-steps-connector-color-active, var(--ds-color-primary));
+  background: var(
+    --ds-steps-connector-color-active,
+    var(--ds-steps-connector-color, var(--ds-color-border-secondary))
+  );
 }
 
 /* Horizontal connectors lead into their step: the first one has none. Vertical
@@ -126,11 +131,11 @@
      pagination.css's `--ds-pagination-numeric` precedent). */
   font-variant-numeric: var(--ds-steps-numeric, tabular-nums);
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    transform var(--ds-motion-fast, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out));
 }
 
 /* ---- status paint for the circle (border-color repaints tie (0,4,1), later). ---- */
@@ -251,6 +256,12 @@
   font-weight: var(--ds-steps-label-font-weight-process, 600);
 }
 
+/* State hierarchy on the title: current strongest, wait quiets to secondary
+   ink (finished keeps the primary ink -- it is done work, not pending). */
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='wait'] [data-part='label'] {
+  color: var(--ds-steps-label-color-wait, var(--ds-color-text-secondary));
+}
+
 /* Error parity with the rustic engine: the errored step's label inks red. */
 .rottay-steps--modern[data-part='root'] [data-part='item'][data-status='error'] [data-part='label'] {
   color: var(--ds-steps-label-color-error, var(--ds-color-error));
@@ -339,7 +350,7 @@
   inset-inline-start: calc(var(--ds-steps-current-item-size) / 2 - 1px);
   inset-inline-end: auto;
   block-size: auto;
-  inline-size: var(--ds-steps-connector-width, 2px);
+  inline-size: var(--ds-steps-connector-width, 1px);
 }
 
 .rottay-steps--modern[data-part='root'][data-direction='vertical'] [data-part='dot-slot'] {
@@ -393,7 +404,7 @@
     inset-inline-start: calc(var(--ds-steps-current-item-size) / 2 - 1px);
     inset-inline-end: auto;
     block-size: auto;
-    inline-size: var(--ds-steps-connector-width, 2px);
+    inline-size: var(--ds-steps-connector-width, 1px);
   }
 
   .rottay-steps--modern[data-part='root'][data-direction='horizontal'] [data-part='item']:first-child::before {

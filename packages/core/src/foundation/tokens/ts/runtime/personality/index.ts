@@ -372,6 +372,104 @@ export function resolvePersonalityCssVariables(tokens: DesignTokens): CssVariabl
 }
 
 /**
+ * Canonical component channels derived from personality data.
+ *
+ * `SystemCssVariablesBridge` must not write these names directly: doing so
+ * would turn a product/vertical axis into a second paint authority beside the
+ * static or DB tenant artifact. The bridge publishes the corresponding
+ * namespaced value and `foundation/tokens/css/runtime/personality.css` is the
+ * single projection that maps it back to the canonical component channel.
+ *
+ * This explicit table is intentionally closed. Adding a new canonical output
+ * to `resolvePartialPersonalityCssVariables` without assigning it a projection
+ * fails closed in `resolvePersonalityBridgeCssVariables`.
+ */
+export const PERSONALITY_CANONICAL_PROJECTION = Object.freeze({
+  '--ds-card-shadow': '--_ds-personality-resolved-card-shadow',
+  '--ds-card-shadow-hover': '--_ds-personality-resolved-card-shadow-hover',
+  '--ds-card-border': '--_ds-personality-resolved-card-border',
+  '--ds-card-border-hover': '--_ds-personality-resolved-card-border-hover',
+  '--ds-card-header-padding': '--_ds-personality-resolved-card-header-padding',
+  '--ds-card-body-padding': '--_ds-personality-resolved-card-body-padding',
+  '--ds-card-footer-padding': '--_ds-personality-resolved-card-footer-padding',
+  '--ds-card-bg-hover': '--_ds-personality-resolved-card-bg-hover',
+  '--ds-card-hover-transform': '--_ds-personality-resolved-card-hover-transform',
+  '--ds-badge-radius': '--_ds-personality-resolved-badge-radius',
+  '--ds-badge-hover-transform': '--_ds-personality-resolved-badge-hover-transform',
+  '--ds-divider-style': '--_ds-personality-resolved-divider-style',
+  '--ds-divider-color': '--_ds-personality-resolved-divider-color',
+  '--ds-skeleton-animation-duration':
+    '--_ds-personality-resolved-skeleton-animation-duration',
+  '--ds-typography-heading-letter-spacing':
+    '--_ds-personality-resolved-typography-heading-letter-spacing',
+  '--ds-typography-heading-font-weight':
+    '--_ds-personality-resolved-typography-heading-font-weight',
+  '--ds-typography-label-transform':
+    '--_ds-personality-resolved-typography-label-transform',
+  '--ds-button-transition': '--_ds-personality-resolved-button-transition',
+  '--ds-button-hover-transform': '--_ds-personality-resolved-button-hover-transform',
+  '--ds-button-active-transform': '--_ds-personality-resolved-button-active-transform',
+  '--ds-toast-enter-duration': '--_ds-personality-resolved-toast-enter-duration',
+  '--ds-toast-exit-duration': '--_ds-personality-resolved-toast-exit-duration',
+  '--ds-toast-enter-easing': '--_ds-personality-resolved-toast-enter-easing',
+  '--ds-toast-exit-easing': '--_ds-personality-resolved-toast-exit-easing',
+  '--ds-message-enter-duration': '--_ds-personality-resolved-message-enter-duration',
+  '--ds-message-exit-duration': '--_ds-personality-resolved-message-exit-duration',
+  '--ds-message-enter-easing': '--_ds-personality-resolved-message-enter-easing',
+  '--ds-message-exit-easing': '--_ds-personality-resolved-message-exit-easing',
+  '--ds-notification-enter-duration':
+    '--_ds-personality-resolved-notification-enter-duration',
+  '--ds-notification-exit-duration':
+    '--_ds-personality-resolved-notification-exit-duration',
+  '--ds-notification-enter-easing':
+    '--_ds-personality-resolved-notification-enter-easing',
+  '--ds-notification-exit-easing':
+    '--_ds-personality-resolved-notification-exit-easing',
+  '--ds-modal-animation-duration':
+    '--_ds-personality-resolved-modal-animation-duration',
+  '--ds-modal-animation-timing': '--_ds-personality-resolved-modal-animation-timing',
+  '--ds-duration-fast': '--_ds-personality-resolved-duration-fast',
+  '--ds-duration-normal': '--_ds-personality-resolved-duration-normal',
+  '--ds-duration-slow': '--_ds-personality-resolved-duration-slow',
+} as const);
+
+/**
+ * Resolve the bridge payload without creating a second component paint owner.
+ *
+ * Existing `--ds-personality-*` inputs keep their names. Every canonical
+ * component output is moved behind the closed namespaced projection above.
+ * Component-level helpers continue to use `resolvePersonalityCssVariables`
+ * directly, so this changes authority—not values or public component props.
+ */
+export function resolvePersonalityBridgeCssVariables(
+  tokens: DesignTokens,
+): CssVariableMap {
+  const resolved = resolvePersonalityCssVariables(tokens);
+  const bridgeVariables: CssVariableMap = {};
+
+  for (const [name, value] of Object.entries(resolved)) {
+    if (name.startsWith('--ds-personality-')) {
+      bridgeVariables[name as `--ds-personality-${string}`] = value;
+      continue;
+    }
+
+    const projectedName =
+      PERSONALITY_CANONICAL_PROJECTION[
+        name as keyof typeof PERSONALITY_CANONICAL_PROJECTION
+      ];
+    if (projectedName === undefined) {
+      throw new Error(
+        `[design-system] Personality bridge cannot publish canonical channel "${name}" ` +
+          'without a namespaced projection owner.',
+      );
+    }
+    bridgeVariables[projectedName] = value;
+  }
+
+  return bridgeVariables;
+}
+
+/**
  * Resolve card prop defaults from personality tokens.
  * Engines call this once to derive `bordered`, `hoverable`, and `padding`
  * without reading the token context themselves.

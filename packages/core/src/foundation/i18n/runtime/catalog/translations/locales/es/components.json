@@ -3,6 +3,7 @@
     "loading": "Cargando avatar...",
     "error": "Error al cargar imagen",
     "fallback": "Sin imagen",
+    "image_alt": "Avatar",
     "group": {
       "surplus": "+{count} más",
       "empty": "Sin usuarios"
@@ -139,7 +140,8 @@
     "reset": "Restablecer"
   },
   "drawer": {
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "actions": "Acciones del panel"
   },
   "dropdown": {
     "no_options": "Sin opciones"
@@ -209,13 +211,16 @@
     "navPrevYear": "Año anterior",
     "navPrevMonth": "Mes anterior",
     "navNextMonth": "Mes siguiente",
-    "navNextYear": "Año siguiente"
+    "navNextYear": "Año siguiente",
+    "gridLabel": "Cuadrícula de fechas",
+    "monthsGridLabel": "Cuadrícula de meses"
   },
   "colorpicker": {
     "clear": "Limpiar",
     "chooseColor": "Elegir color",
     "hexLabel": "Color hexadecimal",
-    "selectColor": "Seleccionar color {color}"
+    "selectColor": "Seleccionar color {color}",
+    "invalidHex": "Introduce un color hexadecimal válido (p. ej. #1677ff)"
   },
   "qrcode": {
     "loading": "Cargando",
@@ -231,8 +236,53 @@
   },
   "mentions": {
     "not_found": "Sin resultados",
+    "loading": "Cargando…",
     "suggestions_label": "Sugerencias de menciones",
     "input_label": "Menciones"
+  },
+  "otp": {
+    "digit_label": "Dígito {index} de {length}"
+  },
+  "detailPanel": {
+    "back": "Volver",
+    "breadcrumb": "Ruta de navegación",
+    "tabs": "Pestañas del panel de detalle"
+  },
+  "columnSettings": {
+    "title": "Columnas",
+    "searchPlaceholder": "Buscar columna...",
+    "emptySearch": "Ninguna columna coincide con la búsqueda",
+    "reset": "Restablecer diseño",
+    "reorder": "Reordenar columna",
+    "pinLeft": "Fijar a la izquierda",
+    "pinRight": "Fijar a la derecha",
+    "unpin": "Desfijar",
+    "visibleSuffix": "visibles"
+  },
+  "pricingTable": {
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "features": "Características",
+    "mostPopular": "Más popular",
+    "loading": "Cargando",
+    "included": "Incluido",
+    "excluded": "No incluido",
+    "empty": "No hay planes disponibles"
+  },
+  "activityLog": {
+    "filter": {
+      "allActions": "Todas las acciones",
+      "allUsers": "Todos los usuarios"
+    },
+    "empty": "Sin actividad registrada",
+    "time": {
+      "justNow": "ahora mismo",
+      "minutesAgo": "hace {count} min",
+      "hoursAgo": "hace {count} h",
+      "daysAgo": "hace {count} d"
+    },
+    "onEntity": "en {entity}",
+    "onEntityWithId": "en {entity} #{id}"
   },
   "transfer": {
     "source_title": "Origen",
@@ -242,6 +292,8 @@
     "item_unit": "elemento",
     "items_unit": "elementos",
     "select_all": "Seleccionar todo",
+    "move_to_target": "Mover a destino",
+    "move_to_source": "Mover a origen",
     "move_right": ">",
     "move_left": "<"
   },
@@ -265,6 +317,9 @@
   },
   "backTop": {
     "back_to_top": "Volver arriba"
+  },
+  "anchor": {
+    "navigation": "Navegación de anclas"
   },
   "floatbutton": {
     "actionLabel": "Botón de acción flotante",
@@ -321,7 +376,8 @@
       "approve": "Aprobar",
       "reject": "Rechazar",
       "escalate": "Escalar"
-    }
+    },
+    "empty": "Todo al día"
   },
   "autocomplete": {
     "not_found": "Sin resultados",
@@ -340,7 +396,9 @@
     "placeholder": "Seleccionar",
     "search_placeholder": "Buscar...",
     "not_found": "Sin datos",
-    "clear": "Limpiar"
+    "clear": "Limpiar",
+    "column_label": "Nivel {level}",
+    "search_results": "Resultados de búsqueda"
   },
   "stepper": {
     "navigation": "Pasos del progreso"
@@ -363,7 +421,12 @@
       "empty_title": "Todavia no hay nada para mostrar",
       "empty_description": "Esta surface no tiene datos para renderizar ahora.",
       "error_title": "La surface no pudo renderizar",
-      "retry": "Reintentar"
+      "retry": "Reintentar",
+      "capability_label": "Disponible cuando se recuperen los datos",
+      "capability_aria": "Capacidades de la superficie registradas",
+      "error_boundary_title": "{surface} encontró un error",
+      "error_boundary_generic_surface": "Esta sección",
+      "error_description": "Se produjo un error al renderizar esta superficie."
     },
     "list": {
       "empty_title": "No hay resultados disponibles",
@@ -382,7 +445,8 @@
       "summary_title": "Resumen"
     },
     "form": {
-      "discard_changes": "¿Descartar los cambios sin guardar del formulario?"
+      "discard_changes": "¿Descartar los cambios sin guardar del formulario?",
+      "actions_aria": "Acciones del formulario"
     },
     "search": {
       "placeholder": "Buscar",
@@ -391,13 +455,16 @@
       "empty_query_description_other": "Ingresa al menos {count} caracteres para ejecutar la busqueda.",
       "empty_results_title": "No se encontraron resultados",
       "empty_results_description": "Prueba ajustando la consulta o los filtros.",
-      "preview_title": "Vista previa"
+      "preview_title": "Vista previa",
+      "filters_title": "Filtros",
+      "results_group_aria": "Resultados de la búsqueda"
     },
     "media": {
       "empty_title": "No hay elementos multimedia",
       "empty_description": "Agrega uno o mas elementos para renderizar la galeria.",
       "preview_title": "Vista previa",
-      "details_title": "Detalles"
+      "details_title": "Detalles",
+      "untitled_item": "Elemento multimedia sin título"
     },
     "sidebar": {
       "expand": "Expandir",
@@ -420,7 +487,11 @@
       "next": "Siguiente",
       "previous_lanes": "Carriles kanban anteriores",
       "next_lanes": "Carriles kanban siguientes",
-      "lane_range": "Carriles {start}–{end} de {total}"
+      "lane_range": "Carriles {start}–{end} de {total}",
+      "filters_title": "Filtros",
+      "empty_title": "Sin elementos",
+      "empty_description": "Todavía no hay elementos en el tablero.",
+      "lanes_nav_aria": "Carriles kanban"
     },
     "operational": {
       "empty_title": "No hay modulos operativos configurados",
@@ -428,7 +499,8 @@
       "primary_panel": "Panel principal",
       "secondary_panel": "Panel secundario",
       "queue": "Cola",
-      "live_feed": "Feed en vivo"
+      "live_feed": "Feed en vivo",
+      "stats_group_aria": "Métricas operativas"
     },
     "wizard": {
       "empty_step_title": "Paso vacio",
@@ -447,14 +519,302 @@
       "composer_title": "Composer",
       "placeholder": "Escribe un mensaje",
       "send": "Enviar",
-      "typing": "El asistente esta escribiendo"
+      "typing": "El asistente esta escribiendo",
+      "composer_label": "Entrada de mensaje"
     },
     "editor": {
-      "title": "Editor"
+      "title": "Editor",
+      "input_label": "Editor de contenido",
+      "preview_title": "Vista previa"
     },
     "visualization": {
       "empty_title": "No hay visualizaciones configuradas",
       "empty_description": "Agrega una o mas vistas para renderizar esta surface."
+    },
+    "audit": {
+      "filters_title": "Filtros",
+      "empty_title": "Sin entradas de auditoría",
+      "empty_description": "No hay entradas de auditoría que coincidan con los filtros actuales.",
+      "pagination_summary": "Página {current} · Registros totales: {total}",
+      "export_group_aria": "Exportar registro de auditoría",
+      "export_format_aria": "Exportar como {format}"
+    },
+    "report": {
+      "templates_title": "Plantillas",
+      "templates_group_aria": "Plantillas de reporte",
+      "filters_title": "Filtros",
+      "summary_title": "Resumen",
+      "chart_title": "Visualización",
+      "table_title": "Resultados",
+      "generate": "Generar",
+      "generating": "Generando reporte...",
+      "empty_title": "Sin datos de reporte",
+      "empty_description": "Selecciona una plantilla y genera un reporte para ver resultados.",
+      "empty_rows_title": "Sin filas",
+      "empty_rows_description": "El reporte se ejecutó pero no devolvió filas para los filtros actuales.",
+      "no_templates_title": "Sin plantillas",
+      "no_templates_description": "No hay plantillas de reporte disponibles.",
+      "export_group_aria": "Exportar reporte",
+      "export_pdf": "PDF",
+      "export_excel": "EXCEL",
+      "export_csv": "CSV"
+    },
+    "import_export": {
+      "import_title": "Importar datos",
+      "import_description": "Sube un archivo para validar sus filas, revisar los errores y confirmar la importación.",
+      "import_not_configured_title": "Importación no configurada",
+      "import_not_configured_description": "La funcionalidad de importación no está configurada.",
+      "import_failed_title": "La importación falló",
+      "dropzone_hint": "Suelta un archivo aquí o haz clic para explorar",
+      "accepted_formats": "Formatos aceptados: {formats}",
+      "processing_file": "Procesando archivo...",
+      "template_hint": "¿Necesitas una plantilla?",
+      "template_download": "Descargar plantilla",
+      "preview_valid": "Válidas: {count}",
+      "preview_errors": "Errores: {count}",
+      "preview_total": "Total: {count}",
+      "validation_errors_title": "Errores de validación",
+      "error_row": "Fila {row}, {field}: {message}",
+      "more_errors": "...y {count} más",
+      "no_valid_rows": "No hay filas válidas para importar. Sube un archivo corregido para continuar.",
+      "back": "Volver",
+      "confirm_import": "Confirmar importación",
+      "import_success": "Importación completada correctamente",
+      "import_more": "Importar más",
+      "export_title": "Exportar datos",
+      "export_description": "Elige un formato y los campos a incluir en el archivo exportado.",
+      "export_not_configured_title": "Exportación no configurada",
+      "export_not_configured_description": "La funcionalidad de exportación no está configurada.",
+      "export_failed_title": "La exportación falló",
+      "format_label": "Formato",
+      "format_group_aria": "Formato de exportación",
+      "export_format_aria": "Exportar como {format}",
+      "fields_label": "Campos",
+      "fields_selected": "{selected} de {total} seleccionados",
+      "select_all": "Seleccionar todo",
+      "clear_all": "Limpiar",
+      "export_action": "Exportar",
+      "history_title": "Historial",
+      "history_empty": "Todavía no hay operaciones de importación ni exportación.",
+      "history_list_aria": "Operaciones de importación y exportación",
+      "history_records": "{count} registros",
+      "type_import": "Importación",
+      "type_export": "Exportación"
+    },
+    "guided_draft_form": {
+      "section_nav_label": "Sección",
+      "section_nav_label_plural": "Secciones",
+      "section_nav_aria": "Secciones del formulario",
+      "section_state_complete": "Completa",
+      "section_state_errors": "Tiene errores",
+      "draft_status_unsaved": "Cambios sin guardar",
+      "draft_status_saving": "Guardando…",
+      "draft_status_saved": "Guardado",
+      "draft_status_saved_at": "Guardado {time}",
+      "draft_status_error": "Error al guardar",
+      "draft_recovery_title": "Se encontró un borrador sin guardar",
+      "draft_recovery_description": "Tu trabajo de una sesión anterior te está esperando.",
+      "draft_recovery_description_date": "Última edición {date}",
+      "draft_recovery_recover": "Recuperar",
+      "draft_recovery_discard": "Descartar",
+      "templates_toggle_show": "Plantillas",
+      "templates_toggle_hide": "Ocultar plantillas",
+      "template_picker_aria": "Plantillas de formulario",
+      "validation_summary_errors": "Errores: {count}",
+      "validation_summary_warnings": "Advertencias: {count}",
+      "validation_issue_overflow": "Problemas adicionales: {count}",
+      "progress_count": "{completed}/{total}",
+      "submit_bar_progress": "Secciones completas: {completed} de {total}",
+      "submit": "Enviar",
+      "submitting": "Enviando…",
+      "empty_sections_title": "Sin secciones de formulario",
+      "empty_sections_description": "Este formulario aún no tiene secciones configuradas."
+    },
+    "notification": {
+      "empty_title": "Sin notificaciones",
+      "empty_description": "Estás al día.",
+      "mark_read": "Marcar como leída",
+      "mark_all_read": "Marcar todo leído",
+      "delete": "Eliminar",
+      "preferences_empty_title": "Sin preferencias",
+      "preferences_empty_description": "No hay preferencias de notificación disponibles.",
+      "preferences_default_category": "General",
+      "notifications_section": "Notificaciones",
+      "preferences_section": "Preferencias"
+    },
+    "billing": {
+      "plan_current_badge": "Plan actual",
+      "action_upgrade": "Mejorar plan",
+      "action_cancel": "Cancelar",
+      "action_download": "Descargar",
+      "usage_title": "Uso",
+      "invoices_title": "Facturas",
+      "invoices_list_aria": "Historial de facturas",
+      "invoice_download_aria": "Descargar factura {date}",
+      "payment_methods_title": "Métodos de pago",
+      "payment_methods_list_aria": "Métodos de pago guardados",
+      "payment_expiry": "Vence {expiry}",
+      "payment_default_badge": "Predeterminada",
+      "tab_plan": "Plan"
+    },
+    "integration": {
+      "keys_title": "Claves de API",
+      "keys_list_aria": "Claves de API",
+      "keys_empty_title": "No hay claves de API",
+      "keys_empty_description": "Crea una clave de API para empezar.",
+      "key_created": "Creada {date}",
+      "key_revoke_aria": "Revocar clave de API {name}",
+      "action_create_key": "Crear clave",
+      "action_revoke": "Revocar",
+      "webhooks_title": "Webhooks",
+      "webhooks_list_aria": "Webhooks",
+      "webhooks_empty_title": "No hay webhooks",
+      "webhooks_empty_description": "Crea un webhook para recibir notificaciones de eventos.",
+      "webhook_events": "Eventos: {events}",
+      "webhook_action_pause": "Pausar",
+      "webhook_action_resume": "Reanudar",
+      "webhook_pause_aria": "Pausar webhook {url}",
+      "webhook_resume_aria": "Reanudar webhook {url}",
+      "webhook_delete_aria": "Eliminar webhook {url}",
+      "action_create_webhook": "Crear webhook",
+      "action_delete": "Eliminar",
+      "apps_title": "Aplicaciones conectadas",
+      "apps_list_aria": "Aplicaciones conectadas",
+      "app_disconnect_aria": "Desconectar {name}",
+      "action_disconnect": "Desconectar"
+    },
+    "profile": {
+      "edit_action": "Editar",
+      "save_action": "Guardar",
+      "cancel_action": "Cancelar",
+      "section_edit_aria": "Editar {section}",
+      "section_save_aria": "Guardar {section}",
+      "section_cancel_aria": "Cancelar la edición de {section}",
+      "empty_title": "Sin secciones de perfil",
+      "empty_description": "No hay secciones de perfil configuradas.",
+      "action_change_password": "Cambiar contraseña",
+      "action_delete_account": "Eliminar cuenta"
+    },
+    "command_center": {
+      "quick_actions": "Acciones rápidas",
+      "recent_activity": "Actividad reciente",
+      "view_all": "Ver todo",
+      "activity_empty": "Sin actividad reciente.",
+      "empty_title": "No hay datos para mostrar",
+      "empty_description": "Configura estadísticas, acciones o secciones para completar este panel.",
+      "system_actor": "Sistema"
+    },
+    "settings": {
+      "empty_title": "Sin secciones de configuración",
+      "empty_description": "No hay secciones de configuración disponibles."
+    },
+    "collection_workspace": {
+      "apply_filters": "Aplicar filtros",
+      "boolean_no": "No",
+      "boolean_yes": "Sí",
+      "cancel": "Cancelar",
+      "cards_per_batch": "Tarjetas por lote",
+      "cards_showing": "Mostrando 1-{visible} de {total}",
+      "cards_unit": "Tarjetas",
+      "collection_actions_aria": "Acciones de la colección",
+      "density_label": "Densidad: {mode}",
+      "end_of_cards": "Fin de las tarjetas",
+      "export_aria": "Exportar",
+      "filters_title": "Filtros avanzados",
+      "filters_title_count": "Filtros avanzados ({count})",
+      "filters_trigger": "Filtros",
+      "filters_trigger_count": "Filtros ({count})",
+      "grid_renderer_missing": "El modo cuadrícula requiere un renderizador de tarjetas (viewModes.cards.renderCard o mobileCard)",
+      "kanban_empty_column": "Sin elementos",
+      "load_more": "Cargar más",
+      "loading_details": "Cargando detalles…",
+      "loading_label": "Cargando…",
+      "meta_in_view": "{count} a la vista",
+      "meta_needs_attention": "Requiere atención",
+      "meta_syncing": "Sincronizando datos",
+      "more": "Más",
+      "more_actions": "Más acciones",
+      "no_card_renderer": "Sin renderizador de tarjetas",
+      "not_set": "Sin definir",
+      "open_details": "Abrir detalles",
+      "open_item_aria": "Abrir elemento {index} de {title}",
+      "page_of": "Página {current} de {total}",
+      "page_size_option": "{count} / página",
+      "pagination_next": "Siguiente",
+      "pagination_next_aria": "Ir a la página siguiente",
+      "pagination_prev_aria": "Ir a la página anterior",
+      "pagination_previous": "Anterior",
+      "per_batch": "/ lote",
+      "per_page": "/ página",
+      "preview_details_title": "Detalles de {title}",
+      "range_from_start_of": "1-{visible} de {total}",
+      "range_of": "{start}-{end} de {total}",
+      "range_results": "{count} resultados",
+      "record_label": "Registro",
+      "record_number": "Registro {index}",
+      "reset": "Restablecer",
+      "resize_rail_aria": "Cambiar el ancho del panel de detalle",
+      "resize_rail_title": "Arrastrar para cambiar el ancho del panel de detalle",
+      "results_zero": "0 resultados",
+      "row_actions": "Acciones de fila",
+      "rows_per_page": "Filas por página",
+      "rows_unit": "Filas",
+      "search_placeholder": "Buscar...",
+      "select_rows": "Seleccionar filas",
+      "selected_count": "{count} seleccionados",
+      "shortcuts_label": "Atajos",
+      "smart_sets": "Conjuntos inteligentes",
+      "uncategorized": "Sin categoría"
+    },
+    "decision_inbox": {
+      "clear_selection": "Limpiar",
+      "close": "Cerrar",
+      "confirm_ok": "Confirmar",
+      "empty_description": "Todos los elementos fueron revisados. Los nuevos elementos aparecerán aquí cuando requieran atención.",
+      "empty_title": "No hay decisiones pendientes",
+      "items_selected": "{count} elementos seleccionados",
+      "pending_count": "{count} pendientes",
+      "reason_label": "Motivo",
+      "reason_placeholder_batch": "Ingresar motivo...",
+      "reason_placeholder_review": "Ingresar el motivo de esta decisión...",
+      "review_details": "Detalles de la revisión",
+      "sla_duration_short": "{hours}h {mins}m",
+      "sla_header": "SLA",
+      "sla_minutes_left": "quedan {count}m",
+      "sla_overdue": "Vencido",
+      "cancel": "Cancelar",
+      "loading_label": "Cargando…"
+    },
+    "record_workbench": {
+      "details_title": "Detalles",
+      "empty_tab_description": "Esta sección aún no tiene contenido para este registro.",
+      "empty_tab_title": "Nada aquí todavía",
+      "loading_label": "Cargando registro…",
+      "tabs_aria": "Secciones del registro"
+    },
+    "file_browser": {
+      "empty_message": "No se encontraron archivos ni carpetas.",
+      "loading_aria": "Cargando archivos"
+    },
+    "activity": {
+      "pagination_summary": "Página {current} de {pages} · {total} entradas",
+      "empty_message": "Aún no se registró actividad."
+    },
+    "team": {
+      "empty_title": "Sin miembros del equipo",
+      "empty_description": "Invita a tu primer miembro del equipo para comenzar.",
+      "action_invite": "Invitar miembro",
+      "action_edit": "Editar",
+      "action_remove": "Quitar",
+      "role_select_aria": "Rol de {name}",
+      "member_joined": "Se unió el {date}",
+      "members_list_aria": "Miembros del equipo"
+    },
+    "auth": {
+      "hero_region_label": "Presentación de marca"
+    },
+    "pricing": {
+      "table_region_label": "Comparación de planes"
     }
   },
   "checkbox": {
@@ -484,7 +844,30 @@
     "select": "Seleccionar",
     "banner": "Estás viendo el entorno {name}",
     "confirmTitle": "Cambiar a {name}",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "group_label": "Entorno"
+  },
+  "commandPalette": {
+    "dialogLabel": "Paleta de comandos",
+    "placeholder": "Escribí un comando...",
+    "empty": "No se encontraron resultados.",
+    "recent": "Recientes"
+  },
+  "locale_switcher": {
+    "trigger_aria": "Idioma: {locale}"
+  },
+  "kanbanBoard": {
+    "add_item": "Agregar item",
+    "empty_board": "No hay columnas"
+  },
+  "map_view": {
+    "placeholder": "Marcador de posición del mapa",
+    "center": "Centro: {lat}, {lng}",
+    "no_center": "Sin centro definido",
+    "zoom": "Zoom: {zoom}",
+    "marker_count_one": "{count} marcador",
+    "marker_count_other": "{count} marcadores",
+    "empty": "No hay marcadores"
   },
   "fileManager": {
     "root": "Raíz",
@@ -528,12 +911,36 @@
     "select_placeholder": "Seleccionar...",
     "value_label": "Valor del filtro",
     "field_label": "Campo del filtro",
-    "operator_label": "Operador del filtro"
+    "operator_label": "Operador del filtro",
+    "empty": "Aún no hay filtros",
+    "range_from_aria": "Valor del filtro desde",
+    "range_to_aria": "Valor del filtro hasta"
   },
   "form_builder": {
     "previous": "Anterior",
     "next": "Siguiente",
-    "step_counter": "Paso {current} de {total}"
+    "step_counter": "Paso {current} de {total}",
+    "empty": "No hay campos para mostrar"
+  },
+  "invoice_template": {
+    "print": "Imprimir",
+    "export": "Exportar",
+    "watermark": "Factura",
+    "number_label": "Factura n.º:",
+    "date_label": "Fecha:",
+    "due_label": "Vencimiento:",
+    "tax_id_label": "ID fiscal:",
+    "bill_to": "Facturar a",
+    "notes_label": "Notas",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "col_description": "Descripción",
+    "col_quantity": "Cant.",
+    "col_unit_price": "Precio unitario",
+    "col_total": "Total",
+    "empty_items": "Sin líneas de items",
+    "tax": "Impuesto",
+    "tax_with_rate": "Impuesto ({rate}%)"
   },
   "layout": {
     "collapse_sidebar": "Contraer barra lateral",
@@ -574,6 +981,7 @@
   "notificationCenter": {
     "title": "Notificaciones",
     "markAllRead": "Marcar todo leído",
+    "markAsRead": "Marcar como leída",
     "clearAll": "Limpiar todo",
     "empty": "Sin notificaciones",
     "dismiss": "Descartar",
@@ -599,7 +1007,8 @@
     "complete": "Completar",
     "skip": "Omitir",
     "progress": "Paso {current} de {total}: {title}",
-    "validation_default": "Completá este paso antes de continuar."
+    "validation_default": "Completá este paso antes de continuar.",
+    "actions": "Acciones del asistente"
   },
   "taginput": {
     "placeholder": "Escribe y presiona Enter"
@@ -636,13 +1045,233 @@
     "tileBadgeShape": "Forma de insignia",
     "tileLabelStyle": "Estilo de etiqueta",
     "tileHoverLift": "Elevación al pasar",
-    "tileEdgeAccent": "Acento de borde"
+    "tileEdgeAccent": "Acento de borde",
+    "sampleRowNameA": "Proyecto Alfa",
+    "sampleRowNameB": "Proyecto Beta",
+    "sampleRowAmountA": "$12,400",
+    "sampleRowAmountB": "$8,200"
   },
   "workspaceSwitcher": {
     "switch": "Cambiar de espacio de trabajo",
     "panel": "Espacios de trabajo",
     "select": "Seleccionar espacio de trabajo",
     "create": "Crear espacio de trabajo",
-    "settings": "Configuración de"
+    "settings": "Configuración de",
+    "search_placeholder": "Buscar espacios de trabajo",
+    "empty": "No hay espacios de trabajo",
+    "empty_results": "No se encontraron espacios de trabajo",
+    "settings_for": "Configuración de {name}"
+  },
+  "shortcutsOverlay": {
+    "title": "Atajos de teclado",
+    "searchPlaceholder": "Buscar atajos...",
+    "empty": "No hay atajos que coincidan.",
+    "close": "Cerrar",
+    "general": "General"
+  },
+  "treeView": {
+    "search_placeholder": "Buscar...",
+    "empty": "No hay items",
+    "empty_results": "No se encontraron resultados"
+  },
+  "loadingOverlay": {
+    "message": "Cargando"
+  },
+  "dataTerminalCard": {
+    "live": "EN VIVO",
+    "statChange": "CAMBIO",
+    "statPeriod": "PERÍODO",
+    "periodDefaultWeek": "Esta semana",
+    "statTarget": "OBJETIVO",
+    "actionView": "VER",
+    "actionAdd": "AGREGAR",
+    "actionStats": "ESTADÍSTICAS",
+    "actionAnalytics": "ANALÍTICA",
+    "statusOptimal": "ÓPTIMO",
+    "statusModerate": "MODERADO",
+    "statusAttention": "ATENCIÓN",
+    "tracking": "SEGUIMIENTO",
+    "periodDefaultPeriod": "este período",
+    "completion": "COMPLETADO",
+    "details": "DETALLES",
+    "viewDetails": "VER DETALLES",
+    "metric": "MÉTRICA",
+    "dataPoint": "DATO"
+  },
+  "record": {
+    "notSet": "Sin definir",
+    "copyField": "Copiar {label}",
+    "copiedField": "{label} copiado",
+    "actionRail": "Barra de acciones"
+  },
+  "editFields": {
+    "requirement": {
+      "required": "Requerido",
+      "recommended": "Recomendado",
+      "optional": "Opcional",
+      "required_title": "Siempre visible. Guardar depende de este valor.",
+      "recommended_title": "Mejora el enrutado, los reportes o la revisión. Se puede completar después.",
+      "optional_title": "Se puede dejar en blanco."
+    },
+    "footer": {
+      "cancel": "Cancelar",
+      "save": "Guardar cambios"
+    },
+    "toggle": {
+      "show_more": "Mostrar más campos",
+      "hide_more": "Ocultar campos"
+    },
+    "section": {
+      "number": "Sección {number}"
+    }
+  },
+  "form_sections": {
+    "required": "Requerido",
+    "optional": "Opcional"
+  },
+  "activeFiltersBar": {
+    "regionLabel": "Filtros activos",
+    "active_count": "{count} activos",
+    "remove_filter_named": "Quitar filtro {field}",
+    "clearAll": "Limpiar todo",
+    "addFilter": "Agregar filtro"
+  },
+  "columnMenu": {
+    "alwaysVisible": "Siempre visible en la tabla",
+    "apply": "Aplicar columnas",
+    "clickToEdit": "clic para editar",
+    "downSuffix": "abajo",
+    "dragToMove": "Arrastrar para mover",
+    "footerHint": "Los anchos de columna también se ajustan desde el encabezado de la tabla.",
+    "fromLeftSuffix": "desde la izquierda",
+    "fromRightSuffix": "desde la derecha",
+    "headerDescription": "Configurá la superficie de la tabla antes de aplicar.",
+    "headerTitle": "Columnas de la tabla",
+    "hiddenFromActions": "Oculta de la columna de acciones",
+    "hiddenFromView": "Oculta de la vista actual",
+    "hiddenSuffix": "ocultas",
+    "moveDown": "Mover",
+    "moveUp": "Mover",
+    "panelLabel": "Columnas de la tabla",
+    "pinnedLeft": "Fijada a la izquierda",
+    "pinnedRight": "Fijada a la derecha",
+    "pinToLeft": "Fijar",
+    "pinToRight": "Fijar",
+    "reset": "Restablecer",
+    "rowActionsDescription": "Elegí qué acciones rápidas quedan visibles en la tabla.",
+    "rowActionsLabel": "Acciones de fila",
+    "toLeftSuffix": "a la izquierda",
+    "toRightSuffix": "a la derecha",
+    "triggerLabel": "Columnas",
+    "unpinFromLeft": "Desfijar",
+    "unpinFromRight": "Desfijar",
+    "upSuffix": "arriba",
+    "visibleInActions": "Visible en la columna de acciones",
+    "visibleInTable": "Visible en la tabla",
+    "visibleSuffix": "visibles",
+    "widthPrefix": "Ancho"
+  },
+  "exportButton": {
+    "triggerLabel": "Exportar datos",
+    "panelLabel": "Formatos de exportación",
+    "formatCsv": "Exportar como CSV",
+    "formatJson": "Exportar como JSON",
+    "formatClipboard": "Copiar al portapapeles",
+    "copied": "¡Copiado!"
+  },
+  "scopeSwitcher": {
+    "groupLabel": "Ámbito"
+  },
+  "connectedCommandPalette": {
+    "commandsCategory": "Comandos",
+    "emptyMessage": "No hay comandos que coincidan",
+    "globalCategory": "Global",
+    "helpCategory": "Ayuda",
+    "keyboardShortcuts": "Atajos de teclado",
+    "keyboardShortcutsDescription": "Ver todos los atajos de teclado",
+    "placeholder": "Escribí un comando o buscá...",
+    "shortcutsOverlayTitle": "Atajos de teclado"
+  },
+  "fieldFiltersPanel": {
+    "activeSuffix": "activos",
+    "allPrefix": "Todos",
+    "anyPrefix": "Cualquiera",
+    "appliesLive": "Se aplica en vivo",
+    "quickSlices": "Cortes rápidos",
+    "refineBy": "Refinar por",
+    "subtitle": "Filtros de precisión para el corte actual.",
+    "title": "Filtros avanzados"
+  },
+  "selectionPreviewRail": {
+    "closePreview": "Cerrar vista previa",
+    "copyKey": "Copiar clave",
+    "focusedPreview": "Vista previa enfocada",
+    "keyPrefix": "Clave",
+    "matchReasonEyebrow": "La búsqueda, el ámbito o los filtros actuales coincidieron con este registro.",
+    "no": "No",
+    "noData": "Sin datos",
+    "openRecord": "Abrir registro",
+    "rowPrefix": "Fila",
+    "selectedRow": "Fila seleccionada",
+    "snapshotEmpty": "No hay campos de vista previa disponibles para este registro.",
+    "snapshotTitle": "Resumen",
+    "whyThisRow": "¿Por qué esta fila?",
+    "yes": "Sí"
+  },
+  "savedViewsMenu": {
+    "columnsSuffix": "columnas",
+    "copied": "Copiado",
+    "copySuffix": "copia",
+    "current": "Actual",
+    "custom": "Personalizada",
+    "customSuffix": "personalizada",
+    "customViewsSection": "Vistas personalizadas",
+    "default": "Predeterminada",
+    "deletePrefix": "Eliminar",
+    "densitySuffix": "densidad",
+    "duplicate": "Duplicar",
+    "emptyDescription": "Aún no hay ámbitos, filtros ni diseños guardados.",
+    "filterPlural": "filtros",
+    "filterSingular": "filtro",
+    "headerDescription": "Cambiá entre estados curados del workspace sin salir de la lista.",
+    "headerTitle": "Vistas guardadas",
+    "noPersonaDescription": "Guardá el corte actual o duplicá una vista del sistema para empezar un workspace personal.",
+    "noPersonaTitle": "Aún no hay vistas personales",
+    "noViewsDescription": "Creá filtros y diseños de columnas curados cuando el guardado esté habilitado para este workspace.",
+    "noViewsTitle": "Aún no hay vistas guardadas",
+    "panelLabel": "Vistas guardadas",
+    "persona": "Personal",
+    "personaSuffix": "personal",
+    "personaViewsSection": "Vistas personales",
+    "queryPrefix": "Consulta",
+    "saveCurrent": "Guardar actual",
+    "scopePrefix": "Ámbito",
+    "share": "Compartir",
+    "shareColumnsPrefix": "Columnas",
+    "shareDensityPrefix": "Densidad",
+    "shareFiltersPrefix": "Filtros",
+    "shareSortPrefix": "Orden",
+    "shareTypePrefix": "Tipo",
+    "shareViewPrefix": "Vista del workspace",
+    "sortedByPrefix": "Ordenado por",
+    "system": "Sistema",
+    "systemSuffix": "sistema",
+    "systemViewsSection": "Vistas del sistema",
+    "views": "Vistas"
+  },
+  "pageShell": {
+    "tabs": {
+      "label": "Pestañas de la página"
+    }
+  },
+  "tabs": {
+    "previous": "Pestañas anteriores",
+    "next": "Pestañas siguientes",
+    "more": "Más pestañas",
+    "loading": "Cargando"
+  },
+  "viewModeSwitcher": {
+    "groupLabel": "Modo de vista",
+    "disabledWithReason": "{label} (no disponible: {reason})"
   }
 }

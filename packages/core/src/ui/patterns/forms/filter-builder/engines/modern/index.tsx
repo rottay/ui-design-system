@@ -4,11 +4,12 @@
  * @fileoverview Modern engine for the FilterBuilder pattern (Lote 2 rebuild).
  * The pattern COMPOSES public primitives -- it never recreates controls:
  * Select (field / operator / select values), Input + InputNumber (text and
- * numeric values), DatePicker (date values), Switch (boolean values), and
- * Button (add / remove / logic-toggle / clear). Each primitive is the single
- * paint owner of its own chrome; this file owns semantics, the recursive
- * filter tree and the layout anatomy (`data-part` wrappers) only. All paint
- * and geometry live in the `filter-builder.css` modern skin.
+ * numeric values), DatePicker (date values), Switch (boolean values), Empty
+ * (initial empty hint) and Button (add / remove / logic-toggle / clear).
+ * Each primitive is the single paint owner of its own chrome; this file owns
+ * semantics, the recursive filter tree and the layout anatomy (`data-part`
+ * wrappers) only. All paint and geometry live in the `filter-builder.css`
+ * modern skin.
  *
  * @example
  * <FilterBuilder
@@ -43,6 +44,7 @@ import {
   toOperatorDefinition,
 } from '../../runtime/operators';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
+import ModernEmpty from '../../../../../primitives/display/Empty/engines/modern';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
 import ModernInput from '../../../../../primitives/inputs/Input/engines/modern';
 import ModernInputNumber from '../../../../../primitives/inputs/InputNumber/engines/modern';
@@ -329,6 +331,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
     if (opDef.requiresRange) {
       const rangeVal = Array.isArray(rule.value) ? rule.value : [undefined, undefined];
       const RangeControl = fieldDef.type === 'number' ? ModernInputNumber : ModernInput;
+      // Each range input carries ONE complete standalone aria-label — never a
+      // concatenation of translated fragments (i18n law).
       return (
         <div data-part="value-range">
           <RangeControl
@@ -338,7 +342,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
             onChange={(v: unknown) =>
               handleValueChange(rule.id, [v ?? undefined, rangeVal[1]])
             }
-            aria-label={`${valueAriaLabel} – ${tOr('filter_builder.range_from', 'From')}`}
+            aria-label={tOr('filter_builder.range_from_aria', 'Filter value from')}
           />
           <span data-part="range-separator">{tOr('filter_builder.range_and', 'and')}</span>
           <RangeControl
@@ -348,7 +352,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
             onChange={(v: unknown) =>
               handleValueChange(rule.id, [rangeVal[0], v ?? undefined])
             }
-            aria-label={`${valueAriaLabel} – ${tOr('filter_builder.range_to', 'To')}`}
+            aria-label={tOr('filter_builder.range_to_aria', 'Filter value to')}
           />
         </div>
       );
@@ -371,6 +375,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
             size={controlSize}
             value={rule.value ?? null}
             onChange={(_date, dateStr) => handleValueChange(rule.id, dateStr || undefined)}
+            aria-label={valueAriaLabel}
             allowClear
           />
         );
@@ -466,7 +471,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
           />
         </div>
 
-        <div data-part="rule-value">
+        <div data-part="rule-value" data-field-type={fieldDef?.type}>
           {fieldDef && renderValueInput(rule, fieldDef)}
         </div>
 
@@ -528,6 +533,14 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
             : renderRule(rule, index === 0, group.logic)
         )}
 
+        {isRoot && group.rules.length === 0 && (
+          // Initial empty state: the composed Empty primitive owns the quiet
+          // hint (i18n floor); the add-row below stays the visible prompt.
+          <div data-part="empty">
+            <ModernEmpty description={tOr('filter_builder.empty', 'No filters yet')} />
+          </div>
+        )}
+
         <div data-part="group-actions">
           <ModernButton
             data-part="add-rule-button"
@@ -555,7 +568,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
             <div data-part="add-filter">
               <ModernButton
                 data-part="add-filter-trigger"
-                data-open={addFilterOpen || undefined}
+                data-open={addFilterOpen ? "true" : "false"}
                 icon={<ActionAddIcon decorative size={14} />}
                 variant="outline"
                 size={buttonSize}
@@ -574,11 +587,16 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
                   aria-label={addFilterLabel}
                 >
                   {fields.map((f) => (
+                    /* role=option keeps the listbox semantics valid (the
+                       composed Button forwards the role to its native
+                       element); single-shot pick closes the dropdown. */
                     <ModernButton
                       key={f.key}
                       data-part="add-filter-option"
                       variant="ghost"
                       size={buttonSize}
+                      role="option"
+                      aria-selected={false}
                       icon={f.icon ? <span data-part="add-filter-option-icon">{f.icon}</span> : undefined}
                       onClick={() => {
                         handleAddRule(group.id, f.key);
@@ -618,12 +636,13 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         data-part="root"
         data-loading="true"
         data-compact={compact || undefined}
-        className={`${ROOT_CLASS_NAME} flex items-center justify-center min-h-[100px] ${className ?? ''}`}
+        className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
         style={style}
       >
         {/* No data-part override: the Spinner primitive keeps its own anatomy
-            so spinner.css stays its single paint owner. */}
-        <ModernSpinner size="md" />
+            so spinner.css stays its single paint owner; the centering frame
+            is skin-owned (the retired Tailwind utilities are drained). */}
+        <ModernSpinner data-part="spinner" size="md" />
       </div>
     );
   }

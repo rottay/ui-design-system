@@ -35,15 +35,64 @@
  * UA-rendered and untouched.
  */
 
+.rottay-colorpicker.rottay-colorpicker--modern[data-part='root'] {
+  position: relative;
+  display: inline-block;
+}
+
+/* ---- trigger + swatch (utilities drained; swatch size by data-size) ---- */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='trigger'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 0.5rem);
+  cursor: pointer;
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='trigger'][data-disabled='true'] {
+  cursor: not-allowed;
+  opacity: var(--ds-colorpicker-disabled-opacity, var(--ds-input-disabled-opacity, 0.5));
+}
+
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'] {
   background-color: var(--ds-colorpicker-swatch-color);
   box-shadow: var(--ds-elevation-1);
+  border-radius: var(--ds-radius-sm, 0.375rem);
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-.rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'][data-part='swatch'] {
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'][data-size='small'] {
+  inline-size: var(--ds-colorpicker-swatch-size-sm, 1.5rem);
+  block-size: var(--ds-colorpicker-swatch-size-sm, 1.5rem);
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'][data-size='middle'] {
+  inline-size: var(--ds-colorpicker-swatch-size-md, 2rem);
+  block-size: var(--ds-colorpicker-swatch-size-md, 2rem);
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'][data-size='large'] {
+  inline-size: var(--ds-colorpicker-swatch-size-lg, 2.5rem);
+  block-size: var(--ds-colorpicker-swatch-size-lg, 2.5rem);
+}
+/* Specificity parity without the doubled data-part (4th wave): the swatch is
+   always a direct child of the trigger. */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='trigger'] > [data-part='swatch'] {
   border: 1px solid var(--ds-color-border);
 }
 
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='display-text'] {
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  color: var(--ds-color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- dropdown shell (utilities drained; placement/edge classes stay inline,
+        test-pinned; data-placement/data-edge own the offsets) ---- */
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'] {
+  position: absolute;
+  z-index: var(--ds-colorpicker-dropdown-z, var(--ds-z-popover, 1600));
+  inset-block-start: calc(100% + var(--ds-spacing-1, 0.25rem));
+  inset-inline-start: 0;
+  padding: var(--ds-spacing-3, 0.75rem);
+  border-radius: var(--ds-radius-lg, 0.5rem);
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-2);
   /* K4-C Pass 2: the dropdown sized to the UA-native color input (~44px),
@@ -52,10 +101,34 @@
      a 3-swatch preset row and the clear button at every density. */
   min-inline-size: var(--ds-colorpicker-dropdown-min-width, 11rem);
 }
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-placement*='top'] {
+  inset-block-start: auto;
+  inset-block-end: calc(100% + var(--ds-spacing-1, 0.25rem));
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-edge='end'] {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='native-color-input'] {
+  inline-size: 100%;
+  cursor: pointer;
+  border: 0;
+}
+
+/* ---- hex field (wrapper margin via the input-number :has() idiom) ---- */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-field'] {
+  margin-block-start: var(--ds-spacing-2, 0.5rem);
+}
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'] {
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: var(--ds-input-sm-height, 32px);
+  padding: 4px var(--ds-input-sm-padding-x, 10px);
+  font-size: var(--ds-input-sm-font-size, 13px);
   border-radius: var(--ds-radius-md);
-  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  background: var(--ds-input-bg, var(--ds-surface-control));
   color: var(--ds-color-text-primary);
   outline: none;
   /* Hex data rides the TENANT mono channel (K4-C Pass-2 live finding): the
@@ -66,30 +139,177 @@
      :where() zero specificity. This unlayered rule wins both and resolves to
      the tenant mono (IBM Plex Mono / Courier New). */
   font-family: var(--ds-font-family-mono, ui-monospace, monospace);
+  font-variant-numeric: tabular-nums;
+  transition: border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-.rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'][data-part='hex-input'] {
+/* Specificity parity without the doubled data-part: type='text' is always
+   stamped on the hex control. */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'][type='text'] {
   border: 1px solid var(--ds-color-border);
 }
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'][type='text']:focus {
+  border-color: var(--ds-input-border-focus, var(--ds-color-primary));
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'][type='text'][data-invalid='true'] {
+  border-color: var(--ds-color-error);
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-error'] {
+  display: block;
+  margin-block-start: var(--ds-spacing-1, 0.25rem);
+  color: var(--ds-color-error);
+  font-size: var(--ds-input-helper-font-size, var(--ds-font-size-xs));
+  line-height: var(--ds-line-height-snug, 1.375);
+}
 
+/* ---- presets ---- */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='presets'] {
+  margin-block-start: var(--ds-spacing-3, 0.75rem);
+  padding-block-start: var(--ds-spacing-3, 0.75rem);
+}
 .rottay-colorpicker.rottay-colorpicker--modern div:has(> [data-part='preset-group']):has(> [data-part='preset-group']),
 .rottay-colorpicker.rottay-colorpicker--modern div:has(> [data-part='clear-button']):has(> [data-part='clear-button']) {
   border-top: 1px solid var(--ds-color-border);
 }
 
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-group'] {
+  margin-block-end: var(--ds-spacing-2, 0.5rem);
+}
+
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-label'] {
+  margin-block-end: var(--ds-spacing-1, 0.25rem);
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-row'] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-1, 0.25rem);
 }
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'] {
+  inline-size: var(--ds-colorpicker-preset-swatch-size, 1.25rem);
+  block-size: var(--ds-colorpicker-preset-swatch-size, 1.25rem);
+  padding: 0;
   background-color: var(--ds-colorpicker-preset-color);
+  border-radius: var(--ds-radius-sm, 0.375rem);
+  cursor: pointer;
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
-.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][data-part='preset-swatch'] {
+/* Specificity parity without the doubled data-part: type='button' is always
+   stamped on the preset controls. */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button'] {
   border: 1px solid var(--ds-color-border);
 }
 
+/* Pointer-fine hover only (hover law); touch feedback is the press below. */
+@media (hover: hover) {
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='trigger']:not([data-disabled='true']):hover [data-part='swatch'] {
+    border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border));
+    box-shadow: var(--ds-elevation-2);
+  }
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button']:not(:disabled):hover {
+    transform: scale(var(--ds-colorpicker-swatch-hover-scale, 1.1));
+    box-shadow: var(--ds-elevation-1);
+  }
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button']:not(:disabled):hover {
+    background: var(--ds-surface-inset);
+  }
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='trigger']:not([data-disabled='true']):active [data-part='swatch'],
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button']:not(:disabled):active,
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button']:not(:disabled):active {
+  transform: scale(var(--ds-state-press-scale, 0.98));
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button']:focus-visible,
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* ---- clear field ---- */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-field'] {
+  margin-block-start: var(--ds-spacing-2, 0.5rem);
+  padding-block-start: var(--ds-spacing-2, 0.5rem);
+}
+
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button'] {
+  block-size: var(--ds-input-sm-height, 32px);
+  padding: 0 var(--ds-input-sm-padding-x, 10px);
+  font-size: var(--ds-input-sm-font-size, 13px);
+  cursor: pointer;
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: var(--ds-radius-md);
   border: none;
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'],
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'],
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button'],
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'] {
+    transition: none;
+  }
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button']:hover,
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='trigger']:not([data-disabled='true']):active [data-part='swatch'],
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button']:active,
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button']:active {
+    transform: none;
+  }
+}
+
+/* forced-colors: chrome re-asserts in system colors. The swatches carry USER
+   DATA (the selected color and the author's palette — the picker's content,
+   not its paint), so they keep their authored fills via
+   forced-color-adjust: none with a system-color frame. EVIDENCE for the
+   opt-out: in forced colors every background would collapse to Canvas and
+   the component could no longer display the value it exists to edit (same
+   category as charts/syntax highlighting, where the platform preserves data
+   color); the native <input type='color'> is UA-rendered and keeps its own
+   colors regardless. The opt-out is deliberately scoped to the two data
+   parts only. */
+@media (forced-colors: active) {
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='trigger'] > [data-part='swatch'],
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button'] {
+    forced-color-adjust: none;
+    border-color: ButtonText;
+    box-shadow: none;
+  }
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'][type='text'] {
+    border-color: ButtonText;
+    background: Field;
+    color: FieldText;
+  }
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'][type='text'][data-invalid='true'] {
+    border-color: MarkText;
+  }
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='display-text'],
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-label'] {
+    color: CanvasText;
+  }
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-error'] {
+    color: MarkText;
+  }
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button'] {
+    border: 1px solid ButtonText;
+    color: ButtonText;
+  }
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button']:focus-visible,
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button']:focus-visible {
+    outline-color: Highlight;
+  }
 }

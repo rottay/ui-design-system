@@ -43,6 +43,7 @@ const FIDELITY_MATRIX = [
   {
     component: 'Avatar',
     file: 'ui/primitives/display/Avatar/engines/modern/index.tsx',
+    skin: 'foundation/tokens/css/runtime/engines/modern/skin/avatar.css',
     prefix: '--ds-avatar-',
     minRefs: 5,
   },
@@ -62,6 +63,7 @@ const FIDELITY_MATRIX = [
   {
     component: 'Spinner',
     file: 'ui/primitives/feedback/Spinner/engines/modern/index.tsx',
+    skin: 'foundation/tokens/css/runtime/engines/modern/skin/spinner.css',
     prefix: '--ds-spinner-',
     minRefs: 3,
   },

@@ -1,14 +1,112 @@
 /**
- * NotificationSurface skin (WO-SKIN-06 CK-I). Engine-agnostic and deliberately
- * unlayered. Text rules clear Typography's (0,4,0) color floor. Unread state is
- * communicated by content and actions rather than a decorative edge rail.
+ * NotificationSurface skin (WO-SKIN-06 CK-I; grown KIMI Modern wave
+ * 2026-07-30, SU22).
+ *
+ * LAYER: registered in `facade/entrypoints/base.css` (~l.616) and
+ * `facade/entrypoints/styles.css` (~l.637) into `layer(rottay-components)`,
+ * alongside the sibling experience surface skins. The old "deliberately
+ * unlayered" note predates the wiring and is retired: the two unlayered
+ * color rules it justified (muted/destructive text, built on the forbidden
+ * `[data-part='root'][data-part='root']` repetition idiom) are REMOVED, not
+ * re-layered — their ink now travels through Typography's own `color`
+ * channel (`color="muted"` / `color="error"` props → `data-color`, resolved
+ * by the modern Typography skin). A layered surface rule could never win
+ * that fight anyway, so the primitive channel is the only durable path.
+ *
+ * SCOPE: the surface composes public primitives and helpers (PageShell,
+ * Card, Tag, Switch, Tabs, Badge, Pagination, Heading, the surface state
+ * kits) — each owns its chrome, interaction states and forced-colors
+ * treatment, so this file paints ONLY what the surface itself owns:
+ *   - the read/unread recession of feed items (opacity on the pinned
+ *     `--read`/`data-read` anatomy, never a decorative accent rail);
+ *   - rhythm offsets the markup cannot express (item action row,
+ *     preference rows);
+ *   - the loading mirror skeleton blocks (`notification-skeleton-*`),
+ *     whose pulse rides the canonical `ds-foundation-pulse` keyframes on
+ *     the `--ds-motion-attention` channel and goes quiet under reduced
+ *     motion.
+ * No forced-colors block on purpose: the only fills set here are neutral
+ * skeleton fills, which the UA re-keys to Canvas under forced colors, and
+ * the read/unread distinction survives forced colors through title weight
+ * and the mark-read affordance (not through opacity alone).
+ *
+ * SPECIFICITY: no class/attribute repetition anywhere. Every selector keys
+ * on an always-stamped hook: the `ds-notification` root class plus a
+ * `data-part` or a `data-*` state attribute. Two engine truths shaped the
+ * selectors: the modern Card re-stamps `data-part='root'` over any caller
+ * passthrough on its root, so the item rules key on the pinned
+ * `ds-notification__item` class plus the surface-owned `data-read`
+ * attribute (which does survive); and the modern Flex already inlines
+ * `minInlineSize: 0` on its root, so no flex-shrink rule is needed for the
+ * item body (long content wraps via Typography's `overflow-wrap:
+ * anywhere`).
  */
 
-.ds-surface.ds-notification .ds-notification__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
+/* ---- read/unread recession ----
+   Read items recede so the unread remainder carries the scan priority.
+   The transition rides the canonical fast cadence so a mark-read flips the
+   card calmly instead of snapping. Reduced-motion contexts get the final
+   state instantly via the authority's zeroing of the motion channels. The
+   selector keys on the pinned `--read` class anatomy plus the surface-owned
+   `data-read` state (the Card root's own `data-part` is engine-stamped). */
+.ds-surface.ds-notification .ds-notification__item {
+  transition: opacity
+    var(--ds-motion-fast, 120ms)
+    var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
-.ds-surface.ds-notification
-  .ds-notification__destructive-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-error-500);
+.ds-surface.ds-notification .ds-notification__item--read[data-read='true'] {
+  opacity: 0.7;
+}
+
+/* ---- item action row offset ----
+   The caller-provided inline action sits under the main row on the
+   surface's own spacing rhythm. */
+.ds-surface.ds-notification .ds-notification__item-action[data-part='item-action'] {
+  margin-block-start: var(--ds-spacing-2, 8px);
+}
+
+/* ---- preference rows ----
+   Quiet vertical breathing room between switch rows; the group card owns
+   the outer frame. */
+.ds-surface.ds-notification .ds-notification__preference-row[data-part='preference-row'] {
+  padding-block: var(--ds-spacing-1, 4px);
+}
+
+/* ---- loading mirror skeleton ----
+   Blocks mirror the loaded anatomy: three feed items at descending heights
+   (item cards settle into a scannable rhythm) and one grouped preferences
+   frame. They sit inside the same section headings and spacing rhythm as
+   the loaded state, so the swap to real content is a pure paint change,
+   never a layout shift. */
+.ds-surface.ds-notification [data-part='notification-skeleton-item'],
+.ds-surface.ds-notification [data-part='notification-skeleton-preferences'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
+  animation: ds-foundation-pulse
+    var(--ds-motion-attention, 1.5s)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-surface.ds-notification [data-part='notification-skeleton-item'][data-size='lg'] {
+  min-block-size: 88px;
+}
+
+.ds-surface.ds-notification [data-part='notification-skeleton-item'][data-size='md'] {
+  min-block-size: 72px;
+}
+
+.ds-surface.ds-notification [data-part='notification-skeleton-item'][data-size='sm'] {
+  min-block-size: 56px;
+}
+
+.ds-surface.ds-notification [data-part='notification-skeleton-preferences'] {
+  min-block-size: 160px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-notification [data-part='notification-skeleton-item'],
+  .ds-surface.ds-notification [data-part='notification-skeleton-preferences'] {
+    animation: none;
+  }
 }

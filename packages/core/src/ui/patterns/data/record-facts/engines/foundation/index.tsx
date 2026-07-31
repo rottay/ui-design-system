@@ -3,6 +3,7 @@
 import { densityScopeAttributes } from "@/infrastructure/runtime/foundation/density";
 import React from "react";
 import type { CSSProperties } from "react";
+import ModernEmpty from "../../../../../primitives/display/Empty/engines/modern";
 import type { RecordFactsProps } from "../../contracts";
 
 export function RecordFactsEngine({
@@ -60,19 +61,27 @@ export function RecordFactsEngine({
       </header>
 
       <dl className="ds-record-facts__grid" data-part="grid">
-        {loading
-          ? Array.from({ length: 3 }, (_, index) => (
-              <div
-                className="ds-record-facts__skeleton"
-                data-part="skeleton"
-                aria-hidden="true"
-                key={`skeleton-${index}`}
-              >
-                <dt className="ds-record-facts__skeleton-line" />
-                <dd className="ds-record-facts__skeleton-line" />
-              </div>
-            ))
-          : facts.map((fact) => (
+        {loading ? (
+          Array.from({ length: 3 }, (_, index) => (
+            <div
+              className="ds-record-facts__skeleton"
+              data-part="skeleton"
+              aria-hidden="true"
+              key={`skeleton-${index}`}
+            >
+              <dt className="ds-record-facts__skeleton-line" />
+              <dd className="ds-record-facts__skeleton-line" />
+            </div>
+          ))
+        ) : facts.length === 0 ? (
+          // Empty collection: the composed Empty primitive (P09) owns the copy
+          // (catalog `empty.description` with its English floor) — never an
+          // accidental blank grid. The div wrapper is spec-legal inside <dl>.
+          <div className="ds-record-facts__empty" data-part="empty">
+            <ModernEmpty image="simple" />
+          </div>
+        ) : (
+          facts.map((fact) => (
               <div
                 className="ds-record-facts__fact"
                 key={fact.key}
@@ -109,7 +118,8 @@ export function RecordFactsEngine({
                   ) : null}
                 </div>
               </div>
-            ))}
+            ))
+          )}
       </dl>
     </section>
   );

@@ -99,22 +99,6 @@ function toNumberInputValue(value: unknown): number | null {
   return Number.isNaN(parsed) ? null : parsed;
 }
 
-function SlidersFallbackIcon({ size = 14, strokeWidth = 2 }: { size?: number; strokeWidth?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 21v-7" />
-      <path d="M4 10V3" />
-      <path d="M12 21v-9" />
-      <path d="M12 8V3" />
-      <path d="M20 21v-5" />
-      <path d="M20 12V3" />
-      <path d="M2 14h4" />
-      <path d="M10 8h4" />
-      <path d="M18 16h4" />
-    </svg>
-  );
-}
-
 function normalizeFilterToken(value: unknown): string {
   return String(value ?? '')
     .replace(/[_-]+/g, ' ')

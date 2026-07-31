@@ -163,8 +163,11 @@ describe('Transfer modern -- geometry lives in the skin, hooks in the DOM', () =
   it('skin pins: item disabled posture + checkbox boxes + move/pagination sizing', () => {
     expect(/\[data-part='panel-item'\]\[data-disabled='true'\]\s*\{[^}]*opacity:\s*0\.5/.test(SKIN)).toBe(true);
     expect(/\[data-part='panel-item'\]\[data-disabled='true'\]\s*\{[^}]*cursor:\s*not-allowed/.test(SKIN)).toBe(true);
-    expect(/\[data-part='panel-item-checkbox'\]\s*\{[^}]*inline-size:\s*16px/.test(SKIN)).toBe(true);
-    expect(/\[data-part='panel-select-all'\]\s*\{[^}]*inline-size:\s*16px/.test(SKIN)).toBe(true);
+    // Checkbox chrome is owned by the composed Checkbox primitive; Transfer
+    // only owns its wrappers' layout.
+    expect(/\[data-part='panel-item-checkbox'\]\s*\{[^}]*display:\s*inline-flex/.test(SKIN)).toBe(true);
+    expect(/\[data-part='panel-select-all'\]\s*\{[^}]*display:\s*inline-flex/.test(SKIN)).toBe(true);
+    expect(/\[data-part='panel-item-checkbox'\]\s*\{[^}]*inline-size:\s*16px/.test(SKIN)).toBe(false);
     expect(/\[data-part='move-button'\]\s*\{[^}]*inline-size:\s*var\(--ds-input-sm-height,\s*32px\)/.test(SKIN)).toBe(true);
     expect(/\[data-part='pagination-button'\]\s*\{[^}]*block-size:\s*24px/.test(SKIN)).toBe(true);
   });
@@ -195,10 +198,7 @@ describe('Transfer modern -- geometry lives in the skin, hooks in the DOM', () =
     // Channel chain: family escape hatch -> certified Button ghost hover
     // (tenant brand tint over its control surface) -> surface-inset floor.
     expect(
-      /\[data-part='move-button'\]:not\(:disabled\):hover\s*\{[^}]*background:\s*var\(--ds-transfer-move-button-bg-hover,\s*var\(--ds-button-ghost-bg-hover,\s*var\(--ds-surface-inset\)\)\)/.test(SKIN_NC)
-    ).toBe(true);
-    expect(
-      /\[data-part='pagination-button'\]:not\(:disabled\):hover\s*\{[^}]*background:\s*var\(--ds-transfer-pagination-button-bg-hover,\s*var\(--ds-button-ghost-bg-hover,\s*var\(--ds-surface-inset\)\)\)/.test(SKIN_NC)
+      /\[data-part='move-button'\]:not\(:disabled\):hover,\s*\.rottay-transfer\.rottay-transfer--modern \[data-part='pagination-button'\]:not\(:disabled\):hover\s*\{[^}]*background:\s*var\(--ds-transfer-button-bg-hover,\s*var\(--ds-button-ghost-bg-hover,\s*var\(--ds-surface-inset\)\)\)/.test(SKIN_NC)
     ).toBe(true);
     // Motion honoured on both buttons with the standard guard.
     const rm = SKIN_NC.match(/@media \(prefers-reduced-motion: reduce\)\s*\{\n([\s\S]*?)\n\}/);
@@ -227,7 +227,7 @@ describe('Transfer modern -- geometry lives in the skin, hooks in the DOM', () =
     expect(/\[data-part='panel'\]\s*\{[^}]*min-inline-size:\s*0/.test(SKIN_NC)).toBe(true);
     // Row hover on the ghost-row grammar, gated off disabled items.
     expect(
-      /\[data-part='panel-item'\]:not\(\[data-disabled='true'\]\):hover\s*\{[^}]*background:\s*var\(--ds-transfer-item-bg-hover,\s*var\(--ds-surface-inset\)\)/.test(SKIN_NC)
+      /\[data-part='panel-item'\]:not\(\[data-disabled='true'\]\):not\(\[data-selected='true'\]\):hover\s*\{[^}]*background:\s*var\(--ds-transfer-item-bg-hover,\s*var\(--ds-surface-inset\)\)/.test(SKIN_NC)
     ).toBe(true);
     expect(/\[data-part='panel-item'\]\s*\{[^}]*border-radius:\s*var\(--ds-transfer-item-radius,\s*var\(--ds-radius-md\)\)/.test(SKIN_NC)).toBe(true);
     // Unbroken words wrap word-first in item text and panel titles, and the

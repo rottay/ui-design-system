@@ -19,10 +19,12 @@
 
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useId, useState } from 'react';
 import type { AlertDialogProps } from '../../contracts';
 import { ALERT_DIALOG_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
+import { ModernButton as Button } from '../../../../facade';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
@@ -73,6 +75,12 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
   } = props;
 
   const cancelLabel = cancelLabelProp ?? tOr('alertDialog.cancel', ALERT_DIALOG_DEFAULTS.cancelLabel);
+
+  // APG alertdialog: the surface's accessible name/description are the visible
+  // title/description, wired by id (the consumer never wires these by hand).
+  const dialogTextId = useId();
+  const titleId = title ? `${dialogTextId}-title` : undefined;
+  const descriptionId = description ? `${dialogTextId}-description` : undefined;
 
   // Inline anchor: the component's DOM position carries the tenant/locale
   // lineage that PortalScope re-stamps onto the portaled dialog.
@@ -186,37 +194,42 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
                 data-open="true"
                 role="alertdialog"
                 aria-modal="true"
+                aria-labelledby={titleId}
+                aria-describedby={descriptionId}
                 style={{ position: 'relative' }}
               >
                 <div className="flex gap-3 items-start">
-                  {/* Error-tinted circle with inline SVG warning triangle;
-                      geometry and tint are skin-owned (alert-dialog.css). */}
+                  {/* Warning-tinted circle with the governed semantic status
+                      icon (the family's shared supplier: Toast/Result); the
+                      tint and geometry are skin-owned. */}
                   <div data-part="icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                      <line x1="12" y1="9" x2="12" y2="13" />
-                      <line x1="12" y1="17" x2="12.01" y2="17" />
-                    </svg>
+                    <StatusWarningIcon decorative size={20} />
                   </div>
                   <div className="flex-1">
                     {title && (
-                      <h3 data-part="title">{title}</h3>
+                      <h3 id={titleId} data-part="title">{title}</h3>
                     )}
                     {description && (
-                      <p data-part="description">{description}</p>
+                      <p id={descriptionId} data-part="description">{description}</p>
                     )}
                   </div>
                 </div>
-                {/* Footer alignment and rhythm are skin-owned (data-part='footer') */}
+                {/* Footer alignment and rhythm are skin-owned (data-part='footer').
+                    The cancel action composes the Button primitive (ghost) — it
+                    owns its chrome, states, coarse floor and forced-colors; the
+                    skin only owns the footer layout. DOM order keeps the least
+                    destructive control first, so the native dialog's initial
+                    focus lands on it. */}
                 <div data-part="footer">
-                  <button
-                    type="button"
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     data-part="action"
                     data-action="cancel"
                     onClick={handleCancel}
                   >
                     {cancelLabel}
-                  </button>
+                  </Button>
                   {action}
                 </div>
               </div>

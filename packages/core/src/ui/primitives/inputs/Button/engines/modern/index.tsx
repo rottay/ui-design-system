@@ -273,7 +273,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       resolve: (v: ButtonSize) => `var(--ds-button-${v}-icon-size)`,
     } as ResponsivePropEntry<any>);
     responsiveEntries.push({
-      cssProperty: '--ds-button-resolved-radius',
+      cssProperty: '--_ds-button-resolved-radius',
       value: resolvedSizeProp,
       resolve: (v: ButtonSize) => `var(--ds-button-${v}-radius)`,
     } as ResponsivePropEntry<any>);
@@ -441,7 +441,11 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
     'data-size': size,
     'data-shape': shape,
     'data-radius': radius,
-    'data-loading': loading ? 'true' : undefined,
+    // The behavioral `loading` prop is authoritative when active. A composing
+    // family may still request an explicit false stamp for a stable state
+    // contract (for example overlay actions); P-79 requires that semantic
+    // caller hook to survive when it does not contradict behavior.
+    'data-loading': loading ? 'true' : nativeButtonProps['data-loading'],
     'data-pending': pending ? 'true' : undefined,
     'data-full-width': isFullWidth ? 'true' : undefined,
     'data-focus-visible': isFocused && !isInert ? 'true' : undefined,

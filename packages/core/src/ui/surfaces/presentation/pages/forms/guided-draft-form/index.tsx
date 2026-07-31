@@ -7,9 +7,22 @@
  * validation summary, submit bar, autosave status, progress indicator.
  *
  * For: job posting, event creation, candidate intake, complex forms.
+ *
+ * Implementation notes (2026-07-30 premium pass):
+ * - Every visible string flows through `tSurfaceOr` under
+ *   `surfaces.guided_draft_form.*` with an English floor.
+ * - Geometry and paint live in `skin/guided-draft-form.css`. Composed
+ *   primitives are retuned through their public channels (`--ds-button-*`,
+ *   `--ds-card-*`) because this surface's skin sorts in `rottay-components`,
+ *   BEFORE the engine skins (`rottay-engines`): declarations painted over a
+ *   composed primitive would lose by layer, while channel overrides resolve
+ *   per-element and hold honestly.
+ * - The only inline styles left are `fontWeight` values resolved at runtime
+ *   from the tenant personality (heading weight bias) — instance values, not
+ *   reusable paint.
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useCallback, useId, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { Box } from '../../../../../primitives/layout/Box';
 import { Stack } from '../../../../../primitives/layout/Stack';
@@ -20,10 +33,17 @@ import { Select } from '../../../../../primitives/inputs/Select';
 import { Card } from '../../../../../primitives/display/Card';
 import type { CardVariant } from '../../../../../primitives/display/Card/contracts';
 import { Progress } from '../../../../../primitives/feedback/Progress';
+import { Skeleton } from '../../../../../primitives/feedback';
 import { PatternStepWizard } from '../../../../../patterns/forms/step-wizard';
 import type { WizardStep } from '../../../../../patterns/forms/step-wizard';
 import { FadeIn } from '@/graphics/motion';
+import { StatusDraftIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-draft';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
+import { WorkflowTemplateIcon } from '@/graphics/icons/presentation/semantic/generated/roles/workflow-template';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 import { useAdaptivePosture } from '../../../../runtime/adaptive-posture';
 import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
 import {
@@ -31,6 +51,11 @@ import {
   resolveHeadingFontWeight,
   SurfaceAccentBarWrapper,
 } from '../../../../runtime/profile-defaults/personality';
+import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
+import {
+  SurfaceEmptyState,
+  SurfaceErrorState,
+} from '../../../../runtime/helpers/states';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -75,6 +100,13 @@ export interface GuidedDraftFormSurfaceProps {
 
   /** Navigation mode: wizard (step by step) or scroll (all visible). */
   mode?: 'wizard' | 'scroll';
+
+  /** Loading state: replaces the form body with a structural skeleton. */
+  loading?: boolean;
+  /** Error state: replaces the form body with the shared error kit. */
+  error?: unknown;
+  /** Retry handler rendered by the error kit. */
+  onRetry?: () => void | Promise<void>;
 
   /** Draft status for autosave indicator. */
   draftStatus?: DraftStatus;
@@ -137,36 +169,46 @@ export interface GuidedDraftFormSurfaceProps {
 // Draft status indicator
 // ---------------------------------------------------------------------------
 
-function DraftStatusBadge({ status, lastSavedAt }: { status: DraftStatus; lastSavedAt?: string }) {
-  // Copy only. The dot and label take their colour from `data-status` in
-  // `foundation/tokens/css/presentation/components/skin/guided-draft-form.css`.
-  const statusLabel: Record<DraftStatus, string> = {
-    unsaved: 'Unsaved changes',
-    saving: 'Saving...',
-    saved: lastSavedAt ? `Saved ${lastSavedAt}` : 'Saved',
-    error: 'Save failed',
+function DraftStatusBadge({
+  status,
+  lastSavedAt,
+}: {
+  status: DraftStatus;
+  lastSavedAt?: string;
+}) {
+  const { tSurfaceOr } = useSurfaceTranslations();
+  // `role="status"` is not severity-inferred: the `DraftStatus` prop contract
+  // declares these four states and this badge is their only rendering — it IS
+  // a status indicator by contract, so autosave transitions are announced.
+  const statusCopy: Record<DraftStatus, string> = {
+    unsaved: tSurfaceOr('guided_draft_form.draft_status_unsaved', 'Unsaved changes'),
+    saving: tSurfaceOr('guided_draft_form.draft_status_saving', 'Saving…'),
+    saved: lastSavedAt
+      ? tSurfaceOr('guided_draft_form.draft_status_saved_at', 'Saved {time}', {
+          time: lastSavedAt,
+        })
+      : tSurfaceOr('guided_draft_form.draft_status_saved', 'Saved'),
+    error: tSurfaceOr('guided_draft_form.draft_status_error', 'Save failed'),
+  };
+  const statusTone: Record<DraftStatus, 'warning' | 'muted' | 'success' | 'error'> = {
+    unsaved: 'warning',
+    saving: 'muted',
+    saved: 'success',
+    error: 'error',
   };
 
   return (
     <Flex
       data-part="draft-status"
       data-status={status}
+      role="status"
       align="center"
       gap={2}
-      style={{
-        padding: '4px 10px',
-      }}
     >
-      <Box
-        data-part="draft-status-dot"
-        data-status={status}
-        style={{
-          width: 6,
-          height: 6,
-          flexShrink: 0,
-        }}
-      />
-      <Text data-part="draft-status-label" size="xs" style={{ whiteSpace: 'nowrap' }}>{statusLabel[status]}</Text>
+      <Box data-part="draft-status-dot" data-status={status} aria-hidden="true" />
+      <Text data-part="draft-status-label" size="xs" color={statusTone[status]}>
+        {statusCopy[status]}
+      </Text>
     </Flex>
   );
 }
@@ -183,44 +225,60 @@ function SectionNav({
   onSectionClick,
   headingWeight,
   layout,
+  mode,
 }: {
   sections: FormSection[];
   activeSection: string;
   onSectionClick: (key: string) => void;
   headingWeight: number;
   layout: SectionNavLayout;
+  mode: 'wizard' | 'scroll';
 }) {
+  const { tSurfaceOr } = useSurfaceTranslations();
+  // aria-current vocabulary follows each mode's navigation semantics: wizard
+  // jumps between steps, scroll repositions the viewport location.
+  const ariaCurrent = mode === 'wizard' ? ('step' as const) : ('location' as const);
+  const navAriaLabel = tSurfaceOr('guided_draft_form.section_nav_aria', 'Form sections');
+
   // -- Mobile: dropdown select --------------------------------------------
   if (layout === 'dropdown') {
     const options = sections.map((s) => ({
       value: s.key,
-      label: `${s.hasErrors ? '! ' : s.isComplete ? '\u2713 ' : ''}${s.title}`,
+      label: s.title,
+      icon: s.hasErrors ? (
+        <StatusErrorIcon decorative size={14} />
+      ) : s.isComplete ? (
+        <StatusSuccessIcon decorative size={14} />
+      ) : undefined,
     }));
 
     return (
-      <Box data-part="section-nav" data-layout="dropdown" style={{ marginBottom: 4 }}>
+      <Box
+        as="nav"
+        data-part="section-nav"
+        data-layout="dropdown"
+        aria-label={navAriaLabel}
+      >
         <Text
           data-part="section-nav-label"
           size="xs"
           weight="semibold"
-          style={{
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
-            marginBottom: 8,
-            fontWeight: headingWeight,
-          }}
+          color="muted"
+          style={{ fontWeight: headingWeight }}
         >
-          Section
+          {tSurfaceOr('guided_draft_form.section_nav_label', 'Section')}
         </Text>
-        <Select
-          options={options}
-          value={activeSection}
-          onChange={(value) => {
-            if (typeof value === 'string') onSectionClick(value);
-          }}
-          size="sm"
-          style={{ width: '100%' }}
-        />
+        <Box data-part="section-nav-select">
+          <Select
+            options={options}
+            value={activeSection}
+            onChange={(value) => {
+              if (typeof value === 'string') onSectionClick(value);
+            }}
+            size="sm"
+            aria-label={navAriaLabel}
+          />
+        </Box>
       </Box>
     );
   }
@@ -228,30 +286,22 @@ function SectionNav({
   // -- Tablet: horizontal scrollable pill bar -----------------------------
   if (layout === 'pills') {
     return (
-      <Box data-part="section-nav" data-layout="pills" style={{ marginBottom: 4 }}>
+      <Box
+        as="nav"
+        data-part="section-nav"
+        data-layout="pills"
+        aria-label={navAriaLabel}
+      >
         <Text
           data-part="section-nav-label"
           size="xs"
           weight="semibold"
-          style={{
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
-            marginBottom: 8,
-            fontWeight: headingWeight,
-          }}
+          color="muted"
+          style={{ fontWeight: headingWeight }}
         >
-          Sections
+          {tSurfaceOr('guided_draft_form.section_nav_label_plural', 'Sections')}
         </Text>
-        <Flex
-          data-part="section-nav-list"
-          gap={2}
-          align="center"
-          style={{
-            overflowX: 'auto',
-            WebkitOverflowScrolling: 'touch',
-            paddingBottom: 4,
-          }}
-        >
+        <Flex data-part="section-nav-list" gap={2} align="center">
           {sections.map((section) => {
             const isActive = activeSection === section.key;
             return (
@@ -261,40 +311,23 @@ function SectionNav({
                 data-active={isActive}
                 data-errors={Boolean(section.hasErrors)}
                 data-complete={Boolean(section.isComplete)}
+                aria-current={isActive ? ariaCurrent : undefined}
                 variant="ghost"
                 size="sm"
                 onClick={() => onSectionClick(section.key)}
-                style={{
-                  fontWeight: isActive ? 600 : 400,
-                  whiteSpace: 'nowrap',
-                  padding: '6px 14px',
-                  flexShrink: 0,
-                  transition: 'all 150ms ease',
-                }}
               >
                 <Flex align="center" gap={1}>
                   {section.icon && (
-                    <Box data-part="section-nav-item-icon" style={{ flexShrink: 0, opacity: isActive ? 1 : 0.7 }}>
+                    <Box data-part="section-nav-item-icon" aria-hidden="true">
                       {section.icon}
                     </Box>
                   )}
-                  <Text data-part="section-nav-item-label" size="sm" style={{ whiteSpace: 'nowrap' }}>
+                  <Text data-part="section-nav-item-label" size="sm" color="inherit">
                     {section.title}
                   </Text>
-                  {section.isComplete && (
-                    <Text data-part="section-nav-item-complete" size="xs" style={{ flexShrink: 0 }}>
-                      ✓
-                    </Text>
-                  )}
+                  {section.isComplete && <StatusSuccessIcon decorative size={14} />}
                   {section.hasErrors && (
-                    <Box
-                      data-part="section-nav-item-error-dot"
-                      style={{
-                        width: 6,
-                        height: 6,
-                        flexShrink: 0,
-                      }}
-                    />
+                    <Box data-part="section-nav-item-error-dot" aria-hidden="true" />
                   )}
                 </Flex>
               </Button>
@@ -308,32 +341,19 @@ function SectionNav({
   // -- Desktop: vertical sticky sidebar -----------------------------------
   return (
     <Box
+      as="nav"
       data-part="section-nav"
       data-layout="sidebar"
-      style={{
-        width: 220,
-        minWidth: 180,
-        maxWidth: 260,
-        flexShrink: 0,
-        flexGrow: 0,
-        position: 'sticky',
-        top: 16,
-        alignSelf: 'flex-start',
-      }}
+      aria-label={navAriaLabel}
     >
       <Text
         data-part="section-nav-label"
         size="xs"
         weight="semibold"
-        style={{
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
-          marginBottom: 12,
-          paddingLeft: 14,
-          fontWeight: headingWeight,
-        }}
+        color="muted"
+        style={{ fontWeight: headingWeight }}
       >
-        Sections
+        {tSurfaceOr('guided_draft_form.section_nav_label_plural', 'Sections')}
       </Text>
       <Stack data-part="section-nav-list" spacing="xs">
         {sections.map((section) => {
@@ -345,50 +365,25 @@ function SectionNav({
               data-active={isActive}
               data-errors={Boolean(section.hasErrors)}
               data-complete={Boolean(section.isComplete)}
+              aria-current={isActive ? ariaCurrent : undefined}
               variant="ghost"
               size="sm"
               onClick={() => onSectionClick(section.key)}
-              style={{
-                fontWeight: isActive ? 600 : 400,
-                justifyContent: 'flex-start',
-                width: '100%',
-                padding: '8px 12px',
-                transition: 'all 150ms ease',
-              }}
             >
-              <Flex align="center" gap={2} style={{ width: '100%' }}>
-                <Flex align="center" gap={2} style={{ flex: 1, minWidth: 0 }}>
+              <Flex data-part="section-nav-item-row" align="center" gap={2}>
+                <Flex data-part="section-nav-item-main" align="center" gap={2}>
                   {section.icon && (
-                    <Box data-part="section-nav-item-icon" style={{ flexShrink: 0, opacity: isActive ? 1 : 0.7 }}>
+                    <Box data-part="section-nav-item-icon" aria-hidden="true">
                       {section.icon}
                     </Box>
                   )}
-                  <Text
-                    data-part="section-nav-item-label"
-                    size="sm"
-                    style={{
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
+                  <Text data-part="section-nav-item-label" size="sm" color="inherit">
                     {section.title}
                   </Text>
                 </Flex>
-                {section.isComplete && (
-                  <Text data-part="section-nav-item-complete" size="xs" style={{ flexShrink: 0 }}>
-                    ✓
-                  </Text>
-                )}
+                {section.isComplete && <StatusSuccessIcon decorative size={14} />}
                 {section.hasErrors && (
-                  <Box
-                    data-part="section-nav-item-error-dot"
-                    style={{
-                      width: 6,
-                      height: 6,
-                      flexShrink: 0,
-                    }}
-                  />
+                  <Box data-part="section-nav-item-error-dot" aria-hidden="true" />
                 )}
               </Flex>
             </Button>
@@ -400,7 +395,8 @@ function SectionNav({
 }
 
 // ---------------------------------------------------------------------------
-// Template picker card
+// Template picker card -- the Card itself is the trigger (real button
+// semantics: role/tabIndex/keydown come from the Card's actionable contract).
 // ---------------------------------------------------------------------------
 
 function TemplateCard({
@@ -416,49 +412,151 @@ function TemplateCard({
     <Card
       className="ds-guided-draft-form__template-card"
       variant={cardVariant}
-      style={{
-        cursor: 'pointer',
-        transition: 'all 150ms ease',
-      }}
+      hoverable
+      clickable
+      onClick={onSelect}
     >
       <Card.Body>
-        <Button
-          className="ds-guided-draft-form__template-card-trigger"
-          variant="ghost"
-          onClick={onSelect}
-          style={{
-            padding: 0,
-            textAlign: 'left',
-            height: 'auto',
-            whiteSpace: 'normal',
-            display: 'block',
-            width: '100%',
-          }}
-        >
-          <Stack spacing="xs">
-            {template.icon && (
-              <Box
-                data-part="template-card-icon"
-                style={{
-                  fontSize: 24,
-                  marginBottom: 4,
-                }}
-              >
-                {template.icon}
-              </Box>
-            )}
-            <Text data-part="template-card-title" size="sm" weight="semibold">
-              {template.name}
+        <Stack spacing="xs">
+          {template.icon && (
+            <Box data-part="template-card-icon" aria-hidden="true">
+              {template.icon}
+            </Box>
+          )}
+          <Text data-part="template-card-title" size="sm" weight="semibold" as="p">
+            {template.name}
+          </Text>
+          {template.description && (
+            <Text data-part="template-card-description" size="xs" color="muted" as="p">
+              {template.description}
             </Text>
-            {template.description && (
-              <Text data-part="template-card-description" size="xs">
-                {template.description}
-              </Text>
-            )}
-          </Stack>
-        </Button>
+          )}
+        </Stack>
       </Card.Body>
     </Card>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Section card (scroll mode) -- single implementation shared by the stacked
+// and side-by-side content layouts.
+// ---------------------------------------------------------------------------
+
+function GuidedDraftFormSectionCard({
+  section,
+  isActive,
+  cardVariant,
+  headingWeight,
+  completeLabel,
+  errorsLabel,
+}: {
+  section: FormSection;
+  isActive: boolean;
+  cardVariant: CardVariant;
+  headingWeight: number;
+  completeLabel: string;
+  errorsLabel: string;
+}) {
+  return (
+    <Card
+      className={[
+        'ds-guided-draft-form__section-card',
+        isActive ? 'ds-guided-draft-form__section-card--active' : '',
+        section.isComplete ? 'ds-guided-draft-form__section-card--complete' : '',
+        section.hasErrors ? 'ds-guided-draft-form__section-card--errors' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      variant={cardVariant}
+      id={`section-${section.key}`}
+    >
+      <Card.Body>
+        <Stack spacing="sm">
+          <Box data-part="section-card-header">
+            <Flex align="center" gap={2}>
+              {section.icon && (
+                <Box data-part="section-card-icon" aria-hidden="true">
+                  {section.icon}
+                </Box>
+              )}
+              <Text
+                data-part="section-card-title"
+                size="md"
+                weight="semibold"
+                style={{ fontWeight: headingWeight }}
+              >
+                {section.title}
+              </Text>
+              {section.isComplete && (
+                <Flex data-part="section-card-complete" align="center" gap={1}>
+                  <StatusSuccessIcon decorative size={14} />
+                  <Text size="xs" color="success">
+                    {completeLabel}
+                  </Text>
+                </Flex>
+              )}
+              {section.hasErrors && (
+                <Flex data-part="section-card-errors" align="center" gap={1}>
+                  <StatusErrorIcon decorative size={14} />
+                  <Text size="xs" color="error">
+                    {errorsLabel}
+                  </Text>
+                </Flex>
+              )}
+            </Flex>
+            {section.description && (
+              <Text data-part="section-card-description" size="sm" color="muted" as="p">
+                {section.description}
+              </Text>
+            )}
+          </Box>
+          {section.render()}
+        </Stack>
+      </Card.Body>
+    </Card>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Loading skeleton -- mirrors the section-card anatomy so the swap to real
+// content does not shift layout.
+// ---------------------------------------------------------------------------
+
+function FormLoadingSkeleton({
+  cardVariant,
+  sectionSpacing,
+}: {
+  cardVariant: CardVariant;
+  sectionSpacing: 'sm' | 'md' | 'lg';
+}) {
+  const tokens = useTokens();
+  const { prefersReducedMotion } = useBreakpoints();
+  // Same animation governance as the shared states kit: reduced motion or a
+  // calm personality falls back to pulse.
+  const skeletonAnimation =
+    prefersReducedMotion || tokens.personality.animation.skeletonStyle === 'pulse'
+      ? 'pulse'
+      : 'wave';
+
+  return (
+    <Stack data-part="loading-skeleton" spacing={sectionSpacing}>
+      {[0, 1].map((index) => (
+        <Card
+          key={index}
+          className="ds-guided-draft-form__section-card"
+          variant={cardVariant}
+        >
+          <Card.Body>
+            <Stack spacing="sm">
+              <Box data-part="loading-skeleton-title">
+                <Skeleton variant="text" rows={1} animation={skeletonAnimation} active />
+              </Box>
+              <Skeleton variant="text" rows={3} animation={skeletonAnimation} active />
+            </Stack>
+          </Card.Body>
+        </Card>
+      ))}
+    </Stack>
   );
 }
 
@@ -472,13 +570,16 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
     subtitle,
     sections,
     mode = 'scroll',
+    loading = false,
+    error,
+    onRetry,
     draftStatus,
     lastSavedAt,
     draftRecovery,
     templates,
     validationIssues,
     onSubmit,
-    submitLabel = 'Submit',
+    submitLabel,
     submitDisabled,
     submitLoading,
     secondaryActions,
@@ -487,8 +588,9 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
     adaptive,
   } = props;
 
+  const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaults();
-  const { isMobile, isTablet } = useBreakpoints();
+  const { isMobile, isTablet, prefersReducedMotion } = useBreakpoints();
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const headingWeight = resolveHeadingFontWeight(profileDefaults.headerWeight);
 
@@ -510,16 +612,22 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
       ? 'pills'
       : 'sidebar';
   const shouldStack = isMobile || isTablet;
+  // Action bar posture: sticky-bottom (default) | inline | floating.
+  const actionBarPosture = posture.actionBar ?? 'sticky-bottom';
+  const compactHeader = Boolean(posture.compactHeader);
 
   const [activeSection, setActiveSection] = useState(sections[0]?.key ?? '');
   const [showTemplates, setShowTemplates] = useState(false);
+  const templatePickerId = useId();
 
-  const errorCount = validationIssues?.filter(v => v.severity === 'error').length ?? 0;
-  const warningCount = validationIssues?.filter(v => v.severity === 'warning').length ?? 0;
+  const errorCount = validationIssues?.filter((v) => v.severity === 'error').length ?? 0;
+  const warningCount =
+    validationIssues?.filter((v) => v.severity === 'warning').length ?? 0;
 
   // Progress indicator: percentage of completed sections
   const completedCount = sections.filter((s) => s.isComplete).length;
-  const progressPercent = sections.length > 0 ? Math.round((completedCount / sections.length) * 100) : 0;
+  const progressPercent =
+    sections.length > 0 ? Math.round((completedCount / sections.length) * 100) : 0;
   const showProgress = sections.some((s) => s.isComplete !== undefined);
 
   // Map FormSection[] to WizardStep[] for PatternStepWizard composition
@@ -541,15 +649,21 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
     [sections, activeSection],
   );
 
-  // Handle sidebar section click -- scrolls in scroll mode
+  // Handle section navigation -- scrolls in scroll mode, jumps in wizard mode.
+  // Smooth scrolling honors reduced motion (instant jump when preferred).
   const handleSectionClick = useCallback(
     (key: string) => {
       setActiveSection(key);
       if (mode === 'scroll') {
-        document.getElementById(`section-${key}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document
+          .getElementById(`section-${key}`)
+          ?.scrollIntoView({
+            behavior: prefersReducedMotion ? 'auto' : 'smooth',
+            block: 'start',
+          });
       }
     },
-    [mode],
+    [mode, prefersReducedMotion],
   );
 
   // Sync activeSection when PatternStepWizard changes step
@@ -563,144 +677,60 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
     [sections],
   );
 
-  const content = (
-    <Stack className="ds-surface ds-guided-draft-form" data-part="root" data-mode={mode} spacing={sectionSpacing}>
-      {headerSlot}
+  const resolvedSubmitLabel =
+    submitLabel ?? tSurfaceOr('guided_draft_form.submit', 'Submit');
+  const submittingLabel = tSurfaceOr('guided_draft_form.submitting', 'Submitting…');
 
-      {/* Draft recovery banner */}
-      {draftRecovery?.hasDraft && (
-        <Card
-          className="ds-guided-draft-form__draft-recovery"
-          variant={profileDefaults.cardVariant}
-        >
-          <Card.Body>
-            <Flex align="center" gap={3}>
-              <Box
-                data-part="draft-recovery-icon"
-                style={{
-                  width: 32,
-                  height: 32,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexShrink: 0,
-                  fontSize: 14,
-                }}
-              >
-                ↻
-              </Box>
-              <Box style={{ flex: 1 }}>
-                <Text data-part="draft-recovery-title" size="sm" weight="medium">
-                  Unsaved draft found
-                </Text>
-                <Text data-part="draft-recovery-description" size="xs">
-                  {draftRecovery.draftDate
-                    ? `Last edited ${draftRecovery.draftDate}`
-                    : 'You have an unsaved draft.'}
-                </Text>
-              </Box>
-              <Flex gap={2}>
-                <Button
-                  size="sm"
-                  variant="primary"
-                  onClick={draftRecovery.onRecover}
-                >
-                  Recover
-                </Button>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={draftRecovery.onDiscard}
-                >
-                  Discard
-                </Button>
-              </Flex>
-            </Flex>
-          </Card.Body>
-        </Card>
-      )}
+  const hasError = error !== undefined && error !== null;
+  const isEmpty = sections.length === 0;
+  // Full chrome (recovery, progress, draft status, templates, validation,
+  // submit bar) only renders once the form itself is present.
+  const showFullChrome = !loading && !hasError && !isEmpty;
 
-      {/* Title bar with progress */}
-      <Flex
-        data-part="title-bar"
-        align={isMobile ? 'stretch' : 'center'}
-        gap={3}
-        style={{
-          flexDirection: isMobile ? 'column' : 'row',
-          flexWrap: isTablet ? 'wrap' : undefined,
-        }}
-      >
-        <Box style={{ flex: 1, minWidth: 0 }}>
-          <Text
-            data-part="title"
-            size="xl"
-            weight="semibold"
-            style={{ fontWeight: headingWeight }}
-          >
-            {title}
-          </Text>
-          {subtitle && (
-            <Text
-              data-part="subtitle"
-              size="sm"
-              style={{ marginTop: 2 }}
-            >
-              {subtitle}
-            </Text>
-          )}
-        </Box>
-        {showProgress && (
-          <Flex data-part="progress" align="center" gap={2} style={{ minWidth: 120 }}>
-            <Progress
-              percent={progressPercent}
-              strokeWidth={4}
-              showInfo={false}
-              style={{ flex: 1 }}
-            />
-            <Text data-part="progress-count" size="xs" style={{ whiteSpace: 'nowrap' }}>
-              {completedCount}/{sections.length}
-            </Text>
-          </Flex>
-        )}
-        {draftStatus && <DraftStatusBadge status={draftStatus} lastSavedAt={lastSavedAt} />}
-        {templates && (
-          <Button
-            size="sm"
-            variant="secondary"
-            onClick={() => setShowTemplates(!showTemplates)}
-            style={isMobile ? { width: '100%' } : undefined}
-          >
-            {showTemplates ? 'Hide templates' : 'Templates'}
-          </Button>
-        )}
-      </Flex>
+  const sectionKeys = useMemo(() => new Set(sections.map((s) => s.key)), [sections]);
 
-      {/* Template picker */}
-      {showTemplates && templates && (
-        <Box
-          data-part="template-picker"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: isMobile
-              ? '1fr'
-              : 'repeat(auto-fill, minmax(200px, 1fr))',
-            gap: 12,
-          }}
-        >
-          {templates.items.map((template) => (
-            <TemplateCard
-              key={template.id}
-              template={template}
-              onSelect={() => {
-                templates.onSelect(template.id);
-                setShowTemplates(false);
-              }}
-              cardVariant={profileDefaults.cardVariant}
-            />
-          ))}
-        </Box>
-      )}
+  const completeLabel = tSurfaceOr(
+    'guided_draft_form.section_state_complete',
+    'Complete',
+  );
+  const sectionErrorsLabel = tSurfaceOr(
+    'guided_draft_form.section_state_errors',
+    'Has errors',
+  );
 
+  const sectionCards = (
+    <Stack spacing={sectionSpacing}>
+      {sections.map((section) => (
+        <GuidedDraftFormSectionCard
+          key={section.key}
+          section={section}
+          isActive={activeSection === section.key}
+          cardVariant={profileDefaults.cardVariant}
+          headingWeight={headingWeight}
+          completeLabel={completeLabel}
+          errorsLabel={sectionErrorsLabel}
+        />
+      ))}
+    </Stack>
+  );
+
+  const wizardContent = (
+    <PatternStepWizard
+      steps={wizardSteps}
+      currentStep={activeStepIndex}
+      onStepChange={handleWizardStepChange}
+      onComplete={onSubmit}
+      completeLabel={resolvedSubmitLabel}
+      completeDisabled={submitDisabled || submitLoading}
+      actionsDisabled={submitLoading}
+      showProgress={false}
+      showCompleteAction={false}
+      orientation="horizontal"
+    />
+  );
+
+  const formBody = (
+    <>
       {/* Content: section nav + form body */}
       {shouldStack ? (
         // Tablet / Mobile: stack vertically -- nav on top, form below
@@ -711,96 +741,10 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
             onSectionClick={handleSectionClick}
             headingWeight={headingWeight}
             layout={sectionNavLayout}
+            mode={mode}
           />
-          <Box data-part="content-body" style={{ minWidth: 0 }}>
-            {mode === 'wizard' ? (
-              <PatternStepWizard
-                steps={wizardSteps}
-                currentStep={activeStepIndex}
-                onStepChange={handleWizardStepChange}
-                onComplete={onSubmit}
-                completeLabel={submitLabel}
-                completeDisabled={submitDisabled || submitLoading}
-                actionsDisabled={submitLoading}
-                showProgress={false}
-                showCompleteAction={false}
-                orientation="horizontal"
-              />
-            ) : (
-              <Stack spacing={sectionSpacing}>
-                {sections.map((section) => (
-                  <Card
-                    key={section.key}
-                    className={[
-                      'ds-guided-draft-form__section-card',
-                      activeSection === section.key ? 'ds-guided-draft-form__section-card--active' : '',
-                      section.isComplete ? 'ds-guided-draft-form__section-card--complete' : '',
-                      section.hasErrors ? 'ds-guided-draft-form__section-card--errors' : '',
-                    ].filter(Boolean).join(' ')}
-                    variant={profileDefaults.cardVariant}
-                    id={`section-${section.key}`}
-                  >
-                    <Card.Body>
-                      <Stack spacing="sm">
-                        <Box data-part="section-card-header">
-                          <Flex align="center" gap={2}>
-                            {section.icon && (
-                              <Box data-part="section-card-icon" style={{ flexShrink: 0 }}>
-                                {section.icon}
-                              </Box>
-                            )}
-                            <Text
-                              data-part="section-card-title"
-                              size="md"
-                              weight="semibold"
-                              style={{
-                                fontWeight: headingWeight,
-                              }}
-                            >
-                              {section.title}
-                            </Text>
-                            {section.isComplete && (
-                              <Text
-                                data-part="section-card-complete"
-                                size="xs"
-                                style={{
-                                  marginLeft: 'auto',
-                                }}
-                              >
-                                ✓ Complete
-                              </Text>
-                            )}
-                            {section.hasErrors && (
-                              <Text
-                                data-part="section-card-errors"
-                                size="xs"
-                                style={{
-                                  marginLeft: section.isComplete ? 0 : 'auto',
-                                }}
-                              >
-                                Has errors
-                              </Text>
-                            )}
-                          </Flex>
-                          {section.description && (
-                            <Text
-                              data-part="section-card-description"
-                              size="sm"
-                              style={{
-                                marginTop: 4,
-                              }}
-                            >
-                              {section.description}
-                            </Text>
-                          )}
-                        </Box>
-                        {section.render()}
-                      </Stack>
-                    </Card.Body>
-                  </Card>
-                ))}
-              </Stack>
-            )}
+          <Box data-part="content-body">
+            {mode === 'wizard' ? wizardContent : sectionCards}
           </Box>
         </Stack>
       ) : (
@@ -812,96 +756,10 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
             onSectionClick={handleSectionClick}
             headingWeight={headingWeight}
             layout="sidebar"
+            mode={mode}
           />
-          <Box data-part="content-body" style={{ flex: 1, minWidth: 0 }}>
-            {mode === 'wizard' ? (
-              <PatternStepWizard
-                steps={wizardSteps}
-                currentStep={activeStepIndex}
-                onStepChange={handleWizardStepChange}
-                onComplete={onSubmit}
-                completeLabel={submitLabel}
-                completeDisabled={submitDisabled || submitLoading}
-                actionsDisabled={submitLoading}
-                showProgress={false}
-                showCompleteAction={false}
-                orientation="horizontal"
-              />
-            ) : (
-              <Stack spacing={sectionSpacing}>
-                {sections.map((section) => (
-                  <Card
-                    key={section.key}
-                    className={[
-                      'ds-guided-draft-form__section-card',
-                      activeSection === section.key ? 'ds-guided-draft-form__section-card--active' : '',
-                      section.isComplete ? 'ds-guided-draft-form__section-card--complete' : '',
-                      section.hasErrors ? 'ds-guided-draft-form__section-card--errors' : '',
-                    ].filter(Boolean).join(' ')}
-                    variant={profileDefaults.cardVariant}
-                    id={`section-${section.key}`}
-                  >
-                    <Card.Body>
-                      <Stack spacing="sm">
-                        <Box data-part="section-card-header">
-                          <Flex align="center" gap={2}>
-                            {section.icon && (
-                              <Box data-part="section-card-icon" style={{ flexShrink: 0 }}>
-                                {section.icon}
-                              </Box>
-                            )}
-                            <Text
-                              data-part="section-card-title"
-                              size="md"
-                              weight="semibold"
-                              style={{
-                                fontWeight: headingWeight,
-                              }}
-                            >
-                              {section.title}
-                            </Text>
-                            {section.isComplete && (
-                              <Text
-                                data-part="section-card-complete"
-                                size="xs"
-                                style={{
-                                  marginLeft: 'auto',
-                                }}
-                              >
-                                ✓ Complete
-                              </Text>
-                            )}
-                            {section.hasErrors && (
-                              <Text
-                                data-part="section-card-errors"
-                                size="xs"
-                                style={{
-                                  marginLeft: section.isComplete ? 0 : 'auto',
-                                }}
-                              >
-                                Has errors
-                              </Text>
-                            )}
-                          </Flex>
-                          {section.description && (
-                            <Text
-                              data-part="section-card-description"
-                              size="sm"
-                              style={{
-                                marginTop: 4,
-                              }}
-                            >
-                              {section.description}
-                            </Text>
-                          )}
-                        </Box>
-                        {section.render()}
-                      </Stack>
-                    </Card.Body>
-                  </Card>
-                ))}
-              </Stack>
-            )}
+          <Box data-part="content-body">
+            {mode === 'wizard' ? wizardContent : sectionCards}
           </Box>
         </Flex>
       )}
@@ -919,131 +777,155 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
         >
           <Card.Body>
             <Stack spacing="sm">
-              <Flex align="center" gap={2}>
-                <Box
-                  data-part="validation-summary-dot"
-                  style={{
-                    width: 8,
-                    height: 8,
-                    flexShrink: 0,
-                  }}
-                />
+              <Flex data-part="validation-summary-header" align="center" gap={2}>
+                {errorCount > 0 ? (
+                  <StatusErrorIcon decorative size={16} />
+                ) : (
+                  <StatusWarningIcon decorative size={16} />
+                )}
                 <Text data-part="validation-summary-title" size="sm" weight="semibold">
-                  {errorCount > 0 ? `${errorCount} error${errorCount > 1 ? 's' : ''}` : ''}
-                  {errorCount > 0 && warningCount > 0 ? ', ' : ''}
-                  {warningCount > 0 ? `${warningCount} warning${warningCount > 1 ? 's' : ''}` : ''}
+                  {[
+                    errorCount > 0
+                      ? tSurfaceOr(
+                          'guided_draft_form.validation_summary_errors',
+                          'Errors: {count}',
+                          { count: errorCount },
+                        )
+                      : '',
+                    warningCount > 0
+                      ? tSurfaceOr(
+                          'guided_draft_form.validation_summary_warnings',
+                          'Warnings: {count}',
+                          { count: warningCount },
+                        )
+                      : '',
+                  ]
+                    .filter(Boolean)
+                    .join(' · ')}
                 </Text>
               </Flex>
-              <Stack spacing="xs">
-                {validationIssues.slice(0, 5).map((issue, i) => (
-                  <Flex key={i} data-part="validation-issue" data-severity={issue.severity} align="baseline" gap={2}>
-                    <Box
-                      data-part="validation-issue-dot"
-                      data-severity={issue.severity}
-                      style={{
-                        width: 4,
-                        height: 4,
-                        flexShrink: 0,
-                        marginTop: 6,
-                      }}
-                    />
-                    <Text data-part="validation-issue-message" size="xs">
-                      <Text
-                        as="span"
-                        data-part="validation-issue-field"
-                        size="xs"
-                        weight="medium"
+              <Box role="list" data-part="validation-issue-list">
+                <Stack spacing="xs">
+                  {validationIssues.slice(0, 5).map((issue, i) => {
+                    const navigable =
+                      issue.sectionKey !== undefined && sectionKeys.has(issue.sectionKey);
+                    return (
+                      <Box
+                        role="listitem"
+                        key={`${issue.field}-${i}`}
+                        data-part="validation-issue"
+                        data-severity={issue.severity}
                       >
-                        {issue.field}
-                      </Text>
-                      {': '}
-                      {issue.message}
-                    </Text>
-                  </Flex>
-                ))}
-                {validationIssues.length > 5 && (
-                  <Text data-part="validation-issue-overflow" size="xs">
-                    +{validationIssues.length - 5} more issue{validationIssues.length - 5 > 1 ? 's' : ''}
-                  </Text>
-                )}
-              </Stack>
+                        <Flex align="start" gap={2}>
+                          <Box
+                            data-part="validation-issue-dot"
+                            data-severity={issue.severity}
+                            aria-hidden="true"
+                          />
+                          <Text data-part="validation-issue-message" size="xs" color="secondary">
+                            {navigable ? (
+                              <Button
+                                variant="link"
+                                size="xs"
+                                className="ds-guided-draft-form__validation-issue-link"
+                                onClick={() => handleSectionClick(issue.sectionKey as string)}
+                              >
+                                {issue.field}
+                              </Button>
+                            ) : (
+                              <Text
+                                as="span"
+                                data-part="validation-issue-field"
+                                size="xs"
+                                weight="medium"
+                                color={issue.severity === 'error' ? 'error' : 'warning'}
+                              >
+                                {issue.field}
+                              </Text>
+                            )}
+                            {': '}
+                            {issue.message}
+                          </Text>
+                        </Flex>
+                      </Box>
+                    );
+                  })}
+                </Stack>
+              </Box>
+              {validationIssues.length > 5 && (
+                <Text data-part="validation-issue-overflow" size="xs" color="muted" as="p">
+                  {tSurfaceOr(
+                    'guided_draft_form.validation_issue_overflow',
+                    'Additional issues: {count}',
+                    { count: validationIssues.length - 5 },
+                  )}
+                </Text>
+              )}
             </Stack>
           </Card.Body>
         </Card>
       )}
 
-      {/* Sticky submit bar */}
-      <Box
-        data-part="submit-bar"
-        style={{
-          position: 'sticky',
-          bottom: 0,
-          zIndex: 10,
-          marginLeft: -1,
-          marginRight: -1,
-          // Safe area inset for iOS notch / home indicator
-          paddingBottom: isMobile
-            ? 'env(safe-area-inset-bottom, 0px)'
-            : undefined,
-        }}
-      >
-        <Card
-          className="ds-guided-draft-form__submit-bar-card"
-          variant={profileDefaults.cardVariant}
-        >
-          <Card.Body>
-            {isMobile ? (
-              // Mobile: stack buttons vertically, full width
-              <Stack spacing="sm">
-                {showProgress && (
-                  <Text
-                    data-part="submit-bar-progress"
-                    size="xs"
-                    style={{
-                      textAlign: 'center',
-                    }}
-                  >
-                    {completedCount} of {sections.length} sections complete
-                  </Text>
-                )}
-                <Button
-                  variant="primary"
-                  onClick={onSubmit}
-                  disabled={submitDisabled || submitLoading}
-                  loading={submitLoading}
-                  style={{ width: '100%' }}
-                >
-                  {submitLoading ? 'Submitting...' : submitLabel}
-                </Button>
-                {secondaryActions && secondaryActions.length > 0 && (
-                  <Flex gap={2} style={{ width: '100%' }}>
-                    {secondaryActions.map((action) => (
-                      <Button
-                        key={action.key}
-                        variant="secondary"
-                        onClick={action.onClick}
-                        disabled={action.disabled}
-                        style={{ flex: 1 }}
-                      >
-                        {action.label}
-                      </Button>
-                    ))}
-                  </Flex>
-                )}
-              </Stack>
-            ) : (
-              // Tablet / Desktop: horizontal row
-              <Flex align="center" gap={3}>
-                {showProgress && (
-                  <Text data-part="submit-bar-progress" size="xs">
-                    {completedCount} of {sections.length} sections complete
-                  </Text>
-                )}
-                <Box style={{ flex: 1 }} />
+      {/* Submit bar (sticky by default; posture-driven) */}
+      <Box data-part="submit-bar" data-action-bar={actionBarPosture}>
+        <Box data-part="submit-bar-panel">
+          {isMobile ? (
+            // Mobile: stacked, full-width actions
+            <Stack spacing="sm">
+              {showProgress && (
+                <Text data-part="submit-bar-progress" size="xs" color="muted" as="p">
+                  {tSurfaceOr(
+                    'guided_draft_form.submit_bar_progress',
+                    'Sections complete: {completed} of {total}',
+                    { completed: completedCount, total: sections.length },
+                  )}
+                </Text>
+              )}
+              <Button
+                variant="primary"
+                className="ds-guided-draft-form__submit-primary"
+                onClick={onSubmit}
+                disabled={submitDisabled || submitLoading}
+                loading={submitLoading}
+              >
+                {submitLoading ? submittingLabel : resolvedSubmitLabel}
+              </Button>
+              {secondaryActions && secondaryActions.length > 0 && (
+                <Flex data-part="submit-bar-secondary" gap={2}>
+                  {secondaryActions.map((action) => (
+                    <Button
+                      key={action.key}
+                      variant="secondary"
+                      className="ds-guided-draft-form__submit-secondary"
+                      onClick={action.onClick}
+                      disabled={action.disabled}
+                    >
+                      {action.label}
+                    </Button>
+                  ))}
+                </Flex>
+              )}
+            </Stack>
+          ) : (
+            // Tablet / Desktop: progress left, actions right
+            <Flex align="center" justify="between" gap={3}>
+              {showProgress ? (
+                <Text data-part="submit-bar-progress" size="xs" color="muted">
+                  {tSurfaceOr(
+                    'guided_draft_form.submit_bar_progress',
+                    'Sections complete: {completed} of {total}',
+                    { completed: completedCount, total: sections.length },
+                  )}
+                </Text>
+              ) : (
+                <Box data-part="submit-bar-progress-placeholder" aria-hidden="true" />
+              )}
+              <Flex data-part="submit-bar-actions" align="center" gap={2}>
                 {secondaryActions?.map((action) => (
                   <Button
                     key={action.key}
                     variant="secondary"
+                    className="ds-guided-draft-form__submit-secondary"
                     onClick={action.onClick}
                     disabled={action.disabled}
                   >
@@ -1052,17 +934,181 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                 ))}
                 <Button
                   variant="primary"
+                  className="ds-guided-draft-form__submit-primary"
                   onClick={onSubmit}
                   disabled={submitDisabled || submitLoading}
                   loading={submitLoading}
                 >
-                  {submitLoading ? 'Submitting...' : submitLabel}
+                  {submitLoading ? submittingLabel : resolvedSubmitLabel}
                 </Button>
               </Flex>
-            )}
+            </Flex>
+          )}
+        </Box>
+      </Box>
+    </>
+  );
+
+  const content = (
+    <Stack
+      className="ds-surface ds-guided-draft-form"
+      data-part="root"
+      data-mode={mode}
+      data-mobile={isMobile ? 'true' : 'false'}
+      data-loading={loading ? 'true' : 'false'}
+      aria-busy={loading || undefined}
+      spacing={sectionSpacing}
+    >
+      {headerSlot}
+
+      {/* Draft recovery banner */}
+      {showFullChrome && draftRecovery?.hasDraft && (
+        <Card
+          className="ds-guided-draft-form__draft-recovery"
+          variant={profileDefaults.cardVariant}
+        >
+          <Card.Body>
+            <Flex align="center" gap={3} wrap="wrap">
+              <Box data-part="draft-recovery-icon" aria-hidden="true">
+                <StatusDraftIcon decorative size={16} />
+              </Box>
+              <Box data-part="draft-recovery-copy">
+                <Text data-part="draft-recovery-title" size="sm" weight="medium" as="p">
+                  {tSurfaceOr(
+                    'guided_draft_form.draft_recovery_title',
+                    'Unsaved draft found',
+                  )}
+                </Text>
+                <Text data-part="draft-recovery-description" size="xs" color="muted" as="p">
+                  {draftRecovery.draftDate
+                    ? tSurfaceOr(
+                        'guided_draft_form.draft_recovery_description_date',
+                        'Last edited {date}',
+                        { date: draftRecovery.draftDate },
+                      )
+                    : tSurfaceOr(
+                        'guided_draft_form.draft_recovery_description',
+                        'Your work from a previous session is waiting.',
+                      )}
+                </Text>
+              </Box>
+              <Flex data-part="draft-recovery-actions" gap={2}>
+                <Button size="sm" variant="primary" onClick={draftRecovery.onRecover}>
+                  {tSurfaceOr('guided_draft_form.draft_recovery_recover', 'Recover')}
+                </Button>
+                <Button size="sm" variant="ghost" onClick={draftRecovery.onDiscard}>
+                  {tSurfaceOr('guided_draft_form.draft_recovery_discard', 'Discard')}
+                </Button>
+              </Flex>
+            </Flex>
           </Card.Body>
         </Card>
-      </Box>
+      )}
+
+      {/* Title bar with progress */}
+      <Flex
+        data-part="title-bar"
+        align={isMobile ? 'stretch' : 'center'}
+        gap={3}
+        direction={isMobile ? 'column' : 'row'}
+        wrap={isTablet ? 'wrap' : undefined}
+      >
+        <Box data-part="title-copy">
+          <Text
+            data-part="title"
+            size="xl"
+            weight="semibold"
+            as="p"
+            style={{ fontWeight: headingWeight }}
+          >
+            {title}
+          </Text>
+          {subtitle && !compactHeader && (
+            <Text data-part="subtitle" size="sm" color="muted" as="p">
+              {subtitle}
+            </Text>
+          )}
+        </Box>
+        {showFullChrome && showProgress && (
+          <Flex data-part="progress" align="center" gap={2}>
+            <Box data-part="progress-bar">
+              <Progress percent={progressPercent} strokeWidth={4} showInfo={false} />
+            </Box>
+            <Text data-part="progress-count" size="xs" color="muted">
+              {tSurfaceOr('guided_draft_form.progress_count', '{completed}/{total}', {
+                completed: completedCount,
+                total: sections.length,
+              })}
+            </Text>
+          </Flex>
+        )}
+        {showFullChrome && draftStatus && (
+          <DraftStatusBadge status={draftStatus} lastSavedAt={lastSavedAt} />
+        )}
+        {showFullChrome && templates && (
+          <Button
+            size="sm"
+            variant="secondary"
+            className="ds-guided-draft-form__templates-toggle"
+            icon={<WorkflowTemplateIcon decorative size={16} />}
+            aria-expanded={showTemplates}
+            aria-controls={templatePickerId}
+            onClick={() => setShowTemplates(!showTemplates)}
+          >
+            {showTemplates
+              ? tSurfaceOr('guided_draft_form.templates_toggle_hide', 'Hide templates')
+              : tSurfaceOr('guided_draft_form.templates_toggle_show', 'Templates')}
+          </Button>
+        )}
+      </Flex>
+
+      {/* Template picker */}
+      {showFullChrome && showTemplates && templates && (
+        <Box
+          data-part="template-picker"
+          id={templatePickerId}
+          role="region"
+          aria-label={tSurfaceOr(
+            'guided_draft_form.template_picker_aria',
+            'Form templates',
+          )}
+        >
+          {templates.items.map((template) => (
+            <TemplateCard
+              key={template.id}
+              template={template}
+              onSelect={() => {
+                templates.onSelect(template.id);
+                setShowTemplates(false);
+              }}
+              cardVariant={profileDefaults.cardVariant}
+            />
+          ))}
+        </Box>
+      )}
+
+      {/* Body: error kit | structural skeleton | empty kit | form */}
+      {hasError ? (
+        <SurfaceErrorState error={error} onRetry={onRetry} />
+      ) : loading ? (
+        <FormLoadingSkeleton
+          cardVariant={profileDefaults.cardVariant}
+          sectionSpacing={sectionSpacing}
+        />
+      ) : isEmpty ? (
+        <SurfaceEmptyState
+          title={tSurfaceOr(
+            'guided_draft_form.empty_sections_title',
+            'No form sections',
+          )}
+          description={tSurfaceOr(
+            'guided_draft_form.empty_sections_description',
+            'This form does not have any sections configured yet.',
+          )}
+        />
+      ) : (
+        formBody
+      )}
 
       {footerSlot}
     </Stack>
@@ -1071,9 +1117,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
   return (
     <SurfaceAccentBarWrapper defaults={profileDefaults}>
       {profileDefaults.animateEntrance ? (
-        <FadeIn durationMs={profileDefaults.entranceDuration}>
-          {content}
-        </FadeIn>
+        <FadeIn durationMs={profileDefaults.entranceDuration}>{content}</FadeIn>
       ) : (
         content
       )}

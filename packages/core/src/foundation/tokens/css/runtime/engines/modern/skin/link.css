@@ -46,9 +46,22 @@
 }
 
 /* Standalone links (underline=false) reveal the underline on hover: the
-   affordance is always one pointer-move away, never hidden for good. */
-.rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-underline='false']:hover {
-  text-decoration-line: underline;
+   affordance is always one pointer-move away, never hidden for good.
+   Pointer-fine only (hover law): the keyboard equivalent is the focus ring
+   below, and the touch equivalent is the :active ink dip. */
+@media (hover: hover) {
+  .rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-underline='false']:hover {
+    text-decoration-line: underline;
+  }
+
+  .rottay-link-shell.rottay-link-shell--modern[data-part='root']:hover {
+    color: var(
+      --ds-link-hover-color,
+      color-mix(in srgb, var(--ds-link-tone) 70%, var(--ds-color-neutral-900, #171717) 30%)
+    );
+    text-underline-offset: var(--ds-link-underline-offset-hover, 3px);
+    text-decoration-thickness: var(--ds-link-underline-thickness-hover, 1.5px);
+  }
 }
 
 /* ---- variant tones: one channel per variant, states derive from it -------- */
@@ -79,7 +92,7 @@
      clears AA: secondary/TMM 5.83:1, secondary/bithire 7.78:1,
      primary/bithire 6.15:1 (was 4.72:1 -- no regression).
      `--ds-link-color` remains the tenant escape hatch. */
-  color: var(--ds-link-color, color-mix(in srgb, var(--ds-link-tone) 84%, var(--ds-color-black, #000) 16%));
+  color: var(--ds-link-color, color-mix(in srgb, var(--ds-link-tone) 84%, var(--ds-color-neutral-900, #171717) 16%));
 }
 
 /* ---- states. Visited precedes hover so pointer feedback always wins; the
@@ -91,19 +104,10 @@
   );
 }
 
-.rottay-link-shell.rottay-link-shell--modern[data-part='root']:hover {
-  color: var(
-    --ds-link-hover-color,
-    color-mix(in srgb, var(--ds-link-tone) 70%, var(--ds-color-black, #000) 30%)
-  );
-  text-underline-offset: var(--ds-link-underline-offset-hover, 3px);
-  text-decoration-thickness: var(--ds-link-underline-thickness-hover, 1.5px);
-}
-
 .rottay-link-shell.rottay-link-shell--modern[data-part='root']:active {
   color: var(
     --ds-link-active-color,
-    color-mix(in srgb, var(--ds-link-tone) 58%, var(--ds-color-black, #000) 42%)
+    color-mix(in srgb, var(--ds-link-tone) 58%, var(--ds-color-neutral-900, #171717) 42%)
   );
 }
 

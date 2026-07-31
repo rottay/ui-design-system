@@ -12,8 +12,9 @@
  * primitive feeding the primitive's `filterTreeNode`/`searchValue`
  * contract), the selection/check wrappers that preserve the pattern's
  * public callback shapes (`onSelect(keys)`, additive `multiple` sets,
- * `onCheck(keys)`, `onDrop({dragKey, dropKey, position})`), and the loading
- * skeleton.
+ * `onCheck(keys)`, `onDrop({dragKey, dropKey, position})`), the empty state
+ * (the public Empty primitive for no-data and no-filter-results) and the
+ * loading skeleton.
  *
  * Notable upgrades the composition brings (documented, same public API):
  * - `draggable` now actually reorders: the previous hand-rolled tree stamped
@@ -40,7 +41,9 @@ import type {
   TreeDropInfo,
 } from '../../../../../primitives/display/Tree/contracts';
 import { filterTree } from '../../../../../primitives/display/Tree/runtime/tree-behavior';
-import { Input } from '../../../../../primitives/inputs/Input';
+import Input from '../../../../../primitives/inputs/Input/engines/modern';
+import ModernEmpty from '../../../../../primitives/display/Empty/engines/modern';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 const ROOT_CLASS_NAME = 'ds-pattern-tree-view ds-engine-modern';
 
@@ -72,9 +75,17 @@ export default function ModernTreeView(props: TreeViewProps) {
   const {
     data, renderNode, onSelect, onExpand, expandedKeys: controlledExpanded,
     selectedKeys: controlledSelected, defaultExpandedKeys, checkable, checkedKeys: controlledChecked,
-    onCheck, draggable, onDrop, searchable, searchPlaceholder = 'Search...', multiple,
+    onCheck, draggable, onDrop, searchable, searchPlaceholder: searchPlaceholderProp, multiple,
     loading, className, style,
   } = props;
+
+  // Optional channel with an English floor: the view renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, floor: string): string => i18n?.tOr(key, floor) ?? floor;
+  const searchPlaceholder = searchPlaceholderProp ?? tOr('treeView.search_placeholder', 'Search...');
+  const emptyDataLabel = tOr('treeView.empty', 'No items');
+  const emptyResultsLabel = tOr('treeView.empty_results', 'No results found');
 
   const [searchQuery, setSearchQuery] = useState('');
   const [internalSelected, setInternalSelected] = useState<string[]>([]);
@@ -184,7 +195,6 @@ export default function ModernTreeView(props: TreeViewProps) {
         {searchable && (
           <div data-part="search-row" className="ds-tree-view-modern__search-row">
             <Input
-              engine="modern"
               size="sm"
               value={searchQuery}
               onChange={(value) => setSearchQuery(value)}
@@ -195,6 +205,17 @@ export default function ModernTreeView(props: TreeViewProps) {
             />
           </div>
         )}
+        {isEmpty ? (
+          /* Empty (no data at all, or a search that matched nothing): the
+             composed Empty primitive owns the quiet hint -- never a mute
+             blank panel. The search row stays mounted above so the filter
+             can be cleared. */
+          <div data-part="empty">
+            <ModernEmpty
+              description={searchQuery ? emptyResultsLabel : emptyDataLabel}
+            />
+          </div>
+        ) : (
         <ModernTree
           treeData={treeData}
           checkable={checkable}
@@ -213,6 +234,7 @@ export default function ModernTreeView(props: TreeViewProps) {
           onCheck={handleCheck}
           onDrop={handleDrop}
         />
+        )}
       </div>
     </div>
   );

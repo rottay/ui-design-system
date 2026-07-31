@@ -7,12 +7,15 @@
  * rendered in a scrollable list with per-type semantic iconography.
  *
  * The pattern COMPOSES public DS primitives — Button (header actions, row
- * action, dismiss), Badge (unread count), Empty (empty state) and Spinner
- * (loading) — and never recreates a control with its own HTML/CSS. Geometry
+ * action, per-item mark-read, dismiss), Badge (unread count, native 99+
+ * cap), Empty (empty state), Spinner (loading) and ScrollArea (list
+ * viewport) — and never recreates a control with its own HTML/CSS. Geometry
  * and the pattern's own paint live in the unlayered modern
  * notification-center skin, keyed on the `data-part`/`data-*` contract this
  * file stamps. Own copy resolves through the optional `components` i18n
- * channel with an English floor.
+ * channel with an English floor. The popover keyboard contract is owned
+ * here: trigger carries aria-expanded, Escape closes and returns focus to
+ * the trigger.
  *
  * @example
  * <ModernNotificationCenter
@@ -27,6 +30,7 @@ import Button from '../../../../../primitives/inputs/Button/engines/modern';
 import ModernBadge from '../../../../../primitives/display/Badge/engines/modern';
 import ModernEmpty from '../../../../../primitives/display/Empty/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
+import ModernScrollArea from '../../../../../primitives/layout/ScrollArea/engines/modern';
 import type { NotificationCenterProps, Notification } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { CommunicationNotificationIcon } from '@/graphics/icons/presentation/semantic/generated/roles/communication-notification';
@@ -47,6 +51,7 @@ const TYPE_ICON: Record<Notification['type'], React.ReactNode> = {
 type Copy = {
   title: string;
   markAllRead: string;
+  markAsRead: string;
   clearAll: string;
   empty: string;
   dismiss: string;
@@ -110,6 +115,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
   const copy: Copy = {
     title: tOr('notificationCenter.title', 'Notifications'),
     markAllRead: tOr('notificationCenter.markAllRead', 'Mark all read'),
+    markAsRead: tOr('notificationCenter.markAsRead', 'Mark as read'),
     clearAll: tOr('notificationCenter.clearAll', 'Clear all'),
     empty: tOr('notificationCenter.empty', 'No notifications'),
     dismiss: tOr('notificationCenter.dismiss', 'Dismiss'),
@@ -121,6 +127,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
   const [internalOpen, setInternalOpen] = useState(false);
   const isOpen = controlledOpen ?? internalOpen;
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null);
 
   const handleOpenChange = useCallback((newOpen: boolean) => {
     if (controlledOpen === undefined) setInternalOpen(newOpen);
@@ -129,15 +136,27 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
 
   // Manual click-outside detection because the dropdown toggle does not
   // support controlled open state. Only attached while open to avoid
-  // unnecessary document-level listeners.
+  // unnecessary document-level listeners. Escape closes the panel and
+  // returns focus to the trigger (popover keyboard contract).
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         handleOpenChange(false);
       }
     };
-    if (isOpen) document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      handleOpenChange(false);
+      triggerRef.current?.focus();
+    };
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEscape);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
   }, [isOpen, handleOpenChange]);
 
   // Prefer server-authoritative count; fall back to client-side filter.
@@ -166,12 +185,13 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
       data-part="root"
       data-loading="false"
       className={`ds-pattern-notification-center ds-engine-modern ${className ?? ''}`}
-      style={{ ...style, position: 'relative', display: 'inline-block' }}
+      style={style}
     >
       {/* Trigger: semantic bell icon with a composed unread-count Badge.
           A custom trigger replaces the entire button contents when provided.
           The inline 40x40 icon geometry is pinned by the public test contract. */}
       <Button
+        ref={triggerRef}
         variant="ghost"
         htmlType="button"
         data-part="trigger"
@@ -179,9 +199,11 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
         onClick={() => handleOpenChange(!isOpen)}
         data-testid="notification-trigger"
         aria-label={copy.title}
+        aria-haspopup="true"
+        aria-expanded={isOpen}
       >
         {trigger || (
-          <div style={{ position: 'relative', display: 'inline-flex' }}>
+          <div data-part="trigger-icon">
             <CommunicationNotificationIcon decorative size={20} />
             {displayCount > 0 && (
               <ModernBadge
@@ -225,10 +247,15 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
             </div>
           </div>
 
-          {/* Scrollable notification list. Unread rows get a subtle primary
-              tint (skin-owned). A custom icon takes priority over the
-              semantic per-type icon. */}
-          <div data-part="list">
+          {/* Scrollable notification list: the composed ScrollArea primitive
+              owns the scroll viewport + scrollbar chrome (the channeled
+              max-height reaches it as its own runtime-measured channel).
+              Unread rows get a subtle primary tint (skin-owned). A custom
+              icon takes priority over the semantic per-type icon. */}
+          <ModernScrollArea
+            data-part="list"
+            maxHeight="var(--ds-notification-center-list-max-height, 22.5rem)"
+          >
             {visibleNotifications.length === 0 ? (
               <div data-part="empty">
                 <ModernEmpty description={emptyMessage} />
@@ -267,6 +294,22 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                           )}
                         </div>
                       </div>
+                      {/* Mark-read: the keyboard path to the row's own click
+                          contract (rows are pointer action surfaces; this
+                          composed Button makes the same callback reachable
+                          for keyboard users, with a governed icon + i18n
+                          label). stopPropagation keeps it from double-firing
+                          the row handler. */}
+                      {onRead && !item.read && (
+                        <Button
+                          variant="ghost"
+                          size="xs"
+                          data-part="mark-read"
+                          icon={<StatusSuccessIcon decorative size={12} />}
+                          aria-label={copy.markAsRead}
+                          onClick={(e: React.MouseEvent) => { e.stopPropagation(); onRead(item.id); }}
+                        />
+                      )}
                       {/* Dismiss button: quiet until hover/focus (skin-owned) */}
                       {onClear && (
                         <Button
@@ -283,7 +326,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                 ))}
               </ul>
             )}
-          </div>
+          </ModernScrollArea>
         </div>
       )}
     </div>

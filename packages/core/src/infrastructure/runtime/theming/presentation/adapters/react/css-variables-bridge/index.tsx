@@ -2,9 +2,9 @@
 
 /**
  * @fileoverview SystemCssVariablesBridge - Rottay Design System
- * @description Synchronizes JS-resolved design tokens (personality, surface, motion)
- * into CSS custom properties scoped to `:root`, keeping React-driven
- * token resolution and CSS-driven styling in lockstep.
+ * @description Synchronizes JS-resolved personality data into namespaced CSS
+ * custom properties scoped to `:root`. A static CSS projection—not this
+ * bridge—owns the canonical component aliases.
  *
  * @remarks
  * Injected CSS variables include personality-derived values such as:
@@ -35,16 +35,17 @@
  *   was written rather than on the declared order -- the same variable resolved
  *   to personality for one vertical and to the artifact for another.
  *
- * Writing into the named layer restores the declared precedence for every
- * vertical at once: personality outranks the tenant artifacts, while unlayered
- * runtime chrome (`ThemeProvider`'s `ds-chrome-<slug>` element) still wins,
- * because unlayered beats layered.
+ * Writing only namespaced inputs into the named layer removes the precedence
+ * ambiguity entirely. Static and DB tenant artifacts remain the sole
+ * productive tenant painters; the personality CSS projection consumes these
+ * values as a subordinate product/vertical data axis.
  *
  * Variables are cleaned up on unmount so tenant switching and test isolation
  * do not leak values across render trees.
  *
  * @see {@link useTokens} - Hook that resolves the merged token graph
- * @see {@link resolvePersonalityCssVariables} - Maps tokens to CSS variable names
+ * @see {@link resolvePersonalityBridgeCssVariables} - Maps tokens to
+ * namespaced bridge inputs
  * @module System/Providers/CssVariablesBridge
  * @category System
  * @package @rottay/design-system
@@ -52,7 +53,7 @@
 
 import { useEffect, useRef } from 'react';
 
-import { resolvePersonalityCssVariables } from '@/foundation/tokens/ts/runtime/personality';
+import { resolvePersonalityBridgeCssVariables } from '@/foundation/tokens/ts/runtime/personality';
 
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 import {
@@ -112,7 +113,7 @@ function insertPersonalityRootRule(sheet: CSSStyleSheet): CSSStyleRule | null {
 export function SystemCssVariablesBridge(): null {
   const tokens = useTokens();
   // Shallow fingerprint instead of JSON.stringify(tokens) for performance.
-  // The bridge only feeds tokens into resolvePersonalityCssVariables which reads
+  // The bridge only feeds tokens into resolvePersonalityBridgeCssVariables which reads
   // tokens.personality and tokens.colors, so we fingerprint just those fields.
   const tokensKey = `${tokens.colors.primary}|${tokens.personality.animation.entrance}|${tokens.personality.card.defaultElevation}|${tokens.personality.typography.headingWeightBias}|${tokens.personality.accent.barPosition}`;
   const lastKeyRef = useRef<string>('');
@@ -145,7 +146,9 @@ export function SystemCssVariablesBridge(): null {
         sheet.cssRules.length > 1 ? 'layered' : 'unlayered',
       );
       if (rule) {
-        for (const [name, value] of Object.entries(resolvePersonalityCssVariables(tokens))) {
+        for (const [name, value] of Object.entries(
+          resolvePersonalityBridgeCssVariables(tokens),
+        )) {
           rule.style.setProperty(name, String(value));
         }
       }

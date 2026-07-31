@@ -1,5 +1,5 @@
 /**
- * Modern ActivityLog skin (WO-SKIN-06 CK-F).
+ * Modern ActivityLog skin (WO-SKIN-06 CK-F; PT12 composition uplift).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
  * `base` layer, so a layered rule loses to preflight regardless of specificity.
@@ -7,163 +7,205 @@
  * `style` (the root forwards the caller's `style`/`className`).
  *
  * SCOPE ROOT: the outer `<div>` carries `ds-pattern-activity-log ds-engine-modern`
- * + `data-part='root'`, identical in both the loading and loaded branches; every
- * painted element is a descendant with its own `data-part`.
+ * + `data-part='root'` in both the loading and loaded branches; every painted
+ * element is a descendant with its own `data-part`.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
- * `border-color` on every element. A rule that paints a border COLOR must reach
- * (0,4,0). The timeline dot's border is the only border-color site here, and it
- * already carries a second contract attribute -- `data-action-category` -- so the
- * floor is bought from the two root classes (0,2,0) + `data-part` (0,1,0) +
- * `data-action-category` (0,1,0), no repeat needed. Non-border paint wins
- * unlayered at (0,3,0).
+ * COMPOSITION LAW (PT12): the temporal axis (ordered list, dot slot and
+ * CONNECTORS) belongs to the composed Timeline primitive -- its skin paints
+ * the connectors as neutral 1px hairlines, never a state hue, never a colored
+ * vertical rail; this file therefore has NO connector rule at all. Avatar,
+ * Tag (badge chrome), Skeleton, Empty and Select likewise own their paint.
+ * What this skin owns: the root surface, the drained geometry (filter bar,
+ * item body/header, diff, timestamp), the pattern's own activity-dot ring
+ * tint per category (the icon inside is the governed type channel; the tint
+ * is redundant decoration), the interactive item-body state triad, and the
+ * forced-colors contract.
  *
  * CLASSIFIER (§3 trap 2): `data-action-category` holds modern's OWN 5-way
- * `classifyAction` result (create/update/delete/view/system). Rustic's classifier
- * is a different if-chain with different buckets and no `system` catch-all -- the
- * two engines' skins are independent recipes, not a shared vocabulary; see
- * `engines/rustic/skin/activity-log.css` for rustic's (differently-keyed) values.
- *
- * AVATAR: the `<img>` and fallback `<span>` both carry `data-part='avatar'`, but
- * only the span paints a background/color (the img shows the photo). Selectors
- * are split by tag, not by a new data-part, to keep the img free of a background
- * that never painted before.
- *
- * SKELETON: the dot skeleton and the two text-line skeletons share
- * `data-part='skeleton'` but the dot overrides its border-radius to a circle; that
- * one divergent channel stays inline (an inline style always outranks this
- * external rule) while the shared background/background-size/radius move here.
- *
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * `classifyAction` result (create/update/delete/view/system). Rustic's
+ * classifier is a different if-chain with different buckets -- the two
+ * engines' skins are independent recipes, not a shared vocabulary.
  */
 
-@keyframes ds-activity-shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-/* root: identical background/shadow/radius in the loading and loaded branches */
+/* ---- root: surface + drained padding (was inline; the loading and loaded
+        branches now share one quiet frame) ---- */
 .ds-pattern-activity-log.ds-engine-modern[data-part='root'] {
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-1);
   border-radius: var(--ds-radius-lg);
+  padding: var(--ds-activity-log-padding, 20px 24px);
 }
 
-/* diff container */
-.ds-pattern-activity-log.ds-engine-modern [data-part='diff'] {
-  background: var(--ds-surface-inset);
+/* ---- filter bar: geometry drained from the engine's inline styles ---- */
+.ds-pattern-activity-log.ds-engine-modern [data-part='filters'] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2);
+  margin-block-end: var(--ds-spacing-5, 1.25rem);
+}
+
+/* ---- item body: the interactive contract's state triad lives here ---- */
+.ds-pattern-activity-log.ds-engine-modern [data-part='item-body'] {
+  min-inline-size: 0;
   border-radius: var(--ds-radius-md);
+  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-.ds-pattern-activity-log.ds-engine-modern [data-part='diff-row'] {
-  color: var(--ds-color-text-secondary);
+.ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true'] {
+  cursor: pointer;
 }
-.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='label'],
-.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='to'] {
-  color: var(--ds-color-text-primary);
+@media (hover: hover) {
+  .ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:hover {
+    background: var(--ds-surface-highlight);
+  }
 }
-.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='from'],
-.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='arrow'] {
-  color: var(--ds-color-text-muted);
+.ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:active {
+  background: var(--ds-surface-inset);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:focus-visible {
+  outline: 2px solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: 2px;
 }
 
-/* avatar: split by tag -- the img never painted a background/color, only radius */
-.ds-pattern-activity-log.ds-engine-modern img[data-part='avatar'] {
+/* ---- item header: geometry drained (flex row, wrapping) ---- */
+.ds-pattern-activity-log.ds-engine-modern [data-part='item-header'] {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2);
+}
+
+/* ---- activity dot: the pattern-owned ring around the governed category
+        icon (the icon shape carries the type; the tint is redundant).
+        Color-mix percentages preserved verbatim from the retired dot (15%). ---- */
+.ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'] {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
   border-radius: 50%;
 }
-.ds-pattern-activity-log.ds-engine-modern span[data-part='avatar'] {
-  border-radius: 50%;
-  background: var(--ds-surface-panel);
-  color: var(--ds-color-text-secondary);
-}
-
-/* skeleton: shared shimmer + default (line) radius; the dot's 50% override stays
-   inline on the element (inline wins over this rule, no selector needed here) */
-.ds-pattern-activity-log.ds-engine-modern [data-part='skeleton'] {
-  background: linear-gradient(90deg, var(--ds-surface-panel) 25%, var(--ds-surface-inset) 50%, var(--ds-surface-panel) 75%);
-  background-size: 200% 100%;
-  border-radius: var(--ds-radius-sm);
-}
-
-/* empty state */
-.ds-pattern-activity-log.ds-engine-modern [data-part='empty'] {
-  color: var(--ds-color-text-muted);
-}
-
-/* timeline dot: base radius for all categories, then the border-color-bearing
-   background/border/color per classifyAction category (color-mix percentages
-   preserved verbatim -- 15% for the dot ring, distinct from the badge's 12%) */
-.ds-pattern-activity-log.ds-engine-modern [data-part='dot'] {
-  border-radius: 50%;
-}
-.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='create'] {
+.ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='create'] {
   background: color-mix(in srgb, var(--ds-color-success) 15%, transparent);
   border: 2px solid var(--ds-color-success);
   color: var(--ds-color-success);
 }
-.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='update'] {
+.ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='update'] {
   background: color-mix(in srgb, var(--ds-color-info) 15%, transparent);
   border: 2px solid var(--ds-color-info);
   color: var(--ds-color-info);
 }
-.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='delete'] {
+.ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='delete'] {
   background: color-mix(in srgb, var(--ds-color-error) 15%, transparent);
   border: 2px solid var(--ds-color-error);
   color: var(--ds-color-error);
 }
-.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='view'] {
+.ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='view'] {
   background: color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent);
   border: 2px solid var(--ds-color-text-muted);
   color: var(--ds-color-text-muted);
 }
-.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='system'] {
+.ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='system'] {
   background: color-mix(in srgb, var(--ds-color-warning) 15%, transparent);
   border: 2px solid var(--ds-color-warning);
   color: var(--ds-color-warning);
 }
 
-/* connecting line */
-.ds-pattern-activity-log.ds-engine-modern [data-part='line'] {
-  background: var(--ds-color-border);
-}
-
-/* actor name */
+/* ---- actor name / badge slot / entity / timestamp ---- */
 .ds-pattern-activity-log.ds-engine-modern [data-part='user'] {
   color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
 }
-
-/* action badge: base radius for all categories (12% color-mix, distinct from the
-   dot's 15%), then per-category background + text color */
-.ds-pattern-activity-log.ds-engine-modern [data-part='badge'] {
-  border-radius: var(--ds-radius-sm);
-}
-.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='create'] {
-  background: color-mix(in srgb, var(--ds-color-success) 12%, transparent);
-  color: var(--ds-color-success);
-}
-.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='update'] {
-  background: color-mix(in srgb, var(--ds-color-info) 12%, transparent);
-  color: var(--ds-color-info);
-}
-.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='delete'] {
-  background: color-mix(in srgb, var(--ds-color-error) 12%, transparent);
-  color: var(--ds-color-error);
-}
-.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='view'] {
-  background: color-mix(in srgb, var(--ds-color-text-muted) 12%, transparent);
-  color: var(--ds-color-text-muted);
-}
-.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='system'] {
-  background: color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
-  color: var(--ds-color-warning);
-}
-
-/* entity label */
 .ds-pattern-activity-log.ds-engine-modern [data-part='entity'] {
   color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='timestamp'] {
+  margin-block-start: var(--ds-spacing-1, 0.25rem);
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs, 0.75rem);
 }
 
-/* timestamp */
-.ds-pattern-activity-log.ds-engine-modern [data-part='timestamp'] {
+/* ---- diff: geometry drained + paint preserved ---- */
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff'] {
+  margin-block-start: var(--ds-spacing-2);
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  background: var(--ds-surface-inset);
+  border-radius: var(--ds-radius-md);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  line-height: 1.6;
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-row'] {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ds-spacing-1, 0.375rem);
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='label'] {
+  min-inline-size: 60px;
+  color: var(--ds-color-text-primary);
+  font-weight: var(--ds-font-weight-semibold, 600);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='from'] {
   color: var(--ds-color-text-muted);
+  text-decoration: line-through;
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='arrow'] {
+  display: inline-flex;
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='to'] {
+  color: var(--ds-color-text-primary);
+  font-weight: var(--ds-font-weight-medium, 500);
+}
+
+/* ---- skeleton list frame (the composed Skeleton primitives own the bars) ---- */
+.ds-pattern-activity-log.ds-engine-modern [data-part='skeleton-list'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-5, 1.25rem);
+  padding-block: var(--ds-spacing-4);
+}
+
+/* ---- empty frame (the composed Empty primitive owns visual + copy paint) ---- */
+.ds-pattern-activity-log.ds-engine-modern [data-part='empty'] {
+  display: flex;
+  justify-content: center;
+  padding-block: var(--ds-spacing-12, 3rem);
+  color: var(--ds-color-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-activity-log.ds-engine-modern [data-part='item-body'] {
+    transition: none;
+  }
+}
+
+/* forced-colors: surfaces, tints and shadows are forced away. The root
+   re-frames in system colors; the activity-dot ring re-asserts as a neutral
+   system boundary while the GOVERNED ICON SHAPE keeps carrying the activity
+   type (never colour alone); the diff keeps its strikethrough channel
+   (text-decoration survives forced colours); the interactive item body keeps
+   a real focus outline. Composed primitives (Timeline, Avatar, Tag, Select,
+   Skeleton, Empty) own their own forced-colors contracts. */
+@media (forced-colors: active) {
+  .ds-pattern-activity-log.ds-engine-modern[data-part='root'] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'] {
+    border-color: ButtonText;
+    background: Canvas;
+    color: ButtonText;
+  }
+  .ds-pattern-activity-log.ds-engine-modern [data-part='diff'] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+  }
+  .ds-pattern-activity-log.ds-engine-modern [data-part='item-body'][data-interactive='true']:focus-visible {
+    outline-color: Highlight;
+  }
 }

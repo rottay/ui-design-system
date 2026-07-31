@@ -25,10 +25,11 @@
  * </Popconfirm>
  * ```
  */
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useId } from 'react';
 import type { PopconfirmProps } from '../../contracts';
 import { POPCONFIRM_DEFAULTS, POPCONFIRM_TO_OVERLAY_PLACEMENT } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ModernButton as Button } from '../../../../facade';
 import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
 
 /**
@@ -126,6 +127,35 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       };
     }, [isOpen, anchorEl, handleOpenChange]);
 
+    // Escape closes while open (same contract as the click-outside dismissal).
+    useEffect(() => {
+      if (!isOpen) return;
+      const onKey = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') handleOpenChange(false);
+      };
+      document.addEventListener('keydown', onKey);
+      return () => document.removeEventListener('keydown', onKey);
+    }, [isOpen, handleOpenChange]);
+
+    // Focus contract: on open, the dialog's initial focus goes to the confirm
+    // action -- or to CANCEL when the confirm is destructive (okType danger),
+    // so the safer choice is the default focus target. On close, focus
+    // returns to the element that was focused before the panel opened (the
+    // trigger), unless the consumer moved it elsewhere first.
+    useEffect(() => {
+      if (!isOpen || !surfaceEl) return;
+      const previousFocus = document.activeElement as HTMLElement | null;
+      const initialTarget = okType === 'danger'
+        ? surfaceEl.querySelector<HTMLElement>('[data-action="cancel"]')
+        : surfaceEl.querySelector<HTMLElement>('[data-action="confirm"]');
+      initialTarget?.focus();
+      return () => {
+        if (previousFocus && document.contains(previousFocus)) {
+          previousFocus.focus();
+        }
+      };
+    }, [isOpen, okType, surfaceEl]);
+
     const handleTriggerClick = () => {
       if (disabled) return;
       handleOpenChange(true);
@@ -171,6 +201,13 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       ...positionStyle,
     };
 
+    // APG dialog wiring: the panel's accessible name/description are the
+    // visible title/description, wired by id (popconfirm pattern, same as the
+    // AlertDialog law).
+    const dialogTextId = useId();
+    const titleId = `${dialogTextId}-title`;
+    const descriptionId = description ? `${dialogTextId}-description` : undefined;
+
     return (
       <div
         ref={(node) => {
@@ -191,43 +228,51 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
             data-part="surface"
             data-open="true"
             data-ds-position-strategy={strategy}
+            role="dialog"
+            aria-labelledby={titleId}
+            aria-describedby={descriptionId}
             className={overlayClassName || undefined}
             style={surfaceStyle}
           >
             <div className="flex items-start gap-2">
               {icon && <span data-part="icon">{icon}</span>}
               <div className="flex-1">
-                <div data-part="title">{title}</div>
+                <div id={titleId} data-part="title">{title}</div>
                 {description && (
-                  <div data-part="description">
+                  <div id={descriptionId} data-part="description">
                     {description}
                   </div>
                 )}
               </div>
             </div>
-            {/* Action row: alignment, rhythm and all button paint are
-                skin-owned (popconfirm.css). */}
+            {/* Action row: alignment and rhythm are skin-owned; the actions
+                compose the Button primitive (ghost cancel; variant by okType),
+                which owns chrome, states, the width-stable busy frame and
+                forced-colors (the AlertDialog P85 composition precedent). */}
             <div data-part="footer">
-              <button
-                type="button"
+              <Button
+                variant="ghost"
+                size="sm"
                 data-part="action"
                 data-action="cancel"
+                disabled={disabled}
                 onClick={handleCancel}
               >
                 {cancelText}
-              </button>
-              <button
-                type="button"
+              </Button>
+              <Button
+                variant={okType === 'danger' ? 'danger' : okType === 'primary' ? 'primary' : 'ghost'}
+                size="sm"
                 data-part="action"
                 data-action="confirm"
                 data-ok-type={okType}
-                data-loading={(loading || okButtonLoading) ? 'true' : 'false'}
+                data-loading={loading || okButtonLoading ? 'true' : 'false'}
+                loading={loading || okButtonLoading}
+                disabled={disabled}
                 onClick={handleConfirm}
-                disabled={loading || okButtonLoading}
               >
-                {(loading || okButtonLoading) && <span data-part="spinner" />}
                 {okText}
-              </button>
+              </Button>
             </div>
           </div>
         )}

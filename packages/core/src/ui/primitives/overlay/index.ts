@@ -2,18 +2,12 @@
  * @fileoverview Overlay primitives barrel export.
  * Re-exports all overlay-category primitive components.
  *
- * Note: Modal compound components (Header, Body, Footer) are exported from
- * './feedback/Modal'. Use OverlayModal for advanced features like Portal.
+ * Note: `feedback/Modal` is the sole Modal owner. `OverlayModal` remains only
+ * as a deprecated compatibility alias; shared portal/focus utilities continue
+ * to be exported from the runtime-owned compatibility module.
  */
 
-// ARCHITECTURE: Two Modal implementations coexist intentionally.
-// - feedback/Modal (canonical public API): Full-featured modal with header/body/footer
-//   compound components, confirmLoading, onOk/onCancel callbacks. Used by consumers.
-// - overlay/Modal (internal/advanced): Lower-level overlay primitive focused on
-//   positioning, animation, and backdrop. Used internally by other overlay components
-//   (Sheet, Drawer, etc.) and available as OverlayModal for advanced use cases.
-// Consolidation is a future consideration but not blocking -- both share the same
-// visual language (backdrop, surface, elevation tokens) as of Wave 2B.
+/** @deprecated Use the canonical `Modal` export from feedback/Modal. */
 export { Modal as OverlayModal } from './Modal';
 
 

@@ -5,6 +5,28 @@
  * feature pages previously reimplemented with one-off width calculations while
  * leaving all product-specific paint to the composed surfaces. Every scalar is
  * overridable by vertical/tenant token artifacts.
+ *
+ * LAYERING: imported by `facade/entrypoints/base.css` into
+ * `layer(rottay-components)` — this file does not control its own layering.
+ *
+ * SCROLL OWNERSHIP: the PAGE owns vertical scroll — the frame never scrolls
+ * vertically, so there is never a nested double scrollbar. The single
+ * internal scroll is the horizontal navigation viewport (tab lanes), with
+ * `overscroll-behavior-inline: contain` so it cannot chain into the page.
+ *
+ * STICKY CHROME LAW (never double fixed chrome): the optional sticky
+ * navigation lane offsets through `--ds-feature-workspace-sticky-offset` so a
+ * host application's top chrome (AppShell S01) reserves its own band first —
+ * the frame composes INSIDE shell structures, it never duplicates them.
+ *
+ * NO GLASS: there is no backdrop blur anywhere in this frame; if a lane ever
+ * needs one it must arrive behind a channel defaulting to none.
+ *
+ * MOTION: the skeleton shimmer is ambient, so its duration derives from the
+ * slowest real rung (`calc(var(--ds-motion-glacial) * 2.4)` = 1200ms) behind
+ * a family channel — the old `--ds-motion-duration-slow` name was a ghost
+ * (no definition anywhere in the token pipeline). Reduced motion stills the
+ * shimmer below; forced colors re-express the skeleton in system ink.
  */
 
 .ds-pattern-feature-workspace-frame {
@@ -125,7 +147,8 @@
   );
   background-size: 240% 100%;
   animation: ds-feature-workspace-skeleton-shimmer
-    var(--ds-motion-duration-slow, 1200ms) linear infinite;
+    var(--ds-feature-workspace-skeleton-duration, calc(var(--ds-motion-glacial, 500ms) * 2.4))
+    linear infinite;
 }
 
 @keyframes ds-feature-workspace-skeleton-shimmer {
@@ -168,5 +191,16 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-feature-workspace-frame__skeleton > span {
     animation: none;
+  }
+}
+
+/* Forced colors: system colors only — the loading skeleton keeps its frame
+   and reads as quiet system ink instead of the primary-tinted shimmer. The
+   frame itself owns no interactive paint, so there is nothing else to
+   re-express and no opt-out anywhere. */
+@media (forced-colors: active) {
+  .ds-feature-workspace-frame__skeleton > span {
+    border-color: ButtonText;
+    background: Canvas;
   }
 }

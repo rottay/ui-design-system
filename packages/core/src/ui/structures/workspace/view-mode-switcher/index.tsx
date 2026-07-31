@@ -5,41 +5,49 @@
  * toggling between collection render modes.
  *
  * @description
- * Renders a horizontal icon-button group where each button maps to one
- * enabled CollectionViewMode. The active mode gets a highlighted background.
- * Uses DS CSS variables for all colors, radii, and spacing.
+ * COMPOSITION LAW (S25): the switcher IS the certified Segmented primitive
+ * (the same lossless composition scope-switcher S22 landed — there is no
+ * per-option paint channel to preserve here). The retired hand-rolled
+ * icon-buttons took with them a real APG gap: their arrow handler activated
+ * without moving focus and never mirrored under RTL; the primitive owns
+ * role=radiogroup/radio, aria-checked, the roving tab stop WITH focus
+ * movement and the RTL-aware arrow contract. Every mode carries a governed
+ * semantic icon role (never a raw barrel icon) plus an accessible name —
+ * disabled modes keep the reason discoverable through a parametric
+ * accessible name (a tooltip cannot wrap a radio inside the radiogroup
+ * anatomy; the retired `title` attribute never fired reliably on disabled
+ * elements anyway).
  *
- * The component itself does NOT hardcode icons -- the consuming surface or
- * app provides them via the `modes` array. A static `defaultIcons` mapping
- * is exported as a convenience for surfaces that want sensible defaults.
+ * The default icon/label maps are exported as a convenience for surfaces;
+ * the defaults ARE the English floor — localization flows through the
+ * `modes` prop (consumer-supplied labels), never through hardcoded chrome.
  */
 
-import {
-  CalendarIcon as Calendar,
-  Columns3Icon as Columns3,
-  Grid3x3Icon as Grid3x3,
-  ImageIcon as GalleryIcon,
-  LayoutGridIcon as LayoutGrid,
-  ListIcon as List,
-} from '../../../../graphics/icons';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { Box } from '../../../primitives';
+import ModernSegmented from '../../../primitives/navigation/Segmented/engines/modern';
+import { DataTableIcon } from '@/graphics/icons/presentation/semantic/generated/roles/data-table';
+import { LayoutCardsIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-cards';
+import { LayoutGridIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-grid';
+import { LayoutColumnsIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-columns';
+import { ContentImageIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-image';
+import { TimeDateIcon } from '@/graphics/icons/presentation/semantic/generated/roles/time-date';
 import type { ReactNode } from 'react';
 
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import { Box, Flex } from '../../../primitives';
 import type { CollectionViewMode } from '@/foundation/contracts/runtime/components/patterns/data';
 
 // ---------------------------------------------------------------------------
-// Default icon mapping (convenience export)
+// Default icon mapping (convenience export — governed semantic roles)
 // ---------------------------------------------------------------------------
 
 /** Default icon mapping for standard collection view modes. */
 export const defaultViewModeIcons: Record<CollectionViewMode, ReactNode> = {
-  table: <List size={16} />,
-  cards: <LayoutGrid size={16} />,
-  grid: <Grid3x3 size={16} />,
-  kanban: <Columns3 size={16} />,
-  gallery: <GalleryIcon size={16} />,
-  calendar: <Calendar size={16} />,
+  table: <DataTableIcon decorative size={16} />,
+  cards: <LayoutCardsIcon decorative size={16} />,
+  grid: <LayoutGridIcon decorative size={16} />,
+  kanban: <LayoutColumnsIcon decorative size={16} />,
+  gallery: <ContentImageIcon decorative size={16} />,
+  calendar: <TimeDateIcon decorative size={16} />,
 };
 
 /** Default accessible labels for standard collection view modes. */
@@ -65,7 +73,7 @@ export interface ViewModeSwitcherMode {
   label: string;
   /** Disable this mode (e.g. no calendar field configured). */
   disabled?: boolean;
-  /** Tooltip text when disabled. */
+  /** Reason shown to assistive technology when the mode is disabled. */
   disabledReason?: string;
 }
 
@@ -95,99 +103,45 @@ export function ViewModeSwitcher({
 }: ViewModeSwitcherProps) {
   const i18n = useOptionalTranslation('components');
   /**
-   * Catalog lookup with an honest English floor: when the provider is absent
-   * or echoes the raw key (missing entry), the historical default wins.
+   * Catalog lookup with an honest English floor (parametric): a missing
+   * entry never echoes a raw key and fragments are never concatenated.
    */
-  const tOr = (key: string, fallback: string): string => {
-    const resolved = i18n?.t(key);
-    if (resolved === undefined || resolved === key || resolved === `components.${key}`) {
-      return fallback;
-    }
-    return resolved;
-  };
+  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
+    i18n?.tOr(key, floor, params) ?? floor;
 
   if (!modes.length) return null;
 
-  const isSm = size === 'sm';
-  const btnSize = isSm ? 28 : 32;
-  const iconPad = isSm ? 6 : 8;
-
   return (
     <Box
-      role="radiogroup"
-      aria-label={tOr('viewModeSwitcher.groupLabel', 'View mode')}
       data-part="root"
+      data-structure="view-mode-switcher"
       className={`ds-structure ds-view-mode-switcher ${className ?? ''}`}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        padding: 2,
-        gap: 2,
-      }}
     >
-      {modes.map((mode) => {
-        const isActive = mode.key === value;
-        const isDisabled = !!mode.disabled;
-
-        return (
-          <Box
-            key={mode.key}
-            as="button"
-            role="radio"
-            aria-checked={isActive}
-            data-part="button"
-            className="ds-view-mode-switcher__button"
-            data-selected={isActive}
-            data-disabled={isDisabled}
-            aria-label={mode.label}
-            title={isDisabled ? mode.disabledReason : mode.label}
-            aria-disabled={isDisabled || undefined}
-            onClick={() => {
-              if (!isDisabled && mode.key !== value) {
-                onChange(mode.key);
-              }
-            }}
-            onKeyDown={(e: React.KeyboardEvent) => {
-              if (isDisabled) return;
-
-              const enabledModes = modes.filter((m) => !m.disabled);
-              const currentIdx = enabledModes.findIndex((m) => m.key === value);
-              if (currentIdx === -1) return;
-
-              let nextIdx = -1;
-              if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                e.preventDefault();
-                nextIdx = (currentIdx + 1) % enabledModes.length;
-              } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                e.preventDefault();
-                nextIdx = (currentIdx - 1 + enabledModes.length) % enabledModes.length;
-              }
-
-              if (nextIdx >= 0) {
-                onChange(enabledModes[nextIdx].key);
-              }
-            }}
-            tabIndex={isActive ? 0 : -1}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: btnSize,
-              height: btnSize,
-              padding: iconPad,
-              cursor: isDisabled ? 'not-allowed' : 'pointer',
-            }}
-          >
-            <Flex
-              align="center"
-              justify="center"
-              style={{ width: 16, height: 16, flexShrink: 0 }}
-            >
-              {mode.icon}
-            </Flex>
-          </Box>
-        );
-      })}
+      {/* Composed Segmented (P81): radiogroup semantics, roving keyboard
+          with focus movement, RTL-aware arrows and option chrome all belong
+          to the primitive. Each option shows the governed mode icon plus
+          the mode label; a disabled option's accessible name carries its
+          reason as ONE parametric message. */}
+      <ModernSegmented
+        data-part="switcher"
+        options={modes.map((mode) => ({
+          value: mode.key,
+          label: mode.label,
+          icon: mode.icon,
+          disabled: mode.disabled,
+          ariaLabel:
+            mode.disabled && mode.disabledReason
+              ? tOr('viewModeSwitcher.disabledWithReason', '{label} (unavailable: {reason})', {
+                  label: mode.label,
+                  reason: mode.disabledReason,
+                })
+              : mode.label,
+        }))}
+        value={value}
+        onChange={(next) => onChange(next as CollectionViewMode)}
+        size={size === 'sm' ? 'small' : 'middle'}
+        ariaLabel={tOr('viewModeSwitcher.groupLabel', 'View mode')}
+      />
     </Box>
   );
 }

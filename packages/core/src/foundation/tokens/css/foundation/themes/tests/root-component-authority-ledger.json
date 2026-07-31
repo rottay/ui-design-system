@@ -1,0 +1,481 @@
+{
+  "schemaVersion": 1,
+  "authorityLaw": "foundation/themes/default.css owns foundation and tenant-neutral fallbacks; presentation/components/<family>.css owns family defaults. A root component channel may not be authored by both.",
+  "measurement": {
+    "officialAuditSnapshot": {
+      "shared": 350,
+      "different": 252,
+      "note": "Reconciled audit checkpoint; its parser/corpus was broader than the current direct component-token root corpus."
+    },
+    "sourceBeforeThisDrain": {
+      "shared": 343,
+      "different": 245,
+      "same": 98
+    },
+    "sourceAfterThisDrain": {
+      "shared": 0,
+      "different": 0,
+      "same": 0
+    },
+    "cascadeProof": "For 339 rows, both shipped source entrypoints import rottay-tokens before the declared component owner, so the component value was already the effective winner. tree.css and empty.css were added to base.css with byte-identical values. Statistic was adjudicated to presentation/components/statistic.css and is now explicitly imported by both entrypoints."
+  },
+  "disposition": "retired-dead-default-duplicate; component-token owner preserved, with one explicitly sighted-pending Statistic delta",
+  "blockedVisualDecisions": [],
+  "sightedPendingDeltas": [
+    {
+      "ownerDecision": "presentation/components/statistic.css is canonical",
+      "probeOwner": "Codex",
+      "status": "SIGHTED_PENDING",
+      "deltas": {
+        "--ds-statistic-title-color": "#737373 -> var(--ds-color-text-secondary)",
+        "--ds-statistic-value-color": "#171717 -> var(--ds-color-text-primary)",
+        "--ds-statistic-prefix-color": "#525252 -> inherit",
+        "--ds-statistic-suffix-color": "#525252 -> inherit"
+      }
+    }
+  ],
+  "owners": {
+    "avatar.css": {
+      "same": [
+        "--ds-avatar-2xl-font-size",
+        "--ds-avatar-2xl-size",
+        "--ds-avatar-3xl-font-size",
+        "--ds-avatar-3xl-size",
+        "--ds-avatar-lg-font-size",
+        "--ds-avatar-lg-size",
+        "--ds-avatar-md-font-size",
+        "--ds-avatar-md-size",
+        "--ds-avatar-sm-font-size",
+        "--ds-avatar-sm-size",
+        "--ds-avatar-status-border-width",
+        "--ds-avatar-xl-font-size",
+        "--ds-avatar-xl-size",
+        "--ds-avatar-xs-font-size",
+        "--ds-avatar-xs-size"
+      ],
+      "different": [
+        "--ds-avatar-default-bg",
+        "--ds-avatar-default-color",
+        "--ds-avatar-error-bg",
+        "--ds-avatar-error-color",
+        "--ds-avatar-gradient-bg",
+        "--ds-avatar-gradient-color",
+        "--ds-avatar-group-overflow-bg",
+        "--ds-avatar-group-overflow-color",
+        "--ds-avatar-primary-bg",
+        "--ds-avatar-primary-color",
+        "--ds-avatar-secondary-bg",
+        "--ds-avatar-secondary-color",
+        "--ds-avatar-success-bg",
+        "--ds-avatar-success-color",
+        "--ds-avatar-transition",
+        "--ds-avatar-warning-bg",
+        "--ds-avatar-warning-color"
+      ]
+    },
+    "badge.css": {
+      "same": [
+        "--ds-badge-border-width",
+        "--ds-badge-font-weight",
+        "--ds-badge-lg-font-size",
+        "--ds-badge-lg-height",
+        "--ds-badge-lg-min-width",
+        "--ds-badge-md-font-size",
+        "--ds-badge-md-height",
+        "--ds-badge-md-min-width",
+        "--ds-badge-padding-x",
+        "--ds-badge-radius-none",
+        "--ds-badge-sm-font-size",
+        "--ds-badge-sm-height",
+        "--ds-badge-sm-min-width",
+        "--ds-badge-xl-font-size",
+        "--ds-badge-xl-height",
+        "--ds-badge-xl-min-width",
+        "--ds-badge-xs-font-size",
+        "--ds-badge-xs-height",
+        "--ds-badge-xs-min-width",
+        "--ds-badge-z-index"
+      ],
+      "different": [
+        "--ds-badge-border-color",
+        "--ds-badge-default-bg",
+        "--ds-badge-default-color",
+        "--ds-badge-dot-lg-size",
+        "--ds-badge-dot-md-size",
+        "--ds-badge-dot-sm-size",
+        "--ds-badge-dot-xl-size",
+        "--ds-badge-dot-xs-size",
+        "--ds-badge-error-bg",
+        "--ds-badge-error-color",
+        "--ds-badge-info-bg",
+        "--ds-badge-info-color",
+        "--ds-badge-primary-bg",
+        "--ds-badge-primary-color",
+        "--ds-badge-radius-full",
+        "--ds-badge-radius-lg",
+        "--ds-badge-radius-md",
+        "--ds-badge-radius-sm",
+        "--ds-badge-secondary-bg",
+        "--ds-badge-secondary-color",
+        "--ds-badge-success-bg",
+        "--ds-badge-success-color",
+        "--ds-badge-transition",
+        "--ds-badge-warning-bg",
+        "--ds-badge-warning-color"
+      ]
+    },
+    "button.css": {
+      "same": [
+        "--ds-button-focus-ring",
+        "--ds-button-ghost-bg",
+        "--ds-button-ghost-border",
+        "--ds-button-ghost-border-active",
+        "--ds-button-ghost-border-hover",
+        "--ds-button-md-height",
+        "--ds-button-md-padding-x",
+        "--ds-button-sm-height",
+        "--ds-button-sm-padding-x",
+        "--ds-button-text-bg",
+        "--ds-button-xs-font-size",
+        "--ds-button-xs-height",
+        "--ds-button-xs-padding-x"
+      ],
+      "different": [
+        "--ds-button-default-bg",
+        "--ds-button-default-bg-active",
+        "--ds-button-default-bg-hover",
+        "--ds-button-default-border",
+        "--ds-button-default-border-active",
+        "--ds-button-default-border-hover",
+        "--ds-button-default-color",
+        "--ds-button-default-color-active",
+        "--ds-button-default-color-hover",
+        "--ds-button-disabled-bg",
+        "--ds-button-disabled-color",
+        "--ds-button-disabled-opacity",
+        "--ds-button-error-bg",
+        "--ds-button-error-bg-active",
+        "--ds-button-error-bg-hover",
+        "--ds-button-error-border",
+        "--ds-button-error-color",
+        "--ds-button-font-weight",
+        "--ds-button-ghost-bg-active",
+        "--ds-button-ghost-bg-hover",
+        "--ds-button-ghost-color",
+        "--ds-button-ghost-color-active",
+        "--ds-button-ghost-color-hover",
+        "--ds-button-icon-only-padding",
+        "--ds-button-info-bg",
+        "--ds-button-info-bg-active",
+        "--ds-button-info-bg-hover",
+        "--ds-button-info-border",
+        "--ds-button-info-color",
+        "--ds-button-lg-font-size",
+        "--ds-button-lg-height",
+        "--ds-button-lg-padding-x",
+        "--ds-button-lg-radius",
+        "--ds-button-link-color",
+        "--ds-button-link-color-active",
+        "--ds-button-link-color-hover",
+        "--ds-button-md-font-size",
+        "--ds-button-md-radius",
+        "--ds-button-primary-bg",
+        "--ds-button-primary-bg-active",
+        "--ds-button-primary-bg-hover",
+        "--ds-button-primary-border",
+        "--ds-button-primary-color",
+        "--ds-button-primary-shadow",
+        "--ds-button-primary-shadow-hover",
+        "--ds-button-secondary-bg",
+        "--ds-button-secondary-bg-active",
+        "--ds-button-secondary-bg-hover",
+        "--ds-button-secondary-border",
+        "--ds-button-secondary-color",
+        "--ds-button-sm-font-size",
+        "--ds-button-sm-radius",
+        "--ds-button-success-bg",
+        "--ds-button-success-bg-active",
+        "--ds-button-success-bg-hover",
+        "--ds-button-success-border",
+        "--ds-button-success-color",
+        "--ds-button-text-bg-active",
+        "--ds-button-text-bg-hover",
+        "--ds-button-text-color",
+        "--ds-button-text-color-active",
+        "--ds-button-text-color-hover",
+        "--ds-button-transition",
+        "--ds-button-warning-bg",
+        "--ds-button-warning-bg-active",
+        "--ds-button-warning-bg-hover",
+        "--ds-button-warning-border",
+        "--ds-button-warning-color",
+        "--ds-button-xl-font-size",
+        "--ds-button-xl-height",
+        "--ds-button-xl-padding-x",
+        "--ds-button-xl-radius",
+        "--ds-button-xs-radius"
+      ]
+    },
+    "card.css": {
+      "same": [
+        "--ds-card-subtitle-font-size",
+        "--ds-card-title-font-size"
+      ],
+      "different": [
+        "--ds-card-bg",
+        "--ds-card-bg-hover",
+        "--ds-card-body-color",
+        "--ds-card-body-padding",
+        "--ds-card-color",
+        "--ds-card-cover-overlay-bg",
+        "--ds-card-footer-bg",
+        "--ds-card-footer-padding",
+        "--ds-card-header-padding",
+        "--ds-card-image-loading-active",
+        "--ds-card-image-loading-track",
+        "--ds-card-radius",
+        "--ds-card-shadow-hover",
+        "--ds-card-subtitle-color",
+        "--ds-card-title-color",
+        "--ds-card-title-font-weight",
+        "--ds-card-transition"
+      ]
+    },
+    "checkbox.css": {
+      "same": [],
+      "different": [
+        "--ds-checkbox-error-border",
+        "--ds-checkbox-focus-ring-color",
+        "--ds-checkbox-label-gap",
+        "--ds-checkbox-transition"
+      ]
+    },
+    "empty.css": {
+      "same": [
+        "--ds-empty-description-color",
+        "--ds-empty-icon-color",
+        "--ds-empty-title-color"
+      ],
+      "different": []
+    },
+    "input.css": {
+      "same": [
+        "--ds-input-helper-font-size",
+        "--ds-input-label-font-size",
+        "--ds-input-label-margin-bottom",
+        "--ds-input-lg-padding-x",
+        "--ds-input-md-font-size",
+        "--ds-input-md-height",
+        "--ds-input-md-padding-x",
+        "--ds-input-sm-font-size",
+        "--ds-input-sm-height",
+        "--ds-input-sm-padding-x",
+        "--ds-input-xl-padding-x",
+        "--ds-input-xs-font-size",
+        "--ds-input-xs-height",
+        "--ds-input-xs-padding-x"
+      ],
+      "different": [
+        "--ds-input-addon-bg",
+        "--ds-input-addon-border",
+        "--ds-input-addon-color",
+        "--ds-input-bg",
+        "--ds-input-bg-disabled",
+        "--ds-input-bg-focus",
+        "--ds-input-bg-hover",
+        "--ds-input-border",
+        "--ds-input-border-disabled",
+        "--ds-input-border-focus",
+        "--ds-input-border-hover",
+        "--ds-input-clear-color",
+        "--ds-input-clear-color-hover",
+        "--ds-input-color",
+        "--ds-input-color-disabled",
+        "--ds-input-color-placeholder",
+        "--ds-input-error-border",
+        "--ds-input-error-color",
+        "--ds-input-error-shadow-focus",
+        "--ds-input-helper-color",
+        "--ds-input-label-color",
+        "--ds-input-label-font-weight",
+        "--ds-input-lg-font-size",
+        "--ds-input-lg-height",
+        "--ds-input-radius",
+        "--ds-input-shadow-focus",
+        "--ds-input-success-border",
+        "--ds-input-success-shadow-focus",
+        "--ds-input-transition",
+        "--ds-input-warning-border",
+        "--ds-input-warning-shadow-focus",
+        "--ds-input-xl-font-size",
+        "--ds-input-xl-height",
+        "--ds-textarea-radius"
+      ]
+    },
+    "list.css": {
+      "same": [],
+      "different": [
+        "--ds-list-border-color",
+        "--ds-list-meta-description-color",
+        "--ds-list-split-color"
+      ]
+    },
+    "modal.css": {
+      "same": [
+        "--ds-modal-2xl-width",
+        "--ds-modal-body-padding",
+        "--ds-modal-close-size",
+        "--ds-modal-footer-gap",
+        "--ds-modal-footer-padding",
+        "--ds-modal-full-width",
+        "--ds-modal-header-padding",
+        "--ds-modal-lg-width",
+        "--ds-modal-md-width",
+        "--ds-modal-padding",
+        "--ds-modal-sm-width",
+        "--ds-modal-title-font-size",
+        "--ds-modal-xl-width",
+        "--ds-modal-xs-width"
+      ],
+      "different": [
+        "--ds-modal-bg",
+        "--ds-modal-body-color",
+        "--ds-modal-close-bg-hover",
+        "--ds-modal-close-color",
+        "--ds-modal-close-color-hover",
+        "--ds-modal-color",
+        "--ds-modal-footer-bg",
+        "--ds-modal-overlay-bg",
+        "--ds-modal-shadow",
+        "--ds-modal-subtitle-color",
+        "--ds-modal-title-color",
+        "--ds-modal-title-font-weight"
+      ]
+    },
+    "patterns.css": {
+      "same": [],
+      "different": [
+        "--ds-skeleton-bg"
+      ]
+    },
+    "radio.css": {
+      "same": [],
+      "different": [
+        "--ds-radio-error-border",
+        "--ds-radio-focus-ring-color",
+        "--ds-radio-label-gap",
+        "--ds-radio-transition"
+      ]
+    },
+    "select.css": {
+      "same": [
+        "--ds-select-dropdown-shadow"
+      ],
+      "different": [
+        "--ds-select-arrow-color",
+        "--ds-select-bg",
+        "--ds-select-bg-disabled",
+        "--ds-select-clear-color",
+        "--ds-select-clear-color-hover",
+        "--ds-select-color",
+        "--ds-select-color-disabled",
+        "--ds-select-color-placeholder",
+        "--ds-select-dropdown-bg",
+        "--ds-select-filled-bg",
+        "--ds-select-option-bg-hover",
+        "--ds-select-option-bg-selected",
+        "--ds-select-option-color-disabled",
+        "--ds-select-option-color-selected",
+        "--ds-select-tag-bg",
+        "--ds-select-tag-color",
+        "--ds-select-transition"
+      ]
+    },
+    "spinner.css": {
+      "same": [
+        "--ds-spinner-lg-size",
+        "--ds-spinner-md-size"
+      ],
+      "different": [
+        "--ds-spinner-sm-size",
+        "--ds-spinner-xl-size"
+      ]
+    },
+    "statistic.css": {
+      "same": [],
+      "different": [
+        "--ds-statistic-prefix-color",
+        "--ds-statistic-suffix-color",
+        "--ds-statistic-title-color",
+        "--ds-statistic-value-color"
+      ]
+    },
+    "tag.css": {
+      "same": [
+        "--ds-tag-font-weight",
+        "--ds-tag-lg-font-size",
+        "--ds-tag-lg-padding",
+        "--ds-tag-md-font-size",
+        "--ds-tag-md-padding",
+        "--ds-tag-radius-none",
+        "--ds-tag-sm-font-size",
+        "--ds-tag-sm-padding",
+        "--ds-tag-xl-font-size",
+        "--ds-tag-xs-padding"
+      ],
+      "different": [
+        "--ds-tag-lg-height",
+        "--ds-tag-md-height",
+        "--ds-tag-radius-full",
+        "--ds-tag-radius-lg",
+        "--ds-tag-radius-md",
+        "--ds-tag-radius-sm",
+        "--ds-tag-sm-height",
+        "--ds-tag-transition",
+        "--ds-tag-xl-height",
+        "--ds-tag-xl-padding",
+        "--ds-tag-xs-font-size",
+        "--ds-tag-xs-height"
+      ]
+    },
+    "timeline.css": {
+      "same": [],
+      "different": [
+        "--ds-timeline-content-color",
+        "--ds-timeline-line-color"
+      ]
+    },
+    "toggle.css": {
+      "same": [],
+      "different": [
+        "--ds-toggle-description-color",
+        "--ds-toggle-description-font-size",
+        "--ds-toggle-dot-bg",
+        "--ds-toggle-dot-shadow",
+        "--ds-toggle-error-bg",
+        "--ds-toggle-label-color",
+        "--ds-toggle-lg-dot",
+        "--ds-toggle-lg-height",
+        "--ds-toggle-lg-width",
+        "--ds-toggle-md-dot",
+        "--ds-toggle-md-height",
+        "--ds-toggle-md-width",
+        "--ds-toggle-sm-dot",
+        "--ds-toggle-sm-height",
+        "--ds-toggle-sm-width",
+        "--ds-toggle-success-bg",
+        "--ds-toggle-transition",
+        "--ds-toggle-warning-bg"
+      ]
+    },
+    "tree.css": {
+      "same": [
+        "--ds-tree-node-bg-hover",
+        "--ds-tree-node-bg-selected",
+        "--ds-tree-node-color",
+        "--ds-tree-node-color-selected"
+      ],
+      "different": []
+    }
+  }
+}

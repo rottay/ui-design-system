@@ -49,6 +49,10 @@
   letter-spacing: var(--ds-input-letter-spacing, normal);
   outline: none;
   resize: var(--ds-textarea-resize, vertical);
+  /* Internal scroll stays quiet: thin, ink-derived, identical to the Select
+     option-list grammar (no new channel needed). */
+  scrollbar-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border)) transparent;
+  scrollbar-width: thin;
   transition:
     border-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
     background-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
@@ -214,18 +218,19 @@
 
 /* State hues use the solid-fill grammar from the Tag/Avatar contrast pass:
    raw 500-level hues fail on light surfaces (warning #F59E0B = 2.15:1, error
-   #EF4444 = 3.76:1), so each deepens toward black until it clears AA on every
-   governed source -- warning 55% >= 5.5:1, error 78% >= 5.7:1 (worst source). */
+   #EF4444 = 3.76:1), so each deepens toward the tenant-safe dark neutral
+   ramp (`--ds-color-neutral-900`) until it clears AA on every governed
+   source -- warning 55% >= 5.5:1, error 78% >= 5.7:1 (worst source). */
 .ds-textarea-field[data-part='field'] > [data-part='count'][data-count-state='error'] {
-  color: var(--ds-input-count-color-error, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-black, #000) 22%));
+  color: var(--ds-input-count-color-error, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900, #171717) 22%));
 }
 
 .ds-textarea-field[data-part='field'] > [data-part='count'][data-count-state='warning'] {
-  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-black, #000) 45%));
+  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900, #171717) 45%));
 }
 
 .ds-textarea-field[data-part='field'] > [data-part='count'][data-count-state='limit'] {
-  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-black, #000) 45%));
+  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900, #171717) 45%));
   font-weight: var(--ds-input-count-limit-font-weight, var(--ds-font-weight-semibold));
 }
 
@@ -255,7 +260,7 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-textarea.ds-textarea--modern[data-part='root'],
   .ds-textarea-field[data-part='field'] > [data-part='clear-button'] {
-    transition-duration: 0.01ms;
+    transition: none;
   }
 }
 

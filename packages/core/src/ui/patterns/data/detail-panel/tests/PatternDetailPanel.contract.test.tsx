@@ -168,7 +168,10 @@ describe('PatternDetailPanel data-part contract', () => {
 
     const expectedCounts = engine === 'modern' ? MODERN_LOADING_PART_COUNTS : RUSTIC_LOADING_PART_COUNTS;
     for (const [part, count] of Object.entries(expectedCounts)) {
-      const nodes = container.querySelectorAll(`[data-part="${part}"]`);
+      const selector = part === 'root'
+        ? `.ds-pattern-detail-panel.ds-engine-${engine}[data-part="root"]`
+        : `[data-part="${part}"]`;
+      const nodes = container.querySelectorAll(selector);
       expect(nodes.length, `data-part="${part}" did not reach the DOM on the loading branch`).toBe(count);
     }
 

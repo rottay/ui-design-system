@@ -2,12 +2,24 @@
 
 /**
  * @fileoverview Modern (Hermes) engine for the FormBuilder pattern. Renders
- * DS primitive components (Input, Select, Checkbox, etc.) instead of raw
- * HTML form elements. All visuals come from CSS custom properties for full
- * theme compliance. Supports vertical, horizontal, grid, and wizard (steps)
- * layouts, collapsible sections, read-only mode, and a sticky action bar.
+ * DS primitive components (Input, Select, Checkbox, FormField, DatePicker,
+ * Button, Steps, Empty, etc.) instead of raw HTML form elements -- it never
+ * recreates a control: field chrome (label / error / help / required mark)
+ * belongs to the composed FormField primitive, wizard chrome to Steps, every
+ * action to Button. All visuals come from CSS custom properties for full
+ * theme compliance; every static geometry lives in the modern skin
+ * (`runtime/engines/modern/skin/form-builder.css`). The ONLY inline styles
+ * left are runtime-computed values pinned by the responsive tests:
+ * `grid-template-columns` on the fields container and `grid-column: span N`
+ * on each field wrapper, the collapse `max-height`/`opacity`, the caller
+ * `maxHeight`-style `gap` numbers, and the color swatch's user-picked
+ * `background` (data, not paint).
  *
  * Wave 5.5-A: Rewritten to use DS primitives instead of raw HTML inputs.
+ * Current wave: remaining static inline dumps drained to the skin, the
+ * `gap` prop now governs every layout (grid/vertical hardcoded 20px before),
+ * and an empty schema composes the Empty primitive instead of rendering a
+ * blank form.
  *
  * @example
  * <ModernFormBuilder
@@ -22,7 +34,7 @@
  * />
  */
 
-import React, { useState, useCallback, useMemo, useRef, useEffect, type ReactNode, type CSSProperties } from 'react';
+import React, { useState, useCallback, useMemo, useRef, useEffect, type ReactNode } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { FormBuilderProps } from '../../contracts';
 import type { FieldDef } from '../../../../../../foundation/contracts/runtime/components/patterns/core';
@@ -49,21 +61,15 @@ import { Slider } from '../../../../../primitives/inputs/Slider';
 import { Rate } from '../../../../../primitives/feedback/Rate';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
 import ModernSteps from '../../../../../primitives/navigation/Steps/engines/modern';
+import { Empty } from '../../../../../primitives/display/Empty';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /* ---------------------------------------------------------------------------
- * Shared inline-style constants (DS tokens) -- retained for read-only
- * rendering where DS primitives are not used.
+ * Read-only rendering geometry lives in the skin (`[data-part='readonly-
+ * value']`); the color swatch keeps only its user-picked `background` inline.
  * -------------------------------------------------------------------------*/
 
 const ROOT_CLASS_NAME = 'ds-pattern-form-builder ds-engine-modern';
-
-const readOnlyTextStyle: CSSProperties = {
-  fontSize: 14,
-  lineHeight: '20px',
-  padding: '8px 0',
-  minHeight: 36,
-};
 
 function readRecordValue(value: unknown, key: PropertyKey): unknown {
   if (typeof value !== 'object' || value === null) return undefined;
@@ -91,7 +97,6 @@ const ChevronIcon = ({ collapsed }: { collapsed: boolean }) => (
     height="16"
     viewBox="0 0 16 16"
     fill="none"
-    style={{ flexShrink: 0 }}
   >
     <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
@@ -285,7 +290,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
       const val = readRecordValue(currentValues, field.name);
       if (val === undefined || val === null || val === '') {
         return (
-          <span data-part="readonly-value" data-field-type="empty" style={readOnlyTextStyle}>
+          <span data-part="readonly-value" data-field-type="empty">
             --
           </span>
         );
@@ -295,7 +300,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
         case 'checkbox':
         case 'switch':
           return (
-            <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>
+            <span data-part="readonly-value" data-field-type={field.type}>
               {val ? 'Yes' : 'No'}
             </span>
           );
@@ -303,7 +308,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
         case 'radio': {
           const opt = field.options?.find((o) => o.value === val);
           return (
-            <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>
+            <span data-part="readonly-value" data-field-type={field.type}>
               {opt?.label ?? String(val)}
             </span>
           );
@@ -312,7 +317,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           const vals = val as string[];
           const labels = vals.map((v) => field.options?.find((o) => o.value === v)?.label ?? v);
           return (
-            <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>
+            <span data-part="readonly-value" data-field-type={field.type}>
               {labels.join(', ')}
             </span>
           );
@@ -322,34 +327,29 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             <span
               data-part="readonly-value"
               data-field-type={field.type}
-              style={{
-                ...readOnlyTextStyle,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-              }}
             >
               {/* `background` is the hex the user picked -- a value computed from data,
-                  never selectable from a token set, so it cannot leave the TSX. */}
-              <span data-part="color-swatch" style={{ width: 20, height: 20, background: String(val) }} />
+                  never selectable from a token set, so it cannot leave the TSX.
+                  The static swatch chrome (size, border, radius) is skin-owned. */}
+              <span data-part="color-swatch" style={{ background: String(val) }} />
               {String(val)}
             </span>
           );
         case 'rating':
           return (
-            <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>
+            <span data-part="readonly-value" data-field-type={field.type}>
               {'*'.repeat(val as number) + ` (${val}/5)`}
             </span>
           );
         case 'file':
           return (
-            <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>
+            <span data-part="readonly-value" data-field-type={field.type}>
               [File attached]
             </span>
           );
         default:
           return (
-            <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>
+            <span data-part="readonly-value" data-field-type={field.type}>
               {String(val)}
             </span>
           );
@@ -556,12 +556,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             >
               <span
                 data-part="upload-trigger"
-                style={{
-                  display: 'inline-block',
-                  padding: '6px 16px',
-                  fontSize: 14,
-                  cursor: fieldDisabled ? 'not-allowed' : 'pointer',
-                }}
+                data-disabled={fieldDisabled ? 'true' : 'false'}
               >
                 {fileList.length > 0 ? fileList[0]?.name ?? 'File selected' : 'Choose file'}
               </span>
@@ -627,78 +622,23 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
         data-part="root"
         data-loading="true"
         className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
-        style={{ maxWidth: 720, width: '100%', ...style }}
+        style={style}
       >
-        {/* Title shimmer */}
-        <div
-          data-part="skeleton-bar"
-          style={{
-            height: 20,
-            width: '40%',
-            marginBottom: 8,
-            /* shimmer animation is skin-owned (reduced-motion governs) */
-          }}
-        />
-        {/* Description shimmer */}
-        <div
-          data-part="skeleton-bar"
-          style={{
-            height: 14,
-            width: '65%',
-            marginBottom: 28,
-            /* shimmer animation is skin-owned (reduced-motion governs) */
-          }}
-        />
+        {/* Bar geometry is skin-owned per data-variant; the shimmer animation
+            is skin-owned too (reduced-motion governs it). */}
+        <div data-part="skeleton-bar" data-variant="title" />
+        <div data-part="skeleton-bar" data-variant="description" />
         {/* Field shimmer rows */}
         {[1, 2, 3].map((i) => (
-          <div key={i} style={{ marginBottom: 24 }}>
-            <div
-              data-part="skeleton-bar"
-              data-variant="label"
-              style={{
-                height: 14,
-                width: 100,
-                marginBottom: 8,
-                /* shimmer animation is skin-owned (reduced-motion governs) */
-              }}
-            />
-            <div
-              data-part="skeleton-bar"
-              style={{
-                height: 40,
-                width: '100%',
-                /* shimmer animation is skin-owned (reduced-motion governs) */
-              }}
-            />
+          <div key={i} data-part="skeleton-field">
+            <div data-part="skeleton-bar" data-variant="label" />
+            <div data-part="skeleton-bar" data-variant="field" />
           </div>
         ))}
-        {/* Action bar shimmer */}
-        <div
-          data-part="action-bar"
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            gap: 12,
-            marginTop: 32,
-            paddingTop: 20,
-          }}
-        >
-          <div
-            data-part="skeleton-bar"
-            style={{
-              height: 36,
-              width: 80,
-              /* shimmer animation is skin-owned (reduced-motion governs) */
-            }}
-          />
-          <div
-            data-part="skeleton-bar"
-            style={{
-              height: 36,
-              width: 100,
-              /* shimmer animation is skin-owned (reduced-motion governs) */
-            }}
-          />
+        {/* Action bar shimmer (same part as the real tray: one layout rule) */}
+        <div data-part="action-bar">
+          <div data-part="skeleton-bar" data-variant="action" />
+          <div data-part="skeleton-bar" data-variant="action-wide" />
         </div>
       </div>
     );
@@ -790,10 +730,14 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
       <div
         key={field.name}
         data-part="field"
-        style={{
-          width: '100%',
-          ...(adaptedLayout === 'grid' && columnSpan ? { gridColumn: `span ${columnSpan}` } : {}),
-        }}
+        /* grid-column stays inline: it is a runtime-computed span PINNED by
+           the responsive tests (`[style*="grid-column: span N"]` queries).
+           The static full-width geometry is skin-owned. */
+        style={
+          adaptedLayout === 'grid' && columnSpan
+            ? { gridColumn: `span ${columnSpan}` }
+            : undefined
+        }
       >
         {showLabel ? (
           <FormField
@@ -834,13 +778,16 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     const fieldElements = fieldsToRender.map(renderFormField);
 
     if (adaptedLayout === 'grid') {
+      /* Inline carries ONLY runtime values: the column count (PINNED by the
+         responsive tests' `[style*="grid-template-columns: repeat(N"]`
+         queries) and the caller `gap`. Display/gap rhythm per layout is
+         skin-owned off data-layout; the `gap` prop now governs every layout
+         (grid/vertical hardcoded 20px before). */
       return (
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: `repeat(${adaptedColumns}, 1fr)`,
-            gap: '20px',
-          }}
+          data-part="fields"
+          data-layout="grid"
+          style={{ gridTemplateColumns: `repeat(${adaptedColumns}, 1fr)`, gap: gapStr }}
         >
           {fieldElements}
         </div>
@@ -849,37 +796,28 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
     if (adaptedLayout === 'horizontal') {
       return (
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'flex-start',
-            gap: gapStr,
-          }}
-        >
+        <div data-part="fields" data-layout="horizontal" style={{ gap: gapStr }}>
           {fieldElements}
         </div>
       );
     }
 
     // vertical (default)
-    return <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>{fieldElements}</div>;
+    return (
+      <div data-part="fields" data-layout="vertical" style={{ gap: gapStr }}>
+        {fieldElements}
+      </div>
+    );
   };
 
   /* -- Render ----------------------------------------------------------- */
-
-  const formContainerStyle: CSSProperties = {
-    maxWidth: 720,
-    width: '100%',
-    ...style,
-  };
 
   return (
     <form
       data-part="root"
       onSubmit={handleSubmit}
       className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
-      style={formContainerStyle}
+      style={style}
     >
       {/* Title & description */}
       {(title || description) && (
@@ -909,6 +847,16 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             direction="horizontal"
             size="small"
             responsive
+          />
+        </div>
+      )}
+
+      {/* Empty schema: composed Empty instead of a silently blank form. */}
+      {visibleFields.length === 0 && (
+        <div data-part="empty">
+          <Empty
+            image="simple"
+            description={tOr('form_builder.empty', 'No fields to display')}
           />
         </div>
       )}
@@ -951,9 +899,9 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
               </ModernButton>
             )}
 
-            {/* Section content with smooth collapse. The transition lives in
-                the skin (reduced-motion governs); max-height/opacity stay
-                inline as runtime state values. */}
+            {/* Section content with smooth collapse. The transition and the
+                overflow live in the skin (reduced-motion governs); the
+                max-height/opacity stay inline as runtime state values. */}
             <div
               data-part="section-content"
               data-collapsed={isCollapsed}
@@ -961,7 +909,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                 Reflect.set(sectionContentRefs.current, section.key, el);
               }}
               style={{
-                overflow: 'hidden',
                 maxHeight: hasSectionHeader ? (isCollapsed ? 0 : contentHeight ?? 2000) : undefined,
                 opacity: isCollapsed ? 0 : 1,
               }}

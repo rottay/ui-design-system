@@ -285,8 +285,9 @@ describe('DashboardWidgets data-part contract (WO-SKIN-06 CK-A)', () => {
       // sparkline dots carry data-accent (two stats have sparkDots -> 14 dots)
       expect(q(container, '[data-part="spark-dot"]')).toHaveLength(14);
       expect(q(container, '[data-part="spark-dot"][data-accent="primary"]')).toHaveLength(7);
-      // the progress-only stat renders the ProgressBar (sparkDots absent)
-      expect(q(container, '[data-part="progress-fill"][data-accent="warning"]')).toHaveLength(1);
+      // The progress-only stat composes the canonical Progress primitive. The
+      // structure owns the semantic accent carrier; Progress owns root/fill.
+      expect(q(container, '[data-part="stat-progress"][data-accent="warning"] [data-part="fill"]')).toHaveLength(1);
       // insight + accent carrier survived
       expect(q(container, '[data-part="stat-insight"]')).toHaveLength(2);
       expect(q(container, '[data-part="stat-card"][data-accent="primary"]')).toHaveLength(1);
@@ -297,9 +298,13 @@ describe('DashboardWidgets data-part contract (WO-SKIN-06 CK-A)', () => {
       const { container } = renderWithEngine(<StatsHeader engine={engine} stats={STATS} loading />, engine);
       await waitForPart(container, 'root');
       expect(q(container, '[data-part="skeleton-card"]').length).toBeGreaterThanOrEqual(1);
-      expect(q(container, '[data-part="skeleton-bar"]').length).toBeGreaterThanOrEqual(1);
-      expect(q(container, '[data-part="skeleton-dot"]').length).toBeGreaterThanOrEqual(1);
-      expect(q(container, '[data-part="skeleton-glow"]').length).toBeGreaterThanOrEqual(1);
+      // Loading now composes Skeleton rather than maintaining a second,
+      // structure-local skeleton anatomy.
+      await waitFor(() =>
+        expect(q(container, '[data-part="skeleton-card"] [data-part="root"]').length).toBeGreaterThanOrEqual(1),
+      );
+      expect(q(container, '[data-part="skeleton-card"] [data-part="title"]').length).toBeGreaterThanOrEqual(1);
+      expect(q(container, '[data-part="skeleton-card"] [data-part="line"]').length).toBeGreaterThanOrEqual(1);
     });
   });
 });

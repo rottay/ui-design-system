@@ -15,12 +15,13 @@
  * @package @rottay/design-system
  */
 
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, useId } from 'react';
 import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { AutoCompleteProps, AutoCompleteOption } from '../../contracts';
 import { AUTOCOMPLETE_DEFAULTS } from '../../contracts';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 /**
  * Hook-local `tOr`: catalogue value with an English floor -- when the
@@ -95,6 +96,9 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
 
     const containerRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    // APG combobox wiring: the input owns focus permanently; the active
+    // option is announced via aria-activedescendant against the listbox id.
+    const listboxId = useId();
 
     // Only update internal open state when the dropdown is uncontrolled;
     // always notify the parent so controlled consumers stay in sync.
@@ -189,7 +193,11 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
           break;
         }
         case 'Escape':
+          // Close and RETURN FOCUS to the input (Dropdown/DatePicker
+          // precedent): if the pointer/user landed DOM focus on an option,
+          // the dropdown unmount would drop focus to <body>.
           handleOpenChange(false);
+          inputRef.current?.focus();
           break;
       }
     };
@@ -212,15 +220,15 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={`ds-autocomplete ds-autocomplete--modern relative ${className || ''}`}
+        className={`ds-autocomplete ds-autocomplete--modern ${className || ''}`}
         style={style}
         data-part="root"
       >
-        <div className="relative" data-part="input-wrapper">
+        <div data-part="input-wrapper">
           <input
             ref={inputRef}
             type="text"
-            style={{ width: '100%', boxSizing: 'border-box', ...getSizeStyle() }}
+            style={getSizeStyle()}
             value={value}
             onChange={(e) => handleChange(e.target.value)}
             onFocus={() => handleOpenChange(true)}
@@ -231,33 +239,42 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             data-part="input"
             data-open={isOpen || undefined}
             data-disabled={disabled || undefined}
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded={isOpen}
+            aria-controls={isOpen ? listboxId : undefined}
+            aria-activedescendant={
+              isOpen && focusedIndex >= 0 ? `${listboxId}-option-${focusedIndex}` : undefined
+            }
           />
           {/* Clear button only visible when there is a non-empty value and the input is interactive.
               Positioning/paint are skin-owned (the old `right-2` utility was
-              physical and broke RTL). */}
+              physical and broke RTL). Governed close icon, never a text glyph. */}
           {allowClear && value && !disabled && (
             <button
               type="button"
-              style={{ width: 24, height: 24, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12 }}
               onClick={() => handleChange('')}
               data-part="clear-button"
               aria-label={tOr('autocomplete.clear', 'Clear')}
             >
-              ✕
+              <ActionCloseIcon decorative size={12} />
             </button>
           )}
         </div>
 
         {/* Dropdown list positioned absolutely below the input (geometry is
-            skin-owned; keyboard focus rides data-active). */}
+            skin-owned; keyboard focus rides data-active). Options are NOT tab
+            stops: per the combobox pattern DOM focus stays on the input and
+            the active option is announced via aria-activedescendant. */}
         {isOpen && (
-          <ul data-part="dropdown" role="listbox">
+          <ul data-part="dropdown" role="listbox" id={listboxId}>
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
                 <li key={option.value}>
                   <button
                     type="button"
                     disabled={option.disabled}
+                    tabIndex={-1}
                     onClick={() => handleSelect(option)}
                     // Sync keyboard focus index on hover so mouse and keyboard
                     // navigation stay coordinated.
@@ -266,6 +283,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
                     data-active={focusedIndex === index || undefined}
                     data-disabled={option.disabled || undefined}
                     role="option"
+                    id={`${listboxId}-option-${index}`}
                     aria-selected={focusedIndex === index}
                   >
                     {option.label ?? option.value}
@@ -273,7 +291,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
                 </li>
               ))
             ) : (
-              <li className="p-2 text-center" data-part="empty">
+              <li data-part="empty">
                 {notFoundContent}
               </li>
             )}

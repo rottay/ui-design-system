@@ -114,7 +114,11 @@
   text-transform: uppercase;
 }
 
-.ds-form-item.ds-form-item--modern [data-part='required-mark'][data-kind='optional'][data-part='required-mark'] {
+/* Border rules clear the tenant `*` border-color floor WITHOUT attribute
+   repetition (4th-tanda law): two distinct attributes already reach (0,4,0),
+   and the stable `[data-part='item']` ancestor buys the 4th unit where the
+   target carries only one attribute of its own. */
+.ds-form-item.ds-form-item--modern [data-part='required-mark'][data-kind='optional'] {
   border: 1px solid var(--ds-color-border-subtle);
 }
 
@@ -137,14 +141,21 @@
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-form-item.ds-form-item--modern [data-part='tooltip-icon'][data-part='tooltip-icon'] {
+.ds-form-item.ds-form-item--modern[data-part='item'] [data-part='tooltip-icon'] {
   border: 1px solid var(--ds-color-border-subtle);
 }
 
-.ds-form-item.ds-form-item--modern [data-part='tooltip-icon']:hover {
+@media (hover: hover) {
+  .ds-form-item.ds-form-item--modern [data-part='tooltip-icon']:hover {
+    color: var(--ds-color-primary);
+    background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card));
+    transform: translateY(-1px);
+  }
+}
+/* Touch/active equivalent of the hover treatment. */
+.ds-form-item.ds-form-item--modern [data-part='tooltip-icon']:active {
   color: var(--ds-color-primary);
   background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card));
-  transform: translateY(-1px);
 }
 
 .ds-form-item.ds-form-item--modern [data-part='field'] {
@@ -176,7 +187,7 @@
   animation: ds-form-modern-feedback-in var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-part='feedback-icon'] {
+.ds-form-item.ds-form-item--modern[data-part='item'] [data-part='feedback-icon'] {
   border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
 }
 
@@ -196,7 +207,9 @@
   color: var(--ds-color-primary);
   animation:
     ds-form-modern-feedback-in var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),
-    ds-form-modern-spin var(--ds-form-spinner-duration, 900ms) linear infinite;
+    /* Canonical spin (Table/Tree precedent) on the motion authority's slow
+       cadence; the family-local duplicate keyframe is retired. */
+    ds-foundation-spin var(--ds-form-spinner-duration, var(--ds-motion-glacial, 500ms)) linear infinite;
 }
 
 .ds-form-item.ds-form-item--modern [data-part='message'] {
@@ -235,7 +248,10 @@
   list-style: none;
 }
 
-.ds-form-error-list.ds-form-error-list--modern[data-part='error-list'][data-part='error-list'] {
+/* The error-list is always rendered INSIDE the form root (it returns null
+   without the context), so the stable ancestor attribute buys the border
+   rule's 4th unit -- no attribute repetition needed. */
+.ds-form.ds-form--modern[data-part='root'] .ds-form-error-list.ds-form-error-list--modern[data-part='error-list'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-error) 28%, var(--ds-color-border-subtle));
 }
 
@@ -257,10 +273,6 @@
   to { opacity: 1; transform: scale(1); }
 }
 
-@keyframes ds-form-modern-spin {
-  to { transform: rotate(360deg); }
-}
-
 @container ds-form (max-width: 620px) {
   .ds-form-item.ds-form-item--modern[data-part='item'][data-layout='horizontal'] {
     align-items: stretch;
@@ -278,5 +290,26 @@
   .ds-form-item.ds-form-item--modern [data-part='message'] {
     animation: none;
     transition: none;
+  }
+}
+
+/* Forced colors (system colors only): hues are forced away, so the semantic
+   marks rely on their shapes (asterisk, badge, icon glyphs) and every frame
+   keeps a system-color boundary. */
+@media (forced-colors: active) {
+  .ds-form-item.ds-form-item--modern[data-part='item'] [data-part='tooltip-icon'],
+  .ds-form-item.ds-form-item--modern[data-part='item'] [data-part='feedback-icon'],
+  .ds-form-item.ds-form-item--modern [data-part='required-mark'][data-kind='optional'],
+  .ds-form.ds-form--modern[data-part='root'] .ds-form-error-list.ds-form-error-list--modern[data-part='error-list'] {
+    border-color: ButtonText;
+  }
+  .ds-form-item.ds-form-item--modern [data-part='tooltip-icon']:hover,
+  .ds-form-item.ds-form-item--modern [data-part='tooltip-icon']:active {
+    color: ButtonText;
+    background: ButtonFace;
+  }
+  .ds-form-item.ds-form-item--modern [data-part='help-text'][data-error='true'],
+  .ds-form-error-list.ds-form-error-list--modern[data-part='error-list'] {
+    color: CanvasText;
   }
 }

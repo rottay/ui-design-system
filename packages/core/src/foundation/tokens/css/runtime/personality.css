@@ -1,8 +1,9 @@
 /**
  * Personality CSS Overrides - Rottay Design System
  *
- * Cross-engine rules that consume personality CSS custom properties
- * pushed by SystemCssVariablesBridge via resolvePersonalityCssVariables().
+ * Cross-engine rules that consume personality CSS custom properties pushed
+ * by SystemCssVariablesBridge. The bridge publishes namespaced data only;
+ * this file is the single projection into canonical component channels.
  *
  * These compatibility selectors project personality tokens across the
  * supported engine DOM contracts. Modern is first-party; Classic and Rustic
@@ -28,18 +29,83 @@
    --ds-letter-spacing-heading override when one is set and no personality
    preset value overrides the namespace var.
 
-   SystemCssVariablesBridge writes these same namespace vars into an UNLAYERED
-   :root rule from the resolved personality tokens, so when it is mounted its
-   value wins over this layered default; these defaults govern the SSR /
-   no-JS / compiled-artifact paints and keep the dial in the resolved chain.
+   SystemCssVariablesBridge writes namespaced inputs into this same declared
+   personality layer. These aliases are static and therefore exist for SSR;
+   once the bridge mounts, the referenced namespaced values update without
+   creating another writer for a canonical component channel.
    ======================================================================== */
 
 :root {
-  --ds-typography-heading-letter-spacing: var(
-    --ds-letter-spacing-heading,
-    -0.01em
+  /* Card projection */
+  --ds-card-shadow: var(
+    --_ds-personality-resolved-card-shadow,
+    var(--ds-shadow-sm)
   );
-  --ds-typography-heading-font-weight: var(--ds-font-weight-heading, 600);
+  --ds-card-shadow-hover: var(
+    --_ds-personality-resolved-card-shadow-hover,
+    var(--ds-shadow-card-hover)
+  );
+  --ds-card-border: var(
+    --_ds-personality-resolved-card-border,
+    var(--ds-color-border-primary)
+  );
+  --ds-card-border-hover: var(
+    --_ds-personality-resolved-card-border-hover,
+    initial
+  );
+  --ds-card-header-padding: var(
+    --_ds-personality-resolved-card-header-padding,
+    var(--ds-card-default-padding)
+  );
+  --ds-card-body-padding: var(
+    --_ds-personality-resolved-card-body-padding,
+    var(--ds-card-default-padding)
+  );
+  --ds-card-footer-padding: var(
+    --_ds-personality-resolved-card-footer-padding,
+    var(--ds-card-default-padding)
+  );
+  --ds-card-bg-hover: var(
+    --_ds-personality-resolved-card-bg-hover,
+    var(--ds-color-neutral-50)
+  );
+  --ds-card-hover-transform: var(
+    --_ds-personality-resolved-card-hover-transform,
+    initial
+  );
+
+  /* Badge / divider / skeleton projection */
+  --ds-badge-radius: var(
+    --_ds-personality-resolved-badge-radius,
+    var(--ds-radius-full)
+  );
+  --ds-badge-hover-transform: var(
+    --_ds-personality-resolved-badge-hover-transform,
+    initial
+  );
+  --ds-divider-style: var(--_ds-personality-resolved-divider-style, solid);
+  --ds-divider-color: var(
+    --_ds-personality-resolved-divider-color,
+    var(--ds-border-color-default)
+  );
+  --ds-skeleton-animation-duration: var(
+    --_ds-personality-resolved-skeleton-animation-duration,
+    1.5s
+  );
+
+  /* Typography projection */
+  --ds-typography-heading-letter-spacing: var(
+    --_ds-personality-resolved-typography-heading-letter-spacing,
+    var(--ds-letter-spacing-heading, -0.01em)
+  );
+  --ds-typography-heading-font-weight: var(
+    --_ds-personality-resolved-typography-heading-font-weight,
+    var(--ds-font-weight-heading, 600)
+  );
+  --ds-typography-label-transform: var(
+    --_ds-personality-resolved-typography-label-transform,
+    initial
+  );
   --ds-typography-body-letter-spacing: var(--ds-letter-spacing-body, normal);
   --ds-typography-display-letter-spacing: var(
     --ds-letter-spacing-display,
@@ -48,6 +114,92 @@
   --ds-typography-heading-line-height: var(--ds-line-height-heading, 1.2);
   --ds-typography-body-line-height: var(--ds-line-height-body, 1.6);
   --ds-typography-display-line-height: var(--ds-line-height-display, 1);
+
+  /* Button projection */
+  --ds-button-transition: var(
+    --_ds-personality-resolved-button-transition,
+    all var(--ds-button-transition-duration) var(--ds-button-transition-timing)
+  );
+  --ds-button-hover-transform: var(
+    --_ds-personality-resolved-button-hover-transform,
+    translateY(-1px)
+  );
+  --ds-button-active-transform: var(
+    --_ds-personality-resolved-button-active-transform,
+    scale(var(--ds-state-press-scale))
+  );
+
+  /* Feedback and overlay motion projection */
+  --ds-toast-enter-duration: var(
+    --_ds-personality-resolved-toast-enter-duration,
+    initial
+  );
+  --ds-toast-exit-duration: var(
+    --_ds-personality-resolved-toast-exit-duration,
+    initial
+  );
+  --ds-toast-enter-easing: var(
+    --_ds-personality-resolved-toast-enter-easing,
+    initial
+  );
+  --ds-toast-exit-easing: var(
+    --_ds-personality-resolved-toast-exit-easing,
+    initial
+  );
+  --ds-message-enter-duration: var(
+    --_ds-personality-resolved-message-enter-duration,
+    initial
+  );
+  --ds-message-exit-duration: var(
+    --_ds-personality-resolved-message-exit-duration,
+    initial
+  );
+  --ds-message-enter-easing: var(
+    --_ds-personality-resolved-message-enter-easing,
+    initial
+  );
+  --ds-message-exit-easing: var(
+    --_ds-personality-resolved-message-exit-easing,
+    initial
+  );
+  --ds-notification-enter-duration: var(
+    --_ds-personality-resolved-notification-enter-duration,
+    initial
+  );
+  --ds-notification-exit-duration: var(
+    --_ds-personality-resolved-notification-exit-duration,
+    initial
+  );
+  --ds-notification-enter-easing: var(
+    --_ds-personality-resolved-notification-enter-easing,
+    initial
+  );
+  --ds-notification-exit-easing: var(
+    --_ds-personality-resolved-notification-exit-easing,
+    initial
+  );
+  --ds-modal-animation-duration: var(
+    --_ds-personality-resolved-modal-animation-duration,
+    200ms
+  );
+  --ds-modal-animation-timing: var(
+    --_ds-personality-resolved-modal-animation-timing,
+    cubic-bezier(0.22, 1, 0.36, 1)
+  );
+
+  /* Legacy duration aliases remain derived, never numerically re-authored. */
+  --ds-duration-fast: var(
+    --_ds-personality-resolved-duration-fast,
+    var(--duration-faster)
+  );
+  --ds-duration-normal: var(
+    --_ds-personality-resolved-duration-normal,
+    var(--duration-fast)
+  );
+  --ds-duration-slow: var(
+    --_ds-personality-resolved-duration-slow,
+    var(--duration-normal)
+  );
 }
 
 /* ========================================================================

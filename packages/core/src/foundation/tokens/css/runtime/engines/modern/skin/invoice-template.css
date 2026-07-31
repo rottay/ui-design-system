@@ -1,79 +1,286 @@
 /**
- * Modern InvoiceTemplate skin (WO-SKIN-06 checkpoint CK-D/F).
+ * Modern InvoiceTemplate skin (WO-SKIN-06 checkpoint CK-D/F; PT22 rebuild).
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
  * unnamed `base` layer, so a layered rule loses to preflight regardless of
  * specificity. Unlayered outranks preflight and still yields to a caller's inline
- * `style`, which the root relies on (`{ ...panelCardStyle, boxShadow, ...style }`).
+ * `style`, which the root relies on (`{ ...panelCardStyle, ...style }` -- the
+ * shared kit stays inline, shared with ten consumers fleet-wide).
  *
  * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-invoice-template
- * ds-engine-modern` + `data-part='root'`.
+ * ds-engine-modern` + `data-part='root'`. The loading branch carries the same
+ * classes with `data-loading='true'`; the elevation below is guarded on
+ * `[data-loading='false']` because the loading state never had one.
  *
- * The loading early-return carries `data-part='root'` + `data-loading='true'` but
- * NOT the scope classes, so the root rule below cannot reach it. That is load-
- * bearing, not an oversight: the loading state never had an elevation, and the
- * class pair is the only thing keeping the `box-shadow` off it.
+ * COMPOSITION LAW (PT22): Button (actions), Spinner (loading), Tag (status
+ * badge) and Empty (no-items row) own their own chrome and skins. The former
+ * hand-rolled native buttons, the pillBadgeStyle badge and the per-status
+ * tint map are retired (duplication). The line-items table stays
+ * pattern-owned: it is a static print document table, not an interactive
+ * data grid (see the engine fileoverview). What this file owns is exactly
+ * what the pattern owns: document geometry, typography hierarchy, column
+ * alignment with TABULAR FIGURES on every amount (decimal alignment is the
+ * law here), the totals measure, the inset panels, the print rule and the
+ * forced-colors contract.
  *
- * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
- * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
- * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
- * `data-part` REPEATED (0,2,0). Non-border paint wins unlayered at (0,3,0).
+ * SPECIFICITY (P-48): border-COLOR paint must reach (0,4,0) to clear the
+ * tenant floor at (0,3,1). Bought from the two root classes + the root's own
+ * `data-part` + the target's `data-part` in the descendant chain -- never by
+ * repeating an identical attribute (4th-tanda law).
  *
- * WHAT STAYS INLINE, DELIBERATELY: `panelCardStyle` and `pillBadgeStyle` are
- * imported from `patterns/_internal/engines/modern/styles`, a module shared with
- * approval-workflow (checkpoint CK-R) and nine other consumers fleet-wide. Their
- * keys are counted against THAT file, not this one, and this skin does not
- * restate them -- so the root's `background`/`border`/`border-radius` and the
- * badge's `border-radius` still arrive inline from the shared kit. Only the keys
- * this engine writes ITSELF move here. Checked before moving either: neither
- * spread sets a key the JSX later layers over it, so lifting `box-shadow` (root)
- * and `background`/`color` (badge) hands nothing back to the spread (P-78).
- *
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * RESPONSIVE: the root is the named container `ds-invoice-template`; the
+ * narrow cut compacts the document and stacks the header blocks while the
+ * table keeps its alignment inside the scroll wrapper (a print document
+ * table does not reflow into cards -- the amounts column alignment is the
+ * invariant).
  */
 
-/* ---- root: the elevation the JSX layered over the shared panel card ---- */
-.ds-pattern-invoice-template.ds-engine-modern[data-part='root'] {
+/* ---- root: the elevation the JSX layered over the shared panel card
+        (guarded: the loading branch never had one) + the drained page
+        measure (was `max-w-3xl mx-auto`) and container registration ---- */
+.ds-pattern-invoice-template.ds-engine-modern[data-part='root'][data-loading='false'] {
   box-shadow: var(--ds-elevation-1);
 }
-
-/* ---- action buttons ---- */
-.ds-pattern-invoice-template.ds-engine-modern [data-part='print-button'][data-part='print-button'],
-.ds-pattern-invoice-template.ds-engine-modern [data-part='export-button'][data-part='export-button'] {
-  background: transparent;
+.ds-pattern-invoice-template.ds-engine-modern[data-part='root'] {
+  container: ds-invoice-template / inline-size;
+  inline-size: 100%;
+  max-inline-size: var(--ds-invoice-template-max-width, 48rem);
+  margin-inline: auto;
+  min-inline-size: 0;
   color: var(--ds-color-text-primary);
-  border-radius: var(--ds-radius-md);
-  border: none;
 }
 
-/* ---- status badge (was the statusStyles enum map, layered over the shared
-        pillBadgeStyle). One rule per status; `border-radius` stays inline with
-        the shared kit. ---- */
-.ds-pattern-invoice-template.ds-engine-modern [data-part='status-badge'][data-status='draft'] {
-  background: var(--ds-surface-panel);
-  color: var(--ds-color-text-secondary);
+/* ---- loading root: centering frame (was `flex justify-center items-center
+        py-12` utilities) ---- */
+.ds-pattern-invoice-template.ds-engine-modern[data-part='root'][data-loading='true'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--ds-spacing-12, 3rem);
 }
-.ds-pattern-invoice-template.ds-engine-modern [data-part='status-badge'][data-status='sent'] {
-  background: color-mix(in srgb, var(--ds-color-info) 15%, transparent);
-  color: var(--ds-color-info);
+
+/* ---- document frame (was inline padding: 32) ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='document'] {
+  padding: var(--ds-invoice-template-document-padding, var(--ds-spacing-8, 2rem));
 }
-.ds-pattern-invoice-template.ds-engine-modern [data-part='status-badge'][data-status='paid'] {
-  background: color-mix(in srgb, var(--ds-color-success) 15%, transparent);
-  color: var(--ds-color-success);
+
+/* ---- actions bar (was flex justify-end gap-2 mb-4) ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='actions-bar'] {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--ds-spacing-2);
+  margin-block-end: var(--ds-spacing-4);
 }
-.ds-pattern-invoice-template.ds-engine-modern [data-part='status-badge'][data-status='overdue'] {
-  background: color-mix(in srgb, var(--ds-color-error) 15%, transparent);
-  color: var(--ds-color-error);
+
+/* ---- header: company start / metadata end (was flex justify-between mb-8) ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='header'] {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-4);
+  margin-block-end: var(--ds-spacing-8, 2rem);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='company-logo'] {
+  block-size: var(--ds-invoice-template-logo-height, 3rem);
+  margin-block-end: var(--ds-spacing-2);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='company-name'] {
+  margin: 0;
+  font-size: var(--ds-font-size-xl, 1.25rem);
+  font-weight: var(--ds-font-weight-bold, 700);
+  line-height: 1.25;
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='company-address-line'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='client-address-line'] {
+  margin: 0;
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  line-height: 1.5;
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='metadata'] {
+  text-align: end;
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='watermark'] {
+  margin-block-end: var(--ds-spacing-2);
+  font-size: var(--ds-font-size-3xl, 1.875rem);
+  font-weight: var(--ds-font-weight-extrabold, 800);
+  line-height: 1.1;
+  text-transform: uppercase;
+  opacity: 0.1;
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='metadata-line'] {
+  margin: 0;
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  line-height: 1.5;
+}
+
+/* ---- status badge slot (the composed Tag owns the badge chrome) ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='status-badge'] {
+  display: inline-flex;
+  margin-block-start: var(--ds-spacing-2);
+}
+
+/* ---- section labels (Bill To / Notes) ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='section-label'] {
+  margin-block-end: var(--ds-spacing-1);
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 /* ---- inset panels: Bill To + Notes shared one literal, kept as one rule
-        because both are this component's own DOM. ---- */
+        because both are this component's own DOM ---- */
 .ds-pattern-invoice-template.ds-engine-modern [data-part='bill-to'],
 .ds-pattern-invoice-template.ds-engine-modern [data-part='notes'] {
+  padding: var(--ds-spacing-4);
   background: var(--ds-surface-inset);
+  border-radius: var(--ds-radius-lg);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='bill-to'] {
+  margin-block-end: var(--ds-spacing-6, 1.5rem);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='client-name'] {
+  font-weight: var(--ds-font-weight-semibold, 600);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='notes'] {
+  margin-block-start: var(--ds-spacing-8, 2rem);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='notes-text'] {
+  margin: 0;
+  max-inline-size: 72ch;
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm, 0.875rem);
+  line-height: 1.6;
+  white-space: pre-wrap;
 }
 
-/* ---- totals divider ---- */
-.ds-pattern-invoice-template.ds-engine-modern [data-part='totals-divider'][data-part='totals-divider'] {
-  border-top: 1px solid var(--ds-color-border);
+/* ---- line items table: pattern-owned document table. Amounts are the law:
+        every numeric column right-aligns (logical end) with TABULAR FIGURES
+        so decimals line up down the column. ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-table-wrapper'] {
+  margin-block-end: var(--ds-spacing-6, 1.5rem);
+  overflow-x: auto;
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-table'] {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--ds-font-size-sm, 0.8125rem);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-header-cell'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-cell'] {
+  padding-block: var(--ds-spacing-2);
+  padding-inline: var(--ds-spacing-2);
+  text-align: start;
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-header-cell'] {
+  color: var(--ds-color-text-secondary);
+  font-weight: var(--ds-font-weight-semibold, 600);
+}
+.ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='items-header-row'] [data-part='items-header-cell'] {
+  border-block-end: 1px solid var(--ds-color-border);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-header-cell'][data-col='index'] {
+  inline-size: 2.5rem;
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-header-cell'][data-col='quantity'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-cell'][data-col='quantity'] {
+  inline-size: 4rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-header-cell'][data-col='unit-price'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-header-cell'][data-col='total'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-cell'][data-col='unit-price'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='items-cell'][data-col='total'] {
+  inline-size: 7rem;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- totals: end-aligned fixed measure (was w-72), tabular values, the
+        hairline divider, and the grand-total focal weight ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='totals'] {
+  inline-size: var(--ds-invoice-template-totals-width, 18rem);
+  max-inline-size: 100%;
+  margin-inline-start: auto;
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='totals-row'] {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3);
+  padding-block: var(--ds-spacing-1);
+  font-size: var(--ds-font-size-sm, 0.875rem);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='totals-value'] {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='totals-row'][data-row='tax'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='totals-divider'] {
+  margin-block: var(--ds-spacing-1);
+  border-block-start: 1px solid var(--ds-color-border);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='totals-row'][data-row='total'] {
+  font-size: var(--ds-font-size-lg, 1.125rem);
+  font-weight: var(--ds-font-weight-bold, 700);
+}
+
+/* ---- narrow composition cut: the document compacts and the header blocks
+        stack; the table keeps its aligned columns inside the scroll
+        wrapper (the amounts alignment is the invariant). ---- */
+@container ds-invoice-template (inline-size < 34rem) {
+  .ds-pattern-invoice-template.ds-engine-modern [data-part='document'] {
+    padding: var(--ds-spacing-4);
+  }
+  .ds-pattern-invoice-template.ds-engine-modern [data-part='header'] {
+    flex-direction: column;
+  }
+  .ds-pattern-invoice-template.ds-engine-modern [data-part='metadata'] {
+    text-align: start;
+  }
+  .ds-pattern-invoice-template.ds-engine-modern [data-part='totals'] {
+    inline-size: 100%;
+  }
+}
+
+/* ---- print: the actions never reach paper (the `no-print` hook stays for
+        consumer sheets; this rule makes the behavior DS-owned) ---- */
+@media print {
+  .ds-pattern-invoice-template.ds-engine-modern [data-part='actions-bar'] {
+    display: none;
+  }
+}
+
+/* forced-colors: shadows, tints and the watermark fade are forced away. The
+   document re-frames in system colors; hairlines (table header, totals
+   divider) and the inset panels re-assert as ButtonText boundaries; the
+   watermark keeps a readable system ink instead of its 10% fade; the status
+   badge is a composed Tag with its own forced-colors contract. Amount
+   alignment and tabular figures are typography -- forced colours never
+   strips them. */
+@media (forced-colors: active) {
+  .ds-pattern-invoice-template.ds-engine-modern[data-part='root'][data-loading='false'] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-pattern-invoice-template.ds-engine-modern [data-part='watermark'] {
+    opacity: 1;
+    color: CanvasText;
+  }
+  .ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='items-header-row'] [data-part='items-header-cell'] {
+    border-block-end-color: ButtonText;
+  }
+  .ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='totals-divider'] {
+    border-block-start-color: ButtonText;
+  }
+  .ds-pattern-invoice-template.ds-engine-modern [data-part='bill-to'],
+  .ds-pattern-invoice-template.ds-engine-modern [data-part='notes'] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+  }
 }

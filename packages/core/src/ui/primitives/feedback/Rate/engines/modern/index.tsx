@@ -277,10 +277,9 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       if (character) {
         return character;
       }
-      // Default star SVG
+      // Default star SVG (sized by the skin's `[data-part='star'] svg` rule).
       return (
         <svg
-          className="w-full h-full"
           fill="currentColor"
           viewBox="0 0 20 20"
         >
@@ -347,10 +346,11 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
         >
           {/* Invisible overlay covering the leading half of the star.
               stopPropagation prevents the full-star handler from firing
-              when the user interacts with the half-star zone. */}
+              when the user interacts with the half-star zone. Geometry is
+              skin-owned (`data-part='star-half-hit`). */}
           {allowHalf && (
             <span
-              className="absolute start-0 top-0 w-1/2 h-full z-10"
+              data-part="star-half-hit"
               onMouseEnter={(e) => {
                 e.stopPropagation();
                 handleHover(starIndex - 0.5);
@@ -363,10 +363,10 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
           )}
           {/* Half star visual - overlay technique */}
           {isHalfFilled ? (
-            <span className="relative inline-flex w-full h-full">
+            <span data-part="star-half-wrap">
               {/* Background (inactive) star: constant inactive color via the
                   track marker; --ds-rate-star-inactive is stamped on the root. */}
-              <span className="absolute inset-0 rottay-rate-star-track">
+              <span className="rottay-rate-star-track">
                 {renderCharacter(index)}
               </span>
               {/* Foreground (active) half star inherits the star's active fill. */}

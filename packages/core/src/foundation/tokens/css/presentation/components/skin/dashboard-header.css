@@ -2,6 +2,22 @@
  * DashboardHeader skin.
  * A framed operational header with clear identity, action and metric zones.
  * All chroma and intensity resolve through tenant-owned tokens.
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)`.
+ *
+ * SPECIFICITY (P-48): the tenant `html[data-tenant]…*` border-color floor sits
+ * at (0,3,1); border paint reaches (0,4,0) through the always-stamped root
+ * `data-part` ancestor (the rule ON the root uses `data-compact`, always
+ * stamped 'true'|'false'). A `color` on a composed Text must exceed the
+ * typography skin's (0,4,0) `[data-color]` rule, so it adds the always-
+ * stamped `data-size` (or the contract `data-direction` / `data-state`) for
+ * (0,5,0). Repeating a class or attribute is forbidden.
+ *
+ * GLASS: `backdrop-filter` is opt-in through the
+ * `--ds-dashboard-header-actions-backdrop` channel (default `none`) — a
+ * default-ON blur taxes every scroll frame (PT29/PT32/S06 fix, Sheet glass
+ * precedent).
  */
 
 .ds-structure.ds-dashboard-header[data-part='root'] {
@@ -32,13 +48,12 @@
   container-name: ds-dashboard-header;
 }
 
-.ds-structure.ds-dashboard-header[data-part='root'][data-part='root'] {
+.ds-structure.ds-dashboard-header[data-part='root'][data-compact] {
   border: 1px solid var(--ds-dashboard-header-border, var(--ds-color-border-primary));
 }
 
 .ds-structure.ds-dashboard-header[data-part='root']::after {
   position: absolute;
-  z-index: 0;
   inset: 0;
   pointer-events: none;
   content: '';
@@ -51,15 +66,15 @@
   );
   background-position: 130% 50%;
   background-size: 240% 100%;
-  animation: ds-dashboard-header-sheen var(--ds-dashboard-header-sheen-duration, 16s) ease-in-out infinite;
+  animation: ds-dashboard-header-sheen var(--ds-dashboard-header-sheen-duration, 16s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] > * {
   position: relative;
-  z-index: 1;
+  z-index: var(--ds-z-index-relative-above, 1);
 }
 
-.ds-structure.ds-dashboard-header[data-part='root']:hover {
+.ds-structure.ds-dashboard-header[data-part='root']:active {
   background-position: 100% 50%;
   border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-dashboard-header-border, var(--ds-color-border-primary)));
   box-shadow:
@@ -84,27 +99,27 @@
   color: var(--ds-dashboard-header-icon-color, var(--ds-color-primary));
   background: var(--ds-dashboard-header-icon-bg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)));
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, white 62%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 62%, transparent),
     0 8px 20px -15px color-mix(in srgb, var(--ds-color-primary) 72%, transparent);
   transition: transform var(--ds-motion-fast) var(--ds-motion-ease-spring, ease-out);
 }
 
-.ds-structure.ds-dashboard-header [data-part='icon'][data-part='icon'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='icon'] {
   border: 1px solid var(--ds-dashboard-header-icon-border, color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle)));
 }
 
-.ds-structure.ds-dashboard-header[data-part='root']:hover [data-part='icon'] {
+.ds-structure.ds-dashboard-header[data-part='root']:active [data-part='icon'] {
   transform: translateY(-1px) scale(1.025);
 }
 
-.ds-structure.ds-dashboard-header [data-part='title'][data-part='title'][data-part='title'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='title'][data-size] {
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   letter-spacing: var(--ds-dashboard-header-title-tracking, -0.025em);
   text-wrap: balance;
 }
 
-.ds-structure.ds-dashboard-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='subtitle'][data-size] {
   max-width: 68ch;
   color: var(--ds-color-text-secondary);
   line-height: 1.5;
@@ -119,10 +134,11 @@
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),
     0 8px 18px -16px color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent);
-  backdrop-filter: blur(var(--ds-glass-blur, 8px));
+  /* Glass is opt-in (default none): PT29/PT32/S06 fix, Sheet glass precedent. */
+  backdrop-filter: var(--ds-dashboard-header-actions-backdrop, none);
 }
 
-.ds-structure.ds-dashboard-header [data-part='actions'][data-part='actions'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='actions'] {
   border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
 }
 
@@ -130,7 +146,7 @@
   padding-top: var(--ds-spacing-3, 12px);
 }
 
-.ds-structure.ds-dashboard-header [data-part='metrics-row'][data-compact='false'][data-part='metrics-row'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metrics-row'][data-compact='false'] {
   border-top: 1px solid var(--ds-toolbar-divider, var(--ds-color-border-subtle));
 }
 
@@ -148,11 +164,11 @@
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 
-.ds-structure.ds-dashboard-header [data-part='metric-chip'][data-part='metric-chip'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip'] {
   border: 1px solid var(--ds-dashboard-metric-border, var(--ds-color-border-subtle));
 }
 
-.ds-structure.ds-dashboard-header [data-part='metric-chip']:hover {
+.ds-structure.ds-dashboard-header [data-part='metric-chip']:active {
   transform: translateY(-1px);
   border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle));
   box-shadow: var(--ds-elevation-1);
@@ -168,7 +184,7 @@
   background: color-mix(in srgb, currentColor 8%, transparent);
 }
 
-.ds-structure.ds-dashboard-header [data-part='metric-chip-label'][data-part='metric-chip-label'][data-part='metric-chip-label'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip-label'][data-size] {
   color: var(--ds-color-text-muted);
   font-family: var(--ds-font-family-mono, var(--ds-font-family-base));
   font-size: var(--ds-font-size-xs, 12px);
@@ -176,37 +192,37 @@
   text-transform: uppercase;
 }
 
-.ds-structure.ds-dashboard-header [data-part='metric-chip-value'][data-part='metric-chip-value'][data-part='metric-chip-value'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip-value'][data-size] {
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-variant-numeric: tabular-nums;
 }
 
-.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip-change'][data-size] {
   padding: 1px 5px;
   border-radius: var(--ds-radius-full);
   background: color-mix(in srgb, currentColor 7%, transparent);
   font-variant-numeric: tabular-nums;
 }
 
-.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='up'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip-change'][data-direction='up'] {
   color: var(--ds-color-success);
 }
 
-.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='down'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip-change'][data-direction='down'] {
   color: var(--ds-color-error);
 }
 
-.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='flat'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip-change'][data-direction='flat'] {
   color: var(--ds-color-text-muted);
 }
 
 .ds-structure.ds-dashboard-header [data-part='status-dot'] {
   border-radius: var(--ds-radius-full);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 50%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 50%, transparent);
 }
 
-.ds-structure.ds-dashboard-header [data-part='status-dot'][data-part='status-dot'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='status-dot'] {
   border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
 }
 
@@ -239,7 +255,7 @@
    reduced-motion guard below can neutralize it. */
 .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='live'],
 .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='syncing'] {
-  animation: ds-foundation-pulse 2s var(--ds-motion-ease-in-out, ease-in-out) infinite;
+  animation: ds-foundation-pulse var(--ds-motion-attention, 2s) var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
 .ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='syncing'],
@@ -253,17 +269,17 @@
   color: var(--ds-color-error);
 }
 
-.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='live'],
-.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='connected'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='status-dot-text'][data-state='live'],
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='status-dot-text'][data-state='connected'] {
   color: var(--ds-color-success);
 }
 
-.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='syncing'],
-.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='warning'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='status-dot-text'][data-state='syncing'],
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='status-dot-text'][data-state='warning'] {
   color: var(--ds-color-warning);
 }
 
-.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='offline'] {
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='status-dot-text'][data-state='offline'] {
   color: var(--ds-color-error);
 }
 
@@ -303,6 +319,41 @@
 @keyframes ds-dashboard-header-sheen {
   0%, 72%, 100% { background-position: 130% 50%; }
   86% { background-position: -130% 50%; }
+}
+
+/* ---- hover is pointer-fine only; every treatment keeps an unguarded
+        `:active` twin at its original cascade position. ---- */
+@media (hover: hover) {
+  .ds-structure.ds-dashboard-header[data-part='root']:hover {
+    background-position: 100% 50%;
+    border-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-dashboard-header-border, var(--ds-color-border-primary)));
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 92%, transparent),
+      var(--ds-dashboard-header-shadow-hover, var(--ds-elevation-2));
+  }
+
+  .ds-structure.ds-dashboard-header[data-part='root']:hover [data-part='icon'] {
+    transform: translateY(-1px) scale(1.025);
+  }
+
+  .ds-structure.ds-dashboard-header [data-part='metric-chip']:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle));
+    box-shadow: var(--ds-elevation-1);
+  }
+}
+
+/* ---- forced colors: the structure-owned frames read as ButtonText; status
+        reads by glyph + label text, metric direction by its +/- sign. ---- */
+@media (forced-colors: active) {
+  .ds-structure.ds-dashboard-header[data-part='root'][data-compact],
+  .ds-structure.ds-dashboard-header[data-part='root'] [data-part='icon'],
+  .ds-structure.ds-dashboard-header[data-part='root'] [data-part='actions'],
+  .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metrics-row'][data-compact='false'],
+  .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metric-chip'],
+  .ds-structure.ds-dashboard-header[data-part='root'] [data-part='status-dot'] {
+    border-color: ButtonText;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

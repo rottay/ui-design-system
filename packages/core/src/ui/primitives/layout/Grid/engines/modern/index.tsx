@@ -8,6 +8,17 @@
  * every supported value remains available in downstream consumer bundles. Gap
  * tokens stay connected to the DS custom-property contract for white-labeling.
  *
+ * **When to use Grid vs the layout sisters (kept in sync with Box/Flex):**
+ * - **Box** is the polymorphic single-element escape hatch (one element, no
+ *   child rhythm).
+ * - **Stack** owns one-dimensional child rhythm with preset spacing.
+ * - **Flex** owns explicit single-axis composition (wrap/justify/align).
+ * - **Grid** (this primitive) owns two-dimensional tracks: column templates
+ *   (`repeat(N, minmax(0, 1fr))` so long content can never force a track
+ *   wider than its share), bounded `auto-fit` via `minColumnWidth`, spans and
+ *   line placement per item. If you only need a row of siblings with a gap,
+ *   you wanted Stack — Grid is for when items must align across TWO axes.
+ *
  * @example Using Modern Engine
  * ```tsx
  * import { Grid } from '@rottay/design-system';
@@ -361,11 +372,6 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
           : undefined
       )
     : null;
-
-  // Gap resolved via inline style using DS CSS custom properties
-  if (gap && typeof gap === "string" && gap in GAP_MAP) {
-    computedStyle.gap = GAP_MAP[gap as keyof typeof GAP_MAP];
-  }
 
   const ElementType = Component as ElementType;
 

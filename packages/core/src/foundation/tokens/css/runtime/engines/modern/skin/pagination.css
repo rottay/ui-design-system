@@ -108,6 +108,17 @@
     border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
 }
 
+/* ---- glyph nav buttons read square next to the padded numeral cells:
+        optical alignment (a wide pill around a chevron reads off-balance
+        beside tabular numerals centered in their own cells). ---- */
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'] {
+  inline-size: var(
+    --ds-pagination-nav-inline-size,
+    var(--ds-pagination-current-height)
+  );
+  padding-inline: 0;
+}
+
 /* ---- the joined seam: every control but `next` drops its inline-end edge. ---- */
 .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-direction='prev'][data-part='pagination-nav-button'],
 .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-part='pagination-page-button'],

@@ -1,91 +1,121 @@
 /**
- * DataTerminalCard skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: foundation/tokens/css/presentation/components/skin/data-terminal-card.css. The component renders
- * one DOM tree under every engine (no engines/ split), so it has a single skin
- * covering BOTH of its scope classes: `ds-data-terminal-card` (the four variant
- * bodies CommandCard/HUDCard/CircuitCard/MatrixCard, selected by `data-variant`
+ * DataTerminalCard skin — engine-agnostic.
+ * Home: foundation/tokens/css/presentation/components/skin/data-terminal-card.css.
+ * The component renders one DOM tree under every engine (no engines/ split), so
+ * it has a single skin covering BOTH of its scope classes:
+ * `ds-data-terminal-card` (the four variant bodies, selected by `data-variant`
  * 1..4) and `ds-data-terminal-stat` (DataTerminalStat).
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * base layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ * LAYERING: imported by `facade/entrypoints/base.css` into
+ * `layer(rottay-components)` — this file does not control its own layering
+ * (the older "deliberately unlayered" note predates that wiring). Caller
+ * inline `style` still wins over every rule here.
  *
  * SCOPE ROOT carries a SINGLE class (`ds-data-terminal-card` OR
- * `ds-data-terminal-stat`) — not the usual `ds-structure ds-<comp>` pair — plus
- * `data-part='root'` and the contract attributes `data-variant` (card only),
- * `data-trend`, `data-band` (card + progress-fill). Every painted node is a
- * descendant with its own `data-part`. Because there is only one root class, the
- * specificity budget below is bought from that one class plus REPEATED
- * `data-part` and/or the contract attributes — never an incidental attribute.
+ * `ds-data-terminal-stat`) plus ALWAYS-PRESENT contract attributes:
+ * `data-part='root'` + `data-variant` (card only) + `data-trend` +
+ * `data-band` (both roots — the stat root now stamps it too). Class/attribute
+ * REPETITION IS PROHIBITED, so the specificity budget the old selectors bought
+ * by repeating `data-part` up to four times is now bought from those
+ * always-present attributes (fragility documented: if an engine ever stops
+ * stamping one, the affected rules silently lose to the floors):
+ *   - NON-BORDER paint on a Box/icon: (0,3,0) = class + `data-part='root'` +
+ *     the descendant part.
+ *   - A BORDER COLOR: (0,4,0) = class + root + one contract attr + the part.
+ *   - `color` on a composed `Text` (must match the Typography skin's (0,4,0)
+ *     and win the tie as the later file): (0,5,0) = class + root + two
+ *     contract attrs + the part.
+ * `border: none`/width-only resets carry no color and are exempt — none here.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
- * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
- * `border-color` on every element, and the modern/rustic Typography skins paint
- * every composed `Text` at
- * `.rottay-typography.rottay-typography--<engine>.rottay-typography--<engine>[data-color='default']`
- * = (0,4,0). Therefore, with one root class:
- *   - NON-BORDER paint on a Box/icon (background, background-image, background-size,
- *     border-radius, icon color) beats preflight at (0,3,0): one class + the
- *     descendant `data-part` repeated once (or the root class + one contract attr
- *     + the descendant part).
- *   - A BORDER COLOR must reach (0,4,0): one class + the descendant `data-part`
- *     repeated (or a contract attr) for three more units. `border: none`/width-only
- *     resets carry no color and are exempt — none exist here.
- *   - `color` on a composed `Text` must EXCEED the Typography skin's (0,4,0), so it
- *     reaches (0,5,0): one class + the descendant `data-part` repeated to four, or
- *     one class + one contract attr + the part repeated to three. (Icon color has
- *     no Typography competitor and wins at (0,3,0).)
- *
- * STATE: `getProgressColor(progress)` is a threshold bucket over static tokens and
- * is STATE-SELECTED, so it becomes rules keyed on the stamped `data-band`
+ * STATE: `getProgressColor(progress)` is a threshold bucket over static tokens
+ * and is STATE-SELECTED, so it stays rules keyed on the stamped `data-band`
  * (high -> success, mid -> warning, low -> error). `trendColor` is the binary
- * `trend === 'up' ? success : error` and becomes rules keyed on `data-trend`.
+ * `trend === 'up' ? success : error` and stays keyed on `data-trend`.
  *
- * RUNTIME HATCHES (uncounted quoted custom-property keys set inline, consumed here):
- *   - `--ds-dtc-live`  — LiveIndicator's ring colour is caller-passed (CircuitCard
- *     passes the band-derived progress colour, MatrixCard passes success). It is
- *     computed from data, so no enumerable rule holds it; the caller sets it and
- *     both rings read it.
- *   - `--ds-dtc-radius` — ProgressBar's `border-radius: height / 2` is computed from
- *     a runtime `height` prop; the track sets it and both track + fill read it.
+ * MOTION: every animation/transition is owned HERE (the inline declarations
+ * left the engine because an inline animation cannot be reduced-motion
+ * silenced without `!important`). Durations ride INTERNAL cadence channels,
+ * each derived from the `--ds-motion-glacial` rung:
+ *   --ds-dtc-duration-entrance  = ×0.8 (0.4s, card fade-in)
+ *   --ds-dtc-duration-tick      = ×2   (1s,   data-tick/typing/details pulse)
+ *   --ds-dtc-duration-pulse     = ×4   (2s,   live/node/shimmer pulse)
+ *   --ds-dtc-duration-heartbeat = ×3   (1.5s, heartbeat dots)
+ *   --ds-dtc-duration-drift     = ×6   (3s,   HUD corner brackets)
+ *   --ds-dtc-duration-ambient   = ×8   (4s,   breathe/slide textures)
+ *   --ds-dtc-duration-scan      = ×10  (5s,   HUD scan line)
+ *   --ds-dtc-duration-flow      = ×80  (40s,  matrix texture flow)
+ * Stagger delays reuse the same channels (no motion literals anywhere) except
+ * the activity-bar's runtime-computed per-index delay, which stays inline.
  *
- * SAME-PART STATIC SIBLINGS: the three terminal-dots and the corner-brackets share
- * one `data-part` each with no distinguishing stamp, so they are selected by
- * scope-anchored `:nth-child` — byte-exact for these hardcoded, fixed-order
- * decorative siblings.
+ * RUNTIME HATCHES (quoted custom-property keys set inline, consumed here):
+ *   - `--ds-dtc-live`  — LiveIndicator's ring colour is caller-passed
+ *     (CircuitCard passes the band-derived progress colour, MatrixCard
+ *     passes success). Computed from data, so no enumerable rule holds it.
+ *   - `--ds-dtc-radius` — ProgressBar's `border-radius: height / 2` is
+ *     computed from a runtime `height` prop; the track sets it and both
+ *     track + fill read it.
+ *
+ * SAME-PART STATIC SIBLINGS: the three terminal-dots and the corner-brackets
+ * share one `data-part` each with no distinguishing stamp, so they are
+ * selected by scope-anchored `:nth-child` — byte-exact for these hardcoded,
+ * fixed-order decorative siblings.
+ *
+ * HOVER LAW: the card is a full-body link and quick actions are buttons, so
+ * their hovers are hover-capable-only (`@media (hover: hover)`) with a
+ * matching `:active`.
+ *
+ * FORCED COLORS: system colors only — the progress WIDTH carries the data
+ * (never its hue), trend reads by icon shape + text, band/status read by
+ * their text labels, and the decorative textures/scan/flow/activity/cursor
+ * layers step out entirely. No forced-color-adjust opt-out anywhere.
  *
  * Values transcribed verbatim from index.tsx (the `DS` token map + the two
- * threshold/binary selectors). The one hardcoded literal is the progress shimmer
- * gradient's `rgba(255,255,255,0.2)`.
+ * threshold/binary selectors).
  */
 
 /* ============================================================================
  * ROOT surface (card + stat) — background + 1px border. Uniform across all
- * four card variants and the stat.
+ * four card variants and the stat. The entrance fade is skin-owned (MOTION).
  * ==========================================================================*/
 
-.ds-data-terminal-card[data-part='root'][data-part='root'] {
+.ds-data-terminal-card[data-part='root'] {
   background: var(--ds-color-background);
+  animation: dtc-fade-in
+    var(--ds-dtc-duration-entrance, calc(var(--ds-motion-glacial, 500ms) * 0.8))
+    var(--ds-motion-ease-out, ease-out);
+  transition: border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-data-terminal-card[data-part='root'][data-part='root'][data-part='root'] {
+.ds-data-terminal-card[data-part='root'][data-variant] {
   border: 1px solid var(--ds-color-border);
 }
 
-.ds-data-terminal-stat[data-part='root'][data-part='root'] {
+.ds-data-terminal-stat[data-part='root'] {
   background: var(--ds-color-background);
 }
-.ds-data-terminal-stat[data-part='root'][data-part='root'][data-part='root'] {
+.ds-data-terminal-stat[data-part='root'][data-trend] {
   border: 1px solid var(--ds-color-border);
+}
+
+/* The card is a full-body link: a quiet border shift on hover (hover-capable
+   only) and press, never a lift or glow. */
+@media (hover: hover) {
+  .ds-data-terminal-card[data-part='root']:hover {
+    border-color: color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border));
+  }
+}
+.ds-data-terminal-card[data-part='root']:active {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border));
 }
 
 /* ============================================================================
  * SHARED CROSS-VARIANT parts — same paint wherever the part appears.
  * ==========================================================================*/
 
-/* value (Text) — all four bodies + stat, always text-primary. */
-.ds-data-terminal-card [data-part='value'][data-part='value'][data-part='value'][data-part='value'],
-.ds-data-terminal-stat [data-part='value'][data-part='value'][data-part='value'][data-part='value'] {
+/* value (Text) — all four bodies + stat, always text-primary, tabular. */
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='value'],
+.ds-data-terminal-stat[data-part='root'][data-trend][data-band] [data-part='value'] {
   color: var(--ds-color-text);
+  font-variant-numeric: tabular-nums;
 }
 
 /* trend-icon (supplier-independent, currentColor) — binary on data-trend, all five bodies. */
@@ -99,68 +129,71 @@
 }
 
 /* change-value (Text) — binary on data-trend, all five bodies. */
-.ds-data-terminal-card[data-trend='up'] [data-part='change-value'][data-part='change-value'][data-part='change-value'],
-.ds-data-terminal-stat[data-trend='up'] [data-part='change-value'][data-part='change-value'][data-part='change-value'] {
+.ds-data-terminal-card[data-part='root'][data-trend='up'][data-band] [data-part='change-value'],
+.ds-data-terminal-stat[data-part='root'][data-trend='up'][data-band] [data-part='change-value'] {
   color: var(--ds-color-success);
+  font-variant-numeric: tabular-nums;
 }
-.ds-data-terminal-card[data-trend='down'] [data-part='change-value'][data-part='change-value'][data-part='change-value'],
-.ds-data-terminal-stat[data-trend='down'] [data-part='change-value'][data-part='change-value'][data-part='change-value'] {
+.ds-data-terminal-card[data-part='root'][data-trend='down'][data-band] [data-part='change-value'],
+.ds-data-terminal-stat[data-part='root'][data-trend='down'][data-band] [data-part='change-value'] {
   color: var(--ds-color-error);
+  font-variant-numeric: tabular-nums;
 }
 
 /* target-value (Text) — threshold bucket on the root's data-band. Command/Circuit/Matrix. */
-.ds-data-terminal-card[data-band='high'] [data-part='target-value'][data-part='target-value'][data-part='target-value'] {
+.ds-data-terminal-card[data-part='root'][data-band='high'][data-trend] [data-part='target-value'] {
   color: var(--ds-color-success);
+  font-variant-numeric: tabular-nums;
 }
-.ds-data-terminal-card[data-band='mid'] [data-part='target-value'][data-part='target-value'][data-part='target-value'] {
+.ds-data-terminal-card[data-part='root'][data-band='mid'][data-trend] [data-part='target-value'] {
   color: var(--ds-color-warning);
+  font-variant-numeric: tabular-nums;
 }
-.ds-data-terminal-card[data-band='low'] [data-part='target-value'][data-part='target-value'][data-part='target-value'] {
+.ds-data-terminal-card[data-part='root'][data-band='low'][data-trend] [data-part='target-value'] {
   color: var(--ds-color-error);
+  font-variant-numeric: tabular-nums;
 }
 
 /* period-value (Text) — text-secondary in Command/Circuit/Matrix, text-subtle in HUD. */
-.ds-data-terminal-card[data-variant='1'] [data-part='period-value'][data-part='period-value'][data-part='period-value'],
-.ds-data-terminal-card[data-variant='3'] [data-part='period-value'][data-part='period-value'][data-part='period-value'],
-.ds-data-terminal-card[data-variant='4'] [data-part='period-value'][data-part='period-value'][data-part='period-value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] [data-part='period-value'],
+.ds-data-terminal-card[data-part='root'][data-variant='3'][data-trend] [data-part='period-value'],
+.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] [data-part='period-value'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-data-terminal-card[data-variant='2'] [data-part='period-value'][data-part='period-value'][data-part='period-value'] {
+.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] [data-part='period-value'] {
   color: var(--ds-color-text-subtle);
 }
 
 /* header icon-box (Box) — HUD/Circuit/Matrix, subtle background + 1px border. */
-.ds-data-terminal-card [data-part='header-icon-box'][data-part='header-icon-box'] {
+.ds-data-terminal-card[data-part='root'] [data-part='header-icon-box'] {
   background: var(--ds-color-background-subtle);
 }
-.ds-data-terminal-card [data-part='header-icon-box'][data-part='header-icon-box'][data-part='header-icon-box'] {
+.ds-data-terminal-card[data-part='root'][data-variant] [data-part='header-icon-box'] {
   border: 1px solid var(--ds-color-border);
 }
 
 /* header-icon — HUD/Circuit/Matrix, text-secondary. */
-.ds-data-terminal-card [data-part='header-icon'][data-part='header-icon'] {
+.ds-data-terminal-card[data-part='root'] [data-part='header-icon'] {
   color: var(--ds-color-text-secondary);
 }
 
 /* header-label (Text) — HUD/Circuit/Matrix, text-secondary. */
-.ds-data-terminal-card [data-part='header-label'][data-part='header-label'][data-part='header-label'][data-part='header-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='header-label'] {
   color: var(--ds-color-text-secondary);
 }
 
 /* details-label (Text) — HUD/Matrix, text-muted. */
-.ds-data-terminal-card [data-part='details-label'][data-part='details-label'][data-part='details-label'][data-part='details-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='details-label'] {
   color: var(--ds-color-text-muted);
 }
 
 /* details-arrow — HUD/Matrix, text-muted. */
-.ds-data-terminal-card [data-part='details-arrow'][data-part='details-arrow'] {
+.ds-data-terminal-card[data-part='root'] [data-part='details-arrow'] {
   color: var(--ds-color-text-muted);
 }
 
-/* section-divider — the header-section bottom rule in HUD/Circuit/Matrix.
- * data-part repeated THREE times to reach the (0,4,0) border floor (×2 = (0,3,0)
- * would lose the border-color to the tenant floor html[data-tenant]…* at (0,3,1)). */
-.ds-data-terminal-card [data-part='section-divider'][data-part='section-divider'][data-part='section-divider'] {
+/* section-divider — the header-section bottom rule in HUD/Circuit/Matrix. */
+.ds-data-terminal-card[data-part='root'][data-variant] [data-part='section-divider'] {
   border-bottom: 1px solid var(--ds-color-border);
 }
 
@@ -170,67 +203,97 @@
  * ==========================================================================*/
 
 /* LiveIndicator rings — colour is caller-passed via the --ds-dtc-live hatch. */
-.ds-data-terminal-card [data-part='live-pulse-ring'][data-part='live-pulse-ring'] {
+.ds-data-terminal-card[data-part='root'] [data-part='live-pulse-ring'] {
+  border-radius: 50%;
+  background: var(--ds-dtc-live);
+  animation: dtc-live-pulse
+    var(--ds-dtc-duration-pulse, calc(var(--ds-motion-glacial, 500ms) * 4))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+.ds-data-terminal-card[data-part='root'] [data-part='live-ring'] {
   border-radius: 50%;
   background: var(--ds-dtc-live);
 }
-.ds-data-terminal-card [data-part='live-ring'][data-part='live-ring'] {
-  border-radius: 50%;
-  background: var(--ds-dtc-live);
-}
-.ds-data-terminal-card [data-part='live-label'][data-part='live-label'][data-part='live-label'][data-part='live-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='live-label'] {
   color: var(--ds-color-text-muted);
 }
 
-/* ActivityIndicator bars — Command/Circuit/Matrix, success. */
-.ds-data-terminal-card [data-part='activity-bar'][data-part='activity-bar'] {
+/* ActivityIndicator bars — Command/Circuit/Matrix, success. The per-index
+   stagger delay stays inline (runtime value); the cadence is owned here. */
+.ds-data-terminal-card[data-part='root'] [data-part='activity-bar'] {
   border-radius: 1px;
   background: var(--ds-color-success);
+  animation: dtc-data-tick
+    var(--ds-dtc-duration-tick, calc(var(--ds-motion-glacial, 500ms) * 2))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-/* QuickAction button — Command/Circuit. */
-.ds-data-terminal-card [data-part='quick-action'][data-part='quick-action'][data-part='quick-action'] {
+/* QuickAction button — Command/Circuit (DEAD affordance; contract gap). */
+.ds-data-terminal-card[data-part='root'][data-variant] [data-part='quick-action'] {
   background: transparent;
   border: 1px solid var(--ds-color-border);
+  transition:
+    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-data-terminal-card [data-part='quick-action-icon'][data-part='quick-action-icon'] {
+@media (hover: hover) {
+  .ds-data-terminal-card[data-part='root'] [data-part='quick-action']:hover {
+    background: var(--ds-color-background-subtle);
+  }
+}
+.ds-data-terminal-card[data-part='root'] [data-part='quick-action']:active {
+  background: var(--ds-color-background-subtle);
+}
+.ds-data-terminal-card[data-part='root'] [data-part='quick-action-icon'] {
   color: var(--ds-color-text-muted);
 }
-.ds-data-terminal-card [data-part='quick-action-label'][data-part='quick-action-label'][data-part='quick-action-label'][data-part='quick-action-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='quick-action-label'] {
   color: var(--ds-color-text-muted);
 }
 
 /* StatItem label (Text) — Command/Circuit/Matrix, text-subtle. */
-.ds-data-terminal-card [data-part='stat-item-label'][data-part='stat-item-label'][data-part='stat-item-label'][data-part='stat-item-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='stat-item-label'] {
   color: var(--ds-color-text-subtle);
 }
 
 /* ProgressBar — track background + fill band background + shimmer. Card + stat.
- * The radius rides the --ds-dtc-radius hatch (height/2, runtime). */
-.ds-data-terminal-card [data-part='progress-track'][data-part='progress-track'],
-.ds-data-terminal-stat [data-part='progress-track'][data-part='progress-track'] {
+ * The radius rides the --ds-dtc-radius hatch (height/2, runtime). The fill's
+ * width transition and the shimmer cadence are owned here (MOTION). */
+.ds-data-terminal-card[data-part='root'] [data-part='progress-track'],
+.ds-data-terminal-stat[data-part='root'] [data-part='progress-track'] {
   background: var(--ds-color-border);
   border-radius: var(--ds-dtc-radius);
 }
-.ds-data-terminal-card [data-part='progress-fill'][data-part='progress-fill'],
-.ds-data-terminal-stat [data-part='progress-fill'][data-part='progress-fill'] {
+.ds-data-terminal-card[data-part='root'] [data-part='progress-fill'],
+.ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'] {
   border-radius: var(--ds-dtc-radius);
+  transition: width
+    var(--ds-dtc-duration-tick, calc(var(--ds-motion-glacial, 500ms) * 2))
+    var(--ds-motion-ease-in-out, ease-in-out);
 }
-.ds-data-terminal-card [data-part='progress-fill'][data-band='high'],
-.ds-data-terminal-stat [data-part='progress-fill'][data-band='high'] {
+.ds-data-terminal-card[data-part='root'] [data-part='progress-fill'][data-band='high'],
+.ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'][data-band='high'] {
   background: var(--ds-color-success);
 }
-.ds-data-terminal-card [data-part='progress-fill'][data-band='mid'],
-.ds-data-terminal-stat [data-part='progress-fill'][data-band='mid'] {
+.ds-data-terminal-card[data-part='root'] [data-part='progress-fill'][data-band='mid'],
+.ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'][data-band='mid'] {
   background: var(--ds-color-warning);
 }
-.ds-data-terminal-card [data-part='progress-fill'][data-band='low'],
-.ds-data-terminal-stat [data-part='progress-fill'][data-band='low'] {
+.ds-data-terminal-card[data-part='root'] [data-part='progress-fill'][data-band='low'],
+.ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'][data-band='low'] {
   background: var(--ds-color-error);
 }
-.ds-data-terminal-card [data-part='progress-shimmer'][data-part='progress-shimmer'],
-.ds-data-terminal-stat [data-part='progress-shimmer'][data-part='progress-shimmer'] {
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+.ds-data-terminal-card[data-part='root'] [data-part='progress-shimmer'],
+.ds-data-terminal-stat[data-part='root'] [data-part='progress-shimmer'] {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--ds-color-text-on-primary) 20%, transparent),
+    transparent
+  );
+  animation: dtc-wave
+    var(--ds-dtc-duration-pulse, calc(var(--ds-motion-glacial, 500ms) * 4))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
 /* ============================================================================
@@ -240,14 +303,14 @@
 .ds-data-terminal-card[data-variant='1'] [data-part='terminal-bar'] {
   background: var(--ds-color-background-subtle);
 }
-.ds-data-terminal-card[data-variant='1'] [data-part='terminal-bar'][data-part='terminal-bar'] {
+.ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='terminal-bar'] {
   border-bottom: 1px solid var(--ds-color-border);
 }
 
 /* terminal-dots — three hardcoded, fixed-order decorative siblings (the
  * traffic-light dots): position IS the meaning and they never reorder, so a
  * scope-anchored :nth-child is byte-exact here. */
-.ds-data-terminal-card[data-variant='1'] [data-part='terminal-dot'][data-part='terminal-dot'] {
+.ds-data-terminal-card[data-variant='1'] [data-part='terminal-dot'] {
   border-radius: 50%;
 }
 .ds-data-terminal-card[data-variant='1'] [data-part='terminal-dot']:nth-child(1) {
@@ -260,13 +323,16 @@
   background: var(--ds-color-success);
 }
 
-.ds-data-terminal-card[data-variant='1'] [data-part='terminal-filename'][data-part='terminal-filename'][data-part='terminal-filename'] {
+.ds-data-terminal-card[data-part='root'][data-variant='1'][data-trend] [data-part='terminal-filename'] {
   color: var(--ds-color-text-muted);
 }
 
 /* heartbeat-dot — threshold bucket on the root's data-band. */
-.ds-data-terminal-card [data-part='heartbeat-dot'][data-part='heartbeat-dot'] {
+.ds-data-terminal-card[data-part='root'] [data-part='heartbeat-dot'] {
   border-radius: 50%;
+  animation: dtc-heartbeat
+    var(--ds-dtc-duration-heartbeat, calc(var(--ds-motion-glacial, 500ms) * 3))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 .ds-data-terminal-card[data-band='high'] [data-part='heartbeat-dot'] {
   background: var(--ds-color-success);
@@ -278,29 +344,32 @@
   background: var(--ds-color-error);
 }
 
-.ds-data-terminal-card [data-part='prompt-header'][data-part='prompt-header'][data-part='prompt-header'] {
+.ds-data-terminal-card[data-part='root'][data-variant] [data-part='prompt-header'] {
   border-bottom: 1px solid var(--ds-color-border);
 }
-.ds-data-terminal-card [data-part='prompt-symbol'][data-part='prompt-symbol'][data-part='prompt-symbol'][data-part='prompt-symbol'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='prompt-symbol'] {
   color: var(--ds-color-success);
 }
-.ds-data-terminal-card [data-part='prompt-icon'][data-part='prompt-icon'] {
+.ds-data-terminal-card[data-part='root'] [data-part='prompt-icon'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-data-terminal-card [data-part='prompt-label'][data-part='prompt-label'][data-part='prompt-label'][data-part='prompt-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='prompt-label'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-data-terminal-card [data-part='cursor'][data-part='cursor'] {
+.ds-data-terminal-card[data-part='root'] [data-part='cursor'] {
   background: var(--ds-color-text-muted);
+  animation: dtc-typing
+    var(--ds-dtc-duration-tick, calc(var(--ds-motion-glacial, 500ms) * 2))
+    step-end infinite;
 }
 
 /* Command stats-grid — top border only. */
-.ds-data-terminal-card[data-variant='1'] [data-part='stats-grid'][data-part='stats-grid'] {
+.ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='stats-grid'] {
   border-top: 1px solid var(--ds-color-border);
 }
 
 /* actions-footer — subtle background + top border. */
-.ds-data-terminal-card [data-part='actions-footer'][data-part='actions-footer'][data-part='actions-footer'] {
+.ds-data-terminal-card[data-part='root'][data-variant] [data-part='actions-footer'] {
   background: var(--ds-color-background-subtle);
   border-top: 1px solid var(--ds-color-border);
 }
@@ -309,18 +378,30 @@
  * VARIANT 2 — HUDCard (heads-up display).
  * ==========================================================================*/
 
-.ds-data-terminal-card[data-variant='2'] [data-part='grid-texture'][data-part='grid-texture'] {
+.ds-data-terminal-card[data-variant='2'] [data-part='grid-texture'] {
   background-image: linear-gradient(var(--ds-color-border) 1px, transparent 1px),
     linear-gradient(90deg, var(--ds-color-border) 1px, transparent 1px);
   background-size: 20px 20px;
+  animation: dtc-breathe
+    var(--ds-dtc-duration-ambient, calc(var(--ds-motion-glacial, 500ms) * 8))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
-.ds-data-terminal-card[data-variant='2'] [data-part='scan-line'][data-part='scan-line'] {
+.ds-data-terminal-card[data-variant='2'] [data-part='scan-line'] {
   background: linear-gradient(180deg, transparent, var(--ds-color-border-subtle), transparent);
+  animation: dtc-scan
+    var(--ds-dtc-duration-scan, calc(var(--ds-motion-glacial, 500ms) * 10))
+    linear infinite;
 }
 
 /* corner-brackets — four fixed siblings (nth-child 3..6, after grid-texture +
- * scan-line), each an L of 2px lines. */
+ * scan-line), each an L of 2px lines. The drift cadence and the per-corner
+ * stagger are owned here; delays reuse the cadence channels (no literals). */
+.ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket'] {
+  animation: dtc-pulse
+    var(--ds-dtc-duration-drift, calc(var(--ds-motion-glacial, 500ms) * 6))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
 .ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket']:nth-child(3) {
   border-top: 2px solid var(--ds-color-text-muted);
   border-left: 2px solid var(--ds-color-text-muted);
@@ -328,37 +409,43 @@
 .ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket']:nth-child(4) {
   border-top: 2px solid var(--ds-color-text-muted);
   border-right: 2px solid var(--ds-color-text-muted);
+  animation-delay: var(--ds-dtc-duration-entrance, calc(var(--ds-motion-glacial, 500ms) * 0.8));
 }
 .ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket']:nth-child(5) {
   border-bottom: 2px solid var(--ds-color-text-muted);
   border-left: 2px solid var(--ds-color-text-muted);
+  animation-delay: var(--ds-dtc-duration-tick, calc(var(--ds-motion-glacial, 500ms) * 2));
 }
 .ds-data-terminal-card[data-variant='2'] [data-part='corner-bracket']:nth-child(6) {
   border-bottom: 2px solid var(--ds-color-text-muted);
   border-right: 2px solid var(--ds-color-text-muted);
+  animation-delay: var(--ds-dtc-duration-heartbeat, calc(var(--ds-motion-glacial, 500ms) * 3));
 }
 
-.ds-data-terminal-card [data-part='tracking-label'][data-part='tracking-label'][data-part='tracking-label'][data-part='tracking-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] [data-part='tracking-label'] {
   color: var(--ds-color-text-subtle);
 }
 
 /* status-badge — subtle background + band-coloured border. */
-.ds-data-terminal-card [data-part='status-badge'][data-part='status-badge'] {
+.ds-data-terminal-card[data-part='root'] [data-part='status-badge'] {
   background: var(--ds-color-background-subtle);
 }
-.ds-data-terminal-card[data-band='high'] [data-part='status-badge'][data-part='status-badge'] {
+.ds-data-terminal-card[data-part='root'][data-band='high'] [data-part='status-badge'] {
   border: 1px solid var(--ds-color-success);
 }
-.ds-data-terminal-card[data-band='mid'] [data-part='status-badge'][data-part='status-badge'] {
+.ds-data-terminal-card[data-part='root'][data-band='mid'] [data-part='status-badge'] {
   border: 1px solid var(--ds-color-warning);
 }
-.ds-data-terminal-card[data-band='low'] [data-part='status-badge'][data-part='status-badge'] {
+.ds-data-terminal-card[data-part='root'][data-band='low'] [data-part='status-badge'] {
   border: 1px solid var(--ds-color-error);
 }
 
 /* status-dot — band background. */
-.ds-data-terminal-card [data-part='status-dot'][data-part='status-dot'] {
+.ds-data-terminal-card[data-part='root'] [data-part='status-dot'] {
   border-radius: 50%;
+  animation: dtc-heartbeat
+    var(--ds-dtc-duration-heartbeat, calc(var(--ds-motion-glacial, 500ms) * 3))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 .ds-data-terminal-card[data-band='high'] [data-part='status-dot'] {
   background: var(--ds-color-success);
@@ -371,82 +458,104 @@
 }
 
 /* status-label (Text) — band colour. */
-.ds-data-terminal-card[data-band='high'] [data-part='status-label'][data-part='status-label'][data-part='status-label'] {
+.ds-data-terminal-card[data-part='root'][data-band='high'][data-trend] [data-part='status-label'] {
   color: var(--ds-color-success);
 }
-.ds-data-terminal-card[data-band='mid'] [data-part='status-label'][data-part='status-label'][data-part='status-label'] {
+.ds-data-terminal-card[data-part='root'][data-band='mid'][data-trend] [data-part='status-label'] {
   color: var(--ds-color-warning);
 }
-.ds-data-terminal-card[data-band='low'] [data-part='status-label'][data-part='status-label'][data-part='status-label'] {
+.ds-data-terminal-card[data-part='root'][data-band='low'][data-trend] [data-part='status-label'] {
   color: var(--ds-color-error);
 }
 
 /* trend-badge — subtle background + trend-coloured border. */
-.ds-data-terminal-card [data-part='trend-badge'][data-part='trend-badge'] {
+.ds-data-terminal-card[data-part='root'] [data-part='trend-badge'] {
   background: var(--ds-color-background-subtle);
 }
-.ds-data-terminal-card[data-trend='up'] [data-part='trend-badge'][data-part='trend-badge'] {
+.ds-data-terminal-card[data-part='root'][data-trend='up'] [data-part='trend-badge'] {
   border: 1px solid var(--ds-color-success);
 }
-.ds-data-terminal-card[data-trend='down'] [data-part='trend-badge'][data-part='trend-badge'] {
+.ds-data-terminal-card[data-part='root'][data-trend='down'] [data-part='trend-badge'] {
   border: 1px solid var(--ds-color-error);
 }
 
 /* stats-panel — subtle background + 1px border. */
-.ds-data-terminal-card [data-part='stats-panel'][data-part='stats-panel'] {
+.ds-data-terminal-card[data-part='root'] [data-part='stats-panel'] {
   background: var(--ds-color-background-subtle);
 }
-.ds-data-terminal-card [data-part='stats-panel'][data-part='stats-panel'][data-part='stats-panel'] {
+.ds-data-terminal-card[data-part='root'][data-variant] [data-part='stats-panel'] {
   border: 1px solid var(--ds-color-border);
 }
 
-.ds-data-terminal-card [data-part='completion-label'][data-part='completion-label'][data-part='completion-label'][data-part='completion-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='2'][data-trend] [data-part='completion-label'] {
   color: var(--ds-color-text-subtle);
 }
 
 /* completion-value (Text) — band colour. */
-.ds-data-terminal-card[data-band='high'] [data-part='completion-value'][data-part='completion-value'][data-part='completion-value'] {
+.ds-data-terminal-card[data-part='root'][data-band='high'][data-trend] [data-part='completion-value'] {
   color: var(--ds-color-success);
+  font-variant-numeric: tabular-nums;
 }
-.ds-data-terminal-card[data-band='mid'] [data-part='completion-value'][data-part='completion-value'][data-part='completion-value'] {
+.ds-data-terminal-card[data-part='root'][data-band='mid'][data-trend] [data-part='completion-value'] {
   color: var(--ds-color-warning);
+  font-variant-numeric: tabular-nums;
 }
-.ds-data-terminal-card[data-band='low'] [data-part='completion-value'][data-part='completion-value'][data-part='completion-value'] {
+.ds-data-terminal-card[data-part='root'][data-band='low'][data-trend] [data-part='completion-value'] {
   color: var(--ds-color-error);
+  font-variant-numeric: tabular-nums;
 }
 
 /* details-icon (activity glyph) — always success. */
-.ds-data-terminal-card [data-part='details-icon'][data-part='details-icon'] {
+.ds-data-terminal-card[data-part='root'] [data-part='details-icon'] {
   color: var(--ds-color-success);
+  animation: dtc-pulse
+    var(--ds-dtc-duration-tick, calc(var(--ds-motion-glacial, 500ms) * 2))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
 /* ============================================================================
  * VARIANT 3 — CircuitCard (circuit board).
  * ==========================================================================*/
 
-.ds-data-terminal-card[data-variant='3'] [data-part='circuit-pattern'][data-part='circuit-pattern'] {
+.ds-data-terminal-card[data-variant='3'] [data-part='circuit-pattern'] {
   background-image: radial-gradient(circle at 8px 8px, var(--ds-color-border) 2px, transparent 2px),
     linear-gradient(90deg, transparent 7px, var(--ds-color-border) 7px, var(--ds-color-border) 8px, transparent 8px),
     linear-gradient(transparent 7px, var(--ds-color-border) 7px, var(--ds-color-border) 8px, transparent 8px);
   background-size: 32px 32px;
 }
 
-.ds-data-terminal-card[data-variant='3'] [data-part='flow-line'][data-part='flow-line'] {
+.ds-data-terminal-card[data-variant='3'] [data-part='flow-line'] {
   background: linear-gradient(90deg, transparent, var(--ds-color-success), transparent);
+  animation: dtc-slide
+    var(--ds-dtc-duration-ambient, calc(var(--ds-motion-glacial, 500ms) * 8))
+    linear infinite;
 }
 
-/* node-dots — three uniform indicators (subtle background + 2px border). */
-.ds-data-terminal-card [data-part='node-dot'][data-part='node-dot'] {
+/* node-dots — three uniform indicators (subtle background + 2px border);
+ * pulse cadence owned here, per-node stagger reuses the cadence channels. */
+.ds-data-terminal-card[data-part='root'] [data-part='node-dot'] {
   border-radius: 50%;
   background: var(--ds-color-background-subtle);
+  animation: dtc-pulse
+    var(--ds-dtc-duration-pulse, calc(var(--ds-motion-glacial, 500ms) * 4))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
-.ds-data-terminal-card [data-part='node-dot'][data-part='node-dot'][data-part='node-dot'] {
+.ds-data-terminal-card[data-variant='3'] [data-part='node-dot']:nth-child(5) {
+  animation-delay: var(--ds-dtc-duration-tick, calc(var(--ds-motion-glacial, 500ms) * 2));
+}
+.ds-data-terminal-card[data-variant='3'] [data-part='node-dot']:nth-child(6) {
+  animation-delay: var(--ds-dtc-duration-entrance, calc(var(--ds-motion-glacial, 500ms) * 0.8));
+}
+.ds-data-terminal-card[data-part='root'][data-variant] [data-part='node-dot'] {
   border: 2px solid var(--ds-color-text-muted);
 }
 
 /* node-dot-live — band background. */
-.ds-data-terminal-card [data-part='node-dot-live'][data-part='node-dot-live'] {
+.ds-data-terminal-card[data-part='root'] [data-part='node-dot-live'] {
   border-radius: 50%;
+  animation: dtc-heartbeat
+    var(--ds-dtc-duration-heartbeat, calc(var(--ds-motion-glacial, 500ms) * 3))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 .ds-data-terminal-card[data-band='high'] [data-part='node-dot-live'] {
   background: var(--ds-color-success);
@@ -458,12 +567,12 @@
   background: var(--ds-color-error);
 }
 
-.ds-data-terminal-card [data-part='metric-label'][data-part='metric-label'][data-part='metric-label'][data-part='metric-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='3'][data-trend] [data-part='metric-label'] {
   color: var(--ds-color-text-subtle);
 }
 
 /* Circuit stats-grid — top + bottom border. */
-.ds-data-terminal-card[data-variant='3'] [data-part='stats-grid'][data-part='stats-grid'] {
+.ds-data-terminal-card[data-part='root'][data-variant='3'] [data-part='stats-grid'] {
   border-top: 1px solid var(--ds-color-border);
   border-bottom: 1px solid var(--ds-color-border);
 }
@@ -472,22 +581,25 @@
  * VARIANT 4 — MatrixCard (data grid).
  * ==========================================================================*/
 
-.ds-data-terminal-card[data-variant='4'] [data-part='matrix-texture'][data-part='matrix-texture'] {
+.ds-data-terminal-card[data-variant='4'] [data-part='matrix-texture'] {
   background-image: radial-gradient(var(--ds-color-border) 1px, transparent 1px);
   background-size: 12px 12px;
+  animation: dtc-flow
+    var(--ds-dtc-duration-flow, calc(var(--ds-motion-glacial, 500ms) * 80))
+    linear infinite;
 }
 
-.ds-data-terminal-card [data-part='datapoint-label'][data-part='datapoint-label'][data-part='datapoint-label'][data-part='datapoint-label'] {
+.ds-data-terminal-card[data-part='root'][data-variant='4'][data-trend] [data-part='datapoint-label'] {
   color: var(--ds-color-text-subtle);
 }
 
 /* Matrix stats-grid — top + bottom border. */
-.ds-data-terminal-card[data-variant='4'] [data-part='stats-grid'][data-part='stats-grid'] {
+.ds-data-terminal-card[data-part='root'][data-variant='4'] [data-part='stats-grid'] {
   border-top: 1px solid var(--ds-color-border);
   border-bottom: 1px solid var(--ds-color-border);
 }
 
-.ds-data-terminal-card [data-part='progress-section'][data-part='progress-section'][data-part='progress-section'] {
+.ds-data-terminal-card[data-part='root'][data-variant='4'] [data-part='progress-section'] {
   border-bottom: 1px solid var(--ds-color-border);
 }
 
@@ -497,18 +609,134 @@
  * ==========================================================================*/
 
 /* corner-brackets — two fixed siblings (nth-child 1..2), each an L of 2px lines. */
-.ds-data-terminal-stat [data-part='corner-bracket'][data-part='corner-bracket']:nth-child(1) {
+.ds-data-terminal-stat[data-part='root'][data-trend] [data-part='corner-bracket']:nth-child(1) {
   border-top: 2px solid var(--ds-color-text-muted);
   border-left: 2px solid var(--ds-color-text-muted);
 }
-.ds-data-terminal-stat [data-part='corner-bracket'][data-part='corner-bracket']:nth-child(2) {
+.ds-data-terminal-stat[data-part='root'][data-trend] [data-part='corner-bracket']:nth-child(2) {
   border-top: 2px solid var(--ds-color-text-muted);
   border-right: 2px solid var(--ds-color-text-muted);
 }
 
-.ds-data-terminal-stat [data-part='stat-icon'][data-part='stat-icon'] {
+.ds-data-terminal-stat[data-part='root'] [data-part='stat-icon'] {
   color: var(--ds-color-text-secondary);
 }
-.ds-data-terminal-stat [data-part='stat-label'][data-part='stat-label'][data-part='stat-label'][data-part='stat-label'] {
+
+.ds-data-terminal-stat[data-part='root'][data-trend][data-band] [data-part='stat-label'] {
   color: var(--ds-color-text-secondary);
+}
+
+/* ============================================================================
+ * REDUCED MOTION — every ambient loop and entrance goes still; the card
+ * reads on its static tones alone.
+ * ==========================================================================*/
+@media (prefers-reduced-motion: reduce) {
+  .ds-data-terminal-card[data-part='root'],
+  .ds-data-terminal-card[data-part='root'] [data-part='live-pulse-ring'],
+  .ds-data-terminal-card[data-part='root'] [data-part='activity-bar'],
+  .ds-data-terminal-card[data-part='root'] [data-part='heartbeat-dot'],
+  .ds-data-terminal-card[data-part='root'] [data-part='cursor'],
+  .ds-data-terminal-card[data-part='root'] [data-part='grid-texture'],
+  .ds-data-terminal-card[data-part='root'] [data-part='scan-line'],
+  .ds-data-terminal-card[data-part='root'] [data-part='corner-bracket'],
+  .ds-data-terminal-card[data-part='root'] [data-part='status-dot'],
+  .ds-data-terminal-card[data-part='root'] [data-part='details-icon'],
+  .ds-data-terminal-card[data-part='root'] [data-part='flow-line'],
+  .ds-data-terminal-card[data-part='root'] [data-part='node-dot'],
+  .ds-data-terminal-card[data-part='root'] [data-part='node-dot-live'],
+  .ds-data-terminal-card[data-part='root'] [data-part='matrix-texture'],
+  .ds-data-terminal-card[data-part='root'] [data-part='progress-shimmer'],
+  .ds-data-terminal-stat[data-part='root'] [data-part='progress-shimmer'] {
+    animation: none;
+  }
+
+  .ds-data-terminal-card[data-part='root'],
+  .ds-data-terminal-card[data-part='root'] [data-part='progress-fill'],
+  .ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'],
+  .ds-data-terminal-card[data-part='root'] [data-part='quick-action'] {
+    transition: none;
+  }
+}
+
+/* ============================================================================
+ * FORCED COLORS — system colors only. The progress WIDTH carries the data
+ * (never its hue); trend reads by icon shape + text; band/status read by
+ * their text labels; decorative textures/scan/flow/activity/cursor step out.
+ * ==========================================================================*/
+@media (forced-colors: active) {
+  /* frames */
+  .ds-data-terminal-card[data-part='root'][data-variant],
+  .ds-data-terminal-stat[data-part='root'][data-trend],
+  .ds-data-terminal-card[data-part='root'][data-variant] [data-part='header-icon-box'],
+  .ds-data-terminal-card[data-part='root'][data-variant] [data-part='section-divider'],
+  .ds-data-terminal-card[data-part='root'][data-variant] [data-part='quick-action'],
+  .ds-data-terminal-card[data-part='root'][data-variant] [data-part='stats-panel'],
+  .ds-data-terminal-card[data-part='root'][data-variant] [data-part='actions-footer'],
+  .ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='terminal-bar'],
+  .ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='stats-grid'],
+  .ds-data-terminal-card[data-part='root'][data-variant='3'] [data-part='stats-grid'],
+  .ds-data-terminal-card[data-part='root'][data-variant='4'] [data-part='stats-grid'],
+  .ds-data-terminal-card[data-part='root'][data-variant='4'] [data-part='progress-section'],
+  .ds-data-terminal-card[data-part='root'][data-variant] [data-part='prompt-header'],
+  .ds-data-terminal-card[data-part='root'][data-band='high'] [data-part='status-badge'],
+  .ds-data-terminal-card[data-part='root'][data-band='mid'] [data-part='status-badge'],
+  .ds-data-terminal-card[data-part='root'][data-band='low'] [data-part='status-badge'],
+  .ds-data-terminal-card[data-part='root'][data-trend='up'] [data-part='trend-badge'],
+  .ds-data-terminal-card[data-part='root'][data-trend='down'] [data-part='trend-badge'] {
+    border-color: ButtonText;
+  }
+
+  /* data readout: progress by width on a system frame, fill in system accent */
+  .ds-data-terminal-card[data-part='root'] [data-part='progress-track'],
+  .ds-data-terminal-stat[data-part='root'] [data-part='progress-track'] {
+    background: Canvas;
+    border: 1px solid ButtonText;
+  }
+  .ds-data-terminal-card[data-part='root'] [data-part='progress-fill'][data-band='high'],
+  .ds-data-terminal-card[data-part='root'] [data-part='progress-fill'][data-band='mid'],
+  .ds-data-terminal-card[data-part='root'] [data-part='progress-fill'][data-band='low'],
+  .ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'][data-band='high'],
+  .ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'][data-band='mid'],
+  .ds-data-terminal-stat[data-part='root'] [data-part='progress-fill'][data-band='low'] {
+    background: Highlight;
+  }
+
+  /* dots, rings and bars read in system ink (their background IS the glyph) */
+  .ds-data-terminal-card[data-part='root'] [data-part='status-dot'],
+  .ds-data-terminal-card[data-part='root'] [data-part='heartbeat-dot'],
+  .ds-data-terminal-card[data-part='root'] [data-part='node-dot-live'],
+  .ds-data-terminal-card[data-part='root'] [data-part='terminal-dot'],
+  .ds-data-terminal-card[data-part='root'] [data-part='live-pulse-ring'],
+  .ds-data-terminal-card[data-part='root'] [data-part='live-ring'],
+  .ds-data-terminal-card[data-part='root'] [data-part='activity-bar'] {
+    background-color: ButtonText;
+  }
+
+  /* semantic hues flatten on text and icons (matching the base rules'
+     specificity so these win inside forced colors): shape (up/down arrow)
+     and the label text carry trend and band; the UA forces any remaining
+     ink to system values regardless. */
+  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='change-value'],
+  .ds-data-terminal-stat[data-part='root'][data-trend][data-band] [data-part='change-value'],
+  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='target-value'],
+  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='completion-value'],
+  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='status-label'],
+  .ds-data-terminal-card[data-part='root'][data-variant][data-trend] [data-part='prompt-symbol'],
+  .ds-data-terminal-card[data-part='root'] [data-part='trend-icon'],
+  .ds-data-terminal-stat[data-part='root'] [data-part='trend-icon'],
+  .ds-data-terminal-card[data-part='root'] [data-part='details-icon'] {
+    color: CanvasText;
+  }
+
+  /* decorative layers step out */
+  .ds-data-terminal-card[data-part='root'] [data-part='grid-texture'],
+  .ds-data-terminal-card[data-part='root'] [data-part='scan-line'],
+  .ds-data-terminal-card[data-part='root'] [data-part='circuit-pattern'],
+  .ds-data-terminal-card[data-part='root'] [data-part='matrix-texture'],
+  .ds-data-terminal-card[data-part='root'] [data-part='flow-line'],
+  .ds-data-terminal-card[data-part='root'] [data-part='progress-shimmer'],
+  .ds-data-terminal-stat[data-part='root'] [data-part='progress-shimmer'],
+  .ds-data-terminal-card[data-part='root'] [data-part='cursor'] {
+    display: none;
+  }
 }

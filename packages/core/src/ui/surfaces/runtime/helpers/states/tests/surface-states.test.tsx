@@ -91,7 +91,7 @@ describe('Surface lifecycle states — R2+R3 ownership contract', () => {
 
     // EN catalog floors: surfaces.states.capability_label / capability_aria.
     expect(root).toHaveAttribute('aria-label', 'Registered surface capabilities');
-    expect(root).toHaveTextContent('Available when data recovers');
+    expect(root).toHaveTextContent('Available when data is retrieved');
     expect(root).not.toHaveAttribute('style');
     expect(container.querySelector('[data-part="capability-list"]')).not.toHaveAttribute('style');
     expect(

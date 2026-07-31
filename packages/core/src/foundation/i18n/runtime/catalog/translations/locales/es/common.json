@@ -12,6 +12,9 @@
   "next": "Siguiente",
   "previous": "Anterior",
   "finish": "Finalizar",
+  "tour": {
+    "step_progress": "Paso {current} de {total}"
+  },
   "submit": "Enviar",
   "search": "Buscar",
   "filter": "Filtrar",
@@ -61,6 +64,8 @@
   "logout": "Cerrar sesión",
   "login": "Iniciar sesión",
   "breadcrumb": "Ruta de navegación",
+  "breadcrumb_more_items": "Más páginas",
+  "opens_in_new_tab": "(se abre en una pestaña nueva)",
   "key_metrics": "Métricas clave",
   "shortcuts": "Atajos",
   "dashboard_status_live": "En vivo",
@@ -70,5 +75,6 @@
   "dashboard_status_warning": "Advertencia",
   "show_password": "Mostrar contraseña",
   "hide_password": "Ocultar contraseña",
-  "password_strength": "Seguridad de la contraseña"
+  "password_strength": "Seguridad de la contraseña",
+  "unsaved_changes": "Cambios sin guardar"
 }

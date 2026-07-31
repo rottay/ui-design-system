@@ -3,6 +3,19 @@
  * @description Modern, token-aware implementation of the Box component.
  * Provides deterministic structure and responsive styles without generated classes.
  *
+ * @remarks
+ * **When to use Box vs the layout sisters:**
+ * - **Box** is the polymorphic single-element escape hatch: one `as` element
+ *   with token-backed spacing, dimensions, radius/shadow and caller-owned
+ *   paint (`style`, `bg`, `border`, `color`). It owns no child rhythm.
+ * - **Stack** owns one-dimensional child rhythm (direction + gap + alignment
+ *   between children) — reach for it the moment siblings need a gap.
+ * - **Flex** owns explicit flex-axis composition beyond Stack's defaults.
+ * - **Grid** owns two-dimensional tracks.
+ * If you are setting `display: flex` plus a gap on a Box just to space
+ * children, you wanted Stack — Box deliberately never stamps a `gap` of its
+ * own so it cannot fight the sisters' rhythm.
+ *
  * @module Box/Engines/Modern
  * @category Layout
  * @package @rottay/design-system

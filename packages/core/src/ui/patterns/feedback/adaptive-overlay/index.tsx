@@ -52,7 +52,7 @@
 
 import React, { useCallback } from 'react';
 import { useResponsive } from '../../../../infrastructure/runtime/responsive';
-import { Modal } from '@/ui/primitives/overlay/Modal';
+import { Modal } from '@/ui/primitives/feedback/Modal';
 import { Drawer } from '@/ui/primitives/feedback/Drawer';
 import { Sheet } from '@/ui/primitives/overlay/Sheet';
 import type {

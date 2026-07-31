@@ -214,13 +214,24 @@ describe('CK-E non-chart inert anatomy', () => {
     const root = expectScope(normal.container, 'tree-view', engine);
     expect(root).toHaveAttribute('data-loading', 'false');
     expect(root).toHaveAttribute('data-empty', 'false');
-    expect(q(normal.container, '[data-part="search-input"]')).toHaveLength(1);
+    if (engine === 'modern') {
+      expect(q(normal.container, 'input[aria-label="Search..."]')).toHaveLength(1);
+    } else {
+      expect(q(normal.container, '[data-part="search-input"]')).toHaveLength(1);
+    }
     expect(q(normal.container, '[data-part="node"]')).toHaveLength(3);
-    expect(q(normal.container, '[data-part="node-row"][data-selected="true"]')).toHaveLength(1);
-    expect(q(normal.container, '[data-part="node-row"][data-disabled="true"]')).toHaveLength(1);
-    expect(q(normal.container, '[data-part="toggle"][data-expanded="true"]')).toHaveLength(1);
+    const rowPart = engine === 'modern' ? 'row' : 'node-row';
+    expect(q(normal.container, `[data-part="${rowPart}"][data-selected="true"]`)).toHaveLength(1);
+    expect(q(normal.container, `[data-part="${rowPart}"][data-disabled="true"]`)).toHaveLength(1);
+    if (engine === 'modern') {
+      expect(q(normal.container, '[data-part="tree-node-toggle"]')).toHaveLength(3);
+      expect(q(normal.container, '[data-part="row"][aria-expanded="true"]')).toHaveLength(1);
+    } else {
+      expect(q(normal.container, '[data-part="toggle"]')).toHaveLength(3);
+      expect(q(normal.container, '[data-part="toggle"][data-expanded="true"]')).toHaveLength(1);
+    }
     expect(q(normal.container, '[data-part="checkbox"]')).toHaveLength(3);
-    expect(q(normal.container, '[data-part="drag-handle"]')).toHaveLength(3);
+    expect(q(normal.container, '[data-part="drag-handle"]')).toHaveLength(engine === 'modern' ? 0 : 3);
     normal.unmount();
 
     const loading = render(<Component data={[]} loading />);

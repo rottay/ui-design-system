@@ -85,13 +85,17 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
     .join(" ");
 
   // Flex container with alignSelf: stretch so vertical dividers fill
-  // the height of their parent flex container
+  // the height of their parent flex container. The vertical root hugs its
+  // own hairline (`fit-content`): in a block parent a flex div would
+  // otherwise stretch full-width and leave the mark glued to the
+  // inline-start edge of an oversized box (pre-flag 4) -- a box the width
+  // of the line is trivially centered.
   const containerStyle: React.CSSProperties = {
     display: "flex",
     alignItems: "center",
     alignSelf: "stretch",
     flexDirection: isHorizontal ? "row" : "column",
-    width: isHorizontal ? "100%" : "auto",
+    width: isHorizontal ? "100%" : "fit-content",
     height: isHorizontal ? "auto" : "100%",
     minWidth: 0,
     // A percentage block-size cannot resolve inside intrinsically-sized

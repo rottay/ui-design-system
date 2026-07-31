@@ -186,7 +186,26 @@ describe("PatternStatsGrid advanced engine coverage", () => {
       expect(screen.getByTestId("custom-stat")).toBeInTheDocument();
       expect(container.querySelector("polyline")).not.toBeNull();
 
-      if (engine !== "classic") {
+      if (engine === "modern") {
+        // The metric anatomy composes the certified Statistic primitive: the
+        // value part is primitive-owned (its composed root carries the
+        // primitive scope class; the retired pattern class is gone). The
+        // trend pill stays pattern-owned.
+        expect(screen.getByTestId("custom-stat")).not.toHaveClass(
+          "ds-stats-grid__value"
+        );
+        const valuePart = container.querySelector(
+          '.ds-stats-grid__card [data-part="value"]'
+        );
+        expect(valuePart).not.toBeNull();
+        expect(valuePart).not.toHaveClass("ds-stats-grid__value");
+        expect(valuePart?.closest('[data-part="root"]')).toHaveClass(
+          "rottay-statistic--modern"
+        );
+        expect(
+          container.querySelector('.ds-stats-grid__card [data-part="trend"]')
+        ).toHaveClass("ds-stats-grid__trend");
+      } else if (engine !== "classic") {
         expect(screen.getByTestId("custom-stat")).not.toHaveClass(
           "ds-stats-grid__value"
         );
@@ -229,7 +248,18 @@ describe("PatternStatsGrid advanced engine coverage", () => {
         await screen.findByText("Monthly recurring revenue")
       ).toBeInTheDocument();
 
-      expect(requestAnimationFrameSpy).toHaveBeenCalled();
+      if (engine === "modern") {
+        // The count-up is delegated to the certified CountUp motion
+        // primitive, which is viewport-gated (IntersectionObserver): in this
+        // environment no frame is scheduled, so the animation branch is
+        // pinned by the primitive's presence instead of a raw rAF call.
+        expect(
+          container.querySelectorAll('[data-ds-motion-primitive="count-up"]')
+            .length
+        ).toBeGreaterThan(0);
+      } else {
+        expect(requestAnimationFrameSpy).toHaveBeenCalled();
+      }
 
       requestAnimationFrameSpy.mockRestore();
       nowSpy.mockRestore();

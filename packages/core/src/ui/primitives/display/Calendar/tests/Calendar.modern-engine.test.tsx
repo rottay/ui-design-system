@@ -6,7 +6,7 @@ import CalendarModern from '../engines/modern';
 
 function getDayButton(day: number): HTMLButtonElement {
   const match = screen
-    .getAllByRole('button')
+    .getAllByRole('gridcell')
     .find((node) => node.textContent?.trim().startsWith(String(day)));
 
   if (!(match instanceof HTMLButtonElement)) {
@@ -42,7 +42,7 @@ describe('Calendar modern engine', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Year' }));
     expect(screen.getByText('Roadmap')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'April Roadmap' }));
+    fireEvent.click(screen.getByRole('gridcell', { name: 'April Roadmap' }));
 
     await waitFor(() => {
       expect(onChange).toHaveBeenCalledWith(expect.any(Date));

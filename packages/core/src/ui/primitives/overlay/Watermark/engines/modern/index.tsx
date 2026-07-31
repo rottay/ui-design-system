@@ -2,22 +2,20 @@
 
 /**
  * @fileoverview Watermark Modern Engine - Rottay Design System
- * @description Modern (DaisyUI/Tailwind) implementation of the Watermark component.
- * Uses canvas for pattern generation with Tailwind utility classes for layout.
+ * @description Token-driven implementation of the Watermark component.
+ * Canvas-based pattern generation (JS-bound, by construction) with the
+ * static layout owned by the modern skin (`skin/watermark.css`) -- no
+ * Tailwind utility classes.
  *
  * @remarks
  * The Modern engine provides:
- * - Canvas-based watermark pattern generation
- * - Tailwind utility classes for positioning (relative, absolute, inset-0)
+ * - Canvas-based watermark pattern generation (rotated text tile or image)
  * - Device pixel ratio support for retina displays
- * - Text and image watermark rendering
- * - Pointer-events-none for non-blocking overlay
- *
- * Implementation details:
- * - useEffect generates canvas pattern on prop changes
- * - Image watermarks load via Image() with crossOrigin
- * - Multi-line text support with array content
- * - Pattern set as CSS backgroundImage
+ * - Multi-line text support with array content (up to 32 lines)
+ * - Non-interactive overlay (pointer-events: none owned by the skin)
+ * - Pattern set as CSS backgroundImage; offset rides the
+ *   `--ds-watermark-offset` channel; zIndex is a contract runtime value
+ *   (band 9: above page content, below the interactive overlay tier)
  *
  * @example Using Modern Engine
  * ```tsx
@@ -44,11 +42,11 @@ import { WATERMARK_DEFAULTS } from '../../contracts';
 import { useWatermarkCanvasPattern } from '../../runtime/canvas-pattern';
 
 /**
- * Modern engine implementation of Watermark using Tailwind CSS.
+ * Modern engine implementation of Watermark.
  *
  * Features:
  * - Canvas-based watermark pattern generation
- * - Tailwind utility classes for positioning
+ * - Skin-owned static layout (skin/watermark.css)
  * - Device pixel ratio support for retina displays
  *
  * @component
@@ -61,7 +59,7 @@ import { useWatermarkCanvasPattern } from '../../runtime/canvas-pattern';
  *
  * @param props - Watermark configuration props
  * @param ref - Forwarded ref to the container div
- * @returns Watermarked content using Tailwind CSS
+ * @returns Watermarked content with the skin-painted pattern layer
  */
 export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
   (props, ref) => {
@@ -94,7 +92,7 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
       <div
         ref={ref}
         data-part="root"
-        className={`relative rottay-watermark--modern ${className || ''}`}
+        className={`rottay-watermark--modern ${className || ''}`}
         style={style}
       >
         {children}
@@ -103,7 +101,6 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
           ref={patternRef}
           data-part="pattern"
           aria-hidden="true"
-          className="absolute inset-0 pointer-events-none"
           style={{
             // A canvas-rasterised data URL: there is no static value to lift into
             // CSS, so it stays JS-bound (object shorthand, invisible to the counter).

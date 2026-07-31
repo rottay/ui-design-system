@@ -402,11 +402,18 @@
   }
 }
 
-/* ---- reduced motion: every transition collapses. ---- */
+/* ---- reduced motion: every transition collapses, and the hover lift/press
+        dip go with it -- an instant transform on every hover is worse than a
+        calm frame (segmented.css precedent). ---- */
 @media (prefers-reduced-motion: reduce) {
   .rottay-stepper--modern[data-part='root'] [data-part='item']::before,
   .rottay-stepper--modern[data-part='root'] [data-part='item']::after {
     transition: none;
+  }
+
+  .rottay-stepper--modern[data-part='root'] [data-part='item'][data-clickable='true']:hover::after,
+  .rottay-stepper--modern[data-part='root'] [data-part='item'][data-clickable='true']:active::after {
+    transform: none;
   }
 }
 

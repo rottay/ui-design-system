@@ -3,6 +3,7 @@
     "loading": "جارٍ تحميل الصورة الرمزية...",
     "error": "حدث خطأ أثناء تحميل الصورة",
     "fallback": "لا توجد صورة",
+    "image_alt": "الصورة الرمزية",
     "group": {
       "surplus": "+{count} إضافية",
       "empty": "لا يوجد مستخدمون"
@@ -147,7 +148,8 @@
     "reset": "إعادة تعيين"
   },
   "drawer": {
-    "close": "إغلاق"
+    "close": "إغلاق",
+    "actions": "إجراءات اللوحة"
   },
   "dropdown": {
     "no_options": "لا توجد خيارات"
@@ -217,13 +219,16 @@
     "navPrevYear": "السنة السابقة",
     "navPrevMonth": "الشهر السابق",
     "navNextMonth": "الشهر التالي",
-    "navNextYear": "السنة التالية"
+    "navNextYear": "السنة التالية",
+    "gridLabel": "شبكة التواريخ",
+    "monthsGridLabel": "شبكة الأشهر"
   },
   "colorpicker": {
     "clear": "مسح",
     "chooseColor": "اختر اللون",
     "hexLabel": "اللون السداسي عشري",
-    "selectColor": "حدد اللون {color}"
+    "selectColor": "حدد اللون {color}",
+    "invalidHex": "أدخل لونًا سداسيًا عشريًا صالحًا (مثل #1677ff)"
   },
   "qrcode": {
     "loading": "جارٍ التحميل",
@@ -239,8 +244,53 @@
   },
   "mentions": {
     "not_found": "لا توجد نتائج",
+    "loading": "جارٍ التحميل…",
     "suggestions_label": "اقتراحات الإشارات",
     "input_label": "الإشارات"
+  },
+  "otp": {
+    "digit_label": "الرقم {index} من {length}"
+  },
+  "detailPanel": {
+    "back": "رجوع",
+    "breadcrumb": "مسار التنقل",
+    "tabs": "علامات تبويب لوحة التفاصيل"
+  },
+  "columnSettings": {
+    "title": "الأعمدة",
+    "searchPlaceholder": "ابحث عن عمود...",
+    "emptySearch": "لا توجد أعمدة مطابقة للبحث",
+    "reset": "إعادة تعيين التخطيط",
+    "reorder": "إعادة ترتيب العمود",
+    "pinLeft": "تثبيت إلى اليسار",
+    "pinRight": "تثبيت إلى اليمين",
+    "unpin": "إلغاء التثبيت",
+    "visibleSuffix": "مرئية"
+  },
+  "pricingTable": {
+    "monthly": "شهري",
+    "yearly": "سنوي",
+    "features": "الميزات",
+    "mostPopular": "الأكثر شيوعًا",
+    "loading": "جارٍ التحميل",
+    "included": "مشمول",
+    "excluded": "غير مشمول",
+    "empty": "لا توجد خطط متاحة"
+  },
+  "activityLog": {
+    "filter": {
+      "allActions": "كل الإجراءات",
+      "allUsers": "كل المستخدمين"
+    },
+    "empty": "لا يوجد نشاط مسجل",
+    "time": {
+      "justNow": "الآن",
+      "minutesAgo": "قبل {count} د",
+      "hoursAgo": "قبل {count} س",
+      "daysAgo": "قبل {count} ي"
+    },
+    "onEntity": "على {entity}",
+    "onEntityWithId": "على {entity} #{id}"
   },
   "transfer": {
     "source_title": "المصدر",
@@ -250,6 +300,8 @@
     "item_unit": "عنصر",
     "items_unit": "عناصر",
     "select_all": "تحديد الكل",
+    "move_to_target": "نقل إلى الوجهة",
+    "move_to_source": "نقل إلى المصدر",
     "move_right": ">",
     "move_left": "<"
   },
@@ -265,6 +317,9 @@
   },
   "backTop": {
     "back_to_top": "العودة إلى الأعلى"
+  },
+  "anchor": {
+    "navigation": "التنقل بالمراسي"
   },
   "floatbutton": {
     "actionLabel": "زر إجراء عائم",
@@ -321,7 +376,8 @@
       "approve": "اعتماد",
       "reject": "رفض",
       "escalate": "تصعيد"
-    }
+    },
+    "empty": "كل شيء محدث"
   },
   "autocomplete": {
     "not_found": "لا توجد نتائج",
@@ -340,7 +396,9 @@
     "placeholder": "يرجى الاختيار",
     "search_placeholder": "بحث...",
     "not_found": "لا توجد بيانات",
-    "clear": "مسح"
+    "clear": "مسح",
+    "column_label": "المستوى {level}",
+    "search_results": "نتائج البحث"
   },
   "stepper": {
     "navigation": "خطوات التقدم"
@@ -363,7 +421,12 @@
       "empty_title": "لا يوجد ما يمكن عرضه بعد",
       "empty_description": "لا تحتوي هذه الواجهة على بيانات لعرضها الآن.",
       "error_title": "تعذر عرض هذه الواجهة",
-      "retry": "حاول مرة أخرى"
+      "retry": "حاول مرة أخرى",
+      "capability_label": "متاح عند استرداد البيانات",
+      "capability_aria": "إمكانات الواجهة المسجلة",
+      "error_boundary_title": "حدث خطأ في {surface}",
+      "error_boundary_generic_surface": "هذا القسم",
+      "error_description": "حدث خطأ أثناء عرض هذه الواجهة."
     },
     "list": {
       "empty_title": "لا توجد نتائج متاحة",
@@ -382,7 +445,8 @@
       "summary_title": "الملخص"
     },
     "form": {
-      "discard_changes": "هل تريد تجاهل تغييرات النموذج غير المحفوظة؟"
+      "discard_changes": "هل تريد تجاهل تغييرات النموذج غير المحفوظة؟",
+      "actions_aria": "إجراءات النموذج"
     },
     "search": {
       "placeholder": "بحث",
@@ -391,13 +455,16 @@
       "empty_query_description_other": "أدخل {count} أحرف على الأقل لبدء البحث.",
       "empty_results_title": "لم يتم العثور على نتائج",
       "empty_results_description": "جرّب تعديل عبارة البحث أو عوامل التصفية.",
-      "preview_title": "المعاينة"
+      "preview_title": "المعاينة",
+      "filters_title": "عوامل التصفية",
+      "results_group_aria": "نتائج البحث"
     },
     "media": {
       "empty_title": "لا توجد عناصر وسائط",
       "empty_description": "أضف عنصر وسائط واحدًا أو أكثر لعرض المعرض.",
       "preview_title": "المعاينة",
-      "details_title": "التفاصيل"
+      "details_title": "التفاصيل",
+      "untitled_item": "عنصر وسائط بدون عنوان"
     },
     "sidebar": {
       "expand": "توسيع",
@@ -420,7 +487,11 @@
       "next": "التالي",
       "previous_lanes": "مسارات كانبان السابقة",
       "next_lanes": "مسارات كانبان التالية",
-      "lane_range": "المسارات {start}–{end} من {total}"
+      "lane_range": "المسارات {start}–{end} من {total}",
+      "filters_title": "عوامل التصفية",
+      "empty_title": "لا توجد عناصر",
+      "empty_description": "لا توجد عناصر في اللوحة بعد.",
+      "lanes_nav_aria": "مسارات كانبان"
     },
     "operational": {
       "empty_title": "لا توجد وحدات تشغيلية مُعدّة",
@@ -428,7 +499,8 @@
       "primary_panel": "اللوحة الرئيسية",
       "secondary_panel": "اللوحة الثانوية",
       "queue": "الطابور",
-      "live_feed": "التدفق المباشر"
+      "live_feed": "التدفق المباشر",
+      "stats_group_aria": "مقاييس تشغيلية"
     },
     "wizard": {
       "empty_step_title": "خطوة فارغة في المعالج",
@@ -447,14 +519,302 @@
       "composer_title": "محرر الرسالة",
       "placeholder": "اكتب رسالة",
       "send": "إرسال",
-      "typing": "المساعد يكتب الآن"
+      "typing": "المساعد يكتب الآن",
+      "composer_label": "إدخال الرسالة"
     },
     "editor": {
-      "title": "المحرر"
+      "title": "المحرر",
+      "input_label": "محرر المحتوى",
+      "preview_title": "معاينة"
     },
     "visualization": {
       "empty_title": "لا توجد تصورات مُعدّة",
       "empty_description": "أضف عرضًا واحدًا أو أكثر لعرض هذه الواجهة."
+    },
+    "audit": {
+      "filters_title": "عوامل التصفية",
+      "empty_title": "لا توجد إدخالات تدقيق",
+      "empty_description": "لا توجد إدخالات في سجل التدقيق تطابق عوامل التصفية الحالية.",
+      "pagination_summary": "الصفحة {current} · إجمالي السجلات: {total}",
+      "export_group_aria": "تصدير سجل التدقيق",
+      "export_format_aria": "تصدير بتنسيق {format}"
+    },
+    "report": {
+      "templates_title": "القوالب",
+      "templates_group_aria": "قوالب التقارير",
+      "filters_title": "عوامل التصفية",
+      "summary_title": "الملخص",
+      "chart_title": "التمثيل البصري",
+      "table_title": "النتائج",
+      "generate": "إنشاء",
+      "generating": "جارٍ إنشاء التقرير...",
+      "empty_title": "لا توجد بيانات للتقرير",
+      "empty_description": "اختر قالبًا وأنشئ تقريرًا لعرض النتائج.",
+      "empty_rows_title": "لا توجد صفوف",
+      "empty_rows_description": "تم تنفيذ التقرير لكنه لم يُرجع أي صفوف لعوامل التصفية الحالية.",
+      "no_templates_title": "لا توجد قوالب",
+      "no_templates_description": "لا تتوفر قوالب تقارير.",
+      "export_group_aria": "تصدير التقرير",
+      "export_pdf": "PDF",
+      "export_excel": "EXCEL",
+      "export_csv": "CSV"
+    },
+    "import_export": {
+      "import_title": "استيراد البيانات",
+      "import_description": "ارفع ملفًا للتحقق من صفوفه ومراجعة الأخطاء وتأكيد الاستيراد.",
+      "import_not_configured_title": "الاستيراد غير مهيأ",
+      "import_not_configured_description": "لم يتم إعداد وظيفة الاستيراد.",
+      "import_failed_title": "فشل الاستيراد",
+      "dropzone_hint": "أسقط ملفًا هنا أو انقر للاستعراض",
+      "accepted_formats": "الصيغ المقبولة: {formats}",
+      "processing_file": "جارٍ معالجة الملف...",
+      "template_hint": "هل تحتاج إلى قالب؟",
+      "template_download": "تنزيل القالب",
+      "preview_valid": "صالحة: {count}",
+      "preview_errors": "أخطاء: {count}",
+      "preview_total": "الإجمالي: {count}",
+      "validation_errors_title": "أخطاء التحقق",
+      "error_row": "الصف {row}، {field}: {message}",
+      "more_errors": "...و{count} أخرى",
+      "no_valid_rows": "لا توجد صفوف صالحة للاستيراد. ارفع ملفًا مصححًا للمتابعة.",
+      "back": "رجوع",
+      "confirm_import": "تأكيد الاستيراد",
+      "import_success": "اكتمل الاستيراد بنجاح",
+      "import_more": "استيراد المزيد",
+      "export_title": "تصدير البيانات",
+      "export_description": "اختر صيغة والحقول المراد تضمينها في الملف المُصدَّر.",
+      "export_not_configured_title": "التصدير غير مهيأ",
+      "export_not_configured_description": "لم يتم إعداد وظيفة التصدير.",
+      "export_failed_title": "فشل التصدير",
+      "format_label": "الصيغة",
+      "format_group_aria": "صيغة التصدير",
+      "export_format_aria": "تصدير بتنسيق {format}",
+      "fields_label": "الحقول",
+      "fields_selected": "{selected} من {total} محددة",
+      "select_all": "تحديد الكل",
+      "clear_all": "مسح",
+      "export_action": "تصدير",
+      "history_title": "السجل",
+      "history_empty": "لا توجد عمليات استيراد أو تصدير بعد.",
+      "history_list_aria": "عمليات الاستيراد والتصدير",
+      "history_records": "السجلات: {count}",
+      "type_import": "استيراد",
+      "type_export": "تصدير"
+    },
+    "guided_draft_form": {
+      "section_nav_label": "القسم",
+      "section_nav_label_plural": "الأقسام",
+      "section_nav_aria": "أقسام النموذج",
+      "section_state_complete": "مكتمل",
+      "section_state_errors": "يحتوي على أخطاء",
+      "draft_status_unsaved": "تغييرات غير محفوظة",
+      "draft_status_saving": "جارٍ الحفظ…",
+      "draft_status_saved": "تم الحفظ",
+      "draft_status_saved_at": "تم الحفظ {time}",
+      "draft_status_error": "فشل الحفظ",
+      "draft_recovery_title": "تم العثور على مسودة غير محفوظة",
+      "draft_recovery_description": "عملك من جلسة سابقة في الانتظار.",
+      "draft_recovery_description_date": "آخر تعديل {date}",
+      "draft_recovery_recover": "استرداد",
+      "draft_recovery_discard": "تجاهل",
+      "templates_toggle_show": "القوالب",
+      "templates_toggle_hide": "إخفاء القوالب",
+      "template_picker_aria": "قوالب النموذج",
+      "validation_summary_errors": "أخطاء: {count}",
+      "validation_summary_warnings": "تحذيرات: {count}",
+      "validation_issue_overflow": "مشكلات إضافية: {count}",
+      "progress_count": "{completed}/{total}",
+      "submit_bar_progress": "الأقسام المكتملة: {completed} من {total}",
+      "submit": "إرسال",
+      "submitting": "جارٍ الإرسال…",
+      "empty_sections_title": "لا توجد أقسام في النموذج",
+      "empty_sections_description": "لا يحتوي هذا النموذج على أي أقسام مهيأة بعد."
+    },
+    "notification": {
+      "empty_title": "لا توجد إشعارات",
+      "empty_description": "أنت مطّلع على كل شيء.",
+      "mark_read": "تعليم كمقروء",
+      "mark_all_read": "تعليم الكل كمقروء",
+      "delete": "حذف",
+      "preferences_empty_title": "لا توجد تفضيلات",
+      "preferences_empty_description": "لا توجد تفضيلات إشعارات متاحة.",
+      "preferences_default_category": "عام",
+      "notifications_section": "الإشعارات",
+      "preferences_section": "التفضيلات"
+    },
+    "billing": {
+      "plan_current_badge": "الخطة الحالية",
+      "action_upgrade": "ترقية الخطة",
+      "action_cancel": "إلغاء",
+      "action_download": "تنزيل",
+      "usage_title": "الاستخدام",
+      "invoices_title": "الفواتير",
+      "invoices_list_aria": "سجل الفواتير",
+      "invoice_download_aria": "تنزيل الفاتورة {date}",
+      "payment_methods_title": "طرق الدفع",
+      "payment_methods_list_aria": "طرق الدفع المحفوظة",
+      "payment_expiry": "تنتهي في {expiry}",
+      "payment_default_badge": "الافتراضية",
+      "tab_plan": "الخطة"
+    },
+    "integration": {
+      "keys_title": "مفاتيح API",
+      "keys_list_aria": "مفاتيح API",
+      "keys_empty_title": "لا توجد مفاتيح API",
+      "keys_empty_description": "أنشئ مفتاح API للبدء.",
+      "key_created": "أُنشئ في {date}",
+      "key_revoke_aria": "إلغاء مفتاح API {name}",
+      "action_create_key": "إنشاء مفتاح",
+      "action_revoke": "إلغاء",
+      "webhooks_title": "خطافات الويب",
+      "webhooks_list_aria": "خطافات الويب",
+      "webhooks_empty_title": "لا توجد خطافات ويب",
+      "webhooks_empty_description": "أنشئ خطاف ويب لتلقي إشعارات الأحداث.",
+      "webhook_events": "الأحداث: {events}",
+      "webhook_action_pause": "إيقاف مؤقت",
+      "webhook_action_resume": "استئناف",
+      "webhook_pause_aria": "إيقاف خطاف الويب {url} مؤقتًا",
+      "webhook_resume_aria": "استئناف خطاف الويب {url}",
+      "webhook_delete_aria": "حذف خطاف الويب {url}",
+      "action_create_webhook": "إنشاء خطاف ويب",
+      "action_delete": "حذف",
+      "apps_title": "التطبيقات المتصلة",
+      "apps_list_aria": "التطبيقات المتصلة",
+      "app_disconnect_aria": "قطع اتصال {name}",
+      "action_disconnect": "قطع الاتصال"
+    },
+    "profile": {
+      "edit_action": "تعديل",
+      "save_action": "حفظ",
+      "cancel_action": "إلغاء",
+      "section_edit_aria": "تعديل {section}",
+      "section_save_aria": "حفظ {section}",
+      "section_cancel_aria": "إلغاء تحرير {section}",
+      "empty_title": "لا توجد أقسام في الملف الشخصي",
+      "empty_description": "لم يتم تكوين أي أقسام للملف الشخصي.",
+      "action_change_password": "تغيير كلمة المرور",
+      "action_delete_account": "حذف الحساب"
+    },
+    "command_center": {
+      "quick_actions": "إجراءات سريعة",
+      "recent_activity": "النشاط الأخير",
+      "view_all": "عرض الكل",
+      "activity_empty": "لا يوجد نشاط حديث.",
+      "empty_title": "لا توجد بيانات لعرضها",
+      "empty_description": "قم بتكوين الإحصائيات أو الإجراءات أو الأقسام لملء هذه اللوحة.",
+      "system_actor": "النظام"
+    },
+    "settings": {
+      "empty_title": "لا توجد أقسام إعدادات",
+      "empty_description": "لا تتوفر أقسام إعدادات في الوقت الحالي."
+    },
+    "collection_workspace": {
+      "apply_filters": "تطبيق عوامل التصفية",
+      "boolean_no": "لا",
+      "boolean_yes": "نعم",
+      "cancel": "إلغاء",
+      "cards_per_batch": "بطاقات لكل دفعة",
+      "cards_showing": "عرض 1-{visible} من {total}",
+      "cards_unit": "بطاقات",
+      "collection_actions_aria": "إجراءات المجموعة",
+      "density_label": "الكثافة: {mode}",
+      "end_of_cards": "نهاية البطاقات",
+      "export_aria": "تصدير",
+      "filters_title": "عوامل تصفية متقدمة",
+      "filters_title_count": "عوامل تصفية متقدمة ({count})",
+      "filters_trigger": "عوامل التصفية",
+      "filters_trigger_count": "عوامل التصفية ({count})",
+      "grid_renderer_missing": "يتطلب وضع الشبكة عارض بطاقات (viewModes.cards.renderCard أو mobileCard)",
+      "kanban_empty_column": "لا توجد عناصر",
+      "load_more": "تحميل المزيد",
+      "loading_details": "جارٍ تحميل التفاصيل…",
+      "loading_label": "جارٍ التحميل…",
+      "meta_in_view": "{count} في العرض",
+      "meta_needs_attention": "يتطلب الانتباه",
+      "meta_syncing": "مزامنة البيانات",
+      "more": "المزيد",
+      "more_actions": "المزيد من الإجراءات",
+      "no_card_renderer": "لا يوجد عارض بطاقات",
+      "not_set": "غير محدد",
+      "open_details": "فتح التفاصيل",
+      "open_item_aria": "فتح العنصر {index} من {title}",
+      "page_of": "الصفحة {current} من {total}",
+      "page_size_option": "{count} / صفحة",
+      "pagination_next": "التالي",
+      "pagination_next_aria": "الانتقال إلى الصفحة التالية",
+      "pagination_prev_aria": "الانتقال إلى الصفحة السابقة",
+      "pagination_previous": "السابق",
+      "per_batch": "/ دفعة",
+      "per_page": "/ صفحة",
+      "preview_details_title": "تفاصيل {title}",
+      "range_from_start_of": "1-{visible} من {total}",
+      "range_of": "{start}-{end} من {total}",
+      "range_results": "{count} نتيجة",
+      "record_label": "سجل",
+      "record_number": "سجل {index}",
+      "reset": "إعادة تعيين",
+      "resize_rail_aria": "تغيير حجم لوحة التفاصيل",
+      "resize_rail_title": "اسحب لتغيير حجم لوحة التفاصيل",
+      "results_zero": "0 نتيجة",
+      "row_actions": "إجراءات الصف",
+      "rows_per_page": "صفوف لكل صفحة",
+      "rows_unit": "صفوف",
+      "search_placeholder": "بحث...",
+      "select_rows": "تحديد الصفوف",
+      "selected_count": "{count} محدد",
+      "shortcuts_label": "اختصارات",
+      "smart_sets": "مجموعات ذكية",
+      "uncategorized": "غير مصنف"
+    },
+    "decision_inbox": {
+      "clear_selection": "مسح",
+      "close": "إغلاق",
+      "confirm_ok": "تأكيد",
+      "empty_description": "تمت مراجعة جميع العناصر. ستظهر العناصر الجديدة هنا عندما تتطلب الانتباه.",
+      "empty_title": "لا توجد قرارات معلقة",
+      "items_selected": "تم تحديد {count} عناصر",
+      "pending_count": "{count} قيد الانتظار",
+      "reason_label": "السبب",
+      "reason_placeholder_batch": "أدخل السبب...",
+      "reason_placeholder_review": "أدخل سبب هذا القرار...",
+      "review_details": "تفاصيل المراجعة",
+      "sla_duration_short": "{hours}س {mins}د",
+      "sla_header": "SLA",
+      "sla_minutes_left": "متبقٍ {count} د",
+      "sla_overdue": "متأخر",
+      "cancel": "إلغاء",
+      "loading_label": "جارٍ التحميل…"
+    },
+    "record_workbench": {
+      "details_title": "التفاصيل",
+      "empty_tab_description": "هذا القسم لا يحتوي على محتوى لهذا السجل بعد.",
+      "empty_tab_title": "لا يوجد شيء هنا بعد",
+      "loading_label": "جارٍ تحميل السجل…",
+      "tabs_aria": "أقسام السجل"
+    },
+    "file_browser": {
+      "empty_message": "لم يتم العثور على ملفات أو مجلدات.",
+      "loading_aria": "جارٍ تحميل الملفات"
+    },
+    "activity": {
+      "pagination_summary": "الصفحة {current} من {pages} · {total} إدخالات",
+      "empty_message": "لم يتم تسجيل أي نشاط بعد."
+    },
+    "team": {
+      "empty_title": "لا يوجد أعضاء في الفريق",
+      "empty_description": "ادعُ أول عضو إلى فريقك للبدء.",
+      "action_invite": "دعوة عضو",
+      "action_edit": "تعديل",
+      "action_remove": "إزالة",
+      "role_select_aria": "دور {name}",
+      "member_joined": "انضم في {date}",
+      "members_list_aria": "أعضاء الفريق"
+    },
+    "auth": {
+      "hero_region_label": "عرض العلامة التجارية"
+    },
+    "pricing": {
+      "table_region_label": "مقارنة الخطط"
     }
   },
   "checkbox": {
@@ -484,7 +844,30 @@
     "select": "اختيار",
     "banner": "أنت تعرض بيئة {name}",
     "confirmTitle": "التبديل إلى {name}",
-    "cancel": "إلغاء"
+    "cancel": "إلغاء",
+    "group_label": "البيئة"
+  },
+  "commandPalette": {
+    "dialogLabel": "لوحة الأوامر",
+    "placeholder": "اكتب أمرًا...",
+    "empty": "لا توجد نتائج.",
+    "recent": "حديثة"
+  },
+  "locale_switcher": {
+    "trigger_aria": "اللغة: {locale}"
+  },
+  "kanbanBoard": {
+    "add_item": "إضافة عنصر",
+    "empty_board": "لا توجد أعمدة"
+  },
+  "map_view": {
+    "placeholder": "عنصر نائب للخريطة",
+    "center": "المركز: {lat}, {lng}",
+    "no_center": "لم يتم تعيين مركز",
+    "zoom": "التكبير: {zoom}",
+    "marker_count_one": "{count} علامة",
+    "marker_count_other": "{count} علامات",
+    "empty": "لا توجد علامات"
   },
   "fileManager": {
     "root": "الجذر",
@@ -528,12 +911,36 @@
     "select_placeholder": "اختر...",
     "value_label": "قيمة المرشح",
     "field_label": "حقل المرشح",
-    "operator_label": "عامل المرشح"
+    "operator_label": "عامل المرشح",
+    "empty": "لا توجد مرشحات بعد",
+    "range_from_aria": "قيمة المرشح من",
+    "range_to_aria": "قيمة المرشح إلى"
   },
   "form_builder": {
     "previous": "السابق",
     "next": "التالي",
-    "step_counter": "الخطوة {current} من {total}"
+    "step_counter": "الخطوة {current} من {total}",
+    "empty": "لا توجد حقول للعرض"
+  },
+  "invoice_template": {
+    "print": "طباعة",
+    "export": "تصدير",
+    "watermark": "فاتورة",
+    "number_label": "رقم الفاتورة:",
+    "date_label": "التاريخ:",
+    "due_label": "الاستحقاق:",
+    "tax_id_label": "الرقم الضريبي:",
+    "bill_to": "فاتورة إلى",
+    "notes_label": "ملاحظات",
+    "subtotal": "المجموع الفرعي",
+    "total": "الإجمالي",
+    "col_description": "الوصف",
+    "col_quantity": "الكمية",
+    "col_unit_price": "سعر الوحدة",
+    "col_total": "الإجمالي",
+    "empty_items": "لا توجد بنود",
+    "tax": "الضريبة",
+    "tax_with_rate": "الضريبة ({rate}%)"
   },
   "layout": {
     "collapse_sidebar": "طي الشريط الجانبي",
@@ -574,6 +981,7 @@
   "notificationCenter": {
     "title": "الإشعارات",
     "markAllRead": "تعليم الكل كمقروء",
+    "markAsRead": "تعليم كمقروء",
     "clearAll": "مسح الكل",
     "empty": "لا توجد إشعارات",
     "dismiss": "تجاهل",
@@ -599,7 +1007,8 @@
     "complete": "إتمام",
     "skip": "تخطي",
     "progress": "الخطوة {current} من {total}: {title}",
-    "validation_default": "أكمل هذه الخطوة قبل المتابعة."
+    "validation_default": "أكمل هذه الخطوة قبل المتابعة.",
+    "actions": "إجراءات المعالج"
   },
   "taginput": {
     "placeholder": "اكتب واضغط Enter"
@@ -636,13 +1045,233 @@
     "tileBadgeShape": "شكل الشارة",
     "tileLabelStyle": "نمط التسمية",
     "tileHoverLift": "الارتفاع عند التحويم",
-    "tileEdgeAccent": "تمييز الحافة"
+    "tileEdgeAccent": "تمييز الحافة",
+    "sampleRowNameA": "المشروع ألفا",
+    "sampleRowNameB": "المشروع بيتا",
+    "sampleRowAmountA": "$12,400",
+    "sampleRowAmountB": "$8,200"
   },
   "workspaceSwitcher": {
     "switch": "تبديل مساحة العمل",
     "panel": "مساحات العمل",
     "select": "اختر مساحة العمل",
     "create": "إنشاء مساحة عمل",
-    "settings": "إعدادات"
+    "settings": "إعدادات",
+    "search_placeholder": "ابحث في مساحات العمل",
+    "empty": "لا توجد مساحات عمل",
+    "empty_results": "لم يتم العثور على مساحات عمل",
+    "settings_for": "إعدادات {name}"
+  },
+  "shortcutsOverlay": {
+    "title": "اختصارات لوحة المفاتيح",
+    "searchPlaceholder": "ابحث في الاختصارات...",
+    "empty": "لا توجد اختصارات مطابقة.",
+    "close": "إغلاق",
+    "general": "عام"
+  },
+  "treeView": {
+    "search_placeholder": "بحث...",
+    "empty": "لا توجد عناصر",
+    "empty_results": "لم يتم العثور على نتائج"
+  },
+  "loadingOverlay": {
+    "message": "جارٍ التحميل"
+  },
+  "dataTerminalCard": {
+    "live": "مباشر",
+    "statChange": "التغيير",
+    "statPeriod": "الفترة",
+    "periodDefaultWeek": "هذا الأسبوع",
+    "statTarget": "الهدف",
+    "actionView": "عرض",
+    "actionAdd": "إضافة",
+    "actionStats": "إحصائيات",
+    "actionAnalytics": "تحليلات",
+    "statusOptimal": "مثالي",
+    "statusModerate": "معتدل",
+    "statusAttention": "انتباه",
+    "tracking": "التتبع",
+    "periodDefaultPeriod": "هذه الفترة",
+    "completion": "الإكمال",
+    "details": "التفاصيل",
+    "viewDetails": "عرض التفاصيل",
+    "metric": "المقياس",
+    "dataPoint": "نقطة بيانات"
+  },
+  "record": {
+    "notSet": "غير محدد",
+    "copyField": "نسخ {label}",
+    "copiedField": "تم نسخ {label}",
+    "actionRail": "شريط الإجراءات"
+  },
+  "editFields": {
+    "requirement": {
+      "required": "مطلوب",
+      "recommended": "موصى به",
+      "optional": "اختياري",
+      "required_title": "يظهر دائمًا. الحفظ يعتمد على هذه القيمة.",
+      "recommended_title": "يحسّن التوجيه والتقارير والمراجعة. يمكن ملؤه لاحقًا.",
+      "optional_title": "يمكن تركه فارغًا."
+    },
+    "footer": {
+      "cancel": "إلغاء",
+      "save": "حفظ التغييرات"
+    },
+    "toggle": {
+      "show_more": "إظهار المزيد من الحقول",
+      "hide_more": "إخفاء الحقول"
+    },
+    "section": {
+      "number": "القسم {number}"
+    }
+  },
+  "form_sections": {
+    "required": "مطلوب",
+    "optional": "اختياري"
+  },
+  "activeFiltersBar": {
+    "regionLabel": "المرشحات النشطة",
+    "active_count": "{count} نشط",
+    "remove_filter_named": "إزالة المرشح {field}",
+    "clearAll": "مسح الكل",
+    "addFilter": "إضافة مرشح"
+  },
+  "columnMenu": {
+    "alwaysVisible": "مرئية دائمًا في الجدول",
+    "apply": "تطبيق الأعمدة",
+    "clickToEdit": "انقر للتحرير",
+    "downSuffix": "لأسفل",
+    "dragToMove": "اسحب للنقل",
+    "footerHint": "يمكن أيضًا ضبط عرض الأعمدة مباشرة من رأس الجدول.",
+    "fromLeftSuffix": "من اليسار",
+    "fromRightSuffix": "من اليمين",
+    "headerDescription": "قم بتكوين سطح الجدول قبل التطبيق.",
+    "headerTitle": "أعمدة الجدول",
+    "hiddenFromActions": "مخفية عن عمود الإجراءات",
+    "hiddenFromView": "مخفية عن العرض الحالي",
+    "hiddenSuffix": "مخفية",
+    "moveDown": "نقل",
+    "moveUp": "نقل",
+    "panelLabel": "أعمدة الجدول",
+    "pinnedLeft": "مثبتة إلى اليسار",
+    "pinnedRight": "مثبتة إلى اليمين",
+    "pinToLeft": "تثبيت",
+    "pinToRight": "تثبيت",
+    "reset": "إعادة تعيين",
+    "rowActionsDescription": "اختر الإجراءات السريعة التي تبقى مرئية في الجدول.",
+    "rowActionsLabel": "إجراءات الصف",
+    "toLeftSuffix": "إلى اليسار",
+    "toRightSuffix": "إلى اليمين",
+    "triggerLabel": "الأعمدة",
+    "unpinFromLeft": "إلغاء التثبيت",
+    "unpinFromRight": "إلغاء التثبيت",
+    "upSuffix": "لأعلى",
+    "visibleInActions": "مرئية في عمود الإجراءات",
+    "visibleInTable": "مرئية في الجدول",
+    "visibleSuffix": "مرئية",
+    "widthPrefix": "العرض"
+  },
+  "exportButton": {
+    "triggerLabel": "تصدير البيانات",
+    "panelLabel": "تنسيقات التصدير",
+    "formatCsv": "تصدير كـ CSV",
+    "formatJson": "تصدير كـ JSON",
+    "formatClipboard": "نسخ إلى الحافظة",
+    "copied": "تم النسخ!"
+  },
+  "scopeSwitcher": {
+    "groupLabel": "النطاق"
+  },
+  "connectedCommandPalette": {
+    "commandsCategory": "الأوامر",
+    "emptyMessage": "لا توجد أوامر مطابقة",
+    "globalCategory": "عام",
+    "helpCategory": "مساعدة",
+    "keyboardShortcuts": "اختصارات لوحة المفاتيح",
+    "keyboardShortcutsDescription": "عرض جميع اختصارات لوحة المفاتيح",
+    "placeholder": "اكتب أمرًا أو ابحث...",
+    "shortcutsOverlayTitle": "اختصارات لوحة المفاتيح"
+  },
+  "fieldFiltersPanel": {
+    "activeSuffix": "نشط",
+    "allPrefix": "الكل",
+    "anyPrefix": "أي",
+    "appliesLive": "يطبق مباشرة",
+    "quickSlices": "شرائح سريعة",
+    "refineBy": "تحديد حسب",
+    "subtitle": "مرشحات دقيقة للشريحة الحالية.",
+    "title": "مرشحات متقدمة"
+  },
+  "selectionPreviewRail": {
+    "closePreview": "إغلاق المعاينة",
+    "copyKey": "نسخ المفتاح",
+    "focusedPreview": "معاينة مركزة",
+    "keyPrefix": "المفتاح",
+    "matchReasonEyebrow": "تطابق البحث أو النطاق أو المرشحات الحالية مع هذا السجل.",
+    "no": "لا",
+    "noData": "لا توجد بيانات",
+    "openRecord": "فتح السجل",
+    "rowPrefix": "الصف",
+    "selectedRow": "الصف المحدد",
+    "snapshotEmpty": "لا تتوفر حقول معاينة لهذا السجل.",
+    "snapshotTitle": "لقطة",
+    "whyThisRow": "لماذا هذا الصف؟",
+    "yes": "نعم"
+  },
+  "savedViewsMenu": {
+    "columnsSuffix": "أعمدة",
+    "copied": "تم النسخ",
+    "copySuffix": "نسخة",
+    "current": "الحالية",
+    "custom": "مخصصة",
+    "customSuffix": "مخصصة",
+    "customViewsSection": "العروض المخصصة",
+    "default": "الافتراضية",
+    "deletePrefix": "حذف",
+    "densitySuffix": "الكثافة",
+    "duplicate": "تكرار",
+    "emptyDescription": "لا توجد نطاقات أو مرشحات أو تخطيطات محفوظة بعد.",
+    "filterPlural": "مرشحات",
+    "filterSingular": "مرشح",
+    "headerDescription": "بدّل بين حالات مساحة العمل المنسقة دون مغادرة القائمة.",
+    "headerTitle": "العروض المحفوظة",
+    "noPersonaDescription": "احفظ الشريحة الحالية أو كرر عرض النظام لبدء مساحة عمل شخصية.",
+    "noPersonaTitle": "لا توجد عروض شخصية بعد",
+    "noViewsDescription": "أنشئ مرشحات وتخطيطات أعمدة منسقة عندما يتم تفعيل الحفظ لمساحة العمل هذه.",
+    "noViewsTitle": "لا توجد عروض محفوظة بعد",
+    "panelLabel": "العروض المحفوظة",
+    "persona": "شخصية",
+    "personaSuffix": "شخصية",
+    "personaViewsSection": "العروض الشخصية",
+    "queryPrefix": "استعلام",
+    "saveCurrent": "حفظ الحالية",
+    "scopePrefix": "النطاق",
+    "share": "مشاركة",
+    "shareColumnsPrefix": "الأعمدة",
+    "shareDensityPrefix": "الكثافة",
+    "shareFiltersPrefix": "المرشحات",
+    "shareSortPrefix": "الترتيب",
+    "shareTypePrefix": "النوع",
+    "shareViewPrefix": "عرض مساحة العمل",
+    "sortedByPrefix": "مرتب حسب",
+    "system": "النظام",
+    "systemSuffix": "النظام",
+    "systemViewsSection": "عروض النظام",
+    "views": "العروض"
+  },
+  "pageShell": {
+    "tabs": {
+      "label": "علامات تبويب الصفحة"
+    }
+  },
+  "tabs": {
+    "previous": "علامات التبويب السابقة",
+    "next": "علامات التبويب التالية",
+    "more": "المزيد من علامات التبويب",
+    "loading": "جارٍ التحميل"
+  },
+  "viewModeSwitcher": {
+    "groupLabel": "وضع العرض",
+    "disabledWithReason": "{label} (غير متاح: {reason})"
   }
 }

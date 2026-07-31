@@ -14,19 +14,48 @@
 /** Version of the profile selection contract persisted by theme sources. */
 export const RECIPE_PROFILE_SCHEMA_VERSION = 1 as const;
 
-/** Families a profile may default. Mirrors the DS-S001 target set. */
-export type RecipeProfileFamily =
-  | 'button'
-  | 'card'
-  | 'tabs'
-  | 'tag'
-  | 'sectionCard'
-  | 'dataTable';
+/**
+ * Closed family/axis vocabulary.
+ *
+ * Profiles are data, not a parallel styling language. Keeping both the family
+ * names and their admissible axes/values closed prevents an inline profile
+ * from inventing a second recipe system that components happen to interpret
+ * differently.
+ */
+export interface RecipeProfileDefaultsByFamily {
+  readonly button: {
+    readonly shape?: 'default' | 'round';
+    readonly size?: 'sm' | 'lg';
+    readonly variant?: 'outline' | 'primary';
+  };
+  readonly card: {
+    readonly variant?: 'outlined' | 'elevated';
+  };
+  readonly tabs: {
+    readonly recipe?: 'underline' | 'pills';
+  };
+  readonly tag: {
+    readonly size?: 'sm' | 'lg';
+    readonly radius?: 'none' | 'full';
+    readonly bordered?: boolean;
+    readonly outlined?: boolean;
+  };
+  readonly sectionCard: {
+    readonly variant?: 'outlined' | 'elevated';
+  };
+  readonly dataTable: {
+    readonly density?: 'compact' | 'comfortable';
+    readonly recipe?: 'ruled' | 'minimal';
+  };
+}
 
-/** Bounded per-family defaults: axis name -> authored axis value. */
-export type RecipeProfileFamilyDefaults = Readonly<
-  Record<string, string | boolean>
->;
+/** Families a profile may default. Mirrors the DS-S001 target set. */
+export type RecipeProfileFamily = keyof RecipeProfileDefaultsByFamily;
+
+/** Bounded defaults for one exact family. */
+export type RecipeProfileFamilyDefaults<
+  Family extends RecipeProfileFamily = RecipeProfileFamily,
+> = Readonly<RecipeProfileDefaultsByFamily[Family]>;
 
 export interface RecipeProfileDefinition {
   /** Namespaced, versioned id: `<namespace>/<name>@<major>`. */
@@ -34,9 +63,9 @@ export interface RecipeProfileDefinition {
   readonly schemaVersion: typeof RECIPE_PROFILE_SCHEMA_VERSION;
   /** Human intent, for the manifest and audits. */
   readonly description: string;
-  readonly families: Partial<
-    Readonly<Record<RecipeProfileFamily, RecipeProfileFamilyDefaults>>
-  >;
+  readonly families: {
+    readonly [Family in RecipeProfileFamily]?: RecipeProfileFamilyDefaults<Family>;
+  };
 }
 
 const PROFILE_ID_PATTERN = /^[a-z0-9-]+\/[a-z0-9-]+@[0-9]+$/;
@@ -52,7 +81,7 @@ export const RECIPE_PROFILES = [
       button: { shape: 'default', size: 'sm', variant: 'outline' },
       card: { variant: 'outlined' },
       tabs: { recipe: 'underline' },
-      tag: { radius: 'none', bordered: true, outlined: true },
+      tag: { size: 'sm', radius: 'none', bordered: true, outlined: true },
       sectionCard: { variant: 'outlined' },
       dataTable: { density: 'compact', recipe: 'ruled' },
     },
@@ -66,7 +95,7 @@ export const RECIPE_PROFILES = [
       button: { shape: 'round', size: 'lg', variant: 'primary' },
       card: { variant: 'elevated' },
       tabs: { recipe: 'pills' },
-      tag: { radius: 'full', bordered: false, outlined: false },
+      tag: { size: 'lg', radius: 'full', bordered: false, outlined: false },
       sectionCard: { variant: 'elevated' },
       dataTable: { density: 'comfortable', recipe: 'minimal' },
     },

@@ -30,7 +30,9 @@ import { CHECKBOX_DEFAULTS, SIZE_MAP_NUMERIC } from '../../contracts';
 /*  SVG icons                                                          */
 /* ------------------------------------------------------------------ */
 
-/** Crisp checkmark -- 2px stroke, round caps, centered in a 12x12 viewBox. */
+/** Crisp checkmark -- 2px stroke, round caps, centered in a 12x12 viewBox.
+ *  The constant viewBox keeps the stroke proportional at every rendered
+ *  size; geometry and motion live in the skin (`data-part='checkmark'`). */
 const CheckIcon = ({ size }: { size: number }) => {
   const svgSize = Math.max(10, Math.round(size * 0.6));
   return (
@@ -41,10 +43,6 @@ const CheckIcon = ({ size }: { size: number }) => {
       viewBox="0 0 12 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{
-        display: 'block',
-        transition: 'transform var(--ds-motion-fast) ease-out',
-      }}
     >
       <path
         d="M2.5 6.5L5 9L9.5 3.5"
@@ -68,10 +66,6 @@ const IndeterminateIcon = ({ size }: { size: number }) => {
       viewBox="0 0 12 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{
-        display: 'block',
-        transition: 'transform var(--ds-motion-fast) ease-out',
-      }}
     >
       <path
         d="M3 6H9"
@@ -157,7 +151,8 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
         data-label-placement={labelPlacement}
         htmlFor={inputId}
       >
-        {/* Visually hidden native input: accessibility + form participation */}
+        {/* Visually hidden native input: accessibility + form participation.
+            The clip idiom lives in the skin with every other visual decision. */}
         <input
           ref={inputRef}
           id={inputId}
@@ -171,16 +166,6 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
           onChange={handleChange}
           aria-checked={indeterminate ? 'mixed' : isChecked}
           aria-invalid={error || undefined}
-          style={{
-            position: 'absolute',
-            width: 1,
-            height: 1,
-            padding: 0,
-            margin: -1,
-            overflow: 'hidden',
-            clip: 'rect(0, 0, 0, 0)',
-            whiteSpace: 'nowrap',
-          }}
         />
 
         {/* Custom visual indicator */}

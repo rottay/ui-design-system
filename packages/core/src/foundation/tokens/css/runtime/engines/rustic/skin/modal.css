@@ -30,6 +30,14 @@
   background-color: rgba(0, 0, 0, var(--ds-modal-scrim-opacity));
 }
 
+.rottay-modal-root--rustic[data-part='root'][data-backdrop='false'] {
+  background-color: transparent;
+}
+
+.rottay-modal-root--rustic[data-part='root'][data-backdrop='true'][data-blur='true'] {
+  backdrop-filter: blur(var(--ds-glass-blur-sm, 8px));
+}
+
 /* ---- panel surface ---- */
 .rottay-modal-root--rustic > [data-part='surface'] {
   background-color: var(--ds-modal-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));

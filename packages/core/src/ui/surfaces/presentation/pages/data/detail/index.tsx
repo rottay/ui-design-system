@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview DetailSurface - Rottay Design System
@@ -16,30 +16,30 @@
  * sidebar, actions, avatar, status).
  */
 
-import { Box, Stack } from '../../../../../primitives';
-import { PatternDetailPanel, resolveRowKey } from '../../../../../patterns';
-import { FadeIn, recordTransitionName } from '@/graphics/motion';
-import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { Box, Stack } from "../../../../../primitives";
+import { PatternDetailPanel, resolveRowKey } from "../../../../../patterns";
+import { FadeIn, recordTransitionName } from "@/graphics/motion";
+import { useBreakpoints } from "@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state";
 import {
   filterDetailSurfaceTabs,
   filterSurfaceActions,
   isAllSurfaceAccess,
   resolveSurfaceCapabilityRegistry,
   resolveSurfaceDetailActionVariant,
-} from '../../../../runtime/helpers';
-import { useSurfaceTranslations } from '../../../../runtime/helpers/states/i18n';
-import { useSurfaceProfileDefaultsWithOverrides } from '../../../../runtime/profile-defaults/overrides';
+} from "../../../../runtime/helpers";
+import { useSurfaceTranslations } from "../../../../runtime/helpers/states/i18n";
+import { useSurfaceProfileDefaultsWithOverrides } from "../../../../runtime/profile-defaults/overrides";
 import type {
   DetailSurfaceConfig,
   EntityAdapter,
   SurfaceCapabilityRegistration,
-} from '../../../../foundation/contracts';
+} from "../../../../foundation/contracts";
 import {
   SurfaceCapabilityAnatomy,
   SurfaceEmptyState,
   SurfaceErrorState,
-} from '../../../../runtime/helpers/states';
-import { PageShellSurface } from '../../../../composition/layout/page-shell';
+} from "../../../../runtime/helpers/states";
+import { PageShellSurface } from "../../../../composition/layout/page-shell";
 
 export interface DetailSurfaceProps<TRaw, TView> {
   data?: TRaw | null;
@@ -58,24 +58,24 @@ function resolveDetailErrorCapabilities<TRaw, TView>(
   const includeStaticHidden = isAllSurfaceAccess(access);
   const registrations: SurfaceCapabilityRegistration[] = [
     ...adapter.fields.map((field) => ({
-      kind: 'field' as const,
+      kind: "field" as const,
       id: field.fieldId,
       label: field.label ?? field.key,
     })),
     ...(config.presentation.tabs ?? [])
       .filter((tab) => includeStaticHidden || tab.visible !== false)
       .map((tab) => ({
-        kind: 'tab' as const,
+        kind: "tab" as const,
         id: tab.capabilityId ?? tab.permissionId ?? tab.key,
         label: tab.label,
         disabled: tab.disabled,
       })),
     ...(config.behavior.actions ?? []).map((action) => ({
-        kind: 'action' as const,
-        id: action.id,
-        label: action.label,
-        disabled: action.disabled,
-      })),
+      kind: "action" as const,
+      id: action.id,
+      label: action.label,
+      disabled: action.disabled,
+    })),
   ];
 
   return resolveSurfaceCapabilityRegistry(registrations, access);
@@ -91,7 +91,9 @@ export function DetailSurface<TRaw, TView>({
   onRetry,
 }: DetailSurfaceProps<TRaw, TView>): React.ReactElement {
   const { tSurface } = useSurfaceTranslations();
-  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(config.visual?.profileOverrides);
+  const profileDefaults = useSurfaceProfileDefaultsWithOverrides(
+    config.visual?.profileOverrides
+  );
   const { isMobile } = useBreakpoints();
 
   if (error) {
@@ -102,7 +104,6 @@ export function DetailSurface<TRaw, TView>({
         data-part="root"
         data-state="error"
         data-capability-count={capabilities.length}
-        style={{ display: 'grid', gap: 'var(--ds-spacing-4, 16px)' }}
       >
         <Box data-part="error-state" aria-live="polite">
           <SurfaceErrorState error={error} onRetry={onRetry} />
@@ -119,11 +120,15 @@ export function DetailSurface<TRaw, TView>({
   // is still in-flight would flash a misleading screen.
   if (!data && !loading) {
     return (
-      <Box>
+      <Box
+        className="ds-surface ds-detail-surface"
+        data-part="root"
+        data-state="empty"
+      >
         {config.emptyState ?? (
           <SurfaceEmptyState
-            title={tSurface('detail.empty_title')}
-            description={tSurface('detail.empty_description')}
+            title={tSurface("detail.empty_title")}
+            description={tSurface("detail.empty_description")}
           />
         )}
       </Box>
@@ -137,48 +142,60 @@ export function DetailSurface<TRaw, TView>({
 
   // Convert the surface action vocabulary into the narrower detail-panel contract.
   const actions = item
-    ? filterSurfaceActions(config.behavior.actions, config.access, item).map((action) => ({
-        key: action.id,
-        label: action.label,
-        icon: action.icon,
-        /**
-         * DetailPanel exposes a narrower variant union than the generic
-         * surface layer, so we explicitly translate here instead of leaking a
-         * looser string type into the pattern contract.
-         */
-        variant: resolveSurfaceDetailActionVariant(action.variant),
-        onClick: () => action.onClick?.(item),
-        disabled: action.disabled,
-        loading: action.loading,
-      }))
+    ? filterSurfaceActions(config.behavior.actions, config.access, item).map(
+        (action) => ({
+          key: action.id,
+          label: action.label,
+          icon: action.icon,
+          /**
+           * DetailPanel exposes a narrower variant union than the generic
+           * surface layer, so we explicitly translate here instead of leaking a
+           * looser string type into the pattern contract.
+           */
+          variant: resolveSurfaceDetailActionVariant(action.variant),
+          onClick: () => action.onClick?.(item),
+          disabled: action.disabled,
+          loading: action.loading,
+        })
+      )
     : [];
 
   // Tabs are filtered after mapping the item so `visible` and `badge` callbacks can inspect real data.
   const visibleTabs = item
-    ? filterDetailSurfaceTabs(config.presentation.tabs, config.access, item).map((tab) => ({
+    ? filterDetailSurfaceTabs(
+        config.presentation.tabs,
+        config.access,
+        item
+      ).map((tab) => ({
         key: tab.key,
         label: tab.label,
         icon: tab.icon,
         content: tab.content(item),
-        badge: typeof tab.badge === 'function' ? tab.badge(item) : tab.badge,
+        badge: typeof tab.badge === "function" ? tab.badge(item) : tab.badge,
         disabled: tab.disabled,
       }))
     : [];
   // Validate that the configured active tab actually exists in the visible
   // set. If the active tab was hidden by access or visibility rules,
   // fall back to the first visible tab to avoid a blank content area.
-  const resolvedActiveTab =
-    visibleTabs.some((tab) => tab.key === config.behavior.activeTab)
-      ? config.behavior.activeTab
-      : visibleTabs[0]?.key;
+  const resolvedActiveTab = visibleTabs.some(
+    (tab) => tab.key === config.behavior.activeTab
+  )
+    ? config.behavior.activeTab
+    : visibleTabs[0]?.key;
   // When activeTab is undefined the Tabs component manages its own state
   // (uncontrolled mode). We track this so we pass the right prop.
   const isControlledTabState = config.behavior.activeTab !== undefined;
-  const resolvedSidebar = item ? config.presentation.sidebar?.(item) : undefined;
+  const resolvedSidebar = item
+    ? config.presentation.sidebar?.(item)
+    : undefined;
   const shouldCollapseSidebarOnMobile =
-    isMobile && !!resolvedSidebar && config.visual.collapseSidebarOnMobile !== false;
+    isMobile &&
+    !!resolvedSidebar &&
+    config.visual.collapseSidebarOnMobile !== false;
   const resolvedFooter =
-    item && (config.presentation.footer?.(item) || shouldCollapseSidebarOnMobile) ? (
+    item &&
+    (config.presentation.footer?.(item) || shouldCollapseSidebarOnMobile) ? (
       <Stack spacing="md">
         {config.presentation.footer?.(item)}
         {shouldCollapseSidebarOnMobile ? resolvedSidebar : null}
@@ -198,8 +215,13 @@ export function DetailSurface<TRaw, TView>({
   // 3. Loading state falls back to generic label
   // 4. Empty string only if title() returns a non-string ReactNode (rare)
   const derivedTitle = item ? config.presentation.title(item) : undefined;
-  const pageTitle = config.presentation.chrome?.pageTitle
-    ?? (typeof derivedTitle === 'string' ? derivedTitle : (loading ? tSurface('detail.loading') : ''));
+  const pageTitle =
+    config.presentation.chrome?.pageTitle ??
+    (typeof derivedTitle === "string"
+      ? derivedTitle
+      : loading
+      ? tSurface("detail.loading")
+      : "");
 
   // A record-derived name pairs this detail body with the list card that
   // resolves the SAME key (see ListSurfaceBehaviorConfig.rowKey +
@@ -211,7 +233,7 @@ export function DetailSurface<TRaw, TView>({
   const detailTransitionName =
     item && config.behavior.recordKey !== undefined
       ? recordTransitionName(resolveRowKey(item, config.behavior.recordKey, 0))
-      : 'ds-vt-detail-body';
+      : "ds-vt-detail-body";
 
   const detailPanel = (
     <Box
@@ -224,26 +246,36 @@ export function DetailSurface<TRaw, TView>({
       }}
     >
       <PatternDetailPanel
-          data={item as TView}
-          /* When wrapped in PageShell, the page-level heading shows the title.
+        data={item as TView}
+        /* When wrapped in PageShell, the page-level heading shows the title.
              DetailPanel suppresses its own <h2> to avoid a double heading.
              The entity header still shows avatar, status, subtitle, and actions. */
-          title={hasPageChrome ? undefined : (item ? config.presentation.title(item) : tSurface('detail.loading'))}
-          subtitle={item ? config.presentation.subtitle?.(item) : undefined}
-          avatar={item ? config.presentation.avatar?.(item) : undefined}
-          status={item ? config.presentation.status?.(item) : undefined}
-          tabs={visibleTabs}
-          actions={actions}
-          sidebar={shouldCollapseSidebarOnMobile ? undefined : resolvedSidebar}
-          sidebarPosition={config.visual.sidebarPosition}
-          sidebarWidth={config.visual.sidebarWidth}
-          headerExtra={item ? config.presentation.headerExtra?.(item) : undefined}
-          footer={resolvedFooter}
-          activeTab={isControlledTabState ? resolvedActiveTab : undefined}
-          onTabChange={config.behavior.onTabChange}
-          loading={loading}
-          breadcrumbs={hasPageChrome ? undefined : config.presentation.chrome?.breadcrumbs}
-          onBack={hasPageChrome ? undefined : config.presentation.chrome?.back?.onClick}
+        title={
+          hasPageChrome
+            ? undefined
+            : item
+            ? config.presentation.title(item)
+            : tSurface("detail.loading")
+        }
+        subtitle={item ? config.presentation.subtitle?.(item) : undefined}
+        avatar={item ? config.presentation.avatar?.(item) : undefined}
+        status={item ? config.presentation.status?.(item) : undefined}
+        tabs={visibleTabs}
+        actions={actions}
+        sidebar={shouldCollapseSidebarOnMobile ? undefined : resolvedSidebar}
+        sidebarPosition={config.visual.sidebarPosition}
+        sidebarWidth={config.visual.sidebarWidth}
+        headerExtra={item ? config.presentation.headerExtra?.(item) : undefined}
+        footer={resolvedFooter}
+        activeTab={isControlledTabState ? resolvedActiveTab : undefined}
+        onTabChange={config.behavior.onTabChange}
+        loading={loading}
+        breadcrumbs={
+          hasPageChrome ? undefined : config.presentation.chrome?.breadcrumbs
+        }
+        onBack={
+          hasPageChrome ? undefined : config.presentation.chrome?.back?.onClick
+        }
       />
     </Box>
   );
@@ -267,20 +299,33 @@ export function DetailSurface<TRaw, TView>({
     <Box
       style={{
         maxWidth: config.presentation.chrome?.maxWidth,
-        margin: config.presentation.chrome?.maxWidth ? '0 auto' : undefined,
+        margin: config.presentation.chrome?.maxWidth ? "0 auto" : undefined,
       }}
     >
       {detailPanel}
     </Box>
   );
 
+  // State-consistent root anatomy (error/empty carry the same pair above).
+  // The skin keeps this wrapper layout-inert while preserving a queryable
+  // state boundary for integrations and tests.
+  const readyRoot = (content: React.ReactNode) => (
+    <Box
+      className="ds-surface ds-detail-surface"
+      data-part="root"
+      data-state={loading ? "loading" : "ready"}
+    >
+      {content}
+    </Box>
+  );
+
   if (profileDefaults.animateEntrance) {
-    return (
+    return readyRoot(
       <FadeIn durationMs={profileDefaults.entranceDuration}>
         {detailContent}
       </FadeIn>
     );
   }
 
-  return detailContent;
+  return readyRoot(detailContent);
 }

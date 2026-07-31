@@ -54,7 +54,7 @@
 
 import { type CSSProperties, type ReactNode } from 'react';
 
-import { ArrowLeftIcon } from '@/graphics/icons/presentation/catalog/navigation';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import type { ComponentType } from 'react';
 type FormHeaderIcon = ComponentType<any>;
 
@@ -193,19 +193,10 @@ export function FormHeader({
   return (
     <Box
       data-part="root"
+      data-structure="form-header"
       className="ds-structure ds-form-header"
-      style={{
-        width: '100%',
-        marginBottom: 24,
-        overflow: 'hidden',
-      }}
     >
-      <Box
-        data-part="top-bar"
-        style={{
-          padding: '12px 24px',
-        }}
-      >
+      <Box data-part="top-bar">
         <Flex justify="between" align="center">
           <Flex align="center" gap={16}>
             {renderHrefAnchor(
@@ -214,13 +205,11 @@ export function FormHeader({
                 data-part="back-button"
                 align="center"
                 gap={8}
-                style={{
-                  padding: '8px 12px',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
               >
-                <ArrowLeftIcon data-part="back-icon" style={{ width: 14, height: 14 }} />
+                {/* Governed semantic role (autoMirror: the arrow flips in
+                    RTL); the retired catalog ArrowLeftIcon carried no
+                    mirroring contract. */}
+                <NavigationBackIcon data-part="back-icon" decorative size={14} />
                 <Text data-part="back-label" size="xs">
                   {resolvedBackLabel}
                 </Text>
@@ -230,7 +219,7 @@ export function FormHeader({
 
             {breadcrumbItems && breadcrumbItems.length > 0 ? (
               <>
-                <Box data-part="breadcrumb-divider" style={{ width: 1, height: 18 }} />
+                <Box data-part="breadcrumb-divider" />
                 <Breadcrumb items={breadcrumbItems} />
               </>
             ) : null}
@@ -245,7 +234,7 @@ export function FormHeader({
                   <Button
                     variant={resolveSharedHeaderActionVariant(headerAction)}
                     size="sm"
-                    icon={ActionIcon ? <ActionIcon style={{ width: 14, height: 14 }} /> : undefined}
+                    icon={ActionIcon ? <ActionIcon data-part="action-icon" /> : undefined}
                     onClick={headerAction.onClick}
                     loading={headerAction.loading}
                     disabled={headerAction.disabled}
@@ -259,40 +248,29 @@ export function FormHeader({
         </Flex>
       </Box>
 
-      <Box data-part="hero-panel" data-archetype={archetype} style={{ padding: 28 }}>
+      <Box data-part="hero-panel" data-archetype={archetype}>
         <Flex align="center" gap={16}>
           <Box
             data-part="icon-badge"
             style={{
-              width: 52,
-              height: 52,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
               '--ds-header-icon-tone-bg': iconTone.bg,
               '--ds-header-icon-tone-bd': iconTone.bd,
               '--ds-header-icon-tone-fg': iconTone.fg,
             } as CSSProperties}
           >
-            <MainIcon data-part="icon-badge-glyph" style={{ width: 22, height: 22 }} />
+            <MainIcon data-part="icon-badge-glyph" />
           </Box>
-          <Stack spacing="xs" style={{ minWidth: 0 }}>
+          <Stack spacing="xs" data-part="hero-copy">
             {eyebrow ? (
               <Text
                 data-part="eyebrow"
                 size="xs"
                 weight="bold"
-                style={{
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.12em',
-                  fontFamily: 'var(--ds-font-family-mono, monospace)',
-                }}
               >
                 {eyebrow}
               </Text>
             ) : null}
-            <Text data-part="title" style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.03em' }}>
+            <Text data-part="title">
               {title}
             </Text>
             {subtitle && (
@@ -304,16 +282,10 @@ export function FormHeader({
         </Flex>
 
         {contextRail || children ? (
-          <Box
-            data-part="context-card"
-            style={{
-              marginTop: 22,
-              padding: '16px 18px 18px',
-            }}
-          >
+          <Box data-part="context-card">
             {contextRail ? <Box data-part="context-rail">{contextRail}</Box> : null}
             {children ? (
-              <Box data-part="context-card-children" style={{ marginTop: contextRail ? 18 : 0 }}>
+              <Box data-part="context-card-children" data-has-rail={contextRail ? 'true' : 'false'}>
                 {children}
               </Box>
             ) : null}

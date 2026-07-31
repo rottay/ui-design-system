@@ -42,7 +42,7 @@
  * Status badge variants follow the standard DS Badge vocabulary.
  */
 
-import { type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
+import { type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 
 import { ArrowLeftIcon } from '@/graphics/icons/presentation/catalog/navigation';
 import type { ComponentType } from 'react';
@@ -101,59 +101,23 @@ export interface DetailHeaderProps {
   children?: ReactNode;
 }
 
-// Only the tab-active background still rides the engine: it is archetype-selected
-// but the tab strip is a SIBLING of the hero-panel, so no `data-archetype` ancestor
-// can reach it from CSS. Everything else the archetype used to compute (hero
-// gradient, fade mask, grid) lives in detail-header.css keyed on `data-archetype`.
-function getArchetypeTabActiveBackground(archetype: DetailHeaderArchetype) {
-  switch (archetype) {
-    case 'editorial':
-      return 'color-mix(in srgb, var(--ds-color-bg-primary) 32%, transparent)';
-    case 'technical':
-      return 'color-mix(in srgb, var(--ds-color-bg-primary) 36%, transparent)';
-    case 'governance':
-      return 'color-mix(in srgb, var(--ds-color-bg-primary) 42%, transparent)';
-    case 'control':
-    default:
-      return 'color-mix(in srgb, var(--ds-color-bg-primary) 28%, transparent)';
-  }
-}
+// Tab-active background is STATE-SELECTED in the skin: the root carries
+// `data-archetype`, so per-archetype rules reach the sibling tab strip without
+// any inline custom property (the root stamp replaced the old JS ternary).
 
 function renderAvatarNode(avatar: string | ReactNode, title: string) {
   if (typeof avatar === 'string') {
     if (avatar.startsWith('http') || avatar.startsWith('/')) {
       return (
-        <Box
-          data-part="avatar"
-          data-variant="image"
-          style={{
-            width: 68,
-            height: 68,
-            overflow: 'hidden',
-          }}
-        >
-          <img
-            src={avatar}
-            alt={title}
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-          />
+        <Box data-part="avatar" data-variant="image">
+          <img src={avatar} alt={title} />
         </Box>
       );
     }
 
     return (
-      <Box
-        data-part="avatar"
-        data-variant="initials"
-        style={{
-          width: 68,
-          height: 68,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Text style={{ fontSize: 24, fontWeight: 700 }}>{avatar}</Text>
+      <Box data-part="avatar" data-variant="initials">
+        <Text data-part="avatar-initials">{avatar}</Text>
       </Box>
     );
   }
@@ -186,74 +150,44 @@ export function DetailHeader({
   // native <a> tag when no NavigationLinkProvider is mounted, which keeps
   // the DS package framework-agnostic.
   const NavLink = useNavigationLink();
-  const renderHrefAnchor = (href: string, content: ReactNode, style?: CSSProperties) => {
+  const renderHrefAnchor = (href: string, content: ReactNode) => {
     if (NavLink) {
-      return (
-        <NavLink href={href} style={style}>
-          {content}
-        </NavLink>
-      );
+      return <NavLink href={href}>{content}</NavLink>;
     }
-    return (
-      <a href={href} style={style}>
-        {content}
-      </a>
-    );
+    return <a href={href}>{content}</a>;
   };
 
   const breadcrumbItems = breadcrumb?.map((item, index) => ({
     key: String(index),
     label: item.href ? renderHrefAnchor(item.href, item.label) : item.label,
   }));
-  const tabActiveBackground = getArchetypeTabActiveBackground(archetype);
   const visibleMetadata = metadata?.filter((item) => item.value) || [];
 
   return (
-    <Box
-      data-part="root"
-      className="ds-structure ds-detail-header"
-      style={{
-        width: '100%',
-        marginBottom: 24,
-        overflow: 'hidden',
-      }}
-    >
-      <Box
-        data-part="top-bar"
-        style={{
-          padding: '12px 24px',
-        }}
-      >
+    <Box data-part="root" data-archetype={archetype} className="ds-structure ds-detail-header">
+      <Box data-part="top-bar">
         <Flex justify="between" align="center" gap={16} wrap="wrap">
           <Flex align="center" gap={16} wrap="wrap">
             {renderHrefAnchor(
               backHref,
-              <Flex
-                data-part="back-button"
-                align="center"
-                gap={8}
-                style={{
-                  padding: '7px 12px',
-                }}
-              >
-                <ArrowLeftIcon data-part="back-icon" style={{ width: 14, height: 14 }} />
+              <Flex data-part="back-button" align="center" gap={8}>
+                <ArrowLeftIcon data-part="back-icon" />
                 <Text data-part="back-label" size="xs">
                   {resolvedBackLabel}
                 </Text>
               </Flex>,
-              { textDecoration: 'none' },
             )}
 
             {breadcrumbItems && breadcrumbItems.length > 0 ? (
               <>
-                <Box data-part="breadcrumb-divider" style={{ width: 1, height: 18 }} />
+                <Box data-part="breadcrumb-divider" />
                 <Breadcrumb items={breadcrumbItems} />
               </>
             ) : null}
           </Flex>
 
           {actions.length > 0 ? (
-            <Flex align="center" gap={8} wrap="wrap">
+            <Flex data-part="actions" align="center" gap={8} wrap="wrap">
               {actions.map((action, index) => {
                 const ActionIcon = resolveSharedHeaderActionIcon(action);
 
@@ -278,70 +212,38 @@ export function DetailHeader({
         </Flex>
       </Box>
 
-      <Box
-        data-part="hero-panel"
-        data-archetype={archetype}
-        style={{
-          padding: 28,
-        }}
-      >
+      <Box data-part="hero-panel" data-archetype={archetype}>
         <Flex align="start" justify="between" gap={22} wrap="wrap">
           <Flex align="start" gap={18} style={{ minWidth: 0, flex: 1 }}>
             {avatar ? renderAvatarNode(avatar, title) : null}
 
             <Stack spacing="sm" style={{ minWidth: 0, flex: 1 }}>
               {eyebrow ? (
-                <Text
-                  data-part="eyebrow"
-                  size="xs"
-                  weight="bold"
-                  style={{
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    fontFamily: 'var(--ds-font-family-mono, monospace)',
-                  }}
-                >
+                <Text data-part="eyebrow" size="xs" weight="bold">
                   {eyebrow}
                 </Text>
               ) : null}
 
               <Flex align="center" gap={12} wrap="wrap">
-                <Box
-                  data-part="title"
-                  data-archetype={archetype}
-                  as="h1"
-                  style={{
-                    margin: 0,
-                  }}
-                >
+                <Box data-part="title" data-archetype={archetype} as="h1">
                   {title}
                 </Box>
                 {status ? <Badge variant={status.variant}>{status.label}</Badge> : null}
               </Flex>
 
               {subtitle ? (
-                <Text data-part="subtitle" size="sm" style={{ lineHeight: 1.65, maxWidth: 780 }}>
+                <Text data-part="subtitle" size="sm">
                   {subtitle}
                 </Text>
               ) : null}
 
-              {contextRail ? (
-                <Box data-part="context-rail" style={{ marginTop: 2 }}>
-                  {contextRail}
-                </Box>
-              ) : null}
+              {contextRail ? <Box data-part="context-rail">{contextRail}</Box> : null}
             </Stack>
           </Flex>
         </Flex>
 
         {visibleMetadata.length > 0 || children ? (
-          <Box
-            data-part="metadata-card"
-            style={{
-              marginTop: 24,
-              padding: '16px 18px 18px',
-            }}
-          >
+          <Box data-part="metadata-card">
             {visibleMetadata.length > 0 ? (
               <Flex gap={12} wrap="wrap">
                 {visibleMetadata.map((item, index) => (
@@ -350,32 +252,16 @@ export function DetailHeader({
                     key={`${item.label}-${index}`}
                     align="center"
                     gap={8}
-                    style={{
-                      minWidth: 0,
-                      padding: '9px 12px',
-                    }}
                   >
                     {item.icon ? <item.icon style={{ width: 14, height: 14 }} /> : null}
-                    <Text
-                      data-part="metadata-chip-label"
-                      size="xs"
-                      weight="bold"
-                      style={{
-                        letterSpacing: '0.12em',
-                        textTransform: 'uppercase',
-                        fontFamily: 'var(--ds-font-family-mono, monospace)',
-                      }}
-                    >
+                    <Text data-part="metadata-chip-label" size="xs" weight="bold">
                       {item.label}
                     </Text>
                     <Text
                       data-part="metadata-chip-value"
+                      data-mono={item.mono ? 'true' : 'false'}
                       size="sm"
                       weight="medium"
-                      style={{
-                        fontFamily: item.mono ? 'var(--ds-font-family-mono, monospace)' : undefined,
-                        wordBreak: item.mono ? 'break-all' : 'break-word',
-                      }}
                     >
                       {item.value}
                     </Text>
@@ -385,23 +271,14 @@ export function DetailHeader({
             ) : null}
 
             {children ? (
-              <Box data-part="metadata-card-children" style={{ marginTop: visibleMetadata.length > 0 ? 18 : 0 }}>
-                {children}
-              </Box>
+              <Box data-part="metadata-card-children">{children}</Box>
             ) : null}
           </Box>
         ) : null}
       </Box>
 
       {tabs && tabs.length > 0 ? (
-        <Box
-          data-part="tab-strip"
-          role="tablist"
-          aria-label={tabStripLabel}
-          style={{
-            padding: '10px 18px 0',
-          }}
-        >
+        <Box data-part="tab-strip" role="tablist" aria-label={tabStripLabel}>
           <Flex align="center" gap={10} wrap="wrap">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
@@ -454,23 +331,9 @@ export function DetailHeader({
                   tabIndex={isActive ? 0 : -1}
                   onClick={() => onTabChange?.(tab.id)}
                   onKeyDown={handleTabKeyDown}
-                  style={{
-                    cursor: 'pointer',
-                    padding: '10px 12px 12px',
-                    '--ds-detail-header-tab-active-bg': tabActiveBackground,
-                  } as CSSProperties}
                 >
                   <Flex align="center" gap={8}>
-                    {TabIcon ? (
-                      <TabIcon
-                        data-part="tab-icon"
-                        data-active={isActive}
-                        style={{
-                          width: 14,
-                          height: 14,
-                        }}
-                      />
-                    ) : null}
+                    {TabIcon ? <TabIcon data-part="tab-icon" data-active={isActive} /> : null}
                     <Text
                       data-part="tab-label"
                       data-active={isActive}
@@ -480,12 +343,7 @@ export function DetailHeader({
                       {tab.label}
                     </Text>
                     {tab.count !== undefined ? (
-                      <Box
-                        data-part="tab-count"
-                        style={{
-                          padding: '2px 6px',
-                        }}
-                      >
+                      <Box data-part="tab-count">
                         <Text data-part="tab-count-text" data-active={isActive} size="xs" weight="medium">
                           {tab.count}
                         </Text>

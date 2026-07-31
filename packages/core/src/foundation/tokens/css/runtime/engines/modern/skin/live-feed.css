@@ -1,42 +1,57 @@
 /**
- * Modern LiveFeed skin (WO-SKIN-06 CK-F).
+ * Modern LiveFeed skin.
  *
- * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
- * `base` layer, so a layered rule loses to preflight regardless of specificity.
- * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
- * `style`.
+ * LAYERING: imported by `facade/entrypoints/base.css` into `layer(
+ * rottay-engines)` — this file does not control its own layering (the older
+ * "deliberately unlayered" note predates that wiring).
  *
- * SCOPE ROOT: the outer `<div>` carries `ds-pattern-live-feed ds-engine-modern`
- * + `data-part='root'`, identical in the loading-skeleton and loaded branches.
+ * SCOPE ROOT: the outer `<div>` carries `ds-pattern-live-feed
+ * ds-engine-modern` + `data-part='root'`, identical in the loading-skeleton
+ * and loaded branches (two distinct classes + one attribute, (0,3,0);
+ * repetition is prohibited).
  *
- * SHARED HELPER OUT OF SCOPE: this engine spreads `panelCardStyle` /
- * `cardBodyStyle` / `pillBadgeSmStyle` / `spinnerStyle` from the DS-wide
- * `patterns/_internal/engines/modern/styles.ts` (11-file, non-family-specific)
- * helper -- those styles are NOT migrated here; only the LOCAL keys this file
- * declares directly (which override or add to the spread) move to this skin.
+ * SHARED HELPER MIGRATED: the engine no longer spreads `panelCardStyle` /
+ * `cardBodyStyle` / `pillBadgeSmStyle` from `patterns/foundation/engine-
+ * styles/modern` — the card frame, body padding and banner-badge geometry
+ * those helpers carried inline are painted HERE (values transcribed
+ * verbatim). Composed primitives (Button, Spinner, Empty) keep their own
+ * paint; this file owns only the pattern chrome plus the local geometry of
+ * the composed buttons (P-79: the caller data-part makes this file their
+ * single paint owner).
  *
- * SPECIFICITY (P-48): every border here is `none` (no color), so nothing in this
- * file needs the (0,4,0) floor -- all rules win unlayered at (0,3,0).
+ * NO-GLOW LAW: the previous "Signal-glow" banner shadow (`--ds-shadow-glow-
+ * primary`) is gone — the new-items banner reads as a solid info surface
+ * with shape + text + count, never a glow and never hue alone.
  *
- * TOKENS: modern reads generic tokens throughout; the `--ds-live-feed-*`
- * component-scoped hatch (11 tokens, declared and tenant-overridden) is
- * rustic-only -- see `engines/rustic/skin/live-feed.css`. Two vocabularies, one
- * per engine; not unified (§0).
+ * A11Y: the item list is a polite live region (engine-stamped); the loading
+ * skeleton keeps its `.animate-pulse` class ONLY as a test query hook — the
+ * real channeled shimmer is the `ds-live-feed-skeleton-pulse` below.
  *
- * Values transcribed verbatim from `engines/modern.tsx`.
+ * TOKENS: modern reads generic tokens plus the `--ds-live-feed-*` component
+ * channels (registered TENANT_CANDIDATE in the previous wave; rung
+ * fallbacks verified against foundation/animations/transitions.css).
  */
 
-/* root: only the local boxShadow override moves here -- panelCardStyle's own
-   background/border/radius stay in the untouched shared helper */
+/* root: card frame transcribed from panelCardStyle + the local elevation */
 .ds-pattern-live-feed.ds-engine-modern[data-part='root'] {
+  border: 1px solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-1);
+  color: var(--ds-color-text-primary);
+}
+
+/* body rhythm (transcribed from cardBodyStyle) */
+.ds-pattern-live-feed.ds-engine-modern[data-part='root'] [data-part='body'],
+.ds-pattern-live-feed.ds-engine-modern[data-part='root'] [data-part='skeleton-list'] {
+  padding: var(--ds-live-feed-body-padding, 20px);
 }
 
 /* skeleton: the pulse cadence replaces Tailwind's `animate-pulse`; the bar
    geometry was per-bar inline styles. */
 .ds-pattern-live-feed.ds-engine-modern [data-part='skeleton-list'] {
   animation: ds-live-feed-skeleton-pulse
-    var(--ds-live-feed-skeleton-duration, var(--ds-motion-deliberate, 720ms))
+    var(--ds-live-feed-skeleton-duration, var(--ds-motion-deliberate, 320ms))
     var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
 }
 
@@ -86,8 +101,8 @@
   font-size: var(--ds-live-feed-control-font-size, 13px);
 }
 
-/* new-items banner -- Signal-glow (spec section 5, role 3): reserved for live
-   moments like new real-time items arriving. Geometry was inline. */
+/* new-items banner: solid info surface with shape + text + count — the
+   former glow shadow is removed (no-glow law). Geometry was inline. */
 .ds-pattern-live-feed.ds-engine-modern [data-part='banner'] {
   inline-size: 100%;
   block-size: var(--ds-live-feed-banner-height, 32px);
@@ -99,26 +114,32 @@
   color: var(--ds-color-text-on-primary);
   border-radius: var(--ds-radius-md);
   border: none;
-  box-shadow: var(--ds-shadow-glow-primary);
   font-size: var(--ds-live-feed-control-font-size, 13px);
 }
 
-/* banner count badge -- only these two channels are local overrides on top of
-   the untouched pillBadgeSmStyle spread (which carries no background/color) */
+/* banner count badge: pill geometry transcribed from pillBadgeSmStyle,
+   tabular count so the number never jitters the banner */
 .ds-pattern-live-feed.ds-engine-modern [data-part='badge'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 6px;
+  border-radius: 9999px;
   background: var(--ds-surface-panel);
   color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-2xs);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  line-height: 16px;
 }
 
 /* feed list: layout stays on the test-pinned Tailwind utilities
    (`flex flex-col gap-2`, see the engine comment) — this file paints no
-   duplicate list rule. */
+   duplicate list rule. The list is a polite live region (engine-stamped). */
 
-/* empty state (was Tailwind `text-center py-8`) */
+/* empty state: rhythm only — the composed Empty primitive owns its paint */
 .ds-pattern-live-feed.ds-engine-modern [data-part='empty'] {
   padding-block: var(--ds-live-feed-empty-padding-block, 32px);
-  color: var(--ds-color-text-secondary);
-  text-align: center;
 }
 
 /* end-of-feed sentinel (geometry was inline) */
@@ -164,5 +185,35 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-live-feed.ds-engine-modern [data-part='skeleton-list'] {
     animation: none;
+  }
+}
+
+/* forced colors: system colors only — the card frame, banner, badge and
+   skeleton re-express without any forced-color-adjust opt-out (no data-viz
+   in this pattern). */
+@media (forced-colors: active) {
+  .ds-pattern-live-feed.ds-engine-modern[data-part='root'] {
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-live-feed.ds-engine-modern [data-part='banner'] {
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  .ds-pattern-live-feed.ds-engine-modern [data-part='badge'] {
+    border: 1px solid HighlightText;
+    background: transparent;
+    color: inherit;
+  }
+
+  .ds-pattern-live-feed.ds-engine-modern [data-part='skeleton'] {
+    background: GrayText;
+  }
+
+  .ds-pattern-live-feed.ds-engine-modern [data-part='refresh']:focus-visible,
+  .ds-pattern-live-feed.ds-engine-modern [data-part='banner']:focus-visible,
+  .ds-pattern-live-feed.ds-engine-modern [data-part='load-more']:focus-visible {
+    outline-color: Highlight;
   }
 }
