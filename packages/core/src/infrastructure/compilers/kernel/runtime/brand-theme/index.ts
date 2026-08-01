@@ -33,6 +33,17 @@ import {
   resolveDensityModeFactor,
 } from "@/foundation/tokens/ts/foundation/base/density";
 import { validateRecipeProfileSelection } from "@/foundation/tokens/ts/presentation/recipe-profiles";
+import {
+  resolveExpressiveAxes,
+  sanitizeExpressiveOverrides,
+  validateExperienceProfileSelection,
+} from "@/foundation/tokens/ts/presentation/expressive-profiles";
+import {
+  expandExpressiveProfiles,
+  expressiveTypeRoleOverlay,
+} from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
+import type { ExpressiveTypeRoleOverlay } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
+import { appearancePostureToVariables } from "../../foundation/css/appearance-posture";
 import type {
   TenantBranding,
   TenantTokenOverrides,
@@ -127,22 +138,29 @@ export function brandThemeToPersonality(
   bt: BrandTheme
 ): Partial<PersonalityTokens> {
   const result: Partial<PersonalityTokens> = {};
+  const expressiveMotion = expandExpressiveProfiles(
+    resolveExpressiveAxes(
+      bt.expressive?.experienceProfile,
+      sanitizeExpressiveOverrides(bt.expressive?.profiles),
+      bt.expressive?.schemaVersion,
+    ),
+  ).fieldDefaults.motion;
 
-  if (bt.motion) {
+  if (bt.motion || expressiveMotion) {
     result.animation = {
-      intensity: bt.motion.intensity,
-      entrance: bt.motion.entrance,
-      entranceDuration: bt.motion.entranceDuration,
-      hoverLift: bt.motion.hoverLift,
-      hoverScale: bt.motion.hoverScale,
-      useSpring: bt.motion.useSpring,
-      springTension: bt.motion.springTension,
-      springFriction: bt.motion.springFriction,
-      pulseSpeed: bt.motion.pulseSpeed,
-      skeletonStyle: bt.motion.skeletonStyle,
-      staggerDelay: bt.motion.staggerDelay,
-      staggerMax: bt.motion.staggerMax,
-      countUpEnabled: bt.motion.countUpEnabled,
+      intensity: bt.motion?.intensity ?? expressiveMotion?.intensity,
+      entrance: bt.motion?.entrance,
+      entranceDuration: bt.motion?.entranceDuration,
+      hoverLift: bt.motion?.hoverLift,
+      hoverScale: bt.motion?.hoverScale,
+      useSpring: bt.motion?.useSpring,
+      springTension: bt.motion?.springTension,
+      springFriction: bt.motion?.springFriction,
+      pulseSpeed: bt.motion?.pulseSpeed,
+      skeletonStyle: bt.motion?.skeletonStyle,
+      staggerDelay: bt.motion?.staggerDelay,
+      staggerMax: bt.motion?.staggerMax,
+      countUpEnabled: bt.motion?.countUpEnabled,
     } as PersonalityTokens["animation"];
   }
 
@@ -519,6 +537,17 @@ function setExtendedPaletteVariables(
 }
 
 function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
+  // C1b expressive expansion — resolved HERE (not in compileBrandTheme) so
+  // compileModeBlocks, which re-invokes this function per authored mode
+  // overlay, re-expands automatically and every mode block sees the same
+  // profile layer. Fail-closed: an invalid selection expands to nothing.
+  const expressiveAxes = resolveExpressiveAxes(
+    bt.expressive?.experienceProfile,
+    sanitizeExpressiveOverrides(bt.expressive?.profiles),
+    bt.expressive?.schemaVersion
+  );
+  const expansion = expandExpressiveProfiles(expressiveAxes);
+
   // A compiled BrandTheme is the complete static baseline for a first-party
   // product. Keep the three ramp axes explicit in that artifact instead of
   // relying on the consumer-side `var(--ds-*-scale, 1)` fallbacks: a DB
@@ -531,19 +560,46 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
     "--ds-radius-scale": "1",
     "--ds-density-scale": String(bt.surfaces?.densityScale ?? 1),
   };
+  // Profile channels land OVER the neutral structural seeds and UNDER every
+  // authored write below: each authored field emits only when present, so
+  // the later assignments restore exactly the "authored wins over profile"
+  // precedence without a second writer per channel. The `--ds-type-{role}-*`
+  // rows seeded here are intentionally restated by the semantic-typography
+  // emitter at the end of this function, which receives the same table as a
+  // role overlay — one owner, identical values.
+  Object.assign(vars, expansion.variables);
+  // Field-backed expressive defaults use the SAME lowering as DB Appearance.
+  // Before this bridge a static selection changed density/radius only while
+  // type pairing, button silhouette, elevation and motion were DB-only.
+  Object.assign(vars, appearancePostureToVariables(expansion.fieldDefaults));
   // Semantic posture — the static path's equivalent of the DB Appearance
   // compiler. Same canonical resolver, same single channel, so a code-owned
   // vertical is no longer limited to the structural scale. Absent posture
   // emits nothing: the channel's `var(…, 1)` default already is the identity,
   // so an explicit `1` would add no value while claiming the channel against
   // every lower-precedence writer — including a root `data-density` boundary
-  // reached through an inline injection of this same variable map.
-  const authoredPosture = bt.surfaces?.density;
+  // reached through an inline injection of this same variable map. The
+  // expressive density default participates only where the theme itself is
+  // silent, mirroring the DB path's field-default law.
+  const authoredPosture =
+    bt.surfaces?.density ?? expansion.fieldDefaults.density;
   if (isDensityPreference(authoredPosture)) {
     vars[DENSITY_MODE_FACTOR_VARIABLE] = String(
       resolveDensityModeFactor(authoredPosture),
     );
   }
+  // Authored static motion stays above the profile default, matching the DB
+  // field precedence. Duration-scale remains profile-owned because the legacy
+  // BrandMotion contract has no equivalent authored field.
+  Object.assign(
+    vars,
+    appearancePostureToVariables({
+      motion:
+        bt.motion?.intensity === undefined
+          ? undefined
+          : { intensity: bt.motion.intensity },
+    }),
+  );
   if (bt.palette) {
     // Semantic defaults come FIRST, so every authored layer outranks them:
     // the palette literals immediately below restate their own channels, and
@@ -721,7 +777,34 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
   Object.assign(vars, deriveTenantColorRamps(bt.palette));
   setTintScaleVariables(vars, bt);
   setTypeRampVariables(vars);
-  setSemanticTypographyVariables(vars, bt.typography?.roles);
+  // `labelStyle` is an AUTHORED case decision and must sit in the authored
+  // layer of the single role emitter — above any expressive profile overlay.
+  // Historically it fed personality only, which let the label role channel
+  // silently ignore it; the finer `typography.roles.label` surface still
+  // wins over this mapping when both are authored.
+  const authoredLabelCase: 'uppercase' | 'capitalize' | 'none' | undefined =
+    bt.typography?.labelStyle === undefined
+      ? undefined
+      : bt.typography.labelStyle === 'uppercase'
+        ? 'uppercase'
+        : bt.typography.labelStyle === 'capitalize'
+          ? 'capitalize'
+          : 'none';
+  const authoredRoles =
+    authoredLabelCase === undefined
+      ? bt.typography?.roles
+      : {
+          ...bt.typography?.roles,
+          label: {
+            textTransform: authoredLabelCase,
+            ...bt.typography?.roles?.label,
+          },
+        };
+  setSemanticTypographyVariables(
+    vars,
+    authoredRoles,
+    expressiveTypeRoleOverlay(expressiveAxes)
+  );
   setMotionVariables(vars, bt);
   return vars;
 }
@@ -956,10 +1039,27 @@ const DEFAULT_SEMANTIC_TYPOGRAPHY: Record<
 
 export function setSemanticTypographyVariables(
   vars: Record<string, string>,
-  authored: SemanticTypographyTokens | undefined
+  authored: SemanticTypographyTokens | undefined,
+  profileOverlay?: ExpressiveTypeRoleOverlay
 ): void {
   for (const role of SEMANTIC_TYPOGRAPHY_ROLES) {
-    const value = { ...DEFAULT_SEMANTIC_TYPOGRAPHY[role], ...authored?.[role] };
+    // Single-writer precedence for every `--ds-type-{role}-*` channel:
+    // engine defaults < expressive profile overlay < authored roles.
+    const overlay =
+      profileOverlay?.[role as keyof ExpressiveTypeRoleOverlay];
+    const value = {
+      ...DEFAULT_SEMANTIC_TYPOGRAPHY[role],
+      ...(overlay?.letterSpacing !== undefined
+        ? { letterSpacing: overlay.letterSpacing }
+        : {}),
+      ...(overlay?.textTransform !== undefined
+        ? { textTransform: overlay.textTransform }
+        : {}),
+      ...(overlay?.fontVariantNumeric !== undefined
+        ? { fontVariantNumeric: overlay.fontVariantNumeric }
+        : {}),
+      ...authored?.[role],
+    };
     const kebabRole = role.replace(
       /[A-Z]/g,
       (letter) => `-${letter.toLowerCase()}`
@@ -1254,6 +1354,22 @@ export const compileBrandTheme: CompileBrandTheme = (
     cssVariables["--ds-recipe-profile"] = `"${recipeProfile}"`;
   }
 
+  // C1b: governed experience-profile selection. The expansion itself already
+  // ran inside brandThemeToCssVariables (so mode overlays re-expand); this
+  // block only publishes the validated selection id as provenance, exactly
+  // like the recipe channel above. Same fail-closed posture: invalid ids
+  // compile to baseline identity with no marker.
+  const experienceProfileValidation = validateExperienceProfileSelection(
+    brandTheme.expressive?.experienceProfile,
+    brandTheme.expressive?.schemaVersion
+  );
+  const experienceProfile = experienceProfileValidation.ok
+    ? experienceProfileValidation.profile?.id
+    : undefined;
+  if (experienceProfile) {
+    cssVariables["--ds-experience-profile"] = `"${experienceProfile}"`;
+  }
+
   assertMandatoryFontFallback(cssVariables, tenantSlug);
 
   // The declared mode of the values above; the non-default modes are compiled
@@ -1290,6 +1406,7 @@ export const compileBrandTheme: CompileBrandTheme = (
     tokenOverrides,
     engineBridge,
     ...(recipeProfile ? { recipeProfile } : {}),
+    ...(experienceProfile ? { experienceProfile } : {}),
     ...(colorScheme ? { colorScheme } : {}),
     ...(modeBlocks.length > 0 ? { modeBlocks } : {}),
   };

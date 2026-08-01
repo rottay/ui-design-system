@@ -75,6 +75,39 @@ export interface BrandRecipeSelection {
 }
 
 /**
+ * Explicit per-axis expressive overrides layered over the selected
+ * experience profile. Values stay `string` for the same reason as
+ * `BrandRecipeSelection.profile`: contracts cannot depend on the registry
+ * module, so the compilers sanitize every axis against the closed
+ * vocabularies fail-closed (an unknown value is dropped, never painted).
+ */
+export interface BrandExpressiveAxisOverrides {
+  type?: string;
+  geometry?: string;
+  edge?: string;
+  material?: string;
+  elevation?: string;
+  motif?: string;
+  /** Declared vocabulary; carries no v1 expansion rows (frontier axis). */
+  icon?: string;
+}
+
+/**
+ * Governed expressive-profile selection (C1b). A theme SELECTS a versioned
+ * experience id and may override individual axes; it never authors profile
+ * content. Resolution is fail-closed against the closed registry in
+ * `foundation/tokens/ts/presentation/expressive-profiles`.
+ */
+export interface BrandExpressiveSelection {
+  /** Selection-contract version; see EXPRESSIVE_PROFILE_SCHEMA_VERSION. */
+  schemaVersion: number;
+  /** Namespaced versioned id, e.g. `rottay/bithire-technical@1`. */
+  experienceProfile?: string;
+  /** Explicit per-axis overrides; each axis wins over the experience id. */
+  profiles?: BrandExpressiveAxisOverrides;
+}
+
+/**
  * Mode posture of the palette a BrandTheme actually authors.
  *
  * A theme declares one default mode and its values ARE that mode: bithire and
@@ -144,6 +177,8 @@ export interface BrandTheme {
   charts?: Partial<ChartPersonalityTokens>;
   /** Governed recipe-profile selection (DS-S001). */
   recipes?: BrandRecipeSelection;
+  /** Governed expressive-profile selection (C1b). */
+  expressive?: BrandExpressiveSelection;
   /** Card and accent visual chrome */
   chrome?: BrandChrome;
   /** DaisyUI variables, engine-specific values */
@@ -1730,6 +1765,13 @@ export interface TenantAppearanceGeneral {
   navigation?: {
     sidebarTone?: "subtle" | "strong" | "inverse";
   };
+  /**
+   * Governed experience-profile selection (C1b): one namespaced versioned id
+   * from the closed first-party registry, e.g. `rottay/management-editorial@1`.
+   * The schema closes the enum over published ids and the compilers revalidate
+   * fail-closed; the value never carries CSS or profile content.
+   */
+  experienceProfile?: string;
 }
 
 /**
@@ -1791,6 +1833,12 @@ export interface TenantAppearanceAdvanced {
   };
   /** Allowlisted raw token overrides. Keys must start with `--ds-`. Max 200. */
   tokenOverrides?: Record<`--ds-${string}`, string | number>;
+  /**
+   * Pro explicit per-axis expressive overrides (C1b), mirrored from the
+   * document write-contract so the normalized compiler/compat shape carries
+   * the same selection the artifact was compiled from.
+   */
+  profiles?: BrandExpressiveAxisOverrides;
 }
 
 /** Combined tenant appearance (General + Advanced). */
@@ -1843,6 +1891,8 @@ export interface CompiledBrand {
   engineBridge: Partial<Record<EngineName, Record<string, unknown>>>;
   /** Validated recipe-profile id (DS-S001); absent when none or invalid. */
   recipeProfile?: string;
+  /** Validated experience-profile id (C1b); absent when none or invalid. */
+  experienceProfile?: string;
   /**
    * Declared default mode, emitted as `color-scheme` on the base block. Kept
    * off `cssVariables` because it is a real CSS property, not a custom one:

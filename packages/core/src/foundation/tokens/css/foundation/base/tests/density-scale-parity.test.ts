@@ -34,6 +34,9 @@ const useTokensSource = source(
 const appearanceSource = source(
   'src/infrastructure/compilers/kernel/runtime/appearance/index.ts',
 );
+const appearancePostureSource = source(
+  'src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts',
+);
 
 function parseCssFactors(css: string): Record<string, number> {
   const factors: Record<string, number> = {};
@@ -120,8 +123,9 @@ describe('density authority contract', () => {
   it('requires useTokens and appearance to consume the canonical resolver', () => {
     expect(useTokensSource).toContain('resolveEffectiveDensityScale');
     expect(useTokensSource).not.toContain('appearanceDensityFactor');
-    expect(appearanceSource).toContain('resolveDensityModeFactor');
-    expect(appearanceSource).toContain('DENSITY_MODE_FACTOR_VARIABLE');
+    expect(appearanceSource).toContain('appearancePostureToVariables');
+    expect(appearancePostureSource).toContain('resolveDensityModeFactor');
+    expect(appearancePostureSource).toContain('DENSITY_MODE_FACTOR_VARIABLE');
   });
 
   it('keeps global appearance and local component posture on separate channels', () => {
@@ -138,8 +142,8 @@ describe('density authority contract', () => {
     expect(densityCss).not.toMatch(
       /\[data-density=['"]compact['"]\]:not\(:root\)\s*\{[^}]*--ds-density-mode-factor:/,
     );
-    expect(appearanceSource).toContain('DENSITY_MODE_FACTOR_VARIABLE');
-    expect(appearanceSource).not.toContain('DENSITY_LOCAL_FACTOR_VARIABLE');
+    expect(appearancePostureSource).toContain('DENSITY_MODE_FACTOR_VARIABLE');
+    expect(appearancePostureSource).not.toContain('DENSITY_LOCAL_FACTOR_VARIABLE');
   });
 
   it('paints the root posture through the semantic channel it represents', () => {

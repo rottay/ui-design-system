@@ -19,6 +19,15 @@ import {
   TENANT_THEME_TYPE_SCALE_BOUNDS,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { RECIPE_PROFILES } from "@/foundation/tokens/ts/presentation/recipe-profiles";
+import {
+  EXPERIENCE_PROFILES,
+  EXPRESSIVE_EDGE_PROFILES,
+  EXPRESSIVE_ELEVATION_PROFILES,
+  EXPRESSIVE_GEOMETRY_PROFILES,
+  EXPRESSIVE_MATERIAL_PROFILES,
+  EXPRESSIVE_MOTIF_PROFILES,
+  EXPRESSIVE_TYPE_PROFILES,
+} from "@/foundation/tokens/ts/presentation/expressive-profiles";
 
 export type TenantThemeSchemaNode =
   | {
@@ -81,6 +90,30 @@ const visualFields = (
 const recipeProfile = enumeration(
   ...RECIPE_PROFILES.map((profile) => profile.id)
 );
+
+/**
+ * Governed experience-profile selection (C1b): closed enum over the published
+ * first-party registry, mirroring the recipe-profile idiom — a customer
+ * document can only SELECT a composition id, never author profile content.
+ */
+const experienceProfile = enumeration(
+  ...EXPERIENCE_PROFILES.map((profile) => profile.id)
+);
+
+/**
+ * Pro explicit per-axis expressive overrides (C1b). Each axis is a closed
+ * vocabulary enum. The `icon` axis is deliberately ABSENT: it is a frontier
+ * capability and the closed object model rejects it as `unknown_key` — the
+ * reachability drill proves that rejection stays executable.
+ */
+const expressiveProfiles = object({
+  type: enumeration(...EXPRESSIVE_TYPE_PROFILES),
+  geometry: enumeration(...EXPRESSIVE_GEOMETRY_PROFILES),
+  edge: enumeration(...EXPRESSIVE_EDGE_PROFILES),
+  material: enumeration(...EXPRESSIVE_MATERIAL_PROFILES),
+  elevation: enumeration(...EXPRESSIVE_ELEVATION_PROFILES),
+  motif: enumeration(...EXPRESSIVE_MOTIF_PROFILES),
+});
 
 const COLOR = string("color");
 const HEX_COLOR = string("hex-color");
@@ -160,6 +193,7 @@ const general = object({
   navigation: object({
     sidebarTone: enumeration("subtle", "strong", "inverse"),
   }),
+  experienceProfile,
 });
 
 const anatomy = (
@@ -1345,6 +1379,7 @@ const tokenValueRules: Readonly<Record<string, TenantThemeSchemaNode>> =
 const advanced = object({
   chrome,
   tokenOverrides: object(tokenValueRules),
+  profiles: expressiveProfiles,
 });
 
 const documentFields: Readonly<Record<string, TenantThemeSchemaNode>> = {

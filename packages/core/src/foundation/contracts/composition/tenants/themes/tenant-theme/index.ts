@@ -12,6 +12,7 @@ import type {
   BrandBreadcrumbChrome,
   BrandCardChrome,
   BrandControlsChrome,
+  BrandExpressiveAxisOverrides,
   BrandFilterPillChrome,
   BrandLayoutChrome,
   BrandListingGridChrome,
@@ -390,6 +391,13 @@ export type TenantThemeFontPackId = (typeof TENANT_THEME_FONT_PACK_IDS)[number];
 export interface TenantThemeAdvancedAppearance {
   chrome?: TenantThemeChrome;
   tokenOverrides?: Partial<Record<TenantThemeOverrideToken, string | number>>;
+  /**
+   * Pro explicit per-axis expressive overrides (C1b), layered over the
+   * Standard `experienceProfile` selection. The document schema closes each
+   * axis to its published vocabulary; the `icon` axis is frontier and stays
+   * schema-rejected in v1.
+   */
+  profiles?: BrandExpressiveAxisOverrides;
 }
 
 /**

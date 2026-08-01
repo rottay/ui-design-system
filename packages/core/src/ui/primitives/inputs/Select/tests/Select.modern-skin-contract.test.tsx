@@ -148,7 +148,9 @@ describe('Select modern — Quiet Premium grammar (Pass 2)', () => {
   });
 
   it('keeps the eyebrow group labels and the open-chevron accent', () => {
-    expect(SKIN).toMatch(/\[data-part='group-label'\][^{]*\{[^}]*text-transform: uppercase/);
+    expect(SKIN).toMatch(
+      /\[data-part='group-label'\][^{]*\{[^}]*text-transform:\s*var\(--ds-select-group-text-transform,\s*uppercase\)/
+    );
     expect(SKIN).toContain("--ds-select-arrow-color-open, var(--ds-color-primary)");
   });
 

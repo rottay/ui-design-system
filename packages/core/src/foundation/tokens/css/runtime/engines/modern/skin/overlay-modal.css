@@ -183,7 +183,7 @@
 /* a colored border SHORTHAND, held to the (0,4,0) floor by the repeated part */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-part='surface'][data-fullscreen='false'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-modal-border-width, var(--ds-edge-standard-width, 1px)) solid var(--ds-color-border-subtle);
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-part='surface'][data-fullscreen='true'] {

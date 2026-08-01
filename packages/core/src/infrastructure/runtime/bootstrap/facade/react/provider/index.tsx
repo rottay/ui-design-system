@@ -129,6 +129,11 @@ import {
   RootDensityProvider,
   deriveDensityPosture,
 } from '../../../../foundation/density';
+import {
+  resolveExpressiveAxes,
+  sanitizeExpressiveOverrides,
+} from '@/foundation/tokens/ts/presentation/expressive-profiles';
+import { expandExpressiveProfiles } from '@/foundation/tokens/ts/presentation/expressive-profiles/expansion';
 
 export interface DesignSystemProviderProps {
   children: ReactNode;
@@ -224,6 +229,18 @@ const LEGACY_PROFILE_DURATION_MS: Readonly<Record<MotionProfile, number>> = {
   expressive: 350,
 };
 
+function resolveStaticExpressiveDefaults(config: TenantConfig | null) {
+  const selection = config?.brandTheme?.expressive;
+  if (!selection) return undefined;
+  return expandExpressiveProfiles(
+    resolveExpressiveAxes(
+      selection.experienceProfile,
+      sanitizeExpressiveOverrides(selection.profiles),
+      selection.schemaVersion,
+    ),
+  ).fieldDefaults;
+}
+
 /**
  * One-minor compatibility bridge from the old open-ended BrandMotion shape to
  * the bounded tenant dial. New DB configs write appearance.general.motion.
@@ -237,7 +254,10 @@ function resolveTenantMotionDial(
   const explicit = config.appearance?.general?.motion;
   const legacy = config.brandTheme?.motion;
   const legacyDurationScale = config.tokenOverrides?.motion?.durationScale;
-  if (!explicit && !legacy && legacyDurationScale === undefined) return undefined;
+  const expressive = resolveStaticExpressiveDefaults(config)?.motion;
+  if (!explicit && !legacy && legacyDurationScale === undefined && !expressive) {
+    return undefined;
+  }
 
   const derivedDurationScale = legacyDurationScale
     ?? (typeof legacy?.entranceDuration === 'number'
@@ -245,9 +265,10 @@ function resolveTenantMotionDial(
       : undefined);
 
   return {
-    intensity: explicit?.intensity ?? legacy?.intensity,
-    durationScale: explicit?.durationScale ?? derivedDurationScale,
-    ambient: explicit?.ambient,
+    intensity: explicit?.intensity ?? legacy?.intensity ?? expressive?.intensity,
+    durationScale:
+      explicit?.durationScale ?? derivedDurationScale ?? expressive?.durationScale,
+    ambient: explicit?.ambient ?? expressive?.ambient,
   };
 }
 
@@ -671,12 +692,13 @@ export function DesignSystemProvider({
   // "which UX preset should we apply within that product space?".
   const resolvedProductProfile = productProfile ?? resolvedVertical?.defaultProductProfile;
 
-  // The root posture mirrors only the semantic Appearance preference.
-  // BrandTheme/tenant `densityScale` is a separate structural axis already
-  // composed by CSS and useTokens; converting it into data-density would
-  // multiply the same brand decision twice.
+  // Root density mirrors the semantic posture from DB, then the explicitly
+  // authored static posture, then its expressive-profile default. Structural
+  // `densityScale` remains a separate multiplier and is never reinterpreted.
   const rootDensityPosture = deriveDensityPosture(
-    normalizedConfig.appearance?.general?.density
+    normalizedConfig.appearance?.general?.density ??
+      normalizedConfig.brandTheme?.surfaces?.density ??
+      resolveStaticExpressiveDefaults(normalizedConfig)?.density,
   );
 
   return (

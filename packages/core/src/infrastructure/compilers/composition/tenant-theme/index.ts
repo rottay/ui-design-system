@@ -14,6 +14,12 @@ import {
   isCanonicalJsonObject as isPlainObject,
 } from "@/foundation/kernel/serialization";
 import { validateRecipeProfileSelection } from "@/foundation/tokens/ts/presentation/recipe-profiles";
+import {
+  resolveExpressiveAxes,
+  sanitizeExpressiveOverrides,
+  validateExperienceProfileSelection,
+} from "@/foundation/tokens/ts/presentation/expressive-profiles";
+import { expandExpressiveProfiles } from "@/foundation/tokens/ts/presentation/expressive-profiles/expansion";
 import type {
   NormalizedTenantThemeAppearance,
   TenantThemeArtifact,
@@ -46,7 +52,10 @@ import {
   TENANT_THEME_CONFIG_SCHEMA,
   type TenantThemeSchemaNode,
 } from "../../kernel/foundation/schemas/tenant-theme";
-import { compileAppearanceVariables } from "../../kernel/runtime/appearance";
+import {
+  compileAppearanceVariables,
+  withExpressiveFieldDefaults,
+} from "../../kernel/runtime/appearance";
 
 export { TENANT_THEME_CONFIG_SCHEMA } from "../../kernel/foundation/schemas/tenant-theme";
 export type { TenantThemeSchemaNode } from "../../kernel/foundation/schemas/tenant-theme";
@@ -325,6 +334,8 @@ const ALLOWED_VALUE_FUNCTIONS = new Set([
   "linear-gradient",
   "radial-gradient",
   "conic-gradient",
+  "repeating-linear-gradient",
+  "repeating-radial-gradient",
   "var",
   "calc",
   "min",
@@ -384,7 +395,7 @@ function countCommasAtDepth(value: string, targetDepth: number): number {
 }
 
 function countGradientStops(value: string): number {
-  const open = value.search(/(?:linear|radial|conic)-gradient\s*\(/i);
+  const open = value.search(/(?:repeating-)?(?:linear|radial|conic)-gradient\s*\(/i);
   if (open < 0) return 0;
   const bodyStart = value.indexOf("(", open) + 1;
   let depth = 1;
@@ -1402,7 +1413,53 @@ export function compileTenantThemeConfig(
     ]);
   }
 
-  const normalizedAppearance = normalizeAppearance(config);
+  const rawNormalizedAppearance = normalizeAppearance(config);
+
+  // C1b: governed expressive selection. The experience id is revalidated
+  // fail-closed (the schema already closes the enum; a row written before a
+  // profile retirement must still never paint), and the profile's FIELD
+  // defaults are applied to the normalized appearance BEFORE compilation,
+  // clamped into the vertical envelope — so the artifact's own
+  // normalizedAppearance (the shape MotionProvider and useTokens consume)
+  // carries the same effective values the CSS was compiled from.
+  const requestedExperienceProfile =
+    rawNormalizedAppearance.general?.experienceProfile;
+  const experienceProfileValidation = validateExperienceProfileSelection(
+    requestedExperienceProfile
+  );
+  if (
+    requestedExperienceProfile !== undefined &&
+    !experienceProfileValidation.ok
+  ) {
+    throw new TenantThemeValidationError([
+      {
+        code: "invalid_value",
+        path:
+          config.mode === "advanced"
+            ? "$.visualFoundation.general.experienceProfile"
+            : "$.appearance.experienceProfile",
+        message: `Experience profile rejected: ${experienceProfileValidation.reason}`,
+      },
+    ]);
+  }
+  const expressiveAxes = resolveExpressiveAxes(
+    requestedExperienceProfile,
+    sanitizeExpressiveOverrides(rawNormalizedAppearance.advanced?.profiles)
+  );
+  const expressiveExpansion = expandExpressiveProfiles(expressiveAxes);
+  const effectiveGeneral = withExpressiveFieldDefaults(
+    rawNormalizedAppearance.general,
+    expressiveExpansion.fieldDefaults,
+    verticalEnvelope.ranges
+  );
+  const normalizedAppearance =
+    effectiveGeneral === rawNormalizedAppearance.general
+      ? rawNormalizedAppearance
+      : normalizedClone({
+          ...rawNormalizedAppearance,
+          general: effectiveGeneral,
+        });
+
   // The shared runtime/static Appearance compiler owns APCA autocorrection so
   // artifact, provider and generated-CSS paths cannot drift.
   const { variables: contrastedVariables, adjustments } =
@@ -1429,6 +1486,10 @@ export function compileTenantThemeConfig(
   if (recipeProfileValidation.profile) {
     contrastedVariables["--ds-recipe-profile"] =
       `"${recipeProfileValidation.profile.id}"`;
+  }
+  if (experienceProfileValidation.profile) {
+    contrastedVariables["--ds-experience-profile"] =
+      `"${experienceProfileValidation.profile.id}"`;
   }
   const variables = sortedVariables(contrastedVariables);
   const chartCategoryIssues = validateCompiledChartCategories(
@@ -1459,9 +1520,16 @@ export function compileTenantThemeConfig(
       key === "--ds-recipe-profile" &&
       recipeProfileValidation.profile !== undefined &&
       value === `"${recipeProfileValidation.profile.id}"`;
+    // Same closed exemption for the experience channel: a quoted identifier
+    // that already passed the registry above, never authored CSS.
+    const isValidatedExperienceProfileChannel =
+      key === "--ds-experience-profile" &&
+      experienceProfileValidation.profile !== undefined &&
+      value === `"${experienceProfileValidation.profile.id}"`;
     if (
       !key.startsWith("--ds-") ||
       (!isValidatedRecipeProfileChannel &&
+        !isValidatedExperienceProfileChannel &&
         !isSafeVisualValue(value, `$.variables[${JSON.stringify(key)}]`, false))
     ) {
       throw new TenantThemeValidationError([

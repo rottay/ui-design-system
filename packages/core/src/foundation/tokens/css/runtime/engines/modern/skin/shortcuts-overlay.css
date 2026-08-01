@@ -43,7 +43,7 @@
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='backdrop'] {
   position: absolute;
   inset: 0;
-  background: var(--ds-color-bg-overlay);
+  background: var(--ds-overlay-scrim, var(--ds-color-bg-overlay));
 }
 
 /* ---- dialog card (was `relative rounded-xl w-full max-w-lg

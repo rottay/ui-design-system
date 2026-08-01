@@ -31,10 +31,11 @@ const PROFILE_ID = 'rottay/technical-sharp@1';
 const SOURCE_ROOT = resolve(process.cwd(), 'src');
 const STYLE_ID = 'planted-recipe-profile-variable';
 
-/** Files allowed to mention the variable, and why. */
-const EMITTERS = [
+/** Files allowed to mention the variable: the two emitters and its declarative capability owner. */
+const ALLOWED_MENTIONS = [
   'infrastructure/compilers/kernel/runtime/brand-theme/index.ts',
   'infrastructure/compilers/composition/tenant-theme/index.ts',
+  'foundation/contracts/composition/tenants/capabilities/index.ts',
 ];
 
 function isProductionSource(path: string): boolean {
@@ -97,10 +98,10 @@ describe('recipe profile — one resolution path', () => {
     expect(SOURCES.length).toBeGreaterThan(1500);
   });
 
-  it('is mentioned only by its emitters, never by a consumer', () => {
+  it('is mentioned only by its contract owner and emitters, never by a consumer', () => {
     // A reader would have to name the variable to read it — `var()`,
     // `getPropertyValue`, or a computed-style probe all require the literal.
-    expect(MENTIONS.sort()).toEqual([...EMITTERS].sort());
+    expect(MENTIONS.sort()).toEqual([...ALLOWED_MENTIONS].sort());
   });
 
   it('moves no component when the artifact disagrees with the mounted context', () => {

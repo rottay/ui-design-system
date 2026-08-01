@@ -113,7 +113,9 @@
 
 /* ---- table element: border only in `bordered` mode ---- */
 .ds-table.ds-table--modern [data-part='table'][data-bordered='true'] {
-  border: 1px solid var(--ds-table-border, var(--ds-color-border));
+  /* Width rides the edge grammar (C1b): tenant table chrome wins, then the
+     expressive standard role, then the historic literal. */
+  border: var(--ds-table-border-width, var(--ds-edge-standard-width, 1px)) solid var(--ds-table-border, var(--ds-color-border));
 }
 
 /* ---- header cells ---- */
@@ -137,7 +139,9 @@
   background: var(--ds-table-header-bg, var(--ds-surface-inset));
 }
 .ds-table.ds-table--modern [data-part='header-cell'][data-hairline='true'] {
-  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
+  /* The header rule is the edge grammar's emphasis role (a `ruled` profile
+     thickens exactly this line); floors keep it at the historic 1px. */
+  border-bottom: var(--ds-table-header-rule-width, var(--ds-edge-emphasis-width, 1px)) solid var(--ds-table-border, var(--ds-color-border));
 }
 /* Sticky + hairline: in the collapsed-borders model the cell's bottom border
    belongs to the table grid and can stay behind (or vanish) while the cell

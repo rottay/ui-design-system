@@ -91,7 +91,7 @@ describe('Card real engine coverage', () => {
     );
 
     expect(skin).toContain(
-      "border: var(--ds-card-bordered-border-width, var(--ds-card-border-width)) solid var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))))"
+      "border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, var(--ds-edge-standard-width, 1px))) solid var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))))"
     );
     expect(skin).toContain(
       'border: 0 solid var(--ds-card-border, var(--ds-card-ghost-border-color))'

@@ -1993,6 +1993,28 @@
   --ds-border-width-2: 2px;
   --ds-border-width-4: 4px;
 
+  /* Edge grammar roles (C1b) — the expressive border-treatment axis. These are
+     ROLE channels a profile remaps (hairline separators, standard container
+     borders, emphasis rules such as table-header keylines); the structural
+     --ds-border-width-N scale above is deliberately never a dial. Floors equal
+     the historic literals, so an unset edge profile is byte-neutral. State
+     borders (selection/error/focus) keep their own channels and never ride
+     these roles. */
+  --ds-edge-hairline-width: 1px;
+  --ds-edge-standard-width: 1px;
+  --ds-edge-emphasis-width: 1px;
+  /* Component channels the edge grammar reaches by default. Tenant chrome may
+     still claim each specific channel; the floor merely routes the silent
+     case through the role instead of a dead literal. */
+  --ds-table-border-width: var(--ds-edge-standard-width);
+  --ds-table-header-rule-width: var(--ds-edge-emphasis-width);
+  /* Overline case channels (C1b type axis): chrome micro-labels whose
+     uppercase used to be hardcoded at their read sites. Floors restate the
+     historic value, so unset profiles stay byte-neutral. */
+  --ds-select-group-text-transform: uppercase;
+  --ds-menu-group-text-transform: uppercase;
+  --ds-page-header-eyebrow-text-transform: uppercase;
+
   /* Border Radius - Modern, Rounded */
   --ds-radius-none: 0;
   --ds-radius-xs: 3px;
@@ -2355,7 +2377,7 @@
   --ds-modal-radius: var(--ds-radius-xl);
 
   /* Modal Overlay */
-  --ds-overlay-bg: rgba(0, 0, 0, 0.5);
+  --ds-overlay-bg: var(--ds-overlay-scrim);
   --ds-modal-overlay-backdrop: blur(4px);
 
   /* Modal Header */
@@ -22333,7 +22355,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 .ds-card.ds-card--modern[data-part='root'][data-variant='elevated'] {
   background-color: var(--ds-card-elevated-bg, var(--ds-card-bg, var(--ds-surface-card)));
   background-image: linear-gradient(var(--ds-card-elevation-surface), var(--ds-card-elevation-surface)), var(--ds-card-surface-gradient, var(--ds-gradient-surface));
-  border: var(--ds-card-elevated-border-width) solid var(--ds-card-border);
+  border: var(--ds-card-elevated-border-width, var(--ds-edge-hairline-width, 1px)) solid var(--ds-card-border);
   /* material layer 4 (optical edge): an intensity-scaled inset top keyline
      composed with the tenant elevation. At --ds-effect-intensity: 0 the
      keyline dissolves while the shadow channel keeps the hierarchy. The
@@ -22346,7 +22368,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 .ds-card.ds-card--modern[data-part='root'][data-variant='outlined'] {
   background-color: var(--ds-card-bordered-bg, var(--ds-card-bg, var(--ds-surface-card)));
   background-image: var(--ds-card-surface-gradient, var(--ds-gradient-surface));
-  border: var(--ds-card-bordered-border-width, var(--ds-card-border-width)) solid var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))));
+  border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, var(--ds-edge-standard-width, 1px))) solid var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))));
   box-shadow: var(--ds-card-bordered-shadow);
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='filled'] {
@@ -24609,7 +24631,9 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
 
 /* ---- table element: border only in `bordered` mode ---- */
 .ds-table.ds-table--modern [data-part='table'][data-bordered='true'] {
-  border: 1px solid var(--ds-table-border, var(--ds-color-border));
+  /* Width rides the edge grammar (C1b): tenant table chrome wins, then the
+     expressive standard role, then the historic literal. */
+  border: var(--ds-table-border-width, var(--ds-edge-standard-width, 1px)) solid var(--ds-table-border, var(--ds-color-border));
 }
 
 /* ---- header cells ---- */
@@ -24633,7 +24657,9 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
   background: var(--ds-table-header-bg, var(--ds-surface-inset));
 }
 .ds-table.ds-table--modern [data-part='header-cell'][data-hairline='true'] {
-  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
+  /* The header rule is the edge grammar's emphasis role (a `ruled` profile
+     thickens exactly this line); floors keep it at the historic 1px. */
+  border-bottom: var(--ds-table-header-rule-width, var(--ds-edge-emphasis-width, 1px)) solid var(--ds-table-border, var(--ds-color-border));
 }
 /* Sticky + hairline: in the collapsed-borders model the cell's bottom border
    belongs to the table grid and can stay behind (or vanish) while the cell
@@ -28221,7 +28247,10 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
     --ds-table-header-shadow,
     inset 0 -1px 0 var(--ds-table-header-border, var(--ds-table-border))
   );
-  transition: background-position var(--ds-motion-ambient, var(--ds-motion-slow))
+  /* `--ds-motion-ambient` is a semantic keyword consumed by MotionProvider,
+     not a CSS time. Reading it here made `off|subtle` invalidate the entire
+     background-position transition. The bounded duration role is canonical. */
+  transition: background-position var(--ds-motion-slow)
       var(--ds-motion-ease-move, ease-out),
     background-color var(--ds-motion-feedback, var(--ds-motion-fast))
       var(--ds-motion-ease-move, ease-out);
@@ -42278,7 +42307,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   font-weight: var(--ds-font-weight-semibold);
   letter-spacing: var(--ds-letter-spacing-wide);
   line-height: 1.2;
-  text-transform: uppercase;
+  /* Overline case rides the expressive type axis (C1b); the fallback keeps
+     today's uppercase for every profile-less tenant. */
+  text-transform: var(--ds-select-group-text-transform, uppercase);
   user-select: none;
 }
 
@@ -52821,7 +52852,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   font-weight: var(--ds-menu-group-font-weight, var(--ds-sidebar-group-font-weight, var(--ds-font-weight-semibold)));
   letter-spacing: var(--ds-menu-group-letter-spacing, var(--ds-sidebar-group-letter-spacing, 0.085em));
   line-height: 1.1;
-  text-transform: uppercase;
+  /* Overline case rides the expressive type axis (C1b); fallback preserves
+     today's uppercase for every profile-less tenant. */
+  text-transform: var(--ds-menu-group-text-transform, uppercase);
   user-select: none;
   background: color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
 }
@@ -53240,7 +53273,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* a colored border SHORTHAND, held to the (0,4,0) floor by the repeated part */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-part='surface'][data-fullscreen='false'] {
-  border: 1px solid var(--ds-color-border-subtle);
+  border: var(--ds-modal-border-width, var(--ds-edge-standard-width, 1px)) solid var(--ds-color-border-subtle);
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-part='surface'][data-fullscreen='true'] {
@@ -72363,7 +72396,9 @@ html[data-ds-motion="reduced"]
   font-weight: var(--ds-font-weight-semibold, 600);
   letter-spacing: var(--ds-page-header-eyebrow-tracking, 0.11em);
   line-height: 1.25;
-  text-transform: uppercase;
+  /* Overline case rides the expressive type axis (C1b); fallback preserves
+     today's uppercase for every profile-less tenant. */
+  text-transform: var(--ds-page-header-eyebrow-text-transform, uppercase);
 }
 
 .ds-pattern-page-shell.ds-engine-modern [data-part='title'] {
@@ -73333,7 +73368,7 @@ html[data-ds-motion="reduced"]
 .ds-pattern-command-palette.ds-engine-modern [data-part='backdrop'] {
   position: absolute;
   inset: 0;
-  background-color: var(--ds-color-bg-overlay);
+  background-color: var(--ds-overlay-scrim, var(--ds-color-bg-overlay));
   background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
   backdrop-filter: var(--ds-glass-backdrop-filter);
   -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
@@ -74328,7 +74363,7 @@ html[data-ds-motion="reduced"]
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='backdrop'] {
   position: absolute;
   inset: 0;
-  background: var(--ds-color-bg-overlay);
+  background: var(--ds-overlay-scrim, var(--ds-color-bg-overlay));
 }
 
 /* ---- dialog card (was `relative rounded-xl w-full max-w-lg
@@ -105427,6 +105462,7 @@ html[lang]:lang(ar) {
   --ds-motion-ease-move: var(--ds-ease-standard);
   --ds-motion-feedback: calc(var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1));
   --ds-motion-instant: 120ms;
+  --ds-motion-intensity: 1;
   --ds-motion-rearrange: calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1));
   --ds-motion-resize: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-reveal: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
@@ -108258,10 +108294,19 @@ html[lang]:lang(ar) {
   --ds-compact-card-shadow: 0 1px 2px rgba(20, 40, 59, 0.04);
   --ds-compact-card-title-color: #14283B;
   --ds-compact-card-value-color: #14283B;
+  --ds-density-mode-factor: 1;
   --ds-density-scale: 0.9;
   --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-edge-emphasis-width: 1px;
+  --ds-edge-hairline-width: 1px;
+  --ds-edge-standard-width: 1px;
   --ds-effect-intensity: 0.58;
+  --ds-elevation-1: none;
+  --ds-elevation-2: none;
+  --ds-elevation-3: 0 1px 2px rgba(0,0,0,0.05);
+  --ds-elevation-lift-strength: 0;
+  --ds-experience-profile: "rottay/bithire-technical@1";
   --ds-filter-pill-active-bg: var(--ds-tint-8);
   --ds-filter-pill-active-border: color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border));
   --ds-filter-pill-active-color: #3A6FB0;
@@ -108478,6 +108523,7 @@ html[lang]:lang(ar) {
   --ds-material-card-shadow-active: 0 1px 2px rgba(20, 40, 59, 0.06);
   --ds-material-card-shadow-hover: 0 18px 38px -24px rgba(20, 40, 59, 0.32), 0 3px 9px rgba(20, 40, 59, 0.08);
   --ds-material-card-shadow-selected: 0 10px 26px -20px rgba(20, 40, 59, 0.3), 0 2px 6px rgba(20, 40, 59, 0.06), 0 0 0 3px rgba(58, 111, 176, 0.16);
+  --ds-material-card-texture: none;
   --ds-material-control-background: var(--ds-surface-control);
   --ds-material-control-background-active: #F1F6FA;
   --ds-material-control-background-disabled: #F2F5F7;
@@ -108522,6 +108568,7 @@ html[lang]:lang(ar) {
   --ds-material-panel-shadow-active: 0 1px 2px rgba(20, 40, 59, 0.025);
   --ds-material-panel-shadow-hover: 0 10px 28px -22px rgba(20, 40, 59, 0.28), 0 2px 6px rgba(20, 40, 59, 0.05);
   --ds-material-panel-shadow-selected: 0 8px 24px -20px rgba(20, 40, 59, 0.26), 0 0 0 3px rgba(58, 111, 176, 0.14);
+  --ds-material-panel-texture: none;
   --ds-material-raised-background: var(--ds-surface-raised);
   --ds-material-raised-border: #C7D6E2;
   --ds-material-raised-foreground: #14283B;
@@ -108529,6 +108576,7 @@ html[lang]:lang(ar) {
   --ds-material-shell-background: var(--ds-surface-shell);
   --ds-material-shell-border: #D4E0EA;
   --ds-material-shell-foreground: #14283B;
+  --ds-menu-group-text-transform: uppercase;
   --ds-metric-card-bg: #FFFFFF;
   --ds-metric-card-border: color-mix(in srgb, #3A6FB0 10%, #D4E0EA);
   --ds-metric-card-border-hover: color-mix(in srgb, #3A6FB0 24%, #D4E0EA);
@@ -108573,17 +108621,19 @@ html[lang]:lang(ar) {
   --ds-motion-ease-move: var(--ds-ease-standard);
   --ds-motion-feedback: calc(var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1));
   --ds-motion-instant: 120ms;
+  --ds-motion-intensity: 0.55;
   --ds-motion-rearrange: calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1));
   --ds-motion-resize: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-reveal: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-overlay-heavy: rgba(20, 40, 59, 0.08);
   --ds-overlay-light: rgba(20, 40, 59, 0.02);
   --ds-overlay-medium: rgba(20, 40, 59, 0.04);
+  --ds-page-header-eyebrow-text-transform: uppercase;
   --ds-radius-button: 9px;
   --ds-radius-input: 9px;
   --ds-radius-lg: 14px;
   --ds-radius-md: 10px;
-  --ds-radius-scale: 1;
+  --ds-radius-scale: 0.85;
   --ds-radius-sm: 7px;
   --ds-radius-xl: 18px;
   --ds-recipe-profile: "rottay/technical-sharp@1";
@@ -108645,6 +108695,7 @@ html[lang]:lang(ar) {
   --ds-segmented-sm-line-height: 16px;
   --ds-segmented-sm-padding-x: 9px;
   --ds-segmented-sm-radius: 6px;
+  --ds-select-group-text-transform: uppercase;
   --ds-shadow-lg: 0 22px 52px -24px rgba(20, 40, 59, 0.34), 0 6px 18px rgba(20, 40, 59, 0.09);
   --ds-shadow-md: 0 10px 28px -18px rgba(20, 40, 59, 0.28), 0 2px 7px rgba(20, 40, 59, 0.08);
   --ds-shadow-sm: 0 1px 2px rgba(20, 40, 59, 0.08), 0 0 0 1px rgba(20, 40, 59, 0.025);
@@ -108907,7 +108958,7 @@ html[lang]:lang(ar) {
   --ds-type-display-font-size: calc(2rem * var(--ds-type-scale, 1));
   --ds-type-display-font-variant-numeric: normal;
   --ds-type-display-font-weight: 700;
-  --ds-type-display-letter-spacing: var(--ds-letter-spacing-display, -0.03em);
+  --ds-type-display-letter-spacing: var(--ds-letter-spacing-display, -0.02em);
   --ds-type-display-line-height: 1.1;
   --ds-type-display-text-transform: none;
   --ds-type-label: var(--ds-type-label-font-weight) var(--ds-type-label-font-size)/var(--ds-type-label-line-height) var(--ds-type-label-font-family);
@@ -110028,6 +110079,7 @@ html[lang]:lang(ar) {
   --ds-motion-ease-move: var(--ds-ease-standard);
   --ds-motion-feedback: calc(var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1));
   --ds-motion-instant: 120ms;
+  --ds-motion-intensity: 1;
   --ds-motion-rearrange: calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1));
   --ds-motion-resize: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-reveal: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
@@ -110161,7 +110213,7 @@ html[lang]:lang(ar) {
   --ds-type-label-font-weight: 600;
   --ds-type-label-letter-spacing: 0.04em;
   --ds-type-label-line-height: 1.3;
-  --ds-type-label-text-transform: none;
+  --ds-type-label-text-transform: capitalize;
   --ds-type-numeric: var(--ds-type-numeric-font-weight) var(--ds-type-numeric-font-size)/var(--ds-type-numeric-line-height) var(--ds-type-numeric-font-family);
   --ds-type-numeric-font-family: var(--ds-font-family-heading);
   --ds-type-numeric-font-size: calc(1rem * var(--ds-type-scale, 1));

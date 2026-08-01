@@ -286,6 +286,21 @@ export const bithireBrandTheme: BrandTheme = {
    */
   recipes: { schemaVersion: 1, profile: "rottay/technical-sharp@1" },
 
+  /*
+   * C1b expressive selection. The composition DESCRIBES the identity this
+   * theme already authors — technical tracking, sharp geometry, hairline
+   * edges, flat material, keyline lift, no motif — so every authored field
+   * above keeps winning and the expansion only adds the profile channels
+   * (edge roles at their 1px floors, explicit 'none' textures, the
+   * provenance marker). Review note for Codex: authored labelStyle
+   * "sentence" and the authored table header chrome deliberately shield
+   * this theme from the technical posture's uppercase defaults.
+   */
+  expressive: {
+    schemaVersion: 1,
+    experienceProfile: "rottay/bithire-technical@1",
+  },
+
   palette: {
     primaryColor: "#3A6FB0",
     secondaryColor: "#315F86",

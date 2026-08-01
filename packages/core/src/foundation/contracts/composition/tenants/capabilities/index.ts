@@ -70,7 +70,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
     {
       id: 'palette.seeds',
       version: 1,
-      tier: 'internal',
+      tier: 'standard',
       status: 'active',
       scope: 'tenant',
       owner: 'design-system',
@@ -91,7 +91,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
     {
       id: 'palette.dark-mode',
       version: 1,
-      tier: 'standard',
+      tier: 'internal',
       status: 'active',
       scope: 'tenant',
       owner: 'design-system',
@@ -265,6 +265,29 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       derivedChannels: ['--ds-sidebar-bg', '--ds-sidebar-item-color'],
       compat: 'additive, unset-to-rollback',
     },
+    {
+      id: 'experience.profile',
+      version: 1,
+      tier: 'standard',
+      status: 'active',
+      scope: 'tenant',
+      owner: 'design-system',
+      title: 'Experience profile',
+      valueType: 'profile-id',
+      defaultBehavior:
+        'baseline identity; a selection composes closed per-axis postures whose expansion always loses to any authored field or channel',
+      documentPath: 'appearance.experienceProfile',
+      brandThemePath: 'expressive.experienceProfile',
+      derivedChannels: [
+        '--ds-experience-profile',
+        '--ds-letter-spacing-heading',
+        '--ds-edge-standard-width',
+        '--ds-material-canvas-texture',
+        '--ds-elevation-lift-strength',
+      ],
+      compat:
+        'closed versioned registry (expressive-profiles); ids permanent, superseded by @N+1; unset-to-rollback',
+    },
     // ── PRO: bounded advanced surface ──────────────────────────────────────
     {
       id: 'chrome.families',
@@ -330,11 +353,35 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       title: 'Family recipe profile',
       valueType: 'profile-id',
       defaultBehavior: 'no profile: family recipe defaults apply',
-      documentPath: 'visualFoundation.advanced.recipeProfile',
+      documentPath: 'visualFoundation.recipeProfile',
       brandThemePath: 'recipeProfile',
       derivedChannels: ['--ds-recipe-profile'],
       compat:
         'closed registry of typed per-family axes (recipe-profiles); caller props always win',
+    },
+    {
+      id: 'profiles.expressive',
+      version: 1,
+      tier: 'pro',
+      status: 'active',
+      scope: 'tenant',
+      owner: 'design-system',
+      title: 'Explicit expressive axes',
+      valueType: 'enum',
+      defaultBehavior:
+        'each axis independently overrides the experience composition; an unset axis falls back to it, then to baseline',
+      documentPath:
+        'visualFoundation.advanced.profiles.{type,geometry,edge,material,elevation,motif}',
+      brandThemePath: 'expressive.profiles.*',
+      derivedChannels: [
+        '--ds-type-label-text-transform',
+        '--ds-edge-emphasis-width',
+        '--ds-material-card-highlight',
+        '--ds-table-header-text-transform',
+      ],
+      dependsOn: ['experience.profile'],
+      compat:
+        'closed per-axis vocabularies; both compilers sanitize fail-closed; unset-to-rollback per axis',
     },
     // ── FRONTIER: declared boundaries the schema still rejects ─────────────
     {
@@ -356,6 +403,23 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
         '--ds-color-on-success',
       ],
       compat: 'opening it is additive; requires schema + envelope + editor rows',
+    },
+    {
+      id: 'profiles.icon',
+      version: 1,
+      tier: 'pro',
+      status: 'frontier',
+      scope: 'tenant',
+      owner: 'design-system',
+      title: 'Icon posture profile',
+      valueType: 'enum',
+      enumValues: ['linear', 'strong-outline', 'duotone', 'solid-active'],
+      defaultBehavior:
+        'the schema REJECTS the axis today (unknown_key drill). The pipeline is proven ready — every generated glyph bundles all supplier weights and resolveIconWeight accepts a posture table — but no provider stamps a profile into the icon runtime yet, and opening the document field is its own reviewed digest move. Literal two-hue duotone stays out: the pinned supplier is single-hue/two-opacity by design.',
+      documentPath: 'visualFoundation.advanced.profiles.icon (REJECTED today)',
+      brandThemePath: 'expressive.profiles.icon (accepted, inert: no expansion rows)',
+      derivedChannels: [],
+      compat: 'opening it is additive: schema field + provider context wiring',
     },
     {
       id: 'responsive.posture',

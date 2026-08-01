@@ -361,7 +361,9 @@
   font-weight: var(--ds-menu-group-font-weight, var(--ds-sidebar-group-font-weight, var(--ds-font-weight-semibold)));
   letter-spacing: var(--ds-menu-group-letter-spacing, var(--ds-sidebar-group-letter-spacing, 0.085em));
   line-height: 1.1;
-  text-transform: uppercase;
+  /* Overline case rides the expressive type axis (C1b); fallback preserves
+     today's uppercase for every profile-less tenant. */
+  text-transform: var(--ds-menu-group-text-transform, uppercase);
   user-select: none;
   background: color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent);
 }

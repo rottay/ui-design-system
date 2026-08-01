@@ -173,6 +173,7 @@
   --ds-motion-ease-move: var(--ds-ease-standard);
   --ds-motion-feedback: calc(var(--ds-motion-instant) * var(--ds-motion-duration-scale, 1));
   --ds-motion-instant: 120ms;
+  --ds-motion-intensity: 1;
   --ds-motion-rearrange: calc(var(--ds-motion-deliberate) * var(--ds-motion-duration-scale, 1));
   --ds-motion-resize: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
   --ds-motion-reveal: calc(var(--ds-motion-calm) * var(--ds-motion-duration-scale, 1));
@@ -306,7 +307,7 @@
   --ds-type-label-font-weight: 600;
   --ds-type-label-letter-spacing: 0.04em;
   --ds-type-label-line-height: 1.3;
-  --ds-type-label-text-transform: none;
+  --ds-type-label-text-transform: capitalize;
   --ds-type-numeric: var(--ds-type-numeric-font-weight) var(--ds-type-numeric-font-size)/var(--ds-type-numeric-line-height) var(--ds-type-numeric-font-family);
   --ds-type-numeric-font-family: var(--ds-font-family-heading);
   --ds-type-numeric-font-size: calc(1rem * var(--ds-type-scale, 1));

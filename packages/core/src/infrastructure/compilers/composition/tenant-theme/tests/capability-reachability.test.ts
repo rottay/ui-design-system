@@ -77,6 +77,10 @@ const FULL_SURFACE_DOCUMENT: TenantThemeDocument = {
       surfaces: { elevation: 'elevated', effectIntensity: 0.18 },
       // navigation.sidebar-tone
       navigation: { sidebarTone: 'strong' },
+      // experience.profile (C1b) — its ruled/soft defaults are deliberately
+      // shadowed by the authored dials above, which is itself load-bearing:
+      // the radius/motion probes prove authored-over-profile precedence.
+      experienceProfile: 'rottay/management-editorial@1',
     },
     advanced: {
       // token-overrides (including the C1 scrim veil channel)
@@ -88,6 +92,9 @@ const FULL_SURFACE_DOCUMENT: TenantThemeDocument = {
       chrome: {
         cardComponent: { bg: '#FFFEFB', anatomy: 'underline' },
       },
+      // profiles.expressive (C1b) — edge overrides the experience profile's
+      // own `ruled`, proving the per-axis Pro layer wins over the composition.
+      profiles: { edge: 'inset-double', motif: 'micro-grid' },
     },
     // recipe-profile
     recipeProfile: 'rottay/editorial-round@1',
@@ -134,6 +141,26 @@ const ACTIVE_CAPABILITY_PROBES = {
     expect(artifact.variables['--ds-color-error']).toBe('#7f1d1d'),
   'recipe-profile': (artifact) =>
     expect(artifact.variables['--ds-recipe-profile']).toBe('"rottay/editorial-round@1"'),
+  'experience.profile': (artifact) => {
+    expect(artifact.variables['--ds-experience-profile']).toBe(
+      '"rottay/management-editorial@1"'
+    );
+    // One expanded channel per representative axis of the composition:
+    // editorial type posture (table chrome case) and paper material.
+    expect(artifact.variables['--ds-table-header-text-transform']).toBe('none');
+    expect(artifact.variables['--ds-material-card-highlight']).toContain(
+      'color-mix'
+    );
+  },
+  'profiles.expressive': (artifact) => {
+    // inset-double (explicit Pro axis) beats the experience profile's ruled.
+    expect(artifact.variables['--ds-edge-emphasis-width']).toBe('3px');
+    // micro-grid (explicit Pro axis) beats the experience profile's contour.
+    expect(artifact.variables['--ds-material-canvas-texture']).toContain(
+      'repeating-linear-gradient'
+    );
+    expect(artifact.variables['--ds-page-header-bg']).toBeUndefined();
+  },
 } satisfies Record<
   ActiveTenantCapabilityId,
   (artifact: CompiledProbeArtifact) => void
@@ -160,6 +187,35 @@ describe('tenant capability registry reachability', () => {
       expect(TENANT_PRO_MANIFEST).not.toContain(capability.id);
       expect(TENANT_INTERNAL_MANIFEST).not.toContain(capability.id);
     }
+  });
+
+  it('pins exact tier membership (binding C1 posture: seeds are Standard, dark-mode is internal compatibility)', () => {
+    // Counts alone cannot catch a tier swap — the C1b-F0-1 defect kept
+    // Standard at 11 and Internal at 1 with the two palette rows inverted.
+    // Membership is therefore pinned literally; moving a capability between
+    // tiers is a reviewed contract change that must edit this expectation.
+    expect([...TENANT_STANDARD_MANIFEST].sort()).toEqual([
+      'density.mode',
+      'experience.profile',
+      'motion.dial',
+      'navigation.sidebar-tone',
+      'palette.seeds',
+      'shape.button-style',
+      'shape.radius-scale',
+      'surfaces.effect-intensity',
+      'surfaces.elevation-posture',
+      'typography.families',
+      'typography.pairing',
+      'typography.scale',
+    ]);
+    expect([...TENANT_PRO_MANIFEST].sort()).toEqual([
+      'chrome.anatomy',
+      'chrome.families',
+      'profiles.expressive',
+      'recipe-profile',
+      'token-overrides',
+    ]);
+    expect([...TENANT_INTERNAL_MANIFEST]).toEqual(['palette.dark-mode']);
   });
 
   it('compiles a document exercising every active capability documentPath', () => {
@@ -197,6 +253,13 @@ describe('tenant capability registry reachability', () => {
     (posture.visualFoundation as Record<string, unknown>).responsivePosture =
       'dashboard-default@1';
     expect(validateTenantThemeDocument(posture).success).toBe(false);
+
+    const iconAxis = structuredClone(FULL_SURFACE_DOCUMENT);
+    if (iconAxis.mode !== 'advanced') throw new Error('advanced fixture');
+    (
+      iconAxis.visualFoundation.advanced!.profiles as Record<string, unknown>
+    ).icon = 'duotone';
+    expect(validateTenantThemeDocument(iconAxis).success).toBe(false);
   });
 
   it('declares every C1 foundation authority with channels and consumers', () => {

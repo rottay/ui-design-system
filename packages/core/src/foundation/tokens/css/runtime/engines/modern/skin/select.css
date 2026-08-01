@@ -558,7 +558,9 @@
   font-weight: var(--ds-font-weight-semibold);
   letter-spacing: var(--ds-letter-spacing-wide);
   line-height: 1.2;
-  text-transform: uppercase;
+  /* Overline case rides the expressive type axis (C1b); the fallback keeps
+     today's uppercase for every profile-less tenant. */
+  text-transform: var(--ds-select-group-text-transform, uppercase);
   user-select: none;
 }
 

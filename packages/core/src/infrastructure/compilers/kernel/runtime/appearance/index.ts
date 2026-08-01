@@ -19,10 +19,8 @@ import type {
   TenantAppearanceGeneral,
   TenantAppearanceAdvanced,
 } from '@/foundation/contracts/composition/tenants/themes';
-import { MOTION_DIAL_BOUNDS } from '@/foundation/contracts/runtime/motion';
 import {
   TENANT_THEME_EFFECT_INTENSITY_BOUNDS,
-  TENANT_THEME_RADIUS_SCALE_BOUNDS,
   TENANT_THEME_TYPE_SCALE_BOUNDS,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import {
@@ -41,12 +39,15 @@ import {
   deriveReadableInk,
   onToneChannel,
 } from '@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink';
-import { TYPE_PAIRINGS } from '@/foundation/tokens/ts/presentation/typography/pairings';
 import {
-  DENSITY_MODE_FACTOR_VARIABLE,
-  isDensityPreference,
-  resolveDensityModeFactor,
-} from '@/foundation/tokens/ts/foundation/base/density';
+  resolveExpressiveAxes,
+  sanitizeExpressiveOverrides,
+} from '@/foundation/tokens/ts/presentation/expressive-profiles';
+import {
+  expandExpressiveProfiles,
+  type ExpressiveFieldDefaultSet,
+} from '@/foundation/tokens/ts/presentation/expressive-profiles/expansion';
+import { appearancePostureToVariables } from '../../foundation/css/appearance-posture';
 import {
   clampValue,
   isHexColor,
@@ -155,34 +156,6 @@ function mergeDerivedModeHalves(
 // Type-scale is resolved both through CSS and useTokens. Density follows the
 // same split-runtime contract: appearance emits only the semantic mode factor;
 // the structural engine/vertical/brand/tenant scale remains a separate channel.
-
-/** Button shape presets map to a --ds-radius-button value. */
-const BUTTON_STYLE_RADIUS: Record<string, string> = {
-  sharp: '2px',
-  soft: 'var(--ds-radius-md, 8px)',
-  pill: '9999px',
-};
-
-/**
- * Elevation presets map to shadow scales. These override --ds-elevation-1..5,
- * which stay the tenant-overridable shadow ramp. The surface-lift channel in the
- * default theme (--ds-elevation-lift-strength / --ds-elevation-surface-*) is an
- * additive luminance overlay composed beside this ramp, not through it, so these
- * presets carry no surface entries and their behavior is unchanged by it.
- */
-const ELEVATION_PRESET: Record<string, Record<string, string>> = {
-  flat: {
-    '--ds-elevation-1': 'none',
-    '--ds-elevation-2': 'none',
-    '--ds-elevation-3': '0 1px 2px rgba(0,0,0,0.05)',
-  },
-  soft: {}, // use DS defaults
-  elevated: {
-    '--ds-elevation-1': '0 2px 4px rgba(0,0,0,0.08)',
-    '--ds-elevation-2': '0 4px 8px rgba(0,0,0,0.1)',
-    '--ds-elevation-3': '0 8px 16px rgba(0,0,0,0.12)',
-  },
-};
 
 /**
  * Code-owned fallback grounds for the single palette admitted by Appearance
@@ -483,22 +456,22 @@ export function appearanceGeneralToVariables(
     }
   }
 
-  // Typography — font families are real CSS vars consumed by engines.
-  // The pairing preset applies first; explicit free-form families still win.
+  // Bounded semantic postures have one lowering shared with BrandTheme.
+  Object.assign(
+    vars,
+    appearancePostureToVariables({
+      typePairing: general.typography?.typePairing,
+      buttonStyle: general.shape?.buttonStyle,
+      radiusScale: general.shape?.radiusScale,
+      density: general.density,
+      motion: general.motion,
+      elevation: general.surfaces?.elevation,
+    }),
+  );
+
+  // Typography — free-form families and scale override the pairing preset.
   if (general.typography) {
     const t = general.typography;
-    if (t.typePairing) {
-      const pairing = TYPE_PAIRINGS[t.typePairing];
-      if (pairing) {
-        vars['--ds-font-family-heading'] = withArabicSafeFallback(
-          pairing.heading
-        );
-        vars['--ds-font-family-base'] = withArabicSafeFallback(pairing.base);
-        if ('mono' in pairing && pairing.mono) vars['--ds-font-family-mono'] = pairing.mono;
-        vars['--ds-letter-spacing-heading'] = pairing.headingLs;
-        vars['--ds-line-height-display'] = String(pairing.displayLh);
-      }
-    }
     if (t.fontFamilyBase)
       vars['--ds-font-family-base'] = withArabicSafeFallback(t.fontFamilyBase);
     if (t.fontFamilyHeading)
@@ -515,68 +488,6 @@ export function appearanceGeneralToVariables(
           TENANT_THEME_TYPE_SCALE_BOUNDS.max,
         ),
       );
-    }
-  }
-
-  // Density — one canonical semantic factor for CSS and numeric token consumers.
-  // Keep this separate from --ds-density-scale, which is the structural
-  // engine/vertical/brand/tenant channel and must remain white-labelable.
-  if (isDensityPreference(general.density)) {
-    vars[DENSITY_MODE_FACTOR_VARIABLE] = String(
-      resolveDensityModeFactor(general.density),
-    );
-  }
-
-  // Shape — buttonStyle maps to a real CSS var consumed by engines
-  if (general.shape?.buttonStyle) {
-    const r = BUTTON_STYLE_RADIUS[general.shape.buttonStyle];
-    if (r) vars['--ds-radius-button'] = r;
-  }
-  if (
-    typeof general.shape?.radiusScale === 'number'
-    && Number.isFinite(general.shape.radiusScale)
-  ) {
-    setVar(
-      vars,
-      '--ds-radius-scale',
-      clampValue(
-        general.shape.radiusScale,
-        TENANT_THEME_RADIUS_SCALE_BOUNDS.min,
-        TENANT_THEME_RADIUS_SCALE_BOUNDS.max,
-      ),
-    );
-  }
-
-  // Density is consumed by useTokens() as a JS factor, not a CSS variable.
-
-  // Motion is consumed by MotionProvider as structured data. These variables
-  // keep the same bounded values available to CSS-only pre-hydration seams.
-  if (general.motion) {
-    const { intensity, durationScale, ambient } = general.motion;
-    if (typeof intensity === 'number' && Number.isFinite(intensity)) {
-      setVar(
-        vars,
-        '--ds-motion-intensity',
-        clampValue(
-          intensity,
-          MOTION_DIAL_BOUNDS.intensity.min,
-          MOTION_DIAL_BOUNDS.intensity.max,
-        ),
-      );
-    }
-    if (typeof durationScale === 'number' && Number.isFinite(durationScale)) {
-      setVar(
-        vars,
-        '--ds-motion-duration-scale',
-        clampValue(
-          durationScale,
-          MOTION_DIAL_BOUNDS.durationScale.min,
-          MOTION_DIAL_BOUNDS.durationScale.max,
-        ),
-      );
-    }
-    if (ambient === 'off' || ambient === 'subtle') {
-      setVar(vars, '--ds-motion-ambient', ambient);
     }
   }
 
@@ -611,11 +522,7 @@ export function appearanceGeneralToVariables(
     }
   }
 
-  // Surfaces / elevation
-  if (general.surfaces?.elevation) {
-    const preset = ELEVATION_PRESET[general.surfaces.elevation];
-    if (preset) Object.assign(vars, preset);
-  }
+  // Surfaces / elevation is emitted by the shared posture lowering above.
   if (
     typeof general.surfaces?.effectIntensity === 'number'
     && Number.isFinite(general.surfaces.effectIntensity)
@@ -674,17 +581,121 @@ export function appearanceAdvancedToVariables(
 
 // ── Combined ──────────────────────────────────────────────
 
+/** Envelope ranges a caller may clamp expressive field defaults against. */
+export interface ExpressiveClampRanges {
+  radiusScale?: { min: number; max: number };
+  motionIntensity?: { min: number; max: number };
+  motionDurationScale?: { min: number; max: number };
+}
+
+/**
+ * Apply expressive-profile FIELD defaults to the general appearance —
+ * only where the tenant left the field unset, so authored dials always win.
+ *
+ * Density, motion and the pairing/silhouette/posture enums ride fields
+ * instead of expansion variables because they have JS consumers (useTokens,
+ * MotionProvider) and single field emitters: defaulting the field keeps CSS
+ * and JS reading the same effective value through the same single writer.
+ * Numeric defaults are additionally clamped into the vertical envelope when
+ * the caller provides it (profile data is DS-reviewed, but a vertical's
+ * envelope is law and a profile must never be a bypass around it).
+ *
+ * Returns the SAME reference when nothing applies, so profile-less
+ * documents keep an identical normalized appearance and digest.
+ */
+export function withExpressiveFieldDefaults(
+  general: TenantAppearanceGeneral | undefined,
+  fieldDefaults: ExpressiveFieldDefaultSet,
+  ranges?: ExpressiveClampRanges
+): TenantAppearanceGeneral | undefined {
+  const clampInto = (
+    value: number,
+    bounds?: { min: number; max: number }
+  ): number =>
+    bounds ? Math.min(bounds.max, Math.max(bounds.min, value)) : value;
+
+  const source = general ?? {};
+  let next: TenantAppearanceGeneral | undefined;
+  const target = (): TenantAppearanceGeneral => (next ??= { ...source });
+
+  if (fieldDefaults.typePairing && !source.typography?.typePairing) {
+    target().typography = {
+      ...source.typography,
+      typePairing: fieldDefaults.typePairing,
+    };
+  }
+  if (
+    fieldDefaults.buttonStyle !== undefined &&
+    source.shape?.buttonStyle === undefined
+  ) {
+    target().shape = { ...target().shape, buttonStyle: fieldDefaults.buttonStyle };
+  }
+  if (
+    fieldDefaults.radiusScale !== undefined &&
+    source.shape?.radiusScale === undefined
+  ) {
+    target().shape = {
+      ...target().shape,
+      radiusScale: clampInto(fieldDefaults.radiusScale, ranges?.radiusScale),
+    };
+  }
+  if (fieldDefaults.density && source.density === undefined) {
+    target().density = fieldDefaults.density;
+  }
+  if (fieldDefaults.motion && source.motion === undefined) {
+    const motion = fieldDefaults.motion;
+    target().motion = {
+      ...(motion.intensity !== undefined
+        ? { intensity: clampInto(motion.intensity, ranges?.motionIntensity) }
+        : {}),
+      ...(motion.durationScale !== undefined
+        ? {
+            durationScale: clampInto(
+              motion.durationScale,
+              ranges?.motionDurationScale
+            ),
+          }
+        : {}),
+      ...(motion.ambient !== undefined ? { ambient: motion.ambient } : {}),
+    };
+  }
+  if (fieldDefaults.elevation && source.surfaces?.elevation === undefined) {
+    target().surfaces = {
+      ...source.surfaces,
+      elevation: fieldDefaults.elevation,
+    };
+  }
+  return next ?? general;
+}
+
 /**
  * Convert the full TenantAppearance into CSS custom property overrides.
- * General is applied first, then Advanced layers on top.
+ * The expressive expansion seeds the map first (profile layer), then
+ * General, then Advanced — later writes win, so every authored value
+ * outranks its profile default while post-merge derivations keep running
+ * over the complete map.
  */
 export function appearanceToVariables(
   appearance: TenantAppearance
 ): Record<string, string> {
-  const vars: Record<string, string> = {};
+  const expressiveAxes = resolveExpressiveAxes(
+    appearance.general?.experienceProfile,
+    sanitizeExpressiveOverrides(appearance.advanced?.profiles)
+  );
+  const expansion = expandExpressiveProfiles(expressiveAxes);
+  // The authoritative artifact path pre-applies these defaults WITH the
+  // vertical envelope in compileTenantThemeConfig; re-applying here is a
+  // no-op there (fields already set) and keeps the compat/preview path,
+  // which has no envelope, honest about the same profile.
+  const general = withExpressiveFieldDefaults(
+    appearance.general,
+    expansion.fieldDefaults
+  );
 
-  if (appearance.general) {
-    Object.assign(vars, appearanceGeneralToVariables(appearance.general));
+  const vars: Record<string, string> = { ...expansion.variables };
+
+  if (general) {
+    Object.assign(vars, appearanceGeneralToVariables(general));
   }
 
   if (appearance.advanced) {

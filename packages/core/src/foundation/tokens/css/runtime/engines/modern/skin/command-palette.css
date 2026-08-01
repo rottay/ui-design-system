@@ -54,7 +54,7 @@
 .ds-pattern-command-palette.ds-engine-modern [data-part='backdrop'] {
   position: absolute;
   inset: 0;
-  background-color: var(--ds-color-bg-overlay);
+  background-color: var(--ds-overlay-scrim, var(--ds-color-bg-overlay));
   background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
   backdrop-filter: var(--ds-glass-backdrop-filter);
   -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);

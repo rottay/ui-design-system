@@ -259,24 +259,25 @@ describe('tenant theme — divergence from the static vertical baseline', () => 
     expect(tenantValue).not.toBe(baselineValue);
   });
 
-  it('density diverges, and the two paths use DIFFERENT variable names for it', () => {
-    // A structural finding worth pinning on its own: the static path expresses
-    // density as `--ds-density-scale`, the DB path as `--ds-density-mode-factor`.
-    // A future unification would break this test, which is the point -- it
-    // should be a deliberate, reviewed change, not a silent one.
+  it('density diverges through the same canonical posture channel on both paths', () => {
+    // Static BrandTheme and DB Appearance must lower through one vocabulary.
+    // `--ds-density-scale` remains the independent expressive-profile factor;
+    // the authored posture is always `--ds-density-mode-factor`.
     const tenantDensity = read(tenantCss, '--ds-density-mode-factor');
-    const baselineDensity = read(bithireCss, '--ds-density-scale');
+    const baselineDensity = read(bithireCss, '--ds-density-mode-factor');
 
     expect(tenantDensity, 'DB tenant must emit --ds-density-mode-factor').toBeDefined();
-    expect(baselineDensity, 'bithire must declare --ds-density-scale').toBeDefined();
-    expect(read(bithireCss, '--ds-density-mode-factor')).toBeUndefined();
+    expect(baselineDensity, 'bithire must emit --ds-density-mode-factor').toBeDefined();
+    expect(tenantDensity).not.toBe(baselineDensity);
+    expect(read(bithireCss, '--ds-density-scale')).toBeDefined();
   });
 
-  it('elevation is reached by the DB path but NOT declared by the static baseline', () => {
-    // Recorded as an asymmetry rather than asserted as a value difference:
-    // claiming "divergence" for an axis only one side declares would overstate
-    // what has been proven.
-    expect(read(tenantCss, '--ds-elevation-1')).toBeDefined();
-    expect(read(bithireCss, '--ds-elevation-1')).toBeUndefined();
+  it('elevation is concrete on both paths and diverges without a vocabulary split', () => {
+    const tenantElevation = read(tenantCss, '--ds-elevation-1');
+    const baselineElevation = read(bithireCss, '--ds-elevation-1');
+
+    expect(tenantElevation, 'DB tenant must emit --ds-elevation-1').toBeDefined();
+    expect(baselineElevation, 'bithire must emit --ds-elevation-1').toBeDefined();
+    expect(tenantElevation).not.toBe(baselineElevation);
   });
 });

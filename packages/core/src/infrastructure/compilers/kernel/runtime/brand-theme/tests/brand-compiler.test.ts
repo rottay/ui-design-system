@@ -302,13 +302,18 @@ describe("compileBrandTheme", () => {
       tenantSlug: "bithire",
     });
 
+    // C1b registered delta: bithire SELECTS rottay/bithire-technical@1, whose
+    // sharp geometry retunes the radius dial to 0.85 over the neutral seed.
+    // The four visible radius steps stay byte-identical because bithire
+    // authors them as literals; the dial records the declared posture for
+    // every non-overridden consumer.
     expect(result.cssVariables).toMatchObject({
       "--ds-type-scale": "1",
-      "--ds-radius-scale": "1",
+      "--ds-radius-scale": "0.85",
       "--ds-density-scale": "0.9",
     });
     expect(result.cssString).toContain("--ds-type-scale: 1;");
-    expect(result.cssString).toContain("--ds-radius-scale: 1;");
+    expect(result.cssString).toContain("--ds-radius-scale: 0.85;");
     expect(result.cssString).toContain("--ds-density-scale: 0.9;");
   });
 

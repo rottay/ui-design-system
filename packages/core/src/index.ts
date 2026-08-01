@@ -80,6 +80,40 @@ export type {
 } from './infrastructure/runtime/foundation/recipes/manifest';
 
 // ============================================
+// EXPRESSIVE PROFILES (C1b white-label contract)
+// ============================================
+// Selection surface only: the expansion lowering stays compiler-internal.
+export {
+  EXPERIENCE_PROFILES,
+  EXPRESSIVE_EDGE_PROFILES,
+  EXPRESSIVE_ELEVATION_PROFILES,
+  EXPRESSIVE_GEOMETRY_PROFILES,
+  EXPRESSIVE_ICON_PROFILES,
+  EXPRESSIVE_MATERIAL_PROFILES,
+  EXPRESSIVE_MOTIF_PROFILES,
+  EXPRESSIVE_PROFILE_SCHEMA_VERSION,
+  EXPRESSIVE_TYPE_PROFILES,
+  resolveExperienceProfile,
+  resolveExpressiveAxes,
+  sanitizeExpressiveOverrides,
+  validateExperienceProfileSelection,
+} from './foundation/tokens/ts/presentation/expressive-profiles';
+export type {
+  ExperienceProfileDefinition,
+  ExperienceProfileId,
+  ExperienceProfileValidation,
+  ExpressiveAxes,
+  ExpressiveEdgeProfile,
+  ExpressiveElevationProfile,
+  ExpressiveGeometryProfile,
+  ExpressiveIconProfile,
+  ExpressiveMaterialProfile,
+  ExpressiveMotifProfile,
+  ExpressiveProfileOverrides,
+  ExpressiveTypeProfile,
+} from './foundation/tokens/ts/presentation/expressive-profiles';
+
+// ============================================
 // DENSITY (public scoped visual-density contract)
 // ============================================
 export {

@@ -645,6 +645,28 @@
   --ds-border-width-2: 2px;
   --ds-border-width-4: 4px;
 
+  /* Edge grammar roles (C1b) — the expressive border-treatment axis. These are
+     ROLE channels a profile remaps (hairline separators, standard container
+     borders, emphasis rules such as table-header keylines); the structural
+     --ds-border-width-N scale above is deliberately never a dial. Floors equal
+     the historic literals, so an unset edge profile is byte-neutral. State
+     borders (selection/error/focus) keep their own channels and never ride
+     these roles. */
+  --ds-edge-hairline-width: 1px;
+  --ds-edge-standard-width: 1px;
+  --ds-edge-emphasis-width: 1px;
+  /* Component channels the edge grammar reaches by default. Tenant chrome may
+     still claim each specific channel; the floor merely routes the silent
+     case through the role instead of a dead literal. */
+  --ds-table-border-width: var(--ds-edge-standard-width);
+  --ds-table-header-rule-width: var(--ds-edge-emphasis-width);
+  /* Overline case channels (C1b type axis): chrome micro-labels whose
+     uppercase used to be hardcoded at their read sites. Floors restate the
+     historic value, so unset profiles stay byte-neutral. */
+  --ds-select-group-text-transform: uppercase;
+  --ds-menu-group-text-transform: uppercase;
+  --ds-page-header-eyebrow-text-transform: uppercase;
+
   /* Border Radius - Modern, Rounded */
   --ds-radius-none: 0;
   --ds-radius-xs: 3px;
@@ -1007,7 +1029,7 @@
   --ds-modal-radius: var(--ds-radius-xl);
 
   /* Modal Overlay */
-  --ds-overlay-bg: rgba(0, 0, 0, 0.5);
+  --ds-overlay-bg: var(--ds-overlay-scrim);
   --ds-modal-overlay-backdrop: blur(4px);
 
   /* Modal Header */
