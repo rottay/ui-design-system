@@ -13,12 +13,25 @@
  * violating single-owner paint. The skin now owns that frame.
  *
  * RTL: arrow and dot placement uses LOGICAL utilities (`start-2`/`end-2`),
- * horizontal arrow glyphs mirror via a `:dir(rtl)` rule in the skin, and the
- * horizontal slide offset multiplies by `--ds-carousel-rtl-factor` (1 in LTR,
- * -1 under `:dir(rtl)`) so the travel direction mirrors too. The `left-1/2`
- * horizontal centring of top/bottom dot rows is deliberately PHYSICAL: it is
- * direction-invariant, and a logical `start-1/2` would break the centre in
- * RTL.
+ * the arrow glyphs are governed `navigation.*` icons whose horizontal roles
+ * auto-mirror through the icon facade, and the horizontal slide offset
+ * multiplies by `--ds-carousel-rtl-factor` (1 in LTR, -1 under `:dir(rtl)`)
+ * so the travel direction mirrors too. The `left-1/2` horizontal centring of
+ * top/bottom dot rows is deliberately PHYSICAL: it is direction-invariant,
+ * and a logical `start-1/2` would break the centre in RTL.
+ *
+ * Phase B additions: the contract's `swipe` and `pauseOnDotsHover` props are
+ * now honored (touch swipe with a dominant-axis deliberate-gesture threshold,
+ * dots-only autoplay pause); autoplay is OFF and slide transitions are
+ * removed under reduced motion; non-current slides are `inert` so focus can
+ * never land inside an `aria-hidden` slide.
+ *
+ * Phase B second pass (P2): the remaining contract slots are honored too —
+ * `prevArrow`/`nextArrow` replace the default governed glyph (caller
+ * composition, the Tree `switcherIcon` idiom), `dotsClass` rides the dots
+ * container, and `effect='fade'` merges with the `fade` boolean into one
+ * crossfade mode. `slidesToShow`/`slidesToScroll` stay unhonored: multi-slide
+ * track geometry is a feature, not a prop alias (documented debt).
  *
  * Landmark law (axe landmark-unique; W8 remediation, mirror of the ScrollArea
  * K3-C fix): the root is promoted to a named `role="region"` +
@@ -63,8 +76,21 @@ import React, {
   useCallback,
 } from 'react';
 import type { CarouselProps, CarouselRef } from '../../contracts';
+import { VisuallyHidden } from '../../../../foundation';
 import { CAROUSEL_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useMotionPolicy } from '@/infrastructure/runtime/motion';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+import { NavigationUpIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-up';
+import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
+
+/**
+ * Deliberate-gesture floor for swipe navigation: below this the pointer was
+ * scrolling or drifting, not turning a page. Not a visual axis — a JS
+ * behavior constant, so it stays a module literal (no token).
+ */
+const SWIPE_THRESHOLD_PX = 40;
 
 /**
  * Modern Carousel - Token-driven Tailwind Implementation
@@ -102,14 +128,33 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       beforeChange,
       afterChange,
       pauseOnHover = CAROUSEL_DEFAULTS.pauseOnHover,
+      pauseOnDotsHover = CAROUSEL_DEFAULTS.pauseOnDotsHover,
+      swipe = CAROUSEL_DEFAULTS.swipe,
       vertical = CAROUSEL_DEFAULTS.vertical,
       fade = CAROUSEL_DEFAULTS.fade,
+      effect = CAROUSEL_DEFAULTS.effect,
+      prevArrow,
+      nextArrow,
+      dotsClass,
       children,
       className = '',
       style,
       'aria-label': ariaLabel,
       'aria-labelledby': ariaLabelledBy,
     } = props;
+
+    // The contract carries BOTH `effect` (Ant API) and the `fade` boolean:
+    // `effect='fade'` is the same crossfade request, so they merge into one
+    // mode flag. `slidesToShow`/`slidesToScroll` stay unhonored (multi-slide
+    // track geometry is a feature, not a prop alias -- documented debt).
+    const fadeEffect = fade || effect === 'fade';
+
+    // Reduced-motion law: autoplay is continuous motion and must be OFF when
+    // the user (or the tenant motion policy) asks for reduction, and slide
+    // transitions land directly in the final state. `useMotionPolicy` is the
+    // provider-free bridge (OS store fallback), unlike useMotionPersonality
+    // which requires the tenant provider tree.
+    const { reduce: reduceMotion } = useMotionPolicy();
 
     // Flatten children into an array so we can index into individual slides
     // and derive the total count for boundary checks and dot rendering.
@@ -120,6 +165,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
     // Autoplay timer ref is stored outside state to avoid triggering
     // re-renders when the interval is created or cleared.
     const autoplayRef = useRef<NodeJS.Timeout | null>(null);
+    // Swipe start point (touch pointer only); null outside an active gesture.
+    const swipeStartRef = useRef<{ pointerId: number; x: number; y: number } | null>(null);
 
     // Accessibility labels: translated when an I18nProvider is mounted, with
     // the documented English fallbacks otherwise (a missing catalog key
@@ -187,9 +234,11 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
     /**
      * Autoplay interval management.
      * Automatically advances slides at specified interval unless paused.
+     * Autoplay is continuous motion: reduced-motion turns it OFF entirely
+     * (WCAG 2.2.2 — the user navigates manually instead).
      */
     useEffect(() => {
-      if (autoplay && !isPaused) {
+      if (autoplay && !isPaused && !reduceMotion) {
         autoplayRef.current = setInterval(next, autoplaySpeed);
       }
       return () => {
@@ -197,7 +246,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
           clearInterval(autoplayRef.current);
         }
       };
-    }, [autoplay, autoplaySpeed, isPaused, next]);
+    }, [autoplay, autoplaySpeed, isPaused, next, reduceMotion]);
 
     /**
      * Pause autoplay on mouse hover.
@@ -274,6 +323,55 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       }
     };
 
+    /**
+     * Touch swipe navigation (the contract's `swipe` prop, now actually
+     * honored by this engine). Pointer Events with a touch filter: mouse
+     * drags keep their selection semantics. The dominant axis decides — a
+     * mostly-vertical gesture on a horizontal carousel is the page scroll the
+     * skin's `touch-action: pan-y` already allowed, so it is ignored here.
+     * RTL mirrors the slide travel (the skin's `--ds-carousel-rtl-factor`),
+     * so the gesture-to-direction mapping mirrors with it (same `closest
+     * [dir]` idiom as the keyboard handler).
+     */
+    const handleTrackPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+      if (!swipe || event.pointerType !== 'touch' || !event.isPrimary) return;
+      swipeStartRef.current = {
+        pointerId: event.pointerId,
+        x: event.clientX,
+        y: event.clientY,
+      };
+    };
+    const handleTrackPointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+      const start = swipeStartRef.current;
+      swipeStartRef.current = null;
+      if (!start || start.pointerId !== event.pointerId) return;
+      const deltaX = event.clientX - start.x;
+      const deltaY = event.clientY - start.y;
+      if (vertical) {
+        if (Math.abs(deltaY) < SWIPE_THRESHOLD_PX || Math.abs(deltaY) <= Math.abs(deltaX)) return;
+        if (deltaY < 0) next(); else prev();
+        return;
+      }
+      if (Math.abs(deltaX) < SWIPE_THRESHOLD_PX || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+      const isRtl = event.currentTarget.closest('[dir]')?.getAttribute('dir') === 'rtl';
+      const towardNext = isRtl ? deltaX > 0 : deltaX < 0;
+      if (towardNext) next(); else prev();
+    };
+    const handleTrackPointerCancel = () => {
+      swipeStartRef.current = null;
+    };
+
+    /**
+     * Dots-only pause contract: with `pauseOnHover` off, hovering the dots
+     * can still pause autoplay (the Ant parity prop, previously unwired).
+     */
+    const handleDotsMouseEnter = () => {
+      if (pauseOnDotsHover) setIsPaused(true);
+    };
+    const handleDotsMouseLeave = () => {
+      if (pauseOnDotsHover) setIsPaused(false);
+    };
+
     // Pre-compute the positional Tailwind classes for the dot container.
     // Each position needs both placement and centering plus a flex direction
     // for the dot row/column. `start-2`/`end-2` are LOGICAL (inset-inline-*),
@@ -286,6 +384,11 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       left: 'start-2 top-1/2 -translate-y-1/2 flex-col',
       right: 'end-2 top-1/2 -translate-y-1/2 flex-col',
     }[dotPosition];
+
+    // Boundary law: with `infinite` off, the edge arrow is a dead control —
+    // expose the real disabled state instead of a silent no-op click.
+    const prevDisabled = !infinite && currentSlide === 0;
+    const nextDisabled = !infinite && currentSlide === slides.length - 1;
 
     // A blank/whitespace-only name is not meaningful: the root stays a plain
     // (non-landmark) div and the naming attribute is dropped. Only a named
@@ -307,7 +410,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         className={`rottay-carousel rottay-carousel--modern ${className}`}
         data-part="root"
         data-vertical={vertical ? 'true' : undefined}
-        data-fade={fade ? 'true' : undefined}
+        data-fade={fadeEffect ? 'true' : undefined}
+        data-swipe={swipe ? 'true' : undefined}
         style={style}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -320,6 +424,9 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         <div
           data-part="track"
           style={{ height: style?.height || 'var(--ds-carousel-height, 300px)' }}
+          onPointerDown={handleTrackPointerDown}
+          onPointerUp={handleTrackPointerUp}
+          onPointerCancel={handleTrackPointerCancel}
         >
           {slides.map((slide, index) => (
             <div
@@ -334,19 +441,24 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
                 // consumes it as a custom property rather than enumerating it.
                 // The horizontal offset rides `--ds-carousel-rtl-factor` (1 in
                 // LTR, -1 under `:dir(rtl)` from the skin) so the travel
-                // direction mirrors in RTL.
-                opacity: fade ? (index === currentSlide ? 1 : 0) : 1,
-                '--ds-carousel-slide-transform': fade
+                // direction mirrors in RTL. Reduced motion lands in the final
+                // state with NO transition (compositor-safe transform/opacity
+                // either way).
+                opacity: fadeEffect ? (index === currentSlide ? 1 : 0) : 1,
+                '--ds-carousel-slide-transform': fadeEffect
                   ? 'none'
                   : vertical
                     ? `translateY(${(index - currentSlide) * 100}%)`
                     : `translateX(calc(${(index - currentSlide) * 100}% * var(--ds-carousel-rtl-factor, 1)))`,
-                transition: `transform ${speed}ms var(--ds-motion-ease-out), opacity ${speed}ms var(--ds-motion-ease-out)`,
+                transition: reduceMotion
+                  ? 'none'
+                  : `transform ${speed}ms var(--ds-motion-ease-out), opacity ${speed}ms var(--ds-motion-ease-out)`,
               } as React.CSSProperties}
               role="group"
               aria-roledescription="slide"
               aria-label={carouselLabel('carousel.slideOf', `Slide ${index + 1} of ${slides.length}`, { index: index + 1, total: slides.length })}
               aria-hidden={index !== currentSlide}
+              inert={index !== currentSlide ? true : undefined}
             >
               {slide}
             </div>
@@ -354,11 +466,16 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         </div>
 
         {/* Navigation Arrows — `start-2`/`end-2` are LOGICAL (inset-inline-*):
-            both buttons mirror sides under RTL, and the skin flips the
-            horizontal glyphs via `:dir(rtl) scaleX(-1)`. The positional
-            utilities stay inline on purpose: the engine tests pin them
-            (`start-2`/`end-2` present, never `left-2`/`right-2`) — paint and
-            geometry live in the skin regardless. */}
+            both buttons mirror sides under RTL. The default glyphs are GOVERNED
+            icons: navigation.back/forward auto-mirror through the icon facade
+            (no skin flip), navigation.up/down are direction-invariant. The
+            contract's `prevArrow`/`nextArrow` slots replace the default glyph
+            wholesale (caller composition, the Tree `switcherIcon` idiom). The
+            vertical defaults keep their legacy text glyph as a visually-hidden
+            landing hook — the K4-C engine test pins `textContent` `↑`/`↓`
+            verbatim; the SVG contributes none. The positional utilities stay
+            inline on purpose (same test-pin law) — paint and geometry live in
+            the skin regardless. */}
         {arrows && (
           <>
             <button
@@ -366,33 +483,53 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
               data-part="arrow"
               data-direction="prev"
               onClick={prev}
+              disabled={prevDisabled}
               aria-label={carouselLabel('carousel.previousSlide', 'Previous slide')}
               type="button"
             >
-              {vertical ? '\u2191' : '\u2190'}
+              {prevArrow ?? (vertical ? (
+                <>
+                  <NavigationUpIcon decorative size={16} />
+                  <VisuallyHidden>{'↑'}</VisuallyHidden>
+                </>
+              ) : (
+                <NavigationBackIcon decorative size={16} />
+              ))}
             </button>
             <button
               className="absolute end-2 top-1/2 -translate-y-1/2 z-10"
               data-part="arrow"
               data-direction="next"
               onClick={next}
+              disabled={nextDisabled}
               aria-label={carouselLabel('carousel.nextSlide', 'Next slide')}
               type="button"
             >
-              {vertical ? '\u2193' : '\u2192'}
+              {nextArrow ?? (vertical ? (
+                <>
+                  <NavigationDownIcon decorative size={16} />
+                  <VisuallyHidden>{'↓'}</VisuallyHidden>
+                </>
+              ) : (
+                <NavigationForwardIcon decorative size={16} />
+              ))}
             </button>
           </>
         )}
 
         {/* Navigation Dots — placement utilities stay inline for the same
-            test-pin reason; size/shape/rhythm are skin-owned. */}
+            test-pin reason; size/shape/rhythm are skin-owned. The current dot
+            reads through SHAPE (the elongation), never color alone. The
+            contract's `dotsClass` rides the container as a caller hook. */}
         {dots && (
           <div
-            className={dotsPositionClass}
+            className={`${dotsPositionClass}${dotsClass ? ` ${dotsClass}` : ''}`}
             data-part="dots"
             data-dots-position={dotPosition}
             role="tablist"
             aria-label={carouselLabel('carousel.navigation', 'Carousel navigation')}
+            onMouseEnter={handleDotsMouseEnter}
+            onMouseLeave={handleDotsMouseLeave}
           >
             {slides.map((_, index) => (
               <button

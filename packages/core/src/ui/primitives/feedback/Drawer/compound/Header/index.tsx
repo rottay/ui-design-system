@@ -42,6 +42,8 @@
 
 import React, { forwardRef } from 'react';
 import type { ReactNode } from 'react';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 // ============================================================================
 // Types
@@ -89,27 +91,10 @@ export interface DrawerHeaderProps {
 
   /**
    * Inline styles to apply to the header container.
-   * Merged with default styles; your styles take precedence.
+   * Applied on top of the compound skin's paint; your styles take precedence.
    */
   style?: React.CSSProperties;
 }
-
-// ============================================================================
-// Constants
-// ============================================================================
-
-/**
- * Default padding for the header.
- * Uses CSS custom property with fallback for tenant customization.
- * @internal
- */
-const HEADER_PADDING = '16px 24px';
-
-/**
- * Default gap between header elements.
- * @internal
- */
-const HEADER_GAP = '12px';
 
 // ============================================================================
 // Component
@@ -129,11 +114,13 @@ const HEADER_GAP = '12px';
  * - Supports ref forwarding for DOM access
  * - Integrates with tenant theming via CSS custom properties
  *
- * CSS Custom Properties:
- * - `--drawer-header-border`: Border color when divider is enabled
- * - `--drawer-header-padding`: Header padding (defaults to 16px 24px)
- * - `--drawer-title-font-size`: Title font size (defaults to 16px)
- * - `--drawer-title-font-weight`: Title font weight (defaults to 600)
+ * CSS Custom Properties (consumed by the compound skin drawer-compounds.css):
+ * - `--ds-drawer-header-divider`: engine-stamped hatch carrying the `divider`
+ *   decision (`none` when off)
+ * - `--ds-drawer-title-font-size`: title font size (falls back to the
+ *   `--ds-font-size-lg` role)
+ * - `--ds-drawer-title-font-weight`: title font weight (falls back to the
+ *   `--ds-font-weight-semibold` role)
  *
  * @param props - {@link DrawerHeaderProps}
  * @param ref - Forwarded ref to the header container div
@@ -161,70 +148,33 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
       style = {},
     } = props;
 
+    // Optional channel with an English floor (components.drawer.close ships for
+    // en/es/ar): standalone compositions never crash nor echo a raw key.
+    const i18n = useOptionalTranslation('components');
+    const closeLabel = i18n?.tOr('drawer.close', 'Close') ?? 'Close';
+
     // -------------------------------------------------------------------------
     // Styles
     // -------------------------------------------------------------------------
 
     /**
-     * Container styles for the header section.
-     * Uses flexbox for horizontal layout with space-between alignment.
+     * Layout and paint (flex row, padding, gap, title typography) live in
+     * drawer-compounds.css (the engine-agnostic compound skin). The only
+     * inline hatch is the per-instance `divider` decision the skin consumes;
+     * a caller's `style` still wins over both.
      */
     const headerStyle: React.CSSProperties = {
-      // Layout
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      gap: HEADER_GAP,
-
-      // Spacing
-      padding: HEADER_PADDING,
-
-      // Visual - the `divider` decision rides a hatch the skin consumes, so the
-      // "off" branch resolves to the same explicit `none` React set inline.
+      // The `divider` decision rides a hatch the skin consumes, so the "off"
+      // branch resolves to the same explicit `none` React used to set inline.
+      // `--ds-drawer-header-border` is a declared channel: bare var (no
+      // fallback) so the tenant default governs.
       '--ds-drawer-header-divider': divider
-        ? '1px solid var(--ds-drawer-header-border, var(--ds-color-border, rgba(0, 0, 0, 0.1)))'
+        ? '1px solid var(--ds-drawer-header-border)'
         : 'none',
-
-      // Prevent shrinking when content overflows
-      flexShrink: 0,
 
       // Merge user styles (takes precedence)
       ...style,
     } as React.CSSProperties;
-
-    /**
-     * Styles for the title text container.
-     * Allows the title to grow and fill available space.
-     */
-    const titleStyle: React.CSSProperties = {
-      // Layout
-      flex: 1,
-      margin: 0,
-
-      // Typography - uses CSS custom properties for tenant theming
-      fontSize: 'var(--ds-drawer-title-font-size, 16px)',
-      fontWeight: 'var(--ds-drawer-title-font-weight, 600)' as React.CSSProperties['fontWeight'],
-      lineHeight: 1.4,
-    };
-
-    /**
-     * Styles for the close button.
-     * Minimal styling for a clean, accessible button.
-     */
-    const closeButtonStyle: React.CSSProperties = {
-      cursor: 'pointer',
-
-      // Spacing
-      padding: '4px',
-
-      // Typography
-      fontSize: '18px',
-      lineHeight: 1,
-
-      // No :hover rule exists for this button in any stylesheet, so this
-      // transition never fires.
-      transition: 'color 0.2s ease',
-    };
 
     // -------------------------------------------------------------------------
     // Render
@@ -240,21 +190,22 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
         role="heading"
         aria-level={2}
       >
-        {/* Title container */}
-        <div data-part="title" style={titleStyle}>{children}</div>
+        {/* Title container (layout + typography roles in the compound skin) */}
+        <div data-part="title">{children}</div>
 
-        {/* Close button - only rendered if closable and onClose provided */}
+        {/* Close button - only rendered if closable and onClose provided.
+            Paint and interaction states live in drawer-compounds.css (the
+            engine-agnostic compound skin); the glyph is the governed
+            action-close role, never a text character. */}
         {closable && onClose && (
           <button
             type="button"
             data-part="close-button"
             onClick={onClose}
-            style={closeButtonStyle}
-            aria-label="Close drawer"
-            // Prevent focus ring on click, allow on keyboard
+            aria-label={closeLabel}
             className="rottay-drawer-close"
           >
-            ✕
+            <ActionCloseIcon decorative size={16} />
           </button>
         )}
       </div>

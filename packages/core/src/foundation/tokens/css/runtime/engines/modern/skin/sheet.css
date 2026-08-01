@@ -8,6 +8,21 @@
  * Modern uses the shared `#rottay-portal-root`; rustic portals directly to body.
  * The scope class anchors every rule regardless of the selected container.
  *
+ * GEOMETRY DRAIN (Phase B): every static inline geometry declaration left the
+ * engine -- the root's fixed inset, the backdrop's fixed inset, the panel's
+ * fixed placement + per-side insets + flex column anatomy + overflow clip, the
+ * FocusTrap scope's flex anatomy, the body's flex/scroll region and the
+ * footer shrink. What stays inline is genuinely dynamic: the tokenized
+ * z-index tiers (overlay-stack datum) and the recipe-driven entrance
+ * animation (pinned inline by the motion-recipe contract). Consumer
+ * *Style props still spread last inline and win over every rule here.
+ *
+ * MATERIAL (Phase B, §4.3 overlay-family coherence): the panel now shares
+ * Drawer's surface register -- the same vertical primary-tinted gradient,
+ * elevation-4 (falling back to elevation-3) and isolation -- replacing the
+ * flat `--ds-surface-card` fill that read as a different system beside the
+ * Drawer panel. The scrim already shared the family's glass channels.
+ *
  * SIDE: `data-placement` carries the `side` prop. The engine's radius lookup was
  * `RADIUS_BY_SIDE[side] || RADIUS_BY_SIDE.bottom`, so the BOTTOM value is the base rule
  * (it also serves any unrecognised side) and left/right override it. The same fallback
@@ -21,28 +36,60 @@
  * Keyframes moved out of the per-mount `<style>` tag and engine-namespaced. The rustic
  * engine has NO keyframes at all (its declared `transition: transform` is inert — the
  * property is never assigned), so nothing here has a rustic counterpart.
+ *
+ * MOTION (P2, Drawer's idiom composed): presence keeps the panel mounted
+ * through its own exit — `data-open` flips false at the close request and the
+ * engine swaps the inline animation to the `ds-sheet-*-out-*-modern` pair on
+ * the recipe's `--ds-recipe-exit` cadence, so the panel LEAVES toward the
+ * same edge it entered from instead of popping out. The stack registration
+ * and body scroll lock stay held until the exit finishes. Under reduced
+ * motion the recipe declares no animation and presence unmounts immediately.
+ *
+ * HEADER (P2): the header always renders — Sheet's contract has no
+ * closable=false, so the panel must always expose a visible dismiss control
+ * (a title-less sheet previously drew NO close button at all). A lone close
+ * button stays end-aligned via the `:only-child` rule below.
  */
 
 @keyframes ds-sheet-backdrop-fade-modern {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+@keyframes ds-sheet-backdrop-fade-out-modern {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
 @keyframes ds-sheet-slide-bottom-modern {
   from { transform: translateY(100%); }
   to   { transform: translateY(0); }
+}
+@keyframes ds-sheet-slide-out-bottom-modern {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
 }
 @keyframes ds-sheet-slide-left-modern {
   from { transform: translateX(-100%); }
   to   { transform: translateX(0); }
 }
+@keyframes ds-sheet-slide-out-left-modern {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
 @keyframes ds-sheet-slide-right-modern {
   from { transform: translateX(100%); }
   to   { transform: translateX(0); }
 }
+@keyframes ds-sheet-slide-out-right-modern {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
 
-/* ---- viewport contract ---- */
+/* ---- viewport contract: the fixed full-viewport frame (drained from the
+        engine's inline `position: fixed; inset: 0`). ---- */
 .rottay-sheet--modern[data-part='root'] {
   --ds-sheet-viewport-max-height: 85vh;
+  position: fixed;
+  inset: 0;
   height: 100vh;
 }
 
@@ -56,21 +103,41 @@
 /* ---- backdrop: scrim + glass, intensity-governed like the rest of the
         overlay family (Drawer/Modal precedent): the frost tint and blur scale
         with --ds-effect-intensity and collapse at 0. Glass is sanctioned on
-        overlay backdrops only. ---- */
+        overlay backdrops only. Fixed inset drained from the engine. ---- */
 .rottay-sheet--modern[data-part='root'] > [data-part='backdrop'] {
+  position: fixed;
+  inset: 0;
   background-color: var(--ds-sheet-overlay-bg, color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent));
   background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
   backdrop-filter: var(--ds-glass-backdrop-filter);
   -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
 }
 
-/* ---- panel ---- */
+/* ---- panel: fixed flex column (drained from the engine). The surface shares
+        Drawer's material register -- vertical primary-tinted gradient over the
+        card fill, elevation-4 with the elevation-3 fallback, isolation so the
+        gradient stack never leaks into a stacking contest. ---- */
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'] {
-  background: var(--ds-surface-card);
-  box-shadow: var(--ds-elevation-3);
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--ds-color-bg-primary) 98%, var(--ds-color-primary) 2%) 0%,
+      var(--ds-surface-card) 32%,
+      var(--ds-color-bg-primary) 100%
+    );
+  box-shadow: var(--ds-elevation-4, var(--ds-elevation-3));
   border-radius: var(--ds-radius-lg) var(--ds-radius-lg) 0 0;
 }
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='bottom'] {
+  inset-inline: 0;
+  inset-block-end: 0;
+  max-block-size: var(--ds-sheet-max-height, var(--ds-sheet-viewport-max-height));
+  min-block-size: var(--ds-sheet-min-height, 30vh);
   padding-bottom: var(--ds-sheet-safe-area-bottom, env(safe-area-inset-bottom, 0px));
 }
 /* Side panels: the width channel (previously an inline 380px literal) and the
@@ -85,10 +152,17 @@
   padding-block-end: var(--ds-sheet-safe-area-bottom, env(safe-area-inset-bottom, 0px));
 }
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='left'] {
+  inset-block: 0;
+  /* The flush edge is the PHYSICAL contract side ('left' is the screen edge,
+     not a logical one -- it must NOT mirror under RTL), so its inset and
+     safe-area pad stay physical (drawer.css's sanctioned idiom). */
+  left: 0;
   padding-left: env(safe-area-inset-left, 0px);
   border-radius: 0 var(--ds-radius-lg) var(--ds-radius-lg) 0;
 }
 .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='right'] {
+  inset-block: 0;
+  right: 0;
   padding-right: env(safe-area-inset-right, 0px);
   border-radius: var(--ds-radius-lg) 0 0 var(--ds-radius-lg);
 }
@@ -146,22 +220,46 @@
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-sheet-title-size, var(--ds-font-size-lg));
   font-weight: var(--ds-font-weight-semibold);
-  letter-spacing: var(--ds-letter-spacing-heading, -0.015em);
+  letter-spacing: var(--ds-letter-spacing-heading);
   line-height: var(--ds-line-height-tight);
 }
 
-/* ---- scroll anatomy: the body is the scroll region (default padding moved
-        out of the engine; a caller's bodyStyle still wins inline). A quiet
-        thin scrollbar keeps long content usable without chrome weight. ---- */
+/* ---- focus scope: the FocusTrap wrapper is the panel's flex child that lets
+        the body scroll while header/footer stay put (drained from the
+        engine's inline style on the scope class). ---- */
+.rottay-sheet--modern[data-part='root'] .rottay-sheet__focus-scope {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-block-size: 0;
+  overflow: hidden;
+}
+
+/* ---- scroll anatomy: the body is the scroll region (flex/overflow drained
+        from the engine; a caller's bodyStyle still wins inline). The zero
+        block floor keeps a tall body from pushing header/footer out of the
+        panel (drawer.css's note). A quiet thin scrollbar keeps long content
+        usable without chrome weight. ---- */
 .rottay-sheet--modern[data-part='root'] [data-part='body'] {
-  min-height: 0;
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-block: auto;
   padding: var(--ds-sheet-body-padding, 16px);
   overscroll-behavior: contain;
   scrollbar-width: var(--ds-sheet-body-scrollbar-width, thin);
   -webkit-overflow-scrolling: touch;
 }
+/* ---- footer: the overlay family's shared action grammar (drawer.css) --
+        end-aligned actions on the spacing rhythm, hairline-separated from the
+        scroll region. ---- */
 .rottay-sheet--modern[data-part='root'] [data-part='footer'] {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ds-spacing-2);
+  padding-block: var(--ds-spacing-3);
+  padding-inline: var(--ds-spacing-4);
   border-top: 1px solid var(--ds-color-border-subtle);
 }
 
@@ -190,9 +288,14 @@
   color: var(--ds-color-text-primary);
 }
 .rottay-sheet--modern[data-part='root'] [data-part='close-button']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid
+  outline: var(--ds-focus-ring-width) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline-offset: var(--ds-focus-ring-offset);
+}
+/* A title-less header holds ONLY the close button: keep it end-aligned
+   (the header's space-between would start-align a lone child). */
+.rottay-sheet--modern[data-part='root'] [data-part='header'] > [data-part='close-button']:only-child {
+  margin-inline-start: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -223,8 +326,17 @@
 }
 
 /* Forced colors: the scrim, glass and depth disappear; the panel and its
-   close control keep a visible system-color boundary. */
+   close control keep a visible system-color boundary, and the scrim
+   re-asserts as a see-through system mix (drawer.css's grammar — without it
+   the forced Canvas background turns the backdrop OPAQUE and the page
+   behind the sheet vanishes). */
 @media (forced-colors: active) {
+  .rottay-sheet--modern[data-part='root'] > [data-part='backdrop'] {
+    background-color: color-mix(in srgb, CanvasText 35%, transparent);
+    background-image: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
   .rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement] {
     border: 1px solid CanvasText;
   }

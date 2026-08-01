@@ -25,7 +25,9 @@
  * placeholder -- open composition (no box), a large tone-tinted glyph disc,
  * heading-level title, balanced guidance, then the action row. The bounded
  * min-height keeps short content from collapsing without ever producing a
- * giant blank box.
+ * giant blank box. The root carries `role='status'` (engine-stamped, engine
+ * parity with rustic) and a one-shot mount reveal on the governed
+ * `ds-foundation-fade-in-up` recipe at the `--ds-motion-reveal` cadence.
  *
  * SPECIFICITY (P-48): the only border painted is the glyph well's, at (0,4,1)
  * (two root classes + data-tone attr + data-part attr), clearing the tenant
@@ -47,6 +49,22 @@
   padding: var(--ds-result-padding, clamp(var(--ds-spacing-xl), 5vw, var(--ds-spacing-3xl))) var(--ds-result-padding-inline, clamp(var(--ds-spacing-lg), 4vw, var(--ds-spacing-2xl)));
   color: var(--ds-color-text-primary);
   text-align: center;
+  /* One-shot mount reveal on the governed recipe (B7-02): the outcome page
+     rises + fades through the shared canon keyframes at the reveal cadence,
+     never a decorative loop. Compositor-safe (opacity/transform) and the
+     global personality.css reduced-motion guard (!important, 0.01ms/1
+     iteration) lands it on the final frame instantly, so no per-family
+     neutralization is needed -- same posture as the Skeleton canon pass. */
+  animation: ds-foundation-fade-in-up var(--ds-motion-reveal) var(--ds-motion-ease-out) both;
+}
+
+/* ---- icon slot: optical centering for whatever glyph lands in it (built-in
+        status-icon wells center themselves; this centers consumer-supplied
+        icons and keeps the display status code optically boxed). Direct-child
+        scoped per the slot-confinement law. ---- */
+.rottay-result--modern.rottay-result--modern[data-part='root'] > [data-part='icon'][data-part='icon'] {
+  display: grid;
+  place-items: center;
 }
 
 /* ---- status glyph well: large tone-tinted disc (built-in glyph only,
@@ -91,7 +109,7 @@
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-result-code-size, clamp(3.5rem, 12vw, 6rem));
   font-weight: var(--ds-font-weight-bold);
-  letter-spacing: var(--ds-letter-spacing-heading, -0.01em);
+  letter-spacing: var(--ds-letter-spacing-heading);
   line-height: 1;
 }
 
@@ -102,7 +120,7 @@
   /* The code is display TEXT, so raw warning fails even the 3:1 large-text
      bar on light surfaces (~2:1); the ink deepens with the Tag contrast-law
      mix (warning 55%, measured >= 6.2:1 on the governed light source). */
-  color: color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900, #171717));
+  color: color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900));
 }
 .rottay-result--modern[data-tone='500'][data-part='root'] > [data-part='icon'] > [data-part='status-code'] {
   color: var(--ds-color-error);
@@ -115,7 +133,7 @@
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-result-title-size, var(--ds-font-size-2xl, var(--ds-font-size-xl)));
   font-weight: var(--ds-font-weight-semibold);
-  letter-spacing: var(--ds-letter-spacing-heading, -0.01em);
+  letter-spacing: var(--ds-letter-spacing-heading);
   line-height: var(--ds-line-height-tight);
   text-wrap: balance;
 }

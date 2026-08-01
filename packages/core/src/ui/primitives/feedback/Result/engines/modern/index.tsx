@@ -147,6 +147,12 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
         data-tone={status}
         className={`rottay-result--modern ${className}`}
         style={style}
+        /* Engine parity (rustic stamps the same role): the completed/failed
+           outcome is a status region, so assistive tech announces it
+           politely on mount instead of landing on an unnamed group. The
+           built-in glyph stays decorative -- the tone is conveyed by the
+           title/description text, never by hue alone. */
+        role="status"
       >
         {/* Custom icon takes precedence over the built-in status glyph,
             allowing consumers to completely replace the visual indicator;

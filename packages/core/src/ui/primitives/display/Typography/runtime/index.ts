@@ -28,7 +28,8 @@ const FAMILY_MAP: Record<TypographyFamily, string> = {
   body: 'var(--ds-font-family-base)',
   heading: 'var(--ds-font-family-heading, var(--ds-font-family-base))',
   display: 'var(--ds-font-family-display, var(--ds-font-family-heading))',
-  mono: 'var(--ds-font-family-mono, ui-monospace, monospace)',
+  // Declared in foundation/themes/default.css -> bare reference (fallback parity).
+  mono: 'var(--ds-font-family-mono)',
   inherit: 'inherit',
 };
 
@@ -78,6 +79,21 @@ export function normalizeLineClamp(lineClamp: number | undefined): number | unde
   return Math.floor(lineClamp);
 }
 
+/**
+ * Languages written in joining scripts (Arabic, Persian, Urdu, …) connect
+ * letters within a word; ANY letter-spacing — positive or negative, tenant or
+ * DS — visibly breaks the joining. Tracking is therefore suppressed whenever
+ * the caller declares one of these languages, matching the typesetting law
+ * that joining scripts must never be tracked. Only the explicit `lang` prop
+ * is observable here; an inherited document lang remains the consumer's
+ * responsibility to pass through (documented contract debt).
+ */
+const JOINING_SCRIPT_LANG_PATTERN = /^(ar|fa|ur|ps|sd|ug|ku|ckb|dv|ks)(-|$)/i;
+
+export function isJoiningScriptLang(lang: string | undefined): boolean {
+  return typeof lang === 'string' && JOINING_SCRIPT_LANG_PATTERN.test(lang.trim());
+}
+
 export interface ResolveTypographyStyleOptions extends TypographyCraftProps {
   align?: TypographyAlign;
   kind: TypographyKind;
@@ -106,6 +122,7 @@ export function resolveTypographyCraftStyle({
   hyphenate,
   contrast,
   align,
+  lang,
   kind,
   size,
   truncate,
@@ -114,6 +131,7 @@ export function resolveTypographyCraftStyle({
 }: ResolveTypographyStyleOptions): CSSProperties {
   const roleKey = textStyle ? ROLE_TOKEN_KEYS[textStyle] : undefined;
   const normalizedClamp = normalizeLineClamp(lineClamp);
+  const suppressTracking = isJoiningScriptLang(lang);
   const style: CSSProperties = {
     ...(roleKey
       ? {
@@ -121,7 +139,9 @@ export function resolveTypographyCraftStyle({
           fontSize: `var(--ds-type-${roleKey}-font-size)`,
           fontWeight: `var(--ds-type-${roleKey}-font-weight)`,
           lineHeight: `var(--ds-type-${roleKey}-line-height)`,
-          letterSpacing: `var(--ds-type-${roleKey}-letter-spacing)`,
+          ...(suppressTracking
+            ? {}
+            : { letterSpacing: `var(--ds-type-${roleKey}-letter-spacing)` }),
           textTransform: `var(--ds-type-${roleKey}-text-transform)` as CSSProperties['textTransform'],
           fontVariantNumeric: `var(--ds-type-${roleKey}-font-variant-numeric)`,
         }
@@ -133,7 +153,7 @@ export function resolveTypographyCraftStyle({
         }
       : {}),
     ...(leading ? { lineHeight: LEADING_MAP[leading] } : {}),
-    ...(tracking ? { letterSpacing: TRACKING_MAP[tracking] } : {}),
+    ...(tracking && !suppressTracking ? { letterSpacing: TRACKING_MAP[tracking] } : {}),
     ...(align ? { textAlign: align } : {}),
     ...(wrap === 'balance'
       ? { textWrap: 'balance' }
@@ -144,9 +164,10 @@ export function resolveTypographyCraftStyle({
           : {}),
     hyphens: hyphenate ? 'auto' : undefined,
     overflowWrap: wrap === 'nowrap' || truncate ? undefined : 'anywhere',
-    fontOpticalSizing: 'var(--ds-type-optical-sizing, auto)' as CSSProperties['fontOpticalSizing'],
-    fontSynthesis: 'var(--ds-type-font-synthesis, none)',
-    fontVariationSettings: 'var(--ds-type-font-variation-settings, normal)',
+    // Declared in foundation/base/typography.css -> bare references (fallback parity).
+    fontOpticalSizing: 'var(--ds-type-optical-sizing)' as CSSProperties['fontOpticalSizing'],
+    fontSynthesis: 'var(--ds-type-font-synthesis)',
+    fontVariationSettings: 'var(--ds-type-font-variation-settings)',
     ...(truncate && !normalizedClamp
       ? {
           display: 'inline-block',

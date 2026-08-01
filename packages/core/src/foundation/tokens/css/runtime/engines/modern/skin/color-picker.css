@@ -33,6 +33,33 @@
  * Non-border paint (background, color, outline, border-radius) wins
  * unlayered at (0,3,0). The native `<input type='color'>` picker chrome is
  * UA-rendered and untouched.
+ *
+ * B6-02 (Phase B premium pass): the trigger became a real disclosure button
+ * (focus ring below; keyboard lives in the engine); preset swatches carry a
+ * SELECTED state — never color-only: a double-keyline (inset surface keyline
+ * + outer primary ring) plus a drawn check glyph whose dark halo guarantees
+ * contrast over ANY authored swatch color (white swatch included), with
+ * `aria-pressed` as the AT signal; the panel gained the contract's format
+ * switcher (`format-field`/`format-select`); the empty value paints a
+ * "no color" slash over the swatch (the swatch keeps its authored fill —
+ * user data, same evidence as the forced-colors opt-out below); the dropdown
+ * entrance rides a compositor-safe opacity/translate appear (no scale — the
+ * engine measures the panel rect on open for edge collision); density rides
+ * `--ds-density-effective-scale` on the panel padding; coarse pointers floor
+ * the trigger and preset swatches at the governed touch target.
+ *
+ * PHASE B2 (P2 deep pass, 2026-07-31):
+ * - The panel joined the lane overlay register: the dark-aware luminance
+ *   lift layer above the card fill + the hairline frame (AutoComplete/
+ *   Cascader/Mentions idiom) — it previously floated on a bare card fill
+ *   with no border outside forced-colors.
+ * - The native color input's inline `height` drained here as logical
+ *   `block-size` on the `--ds-color-picker-height` hook (single paint
+ *   owner; the engine keeps zero static geometry).
+ * - hex-input/format-select gained the Input grammar's gated hover +
+ *   `:active` border repaint, and every panel control gained a governed
+ *   `:disabled` posture (a controlled `open` can render the panel while
+ *   the component is disabled).
  */
 
 .rottay-colorpicker.rottay-colorpicker--modern[data-part='root'] {
@@ -40,25 +67,65 @@
   display: inline-block;
 }
 
+/* Entrance: opacity + vertical drift only (compositor-safe). NO scale — the
+   engine measures the panel's rect on open for the edge-collision flip, and
+   a mid-animation scale would skew that measurement. Reduced-motion lands
+   directly in the final state (guard at the end of this file). */
+@keyframes ds-color-picker-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ---- trigger + swatch (utilities drained; swatch size by data-size) ---- */
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='trigger'] {
   display: flex;
   align-items: center;
-  gap: var(--ds-spacing-2, 0.5rem);
+  gap: var(--ds-spacing-2);
   cursor: pointer;
+  border-radius: var(--ds-radius-sm);
+}
+/* The trigger is a focusable disclosure button (engine-owned keyboard): the
+   ring frames the whole swatch+text row. */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='trigger']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
 }
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='trigger'][data-disabled='true'] {
   cursor: not-allowed;
-  opacity: var(--ds-colorpicker-disabled-opacity, var(--ds-input-disabled-opacity, 0.5));
+  opacity: var(--ds-colorpicker-disabled-opacity, var(--ds-input-disabled-opacity));
 }
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'] {
+  position: relative;
   background-color: var(--ds-colorpicker-swatch-color);
   box-shadow: var(--ds-elevation-1);
-  border-radius: var(--ds-radius-sm, 0.375rem);
+  border-radius: var(--ds-radius-sm);
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+/* Empty value ("no color"): a diagonal slash over the neutral fill — the
+   value's absence is a SHAPE signal, not a color swap. Direction-neutral
+   glyph: no RTL mirror. */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'][data-empty='true']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    to top left,
+    transparent calc(50% - 1px),
+    var(--ds-color-text-muted) calc(50% - 1px),
+    var(--ds-color-text-muted) calc(50% + 1px),
+    transparent calc(50% + 1px)
+  );
 }
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'][data-size='small'] {
   inline-size: var(--ds-colorpicker-swatch-size-sm, 1.5rem);
@@ -79,31 +146,57 @@
 }
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='display-text'] {
-  font-size: var(--ds-font-size-sm, 0.875rem);
+  font-size: var(--ds-font-size-sm);
   color: var(--ds-color-text-primary);
   font-variant-numeric: tabular-nums;
 }
 
-/* ---- dropdown shell (utilities drained; placement/edge classes stay inline,
-        test-pinned; data-placement/data-edge own the offsets) ---- */
+/* ---- dropdown shell (utilities fully drained: placement/edge travel ONLY
+        via data-placement/data-edge; the `bottom-full`/`end-0` utilities are
+        retired and their test pin is queued for repin). ---- */
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'] {
   position: absolute;
-  z-index: var(--ds-colorpicker-dropdown-z, var(--ds-z-popover, 1600));
-  inset-block-start: calc(100% + var(--ds-spacing-1, 0.25rem));
+  z-index: var(--ds-colorpicker-dropdown-z, var(--ds-z-popover));
+  inset-block-start: calc(100% + var(--ds-spacing-1));
   inset-inline-start: 0;
-  padding: var(--ds-spacing-3, 0.75rem);
-  border-radius: var(--ds-radius-lg, 0.5rem);
-  background: var(--ds-surface-card);
+  /* Density: the panel's own padding scales with the governed density
+     channel; internal section rhythm stays on the spacing scale. */
+  padding: calc(var(--ds-spacing-3) * var(--ds-density-effective-scale));
+  border-radius: var(--ds-radius-lg);
+  /* Lane overlay register (AutoComplete/Cascader/Mentions idiom): the
+     dark-aware luminance lift is its own layer directly above the card
+     fill. */
+  background:
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-surface-card);
   box-shadow: var(--ds-elevation-2);
   /* K4-C Pass 2: the dropdown sized to the UA-native color input (~44px),
      truncating the hex input and wrapping every preset onto its own row.
      A token-bound minimum keeps the panel legible; 11rem fits the hex input,
      a 3-swatch preset row and the clear button at every density. */
   min-inline-size: var(--ds-colorpicker-dropdown-min-width, 11rem);
+  animation: ds-color-picker-appear var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+/* Top placement: the panel hangs above the trigger with the same gap. */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-placement*='top'] {
+  inset-block-start: auto;
+  inset-block-end: calc(100% + var(--ds-spacing-1));
+}
+
+/* Edge collision alignment: flush with the trigger's inline-end. */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-edge='end'] {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+}
+/* The panel's hairline frame (overlay register) rides the root-scoped rule:
+   border-color paint needs (0,4,0) against the tenant `*` floor (P-48). */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='root'] [data-part='dropdown'] {
+  border: 1px solid var(--ds-color-border-subtle);
 }
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-placement*='top'] {
   inset-block-start: auto;
-  inset-block-end: calc(100% + var(--ds-spacing-1, 0.25rem));
+  inset-block-end: calc(100% + var(--ds-spacing-1));
 }
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'][data-edge='end'] {
   inset-inline-start: auto;
@@ -112,21 +205,56 @@
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='native-color-input'] {
   inline-size: 100%;
+  /* Drained from the engine's inline `height` (single paint owner; logical
+     property). Undeclared family hook: its fallback is its contract. */
+  block-size: var(--ds-color-picker-height, 10rem);
   cursor: pointer;
   border: 0;
+  border-radius: var(--ds-radius-sm);
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='native-color-input']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
+}
+
+/* ---- format field (contract's onFormatChange switcher; Input-family
+        control grammar, same cadence as the hex input) ---- */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='format-field'] {
+  margin-block-start: var(--ds-spacing-2);
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='format-select'] {
+  box-sizing: border-box;
+  inline-size: 100%;
+  block-size: var(--ds-input-sm-height);
+  padding-inline: var(--ds-input-sm-padding-x);
+  font-size: var(--ds-input-sm-font-size);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-input-bg, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='format-select'][data-part='format-select'] {
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='format-select'][data-part='format-select']:focus-visible {
+  border-color: var(--ds-input-border-focus, var(--ds-color-primary));
+  box-shadow: var(--ds-input-shadow-focus, var(--ds-focus-ring));
 }
 
 /* ---- hex field (wrapper margin via the input-number :has() idiom) ---- */
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-field'] {
-  margin-block-start: var(--ds-spacing-2, 0.5rem);
+  margin-block-start: var(--ds-spacing-2);
 }
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'] {
   box-sizing: border-box;
   inline-size: 100%;
-  block-size: var(--ds-input-sm-height, 32px);
-  padding: 4px var(--ds-input-sm-padding-x, 10px);
-  font-size: var(--ds-input-sm-font-size, 13px);
+  block-size: var(--ds-input-sm-height);
+  padding: 4px var(--ds-input-sm-padding-x);
+  font-size: var(--ds-input-sm-font-size);
   border-radius: var(--ds-radius-md);
   background: var(--ds-input-bg, var(--ds-surface-control));
   color: var(--ds-color-text-primary);
@@ -138,9 +266,9 @@
      unlayered, so it beats every LAYERED Tailwind utility regardless of the
      :where() zero specificity. This unlayered rule wins both and resolves to
      the tenant mono (IBM Plex Mono / Courier New). */
-  font-family: var(--ds-font-family-mono, ui-monospace, monospace);
+  font-family: var(--ds-font-family-mono);
   font-variant-numeric: tabular-nums;
-  transition: border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  transition: border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 /* Specificity parity without the doubled data-part: type='text' is always
    stamped on the hex control. */
@@ -149,22 +277,47 @@
 }
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'][type='text']:focus {
   border-color: var(--ds-input-border-focus, var(--ds-color-primary));
+  box-shadow: var(--ds-input-shadow-focus, var(--ds-focus-ring));
 }
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'][type='text'][data-invalid='true'] {
   border-color: var(--ds-color-error);
 }
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-error'] {
   display: block;
-  margin-block-start: var(--ds-spacing-1, 0.25rem);
+  margin-block-start: var(--ds-spacing-1);
   color: var(--ds-color-error);
   font-size: var(--ds-input-helper-font-size, var(--ds-font-size-xs));
-  line-height: var(--ds-line-height-snug, 1.375);
+  line-height: var(--ds-line-height-snug);
+}
+
+/* Field hover/press parity with the Input grammar (gated hover + the
+   touch :active equivalent); disabled opts out, focus keeps its ring.
+   Consumes the certified declared input-hover channel bare (P0 law). */
+@media (hover: hover) {
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'][type='text']:not(:disabled):hover:not(:focus),
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='format-select'][data-part='format-select']:not(:disabled):hover:not(:focus) {
+    border-color: var(--ds-input-border-hover);
+  }
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'][type='text']:not(:disabled):active:not(:focus),
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='format-select'][data-part='format-select']:not(:disabled):active:not(:focus) {
+  border-color: var(--ds-input-border-hover);
+}
+
+/* Disabled postures for the panel controls (a controlled `open` can render
+   the panel while `disabled`): governed opacity + not-allowed cursor. */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input']:disabled,
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='format-select']:disabled,
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button']:disabled,
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button']:disabled {
+  cursor: not-allowed;
+  opacity: var(--ds-colorpicker-disabled-opacity, var(--ds-input-disabled-opacity));
 }
 
 /* ---- presets ---- */
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='presets'] {
-  margin-block-start: var(--ds-spacing-3, 0.75rem);
-  padding-block-start: var(--ds-spacing-3, 0.75rem);
+  margin-block-start: var(--ds-spacing-3);
+  padding-block-start: var(--ds-spacing-3);
 }
 .rottay-colorpicker.rottay-colorpicker--modern div:has(> [data-part='preset-group']):has(> [data-part='preset-group']),
 .rottay-colorpicker.rottay-colorpicker--modern div:has(> [data-part='clear-button']):has(> [data-part='clear-button']) {
@@ -172,37 +325,64 @@
 }
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-group'] {
-  margin-block-end: var(--ds-spacing-2, 0.5rem);
+  margin-block-end: var(--ds-spacing-2);
 }
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-label'] {
-  margin-block-end: var(--ds-spacing-1, 0.25rem);
+  margin-block-end: var(--ds-spacing-1);
   color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-size: var(--ds-font-size-xs);
 }
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-row'] {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--ds-spacing-1, 0.25rem);
+  gap: var(--ds-spacing-1);
 }
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'] {
+  position: relative;
   inline-size: var(--ds-colorpicker-preset-swatch-size, 1.25rem);
   block-size: var(--ds-colorpicker-preset-swatch-size, 1.25rem);
   padding: 0;
   background-color: var(--ds-colorpicker-preset-color);
-  border-radius: var(--ds-radius-sm, 0.375rem);
+  border-radius: var(--ds-radius-sm);
   cursor: pointer;
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 /* Specificity parity without the doubled data-part: type='button' is always
    stamped on the preset controls. */
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button'] {
   border: 1px solid var(--ds-color-border);
+}
+
+/* Selected preset — NEVER color/border-only: a double-keyline frame (inset
+   surface keyline + outer primary ring) plus a drawn check glyph. The check
+   rides the surface white with a dark halo, so it keeps contrast over ANY
+   authored swatch color (a white swatch included); `aria-pressed` carries
+   the state to AT. The check is a direction-neutral pictogram: physical
+   borders, no RTL mirror. */
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button'][data-selected='true'] {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: 1px;
+  box-shadow: inset 0 0 0 2px var(--ds-color-white);
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button'][data-selected='true']::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 50%;
+  inline-size: 0.5em;
+  block-size: 0.28em;
+  font-size: var(--ds-colorpicker-preset-swatch-size, 1.25rem);
+  border-left: 2px solid var(--ds-color-white);
+  border-bottom: 2px solid var(--ds-color-white);
+  transform: translate(-50%, -65%) rotate(-45deg);
+  filter: drop-shadow(0 0 1px color-mix(in srgb, var(--ds-color-neutral-900) 85%, transparent));
+  pointer-events: none;
 }
 
 /* Pointer-fine hover only (hover law); touch feedback is the press below. */
@@ -222,39 +402,56 @@
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='trigger']:not([data-disabled='true']):active [data-part='swatch'],
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button']:not(:disabled):active,
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button']:not(:disabled):active {
-  transform: scale(var(--ds-state-press-scale, 0.98));
+  transform: scale(var(--ds-state-press-scale));
 }
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button']:focus-visible,
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 /* ---- clear field ---- */
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-field'] {
-  margin-block-start: var(--ds-spacing-2, 0.5rem);
-  padding-block-start: var(--ds-spacing-2, 0.5rem);
+  margin-block-start: var(--ds-spacing-2);
+  padding-block-start: var(--ds-spacing-2);
 }
 
 .rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button'] {
-  block-size: var(--ds-input-sm-height, 32px);
-  padding: 0 var(--ds-input-sm-padding-x, 10px);
-  font-size: var(--ds-input-sm-font-size, 13px);
+  block-size: var(--ds-input-sm-height);
+  padding: 0 var(--ds-input-sm-padding-x);
+  font-size: var(--ds-input-sm-font-size);
   cursor: pointer;
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: var(--ds-radius-md);
   border: none;
   transition:
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+/* Coarse-pointer floor (44px governed channel): the trigger row and every
+   preset swatch reach the touch target; fine pointers keep the authored
+   sizes (min-* wins over the fixed swatch sizes only when larger). */
+@media (pointer: coarse) {
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='trigger'] {
+    min-block-size: var(--ds-input-touch-target-min);
+  }
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button'] {
+    min-inline-size: var(--ds-input-touch-target-min);
+    min-block-size: var(--ds-input-touch-target-min);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'] {
+    animation: none;
+  }
   .rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'],
   .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'],
   .rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button'],
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='format-select'],
   .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'] {
     transition: none;
   }
@@ -294,8 +491,33 @@
     background: Field;
     color: FieldText;
   }
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='format-select'][data-part='format-select'] {
+    border-color: ButtonText;
+    background: Field;
+    color: FieldText;
+  }
   .rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'][type='text'][data-invalid='true'] {
     border-color: MarkText;
+  }
+  /* Selected preset: the system Highlight ring replaces the tenant one; the
+     check glyph re-maps to a system ink (the pseudo does not inherit the
+     swatch's forced-color-adjust opt-out). */
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button'][data-selected='true'] {
+    outline-color: Highlight;
+  }
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button'][data-selected='true']::after {
+    border-color: ButtonText;
+    filter: none;
+  }
+  /* Empty-value slash: deterministic system ink over the opted-out fill. */
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'][data-empty='true']::after {
+    background: linear-gradient(
+      to top left,
+      transparent calc(50% - 1px),
+      ButtonText calc(50% - 1px),
+      ButtonText calc(50% + 1px),
+      transparent calc(50% + 1px)
+    );
   }
   .rottay-colorpicker.rottay-colorpicker--modern [data-part='display-text'],
   .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-label'] {
@@ -308,6 +530,9 @@
     border: 1px solid ButtonText;
     color: ButtonText;
   }
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='trigger']:focus-visible,
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='native-color-input']:focus-visible,
+  .rottay-colorpicker.rottay-colorpicker--modern [data-part='format-select']:focus-visible,
   .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button']:focus-visible,
   .rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button']:focus-visible {
     outline-color: Highlight;

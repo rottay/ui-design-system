@@ -57,6 +57,7 @@
 
 import React, { forwardRef } from 'react';
 import type { ReactNode } from 'react';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ============================================================================
 // Types
@@ -101,37 +102,10 @@ export interface DrawerFooterProps {
 
   /**
    * Inline styles to apply to the footer container.
-   * Merged with default styles; your styles take precedence.
+   * Applied on top of the compound skin's paint; your styles take precedence.
    */
   style?: React.CSSProperties;
 }
-
-// ============================================================================
-// Constants
-// ============================================================================
-
-/**
- * Maps alignment prop to CSS justify-content values.
- * @internal
- */
-const ALIGN_MAP: Record<NonNullable<DrawerFooterProps['align']>, string> = {
-  start: 'flex-start',
-  center: 'center',
-  end: 'flex-end',
-  'space-between': 'space-between',
-};
-
-/**
- * Default padding for the footer.
- * @internal
- */
-const FOOTER_PADDING = '16px 24px';
-
-/**
- * Default gap between footer elements.
- * @internal
- */
-const FOOTER_GAP = '12px';
 
 // ============================================================================
 // Component
@@ -186,32 +160,37 @@ export const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
       style = {},
     } = props;
 
+    // Optional channel with an English floor (components.drawer.actions ships
+    // for en/es/ar): the action group's accessible name localizes and a
+    // standalone composition still announces the English floor.
+    const i18n = useOptionalTranslation('components');
+    const actionsLabel = i18n?.tOr('drawer.actions', 'Drawer actions') ?? 'Drawer actions';
+
+    // Layout (flex row, padding, gap) and the four `align` variants live in
+    // drawer-compounds.css, keyed on `data-align`; an out-of-contract value
+    // degrades to the skin's `end` base, exactly what the old inline map
+    // fallback did.
+    const resolvedAlign =
+      align === 'start' || align === 'center' || align === 'end' || align === 'space-between'
+        ? align
+        : 'end';
+
     // -------------------------------------------------------------------------
     // Styles
     // -------------------------------------------------------------------------
 
     /**
-     * Container styles for the footer section.
-     * Uses flexbox for horizontal layout with configurable alignment.
+     * The only inline hatch is the per-instance `divider` decision the skin
+     * consumes; a caller's `style` still wins over both.
      */
     const footerStyle: React.CSSProperties = {
-      // Layout - horizontal flex with alignment
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: ALIGN_MAP[align] || ALIGN_MAP.end,
-      gap: FOOTER_GAP,
-
-      // Spacing
-      padding: FOOTER_PADDING,
-
-      // Visual - the `divider` decision rides a hatch the skin consumes, so the
-      // "off" branch resolves to the same explicit `none` React set inline.
+      // The `divider` decision rides a hatch the skin consumes, so the "off"
+      // branch resolves to the same explicit `none` React used to set inline.
+      // `--ds-drawer-footer-border` is a declared channel: bare var (no
+      // fallback) so the tenant default governs.
       '--ds-drawer-footer-divider': divider
-        ? '1px solid var(--ds-drawer-footer-border, var(--ds-color-border, rgba(0, 0, 0, 0.1)))'
+        ? '1px solid var(--ds-drawer-footer-border)'
         : 'none',
-
-      // Prevent shrinking when content overflows
-      flexShrink: 0,
 
       // Merge user styles (takes precedence)
       ...style,
@@ -225,11 +204,12 @@ export const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
       <div
         ref={ref}
         data-part="footer"
+        data-align={resolvedAlign}
         className={`rottay-drawer-footer ${className}`.trim()}
         style={footerStyle}
         // Semantic role for action area
         role="group"
-        aria-label="Drawer actions"
+        aria-label={actionsLabel}
       >
         {children}
       </div>

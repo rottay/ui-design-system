@@ -132,7 +132,8 @@ describe.each([
 
     fireEvent.dragOver(activeDropzone);
     if (_engine === 'modern') {
-      expect(activeDropzone.className).toContain('border-primary');
+      expect(activeDropzone).toHaveAttribute('data-state', 'dragging');
+      expect(activeDropzone.className).not.toContain('border-primary');
     } else {
       expect(activeDropzone.parentElement).toHaveClass('rottay-upload-dragger--drag-over');
     }

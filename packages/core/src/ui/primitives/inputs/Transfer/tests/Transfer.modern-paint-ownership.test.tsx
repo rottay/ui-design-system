@@ -172,8 +172,24 @@ describe('Transfer modern -- geometry lives in the skin, hooks in the DOM', () =
     expect(/\[data-part='pagination-button'\]\s*\{[^}]*block-size:\s*24px/.test(SKIN)).toBe(true);
   });
 
-  it('skin pins: the physical pagination glyphs mirror under [dir=rtl]', () => {
-    expect(/\[dir='rtl'\] \.rottay-transfer\.rottay-transfer--modern \[data-part='pagination-button'\]\s*\{[^}]*transform:\s*scaleX\(-1\)/.test(SKIN)).toBe(true);
+  it('uses the governed auto-mirroring icon role in RTL without mirroring whole buttons', () => {
+    const { container } = renderWithEngine(
+      <ModernTransfer
+        dataSource={FOUR_ITEMS}
+        defaultTargetKeys={['delta', 'echo']}
+        pagination={{ pageSize: 1 }}
+        onChange={vi.fn()}
+      />,
+      'modern'
+    );
+
+    const paginationIcons = container.querySelectorAll(
+      '[data-part="pagination-button"] [data-icon-mirrored="auto"]'
+    );
+    expect(paginationIcons).toHaveLength(4);
+    expect(SKIN_NC).not.toMatch(
+      /\[dir='rtl'\][^{]*\[data-part='(?:pagination|move)-button'\][^{]*\{[^}]*transform:\s*scaleX\(-1\)/
+    );
   });
 
   it('skin pins: search surface reads the certified --ds-input-bg channel, never the generic bg-input (TMM near-black class)', () => {
@@ -215,10 +231,11 @@ describe('Transfer modern -- geometry lives in the skin, hooks in the DOM', () =
     expect(
       /\[data-part='pagination-button'\]:disabled\s*\{[^}]*opacity:\s*var\(--ds-transfer-button-disabled-opacity,\s*var\(--ds-button-disabled-opacity,\s*0\.6\)\)/.test(SKIN_NC)
     ).toBe(true);
-    // The native checkboxes get the cursor correction (no double-dim: the
-    // item row owns the opacity posture).
+    // Checkbox wrappers expose the real disabled state (no impossible
+    // `span:disabled` selector; no double-dim because the item row owns
+    // opacity).
     expect(
-      /\[data-part='panel-item-checkbox'\]:disabled\s*\{[^}]*cursor:\s*var\(--ds-transfer-button-disabled-cursor,/.test(SKIN_NC)
+      /\[data-part='panel-item-checkbox'\]\[data-disabled='true'\]\s*\{[^}]*cursor:\s*var\(--ds-transfer-button-disabled-cursor,/.test(SKIN_NC)
     ).toBe(true);
   });
 
@@ -247,12 +264,30 @@ describe('Transfer modern -- geometry lives in the skin, hooks in the DOM', () =
   });
 
   it('disabled move buttons read the posture in the DOM (engine contract)', () => {
-    renderWithEngine(
-      <ModernTransfer dataSource={FOUR_ITEMS} onChange={vi.fn()} />,
+    const { container } = renderWithEngine(
+      <ModernTransfer
+        dataSource={FOUR_ITEMS}
+        defaultTargetKeys={['delta', 'echo']}
+        pagination={{ pageSize: 1 }}
+        showSearch
+        disabled
+        onChange={vi.fn()}
+      />,
       'modern'
     );
-    // Nothing selected: both move buttons are disabled and carry no inline
-    // opacity/cursor -- the skin owns the posture.
+    // The global posture reaches every interactive region, not only the move
+    // buttons. Paint remains skin-owned.
+    expect(container.querySelector('[data-part="root"]')).toHaveAttribute('data-disabled', 'true');
+    for (const row of Array.from(container.querySelectorAll('[data-part="panel-item"]'))) {
+      expect(row).toHaveAttribute('data-disabled', 'true');
+    }
+    for (const search of Array.from(container.querySelectorAll('[data-part="panel-search"]'))) {
+      expect(search).toBeDisabled();
+    }
+    for (const pagination of Array.from(container.querySelectorAll('[data-part="pagination-button"]'))) {
+      expect(pagination).toBeDisabled();
+    }
+
     const buttons = screen.getAllByRole('button').filter((b) =>
       b.hasAttribute('data-part') && b.getAttribute('data-part') === 'move-button'
     );

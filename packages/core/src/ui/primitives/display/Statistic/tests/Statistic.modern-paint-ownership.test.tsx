@@ -120,7 +120,8 @@ describe('Statistic modern — Daisy drained, skin owns the paint', () => {
     // deepened 40% toward the tenant-safe dark neutral ramp (never a black
     // mix), deriving from the tenant's own hue.
     expect(SKIN).toMatch(
-      /\[data-trend='warning'\][^{]*\{[^}]*color-mix\(\s*in srgb,\s*var\(--ds-color-warning\)\s*60%,\s*var\(--ds-color-neutral-900,\s*#171717\)\s*40%\s*\)/
+      /\[data-trend='warning'\][^{]*\{[^}]*color-mix\(\s*in srgb,\s*var\(--ds-color-warning\)\s*60%,\s*var\(--ds-color-neutral-900\)\s*40%\s*\)/
     );
+    expect(SKIN).not.toContain('var(--ds-color-neutral-900, #171717)');
   });
 });

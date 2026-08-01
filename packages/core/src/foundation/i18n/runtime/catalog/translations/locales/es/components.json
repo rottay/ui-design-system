@@ -51,7 +51,8 @@
     "go_to": "Ir a página",
     "items_per_page": "{count} por página",
     "total_items": "Total {total} elementos",
-    "navigation": "Paginación"
+    "navigation": "Paginación",
+    "size_changer": "Elementos por página"
   },
   "table": {
     "empty": "Sin datos",
@@ -88,7 +89,8 @@
     "max_size": "Tamaño máximo: {size}",
     "accepted_formats": "Formatos aceptados: {formats}",
     "progress": "Progreso de subida: {percent}%",
-    "file_list": "Archivos subidos"
+    "file_list": "Archivos subidos",
+    "retry_named": "Reintentar {name}"
   },
   "datepicker": {
     "placeholder": "Seleccionar fecha",
@@ -122,7 +124,11 @@
     "minutes_label": "Min",
     "seconds_label": "Seg",
     "start_time": "Hora de inicio",
-    "end_time": "Hora de fin"
+    "end_time": "Hora de fin",
+    "am": "a. m.",
+    "pm": "p. m.",
+    "meridiem_label": "a. m./p. m.",
+    "time_picker": "Selector de hora"
   },
   "search": {
     "placeholder": "Buscar...",
@@ -213,14 +219,30 @@
     "navNextMonth": "Mes siguiente",
     "navNextYear": "Año siguiente",
     "gridLabel": "Cuadrícula de fechas",
-    "monthsGridLabel": "Cuadrícula de meses"
+    "monthsGridLabel": "Cuadrícula de meses",
+    "months_short": {
+      "january": "ene",
+      "february": "feb",
+      "march": "mar",
+      "april": "abr",
+      "may": "may",
+      "june": "jun",
+      "july": "jul",
+      "august": "ago",
+      "september": "sep",
+      "october": "oct",
+      "november": "nov",
+      "december": "dic"
+    }
   },
   "colorpicker": {
     "clear": "Limpiar",
     "chooseColor": "Elegir color",
     "hexLabel": "Color hexadecimal",
     "selectColor": "Seleccionar color {color}",
-    "invalidHex": "Introduce un color hexadecimal válido (p. ej. #1677ff)"
+    "invalidHex": "Introduce un color hexadecimal válido (p. ej. #1677ff)",
+    "triggerLabel": "Selector de color",
+    "formatLabel": "Formato de color"
   },
   "qrcode": {
     "loading": "Cargando",
@@ -232,7 +254,9 @@
   },
   "markdownView": {
     "taskChecked": "Tarea completada",
-    "taskUnchecked": "Tarea no completada"
+    "taskUnchecked": "Tarea no completada",
+    "tableRegionLabel": "Tabla",
+    "codeRegionLabel": "Bloque de código"
   },
   "mentions": {
     "not_found": "Sin resultados",
@@ -381,7 +405,8 @@
   },
   "autocomplete": {
     "not_found": "Sin resultados",
-    "clear": "Limpiar"
+    "clear": "Limpiar",
+    "input_label": "Autocompletado"
   },
   "calendarView": {
     "today": "Hoy",
@@ -398,7 +423,8 @@
     "not_found": "Sin datos",
     "clear": "Limpiar",
     "column_label": "Nivel {level}",
-    "search_results": "Resultados de búsqueda"
+    "search_results": "Resultados de búsqueda",
+    "loading": "Cargando..."
   },
   "stepper": {
     "navigation": "Pasos del progreso"
@@ -406,7 +432,8 @@
   "tree": {
     "collapse": "Contraer",
     "expand": "Expandir",
-    "select_node": "Seleccionar {title}"
+    "select_node": "Seleccionar {title}",
+    "label": "Árbol"
   },
   "descriptions": {
     "region_label": "Lista de descripción"
@@ -1011,7 +1038,10 @@
     "actions": "Acciones del asistente"
   },
   "taginput": {
-    "placeholder": "Escribe y presiona Enter"
+    "placeholder": "Escribe y presiona Enter",
+    "feedback_duplicate": "La etiqueta ya existe",
+    "feedback_max": "Se alcanzó el número máximo de etiquetas",
+    "feedback_invalid": "La etiqueta no es válida"
   },
   "tenantPreview": {
     "colorPalette": "Paleta de color",
@@ -1273,5 +1303,26 @@
   "viewModeSwitcher": {
     "groupLabel": "Modo de vista",
     "disabledWithReason": "{label} (no disponible: {reason})"
+  },
+  "image": {
+    "failedToLoad": "No se pudo cargar la imagen"
+  },
+  "statistic": {
+    "trendPositive": "En aumento",
+    "trendNegative": "En descenso",
+    "trendWarning": "Advertencia"
+  },
+  "passwordInput": {
+    "strength_weak": "Débil",
+    "strength_fair": "Aceptable",
+    "strength_good": "Buena",
+    "strength_strong": "Fuerte"
+  },
+  "meter": {
+    "threshold": {
+      "optimal": "rango óptimo",
+      "suboptimal": "rango subóptimo",
+      "critical": "rango crítico"
+    }
   }
 }

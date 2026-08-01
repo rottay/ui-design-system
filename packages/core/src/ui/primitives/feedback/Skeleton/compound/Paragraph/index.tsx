@@ -109,7 +109,7 @@ export interface SkeletonParagraphProps {
  * @internal
  */
 const shimmerStyle: React.CSSProperties = {
-  animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration, 1.5s) infinite',
+  animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration) infinite',
 };
 
 // ============================================================================
@@ -152,31 +152,27 @@ export const SkeletonParagraph = forwardRef<HTMLDivElement, SkeletonParagraphPro
     // Style Generation
     // -------------------------------------------------------------------------
 
-    /**
-     * Container styles for vertical line stacking.
-     */
-    const containerStyle: React.CSSProperties = {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '8px',
-      ...style,
-    };
+    // The column stack, the line gap and the uniform line height paint from
+    // the unlayered skeleton-compounds skin; inline style carries only the
+    // caller's `style` on the root and, on the trailing line, the instance
+    // `lastLineWidth` prop (contract geometry) plus the canon animation.
+    const containerStyle: React.CSSProperties = { ...style };
 
     // -------------------------------------------------------------------------
     // Render
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} data-part="root" className={`rottay-skeleton-paragraph ${className}`} style={containerStyle}>
+      <div ref={ref} data-part="root" className={`rottay-skeleton-paragraph ${className}`} style={containerStyle} aria-hidden="true">
         {Array.from({ length: lines }).map((_, index) => (
           <div
             key={index}
             data-part="line"
             style={{
               ...shimmerStyle,
-              height: '16px',
-              // Last line uses configurable width for natural trailing appearance
-              width: index === lines - 1 ? lastLineWidth : '100%',
+              // Non-last lines stretch to the column (skin-owned); only the
+              // trailing line carries the instance `lastLineWidth` prop.
+              ...(index === lines - 1 ? { width: lastLineWidth } : {}),
             }}
           />
         ))}

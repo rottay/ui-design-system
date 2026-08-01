@@ -120,7 +120,7 @@ describe('HoverCard modern engine — the skin owns the drained paint', () => {
 
   it('owns the card chrome with the shipped values as fallbacks', () => {
     expect(SKIN).toContain('inline-size: var(--ds-hover-card-width, 18rem);');
-    expect(SKIN).toContain('padding: var(--ds-hover-card-padding, var(--ds-spacing-4, 1rem));');
+    expect(SKIN).toContain('padding: var(--ds-hover-card-padding, var(--ds-spacing-4));');
   });
 
   it('shares the lane overlay material register with Dropdown (Pass-2 coherence)', () => {
@@ -129,7 +129,8 @@ describe('HoverCard modern engine — the skin owns the drained paint', () => {
     expect(SKIN).toContain('var(--ds-surface-card)');
     expect(SKIN).toContain('var(--ds-hover-card-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%))');
     expect(SKIN).toContain('var(--ds-hover-card-shadow, var(--ds-elevation-3))');
-    expect(SKIN).toContain('var(--ds-hover-card-radius, var(--ds-radius-xl, 16px))');
+    expect(SKIN).toContain('var(--ds-hover-card-radius, var(--ds-radius-xl))');
+    expect(SKIN).not.toContain('var(--ds-radius-xl, 16px)');
     expect(SKIN).not.toContain('background: var(--ds-surface-card);');
   });
 });

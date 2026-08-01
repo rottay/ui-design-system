@@ -161,67 +161,28 @@ export function CardImage({
 
   // `radius` passes an unrecognised value straight through, so the resolved radius
   // is an open string no rule can enumerate; card-compounds.css reads it as a custom
-  // property and overrides the corner pair each position rounds.
+  // property and overrides the corner pair each position rounds. The same holds for
+  // the per-instance aspect ratio and height: open contract values stay inline as
+  // documented instance geometry; every static layout/paint decision (position,
+  // sizing, overflow, absolute regions) is owned by card-compounds.css.
   const containerStyle: CSSProperties = {
-    position: 'relative',
-    width: '100%',
+    // A cover image is pinned to the card bounds by the skin ([data-position='cover']
+    // sets block-size: 100%); the historical inline cover spread also overrode any
+    // caller height, so the prop must not leak back in through this inline value.
     height:
-      typeof height === 'number'
-        ? `${height}px`
-        : height ?? (aspectRatio ? undefined : 'var(--ds-card-image-height, 12.5rem)'),
-    aspectRatio: aspectRatio
-      ? `var(--ds-card-image-aspect-ratio, ${aspectRatio})`
-      : undefined,
+      position === 'cover'
+        ? undefined
+        : typeof height === 'number'
+          ? `${height}px`
+          : height ?? (aspectRatio ? undefined : 'var(--ds-card-image-height, 12.5rem)'),
     '--ds-card-image-aspect-ratio': aspectRatio,
-    overflow: 'hidden',
     '--ds-card-image-radius': RADIUS_MAP[radius] || radius,
-    ...(position === 'cover' && {
-      position: 'absolute',
-      inset: 0,
-      height: '100%',
-      zIndex: 0,
-    }),
     ...style,
   } as CSSProperties;
 
   const imageStyle: CSSProperties = {
-    width: '100%',
-    height: '100%',
     objectFit,
-    display: 'block',
   };
-
-  const placeholderStyle: CSSProperties = {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  };
-
-  const overlayStyle: CSSProperties = {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 1,
-  };
-
-  const gradientStyle: CSSProperties = gradient ? {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 1,
-  } : {};
 
   return (
     <div
@@ -238,7 +199,6 @@ export function CardImage({
       {(!imageLoaded || imageError) && (
         <div
           data-part="placeholder"
-          style={placeholderStyle}
           role={imageError || loadingLabel ? 'status' : undefined}
           aria-live={imageError || loadingLabel ? 'polite' : undefined}
           aria-label={imageError ? (errorLabel ?? alt) : loadingLabel}
@@ -271,11 +231,11 @@ export function CardImage({
       )}
 
       {/* Gradient overlay */}
-      {gradient && <div data-part="gradient" style={gradientStyle} aria-hidden="true" />}
+      {gradient && <div data-part="gradient" aria-hidden="true" />}
 
       {/* Custom overlay content */}
       {overlay && (
-        <div className="rottay-card-image-overlay" data-part="overlay" style={overlayStyle}>
+        <div className="rottay-card-image-overlay" data-part="overlay">
           {overlay}
         </div>
       )}

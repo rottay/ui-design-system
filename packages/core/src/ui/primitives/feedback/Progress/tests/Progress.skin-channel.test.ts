@@ -22,8 +22,23 @@ const skin = readFileSync(
   ),
   'utf8',
 );
+const arcSkin = readFileSync(
+  resolve(
+    HERE,
+    '../../../../../foundation/tokens/css/presentation/components/arc.css',
+  ),
+  'utf8',
+);
 
 describe('Progress modern skin forced-colors channel (K2-V sweep)', () => {
+  it('delegates circular paint to the single shared arc substrate', () => {
+    expect(arcSkin).toContain('conic-gradient(');
+    expect(arcSkin).toContain('.ds-arc::before');
+    expect(skin).not.toContain('conic-gradient(');
+    expect(skin).not.toContain('@property');
+    expect(skin).toContain('--_ds-arc-value: var(--ds-progress-circle-value);');
+  });
+
   it('maps the progress parts to system colors under forced-colors', () => {
     expect(skin).toContain('@media (forced-colors: active)');
     expect(skin).toContain("[data-part='fill'] {\n    background: ButtonFace;");

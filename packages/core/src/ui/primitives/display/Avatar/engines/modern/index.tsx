@@ -15,10 +15,11 @@
 
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import type { AvatarProps } from "../../contracts";
 import { AVATAR_DEFAULTS, TONE_TO_AVATAR_VARIANT } from "../../contracts";
 import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
+import { EntityPersonIcon } from "@/graphics/icons/presentation/semantic/generated/roles/entity-person";
 
 /** Accessible-name fallbacks for the status dot; the i18n catalogue wins when
  * a provider is mounted, the English floor keeps standalone renders honest. */
@@ -94,10 +95,22 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
 
   // Track image load failures so we can fall back to initials/children
   const [imageError, setImageError] = useState(false);
+  // Track the load lifecycle: the mask's panel fill is the reserved-geometry
+  // placeholder and the skin fades the image in once `data-loaded` lands,
+  // so a slow src never pops and never shifts layout (fixed-size mask).
+  const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
 
-  // Reset error state whenever the src URL changes, giving the new image a chance to load
+  // Reset error/load state whenever the src URL changes, giving the new image
+  // a chance to load. An image that finished loading BEFORE this commit (cache
+  // hit, SSR hydration) never re-fires `load` -- `complete` + naturalWidth is
+  // the only observable left for that case.
   useEffect(() => {
     setImageError(false);
+    setLoaded(false);
+    if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
+      setLoaded(true);
+    }
   }, [src]);
 
   const handleError = () => {
@@ -106,6 +119,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
   };
 
   const handleLoad = () => {
+    setLoaded(true);
     onLoad?.();
   };
 
@@ -162,6 +176,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
       data-bordered={bordered ? "true" : undefined}
       data-ring={hasRing ? "true" : undefined}
       data-status={status}
+      data-loaded={loaded ? "true" : undefined}
       data-interactive={isInteractive ? "true" : undefined}
       role={isInteractive ? "button" : undefined}
       tabIndex={isInteractive ? 0 : undefined}
@@ -190,6 +205,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
           // placeholder (owner directive 2026-07-28); a caller-provided
           // `alt`/`name` always wins.
           <img
+            ref={imgRef}
             data-part="img"
             src={src}
             alt={alt || name || ""}
@@ -207,7 +223,14 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
               ...(textColor ? { color: textColor } : {}),
             }}
           >
-            {displayInitials || children}
+            {/*
+              Empty-fallback anatomy (P2): with no initials and no children the
+              tile used to paint a blank disc. The governed entity.person role
+              fills the anatomy instead -- decorative like the nameless img law
+              above, sized and inked by the declared
+              `--ds-avatar-fallback-icon-*` channels through the skin.
+            */}
+            {displayInitials || children || <EntityPersonIcon decorative />}
           </div>
         )}
       </div>

@@ -8,7 +8,7 @@
  * Modern is the premium Rottay-native engine. All paint lives in the
  * `rate.css` modern skin (layer `rottay-engines`), keyed on the public
  * anatomy (`data-part`, `data-size`, `data-state`, `data-focused`,
- * `data-disabled`, `data-readonly`); this file owns semantics and behavior
+ * `data-disabled`, `data-readonly`, `data-previewing`); this file owns semantics and behavior
  * only. No DaisyUI classes are consumed -- the `rating`/`rating-{size}`
  * projection was drained in the K2-V pass, which also fixed the malformed
  * inline size hatch (`var(--ds-rate-md-size)px`, invalid CSS) that had made
@@ -224,20 +224,33 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     /**
      * Handle keyboard navigation on a star (APG radio-group: arrows move
      * BOTH the selection and the focus to the star the new value falls on).
+     *
+     * Under `direction="rtl"` the horizontal arrows mirror (contract:
+     * "direction affects keyboard navigation"): the fill leads from the
+     * right edge, so ArrowLeft steps the value UP and ArrowRight steps it
+     * DOWN, keeping the key's visual motion aligned with the value delta.
+     * Vertical arrows and Home/End stay direction-neutral (APG).
      */
     const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
       if (!keyboard || !isInteractive) return;
 
       let newValue = currentValue || 0;
       const step = allowHalf ? 0.5 : 1;
+      const horizontalStep = direction === 'rtl' ? -step : step;
 
       switch (e.key) {
         case 'ArrowRight':
+          e.preventDefault();
+          newValue = Math.min(count, Math.max(0, newValue + horizontalStep));
+          break;
         case 'ArrowUp':
           e.preventDefault();
           newValue = Math.min(count, newValue + step);
           break;
         case 'ArrowLeft':
+          e.preventDefault();
+          newValue = Math.min(count, Math.max(0, newValue - horizontalStep));
+          break;
         case 'ArrowDown':
           e.preventDefault();
           newValue = Math.max(0, newValue - step);
@@ -261,7 +274,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       // Roving: focus lands on the star owning the new value (2.5 → star 3;
       // 0 → first star, since no radio is checked).
       focusStar(Math.min(count, Math.max(1, Math.round(newValue))));
-    }, [keyboard, isInteractive, currentValue, count, allowHalf, isControlled, onChange, focusStar]);
+    }, [keyboard, isInteractive, currentValue, count, allowHalf, direction, isControlled, onChange, focusStar]);
 
     // -------------------------------------------------------------------------
     // Render Helpers
@@ -424,6 +437,13 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
         data-size={size}
         data-disabled={disabled ? 'true' : 'false'}
         data-readonly={readOnly ? 'true' : 'false'}
+        /* Hover-preview state: while the pointer floats a candidate value the
+           root advertises it so the skin can tint the candidate set with the
+           governed hover channel instead of painting it identical to the
+           committed value. hoverValue only ever goes non-null through
+           handleHover, which guards on isInteractive, so a disabled/readOnly
+           widget never advertises a preview. */
+        data-previewing={hoverValue !== null ? 'true' : undefined}
         data-testid="rate"
         /* APG: a radiogroup carries NO aria-valuenow/min/max (axe
            aria-allowed-attr, critical) -- the legacy triad was dropped in the

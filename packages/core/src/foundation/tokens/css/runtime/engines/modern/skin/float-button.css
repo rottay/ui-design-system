@@ -35,13 +35,23 @@
  * (8px 12px), badge dot offsets/size (-4px, 8px) and badge count geometry
  * (offsets -8px, padding 1px/6px, font-size 11px, line-height 16px) were raw
  * inline literals; they are now token-bound rules below with VERBATIM
- * fallbacks, riding the established `--ds-floatbutton-*` token family. Only
- * structural layout (inline-flex centering, position: relative) and the Group
- * trigger's zIndex stay inline in the engine.
+ * fallbacks, riding the established `--ds-floatbutton-*` token family.
+ * P2-20 drained the REST of the engine's inline paint: trigger structure
+ * (inline-flex centering, position: relative, cursor), the Group trigger's
+ * zIndex literal, the panel's pinned opacity/translate utility pair, and the
+ * `end-6` placement utilities — inline `style` is now reserved for
+ * runtime-measured geometry only.
  *
- * RTL (K4-C): the engine's fixed placement uses the LOGICAL `end-6` utility
- * (inset-inline-end), so Group and BackTop mirror under RTL. The badge offsets
- * below are `inset-inline-end`, so badges mirror too.
+ * RTL (K4-C + P2-20): the fixed placement is `inset-inline-end` below, so
+ * Group and BackTop mirror under RTL without any engine utility. The badge
+ * offsets are `inset-inline-end` too, so badges mirror as well.
+ *
+ * P2-20 CRITICAL FIX: the Group root element carried only the `end-6`
+ * utility — NEVER the canonical `rottay-float-button rottay-float-button--modern`
+ * scope pair — so every rule below keyed on `.rottay-float-button--modern[data-part='root']`
+ * or `.rottay-float-button--modern [data-part='panel']` was DEAD PAINT for
+ * the group (no fixed placement, no column-reverse, no panel motion, no
+ * visibility gate). The engine now stamps the scope pair on the root.
  *
  * SCOPE: all THREE render sites (`FloatButton`, `Group`'s trigger, `BackTop`)
  * carry `rottay-float-button rottay-float-button--modern` +
@@ -51,14 +61,36 @@
  * SPECIFICITY (P-48): `border: none` is a color-free reset, exempt from the
  * (0,4,0) border floor. Everything else is non-border paint and wins unlayered
  * at (0,3,0)+.
+ *
+ * B9 ADDENDUM (pass 2):
+ * - The CLOSED Group panel now also gates `visibility` on `data-open`
+ *   (delayed-hide choreography): `opacity-0` alone kept the invisible child
+ *   buttons in the keyboard tab order. Opening restores visibility at 0s;
+ *   closing hides after the fade; reduced-motion's `transition: none` flips
+ *   it instantly to the correct final state. The engine mirrors the state
+ *   with `aria-hidden`.
+ * - Badge counts use tabular numerals (aligned metric glyphs on the small
+ *   pill), and the trigger gains the touch idiom (`touch-action:
+ *   manipulation` + transparent tap highlight, link.css precedent).
  */
 
 .rottay-float-button.rottay-float-button--modern[data-part='trigger'] {
+  /* Trigger structure (P2-20 — drained from the engine's inline `style`
+     literals, which inline paint reserves for runtime-measured geometry).
+     position:relative anchors the badge slots; the unlayered skin still
+     yields to a caller's inline `style`. */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
   border: none;
   box-shadow: var(--ds-elevation-2);
   font-family: var(--ds-font-family-base);
   font-weight: var(--ds-button-font-weight);
   font-size: var(--ds-button-md-font-size);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   transition: var(--ds-button-transition);
   will-change: transform;
 }
@@ -85,12 +117,12 @@
         44px coarse floor is an absolute law floor and stays unscaled. ---- */
 .rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle'] {
   border-radius: 50%;
-  inline-size: calc(var(--ds-floatbutton-size, 40px) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-floatbutton-size, 40px) * var(--ds-density-effective-scale, 1));
+  inline-size: calc(var(--ds-floatbutton-size, 40px) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-floatbutton-size, 40px) * var(--ds-density-effective-scale));
 }
 .rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-shape='circle']) {
   border-radius: var(--ds-radius-lg);
-  padding: calc(var(--ds-floatbutton-padding-block, 8px) * var(--ds-density-effective-scale, 1)) calc(var(--ds-floatbutton-padding-inline, 12px) * var(--ds-density-effective-scale, 1));
+  padding: calc(var(--ds-floatbutton-padding-block, 8px) * var(--ds-density-effective-scale)) calc(var(--ds-floatbutton-padding-inline, 12px) * var(--ds-density-effective-scale));
 }
 /* K4-C Pass 2: the 40px circle misses the 44px coarse-pointer law; bump the
    footprint under coarse pointers only (square shape already exceeds it via
@@ -137,31 +169,45 @@
   padding: var(--ds-floatbutton-badge-padding-block, 1px) var(--ds-floatbutton-badge-padding-inline, 6px);
   font-size: var(--ds-floatbutton-badge-font-size, 11px);
   line-height: var(--ds-floatbutton-badge-line-height, 16px);
+  /* Counts are metrics: tabular glyphs keep the pill geometry stable as the
+     count changes (B9 pass 2). */
+  font-variant-numeric: tabular-nums;
   border-radius: 9999px;
   color: var(--ds-color-text-on-primary);
 }
 
 /* ---- description text (was the engine's `text-xs` utility). ---- */
 .rottay-float-button--modern [data-part='description'] {
-  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-size: var(--ds-font-size-xs);
 }
 
-/* ---- Group root: fixed placement (the engine keeps ONLY the pinned logical
-        `end-6` inline-offset class). The block offset rides the spacing ramp
-        plus the safe-area gutter (sheet.css precedent), and the z rides the
-        family-local channel. `flex-col-reverse` keeps the trigger at the
-        visual bottom so items expand upward. ---- */
+/* ---- Group root: fixed placement (P2-20: the engine's `end-6` utility is
+        drained — this file now owns the logical inline-end offset too, and
+        the root finally carries the canonical scope pair so this rule
+        MATCHES; without it the whole root/panel block was dead paint). The
+        block offset rides the spacing ramp plus the safe-area gutter
+        (sheet.css precedent), and the z rides the family-local channel.
+        `flex-col-reverse` keeps the trigger at the visual bottom so items
+        expand upward. ---- */
 .rottay-float-button--modern[data-part='root'] {
   position: fixed;
   inset-block-end: calc(
     var(--ds-floatbutton-offset-block-end, var(--ds-spacing-6))
     + env(safe-area-inset-bottom, 0px)
   );
+  inset-inline-end: var(--ds-spacing-6);
   z-index: var(--ds-z-floatbutton, 1000);
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
-  gap: var(--ds-spacing-2, 0.5rem);
+  gap: var(--ds-spacing-2);
+}
+
+/* ---- Group trigger: local stacking above the expanding panel (was the
+        engine's inline zIndex literal, P2-20). position:relative comes from
+        the base trigger rule, so the z applies. ---- */
+.rottay-float-button--modern[data-part='root'] > [data-part='trigger'] {
+  z-index: var(--ds-z-index-relative-top);
 }
 
 /* ---- BackTop trigger: same fixed placement, keyed on its data-placement. ---- */
@@ -171,23 +217,49 @@
     var(--ds-floatbutton-offset-block-end, var(--ds-spacing-6))
     + env(safe-area-inset-bottom, 0px)
   );
+  inset-inline-end: var(--ds-spacing-6);
   z-index: var(--ds-z-floatbutton, 1000);
 }
 
 /* ---- Group panel: layout + the open/close motion (was `flex flex-col
-        items-center gap-2 transition-all duration-200`). The opacity/translate
-        VALUES stay pinned on the engine's class toggle; only the cadence
-        lives here, on canonical rungs. ---- */
+        items-center gap-2 transition-all duration-200`; the opacity/translate
+        VALUES themselves moved here in P2-20 — the engine's pinned utility
+        pair is drained and `data-open` is the single state hook). The closed
+        travel rides the experiment
+        `--_ds-proto-float-button-panel-closed-offset` (fallback 1rem, the
+        drained translate-y-4 value). `visibility` joins the choreography
+        (B9 pass 2): the CLOSED panel is hidden, which removes its invisible
+        child buttons from the keyboard tab order (`opacity:0` alone kept
+        them focusable). Opening restores visibility at 0s delay; closing
+        hides only after the fade completes. ---- */
 .rottay-float-button--modern [data-part='panel'] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--ds-spacing-2, 0.5rem);
+  gap: var(--ds-spacing-2);
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
   transition:
     opacity var(--ds-floatbutton-panel-duration, var(--ds-motion-normal))
       var(--ds-floatbutton-panel-timing, var(--ds-motion-ease-out)),
     transform var(--ds-floatbutton-panel-duration, var(--ds-motion-normal))
-      var(--ds-floatbutton-panel-timing, var(--ds-motion-ease-out));
+      var(--ds-floatbutton-panel-timing, var(--ds-motion-ease-out)),
+    visibility 0s linear 0s;
+}
+
+.rottay-float-button--modern [data-part='panel'][data-open='false'] {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(var(--_ds-proto-float-button-panel-closed-offset, 1rem));
+  pointer-events: none;
+  transition:
+    opacity var(--ds-floatbutton-panel-duration, var(--ds-motion-normal))
+      var(--ds-floatbutton-panel-timing, var(--ds-motion-ease-out)),
+    transform var(--ds-floatbutton-panel-duration, var(--ds-motion-normal))
+      var(--ds-floatbutton-panel-timing, var(--ds-motion-ease-out)),
+    visibility 0s linear
+      var(--ds-floatbutton-panel-duration, var(--ds-motion-normal));
 }
 
 /* ---- reduced motion: panel opens instantly. ---- */

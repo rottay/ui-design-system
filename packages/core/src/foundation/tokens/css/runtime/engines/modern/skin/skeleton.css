@@ -46,7 +46,7 @@
      `--ds-skeleton-animation-duration` (1.5s) stays the primary channel and
      `--ds-motion-attention` is the governed stand-in. */
   animation: var(--ds-skeleton-animation-name, ds-skeleton-shimmer)
-    var(--ds-skeleton-animation-duration, var(--ds-motion-attention, 1.5s))
+    var(--ds-skeleton-animation-duration, var(--ds-motion-attention))
     var(--ds-skeleton-animation-easing, var(--ds-motion-ease-standard, ease-in-out))
     infinite;
 }
@@ -79,10 +79,17 @@
 /* ---- shape-variant root radius (circular/rounded/rectangular) ---- */
 .rottay-skeleton.rottay-skeleton--modern[data-part='root'] {
   border-radius: var(--ds-skeleton-shape-radius);
+  /* Geometry reserve (B7-02): width/height are OPTIONAL contract props, so a
+     bare shape variant used to collapse to a 0-block-size invisible block and
+     the incoming content jumped. The floor keeps the placeholder perceivable
+     at one governed line height; an explicit height always wins over the
+     min. */
+  min-block-size: var(--ds-skeleton-line-height, 1rem);
 }
 
-/* ---- avatar radius (circle/rounded) ---- */
+/* ---- avatar radius (circle/rounded) + squish guard (was inline flexShrink) ---- */
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='avatar'] {
+  flex-shrink: 0;
   border-radius: var(--ds-skeleton-avatar-radius);
 }
 
@@ -91,7 +98,7 @@
         can now retune the whole anatomy from one place. ---- */
 .rottay-skeleton-wrapper.rottay-skeleton--modern[data-part='root'] {
   display: flex;
-  gap: var(--ds-skeleton-gap, var(--ds-spacing-md, 1rem));
+  gap: var(--ds-skeleton-gap, var(--ds-spacing-md));
 }
 
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='content'] {
@@ -99,7 +106,7 @@
   min-inline-size: 0;
   flex: 1 1 auto;
   align-content: start;
-  gap: var(--ds-skeleton-line-gap, var(--ds-spacing-xs, 0.5rem));
+  gap: var(--ds-skeleton-line-gap, var(--ds-spacing-xs));
 }
 
 /* Title line is 60% width to visually distinguish it from body text. */
@@ -121,7 +128,7 @@
 /* ---- title/line corner radius (DaisyUI's `.skeleton` no longer supplies it) ---- */
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='title'],
 .rottay-skeleton-wrapper.rottay-skeleton--modern [data-part='line'] {
-  border-radius: var(--ds-skeleton-line-radius, var(--ds-radius-sm, 4px));
+  border-radius: var(--ds-skeleton-line-radius, var(--ds-radius-sm));
 }
 
 /* ---- RTL: the wave sweeps against the reading direction by default

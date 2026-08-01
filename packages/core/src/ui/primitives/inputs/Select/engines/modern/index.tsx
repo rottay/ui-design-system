@@ -88,6 +88,7 @@ import {
 const EN_FALLBACK = {
   placeholder: 'Select an option',
   noOptions: 'No options available',
+  loading: 'Loading options...',
   clear: 'Clear selection',
   search: 'Search...',
   remove: 'Remove',
@@ -251,6 +252,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   // Use translation as default, allow prop override
   const displayPlaceholder = placeholder ?? tOr('select.placeholder', EN_FALLBACK.placeholder);
   const noOptionsText = tOr('select.no_options', EN_FALLBACK.noOptions);
+  const loadingText = tOr('select.loading', EN_FALLBACK.loading);
 
   // Resolve aliases
   const isClearable = clearable || allowClear;
@@ -288,6 +290,30 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const [dropdownEl, setDropdownEl] = useState<HTMLDivElement | null>(null);
   const [dropdownWidth, setDropdownWidth] = useState(0);
   const [resolvedPlacement, setResolvedPlacement] = useState<'top' | 'bottom'>('bottom');
+
+  /**
+   * Keyboard-driven focus navigation marker: pointer hover also moves
+   * `focusedIndex`, but only keyboard moves are allowed to scroll the listbox
+   * (a hover-followed-by-scroll-yank would fight the pointer).
+   */
+  const keyboardNavRef = useRef(false);
+  /**
+   * Focus jump queued while the dropdown was closed (closed-list type-ahead
+   * opens the panel): the open-reset effect applies this index instead of
+   * recentering on the selected/first option, then clears it.
+   */
+  const pendingFocusRef = useRef<number | null>(null);
+  /**
+   * Listbox type-ahead buffer (WAI pattern): printable characters accumulate
+   * for a short window and jump focus to the first matching option; repeated
+   * identical characters cycle through the options that start with that
+   * character. Inert while `searchable` — keystrokes belong to the filter
+   * input there.
+   */
+  const typeaheadRef = useRef<{ buffer: string; timer: ReturnType<typeof setTimeout> | null }>({
+    buffer: '',
+    timer: null,
+  });
 
   const setContainerNode = useCallback((node: HTMLDivElement | null) => {
     containerRef.current = node;
@@ -461,16 +487,93 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     [tokenSeparators, multiple, allOptions, internalValue, onChange, onSearch]
   );
 
+  // Type-ahead: find the next selectable option whose label starts with the
+  // query, searching forward from `fromPos` (a position inside
+  // `selectableIndices`) and wrapping around the list once.
+  const findTypeaheadIndex = useCallback(
+    (query: string, fromPos: number): number => {
+      const count = selectableIndices.length;
+      if (count === 0 || !query) return -1;
+      for (let step = 0; step < count; step += 1) {
+        const pos = (fromPos + step + count) % count;
+        const itemIndex = arrayValueAt(selectableIndices, pos) ?? -1;
+        const item = arrayValueAt(renderableItems, itemIndex);
+        if (item?.type === 'option' && item.option) {
+          const labelText = getLabelText(item.option.label).toLowerCase();
+          if (labelText.startsWith(query)) return itemIndex;
+        }
+      }
+      return -1;
+    },
+    [selectableIndices, renderableItems]
+  );
+
+  // Accumulate a printable character into the type-ahead buffer and move
+  // focus to the matching option. Returns the matched renderable index, or
+  // -1 when nothing matches (or when searchable owns the keystrokes).
+  const applyTypeahead = useCallback(
+    (char: string): number => {
+      if (isSearchable || selectableIndices.length === 0) return -1;
+      const state = typeaheadRef.current;
+      if (state.timer) clearTimeout(state.timer);
+      const next = (state.buffer + char).toLowerCase();
+      state.timer = setTimeout(() => {
+        typeaheadRef.current.buffer = '';
+        typeaheadRef.current.timer = null;
+      }, 500);
+
+      const currentPos = selectableIndices.indexOf(focusedIndex);
+      // A run of one repeated character ("aaa") cycles through the options
+      // starting with "a" instead of pinning the first three-a match.
+      const isRepeatedRun = next.length > 1 && next.split('').every((c) => c === next[0]);
+      const query = isRepeatedRun ? char.toLowerCase() : next;
+      const fromPos = isRepeatedRun ? currentPos + 1 : Math.max(currentPos, 0);
+      let match = findTypeaheadIndex(query, fromPos);
+      if (match < 0 && !isRepeatedRun && next.length > 1) {
+        // The accumulated buffer matched nothing: retry as a fresh
+        // single-character search from the next position.
+        match = findTypeaheadIndex(char.toLowerCase(), currentPos + 1);
+        if (match >= 0) state.buffer = char.toLowerCase();
+        else state.buffer = '';
+      } else {
+        state.buffer = next;
+      }
+      if (match < 0) return -1;
+      keyboardNavRef.current = true;
+      setFocusedIndex(match);
+      return match;
+    },
+    [isSearchable, selectableIndices, focusedIndex, findTypeaheadIndex]
+  );
+
   // Keyboard navigation
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (disabled) return;
+      // The click guard and the keyboard guard agree: while disabled or
+      // loading the trigger stays shut (async postures live INSIDE an
+      // already-open panel, not behind a fresh open).
+      if (disabled || (loading && !isOpen)) return;
+      const isPrintable =
+        e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey;
       if (!isOpen) {
         if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           setIsOpen(true);
           if (selectableIndices.length > 0) {
+            keyboardNavRef.current = true;
             setFocusedIndex(arrayValueAt(selectableIndices, 0) ?? -1);
+          }
+          return;
+        }
+        // Combobox type-ahead: a printable character opens the list and jumps
+        // to the matching option (native <select> parity). The open-reset
+        // effect below honors `pendingFocusRef` so the jump survives.
+        if (isPrintable && !isSearchable) {
+          e.preventDefault();
+          const match = applyTypeahead(e.key);
+          if (match >= 0) {
+            pendingFocusRef.current = match;
+            setIsOpen(true);
           }
         }
         return;
@@ -481,6 +584,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           e.preventDefault();
           const currentPos = selectableIndices.indexOf(focusedIndex);
           const nextPos = currentPos < selectableIndices.length - 1 ? currentPos + 1 : 0;
+          keyboardNavRef.current = true;
           setFocusedIndex(arrayValueAt(selectableIndices, nextPos) ?? -1);
           break;
         }
@@ -488,12 +592,30 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           e.preventDefault();
           const currentPos = selectableIndices.indexOf(focusedIndex);
           const prevPos = currentPos > 0 ? currentPos - 1 : selectableIndices.length - 1;
+          keyboardNavRef.current = true;
+          setFocusedIndex(arrayValueAt(selectableIndices, prevPos) ?? -1);
+          break;
+        }
+        case 'PageDown': {
+          e.preventDefault();
+          const currentPos = selectableIndices.indexOf(focusedIndex);
+          const nextPos = Math.min(selectableIndices.length - 1, Math.max(currentPos, 0) + 10);
+          keyboardNavRef.current = true;
+          setFocusedIndex(arrayValueAt(selectableIndices, nextPos) ?? -1);
+          break;
+        }
+        case 'PageUp': {
+          e.preventDefault();
+          const currentPos = selectableIndices.indexOf(focusedIndex);
+          const prevPos = Math.max(0, Math.max(currentPos, 0) - 10);
+          keyboardNavRef.current = true;
           setFocusedIndex(arrayValueAt(selectableIndices, prevPos) ?? -1);
           break;
         }
         case 'Home': {
           e.preventDefault();
           if (selectableIndices.length > 0) {
+            keyboardNavRef.current = true;
             setFocusedIndex(arrayValueAt(selectableIndices, 0) ?? -1);
           }
           break;
@@ -501,6 +623,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         case 'End': {
           e.preventDefault();
           if (selectableIndices.length > 0) {
+            keyboardNavRef.current = true;
             setFocusedIndex(arrayValueAt(selectableIndices, -1) ?? -1);
           }
           break;
@@ -515,22 +638,77 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           }
           break;
         }
+        case ' ': {
+          // Outside the searchable branch the filter input cannot own the
+          // keystroke, so Space selects like Enter (native listbox parity).
+          if (!isSearchable) {
+            e.preventDefault();
+            if (focusedIndex >= 0) {
+              const item = arrayValueAt(renderableItems, focusedIndex);
+              if (item?.type === 'option' && item.option && !item.option.disabled) {
+                handleSelect(item.option.value, item.option);
+              }
+            }
+          }
+          break;
+        }
+        case 'Backspace': {
+          // Tags parity with the rustic engine: an empty filter plus
+          // Backspace peels the last selected tag (multiple mode only).
+          if (multiple && searchValue === '' && internalValue.length > 0) {
+            e.preventDefault();
+            const lastValue = internalValue[internalValue.length - 1];
+            const lastOption = allOptions.find((opt) => opt.value === lastValue);
+            if (lastOption && !lastOption.disabled) {
+              handleSelect(lastOption.value, lastOption);
+            }
+          }
+          break;
+        }
         case 'Escape': {
           e.preventDefault();
           setIsOpen(false);
           setFocusedIndex(-1);
           break;
         }
-        default:
+        default: {
+          // Open-list type-ahead: printable characters jump focus to the
+          // matching option. Searchable mode leaves them to the filter input.
+          if (isPrintable && !isSearchable) {
+            e.preventDefault();
+            applyTypeahead(e.key);
+          }
           break;
+        }
       }
     },
-    [isOpen, focusedIndex, selectableIndices, renderableItems, handleSelect, disabled]
+    [
+      isOpen,
+      focusedIndex,
+      selectableIndices,
+      renderableItems,
+      handleSelect,
+      disabled,
+      loading,
+      isSearchable,
+      multiple,
+      searchValue,
+      internalValue,
+      allOptions,
+      applyTypeahead,
+    ]
   );
 
   // Reset focused index when dropdown opens/closes
   useEffect(() => {
     if (isOpen && selectableIndices.length > 0) {
+      // A closed-list type-ahead already picked the target: keep it.
+      const pending = pendingFocusRef.current;
+      pendingFocusRef.current = null;
+      if (pending !== null && selectableIndices.includes(pending)) {
+        setFocusedIndex(pending);
+        return;
+      }
       const selectedIdx = renderableItems.findIndex(
         (item) => item.type === 'option' && item.option && internalValue.includes(item.option.value)
       );
@@ -543,6 +721,39 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       setFocusedIndex(-1);
     }
   }, [isOpen]);
+
+  // Keep the keyboard-focused option inside the visible window. Pointer
+  // hover moves `focusedIndex` too, but only keyboard navigation may scroll
+  // (`keyboardNavRef`); the guard also covers jsdom, where scrollIntoView is
+  // not implemented. In virtual mode the window follows the focused row
+  // instead (scrollIntoView cannot reach unrendered rows).
+  useEffect(() => {
+    if (!isOpen || focusedIndex < 0 || !keyboardNavRef.current) return;
+    if (virtualEnabled) {
+      const list = dropdownRef.current?.querySelector<HTMLElement>("[data-part='option-list']");
+      if (list) {
+        const rowTop = focusedIndex * itemHeight;
+        const rowBottom = rowTop + itemHeight;
+        if (rowTop < list.scrollTop) {
+          list.scrollTop = rowTop;
+        } else if (rowBottom > list.scrollTop + list.clientHeight) {
+          list.scrollTop = rowBottom - list.clientHeight;
+        }
+      }
+      return;
+    }
+    const optionEl = document.getElementById(`${selectId}-option-${focusedIndex}`);
+    if (optionEl && typeof optionEl.scrollIntoView === 'function') {
+      optionEl.scrollIntoView({ block: 'nearest' });
+    }
+  }, [isOpen, focusedIndex, virtualEnabled, itemHeight, selectId]);
+
+  // The type-ahead buffer timer never outlives the component.
+  useEffect(() => {
+    return () => {
+      if (typeaheadRef.current.timer) clearTimeout(typeaheadRef.current.timer);
+    };
+  }, []);
 
   const closeDropdown = useCallback(() => {
     setIsOpen(false);
@@ -663,7 +874,12 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         <div data-part="value" data-mode="multiple">
           {visibleTags.map((opt) => (
             <span key={opt.value} data-part="tag">
-              <span data-part="tag-label">{opt.label}</span>
+              <span
+                data-part="tag-label"
+                title={typeof opt.label === 'string' ? opt.label : undefined}
+              >
+                {opt.label}
+              </span>
               <button
                 type="button"
                 tabIndex={-1}
@@ -688,7 +904,11 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     }
 
     return (
-      <span data-part="value" data-mode="single">
+      <span
+        data-part="value"
+        data-mode="single"
+        title={typeof selectedOptions[0].label === 'string' ? selectedOptions[0].label : undefined}
+      >
         {selectedOptions[0].label}
       </span>
     );
@@ -754,6 +974,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           value={internalValue[0] ?? ''}
           disabled={disabled}
           required={rest.required}
+          aria-invalid={effectiveStatus === 'error' ? true : undefined}
+          aria-busy={loading || undefined}
           onChange={handleNativeChange}
           onFocus={onFocus as any}
           onBlur={onBlur as any}
@@ -780,9 +1002,10 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           <span
             className="rottay-select__loading-indicator"
             data-part="loading"
-            aria-hidden="true"
+            role="status"
           >
-            <span data-part="loading-spinner" />
+            <span data-part="loading-spinner" aria-hidden="true" />
+            <span data-part="loading-label">{loadingText}</span>
           </span>
         )}
       </div>
@@ -853,7 +1076,10 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             handleSelect(option.value, option);
           }
         }}
-        onMouseEnter={() => setFocusedIndex(idx)}
+        onMouseEnter={() => {
+          keyboardNavRef.current = false;
+          setFocusedIndex(idx);
+        }}
       >
         {multiple && (
           <span
@@ -921,6 +1147,14 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         aria-activedescendant={isOpen && focusedIndex >= 0 ? `${selectId}-option-${focusedIndex}` : undefined}
         aria-required={customRequired ? true : undefined}
         aria-disabled={disabled || undefined}
+        aria-invalid={
+          (triggerHtmlProps as Record<string, unknown>)['aria-invalid'] !== undefined
+            ? ((triggerHtmlProps as Record<string, unknown>)['aria-invalid'] as boolean | 'true' | 'false')
+            : effectiveStatus === 'error'
+              ? true
+              : undefined
+        }
+        aria-busy={loading || undefined}
         onFocus={onFocus as any}
         onBlur={onBlur as any}
       >
@@ -935,9 +1169,15 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           {loading && (
             <span
               className="rottay-select__loading-indicator"
-              data-part="loading-spinner"
-              aria-hidden="true"
-            />
+              data-part="loading-status"
+              // Single live owner per visible state: while the dropdown is
+              // open its own loading-state region announces, so the trigger
+              // indicator stays visual-only.
+              role={isOpen ? undefined : 'status'}
+            >
+              <span data-part="loading-spinner" aria-hidden="true" />
+              <span data-part="loading-label">{loadingText}</span>
+            </span>
           )}
           <ChevronIcon />
         </div>
@@ -993,6 +1233,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               id={listboxId}
               role="listbox"
               aria-multiselectable={multiple || undefined}
+              aria-busy={loading || undefined}
               data-part="option-list"
               data-virtual={virtualEnabled || undefined}
               style={
@@ -1016,9 +1257,16 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                     }}
                   >
                     {visibleItems.length === 0 ? (
-                      <div data-part="empty" data-virtual="true">
-                        {noOptionsText}
-                      </div>
+                      loading ? (
+                        <div data-part="loading-state" data-virtual="true" role="status">
+                          <span data-part="loading-spinner" aria-hidden="true" />
+                          <span data-part="loading-state-label">{loadingText}</span>
+                        </div>
+                      ) : (
+                        <div data-part="empty" data-virtual="true">
+                          {noOptionsText}
+                        </div>
+                      )
                     ) : (
                       visibleItems.map((item, idx) => {
                         const realIdx = Math.max(0, Math.floor(scrollTop / itemHeight) - VIRTUAL_BUFFER) + idx;
@@ -1063,7 +1311,10 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                                 handleSelect(option.value, option);
                               }
                             }}
-                            onMouseEnter={() => setFocusedIndex(realIdx)}
+                            onMouseEnter={() => {
+                              keyboardNavRef.current = false;
+                              setFocusedIndex(realIdx);
+                            }}
                           >
                             {multiple && (
                               <span
@@ -1093,9 +1344,19 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                   </div>
                 </div>
               ) : renderableItems.length === 0 ? (
-                <div data-part="empty">
-                  {noOptionsText}
-                </div>
+                loading ? (
+                  /* Async posture: while options stream in, the panel keeps
+                     the same spatial contract as the empty state (same part
+                     geometry in the skin) instead of lying "no options". */
+                  <div data-part="loading-state" role="status">
+                    <span data-part="loading-spinner" aria-hidden="true" />
+                    <span data-part="loading-state-label">{loadingText}</span>
+                  </div>
+                ) : (
+                  <div data-part="empty">
+                    {noOptionsText}
+                  </div>
+                )
               ) : (
                 renderableItems.map((item, idx) => renderOptionItem(item, idx, idx === focusedIndex))
               )}

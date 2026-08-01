@@ -49,7 +49,8 @@
     "next": "Próximo",
     "page": "Página {current} de {total}",
     "go_to": "Ir para página",
-    "items_per_page": "{count} por página"
+    "items_per_page": "{count} por página",
+    "size_changer": "Itens por página"
   },
   "table": {
     "empty": "Sem dados",
@@ -86,7 +87,8 @@
     "upload_file": "Enviar arquivo",
     "drop_hint": "Solte os arquivos aqui ou clique para enviar",
     "progress": "Progresso do envio: {percent}%",
-    "file_list": "Arquivos enviados"
+    "file_list": "Arquivos enviados",
+    "retry_named": "Tentar novamente {name}"
   },
   "datepicker": {
     "placeholder": "Selecione uma data",
@@ -115,7 +117,11 @@
     "placeholder": "Selecione uma hora",
     "now": "Agora",
     "clear": "Limpar",
-    "ok": "OK"
+    "ok": "OK",
+    "am": "AM",
+    "pm": "PM",
+    "meridiem_label": "AM/PM",
+    "time_picker": "Seletor de hora"
   },
   "search": {
     "placeholder": "Buscar...",
@@ -738,7 +744,21 @@
     "navNextMonth": "Próximo mês",
     "navNextYear": "Próximo ano",
     "gridLabel": "Grade de datas",
-    "monthsGridLabel": "Grade de meses"
+    "monthsGridLabel": "Grade de meses",
+    "months_short": {
+      "january": "jan.",
+      "february": "fev.",
+      "march": "mar.",
+      "april": "abr.",
+      "may": "mai.",
+      "june": "jun.",
+      "july": "jul.",
+      "august": "ago.",
+      "september": "set.",
+      "october": "out.",
+      "november": "nov.",
+      "december": "dez."
+    }
   },
   "filter_builder": {
     "add_rule": "Adicionar regra",
@@ -1034,5 +1054,48 @@
     "viewWeek": "Semana",
     "viewDay": "Dia",
     "overflowMore": "+{count} a mais"
+  },
+  "colorpicker": {
+    "triggerLabel": "Seletor de cor",
+    "formatLabel": "Formato de cor"
+  },
+  "markdownView": {
+    "tableRegionLabel": "Tabela",
+    "codeRegionLabel": "Bloco de código"
+  },
+  "cascader": {
+    "loading": "Carregando..."
+  },
+  "tree": {
+    "label": "Árvore"
+  },
+  "taginput": {
+    "feedback_duplicate": "A tag já existe",
+    "feedback_max": "Número máximo de tags atingido",
+    "feedback_invalid": "Tag não permitida"
+  },
+  "image": {
+    "failedToLoad": "Erro ao carregar imagem"
+  },
+  "statistic": {
+    "trendPositive": "Em alta",
+    "trendNegative": "Em queda",
+    "trendWarning": "Aviso"
+  },
+  "passwordInput": {
+    "strength_weak": "Fraca",
+    "strength_fair": "Razoável",
+    "strength_good": "Boa",
+    "strength_strong": "Forte"
+  },
+  "autocomplete": {
+    "input_label": "Preenchimento automático"
+  },
+  "meter": {
+    "threshold": {
+      "optimal": "faixa ideal",
+      "suboptimal": "faixa subótima",
+      "critical": "faixa crítica"
+    }
   }
 }

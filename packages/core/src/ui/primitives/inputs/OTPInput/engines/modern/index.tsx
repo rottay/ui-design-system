@@ -40,8 +40,17 @@ function focusInputAt(inputs: readonly (HTMLInputElement | null)[], index: numbe
  */
 export default function ModernOTPInput(props: OTPInputProps): React.ReactElement {
   // Optional provider + English floor (the floor must stay byte-identical to
-  // the historical label: the quality contract pins `Digit N of M`).
+  // the historical label: the quality contract pins `Digit N of M`). The tOr
+  // guard keeps a missing catalogue entry from echoing the raw key into the
+  // accessible name (the AutoComplete engine's idiom).
   const i18n = useOptionalTranslation('components');
+  const digitLabel = (index: number, total: number): string => {
+    const resolved = i18n?.t('otp.digit_label', { index: index + 1, length: total });
+    if (!resolved || resolved === 'otp.digit_label' || resolved === 'components.otp.digit_label') {
+      return `Digit ${index + 1} of ${total}`;
+    }
+    return resolved;
+  };
   const {
     length = OTPINPUT_DEFAULTS.length,
     value: controlledValue,
@@ -54,6 +63,7 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
     error = OTPINPUT_DEFAULTS.error,
     errorMessage,
     mask = OTPINPUT_DEFAULTS.mask,
+    name,
     className,
     style,
     id: providedId,
@@ -61,6 +71,7 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
 
   const generatedId = useId();
   const idPrefix = providedId || `otp-modern-${generatedId}`;
+  const errorMessageId = `${idPrefix}-error`;
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   // Initialize per-slot values by splitting the controlled value and padding with empty strings
@@ -107,7 +118,10 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
 
   /**
    * Keyboard navigation: Backspace clears the current slot (or retreats to
-   * the previous one if already empty); ArrowLeft/Right moves focus laterally.
+   * the previous one if already empty); Delete clears the current slot in
+   * place; ArrowLeft/Right moves focus laterally; Home/End jump to the
+   * first/last slot. The digit row is LTR by contract (an OTP never mirrors),
+   * so ArrowLeft is always the previous index regardless of locale direction.
    */
   const handleKeyDown = useCallback((index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace') {
@@ -121,10 +135,23 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
         updateValue(newValues);
         focusInputAt(inputRefs.current, index - 1);
       }
+    } else if (e.key === 'Delete') {
+      if (arrayValueAt(internalValues, index)) {
+        e.preventDefault();
+        const newValues = [...internalValues];
+        newValues[index] = '';
+        updateValue(newValues);
+      }
     } else if (e.key === 'ArrowLeft' && index > 0) {
       focusInputAt(inputRefs.current, index - 1);
     } else if (e.key === 'ArrowRight' && index < length - 1) {
       focusInputAt(inputRefs.current, index + 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      focusInputAt(inputRefs.current, 0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      focusInputAt(inputRefs.current, length - 1);
     }
   }, [internalValues, length, updateValue]);
 
@@ -147,13 +174,14 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
   }, [internalValues, isValidChar, length, updateValue]);
 
   return (
-    <div className={`${className || ''}`} style={style}>
+    <div className={className} style={style} data-part="field">
       <div className="ds-otp-input ds-otp-input--modern" data-part="root" data-size={size} data-disabled={disabled ? 'true' : 'false'}>
         {Array.from({ length }, (_, index) => (
           <input
             key={index}
             ref={(el) => { setArrayValueAt(inputRefs.current, index, el); }}
             id={`${idPrefix}-${index}`}
+            name={name ? `${name}-${index}` : undefined}
             type={mask ? 'password' : 'text'}
             inputMode={type === 'numeric' ? 'numeric' : 'text'}
             maxLength={1}
@@ -173,16 +201,15 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
             // The first slot invites the platform's one-time-code autofill;
             // the paste handler above distributes it across every slot.
             autoComplete={index === 0 ? 'one-time-code' : 'off'}
-            aria-label={
-              i18n?.t('otp.digit_label', { index: index + 1, length }) ??
-              `Digit ${index + 1} of ${length}`
-            }
+            aria-label={digitLabel(index, length)}
+            aria-invalid={error || undefined}
+            aria-describedby={error && errorMessage ? errorMessageId : undefined}
           />
         ))}
       </div>
       {error && errorMessage && (
         <div data-part="error-wrapper">
-          <span data-part="error-message">{errorMessage}</span>
+          <span id={errorMessageId} data-part="error-message" role="alert">{errorMessage}</span>
         </div>
       )}
     </div>

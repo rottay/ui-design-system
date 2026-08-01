@@ -40,6 +40,39 @@
  * `ds-cascader-panel-in` (each non-first column's entrance) are consumed by
  * skin rules below; the loading spinner resolves against the global
  * foundation `ds-foundation-spin` keyframe.
+ *
+ * PHASE B SECOND PASS (geometry drain + status + root loading):
+ * - The last inline paint left the engine: trigger per-size geometry
+ *   (`data-size='small'|'middle'|'large'` -> `--ds-input-{sm,md,lg}-*`
+ *   channels) and the search input's box are skin-owned now (single paint
+ *   owner law). The coarse-pointer floor still wins via `min-block-size`.
+ * - `data-status='error'|'warning'` paints the trigger frame through the
+ *   semantic color channels (field-level messages stay with FormField --
+ *   status is never the ONLY signal, the composed field anatomy carries
+ *   the explanation).
+ * - Root `loading` replaces the suffix chevron with the governed
+ *   border-spinner (`data-part='trigger-loading'`, `ds-foundation-spin`) and
+ *   masks the open panel with `data-part='loading-state'` (role="status",
+ *   localized label), which keeps the empty state's spatial rhythm -- never
+ *   a spinner floating in a blank panel. Async per-node loading keeps its
+ *   `data-part='loading'` mini-spinner + `aria-busy` on the option.
+ *
+ * PHASE B2 (P2 deep pass, 2026-07-31):
+ * - Trigger/search surfaces moved off the generic `--ds-color-bg-input`
+ *   (near-black under the TMM dark-text projection -- the CONTROL SURFACE
+ *   law Mentions/AutoComplete already guard) onto the certified
+ *   `--ds-input-bg` chain.
+ * - Clear-button hover/active read the Input clear grammar's ink step; the
+ *   error hue was a destructive miscue for a neutral reset.
+ * - Empty posture adopted the dropdown family's empty-well spatial contract
+ *   (dashed hairline, 4.5rem min-block, radius, muted ink); empty rows
+ *   inside the listboxes carry role="option" + aria-disabled (engine).
+ * - Search input gained the Input field grammar: gated hover + :active
+ *   border repaint, placeholder channel, aria-label floor (engine).
+ * - The non-first-column entrance drift mirrors under RTL via a
+ *   `ds-cascader-panel-in-rtl` keyframe + `:dir(rtl)` swap.
+ * - `cascader.column_label` now receives its `{level}` param (engine):
+ *   AT read the raw catalog placeholder literally before.
  */
 
 @keyframes ds-cascader-slide-in {
@@ -62,6 +95,19 @@
     transform: translateX(0);
   }
 }
+/* Mirrored variant: under RTL the column flow flips, so the entrance drift
+   enters from the reading-direction side (:dir() is the corpus mirror idiom
+   -- dropdown.css submenu-indicator, slider.css fill gradient). */
+@keyframes ds-cascader-panel-in-rtl {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
 /* ---- root + trigger ---- */
 .ds-cascader.ds-cascader--modern[data-part="root"] {
@@ -74,12 +120,12 @@
   cursor: pointer;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
-  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  background: var(--ds-input-bg, var(--ds-surface-control));
   color: var(--ds-color-text-primary);
   outline: none;
-  transition: border-color var(--ds-motion-fast, 120ms)
-      var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: border-color var(--ds-motion-fast)
+      var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
   .ds-cascader.ds-cascader--modern[data-part="root"]
@@ -104,7 +150,7 @@
 }
 
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="placeholder"] {
-  color: var(--ds-color-text-secondary);
+  color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
 }
 
 /* Trigger text takes the remaining track and truncates with ellipsis
@@ -137,8 +183,8 @@
   color: var(--ds-color-text-primary);
   border-radius: 50%;
   border: none;
-  transition: color var(--ds-motion-fast, 120ms)
-    var(--ds-motion-ease-out, ease-out);
+  transition: color var(--ds-motion-fast)
+    var(--ds-motion-ease-out);
 }
 .ds-cascader.ds-cascader--modern[data-part="root"]:has(
     [data-part="clear-button"]
@@ -149,12 +195,15 @@
 @media (hover: hover) {
   .ds-cascader.ds-cascader--modern[data-part="root"]
     [data-part="clear-button"]:hover {
-    color: var(--ds-color-error);
+    color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
   }
 }
+/* Touch/active equivalent. The clear reset is a NEUTRAL action: it reads the
+   Input clear grammar's ink step, never the error hue (a destructive
+   miscue). */
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="clear-button"]:active {
-  color: var(--ds-color-error);
+  color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
 }
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="clear-button"]:focus-visible {
@@ -165,8 +214,8 @@
 /* Trigger chevron: open rotation drained from the `rotate-180` utility +
    inline transition. The glyph is vertically symmetric -- no RTL mirror. */
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="arrow-icon"] {
-  transition: transform var(--ds-motion-fast, 120ms)
-    var(--ds-motion-ease-out, ease-out);
+  transition: transform var(--ds-motion-fast)
+    var(--ds-motion-ease-out);
 }
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="trigger"][data-open="true"]
@@ -182,9 +231,9 @@
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="dropdown"] {
   position: absolute;
   inset-inline-start: 0;
-  z-index: var(--ds-cascader-dropdown-z, var(--ds-z-index-dropdown, 1000));
-  margin-block-start: var(--ds-spacing-1, 4px);
-  max-inline-size: calc(100vw - 2 * var(--ds-spacing-4, 16px));
+  z-index: var(--ds-cascader-dropdown-z, var(--ds-z-index-dropdown));
+  margin-block-start: var(--ds-spacing-1);
+  max-inline-size: calc(100vw - 2 * var(--ds-spacing-4));
   border-radius: var(--ds-radius-lg);
   background: linear-gradient(
       var(--ds-elevation-surface-3),
@@ -195,8 +244,8 @@
   border-color: var(--ds-color-border);
   border-width: 1px;
   border-style: solid;
-  animation: ds-cascader-slide-in var(--ds-motion-fast, 120ms)
-    var(--ds-motion-ease-out, ease-out);
+  animation: ds-cascader-slide-in var(--ds-motion-fast)
+    var(--ds-motion-ease-out);
 }
 /* The columns wrap is a horizontal track (drained from the `flex` utility). */
 .ds-cascader.ds-cascader--modern[data-part="root"]
@@ -208,14 +257,14 @@
   [data-part="dropdown"]
   [data-part="option-list"] {
   max-inline-size: calc(
-    100vw - 2 * var(--ds-spacing-4, 16px) - 2 * var(--ds-spacing-1, 4px)
+    100vw - 2 * var(--ds-spacing-4) - 2 * var(--ds-spacing-1)
   );
   overflow-x: auto;
 }
 
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="search-input-wrapper"] {
-  padding: var(--ds-spacing-2, 8px);
+  padding: var(--ds-spacing-2);
   border-bottom: 1px solid var(--ds-color-border);
 }
 
@@ -223,22 +272,47 @@
   inline-size: 100%;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
-  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  background: var(--ds-input-bg, var(--ds-surface-control));
   color: var(--ds-color-text-primary);
   outline: none;
-  transition: border-color var(--ds-motion-fast, 120ms)
-      var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: border-color var(--ds-motion-fast)
+      var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="search-input"]:focus-visible {
   border-color: var(--ds-cascader-border-focus, var(--ds-color-primary));
   box-shadow: var(--ds-cascader-shadow-focus, var(--ds-shadow-focus-ring));
 }
+@media (hover: hover) {
+  .ds-cascader.ds-cascader--modern[data-part="root"]
+    [data-part="search-input"]:where(:hover):not(:disabled):not(:focus-visible) {
+    border-color: var(--ds-cascader-border-hover, var(--ds-color-border-hover));
+  }
+}
+/* Touch/active equivalent of the hover border (4th-tanda law). */
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="search-input"]:active:not(:disabled):not(:focus-visible) {
+  border-color: var(--ds-cascader-border-hover, var(--ds-color-border-hover));
+}
+.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"]::placeholder {
+  color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
+}
 
+/* Empty posture: the dropdown family's empty-well spatial contract (dashed
+   hairline, 4.5rem min-block, radius, muted helper ink) -- never a bare
+   padded string (AutoComplete/Select idiom). */
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="empty"] {
-  padding: var(--ds-spacing-2, 8px);
-  color: var(--ds-color-text-secondary);
+  display: grid;
+  place-items: center;
+  min-block-size: 4.5rem;
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  border: 1px dashed var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-snug);
+  text-align: center;
 }
 
 /* ---- menu columns: geometry drained from inline. The divider was physical
@@ -247,7 +321,7 @@
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="menu-column"] {
   list-style: none;
   margin: 0;
-  padding: var(--ds-spacing-1, 4px);
+  padding: var(--ds-spacing-1);
   inline-size: var(--ds-cascader-column-width, 192px);
   flex-shrink: 0;
   max-block-size: var(--ds-cascader-column-max-height, 240px);
@@ -256,8 +330,13 @@
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="menu-column"]
   + [data-part="menu-column"] {
-  animation: ds-cascader-panel-in var(--ds-motion-fast, 120ms)
-    var(--ds-motion-ease-out, ease-out);
+  animation: ds-cascader-panel-in var(--ds-motion-fast)
+    var(--ds-motion-ease-out);
+}
+.ds-cascader.ds-cascader--modern[data-part="root"]
+  [data-part="menu-column"]
+  + [data-part="menu-column"]:dir(rtl) {
+  animation-name: ds-cascader-panel-in-rtl;
 }
 .ds-cascader.ds-cascader--modern[data-part="root"]
   [data-part="menu-column"]:not([data-last="true"]) {
@@ -268,7 +347,7 @@
 .ds-cascader.ds-cascader--modern[data-part="root"] ul[data-part="option-list"] {
   list-style: none;
   margin: 0;
-  padding: var(--ds-spacing-1, 4px);
+  padding: var(--ds-spacing-1);
   max-block-size: var(--ds-cascader-column-max-height, 240px);
   overflow-y: auto;
 }
@@ -282,18 +361,18 @@
   align-items: center;
   justify-content: space-between;
   inline-size: 100%;
-  padding-block: var(--ds-spacing-1-5, var(--ds-spacing-1, 4px));
-  padding-inline: var(--ds-spacing-2, 8px);
+  padding-block: var(--ds-spacing-1-5, var(--ds-spacing-1));
+  padding-inline: var(--ds-spacing-2);
   border: 1px solid transparent;
-  border-radius: var(--ds-radius-sm, 6px);
+  border-radius: var(--ds-radius-sm);
   background: transparent;
   color: var(--ds-color-text-primary);
-  font-size: var(--ds-input-sm-font-size, 13px);
+  font-size: var(--ds-input-sm-font-size);
   cursor: pointer;
-  transition: background var(--ds-motion-fast, 120ms)
-      var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms)
-      var(--ds-motion-ease-out, ease-out);
+  transition: background var(--ds-motion-fast)
+      var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast)
+      var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
   .ds-cascader.ds-cascader--modern[data-part="root"]
@@ -328,7 +407,7 @@
     color-mix(in srgb, var(--ds-color-primary) 10%, transparent)
   );
   border-color: color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
-  font-weight: var(--ds-font-weight-medium, 500);
+  font-weight: var(--ds-font-weight-medium);
 }
 
 /* Option label truncation (never wraps mid-word). */
@@ -345,7 +424,7 @@
    no skin transform needed). */
 .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="chevron"] {
   display: inline-flex;
-  margin-inline-start: var(--ds-spacing-2, 8px);
+  margin-inline-start: var(--ds-spacing-2);
   color: var(--ds-color-text-muted);
 }
 
@@ -357,7 +436,7 @@
   border-radius: 50%;
   /* Drained from the inline animation (reduced-motion now governs it). */
   animation: ds-foundation-spin
-    var(--ds-cascader-spinner-duration, var(--ds-motion-glacial, 500ms)) linear
+    var(--ds-cascader-spinner-duration, var(--ds-motion-glacial)) linear
     infinite;
 }
 /* ---- coarse pointer: rows/trigger/clear reach the 44px floor via
@@ -424,5 +503,105 @@
   }
   .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="chevron"] {
     color: ButtonText;
+  }
+}
+
+/* ---- Phase B second pass: geometry drain, status frames, root loading ---- */
+
+/* Trigger geometry, drained from the engine's last inline style (the
+   historical getSizeStyle map, mirrored 1:1 on the --ds-input-* channels so a
+   token-layer outage cannot shift the field). The coarse-pointer
+   min-block-size floor above still wins over these block sizes. */
+.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger"] {
+  box-sizing: border-box;
+}
+.ds-cascader.ds-cascader--modern[data-part="root"][data-size="small"] [data-part="trigger"] {
+  block-size: var(--ds-input-sm-height);
+  padding-block: var(--ds-spacing-1);
+  padding-inline: var(--ds-input-sm-padding-x);
+  font-size: var(--ds-input-sm-font-size);
+}
+.ds-cascader.ds-cascader--modern[data-part="root"][data-size="middle"] [data-part="trigger"] {
+  block-size: var(--ds-input-md-height);
+  padding-block: calc(var(--ds-spacing-3) / 2);
+  padding-inline: var(--ds-input-md-padding-x);
+  font-size: var(--ds-input-md-font-size);
+}
+.ds-cascader.ds-cascader--modern[data-part="root"][data-size="large"] [data-part="trigger"] {
+  block-size: var(--ds-input-lg-height);
+  padding-block: var(--ds-spacing-2);
+  padding-inline: var(--ds-input-lg-padding-x);
+  font-size: var(--ds-input-lg-font-size);
+}
+
+/* Search input geometry, drained from inline (same channels, small step). */
+.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="search-input"] {
+  box-sizing: border-box;
+  block-size: var(--ds-input-sm-height);
+  padding-block: var(--ds-spacing-1);
+  padding-inline: var(--ds-input-sm-padding-x);
+  font-size: var(--ds-input-sm-font-size);
+}
+
+/* Status frames (Select idiom): the border carries the status at rest; the
+   focus ring stays the governed primary ring during keyboard focus, and the
+   composed FormField message remains the non-border signal. Specificity over
+   the hover repaint comes from the extra root attribute. */
+.ds-cascader.ds-cascader--modern[data-part="root"][data-status="error"] [data-part="trigger"] {
+  border-color: var(--ds-color-error);
+}
+.ds-cascader.ds-cascader--modern[data-part="root"][data-status="warning"] [data-part="trigger"] {
+  border-color: var(--ds-color-warning);
+}
+
+/* Root loading: the suffix spinner replaces the chevron in flow (same dock),
+   and the panel loading-state keeps the empty state's rhythm. */
+.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger-loading"],
+.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-spinner"] {
+  border: 2px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+  animation: ds-foundation-spin
+    var(--ds-cascader-spinner-duration, var(--ds-motion-glacial)) linear
+    infinite;
+}
+.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger-loading"] {
+  inline-size: 12px;
+  block-size: 12px;
+  flex-shrink: 0;
+}
+.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-spinner"] {
+  inline-size: 14px;
+  block-size: 14px;
+  flex-shrink: 0;
+}
+/* Clear + busy suffix coexistence (mirrors the arrow-icon gap rule above). */
+.ds-cascader.ds-cascader--modern[data-part="root"]:has(
+    [data-part="clear-button"]
+  )
+  [data-part="trigger-loading"] {
+  margin-inline-start: var(--ds-cascader-clear-gap, 20px);
+}
+.ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-state"] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+  padding: var(--ds-spacing-2);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-input-sm-font-size);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger-loading"],
+  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-spinner"] {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="trigger-loading"],
+  .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="loading-spinner"] {
+    border-color: ButtonText;
+    border-top-color: Highlight;
   }
 }

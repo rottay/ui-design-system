@@ -43,7 +43,6 @@
 'use client';
 
 import React from 'react';
-import type { CSSProperties } from 'react';
 import type { MenuGroupProps } from '../../contracts';
 
 // ============================================================================
@@ -79,57 +78,31 @@ export function MenuGroup({
   children,
   className = '',
   style,
+  'data-part': dataPart,
+  // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
+  // group root element, BEFORE the engine's own stamps.
+  ...rest
 }: MenuGroupProps): React.ReactElement {
-  // ========================================================================
-  // Styles
-  // ========================================================================
-
-  /**
-   * Container styles for the group.
-   */
-  const groupStyle: CSSProperties = {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
-    ...style,
-  };
-
-  /**
-   * Title header styles using CSS variables.
-   */
-  const titleStyle: CSSProperties = {
-    padding: 'var(--ds-menu-group-title-padding, 8px 16px 4px)',
-    fontSize: 'var(--ds-menu-group-title-font-size, 12px)',
-    fontWeight: 'var(--ds-menu-group-title-font-weight, 600)',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    userSelect: 'none',
-  };
-
-  /**
-   * Content container styles.
-   */
-  const contentStyle: CSSProperties = {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
-  };
-
   // ========================================================================
   // Render
   // ========================================================================
 
+  /* Layout and paint (list resets, title padding/typography/uppercase
+     tracking) live in `menu-compounds.css` on the `rottay-menu-group` BEM
+     classes; only the caller's own `style` stays inline. The former inline
+     title block carried a font-size literal, which the typographic-roles law
+     forbids in components. */
   return (
     <li
+      {...rest}
       className={`rottay-menu-group ${className}`}
-      style={groupStyle}
+      style={style}
       role="presentation"
-      data-part="group"
+      data-part={dataPart ?? 'group'}
     >
       {/* Group title header */}
       <div
         className="rottay-menu-group__title"
-        style={titleStyle}
         role="presentation"
         data-part="group-label"
       >
@@ -139,7 +112,6 @@ export function MenuGroup({
       {/* Grouped menu items */}
       <ul
         className="rottay-menu-group__content"
-        style={contentStyle}
         role="group"
         data-part="panel"
         aria-label={typeof title === 'string' ? title : undefined}

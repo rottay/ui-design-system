@@ -20,7 +20,27 @@
  * given), so the collision is not hypothetical — every rule here is anchored on
  * a compound class the engines never stamp, and the engine skins' rules are in
  * turn anchored on `.rottay-menu--modern` / `--rustic`, which these compounds
- * never carry.
+ * never carry. (When composed inside a modern root the modern skin's
+ * higher-specificity hover/state rules win over these baselines — no double
+ * paint of the winning property.)
+ *
+ * P2 (batch p2-21) — THE INLINE DRAIN: the compounds used to carry their whole
+ * layout in TSX `style` objects: static paint (flex rows, paddings, heights,
+ * list resets), raw `all 0.2s ease` / `transform 0.2s ease` durations, a
+ * blanket `opacity: 0.5` disabled treatment whose text composite measured
+ * 3.05:1 (fail — the menu.css engine skin documents the same axe measurement),
+ * and physical `marginLeft` / `paddingLeft` properties that never mirrored in
+ * RTL. All of it lives here now: motion rides the governed `--ds-motion-fast` /
+ * `--ds-motion-normal` + `--ds-motion-ease-out` channels (numerically the same
+ * 120/200ms the raw strings meant), indents are logical, and the disabled row
+ * keeps an AA-legible ink while only the chrome dims (the menu.css idiom).
+ * The state layer is new for the standalone/rustic composition path: gated
+ * hover with an `:active` touch counterpart, a governed `:focus-visible` ring,
+ * and a forced-colors block. The SubMenu's collapsed content additionally
+ * hides with `visibility` — the grid-only collapse used to leak focusable rows
+ * into the tab order while `aria-hidden='true'` was set (axe
+ * aria-hidden-focus); `visibility` interpolates discretely, so the close
+ * choreography still shows the content until the track reaches 0fr.
  *
  * THE DIVIDER'S BORDER IS THREE LONGHANDS, ON PURPOSE. A `border-width` of
  * `1px 0 0 0` has no shorthand form, so the dashed variant cannot be expressed
@@ -44,27 +64,111 @@
 
 /* ---- Menu.Item ---------------------------------------------------------- */
 .rottay-menu-item[data-part='item'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-menu-item-gap, 8px);
+  padding: var(--ds-menu-item-padding, 8px 16px);
+  min-block-size: var(--ds-menu-item-height, 40px);
   color: var(--ds-menu-item-color, inherit);
   background-color: transparent;
   border-radius: var(--ds-menu-border-radius, 8px);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 .rottay-menu-item[data-part='item'][data-tone='danger'] {
   color: var(--ds-menu-item-danger-color, var(--ds-color-error));
 }
 
+/* Disabled refuses activation in the TSX; here it keeps an AA-legible ink
+   (the menu.css engine skin measured the former 0.5-opacity text composite
+   at 3.05:1 — fail) and only the chrome dims. */
+.rottay-menu-item[data-part='item'][data-disabled] {
+  color: var(--ds-menu-item-color-disabled, var(--ds-color-text-secondary));
+  cursor: not-allowed;
+}
+
+.rottay-menu-item[data-part='item'][data-disabled] [data-part='icon'] {
+  opacity: var(--ds-menu-disabled-opacity, 0.5);
+}
+
+/* Hover is a hover-capable affordance; the `:active` wash is the touch
+   counterpart. Composed inside a modern engine root, the modern skin's
+   higher-specificity rules win instead — never both. */
+@media (hover: hover) {
+  .rottay-menu-item[data-part='item']:not([data-disabled]):hover,
+  .rottay-menu-submenu [data-part='trigger']:not([data-disabled]):hover {
+    background-color: var(
+      --ds-menu-item-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 6%, transparent)
+    );
+  }
+
+  .rottay-menu-item[data-part='item'][data-tone='danger']:not([data-disabled]):hover {
+    color: var(--ds-menu-item-danger-color, var(--ds-color-error));
+    background-color: color-mix(in srgb, var(--ds-color-error) 7%, transparent);
+  }
+}
+
+.rottay-menu-item[data-part='item']:not([data-disabled]):active,
+.rottay-menu-submenu [data-part='trigger']:not([data-disabled]):active {
+  background-color: color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
+}
+
+.rottay-menu-item[data-part='item']:focus-visible,
+.rottay-menu-submenu [data-part='trigger']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
+}
+
 /* ---- Menu.SubMenu ------------------------------------------------------- */
+.rottay-menu-submenu {
+  list-style: none;
+}
+
 .rottay-menu-submenu [data-part='trigger'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-menu-item-gap, 8px);
+  padding: var(--ds-menu-item-padding, 8px 16px);
+  min-block-size: var(--ds-menu-item-height, 40px);
   color: var(--ds-menu-item-color, inherit);
   background-color: transparent;
   border-radius: var(--ds-menu-border-radius, 8px);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+.rottay-menu-submenu [data-part='trigger'][data-disabled] {
+  color: var(--ds-menu-item-color-disabled, var(--ds-color-text-secondary));
+  cursor: not-allowed;
+}
+
+.rottay-menu-submenu [data-part='trigger'][data-disabled] [data-part='icon'],
+.rottay-menu-submenu [data-part='trigger'][data-disabled] [data-part='arrow-icon'] {
+  opacity: var(--ds-menu-disabled-opacity, 0.5);
 }
 
 .rottay-menu-submenu [data-part='trigger'][data-open='true'] {
   background-color: var(--ds-menu-submenu-bg, var(--ds-color-bg-secondary));
 }
 
-/* the chevron flips with the panel; both states were fixed strings. */
+/* the chevron flips with the panel; the wrapper's trailing offset is logical
+   so it mirrors to the reading side in RTL (the former inline `marginLeft`
+   never did). */
+.rottay-menu-submenu [data-part='arrow-icon'] {
+  display: flex;
+  align-items: center;
+  margin-inline-start: auto;
+  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
 .rottay-menu-submenu [data-part='trigger'][data-open='false'] [data-part='arrow-icon'] {
   transform: rotate(0deg);
 }
@@ -79,30 +183,67 @@
  * is the row's grid item and needs `min-height:0` because grid items default
  * to `min-height:auto`, which would keep the nested menu's intrinsic height
  * as a floor and prevent the track from ever reaching 0fr; `overflow:hidden`
- * clips it collapsed and mid-transition. The duration/easing are unchanged
- * from the JS `height` transition this replaces.
+ * clips it collapsed and mid-transition. The duration/easing are the governed
+ * `--ds-motion-normal` + `--ds-motion-ease-out` channels (the 200ms the raw
+ * string meant), so a tenant motion profile retunes the disclosure instead of
+ * stranding a hardcoded literal.
  */
 .rottay-menu-submenu__panel {
   display: grid;
-  transition: grid-template-rows 0.2s ease;
+  transition: grid-template-rows var(--ds-motion-normal) var(--ds-motion-ease-out);
 }
 .rottay-menu-submenu__content {
   min-height: 0;
   overflow: hidden;
+  margin: 0;
+  padding-block: 0;
+  padding-inline: var(--ds-menu-submenu-indent, 24px) 0;
+  list-style: none;
+  /* Collapsed content must leave the tab order while `aria-hidden='true'` is
+     set (the grid-only collapse leaked focusable rows — axe
+     aria-hidden-focus). `visibility` interpolates discretely: it stays
+     visible until the close track completes, and returns the instant the
+     panel reopens. */
+  visibility: visible;
+  transition: visibility var(--ds-motion-normal);
 }
+
+.rottay-menu-submenu__panel[data-open='false'] .rottay-menu-submenu__content {
+  visibility: hidden;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .rottay-menu-submenu__panel {
+  .rottay-menu-submenu__panel,
+  .rottay-menu-submenu__content,
+  .rottay-menu-submenu [data-part='arrow-icon'],
+  .rottay-menu-item[data-part='item'],
+  .rottay-menu-submenu [data-part='trigger'] {
     transition: none;
   }
 }
 
 /* ---- Menu.Group --------------------------------------------------------- */
+.rottay-menu-group,
+.rottay-menu-group__content {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .rottay-menu-group [data-part='group-label'] {
+  padding: var(--ds-menu-group-title-padding, 8px 16px 4px);
   color: var(--ds-menu-group-title-color, var(--ds-color-text-muted));
+  font-size: var(--ds-menu-group-title-font-size, 12px);
+  font-weight: var(--ds-menu-group-title-font-weight, 600);
+  letter-spacing: var(--ds-letter-spacing-wider);
+  text-transform: uppercase;
+  user-select: none;
 }
 
 /* ---- Menu.Divider: solid paints a background line, dashed paints a border. -- */
 .rottay-menu-divider[data-part='divider'] {
+  block-size: 1px;
+  margin: var(--ds-menu-divider-margin, 8px 0);
   background-color: var(--ds-menu-divider-color, var(--ds-color-border));
 }
 
@@ -116,4 +257,27 @@
   border-style: dashed;
   border-width: 1px 0 0 0;
   border-color: var(--ds-menu-divider-color, var(--ds-color-border));
+}
+
+/* ---- forced colors: the divider line, the disabled ink and the open
+        trigger survive as system-color signals. ---- */
+@media (forced-colors: active) {
+  .rottay-menu-divider[data-part='divider'] {
+    background-color: ButtonText;
+  }
+
+  .rottay-menu-divider--dashed[data-part='divider'][data-part='divider'] {
+    border-color: ButtonText;
+  }
+
+  .rottay-menu-item[data-part='item'][data-disabled],
+  .rottay-menu-submenu [data-part='trigger'][data-disabled] {
+    color: GrayText;
+  }
+
+  /* The open trigger's background wash is stripped in this mode: an outline
+     keeps the disclosure state visible without growing geometry. */
+  .rottay-menu-submenu [data-part='trigger'][data-open='true'] {
+    outline: 1px solid ButtonText;
+  }
 }

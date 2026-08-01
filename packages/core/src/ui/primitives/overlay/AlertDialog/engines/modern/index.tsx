@@ -75,6 +75,10 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
   } = props;
 
   const cancelLabel = cancelLabelProp ?? tOr('alertDialog.cancel', ALERT_DIALOG_DEFAULTS.cancelLabel);
+  // APG alertdialog REQUIRES an accessible name even when the consumer omits
+  // `title` (aria-labelledby stays undefined then) -- a localized floor keeps
+  // the role valid instead of shipping an unnamed alert dialog.
+  const untitledLabel = title ? undefined : tOr('alertDialog.untitled', 'Alert');
 
   // APG alertdialog: the surface's accessible name/description are the visible
   // title/description, wired by id (the consumer never wires these by hand).
@@ -155,7 +159,10 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
 
   return (
     <>
-      <span ref={setAnchorEl} data-part="anchor" style={{ display: 'contents' }} />
+      {/* Unified portal anchor (P2): the lane-wide
+          `[data-part='anchor']:not([class])` rule owns `display: contents`,
+          so no inline style is declared here. */}
+      <span ref={setAnchorEl} data-part="anchor" />
       {open ? (
         <Portal>
           <PortalScope snapshot={portalScope}>
@@ -185,10 +192,9 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
               onClick={handleBackdropClick}
               onClose={handleDialogClose}
             >
-              <div
-                data-part="backdrop"
-                style={{ position: 'fixed', inset: 0, pointerEvents: 'none' }}
-              />
+              {/* Geometry (fixed full-viewport box, no pointer events) lives
+                  in the skin's backdrop rule next to the scrim paint. */}
+              <div data-part="backdrop" />
               <div
                 data-part="surface"
                 data-open="true"
@@ -196,16 +202,19 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
                 aria-modal="true"
                 aria-labelledby={titleId}
                 aria-describedby={descriptionId}
-                style={{ position: 'relative' }}
+                aria-label={untitledLabel}
               >
-                <div className="flex gap-3 items-start">
+                {/* Content row + copy column: layout is skin-owned (drained
+                    from the former `flex gap-3 items-start` / `flex-1`
+                    utilities; the ConfirmDialog content/copy grammar). */}
+                <div data-part="content">
                   {/* Warning-tinted circle with the governed semantic status
                       icon (the family's shared supplier: Toast/Result); the
                       tint and geometry are skin-owned. */}
                   <div data-part="icon">
                     <StatusWarningIcon decorative size={20} />
                   </div>
-                  <div className="flex-1">
+                  <div data-part="copy">
                     {title && (
                       <h3 id={titleId} data-part="title">{title}</h3>
                     )}

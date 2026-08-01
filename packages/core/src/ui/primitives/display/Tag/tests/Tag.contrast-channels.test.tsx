@@ -112,7 +112,7 @@ describe('Tag modern skin: solid-content contrast channels (R0/Axe)', () => {
       expect(rule![0]).toContain(`--ds-tag-${variant}-solid-bg`);
       expect(rule![0]).toContain(`--ds-tag-${variant}-ink`);
       expect(rule![0]).toContain(
-        `color-mix(in srgb, var(--ds-color-${variant}) ${100 - SOLID_MIX[variant]}%, var(--ds-color-neutral-900, #171717) ${SOLID_MIX[variant]}%)`
+        `color-mix(in srgb, var(--ds-color-${variant}) ${100 - SOLID_MIX[variant]}%, var(--ds-color-neutral-900) ${SOLID_MIX[variant]}%)`
       );
       // The caller's `color` prop hatch stays the first term of the background.
       expect(rule![0]).toMatch(/background:\s*var\(--ds-tag-custom-bg,/);
@@ -146,7 +146,7 @@ describe('Tag modern skin: solid-content contrast channels (R0/Axe)', () => {
     // Outlined frames stay raw hue (decorative, not axe-tested); the INK is a
     // darkened mix because on transparent fills the hue IS the text.
     const outlinedWarning = SKIN.match(
-      /\[data-variant='warning'\]\[data-outlined='true'\] \{\s*border: 1px solid var\(--ds-color-warning\);\s*color: var\(--ds-tag-warning-outlined-ink, color-mix\(in srgb, var\(--ds-color-warning\) 55%, var\(--ds-color-neutral-900, #171717\) 45%\)\);\s*\}/
+      /\[data-variant='warning'\]\[data-outlined='true'\] \{\s*border: 1px solid var\(--ds-color-warning\);\s*color: var\(--ds-tag-warning-outlined-ink, color-mix\(in srgb, var\(--ds-color-warning\) 55%, var\(--ds-color-neutral-900\) 45%\)\);\s*\}/
     );
     expect(outlinedWarning).not.toBeNull();
   });
@@ -160,7 +160,7 @@ describe('Tag modern skin: round-3 resolved-winner pins', () => {
       );
       expect(rule).not.toBeNull();
       expect(rule![0]).toContain(
-        `color: var(--ds-tag-${variant}-ink, var(--ds-color-white, #fff));`
+        `color: var(--ds-tag-${variant}-ink, var(--ds-color-white));`
       );
       // The near-black-collapsing chain must not return on darkened fills.
       expect(rule![0]).not.toContain(
@@ -170,7 +170,7 @@ describe('Tag modern skin: round-3 resolved-winner pins', () => {
     // Primary alone keeps text-on-primary: its fill is unmixed and the token is
     // correct per source (bithire white on mid-blue, TMM dark on light gold).
     const primary = SKIN.match(/\[data-variant='primary'\]:not\(\[data-outlined\]\)\s*\{[^}]*\}/);
-    expect(primary![0]).toContain('color: var(--ds-tag-primary-ink, var(--ds-color-text-on-primary, var(--ds-color-white, #fff)));');
+    expect(primary![0]).toContain('color: var(--ds-tag-primary-ink, var(--ds-color-text-on-primary, var(--ds-color-white)));');
   });
 
   it('carries darkened inks on every chromatic OUTLINED variant and adaptive ink on outlined default', () => {
@@ -180,15 +180,17 @@ describe('Tag modern skin: round-3 resolved-winner pins', () => {
     expect(outlinedDefault![0]).not.toContain('color: var(--ds-color-alpha-black-100);');
 
     const mixes: Record<string, string> = {
-      success: '60%, var(--ds-color-neutral-900, #171717) 40%',
-      warning: '55%, var(--ds-color-neutral-900, #171717) 45%',
-      error: '78%, var(--ds-color-neutral-900, #171717) 22%',
+      success: '60%, var(--ds-color-neutral-900) 40%',
+      warning: '55%, var(--ds-color-neutral-900) 45%',
+      error: '78%, var(--ds-color-neutral-900) 22%',
     };
     for (const [variant, mix] of Object.entries(mixes)) {
       expect(SKIN).toContain(
         `color: var(--ds-tag-${variant}-outlined-ink, color-mix(in srgb, var(--ds-color-${variant}) ${mix}));`
       );
     }
+    expect(SKIN).not.toContain('var(--ds-color-neutral-900, #171717)');
+    expect(SKIN).not.toContain('var(--ds-color-white, #fff)');
   });
 
   it('clears WCAG AA for the outlined inks on page surfaces of every source', () => {

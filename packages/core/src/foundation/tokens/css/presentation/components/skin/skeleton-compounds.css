@@ -1,8 +1,8 @@
 /**
  * Skeleton compounds skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Covers the eight Skeleton compounds (Avatar, Button, Card, FormSkeleton,
- * ListItem, Paragraph, Table, Text), each a standalone render tree with no
- * engine switch, its own scope class, and `data-part` anatomy.
+ * Covers the nine Skeleton compounds (Avatar, Button, Card, FormSkeleton,
+ * ListItem, Paragraph, Table, Text, Transition), each a standalone render
+ * tree with no engine switch, its own scope class, and `data-part` anatomy.
  *
  * Every compound shares ONE shimmer: the sweeping gradient `background` + its
  * `200% 100%` sizing (identical across all eight, so one selector list owns it);
@@ -12,6 +12,16 @@
  * values except Avatar/Button,
  * whose shape-conditional radius rides a hatch stamped inline
  * (--ds-skeleton-avatar-radius / --ds-skeleton-button-radius).
+ *
+ * LAYOUT (P2 second pass): all static geometry that used to ride inline styles
+ * in the compound TSX — column stacks, row grids, gaps, paddings, block sizes
+ * and the varied line widths — lives here now, so tenant density retunes every
+ * placeholder from the same channels (spacing steps are density-scaled; the
+ * Card body padding rides the bare --ds-card-body-padding channel, mirroring
+ * the real Card's density). Inline style keeps only TRUE instance geometry:
+ * the contract dimension props (SkeletonText width, SkeletonParagraph
+ * lastLineWidth, Avatar size, Button size presets, the Form label variety
+ * formula, the Table track template) and the pinned animation reference.
  *
  * SPECIFICITY (P-48): background and border-radius are non-border paint, so
  * (0,2,0)+ unlayered clears preflight. The Card + Table containers and the Table
@@ -53,48 +63,159 @@
 
 /* ---- Card ---------------------------------------------------------------- */
 .rottay-skeleton-card.rottay-skeleton-card[data-part='root'][data-part='root'] {
-  border-radius: var(--ds-radius-lg, 12px);
+  border-radius: var(--ds-radius-lg);
   border: 1px solid var(--ds-skeleton-border, var(--ds-color-border));
+}
+.rottay-skeleton-card[data-part='root'] {
+  /* The image placeholder must respect the frame's corner radius. */
+  overflow: hidden;
+}
+.rottay-skeleton-card [data-part='image'] {
+  block-size: 8.75rem;
+}
+.rottay-skeleton-card [data-part='body'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+  /* Bare declared channel (P0 fallback parity): the placeholder mirrors the
+     real Card's body density instead of approximating it with a literal. */
+  padding: var(--ds-card-body-padding);
 }
 .rottay-skeleton-card [data-part='title'],
 .rottay-skeleton-card [data-part='line'] {
   border-radius: 4px;
 }
+/* Title line is 60% width at title height to read as the card's heading. */
+.rottay-skeleton-card [data-part='title'] {
+  inline-size: 60%;
+  block-size: var(--ds-skeleton-title-height, 1.25rem);
+}
+.rottay-skeleton-card [data-part='line'] {
+  block-size: 0.875rem;
+}
+.rottay-skeleton-card [data-part='line']:last-child {
+  inline-size: 80%;
+}
 
 /* ---- FormSkeleton -------------------------------------------------------- */
+.rottay-skeleton-form[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-5);
+}
+.rottay-skeleton-form [data-part='field'] {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
 .rottay-skeleton-form [data-part='label'] {
+  block-size: 0.875rem;
   border-radius: 4px;
 }
 .rottay-skeleton-form [data-part='input'],
 .rottay-skeleton-form [data-part='action'] {
   border-radius: 6px;
 }
+.rottay-skeleton-form [data-part='input'] {
+  block-size: 2.375rem;
+}
+.rottay-skeleton-form [data-part='action'] {
+  inline-size: 6.25rem;
+  block-size: 2.375rem;
+  margin-block-start: var(--ds-spacing-1);
+}
 
 /* ---- ListItem ------------------------------------------------------------ */
+.rottay-skeleton-list-item[data-part='root'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-3);
+  padding-block: var(--ds-spacing-2);
+}
 .rottay-skeleton-list-item [data-part='avatar'] {
+  flex-shrink: 0;
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
   border-radius: 50%;
 }
+.rottay-skeleton-list-item [data-part='content'] {
+  flex: 1;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
 .rottay-skeleton-list-item [data-part='line'] {
+  block-size: 0.75rem;
+  inline-size: 80%;
   border-radius: 4px;
+}
+/* Order matters: `:last-child` precedes `:first-child` so a single line
+   resolves to the first/title geometry (40% at title height), exactly like
+   the index-conditional inline styles it replaces. */
+.rottay-skeleton-list-item [data-part='line']:last-child {
+  inline-size: 60%;
+}
+.rottay-skeleton-list-item [data-part='line']:first-child {
+  block-size: 0.875rem;
+  inline-size: 40%;
 }
 
 /* ---- Paragraph ----------------------------------------------------------- */
+.rottay-skeleton-paragraph[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+}
 .rottay-skeleton-paragraph [data-part='line'] {
+  block-size: var(--ds-skeleton-line-height, 1rem);
   border-radius: 4px;
 }
 
 /* ---- Text ---------------------------------------------------------------- */
+.rottay-skeleton-text[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+}
 .rottay-skeleton-text [data-part='line'] {
+  block-size: var(--ds-skeleton-line-height, 1rem);
   border-radius: 4px;
+}
+/* Natural text ending; the instance `width` prop rides inline on the other
+   lines and always wins over this rule. */
+.rottay-skeleton-text [data-part='line']:last-child {
+  inline-size: 60%;
 }
 
 /* ---- Table --------------------------------------------------------------- */
+.rottay-skeleton-table[data-part='root'] {
+  overflow: hidden;
+}
 .rottay-skeleton-table.rottay-skeleton-table[data-part='root'][data-part='root'] {
   border-radius: 8px;
-  border: 1px solid var(--ds-skeleton-border, #e5e7eb);
+  border: 1px solid var(--ds-skeleton-border, var(--ds-color-border));
+}
+.rottay-skeleton-table [data-part='row'] {
+  display: grid;
+  gap: var(--ds-spacing-3);
+  padding-block: var(--ds-spacing-3);
+  padding-inline: var(--ds-spacing-4);
 }
 .rottay-skeleton-table [data-part='cell'] {
   border-radius: 4px;
+}
+.rottay-skeleton-table [data-part='row'][data-row='header'] [data-part='cell'] {
+  block-size: 0.875rem;
+  inline-size: 70%;
+}
+.rottay-skeleton-table [data-part='row'][data-row='body'] [data-part='cell'] {
+  block-size: 0.75rem;
+  inline-size: 80%;
+}
+/* First column narrower to mimic ID/key columns. */
+.rottay-skeleton-table [data-part='row'][data-row='body'] [data-part='cell']:first-child {
+  inline-size: 50%;
 }
 /* header row: divider + distinct surface. Divider color reaches (0,4,0). */
 .rottay-skeleton-table [data-part='row'][data-part='row'][data-row='header'] {
@@ -106,4 +227,55 @@
 /* body rows: divider between rows, not after the last (`row < rows - 1`). */
 .rottay-skeleton-table [data-part='row'][data-part='row'][data-row='body']:not(:last-child) {
   border-bottom: 1px solid var(--ds-skeleton-border, var(--ds-color-border));
+}
+
+/* ---- Transition (WO-CRA-07 crossfade): stacking geometry ----------------- */
+.rottay-skeleton-transition[data-part='root'] {
+  display: grid;
+}
+.rottay-skeleton-transition > [data-part='skeleton'],
+.rottay-skeleton-transition > [data-part='content'] {
+  /* Both layers share one grid cell for the opacity-only, zero-shift swap. */
+  grid-area: 1 / 1;
+  min-inline-size: 0;
+}
+
+/* ---- forced colors (B7-02): the modern-engine skin already re-asserts its
+        blocks in system GrayText; the compounds had NO forced-colors rule, so
+        every compound placeholder was stripped to Canvas and vanished against
+        the page. Mirror the engine-skin posture: fills re-assert as GrayText
+        (the system placeholder color -- the background shorthand also clears
+        the shimmer gradient image), the Card/Table frames and the row
+        dividers re-assert as GrayText hairlines, and the Table header
+        distinction survives through its divider + frame instead of a tinted
+        surface. Motion is unaffected (forced colors does not adjust the
+        opacity/background-position animations; the global reduced-motion
+        guard owns the calm posture). ---- */
+@media (forced-colors: active) {
+  .rottay-skeleton-avatar[data-part='root'],
+  .rottay-skeleton-button[data-part='root'],
+  .rottay-skeleton-card [data-part='image'],
+  .rottay-skeleton-card [data-part='title'],
+  .rottay-skeleton-card [data-part='line'],
+  .rottay-skeleton-form [data-part='label'],
+  .rottay-skeleton-form [data-part='input'],
+  .rottay-skeleton-form [data-part='action'],
+  .rottay-skeleton-list-item [data-part='avatar'],
+  .rottay-skeleton-list-item [data-part='line'],
+  .rottay-skeleton-paragraph [data-part='line'],
+  .rottay-skeleton-text [data-part='line'],
+  .rottay-skeleton-table [data-part='cell'] {
+    background: GrayText;
+  }
+  .rottay-skeleton-card.rottay-skeleton-card[data-part='root'][data-part='root'],
+  .rottay-skeleton-table.rottay-skeleton-table[data-part='root'][data-part='root'] {
+    border-color: GrayText;
+  }
+  .rottay-skeleton-table [data-part='row'][data-part='row'][data-row='header'],
+  .rottay-skeleton-table [data-part='row'][data-part='row'][data-row='body']:not(:last-child) {
+    border-bottom-color: GrayText;
+  }
+  .rottay-skeleton-table [data-part='row'][data-row='header'] {
+    background-color: Canvas;
+  }
 }

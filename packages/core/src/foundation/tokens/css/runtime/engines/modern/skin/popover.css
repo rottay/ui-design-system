@@ -4,6 +4,23 @@
  * The engine owns stable anatomy and behavior. Brands can independently tune
  * material, type, density, geometry, arrow craft and motion without an app
  * reconstructing the component.
+ *
+ * Material stack (governed six layers): the opaque base fill and the
+ * elevation lift live on the surface background; the bounded tint/highlight
+ * and the tenant motif (layers 2-3) ride a private `::before` decoration
+ * slot whose opacity is the governed `--ds-effect-intensity` dial -- at 0
+ * the decoration dissolves while fill, edge, elevation and focus ring keep
+ * the hierarchy. Glass is deliberately ABSENT: this is a panel, and the
+ * lane's grammar sanctions backdrop blur on overlay backdrops only
+ * (hover-card.css precedent). Because the shared overlay material channel
+ * may still resolve translucent, `prefers-reduced-transparency` forces an
+ * opaque fill instead of a see-through panel.
+ *
+ * Pass P2 (Phase B segunda pasada): the arrow paints the same elevation-lift
+ * layer as the surface and its motif moves to an intensity-governed
+ * `::before` slot, so neither a dark lift nor `effectIntensity: 0` seams at
+ * the joint; the forced-colors arrow rule ties the base specificity so the
+ * system-color treatment actually wins.
  */
 
 @keyframes ds-popover-enter-modern {
@@ -115,7 +132,7 @@
   isolation: isolate;
   z-index: var(
     --ds-popover-instance-z-index,
-    var(--ds-z-popover, var(--ds-z-index-popover, 1600))
+    var(--ds-z-popover, var(--ds-z-index-popover))
   );
   box-sizing: border-box;
   display: grid;
@@ -162,9 +179,11 @@
      tenant material chain in --ds-popover-surface stays untouched; it is inert
      until a dark surface raises --ds-elevation-lift-strength, where the
      near-invisible shadow ramp needs the luminance step. Level 3 matches the
-     --ds-elevation-3 shadow this surface declares. */
+     --ds-elevation-3 shadow this surface declares. The bounded tint and motif
+     layers moved to the ::before decoration slot below so the governed
+     --ds-effect-intensity dial can dissolve them without flattening this
+     base/lift hierarchy. */
   background:
-    var(--ds-popover-texture-current), var(--ds-popover-highlight-current),
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
     var(--ds-popover-surface);
   box-shadow: var(--ds-popover-shadow-current);
@@ -178,9 +197,28 @@
   unicode-bidi: plaintext;
   transform-origin: center bottom;
   animation: ds-popover-enter-modern
-    var(--ds-popover-enter-duration, var(--ds-motion-calm, 200ms))
+    var(--ds-popover-enter-duration, var(--ds-motion-calm))
     var(--ds-popover-enter-easing, var(--ds-motion-ease-enter)) both;
   will-change: opacity, transform;
+}
+
+/* Material layers 2-3 (bounded tint/gradient + tenant motif) ride this
+ * private decoration slot instead of the surface background so the governed
+ * --ds-effect-intensity dial scales them directly: at 0 the decoration
+ * dissolves while the opaque fill, lift layer, edge, elevation and focus
+ * ring keep the hierarchy (button.css/card.css idiom). Title, body and the
+ * arrow paint above it; it never intercepts pointer input. */
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"][data-part="surface"]::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background-image: var(--ds-popover-texture-current),
+    var(--ds-popover-highlight-current);
+  content: "";
+  opacity: var(--ds-effect-intensity);
+  pointer-events: none;
 }
 
 .rottay-popover--modern[data-part="trigger"]
@@ -189,7 +227,7 @@
   animation-name: ds-popover-exit-modern;
   animation-duration: var(
     --ds-popover-exit-duration,
-    var(--ds-motion-feedback, 160ms)
+    var(--ds-motion-feedback)
   );
   animation-timing-function: var(
     --ds-popover-exit-easing,
@@ -465,7 +503,7 @@
   );
   letter-spacing: var(
     --ds-popover-title-letter-spacing,
-    var(--ds-letter-spacing-heading, -0.01em)
+    var(--ds-letter-spacing-heading)
   );
   text-wrap: balance;
 }
@@ -506,12 +544,19 @@
   > [data-part="surface"]:focus-visible,
 .rottay-popover--modern[data-part="trigger"]
   > [data-part="surface"]:focus-within {
-  outline: var(--ds-focus-ring-width, 2px) solid
+  outline: var(--ds-focus-ring-width) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
-/* Arrow paint derives from the same local material as the surface. */
+/* Arrow paint derives from the same local material as the surface. The fill
+   carries the SAME elevation-lift layer the surface declares, so a dark theme
+   with a raised lift strength does not seam a darker arrow against a lifted
+   panel at the joint. The tenant motif moves to the arrow's own `::before`
+   decoration slot (the surface's idiom): it scales by the governed
+   `--ds-effect-intensity` dial exactly like the surface's, so
+   `effectIntensity: 0` dissolves the motif on both sides of the joint instead
+   of leaving a textured arrow against a flattened panel. */
 .rottay-popover--modern[data-part="trigger"]
   > [data-part="surface"]
   > [data-part="arrow"][data-part="arrow"] {
@@ -520,13 +565,26 @@
   inline-size: var(--ds-popover-arrow-size, 0.6875rem);
   block-size: var(--ds-popover-arrow-size, 0.6875rem);
   border: var(--ds-popover-edge-width) solid var(--ds-popover-edge);
-  background: var(--ds-popover-surface);
+  background:
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
+    var(--ds-popover-surface);
   transform: rotate(45deg);
   transition: inset-block-start var(--ds-motion-feedback)
       var(--ds-motion-ease-move),
     inset-block-end var(--ds-motion-feedback) var(--ds-motion-ease-move),
     inset-inline-start var(--ds-motion-feedback) var(--ds-motion-ease-move),
     inset-inline-end var(--ds-motion-feedback) var(--ds-motion-ease-move);
+}
+
+.rottay-popover--modern[data-part="trigger"]
+  > [data-part="surface"]
+  > [data-part="arrow"][data-part="arrow"]::before {
+  position: absolute;
+  inset: 0;
+  background-image: var(--ds-popover-texture-current);
+  content: "";
+  opacity: var(--ds-effect-intensity);
+  pointer-events: none;
 }
 
 .rottay-popover--modern[data-part="trigger"]
@@ -685,6 +743,31 @@ html[data-ds-motion="reduced"]
   transition: none;
 }
 
+/* Reduced transparency: the shared overlay material channel
+ * (--ds-material-overlay-background) may resolve translucent, and a tenant
+ * may do the same through the recipe channels. Users who request reduced
+ * transparency get an opaque fill instead of a see-through panel
+ * (semantic-surface.css idiom): the decoration layers drop out and the
+ * hierarchy rides the opaque fill, edge and elevation. The inverse recipe
+ * keeps its deliberately opaque dark fill. */
+@media (prefers-reduced-transparency: reduce) {
+  .rottay-popover--modern[data-part="trigger"]
+    > [data-part="surface"][data-part="surface"] {
+    --ds-popover-highlight-current: none;
+    --ds-popover-texture-current: none;
+  }
+
+  /* The arrow inherits the redefined custom properties from the surface, so
+     its fill and motif follow without a second declaration. */
+  .rottay-popover--modern[data-part="trigger"]
+    > [data-part="surface"][data-part="surface"]:not([data-recipe="inverse"]) {
+    --ds-popover-surface: var(
+      --_ds-proto-popover-opaque-surface,
+      var(--ds-popover-bg, var(--ds-surface-card))
+    );
+  }
+}
+
 @media (forced-colors: active) {
   .rottay-popover--modern[data-part="trigger"]
     > [data-part="surface"][data-part="surface"] {
@@ -711,9 +794,13 @@ html[data-ds-motion="reduced"]
     color: CanvasText;
   }
 
+  /* Doubled data-part ties the base arrow rule's (0,5,0) so the system-color
+     treatment actually lands (later source wins): the fill flattens to Canvas
+     -- resetting the elevation-lift background-image with it -- and the frame
+     keeps a system color. */
   .rottay-popover--modern[data-part="trigger"]
     > [data-part="surface"]
-    > [data-part="arrow"] {
+    > [data-part="arrow"][data-part="arrow"] {
     border-color: CanvasText;
     background: Canvas;
   }

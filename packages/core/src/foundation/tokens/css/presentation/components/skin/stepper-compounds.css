@@ -27,11 +27,29 @@
  * same component. It is preserved byte-exact, not reconciled; reconciling it is
  * a visual change and needs its own work order.
  *
- * `Stepper.Content`'s 200ms IS HARDCODED IN FOUR PLACES — two CSS transition
- * strings and two `setTimeout(…, 200)` literals — and the JS assumes, without
- * listening for `transitionend`, that the transition has finished. All four stay
- * exactly where they are: `transition` is not a paint channel, so nothing here
- * touches the duration, and desyncing it would unmount content mid-fade.
+ * `Stepper.Content`'s 200ms used to be hardcoded in four places — two CSS
+ * transition strings and two `setTimeout(…, 200)` literals — and the JS
+ * assumed, without listening for `transitionend`, that the transition had
+ * finished. P2 (batch p2-21) GOVERNS the lifecycle: the panel's state paint
+ * (opacity / display / pointer-events) lives here on `data-state` /
+ * `data-animation` with `--ds-motion-normal` + `--ds-motion-ease-out`
+ * channels, `transitionend` is the primary exit signal, and the JS fallback
+ * timer reads the resolved duration from the computed style (the Message
+ * modern `governedExitMs` idiom). The enter side flips `entering → visible`
+ * on the next frame — the fade starts immediately instead of idling 200ms.
+ *
+ * P2 (batch p2-21) — `Stepper.Step` INLINE DRAIN: the step carried its whole
+ * layout in TSX `style` objects (flex geometry, icon badge box, typography
+ * literals from the contract's FONT_SIZE_MAP, connector geometry) plus raw
+ * `0.3s ease` durations, a blanket 0.5 disabled opacity (the 3.05:1-fail
+ * composite the family's engine skins document), physical `marginLeft` /
+ * `textAlign: 'left'`, and two local SVG status glyphs. Everything paints
+ * here now, keyed on the stamped `data-size` / `data-direction` /
+ * `data-label-placement` / `data-status` / `data-clickable` hooks; the
+ * status glyphs are the governed `action.confirm` / `action.close` facade
+ * roles; the disabled step keeps AA-legible ink while only the icon chrome
+ * dims; and the vertical connector — previously a dead inline branch that
+ * never rendered — paints per `data-direction` / `data-size`.
  *
  * SPECIFICITY (P-48): the icon's `border` shorthand carries a real color and must
  * clear the tenant's unlayered `* { border-color }` floor at (0,3,1); with one
@@ -132,4 +150,225 @@
 
 .rottay-stepper-content[data-part='panel'][data-animation='slide'][data-state='exiting'][data-direction='backward'] {
   transform: translateX(20px);
+}
+
+
+/* ============================================================================
+   P2 (batch p2-21) — the drained layout: every rule below replaces a TSX
+   inline-style block (see the header). Hooks keep the contract's SIZE_MAP /
+   FONT_SIZE_MAP values as fallbacks — the same numbers, now tenant-tunable.
+   ============================================================================ */
+
+/* ---- Stepper.Step: the flex row (direction/placement geometry). --------- */
+.rottay-stepper-step {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--ds-stepper-item-gap, 12px);
+}
+
+.rottay-stepper-step[data-direction='horizontal']:not([data-last='true']) {
+  flex: 1;
+}
+
+.rottay-stepper-step[data-direction='vertical'] {
+  align-items: flex-start;
+}
+
+.rottay-stepper-step[data-direction='horizontal'][data-label-placement='vertical'] {
+  flex-direction: column;
+  align-items: center;
+}
+
+.rottay-stepper-step[data-clickable='true'] {
+  cursor: pointer;
+}
+
+.rottay-stepper-step[data-clickable='true']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
+  border-radius: var(--ds-stepper-border-radius, 6px);
+}
+
+@media (hover: hover) {
+  .rottay-stepper-step[data-clickable='true']:hover [data-part='label'] {
+    color: var(--ds-stepper-label-color-hover, var(--ds-color-primary));
+  }
+}
+
+/* Disabled: activation is refused in the TSX; the row keeps an AA-legible
+   ink and only the icon badge dims (the former blanket 0.5 opacity took the
+   text composite to 3.05:1 — fail, per the family's axe measurements). */
+.rottay-stepper-step[data-disabled='true'] [data-part='icon'] {
+  opacity: var(--ds-stepper-disabled-opacity, 0.5);
+}
+
+.rottay-stepper-step[data-disabled='true'] [data-part='label'] {
+  color: var(--ds-stepper-disabled-label-color, var(--ds-color-text-secondary));
+}
+
+.rottay-stepper-step[data-disabled='true'] [data-part='subtitle'],
+.rottay-stepper-step[data-disabled='true'] [data-part='description'] {
+  color: var(--ds-stepper-disabled-description-color, var(--ds-color-text-secondary));
+}
+
+/* ---- Stepper.Step: the icon badge box (geometry per data-size; the status
+        paint above already owns background/border/color). ----------------- */
+.rottay-stepper-step [data-part='icon'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  /* Step numerals align in columns across widths (Quiet Premium numeral law,
+     the engine skin's `--ds-stepper-numeric` precedent). */
+  font-variant-numeric: var(--ds-stepper-numeric, tabular-nums);
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+.rottay-stepper-step[data-size='sm'] [data-part='icon'] {
+  inline-size: var(--ds-stepper-item-size-sm, 24px);
+  block-size: var(--ds-stepper-item-size-sm, 24px);
+  min-inline-size: var(--ds-stepper-item-size-sm, 24px);
+  font-size: var(--ds-stepper-item-font-size-sm, var(--ds-font-size-xs));
+}
+
+.rottay-stepper-step[data-size='md'] [data-part='icon'] {
+  inline-size: var(--ds-stepper-item-size-md, 32px);
+  block-size: var(--ds-stepper-item-size-md, 32px);
+  min-inline-size: var(--ds-stepper-item-size-md, 32px);
+  font-size: var(--ds-stepper-item-font-size-md, var(--ds-font-size-sm));
+}
+
+.rottay-stepper-step[data-size='lg'] [data-part='icon'] {
+  inline-size: var(--ds-stepper-item-size-lg, 40px);
+  block-size: var(--ds-stepper-item-size-lg, 40px);
+  min-inline-size: var(--ds-stepper-item-size-lg, 40px);
+  font-size: var(--ds-stepper-item-font-size-lg, var(--ds-font-size-md));
+}
+
+/* ---- Stepper.Step: the text column. `text-align: start` is the logical
+        form of the former physical `left` (it never mirrored in RTL). ----- */
+.rottay-stepper-step__content {
+  display: flex;
+  min-inline-size: 0;
+  flex-direction: column;
+  gap: calc(var(--ds-spacing-1) / 2);
+  text-align: start;
+}
+
+.rottay-stepper-step[data-direction='horizontal'][data-label-placement='vertical'] .rottay-stepper-step__content {
+  text-align: center;
+}
+
+.rottay-stepper-step__title {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* The subtitle's trailing offset stacks with the title's flex gap (two
+   spacing-2 steps, so the pair rides the density-effective scale) and
+   mirrors to the reading side in RTL. */
+.rottay-stepper-step__subtitle {
+  margin-inline-start: var(--ds-spacing-2);
+}
+
+.rottay-stepper-step[data-size='sm'] .rottay-stepper-step__title {
+  font-size: var(--ds-stepper-label-font-size-sm, var(--ds-font-size-xs));
+}
+
+.rottay-stepper-step[data-size='md'] .rottay-stepper-step__title {
+  font-size: var(--ds-stepper-label-font-size-md, var(--ds-font-size-sm));
+}
+
+.rottay-stepper-step[data-size='lg'] .rottay-stepper-step__title {
+  font-size: var(--ds-stepper-label-font-size-lg, var(--ds-font-size-md));
+}
+
+.rottay-stepper-step[data-size='sm'] .rottay-stepper-step__subtitle,
+.rottay-stepper-step[data-size='sm'] .rottay-stepper-step__description {
+  font-size: var(--ds-stepper-description-font-size-sm, 11px);
+}
+
+.rottay-stepper-step[data-size='md'] .rottay-stepper-step__subtitle,
+.rottay-stepper-step[data-size='md'] .rottay-stepper-step__description {
+  font-size: var(--ds-stepper-description-font-size-md, var(--ds-font-size-xs));
+}
+
+.rottay-stepper-step[data-size='lg'] .rottay-stepper-step__subtitle,
+.rottay-stepper-step[data-size='lg'] .rottay-stepper-step__description {
+  font-size: var(--ds-stepper-description-font-size-lg, var(--ds-font-size-sm));
+}
+
+/* ---- Stepper.Step's connector: the box per orientation (the fill per
+        `data-status` lives above). The vertical branch renders for the
+        first time — it was a dead inline branch before. ------------------- */
+.rottay-stepper-connector[data-part='connector'] {
+  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+.rottay-stepper-connector[data-part='connector'][data-direction='horizontal'] {
+  flex: 1;
+  min-inline-size: var(--ds-spacing-8);
+  block-size: 1px;
+  margin-block: 0;
+  margin-inline: var(--ds-spacing-2);
+  align-self: center;
+}
+
+.rottay-stepper-connector[data-part='connector'][data-direction='vertical'] {
+  inline-size: 1px;
+  min-block-size: var(--ds-spacing-8);
+  margin-block: var(--ds-spacing-1);
+}
+
+/* The vertical connector centers on the icon badge (half the badge box,
+   logical so it mirrors in RTL). */
+.rottay-stepper-connector[data-part='connector'][data-direction='vertical'][data-size='sm'] {
+  margin-inline-start: calc(var(--ds-stepper-item-size-sm, 24px) / 2);
+}
+
+.rottay-stepper-connector[data-part='connector'][data-direction='vertical'][data-size='md'] {
+  margin-inline-start: calc(var(--ds-stepper-item-size-md, 32px) / 2);
+}
+
+.rottay-stepper-connector[data-part='connector'][data-direction='vertical'][data-size='lg'] {
+  margin-inline-start: calc(var(--ds-stepper-item-size-lg, 40px) / 2);
+}
+
+/* ---- Stepper.Content: the state paint the JS used to inline. `fade` and
+        `slide` share the opacity choreography (slide adds the translate
+        above); `none` is a plain show/hide; `hidden` always unmounts
+        visually. ---------------------------------------------------------- */
+.rottay-stepper-content[data-part='panel']:not([data-animation='none']) {
+  transition:
+    opacity var(--ds-motion-normal) var(--ds-motion-ease-out),
+    transform var(--ds-motion-normal) var(--ds-motion-ease-out);
+}
+
+.rottay-stepper-content[data-part='panel']:not([data-animation='none'])[data-state='entering'],
+.rottay-stepper-content[data-part='panel']:not([data-animation='none'])[data-state='exiting'] {
+  opacity: 0;
+}
+
+.rottay-stepper-content[data-part='panel'][data-state='exiting'] {
+  pointer-events: none;
+}
+
+.rottay-stepper-content[data-part='panel'][data-state='hidden'],
+.rottay-stepper-content[data-part='panel'][data-animation='none']:not([data-active='true']) {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-stepper-content[data-part='panel']:not([data-animation='none']),
+  .rottay-stepper-step [data-part='icon'],
+  .rottay-stepper-connector[data-part='connector'] {
+    transition: none;
+  }
 }

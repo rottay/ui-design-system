@@ -88,7 +88,8 @@ export function buildHideMediaQuery(props: Pick<HideProps, 'from' | 'below' | 'o
 /**
  * CSS-first conditional hiding component.
  *
- * Renders a wrapper element that is visible by default and becomes
+ * Renders a wrapper element that generates no box of its own while visible
+ * (`display: contents`, mirroring Show's visible state) and becomes
  * `display: none !important` when the specified media query matches.
  * A colocated `<style>` tag ensures the rule is available before JS hydrates.
  */

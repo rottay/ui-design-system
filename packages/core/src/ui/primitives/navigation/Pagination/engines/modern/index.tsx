@@ -14,6 +14,13 @@
  * - The ellipsis is an inert `<span>` (never a focusable button).
  * - Size rides `data-size` on the root; the skin maps sm/md/lg to the
  *   documented 32/36/44px control heights.
+ * - `showSizeChanger` renders a native `<select>` trailing the joined
+ *   controls (the modern select.css native-trigger idiom: `appearance: none`
+ *   + a governed `NavigationDownIcon` part). Changing the page size resets to
+ *   page 1 and reports through the contract's only callback,
+ *   `onChange(1, nextPageSize)` — the contract declares no
+ *   `pageSizeOptions`/`onShowSizeChange` axes, so the option list is the
+ *   conventional 10/20/50/100 with the active `pageSize` merged in.
  *
  * @example Basic Usage
  * ```tsx
@@ -49,6 +56,7 @@ import { PAGINATION_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
 
 // ============================================================================
 // i18n fallback helpers
@@ -69,7 +77,17 @@ const EN_FALLBACK = {
   next: 'Next',
   navigation: 'Pagination',
   totalItems: 'Total {total} items',
+  itemsPerPage: '{count} per page',
+  sizeChanger: 'Items per page',
 } as const;
+
+/**
+ * Page-size choices for the contract's `showSizeChanger`. The contract declares
+ * no `pageSizeOptions` axis, so the conventional Ant-aligned set applies; the
+ * active `pageSize` is always merged in so the select never shows a phantom
+ * value.
+ */
+const BASE_PAGE_SIZE_OPTIONS: readonly number[] = [10, 20, 50, 100];
 
 function interpolate(template: string, params?: Record<string, string | number>): string {
   if (!params) return template;
@@ -99,6 +117,7 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
     total,
     pageSize = PAGINATION_DEFAULTS.pageSize!,
     size = PAGINATION_DEFAULTS.size,
+    showSizeChanger = PAGINATION_DEFAULTS.showSizeChanger,
     showTotal = PAGINATION_DEFAULTS.showTotal,
     disabled,
     onChange,
@@ -123,6 +142,15 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
 
   /** Calculate total number of pages */
   const totalPages = Math.ceil(total / pageSize);
+
+  /**
+   * Size-changer option list: the base set plus the active pageSize, deduped
+   * and sorted so a contract-driven pageSize (say 25) reads in place.
+   */
+  const pageSizeOptions = React.useMemo(
+    () => Array.from(new Set([...BASE_PAGE_SIZE_OPTIONS, pageSize])).sort((a, b) => a - b),
+    [pageSize]
+  );
 
   /**
    * Narrow frames let the joined controls row scroll (see the skin). When the
@@ -151,6 +179,17 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
     if (page >= 1 && page <= totalPages && !disabled) {
       onChange?.(page, pageSize);
     }
+  };
+
+  /**
+   * Handles page-size changes. A new page size invalidates the current page
+   * index, so the contract's single callback reports a reset to page 1 —
+   * `onChange(1, nextPageSize)` — matching the classic engine's Ant behavior.
+   */
+  const handlePageSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const nextPageSize = Number(event.target.value);
+    if (disabled || nextPageSize === pageSize || nextPageSize <= 0) return;
+    onChange?.(1, nextPageSize);
   };
 
   // ============================================================================
@@ -273,6 +312,32 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
           <NavigationForwardIcon decorative size="sm" />
         </button>
       </div>
+
+      {/* Page-size changer: a native select (keyboard, mobile picker and
+          forced-colors behavior for free) in the select.css native-trigger
+          idiom — the governed chevron is decorative; the select carries the
+          accessible name. `data-disabled` rides the wrapper so the skin dims
+          control AND chevron as one unit. */}
+      {showSizeChanger && (
+        <span data-part="pagination-size-changer" data-disabled={disabled || undefined}>
+          <select
+            data-part="pagination-size-select"
+            value={pageSize}
+            disabled={disabled}
+            onChange={handlePageSizeChange}
+            aria-label={translate('pagination.size_changer', EN_FALLBACK.sizeChanger)}
+          >
+            {pageSizeOptions.map((option) => (
+              <option key={option} value={option}>
+                {translate('pagination.items_per_page', EN_FALLBACK.itemsPerPage, {
+                  count: option,
+                })}
+              </option>
+            ))}
+          </select>
+          <NavigationDownIcon decorative size="sm" data-part="pagination-size-icon" />
+        </span>
+      )}
     </nav>
   );
 }

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Modern (Token-driven/Tailwind) engine for the ConfirmDialog overlay component.
+ * @fileoverview Modern (token-driven) engine for the ConfirmDialog overlay component.
  * Renders a native `<dialog>` promoted to the browser top layer via `showModal()`,
  * portaled through the shared overlay runtime so tenant scope, focus trapping,
  * background inertness, scroll-lock, Escape routing and focus restore are owned
@@ -20,38 +20,43 @@
 'use client';
 
 import React, { useCallback, useEffect, useId, useState } from 'react';
-import type { ConfirmDialogProps } from '../../contracts';
+import type { ConfirmDialogProps, ConfirmDialogVariant } from '../../contracts';
 import { CONFIRM_DIALOG_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
+import { ModernButton as Button } from '../../../../facade';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
 
-/** Maps each variant to an inline SVG so the component stays icon-library-free. */
-const VARIANT_ICON_MAP: Record<string, React.ReactNode> = {
-  info: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <circle cx="12" cy="12" r="10" />
-      <line x1="12" y1="16" x2="12" y2="12" />
-      <line x1="12" y1="8" x2="12.01" y2="8" />
-    </svg>
-  ),
-  warning: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-      <line x1="12" y1="9" x2="12" y2="13" />
-      <line x1="12" y1="17" x2="12.01" y2="17" />
-    </svg>
-  ),
-  danger: (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-      <circle cx="12" cy="12" r="10" />
-      <line x1="15" y1="9" x2="9" y2="15" />
-      <line x1="9" y1="9" x2="15" y2="15" />
-    </svg>
-  ),
+/**
+ * Maps each variant to its governed semantic status role (the icon facade
+ * owns sizing/stroke, tenant icon treatment and telemetry). Decorative: the
+ * variant tone is reinforcement; the title carries the accessible name.
+ * The former component-local inline SVG roots are retired from the local-SVG
+ * queue -- these three roles are their exact semantic equivalents.
+ */
+const VARIANT_ICON_MAP: Record<ConfirmDialogVariant, React.ReactNode> = {
+  info: <StatusInfoIcon decorative size={24} />,
+  warning: <StatusWarningIcon decorative size={24} />,
+  danger: <StatusErrorIcon decorative size={24} />,
+};
+
+/**
+ * Maps each variant to the composed Button's tone (AlertDialog's composition
+ * grammar): the confirm action IS the Button primitive, so the semantic
+ * fills, hover/press/focus states, the width-stable pending posture and the
+ * forced-colors contract all come from the primitive's own skin instead of a
+ * hand-built copy here.
+ */
+const VARIANT_BUTTON_MAP: Record<ConfirmDialogVariant, 'primary' | 'warning' | 'danger'> = {
+  info: 'primary',
+  warning: 'warning',
+  danger: 'danger',
 };
 
 /**
@@ -190,7 +195,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
 
   return (
     <>
-      <span ref={setAnchorEl} data-part="anchor" style={{ display: 'contents' }} />
+      <span ref={setAnchorEl} data-part="anchor" />
       {open ? (
         <Portal>
           <PortalScope snapshot={portalScope}>
@@ -220,11 +225,10 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
               onClick={handleBackdropClick}
               onClose={handleDialogClose}
             >
-              {/* Backdrop delegates dismiss to onCancel (always allowed, unlike AlertDialog) */}
-              <div
-                data-part="scrim"
-                style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
-              />
+              {/* Backdrop delegates dismiss to onCancel (always allowed, unlike
+                  AlertDialog). Geometry drained to the skin (Pass-2 P0, the
+                  AlertDialog drain's parity): full-viewport absolute, click-transparent. */}
+              <div data-part="scrim" />
               <div
                 data-part="surface"
                 data-open="true"
@@ -233,7 +237,6 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
                 aria-modal="true"
                 aria-labelledby={titleId}
                 aria-describedby={descriptionId}
-                style={{ position: 'relative' }}
               >
                 <div data-part="content">
                   {displayIcon && (
@@ -250,29 +253,36 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
                     )}
                   </div>
                 </div>
-                {/* Action row: alignment, rhythm and all button paint are
-                    skin-owned (confirm-dialog.css). */}
+                {/* Action row: alignment, rhythm and narrow stacking are
+                    skin-owned (confirm-dialog.css). Both actions compose the
+                    Button primitive (AlertDialog's grammar) — chrome, states,
+                    the coarse floor, forced-colors and the width-stable
+                    pending posture (disabled + aria-busy + spinner, label
+                    preserved as the accessible name) are the primitive's own.
+                    DOM order keeps the least destructive control first, so
+                    the native dialog's initial focus lands on it. */}
                 <div data-part="footer">
-                  <button
-                    type="button"
+                  <Button
+                    variant="ghost"
+                    size="sm"
                     data-part="action"
                     data-action="cancel"
                     onClick={onCancel}
                     disabled={loading}
                   >
                     {cancelLabel}
-                  </button>
-                  <button
-                    type="button"
+                  </Button>
+                  <Button
+                    variant={VARIANT_BUTTON_MAP[variant]}
+                    size="sm"
                     data-part="action"
                     data-action="confirm"
                     data-loading={loading ? 'true' : 'false'}
+                    pending={loading}
                     onClick={handleConfirm}
-                    disabled={loading}
                   >
-                    {loading && <span data-part="spinner" />}
-                    <span data-part="confirm-label">{confirmLabel}</span>
-                  </button>
+                    {confirmLabel}
+                  </Button>
                 </div>
               </div>
             </dialog>

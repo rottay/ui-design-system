@@ -11,8 +11,13 @@
  * so this file now owns EVERY painted and geometric channel of the component:
  * the item grid (a direction-aware re-implementation of the DaisyUI
  * `timeline-vertical` geometry on `data-part` hooks), the connectors, the
- * dots, the label, and the pending spinner. The two theme.css bridges the
- * old header documented are DEAD for this engine:
+ * dots, the label, and the pending node. Phase B update: the pending LOADING
+ * indicator is no longer a private CSS ring -- the engine composes the
+ * canonical Spinner primitive as the timeline's `spinner` part (P-79
+ * caller-wins; its own skin owns the ring paint, cadence, reduced-motion and
+ * forced-colors grammar). This skin keeps only the part's inline layout and
+ * the family arc-color dial (`--ds-timeline-pending-dot-color`). The two
+ * theme.css bridges the old header documented are DEAD for this engine:
  *   - `[data-tenant] .timeline::before` -- was already inert (a ::before
  *     with no `content` never generates), and the class is gone;
  *   - `[data-tenant] .timeline-start/-middle/-end { color }` -- the classes
@@ -35,7 +40,7 @@
  * an item renders. The label sits under the item's `[data-part='content']`
  * div, so the chain steps through it explicitly.
  *
- * SPECIFICITY (P-48): the spinner's border color and the dot's border width
+ * SPECIFICITY (P-48): the composed ring's arc color and the dots' fills
  * clear the tenant's unlayered (0,3,1) `*` border-color floor at (0,5,0)+.
  * Values transcribed verbatim from `engines/modern.tsx` and from the DaisyUI
  * `timeline-vertical` geometry the drain retired.
@@ -50,9 +55,9 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  color: var(--ds-timeline-content-color, inherit);
-  font-size: var(--ds-timeline-content-font-size, inherit);
-  line-height: var(--ds-timeline-content-line-height, normal);
+  color: var(--ds-timeline-content-color);
+  font-size: var(--ds-timeline-content-font-size);
+  line-height: var(--ds-timeline-content-line-height);
 }
 
 /* ---- item grid: [start content | dot | end content] tracks, with the
@@ -72,7 +77,7 @@
         inline style; border:none is a colorless reset (preflight gives hr a
         top border). ---- */
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='connector'] {
-  width: var(--ds-timeline-line-width, 2px);
+  width: var(--ds-timeline-line-width);
   height: 100%;
   border: none;
   background: var(--ds-timeline-line-color, var(--ds-surface-panel));
@@ -86,10 +91,15 @@
 }
 
 /* ---- content placement: start side aligns toward the dot, end side away
-        from it; both margins were Daisy's 0.25rem. The text color takes over
-        the dead theme.css bridge, keeping its token in the chain. ---- */
+        from it. The margin rides the density-scaled spacing channel (0.25rem
+        at scale 1, Daisy's original rhythm); min-inline-size + break-word keep
+        unbroken long copy from blowing out the 1fr track. The text color
+        takes over the dead theme.css bridge, keeping its token in the
+        chain. ---- */
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'] {
-  margin: 0.25rem;
+  margin: var(--ds-spacing-1);
+  min-inline-size: 0;
+  overflow-wrap: break-word;
   color: var(--ds-timeline-content-color, var(--ds-text-primary, var(--ds-color-text-primary)));
 }
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'][data-side='start'] {
@@ -143,25 +153,31 @@
       var(--ds-color-text-primary) 30%
     )
   );
-  font-size: var(--ds-timeline-label-font-size, 12px);
-  font-weight: var(--ds-timeline-label-font-weight, var(--ds-font-weight-medium, 500));
+  font-size: var(--ds-timeline-label-font-size, var(--ds-font-size-xs));
+  font-weight: var(--ds-timeline-label-font-weight, var(--ds-font-weight-medium));
   letter-spacing: var(--ds-timeline-label-letter-spacing, 0.02em);
   font-variant-numeric: var(--ds-timeline-label-font-variant-numeric, tabular-nums);
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--ds-spacing-1);
 }
 
-/* ---- dot marker: default fill + ring width. The unqualified rule carries the
+/* ---- dot marker: default fill + halo ring. The `--ds-timeline-dot-border-width`
+        channel (2px at the root default) painted NOTHING after the drain --
+        `border-width` without a style is inert. Phase B completes the channel
+        as an OUTLINE halo in the surface color: the node reads as a disc that
+        breaks the rail line, with zero box-model impact (the 12px geometry is
+        untouched). The unqualified rule carries the
         `primary` fill because the lookup it replaces fell back to primary for an
         unrecognised tone; the tone rules below tie with it at (0,7,0) and win on
-        source order. The pending dot is excluded from the ring width: its own
-        marker never declared one, and a tenant that sets
-        `--ds-timeline-dot-border-width` must not grow a border there. ---- */
+        source order. The pending dot is excluded from the halo: its pulse is
+        already the attention channel, and a tenant that sets
+        `--ds-timeline-dot-border-width` must not grow a second ring there. ---- */
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item']:not([data-pending='true']) > [data-part='dot'] > [data-part='dot-marker'] {
-  width: var(--ds-timeline-dot-size, 12px);
-  height: var(--ds-timeline-dot-size, 12px);
+  width: var(--ds-timeline-dot-size);
+  height: var(--ds-timeline-dot-size);
   border-radius: 9999px;
   background: var(--ds-timeline-color-primary, var(--ds-color-primary));
-  border-width: var(--ds-timeline-dot-border-width, 0);
+  outline: var(--ds-timeline-dot-border-width) solid
+    var(--_ds-proto-timeline-dot-ring-color, var(--ds-surface-canvas));
 }
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='blue'] > [data-part='dot'] > [data-part='dot-marker'] {
   background: var(--ds-timeline-color-blue, var(--ds-color-primary));
@@ -188,52 +204,78 @@
   background: var(--ds-timeline-color-error, var(--ds-color-error));
 }
 
-/* ---- pending row: dot fill + pulse, and the spinner ring. The pulse default
-        moved off Tailwind's `pulse` keyframe (gone with the drained classes)
-        onto the foundation's ds-foundation-pulse. ---- */
-.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'] {
-  width: var(--ds-timeline-dot-size, 12px);
-  height: var(--ds-timeline-dot-size, 12px);
-  border-radius: 9999px;
-  background: var(--ds-timeline-line-color, var(--ds-surface-panel));
-  animation: var(
-    --ds-timeline-pending-animation,
-    ds-foundation-pulse 2s var(--ds-motion-ease-in-out) infinite
-  );
-}
-.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='content'] > [data-part='spinner'] {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin-inline-end: 8px;
-  vertical-align: middle;
-  animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
-  border: 2px solid var(--ds-color-border);
-  border-top-color: var(--ds-timeline-pending-dot-color, var(--ds-color-primary));
-  border-radius: 50%;
+/* ---- state law (B1.4/B1.5): semantic tones never ride hue alone. Success,
+        warning, error and their legacy aliases (red/green/blue) get a surface
+        keyline THROUGH the fill, so a state node reads as a ringed disc
+        against the flat neutral (primary/gray) journey nodes -- shape is the
+        second channel, hue the first. The keyline follows the marker's
+        border-radius; forced colors strips it and re-maps the fill below. ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item']:is([data-tone='success'], [data-tone='warning'], [data-tone='error'], [data-tone='red'], [data-tone='green'], [data-tone='blue']) > [data-part='dot'] > [data-part='dot-marker'] {
+  box-shadow: inset 0 0 0 2px var(--_ds-proto-timeline-state-keyline, var(--ds-surface-canvas));
 }
 
-/* ---- reduced motion: the pending pulse and the spinner are infinite loops,
-        so they settle to a static pending marker instead of cycling. ---- */
+/* ---- joining-script guard: the label's tracked caps treatment breaks
+        contextual joining in Arabic-script timestamps; tracking collapses to
+        normal under a joining-script lang (Typography lane precedent). ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='content'] > [data-part='label']:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks) {
+  letter-spacing: normal;
+}
+
+/* ---- pending row: dot fill + pulse, and the composed Spinner. The pulse
+        default moved off Tailwind's `pulse` keyframe (gone with the drained
+        classes) onto the foundation's ds-foundation-pulse. ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'] {
+  width: var(--ds-timeline-dot-size);
+  height: var(--ds-timeline-dot-size);
+  border-radius: 9999px;
+  background: var(--ds-timeline-line-color, var(--ds-surface-panel));
+  /* Fallback parity: the pending-animation channel is declared in
+     presentation/components/timeline.css (loaded by both facade entrypoints),
+     so the var() stays bare and resolves to the declared pulse recipe. */
+  animation: var(--ds-timeline-pending-animation);
+}
+/* A lone pending row has no predecessor: its leading connector would dangle
+   above the first node. Hidden (not removed) so the grid geometry holds. */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true']:first-child > [data-part='connector'][data-edge='leading'] {
+  visibility: hidden;
+}
+/* The loading indicator is the canonical Spinner primitive composed as the
+   timeline's `spinner` part (P-79 caller-wins renames its root stamp, so its
+   own root layout rule bows out and the timeline lays the part out): inline
+   with the pending copy, optically centered, logical gap. Ring paint, cadence
+   and reduced-motion/forced-colors grammar belong to the Spinner's own skin. */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='content'] > [data-part='spinner'] {
+  display: inline-flex;
+  margin-inline-end: 8px;
+  vertical-align: middle;
+}
+/* Family dial: the pending arc's head keeps reading the timeline's own
+   pending color channel on the composed ring. */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='content'] > [data-part='spinner'] [data-part='indicator'] {
+  border-top-color: var(--ds-timeline-pending-dot-color, var(--ds-color-primary));
+}
+
+/* ---- reduced motion: the pending pulse is an infinite loop, so it settles
+        to a static pending marker instead of cycling. The composed Spinner's
+        cadence is zeroed by its own skin (and the motion authority). ---- */
 @media (prefers-reduced-motion: reduce) {
-  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'],
-  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='content'] > [data-part='spinner'] {
+  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'] {
     animation: none;
   }
 }
 
 html[data-ds-motion='reduced']
-  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'],
-html[data-ds-motion='reduced']
-  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='content'] > [data-part='spinner'] {
+  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'] {
   animation: none;
 }
 
 /* ---- forced colors: tone fills strip away, so the rail, the dots and the
-        pending spinner re-assert in system colors. The dot stays a solid
-        marker (ButtonText), pending keeps the system highlight, and the
-        connector -- always a neutral hairline, never a state hue -- reads
-        ButtonText. ---- */
+        pending node re-assert in system colors. The dot stays a solid marker
+        (ButtonText), pending keeps the system highlight, and the connector --
+        always a neutral hairline, never a state hue -- reads ButtonText. The
+        state keyline is box-shadow paint and strips away with the fills; the
+        composed ring re-expresses in the GrayText/Highlight pair (its own
+        skin's FC grammar, re-asserted here above the family dial). ---- */
 @media (forced-colors: active) {
   .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='connector'] {
     background: ButtonText;
@@ -244,8 +286,9 @@ html[data-ds-motion='reduced']
   .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'] {
     background: Highlight;
   }
-  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='content'] > [data-part='spinner'] {
-    border-color: ButtonText;
+  .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='content'] > [data-part='spinner'] [data-part='indicator'][role='status'] {
+    border-color: GrayText;
     border-top-color: Highlight;
+    border-inline-end-color: GrayText;
   }
 }

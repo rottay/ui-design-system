@@ -223,7 +223,8 @@ describe('Tour modern engine — the skin owns the drained chrome', () => {
   });
 
   it('owns the surface chrome with LOGICAL max-inline-size', () => {
-    expect(SKIN).toContain('padding: var(--ds-tour-surface-padding, var(--ds-spacing-4, 1rem));');
+    expect(SKIN).toContain('padding: var(--ds-tour-surface-padding, var(--ds-spacing-4));');
+    expect(SKIN).not.toContain('var(--ds-spacing-4, 1rem)');
     expect(SKIN).toContain('max-inline-size: var(--ds-tour-surface-max-width, 24rem);');
     expect(SKIN).not.toMatch(/\[data-part='surface'\][^{]*\{[^}]*max-width:/);
   });

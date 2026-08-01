@@ -43,6 +43,40 @@
  *    inside the button;
  *  - the panel surface consumes the MATERIAL card channel before the raw
  *    `--ds-surface-card` fallback (see the panel rule's comment).
+ *
+ * PHASE-B SECOND PASS (2026-07-31):
+ *  - header/content TYPOGRAPHY lives here now (was engine inline styles);
+ *    the weight fallback rides the semantic `--ds-font-weight-medium`
+ *    channel instead of a literal `500`;
+ *  - every padding in the rhythm scales by `--ds-density-effective-scale`
+ *    (the clamped global×local density dial), so compact/spacious density
+ *    reaches the family instead of leaving its fixed-px rhythm frozen —
+ *    same convention as autocomplete/date-picker cell sizing;
+ *  - a collapsed panel's content is `aria-hidden` + `inert` in the engine,
+ *    so nothing here needs to keep painting affordances for it.
+ *
+ * PHASE-B SECOND PASS 2 (P2-18, 2026-07-31):
+ *  - FALLBACK RESTORATION: the `--ds-collapse-{slot}-*` matrix channels are
+ *    declared ONLY by the legacy `presentation/components/collapse.css`
+ *    recipe, which ships in `styles.css` but NOT in `base.css` — the
+ *    production modern bundles (dist/<vertical>.css) declare zero matrix
+ *    channels (verified: dist/bithire.css). The P0 parity sweep stripped
+ *    these fallbacks treating the channels as declared; in the modern
+ *    runtime they are UNDECLARED hooks whose fallback IS their contract
+ *    (padding collapsed to 0, borders vanished, ink/shadow went
+ *    unresolved). Every matrix reference here therefore keeps its
+ *    pre-sweep fallback again — still overridable by any tenant that
+ *    declares the channel. Genuinely declared channels (spacing ramp,
+ *    motion, focus-ring) stay bare.
+ *  - the panel disabled posture (opacity/cursor) and the header cursor
+ *    policy + selection guard moved here from the engine's inline styles,
+ *    keyed on the stamped data-disabled/data-collapsible attributes;
+ *  - the RTL chevron flip switches to the `:dir(rtl)` idiom and is now the
+ *    SINGLE mirror owner: the engine renders the governed
+ *    NavigationForwardIcon with `mirrored={false}`, disabling the
+ *    semantic-icon facade's auto-mirror that double-flipped the glyph in
+ *    RTL (and made the expanded 90deg turn point UP there) — Tree
+ *    precedent (`mirrored={false}` + skin-owned flip).
  */
 
 /* ---- arrow: rotation (was the inline `transform` ternary on `isActive`). ---- */
@@ -55,8 +89,11 @@
 
 /* The collapsed glyph is directional (▶ points in the reading direction);
    mirror it in RTL so "forward" stays honest. The expanded state rotates to
-   point down — direction-neutral, no mirror needed. */
-[dir='rtl'] .rottay-collapse[data-part='root'] [data-part='arrow'][data-expanded='false'] {
+   point down — direction-neutral, no mirror needed. This rule is the SINGLE
+   mirror owner (the engine disables the icon facade's own auto-mirror via
+   `mirrored={false}` — see the docblock); `:dir()` follows the nearest
+   authored direction, no explicit dir ancestor required. */
+.rottay-collapse[data-part='root'] [data-part='arrow'][data-expanded='false']:dir(rtl) {
   transform: scaleX(-1);
 }
 
@@ -101,6 +138,14 @@
   box-shadow: var(--ds-collapse-root-ghost-idle-shadow, none);
 }
 
+/* ---- panel: disabled posture (was the Panel root's engine inline paint
+        until P2-18): the whole surface dims and reports the blocked cursor;
+        the header rule below additionally shifts the ink. ---- */
+.rottay-collapse[data-part='root'] [data-part='panel'][data-disabled='true'] {
+  opacity: var(--ds-collapse-header-default-disabled-opacity, 0.5);
+  cursor: var(--ds-collapse-header-default-disabled-cursor, not-allowed);
+}
+
 /* ---- panel: border, bordered case only (was the `context.bordered` spread
         -- when not bordered, no border key was ever set, so no rule fires
         for that state). `:not(.rottay-collapse--borderless)` is both the
@@ -115,9 +160,32 @@
 
 /* ---- header: color, 3-way priority (disabled > expanded > idle). Mutually
         exclusive `:not()` guards reproduce the JS ternary's priority order
-        without relying on cascade position. ---- */
+        without relying on cascade position. Typography lives here too (was
+        engine inline until the Phase-B second pass): the weight fallback is
+        the semantic `--ds-font-weight-medium` channel, never a literal. ---- */
 .rottay-collapse[data-part='root'] [data-part='header'] {
   color: var(--ds-collapse-header-default-idle-color, inherit);
+  font-size: var(--ds-collapse-header-default-idle-font-size, inherit);
+  font-weight: var(--ds-collapse-header-default-idle-font-weight, var(--ds-font-weight-medium));
+  line-height: var(--ds-collapse-header-default-idle-line-height, normal);
+}
+
+/* ---- header: cursor policy + selection guard (was the engine's inline
+        ternary until P2-18). The toggle header points; `collapsible='icon'`
+        and `collapsible='disabled'` headers are NOT the toggle, so they
+        keep the default cursor; a disabled panel sorts LAST so its blocked
+        cursor wins every tie — the former JS ternary's exact priority
+        (disabled > collapsible policy > idle pointer). ---- */
+.rottay-collapse[data-part='root'] [data-part='header'] {
+  cursor: var(--ds-collapse-header-default-idle-cursor, pointer);
+  user-select: none;
+}
+.rottay-collapse[data-part='root'] [data-part='header'][data-collapsible='icon'],
+.rottay-collapse[data-part='root'] [data-part='header'][data-collapsible='disabled'] {
+  cursor: default;
+}
+.rottay-collapse[data-part='root'] [data-part='header'][data-disabled='true'] {
+  cursor: var(--ds-collapse-header-default-disabled-cursor, not-allowed);
 }
 .rottay-collapse[data-part='root'] [data-part='header'][data-expanded='true']:not([data-disabled='true']) {
   color: var(--ds-collapse-header-default-expanded-color, var(--ds-color-primary));
@@ -145,10 +213,12 @@
 
 /* ---- content-inner: color (was a STATIC, unconditional inline value, no
         ternary in the source) + background (was the `context.ghost`
-        ternary). ---- */
+        ternary) + typography (Phase-B: moved out of the engine inline). ---- */
 .rottay-collapse[data-part='root'] [data-part='content-inner'] {
   color: var(--ds-collapse-content-default-idle-color, inherit);
   background: var(--ds-collapse-content-default-idle-bg, transparent);
+  font-size: var(--ds-collapse-content-default-idle-font-size, inherit);
+  line-height: var(--ds-collapse-content-default-idle-line-height, normal);
 }
 .rottay-collapse.rottay-collapse--ghost[data-part='root'] [data-part='content-inner'] {
   background: var(--ds-collapse-content-ghost-idle-bg, transparent);
@@ -161,6 +231,10 @@
  * vertical padding collapses to 0 when closed so the grid-template-rows
  * 0fr track plus the padding transition (engine-injected COLLAPSE_STYLES)
  * read as one motion.
+ *
+ * PHASE-B: every length scales by `--ds-density-effective-scale` (clamped
+ * 0.5..3 global×local dial), so the tenant density profile reaches the
+ * rhythm instead of leaving fixed px frozen at one density.
  * ======================================================================== */
 
 /* ---- header ROW: padding, default (md) rhythm. The row is the plain flex
@@ -169,52 +243,52 @@
         — the rhythm must cover the whole row so the extra lands inside the
         same padding boundary the toggle had when it was the row. ---- */
 .rottay-collapse[data-part='root'] [data-part='header-row'] {
-  padding: var(--ds-collapse-header-default-idle-padding-y, 12px)
-    var(--ds-collapse-header-default-idle-padding-x, 16px);
+  padding: calc(var(--ds-collapse-header-default-idle-padding-y, 12px) * var(--ds-density-effective-scale))
+    calc(var(--ds-collapse-header-default-idle-padding-x, 16px) * var(--ds-density-effective-scale));
 }
 .rottay-collapse[data-part='root'][data-size='sm'] [data-part='header-row'] {
-  padding: var(--ds-collapse-header-sm-idle-padding-y, 8px)
-    var(--ds-collapse-header-sm-idle-padding-x, 12px);
+  padding: calc(var(--ds-collapse-header-sm-idle-padding-y, 8px) * var(--ds-density-effective-scale))
+    calc(var(--ds-collapse-header-sm-idle-padding-x, 12px) * var(--ds-density-effective-scale));
 }
 .rottay-collapse[data-part='root'][data-size='lg'] [data-part='header-row'] {
-  padding: var(--ds-collapse-header-lg-idle-padding-y, 16px)
-    var(--ds-collapse-header-lg-idle-padding-x, 20px);
+  padding: calc(var(--ds-collapse-header-lg-idle-padding-y, 16px) * var(--ds-density-effective-scale))
+    calc(var(--ds-collapse-header-lg-idle-padding-x, 20px) * var(--ds-density-effective-scale));
 }
 .rottay-collapse.rottay-collapse--ghost[data-part='root'] [data-part='header-row'] {
-  padding: var(--ds-collapse-header-ghost-idle-padding-y, 8px)
-    var(--ds-collapse-header-ghost-idle-padding-x, 12px);
+  padding: calc(var(--ds-collapse-header-ghost-idle-padding-y, 8px) * var(--ds-density-effective-scale))
+    calc(var(--ds-collapse-header-ghost-idle-padding-x, 12px) * var(--ds-density-effective-scale));
 }
 
 /* ---- extra: the actions slot is the toggle's SIBLING (never nested in the
         button); a small logical gap separates it from the toggle. ---- */
 .rottay-collapse[data-part='root'] [data-part='extra'] {
-  margin-inline-start: var(--ds-collapse-extra-margin-inline-start, var(--ds-spacing-2, 8px));
+  margin-inline-start: var(--ds-collapse-extra-margin-inline-start, var(--ds-spacing-2));
 }
 
 /* ---- content-inner: padding, default (md) rhythm; 0 vertical while collapsed. ---- */
 .rottay-collapse[data-part='root'] [data-part='content-inner'] {
-  padding: 0 var(--ds-collapse-content-default-idle-padding-x, 16px);
+  padding: 0 calc(var(--ds-collapse-content-default-idle-padding-x, 16px) * var(--ds-density-effective-scale));
 }
 .rottay-collapse[data-part='root'] [data-part='content-inner'][data-expanded='true'] {
-  padding: 0 var(--ds-collapse-content-default-idle-padding-x, 16px)
-    var(--ds-collapse-content-default-idle-padding-y, 16px)
-    var(--ds-collapse-content-default-idle-padding-x, 16px);
+  padding: 0 calc(var(--ds-collapse-content-default-idle-padding-x, 16px) * var(--ds-density-effective-scale))
+    calc(var(--ds-collapse-content-default-idle-padding-y, 16px) * var(--ds-density-effective-scale))
+    calc(var(--ds-collapse-content-default-idle-padding-x, 16px) * var(--ds-density-effective-scale));
 }
 .rottay-collapse[data-part='root'][data-size='sm'] [data-part='content-inner'] {
-  padding: 0 var(--ds-collapse-content-sm-idle-padding-x, 12px);
+  padding: 0 calc(var(--ds-collapse-content-sm-idle-padding-x, 12px) * var(--ds-density-effective-scale));
 }
 .rottay-collapse[data-part='root'][data-size='sm'] [data-part='content-inner'][data-expanded='true'] {
-  padding: 0 var(--ds-collapse-content-sm-idle-padding-x, 12px)
-    var(--ds-collapse-content-sm-idle-padding-y, 12px)
-    var(--ds-collapse-content-sm-idle-padding-x, 12px);
+  padding: 0 calc(var(--ds-collapse-content-sm-idle-padding-x, 12px) * var(--ds-density-effective-scale))
+    calc(var(--ds-collapse-content-sm-idle-padding-y, 12px) * var(--ds-density-effective-scale))
+    calc(var(--ds-collapse-content-sm-idle-padding-x, 12px) * var(--ds-density-effective-scale));
 }
 .rottay-collapse[data-part='root'][data-size='lg'] [data-part='content-inner'] {
-  padding: 0 var(--ds-collapse-content-lg-idle-padding-x, 20px);
+  padding: 0 calc(var(--ds-collapse-content-lg-idle-padding-x, 20px) * var(--ds-density-effective-scale));
 }
 .rottay-collapse[data-part='root'][data-size='lg'] [data-part='content-inner'][data-expanded='true'] {
-  padding: 0 var(--ds-collapse-content-lg-idle-padding-x, 20px)
-    var(--ds-collapse-content-lg-idle-padding-y, 20px)
-    var(--ds-collapse-content-lg-idle-padding-x, 20px);
+  padding: 0 calc(var(--ds-collapse-content-lg-idle-padding-x, 20px) * var(--ds-density-effective-scale))
+    calc(var(--ds-collapse-content-lg-idle-padding-y, 20px) * var(--ds-density-effective-scale))
+    calc(var(--ds-collapse-content-lg-idle-padding-x, 20px) * var(--ds-density-effective-scale));
 }
 
 /* ===========================================================================
@@ -227,9 +301,9 @@
 
 .rottay-collapse[data-part='root'] [data-part='header'] {
   transition:
-    background var(--ds-collapse-transition-duration, var(--ds-motion-fast, 120ms))
+    background var(--ds-collapse-transition-duration, var(--ds-motion-fast))
       var(--ds-collapse-transition-timing, var(--ds-motion-ease-out)),
-    color var(--ds-collapse-transition-duration, var(--ds-motion-fast, 120ms))
+    color var(--ds-collapse-transition-duration, var(--ds-motion-fast))
       var(--ds-collapse-transition-timing, var(--ds-motion-ease-out));
 }
 /* Hover is hover-capable-only (4th-wave law); the pressed rule below already
@@ -255,8 +329,8 @@
   );
 }
 .rottay-collapse[data-part='root'] [data-part='header']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: calc(-1 * var(--ds-focus-ring-offset, 2px));
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-focus-ring-offset));
   border-radius: var(--ds-collapse-header-focus-ring-radius, var(--ds-radius-md));
 }
 
@@ -274,8 +348,8 @@
   color: var(--ds-collapse-arrow-hover-color, var(--ds-color-primary));
 }
 .rottay-collapse[data-part='root'] [data-part='arrow']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
   border-radius: var(--ds-collapse-arrow-focus-ring-radius, var(--ds-radius-sm));
 }
 

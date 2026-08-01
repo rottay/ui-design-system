@@ -21,6 +21,7 @@
   isolation: isolate;
   display: flex;
   min-block-size: var(--ds-empty-min-height, 10rem);
+  min-inline-size: 0;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -33,11 +34,21 @@
   box-shadow: var(--ds-empty-shadow, none);
   color: var(--ds-color-text-primary);
   text-align: center;
+  /* Container-driven compactness: the expansive posture (below) collapses to
+     the bounded compact one by CONTAINER width, not viewport — an empty state
+     inside a narrow panel must not keep desktop-scale padding and dead air. */
+  container-type: inline-size;
 }
 
 .rottay-empty.rottay-empty--modern[data-part='root'][data-image='simple'] {
   min-block-size: var(--ds-empty-simple-min-height, 8rem);
   padding: var(--ds-empty-simple-padding, var(--ds-spacing-lg));
+}
+
+/* No-visual posture: without the well, a 10rem floor is dead air above a
+   single line of copy — the region shrinks to the reduced bounded height. */
+.rottay-empty.rottay-empty--modern[data-part='root'][data-image='none'] {
+  min-block-size: var(--ds-empty-simple-min-height, 8rem);
 }
 
 .rottay-empty.rottay-empty--modern[data-part='root'][data-has-footer='true'] {
@@ -73,9 +84,13 @@
   margin: 0;
   color: var(--ds-color-text-secondary);
   font-family: var(--ds-font-family-base);
-  font-size: var(--ds-empty-description-size, var(--ds-font-size-sm));
+  /* The declared recipe channel `--ds-empty-description-font-size` joins the
+     fallback chain; the skin's own axis keeps precedence. */
+  font-size: var(--ds-empty-description-size, var(--ds-empty-description-font-size, var(--ds-font-size-sm)));
   font-weight: var(--ds-font-weight-medium);
   line-height: var(--ds-line-height-relaxed);
+  /* Long unbroken strings (URLs, AR copy) must wrap inside the measure. */
+  overflow-wrap: break-word;
   text-wrap: balance;
 }
 
@@ -89,6 +104,22 @@
   gap: var(--ds-empty-footer-gap, var(--ds-spacing-sm));
   min-block-size: var(--ds-control-height-md);
   margin-block-start: var(--ds-spacing-xs);
+}
+
+/* Compact posture by available space (not viewport): under a ~26rem container
+   the region de-escalates to the same bounded values the `simple` variant
+   already declares — one compact grammar, two trigger axes. Tenant overrides
+   of the `--ds-empty-simple-*` channels tune both. */
+@container (max-width: 26rem) {
+  .rottay-empty.rottay-empty--modern[data-part='root'][data-part='root'] {
+    min-block-size: var(--ds-empty-simple-min-height, 8rem);
+    padding: var(--ds-empty-simple-padding, var(--ds-spacing-lg));
+  }
+
+  .rottay-empty.rottay-empty--modern > .rottay-empty__visual[data-part='image'][data-part='image'] {
+    inline-size: var(--ds-empty-simple-visual-size, 3rem);
+    block-size: var(--ds-empty-simple-visual-size, 3rem);
+  }
 }
 
 /* Forced colors: the tinted well collapses to Canvas and the 7%/22% mixes

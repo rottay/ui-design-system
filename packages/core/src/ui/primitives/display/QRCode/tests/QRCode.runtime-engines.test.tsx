@@ -115,12 +115,14 @@ describe('modern QRCode chrome (K4-C)', () => {
     'utf8',
   );
 
-  it('consolidates spinner/refresh-button/icon geometry into the skin with verbatim fallbacks', () => {
+  it('consolidates spinner/refresh-button/icon geometry into the skin through governed channels', () => {
     expect(modernSkin).toContain('--ds-qrcode-spinner-size, 24px');
-    expect(modernSkin).toContain('--ds-qrcode-refresh-button-size, 32px');
+    expect(modernSkin).toContain('var(--ds-qrcode-refresh-button-size)');
     expect(modernSkin).toContain('--ds-qrcode-refresh-button-padding-x, 12px');
     expect(modernSkin).toContain('--ds-qrcode-refresh-button-font-size, 13px');
-    expect(modernSkin).toContain('--ds-qrcode-icon-padding, 4px');
+    expect(modernSkin).toContain('padding: var(--ds-qrcode-icon-padding)');
+    expect(modernSkin).not.toContain('--ds-qrcode-refresh-button-size, 32px');
+    expect(modernSkin).not.toContain('--ds-qrcode-icon-padding, 4px');
     expect(modernSkin).toContain('ds-foundation-spin');
   });
 
@@ -132,14 +134,15 @@ describe('modern QRCode chrome (K4-C)', () => {
     expect(modernSkin).toContain(".rottay-qrcode.rottay-qrcode--modern[data-status='expired'][data-status='expired'] {\n  opacity: 1;");
     expect(modernSkin).toContain(".rottay-qrcode.rottay-qrcode--modern[data-status='loading'][data-status='loading'] {\n  opacity: 1;");
     expect(modernSkin).toContain(".rottay-qrcode.rottay-qrcode--modern[data-status='scanned'][data-status='scanned'] {\n  opacity: 1;");
-    expect(modernSkin).toContain("[data-part='canvas'] {\n  opacity: var(--ds-qrcode-status-expired-opacity, 0.3);");
-    expect(modernSkin).toContain("[data-part='canvas'] {\n  opacity: var(--ds-qrcode-loading-opacity, 0.5);");
-    expect(modernSkin).toContain("[data-part='canvas'] {\n  opacity: var(--ds-qrcode-status-scanned-opacity, 0.7);");
+    expect(modernSkin).toContain("[data-part='canvas'] {\n  opacity: var(--ds-qrcode-status-expired-opacity);");
+    expect(modernSkin).toContain("[data-part='canvas'] {\n  opacity: var(--ds-qrcode-loading-opacity);");
+    expect(modernSkin).toContain("[data-part='canvas'] {\n  opacity: var(--ds-qrcode-status-scanned-opacity);");
     // The round-1 ink mix is REVERTED: the declared solid-chip pair
     // (white on primary, 5.15/5.47) stands on its own.
     expect(modernSkin).not.toContain('--ds-qrcode-refresh-button-ink');
     expect(modernSkin).toContain('color: var(--ds-qrcode-refresh-button-color, var(--ds-color-primary));');
-    expect(modernSkin).toContain('background: var(--ds-qrcode-refresh-button-bg, transparent);');
+    expect(modernSkin).toContain('background: var(--ds-qrcode-refresh-button-bg);');
+    expect(modernSkin).not.toContain('--ds-qrcode-refresh-button-bg, transparent');
     // The component token file deepened the expired scrim 0.5 -> 0.6 so the
     // white status text clears AA on both sources at full chrome opacity.
     const componentTokens = readFileSync(

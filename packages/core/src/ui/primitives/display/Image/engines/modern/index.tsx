@@ -19,6 +19,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
+import { ContentImageIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-image';
+import { ActionZoomInIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-zoom-in';
 import type { ImageProps } from '../../contracts';
 import { IMAGE_DEFAULTS } from '../../contracts';
 import type { ImageRadius, ImageStatus } from '../../contracts';
@@ -58,8 +60,12 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
 
   // Tracks loading/loaded/error lifecycle for opacity transition and fallback
   const [status, setStatus] = useState<ImageStatus>('loading');
+  // The interaction state still drives the root's data-state stamps; the
+  // overlays no longer mount on hover -- they render with their feature prop
+  // and the SKIN gates their visibility on `[data-state~='hovered']` /
+  // `[data-state~='focus-visible']`, so enter/exit is a real transition
+  // instead of an abrupt pop (P2 continuity fix).
   const { state: interaction, handlers: interactionHandlers } = useInteractionState();
-  const isHovered = interaction.hovered;
 
   // A new src means the image must be re-fetched; reset to loading
   useEffect(() => {
@@ -101,21 +107,6 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     ...style,
   };
 
-  // Inline SVG used when no consumer fallback is provided and the image fails.
-  // `fill="currentColor"` resolves against the fallback panel's own colour.
-  const DefaultFallbackIcon = () => (
-    <svg
-      viewBox="0 0 48 48"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M40 8H8C6.9 8 6 8.9 6 10V38C6 39.1 6.9 40 8 40H40C41.1 40 42 39.1 42 38V10C42 8.9 41.1 8 40 8ZM16 34L22 26L26 32L32 24L38 34H16Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-
   const isInteractive = Boolean(onClick || zoomable);
 
   return (
@@ -147,8 +138,11 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     >
       {/* Loading Placeholder — the pulse animation is owned by the skin
           (ds-foundation-pulse), not a raw Tailwind `animate-pulse` utility;
-          the global reduced-motion guard neutralizes it. */}
-      {status === 'loading' && (
+          the global reduced-motion guard neutralizes it. The panel stays
+          MOUNTED once loaded (it only unmounts on error): the skin fades it
+          out under the revealing img, so the handoff is a crossfade instead
+          of the panel vanishing mid-reveal (P2 continuity fix). */}
+      {status !== 'error' && (
         <div data-part="placeholder">
           {placeholder || (
             <div className="rottay-image__pulse" />
@@ -156,18 +150,22 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
         </div>
       )}
 
-      {/* Error Fallback */}
+      {/* Error Fallback — the governed content.image role replaces the local
+          ad-hoc SVG (same 3rem/2xl size, same currentColor ink the skin paints
+          through `--ds-color-text-secondary`; decorative by contract). */}
       {status === 'error' && (
         <div data-part="fallback">
-          {fallback || <DefaultFallbackIcon />}
+          {fallback || <ContentImageIcon decorative size="2xl" />}
         </div>
       )}
 
-      {/* Main Image */}
+      {/* Main Image — an absent alt floors to "" (decorative): omitting the
+          attribute entirely leaves assistive technology announcing the src
+          filename, which is strictly worse than an honest empty name. */}
       <img
         data-part="img"
         src={src}
-        alt={alt}
+        alt={alt ?? ''}
         width={width}
         height={height}
         loading={lazy ? 'lazy' : 'eager'}
@@ -176,8 +174,9 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
         style={{ objectPosition }}
       />
 
-      {/* Hover Overlay */}
-      {hoverOverlay && isHovered && (
+      {/* Hover Overlay — rendered with the prop; the skin owns rest/hover
+          visibility so the overlay fades instead of popping on mount. */}
+      {hoverOverlay && (
         <div data-part="hover-overlay">
           {hoverOverlay}
         </div>
@@ -186,12 +185,14 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
       {/* Zoom indicator for zoomable images — `end-2` is LOGICAL
           (inset-inline-end), so the badge mirrors under RTL, and it is the one
           utility the quality contract pins verbatim; every other property
-          (position, padding, radius, ink) is skin-owned. */}
-      {zoomable && isHovered && (
+          (position, padding, radius, ink) is skin-owned. Same visibility law
+          as the hover overlay above: persistent part, skin-gated fade. */}
+      {zoomable && (
         <div data-part="zoom-indicator" className="end-2">
-          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
-          </svg>
+          {/* Pure affordance hint on the interactive root: the governed
+              action.zoom-in role (1rem = sm, currentColor) replaces the local
+              ad-hoc magnifier SVG and stays decorative by contract. */}
+          <ActionZoomInIcon decorative size="sm" />
         </div>
       )}
     </div>

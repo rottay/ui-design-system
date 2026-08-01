@@ -1060,8 +1060,9 @@ describe("Input modern skin -- shell/control paint contract (K1-B01, K1-B02)", (
 
   it("input-compounds: addon border color rides the doubled (0,4,0) anatomy booster (K1-B02)", () => {
     // Width/style stay on the base rule at (0,3,0) where nothing contests them.
-    expect(compoundCss).toContain("border-width: var(--ds-input-border-width, 1px);");
-    expect(compoundCss).toContain("border-style: var(--ds-input-border-style, solid);");
+    expect(compoundCss).toContain("border-width: var(--ds-input-border-width);");
+    expect(compoundCss).toContain("border-style: var(--ds-input-border-style);");
+    expect(compoundCss).not.toContain("var(--ds-input-border-width, 1px)");
     // The color doubles the anatomy anchor: 2 classes + 2 data-part attrs =
     // (0,4,0), clearing the tenant `html[data-tenant]:not([data-theme]):not(.light) *`
     // border floor at (0,3,1) (P-48). No !important, no third paint owner.

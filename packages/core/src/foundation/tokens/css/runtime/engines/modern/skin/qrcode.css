@@ -50,7 +50,7 @@
 .rottay-qrcode.rottay-qrcode--modern[data-part='root'][data-bordered='true'] {
   padding: var(--ds-qrcode-root-padding, 0.75rem);
   border-color: var(--ds-qrcode-border-color, var(--ds-color-border));
-  border-width: var(--ds-qrcode-border-width, 1px);
+  border-width: var(--ds-qrcode-border-width);
   border-radius: var(--ds-qrcode-border-radius, var(--ds-radius-md));
   background: var(--ds-qrcode-background-color, var(--ds-surface-card));
 }
@@ -77,13 +77,22 @@
   opacity: 1;
 }
 .rottay-qrcode.rottay-qrcode--modern[data-status='expired'] > [data-part='canvas-wrapper'] > [data-part='canvas'] {
-  opacity: var(--ds-qrcode-status-expired-opacity, 0.3);
+  opacity: var(--ds-qrcode-status-expired-opacity);
 }
 .rottay-qrcode.rottay-qrcode--modern[data-status='loading'] > [data-part='canvas-wrapper'] > [data-part='canvas'] {
-  opacity: var(--ds-qrcode-loading-opacity, 0.5);
+  opacity: var(--ds-qrcode-loading-opacity);
 }
 .rottay-qrcode.rottay-qrcode--modern[data-status='scanned'] > [data-part='canvas-wrapper'] > [data-part='canvas'] {
-  opacity: var(--ds-qrcode-status-scanned-opacity, 0.7);
+  opacity: var(--ds-qrcode-status-scanned-opacity);
+}
+
+/* Status morphs (loading -> active -> expired) used to snap the canvas mute
+   instantly; the fade keeps the handoff compositor-only, riding the DECLARED
+   qrcode transition channels (bare per fallback parity). The global
+   reduced-motion guard zeroes them; the family's reduced-motion block below
+   is the second net. */
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='canvas'] {
+  transition: opacity var(--ds-qrcode-transition-duration) var(--ds-qrcode-transition-timing);
 }
 
 .rottay-qrcode.rottay-qrcode--modern[data-status='loading'] > [data-part='canvas-wrapper'] > [data-part='overlay'] {
@@ -133,7 +142,7 @@
 .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button'] {
   /* Density-participating control height (Button-skin
      `--ds-density-effective-scale` idiom, K4-C Pass 2). */
-  block-size: calc(var(--ds-qrcode-refresh-button-size, 32px) * var(--ds-density-effective-scale, 1));
+  block-size: calc(var(--ds-qrcode-refresh-button-size) * var(--ds-density-effective-scale));
   flex-shrink: 0;
   padding: 0 var(--ds-qrcode-refresh-button-padding-x, 12px);
   font-size: var(--ds-qrcode-refresh-button-font-size, 13px);
@@ -148,14 +157,14 @@
      cause was chrome opacity (see the root rule above), never the ink.
      The selector needs no repeated attribute: the wrapper/overlay chain
      already reaches (0,6,0) (4th-wave recount). */
-  background: var(--ds-qrcode-refresh-button-bg, transparent);
+  background: var(--ds-qrcode-refresh-button-bg);
   color: var(--ds-qrcode-refresh-button-color, var(--ds-color-primary));
   border-radius: var(--ds-qrcode-refresh-button-radius, var(--ds-radius-md));
   border: 1px solid var(--ds-color-primary);
   transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out);
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 /* Refresh hover is hover-capable-only (4th-wave law); a held press gets the
@@ -166,8 +175,25 @@
   }
 }
 .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button']:active {
-  transform: scale(var(--ds-state-press-scale, 0.98));
+  transform: scale(var(--ds-state-press-scale));
   background: var(--ds-qrcode-refresh-button-bg-hover, var(--ds-color-primary-hover));
+}
+
+/* Keyboard focus is independent from hover (B2.1/B2.6): without this rule the
+   chip wore the UA default outline. The governed double ring (offset + colour)
+   reads over every status scrim; forced colors re-express it below. */
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button']:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-focus-ring);
+}
+
+/* Coarse pointers: the 32px chip sits under the 44px touch floor. The floor
+   grows only the block size -- the overlay already centres and wraps, and the
+   native button label stays vertically centred. */
+@media (hover: none), (pointer: coarse) {
+  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button'] {
+    min-block-size: var(--ds-touch-target-min);
+  }
 }
 
 /* ---- scanned: the check glyph inherits this through `fill="currentColor"` ---- */
@@ -184,7 +210,7 @@
   inset-block-start: 50%;
   inset-inline-start: 50%;
   transform: translate(-50%, -50%);
-  padding: var(--ds-qrcode-icon-padding, 4px);
+  padding: var(--ds-qrcode-icon-padding);
   background: var(--ds-qrcode-icon-bg, var(--ds-surface-card));
   border-radius: var(--ds-qrcode-icon-border-radius, var(--ds-radius-sm));
 }
@@ -237,7 +263,8 @@
     animation: none;
   }
 
-  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button'] {
+  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button'],
+  .rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='canvas'] {
     transition: none;
   }
 }

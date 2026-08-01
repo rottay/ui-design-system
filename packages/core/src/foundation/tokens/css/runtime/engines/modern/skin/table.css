@@ -1,5 +1,9 @@
 /**
- * Modern Table skin (WO-ARC-09 checkpoint 1; K3-A Pass 1: geometry consolidated).
+ * Modern Table skin (WO-ARC-09 checkpoint 1; K3-A Pass 1: geometry consolidated;
+ * Phase B pass 2: header role, sticky/fixed keylines, stateful fixed fills,
+ * scroll shadows, skeleton, sort/pagination/disabled interaction craft;
+ * Phase B P2: filter-row pinning, pinned-fill transition continuity, sighted-RTL
+ * expand turn, coarse selection hit area, forced-colors hairline re-expression).
  *
  * DELIBERATELY UNLAYERED, for the reason button.css states in full: every
  * `rottay-*` layer sorts before Tailwind's `base` layer, so a layered rule loses
@@ -57,7 +61,7 @@
 /* ---- title block above the table ---- */
 .ds-table.ds-table--modern [data-part='title'] {
   margin-block-end: var(--ds-table-title-margin-block-end, 8px);
-  font-weight: var(--ds-table-title-font-weight, var(--ds-font-weight-semibold, 600));
+  font-weight: var(--ds-table-title-font-weight, var(--ds-font-weight-semibold));
 }
 
 /* ---- table element geometry: font size keyed on the stamped `data-size` ---- */
@@ -65,32 +69,37 @@
   border-collapse: collapse;
 }
 .ds-table.ds-table--modern [data-part='table'][data-size='sm'] {
-  font-size: var(--ds-font-size-xs, 12px);
+  font-size: var(--ds-font-size-xs);
 }
 .ds-table.ds-table--modern [data-part='table'][data-size='md'] {
-  font-size: var(--ds-font-size-sm, 14px);
+  font-size: var(--ds-font-size-sm);
 }
 .ds-table.ds-table--modern [data-part='table'][data-size='lg'] {
-  font-size: var(--ds-font-size-base, 16px);
+  font-size: var(--ds-font-size-base);
 }
 
-/* ---- cell padding per size step (the retired inline SIZE_PADDING map) ---- */
+/* ---- cell padding per size step (the retired inline SIZE_PADDING map).
+        Skeleton cells share the same frame so the loading placeholder keeps
+        the real row rhythm (stats-grid.css precedent). ---- */
 .ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='header-cell'],
 .ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='cell'],
 .ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='expand-cell'],
-.ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='selection-cell'] {
+.ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='selection-cell'],
+.ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='skeleton-cell'] {
   padding: 4px 8px;
 }
 .ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='header-cell'],
 .ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='cell'],
 .ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='expand-cell'],
-.ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='selection-cell'] {
+.ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='selection-cell'],
+.ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='skeleton-cell'] {
   padding: 8px 12px;
 }
 .ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='header-cell'],
 .ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='cell'],
 .ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='expand-cell'],
-.ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='selection-cell'] {
+.ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='selection-cell'],
+.ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='skeleton-cell'] {
   padding: 12px 16px;
 }
 
@@ -108,6 +117,18 @@
 }
 
 /* ---- header cells ---- */
+/* Header typographic role: the tenant header channels (color / weight / size /
+   tracking / casing) reach the primitive, so column titles read as a label
+   role visibly distinct from the body text instead of same-weight same-color
+   text. `--ds-table-header-block-size` is deliberately NOT consumed: a fixed
+   header height would clip at 200% zoom / large type scales. */
+.ds-table.ds-table--modern [data-part='header-cell'] {
+  color: var(--ds-table-header-color, var(--ds-color-text-secondary));
+  font-weight: var(--ds-table-header-font-weight, var(--ds-font-weight-semibold));
+  font-size: var(--ds-table-header-font-size, var(--ds-font-size-xs));
+  letter-spacing: var(--ds-table-header-letter-spacing);
+  text-transform: var(--ds-table-header-text-transform);
+}
 .ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'] {
   position: sticky;
   /* the per-row `top` offset stays inline -- it is computed from the measured
@@ -118,22 +139,54 @@
 .ds-table.ds-table--modern [data-part='header-cell'][data-hairline='true'] {
   border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
 }
+/* Sticky + hairline: in the collapsed-borders model the cell's bottom border
+   belongs to the table grid and can stay behind (or vanish) while the cell
+   sticks -- the classic 1px discontinuity on scroll. The visible keyline
+   rides an inset shadow glued to the cell box; the border itself goes
+   transparent so the geometry (and the border-collapse grid) is unchanged. */
+.ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true'] {
+  border-bottom-color: transparent;
+  box-shadow: var(--ds-table-header-shadow, inset 0 -1px 0 var(--ds-table-border, var(--ds-color-border)));
+}
 /* the expand/selection header cells share the data-part; their fixed 48px
    column width is keyed on the explicit `data-cell-kind` */
 .ds-table.ds-table--modern [data-part='header-cell'][data-cell-kind='expand'],
 .ds-table.ds-table--modern [data-part='header-cell'][data-cell-kind='selection'] {
-  width: 48px;
+  width: calc(var(--_ds-proto-table-utility-column-width, 48px) * var(--ds-density-effective-scale));
 }
 
-/* ---- sortable header: affordance + keyboard focus ring ---- */
+/* ---- sortable header: affordance + keyboard focus ring. Hover paints only
+        under (hover: hover); the ungated :active is the touch equivalent.
+        The hover wash consumes the opaque `--ds-table-header-bg-hover` mix so
+        a sticky header never turns translucent mid-scroll. ---- */
 .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true'] {
   cursor: pointer;
   user-select: none;
-  transition: color var(--ds-motion-fast);
+  transition:
+    color var(--ds-motion-fast),
+    background-color var(--ds-motion-fast);
 }
 .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: calc(-1 * var(--ds-focus-ring-offset, 2px));
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-focus-ring-offset));
+}
+@media (hover: hover) {
+  .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:hover {
+    background: var(
+      --ds-table-header-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-table-header-bg, var(--ds-surface-inset)))
+    );
+    color: var(--ds-color-primary);
+  }
+  .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:hover [data-part='sort-indicator'] {
+    opacity: 1;
+  }
+}
+.ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:active {
+  background: var(
+    --ds-table-header-bg-hover,
+    color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-table-header-bg, var(--ds-surface-inset)))
+  );
 }
 
 /* ---- header cell content: title + sort indicator + resize handle ---- */
@@ -145,15 +198,29 @@
 }
 .ds-table.ds-table--modern [data-part='header-title'] {
   flex: 1;
+  /* flex items refuse to shrink below their content width by default; the
+     zero floor + break-word let long tenant headers wrap instead of forcing
+     the column wide */
+  min-inline-size: 0;
+  overflow-wrap: break-word;
 }
 
-/* ---- sort indicator: rotates with the sort order ---- */
+/* ---- sort indicator: rotates with the sort order. The affordance rests
+        quiet (60%) but the ACTIVE order reads at a glance: full opacity and
+        the primary tone, so the sorted column is legible without hunting. ---- */
 .ds-table.ds-table--modern [data-part='sort-indicator'] {
-  font-size: var(--ds-font-size-xs, 12px);
+  font-size: var(--ds-font-size-xs);
   opacity: 0.6;
   display: inline-block;
-  transition: transform var(--ds-motion-normal);
+  transition:
+    transform var(--ds-motion-normal),
+    opacity var(--ds-motion-fast);
   transform: rotate(0deg);
+}
+.ds-table.ds-table--modern [data-part='sort-indicator'][data-order='ascend'],
+.ds-table.ds-table--modern [data-part='sort-indicator'][data-order='descend'] {
+  opacity: 1;
+  color: var(--ds-color-primary);
 }
 .ds-table.ds-table--modern [data-part='sort-indicator'][data-order='descend'] {
   transform: rotate(180deg);
@@ -184,10 +251,17 @@
   transition: background-color var(--ds-motion-normal);
 }
 .ds-table.ds-table--modern [data-part='filter-spacer'] {
-  width: 48px;
+  width: calc(var(--_ds-proto-table-utility-column-width, 48px) * var(--ds-density-effective-scale));
 }
 .ds-table.ds-table--modern [data-part='filter-cell'] {
   padding: 4px;
+}
+/* the filter row is the bottom edge of the header band: when the header
+   hairline is on, the row closes with the same keyline so the body does not
+   bleed into the filter inputs */
+.ds-table.ds-table--modern [data-part='filter-cell'][data-hairline='true'],
+.ds-table.ds-table--modern [data-part='filter-spacer'][data-hairline='true'] {
+  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
 }
 
 /* ---- fields: filter input, and the editable text/number/date/select cells.
@@ -199,7 +273,7 @@
 .ds-table.ds-table--modern [data-part='field'][data-field='edit'] {
   width: 100%;
   padding: 2px 6px;
-  font-size: var(--ds-font-size-xs, 12px);
+  font-size: var(--ds-font-size-xs);
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-sm);
   background: var(--ds-surface-card);
@@ -212,6 +286,13 @@
 .ds-table.ds-table--modern [data-part='field'][data-field='filter'] {
   transition: border-color var(--ds-motion-normal);
 }
+/* keyboard focus: the base rule zeroes the UA outline, so the governed focus
+   ring must be re-asserted or the filter/edit fields leave keyboard users
+   blind (B2.5) */
+.ds-table.ds-table--modern [data-part='field'][data-field]:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: 1px;
+}
 
 /* ---- selection controls: checkbox/radio row-selection inputs (including
         select-all) + the editable checkbox cell ---- */
@@ -220,6 +301,29 @@
   height: 16px;
   cursor: pointer;
   accent-color: var(--ds-color-primary);
+}
+.ds-table.ds-table--modern [data-part='selection-control']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: 1px;
+}
+/* getCheckboxProps({ disabled: true }) rows: readable but unmistakably
+   inactive, and never swept up by select-all (the hook skips them) */
+.ds-table.ds-table--modern [data-part='selection-control']:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+/* ---- selection hit area: the `<label>` wrapping every row-selection control
+        (and select-all). On fine pointers it is an invisible layout box that
+        centers the control in the cell (matching the skeleton's centered
+        control well). On coarse pointers it grows to fill the whole cell --
+        negative margins cancel the per-size cell padding -- so the entire
+        48px column toggles natively. The block reach stays capped by the
+        dense row: a full 44px reach would swallow the neighboring row's
+        target (the density law the header resize handle documents). ---- */
+.ds-table.ds-table--modern [data-part='selection-hit'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* ---- muted text: empty-state cell, footer, pagination range ---- */
@@ -234,10 +338,10 @@
 }
 .ds-table.ds-table--modern [data-part='footer'] {
   margin-block-start: var(--ds-table-footer-margin-block-start, 8px);
-  font-size: var(--ds-font-size-sm, 14px);
+  font-size: var(--ds-font-size-sm);
 }
 .ds-table.ds-table--modern [data-part='pagination-range'] {
-  font-size: var(--ds-font-size-sm, 14px);
+  font-size: var(--ds-font-size-sm);
   /* The range readout is pure numerals and separators (Quiet Premium numeral
      law, pagination.css's `--ds-pagination-numeric` precedent). */
   font-variant-numeric: var(--ds-table-pagination-numeric, tabular-nums);
@@ -259,21 +363,32 @@
 .ds-table.ds-table--modern [data-part='row'][data-selected='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
 }
+/* selection reads as a framed band, not a bare tint: a quiet primary keyline
+   closes the row's bottom edge (never the ONLY signal -- the checked control
+   carries the state for color-blind and forced-colors users) */
+.ds-table.ds-table--modern [data-part='row'][data-selected='true'] > td {
+  box-shadow: inset 0 -1px 0 0 color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+}
 @media (hover: hover) {
   .ds-table.ds-table--modern [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover {
     background: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, transparent));
   }
 }
 
-/* ---- body cell: bottom border in `bordered` mode, and the editable-cell hover ---- */
+/* ---- body cell: bottom border in `bordered` mode, long-copy resilience, and
+        the editable-cell hover ---- */
+.ds-table.ds-table--modern [data-part='cell'] {
+  /* unbroken strings (URLs, ids) wrap instead of blowing out fixed layouts */
+  overflow-wrap: break-word;
+}
 .ds-table.ds-table--modern [data-part='cell'][data-bordered='true'] {
   border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
 }
 .ds-table.ds-table--modern [data-part='cell'][data-editable='true'] {
   cursor: pointer;
   transition:
-    outline-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    outline-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
   .ds-table.ds-table--modern [data-part='cell'][data-editable='true']:hover {
@@ -285,13 +400,27 @@
 
 /* ---- pinned/fixed columns: sticky positioning with an opaque fill so
         scrolled content cannot bleed through. Applies to header and body
-        cells; the offsets are physical because the `fixed` column contract is
-        itself physical ('left' | 'right'). ---- */
+        cells; the offsets (and the edge keylines below) are physical because
+        the `fixed` column contract is itself physical ('left' | 'right').
+        Filter cells join the pinning: the filter row is part of the header
+        band, and an unpinned filter cell would scroll away under its own
+        stuck column. ---- */
 .ds-table.ds-table--modern [data-part='cell'][data-fixed],
-.ds-table.ds-table--modern [data-part='header-cell'][data-fixed] {
+.ds-table.ds-table--modern [data-part='header-cell'][data-fixed],
+.ds-table.ds-table--modern [data-part='filter-cell'][data-fixed] {
   position: sticky;
   z-index: 10;
   background: var(--ds-table-bg, var(--ds-surface-card));
+  /* the pinned state fills (hover/selected, below) track the row's wash on
+     the same motion channel instead of snapping a frame behind it */
+  transition: background-color var(--ds-motion-normal);
+}
+/* a pinned HEADER-band cell (header cell or filter cell) takes the header
+   fill, not the body fill, or the corner tiles read lighter/darker than
+   their row */
+.ds-table.ds-table--modern [data-part='header-cell'][data-fixed],
+.ds-table.ds-table--modern [data-part='filter-cell'][data-fixed] {
+  background: var(--ds-table-header-bg, var(--ds-surface-inset));
 }
 .ds-table.ds-table--modern [data-fixed='true'],
 .ds-table.ds-table--modern [data-fixed='left'] {
@@ -300,23 +429,71 @@
 .ds-table.ds-table--modern [data-fixed='right'] {
   right: 0;
 }
+/* the corner where a sticky header meets a pinned column must float above
+   BOTH planes (body fixed cells: 10, sticky header: 20; the loading overlay
+   stays on top at 30) or scrolling neighbors slide over it */
+.ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-fixed] {
+  z-index: 25;
+}
+/* pinned-edge keylines: an inset shadow glued to the cell box, so the
+   separation line tracks the column through scroll and resize without the
+   collapsed-border detachment the header hairline already guards against */
+.ds-table.ds-table--modern [data-part='cell'][data-fixed='left'],
+.ds-table.ds-table--modern [data-part='cell'][data-fixed='true'],
+.ds-table.ds-table--modern [data-part='header-cell'][data-fixed='left'],
+.ds-table.ds-table--modern [data-part='header-cell'][data-fixed='true'],
+.ds-table.ds-table--modern [data-part='filter-cell'][data-fixed='left'],
+.ds-table.ds-table--modern [data-part='filter-cell'][data-fixed='true'] {
+  box-shadow: inset -1px 0 0 0 var(--ds-table-border, var(--ds-color-border));
+}
+.ds-table.ds-table--modern [data-part='cell'][data-fixed='right'],
+.ds-table.ds-table--modern [data-part='header-cell'][data-fixed='right'],
+.ds-table.ds-table--modern [data-part='filter-cell'][data-fixed='right'] {
+  box-shadow: inset 1px 0 0 0 var(--ds-table-border, var(--ds-color-border));
+}
+/* corner cells carry BOTH keylines (pinned edge + header hairline shadow) */
+.ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true'][data-fixed='left'],
+.ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true'][data-fixed='true'] {
+  box-shadow:
+    inset -1px 0 0 0 var(--ds-table-border, var(--ds-color-border)),
+    inset 0 -1px 0 0 var(--ds-table-border, var(--ds-color-border));
+}
+.ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true'][data-fixed='right'] {
+  box-shadow:
+    inset 1px 0 0 0 var(--ds-table-border, var(--ds-color-border)),
+    inset 0 -1px 0 0 var(--ds-table-border, var(--ds-color-border));
+}
+/* state fills on pinned body cells: the opaque base fill would otherwise
+   swallow the row's hover/selected wash, making a selected row's pinned
+   columns read unselected. The mixes stay opaque (no bleed-through). */
+@media (hover: hover) {
+  .ds-table.ds-table--modern [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover > [data-part='cell'][data-fixed] {
+    background: var(
+      --ds-table-row-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-table-bg, var(--ds-surface-card)))
+    );
+  }
+}
+.ds-table.ds-table--modern [data-part='row'][data-selected='true'] > [data-part='cell'][data-fixed] {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-table-bg, var(--ds-surface-card)));
+}
 
 /* ---- expand column ---- */
 .ds-table.ds-table--modern [data-part='expand-cell'] {
-  width: 48px;
+  width: calc(var(--_ds-proto-table-utility-column-width, 48px) * var(--ds-density-effective-scale));
   text-align: center;
 }
 .ds-table.ds-table--modern [data-part='selection-cell'] {
-  width: 48px;
+  width: calc(var(--_ds-proto-table-utility-column-width, 48px) * var(--ds-density-effective-scale));
 }
 .ds-table.ds-table--modern [data-part='expand-button'] {
   height: 24px;
   padding: 0 8px;
-  font-size: var(--ds-font-size-xs, 12px);
+  font-size: var(--ds-font-size-xs);
   cursor: pointer;
   transition:
-    color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
-    background-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
+    color var(--ds-motion-normal) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-normal) var(--ds-motion-ease-out);
   background: transparent;
   color: var(--ds-color-text-primary);
   border: none;
@@ -330,6 +507,25 @@
 .ds-table.ds-table--modern [data-part='expand-indicator'][data-expanded='true'] {
   transform: rotate(90deg);
 }
+/* Sighted RTL: the collapsed chevron mirrors through the icon facade
+   (`NavigationForwardIcon` auto-mirror flips the svg), so a 90° clockwise
+   turn would land the expanded glyph pointing UP. The wrapper counter-rotates
+   and the mirrored arrow still settles pointing down (the collapse.css
+   sighted-RTL idiom; no double-mirror -- the skin never flips the glyph). */
+.ds-table.ds-table--modern [data-part='expand-indicator'][data-expanded='true']:dir(rtl) {
+  transform: rotate(-90deg);
+}
+/* hover wash (fine pointers) + pressed state (the touch equivalent): the
+   button already carried the transitions but no states were painted */
+@media (hover: hover) {
+  .ds-table.ds-table--modern [data-part='expand-button']:hover {
+    background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+    color: var(--ds-color-primary);
+  }
+}
+.ds-table.ds-table--modern [data-part='expand-button']:active {
+  background: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
+}
 
 /* ---- expanded row content ---- */
 .ds-table.ds-table--modern [data-part='expanded-row'] {
@@ -338,6 +534,38 @@
 .ds-table.ds-table--modern [data-part='expanded-row'] > td {
   padding: 16px;
   animation: ds-table-expand-modern var(--ds-motion-slow) ease-out;
+}
+
+/* ---- first-load skeleton: row-shaped placeholders that mirror the real
+        anatomy (control wells + one bar per column), painted with the
+        canonical `ds-skeleton-shimmer` keyframes (the stats-grid.css idiom).
+        Widths vary per row so the stack reads as data, not a striped box.
+        The control-well override comes last at equal specificity so the
+        16px square beats the per-row width variants. ---- */
+.ds-table.ds-table--modern [data-part='skeleton-bar'] {
+  display: block;
+  block-size: 12px;
+  inline-size: 72%;
+  border-radius: var(--ds-radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--ds-surface-panel) 25%,
+    var(--ds-surface-inset) 50%,
+    var(--ds-surface-panel) 75%
+  );
+  background-size: 200% 100%;
+  animation: ds-skeleton-shimmer var(--ds-motion-attention) ease-in-out infinite;
+}
+.ds-table.ds-table--modern [data-part='skeleton-row']:nth-child(2n) [data-part='skeleton-bar'] {
+  inline-size: 58%;
+}
+.ds-table.ds-table--modern [data-part='skeleton-row']:nth-child(3n) [data-part='skeleton-bar'] {
+  inline-size: 66%;
+}
+.ds-table.ds-table--modern [data-part='skeleton-row'] [data-part='skeleton-cell'][data-kind='control'] [data-part='skeleton-bar'] {
+  inline-size: 16px;
+  block-size: 16px;
+  margin-inline: auto;
 }
 
 /* ---- loading overlay + spinner. The spinner needs (0,4,0): its
@@ -363,9 +591,27 @@
 }
 
 /* ---- scroll container: horizontal overflow always, vertical bounds stay
-        inline (they project the consumer's `scroll.y` contract). ---- */
+        inline (they project the consumer's `scroll.y` contract). The
+        container paints the themed table base (the `--ds-table-bg` channel
+        the pinned cells already used piecemeal, so pinned and scrolling
+        regions now share one continuous fill) plus a pure-CSS scroll-shadow
+        affordance: two `scroll`-attached radial shadows mark a clipped edge,
+        two `local`-attached covers of the same base color erase each shadow
+        when its edge is reached. Physical gradients track the physical
+        scrollport, so the affordance mirrors itself under RTL with no
+        logical-property wiring. ---- */
 .ds-table.ds-table--modern [data-part='scroll-container'] {
   overflow-x: auto;
+  background-color: var(--ds-table-bg, var(--ds-surface-card));
+  background-image:
+    linear-gradient(to right, var(--ds-table-bg, var(--ds-surface-card)) 30%, transparent),
+    linear-gradient(to left, var(--ds-table-bg, var(--ds-surface-card)) 30%, transparent),
+    radial-gradient(farthest-side at 0% 50%, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent), transparent),
+    radial-gradient(farthest-side at 100% 50%, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent), transparent);
+  background-position: left top, right top, left top, right top;
+  background-size: 24px 100%, 24px 100%, 10px 100%, 10px 100%;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
 }
 .ds-table.ds-table--modern [data-part='scroll-container'][data-loading='true'] {
   opacity: 0.5;
@@ -392,8 +638,8 @@
   font-variant-numeric: var(--ds-table-pagination-numeric, tabular-nums);
   cursor: pointer;
   transition:
-    color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
-    background-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
+    color var(--ds-motion-normal) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-normal) var(--ds-motion-ease-out);
   background: transparent;
   color: var(--ds-color-text-primary);
   border: none;
@@ -401,13 +647,29 @@
 }
 .ds-table.ds-table--modern [data-part='pagination-button'][data-current='true'] {
   pointer-events: none;
-  font-weight: var(--ds-table-pagination-current-font-weight, var(--ds-font-weight-semibold, 600));
+  font-weight: var(--ds-table-pagination-current-font-weight, var(--ds-font-weight-semibold));
+}
+/* hover wash (fine pointers) + pressed state (the touch equivalent); the
+   current page and disabled controls are excluded from both */
+@media (hover: hover) {
+  .ds-table.ds-table--modern [data-part='pagination-button']:not([data-current='true']):not(:disabled):hover {
+    background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+    color: var(--ds-color-primary);
+  }
+}
+.ds-table.ds-table--modern [data-part='pagination-button']:not([data-current='true']):active {
+  background: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
+}
+/* disabled prev/next: readable but unmistakably inactive (B2.1) */
+.ds-table.ds-table--modern [data-part='pagination-button']:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 
 .ds-table.ds-table--modern [data-part='pagination-button']:focus-visible,
 .ds-table.ds-table--modern [data-part='expand-button']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 /* ---- coarse pointers: the row-level actions meet the physical 44px floor.
@@ -429,6 +691,21 @@
     height: var(--ds-table-selection-control-coarse-size, 20px);
   }
 
+  /* the label's box fills the cell (negative margins cancel its padding), so
+     the coarse hit area is the full 48px column x the row's own height */
+  .ds-table.ds-table--modern [data-part='table'][data-size='sm'] [data-part='selection-hit'] {
+    margin: -4px -8px;
+    padding: 4px 8px;
+  }
+  .ds-table.ds-table--modern [data-part='table'][data-size='md'] [data-part='selection-hit'] {
+    margin: -8px -12px;
+    padding: 8px 12px;
+  }
+  .ds-table.ds-table--modern [data-part='table'][data-size='lg'] [data-part='selection-hit'] {
+    margin: -12px -16px;
+    padding: 12px 16px;
+  }
+
   .ds-table.ds-table--modern [data-part='resize-handle']::after {
     content: '';
     position: absolute;
@@ -440,8 +717,11 @@
 /* ---- reduced motion: every animation/transition in this skin quiets down. ---- */
 @media (prefers-reduced-motion: reduce) {
   .ds-table.ds-table--modern [data-part='cell'][data-editable='true'],
+  .ds-table.ds-table--modern [data-part='cell'][data-fixed],
   .ds-table.ds-table--modern [data-part='expand-button'],
   .ds-table.ds-table--modern [data-part='expand-indicator'],
+  .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true'],
+  .ds-table.ds-table--modern [data-part='sort-indicator'],
   .ds-table.ds-table--modern [data-part='pagination-button'] {
     transition: none;
   }
@@ -453,6 +733,10 @@
   .ds-table.ds-table--modern [data-part='spinner'] {
     animation: none;
   }
+
+  .ds-table.ds-table--modern [data-part='skeleton-bar'] {
+    animation: none;
+  }
 }
 
 /* ---- forced colors (system colors only): background washes disappear, so
@@ -462,6 +746,13 @@
   .ds-table.ds-table--modern [data-part='row'][data-selected='true'] {
     outline: 1px solid Highlight;
     outline-offset: -1px;
+  }
+  /* box-shadows are stripped in forced colors: the sticky header keyline (an
+     inset shadow over a transparent border) re-expresses as a real
+     system-color border. The pinned-column edges keep their opaque forced
+     fill, which already separates them from scrolling content. */
+  .ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'][data-hairline='true'] {
+    border-bottom-color: CanvasText;
   }
   .ds-table.ds-table--modern [data-part='header-cell'][data-sortable='true']:focus-visible,
   .ds-table.ds-table--modern [data-part='pagination-button']:focus-visible,
@@ -476,5 +767,11 @@
   .ds-table.ds-table--modern [data-part='resize-handle'][data-resizing='true'],
   .ds-table.ds-table--modern [data-part='resize-handle']:not([data-resizing='true']):hover {
     background: ButtonText;
+  }
+  /* the shimmer gradient is forced away; the bars keep a system-color fill
+     (the stats-grid.css idiom) so the loading anatomy still reads */
+  .ds-table.ds-table--modern [data-part='skeleton-bar'] {
+    background: GrayText;
+    animation: none;
   }
 }

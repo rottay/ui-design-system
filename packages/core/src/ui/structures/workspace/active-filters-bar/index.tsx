@@ -26,7 +26,7 @@
  */
 
 import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
-import { Box, Button, Flex, Tag, Text } from "../../../primitives";
+import { Box, Button, Flex, Tag } from "../../../primitives";
 import { ActionAddIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-add";
 import { ActionCloseIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-close";
 import type { ActiveFilter } from "@/foundation/contracts/runtime/components/patterns/data";
@@ -73,11 +73,11 @@ export function ActiveFiltersBar({
       <Flex align="center" gap={12} justify="between" wrap="wrap">
         <Box data-part="chips-region">
           <Flex align="center" gap={8} wrap="wrap">
-            <Text data-part="pill" size="xs">
+            <Box as="span" data-part="pill">
               {tOr("activeFiltersBar.active_count", "{count} active", {
                 count: activeFilters.length,
               })}
-            </Text>
+            </Box>
             {activeFilters.map((filter) => (
               /* Composed Tag (closable): chrome, focus ring and the close
                  button's semantics belong to the primitive; the pattern
@@ -96,12 +96,12 @@ export function ActiveFiltersBar({
                   }
                 )}
               >
-                <Text data-part="chip-label" size="xs">
+                <Box as="span" data-part="chip-label">
                   {filter.label}
-                </Text>
-                <Text data-part="chip-value" size="xs">
+                </Box>
+                <Box as="span" data-part="chip-value">
                   {filter.displayValue ?? filter.value}
-                </Text>
+                </Box>
               </Tag>
             ))}
           </Flex>

@@ -4,7 +4,10 @@
  * @fileoverview Drawer Modern Engine - Rottay Design System
  * @description Premium slide-in drawer panel with backdrop blur, directional
  * slide animation, and polished header/body/footer layout. Uses DS tokens for
- * surfaces, elevation, motion, and radii. Mobile-responsive (full-width < 640px).
+ * surfaces, elevation, motion, and radii. Narrow viewports are served by the
+ * inline `maxWidth: 100vw` / `maxHeight: 100vh` clamp: a size preset that does
+ * not fit the viewport degrades to full-bleed instead of overflowing (never a
+ * squeezed panel with horizontal scroll).
  *
  * Wave 2B: Unified overlay family visual language -- shared backdrop, surface,
  * border, and motion tokens with Modal and Sheet modern engines.
@@ -58,6 +61,15 @@ const SIZE_MAP: Record<DrawerSize, string> = {
   full: '100%',
 };
 
+/**
+ * Width of the viewport scrollbar, used to compensate the body scroll lock so
+ * the page behind does not reflow when the drawer opens (Modal engine idiom).
+ */
+function getScrollbarWidth(): number {
+  if (typeof window === 'undefined') return 0;
+  return window.innerWidth - document.documentElement.clientWidth;
+}
+
 // ============================================================================
 // Close Button (shared visual with Modal/Sheet)
 // ============================================================================
@@ -82,8 +94,10 @@ function CloseButton({ onClick, label }: { onClick: () => void; label: string })
 export default function ModernDrawer(props: DrawerProps): React.ReactElement {
   // Optional channel: the drawer keeps its standalone rendering contract and
   // falls back to the English accessibility floor when no I18nProvider is
-  // mounted (never a hard useTranslation crash).
-  const i18n = useOptionalTranslation('common');
+  // mounted (never a hard useTranslation crash). The close label lives at
+  // components.drawer.close (shipped for en/es/ar), the same key the Sheet
+  // modern engine consumes.
+  const i18n = useOptionalTranslation('components');
   const {
     open,
     placement = DRAWER_DEFAULTS.placement,
@@ -100,6 +114,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
     closeOnOverlayClick = DRAWER_DEFAULTS.closeOnOverlayClick,
     closeOnEscape = DRAWER_DEFAULTS.closeOnEscape,
     mask = DRAWER_DEFAULTS.mask,
+    maskOpacity,
     className = '',
     style,
     id,
@@ -153,19 +168,26 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
     return () => document.removeEventListener('keydown', onKey);
   }, [open, closeOnEscape, handleClose]);
 
-  // -- body scroll lock -------------------------------------------------------
+  // -- body scroll lock (with scrollbar-width compensation) -------------------
 
   useEffect(() => {
     // Gated on shouldRender (not `open`) so the page behind stays locked
     // through the exit animation rather than unlocking while the drawer is
     // still visibly sliding out.
-    if (shouldRender) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+    if (!shouldRender) return;
+    const scrollbarWidth = getScrollbarWidth();
+    const originalOverflow = document.body.style.overflow;
+    const originalPaddingInlineEnd = document.body.style.paddingInlineEnd;
+    document.body.style.overflow = 'hidden';
+    if (scrollbarWidth > 0) {
+      // Logical property (Modal idiom): the scrollbar sits on the inline-END
+      // edge in both LTR and RTL documents, so the compensation follows
+      // direction instead of hardcoding the physical right side.
+      document.body.style.paddingInlineEnd = `${scrollbarWidth}px`;
     }
     return () => {
-      document.body.style.overflow = '';
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingInlineEnd = originalPaddingInlineEnd;
     };
   }, [shouldRender]);
 
@@ -267,6 +289,12 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
             position: 'fixed',
             inset: 0,
             zIndex: 'var(--ds-z-overlay)',
+            // maskOpacity rides the same --ds-drawer-overlay-opacity hatch the
+            // rustic engine stamps; the modern skin's scrim consumes it with
+            // the pre-existing 0.8 fill as its default (unset = unchanged).
+            ...(maskOpacity != null
+              ? ({ '--ds-drawer-overlay-opacity': maskOpacity } as React.CSSProperties)
+              : null),
             ...overlayMotion.variables,
             animation: motionIsFinal
               ? undefined
@@ -322,7 +350,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
                 </>
               )}
             </div>
-            {closable && <CloseButton onClick={handleClose} label={i18n?.tOr('close', 'Close') ?? 'Close'} />}
+            {closable && <CloseButton onClick={handleClose} label={i18n?.tOr('drawer.close', 'Close') ?? 'Close'} />}
           </div>
         )}
 

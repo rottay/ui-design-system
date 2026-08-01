@@ -1,0 +1,41 @@
+/**
+ * Alert compound skin -- Alert.Description
+ * (P2 2026-07-31; REGISTRAR EN FACADE (coordinador) -- no tocar
+ * base.css/styles.css desde el batch).
+ *
+ * Engine-agnostic: the compound renders one tree regardless of the active
+ * engine (it is composed as a child of any engine's content region, or
+ * standalone), so it gets a single home here, mirroring drawer-compounds.css.
+ *
+ * LAYER: DELIBERATELY UNLAYERED (P-47) -- a layered rule sorts before
+ * Tailwind's base layer and loses to preflight; unlayered outranks it and
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE: `.rottay-alert-description[data-part='description']` only. The
+ * compound used to inline literal paint (marginTop 4px, fontSize 14px,
+ * lineHeight 1.6, opacity 0.85); the literals are gone -- spacing rides the
+ * spacing scale, typography rides the semantic roles, and the de-emphasis is
+ * the secondary-ink channel (the same idiom the modern engine's own
+ * description slot uses) instead of a raw opacity wash.
+ *
+ * SPECIFICITY: the floor sits at (0,2,0). Inside the MODERN engine the
+ * engine skin's content rule
+ * (`.rottay-alert-shell.rottay-alert-shell--modern ... > [data-part='description']`,
+ * (0,5,0)) repaints color/size/line-height with the same token values, so the
+ * compound and the `description` prop slot read identically there; only the
+ * margin differs, and the modern content grid's `gap` already owns that
+ * rhythm -- the reset rule below (0,4,0) zeroes the floor margin inside it.
+ * Nothing here paints a border color, so the tenant `*` border-color floor
+ * does not apply.
+ */
+
+.rottay-alert-description[data-part='description'] {
+  margin-block-start: var(--ds-spacing-1);
+  max-inline-size: var(--ds-alert-description-width, 72ch);
+  color: var(--ds-color-text-secondary);
+  font-family: var(--ds-font-family-base);
+  font-size: var(--ds-alert-description-size, var(--ds-font-size-sm));
+  line-height: var(--ds-line-height-relaxed);
+  /* Long-copy resilience: unbroken strings wrap inside the content track. */
+  overflow-wrap: break-word;
+}

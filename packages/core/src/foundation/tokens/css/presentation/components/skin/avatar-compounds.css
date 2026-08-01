@@ -53,3 +53,24 @@
   background-color: var(--ds-avatar-surplus-bg, var(--ds-color-bg-secondary));
   color: var(--ds-avatar-surplus-color, var(--ds-color-text-secondary));
 }
+
+/* ---- forced colors: presence hues and surface-matched cut-outs strip away.
+        The cut-out frame re-expresses against Canvas (the forced page
+        background) so overlapping circles stay separated, and the badge dot
+        keeps a guaranteed-visible system fill (its status is also exposed
+        through its own role=img label). ---- */
+@media (forced-colors: active) {
+  .rottay-avatar-badge-dot[data-part='dot'][data-part='dot'] {
+    border-color: Canvas;
+    background-color: CanvasText;
+    forced-color-adjust: auto;
+  }
+  .rottay-avatar-group[data-part='root'] > [data-part='item'][data-part='item'],
+  .rottay-avatar-group[data-part='root'] > [data-part='surplus'][data-part='surplus'] {
+    border-color: Canvas;
+  }
+  .rottay-avatar-group[data-part='root'] > [data-part='surplus'] {
+    background-color: Canvas;
+    color: CanvasText;
+  }
+}

@@ -21,6 +21,18 @@
  *
  * SPECIFICITY (P-48): `box-shadow`/`background` are non-border paint —
  * (0,3,0) suffices.
+ *
+ * B9 ADDENDUM (pass 2): the affixed surface had NO optical edge (layer 4 of
+ * the material stack), and the forced-colors hairline was hard-coded to the
+ * block-end edge — wrong for a bottom-affixed bar. The engine now stamps
+ * `data-affix-edge='top'|'bottom'` in BOTH modes; a governed pseudo-element
+ * keyline (pointer-events:none, logically positioned) paints the
+ * content-facing edge per direction, and the forced-colors cut follows the
+ * same stamp. The keyline rides `--_ds-proto-affix-affixed-keyline` with an
+ * intensity-scaled default (`effectIntensity: 0` dissolves it while the
+ * elevation keeps the hierarchy). A pseudo-element — not a composed
+ * box-shadow layer — so a tenant setting `--ds-affix-affixed-shadow: none`
+ * can never invalidate the keyline with it.
  */
 
 /* ---- affixed transition (was the engine's `transition-all duration-200`
@@ -31,9 +43,9 @@
     var(--ds-z-affix, var(--ds-z-index-affix, 100))
   );
   transition:
-    background-color var(--ds-affix-transition-duration, var(--ds-motion-normal, 200ms))
+    background-color var(--ds-affix-transition-duration, var(--ds-motion-normal))
       var(--ds-affix-transition-timing, var(--ds-motion-ease-out)),
-    box-shadow var(--ds-affix-transition-duration, var(--ds-motion-normal, 200ms))
+    box-shadow var(--ds-affix-transition-duration, var(--ds-motion-normal))
       var(--ds-affix-transition-timing, var(--ds-motion-ease-out));
 }
 
@@ -55,6 +67,35 @@
   backdrop-filter: var(--ds-affix-affixed-backdrop, none);
 }
 
+/* ---- optical edge (B9 pass 2): a 1px keyline on the CONTENT-FACING edge,
+        edge-aware via the engine's `data-affix-edge` stamp. Pseudo-element
+        decoration slot (paint-only, pointer-events:none, logical insets) —
+        an inset box-shadow layer would be invalidated wholesale by a
+        tenant's `--ds-affix-affixed-shadow: none`, and a real border would
+        change the bar's geometry when affixing. The root is always a
+        positioning context here (fixed when data-sticky paints), so the
+        absolute keyline anchors correctly. Alpha scales with
+        `--ds-effect-intensity`: at 0 the keyline dissolves while the
+        elevation keeps the hierarchy. ---- */
+.rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  block-size: 1px;
+  pointer-events: none;
+  border-radius: inherit;
+  background: var(
+    --_ds-proto-affix-affixed-keyline,
+    color-mix(in srgb, var(--ds-color-border-secondary) calc(55% * var(--ds-effect-intensity)), transparent)
+  );
+}
+.rottay-affix.rottay-affix--modern[data-part='root'][data-sticky][data-affix-edge='top']::after {
+  inset-block-end: 0;
+}
+.rottay-affix.rottay-affix--modern[data-part='root'][data-sticky][data-affix-edge='bottom']::after {
+  inset-block-start: 0;
+}
+
 /* ---- reduced motion: the affixed surface arrives instantly (the position
         change itself is scroll-driven geometry, never animated). ---- */
 @media (prefers-reduced-motion: reduce) {
@@ -65,12 +106,20 @@
 
 /* ---- forced colors: the fixed bar must not bleed the content scrolling
         underneath -- a system canvas plus a ButtonText cut hairline on the
-        content-facing edge, and no authored shadow. ---- */
+        CONTENT-FACING edge (B9: was hard-coded block-end, which left a
+        bottom-affixed bar with its cut on the wrong side), and no authored
+        shadow. The authored ::after keyline is stripped by forced-color
+        adjustment; the system border carries the cut. ---- */
 @media (forced-colors: active) {
   .rottay-affix.rottay-affix--modern[data-part='root'][data-sticky] {
     background: Canvas;
-    border-block-end: 1px solid ButtonText;
     box-shadow: none;
     backdrop-filter: none;
+  }
+  .rottay-affix.rottay-affix--modern[data-part='root'][data-sticky][data-affix-edge='top'] {
+    border-block-end: 1px solid ButtonText;
+  }
+  .rottay-affix.rottay-affix--modern[data-part='root'][data-sticky][data-affix-edge='bottom'] {
+    border-block-start: 1px solid ButtonText;
   }
 }

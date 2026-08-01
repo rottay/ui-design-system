@@ -38,35 +38,41 @@ interface SizeSpec {
 }
 
 const SIZE_SPECS: Record<string, SizeSpec> = {
+  // The `--ds-badge-*-padding-x` channels are declared in
+  // presentation/components/badge.css, so they resolve bare (P0 fallback
+  // parity: no literal fallback on a declared channel).
   xs: {
     height: 'var(--ds-badge-xs-height)',
     fontSize: 'var(--ds-badge-xs-font-size)',
-    paddingInline: 'var(--ds-badge-xs-padding-x, 0.375rem)',
+    paddingInline: 'var(--ds-badge-xs-padding-x)',
   },
   sm: {
     height: 'var(--ds-badge-sm-height)',
     fontSize: 'var(--ds-badge-sm-font-size)',
-    paddingInline: 'var(--ds-badge-sm-padding-x, 0.5rem)',
+    paddingInline: 'var(--ds-badge-sm-padding-x)',
   },
   md: {
     height: 'var(--ds-badge-md-height)',
     fontSize: 'var(--ds-badge-md-font-size)',
-    paddingInline: 'var(--ds-badge-md-padding-x, 0.625rem)',
+    paddingInline: 'var(--ds-badge-md-padding-x)',
   },
   lg: {
     height: 'var(--ds-badge-lg-height)',
     fontSize: 'var(--ds-badge-lg-font-size)',
-    paddingInline: 'var(--ds-badge-lg-padding-x, 0.75rem)',
+    paddingInline: 'var(--ds-badge-lg-padding-x)',
   },
   xl: {
     height: 'var(--ds-badge-xl-height)',
     fontSize: 'var(--ds-badge-xl-font-size)',
-    paddingInline: 'var(--ds-badge-xl-padding-x, 0.875rem)',
+    paddingInline: 'var(--ds-badge-xl-padding-x)',
   },
 };
 
+// Status is a semantic reading, never a tenant accent: `processing` paints
+// through the governed info channel (the in-progress semantic), not the
+// tenant primary -- a primary-coloured status reads as branding, not state.
 const STATUS_VARIANT = {
-  processing: 'primary',
+  processing: 'info',
   default: 'default',
   success: 'success',
   error: 'error',
@@ -272,7 +278,18 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
       {icon && !loading && <span data-part="icon">{icon}</span>}
       {dot && <span data-part="dot" aria-hidden="true" />}
       {label !== undefined && !(!isFamilyLabel && dot && children === undefined && text === undefined) && (
-        <span data-part="label">{label}</span>
+        // Truncated labels disclose their full value natively (Tag content
+        // precedent); composite children own their own disclosure.
+        <span
+          data-part="label"
+          title={
+            truncate && (typeof label === 'string' || typeof label === 'number')
+              ? String(label)
+              : undefined
+          }
+        >
+          {label}
+        </span>
       )}
       {showAccessoryCount && (
         <span data-part="count">{formatCount(count!, effectiveMax)}</span>

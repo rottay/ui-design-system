@@ -17,9 +17,11 @@
  *
  * SCOPE ROOT is `.ds-input-number.ds-input-number--modern[data-part='root']`,
  * the `<input>` itself -- carrying `data-size` ('sm'|'md'|'lg'), `data-status`
- * ('default'|'error'|'warning'), `data-disabled`, `data-has-prefix` and
- * `data-has-trailing`. Unlike a container-root component (TagInput, Textarea),
- * a void `<input>` cannot have descendants, so every other part
+ * ('default'|'error'|'warning'), `data-disabled`, `data-has-prefix`,
+ * `data-has-trailing` and the transient `data-bounds-hit` flash the engine
+ * stamps when a step cannot move the value. Unlike a container-root
+ * component (TagInput, Textarea), a void `<input>` cannot have descendants,
+ * so every other part
  * (`addon-before`, `prefix`, `suffix`, `stepper-button`, `addon-after`) is a
  * SIBLING or NEPHEW of root, not a child -- some of them (`addon-before`,
  * `prefix`) precede root in the DOM, which a forward-only `~`/descendant
@@ -32,10 +34,13 @@
  * so no rule can bleed into an unrelated component that happens to reuse the
  * same `data-part` name elsewhere on the page.
  *
- * Hover/focus live on the root input itself (`:hover`, `:focus-visible`) --
- * the input IS the focus target, so no behavior layer is needed. The focus
- * ring reads the canonical `--ds-focus-ring` through the
- * `--ds-input-number-shadow-focus` channel.
+ * Hover/focus live on the root input itself (`:hover` gated to
+ * `@media (hover: hover)`, `:focus-visible`) -- the input IS the focus
+ * target, so no behavior layer is needed. The focus ring reads the canonical
+ * `--ds-focus-ring` through the `--ds-input-number-shadow-focus` channel and
+ * tints to the status hue via the certified `--ds-input-*-shadow-focus`
+ * hooks. On coarse pointers the stepper pair leaves the field overlay and
+ * becomes a segmented row of two 44px targets after the control.
  *
  * SPECIFICITY (P-48): the root's `border` paints a color, so its rules reach
  * (0,4,0) via the repeated `[data-part='root']`. Everything else here is
@@ -54,11 +59,37 @@
      BitHire resolves #fff on both channels, so this is a no-op there. */
   background: var(--ds-input-bg, var(--ds-surface-control));
   color: var(--ds-color-text-primary);
+  caret-color: var(--ds-input-caret-color, var(--ds-input-border-focus, var(--ds-color-primary)));
   outline: none;
   border-radius: var(--ds-radius-md);
   transition:
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+/* Placeholder, entered and disabled text are visibly distinct (4.2): the
+   placeholder consumes the certified Input-family placeholder channel. */
+.ds-input-number.ds-input-number--modern[data-part='root']::placeholder {
+  color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
+  opacity: var(--ds-input-placeholder-opacity);
+}
+
+.ds-input-number.ds-input-number--modern[data-part='root']::selection {
+  color: var(--ds-input-selection-color, var(--ds-color-text-primary));
+  background: var(--ds-input-selection-bg);
+}
+
+/* Autofill reads the same Input-family channels on both pseudo spellings so
+   the posture cannot drift across engines. */
+.ds-input-number.ds-input-number--modern[data-part='root']:-webkit-autofill {
+  -webkit-text-fill-color: var(--ds-input-autofill-color, var(--ds-color-text-primary));
+  caret-color: var(--ds-input-autofill-caret, var(--ds-input-caret-color, var(--ds-color-primary)));
+  box-shadow: 0 0 0 1000px var(--ds-input-autofill-bg, var(--ds-input-bg, var(--ds-surface-control))) inset;
+}
+.ds-input-number.ds-input-number--modern[data-part='root']:autofill {
+  caret-color: var(--ds-input-autofill-caret, var(--ds-input-caret-color, var(--ds-color-primary)));
+  box-shadow: 0 0 0 1000px var(--ds-input-autofill-bg, var(--ds-input-bg, var(--ds-surface-control))) inset;
 }
 
 /* The engine renders its own steppers; the native number spinners are a
@@ -75,19 +106,19 @@
 
 /* Public size geometry (density-scaled, physical px channels). */
 .ds-input-number.ds-input-number--modern[data-part='root'][data-size='sm'] {
-  block-size: calc(var(--ds-input-number-sm-height, 32px) * var(--ds-density-effective-scale, 1));
+  block-size: calc(var(--ds-input-number-sm-height, 32px) * var(--ds-density-effective-scale));
   padding-block: var(--ds-input-number-sm-padding-y, 4px);
   padding-inline: var(--ds-input-number-sm-padding-x, 10px);
   font-size: var(--ds-input-number-sm-font-size, 13px);
 }
 .ds-input-number.ds-input-number--modern[data-part='root'][data-size='md'] {
-  block-size: calc(var(--ds-input-number-md-height, 36px) * var(--ds-density-effective-scale, 1));
+  block-size: calc(var(--ds-input-number-md-height, 36px) * var(--ds-density-effective-scale));
   padding-block: var(--ds-input-number-md-padding-y, 6px);
   padding-inline: var(--ds-input-number-md-padding-x, 12px);
   font-size: var(--ds-input-number-md-font-size, 14px);
 }
 .ds-input-number.ds-input-number--modern[data-part='root'][data-size='lg'] {
-  block-size: calc(var(--ds-input-number-lg-height, 40px) * var(--ds-density-effective-scale, 1));
+  block-size: calc(var(--ds-input-number-lg-height, 40px) * var(--ds-density-effective-scale));
   padding-block: var(--ds-input-number-lg-padding-y, 8px);
   padding-inline: var(--ds-input-number-lg-padding-x, 14px);
   font-size: var(--ds-input-number-lg-font-size, 16px);
@@ -122,11 +153,13 @@
 
 /* Wrapper layout (was Tailwind utilities in the engine): the group row, the
    relative field frame and the logical affix insets all live here so the
-   skin stays the single layout owner. */
+   skin stays the single layout owner. Addons STRETCH to the field's height,
+   so addon/input heights stay coherent at every size and density without
+   duplicating the per-size channels. */
 [data-part='group']:has(> [data-part='field'] > .ds-input-number.ds-input-number--modern[data-part='root']) {
   display: flex;
-  align-items: center;
-  gap: var(--ds-spacing-1, 0.25rem);
+  align-items: stretch;
+  gap: 0;
 }
 
 [data-part='field']:has(> .ds-input-number.ds-input-number--modern[data-part='root']) {
@@ -137,12 +170,18 @@
   min-inline-size: 0;
 }
 
+/* The focused field lifts above the joined addons so its ring is never
+   clipped by a later sibling (same grammar as the Input group). */
+[data-part='field']:has(> .ds-input-number.ds-input-number--modern[data-part='root']):focus-within {
+  z-index: var(--ds-input-group-focus-z, 1);
+}
+
 .ds-input-number.ds-input-number--modern[data-part='root'] ~ [data-part='trailing'] {
   position: absolute;
   inset-inline-end: var(--ds-input-number-trailing-inset, 0.5rem);
   display: flex;
   align-items: center;
-  gap: var(--ds-spacing-1, 0.25rem);
+  gap: var(--ds-spacing-1);
 }
 
 .ds-input-number.ds-input-number--modern[data-part='root'] ~ [data-part='trailing'] > [data-part='steppers'] {
@@ -153,8 +192,11 @@
 .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-color-border);
 }
-.ds-input-number.ds-input-number--modern[data-part='root'][data-part='root']:where(:hover):not([data-disabled='true']):not([data-status='error']):not([data-status='warning']) {
-  border-color: var(--ds-input-number-border-hover, var(--ds-color-border-hover));
+/* Hover is hover-capable-only; touch gets the :active/focus path below. */
+@media (hover: hover) {
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root']:where(:hover):not([data-disabled='true']):not([data-status='error']):not([data-status='warning']) {
+    border-color: var(--ds-input-number-border-hover, var(--ds-color-border-hover));
+  }
 }
 .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root']:focus-visible {
   border-color: var(--ds-input-number-border-focus, var(--ds-color-primary));
@@ -168,24 +210,123 @@
 .ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'][data-status='warning'] {
   border: 1px solid var(--ds-color-warning);
 }
-.ds-input-number.ds-input-number--modern[data-part='root'][data-disabled='true'] {
-  opacity: var(--ds-disabled-opacity, 0.58);
-  cursor: not-allowed;
+/* Status rings: the focus shadow tints to the status hue (consuming the
+   certified Input-family status-ring hooks) so error/warning never read as
+   the neutral primary focus. */
+.ds-input-number.ds-input-number--modern[data-part='root'][data-status='error']:focus-visible {
+  box-shadow: var(--ds-input-error-shadow-focus, var(--ds-input-number-shadow-focus, var(--ds-focus-ring)));
+}
+.ds-input-number.ds-input-number--modern[data-part='root'][data-status='warning']:focus-visible {
+  box-shadow: var(--ds-input-warning-shadow-focus, var(--ds-input-number-shadow-focus, var(--ds-focus-ring)));
+}
+/* Bounds-hit: an impossible step (already at min/max) flashes the caution
+   ring once, reusing the focus-ring grammar the field already owns. The
+   engine clears `data-bounds-hit` on animationend (computed-duration
+   fallback), so the cue always lands with this exact cadence. */
+.ds-input-number.ds-input-number--modern[data-part='root'][data-bounds-hit] {
+  animation: ds-input-number-bounds-hit
+    calc(var(--ds-motion-feedback) * 2)
+    var(--ds-motion-ease-out) 1;
 }
 
+@keyframes ds-input-number-bounds-hit {
+  0%,
+  100% {
+    box-shadow: none;
+  }
+  50% {
+    box-shadow: var(
+      --ds-input-warning-shadow-focus,
+      0 0 0 var(--ds-focus-ring-width) var(--ds-input-warning-border, var(--ds-color-warning))
+    );
+  }
+}
+/* Disabled is unmistakably inactive yet readable: full disabled channels,
+   not opacity alone. */
+.ds-input-number.ds-input-number--modern[data-part='root'][data-disabled='true'] {
+  color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
+  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
+  opacity: var(--ds-disabled-opacity, 0.58);
+  cursor: var(--ds-input-disabled-cursor);
+}
+
+/* Addons share the Input family's segmented-join grammar: same border
+   channels, same border-width-aware overlap, zeroed radii at the join, state
+   sync with the field -- the cluster reads as ONE control, never as floating
+   tiles next to a bordered input. */
 [data-part='addon-before']:has(~ div > .ds-input-number.ds-input-number--modern[data-part='root']) {
-  padding: var(--ds-spacing-1, 0.25rem) var(--ds-spacing-2, 0.5rem);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-1) var(--ds-spacing-2);
+  color: var(--ds-input-addon-color, var(--ds-color-text-secondary));
+  background: var(--ds-input-addon-bg, var(--ds-surface-inset));
+  border: var(--ds-input-border-width) var(--ds-input-border-style)
+    var(--ds-input-addon-border, var(--ds-input-border, var(--ds-color-border)));
   border-start-start-radius: var(--ds-radius-md);
   border-end-start-radius: var(--ds-radius-md);
-  background: var(--ds-surface-inset);
-  color: var(--ds-color-text-secondary);
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-part='addon-after'] {
-  padding: var(--ds-spacing-1, 0.25rem) var(--ds-spacing-2, 0.5rem);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-1) var(--ds-spacing-2);
+  color: var(--ds-input-addon-color, var(--ds-color-text-secondary));
+  background: var(--ds-input-addon-bg, var(--ds-surface-inset));
+  border: var(--ds-input-border-width) var(--ds-input-border-style)
+    var(--ds-input-addon-border, var(--ds-input-border, var(--ds-color-border)));
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
   border-start-end-radius: var(--ds-radius-md);
   border-end-end-radius: var(--ds-radius-md);
-  background: var(--ds-surface-inset);
-  color: var(--ds-color-text-secondary);
+  margin-inline-start: var(--ds-input-group-overlap, calc(-1 * var(--ds-input-border-width)));
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+/* Join seams: the field collapses its border against a preceding addon and
+   the input zeroes its radii on every joined side. */
+[data-part='addon-before'] + [data-part='field']:has(> .ds-input-number.ds-input-number--modern[data-part='root']) {
+  margin-inline-start: var(--ds-input-group-overlap, calc(-1 * var(--ds-input-border-width)));
+}
+[data-part='addon-before'] + [data-part='field']:has(> .ds-input-number.ds-input-number--modern[data-part='root']) > .ds-input-number.ds-input-number--modern[data-part='root'] {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+[data-part='field']:has(> .ds-input-number.ds-input-number--modern[data-part='root']):has(+ [data-part='addon-after']) > .ds-input-number.ds-input-number--modern[data-part='root'] {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+/* State sync across the join (4.2: slots share focus treatment): the addon
+   border adopts the field's focus/status/disabled posture so no neutral seam
+   survives next to a state border. */
+[data-part='addon-before']:has(+ [data-part='field'] > .ds-input-number.ds-input-number--modern[data-part='root']:focus-visible),
+[data-part='field']:has(> .ds-input-number.ds-input-number--modern[data-part='root']:focus-visible) + [data-part='addon-after'] {
+  border-color: var(--ds-input-number-border-focus, var(--ds-color-primary));
+}
+[data-part='addon-before']:has(+ [data-part='field'] > .ds-input-number.ds-input-number--modern[data-part='root'][data-status='error']),
+[data-part='field']:has(> .ds-input-number.ds-input-number--modern[data-part='root'][data-status='error']) + [data-part='addon-after'] {
+  border-color: var(--ds-input-error-border, var(--ds-color-error));
+}
+[data-part='addon-before']:has(+ [data-part='field'] > .ds-input-number.ds-input-number--modern[data-part='root'][data-status='warning']),
+[data-part='field']:has(> .ds-input-number.ds-input-number--modern[data-part='root'][data-status='warning']) + [data-part='addon-after'] {
+  border-color: var(--ds-input-warning-border, var(--ds-color-warning));
+}
+[data-part='addon-before']:has(+ [data-part='field'] > .ds-input-number.ds-input-number--modern[data-part='root'][data-disabled='true']),
+[data-part='field']:has(> .ds-input-number.ds-input-number--modern[data-part='root'][data-disabled='true']) + [data-part='addon-after'] {
+  color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
+  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
 }
 
 [data-part='prefix']:has(~ .ds-input-number.ds-input-number--modern[data-part='root']) {
@@ -209,19 +350,30 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   cursor: pointer;
   background: transparent;
   color: var(--ds-color-text-secondary);
-  border-radius: var(--ds-radius-sm, 6px);
+  border-radius: var(--ds-radius-sm);
   border: none;
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-.ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button']:where(:hover) {
+@media (hover: hover) {
+  .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button']:where(:hover) {
+    color: var(--ds-color-primary);
+    background: var(--ds-input-number-stepper-bg-hover, var(--ds-surface-inset));
+  }
+}
+/* Pressed stays physically connected: the same active transform the Input
+   family's inline actions use (existing `--ds-input-action-*` hook), which
+   also gives coarse pointers their :active equivalent of hover. */
+.ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button']:active:not(:disabled) {
   color: var(--ds-color-primary);
   background: var(--ds-input-number-stepper-bg-hover, var(--ds-surface-inset));
+  transform: var(--ds-input-action-active-transform, scale(0.94));
 }
 .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button']:focus-visible {
   color: var(--ds-color-primary);
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-color-primary);
+  outline: var(--ds-focus-ring-width) solid var(--ds-color-primary);
   outline-offset: 1px;
 }
 
@@ -229,7 +381,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button']:disabled {
   color: var(--ds-color-text-disabled);
   background: transparent;
-  cursor: default;
+  cursor: var(--ds-input-disabled-cursor);
 }
 
 /* Quiet hairline between the two halves of the stepper column. */
@@ -252,11 +404,56 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
     min-block-size: var(--ds-input-number-touch-target-min, 44px);
   }
 
-  /* The stacked stepper pair cannot each reach 44px inside a 44px field: the
-     column splits the touch zone evenly (22px per half) instead of inflating
-     the input; the keyboard ArrowUp/Down path remains the APG-primary one. */
+  /* 44px hit targets for BOTH steppers: the stacked 22px column violated the
+     coarse floor, so on touch the cluster leaves the field overlay and
+     becomes a segmented row of two real targets after the control
+     (inline-end, RTL-mirrored). The suffix stays overlaid inside the field
+     by re-anchoring to the field frame. */
+  .ds-input-number.ds-input-number--modern[data-part='root'] ~ [data-part='trailing'] {
+    position: static;
+    flex: 0 0 auto;
+  }
+  .ds-input-number.ds-input-number--modern[data-part='root'] ~ [data-part='trailing'] > [data-part='suffix'] {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: var(--ds-input-number-trailing-inset, 0.5rem);
+    transform: translateY(-50%);
+  }
+  .ds-input-number.ds-input-number--modern[data-part='root'] ~ [data-part='trailing'] > [data-part='steppers'] {
+    flex-direction: row;
+  }
   .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button'] {
-    min-block-size: calc(var(--ds-input-number-touch-target-min, 44px) / 2);
+    min-inline-size: var(--ds-input-number-touch-target-min, 44px);
+    min-block-size: var(--ds-input-number-touch-target-min, 44px);
+  }
+  .ds-input-number.ds-input-number--modern[data-part='root'] ~ [data-part='trailing']
+    [data-part='stepper-button'] + [data-part='stepper-button'] {
+    border-block-start: 0;
+    border-inline-start: 1px solid
+      var(--ds-input-number-stepper-separator, var(--ds-color-border-subtle));
+  }
+
+  /* The overlay reservation collapses: steppers no longer cover the value,
+     so the end padding returns to the per-size channel... */
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-size='sm'][data-has-trailing='true'] {
+    padding-inline-end: var(--ds-input-number-sm-padding-x, 10px);
+  }
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-size='md'][data-has-trailing='true'] {
+    padding-inline-end: var(--ds-input-number-md-padding-x, 12px);
+  }
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-size='lg'][data-has-trailing='true'] {
+    padding-inline-end: var(--ds-input-number-lg-padding-x, 14px);
+  }
+
+  /* ...except when an overlaid suffix still needs its affix room. */
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-size='sm'][data-has-trailing='true']:has(~ [data-part='trailing'] > [data-part='suffix']) {
+    padding-inline-end: var(--ds-input-number-prefix-space, 32px);
+  }
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-size='md'][data-has-trailing='true']:has(~ [data-part='trailing'] > [data-part='suffix']) {
+    padding-inline-end: var(--ds-input-number-prefix-space, 32px);
+  }
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-size='lg'][data-has-trailing='true']:has(~ [data-part='trailing'] > [data-part='suffix']) {
+    padding-inline-end: var(--ds-input-number-prefix-space, 32px);
   }
 }
 
@@ -286,11 +483,24 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
   .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button']:focus-visible {
     outline-color: Highlight;
   }
+
+  [data-part='addon-before']:has(~ div > .ds-input-number.ds-input-number--modern[data-part='root']),
+  div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-part='addon-after'] {
+    background: Field;
+    color: FieldText;
+    border-color: ButtonText;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ds-input-number.ds-input-number--modern[data-part='root'],
   .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button'] {
     transition: none;
+  }
+
+  /* The bounds cue lands directly in its final posture: no flash, the
+     exhausted stepper and the clamped value carry the feedback. */
+  .ds-input-number.ds-input-number--modern[data-part='root'][data-bounds-hit] {
+    animation: none;
   }
 }

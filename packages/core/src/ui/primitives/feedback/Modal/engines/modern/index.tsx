@@ -23,6 +23,7 @@ import React, { useEffect, useState, useCallback, useRef, useId } from 'react';
 import type { ModalProps } from '../../contracts';
 import { MODAL_DEFAULTS, PADDING_MAP } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
+import { usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { TopLayerHostProvider } from '../../../../runtime/overlay/top-layer-host';
 import { useModalInertSiblings } from '../../../../runtime/overlay/focus-management/inert-siblings';
 import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
@@ -91,6 +92,11 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
   // Optional channel with an English floor: the modal renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
+  // The ok/cancel action labels live in the `common` namespace (common.ok /
+  // common.cancel ship for en/es/ar); the `components` namespace only carries
+  // modal.close. Resolving against `common` keeps the English floor verbatim
+  // while letting es/ar locales actually translate the generated actions.
+  const i18nCommon = useOptionalTranslation('common');
 
   const isMobile = usePhoneBreakpoint();
 
@@ -98,6 +104,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     open = false,
     onClose,
     onOpenChange,
+    onOpen,
     onCancel,
     onOk,
     children,
@@ -140,8 +147,16 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
   const descriptionId = `${id || generatedLabelId}-description`;
   const backdropClosable = closeOnBackdropClick ?? closeOnOverlayClick ?? true;
   const effectivePlacement = placement === 'center' && !centered ? 'top' : placement;
-  const resolvedOkText = okText ?? i18n?.tOr('ok', 'OK') ?? 'OK';
-  const resolvedCancelText = cancelText ?? i18n?.tOr('cancel', 'Cancel') ?? 'Cancel';
+  const resolvedOkText = okText ?? i18nCommon?.tOr('ok', 'OK') ?? 'OK';
+  const resolvedCancelText = cancelText ?? i18nCommon?.tOr('cancel', 'Cancel') ?? 'Cancel';
+
+  // Inline anchor: the component's DOM position carries the tenant/locale/
+  // density lineage that `usePortalScope` snapshots and re-stamps directly on
+  // the portaled <dialog> (the same contract <PortalScope> gives a wrapper,
+  // without adding a node above the dialog — the top-layer nesting contract
+  // pins `dialog.parentElement` to the shared portal root).
+  const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null);
+  const portalScope = usePortalScope(anchorEl);
 
   /** Whether the modal should render as fullscreen on the current viewport. */
   const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen && isMobile;
@@ -217,8 +232,13 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     if (!dialog) return;
     if (open && !dialog.open) {
       dialog.showModal();
+      // Lifecycle parity with the shared contract: the promotion is the one
+      // moment the modal becomes visible, so `onOpen` fires exactly once per
+      // open session (the `!dialog.open` guard also suppresses re-fires when
+      // a re-open mid-exit never left the top layer).
+      onOpen?.();
     }
-  }, [open, dialogEl]);
+  }, [open, dialogEl, onOpen]);
 
   // `showModal()` promotes this dialog into the browser TOP LAYER, which
   // paints above every normal-flow node regardless of z-index. A descendant
@@ -259,14 +279,17 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     if (shouldRender) {
       const scrollbarWidth = getScrollbarWidth();
       const originalOverflow = document.body.style.overflow;
-      const originalPaddingRight = document.body.style.paddingRight;
+      const originalPaddingInlineEnd = document.body.style.paddingInlineEnd;
       document.body.style.overflow = 'hidden';
       if (scrollbarWidth > 0) {
-        document.body.style.paddingRight = `${scrollbarWidth}px`;
+        // Logical property: the scrollbar sits on the inline-END edge in both
+        // LTR and RTL documents, so the compensation must follow direction
+        // instead of hardcoding the physical right side.
+        document.body.style.paddingInlineEnd = `${scrollbarWidth}px`;
       }
       return () => {
         document.body.style.overflow = originalOverflow;
-        document.body.style.paddingRight = originalPaddingRight;
+        document.body.style.paddingInlineEnd = originalPaddingInlineEnd;
       };
     }
   }, [shouldRender, preventScroll]);
@@ -312,10 +335,17 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
             type="button"
             data-part="action"
             data-action="ok"
+            data-loading={confirmLoading ? 'true' : 'false'}
             disabled={confirmLoading}
+            aria-busy={confirmLoading || undefined}
             onClick={onOk}
           >
-            {resolvedOkText}
+            {/* Loading affordance: the skin paints a governed ring on the
+                spinner part and keeps the label painted-invisible (never
+                `visibility:hidden`, so the accessible name survives). The
+                ring is aria-hidden; `aria-busy` carries the state. */}
+            {confirmLoading && <span data-part="spinner" aria-hidden="true" />}
+            <span data-part="action-label">{resolvedOkText}</span>
           </button>
         )}
       </>
@@ -323,9 +353,12 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
 
   // Stays mounted while the exit animation plays (usePresence); only unmounts
   // once dataState has been 'closed' long enough for that animation to finish.
-  if (!shouldRender) return null;
-
+  // The anchor must render even while closed: it is the component's own DOM
+  // position, the lineage source the portal scope snapshot reads from.
   return (
+    <>
+      <span ref={setAnchorEl} data-part="anchor" />
+      {!shouldRender ? null : (
     <Portal>
       {/* Inside <Portal> on purpose: the dialog's own portal must NOT resolve
           into a host that lives inside itself. Descendants still see it. */}
@@ -335,6 +368,15 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
         id={id}
         data-testid={dataTestId}
         data-part="root"
+        // Tenant/locale/density scope re-stamped on the portaled root itself
+        // (the <PortalScope> wrapper contract, minus a wrapper node): tenant
+        // selectors like `[data-tenant]`, `dir`/`lang` and inline `--ds-*`
+        // overrides keep resolving as if the dialog had never left the
+        // trigger's ancestry.
+        data-portal-scope="true"
+        {...portalScope.scope}
+        dir={portalScope.direction}
+        lang={portalScope.language}
         data-fullscreen={effectiveFullscreen ? 'true' : 'false'}
         data-adaptive-fullscreen={isAdaptiveFullscreen ? 'true' : 'false'}
         className="rottay-modal-root--modern rottay-modal rottay-modal--modern rottay-overlay-modal-shell--modern"
@@ -344,6 +386,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
         aria-describedby={ariaDescribedBy || (description ? descriptionId : undefined)}
         {...overlayMotion.attributes}
         style={{
+          // Re-stamped lineage `--ds-*` overrides first; the engine's own
+          // geometry keys below always win on collision.
+          ...portalScope.variables,
           ...overlayMotion.variables,
           /* Reset native dialog styling */
           position: 'fixed',
@@ -421,11 +466,17 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
             ['--ds-modal-section-border' as any]: divider
               ? '1px solid var(--ds-modal-border-color, var(--ds-color-border-subtle))'
               : 'none',
-            animation: isAdaptiveFullscreen || motionIsFinal
+            // Motion choreography: the desktop posture keeps the scale+fade
+            // recipe; the adaptive-fullscreen (phone) posture borrows the
+            // Sheet grammar — a bottom slide-up on the same overlay.modal
+            // recipe timing — instead of appearing with no motion at all.
+            // Reduced motion (or disableAnimation) declares NO animation and
+            // the presence hook lands directly on the settled state.
+            animation: motionIsFinal
               ? undefined
               : dataState === 'open'
-                ? `ds-overlay-modal-enter-modern var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`
-                : `ds-overlay-modal-exit-modern var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
+                ? `${isAdaptiveFullscreen ? 'ds-overlay-modal-sheet-enter-modern' : 'ds-overlay-modal-enter-modern'} var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`
+                : `${isAdaptiveFullscreen ? 'ds-overlay-modal-sheet-exit-modern' : 'ds-overlay-modal-exit-modern'} var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
             overflow: 'hidden',
             ...style,
           }}
@@ -484,6 +535,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
       </dialog>
       </TopLayerHostProvider>
     </Portal>
+      )}
+    </>
   );
 }
 

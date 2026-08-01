@@ -80,12 +80,20 @@ const FeedbackIcon: React.FC<{ status: 'success' | 'error' | 'warning' | 'valida
         ? 'warning_state'
         : 'validating';
 
+  // Announcement de-duplication (a11y law: no duplicated status announcements):
+  // in the error posture the message's own `role="alert"` already announces
+  // the failure WITH its text, so the icon bows out (decorative). For
+  // success/warning/validating there is no alert anywhere, so the icon keeps
+  // the `role="status"` channel as the only announcement.
+  const announcementOwnedByAlert = status === 'error';
+
   return (
     <span
       data-part="feedback-icon"
       data-status={status}
-      role="status"
-      aria-label={t(labelKey)}
+      role={announcementOwnedByAlert ? undefined : 'status'}
+      aria-label={announcementOwnedByAlert ? undefined : t(labelKey)}
+      aria-hidden={announcementOwnedByAlert || undefined}
     >
       <Icon decorative size={15} />
     </span>
@@ -108,6 +116,7 @@ interface FormContextValue {
   layout?: 'horizontal' | 'vertical' | 'inline';
   /** Canonical `sm | md | lg` step; the public `size` prop's legacy spelling is normalized once via `toCanonicalSize` before entering context. */
   size?: 'sm' | 'md' | 'lg';
+  labelAlign?: 'left' | 'right';
   disabled?: boolean;
   colon?: boolean;
   requiredMark?: boolean | 'optional';
@@ -250,6 +259,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     layout = 'vertical',
     colon = true,
     size = 'default',
+    labelAlign,
     disabled = false,
     requiredMark = true,
     scrollToFirstError = false,
@@ -420,6 +430,60 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     return fieldErrors;
   }, [setError, tValidation]);
 
+  // Contract honesty: the bare useForm instance cannot validate (it owns no
+  // rules registry), so its validateFields/scrollToField ship as stubs. The
+  // real implementations live HERE, where the rules registry (fieldRulesRef)
+  // and validateField actually exist. This is a SEPARATE wrap seam from the
+  // submit/setFields effect above: it must be declared after validateField
+  // (TDZ) and re-wraps whenever the validation closure changes (locale).
+  React.useEffect(() => {
+    if (!resolvedForm) return;
+    const originalValidateFields = resolvedForm.validateFields;
+    const originalScrollToField = resolvedForm.scrollToField;
+
+    resolvedForm.validateFields = (async (
+      nameList?: (string | number | (string | number)[])[],
+    ) => {
+      const names = nameList
+        ? nameList.map((n) => (Array.isArray(n) ? n.join('.') : String(n)))
+        : Object.keys(fieldRulesRef.current);
+      const entries = await Promise.all(
+        names.map(
+          async (fieldName) =>
+            [fieldName, await validateField(fieldName, getFieldRules(fieldName))] as const,
+        ),
+      );
+      const failed = entries.filter(([, fieldErrors]) => fieldErrors.length > 0);
+      if (failed.length > 0) {
+        // Ant Design parity: reject with the errorFields payload (never a
+        // silent pass) so `await form.validateFields()` can branch on it.
+        throw {
+          values: valuesRef.current,
+          errorFields: failed.map(([fieldName, fieldErrors]) => ({
+            name: fieldName,
+            errors: fieldErrors,
+          })),
+          outOfDate: false,
+        };
+      }
+      return valuesRef.current;
+    }) as FormInstance['validateFields'];
+
+    resolvedForm.scrollToField = (name, options) => {
+      const key = Array.isArray(name) ? name.join('.') : String(name);
+      const el =
+        formElementRef.current?.querySelector(`[id="form-${key}"]`) ||
+        formElementRef.current?.querySelector(`[name="${key}"]`);
+      // Contract: scroll only (focus management stays the caller's call).
+      el?.scrollIntoView(options ?? { behavior: 'smooth', block: 'center' });
+    };
+
+    return () => {
+      resolvedForm.validateFields = originalValidateFields;
+      resolvedForm.scrollToField = originalScrollToField;
+    };
+  }, [resolvedForm, validateField, getFieldRules]);
+
   // Submit handler: validates ALL registered fields in parallel, then either
   // calls onFinish (success) or onFinishFailed (errors) with scroll-to-error UX.
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -475,13 +539,14 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
     registerField,
     layout,
     size: toCanonicalSize(size),
+    labelAlign,
     disabled,
     colon,
     requiredMark,
     hasFeedback: formHasFeedback,
     validateField,
     getFieldRules,
-  }), [values, errors, touched, validating, setValue, setError, setFieldTouched, registerField, layout, size, disabled, colon, requiredMark, formHasFeedback, validateField, getFieldRules]);
+  }), [values, errors, touched, validating, setValue, setError, setFieldTouched, registerField, layout, size, labelAlign, disabled, colon, requiredMark, formHasFeedback, validateField, getFieldRules]);
 
   useImperativeHandle(ref, () => resolvedForm as FormInstance, [resolvedForm]);
 
@@ -555,6 +620,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
     colon,
     disabled,
     requiredMark,
+    labelAlign,
     hasFeedback: formHasFeedback,
     validateField,
     getFieldRules,
@@ -592,6 +658,14 @@ const FormItem: React.FC<FormItemProps> = (props) => {
   const isRequired = required || rules?.some((r) => r.required);
   const showColon = itemColon ?? colon;
   const generatedControlId = fieldName ? `form-${fieldName}` : undefined;
+  // The label's htmlFor must track the control the item ACTUALLY points at:
+  // a child with its own `id` wins over the generated one (the clone below
+  // follows the same rule), otherwise the association silently breaks.
+  const firstChildProvidedId = React.Children.toArray(children).reduce<string | undefined>(
+    (found, child) => found ?? (React.isValidElement<{ id?: string }>(child) ? child.props.id : undefined),
+    undefined,
+  );
+  const resolvedControlId = firstChildProvidedId ?? generatedControlId;
   const showFeedback = itemHasFeedback ?? formHasFeedback;
   const messageId = fieldName ? `${generatedControlId}-message` : undefined;
 
@@ -659,8 +733,9 @@ const FormItem: React.FC<FormItemProps> = (props) => {
     >
       {label && (
         <label
-          htmlFor={generatedControlId}
+          htmlFor={resolvedControlId}
           data-part="label"
+          data-label-align={layout === 'horizontal' ? labelAlign : undefined}
         >
           <span data-part="label-text">
             {label}
@@ -690,8 +765,13 @@ const FormItem: React.FC<FormItemProps> = (props) => {
           )}
         </div>
         {(help || fieldErrors.length > 0) && (
-          <div data-part="message" id={messageId}>
-            <span data-part="help-text" data-error={hasError ? 'true' : 'false'}>
+          <div data-part="message" id={messageId} role={hasError ? 'alert' : undefined}>
+            {/* Error posture rides shape + live announcement, never hue alone:
+                same governed status.error idiom as FormField's error-icon. */}
+            {hasError && (
+              <StatusErrorIcon decorative size={13} data-part="error-icon" />
+            )}
+            <span data-part="help-text" data-error={hasError ? 'true' : 'false'} data-tone={isWarning && !hasError ? 'warning' : undefined}>
               {help || fieldErrors[0]}
             </span>
           </div>
@@ -783,7 +863,7 @@ const FormErrorList: React.FC<FormErrorListProps> = (props) => {
   if (errors.length === 0) return null;
 
   return (
-    <ul data-part="error-list" className={`ds-form-error-list ds-form-error-list--modern ${className}`} style={{ ...style }}>
+    <ul data-part="error-list" role="alert" className={`ds-form-error-list ds-form-error-list--modern ${className}`} style={{ ...style }}>
       {errors.map((error, index) => (
         <li key={index} data-part="error-item">
           <StatusErrorIcon decorative size={14} />

@@ -26,6 +26,18 @@
  * `ds-foundation-spin`. Under `prefers-reduced-motion: reduce` the decorative
  * pulse is silenced; the spinner stays (functional progress indication).
  *
+ * SECOND PREMIUM PASS (Phase B, 2026-07-31):
+ * - The recording pulse is now COMPOSITOR-SAFE: it was a per-frame
+ *   box-shadow interpolation on the root (paint-bound); the halo is a
+ *   `::before` ring animating transform + opacity on the same governed
+ *   cadence (`--ds-motion-glacial`-derived), same keyframe name. Reduced
+ *   motion keeps the ring STATIC (the recording frame stays visible instead
+ *   of collapsing to the bare button).
+ * - The error posture is no longer hue-only: a `::after` marker dot rides
+ *   the button's corner on `data-error='true'` (blocked already carries its
+ *   own shape -- the MicOff glyph -- so the dot is suppressed there).
+ *   Forced colors: the dot takes CanvasText on a Canvas ring.
+ *
  * SPECIFICITY (P-48 + 4th-wave recount): the Platform-only Rottay artifact
  * ships an unlayered border-color floor at (0,3,1). With only ONE root
  * class, the border rules reach (0,4,0) via the always-stamped
@@ -36,6 +48,7 @@
  */
 
 .ds-voice-input-button[data-part='root'] {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -62,7 +75,7 @@
   }
 }
 .ds-voice-input-button[data-part='root']:active {
-  transform: scale(var(--ds-state-press-scale, 0.98));
+  transform: scale(var(--ds-state-press-scale));
 }
 
 /* control + icon geometry per size preset (transcribed verbatim: no global
@@ -87,8 +100,16 @@
 }
 
 /* state animations (keyframes declared at the bottom of this file; durations
-   derive from the motion scale -- never literals) */
-.ds-voice-input-button[data-part='root'][data-status='listening'] {
+   derive from the motion scale -- never literals). The recording halo is a
+   `::before` ring animating compositor-safe transform + opacity (the former
+   box-shadow spread forced paint on every frame). */
+.ds-voice-input-button[data-part='root'][data-part='root'][data-status='listening']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 38%, transparent);
+  pointer-events: none;
   animation: ds-voice-input-button-pulse
     var(--ds-voice-input-pulse-duration, calc(var(--ds-motion-glacial) * 3))
     var(--ds-motion-ease-out) infinite;
@@ -96,8 +117,23 @@
 .ds-voice-input-button[data-part='root'][data-status='transcribing'] > .rottay-icon {
   animation: ds-voice-input-button-spin calc(var(--ds-motion-glacial) * 2) linear infinite;
 }
+/* Error marker (shape, not hue): corner dot for the generic error posture.
+   Blocked is suppressed -- the MicOff glyph already carries that shape. */
+.ds-voice-input-button[data-part='root'][data-error='true']:not([data-blocked='true'])::after {
+  content: '';
+  position: absolute;
+  inset-block-start: -2px;
+  inset-inline-end: -2px;
+  inline-size: var(--_ds-proto-voice-input-error-dot-size, 8px);
+  block-size: var(--_ds-proto-voice-input-error-dot-size, 8px);
+  border-radius: 999px;
+  background: var(--ds-color-error);
+  border: 1px solid var(--ds-surface-card);
+  pointer-events: none;
+}
 @media (prefers-reduced-motion: reduce) {
-  .ds-voice-input-button[data-part='root'][data-status='listening'] {
+  /* Static final state: the ring stays painted, only the pulse quiets. */
+  .ds-voice-input-button[data-part='root'][data-part='root'][data-status='listening']::before {
     animation: none;
   }
 }
@@ -128,6 +164,12 @@
   .ds-voice-input-button[data-part='root'][data-variant][data-blocked='true'] {
     border-color: GrayText;
     color: GrayText;
+  }
+  /* Error dot: system ink on a canvas ring (the ::before recording ring
+     border auto-forces to a system color, so the state frame survives). */
+  .ds-voice-input-button[data-part='root'][data-error='true']:not([data-blocked='true'])::after {
+    background: CanvasText;
+    border-color: Canvas;
   }
 }
 
@@ -181,9 +223,9 @@
 }
 
 @keyframes ds-voice-input-button-pulse {
-  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-primary) 22%, transparent); }
-  70% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--ds-color-primary) 0%, transparent); }
-  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-primary) 0%, transparent); }
+  0% { opacity: 0.9; transform: scale(1); }
+  70% { opacity: 0; transform: scale(1.45); }
+  100% { opacity: 0; transform: scale(1.45); }
 }
 @keyframes ds-voice-input-button-spin {
   from { transform: rotate(0deg); }

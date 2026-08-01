@@ -12,11 +12,10 @@
  * - Text content (title + subtitle, center)
  * - Extra content (optional, right side)
  *
- * **CSS Variables:**
- * - `--ds-card-title-size` - Title font size
- * - `--ds-card-title-color` - Title text color
- * - `--ds-card-subtitle-size` - Subtitle font size
- * - `--ds-card-subtitle-color` - Subtitle text color
+ * **Paint contract:**
+ * - `--ds-card-title-font-size` / `--ds-card-title-color` - Title typography
+ * - `--ds-card-subtitle-font-size` / `--ds-card-subtitle-color` - Subtitle typography
+ * - `--ds-card-header-padding{,-sm,-lg}` - Section padding per `data-padding`
  *
  * @example Basic Header
  * ```tsx
@@ -43,19 +42,7 @@
 'use client';
 
 import React from 'react';
-import type { CSSProperties } from 'react';
 import type { CardHeaderProps } from '../../contracts';
-
-/**
- * Padding size to CSS value mapping.
- * @internal
- */
-const PADDING_MAP: Record<string, string> = {
-  none: '0',
-  sm: 'var(--ds-card-header-padding-sm, var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px))',
-  md: 'var(--ds-card-header-padding, var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px))',
-  lg: 'var(--ds-card-header-padding-lg, var(--ds-spacing-5, 20px) var(--ds-spacing-6, 24px))',
-};
 
 /**
  * Card header compound component.
@@ -67,6 +54,10 @@ const PADDING_MAP: Record<string, string> = {
  * - Extra content slot (typically for action buttons)
  * - Optional divider below the header
  * - Configurable padding
+ *
+ * Layout and paint are owned by `presentation/components/skin/card-compounds.css`,
+ * keyed on the class + `data-part`/`data-padding` contract stamped here; only a
+ * caller's own `style` prop stays inline.
  *
  * @component
  * @example
@@ -107,38 +98,6 @@ export function CardHeader({
   style,
   ...rest
 }: CardHeaderProps): React.ReactElement {
-  const headerStyle: CSSProperties = {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    gap: 'var(--ds-card-header-gap, var(--ds-spacing-3, 12px))',
-    padding: PADDING_MAP[padding],
-    ...style,
-  };
-
-  const contentWrapperStyle: CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 'var(--ds-card-header-gap, var(--ds-spacing-3, 12px))',
-    flex: 1,
-    minWidth: 0,
-  };
-
-  const textContentStyle: CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 'var(--ds-spacing-1, 4px)',
-    flex: 1,
-    minWidth: 0,
-  };
-
-  const extraStyle: CSSProperties = {
-    flexShrink: 0,
-    display: 'flex',
-    alignItems: 'center',
-    gap: 'var(--ds-card-header-actions-gap, var(--ds-spacing-2, 8px))',
-  };
-
   const hasTextContent = eyebrow || title || subtitle;
   const Heading = `h${headingLevel}` as keyof React.JSX.IntrinsicElements;
 
@@ -148,25 +107,26 @@ export function CardHeader({
       className={`rottay-card-header ${className}`}
       data-part="header"
       data-divider={divider ? 'true' : undefined}
+      data-padding={padding}
       data-has-icon={icon ? 'true' : undefined}
       data-has-avatar={avatar ? 'true' : undefined}
       data-has-eyebrow={eyebrow ? 'true' : undefined}
       data-has-extra={extra ? 'true' : undefined}
-      style={headerStyle}
+      style={style}
     >
-      <div className="rottay-card-header-content" style={contentWrapperStyle}>
+      <div className="rottay-card-header-content">
         {icon && (
           <span className="rottay-card-header-icon" data-part="icon" aria-hidden="true">
             {icon}
           </span>
         )}
         {avatar && (
-          <div className="rottay-card-header-avatar" data-part="avatar" style={{ flexShrink: 0 }}>
+          <div className="rottay-card-header-avatar" data-part="avatar">
             {avatar}
           </div>
         )}
         {hasTextContent && (
-          <div className="rottay-card-header-text" style={textContentStyle}>
+          <div className="rottay-card-header-text">
             {eyebrow && <span data-part="eyebrow">{eyebrow}</span>}
             {title && <Heading data-part="title">{title}</Heading>}
             {subtitle && <p data-part="subtitle">{subtitle}</p>}
@@ -175,7 +135,7 @@ export function CardHeader({
         {children}
       </div>
       {extra && (
-        <div className="rottay-card-header-extra" data-part="extra" style={extraStyle}>
+        <div className="rottay-card-header-extra" data-part="extra">
           {extra}
         </div>
       )}

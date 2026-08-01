@@ -90,26 +90,10 @@ export interface DrawerBodyProps {
 
   /**
    * Inline styles to apply to the body container.
-   * Merged with default styles; your styles take precedence.
+   * Applied on top of the compound skin's paint; your styles take precedence.
    */
   style?: React.CSSProperties;
 }
-
-// ============================================================================
-// Constants
-// ============================================================================
-
-/**
- * Padding size mappings.
- * Uses design system spacing tokens with pixel fallbacks.
- * @internal
- */
-const PADDING_MAP: Record<DrawerBodyProps['padding'] & string, string> = {
-  none: '0',
-  sm: 'var(--ds-spacing-3, 12px)',
-  md: 'var(--ds-spacing-4, 16px)',
-  lg: 'var(--ds-spacing-6, 24px)',
-};
 
 // ============================================================================
 // Component
@@ -161,28 +145,14 @@ export const DrawerBody = forwardRef<HTMLDivElement, DrawerBodyProps>(
       style = {},
     } = props;
 
-    // -------------------------------------------------------------------------
-    // Styles
-    // -------------------------------------------------------------------------
-
-    /**
-     * Container styles for the body section.
-     * Designed to fill available space and handle overflow.
-     */
-    const bodyStyle: React.CSSProperties = {
-      // Layout - fill available vertical space
-      flex: 1,
-
-      // Spacing - use padding map for consistent sizing
-      padding: PADDING_MAP[padding] || PADDING_MAP.lg,
-
-      // Overflow handling - scroll vertically, hide horizontal
-      overflowY: 'auto',
-      overflowX: 'hidden',
-
-      // Merge user styles (takes precedence)
-      ...style,
-    };
+    // Layout (flex growth, overflow) and the four padding variants live in
+    // drawer-compounds.css, keyed on `data-padding`; the prop only stamps the
+    // state hook. An out-of-contract value degrades to the skin's `lg` base,
+    // exactly what the old inline map fallback did.
+    const resolvedPadding =
+      padding === 'none' || padding === 'sm' || padding === 'md' || padding === 'lg'
+        ? padding
+        : 'lg';
 
     // -------------------------------------------------------------------------
     // Render
@@ -192,8 +162,9 @@ export const DrawerBody = forwardRef<HTMLDivElement, DrawerBodyProps>(
       <div
         ref={ref}
         data-part="body"
+        data-padding={resolvedPadding}
         className={`rottay-drawer-body ${className}`.trim()}
-        style={bodyStyle}
+        style={style}
       >
         {children}
       </div>

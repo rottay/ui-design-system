@@ -34,7 +34,13 @@
  * ReactDOM omitted them, so the false case must match NO rule rather than paint an
  * explicit `none`. `--ds-overlay-modal-radius` carries the panel radius (a
  * RADIUS_MAP enum folded with the fullscreen '0' override), which CSS cannot
- * enumerate.
+ * enumerate. `data-density` arrives re-stamped on the root by the engine's
+ * portal-scope snapshot and retunes section padding through the
+ * `--_ds-proto-modal-density-*` dials (the explicit
+ * `--ds-modal-section-padding-*` channels still win). `data-loading` on the
+ * generated ok action paints the confirm ring; `data-open` selects the
+ * enter/exit keyframe pair (the adaptive-fullscreen posture swaps them for
+ * the Sheet-grammar bottom slide).
  */
 
 @keyframes ds-overlay-modal-backdrop-enter-modern {
@@ -63,6 +69,18 @@
     opacity: 0;
     transform: translateY(var(--ds-recipe-y, 0px)) scale(var(--ds-recipe-scale-from, 0.95));
   }
+}
+/* Adaptive fullscreen (phone posture): the Sheet family grammar — the panel
+   slides up from the bottom edge on the same overlay.modal recipe timing.
+   Transform-only, compositor-safe; under reduced motion the engine declares
+   no animation at all, so these keyframes never run. */
+@keyframes ds-overlay-modal-sheet-enter-modern {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+@keyframes ds-overlay-modal-sheet-exit-modern {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
 }
 
 /* ---- root: the native <dialog>, stripped of its UA chrome ---- */
@@ -101,8 +119,8 @@
   background-color: var(--ds-modal-bg, var(--ds-surface-card));
   background-image:
     linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4)),
-    var(--ds-gradient-surface, none);
-  color: var(--ds-modal-color, inherit);
+    var(--ds-gradient-surface);
+  color: var(--ds-modal-color);
   border-radius: var(--ds-overlay-modal-radius);
   box-shadow: none;
   outline: none;
@@ -172,6 +190,33 @@
   border: none;
 }
 
+/* ---- density: the tenant density axis crosses the portal on the root's
+        `data-density` (re-stamped from the anchor lineage by the engine).
+        Compact/spacious retune the shared section padding through private
+        proto dials; an explicit `--ds-modal-section-padding-*` tenant channel
+        still wins at the consumption site below. Comfortable stays the
+        authored default — it declares nothing. ---- */
+.rottay-overlay-modal-shell--modern[data-part='root'][data-density='compact'] {
+  --_ds-modal-section-pad-block: var(
+    --_ds-proto-modal-density-compact-section-padding-block,
+    var(--ds-spacing-3)
+  );
+  --_ds-modal-section-pad-inline: var(
+    --_ds-proto-modal-density-compact-section-padding-inline,
+    var(--ds-spacing-4)
+  );
+}
+.rottay-overlay-modal-shell--modern[data-part='root'][data-density='spacious'] {
+  --_ds-modal-section-pad-block: var(
+    --_ds-proto-modal-density-spacious-section-padding-block,
+    var(--ds-spacing-5)
+  );
+  --_ds-modal-section-pad-inline: var(
+    --_ds-proto-modal-density-spacious-section-padding-inline,
+    var(--ds-spacing-8)
+  );
+}
+
 /* ---- header: the canonical divider hatch is stamped on the surface so the
         public Modal's `divider` prop remains authoritative. Section layout
         lives here too; the engine stamps parts only. ---- */
@@ -182,11 +227,17 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--ds-spacing-3);
-  padding-block: var(--ds-modal-section-padding-block, var(--ds-spacing-4));
-  padding-inline: var(--ds-modal-section-padding-inline, var(--ds-spacing-6));
+  padding-block: var(
+    --ds-modal-section-padding-block,
+    var(--_ds-modal-section-pad-block, var(--ds-spacing-4))
+  );
+  padding-inline: var(
+    --ds-modal-section-padding-inline,
+    var(--_ds-modal-section-pad-inline, var(--ds-spacing-6))
+  );
   flex-shrink: 0;
   border-block-end: var(--ds-modal-section-border, none);
-  background-color: var(--ds-modal-header-bg, transparent);
+  background-color: var(--ds-modal-header-bg);
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
@@ -206,7 +257,7 @@
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-modal-title-size, var(--ds-font-size-lg));
   font-weight: var(--ds-font-weight-semibold);
-  letter-spacing: var(--ds-letter-spacing-heading, -0.015em);
+  letter-spacing: var(--ds-letter-spacing-heading);
   line-height: var(--ds-line-height-tight);
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
@@ -219,13 +270,20 @@
 }
 
 /* ---- body: the scroll region. A quiet thin scrollbar (list-toolbar
-        precedent) keeps long content usable without chrome weight. ---- */
+        precedent) keeps long content usable without chrome weight.
+        `min-block-size: 0` lets the flex child actually shrink into a scroll
+        container; `overscroll-behavior: contain` stops scroll chaining into
+        the locked page behind; the header/footer stay put (flex siblings,
+        not sticky hacks) while long content scrolls. ---- */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
   > [data-part='body'] {
+  min-block-size: 0;
+  overscroll-behavior: contain;
   background-color: var(--ds-modal-body-bg, var(--ds-color-surface));
-  color: var(--ds-modal-body-color, inherit);
+  color: var(--ds-modal-body-color);
   scrollbar-width: var(--ds-modal-body-scrollbar-width, thin);
+  scrollbar-color: var(--ds-color-border-secondary) transparent;
 }
 
 /* ---- footer: shares the same canonical divider hatch as the header.
@@ -235,21 +293,31 @@
   > [data-part='footer'][data-part='footer'] {
   display: flex;
   align-items: center;
-  justify-content: var(--ds-modal-footer-justify, flex-end);
+  justify-content: var(--ds-modal-footer-justify);
   gap: var(--ds-modal-footer-gap, var(--ds-spacing-2));
-  padding-block: var(--ds-modal-section-padding-block, var(--ds-spacing-4));
-  padding-inline: var(--ds-modal-section-padding-inline, var(--ds-spacing-6));
+  padding-block: var(
+    --ds-modal-section-padding-block,
+    var(--_ds-modal-section-pad-block, var(--ds-spacing-4))
+  );
+  padding-inline: var(
+    --ds-modal-section-padding-inline,
+    var(--_ds-modal-section-pad-inline, var(--ds-spacing-6))
+  );
   flex-shrink: 0;
   border-block-start: var(--ds-modal-section-border, none);
-  background-color: var(--ds-modal-footer-bg, transparent);
+  background-color: var(--ds-modal-footer-bg);
 }
 
 /* ---- canonical generated actions. Custom footers remain caller-owned;
-        only the `data-part='action'` controls emitted for onOk/onCancel match. ---- */
+        only the `data-part='action'` controls emitted for onOk/onCancel match.
+        `position: relative` anchors the loading ring; the transition easing
+        falls back to the motion channel so a tree without the tenant artifact
+        still transitions. ---- */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
   > [data-part='footer']
   > [data-part='action'] {
+  position: relative;
   min-block-size: var(--ds-control-height-md);
   padding-block: var(--ds-modal-action-padding-block, var(--ds-spacing-2));
   padding-inline: var(--ds-modal-action-padding-inline, var(--ds-spacing-4));
@@ -259,11 +327,16 @@
   font-size: var(--ds-modal-action-font-size, var(--ds-font-size-sm));
   font-weight: var(--ds-font-weight-semibold);
   transition:
-    background-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
-    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
-    box-shadow var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
-    opacity var(--ds-motion-instant, 120ms) var(--ds-ease-standard),
-    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard);
+    background-color var(--ds-motion-instant)
+      var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    border-color var(--ds-motion-instant)
+      var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-motion-instant)
+      var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    opacity var(--ds-motion-instant)
+      var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    transform var(--ds-motion-instant)
+      var(--ds-ease-standard, var(--ds-motion-ease-out));
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
@@ -280,7 +353,7 @@
   > [data-part='action'][data-action='ok'] {
   border: 1px solid var(--ds-color-primary);
   background-color: var(--ds-color-primary);
-  background-image: var(--ds-gradient-primary, none);
+  background-image: var(--ds-gradient-primary);
   color: var(--ds-color-text-on-primary);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 22%, transparent),
@@ -293,22 +366,71 @@
   cursor: wait;
   opacity: var(--ds-modal-action-disabled-opacity, 0.7);
 }
+/* Hover is gated to devices with a real hover capability; coarse pointers
+   get the same feedback through the `:active` pressed state below. */
+@media (hover: hover) {
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface']
+    > [data-part='footer']
+    > [data-part='action']:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: var(--ds-shadow-md);
+  }
+}
+/* Pressed: the control physically settles back (the hover lift collapses,
+   the elevation drops) — the touch equivalent of the hover feedback. */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
   > [data-part='footer']
-  > [data-part='action']:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: var(--ds-shadow-md);
+  > [data-part='action']:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--ds-shadow-xs);
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
   > [data-part='footer']
   > [data-part='action']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color);
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
-/* ---- close button: the removed imperative hover becomes a :hover rule;
+/* ---- confirm loading: a governed ring replaces the label visually while
+        `color: transparent` keeps the accessible name computed from it (a
+        `visibility: hidden` label would strip the button's name). The ring
+        spins on the foundation cadence, which the motion authority zeroes
+        under reduced motion — it then rests as a static arc. ---- */
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-loading='true'] [data-part='action-label'] {
+  color: transparent;
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'] [data-part='spinner'] {
+  position: absolute;
+  inset-inline: 0;
+  inset-block: 0;
+  margin: auto;
+  inline-size: 1rem;
+  block-size: 1rem;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface']
+    > [data-part='footer']
+    > [data-part='action'] [data-part='spinner'] {
+    animation: none;
+  }
+}
+
+/* ---- close button: the removed imperative hover becomes a :hover rule
+        (gated to hover-capable pointers; touch gets the `:active` equivalent);
         geometry moved here from the engine's inline styles, and keyboard
         users get the same visible focus ring the rest of the overlay family
         paints. ---- */
@@ -319,8 +441,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: var(--ds-modal-close-size, 2rem);
-  block-size: var(--ds-modal-close-size, 2rem);
+  inline-size: var(--ds-modal-close-size);
+  block-size: var(--ds-modal-close-size);
   flex-shrink: 0;
   cursor: pointer;
   border: none;
@@ -331,10 +453,19 @@
     background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
     color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
+@media (hover: hover) {
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface']
+    > [data-part='header']
+    > [data-part='close-button']:hover {
+    background-color: var(--ds-modal-close-bg-hover, var(--ds-surface-highlight));
+    color: var(--ds-modal-close-color-hover, var(--ds-color-text-primary));
+  }
+}
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface']
   > [data-part='header']
-  > [data-part='close-button']:hover {
+  > [data-part='close-button']:active {
   background-color: var(--ds-modal-close-bg-hover, var(--ds-surface-highlight));
   color: var(--ds-modal-close-color-hover, var(--ds-color-text-primary));
 }
@@ -342,9 +473,9 @@
   > [data-part='surface']
   > [data-part='header']
   > [data-part='close-button']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid
+  outline: var(--ds-focus-ring-width) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -377,8 +508,23 @@
   }
 }
 
+/* Reduced transparency: the glass layer is retired entirely — no blur, no
+   frost tint — and the scrim becomes a plain opaque surface so nothing
+   behind the modal bleeds through (glass keeps its opaque-fallback law). */
+@media (prefers-reduced-transparency: reduce) {
+  .rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='backdrop'],
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='backdrop'][data-blur='true'] {
+    background-color: var(--ds-modal-overlay-bg, var(--ds-color-bg-primary));
+    background-image: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
 /* Forced colors: the scrim and glass disappear; the surface and its close
-   control keep a visible system-color boundary. */
+   control keep a visible system-color boundary, the generated actions keep
+   their frame, and focus resolves to the system Highlight. */
 @media (forced-colors: active) {
   .rottay-overlay-modal-shell--modern[data-part='root']
     > [data-part='surface'][data-part='surface'] {
@@ -389,5 +535,28 @@
     > [data-part='header']
     > [data-part='close-button'] {
     border: 1px solid ButtonText;
+  }
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface']
+    > [data-part='footer']
+    > [data-part='action'] {
+    border-color: ButtonText;
+  }
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface']
+    > [data-part='footer']
+    > [data-part='action']:focus-visible,
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface']
+    > [data-part='header']
+    > [data-part='close-button']:focus-visible {
+    outline-color: Highlight;
+  }
+  .rottay-overlay-modal-shell--modern[data-part='root']
+    > [data-part='surface']
+    > [data-part='footer']
+    > [data-part='action'] [data-part='spinner'] {
+    border-color: ButtonText;
+    border-top-color: transparent;
   }
 }

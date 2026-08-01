@@ -15,6 +15,20 @@
  * reserved for per-level computed offsets -- which are LOGICAL
  * (inline-start) so indentation and connectors mirror correctly in RTL.
  *
+ * B4-04 (Phase-B): the expand caret and the async-loading indicator stop
+ * being family-local SVGs -- the caret is the governed `NavigationForwardIcon`
+ * role (same role TreeSelect paints for the same affordance; `mirrored=false`
+ * because the skin's pinned `:dir(rtl)` flip remains the single mirror owner)
+ * and loading is the governed `Spinner` primitive (its skin owns cadence,
+ * reduced motion and forced colors; the tree skin keeps only the 16px box).
+ * `switcherIcon` (contract) is honored for custom carets, loading rows stamp
+ * `aria-busy`, draggable rows stamp `data-draggable`/`data-dragging`, the
+ * keyboard layer gains APG typeahead (printable characters move focus to the
+ * next visible node whose label starts with the typed buffer), `multiple`
+ * selection now actually accumulates keys, the root carries an accessible
+ * name from the catalog (`tree.label`), and the per-level indent scales with
+ * the governed density authority.
+ *
  * The component is split into a recursive `TreeNodeInternal` (one per visible node)
  * and a root `ModernTree` that manages shared state and event handlers.
  *
@@ -37,6 +51,8 @@ import { arrayValueAt } from '@/foundation/kernel/collections';
 import type { TreeProps, TreeDataNode } from '../../contracts';
 import { TREE_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+import { LoadingIndicator } from '../../../../foundation/loading-indicator';
 import {
   type TreeEngineKey,
   normalizeTreeKey,
@@ -84,25 +100,13 @@ function highlightText(text: React.ReactNode, searchValue: string): React.ReactN
 }
 
 // ---------------------------------------------------------------------------
-// Loading spinner
+// Loading indicator
 // ---------------------------------------------------------------------------
 
-const LoadingSpinner: React.FC = () => (
-  <span data-part="loading" aria-hidden="true">
-    <svg viewBox="0 0 16 16" fill="none">
-      <circle
-        cx="8"
-        cy="8"
-        r="6"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeDasharray="28"
-        strokeDashoffset="8"
-        strokeLinecap="round"
-      />
-    </svg>
-  </span>
-);
+// Async child loading renders the governed Spinner primitive with the family
+// `loading` part (P-79 caller-wins): its skin owns the arc, cadence, reduced
+// motion and forced colors; the tree skin keeps only the 16px layout box and
+// the margin. The former family-local SVG spinner is retired (B4-04).
 
 // ---------------------------------------------------------------------------
 // Drop indicator line
@@ -155,6 +159,12 @@ interface TreeNodeInternalProps extends TreeDataNode {
   checkable?: boolean;
   blockNode?: boolean;
   draggable?: boolean;
+  /** Custom expand/collapse affordance from the contract (default: governed caret). */
+  switcherIcon?: TreeProps['switcherIcon'];
+  /** Key of the node currently being dragged (null when no drag is active). */
+  dragKey: TreeEngineKey | null;
+  /** True while this node is the one being dragged (drag affordance paint). */
+  isDragging: boolean;
   expandedKeys: TreeEngineKey[];
   selectedKeys: TreeEngineKey[];
   checkedKeys: TreeEngineKey[];
@@ -203,6 +213,9 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
   checkable,
   blockNode,
   draggable: propDraggable,
+  switcherIcon,
+  dragKey,
+  isDragging,
   expandedKeys,
   selectedKeys,
   checkedKeys,
@@ -227,8 +240,16 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
   const showExpander = (hasChildren || (!isLeaf && !hasChildren)) && !isLeaf;
   // Indentation is computed per level, so it stays inline -- but it is a
   // LOGICAL inline-start offset, so the hierarchy indents from the correct
-  // side in RTL. Static padding lives in the skin.
-  const paddingInlineStart = level === 0 ? 0 : `calc(${level} * var(--ds-tree-indent, 24px))`;
+  // side in RTL. Static padding lives in the skin. B4-04: the step scales
+  // with the governed density authority (explicit --ds-tree-indent values
+  // still scale; density is a layout authority, not paint -- button.css
+  // idiom). Connectors read the same step so guides and rows never drift.
+  // Both channels are DECLARED (the family token bridge's `:root`, imported
+  // by every facade entrypoint, and the density authority in default.css), so
+  // they resolve BARE -- a literal fallback over a declared channel would
+  // violate fallback parity.
+  const indentStep = 'var(--ds-tree-indent) * var(--ds-density-effective-scale)';
+  const paddingInlineStart = level === 0 ? 0 : `calc(${level} * ${indentStep})`;
 
   const isDraggable = propDraggable && !disabled;
   const isDropTarget = dropTarget?.key === nodeKey;
@@ -288,7 +309,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
                 data-part="connector"
                 data-axis="vertical"
                 style={{
-                  insetInlineStart: `calc(${i} * var(--ds-tree-indent, 24px) + 12px)`,
+                  insetInlineStart: `calc(${i} * ${indentStep} + 12px)`,
                   top: 0,
                   bottom: 0,
                 }}
@@ -299,7 +320,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
             data-part="connector"
             data-axis="horizontal"
             style={{
-              insetInlineStart: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
+              insetInlineStart: `calc(${level - 1} * ${indentStep} + 12px)`,
               top: '50%',
               width: 12,
             }}
@@ -309,7 +330,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
               data-part="connector"
               data-axis="vertical"
               style={{
-                insetInlineStart: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
+                insetInlineStart: `calc(${level - 1} * ${indentStep} + 12px)`,
                 top: 0,
                 height: '50%',
               }}
@@ -320,7 +341,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
               data-part="connector"
               data-axis="vertical"
               style={{
-                insetInlineStart: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
+                insetInlineStart: `calc(${level - 1} * ${indentStep} + 12px)`,
                 top: 0,
                 bottom: 0,
               }}
@@ -350,6 +371,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         aria-disabled={disabled}
         aria-checked={checkable ? (isHalfChecked ? 'mixed' : isChecked) : undefined}
         aria-level={level + 1}
+        aria-busy={isLoading || undefined}
         tabIndex={nodeKey === tabbableKey ? 0 : -1}
         data-tree-node-key={nodeKey}
         data-part="row"
@@ -359,6 +381,8 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         data-focused={isFocused || undefined}
         data-drop-target={isDropTarget || undefined}
         data-drop-position={isDropTarget ? dropPosition : undefined}
+        data-draggable={isDraggable || undefined}
+        data-dragging={isDragging || undefined}
         draggable={isDraggable}
         onDragStart={isDraggable ? (e) => onDragStartInternal(nodeKey, e) : undefined}
         onDragOver={
@@ -379,9 +403,9 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         }
         onDragEnd={propDraggable ? onDragEndInternal : undefined}
       >
-        {/* Expand/collapse arrow or loading spinner */}
+        {/* Expand/collapse affordance or the governed loading Spinner */}
         {isLoading ? (
-          <LoadingSpinner />
+          <LoadingIndicator data-part="loading" size="sm" />
         ) : showExpander ? (
           <button
             type="button"
@@ -390,15 +414,19 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
             aria-label={isExpanded ? collapseLabel : expandLabel}
             tabIndex={-1}
           >
-            <span>
-              <svg
-                width="var(--ds-tree-icon-size, 12px)"
-                height="var(--ds-tree-icon-size, 12px)"
-                viewBox="0 0 16 16"
-                fill="currentColor"
-              >
-                <path d="M6 4l4 4-4 4z" />
-              </svg>
+            {/* Default caret: the governed navigation.forward role at the xs
+                icon size (12px, the drained SVG's box). mirrored={false}: the
+                skin's pinned :dir(rtl) flip remains the single mirror owner --
+                the facade's auto-mirror would double-flip it. A contract
+                switcherIcon replaces the caret wholesale (function form gets
+                the expanded state) and opts the span out of the skin's 90deg
+                expansion turn via data-custom-switcher. */}
+            <span data-custom-switcher={switcherIcon ? 'true' : undefined}>
+              {switcherIcon
+                ? typeof switcherIcon === 'function'
+                  ? switcherIcon({ expanded: isExpanded })
+                  : switcherIcon
+                : <NavigationForwardIcon decorative mirrored={false} size="xs" />}
             </span>
           </button>
         ) : (
@@ -473,6 +501,9 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
                 checkable={checkable}
                 blockNode={blockNode}
                 draggable={propDraggable}
+                switcherIcon={switcherIcon}
+                dragKey={dragKey}
+                isDragging={dragKey === childKey}
                 expandedKeys={expandedKeys}
                 selectedKeys={selectedKeys}
                 checkedKeys={checkedKeys}
@@ -530,6 +561,8 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
     draggable = TREE_DEFAULTS.draggable,
     blockNode = TREE_DEFAULTS.blockNode,
     treeCheckStrictly = TREE_DEFAULTS.treeCheckStrictly,
+    multiple = false,
+    switcherIcon,
     treeLine,
     loadData,
     filterTreeNode,
@@ -545,10 +578,18 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
 
   const resolvedShowLine = treeLine ?? showLine;
 
+  // Accessible tree name from the catalog (APG: role=tree needs a name);
+  // the English floor keeps bare renders byte-identical in behavior.
+  const rootI18n = useOptionalTranslation('components');
+  const rootLabelTranslated = rootI18n?.t('tree.label');
+  const rootLabel = rootLabelTranslated && !rootLabelTranslated.endsWith('tree.label') ? rootLabelTranslated : 'Tree';
+
   // Refs
   const treeContainerRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<Map<TreeEngineKey, HTMLDivElement>>(new Map());
   const loadedKeysRef = useRef<Set<TreeEngineKey>>(new Set());
+  // APG typeahead rolling buffer (printable characters, 500ms window).
+  const typeaheadRef = useRef<{ buffer: string; lastTime: number }>({ buffer: '', lastTime: 0 });
 
   const registerNodeRef = useCallback((key: TreeEngineKey, el: HTMLDivElement | null) => {
     if (el) nodeRefs.current.set(key, el);
@@ -662,14 +703,21 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
   const handleSelect = useCallback(
     (key: TreeEngineKey, node: TreeDataNode) => {
       if (node.selectable === false) return;
-      const newKeys = actualSelectedKeys.includes(key) ? actualSelectedKeys.filter((k) => k !== key) : [key];
+      // B4-04: `multiple` (contract + aria-multiselectable) now accumulates
+      // keys instead of collapsing to the last clicked node; single mode keeps
+      // the historical replace semantics.
+      const newKeys = actualSelectedKeys.includes(key)
+        ? actualSelectedKeys.filter((k) => k !== key)
+        : multiple
+          ? [...actualSelectedKeys, key]
+          : [key];
       setSelectedKeys(newKeys);
       onSelect?.(newKeys, {
         node,
         selected: !actualSelectedKeys.includes(key),
       });
     },
-    [actualSelectedKeys, onSelect]
+    [actualSelectedKeys, multiple, onSelect]
   );
 
   const handleCheck = useCallback(
@@ -791,7 +839,8 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
 
   // -----------------------------------------------------------------------
   // Keyboard navigation -- follows WAI-ARIA TreeView pattern:
-  // ArrowUp/Down = move focus, ArrowRight = expand or no-op if leaf,
+  // ArrowUp/Down = move focus, ArrowRight = expand a closed node (async
+  // nodes trigger loadData) or descend to the first child of an open one,
   // ArrowLeft = collapse or move to parent, Space = toggle checkbox,
   // Enter = select node. Focus is tracked via focusedKey state and
   // programmatically moved to the DOM element via nodeRefs.
@@ -842,8 +891,19 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
         case 'ArrowRight': {
           e.preventDefault();
           const node = findNode(anchorKey);
-          if (node && node.children && node.children.length > 0 && !actualExpandedKeys.includes(anchorKey)) {
+          if (!node || node.isLeaf) break;
+          if (!actualExpandedKeys.includes(anchorKey)) {
+            // Collapsed non-leaf: expand. Async nodes (no children rendered
+            // yet) take the same path as the switcher click and trigger
+            // loadData -- previously the keyboard could never expand them.
             handleToggle(anchorKey);
+          } else if (node.children && node.children.length > 0) {
+            // APG: Right on an OPEN node descends to its first child (the
+            // next visible key once expanded).
+            const firstChildKey = arrayValueAt(visibleKeys, currentIndex + 1);
+            if (firstChildKey === undefined) break;
+            setFocusedKey(firstChildKey);
+            nodeRefs.current.get(firstChildKey)?.querySelector<HTMLElement>('[data-tree-node-key]')?.focus();
           }
           break;
         }
@@ -895,6 +955,49 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
           nodeRefs.current.get(lastKey)?.querySelector<HTMLElement>('[data-tree-node-key]')?.focus();
           break;
         }
+        default: {
+          // APG typeahead: a printable character (no modifiers, and never the
+          // space -- it is the check toggle above) moves focus to the next
+          // visible node whose string label starts with the rolling buffer.
+          // Keystrokes within 500ms accumulate ("sa" -> "Sandbox"); when the
+          // buffer stops matching (including a repeated character), it
+          // restarts from the fresh character, cycling that letter's matches.
+          // Nodes with non-string titles (ReactNode) do not participate.
+          if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) break;
+          e.preventDefault();
+          const now = Date.now();
+          const state = typeaheadRef.current;
+          const char = e.key.toLowerCase();
+          let buffer = now - state.lastTime < 500 ? state.buffer + char : char;
+          state.lastTime = now;
+
+          const titleOf = (key: TreeEngineKey): string | null => {
+            const node = findNode(key);
+            return node && typeof node.title === 'string' ? node.title.toLowerCase() : null;
+          };
+          // Searches every visible node starting after the current one and
+          // wrapping, so the current node is the last candidate tried.
+          const matchFrom = (prefix: string): TreeEngineKey | undefined => {
+            for (let step = 1; step <= visibleKeys.length; step++) {
+              const candidate = arrayValueAt(visibleKeys, (currentIndex + step) % visibleKeys.length);
+              if (candidate === undefined) continue;
+              const label = titleOf(candidate);
+              if (label && label.startsWith(prefix)) return candidate;
+            }
+            return undefined;
+          };
+
+          let match = matchFrom(buffer);
+          if (match === undefined && buffer.length > 1) {
+            buffer = char;
+            match = matchFrom(buffer);
+          }
+          if (match === undefined || match === anchorKey) break;
+          typeaheadRef.current.buffer = buffer;
+          setFocusedKey(match);
+          nodeRefs.current.get(match)?.querySelector<HTMLElement>('[data-tree-node-key]')?.focus();
+          break;
+        }
       }
     },
     [
@@ -923,7 +1026,8 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
       data-block-node={blockNode || undefined}
       style={style}
       role="tree"
-      aria-multiselectable={props.multiple || false}
+      aria-label={rootLabel}
+      aria-multiselectable={multiple}
       onKeyDown={handleKeyDown}
       tabIndex={-1}
     >
@@ -955,6 +1059,9 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
             checkable={checkable}
             blockNode={blockNode}
             draggable={draggable}
+            switcherIcon={switcherIcon}
+            dragKey={dragKey}
+            isDragging={dragKey === nodeKey}
             expandedKeys={actualExpandedKeys}
             selectedKeys={actualSelectedKeys}
             checkedKeys={actualCheckedKeys}

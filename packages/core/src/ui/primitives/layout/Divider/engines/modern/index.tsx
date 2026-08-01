@@ -105,7 +105,10 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>((props, ref) => {
     minHeight: isHorizontal
       ? 0
       : "var(--ds-divider-vertical-min-block-size, 1em)",
-    gap: "var(--ds-divider-content-gap, var(--ds-spacing-4, 1rem))",
+    // Fallback parity: `--ds-spacing-4` is a declared, density-scaled ramp
+    // channel and resolves to its default bare; only the undeclared
+    // `--ds-divider-content-gap` hook carries a (channel) fallback.
+    gap: "var(--ds-divider-content-gap, var(--ds-spacing-4))",
     margin: isHorizontal ? `${spacingValue} 0` : `0 ${spacingValue}`,
     ...style,
   };

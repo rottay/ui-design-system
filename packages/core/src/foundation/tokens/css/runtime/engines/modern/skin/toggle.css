@@ -10,8 +10,8 @@
  * SCOPE ROOT is `.ds-toggle.ds-toggle--modern[data-part='root']` (a
  * `<label>`), carrying `data-size`, `data-color`, `data-checked`,
  * `data-error`, `data-disabled`, `data-loading`, and
- * `data-label-placement`. `track`, `thumb`, `text`, `label`, `state-label`,
- * `description`, and `loading-indicator` are descendants; the hidden
+ * `data-label-placement`. `track`, `thumb`, `state-icon`, `text`, `label`,
+ * `state-label`, and `description` are descendants; the hidden
  * accessibility `<input>` is a direct child. Helper and error text flow
  * beneath the row inside the `field` wrapper.
  *
@@ -20,7 +20,13 @@
  * canonical dot is trackH - 2*dot-offset with dot-offset folded into the
  * height), the thumb anchors at `inset-inline-start`, and `:dir(rtl)` /
  * `[dir='rtl']` flip the sign -- identical markup works in both directions.
- * State clarity never relies on color alone: the thumb also translates.
+ * State clarity never relies on color alone (Phase B law): the thumb also
+ * translates, and a governed state glyph (`data-part='state-icon'`,
+ * `data-on`) docks on the side opposite the thumb -- logical anchoring, so
+ * RTL mirrors for free. The glyph scales with the resolved thumb through
+ * the `--_ds-proto-toggle-state-icon-size` proto and hides at `xs`, where
+ * no 16px-track glyph stays legible. The busy state is the border-spinner
+ * idiom (`ds-foundation-spin`) docked INSIDE the thumb.
  *
  * SPECIFICITY (P-48): the only border-painted rules are inside
  * `@media (forced-colors)`, which the structural contract strips before
@@ -60,7 +66,7 @@
 }
 
 .ds-toggle.ds-toggle--modern[data-part='root'][data-disabled='true'] {
-  cursor: var(--ds-toggle-disabled-cursor, not-allowed);
+  cursor: var(--ds-toggle-disabled-cursor);
 }
 
 /* Track ---------------------------------------------------------------- */
@@ -79,29 +85,29 @@
    the canonical presentation/components/toggle.css values exactly, so a
    token-layer outage cannot shift the track geometry. */
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='xs'] [data-part='track'] {
-  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-xs-width, 1.75rem) * var(--ds-density-effective-scale, 1));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xs-height, 1rem) * var(--ds-density-effective-scale, 1));
-  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-xs-dot, 0.75rem) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-xs-width) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xs-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-xs-dot) * var(--ds-density-effective-scale));
 }
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='sm'] [data-part='track'] {
-  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-sm-width, 32px) * var(--ds-density-effective-scale, 1));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-sm-height, 18px) * var(--ds-density-effective-scale, 1));
-  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-sm-dot, 14px) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-sm-width) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-sm-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-sm-dot) * var(--ds-density-effective-scale));
 }
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='md'] [data-part='track'] {
-  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-md-width, 2.75rem) * var(--ds-density-effective-scale, 1));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-md-height, 1.5rem) * var(--ds-density-effective-scale, 1));
-  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-md-dot, 1.25rem) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-md-width) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-md-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-md-dot) * var(--ds-density-effective-scale));
 }
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='lg'] [data-part='track'] {
-  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-lg-width, 56px) * var(--ds-density-effective-scale, 1));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-lg-height, 30px) * var(--ds-density-effective-scale, 1));
-  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-lg-dot, 26px) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-lg-width) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-lg-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-lg-dot) * var(--ds-density-effective-scale));
 }
 .ds-toggle.ds-toggle--modern[data-part='root'][data-size='xl'] [data-part='track'] {
-  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-xl-width, 3.75rem) * var(--ds-density-effective-scale, 1));
-  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xl-height, 2rem) * var(--ds-density-effective-scale, 1));
-  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-xl-dot, 1.75rem) * var(--ds-density-effective-scale, 1));
+  --ds-toggle-resolved-track-w: calc(var(--ds-toggle-xl-width) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-track-h: calc(var(--ds-toggle-xl-height) * var(--ds-density-effective-scale));
+  --ds-toggle-resolved-thumb: calc(var(--ds-toggle-xl-dot) * var(--ds-density-effective-scale));
 }
 
 .ds-toggle.ds-toggle--modern [data-part='track'][data-part='track'] {
@@ -128,7 +134,11 @@
 .ds-toggle.ds-toggle--modern[data-color='error'][data-checked='true'] [data-part='track'] {
   background-color: var(--ds-toggle-error-bg-checked, var(--ds-color-error));
 }
-.ds-toggle.ds-toggle--modern[data-error='true'] [data-part='track'] {
+/* Error overrides all: the repeated `[data-error]` reaches (0,5,0) -- the
+   same plane the per-variant rules live on -- so the invalid frame wins the
+   tie by source order instead of losing to a checked variant fill (a green
+   "success" track must never survive `data-error='true'`). */
+.ds-toggle.ds-toggle--modern[data-error='true'][data-error='true'] [data-part='track'] {
   background-color: var(--ds-toggle-error-track-bg, var(--ds-color-error));
 }
 
@@ -153,13 +163,13 @@
 
 /* disabled: the whole control quiets, semantics stay on the input. */
 .ds-toggle.ds-toggle--modern[data-disabled='true'] [data-part='track'] {
-  opacity: var(--ds-toggle-disabled-opacity, 0.5);
+  opacity: var(--ds-toggle-disabled-opacity);
 }
 
 /* focus ring from the hidden input's :focus-visible. */
 .ds-toggle.ds-toggle--modern input:focus-visible ~ [data-part='track'] {
-  outline: var(--ds-toggle-focus-ring-width, 2px) solid var(--ds-toggle-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-toggle-focus-ring-offset, 2px);
+  outline: var(--ds-toggle-focus-ring-width) solid var(--ds-toggle-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-toggle-focus-ring-offset);
 }
 
 /* Thumb ---------------------------------------------------------------- */
@@ -169,7 +179,11 @@
   inset-inline-start: calc((var(--ds-toggle-resolved-track-h) - var(--ds-toggle-resolved-thumb)) / 2);
   inline-size: var(--ds-toggle-resolved-thumb);
   block-size: var(--ds-toggle-resolved-thumb);
-  border-radius: var(--ds-toggle-dot-border-radius, 50%);
+  /* The loading spinner docks inside the thumb (busy stays physically
+     attached to the moving part; geometry never shifts). */
+  display: grid;
+  place-items: center;
+  border-radius: var(--ds-toggle-dot-border-radius);
   background-color: var(--ds-toggle-dot-bg, var(--ds-surface-control, var(--ds-color-text-on-primary)));
   box-shadow: var(--ds-toggle-dot-shadow, var(--ds-elevation-1));
   transform: translateX(0);
@@ -198,6 +212,47 @@
 .ds-toggle.ds-toggle--modern:active:not([data-disabled='true'])[data-checked='true']:dir(rtl) [data-part='thumb'],
 [dir='rtl'] .ds-toggle.ds-toggle--modern:active:not([data-disabled='true'])[data-checked='true'] [data-part='thumb'] {
   transform: translateX(calc((var(--ds-toggle-resolved-track-w) - var(--ds-toggle-resolved-track-h)) * -1)) scale(var(--ds-state-press-scale));
+}
+
+/* State icon (Phase B): the checked/unchecked glyph docked on the side
+   OPPOSITE the thumb -- position + governed icon carry the state, never the
+   track color alone. Inline anchoring is logical, so RTL mirrors for free;
+   the size rides the resolved thumb through the
+   `--_ds-proto-toggle-state-icon-size` proto. */
+.ds-toggle.ds-toggle--modern [data-part='state-icon'] {
+  position: absolute;
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  inline-size: var(--_ds-proto-toggle-state-icon-size, calc(var(--ds-toggle-resolved-thumb) * 0.62));
+  block-size: var(--_ds-proto-toggle-state-icon-size, calc(var(--ds-toggle-resolved-thumb) * 0.62));
+  transition: color var(--ds-toggle-transition-duration, var(--ds-motion-normal)) var(--ds-motion-ease-out);
+}
+.ds-toggle.ds-toggle--modern [data-part='state-icon'] svg {
+  inline-size: 100%;
+  block-size: 100%;
+}
+/* Unchecked: thumb rests at the inline start, the glyph docks at the inline
+   end over the neutral track -> secondary ink. */
+.ds-toggle.ds-toggle--modern [data-part='state-icon'][data-on='false'] {
+  inset-inline-end: calc((var(--ds-toggle-resolved-track-h) - var(--ds-toggle-resolved-thumb)) / 2);
+  color: var(--ds-color-text-secondary);
+}
+/* Checked: the glyph docks at the inline start over the variant-filled
+   track -> on-accent ink. */
+.ds-toggle.ds-toggle--modern [data-part='state-icon'][data-on='true'] {
+  inset-inline-start: calc((var(--ds-toggle-resolved-track-h) - var(--ds-toggle-resolved-thumb)) / 2);
+  color: var(--ds-color-text-on-primary);
+}
+/* Error fills the track in both states, so the glyph always rides the
+   on-accent ink there. */
+.ds-toggle.ds-toggle--modern[data-error='true'] [data-part='state-icon'] {
+  color: var(--ds-color-text-on-primary);
+}
+/* xs geometry (16px track) fits no legible glyph: the thumb position and the
+   fill carry the state alone at that step (deliberate density decision). */
+.ds-toggle.ds-toggle--modern[data-part='root'][data-size='xs'] [data-part='state-icon'] {
+  display: none;
 }
 
 /* Text column ------------------------------------------------------------ */
@@ -255,28 +310,18 @@
   color: var(--ds-color-text-disabled);
 }
 
-/* Loading indicator ----------------------------------------------------- */
-.ds-toggle.ds-toggle--modern [data-part='loading-indicator'] {
-  display: inline-grid;
-  place-items: center;
-  inline-size: var(--ds-toggle-loading-size, 0.875rem);
-  block-size: var(--ds-toggle-loading-size, 0.875rem);
-}
-
-.ds-toggle.ds-toggle--modern [data-part='loading-indicator'] svg {
-  inline-size: 100%;
-  block-size: 100%;
-  animation: ds-foundation-spin var(--ds-toggle-loading-duration, var(--ds-motion-glacial, 500ms)) linear infinite;
-}
-
-/* Spinner paint lives here, never in the runtime: the track ring and the
-   sweeping arc read the same channels the rest of the control reads. */
-.ds-toggle.ds-toggle--modern [data-part='loading-indicator'] [data-part='loading-track'] {
-  stroke: var(--ds-toggle-loading-track-color, var(--ds-color-border-secondary));
-}
-
-.ds-toggle.ds-toggle--modern [data-part='loading-indicator'] [data-part='loading-arc'] {
-  stroke: var(--ds-toggle-loading-arc-color, var(--ds-color-primary));
+/* Loading indicator: the governed border-spinner idiom (the cascader/tree/
+   table convention over `ds-foundation-spin`), docked INSIDE the thumb and
+   sized from the resolved thumb so every size step stays proportional. Paint
+   lives here, never in the runtime: ring + sweeping arc read the same
+   channels the rest of the control reads. */
+.ds-toggle.ds-toggle--modern[data-part='root'] [data-part='loading-indicator'] {
+  inline-size: calc(var(--ds-toggle-resolved-thumb) * 0.55);
+  block-size: calc(var(--ds-toggle-resolved-thumb) * 0.55);
+  border: 2px solid var(--ds-toggle-loading-track-color, var(--ds-color-border-secondary));
+  border-top-color: var(--ds-toggle-loading-arc-color, var(--ds-color-primary));
+  border-radius: 50%;
+  animation: ds-foundation-spin var(--ds-toggle-loading-duration, var(--ds-motion-glacial)) linear infinite;
 }
 
 /* Helper + error text stay in logical flow: no absolute text, no collisions
@@ -326,13 +371,14 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-toggle.ds-toggle--modern [data-part='track'],
-  .ds-toggle.ds-toggle--modern [data-part='thumb'] {
+  .ds-toggle.ds-toggle--modern [data-part='thumb'],
+  .ds-toggle.ds-toggle--modern [data-part='state-icon'] {
     transition-duration: 0.01ms;
   }
 
   /* The loading sweep stops flat (the timeline.css convention); the global
      reduced-motion guard already pins it, this keeps the family explicit. */
-  .ds-toggle.ds-toggle--modern [data-part='loading-indicator'] svg {
+  .ds-toggle.ds-toggle--modern[data-part='root'] [data-part='loading-indicator'] {
     animation: none;
   }
 }
@@ -359,6 +405,17 @@
   }
   .ds-toggle.ds-toggle--modern[data-disabled='true'] [data-part='track'] {
     border-color: GrayText;
+  }
+  .ds-toggle.ds-toggle--modern [data-part='state-icon'] {
+    color: ButtonText;
+  }
+  .ds-toggle.ds-toggle--modern [data-part='state-icon'][data-on='true'],
+  .ds-toggle.ds-toggle--modern[data-error='true'] [data-part='state-icon'] {
+    color: HighlightText;
+  }
+  .ds-toggle.ds-toggle--modern[data-part='root'] [data-part='loading-indicator'] {
+    border-color: ButtonText;
+    border-top-color: Highlight;
   }
   .ds-toggle.ds-toggle--modern input:focus-visible ~ [data-part='track'] {
     outline-color: Highlight;

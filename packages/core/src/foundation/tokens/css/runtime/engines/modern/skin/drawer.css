@@ -50,9 +50,15 @@
  */
 
 /* ---- backdrop: scrim + glass. Outranks personality's blur(4px), as the inline
-        filter did. ---- */
+        filter did. The scrim alpha consumes the --ds-drawer-overlay-opacity
+        hatch (the maskOpacity prop, rustic parity); unset, it keeps the 0.8
+        fill this rule has always painted. ---- */
 .rottay-drawer-backdrop--modern[data-part='backdrop'] {
-  background-color: color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--ds-color-bg-primary) calc(var(--ds-drawer-overlay-opacity, 0.8) * 100%),
+    transparent
+  );
   background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
   backdrop-filter: var(--ds-glass-backdrop-filter);
   -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
@@ -196,6 +202,10 @@
 
 .rottay-drawer--modern > [data-part='body'] {
   flex: 1 1 auto;
+  /* Flex children refuse to shrink below their content box by default; without
+     the zero floor a tall body would push header/footer out of the panel
+     instead of scrolling inside its own region. */
+  min-block-size: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: clamp(var(--ds-spacing-4), 2vw, var(--ds-spacing-6));
@@ -207,8 +217,9 @@
      material carries the region (spec section 5 -- no gradient makeup). */
 }
 
-/* ---- close button. The `:hover` rule reproduces the deleted mouseenter/
-        mouseleave `.style.backgroundColor` writes. ---- */
+/* ---- close button (geometry + rest state). The interaction rules below
+        reproduce the deleted mouseenter/mouseleave `.style.backgroundColor`
+        writes. ---- */
 .rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
   width: 2.25rem;
   height: 2.25rem;
@@ -231,16 +242,30 @@
   position: relative;
   z-index: 1;
 }
-.rottay-drawer--modern > [data-part='header'] [data-part='close-button']:hover {
-  transform: translateY(-1px);
+/* ---- close button states. Hover is hover-capable-only (4th-wave law); a
+        held press settles the lift through `:active`, so touch and keyboard
+        get the same affordance. Focus rides the shared `--ds-focus-ring-*`
+        channels (Modal/overlay grammar parity). ---- */
+@media (hover: hover) {
+  .rottay-drawer--modern > [data-part='header'] [data-part='close-button']:hover {
+    transform: translateY(-1px);
+    background-color: var(--ds-surface-highlight);
+    border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-subtle));
+    color: var(--ds-color-text-primary);
+    box-shadow: var(--ds-elevation-2);
+  }
+}
+.rottay-drawer--modern > [data-part='header'] [data-part='close-button']:active {
+  transform: scale(var(--ds-state-press-scale));
   background-color: var(--ds-surface-highlight);
   border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-subtle));
   color: var(--ds-color-text-primary);
-  box-shadow: var(--ds-elevation-2);
+  box-shadow: var(--ds-elevation-1);
 }
 .rottay-drawer--modern > [data-part='header'] [data-part='close-button']:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--ds-color-primary) 56%, transparent);
-  outline-offset: 2px;
+  outline: var(--ds-focus-ring-width) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 @media (prefers-reduced-motion: reduce) {

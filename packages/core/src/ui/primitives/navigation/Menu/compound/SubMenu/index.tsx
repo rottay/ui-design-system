@@ -56,6 +56,7 @@
 import React, { useState } from 'react';
 import type { CSSProperties } from 'react';
 import type { MenuSubMenuProps } from '../../contracts';
+import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
 
 // ============================================================================
 // MenuSubMenu Component
@@ -96,6 +97,9 @@ export function MenuSubMenu({
   children,
   className = '',
   style,
+  // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
+  // submenu root element, BEFORE the engine's own stamps.
+  ...rest
 }: MenuSubMenuProps): React.ReactElement {
   // ========================================================================
   // State
@@ -146,59 +150,18 @@ export function MenuSubMenu({
   // ========================================================================
 
   /**
-   * Container styles for the submenu.
-   */
-  const subMenuStyle: CSSProperties = {
-    listStyle: 'none',
-    ...style,
-  };
-
-  /**
-   * Title bar styles using CSS variables.
-   */
-  const titleStyle: CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 'var(--ds-menu-item-gap, 8px)',
-    padding: 'var(--ds-menu-item-padding, 8px 16px)',
-    minHeight: 'var(--ds-menu-item-height, 40px)',
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    opacity: disabled ? 0.5 : 1,
-    transition: 'all 0.2s ease',
-    userSelect: 'none',
-  };
-
-  /**
-   * Expand icon container styles; the rotation rides `data-open` in the skin.
-   */
-  const iconContainerStyle: CSSProperties = {
-    marginLeft: 'auto',
-    display: 'flex',
-    alignItems: 'center',
-    transition: 'transform 0.2s ease',
-  };
-
-  /**
    * Panel track styles: the grid-template-rows value is the only per-render
    * dynamic piece (0fr collapsed / 1fr expanded); `display:grid` and the
    * `transition`/reduced-motion rules live in menu-compounds.css on
    * `.rottay-menu-submenu__panel` (mirrors Collapse -- see
-   * Collapse/engines/modern/index.tsx:26-37).
+   * Collapse/engines/modern/index.tsx:26-37). Every other former inline
+   * block (title row, expand-icon wrapper, content indent) was static paint
+   * with raw `0.2s ease` durations and physical `marginLeft`/`paddingLeft`
+   * properties: all of it now lives in menu-compounds.css on the compound
+   * BEM classes, on governed motion channels and logical properties.
    */
   const panelStyle: CSSProperties = {
     gridTemplateRows: isOpen ? '1fr' : '0fr',
-  };
-
-  /**
-   * Content (nested `<ul>`) styles. `min-height:0` and `overflow:hidden`
-   * live in menu-compounds.css on `.rottay-menu-submenu__content` -- they are
-   * static, not per-render.
-   */
-  const contentStyle: CSSProperties = {
-    listStyle: 'none',
-    padding: 0,
-    paddingLeft: 'var(--ds-menu-submenu-indent, 24px)',
-    margin: 0,
   };
 
   // ========================================================================
@@ -206,25 +169,12 @@ export function MenuSubMenu({
   // ========================================================================
 
   /**
-   * Default chevron down icon for expand indicator.
+   * Governed disclosure icon: the semantic facade's `navigation.down` role
+   * replaces the former local SVG chevron (axis-9 law: roles only, no local
+   * SVG). `autoMirror: false` — a vertical arrow needs no RTL flip, and the
+   * skin owns the open/closed rotation via `data-open`.
    */
-  const defaultExpandIcon = (
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 12 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M2.5 4.5L6 8L9.5 4.5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
+  const defaultExpandIcon = <NavigationDownIcon decorative size={12} />;
 
   // ========================================================================
   // Render
@@ -232,14 +182,14 @@ export function MenuSubMenu({
 
   return (
     <li
+      {...rest}
       className={`rottay-menu-submenu ${isOpen ? 'rottay-menu-submenu--open' : ''} ${disabled ? 'rottay-menu-submenu--disabled' : ''} ${className}`}
-      style={subMenuStyle}
+      style={style}
       data-key={itemKey}
     >
       {/* Submenu title bar */}
       <div
         className="rottay-menu-submenu__title"
-        style={titleStyle}
         onClick={handleTitleClick}
         onKeyDown={handleKeyDown}
         role="button"
@@ -258,7 +208,7 @@ export function MenuSubMenu({
         <span className="rottay-menu-submenu__label" data-part="label">{title}</span>
 
         {/* Expand/collapse icon */}
-        <span className="rottay-menu-submenu__expand-icon" data-part="arrow-icon" style={iconContainerStyle}>
+        <span className="rottay-menu-submenu__expand-icon" data-part="arrow-icon">
           {expandIcon || defaultExpandIcon}
         </span>
       </div>
@@ -267,11 +217,13 @@ export function MenuSubMenu({
           The nested `<ul role="menu">` stays the `data-part="panel"` element
           (the documented "submenu's flyout/nested list" contract); this div
           is a structural wrapper only, mirroring Collapse's outer/inner split
-          -- see Collapse/engines/modern/index.tsx:26-37. */}
+          -- see Collapse/engines/modern/index.tsx:26-37. The skin hides the
+          collapsed content with `visibility: hidden` so its focusable rows
+          leave the tab order while `aria-hidden` is set (the former grid-only
+          collapse leaked them into keyboard navigation). */}
       <div className="rottay-menu-submenu__panel" data-open={isOpen} style={panelStyle}>
         <ul
           className="rottay-menu-submenu__content"
-          style={contentStyle}
           role="menu"
           data-part="panel"
           aria-hidden={!isOpen}

@@ -15,13 +15,25 @@
  * (`runtime/engines/modern/skin/calendar.css`), keyed by `data-part` +
  * `data-selected`/`data-today`/`data-disabled`/`data-active`/`data-fullscreen`:
  * the skin is the single owner (selected/today/hover/press surfaces, focus
- * rings, nav-button geometry, the today-ring's border width, the `[dir='rtl']`
- * root/header/grid/cell layout). The former Tailwind layout
+ * rings, nav-button geometry, the today-ring's border width). The former
+ * Tailwind layout
  * utilities (`p-4`, `grid grid-cols-7`, `aspect-square`, ...) are drained; the
  * only class string left is the test-pinned inert `pointer-coarse:` bridge for
  * the compact coarse width, which the skin paints at the same value.
  * Navigation glyphs come from the semantic icon corpus and inherit tenant
- * icon packs plus logical RTL mirroring.
+ * icon packs; the icon facade is the SINGLE RTL mirror owner (no skin flip,
+ * no markup branch), while the grid column flow mirrors natively under
+ * `dir=rtl` and the keyboard layer swaps ArrowLeft/ArrowRight.
+ *
+ * LOCALE-SAFE GEOMETRY (B4-04): the first column of the week follows the
+ * active catalog locale through a bounded CLDR table (Monday for es/fr/pt,
+ * Saturday for ar, Sunday for en -- the no-provider floor, byte-identical to
+ * the pre-locale behavior), and the day-cell accessible names render through
+ * `Intl.DateTimeFormat` in the active locale (`toDateString()` stays the
+ * English floor). Leading/trailing grid cells carry the adjacent month's days
+ * as inert, muted `cell-spacer` parts (42 cells, six rows always), so month
+ * navigation never re-heights the panel; today also stamps `aria-current` and
+ * the view toggles `aria-pressed`.
  *
  * Engine: **skin (calendar.css) + data-part hooks**
  *
@@ -79,6 +91,13 @@ const FALLBACK_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
 const WEEKDAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
 const MONTH_KEYS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'] as const;
 
+// First column of the week per catalog locale (bounded CLDR table over the
+// five supported locales): ISO Monday for es/fr/pt, Saturday for ar, Sunday
+// for en. The no-provider floor is Sunday (0) -- identical to the historical
+// Sunday-first grid. A fixed table (not Intl weekInfo) keeps the geometry
+// deterministic across ICU builds and jsdom.
+const WEEK_START_BY_LOCALE: Record<string, number> = { en: 0, es: 1, fr: 1, pt: 1, ar: 6 };
+
 // Normalizes the incoming value (Date, ISO string, or undefined) into a Date.
 // Falls back to "now" so the calendar always has a valid reference date.
 const parseDate = (value: Date | string | undefined): Date => {
@@ -132,15 +151,27 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     calendarLabel(`calendar.months.${key}`, FALLBACK_MONTHS[index]),
   );
   const yearToggleLabel = calendarLabel('calendar.yearToggle', 'Year');
-  // Accessible names for the glyph-only nav buttons (Pass 2 a11y: '«' is not
-  // an accessible name). Text content stays the glyph; RTL still flips it
-  // visually via the skin.
+  // Accessible names for the icon-only nav buttons (a bare chevron is not an
+  // accessible name). The visual content is the governed semantic icon; the
+  // icon facade owns RTL mirroring (no skin flip, no markup branch).
   const navLabels = {
     prevYear: calendarLabel('calendar.navPrevYear', 'Previous year'),
     prevMonth: calendarLabel('calendar.navPrevMonth', 'Previous month'),
     nextMonth: calendarLabel('calendar.navNextMonth', 'Next month'),
     nextYear: calendarLabel('calendar.navNextYear', 'Next year'),
   };
+
+  // B4-04 locale-safe geometry: the week grid starts on the locale's first
+  // weekday (bounded CLDR table above; Sunday stays the no-provider floor) and
+  // the day-cell accessible names render in the active locale. The header
+  // weekday order rotates with the same offset, so columns and headers always
+  // agree; RTL mirroring stays visual (grid auto-flow under dir=rtl).
+  const weekStart = WEEK_START_BY_LOCALE[i18n?.locale ?? ''] ?? 0;
+  const orderedDays = weekStart === 0 ? days : [...days.slice(weekStart), ...days.slice(0, weekStart)];
+  const fullDateFormatter = useMemo(
+    () => (i18n?.locale ? new Intl.DateTimeFormat(i18n.locale, { dateStyle: 'full' }) : null),
+    [i18n?.locale],
+  );
 
   // Controlled vs uncontrolled: when `value` is provided, the consumer owns
   // the selected date and we read from it on every render. Otherwise internal
@@ -164,11 +195,23 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     return new Date(viewYear, viewMonth + 1, 0).getDate();
   }, [viewYear, viewMonth]);
 
-  // getDay() returns 0=Sunday..6=Saturday. This tells us how many blank cells
-  // to render before the 1st of the month in the 7-column grid.
+  // getDay() returns 0=Sunday..6=Saturday. Rebased by the locale's week start,
+  // this tells us how many leading cells belong to the previous month in the
+  // 7-column grid.
   const firstDayOfMonth = useMemo(() => {
     return new Date(viewYear, viewMonth, 1).getDay();
   }, [viewYear, viewMonth]);
+
+  // B4-04 stable six-row geometry: the grid always renders 42 cells. Leading
+  // and trailing cells carry the adjacent months' days as INERT muted spacers
+  // (aria-hidden, never focusable, never clickable), so month navigation never
+  // re-heights the panel and the viewed month keeps its calendar context --
+  // the same outside-day grammar as the shared `generateCalendarGrid` helper.
+  const leadingOutsideCount = (firstDayOfMonth - weekStart + 7) % 7;
+  const prevMonthDays = useMemo(() => {
+    return new Date(viewYear, viewMonth, 0).getDate();
+  }, [viewYear, viewMonth]);
+  const trailingOutsideCount = 42 - leadingOutsideCount - daysInMonth;
 
   const isDateDisabled = useCallback((date: Date) => {
     if (disabledDate && disabledDate(date)) return true;
@@ -245,6 +288,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
   // PageUp/PageDown, Home/End -- the day arithmetic is shared with DatePicker
   // (`getKeyboardNavDate`). In RTL the column flow mirrors, so Left/Right
   // swap. Focus moves programmatically after the roving stop updates.
+  // Disabled days are skipped during keyboard travel and never carry the tab
+  // stop (see `tabStopDate`), so the grid is never keyboard-stranded.
   const dayGridRef = useRef<HTMLDivElement>(null);
   const yearGridRef = useRef<HTMLDivElement>(null);
   const keyboardNavRef = useRef(false);
@@ -257,6 +302,21 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     ?? new Date(viewYear, viewMonth, 1);
   const anchorMonthIndex = focusedMonthIndex
     ?? (currentDate.getFullYear() === viewYear ? currentDate.getMonth() : 0);
+
+  // A DISABLED anchor would leave the grid with no tab stop at all (a
+  // disabled button cannot hold focus), making the grid keyboard-unreachable
+  // -- e.g. a selected date outside `validRange`. Fall the stop back to the
+  // first enabled day of the viewed month (APG: exactly one focusable cell).
+  let tabStopDate = anchorDate;
+  if (isDateDisabled(anchorDate)) {
+    for (let day = 1; day <= daysInMonth; day++) {
+      const candidate = new Date(viewYear, viewMonth, day);
+      if (!isDateDisabled(candidate)) {
+        tabStopDate = candidate;
+        break;
+      }
+    }
+  }
 
   const focusCurrentStop = useCallback((grid: HTMLDivElement | null) => {
     grid?.querySelector<HTMLElement>("[data-part='cell'][tabindex='0']")?.focus();
@@ -274,13 +334,30 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
       if (!next) return;
       e.preventDefault();
       keyboardNavRef.current = true;
-      setFocusedDate(next);
-      if (next.getFullYear() !== viewYear || next.getMonth() !== viewMonth) {
-        setViewYear(next.getFullYear());
-        setViewMonth(next.getMonth());
+      // Disabled dates are real `disabled` buttons: they cannot take focus,
+      // so arrow/Page/Home/End navigation SKIPS over them (bounded walk in
+      // the same direction) instead of stranding focus on a dead cell. If
+      // every reachable date in that direction is disabled, the key is a
+      // no-op and focus stays put.
+      let target = next;
+      let guard = 0;
+      while (isDateDisabled(target) && guard < 370) {
+        const stepped = getKeyboardNavDate(target, key);
+        if (!stepped) break;
+        target = stepped;
+        guard++;
+      }
+      if (isDateDisabled(target)) {
+        keyboardNavRef.current = false;
+        return;
+      }
+      setFocusedDate(target);
+      if (target.getFullYear() !== viewYear || target.getMonth() !== viewMonth) {
+        setViewYear(target.getFullYear());
+        setViewMonth(target.getMonth());
       }
     },
-    [anchorDate, viewYear, viewMonth],
+    [anchorDate, viewYear, viewMonth, isDateDisabled],
   );
 
   const handleYearGridKeyDown = useCallback(
@@ -343,6 +420,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             data-part="mode-toggle"
             data-mode="month"
             data-active={mode === 'month' ? 'true' : 'false'}
+            aria-pressed={mode === 'month'}
             onClick={() => handleModeChange('month')}
           >
             {months[viewMonth]} {viewYear}
@@ -352,6 +430,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             data-part="mode-toggle"
             data-mode="year"
             data-active={mode === 'year' ? 'true' : 'false'}
+            aria-pressed={mode === 'year'}
             onClick={() => handleModeChange('year')}
           >
             {yearToggleLabel}
@@ -365,10 +444,14 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
 
       {mode === 'month' ? (
         <>
-          {/* Day headers */}
-          <div data-part="weekday-row">
-            {days.map((day) => (
-              <div key={day} data-part="weekday-header">
+          {/* Day headers (locale-rotated with the week start). APG grammar
+              (the DatePicker idiom): the row is a `row` and each header a
+              named `columnheader` -- the accessible name keeps the full
+              weekday label even in compact mode, where only the first
+              letter renders. */}
+          <div data-part="weekday-row" role="row">
+            {orderedDays.map((day) => (
+              <div key={day} data-part="weekday-header" role="columnheader" aria-label={day}>
                 {fullscreen ? day : day.charAt(0)}
               </div>
             ))}
@@ -382,9 +465,11 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             aria-label={calendarLabel('calendar.gridLabel', 'Dates grid')}
             onKeyDown={handleDayGridKeyDown}
           >
-            {/* Empty cells for days before month starts */}
-            {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-              <div key={`empty-${i}`} data-part="cell-spacer" aria-hidden="true" />
+            {/* Leading cells: previous month's tail days (inert, muted) */}
+            {Array.from({ length: leadingOutsideCount }).map((_, i) => (
+              <div key={`outside-prev-${i}`} data-part="cell-spacer" data-outside-month="true" aria-hidden="true">
+                <span>{prevMonthDays - leadingOutsideCount + 1 + i}</span>
+              </div>
             ))}
 
             {/* Day cells */}
@@ -394,7 +479,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
               const isToday = isSameDay(date, today);
               const isSelected = isSameDay(date, currentDate);
               const isDisabled = isDateDisabled(date);
-              const isAnchor = isSameDay(date, anchorDate);
+              const isTabStop = isSameDay(date, tabStopDate);
 
               return (
                 <button
@@ -406,8 +491,9 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                   data-today={isToday ? 'true' : 'false'}
                   data-disabled={isDisabled || undefined}
                   aria-selected={isSelected}
-                  aria-label={date.toDateString()}
-                  tabIndex={isAnchor && !isDisabled ? 0 : -1}
+                  aria-current={isToday ? 'date' : undefined}
+                  aria-label={fullDateFormatter ? fullDateFormatter.format(date) : date.toDateString()}
+                  tabIndex={isTabStop && !isDisabled ? 0 : -1}
                   onClick={() => handleDateClick(day)}
                   disabled={isDisabled}
                 >
@@ -420,6 +506,15 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                 </button>
               );
             })}
+
+            {/* Trailing cells: next month's head days (inert, muted) -- the
+                grid always totals 42 cells, so the panel never re-heights
+                between months. */}
+            {Array.from({ length: trailingOutsideCount }).map((_, i) => (
+              <div key={`outside-next-${i}`} data-part="cell-spacer" data-outside-month="true" aria-hidden="true">
+                <span>{i + 1}</span>
+              </div>
+            ))}
           </div>
         </>
       ) : (

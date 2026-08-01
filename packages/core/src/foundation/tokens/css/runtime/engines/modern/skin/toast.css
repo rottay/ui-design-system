@@ -10,8 +10,16 @@
  * SPECIFICITY (P-48): every border rule reaches b >= 4 to clear the tenant
  * artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
  * border-color floor at (0,3,1); the per-tone border rules sit at b=5 so they
- * beat the un-toned fallback at b=4. `border: none` on the action/close buttons
- * is a color-free reset and is exempt.
+ * beat the un-toned fallback at b=4. The shared action/close structural frame
+ * keeps its historical b=3; the primary action's ACCENT frame (action
+ * hierarchy, B pass 2) is doubled to b=4, and the forced-colors re-assertion
+ * matches that lift so system colors still win there.
+ *
+ * LIFETIME: the progress track is ONE governed CSS animation
+ * (`ds-toast-progress-modern`, compositor-safe scaleX) fed by the
+ * engine-stamped `--ds-toast-duration` instance hatch (`--ds-message-duration`
+ * parity) and frozen by `data-paused` -- the engine no longer repaints
+ * `width` per animation frame.
  *
  * TONES: the eight `ToastVariant`s, transcribed from the deleted getAlertStyle()
  * switch. The un-toned rule reproduces that switch's `default:` arm (an unknown
@@ -82,7 +90,7 @@
   background: color-mix(in srgb, var(--ds-toast-accent) 11%, var(--ds-color-bg-primary));
   border: 1px solid color-mix(in srgb, var(--ds-toast-accent) 26%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-md);
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 56%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(56% * var(--ds-effect-intensity)), transparent);
 }
 
 .rottay-toast--modern[data-part='root'][data-tone='gradient'] [data-part='icon'] {
@@ -103,6 +111,9 @@
   font-weight: var(--ds-font-weight-semibold);
   line-height: var(--ds-line-height-snug);
   letter-spacing: var(--ds-letter-spacing-tight);
+  /* Long-copy resilience: unbroken strings wrap inside the body's
+     minmax(0, 1fr) track instead of protruding past the actions column. */
+  overflow-wrap: break-word;
 }
 .rottay-toast--modern[data-part='root'] [data-part='description'],
 .rottay-toast--modern[data-part='root'] [data-part='custom-content'] {
@@ -110,6 +121,7 @@
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-xs);
   line-height: var(--ds-line-height-relaxed);
+  overflow-wrap: break-word;
 }
 .rottay-toast--modern[data-part='root'][data-tone='gradient'] [data-part='description'],
 .rottay-toast--modern[data-part='root'][data-tone='gradient'] [data-part='custom-content'] {
@@ -138,22 +150,39 @@
     border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
-.rottay-toast--modern[data-part='root'] [data-part='action'] {
+.rottay-toast--modern.rottay-toast--modern[data-part='root'] [data-part='action'] {
   padding-inline: var(--ds-spacing-3);
   font-size: var(--ds-font-size-xs);
   font-weight: var(--ds-font-weight-semibold);
+  /* Action hierarchy: the single primary action leans on the toast accent
+     (quiet tint, accent-keyed frame) while the dismiss stays a neutral ghost,
+     so the two never read as the same affordance (urgency without excess
+     chroma: the tint stays under the surface's own accent wash). */
+  background: color-mix(in srgb, var(--ds-toast-accent) 9%, var(--ds-color-bg-primary));
+  border-color: color-mix(in srgb, var(--ds-toast-accent) 30%, var(--ds-color-border-subtle));
 }
 .rottay-toast--modern[data-part='root'] [data-part='close-button'] {
   width: 2rem;
   padding: 0;
   color: var(--ds-color-text-secondary);
 }
-.rottay-toast--modern[data-part='root'] [data-part='action']:hover,
-.rottay-toast--modern[data-part='root'] [data-part='close-button']:hover {
-  transform: translateY(-1px);
+/* Hover is hover-capable-only (4th-wave law); a held press settles the lift
+   into the governed press scale and keeps the same quiet surface via
+   :active, so touch gets the equivalent affordance (message.css idiom). */
+@media (hover: hover) {
+  .rottay-toast--modern[data-part='root'] [data-part='action']:hover,
+  .rottay-toast--modern[data-part='root'] [data-part='close-button']:hover {
+    transform: translateY(-1px);
+    background-color: var(--ds-surface-highlight);
+    border-color: color-mix(in srgb, var(--ds-toast-accent) 34%, var(--ds-color-border-subtle));
+    box-shadow: var(--ds-elevation-1);
+  }
+}
+.rottay-toast--modern[data-part='root'] [data-part='action']:active,
+.rottay-toast--modern[data-part='root'] [data-part='close-button']:active {
+  transform: scale(var(--ds-state-press-scale));
   background-color: var(--ds-surface-highlight);
   border-color: color-mix(in srgb, var(--ds-toast-accent) 34%, var(--ds-color-border-subtle));
-  box-shadow: var(--ds-elevation-1);
 }
 .rottay-toast--modern[data-part='root'] [data-part='action']:focus-visible,
 .rottay-toast--modern[data-part='root'] [data-part='close-button']:focus-visible {
@@ -163,15 +192,32 @@
 
 .rottay-toast--modern[data-part='root'] > [data-part='progress-bar'] {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 2px;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: 2px;
   background: color-mix(in srgb, var(--ds-toast-accent) 74%, transparent);
-  transition: width var(--ds-motion-fast) linear;
+  transform-origin: left center;
+  /* ONE governed animation drains the bar over the toast's lifetime (stamped
+     by the engine on --ds-toast-duration) -- compositor-safe scaleX, never a
+     per-frame JS width repaint. */
+  animation: ds-toast-progress-modern var(--ds-toast-duration, var(--ds-motion-instant)) linear both;
 }
+
+@keyframes ds-toast-progress-modern {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+/* Pause parity with the JS countdown: data-paused freezes the lifetime bar
+   mid-drain (never a restart) and dims it as the quiet "held" cue. */
 .rottay-toast--modern[data-part='root'][data-paused='true'] > [data-part='progress-bar'] {
+  animation-play-state: paused;
   opacity: 0.62;
+}
+
+/* RTL: the lifetime bar drains toward the reading direction's end edge. */
+.rottay-toast--modern[data-part='root']:dir(rtl) > [data-part='progress-bar'] {
+  transform-origin: right center;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -179,6 +225,11 @@
   .rottay-toast--modern[data-part='root'] [data-part='close-button'],
   .rottay-toast--modern[data-part='root'] > [data-part='progress-bar'] {
     transition: none;
+  }
+  /* Reduced motion lands directly in the final state: the lifetime bar holds
+     as a static full track instead of animating its drain. */
+  .rottay-toast--modern[data-part='root'] > [data-part='progress-bar'] {
+    animation: none;
   }
 }
 
@@ -219,7 +270,7 @@
   .rottay-toast--modern[data-part='root'][data-tone='gradient'] [data-part='custom-content'] {
     color: CanvasText;
   }
-  .rottay-toast--modern[data-part='root'] [data-part='action'],
+  .rottay-toast--modern.rottay-toast--modern[data-part='root'] [data-part='action'],
   .rottay-toast--modern[data-part='root'] [data-part='close-button'] {
     border-color: ButtonText;
     background: Canvas;

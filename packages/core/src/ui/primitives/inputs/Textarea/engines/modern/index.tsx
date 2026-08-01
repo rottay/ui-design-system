@@ -194,6 +194,7 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
         data-disabled={disabled ? 'true' : 'false'}
         data-readonly={readOnly ? 'true' : 'false'}
         data-filled={isFilled ? 'true' : 'false'}
+        data-autosize={autoSize ? 'true' : undefined}
         placeholder={placeholder}
         value={currentValue}
         disabled={disabled}

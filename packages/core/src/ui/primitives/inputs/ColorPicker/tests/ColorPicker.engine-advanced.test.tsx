@@ -150,7 +150,8 @@ describe('ColorPicker runtime engine coverage', () => {
     const { container } = render(<ModernColorPicker open placement="topLeft" />);
     const dropdown = container.querySelector('[data-part="dropdown"]') as HTMLElement;
     expect(dropdown).not.toBeNull();
-    expect(dropdown.className).toContain('bottom-full');
+    expect(dropdown).toHaveAttribute('data-placement', 'topLeft');
+    expect(dropdown.className).not.toContain('bottom-full');
   });
 
   it('rides the tenant mono channel on the hex input via the skin, not a Tailwind utility (K4-C Pass-2 live finding)', () => {
@@ -158,7 +159,7 @@ describe('ColorPicker runtime engine coverage', () => {
       resolve(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/color-picker.css'),
       'utf8',
     );
-    expect(skin).toContain('font-family: var(--ds-font-family-mono, ui-monospace, monospace);');
+    expect(skin).toContain('font-family: var(--ds-font-family-mono);');
     // The engine no longer relies on the shadowed Tailwind font-mono utility.
     const { container } = render(<ModernColorPicker open />);
     const hex = container.querySelector('[data-part="hex-input"]') as HTMLElement;
@@ -187,7 +188,13 @@ describe('ColorPicker runtime engine coverage', () => {
       const { container: c2 } = render(<ModernColorPicker open />);
       const endDropdown = c2.querySelector('[data-part="dropdown"]') as HTMLElement;
       expect(endDropdown.getAttribute('data-edge')).toBe('end');
-      expect(endDropdown.className).toContain('end-0');
+      expect(endDropdown.className).not.toContain('end-0');
+      const skin = readFileSync(
+        resolve(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/color-picker.css'),
+        'utf8',
+      );
+      expect(skin).toContain("[data-part='dropdown'][data-edge='end']");
+      expect(skin).toContain('inset-inline-end: 0');
     } finally {
       Element.prototype.getBoundingClientRect = original;
     }

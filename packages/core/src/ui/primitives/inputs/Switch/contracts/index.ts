@@ -80,6 +80,13 @@ export interface SwitchProps {
   id?: string;
   /** Name attribute for forms */
   name?: string;
+  /**
+   * Accessible label forwarded to the native input. A switch without
+   * `checkedChildren`/`unCheckedChildren` has no visible text of its own, so
+   * this is the primary accessible-name path. Same contract field the
+   * sibling input primitives (Input, Select, Slider) already expose.
+   */
+  'aria-label'?: string;
 }
 
 export const SWITCH_DEFAULTS: Partial<SwitchProps> = {

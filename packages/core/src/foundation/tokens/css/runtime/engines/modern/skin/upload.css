@@ -34,31 +34,134 @@
  * wins unlayered at (0,3,0) or higher.
  *
  * DEVIATIONS (reported, not silently taken):
- * 1. The dropzone/add-button Tailwind paint utilities (`border-2 border-dashed
- *    hover:border-primary hover:bg-primary/5 transition-all duration-300`, the
- *    dragging `shadow-lg scale-[1.01]`) REMAIN in the JSX because
- *    `Upload.engine-advanced.test.tsx:135` asserts `border-primary` is present
- *    in the dropzone's className during drag. They are no longer the effective
- *    paint: the dropzone/add-button rules below override them by layer
- *    ownership (rottay-engines sorts after rottay-framework) with the product
- *    law's quiet treatment -- 1px dashed hairline, 4% primary tint on
- *    hover/drag, token-cadence transitions, NO saturated 2px primary border,
- *    NO shadow, NO scale. `data-disabled` (stamped by the engine) gates the
- *    hover rules.
+ * 1. The dropzone drag state travels ONLY via `data-state='dragging'`
+ *    (stamped by the engine). The formerly pinned inert Tailwind hook
+ *    `border-primary` was RETIRED in the P0 correction --
+ *    `Upload.engine-advanced.test.tsx:135` still asserts that substring in
+ *    the modern branch and is a STALE pin queued for a Codex repin (do not
+ *    reintroduce the hook). This file owns every dropzone declaration and
+ *    beats the framework artifact by layer ownership (rottay-engines sorts
+ *    after rottay-framework) with the product law's quiet treatment -- 1px
+ *    dashed hairline, 4% primary tint on hover/drag, token-cadence
+ *    transitions, NO saturated 2px primary border, NO shadow, NO scale.
+ *    `data-disabled` (stamped by the engine) gates the hover rules. Every
+ *    utility (`border-2 border-dashed rounded-lg flex flex-col items-center
+ *    justify-center cursor-pointer transition-all duration-300`, `shadow-lg
+ *    scale-[1.01]`, the `hover:*` pair, the disabled pair) was drained in
+ *    the 2026-07-31 second pass and is declared in this file.
  * 2. The dropzone height is a runtime prop (`height`, default 200): it rides
  *    the `--ds-upload-dropzone-height` custom property stamped by the engine
  *    and is declared here, keeping the block-size ownership in this file.
  * 3. File rows carry `data-part='file-icon'` (semantic ContentFileIcon) and
  *    `data-part='file-size'` (locale-formatted bytes, painted tabular-nums)
  *    per the product law for the CV/evidence list.
+ *
+ * PART MAP (what each rule group paints):
+ * - preview-modal / preview-content / preview-image / preview-close-button:
+ *   overlay frame + viewport centering, 90vw/90vh relative shell, 85vh
+ *   contain-fit image, close chrome.
+ * - file-list: list rhythm -- wrap grid (picture modes, Upload only) vs
+ *   stacked column (text/picture Upload and every Dragger list).
+ * - file-item (+data-status): row/tile frame, background, radius, error
+ *   hairline + error ink on the name.
+ * - file-thumb / file-icon-slot / file-icon: media geometry + ink.
+ * - file-content / file-name / file-size / file-error(+icon/text): text
+ *   column grow wrapper, truncation, tabular size, per-file failure anatomy.
+ * - file-progress: positioning wrapper for the composed DS Progress (meter
+ *   paint stays in progress.css -- single paint owner).
+ * - file-item-overlay / file-item-action: hover/focus-within reveal scrim +
+ *   action chrome (remove destructive, retry primary).
+ * - add-button / trigger: upload entry chrome (hairline, tint, radius,
+ *   cursor, keyboard rings).
+ * - dropzone (+data-state/data-disabled): drag frame grammar, tint, icon ink,
+ *   runtime height channel; `dropzone-hint` (stable part, no element sniff):
+ *   hint rhythm/ink.
+ * - file-input: hidden.
+ *
+ * SECOND PREMIUM PASS (Phase B, 2026-07-31):
+ * - Dragging is never hue-only: the dropzone frame swaps dashed -> solid on
+ *   `data-state='dragging'` (frame grammar change) on top of the tint,
+ *   border-color and icon-ink signals it already had.
+ * - Per-file error anatomy lands next to the item (`data-part='file-error'`):
+ *   governed status.error glyph + message text (server `error.message` or the
+ *   `upload.error` catalogue floor), so the failure reads shape + text, not a
+ *   red border alone. The retry action (`data-action='retry'`) rides the same
+ *   action grammar as remove but hovers PRIMARY (recovery), never error-red.
+ * - The picture-row fallback icon wrapper is now a stable part
+ *   (`data-part='file-icon-slot'`) instead of a brittle `:has(svg)` sniff.
+ *
+ * UTILITY DRAIN (Phase B2, 2026-07-31): every Tailwind utility left in the
+ * engine after the first pass migrated here, keyed on stable parts:
+ * - preview modal: `preview-modal` fixed viewport frame + centering; NEW
+ *   parts `preview-content` (relative 90vw/90vh shell) and `preview-image`
+ *   (85vh contain-fit, `--ds-radius-lg` step).
+ * - picture-circle tile: 50% radius, overflow clip, flex centering and the
+ *   full 1px quiet hairline (the `border-2` utility is gone -- the circle
+ *   frame matches the card's). Circle `file-thumb` / `file-name` /
+ *   `file-progress` / `file-item-overlay` geometry now lives beside the
+ *   card's; the `[data-part='file-item'] > span` sniff is gone (the fallback
+ *   name span carries `data-part='file-name'`).
+ * - picture/text rows: flex composition (gap + padding on `--ds-spacing-2`),
+ *   48px thumb and icon-slot geometry, NEW `file-content` grow wrapper
+ *   (`flex: 1 1 auto; min-inline-size: 0`), truncating block `file-name` at
+ *   the `--ds-font-size-sm` step.
+ * - add-button: flex centering, cursor, and the tile-related radius
+ *   (`--ds-upload-file-radius`; 50% in circle) -- the drained `rounded-lg`
+ *   sat at 8px next to the 6px tile; the nested radii now relate.
+ * - dropzone: flex column centering, cursor, `--ds-radius-lg` step.
+ * - file-list: `--ds-spacing-2` rhythm + margin-block-start.
+ * Scale steps consume defined tenant channels (`--ds-radius-lg`,
+ * `--ds-font-size-sm`, `--ds-spacing-*`) with fallbacks; NO new variables
+ * were needed.
  */
 
-/* ---- preview-modal / preview-close-button: identical in both Upload and
-        Dragger subtrees (declared once, used by both). ---- */
+/* ---- preview-modal / preview-content / preview-image / preview-close-button:
+        identical in both Upload and Dragger subtrees (declared once, used by
+        both). The modal frame + viewport centering, the capped relative shell
+        and the contain-fit image were drained from engine utilities (`fixed
+        inset-0 flex items-center justify-center`, `relative max-w-[90vw]
+        max-h-[90vh]`, `max-w-full max-h-[85vh] rounded-lg object-contain`). ---- */
 .ds-upload.ds-upload--modern [data-part='preview-modal'],
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='preview-modal'] {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: var(--ds-upload-preview-z, var(--ds-z-index-modal));
   background: var(--ds-upload-preview-backdrop);
+}
+.ds-upload.ds-upload--modern [data-part='preview-content'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='preview-content'] {
+  position: relative;
+  max-inline-size: 90vw;
+  max-block-size: 90vh;
+}
+.ds-upload.ds-upload--modern [data-part='preview-image'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='preview-image'] {
+  display: block;
+  max-inline-size: 100%;
+  max-block-size: 85vh;
+  border-radius: var(--ds-radius-lg);
+  object-fit: contain;
+}
+
+/* ---- file-list: picture modes (Upload only) flow the tiles + add-button as
+        a wrap grid; text/picture Upload lists and every Dragger list stack
+        under the trigger/dropzone. Same `--ds-spacing-2` rhythm in both
+        (drained from `flex flex-wrap gap-2` / `mt-2 space-y-2`). ---- */
+.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-list'],
+.ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-list'] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2);
+}
+.ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-list'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-list'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2);
+  margin-block-start: var(--ds-spacing-2);
 }
 .ds-upload.ds-upload--modern [data-part='preview-close-button'],
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='preview-close-button'] {
@@ -89,7 +192,7 @@
   background: var(--ds-upload-preview-overlay);
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .ds-upload.ds-upload--modern [data-part='file-item']:hover [data-part='file-item-overlay'],
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item']:hover [data-part='file-item-overlay'],
@@ -98,7 +201,11 @@
   opacity: 1;
   pointer-events: auto;
 }
-/* Card overlay geometry (circle carries its own Tailwind geometry). */
+/* Card overlay geometry; the circle mirrors it with the 50% radius and the
+   tighter action gap (24px action chips on a 104px avatar) -- both drained
+   from engine utilities (`absolute inset-0 rounded-full flex items-center
+   justify-center gap-1`). The card gap rides the density-scaled spacing
+   channel. */
 .ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item-overlay'],
 .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item-overlay'] {
   position: absolute;
@@ -106,7 +213,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: var(--ds-spacing-2);
+}
+.ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item-overlay'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item-overlay'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-1);
+  border-radius: 50%;
 }
 
 /* ---- file-item base: circle/picture/text share one background; card is the
@@ -114,10 +231,10 @@
 .ds-upload.ds-upload--modern:not(.ds-upload--picture-card) [data-part='file-item'],
 .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card) [data-part='file-item'] {
   background: var(--ds-surface-inset);
-  border-radius: var(--ds-upload-file-radius, 6px);
+  border-radius: var(--ds-upload-file-radius);
   transition:
-    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 /* Per-file error state (product law): semantic error hairline + error ink on
    the name -- the engine no longer carries the `border border-error`
@@ -150,10 +267,63 @@
 .ds-upload.ds-upload--modern [data-part='file-size'],
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-size'] {
   display: block;
-  font-size: var(--ds-upload-file-size-font-size, var(--ds-font-size-xs, 12px));
-  line-height: var(--ds-line-height-snug, 1.375);
+  font-size: var(--ds-upload-file-size-font-size, var(--ds-font-size-xs));
+  line-height: var(--ds-line-height-snug);
   color: var(--ds-color-text-muted);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---- file-error: per-file failure anatomy next to the item (text/picture
+        rows): governed status.error glyph + message line, shape + text --
+        the red hairline/name ink alone never carried the state. ---- */
+.ds-upload.ds-upload--modern [data-part='file-error'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-error'] {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ds-spacing-1);
+  padding-block-start: 2px;
+  font-size: var(--ds-upload-file-size-font-size, var(--ds-font-size-xs));
+  line-height: var(--ds-line-height-snug);
+  color: var(--ds-color-error);
+}
+.ds-upload.ds-upload--modern [data-part='file-error-icon'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-error-icon'] {
+  flex: none;
+  margin-block-start: calc((1em * var(--ds-line-height-snug) - 12px) / 2);
+  color: var(--ds-color-error);
+}
+.ds-upload.ds-upload--modern [data-part='file-error-text'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-error-text'] {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ---- picture/text row composition (drained from `flex items-center gap-2
+        p-2` and `flex items-center justify-between gap-2 p-2`): the grow
+        wrapper makes `justify-between` moot. ---- */
+.ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item'],
+.ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+  padding: var(--ds-spacing-2);
+}
+/* file-content: grow wrapper that lets long names truncate instead of
+   pushing the trailing actions out (`flex-1 min-w-0` drained). */
+.ds-upload.ds-upload--modern [data-part='file-content'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-content'] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+/* file-name in rows: truncating block at the sm type step (`text-sm truncate
+   block` drained); card/circle keep their own centered xs treatment below. */
+.ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-name'],
+.ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-name'] {
+  display: block;
+  overflow: hidden;
+  font-size: var(--ds-font-size-sm);
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -166,12 +336,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  /* No cursor here (second pass): the tile itself has no click handler --
+     only the overlay actions are operable, and they carry their own pointer
+     cursor. A pointer on the whole tile was a false affordance. */
   background: var(--ds-color-bg-secondary);
-  border-radius: var(--ds-upload-file-radius, 6px);
+  border-radius: var(--ds-upload-file-radius);
   transition:
-    box-shadow var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
+    box-shadow var(--ds-motion-normal) var(--ds-motion-ease-out),
+    transform var(--ds-motion-normal) var(--ds-motion-ease-out);
 }
 .ds-upload.ds-upload--modern.ds-upload--picture-card .ds-upload__file-item[data-part='file-item'],
 .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card .ds-upload__file-item[data-part='file-item'] {
@@ -182,9 +354,12 @@
   border-color: var(--ds-color-error);
 }
 
-/* Card thumbnail + fallback filename. */
+/* Card + circle thumbnail (the circle's `w-full h-full object-cover` drained
+   here) + card fallback filename. */
 .ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-thumb'],
-.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-thumb'] {
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-thumb'],
+.ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-thumb'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-thumb'] {
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
@@ -211,33 +386,75 @@
   background: var(--ds-color-alpha-black-40);
 }
 
-/* ---- circle: fixed avatar geometry + border-color (width/style come from
-        the `border-2` Tailwind class, left in place -- non-paint). ---- */
+/* ---- circle: fixed avatar geometry, 50% radius with overflow clip, flex
+        centering, and the full 1px quiet hairline -- the `border-2` /
+        `relative group rounded-full overflow-hidden flex items-center
+        justify-center` utilities were drained; the frame is skin-owned like
+        the card's ((0,4,0) via the listType root modifier). ---- */
 .ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item'],
 .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item'] {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   inline-size: var(--ds-upload-card-size, 104px);
   block-size: var(--ds-upload-card-size, 104px);
-  border-color: var(--ds-color-border);
+  border: 1px solid var(--ds-color-border);
+  border-radius: 50%;
 }
 .ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item'][data-status='error'],
 .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item'][data-status='error'] {
   border-color: var(--ds-color-error);
 }
-.ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item'] > span,
-.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item'] > span {
+/* Circle fallback filename: the span now carries the stable part (the former
+   `[data-part='file-item'] > span` sniff is gone); centered truncating xs
+   line drained from `text-xs truncate px-2 text-center`. */
+.ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-name'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-name'] {
+  overflow: hidden;
+  padding-inline: var(--ds-spacing-2);
+  font-size: var(--ds-upload-file-name-font-size, 12px);
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--ds-color-text-secondary);
+}
+/* Circle in-progress strip: inset from the avatar edge (`absolute inset-x-2
+   bottom-2` drained). */
+.ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-progress'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-progress'] {
+  position: absolute;
+  inset-inline: var(--ds-spacing-2);
+  inset-block-end: var(--ds-spacing-2);
 }
 
-/* ---- picture-row fallback icon (no thumb): the wrapper `<div>` has no
-        data-part, but it is the only file-item child that :has() a bare
-        (non-action) svg in the "picture" listType. ---- */
-.ds-upload.ds-upload--modern.ds-upload--picture [data-part='file-item'] > div:has(svg),
-.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture [data-part='file-item'] > div:has(svg) {
+/* ---- picture-row fallback icon slot (no thumb): stable part stamped by the
+        engine (replaces the former brittle `:has(svg)` sniff). Geometry
+        drained from `w-12 h-12 rounded flex items-center justify-center
+        flex-shrink-0`; the row thumbnail beside it shares the 48px size. ---- */
+.ds-upload.ds-upload--modern.ds-upload--picture [data-part='file-icon-slot'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture [data-part='file-icon-slot'] {
+  inline-size: 48px;
+  block-size: 48px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-upload-file-radius);
   background: var(--ds-surface-panel);
-}
-.ds-upload.ds-upload--modern.ds-upload--picture [data-part='file-item'] > div:has(svg) svg,
-.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture [data-part='file-item'] > div:has(svg) svg {
   color: var(--ds-color-text-secondary);
+}
+/* Picture-row thumbnail: click-to-preview keeps the pointer affordance
+   (`w-12 h-12 object-cover rounded flex-shrink-0 cursor-pointer` drained). */
+.ds-upload.ds-upload--modern.ds-upload--picture [data-part='file-thumb'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture [data-part='file-thumb'] {
+  inline-size: 48px;
+  block-size: 48px;
+  flex: 0 0 auto;
+  border-radius: var(--ds-upload-file-radius);
+  object-fit: cover;
+  cursor: pointer;
 }
 
 /* ---- file-item-action: card and circle each own a color/radius/border chrome
@@ -256,7 +473,7 @@
   color: var(--ds-upload-overlay-action-color);
   border-radius: 50%;
   border: none;
-  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item-action'],
 .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item-action'] {
@@ -289,17 +506,31 @@
 }
 
 /* ---- add-button (picture-card/circle "add" tile): Upload only, Dragger has
-        no add-button. The JSX keeps test-anchored Tailwind utilities; the
-        rules below override their effective paint by layer ownership with
-        the quiet treatment (1px dashed hairline + 4% tint, deviation #1). ---- */
+        no add-button. Layout, cursor and radius were drained from the
+        utilities (`flex items-center justify-center`, `rounded-lg` /
+        `rounded-full`, `cursor-pointer`) in the second pass; the quiet
+        treatment (1px dashed hairline + 4% tint) was already owned here.
+        The card radius takes the tile channel (`--ds-upload-file-radius`)
+        so the nested radii relate -- the drained `rounded-lg` sat at 8px
+        next to the 6px tile. ---- */
 .ds-upload.ds-upload--modern [data-part='add-button'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-inline-size: var(--ds-upload-card-size, 104px);
   min-block-size: var(--ds-upload-card-size, 104px);
-  padding: 16px;
+  /* Density (second pass): the tile padding rides the density-scaled spacing
+     channel instead of a fixed 16px. */
+  padding: var(--ds-spacing-4);
+  cursor: pointer;
   background: transparent;
+  border-radius: var(--ds-upload-file-radius);
   transition:
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='add-button'] {
+  border-radius: 50%;
 }
 .ds-upload.ds-upload--modern .ds-upload__add-button[data-part='add-button'] {
   border: 1px dashed var(--ds-upload-add-border, var(--ds-color-border));
@@ -336,7 +567,8 @@
    attribute (Form precedent) instead of repeating `[data-part='trigger']`. */
 .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button {
   block-size: 36px;
-  padding-inline: 16px;
+  /* Density (second pass): inline padding rides the density-scaled channel. */
+  padding-inline: var(--ds-spacing-4);
   font-size: var(--ds-upload-trigger-font-size, 14px);
   cursor: pointer;
   background: transparent;
@@ -344,8 +576,8 @@
   border-radius: var(--ds-radius-md);
   border: 1px solid var(--ds-color-border);
   transition:
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
   .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button:where(:hover):not(:disabled) {
@@ -369,21 +601,30 @@
 .ds-upload.ds-upload--modern [data-part='file-item-action']:focus-visible,
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action']:focus-visible,
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-color-primary);
+  outline: var(--ds-focus-ring-width) solid var(--ds-color-primary);
   outline-offset: 2px;
 }
 
 /* Remove-action states: hover wash gated by pointer capability, with the
-   touch/active equivalent (4th-tanda law). */
+   touch/active equivalent (4th-tanda law). Destructive ink is scoped to the
+   remove action -- retry is recovery and hovers PRIMARY instead. */
 @media (hover: hover) {
-  .ds-upload.ds-upload--modern [data-part='file-item-action']:where(:hover),
-  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action']:where(:hover) {
+  .ds-upload.ds-upload--modern [data-part='file-item-action'][data-action='remove']:where(:hover),
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'][data-action='remove']:where(:hover) {
     color: var(--ds-color-error);
   }
+  .ds-upload.ds-upload--modern [data-part='file-item-action'][data-action='retry']:where(:hover),
+  .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'][data-action='retry']:where(:hover) {
+    color: var(--ds-color-primary);
+  }
 }
-.ds-upload.ds-upload--modern [data-part='file-item-action']:active,
-.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action']:active {
+.ds-upload.ds-upload--modern [data-part='file-item-action'][data-action='remove']:active,
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'][data-action='remove']:active {
   color: var(--ds-color-error);
+}
+.ds-upload.ds-upload--modern [data-part='file-item-action'][data-action='retry']:active,
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'][data-action='retry']:active {
+  color: var(--ds-color-primary);
 }
 
 /* ---- hidden file inputs (Upload + Dragger). ---- */
@@ -393,18 +634,27 @@
 }
 
 /* ---- dropzone (Dragger only): runtime height channel + the quiet dropzone
-        law. The Tailwind paint utilities stay in the JSX for a test-anchored
-        assertion but lose every effective declaration here (deviation #1):
-        1px dashed hairline, 4% primary tint on hover/drag, no shadow, no
-        scale, token-cadence transitions. ---- */
+        law. The drag state travels ONLY via `data-state='dragging'` (the
+        inert `border-primary` utility was retired in the P0 correction; the
+        stale test pin is queued for repin). Layout, cursor and the
+        `--ds-radius-lg` step were drained from the utilities in the second
+        pass, and every paint declaration is owned here: 1px dashed hairline,
+        4% primary tint on hover/drag, no shadow, no scale, token-cadence
+        transitions. ---- */
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   block-size: var(--ds-upload-dropzone-height, 200px);
+  cursor: pointer;
   background: transparent;
+  border-radius: var(--ds-radius-lg);
   box-shadow: none;
   transform: none;
   transition:
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='idle'],
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='dragging'] {
@@ -419,7 +669,8 @@
   }
 }
 /* Touch/active equivalent + the dragover state (ungated by pointer type):
-   border AND icon tint, never a rail. */
+   border AND icon tint, never a rail. The dragging frame ALSO swaps dashed
+   -> solid: the drag state reads as a frame-grammar change, not hue alone. */
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone']:active:not([data-disabled='true']),
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='dragging'] {
   background: var(--ds-upload-dropzone-bg-active, color-mix(in srgb, var(--ds-color-primary) 4%, transparent));
@@ -427,6 +678,9 @@
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state]:active:not([data-disabled='true']),
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='dragging'] {
   border-color: var(--ds-upload-dropzone-border-active, color-mix(in srgb, var(--ds-color-primary) 55%, var(--ds-color-border)));
+}
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='dragging'] {
+  border-style: solid;
 }
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='dragging'] svg {
   color: var(--ds-color-primary);
@@ -438,7 +692,15 @@
 .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'] svg {
   color: var(--ds-color-text-secondary);
 }
-.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'] p {
+/* Default hint composition: the governed upload glyph sits one rhythm above
+   the hint text (the engine's migrated ActionUploadIcon carries no margin
+   utility -- spacing is skin-owned). The hint copy is the stable
+   `dropzone-hint` part (no bare `p` sniff). */
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'] .rottay-icon {
+  margin-block-end: var(--ds-spacing-2);
+}
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone-hint'] {
+  margin: 0;
   color: var(--ds-color-text-secondary);
 }
 
@@ -466,7 +728,7 @@
   .ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item'] [data-part='file-item-action'],
   .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item'] [data-part='file-item-action'] {
     opacity: 0;
-    transition: opacity var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
   }
   .ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item']:hover [data-part='file-item-action'],
   .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item']:hover [data-part='file-item-action'],
@@ -505,6 +767,17 @@
   }
   .ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='dragging'] svg {
     color: Highlight;
+  }
+  /* Per-file error hairlines: the semantic red is forced away, so the frame
+     takes the system text ink -- the state still reads shape (frame + error
+     glyph + message), never hue. */
+  .ds-upload.ds-upload--modern:not(.ds-upload--picture-card) .ds-upload__file-item[data-part='file-item'][data-status='error'],
+  .ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card) .ds-upload__file-item[data-part='file-item'][data-status='error'],
+  .ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item'][data-status='error'],
+  .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item'][data-status='error'],
+  .ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item'][data-status='error'],
+  .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item'][data-status='error'] {
+    border-color: ButtonText;
   }
   .ds-upload.ds-upload--modern [data-part='trigger'] button:focus-visible,
   .ds-upload.ds-upload--modern [data-part='add-button']:focus-visible,

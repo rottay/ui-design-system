@@ -36,6 +36,7 @@ import React from 'react';
 import type { SpinnerProps } from '../../contracts';
 import { SPINNER_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { LoadingIndicator } from '../../../../foundation/loading-indicator';
 
 // ============================================================================
 // Modern Engine Implementation
@@ -74,41 +75,17 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
     children,
   } = props;
 
-  // P-79 caller-wins: a pattern composing the Spinner as one named part of
-  // its own anatomy (loading branches stamp `spinner`) overrides the
-  // default `root` stamp; standalone usage keeps `root`.
-  const dataPart = props['data-part'];
-
-  // ============================================================================
-  // Render
-  // ============================================================================
-
-  // Geometry (ring diameter + stroke per size), color and cadence are all
-  // skin-owned against `data-size`; the spin rides --ds-motion-slow, which
-  // the motion authority zeroes under reduced motion — the ring then rests
-  // as a calm static arc. The public `color` prop rides the skin's
-  // `--ds-spinner-color` channel (a custom property is configuration, not
-  // inline paint); the caller's own `style` spreads last and keeps its
-  // documented precedence.
-  const channelStyle: React.CSSProperties | undefined = color
-    ? ({ '--ds-spinner-color': color, ...style } as React.CSSProperties)
-    : style;
   return (
-    <div
-      data-part={dataPart ?? 'root'}
-      data-size={size}
-      className={['rottay-spinner', 'rottay-spinner--modern', className].filter(Boolean).join(' ')}
-      style={channelStyle}
+    <LoadingIndicator
+      data-part={props['data-part']}
+      size={size}
+      color={color}
+      label={label}
+      statusLabel={label || loadingLabel}
+      className={className}
+      style={style}
     >
-      <span
-        data-part="indicator"
-        role="status"
-        aria-label={label || loadingLabel}
-      />
-      {label && (
-        <span data-part="label">{label}</span>
-      )}
       {children}
-    </div>
+    </LoadingIndicator>
   );
 }

@@ -48,9 +48,16 @@
  * transition + disabled posture keyed on `data-disabled`; empty padding/
  * centering; pagination layout + button sizing; operations column; move
  * button box (`--ds-input-sm-*` channels). Spacing channels are the
- * density-scaled `--ds-spacing-*` family. Under `[dir='rtl']` the physical
- * pagination prev/next glyphs (`‹`/`›`) are mirrored so they keep pointing
- * at the logical previous/next page.
+ * density-scaled `--ds-spacing-*` family.
+ *
+ * RTL (second pass): the move/pagination buttons render the governed
+ * `navigation.forward`/`navigation.back` icon roles, which carry
+ * `autoMirror: true` -- `semantic-icon.css` flips them under `:dir(rtl)`.
+ * The former whole-button `scaleX(-1)` mirrors on `move-button` AND
+ * `pagination-button` are REMOVED (owner correction: production follows the
+ * law, stale pins go to the Codex repin list): they double-mirrored the
+ * autoMirror glyphs (net identity, wrong logical direction under RTL) and
+ * mirrored custom `operations` text content.
  *
  * K4-D remediation round 2: the search input's background moved to the
  * certified Input-family `--ds-input-bg` channel (the generic
@@ -67,6 +74,22 @@
  * canonical disabled posture (cursor + opacity channels); the item
  * transition narrowed from `all` to the repainted channels with the
  * reduced-motion guard extended.
+ *
+ * B6-02 (Phase B premium pass): the search field gains its governed
+ * leading-icon affordance (`panel-search-icon`, ActionSearch role — the
+ * input's inline-start padding reserves the icon box via the
+ * `--_ds-proto-transfer-search-icon-inset` axis, ADDED after the pinned
+ * padding shorthand so the K4-D pin keeps matching); the header count
+ * consumes the contract's locale units (engine side); the empty state gains
+ * the governed FeedbackEmpty glyph (`panel-empty-icon`); item rows get real
+ * row padding so the hover/selected wash reads as a full pill instead of
+ * hugging the text; density scales the header/item/pagination paddings via
+ * `--ds-density-effective-scale` (the search cell stays flat — the icon's
+ * absolute offset references its exact padding); move/pagination buttons
+ * finally expose a governed `:focus-visible` ring; forced-colors re-maps
+ * disabled rows to GrayText (opacity alone is not a signal in the forced
+ * palette — Tree B4-04 adjudication) and the decorative glyphs to system
+ * ink.
  */
 
 .rottay-transfer.rottay-transfer--modern[data-part='root'] {
@@ -97,8 +120,9 @@
      count (K4-D Pass 2 iteration 2: "permissio ns" at 390px, count glued at
      Optima widths). Desktop width never triggers the wrap. */
   flex-wrap: wrap;
-  row-gap: var(--ds-spacing-1, 4px);
-  padding: var(--ds-spacing-2, 8px);
+  row-gap: var(--ds-spacing-1);
+  /* Density (B6-02): header rhythm scales with the governed channel. */
+  padding: calc(var(--ds-spacing-2) * var(--ds-density-effective-scale));
   font-weight: 500;
   background: var(--ds-surface-inset);
 }
@@ -129,21 +153,43 @@
      "permissions0/2" glue seen at Optima widths). */
   margin-inline-start: auto;
   padding-inline-start: var(--ds-spacing-2, 8px);
-  font-size: var(--ds-font-size-sm, 14px);
+  font-size: var(--ds-font-size-sm);
   font-variant-numeric: tabular-nums;
   color: var(--ds-color-text-secondary);
 }
 
 .rottay-transfer.rottay-transfer--modern div:has(> [data-part='panel-search']) {
-  padding: var(--ds-spacing-2, 8px);
+  /* Anchoring context for the leading search glyph (B6-02). Padding stays
+     flat (density-free): the glyph's absolute offset references it exactly. */
+  position: relative;
+  padding: var(--ds-spacing-2);
 }
 .rottay-transfer.rottay-transfer--modern div:has(> [data-part='panel-search']):has(> [data-part='panel-search']) {
   border-bottom: 1px solid var(--ds-color-border);
 }
 
+/* Leading search glyph (B6-02): decorative (aria-hidden in the engine),
+   vertically centered in the cell, parked inside the input's visual box;
+   logical inset flips with RTL together with the input's inline-start
+   padding. */
+.rottay-transfer.rottay-transfer--modern [data-part='panel-search-icon'] {
+  position: absolute;
+  inset-inline-start: calc(var(--ds-spacing-2) + var(--ds-spacing-2));
+  inset-block-start: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  color: var(--ds-color-text-muted);
+  pointer-events: none;
+}
+
 .rottay-transfer.rottay-transfer--modern [data-part='panel-search'] {
   inline-size: 100%;
   padding: 4px var(--ds-input-sm-padding-x, 10px);
+  /* B6-02: reserve the leading-icon box. ADDITIVE declaration after the
+     pinned shorthand — the K4-D paint-ownership pin matches the shorthand
+     verbatim and keeps passing; the logical longhand wins in cascade order
+     and flips free under RTL. */
+  padding-inline-start: var(--_ds-proto-transfer-search-icon-inset, 1.75rem);
   font-size: var(--ds-input-sm-font-size, 13px);
   transition: border-color var(--ds-motion-normal);
   border-radius: var(--ds-input-radius, var(--ds-radius-md));
@@ -161,12 +207,17 @@
 }
 .rottay-transfer.rottay-transfer--modern [data-part='panel-search'][data-part='panel-search']:focus {
   border-color: var(--ds-color-primary);
+  box-shadow: var(--ds-input-shadow-focus, var(--ds-focus-ring));
 }
 /* Governed placeholder channel (K4-D Pass 2), same law as the Mentions
    textarea: not the UA-default reduced-alpha ink. */
 .rottay-transfer.rottay-transfer--modern [data-part='panel-search']::placeholder {
   color: var(--ds-transfer-search-placeholder-color, var(--ds-input-color-placeholder, var(--ds-color-text-muted)));
-  opacity: var(--ds-input-placeholder-opacity, 1);
+  opacity: var(--ds-input-placeholder-opacity);
+}
+.rottay-transfer.rottay-transfer--modern [data-part='panel-search']:disabled {
+  cursor: var(--ds-transfer-button-disabled-cursor, var(--ds-button-disabled-cursor, not-allowed));
+  opacity: var(--ds-transfer-button-disabled-opacity, var(--ds-button-disabled-opacity, 0.6));
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel-list'] {
@@ -183,7 +234,11 @@
 .rottay-transfer.rottay-transfer--modern [data-part='panel-item'] {
   display: flex;
   align-items: center;
-  gap: var(--ds-spacing-2, 8px);
+  gap: var(--ds-spacing-2);
+  /* B6-02: real row padding (density-scaled) — the hover/selected wash now
+     reads as a full row pill instead of hugging the text. */
+  padding-block: calc(var(--ds-spacing-1) * var(--ds-density-effective-scale));
+  padding-inline: calc(var(--ds-spacing-2) * var(--ds-density-effective-scale));
   border-radius: var(--ds-transfer-item-radius, var(--ds-radius-md));
   cursor: pointer;
   transition: background-color var(--ds-motion-fast), color var(--ds-motion-fast);
@@ -236,17 +291,26 @@
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel-empty'] {
-  padding: var(--ds-spacing-4, 16px);
+  padding: var(--ds-spacing-4);
   text-align: center;
   color: var(--ds-color-text-secondary);
+}
+/* Governed empty glyph (B6-02): decorative, centered above the copy, muted
+   ink — anatomy, not bare text. */
+.rottay-transfer.rottay-transfer--modern [data-part='panel-empty-icon'] {
+  display: flex;
+  justify-content: center;
+  margin-block-end: var(--ds-spacing-1);
+  color: var(--ds-color-text-muted);
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel-pagination'] {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--ds-spacing-1, 4px);
-  padding: var(--ds-spacing-2, 8px);
+  gap: var(--ds-spacing-1);
+  /* Density (B6-02): footer rhythm scales with the governed channel. */
+  padding: calc(var(--ds-spacing-2) * var(--ds-density-effective-scale));
 }
 .rottay-transfer.rottay-transfer--modern [data-part='panel-pagination'][data-part='panel-pagination'] {
   border-top: 1px solid var(--ds-color-border);
@@ -265,21 +329,27 @@
 }
 /* The ghost-button hover repaint lives in the shared `media (hover: hover)`
    block above (single grammar for row + buttons). */
-/* RTL: the hardcoded ‹/› glyphs are physical; mirror them so prev/next
- * keep pointing at the logical page direction. */
-[dir='rtl'] .rottay-transfer.rottay-transfer--modern [data-part='pagination-button'] {
-  transform: scaleX(-1);
-}
+/* RTL (second pass, owner correction): the whole-button `scaleX(-1)` mirror
+   that lived here dated from the physical `‹`/`›` glyph era. The engine now
+   renders `navigation.back`/`navigation.forward` icon roles with
+   `autoMirror: true` (they self-mirror via semantic-icon.css), so the flip
+   netted the glyphs back to identity under RTL -- wrong logical direction --
+   and mirrored any custom content. Production follows the law: the rule is
+   REMOVED and the stale paint-ownership pin (`skin pins: the physical
+   pagination glyphs mirror under [dir=rtl]`) goes to the Codex repin list. */
 
 .rottay-transfer.rottay-transfer--modern [data-part='panel-pagination'] > span {
-  font-size: var(--ds-font-size-xs, 12px);
+  font-size: var(--ds-font-size-xs);
   color: var(--ds-color-text-secondary);
+  /* Page counts are metrics: tabular numerals keep the indicator width
+     stable while paging (B1.2). */
+  font-variant-numeric: tabular-nums;
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='operations'] {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-spacing-2, 8px);
+  gap: var(--ds-spacing-2);
 }
 
 .rottay-transfer.rottay-transfer--modern [data-part='move-button'] {
@@ -293,19 +363,28 @@
   cursor: pointer;
   /* Never `all`: only the channels this skin actually repaints. */
   transition:
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: 50%;
   border: none;
 }
 /* The move-button hover repaint shares the `media (hover: hover)` block
-   above; the RTL mirror flips the physical </> glyphs toward the logical
-   target/source panels (the panels themselves mirror with direction). */
-[dir='rtl'] .rottay-transfer.rottay-transfer--modern [data-part='move-button'] {
-  transform: scaleX(-1);
+   above. No RTL mirror here (second pass): the default glyphs are the
+   autoMirror `navigation.*` icon roles (they flip themselves under
+   `:dir(rtl)` via semantic-icon.css), and custom `operations` content must
+   never be mirrored -- the former whole-button `scaleX(-1)` double-mirrored
+   the first and mirrored the second. */
+
+/* Governed focus ring (B6-02): these ghost buttons previously exposed only
+   the UA default outline. The ring is independent from the hover repaint
+   (focus law) and re-maps to Highlight under forced colors below. */
+.rottay-transfer.rottay-transfer--modern [data-part='move-button']:focus-visible,
+.rottay-transfer.rottay-transfer--modern [data-part='pagination-button']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 /* Disabled posture (K4-D Pass 2 adjudication): until now enabled and
@@ -320,8 +399,8 @@
   cursor: var(--ds-transfer-button-disabled-cursor, var(--ds-button-disabled-cursor, not-allowed));
   opacity: var(--ds-transfer-button-disabled-opacity, var(--ds-button-disabled-opacity, 0.6));
 }
-.rottay-transfer.rottay-transfer--modern [data-part='panel-select-all']:disabled,
-.rottay-transfer.rottay-transfer--modern [data-part='panel-item-checkbox']:disabled {
+.rottay-transfer.rottay-transfer--modern [data-part='panel-select-all'][data-disabled='true'],
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item-checkbox'][data-disabled='true'] {
   cursor: var(--ds-transfer-button-disabled-cursor, var(--ds-button-disabled-cursor, not-allowed));
 }
 
@@ -375,6 +454,21 @@
   .rottay-transfer.rottay-transfer--modern [data-part='panel-item']:not([data-disabled='true']):active {
     background: Highlight;
     color: HighlightText;
+  }
+  /* B6-02: disabled rows re-map to GrayText (opacity alone is not a signal
+     in the forced palette — Tree B4-04 adjudication); the governed ring and
+     the decorative glyphs re-map to system colors. */
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-item'][data-disabled='true'] {
+    color: GrayText;
+  }
+  .rottay-transfer.rottay-transfer--modern [data-part='move-button']:focus-visible,
+  .rottay-transfer.rottay-transfer--modern [data-part='pagination-button']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+  }
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-search-icon'],
+  .rottay-transfer.rottay-transfer--modern [data-part='panel-empty-icon'] {
+    color: CanvasText;
   }
   .rottay-transfer.rottay-transfer--modern [data-part='move-button'],
   .rottay-transfer.rottay-transfer--modern [data-part='pagination-button'] {

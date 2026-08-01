@@ -49,8 +49,9 @@ export interface SkeletonTransitionProps {
 /**
  * Crossfades a Skeleton placeholder into its real content.
  *
- * Both `skeleton` and `children` occupy the same CSS grid cell
- * (`gridArea: '1 / 1'`) for the lifetime of the component, so the swap is a
+ * Both `skeleton` and `children` occupy the same CSS grid cell (the
+ * `rottay-skeleton-transition` layers share `grid-area: 1 / 1`, skin-owned)
+ * for the lifetime of the component, so the swap is a
  * pure opacity transition with zero layout shift -- content never appears on
  * top of a still-visible skeleton with no transition (a "pop"), and the
  * outgoing skeleton is never removed from the DOM before the incoming
@@ -74,15 +75,24 @@ export const SkeletonTransition = forwardRef<HTMLDivElement, SkeletonTransitionP
       ? 'none'
       : 'opacity var(--ds-motion-fast) var(--ds-motion-ease-out)';
 
+    // The stacking geometry (grid display, the shared cell, the logical
+    // min-inline-size guard) paints from the skeleton-compounds skin against
+    // the `rottay-skeleton-transition` scope and the layer data-parts; inline
+    // style keeps only the dynamic state (opacity, pointer-events) and the
+    // reduced-motion-aware transition (pinned inline by the WO-CRA-07 tests).
     const layerBase: CSSProperties = {
-      gridArea: '1 / 1',
-      minWidth: 0,
       transition: opacityTransition,
     };
 
     return (
-      <div ref={ref} className={className} style={{ display: 'grid', ...style }}>
+      <div
+        ref={ref}
+        data-part="root"
+        className={['rottay-skeleton-transition', className].filter(Boolean).join(' ')}
+        style={style}
+      >
         <div
+          data-part="skeleton"
           aria-hidden={!loading}
           style={{
             ...layerBase,
@@ -93,6 +103,7 @@ export const SkeletonTransition = forwardRef<HTMLDivElement, SkeletonTransitionP
           {skeleton}
         </div>
         <div
+          data-part="content"
           aria-hidden={loading}
           style={{
             ...layerBase,

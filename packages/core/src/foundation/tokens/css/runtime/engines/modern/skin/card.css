@@ -19,6 +19,21 @@
  *     `:not([data-tone])` and means it.
  *   - keyboard focus is an outline, so it cannot erase a tenant's chosen depth
  *     or selected-state shadow. Variant elevation remains independently tunable.
+ *
+ * Phase B (second premium pass) additions:
+ *
+ *   - nested-material grammar: every radius rule publishes the resolved corner
+ *     as `--_ds-card-radius-current`; the body re-publishes a derived
+ *     `--_ds-card-nest-radius` (parent radius minus a bounded inset) so a card
+ *     rendered inside another card's body gets CONCENTRIC corners instead of
+ *     two unrelated rounded rectangles. The shared premium contract supplies
+ *     the resting floor through `--ds-premium-card-min-height`.
+ *   - title/action baseline alignment in this engine's own header.
+ *   - the elevated variant carries an intensity-scaled optical top keyline
+ *     (material layer 4) composed with the tenant shadow.
+ *   - `--ds-premium-card-footer-border` is consumed as the quiet default of
+ *     the actions-rail divider (the tenant `--ds-card-footer-border` still
+ *     wins when emitted).
  */
 
 /* base */
@@ -26,6 +41,7 @@
   position: relative;
   container-type: inline-size;
   min-inline-size: 0;
+  min-block-size: var(--ds-premium-card-min-height);
   overflow: hidden;
   isolation: isolate;
   color: var(--ds-card-color, var(--ds-color-text-primary));
@@ -53,18 +69,24 @@
   z-index: 0;
   pointer-events: none;
   border-radius: inherit;
-  background: var(--ds-card-state-overlay, transparent);
+  background: var(--ds-card-state-overlay);
   opacity: 0;
   transition: opacity var(--ds-card-transition-duration) var(--ds-card-transition-timing);
 }
 
-.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) {
-  color: var(--ds-card-color-hover, var(--ds-card-color));
-  transform: var(--ds-card-interactive-transform-hover, var(--ds-card-hover-transform, translateY(-1px)));
-}
+/* Hover paint exists only where the pointer can hover (`@media (hover:
+   hover)`). On touch the behavior core still stamps `hovered` during a tap;
+   the pressed posture below is the tactile equivalent (the same gate the
+   Button skin documents). */
+@media (hover: hover) {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) {
+    color: var(--ds-card-color-hover, var(--ds-card-color));
+    transform: var(--ds-card-interactive-transform-hover, var(--ds-card-hover-transform, translateY(-1px)));
+  }
 
-.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true'])::after {
-  opacity: var(--ds-card-state-overlay-hover-opacity, 0.42);
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true'])::after {
+    opacity: var(--ds-card-state-overlay-hover-opacity);
+  }
 }
 
 /* a card that paints a pointer; a card that is actually operable */
@@ -77,54 +99,67 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* radius */
+/* radius: each rule also publishes the resolved corner so nested surfaces can
+   derive a concentric radius (see the nesting grammar at the end of the file) */
 .ds-card.ds-card--modern[data-part='root'][data-radius='none'] {
   border-radius: 0;
+  --_ds-card-radius-current: 0px;
 }
 .ds-card.ds-card--modern[data-part='root'][data-radius='sm'] {
-  border-radius: var(--ds-card-radius-sm, 4px);
+  border-radius: var(--ds-card-radius-sm);
+  --_ds-card-radius-current: var(--ds-card-radius-sm);
 }
 .ds-card.ds-card--modern[data-part='root'][data-radius='md'] {
-  border-radius: var(--ds-card-radius, 12px);
+  border-radius: var(--ds-card-radius);
+  --_ds-card-radius-current: var(--ds-card-radius);
 }
 .ds-card.ds-card--modern[data-part='root'][data-radius='lg'] {
-  border-radius: var(--ds-card-radius-lg, 12px);
+  border-radius: var(--ds-card-radius-lg);
+  --_ds-card-radius-current: var(--ds-card-radius-lg);
 }
 .ds-card.ds-card--modern[data-part='root'][data-radius='xl'] {
-  border-radius: var(--ds-card-radius-xl, 16px);
+  border-radius: var(--ds-card-radius-xl);
+  --_ds-card-radius-current: var(--ds-card-radius-xl);
 }
 
 /* variant, at rest */
 .ds-card.ds-card--modern[data-part='root'][data-variant='elevated'] {
   background-color: var(--ds-card-elevated-bg, var(--ds-card-bg, var(--ds-surface-card)));
-  background-image: linear-gradient(var(--ds-card-elevation-surface), var(--ds-card-elevation-surface)), var(--ds-card-surface-gradient, var(--ds-gradient-surface, none));
-  border: var(--ds-card-elevated-border-width, 0) solid var(--ds-card-border, transparent);
-  box-shadow: var(--ds-card-elevated-shadow, var(--ds-card-shadow));
+  background-image: linear-gradient(var(--ds-card-elevation-surface), var(--ds-card-elevation-surface)), var(--ds-card-surface-gradient, var(--ds-gradient-surface));
+  border: var(--ds-card-elevated-border-width) solid var(--ds-card-border);
+  /* material layer 4 (optical edge): an intensity-scaled inset top keyline
+     composed with the tenant elevation. At --ds-effect-intensity: 0 the
+     keyline dissolves while the shadow channel keeps the hierarchy. The
+     hover/selected shadows replace this list wholesale — their stronger
+     frame subsumes the keyline. */
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(72% * var(--ds-effect-intensity)), transparent),
+    var(--ds-card-elevated-shadow, var(--ds-card-shadow));
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='outlined'] {
   background-color: var(--ds-card-bordered-bg, var(--ds-card-bg, var(--ds-surface-card)));
-  background-image: var(--ds-card-surface-gradient, var(--ds-gradient-surface, none));
-  border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, 1px)) solid var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))));
-  box-shadow: var(--ds-card-bordered-shadow, none);
+  background-image: var(--ds-card-surface-gradient, var(--ds-gradient-surface));
+  border: var(--ds-card-bordered-border-width, var(--ds-card-border-width)) solid var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))));
+  box-shadow: var(--ds-card-bordered-shadow);
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='filled'] {
   background-color: var(--ds-card-flat-bg, var(--ds-card-bg, var(--ds-surface-panel)));
-  background-image: var(--ds-card-surface-gradient, var(--ds-gradient-surface, none));
-  border: var(--ds-card-flat-border-width, 0) solid var(--ds-card-border, transparent);
-  box-shadow: var(--ds-card-flat-shadow, none);
+  background-image: var(--ds-card-surface-gradient, var(--ds-gradient-surface));
+  border: var(--ds-card-flat-border-width) solid var(--ds-card-border);
+  box-shadow: var(--ds-card-flat-shadow);
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='ghost'] {
-  background-color: var(--ds-card-ghost-bg, transparent);
+  background-color: var(--ds-card-ghost-bg);
   background-image: none;
-  border: 0 solid var(--ds-card-border, var(--ds-card-ghost-border-color, transparent));
-  box-shadow: var(--ds-card-ghost-shadow, none);
+  border: 0 solid var(--ds-card-border, var(--ds-card-ghost-border-color));
+  box-shadow: var(--ds-card-ghost-shadow);
 }
 
 /* Orthogonal frame/elevation switches. Variant chooses the material; these
    explicit props decide whether its frame and depth are visible. */
 .ds-card.ds-card--modern[data-part='root'][data-bordered='true']:not([data-variant='ghost']) {
-  border-width: var(--ds-card-border-width, 1px);
-  border-style: var(--ds-card-border-style, solid);
+  border-width: var(--ds-card-border-width);
+  border-style: var(--ds-card-border-style);
 }
 .ds-card.ds-card--modern[data-part='root'][data-bordered='false'] {
   border-color: transparent;
@@ -138,20 +173,22 @@
 
 /* The shared hover fill is a white-label state channel, independent from the
    selected/pressed terminal states below. Semantic tones retain their hue and
-   use the state wash instead. */
-.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-tone]):not([data-selected='true']):not([data-disabled='true']) {
-  background-color: var(--ds-card-bg-hover, var(--ds-material-card-background-hover, var(--ds-card-bg)));
-}
+   use the state wash instead. Gated to hover-capable pointers (see above). */
+@media (hover: hover) {
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-tone]):not([data-selected='true']):not([data-disabled='true']) {
+    background-color: var(--ds-card-bg-hover, var(--ds-material-card-background-hover, var(--ds-card-bg)));
+  }
 
-/* hover, only on an interactive card, and only where the variant answers */
-.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-disabled='true']) {
-  --ds-elevation-lift: 1;
-}
-.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-disabled='true']):not([data-shadowed='false']) {
-  box-shadow: var(--ds-card-elevated-shadow-hover, var(--ds-card-shadow-hover));
-}
-.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='outlined'][data-state~='hovered']:not([data-tone]):not([data-disabled='true']) {
-  border-color: var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))));
+  /* hover, only on an interactive card, and only where the variant answers */
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-disabled='true']) {
+    --ds-elevation-lift: 1;
+  }
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered']:not([data-disabled='true']):not([data-shadowed='false']) {
+    box-shadow: var(--ds-card-elevated-shadow-hover, var(--ds-card-shadow-hover));
+  }
+  .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='outlined'][data-state~='hovered']:not([data-tone]):not([data-disabled='true']) {
+    border-color: var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))));
+  }
 }
 .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-disabled='true']) {
   transform: var(--ds-card-active-transform, translateY(0) scale(0.995));
@@ -163,7 +200,7 @@
   box-shadow: var(--ds-card-shadow-active, var(--ds-card-shadow));
 }
 .ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-state~='pressed']:not([data-disabled='true'])::after {
-  opacity: var(--ds-card-state-overlay-active-opacity, 0.68);
+  opacity: var(--ds-card-state-overlay-active-opacity);
 }
 
 .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-disabled='true']) {
@@ -177,13 +214,13 @@
   box-shadow: var(--ds-card-shadow-selected, var(--ds-card-focus-ring));
 }
 .ds-card.ds-card--modern[data-part='root'][data-selectable='true'][data-selected='true']:not([data-disabled='true'])::after {
-  opacity: var(--ds-card-state-overlay-selected-opacity, 0.3);
+  opacity: var(--ds-card-state-overlay-selected-opacity);
 }
 
 /* Focus is an outline, so it never destroys tenant elevation or selection. */
 .ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-state~='focus-visible']:not([data-disabled='true']) {
-  outline: var(--ds-card-focus-ring-width, var(--ds-focus-ring-width, 2px)) solid var(--ds-card-focus-ring-color, var(--ds-focus-ring-color));
-  outline-offset: var(--ds-card-focus-ring-offset, 2px);
+  outline: var(--ds-card-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-card-focus-ring-color, var(--ds-focus-ring-color));
+  outline-offset: var(--ds-card-focus-ring-offset);
 }
 
 /* colour tone: it wins the border and the fill, and it suppresses the surface tint */
@@ -251,7 +288,7 @@
 /* ---- loading: the cover placeholder (a fill the real cover wrapper never has) ---- */
 .ds-card.ds-card--modern[data-part='root'][data-loading='true'] > [data-part='cover'] {
   height: var(--ds-card-cover-height, var(--ds-card-cover-min-height));
-  opacity: var(--ds-card-loading-cover-opacity, 0.6);
+  opacity: var(--ds-card-loading-cover-opacity);
   background-color: var(--ds-surface-inset);
 }
 
@@ -262,24 +299,24 @@
   background-image: linear-gradient(
     100deg,
     transparent 18%,
-    var(--ds-card-skeleton-highlight, transparent) 48%,
+    var(--ds-card-skeleton-highlight) 48%,
     transparent 78%
   );
   background-size: 220% 100%;
-  border-radius: var(--ds-card-skeleton-radius, var(--ds-radius-sm, 6px));
+  border-radius: var(--ds-card-skeleton-radius, var(--ds-radius-sm));
   animation: ds-card-skeleton-sweep var(--ds-card-skeleton-duration, var(--ds-motion-glacial)) var(--ds-card-transition-timing) infinite;
 }
 .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton'] {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-card-skeleton-gap, var(--ds-spacing-3, 12px));
-  opacity: var(--ds-card-loading-skeleton-opacity, 0.52);
+  gap: var(--ds-card-skeleton-gap, var(--ds-spacing-3));
+  opacity: var(--ds-card-loading-skeleton-opacity);
 }
 .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='skeleton-stack'] {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-card-skeleton-stack-gap, var(--ds-spacing-2, 8px));
-  margin-block-start: var(--ds-card-skeleton-stack-margin-top, var(--ds-spacing-1, 4px));
+  gap: var(--ds-card-skeleton-stack-gap, var(--ds-spacing-2));
+  margin-block-start: var(--ds-card-skeleton-stack-margin-top, var(--ds-spacing-1));
 }
 
 /* ---- loading: the frosted spinner scrim ---- */
@@ -291,17 +328,17 @@
   align-items: center;
   justify-content: center;
   opacity: 1;
-  backdrop-filter: blur(var(--ds-card-loading-backdrop-blur, 4px));
-  -webkit-backdrop-filter: blur(var(--ds-card-loading-backdrop-blur, 4px));
+  backdrop-filter: blur(var(--ds-card-loading-backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--ds-card-loading-backdrop-blur));
   background-color: var(--ds-card-loading-overlay-bg, color-mix(in srgb, var(--ds-surface-card) 60%, transparent));
   border-radius: inherit;
   transition: opacity var(--ds-motion-feedback) var(--ds-motion-ease-enter);
 }
 .ds-card.ds-card--modern[data-part='root'][data-loading='true'] [data-part='spinner'] {
   display: block;
-  width: var(--ds-card-spinner-size, 24px);
-  height: var(--ds-card-spinner-size, 24px);
-  border: var(--ds-card-spinner-stroke, 2px) solid var(--ds-card-spinner-track, var(--ds-color-border));
+  width: var(--ds-card-spinner-size);
+  height: var(--ds-card-spinner-size);
+  border: var(--ds-card-spinner-stroke) solid var(--ds-card-spinner-track, var(--ds-color-border));
   border-block-start-color: var(--ds-card-spinner-color, var(--ds-color-primary));
   border-radius: 50%;
   animation: ds-card-spinner-rotate var(--ds-card-spinner-duration, var(--ds-motion-glacial)) linear infinite;
@@ -309,16 +346,16 @@
 
 /* ---- body ---- */
 .ds-card.ds-card--modern[data-part='root'] {
-  --ds-card-padding-current: var(--ds-card-padding-md, var(--ds-card-md-padding, 16px));
+  --ds-card-padding-current: var(--ds-card-padding-md, var(--ds-card-md-padding));
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='none'] {
   --ds-card-padding-current: 0;
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='sm'] {
-  --ds-card-padding-current: var(--ds-card-padding-sm, var(--ds-card-sm-padding, 12px));
+  --ds-card-padding-current: var(--ds-card-padding-sm, var(--ds-card-sm-padding));
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='lg'] {
-  --ds-card-padding-current: var(--ds-card-padding-lg, var(--ds-card-lg-padding, 24px));
+  --ds-card-padding-current: var(--ds-card-padding-lg, var(--ds-card-lg-padding));
 }
 
 /* size axis: density scaling of the header copy and body text. `md`/`lg` keep
@@ -338,10 +375,20 @@
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] {
   min-inline-size: 0;
   padding: var(--ds-card-instance-padding, var(--ds-card-padding-current));
-  color: var(--ds-card-body-color, inherit);
-  font-size: var(--_ds-card-body-font-size-current, var(--ds-card-body-font-size, inherit));
-  line-height: var(--ds-card-body-line-height, inherit);
+  color: var(--ds-card-body-color);
+  font-size: var(--_ds-card-body-font-size-current, var(--ds-card-body-font-size));
+  line-height: var(--ds-card-body-line-height);
   overflow-wrap: anywhere;
+  /* Nested-material grammar: the corner a card nested in this body should
+     wear. Concentric derivation — the parent's resolved radius minus the
+     body inset, bounded at 8px so generous padding never collapses the
+     nested corner to a square. Published on the body (not the root) so a
+     nested card reads the PARENT's value through inheritance while its own
+     body recomputes for the next level down. */
+  --_ds-card-nest-radius: max(
+    0px,
+    calc(var(--_ds-card-radius-current, var(--ds-card-radius)) - min(var(--ds-card-instance-padding, var(--ds-card-padding-current, 0px)), 8px))
+  );
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='loading-content'] {
   position: relative;
@@ -356,13 +403,13 @@
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: var(--ds-card-cover-object-fit, var(--ds-card-media-object-fit, cover));
-  object-position: var(--ds-card-cover-object-position, center);
+  object-fit: var(--ds-card-cover-object-fit, var(--ds-card-media-object-fit));
+  object-position: var(--ds-card-cover-object-position);
 }
 
 .ds-card.ds-card--modern[data-part='root'][data-cover-position='top'] > [data-part='cover'],
 .ds-card.ds-card--modern[data-part='root'][data-cover-position='bottom'] > [data-part='cover'] {
-  aspect-ratio: var(--ds-card-cover-aspect-ratio, var(--ds-card-media-aspect-ratio, 16 / 9));
+  aspect-ratio: var(--ds-card-cover-aspect-ratio, var(--ds-card-media-aspect-ratio));
 }
 
 .ds-card.ds-card--modern[data-part='root'][data-cover-position='start'],
@@ -373,26 +420,29 @@
 }
 .ds-card.ds-card--modern[data-part='root'][data-cover-position='start'] > [data-part='cover'],
 .ds-card.ds-card--modern[data-part='root'][data-cover-position='end'] > [data-part='cover'] {
-  flex: 1 1 var(--ds-card-cover-inline-size, 12rem);
-  min-inline-size: min(100%, var(--ds-card-cover-inline-min-size, 9rem));
-  min-block-size: var(--ds-card-cover-block-min-size, 10rem);
+  flex: 1 1 var(--ds-card-cover-inline-size);
+  min-inline-size: min(100%, var(--ds-card-cover-inline-min-size));
+  min-block-size: var(--ds-card-cover-block-min-size);
 }
 .ds-card.ds-card--modern[data-part='root'][data-cover-position='start'] > [data-part='body'],
 .ds-card.ds-card--modern[data-part='root'][data-cover-position='end'] > [data-part='body'] {
-  flex: 999 1 var(--ds-card-body-inline-min-size, 16rem);
+  flex: 999 1 var(--ds-card-body-inline-min-size);
 }
 
 /* ---- this engine's OWN header (never the Card.Header compound) ---- */
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) {
   display: flex;
-  align-items: flex-start;
+  /* title copy and the trailing actions share one text baseline instead of
+     hanging from unrelated top edges; in the stacked container composition
+     below the cross axis stretches instead. */
+  align-items: baseline;
   justify-content: space-between;
   gap: var(--ds-card-header-gap, var(--ds-card-header-actions-gap));
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header)[data-divider='true'] {
   padding-block-end: var(--ds-card-header-padding-bottom);
   margin-block-end: var(--ds-card-header-padding-bottom);
-  border-block-end: var(--ds-card-header-border-width, 1px) solid var(--ds-card-header-border, var(--ds-color-border));
+  border-block-end: var(--ds-card-header-border-width) solid var(--ds-card-header-border, var(--ds-color-border));
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='extra'] {
   flex: 0 0 auto;
@@ -418,7 +468,7 @@
   color: var(--ds-card-subtitle-color, var(--ds-color-text-secondary));
   font-size: var(--ds-card-subtitle-font-size);
   line-height: var(--ds-card-body-line-height);
-  max-inline-size: var(--ds-card-header-copy-max-width, 68ch);
+  max-inline-size: var(--ds-card-header-copy-max-width);
   overflow-wrap: anywhere;
   text-wrap: pretty;
 }
@@ -433,14 +483,21 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: var(--ds-card-actions-justify, flex-end);
-  border-block-start: var(--ds-card-footer-border-width, 1px) solid var(--ds-card-footer-border, var(--ds-color-border));
-  background-color: var(--ds-card-footer-bg, transparent);
-  gap: var(--ds-card-actions-gap, var(--ds-spacing-2, 8px));
-  margin-block-start: var(--ds-card-actions-margin-top, var(--ds-spacing-4, 16px));
-  padding-block-start: var(--ds-card-actions-padding-top, var(--ds-spacing-4, 16px));
+  /* the tenant footer border wins when emitted; the shared premium contract
+     supplies the quieter default hairline */
+  border-block-start: var(--ds-card-footer-border-width) solid var(--ds-card-footer-border, var(--ds-premium-card-footer-border, var(--ds-color-border)));
+  background-color: var(--ds-card-footer-bg);
+  gap: var(--ds-card-actions-gap, var(--ds-spacing-2));
+  margin-block-start: var(--ds-card-actions-margin-top, var(--ds-spacing-4));
+  padding-block-start: var(--ds-card-actions-padding-top, var(--ds-spacing-4));
 }
 .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] > * {
   max-inline-size: 100%;
+}
+/* empty-region safety: with no header and no content, the rail is the body's
+   only region — its rhythm margin must not become a phantom top gap. */
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions']:first-child {
+  margin-block-start: 0;
 }
 
 @container (max-width: 28rem) {
@@ -450,6 +507,8 @@
 
   .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) {
     flex-direction: column;
+    /* stacked composition: full-width regions, no cross-axis baseline hunt */
+    align-items: stretch;
   }
 
   .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > [data-part='extra'] {
@@ -461,7 +520,7 @@
   .ds-card.ds-card--modern[data-part='root'][data-cover-position='end'] > [data-part='cover'] {
     flex-basis: 100%;
     min-block-size: 0;
-    aspect-ratio: var(--ds-card-cover-aspect-ratio, var(--ds-card-media-aspect-ratio, 16 / 9));
+    aspect-ratio: var(--ds-card-cover-aspect-ratio, var(--ds-card-media-aspect-ratio));
   }
 
   .ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] > * {
@@ -487,40 +546,47 @@
    shadow/radius reach every framed card; the neutral border is added only to an
    untoned card, so a toned card keeps its tone frame. */
 [data-anatomy-card='framed'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
-  border-radius: var(--ds-card-radius, 12px);
+  border-radius: var(--ds-card-radius);
   box-shadow: var(--ds-card-shadow, var(--ds-elevation-1));
 }
 [data-anatomy-card='framed'] .ds-card.ds-card--modern[data-part='root'][data-part='root']:not([data-tone]) {
-  border: var(--ds-card-border-width, 1px) solid var(--ds-card-border, var(--ds-color-border-subtle));
+  border: var(--ds-card-border-width) solid var(--ds-card-border, var(--ds-color-border-subtle));
 }
 
 /* underline: no side/top borders, one block-end hairline, tighter radius, no lift. */
 [data-anatomy-card='underline'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
   border: 0;
   border-block-end: var(--ds-card-underline-border-width, 1px) solid var(--ds-card-border, var(--ds-color-border-subtle));
-  border-radius: var(--ds-card-radius-sm, 4px);
+  border-radius: var(--ds-card-radius-sm);
   box-shadow: none;
 }
 
-/* ghost: no frame at rest; an interactive ghost card tints only on hover. */
+/* ghost: no frame at rest; an interactive ghost card tints only on hover
+   (gated to hover-capable pointers like every other hover paint above). */
 [data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'] {
   border: 0;
   box-shadow: none;
   background-color: transparent;
   background-image: none;
 }
-[data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) {
-  background-color: var(--ds-card-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent));
+@media (hover: hover) {
+  [data-anatomy-card='ghost'] .ds-card.ds-card--modern[data-part='root'][data-part='root'][data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) {
+    background-color: var(--ds-card-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent));
+  }
 }
 
 /* Nesting: a card rendered inside another card's body is grouping, not a new
    surface — it keeps its frame but drops depth at rest so nested composition
-   cannot stack elevations. At (0,7,0) this beats the at-rest variant and
-   anatomy depth rules; the hover rule (0,8,0) still lifts on interaction,
-   and the selected/hover state treatments keep their outline and wash.
-   A tenant can restore nested depth through the channel. */
+   cannot stack elevations, and its corner DERIVES from the parent's resolved
+   radius (concentric grammar, computed on the parent body above) instead of
+   wearing an unrelated second rounding. The tenant can restore nested depth
+   or pin an explicit nested radius through the channels. At (0,7,0) this
+   beats the at-rest variant and anatomy depth rules; the hover rule (0,8,0)
+   still lifts on interaction, and the selected/hover state treatments keep
+   their outline and wash. */
 .ds-card.ds-card--modern [data-part='body'] .ds-card.ds-card--modern[data-part='root'][data-size] {
   box-shadow: var(--ds-card-nested-shadow, none);
+  border-radius: var(--_ds-card-nest-radius, var(--_ds-card-radius-current, var(--ds-card-radius)));
 }
 
 /* Instance-level suppression and unavailable state are terminal even when a
@@ -532,8 +598,8 @@
   box-shadow: none;
 }
 .ds-card.ds-card--modern[data-part='root'][data-disabled='true'] {
-  cursor: var(--ds-card-disabled-cursor, not-allowed);
-  opacity: var(--ds-card-disabled-opacity, var(--ds-state-disabled-opacity, 0.6));
+  cursor: var(--ds-card-disabled-cursor);
+  opacity: var(--ds-card-disabled-opacity, var(--ds-state-disabled-opacity));
   color: var(--ds-card-color-disabled, var(--ds-color-text-disabled));
   background-color: var(--ds-card-bg-disabled, var(--ds-material-card-background-disabled));
   border-color: var(--ds-card-border-disabled, var(--ds-material-card-border-disabled));

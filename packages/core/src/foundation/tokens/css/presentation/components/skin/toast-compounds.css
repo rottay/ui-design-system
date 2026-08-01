@@ -50,4 +50,30 @@
    `<circle data-part='fill'>` sibling, which paints via SVG stroke attributes. */
 .rottay-undo-toast [data-part='track'] > [data-part='fill'] {
   background: var(--ds-color-primary);
+  /* The depletion is a compositor-only scaleX (the engine's keyframes);
+     the bar recedes toward the reading direction's end edge. */
+  transform-origin: left center;
+}
+.rottay-undo-toast:dir(rtl) [data-part='track'] > [data-part='fill'] {
+  transform-origin: right center;
+}
+
+/* Stable, bundle-owned countdown recipes. Per-instance duration and pause
+   state remain data on the element; no component injects executable CSS. */
+@keyframes ds-toast-undo-ring-deplete {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: var(--_ds-toast-undo-ring-circumference);
+  }
+}
+
+@keyframes ds-toast-undo-bar-deplete {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
 }

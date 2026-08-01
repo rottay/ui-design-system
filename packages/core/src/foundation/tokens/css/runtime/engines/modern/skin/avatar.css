@@ -59,21 +59,21 @@
   background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
   isolation: isolate;
   transition:
-    transform var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out),
-    box-shadow var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out),
-    border-color var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out);
+    transform var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing),
+    box-shadow var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing),
+    border-color var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing);
 }
 
 .rottay-avatar.rottay-avatar--modern[data-shape='circle'] > [data-part='mask'] {
-  border-radius: var(--ds-radius-full, 9999px);
+  border-radius: var(--ds-radius-full);
 }
 
 .rottay-avatar.rottay-avatar--modern[data-shape='rounded'] > [data-part='mask'] {
-  border-radius: var(--ds-radius-lg, 12px);
+  border-radius: var(--ds-radius-lg);
 }
 
 .rottay-avatar.rottay-avatar--modern[data-shape='square'] > [data-part='mask'] {
-  border-radius: var(--ds-radius-md, 8px);
+  border-radius: var(--ds-radius-md);
 }
 
 .rottay-avatar.rottay-avatar--modern[data-ring='true'] > [data-part='mask'] {
@@ -87,6 +87,14 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* The reveal: the mask's panel fill is the reserved-geometry placeholder
+     (same shape, zero layout shift); the image fades in once the engine
+     stamps data-loaded after `load` (or a pre-hydration `complete`). */
+  opacity: 0;
+  transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.rottay-avatar.rottay-avatar--modern[data-loaded='true'] > [data-part='mask'] > [data-part='img'] {
+  opacity: 1;
 }
 
 .rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='fallback'] {
@@ -114,6 +122,26 @@
 .rottay-avatar.rottay-avatar--modern[data-size='xl'] > [data-part='mask'] > [data-part='fallback'] {
   font-size: var(--ds-avatar-xl-font-size);
 }
+.rottay-avatar.rottay-avatar--modern[data-size='2xl'] > [data-part='mask'] > [data-part='fallback'] {
+  font-size: var(--ds-avatar-2xl-font-size);
+}
+.rottay-avatar.rottay-avatar--modern[data-size='3xl'] > [data-part='mask'] > [data-part='fallback'] {
+  font-size: var(--ds-avatar-3xl-font-size);
+}
+
+/* ---- empty-fallback glyph (P2): the governed entity.person role the engine
+        renders when neither initials nor children exist. It rides the DECLARED
+        `--ds-avatar-fallback-icon-*` channels (60% of the mask, currentColor) --
+        proportional across the whole size ladder, inked by the variant's
+        contrast-law ink through inheritance. CSS sizing outranks the svg's
+        width/height attributes (the corpus idiom, same as image.css's
+        fallback-icon rule); both channels are component-token-declared, so
+        they stay bare per fallback parity. ---- */
+.rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='fallback'] > [data-icon-name] {
+  inline-size: var(--ds-avatar-fallback-icon-size);
+  block-size: var(--ds-avatar-fallback-icon-size);
+  color: var(--ds-avatar-fallback-icon-color);
+}
 
 /* The default variant is the one avatar most trees render, so it must be
    legible without any tenant tuning: a light neutral fill with a dark neutral
@@ -137,29 +165,29 @@
 .rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-default-bg, var(--ds-color-neutral-100)));
   color: var(--ds-avatar-default-color, var(--ds-color-neutral-600));
-  font-weight: var(--ds-avatar-font-weight, var(--ds-font-weight-medium, 500));
+  font-weight: var(--ds-avatar-font-weight, var(--ds-font-weight-medium));
   letter-spacing: var(--ds-avatar-initials-tracking, 0.01em);
   user-select: none;
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='primary'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, var(--ds-avatar-primary-solid-bg, var(--ds-color-primary)));
-  color: var(--ds-avatar-primary-ink, var(--ds-color-primary-foreground, var(--ds-color-text-inverse, #fff)));
+  color: var(--ds-avatar-primary-ink, var(--ds-color-primary-foreground, var(--ds-color-text-inverse)));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='secondary'] > [data-part='mask'] > [data-part='fallback'] {
-  background: var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900, #171717) 18%)));
-  color: var(--ds-avatar-secondary-ink, var(--ds-color-white, #fff));
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-solid-bg, color-mix(in srgb, var(--ds-color-secondary) 82%, var(--ds-color-neutral-900) 18%)));
+  color: var(--ds-avatar-secondary-ink, var(--ds-color-white));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='success'] > [data-part='mask'] > [data-part='fallback'] {
-  background: var(--ds-avatar-custom-bg, var(--ds-avatar-success-solid-bg, color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900, #171717) 38%)));
-  color: var(--ds-avatar-success-ink, var(--ds-color-white, #fff));
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-success-solid-bg, color-mix(in srgb, var(--ds-color-success) 62%, var(--ds-color-neutral-900) 38%)));
+  color: var(--ds-avatar-success-ink, var(--ds-color-white));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='warning'] > [data-part='mask'] > [data-part='fallback'] {
-  background: var(--ds-avatar-custom-bg, var(--ds-avatar-warning-solid-bg, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900, #171717) 45%)));
-  color: var(--ds-avatar-warning-ink, var(--ds-color-white, #fff));
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-warning-solid-bg, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%)));
+  color: var(--ds-avatar-warning-ink, var(--ds-color-white));
 }
 .rottay-avatar.rottay-avatar--modern[data-variant='error'] > [data-part='mask'] > [data-part='fallback'] {
-  background: var(--ds-avatar-custom-bg, var(--ds-avatar-error-solid-bg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900, #171717) 22%)));
-  color: var(--ds-avatar-error-ink, var(--ds-color-white, #fff));
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-error-solid-bg, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%)));
+  color: var(--ds-avatar-error-ink, var(--ds-color-white));
 }
 
 /* ---- gradient is the only variant that diverges on ink, and the only one that
@@ -167,7 +195,7 @@
 .rottay-avatar.rottay-avatar--modern[data-variant='gradient'] > [data-part='mask'] > [data-part='fallback'] {
   background: var(--ds-avatar-custom-bg, linear-gradient(to bottom right, var(--ds-color-primary), var(--ds-color-secondary)));
   color: var(--ds-avatar-gradient-color);
-  text-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-neutral-900, #171717) 15%, transparent);
+  text-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-neutral-900) 15%, transparent);
 }
 
 /* ---- status dot: the frame and the offset are one object for every status.
@@ -182,12 +210,12 @@
   width: var(--ds-avatar-status-size);
   height: var(--ds-avatar-status-size);
   border: var(--ds-avatar-status-border-width) solid var(--ds-avatar-status-border);
-  border-radius: var(--ds-radius-full, 9999px);
+  border-radius: var(--ds-radius-full);
   transform: translate(var(--ds-avatar-status-offset-x, 25%), 25%);
   transition:
-    opacity var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out),
-    transform var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out),
-    background-color var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing, ease-in-out);
+    opacity var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing),
+    transform var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing),
+    background-color var(--ds-avatar-transition-duration, var(--ds-motion-fast)) var(--ds-avatar-transition-timing);
 }
 :dir(rtl) .rottay-avatar.rottay-avatar--modern,
 .rottay-avatar.rottay-avatar--modern:dir(rtl) {
@@ -206,17 +234,53 @@
   background-color: var(--ds-avatar-status-busy);
 }
 
+/* ---- status dot OPTICAL SCALE: the dot must grow with the avatar it
+        annotates (a 10px dot is a third of an xs avatar and a speck on 3xl).
+        The per-size `--ds-avatar-*-status-size` channels already exist in
+        presentation/components/avatar.css; md stays on the global
+        `--ds-avatar-status-size` (same resolved 10px). These rules sit AFTER
+        the base dot rule and match its (0,4,0) specificity without repeating
+        an attribute, so source order hands them the win. ---- */
+.rottay-avatar.rottay-avatar--modern[data-size='xs'] > [data-part='status-dot'] {
+  width: var(--ds-avatar-xs-status-size, var(--ds-avatar-status-size));
+  height: var(--ds-avatar-xs-status-size, var(--ds-avatar-status-size));
+}
+.rottay-avatar.rottay-avatar--modern[data-size='sm'] > [data-part='status-dot'] {
+  width: var(--ds-avatar-sm-status-size, var(--ds-avatar-status-size));
+  height: var(--ds-avatar-sm-status-size, var(--ds-avatar-status-size));
+}
+.rottay-avatar.rottay-avatar--modern[data-size='lg'] > [data-part='status-dot'] {
+  width: var(--ds-avatar-lg-status-size, var(--ds-avatar-status-size));
+  height: var(--ds-avatar-lg-status-size, var(--ds-avatar-status-size));
+}
+.rottay-avatar.rottay-avatar--modern[data-size='xl'] > [data-part='status-dot'] {
+  width: var(--ds-avatar-xl-status-size, var(--ds-avatar-status-size));
+  height: var(--ds-avatar-xl-status-size, var(--ds-avatar-status-size));
+}
+.rottay-avatar.rottay-avatar--modern[data-size='2xl'] > [data-part='status-dot'] {
+  width: var(--ds-avatar-2xl-status-size, var(--ds-avatar-status-size));
+  height: var(--ds-avatar-2xl-status-size, var(--ds-avatar-status-size));
+}
+.rottay-avatar.rottay-avatar--modern[data-size='3xl'] > [data-part='status-dot'] {
+  width: var(--ds-avatar-3xl-status-size, var(--ds-avatar-status-size));
+  height: var(--ds-avatar-3xl-status-size, var(--ds-avatar-status-size));
+}
+
 /* ---- interactive avatar: pointer feedback and keyboard focus. The mask is the
-        visual object, so the lift and the ring land on it, not the layout root. ---- */
-.rottay-avatar.rottay-avatar--modern[data-interactive='true']:hover > [data-part='mask'] {
-  transform: var(--ds-avatar-hover-transform, scale(var(--ds-avatar-hover-scale, 1.05)));
-  box-shadow:
-    0 0 0 1px var(--ds-avatar-ring-color, var(--ds-avatar-hover-border-color, var(--ds-color-primary-300, var(--ds-color-primary)))),
-    var(--ds-avatar-hover-shadow, 0 4px 12px color-mix(in srgb, var(--ds-color-neutral-900, #171717) 12%, transparent));
+        visual object, so the lift and the ring land on it, not the layout root.
+        Hover paint is hover-capable-only (4th-wave law): on touch the :active
+        press below is the tactile equivalent, with no ghost hover sticking. ---- */
+@media (hover: hover) {
+  .rottay-avatar.rottay-avatar--modern[data-interactive='true']:hover > [data-part='mask'] {
+    transform: var(--ds-avatar-hover-transform, scale(var(--ds-avatar-hover-scale)));
+    box-shadow:
+      0 0 0 1px var(--ds-avatar-ring-color, var(--ds-avatar-hover-border-color, var(--ds-color-primary-300, var(--ds-color-primary)))),
+      var(--ds-avatar-hover-shadow, 0 4px 12px color-mix(in srgb, var(--ds-color-neutral-900) 12%, transparent));
+  }
 }
 
 .rottay-avatar.rottay-avatar--modern[data-interactive='true']:active > [data-part='mask'] {
-  transform: var(--ds-avatar-press-transform, scale(var(--ds-avatar-active-scale, 0.98)));
+  transform: var(--ds-avatar-press-transform, scale(var(--ds-avatar-active-scale)));
 }
 
 .rottay-avatar.rottay-avatar--modern[data-interactive='true']:focus-visible {
@@ -226,8 +290,8 @@
 .rottay-avatar.rottay-avatar--modern[data-interactive='true']:focus-visible > [data-part='mask'] {
   box-shadow: var(
     --ds-avatar-focus-ring,
-    0 0 0 var(--ds-avatar-focus-ring-offset, 2px) var(--ds-surface-card-bg, var(--ds-color-bg-elevated, #fff)),
-    0 0 0 calc(var(--ds-avatar-focus-ring-offset, 2px) + var(--ds-avatar-focus-ring-width, 2px))
+    0 0 0 var(--ds-avatar-focus-ring-offset) var(--ds-surface-card-bg, var(--ds-color-bg-elevated)),
+    0 0 0 calc(var(--ds-avatar-focus-ring-offset) + var(--ds-avatar-focus-ring-width))
       var(--ds-avatar-focus-ring-color, var(--ds-color-primary-500, var(--ds-color-primary)))
   );
 }
@@ -237,12 +301,30 @@
         typography channels stay inline in the compound (engine-agnostic
         geometry); the corner grammar is paint and lives here. ---- */
 .rottay-avatar-group[data-part='root'] > [data-part='surplus'] {
-  border-radius: var(--ds-avatar-group-surplus-radius, var(--ds-radius-full, 9999px));
+  border-radius: var(--ds-avatar-group-surplus-radius, var(--ds-radius-full));
   font-variant-numeric: tabular-nums;
+}
+
+/* ---- coarse pointers: xs/sm avatars are 24/32px, under the 44px touch floor.
+        The hit target grows WITHOUT growing the visual avatar: an invisible
+        ::before centred on the root carries the surplus (the root is already
+        position:relative with overflow:visible). The centred translate is
+        direction-neutral, so RTL needs no fork. ---- */
+@media (hover: none), (pointer: coarse) {
+  .rottay-avatar.rottay-avatar--modern[data-interactive='true']::before {
+    content: '';
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: max(100%, var(--ds-avatar-touch-target-min));
+    block-size: max(100%, var(--ds-avatar-touch-target-min));
+    transform: translate(-50%, -50%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-avatar.rottay-avatar--modern > [data-part='mask'],
+  .rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='img'],
   .rottay-avatar.rottay-avatar--modern > [data-part='status-dot'] {
     transition: none;
   }

@@ -157,7 +157,7 @@ describe.each([
 
     const clearButton = screen
       .getAllByRole('button')
-      .find((button) => button.textContent?.includes('✕'));
+      .find((button) => button.getAttribute('data-part') === 'clear-button');
 
     if (!clearButton) {
       throw new Error('Expected clear button after selecting values');

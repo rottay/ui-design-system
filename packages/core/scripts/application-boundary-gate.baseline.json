@@ -1260,13 +1260,7 @@
         "reason": "R1-P Phase-3 drain transfer (2026-07-27): migrated verbatim from the DS static extension (provenance-gate debt 822->9); same shipped paint, new census location. Kimi visual wave tokenizes; do not grow."
       }
     },
-    "undocumented-ds-writes": {
-      "app-bithire/src/vertical/surface/shell/mobile-tabs/styles.css :: --ds-sheet-max-height": {
-        "count": 2,
-        "owner": "app-bithire/src/vertical/surface/shell/mobile-tabs/styles.css",
-        "reason": "Pre-OLA-5 write to an undocumented --ds-* channel; replace with a documented public hook or an app-owned custom property."
-      }
-    },
+    "undocumented-ds-writes": {},
     "supplier-imports": {},
     "tenant-style-branch": {
       "app-bithire/src/styles/collection-preview-chrome.css :: [data-tenant=\"bithire\"]": {

@@ -9,18 +9,42 @@
  * Every role maps governed channels into private local variables. One shared
  * state machine then paints the component, preventing role blocks from
  * drifting and keeping nested surfaces isolated.
+ *
+ * Phase B (second premium pass) additions — the role projections above are
+ * untouched; everything below the state machine is additive:
+ *
+ *   - Material layer map: base fill (1) and bounded tint/texture (2) come from
+ *     the role background/texture channels; the optical edge (3) is the
+ *     `::before` highlight; state washes (4) are the hover/active/selected
+ *     channel swaps; the focus ring (5) is the independent `::after`. No
+ *     decoration is painted unless a channel authors it, so
+ *     `effectIntensity: 0` tenants keep full canvas → panel → raised
+ *     hierarchy through border, fill and shadow channels alone.
+ *   - Nested-radius grammar: a surface nested inside another derives its
+ *     corner from the parent radius minus a bounded inset (proto axis
+ *     `--_ds-proto-semanticsurface-nest-inset`) — never two unrelated
+ *     rounded rectangles.
+ *   - Bounded glass: callers may opt a `raised` or `overlay` surface into a
+ *     frosted finish through the passthrough hook `data-finish="glass"`. The
+ *     blur scales with `--ds-effect-intensity`, and both
+ *     `prefers-reduced-transparency` and forced-colors collapse it to the
+ *     opaque card surface. Other roles ignore the hook: glass never nests
+ *     through dashboards.
+ *   - Interaction craft: interactive surfaces advertise `cursor: pointer`,
+ *     and the transition targets `background-color` (a paint-only,
+ *     interpolable channel) instead of the `background` shorthand.
  */
 
 /* ── governed role projections ─────────────────────────────────── */
 
 .ds-semantic-surface[data-surface-role="canvas"] {
-  --_surface-background: var(--ds-material-canvas-background, var(--ds-surface-canvas, transparent));
+  --_surface-background: var(--ds-material-canvas-background, var(--ds-surface-canvas));
   --_surface-background-hover: var(--ds-material-canvas-background-hover, var(--_surface-background));
   --_surface-background-active: var(--ds-material-canvas-background-active, var(--_surface-background));
   --_surface-background-selected: var(--ds-material-canvas-background-selected, var(--_surface-background));
   --_surface-background-disabled: var(--ds-material-canvas-background-disabled, var(--_surface-background));
   --_surface-foreground: var(--ds-material-canvas-foreground, inherit);
-  --_surface-foreground-muted: var(--ds-material-canvas-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-muted: var(--ds-material-canvas-foreground-muted, var(--ds-color-text-secondary));
   --_surface-foreground-disabled: var(--ds-material-canvas-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
   --_surface-border: var(--ds-material-canvas-border, transparent);
   --_surface-border-strong: var(--ds-material-canvas-border-strong, var(--_surface-border));
@@ -28,7 +52,7 @@
   --_surface-border-active: var(--ds-material-canvas-border-active, var(--_surface-border));
   --_surface-border-selected: var(--ds-material-canvas-border-selected, var(--_surface-border-strong));
   --_surface-border-disabled: var(--ds-material-canvas-border-disabled, var(--_surface-border));
-  --_surface-focus-ring: var(--ds-material-canvas-focus-ring, var(--ds-focus-ring, none));
+  --_surface-focus-ring: var(--ds-material-canvas-focus-ring, var(--ds-focus-ring));
   --_surface-shadow: var(--ds-material-canvas-shadow, none);
   --_surface-shadow-hover: var(--ds-material-canvas-shadow-hover, var(--_surface-shadow));
   --_surface-shadow-active: var(--ds-material-canvas-shadow-active, var(--_surface-shadow));
@@ -38,13 +62,13 @@
 }
 
 .ds-semantic-surface[data-surface-role="shell"] {
-  --_surface-background: var(--ds-material-shell-background, var(--ds-surface-shell, transparent));
+  --_surface-background: var(--ds-material-shell-background, var(--ds-surface-shell));
   --_surface-background-hover: var(--ds-material-shell-background-hover, var(--_surface-background));
   --_surface-background-active: var(--ds-material-shell-background-active, var(--_surface-background));
   --_surface-background-selected: var(--ds-material-shell-background-selected, var(--_surface-background));
   --_surface-background-disabled: var(--ds-material-shell-background-disabled, var(--_surface-background));
   --_surface-foreground: var(--ds-material-shell-foreground, inherit);
-  --_surface-foreground-muted: var(--ds-material-shell-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-muted: var(--ds-material-shell-foreground-muted, var(--ds-color-text-secondary));
   --_surface-foreground-disabled: var(--ds-material-shell-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
   --_surface-border: var(--ds-material-shell-border, transparent);
   --_surface-border-strong: var(--ds-material-shell-border-strong, var(--_surface-border));
@@ -52,7 +76,7 @@
   --_surface-border-active: var(--ds-material-shell-border-active, var(--_surface-border));
   --_surface-border-selected: var(--ds-material-shell-border-selected, var(--_surface-border-strong));
   --_surface-border-disabled: var(--ds-material-shell-border-disabled, var(--_surface-border));
-  --_surface-focus-ring: var(--ds-material-shell-focus-ring, var(--ds-focus-ring, none));
+  --_surface-focus-ring: var(--ds-material-shell-focus-ring, var(--ds-focus-ring));
   --_surface-shadow: var(--ds-material-shell-shadow, none);
   --_surface-shadow-hover: var(--ds-material-shell-shadow-hover, var(--_surface-shadow));
   --_surface-shadow-active: var(--ds-material-shell-shadow-active, var(--_surface-shadow));
@@ -62,13 +86,13 @@
 }
 
 .ds-semantic-surface[data-surface-role="panel"] {
-  --_surface-background: var(--ds-material-panel-background, var(--ds-surface-panel, transparent));
+  --_surface-background: var(--ds-material-panel-background, var(--ds-surface-panel));
   --_surface-background-hover: var(--ds-material-panel-background-hover, var(--_surface-background));
   --_surface-background-active: var(--ds-material-panel-background-active, var(--_surface-background));
   --_surface-background-selected: var(--ds-material-panel-background-selected, var(--_surface-background));
   --_surface-background-disabled: var(--ds-material-panel-background-disabled, var(--_surface-background));
   --_surface-foreground: var(--ds-material-panel-foreground, inherit);
-  --_surface-foreground-muted: var(--ds-material-panel-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-muted: var(--ds-material-panel-foreground-muted, var(--ds-color-text-secondary));
   --_surface-foreground-disabled: var(--ds-material-panel-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
   --_surface-border: var(--ds-material-panel-border, transparent);
   --_surface-border-strong: var(--ds-material-panel-border-strong, var(--_surface-border));
@@ -76,7 +100,7 @@
   --_surface-border-active: var(--ds-material-panel-border-active, var(--_surface-border));
   --_surface-border-selected: var(--ds-material-panel-border-selected, var(--_surface-border-strong));
   --_surface-border-disabled: var(--ds-material-panel-border-disabled, var(--_surface-border));
-  --_surface-focus-ring: var(--ds-material-panel-focus-ring, var(--ds-focus-ring, none));
+  --_surface-focus-ring: var(--ds-material-panel-focus-ring, var(--ds-focus-ring));
   --_surface-shadow: var(--ds-material-panel-shadow, none);
   --_surface-shadow-hover: var(--ds-material-panel-shadow-hover, var(--_surface-shadow));
   --_surface-shadow-active: var(--ds-material-panel-shadow-active, var(--_surface-shadow));
@@ -86,13 +110,13 @@
 }
 
 .ds-semantic-surface[data-surface-role="card"] {
-  --_surface-background: var(--ds-material-card-background, var(--ds-surface-card, transparent));
+  --_surface-background: var(--ds-material-card-background, var(--ds-surface-card));
   --_surface-background-hover: var(--ds-material-card-background-hover, var(--_surface-background));
   --_surface-background-active: var(--ds-material-card-background-active, var(--_surface-background));
   --_surface-background-selected: var(--ds-material-card-background-selected, var(--_surface-background));
   --_surface-background-disabled: var(--ds-material-card-background-disabled, var(--_surface-background));
   --_surface-foreground: var(--ds-material-card-foreground, inherit);
-  --_surface-foreground-muted: var(--ds-material-card-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-muted: var(--ds-material-card-foreground-muted, var(--ds-color-text-secondary));
   --_surface-foreground-disabled: var(--ds-material-card-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
   --_surface-border: var(--ds-material-card-border, transparent);
   --_surface-border-strong: var(--ds-material-card-border-strong, var(--_surface-border));
@@ -100,7 +124,7 @@
   --_surface-border-active: var(--ds-material-card-border-active, var(--_surface-border));
   --_surface-border-selected: var(--ds-material-card-border-selected, var(--_surface-border-strong));
   --_surface-border-disabled: var(--ds-material-card-border-disabled, var(--_surface-border));
-  --_surface-focus-ring: var(--ds-material-card-focus-ring, var(--ds-focus-ring, none));
+  --_surface-focus-ring: var(--ds-material-card-focus-ring, var(--ds-focus-ring));
   --_surface-shadow: var(--ds-material-card-shadow, none);
   --_surface-shadow-hover: var(--ds-material-card-shadow-hover, var(--_surface-shadow));
   --_surface-shadow-active: var(--ds-material-card-shadow-active, var(--_surface-shadow));
@@ -110,13 +134,13 @@
 }
 
 .ds-semantic-surface[data-surface-role="inset"] {
-  --_surface-background: var(--ds-material-inset-background, var(--ds-surface-inset, transparent));
+  --_surface-background: var(--ds-material-inset-background, var(--ds-surface-inset));
   --_surface-background-hover: var(--ds-material-inset-background-hover, var(--_surface-background));
   --_surface-background-active: var(--ds-material-inset-background-active, var(--_surface-background));
   --_surface-background-selected: var(--ds-material-inset-background-selected, var(--_surface-background));
   --_surface-background-disabled: var(--ds-material-inset-background-disabled, var(--_surface-background));
   --_surface-foreground: var(--ds-material-inset-foreground, inherit);
-  --_surface-foreground-muted: var(--ds-material-inset-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-muted: var(--ds-material-inset-foreground-muted, var(--ds-color-text-secondary));
   --_surface-foreground-disabled: var(--ds-material-inset-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
   --_surface-border: var(--ds-material-inset-border, transparent);
   --_surface-border-strong: var(--ds-material-inset-border-strong, var(--_surface-border));
@@ -124,7 +148,7 @@
   --_surface-border-active: var(--ds-material-inset-border-active, var(--_surface-border));
   --_surface-border-selected: var(--ds-material-inset-border-selected, var(--_surface-border-strong));
   --_surface-border-disabled: var(--ds-material-inset-border-disabled, var(--_surface-border));
-  --_surface-focus-ring: var(--ds-material-inset-focus-ring, var(--ds-focus-ring, none));
+  --_surface-focus-ring: var(--ds-material-inset-focus-ring, var(--ds-focus-ring));
   --_surface-shadow: var(--ds-material-inset-shadow, none);
   --_surface-shadow-hover: var(--ds-material-inset-shadow-hover, var(--_surface-shadow));
   --_surface-shadow-active: var(--ds-material-inset-shadow-active, var(--_surface-shadow));
@@ -134,13 +158,13 @@
 }
 
 .ds-semantic-surface[data-surface-role="control"] {
-  --_surface-background: var(--ds-material-control-background, var(--ds-surface-control, transparent));
+  --_surface-background: var(--ds-material-control-background, var(--ds-surface-control));
   --_surface-background-hover: var(--ds-material-control-background-hover, var(--_surface-background));
   --_surface-background-active: var(--ds-material-control-background-active, var(--_surface-background));
   --_surface-background-selected: var(--ds-material-control-background-selected, var(--_surface-background));
   --_surface-background-disabled: var(--ds-material-control-background-disabled, var(--_surface-background));
   --_surface-foreground: var(--ds-material-control-foreground, inherit);
-  --_surface-foreground-muted: var(--ds-material-control-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-muted: var(--ds-material-control-foreground-muted, var(--ds-color-text-secondary));
   --_surface-foreground-disabled: var(--ds-material-control-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
   --_surface-border: var(--ds-material-control-border, transparent);
   --_surface-border-strong: var(--ds-material-control-border-strong, var(--_surface-border));
@@ -148,7 +172,7 @@
   --_surface-border-active: var(--ds-material-control-border-active, var(--_surface-border));
   --_surface-border-selected: var(--ds-material-control-border-selected, var(--_surface-border-strong));
   --_surface-border-disabled: var(--ds-material-control-border-disabled, var(--_surface-border));
-  --_surface-focus-ring: var(--ds-material-control-focus-ring, var(--ds-focus-ring, none));
+  --_surface-focus-ring: var(--ds-material-control-focus-ring, var(--ds-focus-ring));
   --_surface-shadow: var(--ds-material-control-shadow, none);
   --_surface-shadow-hover: var(--ds-material-control-shadow-hover, var(--_surface-shadow));
   --_surface-shadow-active: var(--ds-material-control-shadow-active, var(--_surface-shadow));
@@ -158,13 +182,13 @@
 }
 
 .ds-semantic-surface[data-surface-role="raised"] {
-  --_surface-background: var(--ds-material-raised-background, var(--ds-surface-raised, transparent));
+  --_surface-background: var(--ds-material-raised-background, var(--ds-surface-raised));
   --_surface-background-hover: var(--ds-material-raised-background-hover, var(--_surface-background));
   --_surface-background-active: var(--ds-material-raised-background-active, var(--_surface-background));
   --_surface-background-selected: var(--ds-material-raised-background-selected, var(--_surface-background));
   --_surface-background-disabled: var(--ds-material-raised-background-disabled, var(--_surface-background));
   --_surface-foreground: var(--ds-material-raised-foreground, inherit);
-  --_surface-foreground-muted: var(--ds-material-raised-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-muted: var(--ds-material-raised-foreground-muted, var(--ds-color-text-secondary));
   --_surface-foreground-disabled: var(--ds-material-raised-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
   --_surface-border: var(--ds-material-raised-border, transparent);
   --_surface-border-strong: var(--ds-material-raised-border-strong, var(--_surface-border));
@@ -172,7 +196,7 @@
   --_surface-border-active: var(--ds-material-raised-border-active, var(--_surface-border));
   --_surface-border-selected: var(--ds-material-raised-border-selected, var(--_surface-border-strong));
   --_surface-border-disabled: var(--ds-material-raised-border-disabled, var(--_surface-border));
-  --_surface-focus-ring: var(--ds-material-raised-focus-ring, var(--ds-focus-ring, none));
+  --_surface-focus-ring: var(--ds-material-raised-focus-ring, var(--ds-focus-ring));
   --_surface-shadow: var(--ds-material-raised-shadow, none);
   --_surface-shadow-hover: var(--ds-material-raised-shadow-hover, var(--_surface-shadow));
   --_surface-shadow-active: var(--ds-material-raised-shadow-active, var(--_surface-shadow));
@@ -182,13 +206,13 @@
 }
 
 .ds-semantic-surface[data-surface-role="overlay"] {
-  --_surface-background: var(--ds-material-overlay-background, var(--ds-surface-overlay, transparent));
+  --_surface-background: var(--ds-material-overlay-background, var(--ds-surface-overlay));
   --_surface-background-hover: var(--ds-material-overlay-background-hover, var(--_surface-background));
   --_surface-background-active: var(--ds-material-overlay-background-active, var(--_surface-background));
   --_surface-background-selected: var(--ds-material-overlay-background-selected, var(--_surface-background));
   --_surface-background-disabled: var(--ds-material-overlay-background-disabled, var(--_surface-background));
   --_surface-foreground: var(--ds-material-overlay-foreground, inherit);
-  --_surface-foreground-muted: var(--ds-material-overlay-foreground-muted, var(--ds-color-text-secondary, inherit));
+  --_surface-foreground-muted: var(--ds-material-overlay-foreground-muted, var(--ds-color-text-secondary));
   --_surface-foreground-disabled: var(--ds-material-overlay-foreground-disabled, var(--ds-color-text-disabled, var(--_surface-foreground-muted)));
   --_surface-border: var(--ds-material-overlay-border, transparent);
   --_surface-border-strong: var(--ds-material-overlay-border-strong, var(--_surface-border));
@@ -196,7 +220,7 @@
   --_surface-border-active: var(--ds-material-overlay-border-active, var(--_surface-border));
   --_surface-border-selected: var(--ds-material-overlay-border-selected, var(--_surface-border-strong));
   --_surface-border-disabled: var(--ds-material-overlay-border-disabled, var(--_surface-border));
-  --_surface-focus-ring: var(--ds-material-overlay-focus-ring, var(--ds-focus-ring, none));
+  --_surface-focus-ring: var(--ds-material-overlay-focus-ring, var(--ds-focus-ring));
   --_surface-shadow: var(--ds-material-overlay-shadow, none);
   --_surface-shadow-hover: var(--ds-material-overlay-shadow-hover, var(--_surface-shadow));
   --_surface-shadow-active: var(--ds-material-overlay-shadow-active, var(--_surface-shadow));
@@ -214,16 +238,29 @@
   background: var(--_surface-texture, none),
     var(--_surface-background, transparent);
   color: var(--_surface-foreground, inherit);
-  border-width: var(--ds-surface-border-width, var(--ds-border-width-1, 1px));
+  border-width: var(--ds-surface-border-width, var(--ds-border-width-1));
   border-style: var(--ds-surface-border-style, solid);
   border-color: var(--_surface-border, transparent);
-  border-radius: var(--ds-surface-radius-md, var(--ds-radius-md, 8px));
+  border-radius: var(--ds-surface-radius-md, var(--ds-radius-md));
   box-shadow: var(--_surface-shadow, none);
+  /* background-color is the interpolable paint channel; the texture layer
+     swaps instantly, which is what a motif change should do. */
   transition:
-    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease);
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+/* Nested-radius grammar: an inner surface derives its corner from the parent
+   radius minus a bounded inset, so nested regions read as one concentric
+   family instead of two unrelated rounded rectangles. The inset is a private
+   proto axis pending adjudication, never a public dial. */
+.ds-semantic-surface .ds-semantic-surface {
+  border-radius: max(
+    0px,
+    calc(var(--ds-surface-radius-md, var(--ds-radius-md)) - var(--_ds-proto-semanticsurface-nest-inset, 4px))
+  );
 }
 
 .ds-semantic-surface::before,
@@ -240,22 +277,41 @@
 }
 
 .ds-semantic-surface::after {
-  box-shadow: var(--_surface-focus-ring, var(--ds-focus-ring, none));
+  box-shadow: var(--_surface-focus-ring, var(--ds-focus-ring));
   opacity: 0;
-  transition: opacity var(--ds-motion-fast, 120ms)
-    var(--ds-motion-ease-out, ease);
+  transition: opacity var(--ds-motion-fast)
+    var(--ds-motion-ease-out);
 }
 
 .ds-semantic-surface[data-emphasis="strong"] {
   border-color: var(--_surface-border-strong, var(--_surface-border));
 }
 
+.ds-semantic-surface[data-interactive="true"] {
+  cursor: pointer;
+}
+
 .ds-semantic-surface > .ds-semantic-surface__support {
-  color: var(--_surface-foreground-muted, var(--ds-color-text-secondary, inherit));
+  color: var(--_surface-foreground-muted, var(--ds-color-text-secondary));
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-normal);
+}
+
+/* Bounded glass finish. Opt-in through the caller-forwarded
+   `data-finish="glass"` hook, and only on the roles where the material law
+   allows frost: bounded `raised` and `overlay` regions. The blur scales with
+   the tenant effect intensity (0 collapses it); the role background channel
+   stays the single source of translucency, so an opaque channel renders a
+   solid surface with no wasted compositing. */
+.ds-semantic-surface[data-finish="glass"][data-surface-role="raised"],
+.ds-semantic-surface[data-finish="glass"][data-surface-role="overlay"] {
+  backdrop-filter: blur(calc(var(--ds-glass-blur-sm) * var(--ds-effect-intensity))) saturate(1.08);
+  -webkit-backdrop-filter: blur(calc(var(--ds-glass-blur-sm) * var(--ds-effect-intensity))) saturate(1.08);
 }
 
 @media (hover: hover) {
-  .ds-semantic-surface[data-interactive="true"]:hover {
+  /* a busy surface is inert: loading suppresses the hover wash */
+  .ds-semantic-surface[data-interactive="true"]:not([data-loading="true"]):hover {
     background: var(--_surface-texture, none),
       var(--_surface-background-hover, var(--_surface-background));
     border-color: var(--_surface-border-hover, var(--_surface-border));
@@ -263,7 +319,7 @@
   }
 }
 
-.ds-semantic-surface[data-interactive="true"]:active {
+.ds-semantic-surface[data-interactive="true"]:not([data-loading="true"]):active {
   background: var(--_surface-texture, none),
     var(--_surface-background-active, var(--_surface-background));
   border-color: var(--_surface-border-active, var(--_surface-border));
@@ -312,12 +368,32 @@
   }
 }
 
+/* Reduced transparency: the frosted finish degrades to the opaque elevated
+   surface, never to a see-through panel. The shorthand also drops any
+   tenant-authored translucent texture layer. Placed after the state machine
+   and matching its interactive selectors, so hover and pressed keep the
+   opaque fallback instead of restoring a translucent channel. */
+@media (prefers-reduced-transparency: reduce) {
+  .ds-semantic-surface[data-finish="glass"],
+  .ds-semantic-surface[data-finish="glass"][data-interactive="true"]:not([data-loading="true"]):hover,
+  .ds-semantic-surface[data-finish="glass"][data-interactive="true"]:not([data-loading="true"]):active {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: var(--ds-surface-card);
+  }
+}
+
 @media (forced-colors: active) {
   .ds-semantic-surface {
     background: Canvas;
     color: CanvasText;
     border-color: CanvasText;
     box-shadow: none;
+  }
+
+  .ds-semantic-surface[data-finish="glass"] {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .ds-semantic-surface::before,

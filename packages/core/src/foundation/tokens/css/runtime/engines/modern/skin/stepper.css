@@ -31,6 +31,26 @@
  * `data-part` on the item + the pseudo-element, and stays a SHORTHAND. The
  * per-status `border-color` repaints tie it at (0,4,1) and win on source
  * order. Backgrounds, colors and custom properties are exempt from the floor.
+ *
+ * PHASE-B PASS 2 (batch-33):
+ * - `data-label-placement` is honored: 'horizontal' (the contract default)
+ *   seats the text column BESIDE the indicator (icon/text row grammar), while
+ *   'vertical' keeps the stacked geometry Pass 1 shipped — the un-keyed base
+ *   rules remain as the fallback frame.
+ * - `data-progress-dot` (boolean) shrinks the circle to a filled status dot
+ *   and `data-part='dot-slot'` hosts the contract's render-function mode
+ *   (steps.css idiom, bounded duplication). Both suppress the numeral/glyph
+ *   via a DOUBLED-attr `:has()` rule that ties the (0,5,1) glyph overrides
+ *   and wins on source order — never a dead hook.
+ * - A custom item icon seats INSIDE the status circle frame: the numeral
+ *   yields (`content: ''`), the frame/ring/status paint stays, and the icon
+ *   ink flips per status (on-primary over the process fill) so status never
+ *   rides icon hue alone. Both cell-mates carry explicit `grid-column` —
+ *   auto-placement would otherwise split them into sibling columns.
+ * - `data-part='subtitle'` is painted (the engine renders it now).
+ * - Hover lifts are gated to `@media (hover: hover)`; the `:active` dip is
+ *   the touch equivalent. Connector ends consume the
+ *   `--_ds-proto-stepper-connector-clearance` axis (one dial, seven sites).
  */
 
 /* ---- root: flex track + the step counter namespace. ---- */
@@ -45,23 +65,23 @@
      track reflow to the vertical geometry when its container no longer fits. */
   container: ds-stepper / inline-size;
   --ds-stepper-current-item-size: var(--ds-stepper-item-size-md, 32px);
-  --ds-stepper-current-item-font-size: var(--ds-stepper-item-font-size-md, var(--ds-font-size-sm, 14px));
-  --ds-stepper-current-label-font-size: var(--ds-stepper-label-font-size-md, var(--ds-font-size-sm, 14px));
-  --ds-stepper-current-description-font-size: var(--ds-stepper-description-font-size-md, var(--ds-font-size-xs, 12px));
+  --ds-stepper-current-item-font-size: var(--ds-stepper-item-font-size-md, var(--ds-font-size-sm));
+  --ds-stepper-current-label-font-size: var(--ds-stepper-label-font-size-md, var(--ds-font-size-sm));
+  --ds-stepper-current-description-font-size: var(--ds-stepper-description-font-size-md, var(--ds-font-size-xs));
 }
 
 .rottay-stepper--modern[data-part='root'][data-size='sm'] {
   --ds-stepper-current-item-size: var(--ds-stepper-item-size-sm, 24px);
-  --ds-stepper-current-item-font-size: var(--ds-stepper-item-font-size-sm, var(--ds-font-size-xs, 12px));
-  --ds-stepper-current-label-font-size: var(--ds-stepper-label-font-size-sm, var(--ds-font-size-xs, 12px));
+  --ds-stepper-current-item-font-size: var(--ds-stepper-item-font-size-sm, var(--ds-font-size-xs));
+  --ds-stepper-current-label-font-size: var(--ds-stepper-label-font-size-sm, var(--ds-font-size-xs));
   --ds-stepper-current-description-font-size: var(--ds-stepper-description-font-size-sm, 11px);
 }
 
 .rottay-stepper--modern[data-part='root'][data-size='lg'] {
   --ds-stepper-current-item-size: var(--ds-stepper-item-size-lg, 40px);
-  --ds-stepper-current-item-font-size: var(--ds-stepper-item-font-size-lg, var(--ds-font-size-md, 16px));
-  --ds-stepper-current-label-font-size: var(--ds-stepper-label-font-size-lg, var(--ds-font-size-md, 16px));
-  --ds-stepper-current-description-font-size: var(--ds-stepper-description-font-size-lg, var(--ds-font-size-sm, 14px));
+  --ds-stepper-current-item-font-size: var(--ds-stepper-item-font-size-lg, var(--ds-font-size-md));
+  --ds-stepper-current-label-font-size: var(--ds-stepper-label-font-size-lg, var(--ds-font-size-md));
+  --ds-stepper-current-description-font-size: var(--ds-stepper-description-font-size-lg, var(--ds-font-size-sm));
 }
 
 .rottay-stepper--modern[data-part='root'][data-direction='horizontal'] {
@@ -90,12 +110,12 @@
   content: '';
   position: absolute;
   inset-block-start: calc(var(--ds-stepper-current-item-size) / 2 - 1px);
-  inset-inline-start: calc(-50% + var(--ds-stepper-current-item-size) / 2 + 4px);
-  inset-inline-end: calc(50% + var(--ds-stepper-current-item-size) / 2 + 4px);
+  inset-inline-start: calc(-50% + var(--ds-stepper-current-item-size) / 2 + var(--_ds-proto-stepper-connector-clearance, 4px));
+  inset-inline-end: calc(50% + var(--ds-stepper-current-item-size) / 2 + var(--_ds-proto-stepper-connector-clearance, 4px));
   block-size: var(--ds-stepper-connector-width, 2px);
-  border-radius: var(--ds-radius-full, 9999px);
+  border-radius: var(--ds-radius-full);
   background: var(--ds-stepper-connector-color, var(--ds-color-border-secondary));
-  transition: background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+  transition: background var(--ds-motion-fast) var(--ds-ease-standard, ease);
 }
 
 /* A connector leads INTO its step: finished and in-progress steps paint the
@@ -121,13 +141,14 @@
 .rottay-stepper--modern[data-part='root'] [data-part='item']::after {
   content: counter(ds-stepper);
   counter-increment: ds-stepper;
+  grid-column: 1;
   grid-row: 1;
   display: flex;
   block-size: var(--ds-stepper-current-item-size);
   inline-size: var(--ds-stepper-current-item-size);
   align-items: center;
   justify-content: center;
-  border-radius: var(--ds-radius-full, 9999px);
+  border-radius: var(--ds-radius-full);
   background: var(--ds-stepper-item-bg, var(--ds-card-bg, var(--ds-surface-card)));
   color: var(--ds-stepper-item-color, var(--ds-color-text-secondary));
   font-size: var(--ds-stepper-current-item-font-size);
@@ -137,11 +158,11 @@
      pagination.css's `--ds-pagination-numeric` precedent). */
   font-variant-numeric: var(--ds-stepper-numeric, tabular-nums);
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast) var(--ds-ease-standard, ease);
 }
 
 /* ---- status paint for the circle (border-color repaints tie (0,4,1), later). ---- */
@@ -204,6 +225,40 @@
     color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
 }
 
+/* ---- boolean progressDot mode: the circle shrinks to a filled status dot.
+        The doubled item attr ties the (0,5,1) glyph overrides above and this
+        later source wins (the P-48 idiom) — the '✓' never survives dot mode. ---- */
+.rottay-stepper--modern[data-part='root'][data-progress-dot='true'] {
+  --ds-stepper-current-item-size: 8px;
+}
+
+.rottay-stepper--modern[data-part='root'][data-progress-dot='true'] [data-part='item'][data-part='item']::after {
+  content: '';
+  padding: 0;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.rottay-stepper--modern[data-part='root'][data-progress-dot='true'] [data-part='item'][data-status='wait']::after {
+  background: var(--ds-stepper-connector-color, var(--ds-color-border-secondary));
+}
+
+/* ---- custom progressDot render slot: replaces the circle outright (the
+        steps.css dot-slot idiom, bounded per-family duplication). ---- */
+.rottay-stepper--modern[data-part='root'] [data-part='dot-slot'] {
+  grid-column: 1;
+  grid-row: 1;
+  display: inline-flex;
+  block-size: var(--ds-stepper-current-item-size);
+  inline-size: var(--ds-stepper-current-item-size);
+  align-items: center;
+  justify-content: center;
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-part='item']:has(> [data-part='dot-slot'])::after {
+  content: none;
+}
+
 /* ---- the text column (real elements): trigger button OR inert content span. ---- */
 .rottay-stepper--modern[data-part='root'] [data-part='content'],
 .rottay-stepper--modern[data-part='root'] [data-part='trigger'] {
@@ -226,15 +281,44 @@
 
 .rottay-stepper--modern[data-part='root'] [data-part='trigger'] {
   cursor: pointer;
-  border-radius: var(--ds-radius-md, 10px);
+  border-radius: var(--ds-radius-md);
 }
 
-.rottay-stepper--modern[data-part='root'] [data-part='icon'] {
-  display: inline-flex;
+/* ---- custom item icon: the engine hoists it to a direct item child and it
+        seats INSIDE the status circle frame (cell 1,1 — both mates carry an
+        explicit grid-column; auto-placement would split them into sibling
+        columns). The numeral/glyph yields via :has (doubled attr ties the
+        (0,5,1) glyph rules, later source wins); the circle keeps its frame,
+        ring and status paint, and the icon ink flips per status — status is
+        never carried by icon hue alone. z-index: the ::after pseudo paints
+        after real children at the same stacking level. ---- */
+.rottay-stepper--modern[data-part='root'] [data-part='item'] > [data-part='icon'] {
+  position: relative;
+  z-index: 1;
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  block-size: var(--ds-stepper-current-item-size);
+  inline-size: var(--ds-stepper-current-item-size);
   align-items: center;
   justify-content: center;
-  margin-block-end: var(--ds-stepper-icon-margin-block-end, 4px);
   color: var(--ds-stepper-icon-color, var(--ds-color-text-secondary));
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-part='item']:has(> [data-part='icon'])::after {
+  content: '';
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='process'] > [data-part='icon'] {
+  color: var(--ds-stepper-item-color-process, var(--ds-color-text-on-primary));
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='finish'] > [data-part='icon'] {
+  color: var(--ds-stepper-item-color-finish, var(--ds-color-primary));
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='error'] > [data-part='icon'] {
+  color: var(--ds-stepper-item-color-error, var(--ds-color-error));
 }
 
 .rottay-stepper--modern[data-part='root'] [data-part='label'] {
@@ -253,31 +337,43 @@
   color: var(--ds-stepper-label-color-error, var(--ds-color-error));
 }
 
+/* Subtitle rides the description's size role and the tertiary ink (the same
+   channel chain the stepper-compounds recipe consumes). */
+.rottay-stepper--modern[data-part='root'] [data-part='subtitle'] {
+  color: var(--ds-stepper-subtitle-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)));
+  font-size: var(--ds-stepper-current-description-font-size);
+  line-height: 1.3;
+}
+
 .rottay-stepper--modern[data-part='root'] [data-part='description'] {
   color: var(--ds-stepper-description-color, var(--ds-color-text-secondary));
   font-size: var(--ds-stepper-current-description-font-size);
   line-height: 1.4;
 }
 
-/* ---- clickable steps: lift the circle and ink the label on hover. ---- */
-.rottay-stepper--modern[data-part='root'] [data-part='item'][data-clickable='true']:hover::after {
-  transform: translateY(-1px);
-  box-shadow: var(--ds-shadow-xs);
+/* ---- clickable steps: hover lifts are a hover-capable affordance (a touch
+        tap must not leave a stuck raised circle); the `:active` dip below is
+        the touch equivalent. ---- */
+@media (hover: hover) {
+  .rottay-stepper--modern[data-part='root'] [data-part='item'][data-clickable='true']:hover::after {
+    transform: translateY(-1px);
+    box-shadow: var(--ds-shadow-xs);
+  }
+
+  .rottay-stepper--modern[data-part='root'] [data-part='item'][data-clickable='true']:hover [data-part='label'] {
+    color: var(--ds-stepper-label-color-hover, var(--ds-color-primary));
+  }
 }
 
 /* A held press settles the circle back with a tactile dip. */
 .rottay-stepper--modern[data-part='root'] [data-part='item'][data-clickable='true']:active::after {
-  transform: translateY(0) scale(var(--ds-state-press-scale, 0.98));
+  transform: translateY(0) scale(var(--ds-state-press-scale));
   box-shadow: none;
 }
 
-.rottay-stepper--modern[data-part='root'] [data-part='item'][data-clickable='true']:hover [data-part='label'] {
-  color: var(--ds-stepper-label-color-hover, var(--ds-color-primary));
-}
-
 .rottay-stepper--modern[data-part='root'] [data-part='trigger']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 /* ---- disabled steps dim and refuse interaction. ---- */
@@ -325,7 +421,7 @@
 }
 
 .rottay-stepper--modern[data-part='root'][data-direction='vertical'] [data-part='item']::before {
-  inset-block-start: calc(var(--ds-stepper-current-item-size) + 4px);
+  inset-block-start: calc(var(--ds-stepper-current-item-size) + var(--_ds-proto-stepper-connector-clearance, 4px));
   inset-block-end: 2px;
   inset-inline-start: calc(var(--ds-stepper-current-item-size) / 2 - 1px);
   inset-inline-end: auto;
@@ -335,6 +431,37 @@
 
 .rottay-stepper--modern[data-part='root'][data-direction='vertical'] [data-part='content'],
 .rottay-stepper--modern[data-part='root'][data-direction='vertical'] [data-part='trigger'] {
+  grid-column: 2;
+  grid-row: 1;
+  align-items: flex-start;
+  margin-block-start: 0;
+  /* optically centers a single-line label against the circle */
+  padding-block-start: calc((var(--ds-stepper-current-item-size) - 1.3em) / 2);
+  text-align: start;
+}
+
+/* ============================================================================
+   LABEL PLACEMENT — 'horizontal' (the contract default) seats the text
+   column BESIDE the indicator; 'vertical' keeps the stacked geometry above.
+   The connector still leads INTO its step: it spans from the previous
+   circle's trailing edge to this circle's leading edge (equal-width flex
+   items make the -100%/100% math exact). Direction 'vertical' ignores the
+   axis (its rows are always beside), matching the rustic engine.
+   ============================================================================ */
+.rottay-stepper--modern[data-part='root'][data-direction='horizontal'][data-label-placement='horizontal'] [data-part='item'] {
+  grid-template-columns: auto 1fr;
+  grid-template-rows: none;
+  column-gap: var(--ds-stepper-vertical-gap, 12px);
+  justify-items: start;
+}
+
+.rottay-stepper--modern[data-part='root'][data-direction='horizontal'][data-label-placement='horizontal'] [data-part='item']::before {
+  inset-inline-start: calc(-100% + var(--ds-stepper-current-item-size) + var(--_ds-proto-stepper-connector-clearance, 4px));
+  inset-inline-end: calc(100% + var(--_ds-proto-stepper-connector-clearance, 4px));
+}
+
+.rottay-stepper--modern[data-part='root'][data-direction='horizontal'][data-label-placement='horizontal'] [data-part='content'],
+.rottay-stepper--modern[data-part='root'][data-direction='horizontal'][data-label-placement='horizontal'] [data-part='trigger'] {
   grid-column: 2;
   grid-row: 1;
   align-items: flex-start;
@@ -374,7 +501,19 @@
   }
 
   .rottay-stepper--modern[data-part='root'][data-direction='horizontal'] [data-part='item']::before {
-    inset-block-start: calc(var(--ds-stepper-current-item-size) + 4px);
+    inset-block-start: calc(var(--ds-stepper-current-item-size) + var(--_ds-proto-stepper-connector-clearance, 4px));
+    inset-block-end: 2px;
+    inset-inline-start: calc(var(--ds-stepper-current-item-size) / 2 - 1px);
+    inset-inline-end: auto;
+    block-size: auto;
+    inline-size: var(--ds-stepper-connector-width, 2px);
+  }
+
+  /* The side-by-side connector rule above the query ties at (0,5,1); without
+     this same-specificity, later-source override a collapsed horizontal
+     label-placement row would keep the horizontal span. */
+  .rottay-stepper--modern[data-part='root'][data-direction='horizontal'][data-label-placement='horizontal'] [data-part='item']::before {
+    inset-block-start: calc(var(--ds-stepper-current-item-size) + var(--_ds-proto-stepper-connector-clearance, 4px));
     inset-block-end: 2px;
     inset-inline-start: calc(var(--ds-stepper-current-item-size) / 2 - 1px);
     inset-inline-end: auto;
@@ -448,5 +587,15 @@
 
   .rottay-stepper--modern[data-part='root'] [data-part='item']::before {
     background: ButtonText;
+  }
+
+  /* The custom icon sits over the circle: it follows the same system inks
+     (ButtonText at rest, HighlightText over the Highlight process fill). */
+  .rottay-stepper--modern[data-part='root'] [data-part='item'] > [data-part='icon'] {
+    color: ButtonText;
+  }
+
+  .rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='process'] > [data-part='icon'] {
+    color: HighlightText;
   }
 }

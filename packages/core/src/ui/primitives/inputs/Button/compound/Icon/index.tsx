@@ -20,8 +20,9 @@
  * - Use descriptive labels that explain the action, not the icon
  * - Good: "Delete item", Bad: "Trash icon"
  *
- * **CSS Custom Properties:**
- * - `--ds-button-spinner-size-{size}` - Loading spinner size per button size
+ * **Paint:**
+ * The control is the same Modern button primitive, so the busy spinner tracks
+ * the skin's `--ds-button-resolved-icon-size` like every other icon slot.
  *
  * @example Basic Icon Button
  * ```tsx

@@ -117,8 +117,8 @@ describe('Mentions modern -- geometry lives in the skin, hooks in the DOM', () =
   it('skin pins: root anchor, textarea channels, autosize resize', () => {
     expect(/\.ds-mentions\.ds-mentions--modern\[data-part='root'\]\s*\{[^}]*position:\s*relative/.test(SKIN)).toBe(true);
     expect(/\[data-part='textarea'\]\s*\{[^}]*inline-size:\s*100%/.test(SKIN)).toBe(true);
-    expect(/\[data-part='textarea'\]\s*\{[^}]*var\(--ds-input-md-padding-y,\s*8px\)/.test(SKIN)).toBe(true);
-    expect(/\[data-part='textarea'\]\s*\{[^}]*var\(--ds-input-md-font-size,\s*14px\)/.test(SKIN)).toBe(true);
+    expect(/\[data-part='textarea'\]\s*\{[^}]*var\(--ds-input-md-padding-y\)/.test(SKIN)).toBe(true);
+    expect(/\[data-part='textarea'\]\s*\{[^}]*var\(--ds-input-md-font-size\)/.test(SKIN)).toBe(true);
     expect(/\[data-part='textarea'\]\[data-autosize='true'\]\s*\{[^}]*resize:\s*none/.test(SKIN)).toBe(true);
   });
 
@@ -126,11 +126,11 @@ describe('Mentions modern -- geometry lives in the skin, hooks in the DOM', () =
     expect(/\[data-part='dropdown'\]\s*\{[^}]*position:\s*absolute/.test(SKIN)).toBe(true);
     expect(/\[data-part='dropdown'\]\s*\{[^}]*z-index:\s*50/.test(SKIN)).toBe(true);
     expect(/\[data-part='dropdown'\]\s*\{[^}]*max-block-size:\s*var\(--ds-dropdown-max-height,\s*192px\)/.test(SKIN)).toBe(true);
-    expect(/\[data-part='dropdown'\]\s*\{[^}]*padding:\s*var\(--ds-dropdown-padding,\s*6px\)/.test(SKIN)).toBe(true);
+    expect(/\[data-part='dropdown'\]\s*\{[^}]*padding:\s*var\(--ds-dropdown-padding\)/.test(SKIN)).toBe(true);
     expect(/\[data-placement='top'\]\s*\{[^}]*inset-block-end:\s*100%/.test(SKIN)).toBe(true);
-    expect(/\[data-placement='top'\]\s*\{[^}]*margin-block-end:\s*var\(--ds-spacing-1,\s*4px\)/.test(SKIN)).toBe(true);
+    expect(/\[data-placement='top'\]\s*\{[^}]*margin-block-end:\s*var\(--ds-spacing-1\)/.test(SKIN)).toBe(true);
     expect(/\[data-placement='bottom'\]\s*\{[^}]*inset-block-start:\s*100%/.test(SKIN)).toBe(true);
-    expect(/\[data-placement='bottom'\]\s*\{[^}]*margin-block-start:\s*var\(--ds-spacing-1,\s*4px\)/.test(SKIN)).toBe(true);
+    expect(/\[data-placement='bottom'\]\s*\{[^}]*margin-block-start:\s*var\(--ds-spacing-1\)/.test(SKIN)).toBe(true);
   });
 
   it('skin pins: empty state owns padding + centering (former p-3 text-center utilities)', () => {
@@ -184,7 +184,7 @@ describe('Mentions modern -- geometry lives in the skin, hooks in the DOM', () =
 
   it('skin pins: placeholder reads the certified placeholder channel with an escape hatch', () => {
     expect(/\[data-part='textarea'\]::placeholder\s*\{[^}]*var\(--ds-mentions-placeholder-color,\s*var\(--ds-input-color-placeholder,\s*var\(--ds-color-text-muted\)\)\)/.test(SKIN_NC)).toBe(true);
-    expect(/::placeholder\s*\{[^}]*opacity:\s*var\(--ds-input-placeholder-opacity,\s*1\)/.test(SKIN_NC)).toBe(true);
+    expect(/::placeholder\s*\{[^}]*opacity:\s*var\(--ds-input-placeholder-opacity\)/.test(SKIN_NC)).toBe(true);
   });
 
   it('skin pins: disabled textarea reads the Input grammar disabled channels (Pass-2 review)', () => {
@@ -192,14 +192,15 @@ describe('Mentions modern -- geometry lives in the skin, hooks in the DOM', () =
       /\[data-part='textarea'\]\[data-disabled='true'\]\s*\{[^}]*color:\s*var\(--ds-color-text-disabled\)/.test(SKIN_NC)
     ).toBe(true);
     expect(
-      /\[data-part='textarea'\]\[data-disabled='true'\]\s*\{[^}]*background:\s*var\(--ds-mentions-input-bg-disabled,\s*var\(--ds-input-bg-disabled,\s*#fafafa\)\)/.test(SKIN_NC)
+      /\[data-part='textarea'\]\[data-disabled='true'\]\s*\{[^}]*background:\s*var\(--ds-mentions-input-bg-disabled,\s*var\(--ds-input-bg-disabled\)\)/.test(SKIN_NC)
     ).toBe(true);
     expect(
       /\[data-part='textarea'\]\[data-disabled='true'\]\s*\{[^}]*cursor:\s*not-allowed/.test(SKIN_NC)
     ).toBe(true);
     expect(
-      /\[data-part='textarea'\]\[data-disabled='true'\]\s*\{[^}]*opacity:\s*var\(--ds-mentions-disabled-opacity,\s*var\(--ds-input-disabled-opacity,\s*0\.6\)\)/.test(SKIN_NC)
+      /\[data-part='textarea'\]\[data-disabled='true'\]\s*\{[^}]*opacity:\s*var\(--ds-mentions-disabled-opacity,\s*var\(--ds-input-disabled-opacity\)\)/.test(SKIN_NC)
     ).toBe(true);
+    expect(SKIN_NC).not.toContain('var(--ds-input-disabled-opacity, 0.6)');
   });
 
   it('skin pins: option rows carry the dropdown-family grammar (Pass-2 craft)', () => {

@@ -19,6 +19,10 @@
  * - Skin-owned typography (no utility-class paint)
  * - Interval-based countdown updates
  * - Loading skeleton animated by the skin (ds-foundation-pulse)
+ * - Trend semantics pair `valueType` color with a governed icon plus a
+ *   localized visually-hidden text alternative (never hue alone)
+ * - Count-up reserves the final formatted width (`ch`, tabular-nums) so the
+ *   animated value never moves the surrounding layout
  *
  * **Token Mappings:**
  * - `var(--ds-statistic-value-color)` - Default value color (falls back to --ds-color-text-primary)
@@ -62,8 +66,13 @@
 
 'use client';
 
-import React, { forwardRef, useState, useEffect, useCallback } from 'react';
+import React, { forwardRef, useState, useEffect, useCallback, useId } from 'react';
+import { VisuallyHidden } from '../../../../foundation';
 import { CountUp } from '@/graphics/motion';
+import { DataTrendIcon } from '@/graphics/icons/presentation/semantic/generated/roles/data-trend';
+import { DataTrendDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/data-trend-down';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { StatisticProps, CountdownProps } from '../../contracts';
 import { STATISTIC_DEFAULTS } from '../../contracts';
 
@@ -108,6 +117,27 @@ function formatNumber(
 const SCOPE_CLASSES = 'rottay-statistic rottay-statistic--modern';
 
 /**
+ * Trend semantics (Phase B): `valueType` used to recolor the value and nothing
+ * else, so trend polarity rode hue alone — invisible to color-blind users and
+ * stripped entirely under forced-colors. Every non-default type now pairs the
+ * color with a governed icon (shape carries the signal in forced-colors) and a
+ * visually-hidden localized text alternative (AT never had the semantics).
+ * The map is closed: an unrecognized trend paints the `default` color and
+ * renders NO icon, mirroring the skin's fallback law.
+ */
+const TREND_SEMANTICS = {
+  positive: { Icon: DataTrendIcon, labelKey: 'statistic.trendPositive', labelFallback: 'Increasing' },
+  negative: { Icon: DataTrendDownIcon, labelKey: 'statistic.trendNegative', labelFallback: 'Decreasing' },
+  warning: { Icon: StatusWarningIcon, labelKey: 'statistic.trendWarning', labelFallback: 'Warning' },
+} as const;
+
+type TrendType = keyof typeof TREND_SEMANTICS;
+
+function isTrendType(valueType: StatisticProps['valueType']): valueType is TrendType {
+  return valueType !== undefined && valueType in TREND_SEMANTICS;
+}
+
+/**
  * Modern Engine implementation of the Statistic component.
  *
  * This implementation uses structural utilities and the token-driven modern
@@ -144,6 +174,22 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
       style,
     } = props;
 
+    // Accessibility labels: translated when an I18nProvider is mounted, with
+    // the documented English fallbacks otherwise (a missing catalog key
+    // echoes the raw key back, which the endsWith guard detects — the same
+    // channel-ahead-of-catalog idiom as the Carousel K4-C wiring).
+    const i18n = useOptionalTranslation('components');
+    const trendLabel = (key: string, fallback: string): string => {
+      const translated = i18n?.t(key);
+      return translated && !translated.endsWith(key) ? translated : fallback;
+    };
+
+    // Title/value association: the title labels the metric, so a titled
+    // statistic is a named group (AT announces "Revenue, group" and then the
+    // value) instead of two unrelated text runs.
+    const titleId = useId();
+    const hasTitle = Boolean(title);
+
     // Resolve display value: custom formatter takes priority, then formatNumber,
     // and '--' as a fallback when value is undefined (empty-state indicator).
     const displayValue = formatter
@@ -157,11 +203,35 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
     const shouldAnimateValue =
       animateValue && typeof value === 'number' && !formatter && !loading;
 
+    // Trend semantics: governed icon + localized hidden text, never hue alone.
+    const trend = isTrendType(valueType) ? TREND_SEMANTICS[valueType] : undefined;
+
+    // GEOMETRY RESERVE (sanctioned instance geometry, not paint): the count-up
+    // writes intermediate strings that grow (0 -> ... -> 12,500), which used
+    // to push the suffix/wrap on every frame. With the skin's tabular-nums,
+    // one digit == one `ch`, and separators are never WIDER than a digit, so
+    // the WIDER of both endpoints' formatted lengths is a safe upper bound
+    // that freezes the row geometry from the first frame. Final length alone
+    // under-reserved a count-DOWN (countFrom > value): its wider intermediate
+    // strings still shifted the row mid-animation (P2 stability fix).
+    // Reduced-motion/static renders skip the reserve because they paint the
+    // final value directly.
+    const numberReserveStyle =
+      shouldAnimateValue && typeof displayValue === 'string'
+        ? ({
+            minInlineSize: `${Math.max(
+              displayValue.length,
+              formatNumber(countFrom, precision, groupSeparator, decimalSeparator).length
+            )}ch`,
+          } as React.CSSProperties)
+        : undefined;
+
     // Loading skeleton: the pulse animation and bar geometry are the skin's,
-    // keyed on data-loading + data-part="skeleton-line".
+    // keyed on data-loading + data-part="skeleton-line". aria-busy keeps the
+    // pending state observable; the bars approximate the title/value anatomy.
     if (loading) {
       return (
-        <div ref={ref} className={`${SCOPE_CLASSES} ${className}`.trim()} data-part="root" data-loading="true" data-has-title={!!title} data-countdown="false" style={style}>
+        <div ref={ref} className={`${SCOPE_CLASSES} ${className}`.trim()} data-part="root" data-loading="true" data-has-title={!!title} data-countdown="false" aria-busy="true" style={style}>
           <div data-part="skeleton-line" />
           <div data-part="skeleton-line" />
         </div>
@@ -175,15 +245,17 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
         data-part="root"
         data-loading="false"
         data-countdown="false"
-        data-has-title={!!title}
+        data-has-title={hasTitle}
         data-has-prefix={!!prefix}
         data-has-suffix={!!suffix}
         data-animated={shouldAnimateValue}
         data-value-type={valueType}
+        role={hasTitle ? 'group' : undefined}
+        aria-labelledby={hasTitle ? titleId : undefined}
         style={style}
       >
         {title && (
-          <div data-part="title">
+          <div data-part="title" id={titleId}>
             {title}
           </div>
         )}
@@ -192,13 +264,19 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
           data-trend={valueType}
           style={valueStyle}
         >
+          {trend && (
+            <>
+              <trend.Icon decorative size="md" />
+              <VisuallyHidden>{trendLabel(trend.labelKey, trend.labelFallback)}</VisuallyHidden>
+            </>
+          )}
           {prefix && (
             <span data-part="prefix">
               {prefix}
             </span>
           )}
           {shouldAnimateValue ? (
-            <span data-part="number">
+            <span data-part="number" style={numberReserveStyle}>
               <CountUp
                 from={countFrom}
                 to={value}
@@ -285,6 +363,17 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
     // Tracks whether onFinish has already fired to prevent duplicate calls
     const [isFinished, setIsFinished] = useState(false);
 
+    // Same trend-semantics and title-association law as the main Statistic
+    // render (one shared anatomy, one shared skin).
+    const i18n = useOptionalTranslation('components');
+    const trendLabel = (key: string, fallback: string): string => {
+      const translated = i18n?.t(key);
+      return translated && !translated.endsWith(key) ? translated : fallback;
+    };
+    const titleId = useId();
+    const hasTitle = Boolean(title);
+    const trend = isTrendType(valueType) ? TREND_SEMANTICS[valueType] : undefined;
+
     // Normalise the target: accept either an ISO date string or epoch ms number.
     const getTargetTime = useCallback(() => {
       return typeof value === 'string' ? new Date(value).getTime() : value;
@@ -326,14 +415,16 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
         className={`${SCOPE_CLASSES} ${className}`.trim()}
         data-part="root"
         data-countdown="true"
-        data-has-title={!!title}
+        data-has-title={hasTitle}
         data-has-prefix={!!prefix}
         data-has-suffix={!!suffix}
         data-value-type={valueType}
+        role={hasTitle ? 'group' : undefined}
+        aria-labelledby={hasTitle ? titleId : undefined}
         style={style}
       >
         {title && (
-          <div data-part="title">
+          <div data-part="title" id={titleId}>
             {title}
           </div>
         )}
@@ -345,6 +436,12 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
           data-trend={valueType}
           style={valueStyle}
         >
+          {trend && (
+            <>
+              <trend.Icon decorative size="md" />
+              <VisuallyHidden>{trendLabel(trend.labelKey, trend.labelFallback)}</VisuallyHidden>
+            </>
+          )}
           {prefix && (
             <span data-part="prefix">
               {prefix}

@@ -15,12 +15,15 @@
  *
  * **Key Features:**
  * - Native `<progress>` element for the determinate line type
- * - Skin-owned conic-gradient ring for the circle type (no SVG, no DaisyUI)
+ * - Canonical `.ds-arc` substrate for the circle type (no SVG, no DaisyUI)
  * - Indeterminate mode on both types, cadence from the motion authority
  *   (canon `ds-foundation-progress-indeterminate` / `ds-foundation-spin`
  *   keyframes riding `--ds-motion-*` durations; collapses under reduced motion)
  * - DS token inline hatches for geometry only (--ds-progress-circle-*,
  *   --ds-progress-arc-color)
+ * - Terminal statuses never read as color-only: success/error prepend a
+ *   governed status glyph to the percent text, `active` carries the skin's
+ *   stripe cue
  *
  * **Multi-Tenant Theming:**
  * Status color resolves through governed tokens:
@@ -61,6 +64,8 @@ import React from 'react';
 import type { ProgressProps } from '../../contracts';
 import { PROGRESS_DEFAULTS, TONE_TO_PROGRESS_STATUS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 
 // ============================================================================
 // Component
@@ -81,7 +86,7 @@ import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
  * - `data-type` ('line' | 'circle'), `data-status` and `data-indeterminate`
  *   select the skin rules; geometry rides `--ds-progress-*` inline hatches.
  * - Circle: single root div (the data-part contract proves no track/fill
- *   nodes), arc painted by the skin's `::before`/`::after`.
+ *   nodes), arc painted by the shared `.ds-arc` substrate.
  * - Line indeterminate: the native element renders without `value` (correct
  *   ARIA indeterminate semantics) while a sibling `[data-part='indeterminate']`
  *   bar carries the canon sliding animation in the same grid area.
@@ -126,6 +131,28 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
 
   // `tone` takes precedence over `status`'s color implication when both are given.
   const resolvedStatus = tone ? TONE_TO_PROGRESS_STATUS[tone] : status;
+
+  // Terminal statuses must never read as color-only: success/error add a
+  // governed status glyph next to the percent text (decorative -- the meter's
+  // accessible name already carries the value). `active` gets its non-color
+  // cue from the skin's stripe motion instead.
+  const renderStatusIcon = (size: number): React.ReactNode => {
+    if (resolvedStatus === 'success') {
+      return (
+        <span data-part="status-icon" aria-hidden="true">
+          <StatusSuccessIcon decorative size={size} />
+        </span>
+      );
+    }
+    if (resolvedStatus === 'error') {
+      return (
+        <span data-part="status-icon" aria-hidden="true">
+          <StatusErrorIcon decorative size={size} />
+        </span>
+      );
+    }
+    return null;
+  };
 
   // Defensive clamping prevents visual overflow (arc over-rotation, bar
   // exceeding the track) -- mirrors the rustic engine's guard.
@@ -181,21 +208,26 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
         data-type="circle"
         data-status={resolvedStatus}
         data-indeterminate={indeterminate ? 'true' : 'false'}
-        className={`rottay-progress-shell rottay-progress-shell--modern ${className}`}
+        className={`ds-arc rottay-progress-shell rottay-progress-shell--modern ${className}`}
         style={circleStyle}
+        data-arc-mirror={indeterminate ? undefined : 'true'}
+        data-arc-cap={indeterminate ? 'false' : undefined}
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label={
           indeterminate
-            ? i18n?.t('progress.indeterminate') ?? 'In progress'
-            : i18n?.t('progress.percent_complete', { percent: clampedPercent }) ??
+            ? i18n?.tOr('progress.indeterminate', 'In progress') ?? 'In progress'
+            : i18n?.tOr('progress.percent_complete', `${clampedPercent}% complete`, { percent: clampedPercent }) ??
               `${clampedPercent}% complete`
         }
         {...(indeterminate ? {} : { 'aria-valuenow': clampedPercent })}
       >
         {showInfo && !indeterminate && (
-          <span data-part="label">{`${clampedPercent}%`}</span>
+          <span data-part="label">
+            {renderStatusIcon(14)}
+            {`${clampedPercent}%`}
+          </span>
         )}
       </div>
     );
@@ -232,9 +264,14 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
       {indeterminate && <span data-part="indeterminate" aria-hidden="true" />}
 
       {/* Percentage info display (determinate only; an indeterminate meter
-          has no value to report). Typography/alignment live in the skin. */}
+          has no value to report). Typography/alignment live in the skin.
+          Terminal statuses prepend a governed glyph so the state never reads
+          as color-only. */}
       {showInfo && !indeterminate && (
-        <div data-part="label">{clampedPercent}%</div>
+        <div data-part="label">
+          {renderStatusIcon(12)}
+          {clampedPercent}%
+        </div>
       )}
     </div>
   );

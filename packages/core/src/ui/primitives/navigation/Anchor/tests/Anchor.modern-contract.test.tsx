@@ -11,10 +11,17 @@
  * skin-owned. These tests pin the new contract.
  */
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { Anchor, Link } from '../engines/modern';
+
+const SKIN = readFileSync(
+  resolve(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/anchor.css'),
+  'utf8',
+);
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -45,28 +52,31 @@ describe('Anchor modern contract: anatomy', () => {
     expect(root.style.top).toBe('80px');
   });
 
-  it('link uses the LOGICAL border-s-2 accent width, never physical border-l-2', () => {
+  it('link uses a skin-owned logical accent width, never physical border utilities', () => {
     render(
       <Anchor>
         <Link href="#a" title="A" />
       </Anchor>
     );
     const link = screen.getByText('A');
-    expect(link.className).toContain('border-s-2');
+    expect(link).toHaveAttribute('data-part', 'item');
+    expect(SKIN).toContain('border-inline-start-width: 2px');
+    expect(link.className).not.toContain('border-s-2');
     expect(link.className).not.toContain('border-l-2');
     // Rhythm/typography utilities are skin-owned now.
     expect(link.className).not.toMatch(/py-1|px-3|text-sm|transition-colors|block|font-medium/);
   });
 
-  it('inactive links keep border-transparent (tenant floor), selected drops it', () => {
+  it('stamps selection so the skin owns transparent and selected border paint', () => {
     render(
       <Anchor activeKey="#a">
         <Link href="#a" title="A" />
         <Link href="#b" title="B" />
       </Anchor>
     );
-    expect(screen.getByText('A').className).not.toContain('border-transparent');
-    expect(screen.getByText('B').className).toContain('border-transparent');
+    expect(screen.getByText('A')).toHaveAttribute('data-selected', 'true');
+    expect(screen.getByText('B')).toHaveAttribute('data-selected', 'false');
+    expect(SKIN).toMatch(/\[data-selected='false'\]\s*\{[^}]*border-color:\s*transparent/);
   });
 
   it('nested children render inside data-part="nested" (skin owns the logical indent)', () => {

@@ -3,7 +3,8 @@
 /**
  * @fileoverview Layout Modern Engine - Rottay Design System
  * @description Modern (token-driven) implementation of the Layout compound component.
- * Uses Tailwind CSS utility classes for styling with DS token theme integration.
+ * Skin-owned structure and paint (`layout.css`); the engine stamps anatomy
+ * (class pairs + data parts) and runtime-measured geometry only.
  *
  * @remarks
  * The Modern engine stamps anatomy (class pairs + data parts); the modern
@@ -18,7 +19,7 @@
  * ```tsx
  * import { Layout } from '@rottay/design-system';
  *
- * // Tailwind-styled layout
+ * // Skin-styled layout
  * <Layout engine="modern" hasSider>
  *   <Layout.Sider engine="modern" theme="dark" collapsible>
  *     Navigation
@@ -222,10 +223,13 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
             aria-expanded={!isCollapsed}
           >
             {trigger ?? (
-              /* Governed semantic icons (pre-flag 11: no unicode glyphs). The
-                 directional meaning mirrors in RTL via the skin's `[dir='rtl']`
-                 rule on this part: back = collapse toward the sider edge,
-                 forward = expand away from it. */
+              /* Governed semantic icons (pre-flag 11: no unicode glyphs). Both
+                 roles are `autoMirror: true`: the semantic-icon facade flips
+                 them under RTL (`[data-icon-mirrored='auto']:dir(rtl)`), so
+                 neither the engine nor the skin flips anything -- a former
+                 skin-side `[dir='rtl'] scaleX(-1)` rule double-mirrored the
+                 facade. Back = collapse toward the sider edge, forward =
+                 expand away from it. */
               <span data-part="trigger-icon" aria-hidden="true">
                 {isCollapsed ? (
                   <NavigationForwardIcon decorative size={14} />

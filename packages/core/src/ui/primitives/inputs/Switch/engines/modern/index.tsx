@@ -14,6 +14,17 @@
  * channel `--ds-density-effective-scale`; the thumb travel is a pure CSS
  * `calc()` flipped under `:dir(rtl)`, so RTL needs no runtime branch.
  *
+ * Composition notes (Phase B):
+ * - The loading state composes the canonical `Spinner` primitive (Modern
+ *   engine) inside the pinned `loading-indicator` slot -- no private loading
+ *   glyph. The spinner keeps its `role="status"` announcement; the input
+ *   carries `aria-busy`.
+ * - The state label (`checkedChildren`/`unCheckedChildren`) renders in ONE
+ *   stable slot after the track: swapping states never moves geometry.
+ * - The hidden input's clip idiom lives in the skin with every other visual
+ *   decision (zero inline paint), and `aria-label` forwards to the input --
+ *   the primary accessible-name path when no state label is rendered.
+ *
  * @see {@link Switch} for the main component
  * @module ModernSwitch
  * @category Inputs
@@ -25,6 +36,7 @@
 import React, { useState, useCallback } from 'react';
 import type { SwitchProps } from '../../contracts';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
+import { LoadingIndicator } from '../../../../foundation/loading-indicator';
 
 /* ------------------------------------------------------------------ */
 /*  Component                                                          */
@@ -49,6 +61,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       id,
       name,
     } = props;
+    const ariaLabel = props['aria-label'];
 
     const isControlled = checked !== undefined;
     const [internalChecked, setInternalChecked] = useState(defaultChecked);
@@ -70,6 +83,10 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
 
     const sizeKey = toCanonicalSize(size) ?? 'md';
 
+    // One stable label slot: the active state's content always renders after
+    // the track, so toggling never relocates the label across the control.
+    const stateLabel = isChecked ? checkedChildren : unCheckedChildren;
+
     return (
       <label
         className={`ds-switch ds-switch--modern ${className}`.trim()}
@@ -80,12 +97,8 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
         data-loading={loading ? 'true' : 'false'}
         style={style}
       >
-        {/* Unchecked label (before track) */}
-        {!isChecked && unCheckedChildren && (
-          <span data-part="label">{unCheckedChildren}</span>
-        )}
-
-        {/* Visually hidden native input: accessibility + form participation */}
+        {/* Visually hidden native input: accessibility + form participation.
+            The clip idiom lives in the skin (single paint/layout owner). */}
         <input
           ref={ref}
           type="checkbox"
@@ -100,16 +113,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
           role="switch"
           aria-checked={isChecked}
           aria-busy={loading || undefined}
-          style={{
-            position: 'absolute',
-            width: 1,
-            height: 1,
-            padding: 0,
-            margin: -1,
-            overflow: 'hidden',
-            clip: 'rect(0, 0, 0, 0)',
-            whiteSpace: 'nowrap',
-          }}
+          aria-label={ariaLabel}
         />
 
         {/* Custom visual track + thumb */}
@@ -117,29 +121,17 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
           <span data-part="thumb" />
         </span>
 
-        {/* Checked label (after track) */}
-        {isChecked && checkedChildren && (
-          <span data-part="label">{checkedChildren}</span>
+        {/* Active state label (stable slot after the track) */}
+        {stateLabel && (
+          <span data-part="label">{stateLabel}</span>
         )}
 
-        {/* Loading indicator */}
+        {/* Loading state composes the canonical Spinner primitive (its
+            role="status" announces the busy state; the input carries
+            aria-busy). The slot wrapper keeps the pinned anatomy hook. */}
         {loading && (
-          <span data-part="loading-indicator" aria-hidden="true">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <circle
-                data-part="loading-track"
-                cx="7"
-                cy="7"
-                r="5.5"
-                strokeWidth="1.5"
-              />
-              <path
-                data-part="loading-arc"
-                d="M12.5 7A5.5 5.5 0 0 0 7 1.5"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
+          <span data-part="loading-indicator">
+            <LoadingIndicator size="sm" />
           </span>
         )}
       </label>

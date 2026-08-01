@@ -90,21 +90,33 @@
 }
 
 /* Stack defaults. Preset spacing stays connected to the tenant spacing ramp,
-   scales with the three-plane density channel, and mirrors into
+   whose channels are ALREADY density-scaled at the token layer
+   (foundation/base/spacing.css: --ds-spacing-N = rung *
+   --ds-density-effective-scale, clamped 0.5..3) -- multiplying by the density
+   factor again here scaled Stack quadratically against Box/Flex, which read
+   the same channels once (Phase B B7-03 fix). The gap mirrors into
    --_ds-stack-gap-current so the divider can center itself in the governed
-   rhythm instead of adding its own separation on top of it. */
+   rhythm instead of adding its own separation on top of it. The divider axis
+   flags (proto, private) live on the root so the responsive runtime can
+   re-project them per breakpoint -- a responsive direction stamps no
+   data-direction attribute for the horizontal rule below to select on, and
+   custom properties inherit to the generated divider. */
 .rottay-stack {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: stretch;
   justify-content: flex-start;
-  --_ds-stack-gap-current: calc(var(--ds-spacing-4, 1rem) * var(--ds-density-effective-scale, 1));
+  --_ds-stack-gap-current: var(--ds-spacing-4);
   gap: var(--_ds-stack-gap-current);
+  --_ds-proto-stack-divider-gap-block: calc(var(--_ds-stack-gap-current, 0px) / -2);
+  --_ds-proto-stack-divider-gap-inline: var(--ds-stack-divider-inset, 0px);
 }
 
 .rottay-stack[data-direction="horizontal"] {
   flex-direction: row;
+  --_ds-proto-stack-divider-gap-block: var(--ds-stack-divider-inset, 0px);
+  --_ds-proto-stack-divider-gap-inline: calc(var(--_ds-stack-gap-current, 0px) / -2);
 }
 
 .rottay-stack[data-reverse="true"] {
@@ -160,35 +172,35 @@
 }
 
 .rottay-stack[data-spacing="xs"] {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-1, 0.25rem) * var(--ds-density-effective-scale, 1));
+  --_ds-stack-gap-current: var(--ds-spacing-1);
 }
 
 .rottay-stack[data-spacing="sm"] {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-2, 0.5rem) * var(--ds-density-effective-scale, 1));
+  --_ds-stack-gap-current: var(--ds-spacing-2);
 }
 
 .rottay-stack[data-spacing="md"] {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-4, 1rem) * var(--ds-density-effective-scale, 1));
+  --_ds-stack-gap-current: var(--ds-spacing-4);
 }
 
 .rottay-stack[data-spacing="lg"] {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-6, 1.5rem) * var(--ds-density-effective-scale, 1));
+  --_ds-stack-gap-current: var(--ds-spacing-6);
 }
 
 .rottay-stack[data-spacing="xl"] {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-8, 2rem) * var(--ds-density-effective-scale, 1));
+  --_ds-stack-gap-current: var(--ds-spacing-8);
 }
 
 .rottay-stack[data-spacing="2xl"] {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-10, 2.5rem) * var(--ds-density-effective-scale, 1));
+  --_ds-stack-gap-current: var(--ds-spacing-10);
 }
 
 .rottay-stack[data-spacing="3xl"] {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-12, 3rem) * var(--ds-density-effective-scale, 1));
+  --_ds-stack-gap-current: var(--ds-spacing-12);
 }
 
 .rottay-stack[data-spacing="4xl"] {
-  --_ds-stack-gap-current: calc(var(--ds-spacing-16, 4rem) * var(--ds-density-effective-scale, 1));
+  --_ds-stack-gap-current: var(--ds-spacing-16);
 }
 
 /* A consumer's numeric gap is exact geometry: honored as-is, never
@@ -210,25 +222,29 @@
    horizontal and vertical stacks without physical-side paint. The negative
    main-axis margins of half the current gap center the hairline INSIDE the
    governed rhythm: two neighbors keep exactly one gap between them instead
-   of gap + divider + gap (measured as a doubled seam in dense lists). */
+   of gap + divider + gap (measured as a doubled seam in dense lists). The
+   margins ride the root-declared axis flags so a RESPONSIVE direction (which
+   stamps no data-direction attribute) still lands the hairline on the right
+   axis at every breakpoint. */
 .rottay-stack > .rottay-stack-divider[data-part="divider"] {
   align-self: stretch;
   flex: 0 0 var(--ds-stack-divider-size, 1px);
   min-inline-size: 0;
   min-block-size: 0;
-  margin-block: calc(var(--_ds-stack-gap-current, 0px) / -2);
-  margin-inline: var(--ds-stack-divider-inset, 0px);
+  margin-block: var(
+    --_ds-proto-stack-divider-gap-block,
+    calc(var(--_ds-stack-gap-current, 0px) / -2)
+  );
+  margin-inline: var(
+    --_ds-proto-stack-divider-gap-inline,
+    var(--ds-stack-divider-inset, 0px)
+  );
   background: var(
     --ds-stack-divider-color,
-    var(--ds-color-border-subtle, currentColor)
+    var(--ds-color-border-subtle)
   );
   opacity: var(--ds-stack-divider-opacity, 0.72);
   pointer-events: none;
-}
-
-.rottay-stack[data-direction="horizontal"] > .rottay-stack-divider[data-part="divider"] {
-  margin-block: var(--ds-stack-divider-inset, 0px);
-  margin-inline: calc(var(--_ds-stack-gap-current, 0px) / -2);
 }
 
 @media (forced-colors: active) {
@@ -252,7 +268,7 @@
     --ds-container-instance-max-width,
     var(--ds-container-lg, 1024px)
   );
-  padding: var(--ds-container-instance-padding, var(--ds-spacing-4, 1rem));
+  padding: var(--ds-container-instance-padding, var(--ds-spacing-4));
   background: var(--ds-container-background, transparent);
   border: var(--ds-container-border, 0 solid transparent);
   border-radius: var(--ds-container-radius, 0);
@@ -319,9 +335,36 @@
 }
 
 /* Replaced media fills the frame without distortion: cover by default,
-   optically centered, both decisions on tenant channels. */
+   optically centered, both decisions on tenant channels. `display: block`
+   removes the inline baseline strut, whose extra line-box slack would paint a
+   letterbox sliver the moment a tenant opens `--ds-aspect-ratio-overflow` to
+   `visible` (the reserved ratio box must match the media box exactly). */
 .rottay-aspect-ratio.rottay-aspect-ratio--modern[data-part="root"]
   > :where(img, video, canvas, iframe) {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: var(--ds-aspect-ratio-object-fit, cover);
+  object-position: var(--ds-aspect-ratio-object-position, center);
+}
+
+/* A <picture> wrapper (art direction, format fallback) is an inline,
+   non-replaced element: left at its defaults it collapses to the baseline
+   strut and the inner <img> never receives the frame geometry -- the reserved
+   ratio box then paints empty or letterboxed media. The wrapper becomes a
+   block fill and forwards the same governed object-fit/object-position
+   channels to its img, so art-directed media honors the frame exactly like a
+   direct child. */
+.rottay-aspect-ratio.rottay-aspect-ratio--modern[data-part="root"]
+  > :where(picture) {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.rottay-aspect-ratio.rottay-aspect-ratio--modern[data-part="root"]
+  > :where(picture) > img {
+  display: block;
   inline-size: 100%;
   block-size: 100%;
   object-fit: var(--ds-aspect-ratio-object-fit, cover);
@@ -340,13 +383,39 @@
      a spacing refinement moves Space together with Stack (pre-flag 9). */
   gap: var(
     --ds-space-instance-gap,
-    var(--ds-space-small-size, var(--ds-spacing-2, 0.5rem))
+    var(--ds-space-small-size, var(--ds-spacing-2))
   );
   transition: gap
       var(--ds-space-motion-duration, var(--ds-motion-fast))
       var(--ds-space-motion-easing, var(--ds-motion-ease-out)),
     align-items var(--ds-space-motion-duration, var(--ds-motion-fast))
       var(--ds-space-motion-easing, var(--ds-motion-ease-out));
+}
+
+/* Density-aware preset gaps. The engine projects presets as the legacy
+   `--ds-space-*-size` aliases, which `presentation/components/space.css`
+   declares as fixed rem values that never track the density profile -- so a
+   compact density shrank Stack but left Space untouched. Keyed on the preset
+   `data-size` spellings only (raw numbers and [h, v] arrays stay exact
+   geometry, the same law Stack declares for custom gaps), the preset terminal
+   now scales with `--ds-density-effective-scale` exactly like the
+   `--ds-spacing-*` ramp it aliases. `:where()` keeps this at the root rule's
+   specificity so source order -- not escalation -- decides. */
+.rottay-space.rottay-space--modern[data-part="root"]:where(
+  [data-size="small"],
+  [data-size="middle"],
+  [data-size="large"],
+  [data-size="sm"],
+  [data-size="md"],
+  [data-size="lg"]
+) {
+  gap: calc(
+    var(
+        --ds-space-instance-gap,
+        var(--ds-space-small-size, var(--ds-spacing-2))
+      ) *
+      var(--ds-density-effective-scale)
+  );
 }
 
 .rottay-space.rottay-space--modern[data-direction="vertical"] {

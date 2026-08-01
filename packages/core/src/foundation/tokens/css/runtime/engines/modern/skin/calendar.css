@@ -38,11 +38,11 @@
  * mode toggles carried the same inline `height: 32 / padding: 0 12px /
  * font-size: 13 / cursor: pointer` six times in the engine; it is transcribed
  * verbatim into the shared rule below (logical `padding-inline`), so the
- * component ships zero inline paint. The nav glyphs are inline SVG chevrons
- * (single for month, double for year -- never Unicode characters): under
- * `[dir='rtl']` the flip rule mirrors them with `scaleX(-1)`, so
- * previous/next point outward in both writing directions without a markup
- * branch (same pattern as breadcrumb/menu skins).
+ * component ships zero inline paint. The nav glyphs are governed semantic
+ * icons (single `navigation.back/forward` for month, a composed pair for year
+ * -- never Unicode characters, no calendar-local SVG): RTL mirroring is the
+ * icon facade's auto-mirror, the SINGLE mirror owner -- this file deliberately
+ * carries NO `scaleX(-1)` flip rule (a skin flip would double-mirror).
  *
  * `>` CHAINS THROUGHOUT: `data-part` is a shared vocabulary and `dateCellRender`
  * / `monthCellRender` inject arbitrary caller content inside the cells, so a
@@ -72,6 +72,24 @@
  * grid cell jitters its neighbours; (7) the skin (unlayered, single paint
  * owner) now owns the state transition on the repainted channels, guarded by
  * prefers-reduced-motion.
+ *
+ * B4-04 (Phase-B pass, locale + density + outside-month):
+ * (8) the grid is now a fixed 6x7 (42 cells): leading/trailing cells carry
+ * the adjacent months' days as inert, muted `cell-spacer` parts, so month
+ * navigation never re-heights the panel; their ink rides the legacy
+ * `--ds-calendar-day-color-other` channel (the "other month" color) with the
+ * disabled-ink floor, and forced colors re-maps it to GrayText. They are
+ * `aria-hidden` and non-interactive by construction (divs, not buttons), so
+ * the APG grid contract (roving stop over current-month days) is unchanged.
+ * (9) density: the root padding, header rhythm and year-cell padding scale
+ * with the governed `--ds-density-effective-scale` authority through their
+ * fallbacks (explicit `--ds-calendar-*` channel values keep exact tenant
+ * intent). The header chrome's 32px block / 12px inline geometry is
+ * test-pinned verbatim and therefore density-frozen (documented debt).
+ * (10) the today ring is never color-only: it now pairs the 1px primary edge
+ * with a semibold numeral, and every cell reserves the 1px border box
+ * (transparent at rest) so today/rest share identical geometry -- no 1px
+ * content shift when the ring appears.
  */
 
 .rottay-calendar.rottay-calendar--modern[data-part='root'] {
@@ -84,8 +102,9 @@
   /* Drained layout (the former live `p-4` / `w-full` / `w-80` utilities):
      fullscreen fills its container; compact reads the family width channel,
      widening on coarse pointers so 7x44px tracks fit (the engine keeps the
-     pinned coarse utility string as an inert bridge). */
-  padding: var(--ds-calendar-padding, 1rem);
+     pinned coarse utility string as an inert bridge). The fallback padding
+     scales with the governed density authority (B4-04). */
+  padding: var(--ds-calendar-padding, calc(1rem * var(--ds-density-effective-scale)));
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='true'] {
   inline-size: 100%;
@@ -106,35 +125,52 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-block-end: var(--ds-calendar-header-margin-block-end, 1rem);
+  margin-block-end: var(--ds-calendar-header-margin-block-end, calc(1rem * var(--ds-density-effective-scale)));
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div {
   display: flex;
   align-items: center;
-  gap: var(--ds-spacing-2, 8px);
+  gap: var(--ds-spacing-2);
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='weekday-row'] {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: var(--ds-spacing-1, 4px);
-  margin-block-end: var(--ds-spacing-2, 8px);
+  gap: var(--ds-spacing-1);
+  margin-block-end: var(--ds-spacing-2);
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: var(--ds-spacing-1, 4px);
+  gap: var(--ds-spacing-1);
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--ds-spacing-2, 8px);
+  gap: var(--ds-spacing-2);
 }
 
 /* ---- cell layout (former `aspect-square flex flex-col items-center
         justify-center relative`, `opacity-30 cursor-not-allowed`,
-        `p-4 text-center` utilities). Day cells are square; year cells breathe. ---- */
+        `p-4 text-center` utilities). Day cells are square; year cells breathe.
+        B4-04: outside-month spacers render the adjacent months' days as inert
+        muted numerals (same box as the day cells, no interaction). ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='cell-spacer'] {
   aspect-ratio: 1;
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='cell-spacer'][data-outside-month='true'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* The legacy "other month day" channel is the exact semantic slot; the
+     disabled-ink floor covers tenants without it. Inert + muted is the
+     state signal (never an interactive affordance). */
+  color: var(--ds-calendar-day-color-other, var(--ds-color-text-disabled));
+  font-size: var(--ds-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'][data-fullscreen='false'] [data-part='cell-spacer'][data-outside-month='true'] {
+  font-size: var(--ds-font-size-xs);
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'] > [data-part='grid'] > [data-part='cell'] {
   position: relative;
@@ -145,19 +181,19 @@
   aspect-ratio: 1;
   padding: 0;
   cursor: pointer;
-  font-size: var(--ds-font-size-sm, 14px);
+  font-size: var(--ds-font-size-sm);
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='month'][data-fullscreen='false'] > [data-part='grid'] > [data-part='cell'] {
-  font-size: var(--ds-font-size-xs, 12px);
+  font-size: var(--ds-font-size-xs);
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='cell'] {
   position: relative;
-  padding: var(--ds-calendar-year-cell-padding, 1rem);
+  padding: var(--ds-calendar-year-cell-padding, calc(1rem * var(--ds-density-effective-scale)));
   cursor: pointer;
   text-align: center;
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'][data-fullscreen='false'] > [data-part='grid'] > [data-part='cell'] {
-  font-size: var(--ds-font-size-xs, 12px);
+  font-size: var(--ds-font-size-xs);
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-disabled] {
   opacity: var(--ds-calendar-cell-disabled-opacity, 0.3);
@@ -174,11 +210,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--ds-font-size-xs, 12px);
+  font-size: var(--ds-font-size-xs);
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'][data-mode='year'] > [data-part='grid'] > [data-part='cell'] > [data-part='cell-content'] {
-  margin-block-start: var(--ds-spacing-1, 4px);
-  font-size: var(--ds-font-size-xs, 12px);
+  margin-block-start: var(--ds-spacing-1);
+  font-size: var(--ds-font-size-xs);
 }
 
 /* ---- W10: header hairline -- separates the navigation chrome from the day
@@ -217,8 +253,8 @@
         baseline, so the header stops reading as six identical ghost
         buttons. The year toggle and nav glyphs stay quiet. ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-mode='month'] {
-  font-size: var(--ds-font-size-sm, 14px);
-  font-weight: var(--ds-font-weight-semibold, 600);
+  font-size: var(--ds-font-size-sm);
+  font-weight: var(--ds-font-weight-semibold);
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true'] {
   background: var(--ds-color-primary);
@@ -228,7 +264,7 @@
      clears AA on BOTH raw tenant primaries (5.15:1 bithire #3A6FB0, 5.47:1
      TMM #0F766E), so the raw fill stays un-deepened. Escape hatch stays raw;
      --ds-color-white falls back to literal white when undeclared. */
-  color: var(--ds-calendar-active-ink, var(--ds-color-white, #fff));
+  color: var(--ds-calendar-active-ink, var(--ds-color-white));
 }
 
 /* The year control is a composition of two governed semantic navigation
@@ -295,12 +331,12 @@
         label/number instead of two competing text rows; ink stays the
         contrast-governed secondary channel). ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > div > [data-part='weekday-header'] {
-  font-size: var(--ds-font-size-xs, 12px);
-  font-weight: var(--ds-font-weight-medium, 500);
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-medium);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   text-align: center;
-  padding-block: var(--ds-spacing-2, 8px);
+  padding-block: var(--ds-spacing-2);
   color: var(--ds-color-text-secondary);
 }
 
@@ -314,6 +350,10 @@
         transparent by construction (the hover rule's contrast argument). ---- */
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
   border-radius: var(--ds-calendar-cell-radius, var(--ds-radius-md));
+  /* B4-04: every cell reserves the 1px border box the today-ring uses, so
+     today/rest share identical inner geometry (no 1px content shift when the
+     ring appears). Transparent at rest; the today rule below owns the color. */
+  border: 1px solid transparent;
   font-variant-numeric: tabular-nums;
   transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out), border-color var(--ds-motion-fast) var(--ds-motion-ease-out), box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
@@ -329,10 +369,10 @@
      primaries (5.15:1 bithire, 5.47:1 TMM #0F766E); the raw fill is
      preserved. Escape hatch stays raw; --ds-color-white falls back to literal
      white when undeclared. */
-  color: var(--ds-calendar-selected-ink, var(--ds-color-white, #fff));
+  color: var(--ds-calendar-selected-ink, var(--ds-color-white));
   /* W10: the selected day reads as the grid's focal point -- semibold on the
      primary fill (the year-view month cells inherit the same weight). */
-  font-weight: var(--ds-font-weight-semibold, 600);
+  font-weight: var(--ds-font-weight-semibold);
 }
 
 /* ---- forced colors: arbitrary fills are overridden by the system palette, so
@@ -353,6 +393,10 @@
        (skin-owned) opacity channel. */
     color: GrayText;
   }
+  /* B4-04: the inert outside-month numerals join the disabled system ink. */
+  .rottay-calendar.rottay-calendar--modern[data-part='root'] [data-part='cell-spacer'][data-outside-month='true'] {
+    color: GrayText;
+  }
   /* W10: box-shadow focus rings are dropped under forced colors -- re-map the
      keyboard ring to a Highlight outline on every interactive part. */
   .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:focus-visible,
@@ -364,6 +408,10 @@
 }
 .rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true']) {
   border: 1px solid var(--ds-color-primary);
+  /* B4-04: today is never a color-only signal -- the primary ring pairs with
+     a semibold numeral (the grid's tabular figures keep columns aligned; the
+     reserved 1px border box in the base cell rule keeps geometry stable). */
+  font-weight: var(--ds-font-weight-semibold);
 }
 /* K4-B remediation (spec: day-cell hover painted nothing): the resting cell
    is TRANSPARENT over the root's surface-card, and the old

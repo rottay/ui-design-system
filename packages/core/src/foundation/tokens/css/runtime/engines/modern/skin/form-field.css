@@ -1,4 +1,21 @@
-/** Modern FormField skin: long-copy-safe, RTL-safe and fully token driven. */
+/**
+ * Modern FormField skin: long-copy-safe, RTL-safe and fully token driven.
+ *
+ * SECOND PREMIUM PASS (Phase B, 2026-07-31):
+ * - The error posture no longer travels by color alone: a governed
+ *   `status.error` icon (engine-stamped `data-part='error-icon'`) rides the
+ *   first text line of the message, so shape + role="alert" + text carry the
+ *   semantics even under forced colors and monochrome print.
+ * - Horizontal labels optically center on the control instead of pinning to
+ *   the grid start edge: `--_ds-proto-form-field-control-height` derives per size
+ *   from the Input height channels (density-aware) and feeds the
+ *   `--ds-form-field-label-offset-y` fallback.
+ * - The label gains a governed focus-within tint channel; invalid/disabled
+ *   postures keep their own ink.
+ * - The error message enters with one compositor-safe motion beat
+ *   (opacity + 2px rise on the `--ds-motion-fast` channel), never moving
+ *   focus and landing in its final state under reduced motion.
+ */
 
 .ds-form-field.ds-form-field--modern[data-part='root'] {
   container-type: inline-size;
@@ -28,13 +45,33 @@
 
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='label-wrap'] {
   display: block;
-  padding-block-start: var(--ds-form-field-label-offset-y, 0);
+  padding-block-start: var(--ds-form-field-label-offset-y);
+}
+
+/* Horizontal posture: the label optically centers on the control's first
+   text line instead of floating at the grid start edge. The control height
+   derives per size from the Input channels (density-aware), and tenants keep
+   the explicit `--ds-form-field-label-offset-y` override. */
+.ds-form-field.ds-form-field--modern[data-part='root'][data-layout='horizontal'] [data-part='label-wrap'] {
+  padding-block-start: var(
+    --ds-form-field-label-offset-y,
+    max(
+      0px,
+      calc(
+        (
+          var(--_ds-proto-form-field-control-height, var(--ds-input-md-height)) *
+            var(--ds-density-effective-scale) -
+          1em * var(--ds-input-label-line-height, var(--ds-line-height-snug))
+        ) / 2
+      )
+    )
+  );
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='label'] {
   display: inline;
   color: var(--ds-input-label-color, var(--ds-color-text-primary));
-  font-family: var(--ds-input-label-font-family, var(--ds-input-font-family, inherit));
+  font-family: var(--ds-input-label-font-family, var(--ds-input-font-family));
   font-size: var(--ds-input-label-font-size, var(--ds-font-size-sm));
   font-weight: var(--ds-input-label-font-weight, var(--ds-font-weight-medium));
   letter-spacing: var(--ds-input-label-letter-spacing, normal);
@@ -45,7 +82,7 @@
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='required-mark'] {
-  margin-inline-start: var(--ds-form-field-required-gap, 0.25em);
+  margin-inline-start: var(--ds-form-field-required-gap);
   color: var(--ds-input-label-required-color, var(--ds-color-error));
   font-weight: var(--ds-form-field-required-font-weight, var(--ds-font-weight-bold));
 }
@@ -68,6 +105,17 @@
   color: var(--ds-input-error-message-color, var(--ds-color-error));
 }
 
+/* Focus-within label tint: the field answers keyboard/pointer focus with one
+   governed ink shift so label and control read as one anatomy. Invalid and
+   disabled postures keep their own ink (error stays error, muted stays
+   muted) — the tint never hijacks a semantic state. */
+.ds-form-field.ds-form-field--modern[data-part='root']:focus-within:not([data-invalid='true']):not([data-disabled='true']) [data-part='label'] {
+  color: var(
+    --_ds-proto-form-field-label-color-focus,
+    var(--ds-color-primary)
+  );
+}
+
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='help-text'] {
   /* CONTRAST LAW (R0/Axe): bithire's `--ds-input-helper-color: #71869A` fails
      WCAG AA on the page surface (3.43:1 on #F4F5F7). The channel deepens the
@@ -79,8 +127,48 @@
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='error-message'] {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--_ds-proto-form-field-error-icon-gap, var(--ds-spacing-1));
   color: var(--ds-input-error-message-color, var(--ds-input-error-color, var(--ds-color-error)));
   font-weight: var(--ds-input-error-message-font-weight, var(--ds-font-weight-medium));
+  /* One compositor-safe beat on entry; the message text itself is already
+     announced by role="alert", so motion never carries the information. */
+  animation: ds-form-field-message-in var(--ds-motion-fast)
+    var(--ds-motion-ease-out);
+}
+
+@keyframes ds-form-field-message-in {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* The governed status.error glyph: semantic signal as SHAPE (never color
+   alone), optically centered on the first line box of the message. */
+.ds-form-field.ds-form-field--modern[data-part='root'] [data-part='error-icon'] {
+  flex: none;
+  inline-size: var(--_ds-proto-form-field-error-icon-size, 14px);
+  block-size: var(--_ds-proto-form-field-error-icon-size, 14px);
+  margin-block-start: calc(
+    (
+      1em * var(--ds-input-helper-line-height, var(--ds-line-height-snug)) -
+        var(--_ds-proto-form-field-error-icon-size, 14px)
+    ) / 2
+  );
+  color: var(
+    --_ds-proto-form-field-error-icon-color,
+    var(--ds-input-error-message-color, var(--ds-color-error))
+  );
+}
+
+.ds-form-field.ds-form-field--modern[data-part='root'] [data-part='error-text'] {
+  min-inline-size: 0;
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'][data-disabled='true'] {
@@ -94,11 +182,19 @@
 .ds-form-field.ds-form-field--modern[data-part='root'][data-size='sm'] {
   --ds-input-label-font-size: var(--ds-form-field-sm-label-font-size, var(--ds-font-size-xs));
   --ds-input-helper-font-size: var(--ds-form-field-sm-helper-font-size, var(--ds-font-size-xs));
+  /* Control geometry the horizontal label aligns to (Input sm height). */
+  --_ds-proto-form-field-control-height: var(--ds-input-sm-height);
+}
+
+.ds-form-field.ds-form-field--modern[data-part='root'][data-size='md'] {
+  --_ds-proto-form-field-control-height: var(--ds-input-md-height);
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'][data-size='lg'] {
   --ds-input-label-font-size: var(--ds-form-field-lg-label-font-size, var(--ds-font-size-md));
   --ds-input-helper-font-size: var(--ds-form-field-lg-helper-font-size, var(--ds-font-size-sm));
+  /* Control geometry the horizontal label aligns to (Input lg height). */
+  --_ds-proto-form-field-control-height: var(--ds-input-lg-height);
 }
 
 @container (inline-size < 34rem) {
@@ -112,12 +208,18 @@
   .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='label'] {
     transition: none;
   }
+
+  /* Reduced motion lands the message directly in its final state. */
+  .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='error-message'] {
+    animation: none;
+  }
 }
 
 /* Forced colors: the forced palette already re-maps every text ink to
    CanvasText; the semantic signal travels by SHAPE (the required asterisk,
-   the error message text, aria-invalid) — never by hue. This block
-   deliberately declares nothing: the previous `color: MarkText` mapping was
-   dropped because MarkText only guarantees contrast AGAINST a Mark
-   background, which this anatomy does not paint (on a dark Canvas the
-   required mark and error text could go invisible). */
+   the governed status.error icon glyph, the error message text itself,
+   aria-invalid) — never by hue. This block deliberately declares nothing:
+   the previous `color: MarkText` mapping was dropped because MarkText only
+   guarantees contrast AGAINST a Mark background, which this anatomy does not
+   paint (on a dark Canvas the required mark and error text could go
+   invisible). */

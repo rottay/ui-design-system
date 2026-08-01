@@ -68,6 +68,8 @@ describe('Progress modern engine (post Daisy drain)', () => {
     expect(root).toHaveAttribute('aria-valuemin', '0');
     expect(root).toHaveAttribute('aria-valuemax', '100');
     expect(root).toHaveAttribute('aria-valuenow', '60');
+    expect(root.classList).toContain('ds-arc');
+    expect(root).toHaveAttribute('data-arc-mirror', 'true');
     expect(root.style.getPropertyValue('--ds-progress-circle-value')).toBe('60');
     expect(root.style.getPropertyValue('--ds-progress-circle-thickness')).toBe('10px');
     // The drained DaisyUI arc class must not reappear.
@@ -99,6 +101,8 @@ describe('Progress modern engine (post Daisy drain)', () => {
     expect(root).toHaveAttribute('role', 'progressbar');
     expect(root).not.toHaveAttribute('aria-valuenow');
     expect(root).toHaveAttribute('data-indeterminate', 'true');
+    expect(root).toHaveAttribute('data-arc-cap', 'false');
+    expect(root).not.toHaveAttribute('data-arc-mirror');
     expect(container.querySelector('[data-part="label"]')).toBeNull();
     // EN catalog components.progress.indeterminate = "In progress".
     const name = root.getAttribute('aria-label') ?? '';

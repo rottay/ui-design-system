@@ -135,7 +135,13 @@ describe('Field family data-part contract (WO-SKIN-02 checkpoint A)', () => {
       await waitForPart(container, 'root');
       expect(container.querySelectorAll('[data-part="visibility-toggle"]')).toHaveLength(1);
       expect(container.querySelectorAll('[data-part="strength-track"]')).toHaveLength(1);
-      expect(container.querySelectorAll('[data-part="strength-fill"]')).toHaveLength(1);
+      // Modern renders one fill per strength step so strength is conveyed by
+      // segment count as well as tone; Rustic keeps its single continuous fill.
+      const expectedFillCount = engine === 'modern' ? 4 : 1;
+      expect(container.querySelectorAll('[data-part="strength-fill"]')).toHaveLength(expectedFillCount);
+      if (engine === 'modern') {
+        expect(container.querySelectorAll('[data-part="strength-segment"]')).toHaveLength(4);
+      }
     });
   });
 
@@ -164,8 +170,11 @@ describe('Field family data-part contract (WO-SKIN-02 checkpoint A)', () => {
         />,
         engine,
       );
-      expect(container.querySelectorAll('[data-part="root"]')).toHaveLength(1);
+      // The group owns one root; the two composed Radio controls legitimately
+      // own their own roots beneath the option slots.
+      expect(container.querySelectorAll('[data-testid="radio-group"][data-part="root"]')).toHaveLength(1);
       expect(container.querySelectorAll('[data-part="option"]')).toHaveLength(2);
+      expect(container.querySelectorAll('[data-part="option"] [data-part="root"]')).toHaveLength(2);
     });
   });
 
@@ -210,8 +219,10 @@ describe('Field family data-part contract (WO-SKIN-02 checkpoint A)', () => {
         />,
         engine,
       );
-      expect(container.querySelectorAll('[data-part="root"]')).toHaveLength(1);
+      // The group owns one root; each composed Checkbox keeps its own root.
+      expect(container.querySelectorAll('[data-testid="checkbox-group"][data-part="root"]')).toHaveLength(1);
       expect(container.querySelectorAll('[data-part="option"]')).toHaveLength(2);
+      expect(container.querySelectorAll('[data-part="option"] [data-part="root"]')).toHaveLength(2);
     });
   });
 

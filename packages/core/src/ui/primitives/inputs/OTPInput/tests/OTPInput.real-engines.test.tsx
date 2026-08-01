@@ -81,11 +81,11 @@ describe('OTPInput real engines', () => {
     expect(/\.ds-otp-input\.ds-otp-input--modern\[data-part='root'\]\s*\{[^}]*display:\s*flex/.test(SKIN)).toBe(true);
     expect(/gap:\s*var\(--ds-otp-slot-gap,\s*8px\)/.test(SKIN)).toBe(true);
     for (const [size, box, font] of [['sm', '36px', '16px'], ['md', '44px', '20px'], ['lg', '52px', '24px']] as const) {
-      const re = new RegExp(`\\[data-size='${size}'\\] \\[data-part='slot'\\]\\s*\\{[^}]*var\\(--ds-otp-slot-${size}-size, ${box}\\) \\* var\\(--ds-density-effective-scale, 1\\)`);
+      const re = new RegExp(`\\[data-size='${size}'\\] \\[data-part='slot'\\]\\s*\\{[^}]*var\\(--ds-otp-slot-${size}-size, ${box}\\) \\* var\\(--ds-density-effective-scale\\)`);
       expect(re.test(SKIN), `size ${size} box`).toBe(true);
       expect(new RegExp(`\\[data-size='${size}'\\][^}]*var\\(--ds-otp-slot-${size}-font-size, ${font}\\)`).test(SKIN), `size ${size} font`).toBe(true);
     }
-    expect(/\[data-part='slot'\]\s*\{[^}]*font-family:\s*var\(--ds-font-family-mono,\s*monospace\)/.test(SKIN)).toBe(true);
+    expect(/\[data-part='slot'\]\s*\{[^}]*font-family:\s*var\(--ds-font-family-mono\)/.test(SKIN)).toBe(true);
     expect(/\[data-part='slot'\]\s*\{[^}]*font-weight:\s*700/.test(SKIN)).toBe(true);
   });
 
@@ -121,8 +121,9 @@ describe('OTPInput real engines', () => {
     // Coarse floor: every slot at least 44px under (pointer: coarse).
     const coarse = SKIN_NC.match(/@media \(pointer: coarse\)\s*\{\n([\s\S]*?)\n\}/);
     expect(coarse, 'coarse media block present').not.toBeNull();
-    expect(/\[data-part='slot'\]\s*\{[^}]*min-inline-size:\s*var\(--ds-input-touch-target-min,\s*44px\)/.test(coarse![1])).toBe(true);
-    expect(/\[data-part='slot'\]\s*\{[^}]*min-block-size:\s*var\(--ds-input-touch-target-min,\s*44px\)/.test(coarse![1])).toBe(true);
+    expect(/\[data-part='slot'\]\s*\{[^}]*min-inline-size:\s*var\(--ds-input-touch-target-min\)/.test(coarse![1])).toBe(true);
+    expect(/\[data-part='slot'\]\s*\{[^}]*min-block-size:\s*var\(--ds-input-touch-target-min\)/.test(coarse![1])).toBe(true);
+    expect(SKIN_NC).not.toContain('var(--ds-input-touch-target-min, 44px)');
     // Motion honoured.
     const rm = SKIN_NC.match(/@media \(prefers-reduced-motion: reduce\)\s*\{\n([\s\S]*?)\n\}/);
     expect(rm).not.toBeNull();

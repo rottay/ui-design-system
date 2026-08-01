@@ -1,0 +1,97 @@
+/**
+ * Arc — shared circular-gauge substrate (conic sweep, ring mask, rounded cap).
+ *
+ * LAYER: rottay-components (single owner of the arc recipe for every gauge
+ *   consumer). `Meter` and Modern `Progress` both compose it; each consumer
+ *   maps its own contract onto the private substrate channels below.
+ * SCOPE: `.ds-arc` on the gauge element. All inputs are private composition
+ *   channels set by the consuming skin — never tenant tokens:
+ *     --_ds-arc-value      0..100 sweep (stamped per instance by the owner TSX)
+ *     --_ds-arc-size       outer diameter (consumer maps its sizing channel)
+ *     --_ds-arc-thickness  ring thickness (defaults to size/10, progress parity)
+ *     --_ds-arc-fill       sweep color (consumer maps its resolved fill)
+ *     --_ds-arc-track      remainder color
+ *   `data-arc-mirror='true'` opts into the RTL horizontal flip (Progress's
+ *   determinate posture); `data-arc-cap='false'` suppresses the cap for a
+ *   spinning arc. Without either flag the sweep is direction-neutral.
+ * SPECIFICITY: single class (+ one attribute opt-in), no `!important`, logical
+ *   properties; the `#0000`/`#000` stops below are mask alpha, not paint.
+ * MOTION: the sweep transition rides `--ds-motion-normal`/`--ds-motion-ease-out`,
+ *   zeroed by the foundation under reduced motion.
+ *
+ * REGISTRATION: `--_ds-arc-value` is registered exactly once in
+ * foundation/base/properties.css. Component skins must never register typed
+ * custom properties locally because @property is document-global.
+ */
+
+.ds-arc {
+  --_ds-arc-size: 6rem;
+  --_ds-arc-thickness: calc(var(--_ds-arc-size) / 10);
+  --_ds-arc-fill: var(--ds-color-primary);
+  --_ds-arc-track: var(--ds-color-border-secondary);
+
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--_ds-arc-size);
+  block-size: var(--_ds-arc-size);
+  border-radius: 50%;
+  transition: --_ds-arc-value var(--ds-motion-normal) var(--ds-motion-ease-out);
+}
+
+/* Sweep over the full disc, masked down to the ring thickness. */
+.ds-arc::before {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  content: '';
+  background: conic-gradient(
+    var(--_ds-arc-fill) calc(var(--_ds-arc-value) * 1%),
+    var(--_ds-arc-track) 0
+  );
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    #0000 calc(100% - var(--_ds-arc-thickness)),
+    #000 calc(100% + 0.5px - var(--_ds-arc-thickness))
+  );
+  mask: radial-gradient(
+    farthest-side,
+    #0000 calc(100% - var(--_ds-arc-thickness)),
+    #000 calc(100% + 0.5px - var(--_ds-arc-thickness))
+  );
+}
+
+/* Rounded cap at the sweep tip. */
+.ds-arc::after {
+  position: absolute;
+  inset: calc(50% - var(--_ds-arc-thickness) / 2);
+  border-radius: 50%;
+  content: '';
+  background: var(--_ds-arc-fill);
+  transform: rotate(calc(var(--_ds-arc-value) * 3.6deg - 90deg))
+    translate(calc(var(--_ds-arc-size) / 2 - 50%));
+}
+
+.ds-arc[data-arc-cap='false']::after {
+  content: none;
+}
+
+/* RTL flip is an explicit consumer opt-in: a mirrored gauge reverses the
+   sweep and the cap together so the arc still meets its own tip. */
+.ds-arc[data-arc-mirror='true']:dir(rtl)::before {
+  transform: scaleX(-1);
+}
+
+.ds-arc[data-arc-mirror='true']:dir(rtl)::after {
+  transform: scaleX(-1) rotate(calc(var(--_ds-arc-value) * 3.6deg - 90deg))
+    translate(calc(var(--_ds-arc-size) / 2 - 50%));
+}
+
+/* Forced colors: the system palette feeds the same channels, so both the
+   sweep and the cap remap without touching the recipe. */
+@media (forced-colors: active) {
+  .ds-arc {
+    --_ds-arc-fill: Highlight;
+    --_ds-arc-track: Canvas;
+  }
+}

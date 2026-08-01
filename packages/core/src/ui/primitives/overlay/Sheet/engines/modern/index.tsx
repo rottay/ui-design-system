@@ -3,8 +3,14 @@
 /**
  * @fileoverview Sheet Modern (Hermes) Engine - Rottay Design System.
  * Bottom sheet on mobile, side panel on desktop. Features a drag handle
- * indicator, backdrop blur, and slide-in animation. Uses pure DS token
- * inline styles -- no DaisyUI or Tailwind class dependencies.
+ * indicator, backdrop blur, and recipe-driven slide-in/slide-out animations
+ * (presence keeps the panel mounted through its exit, Drawer's idiom). The
+ * engine stamps parts and dynamic channels only: static geometry (fixed
+ * placement, per-side insets, flex/scroll anatomy) is skin-owned in
+ * sheet.css, keyed on data-part/data-placement. Inline survives solely where
+ * it is genuinely dynamic -- the tokenized z-index tiers, the recipe-driven
+ * enter/exit animation (pinned by the motion-recipe contract) and consumer
+ * style overrides. No DaisyUI or Tailwind class dependencies.
  *
  * Wave 2B: Unified overlay family visual language -- shared backdrop, surface,
  * border, and motion tokens with Modal and Drawer modern engines.
@@ -20,6 +26,7 @@ import { SHEET_DEFAULTS } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { FocusTrap } from '../../../../runtime/overlay/focus-management/focus-trap';
 import { useSheetOverlayRuntime } from '../../runtime/overlay-stack';
+import { usePresence } from '@/graphics/motion/react/runtime';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
@@ -37,6 +44,14 @@ const SLIDE_ANIMATION: Record<string, string> = {
   bottom: 'ds-sheet-slide-bottom-modern',
   left: 'ds-sheet-slide-left-modern',
   right: 'ds-sheet-slide-right-modern',
+};
+
+/** Exit lookup by side (Drawer's idiom): the panel leaves toward the same
+ *  edge it entered from, on the recipe's `--ds-recipe-exit` cadence. */
+const SLIDE_OUT_ANIMATION: Record<string, string> = {
+  bottom: 'ds-sheet-slide-out-bottom-modern',
+  left: 'ds-sheet-slide-out-left-modern',
+  right: 'ds-sheet-slide-out-right-modern',
 };
 
 // ============================================================================
@@ -68,8 +83,9 @@ function CloseButton({ onClick, label }: { onClick: () => void; label: string })
  * - Handle bar indicator at top for bottom sheets
  * - Title area below handle
  *
- * Locks body scroll while open, listens for Escape key, and returns an
- * empty fragment when closed so no DOM nodes remain in the tree.
+ * Locks body scroll while open (and through the exit animation), listens
+ * for Escape key, and returns an empty fragment once presence reports the
+ * exit finished so no DOM nodes remain in the tree.
  */
 export default function ModernSheet(props: SheetProps): React.ReactElement {
   // Optional channel with an English floor: the sheet renders standalone
@@ -109,7 +125,18 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
   } = props;
   const generatedTitleId = useId();
   const titleId = `${id || generatedTitleId}-title`;
-  const { isTopmost } = useSheetOverlayRuntime(open);
+
+  // Presence (Drawer's idiom, composed): `open` flipping false keeps the
+  // sheet mounted (dataState 'closed') until its own slide-out animation
+  // finishes, instead of vanishing the instant `open` changes. Under reduced
+  // motion the recipe declares no animation and presence unmounts
+  // immediately.
+  const { shouldRender, dataState, ref: presenceRef } = usePresence(open);
+
+  // Stack registration and the body scroll lock stay held through the exit
+  // animation (gated on shouldRender, Drawer's posture) — the page behind
+  // must not reflow while the panel is still visibly sliding out.
+  const { isTopmost } = useSheetOverlayRuntime(shouldRender);
 
   // overlay.sheet recipe (motion canon): entrance timing/easing resolve from
   // the stamped `--ds-recipe-*` variables. The slide TRAVEL stays the skin's
@@ -138,62 +165,33 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [open, handleEscape]);
 
-  // Bail early when closed -- no DOM footprint remains
-  if (!open) return <></>;
+  // Bail early when closed AND the exit finished -- no DOM footprint remains
+  if (!shouldRender) return <></>;
 
   const isBottom = side === 'bottom';
-  const animationName = SLIDE_ANIMATION[side] || SLIDE_ANIMATION.bottom;
+  const animationName =
+    (dataState === 'open' ? SLIDE_ANIMATION[side] : SLIDE_OUT_ANIMATION[side]) ||
+    (dataState === 'open' ? SLIDE_ANIMATION.bottom : SLIDE_OUT_ANIMATION.bottom);
 
-  // -- panel position styles --------------------------------------------------
-
-  const getPanelPositionStyles = (): React.CSSProperties => {
-    const base: React.CSSProperties = {
-      position: 'fixed',
-      // Tokenized overlay stack (spec section 9): panel sits at the drawer
-      // tier, above the wrapper's overlay tier, instead of a magic 51.
-      zIndex: 'var(--ds-z-drawer)',
-      display: 'flex',
-      flexDirection: 'column',
-      animation: motionIsFinal
-        ? undefined
-        : `${animationName} var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
-      overflow: 'hidden',
-    };
-
-    if (isBottom) {
-      return {
-        ...base,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        maxHeight:
-          'var(--ds-sheet-max-height, var(--ds-sheet-viewport-max-height, 85vh))',
-        minHeight: 'var(--ds-sheet-min-height, 30vh)',
-        ...panelStyle,
-        ...surfaceStyle,
-      };
-    }
-
-    if (side === 'left') {
-      return {
-        ...base,
-        top: 0,
-        left: 0,
-        bottom: 0,
-        ...panelStyle,
-        ...surfaceStyle,
-      };
-    }
-
-    // right (default for non-bottom)
-    return {
-      ...base,
-      top: 0,
-      right: 0,
-      bottom: 0,
-      ...panelStyle,
-      ...surfaceStyle,
-    };
+  // -- panel style ------------------------------------------------------------
+  // Static geometry (fixed placement, per-side insets, flex anatomy, scroll
+  // regions) is SKIN-OWNED, keyed on data-part/data-placement in sheet.css.
+  // Inline stays only for the genuinely dynamic channels: the tokenized stack
+  // tier (zIndex is the overlay-stack datum, sibling-pinned idiom), the
+  // recipe-driven enter/exit animation (pinned inline by the motion-recipe
+  // contract), and the consumer's panelStyle/surfaceStyle overrides, which
+  // still spread last and win over the skin.
+  const panelStyleResolved: React.CSSProperties = {
+    // Tokenized overlay stack (spec section 9): panel sits at the drawer
+    // tier, above the wrapper's overlay tier, instead of a magic 51.
+    zIndex: 'var(--ds-z-drawer)',
+    animation: motionIsFinal
+      ? undefined
+      : dataState === 'open'
+        ? `${animationName} var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`
+        : `${animationName} var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING}) both`,
+    ...panelStyle,
+    ...surfaceStyle,
   };
 
   return (
@@ -205,10 +203,9 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
         className={`rottay-sheet--modern ${className || ''} ${rootClassName || ''}`}
         style={{
           ...overlayMotion.variables,
-          position: 'fixed',
-          inset: 0,
           // Tokenized overlay stack (spec section 9), matching Drawer's
-          // backdrop/panel pair instead of a magic 50.
+          // backdrop/panel pair instead of a magic 50. The fixed inset lives
+          // in the skin.
           zIndex: 'var(--ds-z-overlay)',
           ...style,
           ...rootStyle,
@@ -220,17 +217,18 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
             data-part="backdrop"
             onClick={closeOnOverlayClick ? handleClose : undefined}
             style={{
-              position: 'fixed',
-              inset: 0,
               animation: motionIsFinal
                 ? undefined
-                : `ds-sheet-backdrop-fade-modern var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING})`,
+                : dataState === 'open'
+                  ? `ds-sheet-backdrop-fade-modern var(--ds-recipe-enter, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING})`
+                  : `ds-sheet-backdrop-fade-out-modern var(--ds-recipe-exit, ${MOTION_DURATION}) var(--ds-recipe-curve, ${MOTION_EASING})`,
             }}
           />
         )}
 
         {/* ---- Panel ---- */}
         <div
+          ref={presenceRef}
           id={id}
           role="dialog"
           aria-modal="true"
@@ -239,10 +237,10 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
           aria-describedby={ariaDescribedBy}
           data-testid={dataTestId}
           data-part="surface"
-          data-open="true"
+          data-open={dataState === 'open' ? 'true' : 'false'}
           data-placement={side}
           className={surfaceClassName || panelClassName || undefined}
-          style={getPanelPositionStyles()}
+          style={panelStyleResolved}
         >
           <FocusTrap
             active={open}
@@ -251,13 +249,6 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
             initialFocus={initialFocus}
             finalFocus={finalFocus}
             className="rottay-sheet__focus-scope"
-            style={{
-              display: 'flex',
-              flex: '1 1 auto',
-              flexDirection: 'column',
-              minHeight: 0,
-              overflow: 'hidden',
-            }}
           >
           {/* Handle bar -- bottom sheet only. Geometry lives in the skin;
               the engine stamps parts only. */}
@@ -267,30 +258,32 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
             </div>
           )}
 
-          {/* Title area. Layout and typography live in the modern Sheet skin;
-              the engine stamps parts only. */}
-          {title && (
-            <div data-part="header">
+          {/* Header always renders (Drawer's `title || closable` rule —
+              Sheet's contract has no closable=false, so the panel must
+              always expose a visible dismiss control; a title-less sheet
+              previously trapped keyboard/AT users with no drawn close).
+              Layout and typography live in the modern Sheet skin; the engine
+              stamps parts only. A string title gets the native tooltip
+              affordance for the skin's ellipsis truncation. */}
+          <div data-part="header">
+            {title ? (
               <div
                 id={titleId}
                 data-part="title"
+                title={typeof title === 'string' ? title : undefined}
               >
                 {title}
               </div>
-              <CloseButton onClick={handleClose} label={i18n?.tOr('drawer.close', 'Close') ?? 'Close'} />
-            </div>
-          )}
+            ) : null}
+            <CloseButton onClick={handleClose} label={i18n?.tOr('drawer.close', 'Close') ?? 'Close'} />
+          </div>
 
-          {/* Scrollable content area */}
+          {/* Scrollable content area. Flex/scroll anatomy lives in the skin;
+              a caller's bodyStyle still wins inline. */}
           <div
             data-part="body"
             className={bodyClassName}
-            style={{
-              flex: '1 1 auto',
-              minHeight: 0,
-              overflowY: 'auto',
-              ...bodyStyle,
-            }}
+            style={bodyStyle}
           >
             {children}
           </div>
@@ -299,10 +292,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
             <div
               data-part="footer"
               className={footerClassName}
-              style={{
-                flexShrink: 0,
-                ...footerStyle,
-              }}
+              style={footerStyle}
             >
               {footer}
             </div>

@@ -33,11 +33,18 @@
 /* ---- Card.Header ---- */
 .rottay-card-header[data-part='header'][data-part='header'] {
   position: relative;
+  /* layout moved from the compound's inline styles (P2): the skin owns the
+     row composition and the gap; the padding axis is keyed on data-padding
+     below so every engine renders the identical geometry. */
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
   flex-wrap: wrap;
+  gap: var(--ds-card-header-gap);
   min-inline-size: 0;
-  min-height: var(--ds-card-header-min-height, 64px);
+  min-height: var(--ds-card-header-min-height);
   border-bottom: none;
-  background: var(--ds-card-header-bg, transparent);
+  background: var(--ds-card-header-bg);
   background-position: 0% 50%;
   background-size: 180% 180%;
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent);
@@ -45,11 +52,54 @@
     background-position var(--ds-motion-deliberate) var(--ds-motion-ease-enter),
     border-color var(--ds-motion-feedback) var(--ds-motion-ease-enter);
 }
-.ds-card[data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) .rottay-card-header[data-part='header'][data-part='header'] {
-  background-position: 100% 50%;
+
+.rottay-card-header[data-padding='none'] {
+  padding: 0;
+}
+.rottay-card-header[data-padding='sm'] {
+  padding: var(--ds-card-header-padding-sm);
+}
+.rottay-card-header[data-padding='md'] {
+  padding: var(--ds-card-header-padding);
+}
+.rottay-card-header[data-padding='lg'] {
+  padding: var(--ds-card-header-padding-lg);
+}
+
+.rottay-card-header > .rottay-card-header-content {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-card-header-gap);
+  flex: 1;
+  min-inline-size: 0;
+}
+.rottay-card-header > .rottay-card-header-content > .rottay-card-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-1);
+  flex: 1;
+  min-inline-size: 0;
+}
+.rottay-card-header > .rottay-card-header-content > .rottay-card-header-avatar {
+  flex-shrink: 0;
+}
+.rottay-card-header > .rottay-card-header-extra {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: var(--ds-card-header-actions-gap);
+}
+
+/* Hover paint is gated to hover-capable pointers: on touch the behavior core
+   still stamps `hovered` during a tap, and the card's pressed posture is the
+   tactile equivalent (same law as the Button skin). */
+@media (hover: hover) {
+  .ds-card[data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) .rottay-card-header[data-part='header'][data-part='header'] {
+    background-position: 100% 50%;
+  }
 }
 .rottay-card-header[data-part='header'][data-part='header'][data-divider='true'] {
-  border-bottom: var(--ds-card-header-border-width, 1px) solid var(--ds-card-header-border, var(--ds-card-border, var(--ds-color-border)));
+  border-bottom: var(--ds-card-header-border-width) solid var(--ds-card-header-border, var(--ds-card-border, var(--ds-color-border)));
 }
 .rottay-card-header > .rottay-card-header-content > .rottay-card-header-text > [data-part='title'] {
   color: var(--ds-card-title-color, var(--ds-color-text-primary));
@@ -67,24 +117,24 @@
   font-size: var(--ds-card-subtitle-font-size);
   line-height: var(--ds-card-body-line-height);
   margin: var(--ds-card-subtitle-margin-top) 0 0;
-  max-inline-size: var(--ds-card-header-copy-max-width, 68ch);
+  max-inline-size: var(--ds-card-header-copy-max-width);
   overflow-wrap: anywhere;
   text-wrap: pretty;
 }
 .rottay-card-header > .rottay-card-header-content > .rottay-card-header-text > [data-part='eyebrow'] {
   color: var(--ds-card-header-color, var(--ds-color-text-muted));
-  font-family: var(--ds-font-family-mono, ui-monospace, monospace);
-  font-size: var(--ds-card-header-eyebrow-size, 10px);
-  font-weight: var(--ds-font-weight-semibold, 600);
-  letter-spacing: var(--ds-card-header-eyebrow-tracking, 0.11em);
+  font-family: var(--ds-font-family-mono);
+  font-size: var(--ds-card-header-eyebrow-size);
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: var(--ds-card-header-eyebrow-tracking);
   line-height: 1.2;
   text-transform: uppercase;
 }
 .rottay-card-header > .rottay-card-header-content > [data-part='icon'][data-part='icon'] {
   display: inline-grid;
   flex: 0 0 auto;
-  width: var(--ds-card-header-icon-size, 36px);
-  height: var(--ds-card-header-icon-size, 36px);
+  width: var(--ds-card-header-icon-size);
+  height: var(--ds-card-header-icon-size);
   place-items: center;
   border: 1px solid var(--ds-card-header-icon-border, var(--ds-card-border, var(--ds-color-border)));
   border-radius: var(--ds-card-header-icon-radius, var(--ds-radius-lg));
@@ -97,21 +147,23 @@
     transform var(--ds-motion-feedback) var(--ds-motion-ease-enter),
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-enter);
 }
-.ds-card[data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) .rottay-card-header > .rottay-card-header-content > [data-part='icon'] {
-  transform: translateY(-1px) scale(1.025);
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 94%, transparent),
-    0 10px 22px -14px color-mix(in srgb, currentColor 64%, transparent);
+@media (hover: hover) {
+  .ds-card[data-interactive='true'][data-state~='hovered']:not([data-disabled='true']) .rottay-card-header > .rottay-card-header-content > [data-part='icon'] {
+    transform: translateY(-1px) scale(1.025);
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 94%, transparent),
+      0 10px 22px -14px color-mix(in srgb, currentColor 64%, transparent);
+  }
 }
 .rottay-card-header > [data-part='extra'][data-part='extra'] {
   max-inline-size: 100%;
   min-height: var(--ds-control-height-sm, 32px);
-  padding: var(--ds-card-header-extra-padding, 3px);
+  padding: var(--ds-card-header-extra-padding);
   border: 1px solid var(--ds-card-header-extra-border, var(--ds-card-header-border, var(--ds-card-border, var(--ds-color-border))));
   border-radius: var(--ds-card-header-extra-radius, var(--ds-radius-lg));
   background: var(--ds-card-header-extra-bg, var(--ds-surface-card));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);
-  overflow-x: auto;
+  overflow-inline: auto;
 }
 
 .rottay-card-header > .rottay-card-header-content,
@@ -128,55 +180,142 @@
   line-height: var(--ds-card-body-line-height, var(--ds-line-height-normal));
 }
 
+/* Body layout moved from the compound's inline styles (P2): the flex posture
+   fills the card's available block space; the padding axis is keyed on
+   data-padding so every engine renders the identical geometry. */
+.rottay-card-body[data-part='body'] {
+  flex: 1;
+}
+.rottay-card-body[data-padding='none'] {
+  padding: 0;
+}
+.rottay-card-body[data-padding='sm'] {
+  padding: var(--ds-card-body-padding-sm);
+}
+.rottay-card-body[data-padding='md'] {
+  padding: var(--ds-card-body-padding);
+}
+.rottay-card-body[data-padding='lg'] {
+  padding: var(--ds-card-body-padding-lg);
+}
+
 /* ---- Card.Footer ---- */
 .rottay-card-footer[data-part='footer'][data-part='footer'] {
+  /* layout moved from the compound's inline styles (P2): row composition and
+     gap here; justification follows data-align, inset follows data-padding. */
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-card-footer-actions-gap);
   border-top: none;
-  background: var(--ds-card-footer-bg, transparent);
+  background: var(--ds-card-footer-bg);
   color: var(--ds-card-footer-color, var(--ds-color-text-secondary));
 }
-.rottay-card-footer[data-part='footer'][data-part='footer'][data-divider='true'] {
-  border-top: var(--ds-card-footer-border-width, 1px) solid var(--ds-card-footer-border, var(--ds-card-border, var(--ds-color-border)));
+.rottay-card-footer[data-align='start'] {
+  justify-content: flex-start;
 }
+.rottay-card-footer[data-align='center'] {
+  justify-content: center;
+}
+.rottay-card-footer[data-align='end'] {
+  justify-content: flex-end;
+}
+.rottay-card-footer[data-align='space-between'] {
+  justify-content: space-between;
+}
+.rottay-card-footer[data-padding='none'] {
+  padding: 0;
+}
+.rottay-card-footer[data-padding='sm'] {
+  padding: var(--ds-card-footer-padding-sm);
+}
+.rottay-card-footer[data-padding='md'] {
+  padding: var(--ds-card-footer-padding);
+}
+.rottay-card-footer[data-padding='lg'] {
+  padding: var(--ds-card-footer-padding-lg);
+}
+.rottay-card-footer[data-part='footer'][data-part='footer'][data-divider='true'] {
+  /* tenant footer border first; the shared premium contract supplies the
+     quieter default hairline */
+  border-top: var(--ds-card-footer-border-width) solid var(--ds-card-footer-border, var(--ds-premium-card-footer-border, var(--ds-card-border, var(--ds-color-border))));
+}
+/* the actions subgroup is a bounded well — the same grammar the header extra
+   slot already wears — so footer controls read as one grouped unit instead
+   of floating loose. Paint comes from the shared premium action-well
+   channels; both default to a whisper over the card's own fill. */
 .rottay-card-footer > .rottay-card-footer-actions {
+  /* row layout moved from the compound's inline styles (P2) */
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ds-card-footer-actions-gap);
   min-inline-size: 0;
   max-inline-size: 100%;
+  padding: 3px; /* mirrors the header extra well inset */
+  border: 1px solid var(--ds-premium-card-action-border);
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-premium-card-action-bg);
 }
 .rottay-card-footer > .rottay-card-footer-actions > * {
   max-inline-size: 100%;
 }
 
-/* ---- Card.Image: radius, then the corner pair its position rounds ---- */
+/* ---- Card.Image: radius, then the corner pair its position rounds.
+   The corner derives from the card's own resolved radius
+   (`--_ds-card-radius-current`, published by the modern engine's radius
+   rules) so a cover flush against the card edge is concentric with it —
+   never a second, unrelated rounding. Engines that do not publish the
+   private keep the historical `--ds-card-radius` fallback. ---- */
 .rottay-card-image[data-part='image'][data-part='image'] {
+  /* layout moved from the compound's inline styles (P2). The aspect ratio
+     reads the per-instance hook the compound stamps from its contract value;
+     unset, the declaration is inert and the ratio stays at the UA initial. */
+  position: relative;
+  inline-size: 100%;
+  overflow: hidden;
+  aspect-ratio: var(--ds-card-image-aspect-ratio);
   border-radius: var(--ds-card-image-radius);
+  --_ds-card-image-corner: var(--_ds-card-radius-current, var(--ds-card-radius));
+}
+.rottay-card-image[data-part='image'][data-part='image'][data-position='cover'] {
+  position: absolute;
+  inset: 0;
+  block-size: 100%;
+  z-index: 0;
 }
 .rottay-card-image[data-part='image'][data-part='image'][data-position='top'] {
-  border-top-left-radius: var(--ds-card-radius, 12px);
-  border-top-right-radius: var(--ds-card-radius, 12px);
+  border-top-left-radius: var(--_ds-card-image-corner);
+  border-top-right-radius: var(--_ds-card-image-corner);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
 .rottay-card-image[data-part='image'][data-part='image'][data-position='bottom'] {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  border-bottom-left-radius: var(--ds-card-radius, 12px);
-  border-bottom-right-radius: var(--ds-card-radius, 12px);
+  border-bottom-left-radius: var(--_ds-card-image-corner);
+  border-bottom-right-radius: var(--_ds-card-image-corner);
 }
 .rottay-card-image[data-part='image'][data-part='image'][data-position='start'] {
-  border-start-start-radius: var(--ds-card-radius, 12px);
-  border-end-start-radius: var(--ds-card-radius, 12px);
+  border-start-start-radius: var(--_ds-card-image-corner);
+  border-end-start-radius: var(--_ds-card-image-corner);
   border-start-end-radius: 0;
   border-end-end-radius: 0;
 }
 .rottay-card-image[data-part='image'][data-part='image'][data-position='end'] {
   border-start-start-radius: 0;
   border-end-start-radius: 0;
-  border-start-end-radius: var(--ds-card-radius, 12px);
-  border-end-end-radius: var(--ds-card-radius, 12px);
+  border-start-end-radius: var(--_ds-card-image-corner);
+  border-end-end-radius: var(--_ds-card-image-corner);
 }
 
 .rottay-card-image > img {
-  object-fit: var(--ds-card-media-object-fit, cover);
-  object-position: var(--ds-card-cover-object-position, center);
+  /* box layout moved from the compound's inline styles (P2) */
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: var(--ds-card-media-object-fit);
+  object-position: var(--ds-card-cover-object-position);
   opacity: 0;
   transition: opacity var(--ds-motion-reveal) var(--ds-motion-ease-enter);
 }
@@ -185,7 +324,14 @@
 }
 
 /* ---- Card.Image: the placeholder behind a loading or broken image ---- */
+/* Absolute regions moved from the compound's inline styles (P2): the logical
+   `inset: 0` shorthand replaces the old physical top/left/right/bottom set. */
 .rottay-card-image > [data-part='placeholder'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: var(--ds-card-image-placeholder-bg, var(--ds-color-neutral-100));
   color: var(--ds-card-image-placeholder-color, var(--ds-color-text-tertiary));
 }
@@ -198,13 +344,26 @@
   animation: ds-card-image-spin var(--ds-card-image-loading-duration) linear infinite;
 }
 .rottay-card-image > [data-part='placeholder'] > [data-part='error-icon'] {
-  width: var(--ds-card-image-error-icon-size, 3rem);
-  height: var(--ds-card-image-error-icon-size, 3rem);
+  width: var(--ds-card-image-error-icon-size);
+  height: var(--ds-card-image-error-icon-size);
 }
 
 /* ---- Card.Image: the scrim that keeps overlay text readable ---- */
 .rottay-card-image > [data-part='gradient'] {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   background: var(--ds-card-cover-overlay-bg);
+}
+
+/* ---- Card.Image: the custom overlay content slot ---- */
+.rottay-card-image > [data-part='overlay'] {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @container (max-width: 28rem) {
@@ -246,7 +405,8 @@
 
 @media (forced-colors: active) {
   .rottay-card-header > .rottay-card-header-content > [data-part='icon'][data-part='icon'],
-  .rottay-card-header > [data-part='extra'][data-part='extra'] {
+  .rottay-card-header > [data-part='extra'][data-part='extra'],
+  .rottay-card-footer > .rottay-card-footer-actions {
     border-color: CanvasText;
     background: Canvas;
     color: CanvasText;

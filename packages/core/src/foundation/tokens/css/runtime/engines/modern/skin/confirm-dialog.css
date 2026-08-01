@@ -10,6 +10,18 @@
  * previously laid out inline now carries `data-part='footer'` so one owner
  * holds the section chrome.
  *
+ * ACTIONS (P2): both footer actions COMPOSE the Button primitive
+ * (AlertDialog's grammar — primitives compose, never rebuild). The ghost
+ * cancel and the variant-toned confirm (info→primary, warning→warning,
+ * danger→danger) take their chrome, hover/press/focus/disabled states,
+ * coarse 44px floor, forced-colors frames and the width-stable pending
+ * posture (disabled + aria-busy + spinner with the resting label preserved
+ * as the accessible name) from the primitive's own skin. This file keeps
+ * only the footer layout and the narrow-viewport stacking. The former
+ * hand-built button chrome, spinner ring and `confirm-label` hiding are
+ * retired — that copy also LOST the confirm's accessible name while loading
+ * (`visibility: hidden` drops the label from the a11y tree).
+ *
  * SCOPE ROOT is SELF-CARRYING: `rottay-confirm-dialog--modern` sits on the same node as
  * `data-part='backdrop'` (the fixed positioning wrapper). The PAINTED scrim is a
  * separate inner div stamped `data-part='scrim'`.
@@ -38,10 +50,18 @@
  * the tenant artifacts' unlayered `*` border-color floor at (0,3,1); the
  * target's own `data-part` is repeated to buy the extra attributes.
  *
- * The spinner rides the canonical `ds-foundation-spin` (Table/Tree/Form
- * precedent) — the former `ds-spin` dependency on the rustic theme bundle is
- * retired. The `[data-loading='true']` anchor buys the border shorthand's
- * (0,4,0) with a DISTINCT attribute; repetition is forbidden (4th-tanda law).
+ * ICON WELL (Pass-B): the variant icon now sits in the same tinted circle
+ * well AlertDialog paints — governed semantic roles (StatusInfo/Warning/
+ * ErrorIcon, drained from the retired component-local SVGs), a 10% tone tint
+ * and an inset keyline so the tone stays framed at low effect intensity.
+ *
+ * RESILIENCE (Pass-B): the surface caps its block size against the dynamic
+ * viewport and scrolls its own overflow; density postures (PortalScope
+ * carries `data-density`) step the padding deliberately.
+ *
+ * FORCED COLORS (Pass-B): full parity with alert-dialog.css — the scrim,
+ * surface, icon well and copy re-assert in system colors. The actions are
+ * composed Buttons and carry their own forced-colors contract.
  */
 
 /* ---- entrance keyframes: engine-namespaced so a future rustic twin cannot
@@ -78,8 +98,13 @@
   display: none;
 }
 
-/* ---- scrim: fill + the sanctioned glass layer ---- */
+/* ---- scrim: fill + the sanctioned glass layer. Geometry (full-viewport
+        absolute, click-transparent) drained from the engine's former inline
+        static (Pass-2 P0, the AlertDialog drain's parity). ---- */
 .rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='scrim'] {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
   background-color: var(--ds-overlay-bg, var(--ds-color-alpha-black-40));
   background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
   backdrop-filter: var(--ds-glass-backdrop-filter, var(--ds-modal-overlay-backdrop));
@@ -93,7 +118,10 @@
   /* The lift overlay is its own layer directly above the fill so the fallback
      chain stays untouched; it is inert until a dark surface raises
      --ds-elevation-lift-strength, where the near-invisible shadow ramp needs
-     the luminance step. Level 4 matches the overlay elevation band. */
+     the luminance step. Level 4 matches the overlay elevation band.
+     `position: relative` is drained from the engine's former inline static
+     (Pass-2 P0): it keeps the panel painting above the positioned scrim. */
+  position: relative;
   background-color: var(--ds-surface-card);
   background-image: linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4));
   border-radius: var(--ds-radius-lg);
@@ -103,6 +131,12 @@
     var(--ds-confirm-dialog-max-width, 24rem),
     calc(100vw - var(--ds-spacing-4) - var(--ds-spacing-4))
   );
+  /* Cap against the DYNAMIC viewport with breathing room at both edges; the
+     panel scrolls its own overflow instead of pushing actions off-screen. */
+  max-block-size: calc(100vh - var(--ds-spacing-8));
+  max-block-size: calc(100dvh - var(--ds-spacing-8));
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: var(--ds-confirm-dialog-padding, var(--ds-spacing-6));
   animation: ds-confirm-dialog-enter-modern var(--ds-motion-normal)
     var(--ds-motion-ease-out) both;
@@ -111,29 +145,51 @@
   border: 1px solid var(--ds-color-border-subtle);
 }
 
+/* Density postures (the attribute lives on the PortalScope wrapper, so the
+   ancestor axis is the honest selector): deliberate padding steps, not a
+   uniform scale; comfortable keeps reading `--ds-confirm-dialog-padding`. */
+[data-density='compact'] .rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='surface'] {
+  padding: var(--ds-spacing-4);
+}
+[data-density='spacious'] .rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='surface'] {
+  padding: var(--ds-spacing-8);
+}
+
 /* ---- content row: icon + copy (layout drained from the `flex gap-3`,
         `flex-shrink-0 mt-0.5` and `flex-1` utilities). ---- */
 .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='content'] {
   display: flex;
-  gap: var(--ds-spacing-3, 12px);
+  gap: var(--ds-spacing-3);
 }
 .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='content'] > [data-part='icon'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  margin-block-start: 2px;
+  inline-size: var(--_ds-proto-confirm-dialog-icon-size, 2.5rem);
+  block-size: var(--_ds-proto-confirm-dialog-icon-size, 2.5rem);
+  border-radius: var(--ds-radius-full);
 }
 .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='content'] > [data-part='copy'] {
   flex: 1;
   min-inline-size: 0;
 }
 
-/* ---- icon tint: semantic variant channels ---- */
+/* ---- icon tint + well: semantic variant channels (tint at 10%, keyline at
+        22% — the AlertDialog well grammar; never palette literals) ---- */
 .rottay-confirm-dialog--modern[data-part='backdrop'] [data-variant='info'] [data-part='icon'] {
+  background: color-mix(in srgb, var(--ds-color-primary-500) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary-500) 22%, transparent);
   color: var(--ds-color-primary-500);
 }
 .rottay-confirm-dialog--modern[data-part='backdrop'] [data-variant='warning'] [data-part='icon'] {
+  background: color-mix(in srgb, var(--ds-color-warning-500) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-warning-500) 22%, transparent);
   color: var(--ds-color-warning-500);
 }
 .rottay-confirm-dialog--modern[data-part='backdrop'] [data-variant='danger'] [data-part='icon'] {
+  background: color-mix(in srgb, var(--ds-color-error-500) 10%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-error-500) 22%, transparent);
   color: var(--ds-color-error-500);
 }
 
@@ -146,17 +202,22 @@
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-font-size-lg);
   font-weight: var(--ds-font-weight-semibold);
-  letter-spacing: var(--ds-letter-spacing-heading, -0.015em);
+  letter-spacing: var(--ds-letter-spacing-heading);
   line-height: var(--ds-line-height-tight);
 }
 .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='description'] {
+  overflow-wrap: anywhere;
   color: var(--ds-color-text-secondary);
   font-family: var(--ds-font-family-base);
   font-size: var(--ds-font-size-sm);
   line-height: var(--ds-line-height-relaxed);
 }
 
-/* ---- footer: end-aligned action row ---- */
+/* ---- footer: end-aligned action row. Both actions compose the Button
+        primitive (AlertDialog's grammar): chrome, hover/press/focus/disabled,
+        the pending posture, the coarse 44px floor and forced-colors are all
+        owned by the primitive's own skin — this file keeps only the row
+        layout and the narrow stacking. ---- */
 .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='footer'] {
   display: flex;
   justify-content: flex-end;
@@ -164,104 +225,21 @@
   margin-block-start: var(--ds-spacing-4);
 }
 
-/* ---- actions: shared geometry + the state contract (spec section 4) ---- */
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'] {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--ds-spacing-2);
-  min-block-size: var(--ds-control-height-sm, 2.25rem);
-  padding-inline: var(--ds-spacing-md);
-  cursor: pointer;
-  border: none;
-  border-radius: var(--ds-radius-md);
-  font-family: var(--ds-font-family-base);
-  font-size: var(--ds-font-size-sm);
-  transition:
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
-    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
-}
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action']:focus-visible {
-  outline: none;
-  box-shadow: var(--ds-shadow-focus-ring);
-}
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action']:active:not(:disabled) {
-  transform: scale(var(--ds-state-press-scale));
-}
-/* The confirm-pending state (loading) is skin-owned: the engine only sets the
-   `disabled` attribute. `cursor: wait` communicates the in-flight cost of the
-   action; the dim keeps it legible, not hidden. */
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action']:disabled {
-  cursor: wait;
-  opacity: var(--ds-state-disabled-opacity);
+/* The surface is the container: on narrow panels the actions stack
+   full-width instead of compressing into an unreadable end-aligned row
+   (alert-dialog.css's grammar — long localized labels stay reachable at
+   320px). */
+.rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='surface'] {
+  container-type: inline-size;
 }
 
-/* ---- cancel action: ghost treatment ---- */
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-action='cancel'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
-}
-@media (hover: hover) {
-  .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-action='cancel']:hover:not(:disabled) {
-    background: var(--ds-surface-highlight);
+@container (max-width: 20rem) {
+  .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='footer'] {
+    flex-direction: column;
+    align-items: stretch;
   }
-}
-
-/* ---- confirm action: semantic variant fills ---- */
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-action='confirm'] {
-  color: var(--ds-color-text-on-primary);
-}
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-variant='info'] [data-part='action'][data-action='confirm'] {
-  background: var(--ds-color-primary);
-}
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-variant='warning'] [data-part='action'][data-action='confirm'] {
-  background: var(--ds-color-warning);
-}
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-variant='danger'] [data-part='action'][data-action='confirm'] {
-  background: var(--ds-color-error);
-}
-/* Hover = a quiet luminance lift on the filled action (spec section 4),
-   gated to devices with real hover; the `:active` press scale above is the
-   touch/active equivalent (4th-tanda law). */
-@media (hover: hover) {
-  .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-action='confirm']:hover:not(:disabled) {
-    background-image: linear-gradient(
-      color-mix(in srgb, var(--ds-color-text-on-primary) var(--ds-state-hover-shift, 4%), transparent),
-      color-mix(in srgb, var(--ds-color-text-on-primary) var(--ds-state-hover-shift, 4%), transparent)
-    );
-  }
-}
-
-/* ---- loading spinner ring: canonical `ds-foundation-spin` (Table/Tree/Form
-        precedent) replaces the fragile cross-engine `ds-spin` dependency.
-        The button's width NEVER jumps when loading toggles: the spinner is
-        centered absolute over the label, which keeps its box but hides. ---- */
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-action='confirm'] {
-  position: relative;
-}
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='spinner'] {
-  position: absolute;
-  inset-inline: 0;
-  margin-inline: auto;
-  inline-size: 1rem;
-  block-size: 1rem;
-  border-radius: 50%;
-  animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
-}
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-loading='true'] [data-part='spinner'] {
-  border: 2px solid currentColor;
-  border-top-color: transparent;
-}
-.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-loading='true'] [data-part='confirm-label'] {
-  visibility: hidden;
-}
-
-/* 44px hit area on coarse pointers, via block-size only — never by inflating
-   the visual size beyond the density contract. */
-@media (pointer: coarse) {
-  .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'] {
-    min-block-size: var(--ds-confirm-dialog-touch-target, 2.75rem);
+  .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='footer'] > * {
+    inline-size: 100%;
   }
 }
 
@@ -272,21 +250,31 @@
     animation-timing-function: linear;
     transform: none;
   }
-
-  .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'] {
-    transition: none;
-  }
-  .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action']:active:not(:disabled) {
-    transform: none;
-  }
 }
 
-/* Forced colors: shadow rings vanish, so the focus channel degrades to a
-   system outline. */
+/* Forced colors: the scrim, lift, elevation and shadow rings vanish, so the
+   surface keeps a framed system boundary, the scrim stays a see-through
+   system mix, and the icon well and copy re-assert in system colors. The
+   composed Button actions carry their own forced-colors contract. */
 @media (forced-colors: active) {
-  .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action']:focus-visible {
-    outline: 2px solid CanvasText;
-    outline-offset: 2px;
+  .rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='scrim'] {
+    background-color: color-mix(in srgb, CanvasText 35%, transparent);
+    background-image: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='surface'][role='alertdialog'] {
+    border-color: ButtonText;
+    background: Canvas;
     box-shadow: none;
+  }
+  .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='icon'] {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    box-shadow: none;
+    color: CanvasText;
+  }
+  .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='description'] {
+    color: CanvasText;
   }
 }

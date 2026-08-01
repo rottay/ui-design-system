@@ -1,6 +1,6 @@
 /**
  * Drawer compound skin -- Drawer.Header / Body / Footer
- * (WO-SKIN-03 checkpoint O).
+ * (WO-SKIN-03 checkpoint O; P2 layout/typography consolidation 2026-07-31).
  *
  * Engine-agnostic: these three compounds render one tree regardless of the active
  * engine, so they get a single home here rather than an engines/{modern,rustic}/skin pair. They
@@ -14,36 +14,163 @@
  * to clear the tenant artifacts' unlayered `*` border-color floor at (0,3,1).
  * `border: none` on the close button is a color-free reset and is exempt.
  *
+ * LAYOUT OWNERSHIP (P2): the compounds used to inline their static layout
+ * (flex row, padding literals, gap literals, title font-size/line-height
+ * literals). That paint lives here now; the TSX keeps only the per-instance
+ * `--ds-drawer-{header,footer}-divider` hatch and stamps `data-padding` /
+ * `data-align` for the variant maps. Declared channels resolve BARE (no
+ * literal fallbacks); undeclared family hooks keep their fallback as their
+ * contract.
+ *
  * PERSONALITY: `.rottay-drawer-header/-body/-footer/-close` match no rule in
  * runtime/personality.css (its Drawer rules key on `.rottay-drawer` and
  * `.rottay-drawer-overlay`, which the ENGINE panel and backdrop carry, not these).
  *
  * The `divider` booleans ride the `--ds-drawer-{header,footer}-divider` hatches:
  * an off divider resolves to the same explicit `none` the inline style set.
+ *
+ * The compound close control's paint and interaction states (hover gated to
+ * hover-capable pointers, `:active` press, `--ds-focus-ring-*` focus, 44px
+ * coarse floor, forced-colors frame) live below; the glyph is the governed
+ * `action-close` icon role stamped by the compound, not a text character.
  */
+
+.rottay-drawer-header[data-part='header'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3);
+  padding: var(--ds-spacing-4) var(--ds-spacing-6);
+  /* Prevent shrinking when content overflows */
+  flex-shrink: 0;
+}
 
 .rottay-drawer-header.rottay-drawer-header[data-part='header'][data-part='header'] {
   border-bottom: var(--ds-drawer-header-divider);
 }
 
 .rottay-drawer-header [data-part='title'] {
+  /* Grow into the available space and truncate safely inside the flex row. */
+  flex: 1;
+  min-inline-size: 0;
+  margin: 0;
   color: inherit;
+  /* Typography rides the semantic roles; the legacy tenant hatches stay
+     first in the chain as the family contract. */
+  font-size: var(--ds-drawer-title-font-size, var(--ds-font-size-lg));
+  font-weight: var(--ds-drawer-title-font-weight, var(--ds-font-weight-semibold));
+  line-height: var(--ds-line-height-snug);
 }
 
 .rottay-drawer-close[data-part='close-button'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-1);
+  cursor: pointer;
   background: transparent;
   border: none;
-  color: var(--ds-drawer-close-color, var(--ds-color-text-secondary, rgba(0, 0, 0, 0.45)));
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-drawer-close-color, var(--ds-color-text-secondary));
+  transition:
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+/* Hover is hover-capable-only; a held press gets the same ink through
+   :active, so touch never loses the affordance. Focus rides the shared
+   --ds-focus-ring-* channels (engine close-button grammar parity). */
+@media (hover: hover) {
+  .rottay-drawer-close[data-part='close-button']:hover {
+    background-color: var(--ds-surface-highlight);
+    color: var(--ds-color-text-primary);
+  }
+}
+.rottay-drawer-close[data-part='close-button']:active {
+  transform: scale(var(--ds-state-press-scale));
+  background-color: var(--ds-surface-highlight);
+  color: var(--ds-color-text-primary);
+}
+.rottay-drawer-close[data-part='close-button']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-drawer-close[data-part='close-button'] {
+    transition: none;
+  }
+}
+
+/* Coarse pointers: the compound close control meets the physical 44px floor. */
+@media (pointer: coarse) {
+  .rottay-drawer-close[data-part='close-button'] {
+    min-inline-size: max(44px, var(--ds-size-touch-target, 44px));
+    min-block-size: max(44px, var(--ds-size-touch-target, 44px));
+  }
+}
+
+/* Forced colors: a visible system-color frame and Highlight focus. */
+@media (forced-colors: active) {
+  .rottay-drawer-close.rottay-drawer-close[data-part='close-button'][data-part='close-button'] {
+    border: 1px solid ButtonText;
+    color: ButtonText;
+  }
+  .rottay-drawer-close[data-part='close-button']:focus-visible {
+    outline-color: Highlight;
+  }
 }
 
 .rottay-drawer-body[data-part='body'] {
+  /* Fill the available vertical space between header and footer; the zero
+     block floor lets a tall body scroll inside its own region instead of
+     pushing siblings out (engine body grammar parity). */
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--ds-spacing-6);
   background-color: var(--ds-drawer-body-bg, transparent);
   color: var(--ds-drawer-body-color, inherit);
 }
 
+/* Padding variants: the prop stamps `data-padding`, the skin owns the
+   spacing-token values (base rule above = the 'lg' default). */
+.rottay-drawer-body[data-part='body'][data-padding='none'] {
+  padding: 0;
+}
+.rottay-drawer-body[data-part='body'][data-padding='sm'] {
+  padding: var(--ds-spacing-3);
+}
+.rottay-drawer-body[data-part='body'][data-padding='md'] {
+  padding: var(--ds-spacing-4);
+}
+
 .rottay-drawer-footer[data-part='footer'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-3);
+  padding: var(--ds-spacing-4) var(--ds-spacing-6);
+  /* Prevent shrinking when content overflows */
+  flex-shrink: 0;
+  justify-content: flex-end;
   background-color: var(--ds-drawer-footer-bg, transparent);
 }
+
+/* Align variants: the prop stamps `data-align`, the skin owns the
+   justify-content values (base rule above = the 'end' default). */
+.rottay-drawer-footer[data-part='footer'][data-align='start'] {
+  justify-content: flex-start;
+}
+.rottay-drawer-footer[data-part='footer'][data-align='center'] {
+  justify-content: center;
+}
+.rottay-drawer-footer[data-part='footer'][data-align='space-between'] {
+  justify-content: space-between;
+}
+
 .rottay-drawer-footer.rottay-drawer-footer[data-part='footer'][data-part='footer'] {
   border-top: var(--ds-drawer-footer-divider);
 }

@@ -34,6 +34,12 @@
 
 /* Layer 2: Component tokens */
 @import "../../presentation/components/avatar.css" layer(rottay-components);
+@import "../../presentation/components/visually-hidden.css"
+  layer(rottay-components);
+@import "../../presentation/components/icon-frame.css"
+  layer(rottay-components);
+@import "../../presentation/components/arc.css" layer(rottay-components);
+@import "../../presentation/components/meter.css" layer(rottay-components);
 @import "../../presentation/components/badge.css" layer(rottay-components);
 @import "../../presentation/components/semantic-surface.css"
   layer(rottay-components);
@@ -603,6 +609,10 @@
 @import "../../presentation/components/skin/auth-surface.css"
   layer(rottay-components);
 @import "../../presentation/components/skin/chat-surface.css"
+  layer(rottay-components);
+@import "../../presentation/components/skin/alert-compounds.css"
+  layer(rottay-components);
+@import "../../presentation/components/skin/tag-compounds.css"
   layer(rottay-components);
 @import "../../presentation/components/skin/empty-state-surface.css"
   layer(rottay-components);

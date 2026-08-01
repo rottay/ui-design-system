@@ -56,7 +56,6 @@
 import React, { forwardRef } from 'react';
 import type { ModalHeaderProps } from '../../contracts';
 import { ModalCloseButton } from './CloseButton';
-import { PADDING_MAP } from '../../contracts';
 
 // ============================================================================
 // Component
@@ -107,47 +106,21 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
     // -------------------------------------------------------------------------
 
     /**
-     * Container styles for the header section.
-     * Uses flexbox for horizontal layout with space-between alignment.
+     * Instance styles for the header section: only the `divider` decision
+     * rides inline, as a hatch the skin consumes (the "off" branch resolves
+     * to the same explicit `none` React used to set inline; the divider color
+     * resolves from the semantic border channel, never a hardcoded neutral).
+     * Layout (flex, gap, padding, shrink) AND typography are skin-owned —
+     * modal-compounds.css `[data-part='header']` / `[data-part='title']`.
      */
     const headerStyle: React.CSSProperties = {
-      // Layout - horizontal flex with space between title and close
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      gap: '12px',
-
-      // Spacing - uses PADDING_MAP for consistency
-      padding: PADDING_MAP.lg,
-
-      // Visual - optional bottom border for separation. The `divider` decision
-      // rides a hatch the skin consumes, so the "off" branch resolves to the
-      // same explicit `none` React set inline.
       '--ds-modal-header-divider': divider
-        ? '1px solid var(--ds-modal-header-border, rgba(0, 0, 0, 0.1))'
+        ? '1px solid var(--ds-modal-header-border, var(--ds-color-border-subtle))'
         : 'none',
-
-      // Prevent shrinking when content overflows
-      flexShrink: 0,
 
       // Merge user styles (takes precedence)
       ...style,
     } as React.CSSProperties;
-
-    /**
-     * Styles for the title text container.
-     * Allows the title to grow and fill available space.
-     */
-    const titleStyle: React.CSSProperties = {
-      // Layout - fill available space
-      flex: 1,
-      margin: 0,
-
-      // Typography - uses CSS custom properties for tenant theming
-      fontSize: 'var(--ds-modal-title-font-size, 18px)',
-      fontWeight: 'var(--ds-modal-title-font-weight, 600)',
-      lineHeight: 1.4,
-    };
 
     // -------------------------------------------------------------------------
     // Render
@@ -160,8 +133,8 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
         className={`rottay-modal-header ${className}`.trim()}
         style={headerStyle}
       >
-        {/* Title container */}
-        <div data-part="title" style={titleStyle}>{children}</div>
+        {/* Title container (layout + typography skin-owned) */}
+        <div data-part="title">{children}</div>
 
         {/* Close button - only rendered if closable and onClose provided */}
         {closable && onClose && (

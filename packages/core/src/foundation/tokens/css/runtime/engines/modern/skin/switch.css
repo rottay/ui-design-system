@@ -10,7 +10,12 @@
  * SCOPE ROOT is `.ds-switch.ds-switch--modern[data-part='root']` (a
  * `<label>`), carrying `data-size`, `data-checked`, `data-disabled`, and
  * `data-loading`. `track`, `thumb`, `label`, and `loading-indicator` are
- * descendants; the hidden accessibility `<input>` is a direct child.
+ * descendants; the hidden accessibility `<input>` is a direct child (its
+ * clip idiom lives here -- the engine paints nothing inline).
+ *
+ * LOADING composes the canonical Spinner primitive inside
+ * `[data-part='loading-indicator']`; the slot below owns layout only -- ring
+ * geometry, paint and spin cadence belong to the Spinner skin.
  *
  * THUMB TRAVEL is pure CSS: the per-size track defines
  * `--ds-switch-resolved-travel` (= trackW - trackH, density-scaled, because
@@ -23,10 +28,6 @@
  * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
  * unlayered at (0,3,0) or higher.
  */
-
-@keyframes ds-switch-modern-spin {
-  to { transform: rotate(1turn); }
-}
 
 /* Root row ------------------------------------------------------------- */
 .ds-switch.ds-switch--modern[data-part='root'] {
@@ -61,19 +62,19 @@
 
 /* Size geometry + resolved thumb travel (density-scaled). */
 .ds-switch.ds-switch--modern[data-part='root'][data-size='sm'] [data-part='track'] {
-  --ds-switch-resolved-track-w: calc(var(--ds-switch-sm-width, 1.75rem) * var(--ds-density-effective-scale, 1));
-  --ds-switch-resolved-track-h: calc(var(--ds-switch-sm-height, 1rem) * var(--ds-density-effective-scale, 1));
-  --ds-switch-resolved-thumb: calc(var(--ds-switch-sm-thumb, 0.75rem) * var(--ds-density-effective-scale, 1));
+  --ds-switch-resolved-track-w: calc(var(--ds-switch-sm-width) * var(--ds-density-effective-scale));
+  --ds-switch-resolved-track-h: calc(var(--ds-switch-sm-height) * var(--ds-density-effective-scale));
+  --ds-switch-resolved-thumb: calc(var(--ds-switch-sm-thumb, 0.75rem) * var(--ds-density-effective-scale));
 }
 .ds-switch.ds-switch--modern[data-part='root'][data-size='md'] [data-part='track'] {
-  --ds-switch-resolved-track-w: calc(var(--ds-switch-md-width, 2.75rem) * var(--ds-density-effective-scale, 1));
-  --ds-switch-resolved-track-h: calc(var(--ds-switch-md-height, 1.375rem) * var(--ds-density-effective-scale, 1));
-  --ds-switch-resolved-thumb: calc(var(--ds-switch-md-thumb, 1rem) * var(--ds-density-effective-scale, 1));
+  --ds-switch-resolved-track-w: calc(var(--ds-switch-md-width) * var(--ds-density-effective-scale));
+  --ds-switch-resolved-track-h: calc(var(--ds-switch-md-height) * var(--ds-density-effective-scale));
+  --ds-switch-resolved-thumb: calc(var(--ds-switch-md-thumb, 1rem) * var(--ds-density-effective-scale));
 }
 .ds-switch.ds-switch--modern[data-part='root'][data-size='lg'] [data-part='track'] {
-  --ds-switch-resolved-track-w: calc(var(--ds-switch-lg-width, 3.5rem) * var(--ds-density-effective-scale, 1));
-  --ds-switch-resolved-track-h: calc(var(--ds-switch-lg-height, 1.75rem) * var(--ds-density-effective-scale, 1));
-  --ds-switch-resolved-thumb: calc(var(--ds-switch-lg-thumb, 1.25rem) * var(--ds-density-effective-scale, 1));
+  --ds-switch-resolved-track-w: calc(var(--ds-switch-lg-width) * var(--ds-density-effective-scale));
+  --ds-switch-resolved-track-h: calc(var(--ds-switch-lg-height) * var(--ds-density-effective-scale));
+  --ds-switch-resolved-thumb: calc(var(--ds-switch-lg-thumb, 1.25rem) * var(--ds-density-effective-scale));
 }
 
 .ds-switch.ds-switch--modern [data-part='track'][data-part='track'] {
@@ -87,18 +88,28 @@
 .ds-switch.ds-switch--modern[data-checked='false'] [data-part='track'] {
   background-color: var(--ds-switch-unchecked-bg, var(--ds-color-border-secondary));
 }
-.ds-switch.ds-switch--modern[data-checked='true']:hover:not([data-disabled='true']) [data-part='track'] {
+/* Track hover (pointer-fine only); touch parity rides the press dip below. */
+@media (hover: hover) {
+  .ds-switch.ds-switch--modern[data-checked='true']:hover:not([data-disabled='true']) [data-part='track'] {
+    background-color: var(--ds-switch-checked-bg-hover, var(--ds-color-primary-hover));
+  }
+  .ds-switch.ds-switch--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='track'] {
+    background-color: var(--ds-switch-unchecked-bg-hover, var(--ds-color-border));
+  }
+}
+/* Touch equivalent of the track hover while the row is pressed. */
+.ds-switch.ds-switch--modern[data-checked='true']:active:not([data-disabled='true']) [data-part='track'] {
   background-color: var(--ds-switch-checked-bg-hover, var(--ds-color-primary-hover));
 }
-.ds-switch.ds-switch--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='track'] {
+.ds-switch.ds-switch--modern[data-checked='false']:active:not([data-disabled='true']) [data-part='track'] {
   background-color: var(--ds-switch-unchecked-bg-hover, var(--ds-color-border));
 }
 .ds-switch.ds-switch--modern[data-disabled='true'] [data-part='track'] {
   opacity: var(--ds-switch-disabled-opacity, 0.5);
 }
 .ds-switch.ds-switch--modern input:focus-visible ~ [data-part='track'] {
-  outline: var(--ds-switch-focus-ring-width, 2px) solid var(--ds-switch-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-switch-focus-ring-offset, 2px);
+  outline: var(--ds-switch-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-switch-focus-ring-color, var(--ds-focus-ring-color, var(--ds-color-primary)));
+  outline-offset: var(--ds-switch-focus-ring-offset, var(--ds-focus-ring-offset));
 }
 
 /* Thumb ---------------------------------------------------------------- */
@@ -147,43 +158,37 @@
   color: var(--ds-switch-label-color, var(--ds-color-text-primary));
   font-size: var(--ds-switch-label-font-size, var(--ds-font-size-sm));
   line-height: var(--ds-switch-label-line-height, var(--ds-line-height-snug));
-  hyphens: auto;
-  overflow-wrap: anywhere;
+  /* Word-boundary wrapping (never `anywhere`): per-character collapse is the
+     sighted Toggle-class defect the checkbox/radio skins already guard. */
+  overflow-wrap: break-word;
+  min-inline-size: 0;
 }
 .ds-switch.ds-switch--modern[data-disabled='true'] [data-part='label'] {
   color: var(--ds-color-text-disabled);
 }
 
-/* Loading indicator ----------------------------------------------------- */
+/* Loading slot ------------------------------------------------------------
+   The engine composes the canonical Spinner primitive here (no private
+   loading glyph): the slot owns only layout; ring geometry, paint and spin
+   cadence belong to the Spinner's own skin. */
 .ds-switch.ds-switch--modern [data-part='loading-indicator'] {
-  display: inline-grid;
-  place-items: center;
-  inline-size: var(--ds-switch-loading-size, 0.875rem);
-  block-size: var(--ds-switch-loading-size, 0.875rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.ds-switch.ds-switch--modern [data-part='loading-indicator'] svg {
-  inline-size: 100%;
-  block-size: 100%;
-  /* The fallback chain prefers the motion authority's slowest cadence over a
-     raw duration; the 900ms literal only resolves where the authority is
-     absent. The reduced-motion block below keeps loading perceptible with its
-     own slower cycle (the authority zeroes --ds-motion-glacial there). */
-  animation: ds-switch-modern-spin var(--ds-switch-loading-duration, var(--ds-motion-glacial, 500ms)) linear infinite;
-}
-
-/* Spinner paint lives here, never in the runtime: the track ring and the
-   sweeping arc read the same channels the rest of the control reads. */
-.ds-switch.ds-switch--modern [data-part='loading-indicator'] [data-part='loading-track'] {
-  stroke: var(--ds-switch-loading-track-color, var(--ds-color-border-secondary));
-}
-
-.ds-switch.ds-switch--modern [data-part='loading-indicator'] [data-part='loading-arc'] {
-  stroke: var(--ds-switch-loading-arc-color, var(--ds-color-primary));
-}
-
-/* hidden accessibility input (visually clipped): no border. */
+/* hidden accessibility input (visually clipped): the canonical sr-only
+   idiom, owned here with every other visual decision (was inline paint). */
 .ds-switch.ds-switch--modern input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
   border: 0;
 }
 
@@ -191,10 +196,6 @@
   .ds-switch.ds-switch--modern [data-part='track'],
   .ds-switch.ds-switch--modern [data-part='thumb'] {
     transition-duration: 0.01ms;
-  }
-
-  .ds-switch.ds-switch--modern [data-part='loading-indicator'] svg {
-    animation-duration: 1.8s;
   }
 }
 

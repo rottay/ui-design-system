@@ -168,6 +168,13 @@ export interface RadioProps extends EngineAwareProps {
   value?: string | number;
   /** Autofocus attribute */
   autoFocus?: boolean;
+  /**
+   * Accessible label forwarded to the native input. Required when no visible
+   * `label`/`children` is rendered (standalone indicator); ignored otherwise.
+   * Same contract field the sibling input primitives (Input, Select, Slider)
+   * already expose.
+   */
+  'aria-label'?: string;
 }
 
 /**

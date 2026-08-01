@@ -18,7 +18,7 @@
  * @package @rottay/design-system
  */
 
-import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive';
 import { BaseToast } from '../../engines';
@@ -123,10 +123,6 @@ export function UndoToast({
   const [visible, setVisible] = useState(true);
   const [paused, setPaused] = useState(false);
 
-  const uid = useId().replace(/:/g, '');
-  const ringAnimName = `ds-toast-undo-ring-${uid}`;
-  const barAnimName = `ds-toast-undo-bar-${uid}`;
-
   // Latest callbacks in refs so the window timer never closes over stale state.
   const onUndoRef = useRef(onUndo);
   onUndoRef.current = onUndo;
@@ -196,13 +192,6 @@ export function UndoToast({
   // zero/negative window (no countdown to run).
   const animate = !prefersReducedMotion && duration > 0 && countdown !== 'none';
 
-  const keyframes =
-    countdown === 'ring'
-      ? `@keyframes ${ringAnimName}{from{stroke-dashoffset:0}to{stroke-dashoffset:${RING_CIRCUMFERENCE}px}}`
-      : countdown === 'bar'
-        ? `@keyframes ${barAnimName}{from{width:100%}to{width:0%}}`
-        : '';
-
   const ringNode =
     countdown === 'ring' && duration > 0 ? (
       <svg
@@ -235,11 +224,12 @@ export function UndoToast({
           style={
             animate
               ? {
-                  animationName: ringAnimName,
+                  animationName: 'ds-toast-undo-ring-deplete',
                   animationDuration: `${duration}ms`,
                   animationTimingFunction: 'linear',
                   animationFillMode: 'forwards',
                   animationPlayState: paused ? 'paused' : 'running',
+                  ['--_ds-toast-undo-ring-circumference' as any]: `${RING_CIRCUMFERENCE}px`,
                 }
               : { strokeDashoffset: 0 }
           }
@@ -255,8 +245,6 @@ export function UndoToast({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {animate && keyframes && <style dangerouslySetInnerHTML={{ __html: keyframes }} />}
-
       <BaseToast
         variant={variant}
         title={title}
@@ -292,7 +280,7 @@ export function UndoToast({
               width: '100%',
               ...(animate
                 ? {
-                    animationName: barAnimName,
+                    animationName: 'ds-toast-undo-bar-deplete',
                     animationDuration: `${duration}ms`,
                     animationTimingFunction: 'linear',
                     animationFillMode: 'forwards',

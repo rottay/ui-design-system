@@ -27,13 +27,25 @@ import { Empty } from '../../../../facade';
 /** Modern List Item Meta. Renders avatar + title + description with a flex row. */
 export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
   (props, ref) => {
-    const { avatar, title, description, className = '', style } = props;
+    const {
+      avatar,
+      title,
+      description,
+      className = '',
+      style,
+      'data-part': dataPart,
+      // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to
+      // the meta root. It spreads BEFORE the engine's own stamps so the skin
+      // contract always lands last.
+      ...rest
+    } = props;
     // flex-start alignment so multi-line descriptions don't center the avatar
     return (
       <div
+        {...rest}
         ref={ref}
         className={`rottay-list-item-meta rottay-list-item-meta--modern ${className}`}
-        data-part="meta"
+        data-part={dataPart ?? 'meta'}
         style={style}
       >
         {avatar && <div data-part="meta-avatar">{avatar}</div>}
@@ -58,14 +70,28 @@ Meta.displayName = 'List.Item.Meta.Modern';
 /** Modern List Item. Uses `<li>` with flex layout for content, extra, and actions. */
 export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
   (props, ref) => {
-    const { actions, extra, children, className = '', style } = props;
+    const {
+      actions,
+      extra,
+      children,
+      className = '',
+      style,
+      'data-part': dataPart,
+      // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to
+      // the row element. It spreads BEFORE the engine's own stamps so the skin
+      // contract always lands last — and it is what makes the skin's
+      // aria-selected / aria-current / aria-disabled row-state grammar
+      // reachable through the public <List.Item> API at all.
+      ...rest
+    } = props;
     // Content takes remaining space; extra and actions are flex-shrink-0 on the
     // inline-end side (the skin's margins are logical, so they flip in RTL).
     return (
       <li
+        {...rest}
         ref={ref}
         className={`rottay-list-item rottay-list-item--modern ${className}`}
-        data-part="item"
+        data-part={dataPart ?? 'item'}
         style={style}
       >
         <div data-part="item-content">{children}</div>
@@ -111,6 +137,11 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
       children,
       className = '',
       style,
+      'data-part': dataPart,
+      // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to
+      // the root element (both postures). It spreads BEFORE the engine's own
+      // stamps so the skin contract always lands last.
+      ...rest
     } = props;
 
     // Prefer renderItem for data-driven lists; fall back to children for declarative usage
@@ -122,13 +153,15 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
     if (loading) {
       return (
         <div
+          {...rest}
           ref={ref}
           // `animate-pulse` stays as a test-pinned bridge string; the skin's
           // own motion-channel pulse OVERRIDES the vendor animation by layer
           // ownership, so the paint/motion authority is the skin (motion law).
           className={`rottay-list rottay-list--modern animate-pulse ${className}`}
-          data-part="root"
+          data-part={dataPart ?? 'root'}
           data-loading="true"
+          aria-busy="true"
           style={style}
         >
           {[1, 2, 3].map((i) => (
@@ -153,12 +186,14 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
 
     return (
       <div
+        {...rest}
         ref={ref}
         className={`rottay-list rottay-list--modern ${className}`}
-        data-part="root"
+        data-part={dataPart ?? 'root'}
         data-loading="false"
         data-bordered={bordered ? 'true' : 'false'}
         data-size={size}
+        data-item-layout={itemLayout}
         style={style}
       >
         {header && (

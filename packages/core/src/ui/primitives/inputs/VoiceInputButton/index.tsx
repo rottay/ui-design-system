@@ -23,6 +23,11 @@
  * the single paint owner and also owns the `ds-voice-input-button-pulse` /
  * `-spin` keyframes referenced below. This file carries no inline paint.
  *
+ * The root is a real `<button type='button'>` (via `Box as='button'`) that
+ * honors the `BaseComponentProps` passthrough law: caller `id`, `className`,
+ * `style`, `data-testid` and arbitrary `data-*`/`aria-*` reach the element,
+ * with the engine-owned hooks winning every tie (the layout sisters' law).
+ *
  * Originally lived in app-platform's `_shared/voice-input/` and was
  * relocated to the design system as part of Wave 4.2 of the canonical
  * execution plan (correcting the Wave 1 misclassification — voice
@@ -37,10 +42,21 @@ import {
   MicOffIcon as MicOff,
 } from '../../../../graphics/icons';
 
+import type { BaseComponentProps } from '../../../../foundation/contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useVoiceInput } from '../../../../infrastructure/runtime/application/automation/voice/composition/react/input';
 
-export interface VoiceInputButtonProps {
+/**
+ * The passthrough law applies here exactly like on the layout sisters: the
+ * caller's `BaseComponentProps` (`id`, `className`, `style`, `data-testid`,
+ * arbitrary `data-*`/`aria-*`) reach the rendered `<button>` — spread FIRST,
+ * so the engine-owned hooks (`data-part`, `data-status`, `aria-pressed`,
+ * `onClick`, …) always win the tie, the same ordering Box/Stack/Flex pin.
+ * The accessible-name override channel is `ariaLabel` (or a caller
+ * `aria-label`, honored as fallback of `ariaLabel`): the state-dependent
+ * default only applies when neither is given.
+ */
+export interface VoiceInputButtonProps extends BaseComponentProps {
   /** BCP 47 language tag, e.g. 'en-US', 'es-AR'. Default: 'en-US'. */
   lang?: string;
   /** Called with the final transcript when recording stops. */
@@ -59,6 +75,9 @@ export function VoiceInputButton({
   size = 'md',
   variant = 'ghost',
   ariaLabel,
+  className,
+  style,
+  ...passthrough
 }: VoiceInputButtonProps) {
   const {
     isSupported,
@@ -112,6 +131,7 @@ export function VoiceInputButton({
 
   const resolvedAriaLabel =
     ariaLabel ??
+    passthrough['aria-label'] ??
     (isActive
       ? voiceLabel('voiceInput.stop', 'Stop voice input')
       : voiceLabel('voiceInput.start', 'Start voice input'));
@@ -127,9 +147,16 @@ export function VoiceInputButton({
       color={isError ? 'error' : 'default'}
       maxWidth="var(--ds-voice-input-tooltip-max-width, 280px)"
     >
+      {/* `type='button'`: without it the UA default is `submit` and a mic
+          toggle inside a form would submit it (Box's own contract flags this
+          exact hazard for `as='button'`). The passthrough spreads first so
+          every engine-owned hook below wins the tie — the pinned law of the
+          layout sisters. */}
       <Box
         as="button"
-        className="ds-voice-input-button"
+        type="button"
+        {...passthrough}
+        className={['ds-voice-input-button', className].filter(Boolean).join(' ')}
         data-part="root"
         data-size={size}
         data-status={status}
@@ -141,6 +168,7 @@ export function VoiceInputButton({
         aria-label={resolvedAriaLabel}
         aria-pressed={isActive}
         title={title}
+        style={style}
       >
         {status === 'transcribing' ? (
           <LoaderCircle />

@@ -1,0 +1,279 @@
+/**
+ * Meter — canonical paint for the engine-independent scalar-gauge primitive.
+ *
+ * LAYER: rottay-components (single owner for every engine and consumer).
+ * SCOPE: `.ds-meter` applied by the `Meter` primitive. Axes arrive as data
+ *   attributes stamped by the TSX: `data-variant` (bar|compact|ring),
+ *   `data-size`, `data-tone` (only when the caller sets an explicit tone),
+ *   `data-threshold` (none|optimal|suboptimal|critical, resolved with the
+ *   WHATWG region algorithm over sanitized bounds). Anatomy parts: header,
+ *   label, value, track, fill, tick, ring, description.
+ * SPECIFICITY: single class + attribute selectors, no repetition, no
+ *   `!important`, logical properties throughout. The bar fill and the ticks
+ *   anchor to the inline-start edge, so RTL flows them from the reading
+ *   side with zero mirroring code; the fill's scaleX origin flips under
+ *   `:dir(rtl)`. The ring arc is gauge semantics (a clockwise sweep from
+ *   12 o'clock), deliberately direction-neutral: it does not opt into the
+ *   substrate's `data-arc-mirror` flip.
+ * GEOMETRY: track thickness and ring diameter ride the density-effective
+ *   spacing scale (already multiplied by `--ds-density-effective-scale`),
+ *   so the tenant density dial and compact/comfortable/spacious reshape every
+ *   meter without a fixed pixel. The only per-instance geometry is truly
+ *   dynamic: the fill ratio custom property, the tick positions and the
+ *   registered arc sweep, all stamped inline by the TSX (contract instance
+ *   geometry — never a tenant token).
+ * THRESHOLDS: on bar/compact, never color-only — shape (track tick marks at
+ *   the low/high boundaries), label (the localized value text plus the
+ *   screen-reader threshold status in `aria-valuetext`) and pattern (static
+ *   governed stripes on the fill, graduated by severity). On the ring the
+ *   threshold reaches users through TEXT — `aria-valuetext` and the center
+ *   reading — not through shape. An explicit `data-tone` always wins over
+ *   threshold-derived fill color: its rules sort after the threshold ones at
+ *   equal specificity.
+ * RING: composes the shared `.ds-arc` substrate
+ *   (presentation/components/arc.css) — this skin only maps its own channels
+ *   (`--_ds-arc-size/fill/track`) onto it and sizes the textual center.
+ * MOTION: fill and arc transitions ride `--ds-motion-normal` /
+ *   `--ds-motion-ease-out`, which the foundation zeroes under reduced
+ *   motion — every meter settles in its final state immediately. Stripes are
+ *   static, so the non-color threshold cue survives motion-off.
+ */
+
+/* ---- private experimental axes (prototype ledger; fallbacks canonical) ---- */
+
+.ds-meter {
+  /* material axis: track substrate */
+  --_ds-proto-meter-track-bg: var(--ds-color-border-secondary);
+  /* geometry axis: bar/compact track thickness */
+  --_ds-proto-meter-track-size: var(--ds-spacing-2);
+  /* geometry axis: ring diameter */
+  --_ds-proto-meter-ring-size: var(--ds-spacing-16);
+
+  /* internal composition hatch: resolved fill color (threshold < tone) */
+  --_meter-fill: var(--ds-color-primary);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-1);
+  inline-size: 100%;
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- size (geometry × density-effective spacing scale) ---- */
+
+.ds-meter[data-size='sm'] {
+  --_ds-proto-meter-track-size: var(--ds-spacing-1);
+  --_ds-proto-meter-ring-size: var(--ds-spacing-10);
+}
+.ds-meter[data-size='md'] {
+  --_ds-proto-meter-track-size: var(--ds-spacing-2);
+  --_ds-proto-meter-ring-size: var(--ds-spacing-16);
+}
+.ds-meter[data-size='lg'] {
+  --_ds-proto-meter-track-size: var(--ds-spacing-3);
+  --_ds-proto-meter-ring-size: var(--ds-spacing-24);
+}
+
+/* ---- header / label / value / description ---- */
+
+.ds-meter > [data-part='header'] {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2);
+  min-inline-size: 0;
+}
+
+.ds-meter [data-part='label'] {
+  min-inline-size: 0;
+  overflow: hidden;
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-normal);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-meter [data-part='value'] {
+  flex: none;
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: var(--ds-line-height-normal);
+}
+
+.ds-meter > [data-part='description'] {
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs);
+  line-height: var(--ds-line-height-normal);
+  overflow-wrap: anywhere;
+}
+
+/* ---- bar / compact track, fill, ticks ---- */
+
+.ds-meter > [data-part='track'] {
+  position: relative;
+  display: block;
+  flex: none;
+  inline-size: 100%;
+  block-size: var(--_ds-proto-meter-track-size);
+  border-radius: var(--ds-radius-full);
+  background: var(--_ds-proto-meter-track-bg);
+}
+
+.ds-meter [data-part='fill'] {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: 100%;
+  border-radius: var(--ds-radius-full);
+  background: var(--_meter-fill);
+  transform: scaleX(var(--_meter-ratio, 0));
+  transform-origin: 0 50%;
+  transition: transform var(--ds-motion-normal) var(--ds-motion-ease-out);
+}
+
+.ds-meter:dir(rtl) [data-part='fill'] {
+  transform-origin: 100% 50%;
+}
+
+/* threshold boundary marks: hairlines overshooting the track pill (shape cue) */
+.ds-meter [data-part='tick'] {
+  position: absolute;
+  inset-block: calc(-1 * var(--ds-spacing-1));
+  border-inline-start: 1px solid var(--ds-color-text-muted);
+}
+
+/* ---- compact: single-row micro meter (label · track · value) ---- */
+
+.ds-meter[data-variant='compact'] {
+  flex-flow: row wrap;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+  inline-size: auto;
+  min-inline-size: var(--ds-spacing-20);
+}
+
+.ds-meter[data-variant='compact'] > [data-part='header'] {
+  display: contents;
+}
+
+.ds-meter[data-variant='compact'] [data-part='label'] {
+  order: 1;
+  flex: 0 1 auto;
+}
+
+.ds-meter[data-variant='compact'] > [data-part='track'] {
+  order: 2;
+  flex: 1 1 0;
+  min-inline-size: 0;
+}
+
+.ds-meter[data-variant='compact'] [data-part='value'] {
+  order: 3;
+}
+
+.ds-meter[data-variant='compact'] > [data-part='description'] {
+  flex: 1 1 100%;
+  order: 4;
+}
+
+/* ---- ring: the shared arc substrate, fed by this skin's channels ---- */
+
+.ds-meter[data-variant='ring'] {
+  align-items: center;
+  inline-size: auto;
+}
+
+.ds-meter [data-part='ring'] {
+  --_ds-arc-size: var(--_ds-proto-meter-ring-size);
+  --_ds-arc-fill: var(--_meter-fill);
+  --_ds-arc-track: var(--_ds-proto-meter-track-bg);
+
+  flex: none;
+}
+
+/* center reading: the textual alternative, sized off the arc */
+.ds-meter [data-part='ring'] > [data-part='value'] {
+  position: relative;
+  font-size: calc(var(--_ds-arc-size) * 0.22);
+  line-height: 1;
+}
+
+/* ---- threshold signaling (color + static pattern; tone overrides below) ---- */
+
+.ds-meter[data-threshold='optimal'] {
+  --_meter-fill: var(--ds-color-success);
+}
+
+.ds-meter[data-threshold='suboptimal'] {
+  --_meter-fill: var(--ds-color-warning);
+}
+
+.ds-meter[data-threshold='suboptimal'] [data-part='fill'] {
+  background-image: linear-gradient(
+    45deg,
+    color-mix(in srgb, white 14%, transparent) 25%,
+    transparent 25%,
+    transparent 50%,
+    color-mix(in srgb, white 14%, transparent) 50%,
+    color-mix(in srgb, white 14%, transparent) 75%,
+    transparent 75%
+  );
+  background-size: var(--ds-spacing-2) var(--ds-spacing-2);
+}
+
+.ds-meter[data-threshold='critical'] {
+  --_meter-fill: var(--ds-color-error);
+}
+
+.ds-meter[data-threshold='critical'] [data-part='fill'] {
+  background-image: linear-gradient(
+    45deg,
+    color-mix(in srgb, white 26%, transparent) 25%,
+    transparent 25%,
+    transparent 50%,
+    color-mix(in srgb, white 26%, transparent) 50%,
+    color-mix(in srgb, white 26%, transparent) 75%,
+    transparent 75%
+  );
+  background-size: var(--ds-spacing-2) var(--ds-spacing-2);
+}
+
+/* ---- explicit tone (sorted after thresholds at equal specificity: it wins) ---- */
+
+.ds-meter[data-tone='neutral'] {
+  --_meter-fill: var(--ds-color-text-secondary);
+}
+.ds-meter[data-tone='primary'] {
+  --_meter-fill: var(--ds-color-primary);
+}
+.ds-meter[data-tone='success'] {
+  --_meter-fill: var(--ds-color-success);
+}
+.ds-meter[data-tone='warning'] {
+  --_meter-fill: var(--ds-color-warning);
+}
+.ds-meter[data-tone='error'] {
+  --_meter-fill: var(--ds-color-error);
+}
+.ds-meter[data-tone='info'] {
+  --_meter-fill: var(--ds-color-info);
+}
+
+/* ---- forced colors: system palette, patterns flattened, ticks kept.
+        The ring remaps through the arc substrate's own forced-colors block. */
+
+@media (forced-colors: active) {
+  .ds-meter > [data-part='track'] {
+    border: 1px solid CanvasText;
+    background: Canvas;
+  }
+  .ds-meter [data-part='fill'] {
+    background: Highlight;
+  }
+  .ds-meter [data-part='tick'] {
+    border-color: CanvasText;
+  }
+}

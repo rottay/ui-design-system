@@ -12,20 +12,19 @@
  * `data-part='root'` + `data-direction`/`data-affix`) so the root's
  * sticky/flex structure is skin-owned too.
  *
- * MIXED BORDER MECHANISM — the inline-start geometry is assembled from two
- * sources: the 2px width comes from the engine's `border-s-2` class
- * (border-INLINE-start since K3-C — logical, so the marker flips to the
- * correct side under `dir="rtl"`); the INACTIVE color comes from the
- * engine's `border-transparent` class (present only when inactive); the
- * ACTIVE state used to paint that border with the primary hue. The owner's
- * no-vertical-color-accent law (filter-builder precedent) retires that:
- * the active marker is now NEUTRAL (`--ds-color-border-secondary`) and the
- * accent expression lives in typographic weight + accent ink + a quiet
- * background wash. Writing an inactive `border-color` rule would NOT be a
- * no-op: it would newly out-rank the tenant's unlayered
- * `* { border-color }` floor, which today beats the layered
- * `.border-transparent` utility. The inactive channel is therefore left
- * exactly as it is.
+ * P2-20 SINGLE-OWNER BORDER — the pass-1 mixed mechanism (engine `border-s-2`
+ * width utility + idle `border-transparent` utility, skin active color only)
+ * is DRAINED: the engine no longer carries border utilities and this file owns
+ * the whole accent-marker track — width, idle transparent color and selected
+ * neutral color. The idle transparent sits at (0,4,0) (two scope classes +
+ * `data-part` + `data-selected='false'`) so it intentionally out-ranks the
+ * tenant's unlayered `* { border-color }` floor at (0,3,1): under the layered
+ * utility the floor accidentally won and every idle item rendered a 2px bar
+ * in the tenant's generic border color. The governed reading is a clean idle
+ * track; the selected marker appears in `--ds-color-border-secondary` plus
+ * weight + accent ink + wash (never color alone). The base width lives at
+ * (0,3,0) — width has no tenant floor, and the horizontal override at
+ * (0,7,0) still neutralizes it per-axis.
  *
  * K3-C ADDENDUM (pass 1): the engine's remaining rhythm utilities
  * (`py-1 px-3 text-sm transition-colors block font-medium`, the nested
@@ -38,6 +37,22 @@
  * SPECIFICITY (P-48): the tenant border-color floor sits at (0,3,1), so the
  * active `border-color` must reach (0,4,0) — two scope classes + `data-part` +
  * `data-selected`. `color` is non-border paint and wins at (0,3,0)+.
+ *
+ * B9 ADDENDUM (pass 2):
+ * - HORIZONTAL marker axis: the active indicator is semantic of the active
+ *   item and must sit on the orientation's cross axis. `direction='horizontal'`
+ *   neutralizes the inline-start width (an inline-start bar on every tab
+ *   reads as the forbidden decorative rail) and reserves a 2px block-end
+ *   track on EVERY item (transparent when idle) so selection never changes
+ *   geometry; the existing selected `border-color` rule then paints only
+ *   the block-end edge, and the forced-colors frame follows for free.
+ * - Horizontal roots own their overflow (`overflow-x: auto`, thin logical
+ *   scrollbar, items `flex: none`) instead of squishing tabs.
+ * - Items ellipsize at 100% of their wrapper (never horizontal bleed);
+ *   string titles get the engine's native `title` full-value affordance.
+ * - The selected wash alpha scales with `--ds-effect-intensity` (0 removes
+ *   the decoration; marker + weight + accent ink keep the hierarchy), and
+ *   reduced-motion now kills the color/border transitions.
  */
 
 /* ---- root: sticky affix + horizontal flex structure (was engine utilities).
@@ -48,10 +63,17 @@
 }
 .rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='horizontal'] {
   display: flex;
-  gap: var(--ds-anchor-horizontal-gap, var(--ds-spacing-2, 8px));
+  gap: var(--ds-anchor-horizontal-gap, var(--ds-spacing-2));
+  /* Own the overflow instead of squishing tabs: items are `flex: none` and
+     the root scrolls inline with a thin logical scrollbar (B9 pass 2). */
+  max-inline-size: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-color-border-secondary) transparent;
 }
 .rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='horizontal'] [data-part='link-wrapper'] {
   display: inline-block;
+  flex: none;
 }
 .rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='vertical'] {
   max-block-size: var(--ds-anchor-list-max-block-size, none);
@@ -62,40 +84,73 @@
 
 /* ---- link: base structure + rhythm (was `block py-1 px-3 text-sm
         transition-colors`). Logical padding keeps the accent bar reading as
-        an inline-start rail in both writing directions. ---- */
+        an inline-start rail in both writing directions. Titles ellipsize at
+        the wrapper's inline size (B9 pass 2) so a long section name can
+        never bleed the list horizontally; string titles carry the engine's
+        native `title` full-value affordance. ---- */
 .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'] {
   display: block;
-  padding-block: var(--ds-anchor-item-padding-block, var(--ds-spacing-1, 4px));
-  padding-inline: var(--ds-anchor-item-padding-inline, var(--ds-spacing-3, 12px));
+  max-inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* Accent-marker geometry (P2-20 — was the engine's `border-s-2` utility):
+     a 2px logical inline-start track on every item, so selection changes
+     only color, never geometry. Width has no tenant floor; the horizontal
+     rule below neutralizes it per-axis at higher specificity. */
+  border: 0 solid;
+  border-inline-start-width: 2px;
+  padding-block: var(--ds-anchor-item-padding-block, var(--ds-spacing-1));
+  padding-inline: var(--ds-anchor-item-padding-inline, var(--ds-spacing-3));
   font-size: var(--ds-anchor-item-font-size, 14px);
   line-height: var(--ds-anchor-item-line-height, 1.5715);
   transition:
-    color var(--ds-anchor-transition-duration, var(--ds-motion-fast, 120ms))
+    color var(--ds-anchor-transition-duration, var(--ds-motion-fast))
       var(--ds-anchor-transition-timing, var(--ds-motion-ease-out)),
-    border-color var(--ds-anchor-transition-duration, var(--ds-motion-fast, 120ms))
+    border-color var(--ds-anchor-transition-duration, var(--ds-motion-fast))
       var(--ds-anchor-transition-timing, var(--ds-motion-ease-out));
 }
 
-/* ---- link: state colors. ---- */
+/* ---- link: state colors + the idle marker track (P2-20: governed
+        transparent at (0,4,0), intentionally above the tenant border floor
+        (0,3,1) — the drained layered utility let the floor paint every idle
+        item's track by accident). ---- */
 .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false'] {
   color: var(--ds-anchor-item-color, var(--ds-color-text-secondary));
+  border-color: transparent;
 }
 
 /* ACTIVE INDICATOR LAW (owner's no-vertical-color-accent rule, filter-builder
    precedent): the active link never gets a COLOR rail. The inline-start
-   geometry the engine stamps (`border-s-2`) stays — it is now a NEUTRAL
-   marker (border-secondary, one of the sanctioned forms), and the accent
-   expression lives in typographic weight + accent ink + a quiet background
-   wash. The channel keeps its name so tenant overrides still win; its
-   default simply stops being the accent hue. */
+   geometry stays a NEUTRAL marker (border-secondary, one of the sanctioned
+   forms), and the accent expression lives in typographic weight + accent ink
+   + a quiet background wash. The channel keeps its name so tenant overrides
+   still win; its default simply stops being the accent hue. */
 .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='true'] {
   border-color: var(--ds-anchor-item-accent-selected, var(--ds-color-border-secondary));
   background: var(
     --ds-anchor-item-bg-selected,
-    color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
+    color-mix(in srgb, var(--ds-color-primary) calc(8% * var(--ds-effect-intensity)), transparent)
   );
   color: var(--ds-anchor-item-color-selected, var(--ds-color-primary));
   font-weight: var(--ds-anchor-item-font-weight-selected, 500);
+}
+
+/* ---- horizontal: the active indicator is semantic of the ACTIVE ITEM and
+        must sit on the orientation's cross axis (B9 pass 2). An inline-start
+        bar on every horizontal tab reads as the forbidden decorative rail,
+        so the skin's base inline-start width is neutralized here and a 2px
+        block-end track is reserved on EVERY item (transparent idle) —
+        selection then changes only color, never geometry. The reserve rule
+        sits at (0,7,0), ABOVE the direction-agnostic selected `border-color`
+        (0,4,0), so the selected marker is re-asserted per-edge on the
+        block-end below (same channel, same neutral default). ---- */
+.rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='horizontal'] .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'] {
+  border-inline-start-width: 0;
+  border-block-end: 2px solid transparent;
+}
+.rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='horizontal'] .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='true'] {
+  border-block-end-color: var(--ds-anchor-item-accent-selected, var(--ds-color-border-secondary));
 }
 
 /* ---- link: hover (new in K3-C — the skin painted no hover at all). The
@@ -114,7 +169,7 @@
 
 /* ---- link: keyboard focus ring (new in K3-C). ---- */
 .rottay-anchor-link.rottay-anchor-link--modern[data-part='item']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-anchor-focus-ring-offset, 2px);
   border-radius: var(--ds-anchor-focus-ring-radius, var(--ds-radius-sm));
 }
@@ -122,7 +177,15 @@
 /* ---- nested links: LOGICAL indent (was the physical `ml-4`, which stranded
         nested links on the wrong side in RTL). ---- */
 .rottay-anchor.rottay-anchor--modern[data-part='root'] [data-part='nested'] {
-  margin-inline-start: var(--ds-anchor-nested-indent, var(--ds-spacing-4, 16px));
+  margin-inline-start: var(--ds-anchor-nested-indent, var(--ds-spacing-4));
+}
+
+/* ---- reduced motion (B9 pass 2): state changes land in their final
+        colors immediately. ---- */
+@media (prefers-reduced-motion: reduce) {
+  .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'] {
+    transition: none;
+  }
 }
 
 @media (forced-colors: active) {
@@ -136,6 +199,12 @@
     border-color: ButtonText;
     background: Highlight;
     color: HighlightText;
+  }
+  /* Horizontal: the reserved block-end track out-ranks the generic frame
+     above (same B9 specificity ladder), so the selected marker is
+     re-asserted on the block-end edge in system ink. */
+  .rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='horizontal'] .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='true'] {
+    border-block-end-color: ButtonText;
   }
   .rottay-anchor-link.rottay-anchor-link--modern[data-part='item']:focus-visible {
     outline: 2px solid Highlight;

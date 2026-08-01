@@ -70,6 +70,9 @@ import type {
 import { NOTIFICATION_DEFAULTS } from '../../contracts';
 import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useReducedMotion } from '@/graphics/motion/react/runtime';
+import { Portal } from '../../../../runtime/overlay/portal';
+import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
 import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
@@ -123,9 +126,70 @@ let notificationId = 0;
  */
 const generateId = () => `modern-notification-${++notificationId}`;
 
+/**
+ * Resolves the exit window from the element's computed style (the governed
+ * `--ds-motion-*` value the skin actually applied), plus a small buffer.
+ * Returns 0 when no animation/transition is declared (reduced motion, tests).
+ * @internal
+ */
+const governedExitMs = (el: HTMLElement): number => {
+  const { animationDuration, transitionDuration } = getComputedStyle(el);
+  const toMs = (raw: string) =>
+    raw.split(',').reduce((max, part) => {
+      const t = part.trim();
+      const v = t.endsWith('ms') ? parseFloat(t) : t.endsWith('s') ? parseFloat(t) * 1000 : 0;
+      return Number.isFinite(v) && v > max ? v : max;
+    }, 0);
+  return Math.max(toMs(animationDuration), toMs(transitionDuration)) + 50;
+};
+
 // ============================================================================
 // Notification Provider
 // ============================================================================
+
+/**
+ * Stack-item shell: owns one item's exit window. While `leaving` is true the
+ * skin's exit animation plays on the inner card; the shell finalizes the exit
+ * when the matching keyframes end (primary) or when a fallback timer derived
+ * from the card's computed animation/transition duration fires (tests and
+ * engines without animation events). The window is therefore always in
+ * lockstep with the governed motion value — never a fixed JS constant.
+ * @internal
+ */
+function NotificationStackItemShell({
+  id,
+  leaving,
+  onExitDone,
+  children,
+}: {
+  id: string;
+  leaving: boolean;
+  onExitDone: (id: string) => void;
+  children: React.ReactNode;
+}): React.ReactElement {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!leaving) return;
+    const card = ref.current?.firstElementChild as HTMLElement | null;
+    const timer = setTimeout(() => onExitDone(id), card ? governedExitMs(card) : 0);
+    return () => clearTimeout(timer);
+  }, [leaving, id, onExitDone]);
+
+  return (
+    <div
+      ref={ref}
+      data-part="stack-item"
+      data-state={leaving ? 'leaving' : 'open'}
+      style={{ display: 'contents' }}
+      onAnimationEnd={(event) => {
+        if (leaving && event.animationName.startsWith('ds-notification-exit')) onExitDone(id);
+      }}
+    >
+      {children}
+    </div>
+  );
+}
 
 /**
  * NotificationProvider component for the Modern engine.
@@ -142,6 +206,13 @@ const generateId = () => `modern-notification-${++notificationId}`;
  * - Supports multiple placements simultaneously
  * - Automatic notification stacking and limiting
  * - Skin-owned placement (no DaisyUI toast classes)
+ * - Stack containers portal to the shared top-layer root (a transformed or
+ *   filtered ancestor can never trap their fixed placement), with the
+ *   tenant/locale/direction lineage re-stamped across the portal boundary
+ * - Graceful exits: dismissal stamps `data-state='leaving'` on the item's
+ *   stack-item wrapper so the skin's exit animation plays before the node
+ *   leaves state (immediate under reduced motion); `destroy()` stays the
+ *   immediate teardown path
  *
  * @param props - {@link NotificationProviderProps}
  * @returns Provider component with notification containers
@@ -171,16 +242,68 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
 
   const [notifications, setNotifications] = useState<InternalNotification[]>([]);
 
+  // Anchored portal scope (Modal engine idiom): the stack containers portal to
+  // the shared top-layer root so a transformed/filtered ancestor can never
+  // trap their fixed placement, and the portal scope re-stamps the
+  // tenant/locale/direction lineage the portal boundary would otherwise cut.
+  const [anchorEl, setAnchorEl] = useState<HTMLSpanElement | null>(null);
+  const portalScope = usePortalScope(anchorEl);
+  const reducedMotion = useReducedMotion();
+
+  // Graceful exit bookkeeping: ids currently playing their exit animation.
+  // Each leaving item's stack-item shell owns its exit window (animationend
+  // primary, computed-duration fallback), so there are no provider-side
+  // timers to cancel on unmount.
+  const [leavingIds, setLeavingIds] = useState<ReadonlySet<string>>(() => new Set());
+
+  const clearLeaving = useCallback((id: string) => {
+    // Re-arming an id (keyed update) flips its shell back to `open`; the
+    // shell's own effect cleanup cancels its pending fallback timer.
+    setLeavingIds((prev) => {
+      if (!prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+  }, []);
+
   // ========================================================================
   // Notification Actions
   // ========================================================================
 
   /**
-   * Removes a notification by ID.
+   * Removes a notification by ID. The removal is GRACEFUL (Message family
+   * parity): the item is stamped `data-state='leaving'` through its stack-item
+   * shell, which owns the exit window from here on (animationend primary,
+   * computed-duration fallback — never a fixed JS constant). Under reduced
+   * motion there is no exit animation, so the item leaves immediately.
+   * `destroy()` stays the immediate path.
    */
-  const removeNotification = useCallback((id: string) => {
+  const finalizeRemove = useCallback((id: string) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
+    setLeavingIds((prev) => {
+      if (!prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
   }, []);
+
+  const removeNotification = useCallback(
+    (id: string) => {
+      if (reducedMotion) {
+        setNotifications((prev) => prev.filter((n) => n.id !== id));
+        return;
+      }
+      setLeavingIds((prev) => {
+        if (prev.has(id)) return prev;
+        const next = new Set(prev);
+        next.add(id);
+        return next;
+      });
+    },
+    [reducedMotion]
+  );
 
   /**
    * Adds a new notification to the stack.
@@ -189,6 +312,10 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   const addNotification = useCallback(
     (config: NotificationConfig & { type: NotificationType }) => {
       const id = config.key || generateId();
+
+      // A keyed update re-arms a notification that may be mid-exit: cancel the
+      // pending removal so the refreshed card never vanishes under the user.
+      clearLeaving(id);
 
       const newNotification: InternalNotification = {
         id,
@@ -226,7 +353,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
         return updated;
       });
     },
-    [maxCount, placement]
+    [maxCount, placement, clearLeaving]
   );
 
   /**
@@ -255,6 +382,13 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     warning: createNotificationMethod('warning'),
     open: createNotificationMethod('open'),
     destroy: (key?: string) => {
+      // destroy() is the IMMEDIATE path (explicit teardown): no exit motion,
+      // and any mid-exit bookkeeping for the removed items is cancelled so a
+      // dying timer can never touch a re-added key.
+      const removed = key
+        ? notifications.filter((n) => n.key === key || n.id === key)
+        : notifications;
+      removed.forEach((n) => clearLeaving(n.id));
       if (key) {
         setNotifications((prev) => prev.filter((n) => n.key !== key && n.id !== key));
       } else {
@@ -307,28 +441,51 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   return (
     <NotificationContext.Provider value={notificationApi}>
       {children}
-      {/* Render notification containers for each placement with notifications */}
-      {Object.entries(groupedNotifications).map(([p, items]) => (
-        <div
-          key={p}
-          data-part="stack-container"
-          data-placement={p}
-          className="rottay-notification-stack--modern"
-          style={placementStyles[p as NotificationPlacement]}
-        >
-          {items.map((notification) => {
-            const { key: _notificationKey, ...notificationProps } = notification;
+      {/* Inline anchor: the provider's own DOM position carries the
+          tenant/locale/direction lineage that `usePortalScope` snapshots and
+          re-stamps around the portaled stacks (Modal engine idiom). */}
+      <span ref={setAnchorEl} data-part="anchor" />
+      {/* Render notification containers for each placement with notifications.
+          The stacks portal to the shared top-layer root: a `position: fixed`
+          container rendered inline would be trapped by any ancestor transform,
+          filter or backdrop-filter (new containing block), breaking the
+          placement contract near app-shell chrome. The display:contents scope
+          wrapper adds no layout box. The portal only mounts while at least one
+          stack is alive (a leaving item is still alive until its exit timer
+          drops it, so exits never lose their stage). */}
+      {Object.keys(groupedNotifications).length === 0 ? null : (
+        <Portal>
+          <PortalScope snapshot={portalScope}>
+            {Object.entries(groupedNotifications).map(([p, items]) => (
+              <div
+                key={p}
+                data-part="stack-container"
+                data-placement={p}
+                className="rottay-notification-stack--modern"
+                style={placementStyles[p as NotificationPlacement]}
+              >
+                {items.map((notification) => {
+                  const { key: _notificationKey, ...notificationProps } = notification;
 
-            return (
-              <NotificationItem
-                key={notification.id}
-                {...notificationProps}
-                onRemove={removeNotification}
-              />
-            );
-          })}
-        </div>
-      ))}
+                  return (
+                    <NotificationStackItemShell
+                      key={notification.id}
+                      id={notification.id}
+                      leaving={leavingIds.has(notification.id)}
+                      onExitDone={finalizeRemove}
+                    >
+                      <NotificationItem
+                        {...notificationProps}
+                        onRemove={removeNotification}
+                      />
+                    </NotificationStackItemShell>
+                  );
+                })}
+              </div>
+            ))}
+          </PortalScope>
+        </Portal>
+      )}
     </NotificationContext.Provider>
   );
 };
@@ -438,7 +595,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   role,
   onRemove,
 }) => {
-  const i18n = useOptionalTranslation('common');
+  const i18n = useOptionalTranslation('components');
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ========================================================================
@@ -486,6 +643,14 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
     setIsPaused(true);
   };
   const resumeCountdown = () => setIsPaused(false);
+  // Keyboard parity for the hover pause (Toast/Message engines' contains-check
+  // precedent): focus bubbles in React, so a blur that lands on ANOTHER
+  // descendant of the same card (close button -> action button) must not
+  // resume the countdown -- only a blur that leaves the card entirely does.
+  const handleBlurResume = (event: React.FocusEvent<HTMLDivElement>) => {
+    const next = event.relatedTarget as Node | null;
+    if (!next || !event.currentTarget.contains(next)) resumeCountdown();
+  };
 
   // ========================================================================
   // Event Handlers
@@ -544,13 +709,21 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
       onMouseEnter={pauseCountdown}
       onMouseLeave={resumeCountdown}
       onFocus={pauseCountdown}
-      onBlur={resumeCountdown}
-      onKeyDown={onClick ? (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
+      onBlur={handleBlurResume}
+      onKeyDown={(event) => {
+        // Escape dismisses a closable notification while focus lives inside it
+        // (Toast engine parity: a transient surface yields to the keyboard).
+        // Non-closable notifications are deliberately sticky, so the key stays
+        // inert there. Focus is never moved by the dismiss itself.
+        if (event.key === 'Escape') {
+          if (closable) handleClose();
+          return;
+        }
+        if (onClick && (event.key === 'Enter' || event.key === ' ')) {
           event.preventDefault();
           onClick();
         }
-      } : undefined}
+      }}
       tabIndex={onClick ? 0 : undefined}
       role={role ?? (type === 'error' || type === 'warning' ? 'alert' : 'status')}
     >
@@ -583,7 +756,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
               e.stopPropagation();
               handleClose();
             }}
-            aria-label={i18n?.t('close') ?? 'Close'}
+            aria-label={i18n?.tOr('notification.close', 'Close') ?? 'Close'}
           >
             {closeIcon || <ActionCloseIcon decorative size={16} />}
           </button>

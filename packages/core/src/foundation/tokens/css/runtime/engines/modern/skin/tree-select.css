@@ -36,6 +36,28 @@
  * KEYFRAMES: `ds-tree-select-slide-in` backs the dropdown's skin-owned
  * `animation`. The loading spinner resolves against the global foundation
  * `ds-foundation-spin` keyframe.
+ *
+ * PER-NODE LAZY SPINNER (deliberate eje-12 deviation, documented): the
+ * toggle's loading indicator is a phrasing-content `<span data-part=
+ * 'loading'>` painted here (border arc over `ds-foundation-spin`), NOT the
+ * composed Spinner primitive -- the Spinner's root is a `<div>` with a
+ * `role='status'` live region, which is invalid inside the `<button>`
+ * toggle's content model, and swapping the whole toggle for a Spinner while
+ * `loadData` runs would unmount the focused control (focus loss on
+ * activation). The panel-level `loading` state DOES compose ModernSpinner.
+ *
+ * B6-02 (Phase B premium pass): (1) the trigger/search surfaces moved off
+ * the generic `--ds-color-bg-input` (near-black under the TMM dark-text
+ * projection — the K4-D Transfer adjudication) onto the certified
+ * `--ds-input-bg` channel; (2) trigger geometry (box sizing, per-size
+ * height/font/padding, density-scaled) drained from the engine's inline
+ * `getSizeStyle` into `data-size` rules; (3) the contract `status` prop
+ * paints the Input-family error/warning frame grammar (border + focus halo
+ * via the certified `--ds-input-{error,warning}-*` channels); (4) search
+ * input and option checkbox geometry drained from inline styles; (5) option
+ * rows scale their block padding with `--ds-density-effective-scale`;
+ * (6) the contract `loading` prop renders a governed Spinner posture
+ * (`loading-state`, Select loading grammar).
  */
 
 @keyframes ds-tree-select-slide-in {
@@ -57,15 +79,47 @@
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"] {
   display: flex;
   align-items: center;
+  box-sizing: border-box;
+  inline-size: 100%;
   cursor: pointer;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
-  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  /* Certified Input-family channel (B6-02): the generic --ds-color-bg-input
+     resolves near-black under the TMM dark-text projection (K4-D Transfer
+     adjudication); --ds-input-bg is the Input family's own surface. */
+  background: var(--ds-input-bg, var(--ds-surface-control));
   color: var(--ds-color-text-primary);
   outline: none;
   transition:
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+/* Trigger geometry per size (drained from the engine's inline getSizeStyle,
+   B6-02): the Input family's certified height/font/padding channels, scaled
+   by the governed density channel (tag-input idiom). */
+.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-size="small"] {
+  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale));
+  font-size: var(--ds-input-sm-font-size);
+  padding: 4px var(--ds-input-sm-padding-x);
+}
+.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-size="middle"] {
+  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale));
+  font-size: var(--ds-input-md-font-size);
+  padding: 6px var(--ds-input-md-padding-x);
+}
+.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-size="large"] {
+  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale));
+  font-size: var(--ds-input-lg-font-size);
+  padding: 8px var(--ds-input-lg-padding-x);
+}
+/* Contract `status` (B6-02): the Input-family error/warning frame grammar —
+   border at rest AND under focus (source order keeps these after the
+   generic focus rule so equal specificity resolves to status). */
+.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-status="error"] {
+  border-color: var(--ds-input-error-border, var(--ds-color-error));
+}
+.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-status="warning"] {
+  border-color: var(--ds-input-warning-border, var(--ds-color-warning));
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"]:where(:hover):not([data-disabled='true']) {
   border-color: var(--ds-tree-select-border-hover, var(--ds-color-border-hover));
@@ -73,6 +127,16 @@
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"]:focus-visible {
   border-color: var(--ds-tree-select-border-focus, var(--ds-color-primary));
   box-shadow: var(--ds-tree-select-shadow-focus, var(--ds-shadow-focus-ring));
+}
+/* Status under focus (B6-02): the frame keeps the status hue; the halo reads
+   the certified Input status channels. */
+.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-status="error"]:focus-visible {
+  border-color: var(--ds-input-error-border, var(--ds-color-error));
+  box-shadow: var(--ds-input-error-shadow-focus, var(--ds-tree-select-shadow-focus, var(--ds-shadow-focus-ring)));
+}
+.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-status="warning"]:focus-visible {
+  border-color: var(--ds-input-warning-border, var(--ds-color-warning));
+  box-shadow: var(--ds-input-warning-shadow-focus, var(--ds-tree-select-shadow-focus, var(--ds-shadow-focus-ring)));
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-disabled='true'] {
   opacity: var(--ds-disabled-opacity, 0.5);
@@ -115,7 +179,7 @@
   color: var(--ds-color-text-primary);
   border-radius: 50%;
   border: none;
-  transition: color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"]:has([data-part="clear-button"]) [data-part="arrow-icon"] {
   margin-inline-start: var(--ds-tree-select-clear-gap, 20px);
@@ -140,7 +204,7 @@
 /* Trigger chevron: open rotation drained from the `rotate-180` utility +
    inline transition. The glyph is vertically symmetric -- no RTL mirror. */
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="arrow-icon"] {
-  transition: transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="trigger"][data-open='true'] [data-part="arrow-icon"] {
   transform: rotate(180deg);
@@ -153,8 +217,8 @@
   [data-part="dropdown"] {
   position: absolute;
   inset-inline: 0;
-  z-index: var(--ds-tree-select-dropdown-z, var(--ds-z-index-dropdown, 1000));
-  margin-block-start: var(--ds-spacing-1, 4px);
+  z-index: var(--ds-tree-select-dropdown-z, var(--ds-z-index-dropdown));
+  margin-block-start: var(--ds-spacing-1);
   max-block-size: var(--ds-tree-select-dropdown-max-height, 240px);
   overflow-y: auto;
   border-radius: var(--ds-radius-lg);
@@ -165,7 +229,7 @@
   border-color: var(--ds-color-border);
   border-width: 1px;
   border-style: solid;
-  animation: ds-tree-select-slide-in var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  animation: ds-tree-select-slide-in var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 /* Search wrapper: padding drained from `p-2`; the sticky top bar (was the
@@ -175,8 +239,8 @@
   [data-part="search-input-wrapper"] {
   position: sticky;
   inset-block-start: 0;
-  z-index: var(--ds-z-index-relative-above, 1);
-  padding: var(--ds-spacing-2, 8px);
+  z-index: var(--ds-z-index-relative-above);
+  padding: var(--ds-spacing-2);
   border-bottom: 1px solid var(--ds-color-border);
   background: var(--ds-surface-card);
 }
@@ -184,14 +248,21 @@
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="search-input"] {
   inline-size: 100%;
+  box-sizing: border-box;
+  /* Geometry drained from the engine's inline style (B6-02). */
+  block-size: var(--ds-input-sm-height);
+  padding: 4px var(--ds-input-sm-padding-x);
+  font-size: var(--ds-input-sm-font-size);
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
-  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  /* Certified Input-family channel (B6-02), same adjudication as the
+     trigger above. */
+  background: var(--ds-input-bg, var(--ds-surface-control));
   color: var(--ds-color-text-primary);
   outline: none;
   transition:
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="search-input"]:focus-visible {
@@ -200,14 +271,27 @@
 }
 
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="empty"] {
-  padding: var(--ds-spacing-4, 16px);
+  padding: var(--ds-spacing-4);
   text-align: center;
   color: var(--ds-color-text-secondary);
 }
 
+/* Contract `loading` posture (B6-02): the governed Spinner centered in the
+   empty well's spatial contract (Select loading-state grammar); the Spinner
+   primitive owns ring/cadence/reduced-motion/forced-colors. */
+.ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="loading-state"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-2);
+  min-block-size: 4.5rem;
+  padding: var(--ds-spacing-4);
+  color: var(--ds-color-text-muted, var(--ds-color-text-secondary));
+}
+
 /* Tree list rhythm (drained from the `p-2` utility). */
 .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="tree-list"] {
-  padding: var(--ds-spacing-2, 8px);
+  padding: var(--ds-spacing-2);
 }
 
 /* ---- tree node row (layout drained from `flex items-center py-1
@@ -216,16 +300,18 @@
   [data-part="option"] {
   display: flex;
   align-items: center;
-  padding-block: var(--ds-spacing-1, 4px);
+  /* Density (B6-02): row rhythm scales with the governed channel; the
+     per-level indent scales in the engine's calc. */
+  padding-block: calc(var(--ds-spacing-1) * var(--ds-density-effective-scale));
   cursor: pointer;
   /* Base transparent frame so selection never shifts layout by 1px. */
   border: 1px solid transparent;
-  border-radius: var(--ds-radius-sm, 6px);
-  padding-inline-end: var(--ds-spacing-2, 8px);
+  border-radius: var(--ds-radius-sm);
+  padding-inline-end: var(--ds-spacing-2);
   transition:
-    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
   .ds-tree-select.ds-tree-select--modern[data-part="root"]
@@ -256,7 +342,7 @@
   );
   color: var(--ds-color-primary);
   border-color: color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
-  font-weight: var(--ds-font-weight-medium, 500);
+  font-weight: var(--ds-font-weight-medium);
 }
 
 /* Long taxonomy labels truncate -- never wrap mid-word (content-integrity).
@@ -275,21 +361,22 @@
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="tree-node-highlight"] {
   color: var(--ds-color-primary);
-  font-weight: var(--ds-font-weight-semibold, 600);
+  font-weight: var(--ds-font-weight-semibold);
 }
 
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="tree-node-toggle"] {
   block-size: 24px;
-  padding-inline: var(--ds-spacing-2, 8px);
-  margin-inline-end: var(--ds-spacing-1, 4px);
+  padding-block: 0;
+  padding-inline: var(--ds-spacing-2);
+  margin-inline-end: var(--ds-spacing-1);
   cursor: pointer;
-  font-size: var(--ds-font-size-xs, 12px);
+  font-size: var(--ds-font-size-xs);
   background: transparent;
   color: var(--ds-color-text-primary);
   border-radius: var(--ds-radius-md);
   border: none;
-  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
   .ds-tree-select.ds-tree-select--modern[data-part="root"]
@@ -315,7 +402,7 @@
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="chevron"] {
   display: inline-flex;
-  transition: transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="chevron"][data-expanded='true'] {
@@ -334,14 +421,24 @@
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
   /* Drained from the inline animation (reduced-motion now governs it). */
-  animation: ds-foundation-spin var(--ds-tree-select-spinner-duration, var(--ds-motion-glacial, 500ms)) linear infinite;
+  animation: ds-foundation-spin var(--ds-tree-select-spinner-duration, var(--ds-motion-glacial)) linear infinite;
 }
 
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="option-icon"] {
   accent-color: var(--ds-color-primary);
+  /* Box + cursor drained from the engine's inline style (B6-02); the
+     checkbox never stretches with the row. */
+  inline-size: 16px;
+  block-size: 16px;
+  flex: none;
+  cursor: pointer;
   /* Logical gap after the checkbox (was the physical `mr-2` utility). */
-  margin-inline-end: var(--ds-spacing-2, 8px);
+  margin-inline-end: var(--ds-spacing-2);
+}
+.ds-tree-select.ds-tree-select--modern[data-part="root"]
+  [data-part="option-icon"]:disabled {
+  cursor: not-allowed;
 }
 
 /* treeLine guide: physical border-left -> logical inline-start (RTL flips it
@@ -349,7 +446,7 @@
    The indent (was the `ml-4` utility) is skin-owned. */
 .ds-tree-select.ds-tree-select--modern[data-part="root"]
   [data-part="tree-list"][data-tree-line="true"] {
-  margin-inline-start: var(--ds-spacing-4, 16px);
+  margin-inline-start: var(--ds-spacing-4);
   border-inline-start: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
 }
 
@@ -418,5 +515,12 @@
   .ds-tree-select.ds-tree-select--modern[data-part="root"]
     [data-part="tree-node-highlight"] {
     color: CanvasText;
+  }
+  /* Per-node lazy spinner: authored border colors are forced away, which
+     would leave a uniform static ring -- the arc re-expresses in system
+     colors so the activity cue keeps its shape. */
+  .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="loading"] {
+    border-color: ButtonText;
+    border-top-color: Highlight;
   }
 }

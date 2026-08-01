@@ -208,7 +208,7 @@ export const SkeletonButton = forwardRef<HTMLDivElement, SkeletonButtonProps>(
       width: shape === 'circle' ? dimensions.height : dimensions.width,
       height: dimensions.height,
       '--ds-skeleton-button-radius': borderRadius,
-      animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration, 1.5s) infinite',
+      animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration) infinite',
       ...style,
     } as React.CSSProperties;
 
@@ -217,7 +217,7 @@ export const SkeletonButton = forwardRef<HTMLDivElement, SkeletonButtonProps>(
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} data-part="root" className={`rottay-skeleton-button ${className}`} style={buttonStyle} />
+      <div ref={ref} data-part="root" className={`rottay-skeleton-button ${className}`} style={buttonStyle} aria-hidden="true" />
     );
   }
 );

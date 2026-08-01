@@ -107,7 +107,7 @@ describe('Avatar modern skin: solid-fallback contrast channels (R0/Axe)', () => 
       expect(rule![0]).toContain(`--ds-avatar-${variant}-solid-bg`);
       expect(rule![0]).toContain(`--ds-avatar-${variant}-ink`);
       expect(rule![0]).toContain(
-        `color-mix(in srgb, var(--ds-color-${variant}) ${100 - SOLID_MIX[variant]}%, var(--ds-color-neutral-900, #171717) ${SOLID_MIX[variant]}%)`
+        `color-mix(in srgb, var(--ds-color-${variant}) ${100 - SOLID_MIX[variant]}%, var(--ds-color-neutral-900) ${SOLID_MIX[variant]}%)`
       );
       // The caller's backgroundColor hatch stays the first term of the background.
       expect(rule![0]).toMatch(/background:\s*var\(--ds-avatar-custom-bg,/);
@@ -157,7 +157,7 @@ describe('Avatar modern skin: solid-fallback contrast channels (R0/Axe)', () => 
       );
       expect(rule).not.toBeNull();
       expect(rule![0]).toContain(
-        `color: var(--ds-avatar-${variant}-ink, var(--ds-color-white, #fff));`
+        `color: var(--ds-avatar-${variant}-ink, var(--ds-color-white));`
       );
       // The near-black-collapsing chain must not return on darkened fills.
       expect(rule![0]).not.toContain(

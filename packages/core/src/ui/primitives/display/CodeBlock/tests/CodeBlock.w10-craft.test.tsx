@@ -77,8 +77,9 @@ describe('CodeBlock W10 second visual pass (Modern craft)', () => {
 
   it('animates the copy control on the governed fast-duration channel with a family escape hatch', () => {
     expect(skin).toContain(
-      'var(--ds-code-block-motion-duration, var(--ds-motion-fast, 120ms))',
+      'var(--ds-code-block-motion-duration, var(--ds-motion-fast))',
     );
+    expect(skin).not.toContain('var(--ds-motion-fast, 120ms)');
     // The copy control's own font-size also rides the type scale now.
     expect(skin).toContain('font-size: var(--ds-font-size-xs)');
     expect(skin).not.toContain('font-size: 0.8125rem');

@@ -165,7 +165,7 @@ describe('ContextMenu modern engine — the opening side is logical', () => {
 describe('ContextMenu modern engine — the skin owns the drained paint', () => {
   it('owns the panel chrome', () => {
     expect(SKIN).toContain('inline-size: var(--ds-context-menu-width, 14rem);');
-    expect(SKIN).toContain('padding: var(--ds-context-menu-padding, var(--ds-spacing-2, 0.5rem));');
+    expect(SKIN).toContain('padding: var(--ds-context-menu-padding, var(--ds-spacing-2));');
     expect(SKIN).toContain('list-style: none;');
   });
 
@@ -177,7 +177,7 @@ describe('ContextMenu modern engine — the skin owns the drained paint', () => 
     expect(SKIN).toContain('var(--ds-surface-card)');
     expect(SKIN).toContain('var(--ds-context-menu-border-color, color-mix(in srgb, var(--ds-color-border) 86%, var(--ds-color-primary) 14%))');
     expect(SKIN).toContain('var(--ds-context-menu-shadow, var(--ds-elevation-3))');
-    expect(SKIN).toContain('var(--ds-context-menu-radius, var(--ds-radius-xl, 16px))');
+    expect(SKIN).toContain('var(--ds-context-menu-radius, var(--ds-radius-xl))');
     expect(SKIN).not.toContain('background: var(--ds-surface-card);');
     expect(SKIN).not.toContain('box-shadow: var(--ds-elevation-2);');
   });
@@ -194,8 +194,9 @@ describe('ContextMenu modern engine — the skin owns the drained paint', () => 
 
   it('owns the group-label chrome with token channels', () => {
     expect(SKIN).toMatch(/\[data-part='group-label'\]\s*\{[^}]*padding: var\(--ds-context-menu-group-padding, 0\.375rem 0\.75rem\);/);
-    expect(SKIN).toContain('font-size: var(--ds-font-size-xs, 0.75rem);');
-    expect(SKIN).toContain('font-weight: var(--ds-font-weight-medium, 500);');
+    expect(SKIN).toContain('font-size: var(--ds-font-size-xs);');
+    expect(SKIN).toContain('font-weight: var(--ds-font-weight-medium);');
+    expect(SKIN).not.toContain('var(--ds-font-size-xs, 0.75rem)');
     expect(SKIN).toContain('letter-spacing: var(--ds-context-menu-group-letter-spacing, 0.05em);');
   });
 

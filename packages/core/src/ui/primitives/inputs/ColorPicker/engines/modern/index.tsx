@@ -36,7 +36,7 @@
  * @package @rottay/design-system
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import type { ColorPickerProps, Color } from '../../contracts';
+import type { ColorPickerProps, Color, ColorFormat } from '../../contracts';
 import { COLORPICKER_DEFAULTS } from '../../contracts';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
 import { resolveCssColor } from '@/infrastructure/runtime/dom/runtime/css-color-resolution';
@@ -105,7 +105,8 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       value: controlledValue,
       defaultValue = TOKEN_DEFAULT_VALUE,
       onChange,
-      format = COLORPICKER_DEFAULTS.format,
+      format: formatProp,
+      onFormatChange,
       presets,
       showText,
       size: sizeProp = COLORPICKER_DEFAULTS.size,
@@ -115,6 +116,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       open: controlledOpen,
       onOpenChange,
       placement = COLORPICKER_DEFAULTS.placement,
+      panelRender,
       className,
       style,
     } = props;
@@ -135,6 +137,18 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
     const HEX_DRAFT_RE = /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
     const [hexDraft, setHexDraft] = useState<string | null>(null);
 
+    /**
+     * Format: controlled through the `format` prop or uncontrolled through
+     * internal state. The contract's `onFormatChange` fires "via format
+     * switcher" — the panel's own format `<select>` rendered below. The
+     * switcher governs the DISPLAY/output format; the panel's editing grammar
+     * stays hex (the only input grammar this lightweight panel owns).
+     */
+    const [internalFormat, setInternalFormat] = useState<ColorFormat>(
+      formatProp ?? COLORPICKER_DEFAULTS.format ?? 'hex'
+    );
+    const currentFormat = formatProp ?? internalFormat;
+
     // Dual controlled/uncontrolled for both value and open state
     const isControlled = controlledValue !== undefined;
     const currentValue = isControlled
@@ -144,6 +158,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
 
     const containerRef = useRef<HTMLDivElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
 
     // Viewport collision handling (K4-C Pass 2): the in-tree dropdown is
     // start-aligned by default, which overflows narrow viewports when the
@@ -176,6 +191,18 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       return translated && !translated.endsWith(key) ? translated : fallback;
     };
     const clearLabel = colorPickerLabel('colorpicker.clear', 'Clear');
+    const triggerLabel = colorPickerLabel('colorpicker.triggerLabel', 'Color picker');
+    const formatLabel = colorPickerLabel('colorpicker.formatLabel', 'Color format');
+
+    /** Format switcher: fires the contract callback and, when the consumer
+     *  does not control `format`, moves the internal display format. */
+    const handleFormatSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+      const next = event.target.value as ColorFormat;
+      if (formatProp === undefined) {
+        setInternalFormat(next);
+      }
+      onFormatChange?.(next);
+    };
 
     /** Toggles the dropdown, respecting controlled `open` prop when present. */
     const handleOpenChange = useCallback((newOpen: boolean) => {
@@ -184,6 +211,32 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       }
       onOpenChange?.(newOpen);
     }, [controlledOpen, onOpenChange]);
+
+    /**
+     * Keyboard disclosure contract (B2.5): the trigger is a real focusable
+     * button — Enter/Space toggle, ArrowDown opens, and Escape anywhere
+     * inside the component (hex input, preset swatches, clear) closes and
+     * returns focus to the trigger. Keyboard always works, even under
+     * `trigger='hover'` (pointer parity).
+     */
+    const handleTriggerKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (disabled) return;
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        handleOpenChange(!isOpen);
+      } else if (event.key === 'ArrowDown' && !isOpen) {
+        event.preventDefault();
+        handleOpenChange(true);
+      }
+    };
+
+    const handleRootKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key !== 'Escape' || !isOpen) return;
+      event.preventDefault();
+      event.stopPropagation();
+      handleOpenChange(false);
+      triggerRef.current?.focus();
+    };
 
     /** Updates the selected color, wrapping the hex in a Color interface object. */
     const handleChange = (hex: string) => {
@@ -259,7 +312,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       if (typeof showText === 'function') {
         return showText(createColor(currentValue));
       }
-      switch (format) {
+      switch (currentFormat) {
         case 'rgb': return createColor(currentValue).toRgbString();
         case 'hsb': return currentValue;
         default: return currentValue;
@@ -267,6 +320,118 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
     };
 
     const displayText = getDisplayText();
+
+    /**
+     * The panel (extracted so the contract's `panelRender` can wrap it). DOM
+     * order matters: the engine tests pin `querySelectorAll('button')[0]` as
+     * the first PRESET swatch — the format switcher is a `<select>`, never a
+     * button, and the trigger stays a div, so that pin holds.
+     */
+    const dropdownPanel = (
+      <div
+        ref={dropdownRef}
+        data-part="dropdown"
+        data-edge={alignEdge}
+        data-placement={placement}
+      >
+        {/* Color input: geometry drained to the skin (the
+            `--ds-color-picker-height` hook keeps its fallback there --
+            undeclared channel, its fallback IS its contract). */}
+        <input
+          type="color"
+          data-part="native-color-input"
+          value={currentValue}
+          onChange={(e) => handleChange(e.target.value)}
+          disabled={disabled}
+          aria-label={colorPickerLabel('colorpicker.chooseColor', 'Choose color')}
+        />
+
+        {/* Hex input */}
+        <div data-part="hex-field">
+          <input
+            type="text"
+            data-part="hex-input"
+            data-invalid={hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft) ? 'true' : undefined}
+            value={hexDraft ?? currentValue}
+            onChange={(e) => setHexDraft(e.target.value)}
+            onKeyDown={handleHexKeyDown}
+            onBlur={handleHexBlur}
+            placeholder="#000000"
+            disabled={disabled}
+            aria-label={colorPickerLabel('colorpicker.hexLabel', 'Hex color')}
+            aria-invalid={hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft) || undefined}
+          />
+          {hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft) && (
+            <span data-part="hex-error" role="alert">
+              {colorPickerLabel('colorpicker.invalidHex', 'Enter a valid hex color (e.g. #1677ff)')}
+            </span>
+          )}
+        </div>
+
+        {/* Format switcher (contract's onFormatChange channel). HEX/RGB/HSB are
+            technical tokens, identical across locales — only the select's
+            accessible name is localized. */}
+        <div data-part="format-field">
+          <select
+            data-part="format-select"
+            value={currentFormat}
+            onChange={handleFormatSelect}
+            disabled={disabled}
+            aria-label={formatLabel}
+          >
+            <option value="hex">HEX</option>
+            <option value="rgb">RGB</option>
+            <option value="hsb">HSB</option>
+          </select>
+        </div>
+
+        {/* Presets */}
+        {presets && presets.length > 0 && (
+          <div data-part="presets">
+            {presets.map((preset, idx) => (
+              <div key={idx} data-part="preset-group">
+                {preset.label && (
+                  <div data-part="preset-label">{preset.label}</div>
+                )}
+                <div data-part="preset-row">
+                  {preset.colors.map((color) => {
+                    const isPresetSelected =
+                      currentValue.toLowerCase() === color.toLowerCase();
+                    return (
+                      <button
+                        key={color}
+                        type="button"
+                        data-part="preset-swatch"
+                        data-selected={isPresetSelected || undefined}
+                        style={{ '--ds-colorpicker-preset-color': color } as React.CSSProperties}
+                        aria-label={colorPickerLabel('colorpicker.selectColor', `Select color ${color}`, { color })}
+                        aria-pressed={isPresetSelected}
+                        onClick={() => handleChange(color)}
+                        disabled={disabled}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Actions */}
+        {allowClear && (
+          <div data-part="clear-field">
+            <button
+              type="button"
+              data-part="clear-button"
+              onClick={handleClear}
+              disabled={disabled}
+            >
+              {clearLabel}
+            </button>
+          </div>
+        )}
+      </div>
+    );
 
     return (
       <div
@@ -278,107 +443,37 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
         data-part="root"
         className={`rottay-colorpicker rottay-colorpicker--modern ${className || ''}`}
         style={style}
+        onKeyDown={handleRootKeyDown}
       >
-        {/* Trigger area: opens/closes dropdown on click or hover depending on `trigger` prop */}
+        {/* Trigger area: opens/closes dropdown on click or hover depending on
+            `trigger` prop. A real focusable disclosure button (keyboard law):
+            Enter/Space/ArrowDown operate it even in hover mode. */}
         <div
+          ref={triggerRef}
           data-part="trigger"
           data-disabled={disabled ? 'true' : undefined}
+          data-open={isOpen || undefined}
+          role="button"
+          tabIndex={disabled ? -1 : 0}
+          aria-label={triggerLabel}
+          aria-haspopup="dialog"
+          aria-expanded={isOpen}
+          aria-disabled={disabled || undefined}
           onClick={() => !disabled && (trigger === 'click' ? handleOpenChange(!isOpen) : null)}
+          onKeyDown={handleTriggerKeyDown}
           onMouseEnter={() => !disabled && trigger === 'hover' && handleOpenChange(true)}
           onMouseLeave={() => !disabled && trigger === 'hover' && handleOpenChange(false)}
         >
           <div
             data-part="swatch"
             data-size={size}
+            data-empty={!currentValue || undefined}
             style={{ '--ds-colorpicker-swatch-color': currentValue || 'var(--ds-color-white)' } as React.CSSProperties}
           />
           {displayText && <span data-part="display-text">{displayText}</span>}
         </div>
 
-        {isOpen && (
-          <div
-            ref={dropdownRef}
-            data-part="dropdown"
-            data-edge={alignEdge}
-            data-placement={placement}
-            // Placement/edge classes stay inline: the engine tests pin
-            // `bottom-full` (top placement) and `end-0` (edge collision).
-            className={`${placement?.includes('top') ? 'bottom-full mb-1' : ''} ${alignEdge === 'end' ? 'end-0' : ''}`}
-          >
-            {/* Color input */}
-            <input
-              type="color"
-              data-part="native-color-input"
-              value={currentValue}
-              onChange={(e) => handleChange(e.target.value)}
-              style={{ height: 'var(--ds-color-picker-height, 10rem)' }}
-              disabled={disabled}
-              aria-label={colorPickerLabel('colorpicker.chooseColor', 'Choose color')}
-            />
-
-            {/* Hex input */}
-            <div data-part="hex-field">
-              <input
-                type="text"
-                data-part="hex-input"
-                data-invalid={hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft) ? 'true' : undefined}
-                value={hexDraft ?? currentValue}
-                onChange={(e) => setHexDraft(e.target.value)}
-                onKeyDown={handleHexKeyDown}
-                onBlur={handleHexBlur}
-                placeholder="#000000"
-                disabled={disabled}
-                aria-label={colorPickerLabel('colorpicker.hexLabel', 'Hex color')}
-                aria-invalid={hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft) || undefined}
-              />
-              {hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft) && (
-                <span data-part="hex-error" role="alert">
-                  {colorPickerLabel('colorpicker.invalidHex', 'Enter a valid hex color (e.g. #1677ff)')}
-                </span>
-              )}
-            </div>
-
-            {/* Presets */}
-            {presets && presets.length > 0 && (
-              <div data-part="presets">
-                {presets.map((preset, idx) => (
-                  <div key={idx} data-part="preset-group">
-                    {preset.label && (
-                      <div data-part="preset-label">{preset.label}</div>
-                    )}
-                    <div data-part="preset-row">
-                      {preset.colors.map((color) => (
-                        <button
-                          key={color}
-                          type="button"
-                          data-part="preset-swatch"
-                          style={{ '--ds-colorpicker-preset-color': color } as React.CSSProperties}
-                          aria-label={colorPickerLabel('colorpicker.selectColor', `Select color ${color}`, { color })}
-                          onClick={() => handleChange(color)}
-                          disabled={disabled}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Actions */}
-            {allowClear && (
-              <div data-part="clear-field">
-                <button
-                  type="button"
-                  data-part="clear-button"
-                  onClick={handleClear}
-                  disabled={disabled}
-                >
-                  {clearLabel}
-                </button>
-              </div>
-            )}
-          </div>
-        )}
+        {isOpen && (panelRender ? panelRender(dropdownPanel) : dropdownPanel)}
       </div>
     );
   }

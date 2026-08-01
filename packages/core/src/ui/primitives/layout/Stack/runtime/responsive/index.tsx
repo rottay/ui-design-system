@@ -48,12 +48,43 @@ export function collectStackResponsiveEntries(
       value: props.direction,
       resolve: (value: StackDirection) => resolveStackDirection(value, reverse),
     });
+    // With a divider interleaved, the hairline's centering margins must
+    // follow the same per-breakpoint axis. The skin reads these root-declared
+    // flags (custom properties inherit to the generated divider) because a
+    // responsive direction stamps no data-direction attribute for the skin's
+    // horizontal rule to select on. Reverse only flips order, never the axis.
+    if (props.divider) {
+      entries.push({
+        cssProperty: "--_ds-proto-stack-divider-gap-block",
+        value: props.direction,
+        resolve: (value: StackDirection) =>
+          value === "horizontal"
+            ? "var(--ds-stack-divider-inset, 0px)"
+            : "calc(var(--_ds-stack-gap-current, 0px) / -2)",
+      });
+      entries.push({
+        cssProperty: "--_ds-proto-stack-divider-gap-inline",
+        value: props.direction,
+        resolve: (value: StackDirection) =>
+          value === "horizontal"
+            ? "calc(var(--_ds-stack-gap-current, 0px) / -2)"
+            : "var(--ds-stack-divider-inset, 0px)",
+      });
+    }
   }
 
   const spacing = props.gap ?? props.spacing;
   if (isResponsiveValue(spacing)) {
     entries.push({
       cssProperty: "gap",
+      value: spacing,
+      resolve: resolveStackSpacing,
+    });
+    // The divider mirror centers on --_ds-stack-gap-current; re-project it
+    // with the SAME resolution as the gap entry so the hairline tracks the
+    // responsive rhythm instead of the stale static (or default) preset.
+    entries.push({
+      cssProperty: "--_ds-stack-gap-current",
       value: spacing,
       resolve: resolveStackSpacing,
     });

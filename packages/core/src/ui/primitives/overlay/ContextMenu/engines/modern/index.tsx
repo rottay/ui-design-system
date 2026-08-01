@@ -21,6 +21,15 @@
  * measured `position: fixed`. `data-ds-position-strategy` is stamped for
  * e2e/debug observability.
  *
+ * OPTION GRAMMAR (Dropdown's, composed -- not duplicated): rows are
+ * `item-shell > item` with `icon`/`label`/`shortcut`/`submenu-indicator`
+ * parts; `item.children` expands an INLINE (accordion) submenu, never a
+ * fly-out, because the panel is a scroll container and would clip it. Every
+ * menu level runs the same APG keyboard contract (arrows/Home/End/typeahead,
+ * logical forward/backward submenu keys). Disclosure semantics are cloned
+ * onto the consumer's trigger element (aria-haspopup/controls/expanded), and
+ * an empty item list mounts no panel at all.
+ *
  * @example
  * ```tsx
  * <ModernContextMenu
@@ -31,19 +40,99 @@
  * ```
  */
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useId, isValidElement, cloneElement } from 'react';
 import type { ContextMenuProps, ContextMenuItem } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 
 const MOTION_DURATION = 'var(--ds-motion-fast)';
 const MOTION_EASING = 'var(--ds-motion-ease-out)';
 
-/** Renders a single menu row: standard item, divider, or group title. */
+/**
+ * Typeahead state for the menu keyboard contract below (Dropdown's idiom,
+ * shared verbatim): printable characters focus the next enabled item whose
+ * visible text starts with the typed prefix (wrapping). The buffer lives per
+ * menu LEVEL, keyed weakly by the <ul> element, so no two menu instances --
+ * nor two levels of one menu -- ever share a prefix; it resets after a pause
+ * and dies with its DOM node.
+ */
+const TYPEAHEAD_RESET_MS = 500;
+const typeaheadStateByMenu = new WeakMap<
+  HTMLElement,
+  { buffer: string; lastKeyTime: number }
+>();
+
+function resolveTypeaheadPrefix(menu: HTMLElement, key: string): string {
+  const now = Date.now();
+  const state = typeaheadStateByMenu.get(menu) ?? { buffer: '', lastKeyTime: 0 };
+  state.buffer = now - state.lastKeyTime > TYPEAHEAD_RESET_MS ? key : state.buffer + key;
+  state.lastKeyTime = now;
+  typeaheadStateByMenu.set(menu, state);
+  return state.buffer.toLowerCase();
+}
+
+/**
+ * APG menu keyboard contract for ONE menu level (Dropdown's handler, shared
+ * so the root menu and every inline submenu navigate identically):
+ * ArrowUp/ArrowDown cycle the enabled items of THIS <ul> (wrapping), Home/End
+ * jump to the edges, and printable characters run typeahead over the visible
+ * item text. Events bubbling out of a nested submenu are ignored by the
+ * ancestor handler (the target's closest role="menu" is the nested list), so
+ * each level navigates its own items. Escape is NOT handled here -- the root
+ * menu owns it (close + focus return), and a parent item's own keydown closes
+ * its submenu first.
+ */
+function handleMenuLevelKeyDown(event: React.KeyboardEvent<HTMLUListElement>): void {
+  const { key } = event;
+  const menu = event.currentTarget;
+  const target = event.target as HTMLElement | null;
+  if (!target || target.closest('[role="menu"]') !== menu) return;
+  const menuItems = Array.from(
+    menu.querySelectorAll<HTMLElement>(
+      ':scope > [data-part="item-shell"] > [data-part="item"]:not(:disabled)',
+    ),
+  );
+  if (menuItems.length === 0) return;
+
+  if (key === 'ArrowDown' || key === 'ArrowUp' || key === 'Home' || key === 'End') {
+    event.preventDefault();
+    const currentIndex = menuItems.indexOf(target.closest('[data-part="item"]') as HTMLElement);
+    let nextIndex = 0;
+    if (key === 'Home') nextIndex = 0;
+    else if (key === 'End') nextIndex = menuItems.length - 1;
+    else if (currentIndex >= 0) {
+      nextIndex = (currentIndex + (key === 'ArrowDown' ? 1 : -1) + menuItems.length) % menuItems.length;
+    }
+    menuItems[nextIndex]?.focus();
+    return;
+  }
+
+  // Typeahead: single printable characters, never a chord and never Space
+  // (Space stays the native button activation). The search starts AFTER the
+  // current item and wraps, so repeating a key cycles its matches.
+  if (key.length === 1 && key !== ' ' && !event.metaKey && !event.ctrlKey && !event.altKey) {
+    const prefix = resolveTypeaheadPrefix(menu, key);
+    const currentIndex = menuItems.indexOf(target.closest('[data-part="item"]') as HTMLElement);
+    for (let step = 1; step <= menuItems.length; step += 1) {
+      const candidate = menuItems[(currentIndex + step) % menuItems.length];
+      if (candidate?.textContent?.trim().toLowerCase().startsWith(prefix)) {
+        event.preventDefault();
+        candidate.focus();
+        return;
+      }
+    }
+  }
+}
+
+/** Renders a single menu row: standard item, divider, group title, or a
+ *  parent item with an inline-expanding submenu (Dropdown's grammar). */
 const MenuItem: React.FC<{
   item: ContextMenuItem;
   onClick?: (key: string) => void;
 }> = ({ item, onClick }) => {
+  const [submenuOpen, setSubmenuOpen] = useState(false);
+
   // All row geometry (divider thickness/margins, group-label chrome, item
   // layout) is skin-owned -- context-menu.css keys on data-part. No utility
   // classes and no static inline geometry on this tree. Menu semantics mirror
@@ -61,8 +150,30 @@ const MenuItem: React.FC<{
     );
   }
 
+  // Submenus expand INLINE (accordion), never as a fly-out: the panel is a
+  // scroll container (overflow-block: auto), so a fly-out would be clipped by
+  // its own surface. Nested levels reuse this same row renderer, so divider/
+  // group/danger/disabled grammar composes at every depth.
+  const hasChildren = Boolean(item.children?.length);
+
+  const activate = () => {
+    if (hasChildren) {
+      setSubmenuOpen((current) => !current);
+      return;
+    }
+    item.onClick?.();
+    onClick?.(item.key);
+  };
+
   return (
-    <li role="none">
+    <li
+      role="none"
+      data-part="item-shell"
+      data-has-children={hasChildren ? 'true' : undefined}
+      data-submenu-open={submenuOpen ? 'true' : undefined}
+      onMouseEnter={() => hasChildren && setSubmenuOpen(true)}
+      onMouseLeave={() => hasChildren && setSubmenuOpen(false)}
+    >
       <button
         type="button"
         role="menuitem"
@@ -70,20 +181,53 @@ const MenuItem: React.FC<{
         data-tone={item.danger ? 'danger' : undefined}
         data-disabled={item.disabled ? 'true' : undefined}
         aria-disabled={item.disabled || undefined}
+        aria-haspopup={hasChildren ? 'menu' : undefined}
+        aria-expanded={hasChildren ? submenuOpen : undefined}
         disabled={item.disabled}
-        onClick={() => {
-          item.onClick?.();
-          onClick?.(item.key);
+        onClick={activate}
+        onKeyDown={(event) => {
+          // Submenu keys are LOGICAL: forward opens, backward closes. Forward
+          // is ArrowRight in LTR and ArrowLeft in RTL (Dropdown/Tabs
+          // precedent), resolved from the item's context -- nearest `[dir]`
+          // owner first, computed style as a fallback.
+          const isRtl =
+            event.currentTarget.closest<HTMLElement>('[dir]')?.dir === 'rtl' ||
+            window.getComputedStyle(event.currentTarget).direction === 'rtl';
+          const forwardKey = isRtl ? 'ArrowLeft' : 'ArrowRight';
+          const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
+          if (event.key === forwardKey && hasChildren) {
+            event.preventDefault();
+            setSubmenuOpen(true);
+          }
+          if (event.key === backwardKey && hasChildren) {
+            event.preventDefault();
+            setSubmenuOpen(false);
+          }
+          if (event.key === 'Escape' && hasChildren && submenuOpen) {
+            event.stopPropagation();
+            setSubmenuOpen(false);
+          }
         }}
       >
-        <span data-part="label">
-          {item.icon}
-          {item.label}
-        </span>
+        {item.icon ? <span data-part="icon">{item.icon}</span> : null}
+        <span data-part="label">{item.label}</span>
         {item.shortcut && (
           <span data-part="shortcut">{item.shortcut}</span>
         )}
+        {hasChildren ? (
+          <span data-part="submenu-indicator" aria-hidden="true">
+            <NavigationForwardIcon decorative size={12} />
+          </span>
+        ) : null}
       </button>
+
+      {hasChildren && submenuOpen ? (
+        <ul role="menu" data-part="submenu" aria-orientation="vertical" onKeyDown={handleMenuLevelKeyDown}>
+          {item.children?.map((child) => (
+            <MenuItem key={child.key} item={child} onClick={onClick} />
+          ))}
+        </ul>
+      ) : null}
     </li>
   );
 };
@@ -126,7 +270,11 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   const [menuEl, setMenuEl] = useState<HTMLUListElement | null>(null);
   const menuRef = useRef<HTMLUListElement | null>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
-  const { shouldRender, dataState, ref: presenceRef } = usePresence(isOpen);
+  // An empty item list never renders a panel (Dropdown's `isOpen && hasItems`
+  // posture): right-clicking still suppresses the native menu, but no blank
+  // surface mounts.
+  const hasItems = items.length > 0;
+  const { shouldRender, dataState, ref: presenceRef } = usePresence(isOpen && hasItems);
 
   // The <ul> is BOTH the presence-animated node and the positioned overlay, so
   // its ref fans out to presence (exit animation), click-outside, and the
@@ -204,9 +352,9 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
     };
   }, [isOpen]);
 
-  // APG menu keyboard contract: on open the first enabled item takes focus;
-  // arrows cycle (wrapping), Home/End jump to the edges, Escape closes and
-  // returns focus to the context trigger. Typeahead is registered debt.
+  // APG menu keyboard contract: on open the first enabled item takes focus.
+  // Arrows/Home/End/typeahead live in the shared level handler below; Escape
+  // closes and returns focus to the context trigger.
   useEffect(() => {
     if (isOpen) {
       menuRef.current
@@ -222,26 +370,29 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
       triggerRef.current?.focus();
       return;
     }
-    const menuItems = Array.from(
-      menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]:not(:disabled)') ?? []
-    );
-    if (menuItems.length === 0) return;
-    const currentIndex = menuItems.indexOf(document.activeElement as HTMLElement);
-    let nextIndex: number | undefined;
-    if (e.key === 'ArrowDown') {
-      nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % menuItems.length;
-    } else if (e.key === 'ArrowUp') {
-      nextIndex = currentIndex < 0 ? menuItems.length - 1 : (currentIndex - 1 + menuItems.length) % menuItems.length;
-    } else if (e.key === 'Home') {
-      nextIndex = 0;
-    } else if (e.key === 'End') {
-      nextIndex = menuItems.length - 1;
-    }
-    if (nextIndex !== undefined) {
-      e.preventDefault();
-      menuItems[nextIndex]?.focus();
-    }
+    handleMenuLevelKeyDown(e);
   }, []);
+
+  // Disclosure semantics live on the consumer's trigger ELEMENT (Dropdown's
+  // describeTrigger precedent): this role-less wrapper may not carry
+  // aria-haspopup/aria-expanded (axe aria-allowed-attr). Non-element triggers
+  // (text, fragments) receive nothing -- there is no valid host for them.
+  const surfaceId = useId();
+  const describedTrigger =
+    isValidElement(trigger) && trigger.type !== React.Fragment
+      ? cloneElement(
+          trigger as React.ReactElement<{
+            'aria-controls'?: string;
+            'aria-expanded'?: boolean;
+            'aria-haspopup'?: 'menu';
+          }>,
+          {
+            'aria-controls': surfaceId,
+            'aria-expanded': isOpen,
+            'aria-haspopup': 'menu',
+          },
+        )
+      : trigger;
 
   const surfaceStyle: React.CSSProperties = {
     // Tokenized overlay stack (spec section 9): context menus share the popover
@@ -266,7 +417,7 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
       onKeyDown={handleTriggerKeyDown}
       tabIndex={disabled ? -1 : 0}
     >
-      {trigger}
+      {describedTrigger}
       {shouldRender && (
         <>
           <div
@@ -278,6 +429,7 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
           />
           <ul
             ref={setMenuRef}
+            id={surfaceId}
             role="menu"
             aria-orientation="vertical"
             data-part="surface"

@@ -28,28 +28,48 @@
  * unlayered (0,3,1) `*` border-color floor at (0,4,0)+.
  *
  * Values transcribed verbatim from `engines/modern.tsx`.
+ *
+ * SECOND PASS (Phase B): row states (gated hover wash / :active / :focus-within
+ * / aria-selected tint+keyline / aria-disabled), size-driven row insets, the
+ * vertical itemLayout, empty-slot nested-radius grammar, grid overflow guard
+ * and long-copy wrapping were added; the split divider gained ONE bounded
+ * prototype axis, `--_ds-proto-list-split-inset-inline` (length, default 0 =
+ * full-bleed, logical/RTL-safe; disposition: recipe axis or bounded tenant
+ * dial). No new `--ds-*` is defined anywhere in this file.
  */
 
 /* ============================ List (container) ============================ */
 
 .rottay-list.rottay-list--modern[data-part='root'] {
-  background: var(--ds-list-background-color, transparent);
-  color: var(--ds-list-text-color, inherit);
+  background: var(--ds-list-background-color);
+  color: var(--ds-list-text-color);
 }
 .rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] {
-  border: var(--ds-list-border-width, 1px) solid var(--ds-list-border-color, var(--ds-color-border));
+  border: var(--ds-list-border-width) solid var(--ds-list-border-color, var(--ds-color-border));
   border-radius: var(--ds-list-border-radius, var(--ds-radius-lg));
 }
 
 /* size steps: the retired inline sizeFontSize map, keyed on the stamped data-size */
 .rottay-list.rottay-list--modern[data-part='root'][data-size='small'] {
-  font-size: var(--ds-list-sm-font-size, 12px);
+  font-size: var(--ds-list-sm-font-size, var(--ds-font-size-xs));
 }
 .rottay-list.rottay-list--modern[data-part='root'][data-size='default'] {
-  font-size: var(--ds-list-default-font-size, 14px);
+  font-size: var(--ds-list-default-font-size, var(--ds-font-size-sm));
 }
 .rottay-list.rottay-list--modern[data-part='root'][data-size='large'] {
-  font-size: var(--ds-list-lg-font-size, 16px);
+  font-size: var(--ds-list-lg-font-size, var(--ds-font-size-base));
+}
+
+/* size steps de-escalate the ROW INSET too, not just the font: density is a
+   composed posture, not a uniform scale. Items are direct children of
+   [data-part='list'] (child combinators — a list nested inside an item keeps
+   its own size step). The base item rule below stays the standalone/default
+   authority; these consume the declared --ds-list-sm/lg-padding-* channels. */
+.rottay-list.rottay-list--modern[data-part='root'][data-size='small'] > [data-part='list'] > .rottay-list-item.rottay-list-item--modern[data-part='item'] {
+  padding: var(--ds-list-sm-padding-vertical) var(--ds-list-sm-padding-horizontal);
+}
+.rottay-list.rottay-list--modern[data-part='root'][data-size='large'] > [data-part='list'] > .rottay-list-item.rottay-list-item--modern[data-part='item'] {
+  padding: var(--ds-list-lg-padding-vertical) var(--ds-list-lg-padding-horizontal);
 }
 
 /* loading posture (the vendor `animate-pulse` string is a test-pinned bridge:
@@ -58,8 +78,8 @@
    vendor pulse's 2s -- and reduced-motion can silence it) */
 .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] {
   /* Static posture when motion is off; the pulse animates over it. */
-  opacity: var(--ds-list-loading-opacity, 0.6);
-  animation: ds-list-skeleton-pulse-modern var(--ds-list-skeleton-pulse-duration, calc(var(--ds-motion-glacial, 500ms) * 4)) var(--ds-motion-ease-in-out, ease-in-out) infinite;
+  opacity: var(--ds-list-loading-opacity);
+  animation: ds-list-skeleton-pulse-modern var(--ds-list-skeleton-pulse-duration, calc(var(--ds-motion-glacial) * 4)) var(--ds-motion-ease-in-out) infinite;
 }
 .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-row'] {
   padding-block: var(--ds-list-skeleton-row-padding-block, 12px);
@@ -81,10 +101,10 @@
   inline-size: var(--ds-list-skeleton-avatar-size, 40px);
   block-size: var(--ds-list-skeleton-avatar-size, 40px);
   flex-shrink: 0;
-  border-radius: var(--ds-radius-full, 9999px);
+  border-radius: var(--ds-radius-full);
 }
 .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line'] {
-  border-radius: var(--ds-list-skeleton-line-radius, var(--ds-radius-sm, 4px));
+  border-radius: var(--ds-list-skeleton-line-radius, var(--ds-radius-sm));
 }
 .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line']:first-child {
   inline-size: 33.333%;
@@ -109,26 +129,49 @@
    style AND color) only in bordered mode -- this skin is the single owner of
    those borders (the Tailwind `border-b`/`border-t` utilities are gone). */
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='header'] {
-  padding: var(--ds-list-header-padding-vertical, 12px) var(--ds-list-header-padding-horizontal, 16px);
-  font-size: var(--ds-list-header-font-size, inherit);
-  font-weight: var(--ds-list-header-font-weight, 600);
-  background: var(--ds-list-header-background-color, transparent);
+  padding: var(--ds-list-header-padding-vertical) var(--ds-list-header-padding-horizontal);
+  font-size: var(--ds-list-header-font-size, var(--ds-font-size-sm));
+  font-weight: var(--ds-list-header-font-weight);
+  background: var(--ds-list-header-background-color);
 }
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='footer'] {
-  padding: var(--ds-list-footer-padding-vertical, 12px) var(--ds-list-footer-padding-horizontal, 16px);
-  font-size: var(--ds-list-footer-font-size, inherit);
-  background: var(--ds-list-footer-background-color, transparent);
+  padding: var(--ds-list-footer-padding-vertical) var(--ds-list-footer-padding-horizontal);
+  font-size: var(--ds-list-footer-font-size, var(--ds-font-size-sm));
+  background: var(--ds-list-footer-background-color);
 }
 .rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='header'] {
-  border-bottom: var(--ds-list-border-width, 1px) solid var(--ds-list-border-color, var(--ds-color-border));
+  border-bottom: var(--ds-list-border-width) solid var(--ds-list-border-color, var(--ds-color-border));
 }
 .rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='footer'] {
-  border-top: var(--ds-list-border-width, 1px) solid var(--ds-list-border-color, var(--ds-color-border));
+  border-top: var(--ds-list-border-width) solid var(--ds-list-border-color, var(--ds-color-border));
 }
 
-/* split divider between items */
+/* Empty region: the composed Empty primitive owns its own frame/padding; the
+   slot only insets it and resolves the NESTED RADIUS relationship — inside a
+   bordered list the inner empty frame derives from the list's own radius
+   channel instead of reading as an unrelated larger rounded rectangle. The
+   declared --ds-list-empty-padding (32px, pre-composition era) is deliberately
+   NOT consumed: stacked on Empty's own padding it doubled the dead air. */
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='empty'] {
+  padding: var(--ds-spacing-3);
+  --ds-empty-radius: var(--ds-list-border-radius, var(--ds-radius-lg));
+  --ds-empty-min-height: var(--ds-empty-simple-min-height, 8rem);
+}
+
+/* Grid mode: the inline track projection is `repeat(N, 1fr)` (test-pinned),
+   so the overflow guard lives here — grid children may shrink below content
+   size instead of forcing horizontal scroll. */
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'] > * {
+  min-inline-size: 0;
+}
+
+/* split divider between items: full-bleed by default; the inset proto pulls
+   both LOGICAL ends in by one bounded length (aligns the rule with the text
+   column instead of the well edge when a tenant wants a quieter rhythm).
+   RTL-safe: margin-inline flips with direction. */
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'] > [data-part='divider'] {
-  border-bottom: var(--ds-list-split-width, 1px) solid var(--ds-list-split-color, var(--ds-color-border));
+  margin-inline: var(--_ds-proto-list-split-inset-inline, 0);
+  border-bottom: var(--ds-list-split-width) solid var(--ds-list-split-color, var(--ds-color-border));
 }
 
 /* ============================== List.Item ================================ */
@@ -137,26 +180,87 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--ds-list-default-padding-vertical, 12px) var(--ds-list-default-padding-horizontal, 16px);
-  background: var(--ds-list-item-background-color, transparent);
-  color: var(--ds-list-text-color, inherit);
-  transition: background var(--ds-list-transition-duration, var(--ds-motion-normal)) var(--ds-list-transition-timing, ease-in-out);
+  padding: var(--ds-list-default-padding-vertical) var(--ds-list-default-padding-horizontal);
+  background: var(--ds-list-item-background-color);
+  color: var(--ds-list-text-color);
+  transition: background var(--ds-list-transition-duration, var(--ds-motion-normal)) var(--ds-list-transition-timing);
 }
+
+/* Row states. The hover wash consumes the long-declared
+   --ds-list-item-hover-background-color channel (previously read ONLY by the
+   skeleton fill). Hover is gated to fine pointers; :active is the touch
+   equivalent; :focus-within gives keyboard users the same row context when a
+   slotted control takes focus. */
+@media (hover: hover) {
+  .rottay-list-item.rottay-list-item--modern[data-part='item']:hover {
+    background: var(--ds-list-item-hover-background-color, var(--ds-surface-panel));
+  }
+}
+.rottay-list-item.rottay-list-item--modern[data-part='item']:active,
+.rottay-list-item.rottay-list-item--modern[data-part='item']:focus-within {
+  background: var(--ds-list-item-hover-background-color, var(--ds-surface-panel));
+}
+
+/* Selected (caller-stamped aria hook): tint PLUS a full inset keyline — the
+   selection never reads by color alone, and the keyline wraps all four edges
+   (a colored inline-start rail is prohibited frame grammar). */
+.rottay-list-item.rottay-list-item--modern[data-part='item'][aria-selected='true'],
+.rottay-list-item.rottay-list-item--modern[data-part='item'][aria-current] {
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-list-item-background-color));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 35%, transparent);
+}
+
+/* Disabled rows stay readable but unmistakably inactive, and skip the wash. */
+.rottay-list-item.rottay-list-item--modern[data-part='item'][aria-disabled='true'] {
+  color: var(--ds-color-text-muted, var(--ds-color-text-secondary));
+}
+@media (hover: hover) {
+  .rottay-list-item.rottay-list-item--modern[data-part='item'][aria-disabled='true']:hover {
+    background: var(--ds-list-item-background-color);
+  }
+}
+
 .rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-content'] {
   flex: 1;
   min-inline-size: 0;
+  /* Long copy (URLs, AR strings) wraps inside the row instead of pushing
+     extra/actions out of the box. */
+  overflow-wrap: break-word;
 }
 .rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-extra'] {
   flex-shrink: 0;
-  margin-inline-start: var(--ds-list-extra-margin-left, 16px);
+  margin-inline-start: var(--ds-list-extra-margin-left);
 }
 .rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-actions'] {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  margin-inline-start: var(--ds-list-extra-margin-left, 16px);
-  gap: var(--ds-list-actions-gap, 8px);
+  margin-inline-start: var(--ds-list-extra-margin-left);
+  gap: var(--ds-list-actions-gap);
   color: var(--ds-list-actions-color, var(--ds-color-primary));
+}
+
+/* Plain text/link actions inherit the tray color and pick up the declared
+   hover tone; slotted Buttons paint themselves and are unaffected. */
+@media (hover: hover) {
+  .rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-actions'] > [data-part='item-action']:hover {
+    color: var(--ds-list-actions-hover-color, var(--ds-color-primary));
+  }
+}
+
+/* Vertical item layout (the contract's itemLayout='vertical', now stamped):
+   content stacks above the action row; extra/actions drop their inline-start
+   offset and settle at the trailing edge under the content. Child combinators
+   keep a nested horizontal list untouched. */
+.rottay-list.rottay-list--modern[data-part='root'][data-item-layout='vertical'] > [data-part='list'] > .rottay-list-item.rottay-list-item--modern[data-part='item'] {
+  flex-direction: column;
+  align-items: stretch;
+}
+.rottay-list.rottay-list--modern[data-part='root'][data-item-layout='vertical'] > [data-part='list'] > .rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-extra'],
+.rottay-list.rottay-list--modern[data-part='root'][data-item-layout='vertical'] > [data-part='list'] > .rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-actions'] {
+  margin-inline-start: 0;
+  margin-block-start: var(--ds-spacing-2);
+  justify-content: flex-end;
 }
 
 /* ============================ List.Item.Meta ============================= */
@@ -164,7 +268,7 @@
 .rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] {
   display: flex;
   align-items: flex-start;
-  gap: var(--ds-list-meta-avatar-margin-right, 12px);
+  gap: var(--ds-list-meta-avatar-margin-right);
 }
 .rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-avatar'] {
   flex-shrink: 0;
@@ -174,13 +278,16 @@
   min-inline-size: 0;
 }
 .rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-title'] {
-  font-size: var(--ds-list-meta-title-font-size, inherit);
-  font-weight: var(--ds-list-meta-title-font-weight, 500);
+  font-size: var(--ds-list-meta-title-font-size);
+  font-weight: var(--ds-list-meta-title-font-weight);
   color: var(--ds-list-meta-title-color, var(--ds-color-text-primary));
+  overflow-wrap: break-word;
 }
 .rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-description'] {
-  font-size: var(--ds-list-meta-description-font-size, 0.875rem);
-  margin-top: var(--ds-list-meta-description-margin-top, 0);
+  /* em (not rem) so the step follows the list's own data-size font step. */
+  font-size: var(--ds-list-meta-description-font-size);
+  margin-top: var(--ds-list-meta-description-margin-top);
+  overflow-wrap: break-word;
   /* CONTRAST LAW (K3-A Pass 2, axe color-contrast/serious): the resolved
      description channel fails AA on the page surface (bithire's #888d9e =
      3.31:1 on #fff; TMM's #737373 = 4.74:1 passes but the channel must hold
@@ -222,5 +329,13 @@
   .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-avatar'],
   .rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line'] {
     border: 1px solid ButtonText;
+  }
+  /* The selected tint + inset shadow wash out under forced colors; the
+     selected row keeps a system-color keyline so selection never depends on
+     the (now gone) background mix. */
+  .rottay-list-item.rottay-list-item--modern[data-part='item'][aria-selected='true'],
+  .rottay-list-item.rottay-list-item--modern[data-part='item'][aria-current] {
+    outline: 1px solid ButtonText;
+    outline-offset: -1px;
   }
 }

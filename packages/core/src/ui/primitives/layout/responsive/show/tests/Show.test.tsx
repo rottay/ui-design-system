@@ -257,7 +257,7 @@ describe('Show and Hide are inverses', () => {
     expect(showQuery).toBe(hideQuery);
   });
 
-  it('Show uses display: contents, Hide uses display: none !important', () => {
+  it('keeps both wrappers boxless while applying inverse visibility rules', () => {
     const { container: showContainer } = render(
       <Show on="phone">
         <span>Show</span>
@@ -276,8 +276,9 @@ describe('Show and Hide are inverses', () => {
     expect(showCss).toContain('display: none');
     expect(showCss).toContain('display: contents');
 
-    // Hide: visible by default, hidden in media query
+    // Hide: boxless-visible by default, hidden in media query. `contents` is
+    // intentional here: neither responsive helper may inject a layout box.
+    expect(hideCss).toContain('display: contents');
     expect(hideCss).toContain('display: none !important');
-    expect(hideCss).not.toContain('display: contents');
   });
 });

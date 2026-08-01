@@ -21,11 +21,21 @@
  * Each variant resolves a single `--ds-link-tone` channel; hover/pressed/
  * visited are color-mixes OF THAT TONE, so a tenant that re-tunes the tone
  * inherits a coherent state ramp for free.
+ *
+ * B9 ADDENDUM (pass 2):
+ * - CURRENT LOCATION: consumers pass `aria-current` through the anchor rest
+ *   props (contract untouched). The current link reads active WITHOUT color
+ *   alone: typographic weight (`--_ds-proto-link-current-font-weight`) plus
+ *   the hover-grade underline thickness — the same non-color affordance
+ *   ramp, extended to forced-colors with system values.
+ * - KEYBOARD PARITY: standalone links (`underline=false`) already revealed
+ *   the underline on hover; `:focus-visible` now reveals it too, so the
+ *   affordance is never pointer-only.
  */
 
 .rottay-link-shell.rottay-link-shell--modern[data-part='root'] {
   cursor: pointer;
-  border-radius: var(--ds-link-radius, var(--ds-radius-sm, 2px));
+  border-radius: var(--ds-link-radius, var(--ds-radius-sm));
   text-decoration-line: underline;
   text-decoration-thickness: var(--ds-link-underline-thickness, 1px);
   text-underline-offset: var(--ds-link-underline-offset, 2px);
@@ -33,12 +43,12 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transition:
-    color var(--ds-link-motion-duration, var(--ds-motion-fast, 120ms))
-      var(--ds-link-motion-easing, var(--ds-motion-ease-out, ease-out)),
-    text-underline-offset var(--ds-link-motion-duration, var(--ds-motion-fast, 120ms))
-      var(--ds-link-motion-easing, var(--ds-motion-ease-out, ease-out)),
-    text-decoration-thickness var(--ds-link-motion-duration, var(--ds-motion-fast, 120ms))
-      var(--ds-link-motion-easing, var(--ds-motion-ease-out, ease-out));
+    color var(--ds-link-motion-duration, var(--ds-motion-fast))
+      var(--ds-link-motion-easing, var(--ds-motion-ease-out)),
+    text-underline-offset var(--ds-link-motion-duration, var(--ds-motion-fast))
+      var(--ds-link-motion-easing, var(--ds-motion-ease-out)),
+    text-decoration-thickness var(--ds-link-motion-duration, var(--ds-motion-fast))
+      var(--ds-link-motion-easing, var(--ds-motion-ease-out));
 }
 
 .rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-underline='false'] {
@@ -48,7 +58,8 @@
 /* Standalone links (underline=false) reveal the underline on hover: the
    affordance is always one pointer-move away, never hidden for good.
    Pointer-fine only (hover law): the keyboard equivalent is the focus ring
-   below, and the touch equivalent is the :active ink dip. */
+   below PLUS the same underline reveal (B9 pass 2 — the affordance must
+   never be pointer-only), and the touch equivalent is the :active ink dip. */
 @media (hover: hover) {
   .rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-underline='false']:hover {
     text-decoration-line: underline;
@@ -57,11 +68,25 @@
   .rottay-link-shell.rottay-link-shell--modern[data-part='root']:hover {
     color: var(
       --ds-link-hover-color,
-      color-mix(in srgb, var(--ds-link-tone) 70%, var(--ds-color-neutral-900, #171717) 30%)
+      color-mix(in srgb, var(--ds-link-tone) 70%, var(--ds-color-neutral-900) 30%)
     );
     text-underline-offset: var(--ds-link-underline-offset-hover, 3px);
     text-decoration-thickness: var(--ds-link-underline-thickness-hover, 1.5px);
   }
+}
+
+/* Keyboard parity for the hover underline reveal (B9 pass 2). */
+.rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-underline='false']:focus-visible {
+  text-decoration-line: underline;
+}
+
+/* ---- current location (B9 pass 2): `aria-current` arrives through the
+        anchor rest props. The active reading is NEVER color alone: weight
+        + the hover-grade underline thickness carry it (the ink itself is
+        unchanged so the tone ramp stays coherent). ---- */
+.rottay-link-shell.rottay-link-shell--modern[data-part='root'][aria-current]:not([aria-current='false']) {
+  font-weight: var(--_ds-proto-link-current-font-weight, 500);
+  text-decoration-thickness: var(--ds-link-underline-thickness-hover, 1.5px);
 }
 
 /* ---- variant tones: one channel per variant, states derive from it -------- */
@@ -92,7 +117,7 @@
      clears AA: secondary/TMM 5.83:1, secondary/bithire 7.78:1,
      primary/bithire 6.15:1 (was 4.72:1 -- no regression).
      `--ds-link-color` remains the tenant escape hatch. */
-  color: var(--ds-link-color, color-mix(in srgb, var(--ds-link-tone) 84%, var(--ds-color-neutral-900, #171717) 16%));
+  color: var(--ds-link-color, color-mix(in srgb, var(--ds-link-tone) 84%, var(--ds-color-neutral-900) 16%));
 }
 
 /* ---- states. Visited precedes hover so pointer feedback always wins; the
@@ -100,14 +125,14 @@
 .rottay-link-shell.rottay-link-shell--modern[data-part='root']:visited {
   color: var(
     --ds-link-visited-color,
-    color-mix(in srgb, var(--ds-link-tone) 76%, var(--ds-color-text-secondary, #64748b) 24%)
+    color-mix(in srgb, var(--ds-link-tone) 76%, var(--ds-color-text-secondary) 24%)
   );
 }
 
 .rottay-link-shell.rottay-link-shell--modern[data-part='root']:active {
   color: var(
     --ds-link-active-color,
-    color-mix(in srgb, var(--ds-link-tone) 58%, var(--ds-color-neutral-900, #171717) 42%)
+    color-mix(in srgb, var(--ds-link-tone) 58%, var(--ds-color-neutral-900) 42%)
   );
 }
 
@@ -118,7 +143,7 @@
 }
 
 .rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-disabled='true'][data-disabled='true'] {
-  color: var(--ds-link-disabled-color, var(--ds-color-text-disabled, var(--ds-color-neutral-400, #a3a3a3)));
+  color: var(--ds-link-disabled-color, var(--ds-color-text-disabled, var(--ds-color-neutral-400)));
   opacity: var(--ds-link-disabled-opacity, 0.62);
   cursor: not-allowed;
   pointer-events: none;
@@ -160,5 +185,11 @@
   .rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-disabled='true'][data-disabled='true'] {
     color: GrayText;
     opacity: 1;
+  }
+  /* The current location survives forced colors without any authored hue:
+     heavier system underline + weight (B9 pass 2). */
+  .rottay-link-shell.rottay-link-shell--modern[data-part='root'][aria-current]:not([aria-current='false']) {
+    text-decoration-thickness: 2px;
+    font-weight: 700;
   }
 }

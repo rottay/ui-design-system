@@ -146,24 +146,15 @@ export const SkeletonText = forwardRef<HTMLDivElement, SkeletonTextProps>(
     // Style Generation
     // -------------------------------------------------------------------------
 
-    /**
-     * Container styles for vertical line stacking.
-     */
-    const containerStyle: React.CSSProperties = {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '8px',
-      ...style,
-    };
+    // The column stack, the line gap, the line height and the 60%
+    // natural-ending last line all paint from the unlayered skeleton-compounds
+    // skin (density-retunable); inline style carries only the caller's `style`
+    // on the root and, per line, the instance `width` prop plus the shared
+    // canon animation reference (pinned inline by Skeleton.integration.test).
+    const containerStyle: React.CSSProperties = { ...style };
 
-    /**
-     * Individual line styles. The shimmer gradient background + 200% sizing and
-     * the corner radius paint from the unlayered skeleton-compounds skin; only
-     * the animation reference (which drives the slide) stays inline.
-     */
     const lineStyle: React.CSSProperties = {
-      height: '16px',
-      animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration, 1.5s) infinite',
+      animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration) infinite',
     };
 
     // -------------------------------------------------------------------------
@@ -171,15 +162,16 @@ export const SkeletonText = forwardRef<HTMLDivElement, SkeletonTextProps>(
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} data-part="root" className={`rottay-skeleton-text ${className}`} style={containerStyle}>
+      <div ref={ref} data-part="root" className={`rottay-skeleton-text ${className}`} style={containerStyle} aria-hidden="true">
         {Array.from({ length: lines }).map((_, index) => (
           <div
             key={index}
             data-part="line"
             style={{
               ...lineStyle,
-              // Last line is shorter for realistic text appearance
-              width: index === lines - 1 ? '60%' : width,
+              // Instance width is contract geometry; the last line carries no
+              // inline width so the skin's 60% natural-ending rule applies.
+              ...(index === lines - 1 ? {} : { width }),
             }}
           />
         ))}

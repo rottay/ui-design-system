@@ -40,6 +40,12 @@ const ModernEmpty = forwardRef<HTMLDivElement, EmptyProps>((props, ref) => {
     children,
     className = '',
     style,
+    'data-part': dataPart,
+    // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
+    // root element. It spreads BEFORE the engine's own stamps so the skin and
+    // status contracts (data-image / data-has-* / role / aria-live) always
+    // land last.
+    ...rest
   } = props;
 
   const displayDescription = description ?? i18n?.tOr('empty.description', 'No data') ?? 'No data';
@@ -53,9 +59,10 @@ const ModernEmpty = forwardRef<HTMLDivElement, EmptyProps>((props, ref) => {
 
   return (
     <div
+      {...rest}
       ref={ref}
       className={`rottay-empty rottay-empty--modern ${className}`}
-      data-part="root"
+      data-part={dataPart ?? 'root'}
       data-image={imageType}
       data-has-description={Boolean(displayDescription)}
       data-has-footer={Boolean(children)}

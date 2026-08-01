@@ -14,6 +14,11 @@
  * `--ds-checkbox-{size}-*` channels multiplied by the three-plane density
  * channel `--ds-density-effective-scale`.
  *
+ * Group participation: inside `<Checkbox.Group>` children mode the control
+ * derives checked/name/disabled from `useCheckboxGroup()` whenever it carries
+ * a `value` and no explicit `checked` of its own; explicit props always win.
+ * `aria-label` forwards to the native input (standalone indicators need it).
+ *
  * @see {@link Checkbox} for the main component
  * @module ModernCheckbox
  * @category Inputs
@@ -25,6 +30,7 @@
 import React, { useState, useRef, useEffect, useId, useCallback } from 'react';
 import type { CheckboxProps } from '../../contracts';
 import { CHECKBOX_DEFAULTS, SIZE_MAP_NUMERIC } from '../../contracts';
+import { useCheckboxGroup } from '../../runtime/group-context';
 
 /* ------------------------------------------------------------------ */
 /*  SVG icons                                                          */
@@ -83,8 +89,8 @@ const IndeterminateIcon = ({ size }: { size: number }) => {
 
 export default function ModernCheckbox(props: CheckboxProps): React.ReactElement {
   const {
-    size = CHECKBOX_DEFAULTS.size,
-    color = CHECKBOX_DEFAULTS.color,
+    size: sizeProp,
+    color: colorProp,
     radius = CHECKBOX_DEFAULTS.radius,
     labelPlacement = CHECKBOX_DEFAULTS.labelPlacement,
     label,
@@ -92,18 +98,27 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     checked: controlledChecked,
     defaultChecked = CHECKBOX_DEFAULTS.defaultChecked,
     indeterminate = CHECKBOX_DEFAULTS.indeterminate,
-    disabled = CHECKBOX_DEFAULTS.disabled,
+    disabled: disabledProp = CHECKBOX_DEFAULTS.disabled,
     required = CHECKBOX_DEFAULTS.required,
     error = CHECKBOX_DEFAULTS.error,
     onChange,
     children,
-    name,
+    name: nameProp,
     value,
     id: providedId,
     autoFocus,
     className = '',
     style,
   } = props;
+  const ariaLabel = props['aria-label'];
+
+  // Group participation (children-mode `<Checkbox.Group>`): when the control
+  // carries a `value` and no explicit checked state of its own, the group
+  // context owns checked/name/disabled and receives the change notification.
+  // Explicit props always win over context, so an option can still opt out.
+  const group = useCheckboxGroup();
+  const groupControlled =
+    group != null && value !== undefined && controlledChecked === undefined;
 
   const generatedId = useId();
   const inputId = providedId || `checkbox-modern-${generatedId.replace(/:/g, '')}`;
@@ -111,7 +126,18 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
 
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = controlledChecked !== undefined;
-  const isChecked = isControlled ? controlledChecked : internalChecked;
+  const isChecked = groupControlled
+    ? group.value.includes(value)
+    : isControlled
+      ? controlledChecked
+      : internalChecked;
+
+  const size = sizeProp ?? group?.size ?? CHECKBOX_DEFAULTS.size;
+  const color = colorProp ?? group?.color ?? CHECKBOX_DEFAULTS.color;
+  // Group disabled cascades to every child; size/color inherit unless the
+  // control sets its own. Checked/name flow only when group-controlled.
+  const disabled = disabledProp || group?.disabled === true;
+  const name = nameProp ?? (groupControlled ? group?.name : undefined);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -121,11 +147,13 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const newChecked = e.target.checked;
-    if (!isControlled) {
+    if (groupControlled && group) {
+      group.onChange(value, newChecked);
+    } else if (!isControlled) {
       setInternalChecked(newChecked);
     }
     onChange?.(newChecked, e);
-  }, [isControlled, onChange]);
+  }, [groupControlled, group, value, isControlled, onChange]);
 
   // Numeric fallback for SVG icon sizing (cannot use CSS vars in SVG attributes)
   const boxSizeNumeric = SIZE_MAP_NUMERIC[size] ?? SIZE_MAP_NUMERIC.md;
@@ -166,6 +194,7 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
           onChange={handleChange}
           aria-checked={indeterminate ? 'mixed' : isChecked}
           aria-invalid={error || undefined}
+          aria-label={ariaLabel}
         />
 
         {/* Custom visual indicator */}

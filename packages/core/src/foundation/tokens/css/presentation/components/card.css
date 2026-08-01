@@ -92,11 +92,11 @@
      Card header section styling
      ======================================================================== */
   --ds-card-header-padding: var(--ds-card-default-padding);
-  --ds-card-header-padding-sm: var(--ds-spacing-3, 12px)
-    var(--ds-spacing-4, 16px);
-  --ds-card-header-padding-lg: var(--ds-spacing-5, 20px)
-    var(--ds-spacing-6, 24px);
-  --ds-card-header-gap: var(--ds-spacing-3, 12px);
+  --ds-card-header-padding-sm: var(--ds-spacing-3)
+    var(--ds-spacing-4);
+  --ds-card-header-padding-lg: var(--ds-spacing-5)
+    var(--ds-spacing-6);
+  --ds-card-header-gap: var(--ds-spacing-3);
   --ds-card-header-padding-bottom: calc(var(--ds-card-default-padding) * 0.75);
   --ds-card-header-border-width: 1px;
   --ds-card-header-border-color: var(--ds-color-neutral-200);
@@ -146,10 +146,10 @@
      Card content area styling
      ======================================================================== */
   --ds-card-body-padding: var(--ds-card-default-padding);
-  --ds-card-body-padding-sm: var(--ds-spacing-3, 12px)
-    var(--ds-spacing-4, 16px);
-  --ds-card-body-padding-lg: var(--ds-spacing-5, 20px)
-    var(--ds-spacing-6, 24px);
+  --ds-card-body-padding-sm: var(--ds-spacing-3)
+    var(--ds-spacing-4);
+  --ds-card-body-padding-lg: var(--ds-spacing-5)
+    var(--ds-spacing-6);
   --ds-card-body-color: var(--ds-color-neutral-700);
   --ds-card-body-font-size: var(--ds-font-size-base);
   --ds-card-body-line-height: var(--ds-line-height-normal);
@@ -159,10 +159,10 @@
      Card footer section styling
      ======================================================================== */
   --ds-card-footer-padding: var(--ds-card-default-padding);
-  --ds-card-footer-padding-sm: var(--ds-spacing-3, 12px)
-    var(--ds-spacing-4, 16px);
-  --ds-card-footer-padding-lg: var(--ds-spacing-5, 20px)
-    var(--ds-spacing-6, 24px);
+  --ds-card-footer-padding-sm: var(--ds-spacing-3)
+    var(--ds-spacing-4);
+  --ds-card-footer-padding-lg: var(--ds-spacing-5)
+    var(--ds-spacing-6);
   --ds-card-footer-padding-top: calc(var(--ds-card-default-padding) * 0.75);
   --ds-card-footer-border-width: 1px;
   --ds-card-footer-border-color: var(--ds-color-neutral-200);
@@ -172,9 +172,9 @@
   /* Footer actions */
   --ds-card-footer-actions-gap: 0.5rem;
   --ds-card-footer-actions-justify: flex-end;
-  --ds-card-actions-gap: var(--ds-spacing-2, 8px);
-  --ds-card-actions-margin-top: var(--ds-spacing-4, 16px);
-  --ds-card-actions-padding-top: var(--ds-spacing-4, 16px);
+  --ds-card-actions-gap: var(--ds-spacing-2);
+  --ds-card-actions-margin-top: var(--ds-spacing-4);
+  --ds-card-actions-padding-top: var(--ds-spacing-4);
 
   /* ========================================================================
      MEDIA/IMAGE
@@ -257,11 +257,11 @@
   --ds-card-interactive-transform-hover: translateY(-1px);
   --ds-card-active-transform: translateY(0) scale(0.995);
   --ds-card-interactive-transition: var(--ds-transition-card);
-  --ds-card-surface-gradient: var(--ds-gradient-surface, none);
+  --ds-card-surface-gradient: var(--ds-gradient-surface);
   --ds-card-texture: var(--ds-premium-card-grid-bg);
   --ds-card-texture-size: var(--ds-premium-card-grid-size)
     var(--ds-premium-card-grid-size);
-  --ds-card-texture-opacity: calc(var(--ds-effect-intensity, 1) * 0.1);
+  --ds-card-texture-opacity: calc(var(--ds-effect-intensity) * 0.1);
   --ds-card-overlay: var(--ds-premium-card-overlay);
   --ds-card-state-overlay: linear-gradient(
     118deg,
@@ -279,7 +279,7 @@
      ======================================================================== */
   --ds-premium-card-radius: var(--ds-card-radius, var(--ds-radius-lg));
   --ds-premium-card-padding: var(--ds-card-md-padding);
-  --ds-premium-card-gap: var(--ds-spacing-3, 12px);
+  --ds-premium-card-gap: var(--ds-spacing-3);
   --ds-premium-card-min-height: auto;
   --ds-premium-card-grid-size: 22px;
   --ds-premium-card-grid-line: color-mix(
@@ -506,7 +506,7 @@
     var(--ds-color-bg-elevated) 82%,
     transparent
   );
-  --ds-card-skeleton-radius: var(--ds-radius-sm, 6px);
+  --ds-card-skeleton-radius: var(--ds-radius-sm);
   --ds-card-skeleton-duration: var(--ds-motion-glacial);
 
   /* ========================================================================
@@ -593,7 +593,7 @@
      ======================================================================== */
   --ds-card-focus-ring: var(--ds-shadow-focus-ring);
   --ds-card-focus-ring-color: var(--ds-focus-ring-color);
-  --ds-card-focus-ring-width: var(--ds-focus-ring-width, 2px);
+  --ds-card-focus-ring-width: var(--ds-focus-ring-width);
   --ds-card-focus-ring-offset: 2px;
   --ds-card-selected-outline-width: var(--ds-card-border-width);
   --ds-card-focus-outline: none;

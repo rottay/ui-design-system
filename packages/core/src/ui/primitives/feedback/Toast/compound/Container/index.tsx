@@ -175,8 +175,14 @@ function getContainerPosition(position: ToastPosition): CSSProperties {
   const posMap = POSITION_MAP[position];
   const base: CSSProperties = {
     position: 'fixed',
-    zIndex: 'var(--ds-toast-z-index, 9999)',
-    padding: '16px',
+    // The family channel stays authoritative; its fallback rides the governed
+    // overlay scale (`--ds-z-toast` -> --ds-z-index-notification tier, 1800)
+    // instead of an arbitrary magic number.
+    zIndex: 'var(--ds-toast-z-index, var(--ds-z-toast, 1800))',
+    // One gutter axis shared with the skin's viewport-width formula
+    // (`--ds-toast-viewport-gutter`), so a tenant that widens the edge gutter
+    // moves the stack frame and the card geometry together.
+    padding: 'var(--ds-toast-viewport-gutter, var(--ds-spacing-4))',
     display: 'flex',
     flexDirection: 'column',
     pointerEvents: 'none',

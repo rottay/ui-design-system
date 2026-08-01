@@ -134,28 +134,26 @@ export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(
     // -------------------------------------------------------------------------
 
     /**
-     * Container styles for the footer section.
-     * Uses flexbox for horizontal layout with configurable alignment.
+     * Instance styles for the footer section: the prop-driven decisions
+     * resolve inline — `align` (ALIGN_MAP contract enum), `padding`
+     * (PADDING_MAP contract enum) — plus the `divider` hatch the skin
+     * consumes (the "off" branch resolves to the same explicit `none` React
+     * used to set inline; the divider color resolves from the semantic
+     * border channel, never a hardcoded neutral). The stable frame (flex,
+     * alignment, gap, shrink) lives in modal-compounds.css
+     * `[data-part='footer']`.
      */
     const footerStyle: React.CSSProperties = {
-      // Layout - horizontal flex with alignment
-      display: 'flex',
-      alignItems: 'center',
+      // Layout - alignment is a contract enum (ALIGN_MAP)
       justifyContent: ALIGN_MAP[align] || 'flex-end',
-      gap: '12px',
 
       // Spacing - uses PADDING_MAP for consistency
       padding: PADDING_MAP[padding] || PADDING_MAP.lg,
 
-      // Visual - optional top border for separation. The `divider` decision
-      // rides a hatch the skin consumes, so the "off" branch resolves to the
-      // same explicit `none` React set inline.
+      // Visual - optional top border for separation
       '--ds-modal-footer-divider': divider
-        ? '1px solid var(--ds-modal-footer-border, rgba(0, 0, 0, 0.1))'
+        ? '1px solid var(--ds-modal-footer-border, var(--ds-color-border-subtle))'
         : 'none',
-
-      // Prevent shrinking when content overflows
-      flexShrink: 0,
 
       // Merge user styles (takes precedence)
       ...style,

@@ -106,7 +106,7 @@ export interface SkeletonTableProps {
  * @internal
  */
 const shimmerStyle: React.CSSProperties = {
-  animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration, 1.5s) infinite',
+  animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration) infinite',
 };
 
 // ============================================================================
@@ -152,25 +152,19 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
     // Style Generation
     // -------------------------------------------------------------------------
 
-    /**
-     * Outer container with rounded corners and themed border.
-     */
-    // Rounded corners + themed border paint from the skeleton-compounds skin
-    // (the border-color reaches the tenant (0,4,0) floor there).
-    const containerStyle: React.CSSProperties = {
-      width: '100%',
-      overflow: 'hidden',
-      ...style,
-    };
+    // The frame clip, the row grid rhythm (gap/padding) and every cell
+    // geometry (header 70%, body first-column 50% / others 80%) paint from the
+    // unlayered skeleton-compounds skin. Inline style keeps only the caller's
+    // `style` and the ONE truly dynamic value: the track count, which the
+    // `columns` prop computes per instance.
+    const containerStyle: React.CSSProperties = { ...style };
 
     /**
-     * Shared row layout using CSS Grid for equal column distribution.
+     * Shared row layout: the track template is instance geometry (`columns`
+     * prop); the grid display, gap and padding are skin-owned.
      */
     const rowStyle: React.CSSProperties = {
-      display: 'grid',
       gridTemplateColumns: `repeat(${columns}, 1fr)`,
-      gap: '12px',
-      padding: '12px 16px',
     };
 
     // -------------------------------------------------------------------------
@@ -178,7 +172,7 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} data-part="root" className={`rottay-skeleton-table ${className}`} style={containerStyle}>
+      <div ref={ref} data-part="root" className={`rottay-skeleton-table ${className}`} style={containerStyle} aria-hidden="true">
         {/* Header row - distinct background, taller cells */}
         <div
           data-part="row"
@@ -189,11 +183,7 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
             <div
               key={`header-${col}`}
               data-part="cell"
-              style={{
-                ...shimmerStyle,
-                height: '14px',
-                width: '70%',
-              }}
+              style={shimmerStyle}
             />
           ))}
         </div>
@@ -210,12 +200,7 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
               <div
                 key={`cell-${row}-${col}`}
                 data-part="cell"
-                style={{
-                  ...shimmerStyle,
-                  height: '12px',
-                  // First column narrower to mimic ID/key columns
-                  width: col === 0 ? '50%' : '80%',
-                }}
+                style={shimmerStyle}
               />
             ))}
           </div>

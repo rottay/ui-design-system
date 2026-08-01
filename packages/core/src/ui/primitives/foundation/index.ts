@@ -7,6 +7,25 @@
  */
 
 export { ResizeHandle, RESIZE_HANDLE_DEFAULTS } from './ResizeHandle';
+export { VisuallyHidden } from './VisuallyHidden';
+export type { VisuallyHiddenProps } from './VisuallyHidden';
+export { IconFrame } from './IconFrame';
+export type {
+  IconFrameProps,
+  IconFrameShape,
+  IconFrameSize,
+  IconFrameTone,
+  IconFrameVariant,
+} from './IconFrame';
+export { Meter, resolveMeterThreshold } from './Meter';
+export type {
+  MeterFormat,
+  MeterProps,
+  MeterSize,
+  MeterThreshold,
+  MeterTone,
+  MeterVariant,
+} from './Meter';
 export type {
   ResizeHandleAnatomy,
   ResizeHandleArrowPolicy,

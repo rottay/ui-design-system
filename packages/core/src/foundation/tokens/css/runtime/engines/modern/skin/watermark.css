@@ -24,6 +24,27 @@
  * exactly as the tenant authored it (provenance marks like "DRAFT" often
  * WANT to print). Recorded as a contract candidate, not a skin decision.
  *
+ * RTL (Phase B second pass): deliberately direction-neutral. The tile is a
+ * repeating raster of legible text — mirroring it would render the copy
+ * backwards — so `inset: 0` is symmetric by construction and
+ * `background-position` keeps the physical `--ds-watermark-offset` the
+ * consumer authored. No logical-property conversion applies.
+ *
+ * REDUCED TRANSPARENCY / EFFECT DIAL (Phase B second pass): deliberately NOT
+ * wired. The mark's alpha is baked into the canvas raster by the tenant's
+ * `--ds-watermark-color`, and the layer is document provenance (a
+ * "CONFIDENTIAL" mark), not chrome decoration — dissolving it under
+ * `prefers-reduced-transparency` or `--ds-effect-intensity: 0` would silently
+ * drop information the document owner asked to paint. The governed dials
+ * that DO apply are the tenant color channel and `--ds-watermark-opacity`.
+ *
+ * KNOWN RESIDUE (contract candidate, not a skin decision): the contract
+ * default `font.color` falls back to `rgba(0, 0, 0, 0.15)` when
+ * `--ds-watermark-color` is unemitted — on dark surfaces under a DB tenant
+ * without Appearance emission that fallback is near-invisible. Both default
+ * themes and the rottay facade artifacts emit the channel per light/dark;
+ * per-tenant authoring is the fix path (the contract is read-only here).
+ *
  * PORTAL: neither engine portals — this is an in-place absolute layer, not a
  * floating overlay.
  */

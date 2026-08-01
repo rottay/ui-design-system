@@ -24,7 +24,7 @@
 .rottay-button-group[data-connected='true'] {
   gap: 0;
   flex-wrap: nowrap;
-  overflow-x: auto;
+  overflow-inline: auto;
   overscroll-behavior-inline: contain;
   isolation: isolate;
 }

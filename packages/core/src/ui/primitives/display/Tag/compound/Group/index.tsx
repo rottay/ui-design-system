@@ -72,17 +72,12 @@ export interface TagGroupProps extends BaseComponentProps, WithChildren {
 /**
  * Gap size mapping to CSS values.
  */
-const GAP_MAP: Record<string, string> = {
-  xs: '0.25rem',
-  sm: '0.5rem',
-  md: '0.75rem',
-  lg: '1rem',
-};
-
 /**
  * TagGroup component for organizing multiple tags.
  *
  * Provides consistent spacing and layout options for tag collections.
+ * Layout paint is skin-owned (`tag-compounds.css`, keyed on the stamped
+ * `data-gap`/`data-direction`/`data-wrap`/`data-align` axes).
  *
  * @param props - TagGroup component properties (gap, wrap, direction, align, children)
  * @param ref - Forwarded ref to the root div element
@@ -110,24 +105,8 @@ export const TagGroup = forwardRef<HTMLDivElement, TagGroupProps>(
       ...restProps
     } = props;
 
-    // Alignment mapping
-    const alignMap: Record<string, string> = {
-      start: 'flex-start',
-      center: 'center',
-      end: 'flex-end',
-    };
-
-    // Container styles
-    const containerStyle: React.CSSProperties = {
-      display: 'flex',
-      flexDirection: direction === 'vertical' ? 'column' : 'row',
-      flexWrap: wrap ? 'wrap' : 'nowrap',
-      gap: GAP_MAP[gap] || GAP_MAP.sm,
-      alignItems: alignMap[align] || alignMap.start,
-      ...style,
-    };
-
-    // Build class names
+    // Layout is skin-owned (tag-compounds.css, data-attr axes); inline
+    // keeps only the consumer's own style overrides.
     const classNames = [
       'rottay-tag-group',
       `rottay-tag-group--${direction}`,
@@ -141,7 +120,12 @@ export const TagGroup = forwardRef<HTMLDivElement, TagGroupProps>(
       <div
         ref={ref}
         className={classNames}
-        style={containerStyle}
+        data-part="group"
+        data-gap={gap}
+        data-direction={direction}
+        data-wrap={wrap ? 'true' : 'false'}
+        data-align={align}
+        style={style}
         role="group"
         {...restProps}
       >

@@ -29,6 +29,12 @@
  * none` for the pointer-event drag, and the coarse-pointer hit expansion
  * (the ::before reach extends the 8px rail to a 44px PHYSICAL-px target
  * without changing the visual rhythm).
+ *
+ * PHASE-B SECOND PASS (2026-07-31): the engine now honors the panel
+ * contract (`defaultSize`, `min`/`max` in drag AND keyboard math,
+ * `resizable={false}`). A locked boundary stamps `data-resizable='false'`
+ * and renders as an inert separator: this file paints its static posture
+ * (neutral cursor, no hover/pressed tint, quieter grip) below.
  */
 
 /* ---- root: flex structure per orientation (was engine utilities). ---- */
@@ -69,7 +75,7 @@
   position: relative;
   flex-shrink: 0;
   touch-action: none;
-  transition: background var(--ds-splitter-gutter-transition-duration, var(--ds-motion-fast, 120ms))
+  transition: background var(--ds-splitter-gutter-transition-duration, var(--ds-motion-fast))
     var(--ds-splitter-gutter-transition-timing, var(--ds-motion-ease-out));
 }
 .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-orientation='horizontal'] {
@@ -87,7 +93,7 @@
         persistent grip below is the touch affordance (4th-wave hover law).
         Dragging reads as a primary TINT, never a loud full-strength bar. ---- */
 @media (hover: hover) {
-  .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']:hover {
+  .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']:hover:not([data-resizable='false']) {
     background: var(
       --ds-splitter-gutter-bg-hover,
       color-mix(
@@ -99,7 +105,7 @@
   }
 }
 
-.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']:active {
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']:active:not([data-resizable='false']) {
   background: var(
     --ds-splitter-gutter-bg-hover,
     color-mix(
@@ -130,7 +136,7 @@
   position: absolute;
   inset: 0;
   margin: auto;
-  border-radius: var(--ds-radius-full, 9999px);
+  border-radius: var(--ds-radius-full);
   background: var(
     --ds-splitter-gutter-grip-color,
     color-mix(in srgb, var(--ds-color-text-primary) 32%, transparent)
@@ -145,10 +151,32 @@
   block-size: 2px;
 }
 
+/* ---- gutter: locked boundary (an adjacent panel is `resizable={false}`;
+        Phase-B). The separator stays visible as a structural divider but
+        exposes NO resize affordance: neutral cursor (placed after the
+        orientation cursor rules so it wins the (0,5,0) tie by source
+        order), hover/pressed tints are `:not()`-gated above, and the grip
+        drops to a quieter ink. ---- */
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-resizable='false'] {
+  cursor: default;
+}
+/* A locked gutter has no drag handlers: the 44px coarse-pointer reach
+   would be an accidental dead area swallowing clicks meant for the
+   adjacent panels, so the invisible ::before expansion is removed. */
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-resizable='false']::before {
+  content: none;
+}
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'][data-resizable='false']::after {
+  background: var(
+    --ds-splitter-gutter-grip-color,
+    color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent)
+  );
+}
+
 /* ---- gutter: keyboard focus ring (the K3-C engine made gutters real
         `role="separator"` tab stops). ---- */
 .rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-splitter-gutter-focus-ring-offset, 1px);
 }
 

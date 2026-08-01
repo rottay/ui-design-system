@@ -40,6 +40,7 @@ import {
   type ResponsivePropEntry,
 } from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import { Dropdown } from '../../../../facade';
+import { VisuallyHidden } from '../../../../foundation';
 import type {
   TabItem,
   TabsProps,
@@ -322,21 +323,38 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
 
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLButtonElement>, key: string) => {
-      const enabledIndex = enabledItems.findIndex((item) => item.key === key);
-      if (enabledIndex === -1 || enabledItems.length === 0) return;
+      if (enabledItems.length === 0) return;
 
       const isRtl = elementDirection(event.currentTarget) === 'rtl';
       const forwardKey = isRtl ? 'ArrowLeft' : 'ArrowRight';
       const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
+
+      // A pointer can land DOM focus on a loading destination that the roving
+      // sequence excludes; anchor arrow navigation at its insertion point in
+      // the enabled sequence so the keys stay live instead of going dead.
+      const enabledIndex = enabledItems.findIndex((item) => item.key === key);
+      let forwardIndex: number;
+      let backwardIndex: number;
+      if (enabledIndex >= 0) {
+        forwardIndex = (enabledIndex + 1) % enabledItems.length;
+        backwardIndex =
+          (enabledIndex - 1 + enabledItems.length) % enabledItems.length;
+      } else {
+        const allIndex = items.findIndex((item) => item.key === key);
+        if (allIndex === -1) return;
+        const insertion = items
+          .slice(0, allIndex)
+          .filter((item) => !item.disabled && !item.loading).length;
+        forwardIndex = insertion % enabledItems.length;
+        backwardIndex =
+          (insertion - 1 + enabledItems.length) % enabledItems.length;
+      }
       let nextKey: string | undefined;
 
       if (event.key === forwardKey || event.key === 'ArrowDown') {
-        nextKey = arrayValueAt(enabledItems, (enabledIndex + 1) % enabledItems.length)?.key;
+        nextKey = arrayValueAt(enabledItems, forwardIndex)?.key;
       } else if (event.key === backwardKey || event.key === 'ArrowUp') {
-        nextKey = arrayValueAt(
-          enabledItems,
-          (enabledIndex - 1 + enabledItems.length) % enabledItems.length
-        )?.key;
+        nextKey = arrayValueAt(enabledItems, backwardIndex)?.key;
       } else if (event.key === 'Home') {
         nextKey = arrayValueAt(enabledItems, 0)?.key;
       } else if (event.key === 'End') {
@@ -356,7 +374,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
       event.preventDefault();
       moveFocus(nextKey, activationMode !== 'manual');
     },
-    [activationMode, enabledItems, handleChange, moveFocus]
+    [activationMode, enabledItems, handleChange, items, moveFocus]
   );
 
   const refreshOverflow = useCallback(() => {
@@ -570,6 +588,9 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
                     labelRefs.current.set(item.key, node);
                   }}
                   data-part="tab-label"
+                  title={
+                    typeof legacy.label === 'string' ? legacy.label : undefined
+                  }
                 >
                   {legacy.label}
                 </span>
@@ -613,7 +634,10 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
         )}
       </div>
 
-      <span data-part="loading-status" role="status" aria-live="polite">
+      {/* Loading announcements ride the canonical VisuallyHidden rule (the
+          local clip block is retired); role=status + aria-live survive on the
+          rendered span through the primitive's rest props. */}
+      <VisuallyHidden data-part="loading-status" role="status" aria-live="polite">
         {loadingItems.length > 0 ? (
           <>
             {loadingItems.map((item, index) => (
@@ -625,7 +649,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
             {chromeLabels.loading}
           </>
         ) : null}
-      </span>
+      </VisuallyHidden>
 
       {activeItem && activeItem.children !== undefined && (
         <div

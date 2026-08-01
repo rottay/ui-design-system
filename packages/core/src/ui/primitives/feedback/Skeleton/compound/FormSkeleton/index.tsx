@@ -95,7 +95,7 @@ export interface SkeletonFormProps {
  * @internal
  */
 const shimmerStyle: React.CSSProperties = {
-  animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration, 1.5s) infinite',
+  animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration) infinite',
 };
 
 // ============================================================================
@@ -140,54 +140,40 @@ export const SkeletonForm = forwardRef<HTMLDivElement, SkeletonFormProps>(
     // Style Generation
     // -------------------------------------------------------------------------
 
-    /**
-     * Container styles for vertical field stacking.
-     * 20px gap matches typical form field spacing.
-     */
-    const containerStyle: React.CSSProperties = {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '20px',
-      ...style,
-    };
+    // The field-stack rhythm (20px between fields, 6px inside a field), the
+    // label/input heights and the submit-action geometry all paint from the
+    // unlayered skeleton-compounds skin. Inline style keeps only the caller's
+    // `style`, the per-label computed width (`60 + (index % 3) * 15`px, the
+    // deterministic variety formula) and the canon animation reference.
+    const containerStyle: React.CSSProperties = { ...style };
 
     // -------------------------------------------------------------------------
     // Render
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} data-part="root" className={`rottay-skeleton-form ${className}`} style={containerStyle}>
+      <div ref={ref} data-part="root" className={`rottay-skeleton-form ${className}`} style={containerStyle} aria-hidden="true">
         {Array.from({ length: fields }).map((_, index) => (
-          <div key={index} data-part="field" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div key={index} data-part="field">
             {/* Label placeholder - width varies by index for visual variety */}
             <div
               data-part="label"
               style={{
                 ...shimmerStyle,
-                height: '14px',
                 width: `${60 + (index % 3) * 15}px`,
               }}
             />
             {/* Input placeholder - full width, matches typical input height */}
             <div
               data-part="input"
-              style={{
-                ...shimmerStyle,
-                height: '38px',
-                width: '100%',
-              }}
+              style={shimmerStyle}
             />
           </div>
         ))}
         {/* Submit button placeholder */}
         <div
           data-part="action"
-          style={{
-            ...shimmerStyle,
-            height: '38px',
-            width: '100px',
-            marginTop: '4px',
-          }}
+          style={shimmerStyle}
         />
       </div>
     );

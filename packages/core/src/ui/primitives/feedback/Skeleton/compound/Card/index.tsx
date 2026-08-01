@@ -106,7 +106,7 @@ export interface SkeletonCardProps {
  * @internal
  */
 const shimmerStyle: React.CSSProperties = {
-  animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration, 1.5s) infinite',
+  animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration) infinite',
 };
 
 // ============================================================================
@@ -150,63 +150,41 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
     // Style Generation
     // -------------------------------------------------------------------------
 
-    /**
-     * Container styles with rounded corners and themed border.
-     * Overflow hidden ensures the image placeholder respects border-radius.
-     */
-    // Rounded corners + themed border paint from the skeleton-compounds skin
-    // (the border-color reaches the tenant (0,4,0) floor there).
-    const containerStyle: React.CSSProperties = {
-      overflow: 'hidden',
-      ...style,
-    };
+    // Every static layout decision — the root overflow clip, the image block
+    // height, the body column (padding rides the bare --ds-card-body-padding
+    // channel so the placeholder mirrors the real Card's density), the title
+    // geometry and the 80% natural-ending last line — paints from the
+    // unlayered skeleton-compounds skin. Inline style carries only the
+    // caller's `style` plus the shared canon animation reference per block.
+    const containerStyle: React.CSSProperties = { ...style };
 
     // -------------------------------------------------------------------------
     // Render
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} data-part="root" className={`rottay-skeleton-card ${className}`} style={containerStyle}>
+      <div ref={ref} data-part="root" className={`rottay-skeleton-card ${className}`} style={containerStyle} aria-hidden="true">
         {/* Optional image placeholder at top of card */}
         {hasImage && (
           <div
             data-part="image"
-            style={{
-              ...shimmerStyle,
-              width: '100%',
-              height: '140px',
-            }}
+            style={shimmerStyle}
           />
         )}
 
         {/* Card body with title and text lines */}
-        <div
-          style={{
-            padding: 'var(--ds-card-body-padding, 20px)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-          }}
-        >
-          {/* Title line - wider height, partial width */}
+        <div data-part="body">
+          {/* Title line - wider height, partial width (skin-owned) */}
           <div
             data-part="title"
-            style={{
-              ...shimmerStyle,
-              height: '20px',
-              width: '60%',
-            }}
+            style={shimmerStyle}
           />
           {/* Body lines - last line is shorter for realistic appearance */}
           {Array.from({ length: lines }).map((_, index) => (
             <div
               key={index}
               data-part="line"
-              style={{
-                ...shimmerStyle,
-                height: '14px',
-                width: index === lines - 1 ? '80%' : '100%',
-              }}
+              style={shimmerStyle}
             />
           ))}
         </div>

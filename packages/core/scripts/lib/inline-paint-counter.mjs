@@ -160,6 +160,21 @@ const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
     new Map([["getToastAnimationStyle", ownedStyle()]]),
   ],
   [
+    "ui/primitives/runtime/overlay/portal-scope/index",
+    new Map([
+      [
+        "usePortalScope",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set(["variables"]),
+          nonStylePaths: new Set(["scope"]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+  [
     "ui/primitives/display/Tooltip/contracts/index",
     new Map([
       [

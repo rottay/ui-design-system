@@ -48,7 +48,6 @@
 'use client';
 
 import React from 'react';
-import type { CSSProperties } from 'react';
 import type { MenuDividerProps } from '../../contracts';
 
 // ============================================================================
@@ -82,31 +81,25 @@ export function MenuDivider({
   dashed = false,
   className = '',
   style,
+  'data-part': dataPart,
+  // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
+  // divider element, BEFORE the engine's own stamps.
+  ...rest
 }: MenuDividerProps): React.ReactElement {
-  // ========================================================================
-  // Styles
-  // ========================================================================
-
-  /**
-   * Divider styles using CSS variables for theming.
-   * Supports both solid and dashed variants.
-   */
-  const dividerStyle: CSSProperties = {
-    height: '1px',
-    margin: 'var(--ds-menu-divider-margin, 8px 0)',
-    ...style,
-  };
-
   // ========================================================================
   // Render
   // ========================================================================
 
+  /* Geometry (1px block size, block margins) lives in `menu-compounds.css`
+     on the `rottay-menu-divider` BEM class; only the caller's own `style`
+     stays inline. */
   return (
     <li
+      {...rest}
       className={`rottay-menu-divider ${dashed ? 'rottay-menu-divider--dashed' : ''} ${className}`}
-      style={dividerStyle}
+      style={style}
       role="separator"
-      data-part="divider"
+      data-part={dataPart ?? 'divider'}
     />
   );
 }

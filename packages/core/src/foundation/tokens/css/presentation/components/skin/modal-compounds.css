@@ -5,10 +5,13 @@
  * Engine-agnostic: these four compounds render one tree regardless of the active
  * engine, so they get a single home here rather than an engines/{modern,rustic}/skin pair.
  * They are a fully parallel implementation of the same visual parts the engines
- * hand-roll inline, on their own `--ds-modal-{header,footer}-border` /
+ * stamp unclassed, on their own `--ds-modal-{header,footer}-border` /
  * `--ds-modal-close-color` tokens; the engines' own section rules are anchored on
  * `surface > ...` so composing a compound inside an engine body cannot pick up
- * engine paint on top of these rules.
+ * engine paint on top of these rules. P2 drained the compounds' stable section
+ * frame (flex/gap/shrink/overflow, close-button centering + transition) here as
+ * well; only contract-enum geometry (`padding`/`align`/`size` props) and the
+ * divider hatches still resolve inline.
  *
  * DELIBERATELY UNLAYERED (P-47) and, for the two divider rules, at b >= 4 (P-48)
  * to clear the tenant artifacts' unlayered `*` border-color floor at (0,3,1).
@@ -16,27 +19,139 @@
  *
  * The `divider` booleans ride the `--ds-modal-{header,footer}-divider` hatches:
  * an off divider resolves to the same explicit `none` the inline style set.
+ * Borders are logical (`border-block-*`) so the grammar holds under RTL.
+ *
+ * The close control shares the overlay family's close grammar with the modern
+ * engine skin: transparent rest, gated hover wash, `:active` touch equivalent,
+ * `--ds-focus-ring-*` keyboard ring and the 44px coarse-pointer floor.
  */
 
 .rottay-modal-header.rottay-modal-header[data-part='header'][data-part='header'] {
-  border-bottom: var(--ds-modal-header-divider);
+  border-block-end: var(--ds-modal-header-divider);
+}
+
+/* Stable section frame, drained from the compound's inline styles (P2): the
+   flex row, the gap on the spacing channel and the default section padding.
+   Padding resolves through the shared `--ds-modal-section-padding-*` hooks
+   with the historical metric (PADDING_MAP.lg = 24px = spacing-6) as the
+   inert fallback — density still scales the spacing channels. */
+.rottay-modal-header[data-part='header'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3);
+  padding-block: var(--ds-modal-section-padding-block, var(--ds-spacing-6));
+  padding-inline: var(--ds-modal-section-padding-inline, var(--ds-spacing-6));
+  flex-shrink: 0;
 }
 
 .rottay-modal-header [data-part='title'] {
-  color: var(--ds-modal-title-color, inherit);
+  /* Title fills the row (drained inline flex/margin); long titles shrink
+     and wrap instead of pushing the close control out. */
+  flex: 1;
+  min-inline-size: 0;
+  margin: 0;
+  color: var(--ds-modal-title-color);
+  /* Typography drained from the compound's inline style (semantic channels
+     with the historical metric as the inert fallback). */
+  font-size: var(--ds-modal-title-font-size, var(--ds-font-size-lg));
+  font-weight: var(--ds-modal-title-font-weight, var(--ds-font-weight-semibold));
+  line-height: var(--ds-modal-title-line-height, var(--ds-line-height-tight));
 }
 
 .rottay-modal-body[data-part='body'] {
-  color: var(--ds-modal-body-color, inherit);
+  /* Scroll region frame (drained inline flex/overflow): grows between header
+     and footer, scrolls vertically, never sideways; `min-block-size: 0` lets
+     the flex child actually shrink into a scroll container. */
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  color: var(--ds-modal-body-color);
+  /* Typography drained from the compound's inline style. */
+  font-size: var(--ds-modal-body-font-size, var(--ds-font-size-sm));
+  line-height: var(--ds-modal-body-line-height, var(--ds-line-height-relaxed));
 }
 
 .rottay-modal-footer.rottay-modal-footer[data-part='footer'][data-part='footer'] {
-  border-top: var(--ds-modal-footer-divider);
+  border-block-start: var(--ds-modal-footer-divider);
+}
+
+/* Stable footer frame (drained from the compound's inline styles, P2);
+   `justify-content` stays inline — it folds the `align` contract enum. */
+.rottay-modal-footer[data-part='footer'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-3);
+  flex-shrink: 0;
+}
+
+/* Portal lineage anchors (Modal/Notification/ConfirmDialog): a classless
+   span that only feeds the PortalScope snapshot — it must not create a
+   layout box. Scoped via `:not([class])` so Avatar's classed
+   `rottay-avatar-badge[data-part='anchor']` is untouched. Drained from the
+   engines' inline `display: 'contents'`. */
+[data-part='anchor']:not([class]) {
+  display: contents;
 }
 
 .rottay-modal-close[data-part='close-button'] {
+  /* Stable frame + interaction transition, drained from the compound's
+     inline styles (P2): pure `--ds-motion-*` channels, no literal duration
+     fallbacks. The square size stays inline (SIZE_MAP contract enum). */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+  cursor: pointer;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--ds-modal-close-border-radius, var(--ds-radius-md));
   background: transparent;
-  color: var(--ds-modal-close-color, rgba(0, 0, 0, 0.45));
+  color: var(--ds-modal-close-color, var(--ds-color-text-secondary));
+  transition:
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-modal-close[data-part='close-button'] {
+    transition: none;
+  }
+}
+
+@media (hover: hover) {
+  .rottay-modal-close[data-part='close-button']:hover {
+    background-color: var(--ds-modal-close-bg-hover, var(--ds-surface-highlight));
+    color: var(--ds-modal-close-color-hover, var(--ds-color-text-primary));
+  }
+}
+
+.rottay-modal-close[data-part='close-button']:active {
+  background-color: var(--ds-modal-close-bg-hover, var(--ds-surface-highlight));
+  color: var(--ds-modal-close-color-hover, var(--ds-color-text-primary));
+}
+
+.rottay-modal-close[data-part='close-button']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
+}
+
+/* Coarse pointers: the compound close meets the same 44px physical floor the
+   engine skin enforces (ActionDock contract). */
+@media (pointer: coarse) {
+  .rottay-modal-close[data-part='close-button'] {
+    min-inline-size: max(44px, var(--ds-size-touch-target, 44px));
+    min-block-size: max(44px, var(--ds-size-touch-target, 44px));
+  }
+}
+
+@media (forced-colors: active) {
+  .rottay-modal-close[data-part='close-button'] {
+    border: 1px solid ButtonText;
+  }
+  .rottay-modal-close[data-part='close-button']:focus-visible {
+    outline-color: Highlight;
+  }
 }

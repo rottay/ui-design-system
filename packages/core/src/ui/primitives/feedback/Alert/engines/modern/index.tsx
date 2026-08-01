@@ -166,6 +166,7 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
     // Content
     message,
     description,
+    children,
 
     // Behavior
     compact: compactProp = ALERT_DEFAULTS.compact,
@@ -260,6 +261,11 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
       <div className="rottay-alert-shell__content" data-part="content">
         <div data-part="label">{message}</div>
         {description && <div data-part="description">{description}</div>}
+        {/* Compound anatomy (`<Alert.Description>` and other structured
+            children) is contract-documented; the modern engine used to drop it
+            silently. It renders after the description slot so the spatial
+            contract (icon / label / detail / action) is preserved. */}
+        {children}
       </div>
 
       {/* Close Button */}
@@ -268,7 +274,7 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
           type="button"
           data-part="action"
           onClick={handleClose}
-          aria-label={i18n?.t('close') ?? 'Close'}
+          aria-label={i18n?.tOr('close', 'Close') ?? 'Close'}
         >
           <ActionCloseIcon decorative size={16} />
         </button>

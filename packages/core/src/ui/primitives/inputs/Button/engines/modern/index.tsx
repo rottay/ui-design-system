@@ -42,6 +42,7 @@
 import React, { forwardRef, useId } from 'react';
 
 import { partAttributes, useInteractionState } from '../../../../../../foundation/behavior';
+import { VisuallyHidden } from '../../../../foundation';
 import { useMotionRecipePresentation } from '@/infrastructure/runtime/foundation/motion/composition/react/preference/recipe';
 import type { ButtonProps, ButtonSize } from '../../contracts';
 import { defineRecipe } from '@/infrastructure/runtime/foundation/recipes/engine';
@@ -249,7 +250,8 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       cssProperty: 'padding-inline',
       value: resolvedSizeProp,
       resolve: (v: ButtonSize) =>
-        `calc(var(--ds-button-${v}-padding-x) * var(--ds-density-effective-scale, 1))`,
+        // --ds-density-effective-scale is always declared (base/density.css): bare reference.
+        `calc(var(--ds-button-${v}-padding-x) * var(--ds-density-effective-scale))`,
     } as ResponsivePropEntry<any>);
     responsiveEntries.push({
       cssProperty: 'font-size',
@@ -265,7 +267,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
       cssProperty: 'gap',
       value: resolvedSizeProp,
       resolve: (v: ButtonSize) =>
-        `calc(var(--ds-button-${v}-gap) * var(--ds-density-effective-scale, 1))`,
+        `calc(var(--ds-button-${v}-gap) * var(--ds-density-effective-scale))`,
     } as ResponsivePropEntry<any>);
     responsiveEntries.push({
       cssProperty: '--ds-button-resolved-icon-size',
@@ -381,7 +383,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
         {resolvedBusyLabel != null && <span data-part="label">{resolvedBusyLabel}</span>}
       </span>
       {accessibleBusyLabel != null && (
-        <span data-part="accessible-label">{accessibleBusyLabel}</span>
+        <VisuallyHidden data-part="accessible-label">{accessibleBusyLabel}</VisuallyHidden>
       )}
     </span>
   ) : (
@@ -396,7 +398,7 @@ const ModernButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPro
         {restingContentNode}
       </span>
       {busy && accessibleBusyLabel != null && (
-        <span data-part="accessible-label">{accessibleBusyLabel}</span>
+        <VisuallyHidden data-part="accessible-label">{accessibleBusyLabel}</VisuallyHidden>
       )}
     </>
   );

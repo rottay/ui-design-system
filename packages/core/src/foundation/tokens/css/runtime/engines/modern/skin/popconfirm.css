@@ -15,10 +15,27 @@
  * sibling inside a relative wrapper, so it can be clipped by an `overflow: hidden`
  * ancestor. The scope class anchors every rule regardless.
  *
- * OK-TYPE: `data-ok-type` carries the `okType` prop. The engine's `default:` branch is
- * the catch-all for anything that is neither `danger` nor `primary`, reproduced with a
- * `:not():not()` guard so an unrecognised value keeps painting the transparent default.
- * Destructive tone resolves through `--ds-color-error`, never a palette literal.
+ * OK-TYPE: `data-ok-type` carries the `okType` prop on BOTH the surface (the
+ * icon well reads it for its tone) and the confirm action. Any value that is
+ * neither `danger` nor `primary` keeps the base warning tint of the icon
+ * well. Destructive tone resolves through `--ds-color-error`, never a palette
+ * literal. The confirm ACTION maps okType to a Button variant
+ * (danger/primary/default) so a neutral confirm never reads identical to the
+ * ghost cancel.
+ *
+ * LAYOUT (Pass-B): the trigger's `position: relative; display: inline-block`
+ * and the content/copy row are skin-owned -- the engine's last in-tree
+ * utility classes (`relative inline-block`, `flex items-start gap-2`,
+ * `flex-1`) are drained onto `data-part='content'` / `data-part='copy'`.
+ *
+ * TONE ICON (Pass-B): the engine renders the governed StatusWarningIcon by
+ * default (a consumer `icon` wins; `icon={null}` opts out) and the well
+ * follows the confirm's tone -- warning for the neutral confirm, error for
+ * the destructive one, primary otherwise.
+ *
+ * MATERIAL (Pass-B): the surface gains the lane's bounded primary tint on
+ * top of the dark-aware lift layer (dropdown.css idiom), so the anchored
+ * mini-confirm reads as the same overlay material as Dropdown/Popover.
  *
  * MOTION (spec section 2): the panel enters on the shared `--ds-motion-normal`
  * / `--ds-motion-ease-out` cadence with an engine-namespaced keyframe. There
@@ -43,15 +60,41 @@
   }
 }
 
-/* ---- panel: overlay material (fill + dark lift + elevation) ---- */
+/* ---- trigger: drained from the engine's former `relative inline-block`
+        utilities. `relative` keeps the js positioning fallback anchored; the
+        measured `position: fixed` style always wins when the runtime
+        positions. ---- */
+.rottay-popconfirm--modern[data-part='trigger'] {
+  position: relative;
+  display: inline-block;
+  max-inline-size: 100%;
+}
+
+/* ---- trigger-content: the click-capture wrapper around the consumer's
+        trigger (stamped in Pass-2 for the anatomy contract, mirroring
+        Dropdown's data-part='trigger-content'). Inline-level so the trigger
+        keeps shrink-wrapping its content. ---- */
+.rottay-popconfirm--modern[data-part='trigger'] > [data-part='trigger-content'] {
+  display: inline-block;
+  max-inline-size: 100%;
+}
+
+/* ---- panel: overlay material (bounded tint + fill + dark lift + elevation) ---- */
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'] {
   /* The lift overlay is its own layer directly above the fill so the fallback
      chain stays untouched; it is inert until a dark surface raises
      --ds-elevation-lift-strength, where the near-invisible shadow ramp needs
      the luminance step. Level 3 matches the --ds-elevation-3 shadow this
-     surface declares. */
+     surface declares. The bounded primary tint rides on top (dropdown.css
+     idiom) so anchored overlays share one material grammar. */
   background-color: var(--ds-surface-card);
-  background-image: linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3));
+  background-image:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
+      transparent 44%
+    ),
+    linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3));
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-3);
   padding: var(--ds-popconfirm-padding, var(--ds-spacing-4));
@@ -81,19 +124,44 @@
   overflow: visible;
 }
 
+/* ---- content row + copy column (drained from `flex items-start gap-2` /
+        `flex-1`): icon well + text track with safe shrink/wrap. ---- */
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='content'] {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ds-spacing-2);
+}
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='copy'] {
+  flex: 1;
+  min-inline-size: 0;
+}
+
 /* ---- copy: typography is skin-owned (the engine stamps parts only) ---- */
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='icon'] {
+  flex: none;
   margin-block-start: var(--ds-popconfirm-icon-offset, 0.125rem);
   color: var(--ds-color-warning);
 }
+/* Tone follows the confirm's intent: destructive confirmations tint the
+   well with the error channel, primary confirmations with the tenant
+   primary. Never a palette literal. */
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'][data-ok-type='danger'] [data-part='icon'] {
+  color: var(--ds-color-error);
+}
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'][data-ok-type='primary'] [data-part='icon'] {
+  color: var(--ds-color-primary);
+}
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='title'] {
+  overflow-wrap: anywhere;
+  text-wrap: balance;
   color: var(--ds-color-text-primary);
   font-size: var(--ds-font-size-sm);
   font-weight: var(--ds-font-weight-medium);
   line-height: var(--ds-line-height-tight);
 }
 .rottay-popconfirm--modern[data-part='trigger'] [data-part='description'] {
-  margin-block-start: var(--ds-spacing-1, 0.25rem);
+  margin-block-start: var(--ds-spacing-1);
+  overflow-wrap: anywhere;
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-sm);
   line-height: var(--ds-line-height-relaxed);

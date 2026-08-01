@@ -32,6 +32,22 @@ const SKIN = readFileSync(
   ),
   'utf8'
 );
+const TYPOGRAPHY_FOUNDATION = readFileSync(
+  join(
+    dirname(fileURLToPath(import.meta.url)),
+    '../../../../../foundation/tokens/css/foundation/base/typography.css'
+  ),
+  'utf8'
+);
+
+const LG_TABLE_CANONICAL_FONT_RULE =
+  /\[data-part='table'\]\[data-size='lg'\]\s*\{[^}]*font-size:\s*var\(--ds-font-size-base\)\s*;/;
+const LG_TABLE_EMBEDDED_FONT_FALLBACK =
+  /\[data-part='table'\]\[data-size='lg'\]\s*\{[^}]*font-size:\s*var\(--ds-font-size-base\s*,/;
+
+function usesCanonicalLgTableFont(css: string): boolean {
+  return LG_TABLE_CANONICAL_FONT_RULE.test(css) && !LG_TABLE_EMBEDDED_FONT_FALLBACK.test(css);
+}
 
 interface Row {
   key: string;
@@ -130,9 +146,8 @@ describe('Table modern — geometry lives in the skin, hooks in the DOM', () => 
   it('pins the skin rules that replaced the retired inline geometry', () => {
     // size-keyed padding and font-size
     expect(SKIN).toMatch(/\[data-part='table'\]\[data-size='sm'\][^{]*\{[^}]*padding:\s*4px 8px/);
-    expect(SKIN).toMatch(
-      /\[data-part='table'\]\[data-size='lg'\]\s*\{[^}]*font-size:\s*var\(--ds-font-size-base,\s*16px\)/,
-    );
+    expect(usesCanonicalLgTableFont(SKIN)).toBe(true);
+    expect(TYPOGRAPHY_FOUNDATION).toMatch(/--ds-font-size-base:\s*calc\(/);
     // alignment hook
     expect(SKIN).toMatch(/\[data-align='right'\]\s*\{[^}]*text-align:\s*right/);
     // sticky header + fixed columns positioned by the skin
@@ -144,6 +159,16 @@ describe('Table modern — geometry lives in the skin, hooks in the DOM', () => 
     expect(SKIN).toMatch(/\[data-part='scroll-container'\]\[data-loading='true'\][^{]*\{[^}]*opacity/);
     // pagination chrome geometry
     expect(SKIN).toMatch(/\[data-part='pagination-button'\][^{]*\{[^}]*height:\s*32px/);
+  });
+
+  it('rejects a second lg font authority embedded in the Table skin', () => {
+    const planted = SKIN.replace(
+      'font-size: var(--ds-font-size-base);',
+      'font-size: var(--ds-font-size-base, 16px);'
+    );
+
+    expect(planted).not.toBe(SKIN);
+    expect(usesCanonicalLgTableFont(planted)).toBe(false);
   });
 
   it('stamps expand/selection cell parts for the skin', () => {

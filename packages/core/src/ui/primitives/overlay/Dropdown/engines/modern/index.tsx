@@ -21,6 +21,7 @@ import React, {
 import type { ReactElement, ReactNode } from 'react';
 import type { DropdownProps, DropdownMenuItem, DropdownPlacement } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
+import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { DROPDOWN_DEFAULTS } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
@@ -112,8 +113,31 @@ function describeTrigger(
 }
 
 /**
+ * Typeahead state for the menu keyboard contract below: printable characters
+ * focus the next enabled item whose visible text starts with the typed
+ * prefix (wrapping). The buffer lives per menu LEVEL, keyed weakly by the
+ * <ul> element, so no two menu instances -- nor two levels of one menu --
+ * ever share a prefix; it resets after a pause and dies with its DOM node.
+ */
+const TYPEAHEAD_RESET_MS = 500;
+const typeaheadStateByMenu = new WeakMap<
+  HTMLElement,
+  { buffer: string; lastKeyTime: number }
+>();
+
+function resolveTypeaheadPrefix(menu: HTMLElement, key: string): string {
+  const now = Date.now();
+  const state = typeaheadStateByMenu.get(menu) ?? { buffer: '', lastKeyTime: 0 };
+  state.buffer = now - state.lastKeyTime > TYPEAHEAD_RESET_MS ? key : state.buffer + key;
+  state.lastKeyTime = now;
+  typeaheadStateByMenu.set(menu, state);
+  return state.buffer.toLowerCase();
+}
+
+/**
  * APG menu keyboard contract for one menu level: ArrowUp/ArrowDown cycle the
- * enabled items of THIS <ul> (wrapping), Home/End jump to the edges. Events
+ * enabled items of THIS <ul> (wrapping), Home/End jump to the edges, and
+ * printable characters run typeahead over the visible item text. Events
  * bubbling out of a nested submenu are ignored by the ancestor handler (the
  * target's closest role="menu" is the nested list), so each level navigates
  * its own items. Items stay natively tabbable buttons; this adds directional
@@ -121,7 +145,6 @@ function describeTrigger(
  */
 function handleMenuKeyDown(event: React.KeyboardEvent<HTMLUListElement>): void {
   const { key } = event;
-  if (key !== 'ArrowDown' && key !== 'ArrowUp' && key !== 'Home' && key !== 'End') return;
   const menu = event.currentTarget;
   const target = event.target as HTMLElement | null;
   if (!target || target.closest('[role="menu"]') !== menu) return;
@@ -131,15 +154,48 @@ function handleMenuKeyDown(event: React.KeyboardEvent<HTMLUListElement>): void {
     ),
   );
   if (items.length === 0) return;
-  event.preventDefault();
-  const currentIndex = items.indexOf(target.closest('[data-part="item"]') as HTMLElement);
-  let nextIndex = 0;
-  if (key === 'Home') nextIndex = 0;
-  else if (key === 'End') nextIndex = items.length - 1;
-  else if (currentIndex >= 0) {
-    nextIndex = (currentIndex + (key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+
+  if (key === 'ArrowDown' || key === 'ArrowUp' || key === 'Home' || key === 'End') {
+    event.preventDefault();
+    const currentIndex = items.indexOf(target.closest('[data-part="item"]') as HTMLElement);
+    let nextIndex = 0;
+    if (key === 'Home') nextIndex = 0;
+    else if (key === 'End') nextIndex = items.length - 1;
+    else if (currentIndex >= 0) {
+      nextIndex = (currentIndex + (key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+    }
+    items[nextIndex]?.focus();
+    return;
   }
-  items[nextIndex]?.focus();
+
+  // Typeahead: single printable characters, never a chord and never Space
+  // (Space stays the native button activation). The search starts AFTER the
+  // current item and wraps, so repeating a key cycles its matches.
+  if (key.length === 1 && key !== ' ' && !event.metaKey && !event.ctrlKey && !event.altKey) {
+    const prefix = resolveTypeaheadPrefix(menu, key);
+    const currentIndex = items.indexOf(target.closest('[data-part="item"]') as HTMLElement);
+    for (let step = 1; step <= items.length; step += 1) {
+      const candidate = items[(currentIndex + step) % items.length];
+      if (candidate?.textContent?.trim().toLowerCase().startsWith(prefix)) {
+        event.preventDefault();
+        candidate.focus();
+        return;
+      }
+    }
+  }
+}
+
+/**
+ * True when any item in the tree carries children. Stamped on the surface so
+ * the skin can keep submenus (which hang OUTSIDE the menu's box) free of the
+ * long-menu scroll clip.
+ */
+function itemsHaveSubmenu(items: DropdownMenuItem[] | undefined): boolean {
+  return Boolean(
+    items?.some(
+      (item) => Boolean(item.children?.length) || itemsHaveSubmenu(item.children),
+    ),
+  );
 }
 
 const MenuItem: React.FC<{
@@ -277,19 +333,38 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
   const [internalOpen, setInternalOpen] = useState(false);
   const [portalHost, setPortalHost] = useState<HTMLElement | null>(null);
   const [popupPosition, setPopupPosition] = useState<PopupPosition | null>(null);
+  // Collision-resolved placement + the measured arrow anchor offset (portal
+  // branch only; the in-tree fallback stays declarative). The surface stamps
+  // the RESOLVED placement so the skin's arrow edges, transform-origin and
+  // enter/exit travel follow reality after a flip.
+  const [resolvedPlacement, setResolvedPlacement] = useState<DropdownPlacement>(placement);
+  const [arrowAnchorOffset, setArrowAnchorOffset] = useState<string | null>(null);
   const isControlled = controlledOpen !== undefined;
   const isOpen = isControlled ? controlledOpen : internalOpen;
   const hasItems = Boolean(menu?.items?.length);
   const containerRef = useRef<HTMLDivElement>(null);
   const surfaceRef = useRef<HTMLDivElement>(null);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // APG menu-button: a keyboard open (ArrowDown/ArrowUp on the trigger) moves
+  // focus into the menu -- Down to the FIRST enabled item, Up to the LAST.
+  // Pointer opens leave focus on the trigger, so the edge travels as a ref
+  // flag consumed by the effect below once the surface actually exists.
+  const focusEdgeOnOpenRef = useRef<'first' | 'last' | null>(null);
   const { shouldRender, dataState, ref: presenceRef } = usePresence(isOpen && hasItems);
   const triggers = Array.isArray(trigger) ? trigger : [trigger];
   // Links the consumer's trigger element to the surface (aria-controls).
   const surfaceId = useId();
 
+  // Tracked as STATE (not only a ref) so the portal-scope snapshot observes the
+  // attached anchor: `usePortalScope` re-stamps tenant scope, locale, direction
+  // and density across the `getPopupContainer` portal boundary (the Popover /
+  // AlertDialog precedent).
+  const [containerEl, setContainerEl] = useState<HTMLDivElement | null>(null);
+  const portalScope = usePortalScope(containerEl);
+
   const setContainerRef = useCallback((node: HTMLDivElement | null) => {
     containerRef.current = node;
+    setContainerEl(node);
     if (typeof forwardedRef === 'function') forwardedRef(node);
     else if (forwardedRef) forwardedRef.current = node;
   }, [forwardedRef]);
@@ -362,8 +437,24 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
     if (alignPhysicalEnd) left += triggerRect.width - surfaceRect.width;
     else if (!alignPhysicalStart) left += (triggerRect.width - surfaceRect.width) / 2;
 
-    let top = triggerRect.bottom - hostRect.top + scrollTop + SURFACE_GAP;
-    if (isTop) top = triggerRect.top - hostRect.top + scrollTop - surfaceRect.height - SURFACE_GAP;
+    // Collision FLIP (the useOverlayPosition precedent): when the declared
+    // side clips the host and the opposite side has strictly more room, the
+    // menu opens on the opposite side and the surface stamps the RESOLVED
+    // placement, so arrow edges, transform-origin and travel stay truthful.
+    let resolvedSide: 'top' | 'bottom' = isTop ? 'top' : 'bottom';
+    if (autoAdjustOverflow) {
+      const spaceBelow = hostHeight - (triggerRect.bottom - hostRect.top + scrollTop);
+      const spaceAbove = triggerRect.top - hostRect.top + scrollTop;
+      if (!isTop && spaceBelow < surfaceRect.height + SURFACE_GAP && spaceAbove > spaceBelow) {
+        resolvedSide = 'top';
+      } else if (isTop && spaceAbove < surfaceRect.height + SURFACE_GAP && spaceBelow > spaceAbove) {
+        resolvedSide = 'bottom';
+      }
+    }
+
+    let top = resolvedSide === 'bottom'
+      ? triggerRect.bottom - hostRect.top + scrollTop + SURFACE_GAP
+      : triggerRect.top - hostRect.top + scrollTop - surfaceRect.height - SURFACE_GAP;
 
     if (autoAdjustOverflow) {
       const minimum = SURFACE_GAP;
@@ -375,7 +466,23 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
     }
 
     setPopupPosition({ top, left });
-  }, [autoAdjustOverflow, placement, portalHost]);
+    setResolvedPlacement(
+      `${resolvedSide}${isLeft ? 'Left' : isRight ? 'Right' : ''}` as DropdownPlacement,
+    );
+
+    // Arrow anchor tracking: publish the trigger's cross-axis center measured
+    // from the surface's inline-start edge (LOGICAL -- mirrored under RTL), so
+    // the skin points the arrow at the trigger instead of centering it on a
+    // wider surface (Popover's --ds-popover-arrow-anchor-offset precedent,
+    // here a private measured bridge per the proto naming law).
+    if (arrow) {
+      const triggerCenter = triggerRect.left + triggerRect.width / 2;
+      const inlineStartOffset = mirrorInline
+        ? left + surfaceRect.width - triggerCenter
+        : triggerCenter - left;
+      setArrowAnchorOffset(`${Math.round(inlineStartOffset * 100) / 100}px`);
+    }
+  }, [autoAdjustOverflow, arrow, placement, portalHost]);
 
   useLayoutEffect(() => {
     if (!portalHost || !shouldRender || !surfaceEl) return undefined;
@@ -431,6 +538,28 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
     handleOpenChange(false);
   };
 
+  // Consume the keyboard-open focus edge once the surface exists (inside
+  // `<Portal>` it mounts one commit after the host resolves, so the flag
+  // survives until then; a close before that clears it).
+  useEffect(() => {
+    if (!isOpen) {
+      focusEdgeOnOpenRef.current = null;
+      return;
+    }
+    const edge = focusEdgeOnOpenRef.current;
+    if (!edge || !surfaceEl) return;
+    const items = surfaceEl.querySelectorAll<HTMLElement>(
+      '[data-part="menu"] > [data-part="item-shell"] > [data-part="item"]:not(:disabled)',
+    );
+    const target = edge === 'first' ? items[0] : items[items.length - 1];
+    focusEdgeOnOpenRef.current = null;
+    target?.focus();
+  }, [isOpen, surfaceEl]);
+
+  // The in-tree branch stamps the DECLARED placement (declarative fallback,
+  // no measurement); the portal branch stamps the collision-RESOLVED one.
+  const surfacePlacement = portalHost ? resolvedPlacement : placement;
+
   const surface = shouldRender ? (
     <div
       ref={setSurfaceRef}
@@ -438,8 +567,10 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
       data-part="surface"
       data-state={dataState}
       data-open={dataState === 'open' ? 'true' : 'false'}
-      data-placement={placement}
+      data-placement={surfacePlacement}
       data-arrow={arrow ? 'true' : undefined}
+      data-arrow-tracked={arrow && arrowAnchorOffset ? 'true' : undefined}
+      data-has-submenu={itemsHaveSubmenu(menu?.items) ? 'true' : undefined}
       className={['rottay-dropdown__surface', overlayClassName].filter(Boolean).join(' ')}
       style={{
         position: 'absolute',
@@ -447,21 +578,32 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
         ...(portalHost
           ? (popupPosition ?? { visibility: 'hidden' })
           : inTreePlacementStyle(placement)),
+        // Measured geometry bridge (private proto per the naming law): the
+        // trigger's center offset from the surface's inline-start edge.
+        ...(arrowAnchorOffset
+          ? ({ '--_ds-proto-dropdown-arrow-anchor-offset': arrowAnchorOffset } as React.CSSProperties)
+          : {}),
         // Direction-aware choreography: a surface opening ABOVE the trigger
         // travels from below (and exits downward), mirroring the bottom
         // placement's travel. Keyframes live in the modern skin.
         animation: `${
           dataState === 'open'
-            ? placement.startsWith('top')
+            ? surfacePlacement.startsWith('top')
               ? 'ds-dropdown-popover-enter-top-modern'
               : 'ds-dropdown-popover-enter-modern'
-            : placement.startsWith('top')
+            : surfacePlacement.startsWith('top')
               ? 'ds-dropdown-popover-exit-top-modern'
               : 'ds-dropdown-popover-exit-modern'
         } ${MOTION_DURATION} ${MOTION_EASING} both`,
         ...overlayStyle,
       }}
       onClick={(event) => event.stopPropagation()}
+      onKeyDown={(event) => {
+        // APG menu-button: Tab dismisses the menu and lets focus move on in
+        // page order (no preventDefault). Keys from nested submenus bubble up
+        // to the surface, so one handler covers every level.
+        if (event.key === 'Tab') handleOpenChange(false);
+      }}
       onMouseEnter={clearCloseTimer}
       onMouseLeave={() => triggers.includes('hover') && scheduleHoverClose()}
     >
@@ -488,7 +630,10 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
       data-placement={placement}
       data-disabled={disabled ? 'true' : undefined}
       className={['rottay-dropdown', 'rottay-dropdown--modern', className].filter(Boolean).join(' ')}
-      style={{ position: 'relative', display: 'inline-flex', ...style }}
+      // Static chrome (the relative anchor the in-tree surface positions
+      // against, the inline-flex shrink-wrap) lives in the modern skin's
+      // trigger rule; only the consumer's documented instance style stays.
+      style={style}
       // Programmatic-focus fallback for the Escape contract only; -1 keeps the
       // container out of the tab order.
       tabIndex={-1}
@@ -498,8 +643,12 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
       }}
       onKeyDown={(event) => {
         if (disabled) return;
-        if (event.key === 'ArrowDown') {
+        // Keys bubbling out of the menu belong to the menu-level contract
+        // (handleMenuKeyDown); the trigger contract only acts from outside it.
+        const fromMenu = (event.target as HTMLElement | null)?.closest('[data-part="menu"]');
+        if (!fromMenu && (event.key === 'ArrowDown' || event.key === 'ArrowUp')) {
           event.preventDefault();
+          focusEdgeOnOpenRef.current = event.key === 'ArrowDown' ? 'first' : 'last';
           handleOpenChange(true);
         }
         if (event.key === 'Escape') handleOpenChange(false);
@@ -528,8 +677,16 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
           then handles the rest: a host that never attached (or was detached
           since) falls back to the top-layer host / `#rottay-portal-root`
           instead of rendering the menu into a node that paints nowhere.
-          Without `getPopupContainer` the surface stays in-tree, unchanged. */}
-      {portalHost && surface ? <Portal container={portalHost}>{surface}</Portal> : surface}
+          Without `getPopupContainer` the surface stays in-tree, unchanged.
+          `<PortalScope>` re-stamps the trigger's tenant/locale/direction/
+          density lineage across that boundary (Popover's js-branch
+          precedent): the portaled menu resolves the same tokens it would
+          have resolved in-tree. */}
+      {portalHost && surface ? (
+        <Portal container={portalHost}>
+          <PortalScope snapshot={portalScope}>{surface}</PortalScope>
+        </Portal>
+      ) : surface}
     </div>
   );
 });

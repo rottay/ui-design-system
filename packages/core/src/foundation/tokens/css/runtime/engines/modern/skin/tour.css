@@ -65,13 +65,34 @@
  *
  * SPECIFICITY (P-48): the surface's colored border is a SHORTHAND per `data-type`, repeated
  * to clear the tenant `*` border-color floor at (0,3,1).
+ *
+ * ENTER CHOREOGRAPHY (Phase B second pass): the whole overlay chain (scrim,
+ * cutout, surface) fades in together on mount. OPACITY ONLY -- the measured
+ * transform contract above (anchored: none; unanchored: -50%/-50%) is never
+ * touched, and the runtime's top/left placement stays the single source of
+ * position. There is deliberately no exit or step-change motion: close
+ * unmounts the chain and the surface node persists across steps with its
+ * content swapping in place, so nothing animates and focus is never moved
+ * because an animation completed. Reduced motion (media query and the
+ * runtime `html[data-ds-motion='reduced']` dial) lands in the final state.
  */
+
+@keyframes ds-tour-enter-modern {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
 /* ---- mask + spotlight cutout ---- */
 .rottay-tour--modern[data-part='root'] > [data-part='backdrop'] {
   position: fixed;
   inset: 0;
   background-color: var(--ds-tour-mask-color);
+  animation: ds-tour-enter-modern var(--ds-motion-calm)
+    var(--ds-motion-ease-enter) both;
 }
 .rottay-tour--modern[data-part='root'] > [data-part='spotlight'] {
   position: fixed;
@@ -81,11 +102,13 @@
      mega-spread); the mask colour stays the runtime `--ds-tour-mask-color`
      stamped on the root. */
   box-shadow: 0 0 0 var(--ds-tour-spotlight-spread, 9999px) var(--ds-tour-mask-color);
+  animation: ds-tour-enter-modern var(--ds-motion-calm)
+    var(--ds-motion-ease-enter) both;
 }
 
 /* ---- step popover ---- */
 .rottay-tour--modern[data-part='root'] > [data-part='surface'] {
-  padding: var(--ds-tour-surface-padding, var(--ds-spacing-4, 1rem));
+  padding: var(--ds-tour-surface-padding, var(--ds-spacing-4));
   max-inline-size: var(--ds-tour-surface-max-width, 24rem);
   /* Font channels consumed like every sibling (dropdown/toast/notification):
      without them the chrome borrowed the APP's body font (GeistSans in the
@@ -101,7 +124,15 @@
   background: var(--ds-tour-surface-bg, var(--ds-material-card-background, var(--ds-surface-card)));
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-3);
+  /* Long-copy resilience (popover.css idiom): long ES/AR step copy and 200%
+     zoom wrap cleanly instead of overflowing the measured placement box. */
+  text-align: start;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+  word-break: normal;
   transform: translate(-50%, -50%);
+  animation: ds-tour-enter-modern var(--ds-motion-calm)
+    var(--ds-motion-ease-enter) both;
 }
 .rottay-tour--modern[data-part='root'] > [data-part='surface'][data-anchored='true'] {
   transform: none;
@@ -118,8 +149,8 @@
         here: that belonged to the retired ✕ text glyph. ---- */
 .rottay-tour--modern[data-part='root'] [data-part='close-button'] {
   position: absolute;
-  inset-block-start: var(--ds-tour-close-offset, var(--ds-spacing-2, 0.5rem));
-  inset-inline-end: var(--ds-tour-close-offset, var(--ds-spacing-2, 0.5rem));
+  inset-block-start: var(--ds-tour-close-offset, var(--ds-spacing-2));
+  inset-inline-end: var(--ds-tour-close-offset, var(--ds-spacing-2));
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -132,14 +163,14 @@
   background: transparent;
   color: var(--ds-tour-close-ink, var(--ds-material-card-foreground-muted, var(--ds-color-text-secondary)));
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    background-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    background-color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-fast) var(--ds-ease-standard, ease);
 }
 
 /* ---- copy (margins reset: preflight used to zero the UA h3/p margins) ---- */
 .rottay-tour--modern[data-part='root'] [data-part='cover'] {
-  margin-block-end: var(--ds-spacing-3, 0.75rem);
+  margin-block-end: var(--ds-spacing-3);
 }
 .rottay-tour--modern[data-part='root'] [data-part='title'] {
   margin: 0;
@@ -150,13 +181,13 @@
   /* Card-foreground is the tenant-authored ink for this surface (identical
      to text-primary under bithire/TMM); text-primary is the fallback. */
   color: var(--ds-tour-title-ink, var(--ds-material-card-foreground, var(--ds-color-text-primary)));
-  font-size: var(--ds-font-size-lg, 1.125rem);
-  font-weight: var(--ds-font-weight-bold, 700);
+  font-size: var(--ds-font-size-lg);
+  font-weight: var(--ds-font-weight-bold);
   line-height: var(--ds-tour-title-line-height, 1.75rem);
 }
 .rottay-tour--modern[data-part='root'] [data-part='description'] {
   margin: 0;
-  margin-block-start: var(--ds-spacing-2, 0.5rem);
+  margin-block-start: var(--ds-spacing-2);
   /* text-secondary passes on the card material under both probe tenants
      (7.4:1 TMM, 5.9:1 bithire); the channel gets a raw escape hatch. */
   color: var(--ds-tour-description-ink, var(--ds-color-text-secondary));
@@ -167,24 +198,34 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-block-start: var(--ds-spacing-4, 1rem);
+  margin-block-start: var(--ds-spacing-4);
 }
 .rottay-tour--modern[data-part='root'] [data-part='indicators'] {
   display: flex;
-  gap: var(--ds-spacing-1, 0.25rem);
+  gap: var(--ds-spacing-1);
 }
 .rottay-tour--modern[data-part='root'] [data-part='indicator'] {
   inline-size: 0.5rem;
   block-size: 0.5rem;
-  border-radius: var(--ds-radius-full, 9999px);
+  border-radius: var(--ds-radius-full);
   background: var(--ds-surface-panel);
+  /* Step-change feedback: the current dot reads as progress, not just a
+     color swap. Width tween is the carousel-dot idiom on an 8px part --
+     layout cost is negligible and reduced-motion below kills it. */
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    inline-size var(--ds-motion-fast) var(--ds-ease-standard, ease);
 }
 .rottay-tour--modern[data-part='root'] [data-part='indicator'][data-current='true'] {
+  /* Current step elongates into a pill (2x the base dot; the base size stays
+     the family-local literal the pins own, so this override ships literal
+     too -- no new channel for an internal detail). */
+  inline-size: 1rem;
   background: var(--ds-color-primary);
 }
 .rottay-tour--modern[data-part='root'] [data-part='actions'] {
   display: flex;
-  gap: var(--ds-spacing-2, 0.5rem);
+  gap: var(--ds-spacing-2);
 }
 
 /* ---- nav actions ---- */
@@ -197,10 +238,10 @@
   border-radius: var(--ds-radius-md);
   border: none;
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    background-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    background-color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast) var(--ds-ease-standard, ease);
 }
 .rottay-tour--modern[data-part='root'] [data-part='action'][data-action='prev'] {
   background: transparent;
@@ -227,6 +268,17 @@
 
 .rottay-tour--modern[data-part='root'] [data-part='action']:not(:disabled):focus-visible,
 .rottay-tour--modern[data-part='root'] [data-part='close-button']:not(:disabled):focus-visible {
+  outline: 2px solid var(--ds-tour-focus-ring, var(--ds-focus-ring-color, var(--ds-color-primary)));
+  outline-offset: 2px;
+}
+
+/* The surface is the programmatic focus target on open and on every step
+   change (tabIndex=-1): the ring makes the landing spot observable for
+   keyboard users, and :focus-within covers focus moving into nested step
+   content. Same ring channel as the action contract above (popover.css
+   surface idiom). */
+.rottay-tour--modern[data-part='root'] > [data-part='surface']:focus-visible,
+.rottay-tour--modern[data-part='root'] > [data-part='surface']:focus-within {
   outline: 2px solid var(--ds-tour-focus-ring, var(--ds-focus-ring-color, var(--ds-color-primary)));
   outline-offset: 2px;
 }
@@ -285,14 +337,34 @@
   .rottay-tour--modern[data-part='root'] [data-part='close-button'] {
     inline-size: max(44px, var(--ds-tour-touch-target-min, 1.75rem));
     block-size: max(44px, var(--ds-tour-touch-target-min, 1.75rem));
-    inset-block-start: var(--ds-spacing-1, 0.25rem);
-    inset-inline-end: var(--ds-spacing-1, 0.25rem);
+    inset-block-start: var(--ds-spacing-1);
+    inset-inline-end: var(--ds-spacing-1);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-tour--modern[data-part='root'] [data-part='action'],
-  .rottay-tour--modern[data-part='root'] [data-part='close-button'] {
+  .rottay-tour--modern[data-part='root'] [data-part='close-button'],
+  .rottay-tour--modern[data-part='root'] [data-part='indicator'] {
     transition: none;
   }
+  /* The enter fade lands directly in the final state. */
+  .rottay-tour--modern[data-part='root'] > [data-part='backdrop'],
+  .rottay-tour--modern[data-part='root'] > [data-part='spotlight'],
+  .rottay-tour--modern[data-part='root'] > [data-part='surface'] {
+    animation: none;
+  }
+}
+
+/* Runtime motion dial (popover.css idiom): same final-state landing when the
+   tenant/runtime pins reduced motion on the document. */
+html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] > [data-part='backdrop'],
+html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] > [data-part='spotlight'],
+html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] > [data-part='surface'] {
+  animation: none;
+}
+html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part='action'],
+html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part='close-button'],
+html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part='indicator'] {
+  transition: none;
 }

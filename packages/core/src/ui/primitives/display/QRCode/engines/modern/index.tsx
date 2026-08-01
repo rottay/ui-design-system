@@ -18,6 +18,7 @@ import type { QRCodeProps } from '../../contracts';
 import { QRCODE_DEFAULTS } from '../../contracts';
 import { EncodedQRCodeSymbol } from '../../runtime/encoded-symbol';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 
 /**
  * Modern QRCode engine. Renders the shared standards-compliant Canvas/SVG
@@ -88,18 +89,11 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
       case 'scanned':
         return (
           <div data-part="overlay" role="status" aria-label={qrcodeLabel('qrcode.scanned', 'QR code scanned')}>
-            <svg
-              data-part="status-icon"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              aria-hidden="true"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clipRule="evenodd"
-              />
-            </svg>
+            {/* The governed status.success role replaces the local ad-hoc
+                check-circle SVG (2xl = 3rem = --ds-qrcode-status-icon-size,
+                currentColor so the skin's success channel keeps painting it);
+                the overlay's role=status label carries the accessible name. */}
+            <StatusSuccessIcon data-part="status-icon" decorative size="2xl" />
           </div>
         );
       default:

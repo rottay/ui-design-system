@@ -15,10 +15,9 @@
  *    `[data-part='indeterminate']` element sharing the track's grid area --
  *    the native element alone cannot carry a cross-browser indeterminate bar
  *    once `appearance: none` strips the platform animation);
- *  - circle: the conic-gradient ring technique (track + fill + end cap), the
- *    `@property`-registered `--ds-progress-circle-value` so percent changes
- *    sweep smoothly (parity with the drained DaisyUI `--radialprogress`
- *    registration), and the indeterminate spin.
+ *  - circle: maps Progress channels onto the canonical `.ds-arc` substrate;
+ *    that substrate owns conic paint, mask, cap, registration and
+ *    forced-color channels while this skin owns Progress-only state.
  *
  * MOTION AUTHORITY: every cadence rides `--ds-motion-*` durations, which the
  * foundation zeroes under reduced motion (transitions.css media query +
@@ -39,15 +38,17 @@
  *
  * SPECIFICITY (P-48): nothing here paints a border COLOR, so (0,3,0)+
  * unlayered suffices and the tenant `* { border-color }` floor does not apply.
+ *
+ * STATUS CUES (never color-only): terminal statuses prepend a governed
+ * `data-part='status-icon'` glyph (engine-stamped, tone-inked here) to the
+ * percent text; `active` carries a stripe cadence on the line fill whose
+ * STATIC stripe survives reduced motion (forced colors re-flattens it to
+ * solid Highlight below).
+ *
+ * RTL: the line's native fill and the indeterminate sweep already follow the
+ * reading direction; the determinate CIRCLE mirrors its painted arc via a
+ * horizontal flip of ::before/::after, and the indeterminate spin reverses.
  */
-
-/* Registered so percent changes interpolate the arc (DaisyUI parity). The
-   engine stamps plain numbers (0..100); the gradient scales them to %. */
-@property --ds-progress-circle-value {
-  syntax: '<number>';
-  inherits: false;
-  initial-value: 0;
-}
 
 /* ---- resolved fill per status (line + circle share the one hatch) ---- */
 .rottay-progress-shell.rottay-progress-shell--modern[data-status='normal'] {
@@ -98,7 +99,7 @@
 .rottay-progress-shell.rottay-progress-shell--modern [data-part='fill']::-webkit-progress-value {
   border-radius: inherit;
   background: var(--ds-progress-resolved-fill, var(--ds-color-primary));
-  transition: width var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
+  transition: width var(--ds-motion-normal) var(--ds-motion-ease-out);
 }
 
 .rottay-progress-shell.rottay-progress-shell--modern [data-part='fill']::-moz-progress-bar {
@@ -110,6 +111,62 @@
    the sliding span owns the motion there, so the native bar stays invisible. */
 .rottay-progress-shell.rottay-progress-shell--modern [data-part='fill']:indeterminate::-moz-progress-bar {
   background: transparent;
+}
+
+/* ---- active status: a moving stripe carries the "in flight" cue, so the
+        state never reads as color-only. The stripe is a background-position
+        cadence (a <progress> pseudo cannot host a transformed child); the
+        surface is a few pixels tall, and reduced motion keeps the STATIC
+        stripe so the non-color cue survives with the cadence off. The forced-
+        colors block below re-flattens the stripe to solid Highlight. ---- */
+.rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-webkit-progress-value {
+  background-color: var(--ds-progress-resolved-fill, var(--ds-color-primary));
+  background-image: linear-gradient(
+    45deg,
+    color-mix(in srgb, white 22%, transparent) 25%,
+    transparent 25%,
+    transparent 50%,
+    color-mix(in srgb, white 22%, transparent) 50%,
+    color-mix(in srgb, white 22%, transparent) 75%,
+    transparent 75%
+  );
+  background-size: var(--ds-spacing-4) var(--ds-spacing-4);
+}
+.rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-moz-progress-bar {
+  background-color: var(--ds-progress-resolved-fill, var(--ds-color-primary));
+  background-image: linear-gradient(
+    45deg,
+    color-mix(in srgb, white 22%, transparent) 25%,
+    transparent 25%,
+    transparent 50%,
+    color-mix(in srgb, white 22%, transparent) 50%,
+    color-mix(in srgb, white 22%, transparent) 75%,
+    transparent 75%
+  );
+  background-size: var(--ds-spacing-4) var(--ds-spacing-4);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-webkit-progress-value,
+  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-moz-progress-bar {
+    animation: ds-progress-active-stripes-modern calc(var(--ds-motion-glacial) * 2) linear infinite;
+  }
+}
+
+/* RTL: the stripe cadence travels with the reading direction (the
+   indeterminate sweep below does the same). */
+.rottay-progress-shell.rottay-progress-shell--modern[data-type='line']:dir(rtl) [data-part='fill']::-webkit-progress-value,
+.rottay-progress-shell.rottay-progress-shell--modern[data-type='line']:dir(rtl) [data-part='fill']::-moz-progress-bar {
+  animation-direction: reverse;
+}
+
+@keyframes ds-progress-active-stripes-modern {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: var(--ds-spacing-4) 0;
+  }
 }
 
 /* ---- indeterminate sliding bar (canon keyframe, motion-authority cadence) ---- */
@@ -126,7 +183,7 @@
   .rottay-progress-shell.rottay-progress-shell--modern [data-part='indeterminate'][data-part='indeterminate'] {
     animation: ds-foundation-progress-indeterminate
       calc(var(--ds-motion-glacial) * 3)
-      var(--ds-motion-ease-in-out, ease-in-out) infinite;
+      var(--ds-motion-ease-in-out) infinite;
   }
 }
 
@@ -136,69 +193,45 @@
 }
 
 /* ---- line label (info text); scoped so the circle's centered value text
-        keeps its own geometry below ---- */
+        keeps its own geometry below. Inline-flex so the terminal-status glyph
+        (data-part='status-icon') sits on the text baseline. ---- */
 .rottay-progress-shell.rottay-progress-shell--modern[data-type='line'] [data-part='label'] {
-  margin-block-start: var(--ds-progress-label-gap, var(--ds-spacing-xs, 0.25rem));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-1);
+  margin-block-start: var(--ds-progress-label-gap, var(--ds-spacing-xs));
   color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-sm, 14px);
+  font-size: var(--ds-font-size-sm);
   font-variant-numeric: tabular-nums;
   text-align: center;
 }
 
+/* Terminal-status glyph: the tone-resolved ink, optically centered on the
+   label line (never color-only: the glyph shape is the cue, the ink is tone). */
+.rottay-progress-shell.rottay-progress-shell--modern [data-part='status-icon'] {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  color: var(--ds-progress-resolved-fill, var(--ds-color-primary));
+}
+
 /* ==========================================================================
-   CIRCLE (skin-owned conic ring; no DaisyUI radial-progress)
+   CIRCLE (Progress state mapped onto the shared arc substrate)
    ========================================================================== */
 
 .rottay-progress-shell.rottay-progress-shell--modern[data-type='circle'][data-type='circle'] {
-  --ds-progress-circle-size-resolved: var(--ds-progress-circle-size, 6rem);
-  --ds-progress-circle-thickness-resolved: var(
+  --_ds-arc-value: var(--ds-progress-circle-value);
+  --_ds-arc-size: var(--ds-progress-circle-size, 6rem);
+  --_ds-arc-thickness: var(
     --ds-progress-circle-thickness,
-    calc(var(--ds-progress-circle-size-resolved) / 10)
+    calc(var(--_ds-arc-size) / 10)
   );
-  position: relative;
-  display: inline-grid;
-  inline-size: var(--ds-progress-circle-size-resolved);
-  block-size: var(--ds-progress-circle-size-resolved);
+  --_ds-arc-fill: var(--ds-progress-resolved-fill, var(--ds-color-primary));
+  --_ds-arc-track: var(--ds-progress-bg);
+
   box-sizing: content-box;
-  place-content: center;
   vertical-align: middle;
-  border-radius: 50%;
-  transition: --ds-progress-circle-value var(--ds-motion-normal)
-    var(--ds-motion-ease-out, ease-out);
-}
-
-/* Ring: fill arc over the full track, masked down to the ring thickness. */
-.rottay-progress-shell.rottay-progress-shell--modern[data-type='circle'][data-type='circle']::before {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  content: '';
-  background: conic-gradient(
-    var(--ds-progress-resolved-fill, var(--ds-color-primary))
-      calc(var(--ds-progress-circle-value) * 1%),
-    var(--ds-progress-bg) 0
-  );
-  -webkit-mask: radial-gradient(
-    farthest-side,
-    #0000 calc(100% - var(--ds-progress-circle-thickness-resolved)),
-    #000 calc(100% + 0.5px - var(--ds-progress-circle-thickness-resolved))
-  );
-  mask: radial-gradient(
-    farthest-side,
-    #0000 calc(100% - var(--ds-progress-circle-thickness-resolved)),
-    #000 calc(100% + 0.5px - var(--ds-progress-circle-thickness-resolved))
-  );
-}
-
-/* Rounded cap at the arc tip (determinate only; hidden while spinning). */
-.rottay-progress-shell.rottay-progress-shell--modern[data-type='circle'][data-indeterminate='false']::after {
-  position: absolute;
-  inset: calc(50% - var(--ds-progress-circle-thickness-resolved) / 2);
-  border-radius: 50%;
-  content: '';
-  background: var(--ds-progress-resolved-fill, var(--ds-color-primary));
-  transform: rotate(calc(var(--ds-progress-circle-value) * 3.6deg - 90deg))
-    translate(calc(var(--ds-progress-circle-size-resolved) / 2 - 50%));
 }
 
 /* Indeterminate circle: the quarter arc stamped by the engine spins calmly. */
@@ -210,12 +243,23 @@
 
 /* Center value text: sized off the ring so it scales with the token. */
 .rottay-progress-shell.rottay-progress-shell--modern[data-type='circle'] > [data-part='label'] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.18em;
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
-  font-size: calc(var(--ds-progress-circle-size-resolved) * 0.22);
+  font-size: calc(var(--_ds-arc-size) * 0.22);
   font-variant-numeric: tabular-nums;
   font-weight: var(--ds-font-weight-semibold);
   line-height: 1;
+}
+
+/* Determinate RTL mirroring belongs to `.ds-arc`; indeterminate animation
+   owns transform, so only its direction reverses here. */
+@media (prefers-reduced-motion: no-preference) {
+  .rottay-progress-shell.rottay-progress-shell--modern[data-type='circle'][data-indeterminate='true']:dir(rtl)::before {
+    animation-direction: reverse;
+  }
 }
 
 /* Forced colors: native progress parts map to system colors so the fill
@@ -244,6 +288,14 @@
 
   .rottay-progress-shell.rottay-progress-shell--modern [data-part='indeterminate'][data-part='indeterminate'] {
     background: Highlight;
+  }
+
+  /* The active status stripes sit ABOVE these rules in normal specificity, so
+     they are re-flattened here explicitly: solid Highlight, no stripe image. */
+  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-webkit-progress-value,
+  .rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill']::-moz-progress-bar {
+    background: Highlight;
+    background-image: none;
   }
 
   /* Forced colors also strips background IMAGES, which would erase the

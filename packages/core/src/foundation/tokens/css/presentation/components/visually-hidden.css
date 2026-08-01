@@ -1,0 +1,39 @@
+/**
+ * VisuallyHidden — canonical screen-reader-only rule.
+ *
+ * LAYER: rottay-components (single owner for every engine and consumer).
+ * SCOPE: `.ds-visually-hidden` applied by the `VisuallyHidden` primitive;
+ *   no data-part, no states, no theming axes — the geometry is universal
+ *   and must never change per tenant.
+ * SPECIFICITY: single class, no repetition, no `!important`, logical
+ *   properties. Content stays in the accessibility tree and in the tab
+ *   order's source position; it is only clipped from paint.
+ */
+.ds-visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Reveal-on-focus (skip-link pattern): the content stays clipped until it
+ * or a descendant receives keyboard focus, then it re-enters the layout.
+ * Interactive content must become visible to keyboard users — clipping a
+ * focused control would hide the focus ring itself. */
+.ds-visually-hidden--focusable:focus,
+.ds-visually-hidden--focusable:focus-within {
+  position: static;
+  inline-size: auto;
+  block-size: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  clip-path: none;
+  white-space: normal;
+}

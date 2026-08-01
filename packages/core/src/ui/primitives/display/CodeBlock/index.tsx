@@ -27,7 +27,8 @@
 import React from 'react';
 
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import { CheckIcon } from '../../../../graphics/icons';
+import { CheckIcon, CopyIcon } from '../../../../graphics/icons';
+import { VisuallyHidden } from '../../foundation';
 import { CODE_BLOCK_DEFAULTS } from './contracts';
 import type { CodeBlockProps, HighlightTokenLine } from './contracts';
 import { useHighlighter } from './runtime/highlighter';
@@ -41,20 +42,10 @@ export type {
 export { CODE_BLOCK_DEFAULTS } from './contracts';
 export { registerHighlighter, getHighlighter, useHighlighter } from './runtime/highlighter';
 
-const MONO_FONT = 'var(--ds-font-family-mono, ui-monospace, SFMono-Regular, Menlo, monospace)';
+// Fallback parity law: `--ds-font-family-mono` is a declared channel, so the
+// var() stays bare and resolves to the governed default stack.
+const MONO_FONT = 'var(--ds-font-family-mono)';
 const ZERO_WIDTH_SPACE = String.fromCharCode(0x200b);
-
-const SR_ONLY: React.CSSProperties = {
-  position: 'absolute',
-  width: 1,
-  height: 1,
-  padding: 0,
-  margin: -1,
-  overflow: 'hidden',
-  clip: 'rect(0, 0, 0, 0)',
-  whiteSpace: 'nowrap',
-  border: 0,
-};
 
 function isPromise<T>(value: unknown): value is Promise<T> {
   return (
@@ -223,6 +214,7 @@ export function CodeBlock({
       >
         <span
           data-part="title"
+          data-language-badge={!title && language ? 'true' : undefined}
           style={{
             fontSize: 'var(--ds-font-size-xs)',
             color: 'var(--ds-color-text-secondary)',
@@ -233,6 +225,21 @@ export function CodeBlock({
             fontWeight: title ? 500 : 600,
             textTransform: title ? undefined : 'uppercase',
             letterSpacing: title ? undefined : 'var(--ds-letter-spacing-wider)',
+            // Language badge: the bare language tag gets a quiet chip (hairline
+            // frame + whisper tint, no second box) so it reads as METADATA
+            // instead of floating header copy. The filename title stays bare --
+            // it is content, not a tag. No chip is stamped when both are absent
+            // (an empty bordered pill would be a pure artifact).
+            ...(!title && language
+              ? {
+                  padding: '0 var(--ds-spacing-2)',
+                  border: '1px solid var(--ds-color-border)',
+                  borderRadius: 'var(--ds-radius-sm)',
+                  background:
+                    'var(--_ds-proto-codeblock-language-badge-bg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent))',
+                  lineHeight: 'var(--ds-line-height-snug)',
+                }
+              : undefined),
           }}
         >
           {title ?? language ?? ''}
@@ -245,15 +252,24 @@ export function CodeBlock({
           aria-label={copied ? copiedLabel : copyLabel}
         >
           <span aria-hidden="true" data-part="copy-tick" data-copied={copied ? 'true' : 'false'}>
-            {copied ? <CheckIcon size={12} strokeWidth={2.4} aria-hidden /> : ''}
+            {copied ? (
+              <CheckIcon size={12} strokeWidth={2.4} aria-hidden />
+            ) : (
+              // Idle affordance: the governed copy role (same facade tier as the
+              // confirmation tick) makes the control identifiable before use;
+              // decorative -- the button's aria-label carries the name.
+              <CopyIcon size={12} strokeWidth={2} aria-hidden />
+            )}
           </span>
           <span>{copied ? copiedLabel : copyLabel}</span>
         </button>
       </div>
 
-      <div aria-live="polite" data-part="copy-status" style={SR_ONLY}>
+      {/* The copied announcement rides the canonical VisuallyHidden rule (P0
+          primitive) instead of a local clip-inline style object. */}
+      <VisuallyHidden as="div" aria-live="polite" data-part="copy-status">
         {copied ? copiedLabel : ''}
-      </div>
+      </VisuallyHidden>
 
       <div
         data-part="scroll"
@@ -272,6 +288,10 @@ export function CodeBlock({
           // border token instead of the UA default chrome.
           scrollbarWidth: 'thin',
           scrollbarColor: 'var(--ds-color-border-secondary) transparent',
+          // Scroll containment: wheel/touch deltas dead-end inside the block
+          // instead of chaining into the page scroll (the block never hijacks
+          // the document's scroll, the document never steals the block's).
+          overscrollBehavior: 'contain',
         }}
       >
         <pre
@@ -284,6 +304,11 @@ export function CodeBlock({
             fontFamily: MONO_FONT,
             fontSize: 'var(--ds-font-size-sm)',
             lineHeight: 'var(--ds-line-height-body)',
+            // The block owns its inset surface, so it also owns the ink paired
+            // with it (the MarkdownView fence law): code never inherits a
+            // dimmed ancestor ink onto the inset floor. Adapter token spans
+            // still override per token.
+            color: 'var(--ds-color-text-primary)',
             tabSize: 2,
           }}
         >
@@ -334,7 +359,18 @@ export function CodeBlock({
                       {lineNumber}
                     </span>
                   ) : null}
-                  <span data-part="line-content" style={{ flex: '1 1 auto', minWidth: 0 }}>
+                  <span
+                    data-part="line-content"
+                    style={{
+                      flex: '1 1 auto',
+                      minWidth: 0,
+                      // Bidi law: each code line resolves its own base direction
+                      // from its first strong character, so LTR source stays LTR
+                      // inside an RTL document (and an Arabic comment line reads
+                      // RTL) without reordering the gutter or line boundaries.
+                      unicodeBidi: 'plaintext',
+                    }}
+                  >
                     {renderLineContent(lineIndex)}
                   </span>
                 </span>

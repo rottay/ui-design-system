@@ -107,6 +107,7 @@ describe('Badge modern i18n (R2+R3)', () => {
 
   it('paints the optical highlight from the white token channel, never a bare literal', () => {
     expect(modernSkin).not.toMatch(/color-mix\(in srgb, white /);
-    expect(modernSkin).toContain('var(--ds-color-white, white)');
+    expect(modernSkin).toContain('var(--ds-color-white)');
+    expect(modernSkin).not.toContain('var(--ds-color-white, white)');
   });
 });

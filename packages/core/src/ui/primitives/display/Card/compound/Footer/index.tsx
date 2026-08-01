@@ -42,30 +42,7 @@
 'use client';
 
 import React from 'react';
-import type { CSSProperties } from 'react';
 import type { CardFooterProps } from '../../contracts';
-
-/**
- * Padding size to CSS value mapping.
- * @internal
- */
-const PADDING_MAP: Record<string, string> = {
-  none: '0',
-  sm: 'var(--ds-card-footer-padding-sm, var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px))',
-  md: 'var(--ds-card-footer-padding, var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px))',
-  lg: 'var(--ds-card-footer-padding-lg, var(--ds-spacing-5, 20px) var(--ds-spacing-6, 24px))',
-};
-
-/**
- * Alignment value to CSS flexbox value mapping.
- * @internal
- */
-const ALIGN_MAP: Record<string, string> = {
-  start: 'flex-start',
-  center: 'center',
-  end: 'flex-end',
-  'space-between': 'space-between',
-};
 
 /**
  * Card footer compound component.
@@ -76,6 +53,10 @@ const ALIGN_MAP: Record<string, string> = {
  * - Configurable content alignment
  * - Optional divider above the footer
  * - Supports both children and actions array
+ *
+ * Layout (flex posture, `data-align` justification, per-`data-padding` inset)
+ * and paint are owned by `presentation/components/skin/card-compounds.css`;
+ * only a caller's own `style` prop stays inline.
  *
  * @component
  * @example
@@ -114,29 +95,13 @@ export function CardFooter({
   style,
   ...rest
 }: CardFooterProps): React.ReactElement {
-  const footerStyle: CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: ALIGN_MAP[align],
-    flexWrap: 'wrap',
-    gap: 'var(--ds-card-footer-actions-gap, var(--ds-spacing-2, 8px))',
-    padding: PADDING_MAP[padding],
-    ...style,
-  };
-
   return (
-    <div {...rest} className={`rottay-card-footer ${className}`} data-part="footer" data-divider={divider ? 'true' : undefined} data-align={align} style={footerStyle}>
+    <div {...rest} className={`rottay-card-footer ${className}`} data-part="footer" data-divider={divider ? 'true' : undefined} data-padding={padding} data-align={align} style={style}>
       {children}
       {actions && actions.length > 0 && (
         <div
           className="rottay-card-footer-actions"
           data-part="actions"
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            gap: 'var(--ds-card-footer-actions-gap, var(--ds-spacing-2, 8px))',
-          }}
         >
           {actions.map((action, index) => (
             <React.Fragment key={index}>{action}</React.Fragment>

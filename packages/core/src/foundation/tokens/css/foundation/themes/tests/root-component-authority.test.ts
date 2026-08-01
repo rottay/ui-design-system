@@ -201,14 +201,16 @@ describe("root authority negative drills", () => {
   });
 
   it("turns red when a component family authors a foundation channel", () => {
-    const [filename, css] = componentSources().entries().next().value as [
-      string,
-      string,
-    ];
+    const rootOwner = [...componentSources()].find(([, css]) =>
+      css.includes(":root {"),
+    );
+    expect(rootOwner, "negative drill requires a component :root owner").toBeDefined();
+    const [filename, css] = rootOwner!;
     const planted = css.replace(
       ":root {",
       ":root {\n  --ds-color-authority-negative-drill: hotpink;",
     );
+    expect(planted).not.toBe(css);
     expect(
       componentFoundationChannels(
         componentSources({ [filename]: planted }),

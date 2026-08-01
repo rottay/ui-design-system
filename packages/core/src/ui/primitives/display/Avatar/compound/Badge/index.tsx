@@ -74,14 +74,15 @@ export function AvatarBadge({
   return (
     <div className={`rottay-avatar-badge ${className}`} data-part="anchor" style={containerStyle}>
       {children}
-      {/* aria-label exposes the status to assistive technologies; the catalogue
-          carries the localized status names, with the legacy English template as
-          the provider-less fallback. */}
+      {/* role="img" + aria-label exposes the status to assistive technologies;
+          the catalogue carries the localized status names, with the legacy
+          English template as the provider-less fallback. */}
       <span
         className="rottay-avatar-badge-dot"
         data-part="dot"
         data-status={status}
         style={badgeStyle}
+        role="img"
         aria-label={i18n ? i18n.t(`avatar.status.${status}`) : `Status: ${status}`}
       />
     </div>

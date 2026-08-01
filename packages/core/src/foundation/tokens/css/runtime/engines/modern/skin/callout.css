@@ -19,6 +19,7 @@
    than re-doubling an attribute. */
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone] {
   --ds-callout-tone: var(--ds-color-info);
+  --_ds-proto-callout-tone-ink: var(--ds-color-info);
   position: relative;
   isolation: isolate;
   display: flex;
@@ -32,42 +33,37 @@
   background-color: color-mix(in srgb, var(--ds-callout-tone) 6%, var(--ds-color-surface));
   background-image:
     linear-gradient(135deg, color-mix(in srgb, var(--ds-callout-tone) 7%, transparent), transparent 58%),
-    var(--ds-gradient-surface, none);
+    var(--ds-gradient-surface);
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 38%, transparent),
     var(--ds-callout-shadow, var(--ds-shadow-sm));
   color: var(--ds-color-text-primary);
   animation: ds-callout-enter-modern var(--ds-motion-calm, var(--ds-motion-normal)) var(--ds-ease-standard, var(--ds-motion-ease-out)) both;
-  transition:
-    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    box-shadow var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out));
 }
 
-/* Hover only where hover exists (4th-wave law); a held press keeps the
-   accent frame with the lift settled, so touch gets the same answer. */
-@media (hover: hover) {
-  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone]:hover {
-    border-color: color-mix(in srgb, var(--ds-callout-tone) 40%, var(--ds-color-border));
-    box-shadow: var(--ds-callout-shadow-hover, var(--ds-shadow-md));
-    transform: translateY(-1px);
-  }
-}
-.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone]:active {
-  border-color: color-mix(in srgb, var(--ds-callout-tone) 40%, var(--ds-color-border));
-  transform: translateY(0);
-}
+/* NO root hover/press paint: the banner is a non-operable role="alert"
+   surface, so a hover lift or a reactive border is a false affordance (the
+   quiet-premium law the Empty skin documents). The only interaction paint
+   belongs to the real controls — the close button below and whatever the
+   caller slots into the action tray. */
 
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='warning'] {
   --ds-callout-tone: var(--ds-color-warning);
+  /* CONTRAST (Tag R0/Axe mixes): the raw warning hue reads ~2.2:1 on the
+     light well -- under the 3:1 floor for a 20px semantic glyph. The ink
+     deepens toward the tenant-safe dark neutral; frames and washes keep the
+     raw hue because they are decorative, not signal. */
+  --_ds-proto-callout-tone-ink: color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%);
 }
 
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='error'] {
   --ds-callout-tone: var(--ds-color-error);
+  --_ds-proto-callout-tone-ink: color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%);
 }
 
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='success'] {
   --ds-callout-tone: var(--ds-color-success);
+  --_ds-proto-callout-tone-ink: color-mix(in srgb, var(--ds-color-success) 60%, var(--ds-color-neutral-900) 40%);
 }
 
 /* The anatomy class already contributes the 4th specificity unit for every
@@ -84,7 +80,7 @@
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 50%, transparent),
     0 8px 18px color-mix(in srgb, var(--ds-callout-tone) 11%, transparent);
-  color: var(--ds-callout-tone);
+  color: var(--_ds-proto-callout-tone-ink, var(--ds-callout-tone));
 }
 
 .rottay-callout-shell.rottay-callout-shell--modern > .rottay-callout-shell__body[data-part='body'] {
@@ -100,7 +96,7 @@
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-callout-title-size, var(--ds-font-size-base));
   font-weight: var(--ds-font-weight-semibold);
-  letter-spacing: var(--ds-letter-spacing-heading, -0.01em);
+  letter-spacing: var(--ds-letter-spacing-heading);
   line-height: var(--ds-line-height-tight);
 }
 
@@ -139,10 +135,10 @@
   cursor: pointer;
   box-shadow: var(--ds-shadow-xs);
   transition:
-    background-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out));
+    background-color var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    border-color var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    color var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    transform var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out));
 }
 
 @media (hover: hover) {
@@ -155,10 +151,26 @@
 }
 
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']:active {
-  transform: scale(var(--ds-state-press-scale, 0.98));
+  transform: scale(var(--ds-state-press-scale));
   border-color: color-mix(in srgb, var(--ds-callout-tone) 44%, var(--ds-color-border));
   background: color-mix(in srgb, var(--ds-callout-tone) 9%, var(--ds-color-surface));
   color: var(--ds-color-text-primary);
+}
+
+@media (pointer: coarse) {
+  /* The dismiss control keeps its compact 2rem visual size but meets the 44px
+     coarse-pointer floor through an invisible centered hit area (Badge remove
+     and Tag close precedent) -- growing the button physically would break the
+     banner's leading/center alignment. */
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button'] {
+    position: relative;
+  }
+  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']::after {
+    content: '';
+    position: absolute;
+    inset: calc(50% - var(--ds-touch-target-min) / 2);
+    border-radius: var(--ds-radius-md);
+  }
 }
 
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']:focus-visible {
@@ -172,8 +184,6 @@
     transition: none;
   }
 
-  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone]:hover,
-  .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone]:active,
   .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']:hover,
   .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button']:active {
     transform: none;

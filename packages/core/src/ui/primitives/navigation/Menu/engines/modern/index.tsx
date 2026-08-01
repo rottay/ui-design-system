@@ -10,12 +10,23 @@
  * (`data-selected`, `data-open`, `data-disabled`, `data-tone`); the modern
  * skin (`modern/skin/menu.css`) owns 100% of layout and paint. No inline
  * style objects beyond the two custom properties, no DaisyUI classes, no
- * Tailwind utilities.
+ * Tailwind utilities. The `BaseComponentProps` passthrough (id / aria-* /
+ * data-* / data-testid + the caller-owned `data-part` hook, P-79) spreads on
+ * the root BEFORE the engine's stamps so the skin contract always lands last.
  *
  * Keyboard contract (hand-rolled per family — no shared collection hook
- * exists in this wave): every enabled item and submenu trigger is its own
- * tab stop; Enter/Space activates. A roving-tabindex/arrows model is NOT
- * implemented (see the K3-B ficha).
+ * exists in this wave): every enabled item and submenu trigger remains its
+ * own tab stop (the K3-B tab model is preserved); Enter/Space activates.
+ * Phase-B Pass 2 ADDS the APG arrow layer on top of that model: orientation
+ * -aware arrows move DOM focus between the visible enabled rows with
+ * wrap-around (vertical/inline: Up/Down; horizontal: Left/Right, mirrored
+ * under RTL), Home/End jump to the first/last row, the forward arrow on a
+ * closed submenu trigger opens it (vertical: Right in LTR / Left in RTL;
+ * horizontal: Down) and the back arrow closes an open trigger or, on a row
+ * nested inside a panel, returns focus to the parent trigger. Focus stays
+ * on the trigger when a submenu opens (inline disclosure, not a popup).
+ * Typeahead is NOT implemented: the contract declares no axis for it (see
+ * the batch-33 ficha). A roving-tabindex model is still deliberately absent.
  *
  * @example
  * ```tsx
@@ -144,6 +155,8 @@ function SubmenuRow({
   onSubmenuToggle,
   onItemClick,
   selectedKeys,
+  mode,
+  expandIcon,
 }: {
   item: MenuItemInterface;
   level: number;
@@ -153,6 +166,8 @@ function SubmenuRow({
   onSubmenuToggle: (key: string, nextOpen: boolean) => void;
   onItemClick: (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => void;
   selectedKeys: string[];
+  mode: 'vertical' | 'horizontal' | 'inline';
+  expandIcon?: React.ReactNode;
 }) {
   const hadSelectedDescendantRef = useRef(false);
 
@@ -189,6 +204,23 @@ function SubmenuRow({
           if ((e.key === 'Enter' || e.key === ' ') && !item.disabled) {
             e.preventDefault();
             onSubmenuToggle(item.key, !isOpen);
+            return;
+          }
+          // APG disclosure arrows: the forward arrow opens a closed submenu
+          // (vertical: Right in LTR / Left in RTL; horizontal menubar: Down),
+          // the back arrow closes an open one (vertical: Left in LTR /
+          // Right in RTL; horizontal: Up). Focus stays on the trigger —
+          // this is an inline disclosure, not a popup handoff. The
+          // panel-focus and movement keys live on the root handler.
+          const rtl = e.currentTarget.closest('[dir]')?.getAttribute('dir') === 'rtl';
+          const forwardKey = mode === 'horizontal' ? 'ArrowDown' : rtl ? 'ArrowLeft' : 'ArrowRight';
+          const backKey = mode === 'horizontal' ? 'ArrowUp' : rtl ? 'ArrowRight' : 'ArrowLeft';
+          if (e.key === forwardKey && !isOpen && !item.disabled) {
+            e.preventDefault();
+            onSubmenuToggle(item.key, true);
+          } else if (e.key === backKey && isOpen && !item.disabled) {
+            e.preventDefault();
+            onSubmenuToggle(item.key, false);
           }
         }}
         onClick={(e) => {
@@ -200,9 +232,11 @@ function SubmenuRow({
       >
         {item.icon && <span data-part="icon">{item.icon}</span>}
         <span data-part="label">{item.label}</span>
-        {/* Directional disclosure icon */}
+        {/* Directional disclosure icon (the contract's `expandIcon` axis
+            overrides the governed default chevron; the skin rotates the
+            wrapper either way) */}
         <span data-part="arrow-icon" aria-hidden="true">
-          <NavigationForwardIcon decorative size={12} />
+          {expandIcon ?? <NavigationForwardIcon decorative size={12} />}
         </span>
       </div>
       {isOpen && (
@@ -214,7 +248,9 @@ function SubmenuRow({
             openKeys,
             onSubmenuToggle,
             level + 1,
-            inlineIndent
+            inlineIndent,
+            mode,
+            expandIcon
           )}
         </ul>
       )}
@@ -244,7 +280,9 @@ function renderModernMenuItems(
   openKeys: string[],
   onSubmenuToggle: (key: string, nextOpen: boolean) => void,
   level: number = 0,
-  inlineIndent: number = MENU_DEFAULTS.inlineIndent
+  inlineIndent: number = MENU_DEFAULTS.inlineIndent,
+  mode: 'vertical' | 'horizontal' | 'inline' = MENU_DEFAULTS.mode,
+  expandIcon?: React.ReactNode
 ): React.ReactNode {
   return items.map((item) => {
     // Divider
@@ -266,7 +304,9 @@ function renderModernMenuItems(
                 openKeys,
                 onSubmenuToggle,
                 level + 1,
-                inlineIndent
+                inlineIndent,
+                mode,
+                expandIcon
               )}
             </ul>
           )}
@@ -287,6 +327,8 @@ function renderModernMenuItems(
           onSubmenuToggle={onSubmenuToggle}
           onItemClick={onItemClick}
           selectedKeys={selectedKeys}
+          mode={mode}
+          expandIcon={expandIcon}
         />
       );
     }
@@ -357,6 +399,15 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
     className = '',
     style,
     inlineIndent = MENU_DEFAULTS.inlineIndent,
+    expandIcon,
+    'data-part': dataPart,
+    engine: _engine,
+    // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to
+    // the root element. It spreads BEFORE the engine's own stamps so the
+    // skin and keyboard contracts (data-part default, role, aria-orientation,
+    // data-mode/data-collapsed/data-has-selection) always land last (the Card
+    // modern idiom; contracts promise BaseComponentProps pass-through).
+    ...rest
   } = props;
 
   // ========================================================================
@@ -441,21 +492,123 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
   );
 
   // ========================================================================
+  // Keyboard Navigation (APG arrow layer on top of the tab-stop model)
+  // ========================================================================
+
+  /**
+   * Orientation-aware arrow/Home/End focus movement between the visible
+   * enabled rows. Runs at the root so closed submenus (whose panels are
+   * unmounted) simply drop out of the focus order — the query always sees
+   * exactly the rows a keyboard user can reach. Enter/Space stay owned by
+   * the row handlers above; the trigger disclosure arrows live in
+   * SubmenuRow (they need the item key and the open state).
+   */
+  const handleRootKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLUListElement>) => {
+      const root = e.currentTarget;
+      const row = (e.target as HTMLElement).closest("[data-part='item'], [data-part='trigger']");
+      if (!row || !root.contains(row)) return;
+
+      const horizontal = mode === 'horizontal';
+      const rtl = root.closest('[dir]')?.getAttribute('dir') === 'rtl';
+
+      const focusableRows = Array.from(
+        root.querySelectorAll("[data-part='item']:not([data-disabled]), [data-part='trigger']:not([data-disabled])")
+      ) as HTMLElement[];
+      const currentIndex = focusableRows.indexOf(row as HTMLElement);
+      if (currentIndex === -1) return;
+
+      let nextIndex: number | null = null;
+
+      switch (e.key) {
+        case 'ArrowDown':
+          if (horizontal) return; // horizontal menubar: Down is the trigger's open key
+          nextIndex = (currentIndex + 1) % focusableRows.length;
+          break;
+        case 'ArrowUp':
+          if (horizontal) return; // horizontal menubar: Up is the trigger's close key
+          nextIndex = (currentIndex - 1 + focusableRows.length) % focusableRows.length;
+          break;
+        case 'ArrowRight': {
+          if (!horizontal) {
+            // Vertical RTL back key: return focus from a panel row to its
+            // parent trigger (the panel stays open — inline disclosure).
+            // In LTR, Right is the trigger's forward/open key (row-owned).
+            if (rtl) {
+              const panel = (row as HTMLElement).closest("[data-part='panel']");
+              const parentTrigger = panel?.parentElement?.querySelector(
+                ":scope > [data-part='trigger']:not([data-disabled])"
+              ) as HTMLElement | null;
+              if (parentTrigger) {
+                e.preventDefault();
+                parentTrigger.focus();
+              }
+            }
+            return;
+          }
+          nextIndex = rtl
+            ? (currentIndex - 1 + focusableRows.length) % focusableRows.length
+            : (currentIndex + 1) % focusableRows.length;
+          break;
+        }
+        case 'ArrowLeft': {
+          if (!horizontal) {
+            // Vertical LTR back key: panel row → parent trigger. In RTL,
+            // Left is the trigger's forward/open key (row-owned).
+            if (!rtl) {
+              const panel = (row as HTMLElement).closest("[data-part='panel']");
+              const parentTrigger = panel?.parentElement?.querySelector(
+                ":scope > [data-part='trigger']:not([data-disabled])"
+              ) as HTMLElement | null;
+              if (parentTrigger) {
+                e.preventDefault();
+                parentTrigger.focus();
+              }
+            }
+            return;
+          }
+          nextIndex = rtl
+            ? (currentIndex + 1) % focusableRows.length
+            : (currentIndex - 1 + focusableRows.length) % focusableRows.length;
+          break;
+        }
+        case 'Home':
+          nextIndex = 0;
+          break;
+        case 'End':
+          nextIndex = focusableRows.length - 1;
+          break;
+        default:
+          return;
+      }
+
+      if (nextIndex !== null) {
+        e.preventDefault();
+        focusableRows[nextIndex]?.focus();
+      }
+    },
+    [mode]
+  );
+
+  // ========================================================================
   // Render
   // ========================================================================
 
   return (
     <ul
+      {...rest}
       className={`rottay-menu rottay-menu--modern rottay-menu--${theme} ${className}`.trim()}
       style={style}
       role="menu"
-      data-part="root"
+      aria-orientation={mode === 'horizontal' ? 'horizontal' : 'vertical'}
+      data-part={dataPart ?? 'root'}
       data-mode={mode}
       data-collapsed={inlineCollapsed || undefined}
       data-has-selection={selectedKeys.length > 0 || undefined}
+      onKeyDown={handleRootKeyDown}
     >
       {items
-        ? renderModernMenuItems(items, handleItemClick, selectedKeys, openKeys, handleSubmenuToggle, 0, inlineIndent)
+        ? renderModernMenuItems(items, handleItemClick, selectedKeys, openKeys, handleSubmenuToggle, 0, inlineIndent, mode, expandIcon)
         : children}
     </ul>
   );

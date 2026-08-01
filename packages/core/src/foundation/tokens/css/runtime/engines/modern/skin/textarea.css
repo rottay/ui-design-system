@@ -21,6 +21,14 @@
  *
  * SPECIFICITY (P-48): every border-color rule reaches (0,4,0) via a
  * variant/status attribute beyond the two root classes + `[data-part='root']`.
+ *
+ * PHASE-B SECOND PASS 2 (2026-07-31, P2-14): the clear action's hover repaint
+ * is now gated under `@media (hover: hover)` with the touch-equivalent
+ * repaint on `:active` (it was an ungated hover + a transform-only press),
+ * and the press dip is neutralized under reduced motion (the PasswordInput
+ * visibility-toggle grammar). The clear-button base rule keeps its (0,4,0)
+ * via the always-stamped `[type='button']` instead of the forbidden doubled
+ * `[data-part='clear-button']` repetition.
  */
 
 .ds-textarea-field[data-part='field'] {
@@ -40,15 +48,15 @@
   min-block-size: var(--ds-textarea-min-block-size, 2.75rem);
   color: var(--ds-textarea-color, var(--ds-color-text-primary));
   caret-color: var(--ds-textarea-caret-color, var(--ds-input-border-focus, var(--ds-color-primary)));
-  border-width: var(--ds-input-border-width, 1px);
+  border-width: var(--ds-input-border-width);
   border-style: solid;
   border-radius: var(--ds-textarea-radius, var(--ds-radius-input, var(--ds-radius-md)));
-  background-color: var(--ds-textarea-bg, var(--ds-color-bg-input, var(--ds-surface-control, transparent)));
-  font-family: var(--ds-input-font-family, inherit);
+  background-color: var(--ds-textarea-bg, var(--ds-color-bg-input, var(--ds-surface-control)));
+  font-family: var(--ds-input-font-family);
   font-weight: var(--ds-input-font-weight, var(--ds-font-weight-normal));
-  letter-spacing: var(--ds-input-letter-spacing, normal);
+  letter-spacing: var(--ds-input-letter-spacing);
   outline: none;
-  resize: var(--ds-textarea-resize, vertical);
+  resize: var(--ds-textarea-resize);
   /* Internal scroll stays quiet: thin, ink-derived, identical to the Select
      option-list grammar (no new channel needed). */
   scrollbar-color: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border)) transparent;
@@ -88,12 +96,12 @@
 
 .ds-textarea.ds-textarea--modern[data-part='root']::placeholder {
   color: var(--ds-textarea-color-placeholder, var(--ds-input-color-placeholder, var(--ds-color-text-muted)));
-  opacity: var(--ds-input-placeholder-opacity, 1);
+  opacity: var(--ds-input-placeholder-opacity);
 }
 
 .ds-textarea.ds-textarea--modern[data-part='root']::selection {
   color: var(--ds-input-selection-color, var(--ds-textarea-color, var(--ds-color-text-primary)));
-  background: var(--ds-input-selection-bg, Highlight);
+  background: var(--ds-input-selection-bg);
 }
 
 /* background: filled, then disabled (disabled wins the tie when both). */
@@ -103,8 +111,8 @@
 .ds-textarea.ds-textarea--modern[data-part='root'][data-disabled='true'] {
   color: var(--ds-color-text-disabled);
   background-color: var(--ds-textarea-bg-disabled, var(--ds-surface-disabled));
-  cursor: var(--ds-input-disabled-cursor, not-allowed);
-  opacity: var(--ds-input-disabled-opacity, 0.6);
+  cursor: var(--ds-input-disabled-cursor);
+  opacity: var(--ds-input-disabled-opacity);
   resize: none;
 }
 
@@ -125,7 +133,16 @@
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='success'] {
   border-color: var(--ds-textarea-success-border, var(--ds-color-success));
 }
-.ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:hover:not([data-disabled='true']):not([data-readonly='true']):not(:focus) {
+/* Hover is pointer-capable only (4th-tanda hover law); the coarse-pointer
+   equivalent rides `:active` below, and the focused tap paints the focus
+   grammar which already follows. */
+@media (hover: hover) {
+  .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:hover:not([data-disabled='true']):not([data-readonly='true']):not(:focus) {
+    border-color: var(--ds-textarea-border-hover, var(--ds-color-border-hover));
+  }
+}
+/* Touch/active equivalent of the hover border. */
+.ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:active:not([data-disabled='true']):not([data-readonly='true']) {
   border-color: var(--ds-textarea-border-hover, var(--ds-color-border-hover));
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:focus:not([data-disabled='true']) {
@@ -135,7 +152,7 @@
 /* Read-only: value stays fully legible, chrome quiets down. */
 .ds-textarea.ds-textarea--modern[data-part='root'][data-readonly='true']:not([data-disabled='true']) {
   background-color: var(--ds-input-readonly-bg, var(--ds-textarea-bg, var(--ds-surface-control)));
-  cursor: var(--ds-input-readonly-cursor, text);
+  cursor: var(--ds-input-readonly-cursor);
 }
 
 /* Focus ring: a status-aware halo (same grammar as Modern Input), never an
@@ -153,8 +170,11 @@
   box-shadow: var(--ds-input-success-shadow-focus, var(--ds-textarea-shadow-focus, var(--ds-focus-ring)));
 }
 
-/* Clear action: pinned to the field's logical top-inline-end corner. */
-.ds-textarea-field[data-part='field'] > [data-part='clear-button'][data-part='clear-button'] {
+/* Clear action: pinned to the field's logical top-inline-end corner. The
+   (0,4,0) comes from two DISTINCT always-present attributes -- the engine
+   stamps `type="button"` on every render -- not from repeating the part
+   attribute (4th-tanda law; no test pinned the doubled form). */
+.ds-textarea-field[data-part='field'] > [data-part='clear-button'][type='button'] {
   position: absolute;
   inset-block-start: var(--ds-textarea-clear-offset, 0.375rem);
   inset-inline-end: var(--ds-textarea-clear-offset, 0.375rem);
@@ -165,8 +185,8 @@
   block-size: var(--ds-input-action-size, var(--ds-input-md-icon-size));
   padding: 0;
   color: var(--ds-input-clear-color, var(--ds-color-text-muted));
-  background: var(--ds-input-clear-bg, transparent);
-  border: var(--ds-input-clear-border, 1px solid transparent);
+  background: var(--ds-input-clear-bg);
+  border: var(--ds-input-clear-border);
   border-radius: var(--ds-input-action-radius, var(--ds-input-clear-radius, var(--ds-radius-full)));
   cursor: pointer;
   font: inherit;
@@ -178,10 +198,15 @@
     transform var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out));
 }
 
-.ds-textarea-field[data-part='field'] > [data-part='clear-button']:hover {
-  color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
-  background: var(--ds-input-clear-bg-hover, var(--ds-surface-inset));
-  border-color: var(--ds-input-clear-border-hover, var(--ds-color-border-subtle));
+/* Pointer-fine hover only (hover law); the coarse-pointer equivalent is the
+   press below, which repaints with the same governed channels and keeps its
+   scale dip (the PasswordInput visibility-toggle idiom). */
+@media (hover: hover) {
+  .ds-textarea-field[data-part='field'] > [data-part='clear-button']:hover {
+    color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
+    background: var(--ds-input-clear-bg-hover, var(--ds-surface-inset));
+    border-color: var(--ds-input-clear-border-hover, var(--ds-color-border-subtle));
+  }
 }
 
 .ds-textarea-field[data-part='field'] > [data-part='clear-button']:focus-visible {
@@ -193,6 +218,9 @@
 }
 
 .ds-textarea-field[data-part='field'] > [data-part='clear-button']:active {
+  color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
+  background: var(--ds-input-clear-bg-hover, var(--ds-surface-inset));
+  border-color: var(--ds-input-clear-border-hover, var(--ds-color-border-subtle));
   transform: var(--ds-input-action-active-transform, scale(0.94));
 }
 
@@ -222,16 +250,66 @@
    ramp (`--ds-color-neutral-900`) until it clears AA on every governed
    source -- warning 55% >= 5.5:1, error 78% >= 5.7:1 (worst source). */
 .ds-textarea-field[data-part='field'] > [data-part='count'][data-count-state='error'] {
-  color: var(--ds-input-count-color-error, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900, #171717) 22%));
+  color: var(--ds-input-count-color-error, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%));
 }
 
 .ds-textarea-field[data-part='field'] > [data-part='count'][data-count-state='warning'] {
-  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900, #171717) 45%));
+  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%));
 }
 
 .ds-textarea-field[data-part='field'] > [data-part='count'][data-count-state='limit'] {
-  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900, #171717) 45%));
+  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%));
   font-weight: var(--ds-input-count-limit-font-weight, var(--ds-font-weight-semibold));
+}
+
+/* Over-limit is never color-only (frame-grammar law): alongside the hue +
+   weight shift, error/limit gain a shape marker -- a currentColor triangle
+   glyph drawn with logical borders, so the state channels above stay the
+   single paint owner and forced-colors keeps the silhouette. */
+.ds-textarea-field[data-part='field'] > [data-part='count'][data-count-state='error']::before,
+.ds-textarea-field[data-part='field'] > [data-part='count'][data-count-state='limit']::before {
+  content: '';
+  display: inline-block;
+  inline-size: 0;
+  block-size: 0;
+  margin-inline-end: 0.3em;
+  border-inline-start: 0.28em solid transparent;
+  border-inline-end: 0.28em solid transparent;
+  border-block-end: 0.48em solid currentColor;
+}
+
+/* Auto-size owns the block axis: the manual resize grip would fight the
+   measured height on every keystroke, so it is removed (Mentions idiom). */
+.ds-textarea.ds-textarea--modern[data-part='root'][data-autosize='true'] {
+  resize: none;
+}
+
+/* Resize affordance (B2.1: the drag target must READ as a target, not hide as
+   the UA-only grip glyph). The `<textarea>` is a replaced element (no
+   pseudo-elements), so the affordance is painted as a corner background
+   layer on the control itself -- a quiet hairline dash grid that sits exactly
+   over the native grip zone (padding-box corner, 2px inset). It deepens on
+   hover so the intended target is exposed before the drag starts. Painted
+   only when a resize can actually happen: never when disabled, never under
+   autoSize. Tenants that set `--ds-textarea-resize: none` should also set
+   `--_ds-proto-textarea-resize-grip-ink: transparent` (CSS cannot read the
+   resolved `resize` value). RTL flips the layer to the logical inline-end
+   corner with the mirrored diagonal. */
+.ds-textarea.ds-textarea--modern[data-part='root']:not([data-disabled='true']):not([data-autosize='true']) {
+  --_ds-textarea-grip-ink: var(--_ds-proto-textarea-resize-grip-ink, color-mix(in srgb, var(--ds-color-text-muted) 62%, transparent));
+  background-image: repeating-linear-gradient(135deg, transparent 0 2px, var(--_ds-textarea-grip-ink) 2px 3px);
+  background-repeat: no-repeat;
+  background-size: var(--_ds-proto-textarea-resize-grip-size, 0.625rem) var(--_ds-proto-textarea-resize-grip-size, 0.625rem);
+  background-position: calc(100% - 2px) calc(100% - 2px);
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:not([data-disabled='true']):not([data-autosize='true']):dir(rtl) {
+  background-image: repeating-linear-gradient(225deg, transparent 0 2px, var(--_ds-textarea-grip-ink) 2px 3px);
+  background-position: 2px calc(100% - 2px);
+}
+@media (hover: hover) {
+  .ds-textarea.ds-textarea--modern[data-part='root']:not([data-disabled='true']):not([data-autosize='true']):hover {
+    --_ds-textarea-grip-ink: var(--_ds-proto-textarea-resize-grip-ink-hover, color-mix(in srgb, var(--ds-color-text-primary) 50%, transparent));
+  }
 }
 
 /* Browser chrome: keep autofill legible and on-surface. */
@@ -239,21 +317,20 @@
   -webkit-text-fill-color: var(--ds-input-autofill-color, var(--ds-textarea-color, var(--ds-color-text-primary)));
   caret-color: var(--ds-input-autofill-caret, var(--ds-textarea-caret-color));
   box-shadow: 0 0 0 1000px var(--ds-input-autofill-bg, var(--ds-textarea-bg, var(--ds-surface-control))) inset;
-  transition: background-color 9999s ease-out 0s;
 }
 
 @media (pointer: coarse) {
   .ds-textarea.ds-textarea--modern[data-part='root'] {
     /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px
        fluid root at narrow widths (measured on the live bundle, Axe R0). */
-    min-block-size: var(--ds-input-touch-target-min, 44px);
+    min-block-size: var(--ds-input-touch-target-min);
   }
 
   .ds-textarea-field[data-part='field'] > [data-part='clear-button'] {
-    min-inline-size: var(--ds-input-touch-target-min, 44px);
+    min-inline-size: var(--ds-input-touch-target-min);
     /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px
        fluid root at narrow widths (measured on the live bundle, Axe R0). */
-    min-block-size: var(--ds-input-touch-target-min, 44px);
+    min-block-size: var(--ds-input-touch-target-min);
   }
 }
 
@@ -261,6 +338,12 @@
   .ds-textarea.ds-textarea--modern[data-part='root'],
   .ds-textarea-field[data-part='field'] > [data-part='clear-button'] {
     transition: none;
+  }
+
+  /* The press dip is motion too: without its transition it would fire
+     instantly on every tap (PasswordInput visibility-toggle precedent). */
+  .ds-textarea-field[data-part='field'] > [data-part='clear-button']:active {
+    transform: none;
   }
 }
 
@@ -272,6 +355,12 @@
     border-color: ButtonText;
   }
 
+  /* The painted grip layer is stripped with author backgrounds; the native
+     UA grip (system-drawn) remains the affordance. */
+  .ds-textarea.ds-textarea--modern[data-part='root']:not([data-disabled='true']):not([data-autosize='true']) {
+    background-image: none;
+  }
+
   .ds-textarea.ds-textarea--modern[data-part='root']:focus {
     outline: 2px solid Highlight;
     outline-offset: 2px;
@@ -280,6 +369,13 @@
   .ds-textarea.ds-textarea--modern[data-part='root'][data-disabled='true'] {
     color: GrayText;
     border-color: GrayText;
+  }
+
+  /* The counter sits on the canvas below the field: system text ink; the
+     over-limit state keeps its shape marker (border glyph survives forcing
+     as ButtonText) plus the semibold shift, never hue. */
+  .ds-textarea-field[data-part='field'] > [data-part='count'] {
+    color: CanvasText;
   }
 
   .ds-textarea-field[data-part='field'] > [data-part='clear-button']:focus-visible {

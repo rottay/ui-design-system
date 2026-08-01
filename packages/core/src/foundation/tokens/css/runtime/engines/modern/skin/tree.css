@@ -5,16 +5,13 @@
  * base layer, so a layered rule loses to preflight regardless of specificity.
  * Unlayered outranks preflight and still yields to a caller's inline `style`.
  *
- * THE TWO-LAYER HOVER IS DELIBERATE AND BOTH HALVES SURVIVE.
- * `engines/modern/theme.css` paints `.rottay-tree .rottay-tree-node:hover`
- * (the outer WRAPPER, which spans the tree's full column width) while the row
- * inside it painted itself imperatively from `onMouseEnter`. When `blockNode` is
- * false the row is only as wide as its content, so the wrapper's rule is what
- * extends the highlight into the gutter -- the two are one hover AREA, not a
- * duplicate. This file reproduces ONLY the row's half, on the row's own element.
- * It must not declare anything on `.rottay-tree-node` / `[data-part='node']`:
- * that would collapse the two layers into one and silently shrink the hover
- * target.
+ * HOVER IS SINGLE-LAYER, ON THE ROW. Historically an `engines/modern/theme.css`
+ * bridge co-painted the full-column wrapper (`[data-part='node']`) so the
+ * highlight extended into the gutter when `blockNode` was false; that bridge
+ * no longer exists (grep-verified: nothing else paints `.rottay-tree-node`),
+ * and this file is the only hover owner. The row stays `inline-flex`
+ * (content width) and `blockNode` promotes it to full-width; the skin still
+ * declares NOTHING on the wrapper, so the hover target is exactly the row.
  *
  * ROOT BACKGROUND: `[data-tenant] .rottay-tree { background-color }` in theme.css
  * is layered and was already suppressed by the root's inline background; this
@@ -42,10 +39,38 @@
  * drop-target rule's (0,7,0) -- the same order the imperative write had, since
  * its `!isSelected && !disabled` gate did not exclude a drop target. Values
  * transcribed verbatim from `engines/modern.tsx`.
+ *
+ * B4-04 (Phase-B pass):
+ * (1) LOADING IS THE GOVERNED SPINNER. The engine now composes the Spinner
+ * primitive with the family `loading` part (P-79 caller-wins), so the arc,
+ * cadence (`--ds-spinner-duration`), reduced-motion rest and forced-colors
+ * re-expression live in spinner.css; this file keeps only the 16px layout
+ * box, the margin and the scoped ring size (its (0,6,0) selector outranks
+ * spinner.css's (0,5,0) `data-size` geometry). The family-local SVG spinner
+ * and this file's `ds-foundation-spin` wrapper are retired.
+ * (2) The default expand caret is the governed `navigation.forward` icon
+ * (mirrored=false -- the pinned `:dir(rtl)` flip below remains the single
+ * mirror owner; the facade's auto-mirror would double-flip). A contract
+ * `switcherIcon` stamps `data-custom-switcher` on the span and opts out of
+ * the 90deg expansion turn (the consumer composes orientation via the
+ * `expanded` render prop).
+ * (3) Interaction states complete: an `:active` press wash one step deeper
+ * than hover (ungated so touch gets the equivalent feedback), `grab` /
+ * `grabbing` cursor semantics and a dragging-row emphasis channel keyed on
+ * the engine's new `data-draggable`/`data-dragging` hooks.
+ * (4) Density: the row padding fallback rides the
+ * `--_ds-proto-tree-row-padding-*` axes scaled by the governed
+ * `--ds-density-effective-scale` authority; the per-level indent step scales
+ * in the engine (logical offsets, connectors track the same step). The
+ * legacy layered presentation bridge still declares `--ds-tree-node-padding`,
+ * so the proto axes take effect where that bridge is absent or the channel
+ * is cleared -- documented debt, not a parallel system.
+ * (5) Forced colors: disabled rows re-map to GrayText (opacity is not a
+ * sufficient signal in the forced palette).
  */
 
 .rottay-tree.rottay-tree--modern[data-part='root'] {
-  background: var(--ds-tree-bg, transparent);
+  background: var(--ds-tree-bg);
 }
 
 /* ---- hierarchy lines (their per-node logical offsets stay inline) ---- */
@@ -54,10 +79,10 @@
   border-color: var(--ds-tree-line-color, var(--ds-color-border));
 }
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='vertical'] {
-  border-left-width: var(--ds-tree-line-width, 1px);
+  border-left-width: var(--ds-tree-line-width);
 }
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='horizontal'] {
-  border-top-width: var(--ds-tree-line-width, 1px);
+  border-top-width: var(--ds-tree-line-width);
 }
 
 /* ---- drop indicator: the positioned wrapper + the line inside it (its
@@ -94,10 +119,18 @@
   display: inline-flex;
   min-inline-size: 0;
   align-items: center;
-  padding: var(--ds-tree-node-padding, 4px 8px);
+  /* B4-04: the fallback padding splits into the private proto axes so row
+     rhythm scales with the governed density authority. An explicit
+     --ds-tree-node-padding (the legacy layered bridge declares one) keeps
+     exact tenant intent and skips the scale. */
+  padding: var(
+    --ds-tree-node-padding,
+    calc(var(--_ds-proto-tree-row-padding-block, 4px) * var(--ds-density-effective-scale))
+      calc(var(--_ds-proto-tree-row-padding-inline, 8px) * var(--ds-density-effective-scale))
+  );
   border-radius: var(--ds-tree-node-radius, var(--ds-radius-md));
-  background: var(--ds-tree-node-bg, transparent);
-  color: var(--ds-tree-node-color, inherit);
+  background: var(--ds-tree-node-bg);
+  color: var(--ds-tree-node-color);
   cursor: pointer;
   user-select: none;
   transition:
@@ -120,7 +153,7 @@
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true'] {
   background: var(--ds-tree-node-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent));
   color: var(--ds-tree-node-color-selected, var(--ds-color-primary));
-  font-weight: var(--ds-tree-node-font-weight-selected, var(--ds-font-weight-medium, 500));
+  font-weight: var(--ds-tree-node-font-weight-selected, var(--ds-font-weight-medium));
   box-shadow: inset 0 0 0 1px
     var(--ds-tree-node-frame-selected, color-mix(in srgb, var(--ds-color-primary) 34%, transparent));
 }
@@ -131,19 +164,38 @@
 }
 
 /* Row hover paints only where hover exists (button.css idiom, pre-flag 8):
-   on touch the wash would stick after the tap. The two-layer hover contract
-   with theme.css's wrapper rule is unchanged (see the header). */
+   on touch the wash would stick after the tap. Single-layer row hover (the
+   old theme.css wrapper bridge is gone -- see the header). */
 @media (hover: hover) {
   .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:hover:not([data-selected='true']):not([data-disabled]) {
     background: var(--ds-tree-node-bg-hover, color-mix(in srgb, var(--ds-surface-inset) 50%, transparent));
   }
 }
 
+/* B4-04: press feedback -- one step deeper than the hover wash, ungated so
+   touch gets the equivalent :active feedback the hover rule withholds. The
+   selected row and disabled rows keep their own state paint. */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:active:not([data-selected='true']):not([data-disabled]) {
+  background: var(--_ds-proto-tree-row-bg-active, color-mix(in srgb, var(--ds-surface-inset) 75%, transparent));
+}
+
+/* B4-04: drag affordance -- the WHOLE row is the drag target (the engine
+   stamps draggable on the row), so the cursor semantics live on the row, not
+   on a decorative glyph. The dragged row dims through the emphasis channel
+   while the drop indicator/inside-ring own the landing feedback. */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-draggable] {
+  cursor: grab;
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-dragging] {
+  cursor: grabbing;
+  opacity: var(--_ds-proto-tree-dragging-opacity, 0.55);
+}
+
 /* The engine's focusedKey state ring (roving focus after the first arrow
    keystroke) -- was an imperative `--tw-ring-color` write on Tailwind's
    ring-2 utility. */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-focused='true'] {
-  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px)
+  box-shadow: 0 0 0 var(--ds-focus-ring-width)
     color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
 }
 
@@ -151,7 +203,7 @@
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true'][data-focused='true'] {
   box-shadow:
     inset 0 0 0 1px var(--ds-tree-node-frame-selected, color-mix(in srgb, var(--ds-color-primary) 34%, transparent)),
-    0 0 0 var(--ds-focus-ring-width, 2px) color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+    0 0 0 var(--ds-focus-ring-width) color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
 }
 
 /* Keyboard reachability: the roving tab stop lands DOM focus on the row
@@ -159,19 +211,19 @@
    platform :focus-visible ring owned here (the state ring only exists once
    the engine's focusedKey is set). */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: calc(-1 * var(--ds-focus-ring-offset, 2px));
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-focus-ring-offset));
 }
 
 /* ---- row contents: expander, spacer, checkbox, icon, search highlight ---- */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle'] {
-  width: var(--ds-tree-switcher-size, 24px);
-  height: var(--ds-tree-switcher-size, 24px);
+  width: var(--ds-tree-switcher-size);
+  height: var(--ds-tree-switcher-size);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 0;
-  font-size: var(--ds-font-size-xs, 12px);
+  font-size: var(--ds-font-size-xs);
   margin-inline-end: 4px;
   flex-shrink: 0;
   cursor: pointer;
@@ -191,7 +243,7 @@
     transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
-.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-expanded='true'] > [data-part='tree-node-toggle'] > span {
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-expanded='true'] > [data-part='tree-node-toggle'] > span:not([data-custom-switcher]) {
   rotate: 90deg;
 }
 
@@ -205,9 +257,13 @@
   transform: scaleX(-1);
 }
 
-/* ---- async loading: the spinner arc rides the CANONICAL `ds-foundation-spin`
-        (Table/progress precedent) on the motion authority's slow cadence; the
-        family-local duplicate keyframe is retired. ---- */
+/* ---- async loading: the governed Spinner primitive (B4-04). The engine
+        stamps the family `loading` part on the Spinner root (P-79), so the
+        arc, cadence, reduced-motion rest and forced-colors re-expression are
+        spinner.css's; this file keeps the 16px layout box + margin and pins
+        the ring to the family size channel (this (0,6,0) selector outranks
+        spinner.css's (0,5,0) data-size geometry). The old family-local SVG
+        and the ds-foundation-spin wrapper rule are retired. ---- */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='loading'] {
   display: inline-flex;
   inline-size: var(--ds-tree-loading-size, 16px);
@@ -216,16 +272,14 @@
   align-items: center;
   justify-content: center;
   margin-inline-end: 4px;
-  animation: ds-foundation-spin var(--ds-tree-loading-duration, var(--ds-motion-glacial, 500ms))
-    linear infinite;
 }
 
-.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='loading'] > svg {
-  inline-size: 100%;
-  block-size: 100%;
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='loading'] > [data-part='indicator'] {
+  inline-size: var(--ds-tree-loading-size, 16px);
+  block-size: var(--ds-tree-loading-size, 16px);
 }
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='switcher-spacer'] {
-  width: var(--ds-tree-switcher-size, 24px);
+  width: var(--ds-tree-switcher-size);
   margin-inline-end: 4px;
   flex-shrink: 0;
 }
@@ -234,19 +288,19 @@
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='checkbox'] {
   width: var(--ds-tree-checkbox-size, 16px);
   height: var(--ds-tree-checkbox-size, 16px);
-  margin-inline-end: var(--ds-tree-checkbox-margin, 8px);
+  margin-inline-end: var(--ds-tree-checkbox-margin);
   flex-shrink: 0;
   cursor: pointer;
   accent-color: var(--ds-color-primary);
 }
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='icon'] {
-  width: var(--ds-tree-icon-size, 16px);
-  height: var(--ds-tree-icon-size, 16px);
+  width: var(--ds-tree-icon-size);
+  height: var(--ds-tree-icon-size);
   display: flex;
   align-items: center;
   margin-inline-end: 8px;
   flex-shrink: 0;
-  color: var(--ds-tree-icon-color, currentColor);
+  color: var(--ds-tree-icon-color);
 }
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-label'] > [data-part='tree-node-highlight'] {
   padding-inline: 2px;
@@ -285,21 +339,18 @@
     position: absolute;
     /* 44px block, ~38px inline: the inline-end expansion is capped so the
        hit area never swallows the adjacent checkbox's target. */
-    inset-block: calc((var(--ds-tree-switcher-size, 24px) - var(--ds-tree-touch-target-min, 44px)) / 2);
-    inset-inline-start: calc((var(--ds-tree-switcher-size, 24px) - var(--ds-tree-touch-target-min, 44px)) / 2);
+    inset-block: calc((var(--ds-tree-switcher-size) - var(--ds-tree-touch-target-min, 44px)) / 2);
+    inset-inline-start: calc((var(--ds-tree-switcher-size) - var(--ds-tree-touch-target-min, 44px)) / 2);
     inset-inline-end: -4px;
   }
 }
 
-/* ---- reduced motion: transitions and the spinner collapse. ---- */
+/* ---- reduced motion: transitions collapse (the loading indicator's cadence
+        is spinner.css's own reduced-motion concern -- B4-04). ---- */
 @media (prefers-reduced-motion: reduce) {
   .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'],
   .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle'] > span {
     transition: none;
-  }
-
-  .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='loading'] {
-    animation: none;
   }
 }
 
@@ -310,6 +361,13 @@
     background: Highlight;
     color: HighlightText;
     box-shadow: none;
+  }
+
+  /* B4-04: opacity alone is not a disabled signal in the forced palette --
+     the ink re-maps to the system disabled color. */
+  .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-disabled] {
+    color: GrayText;
+    opacity: 1;
   }
 
   .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside'] {

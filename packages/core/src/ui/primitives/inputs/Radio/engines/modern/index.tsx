@@ -12,6 +12,11 @@
  * Geometry consumes the canonical `--ds-radio-{size}-*` channels multiplied
  * by the three-plane density channel `--ds-density-effective-scale`.
  *
+ * Group participation: inside `<Radio.Group>` children mode the control
+ * derives checked/name/disabled from `useRadioGroup()` whenever it carries a
+ * `value` and no explicit `checked` of its own; explicit props always win.
+ * `aria-label` forwards to the native input (standalone indicators need it).
+ *
  * @see {@link Radio} for the main component
  * @module ModernRadio
  * @category Inputs
@@ -23,6 +28,7 @@
 import React, { useState, useId, useCallback } from 'react';
 import type { RadioProps } from '../../contracts';
 import { RADIO_DEFAULTS } from '../../contracts';
+import { useRadioGroup } from '../../runtime/group-context';
 
 /* ------------------------------------------------------------------ */
 /*  Component                                                          */
@@ -30,39 +36,64 @@ import { RADIO_DEFAULTS } from '../../contracts';
 
 export default function ModernRadio(props: RadioProps): React.ReactElement {
   const {
-    size = RADIO_DEFAULTS.size,
-    color = RADIO_DEFAULTS.color,
+    size: sizeProp,
+    color: colorProp,
     labelPlacement = RADIO_DEFAULTS.labelPlacement,
     label,
     value,
     checked: controlledChecked,
     defaultChecked = RADIO_DEFAULTS.defaultChecked,
-    disabled = RADIO_DEFAULTS.disabled,
+    disabled: disabledProp = RADIO_DEFAULTS.disabled,
     required = RADIO_DEFAULTS.required,
     error = RADIO_DEFAULTS.error,
     onChange,
     children,
-    name,
+    name: nameProp,
     description,
     id: providedId,
     autoFocus,
     className = '',
     style,
   } = props;
+  const ariaLabel = props['aria-label'];
+
+  // Group participation (children-mode `<Radio.Group>`): when the control
+  // carries a `value` and no explicit checked state of its own, the group
+  // context owns checked/name/disabled and receives the selection. Sharing
+  // the group name is what gives the set its native APG arrow-key roving
+  // keyboard behavior. Explicit props always win over context.
+  const group = useRadioGroup();
+  const groupControlled =
+    group != null && value !== undefined && controlledChecked === undefined;
 
   const generatedId = useId();
   const inputId = providedId || `radio-modern-${generatedId.replace(/:/g, '')}`;
 
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = controlledChecked !== undefined;
-  const isChecked = isControlled ? controlledChecked : internalChecked;
+  const isChecked = groupControlled
+    ? group.value === value
+    : isControlled
+      ? controlledChecked
+      : internalChecked;
+
+  const size = sizeProp ?? group?.size ?? RADIO_DEFAULTS.size;
+  const color = colorProp ?? group?.color ?? RADIO_DEFAULTS.color;
+  // Group disabled cascades to every child; size/color inherit unless the
+  // control sets its own. Checked/name flow only when group-controlled.
+  const disabled = disabledProp || group?.disabled === true;
+  const name = nameProp ?? (groupControlled ? group?.name : undefined);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isControlled) {
+    if (groupControlled && group) {
+      if (e.target.checked) {
+        group.onChange(value);
+      }
+    } else if (!isControlled) {
       setInternalChecked(e.target.checked);
     }
     onChange?.(e);
-  }, [isControlled, onChange]);
+  }, [groupControlled, group, value, isControlled, onChange]);
 
   const displayLabel = label || children;
 
@@ -93,6 +124,7 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
           onChange={handleChange}
           aria-checked={isChecked}
           aria-invalid={error || undefined}
+          aria-label={ariaLabel}
         />
 
         {/* Custom visual indicator */}

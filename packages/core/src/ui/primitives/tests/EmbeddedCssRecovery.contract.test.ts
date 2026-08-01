@@ -174,8 +174,25 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       formPlaceholders: 2,
     });
 
-    // The relocated modern ScrollArea payload, in its new single owner.
-    expect(paintCount(RELOCATED.scrollAreaModern)).toBe(15);
+    // Preserve the recovered 15-declaration floor while accounting for the
+    // two independently specified Phase-B additions: the transparent WebKit
+    // corner and the keyboard-focus thumb reveal. Treating 17 as a new opaque
+    // total would lose the causal boundary this recovery contract protects.
+    const phaseBPaint = [
+      ruleContract(
+        RELOCATED.scrollAreaModern,
+        `${MODERN_SCROLL_AREA}::-webkit-scrollbar-corner`,
+      ).background,
+      ruleContract(
+        RELOCATED.scrollAreaModern,
+        `${MODERN_SCROLL_AREA}[data-hide-scrollbar='true']:focus-visible::-webkit-scrollbar-thumb`,
+      ).background,
+    ];
+    expect(phaseBPaint).toEqual([
+      'transparent',
+      'var(--ds-scroll-area-thumb-bg, color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent))',
+    ]);
+    expect(paintCount(RELOCATED.scrollAreaModern) - phaseBPaint.length).toBe(15);
   });
 
   it('pins every DataTable interaction selector and animation body', () => {
@@ -357,8 +374,8 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
     expect(
       ruleContract(RELOCATED.tabsModern, `${MODERN_TABS} [data-part='tab-button']:focus-visible`)
     ).toEqual({
-      outline: 'var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color)',
-      'outline-offset': 'calc(-1 * var(--ds-focus-ring-offset, 2px))',
+      outline: 'var(--ds-focus-ring-width) solid var(--ds-focus-ring-color)',
+      'outline-offset': 'calc(-1 * var(--ds-focus-ring-offset))',
     });
 
     // `ds-tabs-fade-in` now lives in the foundation keyframes owner and is
@@ -595,6 +612,7 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       ).toEqual({
         '--ds-scroll-area-scrollbar-size': width,
         '--ds-scroll-area-scrollbar-radius': radius,
+        ...(size === 'wide' ? { 'scrollbar-width': 'auto' } : {}),
       });
     }
   });

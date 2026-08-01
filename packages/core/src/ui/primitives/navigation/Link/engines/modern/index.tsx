@@ -29,6 +29,7 @@
 'use client';
 
 import React from 'react';
+import { VisuallyHidden } from '../../../../foundation';
 import { ActionOpenExternalIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-open-external';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { LinkProps } from '../../contracts';
@@ -99,7 +100,12 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
       href={disabled ? undefined : href}
       className={`rottay-link-shell rottay-link-shell--modern ${className}`.trim()}
       onClick={handleClick}
-      aria-disabled={disabled}
+      // aria-disabled only when actually disabled (B9 pass 2): stamping
+      // aria-disabled="false" on every enabled link is AOM noise. Consumers
+      // mark the current location with `aria-current` through the rest
+      // props; the skin paints that state (weight + underline grade, never
+      // color alone).
+      aria-disabled={disabled || undefined}
       data-part="root"
       data-variant={type}
       data-underline={underline ? 'true' : 'false'}
@@ -115,7 +121,7 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
           <ActionOpenExternalIcon size={12} decorative />
         </span>
       )}
-      {external && <span className="ds-sr-only">{newTabText}</span>}
+      {external && <VisuallyHidden>{newTabText}</VisuallyHidden>}
     </a>
   );
 }

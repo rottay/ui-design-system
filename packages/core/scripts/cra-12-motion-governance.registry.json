@@ -276,9 +276,9 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 561,
-          "maxFiles": 228,
-          "digest": "fb095e2dd37c8b39451af6445439416166288dc66dcf51f506304efd3da15971"
+          "maxCount": 432,
+          "maxFiles": 170,
+          "digest": "aa3a9660e7000586c344d60b4511dc8a7e92fce4c30baed280366660c54df653"
         },
         {
           "repo": "ui-design-system",
@@ -297,14 +297,24 @@
       ],
       "reanchor": {
         "kind": "one-off-reanchor",
-        "snapshotSha": "f3720ea8",
-        "snapshotDate": "2026-07-27",
-        "owner": "claude/R1-P",
-        "verifiedBy": "Pre-drain mirror proof. A copy of the scanned tree with ONLY the six vertical-artifact files restored from the W-B snapshot (test-artifacts/rottay-design-platform/r1p-round3-evidence/r1p/closure/wb-snapshot) reproduces the superseded row byte-exact -- 584 findings in 231 files, digest cf64542f... -- and the finding-set diff against the live tree is 18 removals and ZERO additions, all inside two files. The R2/R3 rows for showroom, test and transition-all reproduce unchanged in the same run, which is the proof that no edit outside the drain contributed to this drift.",
-        "reason": "The R1-P Phase-3 drain moved the BitHire vertical extension's application/component CSS out of the DS artifact and into app-bithire. Five raw-motion-timing findings left `foundation/tokens/css/facade/artifacts/bithire/_source/extension.css` and their five generated copies left `artifacts/bithire/index.css` (one `animation: rt-detail-floating-toggle-in 180ms`, and transitions on background-color, color, border-color and width). Both files now contribute zero findings and no other scanned path changed, so this row is re-anchored DOWN (584 -> 574 in 231 -> 229 files) to the DS slice this gate certifies via `--repositories ui-design-system`. The matching growth on the receiving side is app-bithire's, not the DS's; the cross-repo slice is a separate lane and was deliberately NOT touched here.",
-        "notAnImprovement": "574 raw-motion timings across 229 DS files remain INHERITED DEBT from earlier waves. The decrease is a relocation of BitHire-owned paint out of the DS, not a cleanup, and it is not a licence to add a single new literal; the decrease-only law stands.",
-        "doNotRepeat": "This is a one-off reconciliation for one named, evidence-backed removal wave, NOT the routine way to update a baseline. Routine changes must land below these ceilings without touching this registry; a count above them is a real regression to fix in the code.",
+        "snapshotSha": "26299ebf",
+        "snapshotDate": "2026-07-31",
+        "owner": "codex/C0-audit",
+        "verifiedBy": "Codex scanned a clean `git archive 26299ebf` with the current CRA12 implementation and compared the exact finding multiset (channel, repo, scope, path, kind, symbol, evidence) against the C0/Kimi worktree. The diff is 129 raw-motion-timing removals and ZERO additions. Seven proposed 9999s autofill transition hacks and one Toast 0ms fallback were rejected before this snapshot, so none was hidden by the net decrease.",
+        "reason": "The Phase-B primitive pass replaced raw timing literals with governed motion channels across Modern. The independently reproduced finding-set diff proves the DS internal slice is a strict subset of HEAD: 561 -> 432 findings and 228 -> 170 files, with no new finding identity. This row is re-anchored DOWN to make those 129 removals permanent.",
+        "notAnImprovement": "432 raw-motion timings across 170 DS files remain inherited debt. The large decrease is useful cleanup, not permission to add a single new literal; the exact-body decrease-only law remains binding.",
+        "doNotRepeat": "Do not refresh this row from aggregate counts. Any future change requires an exact multiset comparison against this snapshot and must prove zero additions before a downward re-anchor.",
         "supersedes": [
+          {
+            "kind": "one-off-reanchor",
+            "snapshotSha": "f3720ea8",
+            "snapshotDate": "2026-07-27",
+            "owner": "claude/R1-P",
+            "verifiedBy": "Pre-drain mirror proof. A copy of the scanned tree with ONLY the six vertical-artifact files restored from the W-B snapshot reproduces the superseded row byte-exact, and the finding-set diff against the live tree was removals-only.",
+            "reason": "The R1-P Phase-3 drain moved the BitHire vertical extension's application/component CSS out of the DS artifact and into app-bithire, re-anchoring the DS slice downward.",
+            "notAnImprovement": "574 raw-motion timings across 229 DS files remained inherited debt; the decrease was a relocation, not a licence to add more.",
+            "doNotRepeat": "This was a one-off evidence-backed relocation reconciliation, not the routine way to update a baseline."
+          },
           {
             "kind": "one-off-reanchor",
             "snapshotSha": "f3720ea8",
@@ -361,9 +371,9 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 53,
-          "maxFiles": 31,
-          "digest": "9bbd5e526f70e869ac2daeb5da907bbefcd23eff79a60482793dcd1eec571550"
+          "maxCount": 47,
+          "maxFiles": 26,
+          "digest": "5ea4f1a6e4600bf90c693099fc627ebd676df5e4a52cd0194ea0c816c821a538"
         },
         {
           "repo": "ui-design-system",
@@ -382,13 +392,25 @@
       ],
       "reanchor": {
         "kind": "one-off-reanchor",
-        "snapshotSha": "f3720ea8",
-        "snapshotDate": "2026-07-27",
-        "owner": "design-system-program",
-        "verifiedBy": "live scan after the R2/R3 wave's motion-literal drain; gate rerun green",
-        "reason": "The R2/R3 Modern-premium wave introduced raw motion literals via var() fallbacks in transition/animation declarations (593->609) and moved pre-existing findings (hash drift). The orchestrator dropped every literal fallback from motion declarations and hatched long decorative durations, landing BELOW the inherited count (584 and 73). Rows are re-anchored to the tree at HEAD f3720ea8 plus this wave's uncommitted work, which is the tree the gate must certify.",
-        "notAnImprovement": "584 raw-motion timings and 73 transition-all remain inherited debt from earlier waves, not an achievement and not a licence to add more; the decrease-only law stands.",
-        "doNotRepeat": "This is a one-off reconciliation for the R2/R3 wave's intentional change, not the routine way to update a baseline; routine changes must land below the current ceilings without touching this registry."
+        "snapshotSha": "26299ebf",
+        "snapshotDate": "2026-07-31",
+        "owner": "codex/C0-audit",
+        "verifiedBy": "Codex scanned a clean `git archive 26299ebf` with the current CRA12 implementation and compared the exact finding multiset against the C0/Kimi worktree. The diff is six transition-all removals and ZERO additions.",
+        "reason": "The Phase-B primitive pass narrowed six broad transitions. The independently reproduced strict-subset proof supports a downward re-anchor from 53 -> 47 findings and 31 -> 26 files.",
+        "notAnImprovement": "47 transition-all findings across 26 DS files remain inherited debt. This decrease is not permission to introduce broad transitions; the exact-body decrease-only law remains binding.",
+        "doNotRepeat": "Do not refresh this row from aggregate counts. Any future downward re-anchor must prove an exact finding-set subset with zero additions.",
+        "supersedes": [
+          {
+            "kind": "one-off-reanchor",
+            "snapshotSha": "f3720ea8",
+            "snapshotDate": "2026-07-27",
+            "owner": "design-system-program",
+            "verifiedBy": "live scan after the R2/R3 wave's motion-literal drain; gate rerun green",
+            "reason": "The orchestrator removed the wave's new literal fallbacks and broad transitions, landing below inherited debt before the prior re-anchor.",
+            "notAnImprovement": "The prior row still represented inherited transition-all debt, not an achievement or licence to add more.",
+            "doNotRepeat": "This was a one-off reconciliation for the R2/R3 wave, not the routine way to update a baseline."
+          }
+        ]
       }
     }
   }

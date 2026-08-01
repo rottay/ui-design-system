@@ -30,11 +30,13 @@
  * top-light now resolve through the `--ds-elevation-surface-3` lift layer
  * (inert where `--ds-elevation-lift-strength` is 0).
  *
- * MOTION: the engine mounts the card on open and has no presence layer, so
- * only the ENTRANCE is choreographed -- on the shared
- * `--ds-motion-normal` / `--ds-motion-ease-out` cadence with an
- * engine-namespaced keyframe; reduced motion collapses it to an instant fade.
- * The card owns no inline animation, so the CSS rule below is the single
+ * MOTION: `usePresence` in the engine keeps the card mounted through its own
+ * exit, so BOTH directions are choreographed here -- enter and exit run on the
+ * shared `--ds-motion-normal` / `--ds-motion-ease-out` cadence with
+ * engine-namespaced keyframes keyed on `data-open`, each placement travelling
+ * from/ toward its own edge via `--_ds-hover-card-closed-transform`
+ * (popover.css idiom); reduced motion collapses both to an instant fade.
+ * The card owns no inline animation, so the CSS rules below are the single
  * motion owner.
  *
  * PORTAL: this engine does NOT portal (rustic DOES) — the surface renders in-tree
@@ -73,6 +75,19 @@
   }
 }
 
+/* Exit mirrors the entrance: the card leaves toward the same edge it arrived
+   from (presence keeps it mounted until animationend). */
+@keyframes ds-hover-card-exit-modern {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: var(--_ds-hover-card-closed-transform);
+  }
+}
+
 .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'] {
   --_ds-hover-card-closed-transform: translate3d(
       0,
@@ -90,8 +105,8 @@
   overflow: auto;
   overscroll-behavior: contain;
   scrollbar-width: var(--ds-hover-card-scrollbar-width, thin);
-  padding: var(--ds-hover-card-padding, var(--ds-spacing-4, 1rem));
-  border-radius: var(--ds-hover-card-radius, var(--ds-radius-xl, 16px));
+  padding: var(--ds-hover-card-padding, var(--ds-spacing-4));
+  border-radius: var(--ds-hover-card-radius, var(--ds-radius-xl));
   transform-origin: center top;
   /* The dark-aware luminance step is its own layer directly above the fill
      (popover.css idiom): inert until a dark surface raises
@@ -106,7 +121,16 @@
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
     var(--ds-surface-card);
   box-shadow: var(--ds-hover-card-shadow, var(--ds-elevation-3));
+}
+/* Presence-driven choreography: the engine stamps data-open from dataState,
+   so enter/exit swap at the exact frame the close is requested (the exit
+   starts from wherever the enter reached). */
+.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-open='true'] {
   animation: ds-hover-card-enter-modern var(--ds-motion-normal)
+    var(--ds-motion-ease-out) both;
+}
+.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-open='false'] {
+  animation: ds-hover-card-exit-modern var(--ds-motion-normal)
     var(--ds-motion-ease-out) both;
 }
 .rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-part='surface'] {
@@ -157,9 +181,9 @@
    the family's visible ring on the surface frame; the content's own
    components keep their own focus channels. */
 .rottay-hover-card--modern[data-part='trigger'] [data-part='surface']:focus-within {
-  outline: var(--ds-focus-ring-width, 2px) solid
+  outline: var(--ds-focus-ring-width) solid
     var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 /* Coarse pointers: interactive content inside the card reaches the physical

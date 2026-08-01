@@ -49,7 +49,8 @@
     "next": "Suivant",
     "page": "Page {current} sur {total}",
     "go_to": "Aller à la page",
-    "items_per_page": "{count} par page"
+    "items_per_page": "{count} par page",
+    "size_changer": "Éléments par page"
   },
   "table": {
     "empty": "Aucune donnée",
@@ -68,7 +69,8 @@
     "error": "Erreur lors de l'envoi du fichier",
     "remove": "Retirer le fichier",
     "max_size": "Taille maximale: {size}",
-    "accepted_formats": "Formats acceptés: {formats}"
+    "accepted_formats": "Formats acceptés: {formats}",
+    "retry_named": "Réessayer {name}"
   },
   "datepicker": {
     "placeholder": "Sélectionnez une date",
@@ -82,7 +84,11 @@
     "placeholder": "Sélectionnez une heure",
     "now": "Maintenant",
     "clear": "Effacer",
-    "ok": "OK"
+    "ok": "OK",
+    "am": "AM",
+    "pm": "PM",
+    "meridiem_label": "AM/PM",
+    "time_picker": "Sélecteur d'heure"
   },
   "search": {
     "placeholder": "Rechercher...",
@@ -693,7 +699,21 @@
     "navNextMonth": "Mois suivant",
     "navNextYear": "Année suivante",
     "gridLabel": "Grille des dates",
-    "monthsGridLabel": "Grille des mois"
+    "monthsGridLabel": "Grille des mois",
+    "months_short": {
+      "january": "janv.",
+      "february": "févr.",
+      "march": "mars",
+      "april": "avr.",
+      "may": "mai",
+      "june": "juin",
+      "july": "juil.",
+      "august": "août",
+      "september": "sept.",
+      "october": "oct.",
+      "november": "nov.",
+      "december": "déc."
+    }
   },
   "filter_builder": {
     "add_rule": "Ajouter une règle",
@@ -1051,5 +1071,48 @@
     "next": "Onglets suivants",
     "more": "Plus d'onglets",
     "loading": "Chargement"
+  },
+  "colorpicker": {
+    "triggerLabel": "Sélecteur de couleurs",
+    "formatLabel": "Format de couleur"
+  },
+  "markdownView": {
+    "tableRegionLabel": "Tableau",
+    "codeRegionLabel": "Bloc de code"
+  },
+  "cascader": {
+    "loading": "Chargement..."
+  },
+  "tree": {
+    "label": "Arbre"
+  },
+  "taginput": {
+    "feedback_duplicate": "L'étiquette existe déjà",
+    "feedback_max": "Nombre maximal d'étiquettes atteint",
+    "feedback_invalid": "L'étiquette n'est pas autorisée"
+  },
+  "image": {
+    "failedToLoad": "Erreur lors du chargement de l'image"
+  },
+  "statistic": {
+    "trendPositive": "En hausse",
+    "trendNegative": "En baisse",
+    "trendWarning": "Avertissement"
+  },
+  "passwordInput": {
+    "strength_weak": "Faible",
+    "strength_fair": "Moyen",
+    "strength_good": "Bon",
+    "strength_strong": "Fort"
+  },
+  "autocomplete": {
+    "input_label": "Saisie semi-automatique"
+  },
+  "meter": {
+    "threshold": {
+      "optimal": "plage optimale",
+      "suboptimal": "plage sous-optimale",
+      "critical": "plage critique"
+    }
   }
 }

@@ -10,9 +10,14 @@
  *
  * OWNERSHIP (single owner PER PART): this skin owns the link part --
  * wholesale: ink, the underline mandated by axe link-in-text-block (K4-B R3),
- * and the hover/focus-visible states -- plus the list `::marker` tint and
- * the heading type ramp (W10). Every other part (blockquote, lists, tables,
- * code, task checkbox) keeps its inline paint in `index.tsx`. Inline styles
+ * and the hover/focus-visible states -- plus the list `::marker` tint,
+ * the heading type ramp (W10) and its joining-script tracking guard (Phase B),
+ * the focus rings of the keyboard-reachable scroll regions (table wrapper and
+ * default code fence, Phase B; inline styles cannot express :focus-visible),
+ * and the forced-colors re-map of the task-checkbox fill variables (Phase B;
+ * custom properties survive forced colors, inline paint does not).
+ * Every other part (blockquote, lists, tables, code, task checkbox) keeps its
+ * inline paint in `index.tsx`. Inline styles
  * cannot express :hover/:focus-visible or pseudo-elements, and inline style
  * producer consts are counted paint by the engine-token-audit (the
  * component's inline-paint counter is decrease-only), which is why those
@@ -30,8 +35,8 @@
   text-underline-offset: 0.15em;
   text-decoration-skip-ink: auto;
   transition:
-    color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, ease),
-    text-decoration-thickness var(--ds-motion-instant, 120ms) var(--ds-ease-standard, ease);
+    color var(--ds-motion-instant) var(--ds-ease-standard),
+    text-decoration-thickness var(--ds-motion-instant) var(--ds-ease-standard);
 }
 
 @media (hover: hover) {
@@ -67,6 +72,24 @@
  * cannot be reached from inline styles, so the skin owns it. */
 .ds-markdown-view[data-part='root'] [data-part='list'] ::marker {
   color: var(--ds-markdown-marker-ink, var(--ds-color-text-secondary));
+}
+
+/* Blockquote: quiet paper tint + related end radii — the quote reads as an
+ * inset voice of the document, not as bare indented text. The start edge
+ * keeps the structural hairline square (the radius belongs to the tint slab,
+ * not the marker). Paint drained from the engine's inline style object;
+ * only the density-driven block margin stays inline (family W10 idiom). */
+.ds-markdown-view[data-part='root'] [data-part='blockquote'] {
+  margin-bottom: 0;
+  margin-inline: 0;
+  padding-block: var(--ds-spacing-1);
+  padding-inline-start: var(--ds-spacing-4);
+  padding-inline-end: var(--ds-spacing-3);
+  border-inline-start: 3px solid var(--ds-color-border);
+  background: color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent);
+  border-start-end-radius: var(--ds-radius-sm);
+  border-end-end-radius: var(--ds-radius-sm);
+  color: var(--ds-color-text-secondary);
 }
 
 /* W10: the heading type ramp replaces the browser-default h1-h6 scale with
@@ -116,6 +139,27 @@
   letter-spacing: 0.02em;
 }
 
+/* Joining-script guard (Phase B, the Typography lane precedent): any
+   non-normal tracking breaks contextual joining in Arabic-script headlines,
+   so the ramp's tracking collapses to `normal` under a joining-script lang.
+   One (0,3,0) rule outranks every hN level above (0,1,1). */
+.ds-markdown-view[data-part='root'] [data-part='heading']:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks) {
+  letter-spacing: normal;
+}
+
+/* Keyboard-reachable scroll regions (Phase B): the table wrapper and the
+   default code fence became focusable in the engine (scrollable-region law);
+   their ring shares the family's governed focus grammar. `outline`-free like
+   the link ring -- the box-shadow does not move geometry. */
+.ds-markdown-view[data-part='root'] [data-part='table-wrapper']:focus-visible,
+.ds-markdown-view[data-part='root'] [data-part='code-block-pre']:focus-visible {
+  outline: none;
+  box-shadow: var(
+    --ds-markdown-focus-ring,
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+  );
+}
+
 /* Reading frame additions (Pass 2): the document keeps an opt-in measure
  * channel (default `none` — no change to current layouts) and the table
  * wrapper gains a quiet frame around its existing scroll region. The skin
@@ -137,15 +181,29 @@
     outline: 2px solid Highlight;
     box-shadow: none;
   }
+  .ds-markdown-view[data-part='root'] [data-part='table-wrapper']:focus-visible,
+  .ds-markdown-view[data-part='root'] [data-part='code-block-pre']:focus-visible {
+    outline: 2px solid Highlight;
+    box-shadow: none;
+  }
   /* Inline code loses its inset fill when backgrounds are forced away; it
      keeps a system-color frame (the skin's own frame and the UA-forced
      borders of table cells/task checkbox resolve to system colors
-     automatically — only the checked FILL of the task indicator is lost,
-     which no system color can restore without forced-color-adjust: none). */
+     automatically). The blockquote's start rule and the table rules are
+     borders, so they invert to CanvasText with the rest; the tint slabs
+     (blockquote, inline code, fence) strip away, which is the safe inversion. */
   .ds-markdown-view[data-part='root'] [data-part='inline-code'] {
     border: 1px solid ButtonText;
   }
   .ds-markdown-view[data-part='root'] [data-part='table-wrapper'] {
     border-color: ButtonText;
+  }
+  /* Checked state is DATA: custom properties survive forced colors (the
+     CodeBlock line-highlight precedent), so the engine's family variables are
+     re-mapped to the system pair and the checked fill reads again -- a filled
+     system-ink box with a Canvas keyline against the unchecked hollow box. */
+  .ds-markdown-view[data-part='root'] [data-part='task-checkbox'][data-checked='true'] {
+    --_ds-proto-markdown-task-fill: CanvasText;
+    --_ds-proto-markdown-task-fill-ring: Canvas;
   }
 }

@@ -13,6 +13,7 @@
  *   consumers.
  */
 import ts from "typescript";
+import { stripScriptComments } from "./script-source-comment-stripper.mjs";
 
 export const DEFAULT_VISUAL_ROOTS = Object.freeze([
   "palette",
@@ -1013,36 +1014,10 @@ export function extractStringArrayExport(
   );
 }
 
-function stripTypeScriptComments(text, file = "consumer.ts") {
-  const language = file.endsWith(".tsx")
-    ? ts.LanguageVariant.JSX
-    : ts.LanguageVariant.Standard;
-  const scanner = ts.createScanner(
-    ts.ScriptTarget.Latest,
-    false,
-    language,
-    text
-  );
-  let output = "";
-  for (
-    let token = scanner.scan();
-    token !== ts.SyntaxKind.EndOfFileToken;
-    token = scanner.scan()
-  ) {
-    if (
-      token === ts.SyntaxKind.SingleLineCommentTrivia ||
-      token === ts.SyntaxKind.MultiLineCommentTrivia
-    )
-      continue;
-    output += scanner.getTokenText();
-  }
-  return output;
-}
-
 /** Extract actual `var(--ds-*)` reads, excluding comments. */
 export function extractConsumedCssVariables(text, file = "consumer.css") {
   const clean = /\.(?:ts|tsx|js|jsx|mjs|cjs)$/i.test(file)
-    ? stripTypeScriptComments(text, file)
+    ? stripScriptComments(text, file)
     : text.replace(/\/\*[\s\S]*?\*\//g, " ");
   const names = new Set();
   for (const match of clean.matchAll(/var\(\s*(--ds-[a-z0-9-]+)/gi))

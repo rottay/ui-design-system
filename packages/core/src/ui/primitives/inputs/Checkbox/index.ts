@@ -88,7 +88,7 @@
 
 import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
 import type { CheckboxProps } from './contracts';
-import { CheckboxGroup } from './compound';
+import { CheckboxGroup } from './compound/Group';
 
 // Export types
 export type {

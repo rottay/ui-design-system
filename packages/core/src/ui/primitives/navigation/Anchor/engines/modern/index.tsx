@@ -5,15 +5,21 @@
  * the engine stamps anatomy and keeps runtime values inline.
  *
  * @remarks
- * **Engine contract (K3-C pass 1):**
- * - The accent bar is LOGICAL: `border-s-2` (border-inline-start), never a
- *   physical `border-l-2`, so the bar flips to the correct side in RTL.
- *   Nested indentation is skin-owned `margin-inline-start` (was `ml-4`).
+ * **Engine contract (K3-C pass 1; P2-20 pass 2):**
+ * - The accent marker is LOGICAL and fully skin-owned: `border-inline-start`
+ *   geometry + idle/selected colors live in `anchor.css` (the pass-1
+ *   `border-s-2`/`border-transparent` utilities are drained), so the marker
+ *   flips to the correct side in RTL with a single paint owner.
+ * - Nested indentation is skin-owned `margin-inline-start` (was `ml-4`).
  * - The active link carries `aria-current="location"`.
  * - Click scrolling honors `prefers-reduced-motion` (`behavior: 'auto'`).
+ * - `target='_blank'` links stamp `rel='noopener noreferrer'` (P2-20).
  * - The root mints the canonical `rottay-anchor rottay-anchor--modern`
  *   pair + `data-direction`/`data-affix`; sticky/flex structure moved to
  *   the skin.
+ * - B9 pass 2: arrow-key/Home/End navigation across links on the root
+ *   (native tab order untouched), and a native `title` full-value
+ *   affordance on string titles (the skin ellipsizes overflow).
  *
  * @example Basic Usage
  * ```tsx
@@ -94,11 +100,9 @@ function scrollBehavior(): ScrollBehavior {
  * Modern engine implementation of the Anchor.Link component.
  *
  * @description
- * A navigation link that scrolls to its target section. Color, accent-bar
- * paint, padding rhythm and typography are skin-owned (`anchor.css`); the
- * engine keeps only the border width/color utilities the skin deliberately
- * does NOT own (see the skin header for the mixed-border rationale) plus
- * the selected state.
+ * A navigation link that scrolls to its target section. Color, accent-marker
+ * geometry, padding rhythm and typography are skin-owned (`anchor.css`,
+ * single paint owner since P2-20); the engine stamps anatomy + state only.
  *
  * @param props - {@link AnchorLinkProps}
  * @param ref - Forwarded ref to the anchor element
@@ -147,13 +151,20 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
           ref={ref}
           href={href}
           target={target}
+          // External anchors get the same security floor as the Link family
+          // (P2-20): `target='_blank'` without rel is a reverse-tabnabbing
+          // vector.
+          rel={target === '_blank' ? 'noopener noreferrer' : undefined}
           onClick={handleClick}
-          // `border-s-2` is the LOGICAL accent-bar width (flips correctly in
-          // RTL); `border-transparent` keeps the inactive bar color at the
-          // tenant floor -- the skin owns only the ACTIVE border color.
-          className={`rottay-anchor-link rottay-anchor-link--modern border-s-2 ${
-            isActive ? '' : 'border-transparent'
-          } ${className}`}
+          // Truncation affordance (B9 pass 2): the skin ellipsizes long
+          // titles, so a string title doubles as the native full-value
+          // tooltip. ReactNode titles carry their own semantics.
+          title={typeof title === 'string' ? title : undefined}
+          // P2-20: the border geometry/idle color utilities (`border-s-2`,
+          // `border-transparent`) are DRAINED — the skin is the single owner
+          // of the accent-marker track (width, idle transparent, selected
+          // neutral), keyed on data-part + data-selected.
+          className={`rottay-anchor-link rottay-anchor-link--modern ${className}`}
           style={style}
           data-part="item"
           data-selected={isActive}
@@ -301,6 +312,53 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
     }, [getContainer, getAnchors, offsetTop, bounds, onChange, internalActiveKey]);
 
     // ---------------------------------------------------------------------------
+    // Keyboard Navigation (B9 pass 2)
+    // ---------------------------------------------------------------------------
+
+    /**
+     * Arrow-key navigation across the anchor's links. Links stay native
+     * tabbable anchors (no roving tabindex) — the arrows are a shortcut on
+     * top, matching the direction axis: vertical uses ArrowUp/ArrowDown,
+     * horizontal uses ArrowLeft/ArrowRight mirrored under RTL; Home/End jump
+     * to the first/last link. Focus moves only — activation stays on the
+     * native Enter/Space click (which performs the scroll jump).
+     */
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+      const { key } = event;
+      const vertical = direction !== 'horizontal';
+      const rtl =
+        typeof window !== 'undefined' &&
+        typeof window.getComputedStyle === 'function' &&
+        window.getComputedStyle(event.currentTarget).direction === 'rtl';
+
+      const links = Array.from(
+        event.currentTarget.querySelectorAll<HTMLElement>("[data-part='item']")
+      );
+      if (links.length === 0) return;
+
+      if (key === 'Home' || key === 'End') {
+        event.preventDefault();
+        links[key === 'Home' ? 0 : links.length - 1]?.focus();
+        return;
+      }
+
+      let delta = 0;
+      if (vertical) {
+        if (key === 'ArrowDown') delta = 1;
+        else if (key === 'ArrowUp') delta = -1;
+      } else {
+        if (key === 'ArrowRight') delta = rtl ? -1 : 1;
+        else if (key === 'ArrowLeft') delta = rtl ? 1 : -1;
+      }
+      if (delta === 0) return;
+
+      const currentIndex = links.indexOf(document.activeElement as HTMLElement);
+      if (currentIndex < 0) return;
+      event.preventDefault();
+      links[(currentIndex + delta + links.length) % links.length]?.focus();
+    };
+
+    // ---------------------------------------------------------------------------
     // Render
     // ---------------------------------------------------------------------------
 
@@ -310,6 +368,7 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
           ref={ref}
           className={`rottay-anchor rottay-anchor--modern ${className}`}
           style={{ top: affix ? offsetTop : undefined, ...style }}
+          onKeyDown={handleKeyDown}
           data-part="root"
           data-direction={direction}
           data-affix={affix ? 'true' : 'false'}

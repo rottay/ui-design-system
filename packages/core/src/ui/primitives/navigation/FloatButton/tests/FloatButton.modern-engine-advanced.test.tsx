@@ -85,8 +85,9 @@ describe('FloatButton modern advanced engine coverage', () => {
     expect(modernSkin).toContain('transition: var(--ds-button-transition)');
     // Footprint + badge geometry: verbatim fallbacks for the drained literals,
     // density-scaled via the canonical effective-scale idiom (K4-C Pass 2).
-    expect(modernSkin).toContain('inline-size: calc(var(--ds-floatbutton-size, 40px) * var(--ds-density-effective-scale, 1))');
-    expect(modernSkin).toContain('calc(var(--ds-floatbutton-padding-block, 8px) * var(--ds-density-effective-scale, 1))');
+    expect(modernSkin).toContain('inline-size: calc(var(--ds-floatbutton-size, 40px) * var(--ds-density-effective-scale))');
+    expect(modernSkin).toContain('calc(var(--ds-floatbutton-padding-block, 8px) * var(--ds-density-effective-scale))');
+    expect(modernSkin).not.toContain('var(--ds-density-effective-scale, 1)');
     expect(modernSkin).toContain('inset-inline-end: var(--ds-floatbutton-dot-offset-inline, -4px)');
     expect(modernSkin).toContain('inset-inline-end: var(--ds-floatbutton-badge-offset-inline, -8px)');
     expect(modernSkin).toContain('var(--ds-floatbutton-badge-padding-block, 1px) var(--ds-floatbutton-badge-padding-inline, 6px)');
@@ -156,8 +157,9 @@ describe('FloatButton modern advanced engine coverage', () => {
     }
 
     // Logical fixed placement: mirrors under RTL, never physical right-6.
-    expect(uncontrolledRoot.className).toContain('end-6');
+    expect(uncontrolledRoot.className).not.toContain('end-6');
     expect(uncontrolledRoot.className).not.toContain('right-6');
+    expect(modernSkin).toContain('inset-inline-end: var(--ds-spacing-6)');
 
     fireEvent.mouseEnter(uncontrolledRoot);
     expect(onOpenChange).toHaveBeenCalledWith(true);
@@ -183,7 +185,9 @@ describe('FloatButton modern advanced engine coverage', () => {
       throw new Error('Expected controlled group container');
     }
 
-    expect(controlledRoot.querySelector('.opacity-100.translate-y-0')).toBeTruthy();
+    const panel = controlledRoot.querySelector('[data-part="panel"]');
+    expect(panel).toHaveAttribute('data-open', 'true');
+    expect(controlledRoot.querySelector('.opacity-100.translate-y-0')).toBeNull();
     const groupTrigger = controlledRoot.querySelector('[data-part="trigger"]') as HTMLElement;
     for (const cls of DAISY_CLASSES) {
       expect(groupTrigger.classList.contains(cls)).toBe(false);
@@ -229,8 +233,9 @@ describe('FloatButton modern advanced engine coverage', () => {
     for (const cls of DAISY_CLASSES) {
       expect(button.classList.contains(cls)).toBe(false);
     }
-    expect(button.className).toContain('end-6');
+    expect(button.className).not.toContain('end-6');
     expect(button.className).not.toContain('right-6');
+    expect(modernSkin).toContain('inset-inline-end: var(--ds-spacing-6)');
 
     rerender(
       <ModernBackTop

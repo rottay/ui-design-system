@@ -51,7 +51,8 @@
     "go_to": "الانتقال إلى الصفحة",
     "items_per_page": "{count} لكل صفحة",
     "navigation": "ترقيم الصفحات",
-    "total_items": "إجمالي {total} عنصر"
+    "total_items": "إجمالي {total} عنصر",
+    "size_changer": "عناصر لكل صفحة"
   },
   "table": {
     "empty": "لا توجد بيانات",
@@ -88,7 +89,8 @@
     "add_file": "إضافة ملف",
     "upload_file": "رفع ملف",
     "drop_hint": "أسقط الملفات هنا أو انقر للرفع",
-    "progress": "تقدم الرفع: {percent}%"
+    "progress": "تقدم الرفع: {percent}%",
+    "retry_named": "إعادة محاولة {name}"
   },
   "datepicker": {
     "placeholder": "اختر تاريخًا",
@@ -130,7 +132,11 @@
     "minutes_label": "د",
     "seconds_label": "ث",
     "start_time": "وقت البدء",
-    "end_time": "وقت الانتهاء"
+    "end_time": "وقت الانتهاء",
+    "am": "ص",
+    "pm": "م",
+    "meridiem_label": "ص/م",
+    "time_picker": "منتقي الوقت"
   },
   "search": {
     "placeholder": "بحث...",
@@ -221,14 +227,30 @@
     "navNextMonth": "الشهر التالي",
     "navNextYear": "السنة التالية",
     "gridLabel": "شبكة التواريخ",
-    "monthsGridLabel": "شبكة الأشهر"
+    "monthsGridLabel": "شبكة الأشهر",
+    "months_short": {
+      "january": "يناير",
+      "february": "فبراير",
+      "march": "مارس",
+      "april": "أبريل",
+      "may": "مايو",
+      "june": "يونيو",
+      "july": "يوليو",
+      "august": "أغسطس",
+      "september": "سبتمبر",
+      "october": "أكتوبر",
+      "november": "نوفمبر",
+      "december": "ديسمبر"
+    }
   },
   "colorpicker": {
     "clear": "مسح",
     "chooseColor": "اختر اللون",
     "hexLabel": "اللون السداسي عشري",
     "selectColor": "حدد اللون {color}",
-    "invalidHex": "أدخل لونًا سداسيًا عشريًا صالحًا (مثل #1677ff)"
+    "invalidHex": "أدخل لونًا سداسيًا عشريًا صالحًا (مثل #1677ff)",
+    "triggerLabel": "منتقي اللون",
+    "formatLabel": "تنسيق اللون"
   },
   "qrcode": {
     "loading": "جارٍ التحميل",
@@ -240,7 +262,9 @@
   },
   "markdownView": {
     "taskChecked": "مهمة مكتملة",
-    "taskUnchecked": "مهمة غير مكتملة"
+    "taskUnchecked": "مهمة غير مكتملة",
+    "tableRegionLabel": "جدول",
+    "codeRegionLabel": "كتلة التعليمات البرمجية"
   },
   "mentions": {
     "not_found": "لا توجد نتائج",
@@ -381,7 +405,8 @@
   },
   "autocomplete": {
     "not_found": "لا توجد نتائج",
-    "clear": "مسح"
+    "clear": "مسح",
+    "input_label": "الإكمال التلقائي"
   },
   "calendarView": {
     "today": "اليوم",
@@ -398,7 +423,8 @@
     "not_found": "لا توجد بيانات",
     "clear": "مسح",
     "column_label": "المستوى {level}",
-    "search_results": "نتائج البحث"
+    "search_results": "نتائج البحث",
+    "loading": "جارٍ التحميل..."
   },
   "stepper": {
     "navigation": "خطوات التقدم"
@@ -406,7 +432,8 @@
   "tree": {
     "collapse": "طي",
     "expand": "توسيع",
-    "select_node": "تحديد {title}"
+    "select_node": "تحديد {title}",
+    "label": "شجرة"
   },
   "descriptions": {
     "region_label": "قائمة الوصف"
@@ -1011,7 +1038,10 @@
     "actions": "إجراءات المعالج"
   },
   "taginput": {
-    "placeholder": "اكتب واضغط Enter"
+    "placeholder": "اكتب واضغط Enter",
+    "feedback_duplicate": "الوسم موجود بالفعل",
+    "feedback_max": "تم بلوغ الحد الأقصى لعدد الوسوم",
+    "feedback_invalid": "الوسم غير مسموح به"
   },
   "tenantPreview": {
     "colorPalette": "لوحة الألوان",
@@ -1273,5 +1303,26 @@
   "viewModeSwitcher": {
     "groupLabel": "وضع العرض",
     "disabledWithReason": "{label} (غير متاح: {reason})"
+  },
+  "image": {
+    "failedToLoad": "فشل تحميل الصورة"
+  },
+  "statistic": {
+    "trendPositive": "في ارتفاع",
+    "trendNegative": "في انخفاض",
+    "trendWarning": "تحذير"
+  },
+  "passwordInput": {
+    "strength_weak": "ضعيفة",
+    "strength_fair": "مقبولة",
+    "strength_good": "جيدة",
+    "strength_strong": "قوية"
+  },
+  "meter": {
+    "threshold": {
+      "optimal": "النطاق الأمثل",
+      "suboptimal": "نطاق دون الأمثل",
+      "critical": "النطاق الحرج"
+    }
   }
 }

@@ -43,6 +43,9 @@ import { NavigationUpIcon } from '@/graphics/icons/presentation/semantic/generat
 import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 
+/** Row-shaped skeleton placeholders rendered while the first page loads. */
+const SKELETON_ROW_COUNT = 4;
+
 /**
  * Modern Table engine painted by the modern skin (`table.css`).
  *
@@ -97,6 +100,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
     handleSelectAll,
     handleSelectRow,
     isAllSelected,
+    isSomeSelected,
     expandedRowKeys,
     handleToggleExpand,
     isRowExpandable,
@@ -127,6 +131,12 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   // value falls through to 'md' so the table always has valid sizing. The skin
   // keys cell padding and font size on the stamped `data-size`.
   const sizeKey = toCanonicalSize(size) ?? 'md';
+  // The `loading` prop accepts the Spin-style object form ({ spinning, delay })
+  // alongside the boolean; normalize once so `{ spinning: false }` does not
+  // read as truthy. `delay` is not honored yet (the overlay renders
+  // immediately) -- documented debt, needs runtime support.
+  const isLoading =
+    typeof loading === 'object' && loading !== null ? loading.spinning !== false : !!loading;
   const hasExpandable = !!expandable?.expandedRowRender;
   // The expand column is rendered unless the consumer explicitly opts out via
   // showExpandColumn: false -- useful when they want expand-on-row-click only.
@@ -386,15 +396,34 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
     if (!hasFilters) return null;
     return (
       <tr data-part="filter-row">
-        {rowSelection && <th data-part="filter-spacer" />}
-        {showExpandCol && <th data-part="filter-spacer" />}
+        {rowSelection && <th data-part="filter-spacer" data-hairline={showHeaderHairline ? 'true' : undefined} />}
+        {showExpandCol && <th data-part="filter-spacer" data-hairline={showHeaderHairline ? 'true' : undefined} />}
         {leafColumns.map((col, i) => {
           const field = columnFieldKey(col);
           if (!col.filterSearch && !col.filters) {
-            return <th key={col.key || field || i} />;
+            // Columns without a filter still occupy a cell in the filter row;
+            // they share the part and the hairline so the row reads as one
+            // continuous band instead of unstyled gaps. Pinned columns pin
+            // this cell too (same seam as the filter input branch below).
+            return (
+              <th
+                key={col.key || field || i}
+                data-part="filter-cell"
+                data-hairline={showHeaderHairline ? 'true' : undefined}
+                data-fixed={col.fixed === true ? 'true' : (col.fixed || undefined)}
+              />
+            );
           }
           return (
-            <th key={col.key || field || i} data-part="filter-cell">
+            <th
+              key={col.key || field || i}
+              data-part="filter-cell"
+              data-hairline={showHeaderHairline ? 'true' : undefined}
+              // Pinned columns pin their filter cell too: without the stamp
+              // the filter input scrolled away under its own stuck column,
+              // splitting the header band during horizontal scroll.
+              data-fixed={col.fixed === true ? 'true' : (col.fixed || undefined)}
+            >
               <input
                 type="text"
                 data-part="field"
@@ -415,11 +444,41 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   const renderBodyRows = () => {
     if (displayData.length === 0) {
       return (
-        <tr>
-          <td colSpan={totalColSpan} data-part="empty-cell">
-            {locale?.emptyText || t('table.empty')}
-          </td>
-        </tr>
+        <>
+          {/* First-load skeleton: row-shaped placeholders that mirror the
+              column anatomy (control wells + one bar per leaf column) so the
+              pending state reads as a table, not a blank box. The empty cell
+              stays rendered underneath -- it carries the locale-aware text
+              and keeps the spatial contract once the overlay fades. */}
+          {isLoading &&
+            Array.from({ length: SKELETON_ROW_COUNT }, (_, rowIdx) => (
+              <tr key={`skeleton-${rowIdx}`} data-part="skeleton-row" aria-hidden="true">
+                {showExpandCol && (
+                  <td data-part="skeleton-cell" data-kind="control">
+                    <span data-part="skeleton-bar" />
+                  </td>
+                )}
+                {rowSelection && (
+                  <td data-part="skeleton-cell" data-kind="control">
+                    <span data-part="skeleton-bar" />
+                  </td>
+                )}
+                {leafColumns.map((column, colIdx) => (
+                  <td
+                    key={column.key || columnFieldKey(column) || colIdx}
+                    data-part="skeleton-cell"
+                  >
+                    <span data-part="skeleton-bar" />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          <tr>
+            <td colSpan={totalColSpan} data-part="empty-cell">
+              {locale?.emptyText || t('table.empty')}
+            </td>
+          </tr>
+        </>
       );
     }
 
@@ -435,6 +494,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       const isExpanded = expandedRowKeys.has(key);
       const canExpand = isRowExpandable(record);
       const rowClass = typeof rowClassName === 'function' ? rowClassName(record, actualIndex) : rowClassName;
+      // Per-row selection overrides (disabled/name) from the contract's
+      // getCheckboxProps -- previously ignored, so a flagged row could still
+      // be checked and select-all could never settle.
+      const selectionProps = rowSelection?.getCheckboxProps?.(record) ?? {};
 
       return (
         <Fragment key={key}>
@@ -474,14 +537,22 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
             {/* Selection column */}
             {rowSelection && (
               <td data-part="selection-cell">
-                <input
-                  type={rowSelection.type === 'radio' ? 'radio' : 'checkbox'}
-                  data-part="selection-control"
-                  checked={isSelected}
-                  onChange={(e) => handleSelectRow(record, actualIndex, e.target.checked)}
-                  name={rowSelection.type === 'radio' ? 'table-row-selection' : undefined}
-                  aria-label={t('table.select_row', { index: actualIndex + 1 })}
-                />
+                {/* The label is the control's native hit area: a click anywhere
+                    on its box toggles the input with no JS, so the skin can grow
+                    the coarse-pointer target to fill the cell (the 44px floor
+                    stays capped by the dense row -- same law the header resize
+                    handle documents). A disabled input's label does not toggle. */}
+                <label data-part="selection-hit">
+                  <input
+                    type={rowSelection.type === 'radio' ? 'radio' : 'checkbox'}
+                    data-part="selection-control"
+                    checked={isSelected}
+                    disabled={selectionProps.disabled || undefined}
+                    onChange={(e) => handleSelectRow(record, actualIndex, e.target.checked)}
+                    name={selectionProps.name ?? (rowSelection.type === 'radio' ? 'table-row-selection' : undefined)}
+                    aria-label={t('table.select_row', { index: actualIndex + 1 })}
+                  />
+                </label>
               </td>
             )}
 
@@ -507,6 +578,19 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                 String(value ?? '')
               );
 
+              // Truncated cells expose the full value through the native
+              // tooltip (Ant parity): the visual ellipsis alone strands
+              // pointer users. Custom renders own their own affordance, and
+              // the { showTitle: false } opt-out is honored.
+              const ellipsisTitle =
+                column.ellipsis &&
+                !cellIsEditing &&
+                !column.render &&
+                (typeof column.ellipsis !== 'object' || column.ellipsis.showTitle !== false) &&
+                value != null
+                  ? String(value)
+                  : undefined;
+
               return (
                 <td
                   key={column.key || field || colIndex}
@@ -517,6 +601,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   data-fixed={column.fixed === true ? 'true' : (column.fixed || undefined)}
                   data-align={column.align || undefined}
                   data-field-type={column.fieldType || undefined}
+                  title={ellipsisTitle}
                   style={{
                     width,
                     // Ellipsis is a per-column prop projection (overflow +
@@ -564,6 +649,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       data-part="table"
       data-bordered={bordered ? 'true' : undefined}
       data-size={sizeKey}
+      aria-busy={isLoading || undefined}
       style={{
         // The table's own width is a projection of the consumer's `scroll.x`
         // contract, and `tableLayout` is a direct prop -- both stay inline.
@@ -592,6 +678,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                 <th
                   data-part="header-cell"
                   data-cell-kind="expand"
+                  data-hairline={showHeaderHairline ? 'true' : undefined}
                   rowSpan={headerRows.length > 1 ? headerRows.length : undefined}
                   style={stickyConfig.enabled ? { top: stickyConfig.offsetHeader } : undefined}
                   data-sticky={stickyConfig.enabled ? 'true' : undefined}
@@ -603,18 +690,26 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                 <th
                   data-part="header-cell"
                   data-cell-kind="selection"
+                  data-hairline={showHeaderHairline ? 'true' : undefined}
                   rowSpan={headerRows.length > 1 ? headerRows.length : undefined}
                   style={stickyConfig.enabled ? { top: stickyConfig.offsetHeader } : undefined}
                   data-sticky={stickyConfig.enabled ? 'true' : undefined}
                 >
                   {rowSelection.type !== 'radio' && !rowSelection.hideSelectAll && (
-                    <input
-                      type="checkbox"
-                      data-part="selection-control"
-                      checked={isAllSelected}
-                      onChange={(e) => handleSelectAll(e.target.checked)}
-                      aria-label={t('table.select_all')}
-                    />
+                    <label data-part="selection-hit">
+                      <input
+                        type="checkbox"
+                        data-part="selection-control"
+                        checked={isAllSelected}
+                        // Native indeterminate is a property, not an attribute --
+                        // it has to be assigned through the element ref.
+                        ref={(el) => {
+                          if (el) el.indeterminate = isSomeSelected;
+                        }}
+                        onChange={(e) => handleSelectAll(e.target.checked)}
+                        aria-label={t('table.select_all')}
+                      />
+                    </label>
                   )}
                 </th>
               )}
@@ -672,7 +767,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       )}
 
       {/* Loading overlay */}
-      {loading && (
+      {isLoading && (
         <div data-part="loading-overlay">
           <span
             data-part="spinner"
@@ -686,7 +781,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       <div
         ref={virtualEnabled ? scrollContainerRef : undefined}
         data-part="scroll-container"
-        data-loading={loading ? 'true' : undefined}
+        data-loading={isLoading ? 'true' : undefined}
         data-resizing={resizingColumn ? 'true' : undefined}
         style={{
           maxHeight: scrollYValue,

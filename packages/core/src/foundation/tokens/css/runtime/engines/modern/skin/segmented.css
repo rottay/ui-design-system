@@ -22,6 +22,22 @@
  * a SHORTHAND. The option's `border: none` is a color-free reset, exempt. The
  * option rules inherit the root's two classes through the descendant combinator,
  * so their `background`/`color` clear (0,3,0) comfortably.
+ *
+ * PASS-2 LAW (batch-28): hover paint (root frame lift, option wash/lift) is
+ * gated to `@media (hover: hover)`; the option `:active` dip is the touch
+ * counterpart. The decorative inset keylines (root, selected option) scale by
+ * `--ds-effect-intensity` so `effectIntensity: 0` removes decoration without
+ * flattening the selected frame. Nested radius is intentional: the option's
+ * `--ds-radius-sm` sits inside the root's `--ds-radius-md` minus the track
+ * padding, so inner and outer corners read as one frame grammar. In
+ * forced-colors the track and every option keep a ButtonText frame, selection
+ * remaps to Highlight, and disabled options remap to GrayText (opacity is
+ * stripped there).
+ *
+ * P2 (batch p2-21): block mode lifts the 16rem option cap (a scroll-mode
+ * bound that kept two options from filling a wide track), and the icon
+ * part's dead transition (no rule ever transforms or tints it — the
+ * single-axis-reading verdict) is removed.
  */
 
 .rottay-segmented.rottay-segmented--modern[data-part='root'] {
@@ -51,7 +67,10 @@
   );
   box-shadow: var(
     --ds-segmented-shadow,
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 80%, transparent),
+    /* material layer 4 (optical edge): intensity-scaled inset top keyline —
+       at `--ds-effect-intensity: 0` it dissolves while the shadow channel
+       keeps the track's hierarchy (card.css precedent). */
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(80% * var(--ds-effect-intensity)), transparent),
     var(--ds-shadow-xs)
   );
   transition:
@@ -68,16 +87,20 @@
   display: none;
 }
 
-.rottay-segmented.rottay-segmented--modern[data-part='root'][data-part='root']:hover {
-  border-color: var(
-    --ds-segmented-border-hover,
-    color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border))
-  );
-  box-shadow: var(
-    --ds-segmented-shadow-hover,
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent),
-    var(--ds-elevation-1)
-  );
+/* Root hover is gated to hover-capable pointers (lane law); the option-level
+   `:active` press below is the touch counterpart of the hover treatment. */
+@media (hover: hover) {
+  .rottay-segmented.rottay-segmented--modern[data-part='root'][data-part='root']:hover {
+    border-color: var(
+      --ds-segmented-border-hover,
+      color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border))
+    );
+    box-shadow: var(
+      --ds-segmented-shadow-hover,
+      inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(86% * var(--ds-effect-intensity)), transparent),
+      var(--ds-elevation-1)
+    );
+  }
 }
 
 .rottay-segmented.rottay-segmented--modern[data-part='root'][data-block='true'] {
@@ -148,6 +171,9 @@
 
 .rottay-segmented--modern[data-part='root'][data-block='true'] [data-part='option'] {
   flex: 1 1 0;
+  /* Block mode fills the track: the 16rem truncation cap (a scroll-mode
+     bound) must not keep two options from stretching a wide container. */
+  max-inline-size: none;
 }
 
 .rottay-segmented--modern[data-part='root'] [data-part='icon'] {
@@ -158,9 +184,10 @@
   width: var(--ds-segmented-current-icon-size);
   height: var(--ds-segmented-current-icon-size);
   border-radius: var(--ds-segmented-icon-radius, var(--ds-radius-xs));
-  transition:
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+  /* No transition here: the pass-2 verdict keeps the icon on the option's
+     ink with no lift/tint of its own (single-axis reading), so no rule ever
+     changes a transitionable property on this part — the former
+     transform/background-color transition was dead weight. */
 }
 
 .rottay-segmented--modern[data-part='root'] [data-part='label'] {
@@ -171,30 +198,32 @@
 }
 
 .rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='false'] {
-  background: var(--ds-segmented-item-bg, transparent);
+  background: var(--ds-segmented-item-bg);
   color: var(--ds-segmented-item-color, var(--ds-color-text-secondary));
 }
 
-.rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='false']:hover {
-  /* `--ds-color-bg-hover` is a dark inset under both first-party themes
-     (#18181c) — dark-on-dark with the hover ink. The hover surface mixes
-     from the paired card chrome instead (measured: text-primary on
-     `--ds-card-bg` = 15.0:1 BitHire / 14.8:1 TMM). */
-  background: var(
-    --ds-segmented-item-bg-hover,
-    color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-color-bg-secondary)))
-  );
-  color: var(--ds-segmented-item-color-hover, var(--ds-color-text-primary));
-  border-color: var(
-    --ds-segmented-item-border-hover,
-    color-mix(in srgb, var(--ds-color-border) 72%, transparent)
-  );
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='false']:hover {
+    /* `--ds-color-bg-hover` is a dark inset under both first-party themes
+       (#18181c) — dark-on-dark with the hover ink. The hover surface mixes
+       from the paired card chrome instead (measured: text-primary on
+       `--ds-card-bg` = 15.0:1 BitHire / 14.8:1 TMM). */
+    background: var(
+      --ds-segmented-item-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-color-bg-secondary)))
+    );
+    color: var(--ds-segmented-item-color-hover, var(--ds-color-text-primary));
+    border-color: var(
+      --ds-segmented-item-border-hover,
+      color-mix(in srgb, var(--ds-color-border) 72%, transparent)
+    );
+    transform: translateY(-1px);
+  }
 }
 
 /* A held press settles the option back onto the track with a tactile dip. */
 .rottay-segmented--modern[data-part='root'] [data-part='option']:not([data-disabled='true']):active {
-  transform: translateY(0) scale(var(--ds-state-press-scale, 0.98));
+  transform: translateY(0) scale(var(--ds-state-press-scale));
 }
 
 .rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='true'] {
@@ -213,7 +242,7 @@
   );
   box-shadow: var(
     --ds-segmented-item-shadow-selected,
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) calc(82% * var(--ds-effect-intensity)), transparent),
     var(--ds-shadow-xs)
   );
   font-weight: var(--ds-segmented-item-font-weight-selected, var(--ds-font-weight-semibold));
@@ -243,8 +272,14 @@
 }
 
 /* ---- forced colors: every option keeps a frame; selection stays readable.
-        Doubled data-part ties the (0,4,0) border shorthand, later source wins. ---- */
+        Doubled data-part ties the (0,4,0) border shorthand, later source wins.
+        Opacity is stripped in this mode: disabled options remap to the
+        GrayText system color so the track itself keeps its ButtonText frame. ---- */
 @media (forced-colors: active) {
+  .rottay-segmented.rottay-segmented--modern[data-part='root'][data-part='root'] {
+    border-color: ButtonText;
+  }
+
   .rottay-segmented--modern[data-part='root'] [data-part='option'][data-part='option'] {
     forced-color-adjust: auto;
     border-color: ButtonText;
@@ -253,6 +288,10 @@
   .rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='true'] {
     background: Highlight;
     color: HighlightText;
+  }
+
+  .rottay-segmented--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
+    color: GrayText;
   }
 }
 

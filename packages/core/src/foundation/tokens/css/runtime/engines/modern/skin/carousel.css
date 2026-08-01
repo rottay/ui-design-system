@@ -25,23 +25,29 @@
  *
  * RTL (K4-C): the engine positions arrows and lateral dots with LOGICAL
  * utilities (`start-2`/`end-2`), so they mirror under `:dir(rtl)` for free.
- * Two pieces cannot be logical utilities and live here instead:
- *   1. `--ds-carousel-rtl-factor` multiplies the horizontal slide offset so
- *      the travel direction mirrors (translateY is direction-invariant and
- *      untouched). It is declared on the ROOT so the per-slide inline
- *      `translateX(calc(... * var(--ds-carousel-rtl-factor, 1)))` inherits it.
- *   2. Horizontal arrow glyphs are text (`←`/`→`), so the buttons flip via
- *      `scaleX(-1)`. The buttons' `-translate-y-1/2` rides the standalone
- *      `translate` property (Tailwind v4), which composes with `transform`.
+ * The one piece that cannot be a logical utility lives here instead:
+ * `--ds-carousel-rtl-factor` multiplies the horizontal slide offset so the
+ * travel direction mirrors (translateY is direction-invariant and
+ * untouched). It is declared on the ROOT so the per-slide inline
+ * `translateX(calc(... * var(--ds-carousel-rtl-factor, 1)))` inherits it.
+ * Arrow glyphs need NO flip rule (Phase B): they are governed `navigation.*`
+ * icons — the horizontal roles auto-mirror through the icon facade and the
+ * vertical roles are direction-invariant.
  *
  * Every rule uses a CHILD combinator. `data-part` is a shared vocabulary and each
  * slide holds arbitrary consumer content, which may itself be a component that
  * stamps `slide`, `arrow` or `dot`.
  *
  * SPECIFICITY (P-48): the arrow's `border` shorthand carries a real colour, so it
- * must clear the tenant's unlayered `*` border-color floor at (0,3,1); the repeated
- * `[data-part='arrow']` buys the fourth unit. It stays a SHORTHAND because preflight
- * zeroes `border-width` on every element.
+ * must clear the tenant's unlayered `*` border-color floor at (0,3,1); the
+ * `[data-part='arrow'][data-direction]` pair buys the fourth unit (data-direction
+ * is always stamped). It stays a SHORTHAND because preflight zeroes
+ * `border-width` on every element.
+ *
+ * PHASE B: swipe `touch-action` on the track (cross-axis scroll stays with the
+ * page), governed `navigation.*` arrow icons, and a real `:disabled` edge
+ * arrow (shared `--ds-state-disabled-opacity`; GrayText under forced-colors,
+ * where opacity is stripped).
  *
  * The slide offset is arithmetic over the live slide index (`(index - currentSlide)
  * * 100%`), so it cannot be enumerated as a rule; it rides the
@@ -66,19 +72,29 @@
   overflow: hidden;
 }
 
+/* ---- swipe (Phase B): with `swipe` on, the cross axis stays with the PAGE
+        so a vertical scroll gesture starting on a horizontal carousel never
+        gets captured (and vice versa); the gesture axis reaches the engine's
+        pointer handlers. `swipe: false` leaves the UA default untouched. ---- */
+.rottay-carousel.rottay-carousel--modern[data-swipe='true'] > [data-part='track'] {
+  touch-action: pan-y;
+}
+.rottay-carousel.rottay-carousel--modern[data-swipe='true'][data-vertical='true'] > [data-part='track'] {
+  touch-action: pan-x;
+}
+
 .rottay-carousel.rottay-carousel--modern > [data-part='track'] > [data-part='slide'] {
   position: absolute;
   inset: 0;
 }
 
-/* ---- RTL: mirror horizontal travel + horizontal arrow glyphs ---- */
+/* ---- RTL: mirror horizontal travel. The arrow glyphs no longer need a skin
+        flip: they are governed `navigation.*` icons whose horizontal roles
+        auto-mirror through the icon facade (Phase B), and the vertical roles
+        are direction-invariant. ---- */
 :dir(rtl) .rottay-carousel.rottay-carousel--modern,
 .rottay-carousel.rottay-carousel--modern:dir(rtl) {
   --ds-carousel-rtl-factor: -1;
-}
-:dir(rtl) .rottay-carousel.rottay-carousel--modern > [data-part='arrow'],
-.rottay-carousel.rottay-carousel--modern > [data-part='arrow']:dir(rtl) {
-  transform: scaleX(-1);
 }
 
 .rottay-carousel.rottay-carousel--modern > [data-part='track'] > [data-part='slide'] {
@@ -104,20 +120,21 @@
   border-radius: 50%;
   border: 1px solid var(--ds-color-border);
   box-shadow: var(--ds-elevation-1);
-  inline-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale, 1));
-  font-size: var(--ds-font-size-xs, 12px);
+  inline-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));
+  font-size: var(--ds-font-size-xs);
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
-/* Pointer-fine hover only (hover law); touch feedback is the press below. */
+/* Pointer-fine hover only (hover law); touch feedback is the press below. A
+   disabled edge arrow keeps rest paint (no affordance on a dead control). */
 @media (hover: hover) {
-  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:hover {
+  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:hover:not(:disabled) {
     border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border));
     color: var(--ds-color-primary);
     box-shadow: var(--ds-elevation-2);
@@ -133,16 +150,24 @@
 .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:active {
   border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border));
   color: var(--ds-color-primary);
-  transform: scale(var(--ds-state-press-scale, 0.98));
+  transform: scale(var(--ds-state-press-scale));
 }
 .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:active {
-  transform: scale(var(--ds-state-press-scale, 0.98));
+  transform: scale(var(--ds-state-press-scale));
+}
+
+/* Disabled edge arrow (infinite=off at a boundary): readable but unmistakably
+   inactive, riding the shared disabled-opacity channel — no new hook. */
+.rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:disabled {
+  cursor: default;
+  opacity: var(--ds-state-disabled-opacity);
+  box-shadow: none;
 }
 
 .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:focus-visible,
 .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 @media (pointer: coarse) {
@@ -182,10 +207,10 @@
   border-radius: 9999px;
   cursor: pointer;
   transition:
-    inline-size var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    inline-size var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='true'] {
@@ -226,6 +251,12 @@
     background: Canvas;
     box-shadow: none;
     color: ButtonText;
+  }
+  /* Opacity is stripped in forced-colors, so the disabled edge arrow
+     re-expresses through the system disabled ink instead. */
+  .rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-direction]:disabled {
+    border-color: GrayText;
+    color: GrayText;
   }
   .rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='true'] {
     background: Highlight;

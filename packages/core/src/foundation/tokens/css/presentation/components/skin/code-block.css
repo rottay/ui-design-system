@@ -13,11 +13,16 @@
  *       from the old inline styles) and its interaction states (hover,
  *       active, focus-visible and the transient copied confirmation);
  *   (b) the scroll region's focus ring (the region became keyboard-focusable
- *       in the K4-B R4 remediation; the ring is its contract); and
+ *       in the K4-B R4 remediation; the ring is its contract);
  *   (c) the ::selection tint inside the block (state paint the inline styles
- *       cannot express -- same tier as (a)'s interaction states).
- * Every other part (root surface, header, gutter, code) keeps its inline
- * paint in `index.tsx`. Inline styles cannot express :hover/:focus-visible
+ *       cannot express -- same tier as (a)'s interaction states); and
+ *   (d) the scroll-edge affordance of the scroll region (Phase B): gradient
+ *       scroll shadows via the background-attachment idiom -- paint the inline
+ *       styles cannot layer without re-owning the region's background, and the
+ *       cover tint must read the surface token, which only a stylesheet rule
+ *       can keep in sync with the skin grammar.
+ * Every other part (root surface, header, language badge, gutter, code) keeps
+ * its inline paint in `index.tsx`. Inline styles cannot express :hover/:focus-visible
  * or selection state, which is why the interactive paint lives here.
  *
  * Hover grammar: the certified ghost-button law (same as Transfer's
@@ -40,9 +45,60 @@
   font-weight: 500;
   cursor: pointer;
   transition:
-    background var(--ds-code-block-motion-duration, var(--ds-motion-fast, 120ms)) ease,
-    color var(--ds-code-block-motion-duration, var(--ds-motion-fast, 120ms)) ease,
-    border-color var(--ds-code-block-motion-duration, var(--ds-motion-fast, 120ms)) ease;
+    background var(--ds-code-block-motion-duration, var(--ds-motion-fast)) ease,
+    color var(--ds-code-block-motion-duration, var(--ds-motion-fast)) ease,
+    border-color var(--ds-code-block-motion-duration, var(--ds-motion-fast)) ease;
+}
+
+/* The idle/copied glyph sits on the button's text baseline: inline-flex with a
+   fixed 1em square keeps the icon optically centered next to the xs label and
+   holds the button's inline size steady across the copy -> copied swap (both
+   glyphs are 12px; the label is the only width variable). */
+.ds-code-block[data-part='root'] [data-part='copy-tick'] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1em;
+  block-size: 1em;
+}
+
+/* Coarse-pointer floor (B1.3): the chrome-sized control grows to the governed
+   touch target on touch devices; fine pointers keep the compact geometry. The
+   centering above keeps the hit-area growth invisible. */
+@media (pointer: coarse) {
+  .ds-code-block[data-part='root'] [data-part='copy-button'] {
+    min-block-size: var(--ds-touch-target-min);
+    min-inline-size: var(--ds-touch-target-min);
+    justify-content: center;
+  }
+}
+
+/* Scroll-edge affordance (Phase B): the region tells the truth about hidden
+   content. The background-attachment idiom paints edge shadows that appear
+   only when more content exists in that direction -- `local` covers ride the
+   content (they mask the shadow exactly when the edge is reached), `scroll`
+   shadows stay pinned to the frame. The cover tint reads the same inset
+   surface the root paints, so the masks are invisible at rest; when the
+   region cannot scroll (wrap, no maxHeight) covers and shadows coincide and
+   nothing shows. No JS, no scroll listeners, compositor-free static paint. */
+.ds-code-block[data-part='root'] [data-part='scroll'] {
+  background-image:
+    linear-gradient(to bottom, var(--ds-surface-inset) 30%, transparent),
+    linear-gradient(to top, var(--ds-surface-inset) 30%, transparent),
+    radial-gradient(
+      farthest-side at 50% 0,
+      var(--_ds-proto-codeblock-scroll-shadow, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent)),
+      transparent
+    ),
+    radial-gradient(
+      farthest-side at 50% 100%,
+      var(--_ds-proto-codeblock-scroll-shadow, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent)),
+      transparent
+    );
+  background-position: 0 0, 0 100%, 0 0, 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 2.5rem, 100% 2.5rem, 100% 0.625rem, 100% 0.625rem;
+  background-attachment: local, local, scroll, scroll;
 }
 
 /* Pointer-fine hover only (hover law); the press below is the touch and
@@ -111,6 +167,13 @@
     outline: 2px solid Highlight;
     box-shadow: none;
   }
+
+  /* The scroll-edge shadows are background-image paint: forced colors strips
+     them at used-value time (no explicit reset needed) and the block inverts
+     safely -- root frame/background, header tint and language-badge chip are
+     inline author colors, so the UA re-maps them to Canvas/CanvasText; the
+     channeled scrollbar falls back to the system scrollbar. The block's frame
+     and structure survive the inversion with zero author intervention. */
 
   /* Line-highlight bands carry STATE (which lines are flagged), and the
      system palette reserves exactly this pair for it. The band rides a custom

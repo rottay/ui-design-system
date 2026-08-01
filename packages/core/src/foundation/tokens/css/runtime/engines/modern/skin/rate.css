@@ -28,8 +28,16 @@
  * SCOPE ROOT is `.ds-rate.ds-rate--modern[data-part='root']` (the legacy
  * `rottay-rate rottay-rate--modern` pair stays on the element as a
  * compatibility alias; no paint keys on it), carrying `data-size`,
- * `data-disabled`, `data-readonly`; each star is a
+ * `data-disabled`, `data-readonly`, `data-previewing`; each star is a
  * `<span data-part='star' data-state='full'|'half'|'empty' data-focused>`.
+ *
+ * VALUE GRAMMAR (B7-02): selected never reads through hue alone -- empty
+ * stars and the half-star track render as an OUTLINE glyph (fill: none,
+ * stroke currentColor) against the filled selected silhouette. While the
+ * pointer floats a candidate value (`data-previewing='true'`, engine-
+ * stamped) the candidate set tints with the governed
+ * `--ds-rate-hover-color` channel so preview and committed value are
+ * visibly distinct states.
  *
  * Per-star fill color is runtime (it follows `displayValue`, hover included),
  * so it rides the `--ds-rate-star-fill` custom-property hatch stamped on each
@@ -46,30 +54,30 @@
 
 .ds-rate.ds-rate--modern[data-part='root'] {
   display: inline-flex;
-  gap: var(--ds-rate-gap, 4px);
+  gap: var(--ds-rate-gap);
 }
 
 /* Public size geometry: the canonical component channels (this is the rule
    set that replaces the drained DaisyUI `rating-{size}` classes). */
 .ds-rate.ds-rate--modern[data-part='root'][data-size='xs'] [data-part='star'] {
-  inline-size: var(--ds-rate-xs-size, 16px);
-  block-size: var(--ds-rate-xs-size, 16px);
+  inline-size: var(--ds-rate-xs-size);
+  block-size: var(--ds-rate-xs-size);
 }
 .ds-rate.ds-rate--modern[data-part='root'][data-size='sm'] [data-part='star'] {
-  inline-size: var(--ds-rate-sm-size, 20px);
-  block-size: var(--ds-rate-sm-size, 20px);
+  inline-size: var(--ds-rate-sm-size);
+  block-size: var(--ds-rate-sm-size);
 }
 .ds-rate.ds-rate--modern[data-part='root'][data-size='md'] [data-part='star'] {
-  inline-size: var(--ds-rate-md-size, 24px);
-  block-size: var(--ds-rate-md-size, 24px);
+  inline-size: var(--ds-rate-md-size);
+  block-size: var(--ds-rate-md-size);
 }
 .ds-rate.ds-rate--modern[data-part='root'][data-size='lg'] [data-part='star'] {
-  inline-size: var(--ds-rate-lg-size, 32px);
-  block-size: var(--ds-rate-lg-size, 32px);
+  inline-size: var(--ds-rate-lg-size);
+  block-size: var(--ds-rate-lg-size);
 }
 .ds-rate.ds-rate--modern[data-part='root'][data-size='xl'] [data-part='star'] {
-  inline-size: var(--ds-rate-xl-size, 40px);
-  block-size: var(--ds-rate-xl-size, 40px);
+  inline-size: var(--ds-rate-xl-size);
+  block-size: var(--ds-rate-xl-size);
 }
 
 .ds-rate.ds-rate--modern [data-part='star'] {
@@ -80,8 +88,8 @@
   cursor: default;
   color: var(--ds-rate-star-fill);
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-in-out, ease-in-out),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-in-out, ease-in-out);
+    color var(--ds-motion-fast) var(--ds-motion-ease-in-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-in-out);
 }
 
 /* Star glyphs fill the star box (drained from the `w-full h-full` utilities). */
@@ -90,26 +98,54 @@
   block-size: 100%;
 }
 
+/* FILL GRAMMAR (B7-02): the value used to read through HUE alone -- the same
+   filled star painted warning vs neutral. Empty stars and the half-star
+   background track now render as an OUTLINE glyph (fill: none, stroke
+   currentColor, hairline width), so selected vs unselected is shape-coded
+   (filled silhouette vs stroked outline) and survives any tenant palette,
+   monochrome printing and the hue-insensitivity cases; color becomes the
+   reinforcement layer, never the only signal. The rule keys on the SVG
+   glyphs (the default star and any consumer SVG character); non-SVG custom
+   characters keep their own rendering. */
+.ds-rate.ds-rate--modern [data-part='star'][data-state='empty'] svg,
+.ds-rate.ds-rate--modern .rottay-rate-star-track svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5px;
+}
+
+/* HOVER PREVIEW (B7-02): while the pointer floats a candidate value the
+   engine stamps data-previewing on the root; the candidate set then paints
+   with the governed --ds-rate-hover-color channel (declared in
+   presentation/components/rate.css, previously inert) instead of looking
+   identical to the committed value. Committed = active fill, preview =
+   hover tint; on commit or pointer-leave the active fill returns. The rule
+   needs (0,6,0) to outrank the per-star fill hatch rule above. */
+.ds-rate.ds-rate--modern[data-part='root'][data-previewing='true'] [data-part='star'][data-state='full'],
+.ds-rate.ds-rate--modern[data-part='root'][data-previewing='true'] [data-part='star'][data-state='half'] {
+  color: var(--ds-rate-hover-color, var(--ds-rate-star-fill));
+}
+
 /* Interactive postures (gated on the root state channels). */
 .ds-rate.ds-rate--modern[data-part='root']:not([data-disabled='true']):not([data-readonly='true']) [data-part='star'] {
   cursor: pointer;
 }
 @media (hover: hover) {
   .ds-rate.ds-rate--modern[data-part='root']:not([data-disabled='true']):not([data-readonly='true']) [data-part='star']:hover {
-    transform: scale(var(--ds-rate-hover-scale, 1.1));
+    transform: scale(var(--ds-rate-hover-scale));
   }
 }
 /* Touch/active equivalent of the hover scale (4th-tanda law). */
 .ds-rate.ds-rate--modern[data-part='root']:not([data-disabled='true']):not([data-readonly='true']) [data-part='star']:active {
-  transform: scale(var(--ds-rate-hover-scale, 1.1));
+  transform: scale(var(--ds-rate-hover-scale));
 }
 
 /* Keyboard ring: the engine stamps `data-focused` on the star that matches
    the roving focus index (replaces the Tailwind `ring-2 ring-offset-2`
    conditional class and its `--tw-ring-color` hatch). */
 .ds-rate.ds-rate--modern [data-part='star'][data-focused='true'] {
-  outline: var(--ds-rate-focus-ring-width, 2px) solid var(--ds-rate-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-rate-focus-ring-offset, 2px);
+  outline: var(--ds-rate-focus-ring-width) solid var(--ds-rate-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-rate-focus-ring-offset);
 }
 
 .ds-rate.ds-rate--modern[data-part='root'][data-disabled='true'] [data-part='star'] {
@@ -124,6 +160,23 @@
   inset-inline-start: 0;
   inline-size: 50%;
   overflow: hidden;
+}
+
+/* Half-star glyph geometry (B7-02 defect fix): the generic star svg rule
+   (inline-size: 100%) scaled the glyph into the 50% clip container, so a
+   "half" star rendered as a MINIATURE full star parked in the leading half
+   instead of the leading half of a full-size glyph. The foreground svg now
+   keeps the full star geometry (200% of the 50% container) anchored at
+   inline-start, so the clip reveals exactly the leading half -- and under
+   RTL the container sits on the right and the svg anchors to the right
+   edge, revealing the right half (the fill leads from the right, matching
+   the sighted AR grammar). (0,4,1) outranks the base star svg rule. */
+.ds-rate.ds-rate--modern [data-part='star'] [data-part='star-half'] svg {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 200%;
+  block-size: 100%;
 }
 
 /* Half-star wrap: the relative positioning context for track + foreground
@@ -144,7 +197,7 @@
   inset-inline-start: 0;
   inline-size: 50%;
   block-size: 100%;
-  z-index: var(--ds-z-index-relative-above, 1);
+  z-index: var(--ds-z-index-relative-above);
 }
 
 /* Half-star background track: constant inactive color via the root hatch

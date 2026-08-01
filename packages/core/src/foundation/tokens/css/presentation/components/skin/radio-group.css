@@ -1,57 +1,201 @@
 /**
  * RadioGroup skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
- * Home: foundation/tokens/css/presentation/components/skin/radio-group.css -- the compound renders one
- * DOM under every engine, so there is no --modern/--rustic discriminator.
+ * Home: foundation/tokens/css/presentation/components/skin/radio-group.css --
+ * the compound renders one group shell under every engine. Standard (dot)
+ * options are the real `Radio` facade (one anatomy, one a11y contract, one
+ * engine skin); only `buttonStyle` segments carry group-owned paint.
  *
  * SCOPE ROOT is `.rottay-radio-group[data-part='root']`, carrying
- * `rottay-radio-group--<direction>`, (in button mode) `rottay-radio-group--button`
- * and `data-button-style` ('solid'|'outline'). The two option render modes stamp
- * `[data-part='option']` (button/segmented) with `[data-part='option-dot']` +
- * `[data-part='option-fill']` + `[data-part='option-description']` (dot mode);
- * `data-checked`/`data-disabled` ride on each option.
+ * `rottay-radio-group--<direction>`, (in button mode)
+ * `rottay-radio-group--button`, `data-direction`, `data-spacing`
+ * ('sm'|'md'|'lg'), `data-size` and `data-button-style` ('solid'|'outline').
+ * Every option stamps `[data-part='option']` with
+ * `data-checked`/`data-disabled`; segment text rides `[data-part='option-label']`.
  *
  * The active color variant (`COLOR_MAP[color]` -> border/bg/dot) is a per-group
  * runtime value carried once, on the root, via the uncounted custom properties
  * `--ds-rg-color-border` / `--ds-rg-color-bg` / `--ds-rg-color-dot`.
  *
- * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
- * every border-color rule below reaches (0,4,0) via the `--button` class or the
- * `[data-part='option']` ancestor plus a repeated/qualifying attribute. Non-
- * border paint wins unlayered at (0,3,0) or lower (no universal floor).
+ * SEGMENT STATE GRAMMAR: selected is never a lone recolor -- 'outline' pairs
+ * the recolored border with an inset keyline (box-shadow), 'solid' pairs the
+ * filled background with the on-color text flip. Keyboard focus lands on the
+ * segment via `:focus-within` (the clipped native input keeps focusability
+ * and native APG arrow-key roving through the shared group name).
+ *
+ * SPECIFICITY (P-48): every border-color rule reaches (0,4,0) via the
+ * `--button` class plus a repeated/qualifying attribute. Non-border paint
+ * wins unlayered at (0,3,0) or lower.
  */
 
-/* button-style option (segmented control) --------------------------------- */
+/* Root shell ------------------------------------------------------------- */
+.rottay-radio-group[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-3);
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+.rottay-radio-group[data-part='root'][data-direction='horizontal'] {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+/* Spacing rhythm: the `spacing` prop picks a governed density-scaled role,
+   never a literal pixel ladder. */
+.rottay-radio-group[data-part='root'][data-spacing='sm'] {
+  gap: var(--ds-spacing-2);
+}
+.rottay-radio-group[data-part='root'][data-spacing='md'] {
+  gap: var(--ds-spacing-3);
+}
+.rottay-radio-group[data-part='root'][data-spacing='lg'] {
+  gap: var(--ds-spacing-4);
+}
+
+/* Option slot: shrink-safe in wrapped horizontal rows and narrow columns. */
+.rottay-radio-group [data-part='option'] {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+/* Segmented (buttonStyle) option ------------------------------------------ */
 .rottay-radio-group.rottay-radio-group--button [data-part='option'] {
-  border-radius: 4px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: var(--ds-spacing-1);
+  padding-inline: var(--ds-spacing-3);
+  border-radius: var(--ds-radius-md);
   background-color: transparent;
-  color: inherit;
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-radio-md-font-size);
+  line-height: var(--ds-line-height-snug);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .rottay-radio-group.rottay-radio-group--button [data-part='option'][data-part='option'] {
   border: 1px solid var(--ds-color-border-secondary);
 }
+
+/* Segment density: the group `size` picks the canonical font channel and a
+   spacing-role padding ladder (compact reads intentional, not shrunk). */
+.rottay-radio-group.rottay-radio-group--button[data-size='xs'] [data-part='option'],
+.rottay-radio-group.rottay-radio-group--button[data-size='sm'] [data-part='option'] {
+  padding-block: calc(var(--ds-spacing-1) / 2);
+  padding-inline: var(--ds-spacing-2);
+  font-size: var(--ds-radio-sm-font-size);
+}
+.rottay-radio-group.rottay-radio-group--button[data-size='lg'] [data-part='option'],
+.rottay-radio-group.rottay-radio-group--button[data-size='xl'] [data-part='option'] {
+  padding-block: var(--ds-spacing-2);
+  padding-inline: var(--ds-spacing-4);
+  font-size: var(--ds-radio-lg-font-size);
+}
+
+/* Segment text: wraps at word boundaries, never per character. */
+.rottay-radio-group.rottay-radio-group--button [data-part='option-label'] {
+  overflow-wrap: break-word;
+  min-inline-size: 0;
+}
+
+/* Segment hover (pointer-fine only) + pressed parity for touch. */
+@media (hover: hover) {
+  .rottay-radio-group.rottay-radio-group--button [data-part='option']:not([data-disabled='true']):not([data-checked='true']):hover {
+    border-color: color-mix(in srgb, var(--ds-color-text-secondary) 40%, var(--ds-color-border-secondary));
+    background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+  }
+  .rottay-radio-group.rottay-radio-group--button[data-button-style='outline'] [data-part='option'][data-checked='true']:not([data-disabled='true']):hover {
+    background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+  }
+  .rottay-radio-group.rottay-radio-group--button[data-button-style='solid'] [data-part='option'][data-checked='true']:not([data-disabled='true']):hover {
+    background-color: color-mix(in srgb, var(--ds-rg-color-bg) 88%, var(--ds-color-neutral-900));
+  }
+}
+.rottay-radio-group.rottay-radio-group--button [data-part='option']:not([data-disabled='true']):active {
+  transform: scale(var(--ds-state-press-scale));
+}
+
+/* Selected: 'outline' = recolored border + inset keyline; 'solid' = filled
+   background + on-color text flip. Never a lone hue shift. */
 .rottay-radio-group.rottay-radio-group--button [data-part='option'][data-part='option'][data-checked='true'] {
   border-color: var(--ds-rg-color-border);
+}
+.rottay-radio-group.rottay-radio-group--button[data-button-style='outline'] [data-part='option'][data-checked='true'] {
+  box-shadow: inset 0 0 0 1px var(--ds-rg-color-border);
+  color: var(--ds-color-text-primary);
+  font-weight: var(--ds-font-weight-medium);
 }
 .rottay-radio-group.rottay-radio-group--button[data-button-style='solid'] [data-part='option'][data-checked='true'] {
   background-color: var(--ds-rg-color-bg);
   color: var(--ds-rg-color-dot);
 }
 
-/* dot-style option indicator ---------------------------------------------- */
-.rottay-radio-group [data-part='option-dot'] {
-  border-radius: 50%;
-  background-color: transparent;
+/* Focus: the clipped input stays focusable; the segment wears the ring. */
+.rottay-radio-group.rottay-radio-group--button [data-part='option']:focus-within {
+  outline: var(--ds-radio-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-radio-focus-ring-color, var(--ds-focus-ring-color, var(--ds-color-primary)));
+  outline-offset: var(--ds-radio-focus-ring-offset, var(--ds-focus-ring-offset));
 }
-.rottay-radio-group [data-part='option'] [data-part='option-dot'][data-part='option-dot'] {
-  border: 2px solid var(--ds-color-border-secondary);
+
+/* Disabled segment: readable, unmistakably inactive. */
+.rottay-radio-group.rottay-radio-group--button [data-part='option'][data-disabled='true'] {
+  cursor: not-allowed;
+  color: var(--ds-color-text-disabled);
+  opacity: var(--ds-radio-disabled-opacity);
 }
-.rottay-radio-group [data-part='option'][data-checked='true'] [data-part='option-dot'] {
-  border-color: var(--ds-rg-color-border);
+
+/* Clipped native input: accessibility + form participation + native APG
+   arrow-key roving through the shared group name. Zero inline geometry. */
+.rottay-radio-group.rottay-radio-group--button [data-part='option'] input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
-.rottay-radio-group [data-part='option-fill'] {
-  border-radius: 50%;
-  background-color: var(--ds-rg-color-bg);
+
+/* Coarse pointers: the 44px touch law is physical. */
+@media (pointer: coarse) {
+  .rottay-radio-group.rottay-radio-group--button [data-part='option'] {
+    min-block-size: var(--ds-radio-touch-target-min, 44px);
+  }
 }
-.rottay-radio-group [data-part='option-description'] {
-  color: var(--ds-color-text-secondary);
+
+@media (prefers-reduced-motion: reduce) {
+  .rottay-radio-group.rottay-radio-group--button [data-part='option'] {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .rottay-radio-group.rottay-radio-group--button [data-part='option'][data-part='option'] {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+  }
+  .rottay-radio-group.rottay-radio-group--button [data-part='option'][data-checked='true'] {
+    border-color: Highlight;
+    box-shadow: inset 0 0 0 1px Highlight;
+  }
+  .rottay-radio-group.rottay-radio-group--button[data-button-style='solid'] [data-part='option'][data-checked='true'] {
+    background-color: Highlight;
+    color: HighlightText;
+  }
+  .rottay-radio-group.rottay-radio-group--button [data-part='option'][data-disabled='true'] {
+    border-color: GrayText;
+    color: GrayText;
+  }
+  .rottay-radio-group.rottay-radio-group--button [data-part='option']:focus-within {
+    outline-color: Highlight;
+  }
 }

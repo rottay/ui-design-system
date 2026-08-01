@@ -8,7 +8,7 @@
  * It automatically shows/hides based on the current step index.
  * Supports fade and slide animations for smooth transitions between steps.
  *
- * @example Basic Usage
+ * @example
  * ```tsx
  * <Stepper current={currentStep}>
  *   <Stepper.Step title="Step 1" />
@@ -47,8 +47,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import type { CSSProperties } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { StepContentProps } from '../../contracts';
 
 // ============================================================================
@@ -67,6 +66,29 @@ interface StepContentInternalProps extends StepContentProps {
 }
 
 // ============================================================================
+// Governed exit window
+// ============================================================================
+
+/**
+ * Resolves the exit window from the element's computed style (the governed
+ * `--ds-motion-*` value the skin actually applied), plus a small buffer.
+ * Returns ~50ms when no transition is declared (`animation='none'`, reduced
+ * motion, tests). Bounded per-family duplication of the Message modern
+ * engine's `governedExitMs` — no shared helper exists in this wave.
+ * @internal
+ */
+const governedExitMs = (el: HTMLElement): number => {
+  const { animationDuration, transitionDuration } = getComputedStyle(el);
+  const toMs = (raw: string) =>
+    raw.split(',').reduce((max, part) => {
+      const t = part.trim();
+      const v = t.endsWith('ms') ? parseFloat(t) : t.endsWith('s') ? parseFloat(t) * 1000 : 0;
+      return Number.isFinite(v) && v > max ? v : max;
+    }, 0);
+  return Math.max(toMs(animationDuration), toMs(transitionDuration)) + 50;
+};
+
+// ============================================================================
 // Main Component
 // ============================================================================
 
@@ -82,7 +104,15 @@ interface StepContentInternalProps extends StepContentProps {
  *
  * @remarks
  * - Animation direction is determined by step navigation direction
- * - Uses CSS transitions for smooth animations
+ * - The state paint (opacity / transform / display) lives in
+ *   `stepper-compounds.css`, keyed on `data-state` / `data-animation` /
+ *   `data-direction` — no inline animation styles, no raw durations
+ * - The exit lifecycle is GOVERNED: `transitionend` on the panel is the
+ *   primary path and the fallback timer reads the resolved duration from the
+ *   element's computed style, replacing the two desynced `setTimeout(200)`
+ *   literals (the P0 animationend + computed-fallback law; the enter side
+ *   simply flips `entering → visible` on the next frame, so the fade starts
+ *   immediately instead of idling 200ms first)
  * - Content is unmounted when inactive (unless keepMounted is true)
  *
  * @param props - {@link StepContentInternalProps}
@@ -97,10 +127,13 @@ export function StepperContent({
   children,
   className = '',
   style,
+  // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
+  // panel element, BEFORE the engine's own stamps.
+  ...rest
 }: StepContentInternalProps): React.ReactElement | null {
-  // ============================================================================
+  // ========================================================================
   // State Management
-  // ============================================================================
+  // ========================================================================
 
   /** Controls whether the content should be rendered in the DOM */
   const [shouldRender, setShouldRender] = useState(stepIndex === currentStep);
@@ -116,147 +149,92 @@ export function StepperContent({
   /** Direction of navigation for slide animation */
   const direction = currentStep > previousStep ? 'forward' : 'backward';
 
-  // ============================================================================
+  /** The panel element the governed exit reads its computed duration from */
+  const panelRef = useRef<HTMLDivElement | null>(null);
+
+  /** Computed-duration fallback for the exit (transitionend is primary) */
+  const exitFallbackRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearExitFallback = useCallback(() => {
+    if (exitFallbackRef.current) {
+      clearTimeout(exitFallbackRef.current);
+      exitFallbackRef.current = null;
+    }
+  }, []);
+
+  /** Terminal exit: hide the panel and unmount unless kept mounted. */
+  const finalizeExit = useCallback(() => {
+    clearExitFallback();
+    setAnimationState('hidden');
+    if (!keepMounted) {
+      setShouldRender(false);
+    }
+  }, [clearExitFallback, keepMounted]);
+
+  // ========================================================================
   // Animation Effect
-  // ============================================================================
+  // ========================================================================
 
   /**
    * Handles animation transitions when active state changes.
-   * Manages entering/exiting animations and DOM mounting.
+   * Enter: mount at `entering`, flip to `visible` on the next frame so the
+   * skin's transition runs immediately (the former 200ms idle is gone).
+   * Exit: play `exiting`, then let `transitionend` finalize — with a
+   * computed-duration fallback for environments where the event never fires
+   * (`animation='none'`, reduced motion, jsdom).
    */
   useEffect(() => {
     if (isActive) {
-      // Content is becoming active - mount and animate in
+      // Content is becoming active - cancel any in-flight exit, mount, enter
+      clearExitFallback();
       setShouldRender(true);
-      // Small delay to trigger enter animation
-      requestAnimationFrame(() => {
-        setAnimationState('entering');
-        // After animation completes, set to visible
-        setTimeout(() => {
-          setAnimationState('visible');
-        }, 200);
+      setAnimationState((state) => (state === 'visible' ? 'visible' : 'entering'));
+      const raf = requestAnimationFrame(() => {
+        setAnimationState('visible');
       });
-    } else {
-      // Content is becoming inactive - animate out
-      setAnimationState('exiting');
-      // Wait for exit animation before unmounting
-      setTimeout(() => {
-        setAnimationState('hidden');
-        if (!keepMounted) {
-          setShouldRender(false);
-        }
-      }, 200);
+      return () => cancelAnimationFrame(raf);
     }
-  }, [isActive, keepMounted]);
 
-  // ============================================================================
+    // Content is becoming inactive - animate out, then hide/unmount
+    setAnimationState((state) => (state === 'hidden' ? 'hidden' : 'exiting'));
+    const el = panelRef.current;
+    exitFallbackRef.current = setTimeout(finalizeExit, el ? governedExitMs(el) : 0);
+    return clearExitFallback;
+  }, [isActive, keepMounted, finalizeExit, clearExitFallback]);
+
+  /**
+   * Primary exit path: the panel's own opacity transition completing (the
+   * one property fade and slide both animate). Bubbled child transitions and
+   * non-exit states are ignored.
+   */
+  const handleTransitionEnd = useCallback(
+    (event: React.TransitionEvent<HTMLDivElement>) => {
+      if (animationState !== 'exiting') return;
+      if (event.target !== panelRef.current) return;
+      if (event.propertyName !== 'opacity') return;
+      finalizeExit();
+    },
+    [animationState, finalizeExit]
+  );
+
+  // ========================================================================
   // Render Logic
-  // ============================================================================
+  // ========================================================================
 
   // Don't render if not active and not keeping mounted
   if (!shouldRender && !keepMounted) {
     return null;
   }
 
-  // ============================================================================
-  // Animation Styles
-  // ============================================================================
-
-  /**
-   * Computes animation styles based on current animation state and type.
-   */
-  const getAnimationStyles = (): CSSProperties => {
-    // No animation - simple show/hide
-    if (animation === 'none') {
-      return {
-        display: isActive ? 'block' : 'none',
-      };
-    }
-
-    const baseTransition = 'opacity 0.2s ease, transform 0.2s ease';
-
-    // Fade animation
-    if (animation === 'fade') {
-      switch (animationState) {
-        case 'entering':
-          return {
-            opacity: 0,
-            transition: baseTransition,
-          };
-        case 'visible':
-          return {
-            opacity: 1,
-            transition: baseTransition,
-          };
-        case 'exiting':
-          return {
-            opacity: 0,
-            transition: baseTransition,
-            pointerEvents: 'none',
-          };
-        case 'hidden':
-          return {
-            opacity: 0,
-            display: 'none',
-          };
-        default:
-          return {};
-      }
-    }
-
-    // Slide animation. The translate itself rides data-state/data-direction in
-    // the skin; the 0.2s here must stay numerically in sync with the two
-    // setTimeout(200) calls above, which is why it is not folded into a token.
-    if (animation === 'slide') {
-      switch (animationState) {
-        case 'entering':
-          return {
-            opacity: 0,
-            transition: baseTransition,
-          };
-        case 'visible':
-          return {
-            opacity: 1,
-            transition: baseTransition,
-          };
-        case 'exiting':
-          return {
-            opacity: 0,
-            transition: baseTransition,
-            pointerEvents: 'none',
-          };
-        case 'hidden':
-          return {
-            opacity: 0,
-            display: 'none',
-          };
-        default:
-          return {};
-      }
-    }
-
-    return {};
-  };
-
-  // ============================================================================
-  // Final Styles
-  // ============================================================================
-
-  const contentStyle: CSSProperties = {
-    ...getAnimationStyles(),
-    ...style,
-  };
-
-  // ============================================================================
-  // Render
-  // ============================================================================
-
   return (
     <div
+      {...rest}
+      ref={panelRef}
       className={`rottay-stepper-content ${isActive ? 'rottay-stepper-content--active' : ''} ${className}`}
-      style={contentStyle}
+      style={style}
       role="tabpanel"
       aria-hidden={!isActive}
+      onTransitionEnd={handleTransitionEnd}
       data-step={stepIndex}
       data-part="panel"
       data-active={isActive || undefined}

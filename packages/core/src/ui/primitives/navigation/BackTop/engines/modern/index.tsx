@@ -11,7 +11,12 @@
  * - Conditional rendering (unmounts when below the visibility threshold)
  * - The governed semantic icon (`navigation-up`) as the default glyph
  * - A localized aria-label via the components catalog (English fallback)
- * - LOGICAL placement utilities (`end-8`, never a physical `right-8`)
+ * - Skin-owned fixed placement (P2-20: the pass-1 `end-8` bridge utility is
+ *   drained; the skin already owned the same 2rem logical inline-end value)
+ * - Focus return on activation (P2-20): the trigger unmounts itself once the
+ *   scroll crosses the threshold, so a focused activation hands focus to the
+ *   scrolled context (transient tabindex, restored on blur) before the
+ *   journey starts — focus never strands on `<body>` by accident.
  *
  * Sizing (44px coarse-pointer floor), hover lift, pressed dip, and the
  * focus ring are skin-owned; the engine stamps anatomy only.
@@ -97,6 +102,18 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
     /** Controls button visibility - component unmounts when false */
     const [visible, setVisible] = useState(false);
 
+    /** Internal trigger handle, merged with the forwarded ref so the click
+     *  path can tell whether the activation held focus (focus return, P2-20). */
+    const buttonRef = React.useRef<HTMLButtonElement>(null);
+    const setTriggerRefs = (node: HTMLButtonElement | null) => {
+      buttonRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    };
+
     // ========================================================================
     // Callbacks
     // ========================================================================
@@ -150,6 +167,35 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
         typeof window.matchMedia === 'function' &&
         window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const behavior: ScrollBehavior = prefersReducedMotion ? 'instant' : 'smooth';
+
+      // Focus return (P2-20): the trigger UNMOUNTS itself as soon as the
+      // scroll crosses back below the threshold, so a focused activation
+      // would otherwise strand focus on <body> mid-journey. Hand focus to
+      // the scrolled context first — transient tabindex="-1" (restored on
+      // blur), preventScroll so the focus move never fights the animated
+      // scroll. Pointer-only activations (unfocused trigger) skip this.
+      if (
+        typeof document !== 'undefined' &&
+        buttonRef.current !== null &&
+        document.activeElement === buttonRef.current
+      ) {
+        const focusTarget: HTMLElement = t === window ? document.body : (t as HTMLElement);
+        const previousTabIndex = focusTarget.getAttribute('tabindex');
+        focusTarget.setAttribute('tabindex', '-1');
+        focusTarget.addEventListener(
+          'blur',
+          () => {
+            if (previousTabIndex === null) {
+              focusTarget.removeAttribute('tabindex');
+            } else {
+              focusTarget.setAttribute('tabindex', previousTabIndex);
+            }
+          },
+          { once: true },
+        );
+        focusTarget.focus({ preventScroll: true });
+      }
+
       if (t === window) {
         window.scrollTo({ top: 0, behavior });
       } else {
@@ -168,13 +214,12 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
 
     return (
       <button
-        ref={ref}
+        ref={setTriggerRefs}
         type="button"
-        // `end-8` is LOGICAL (inset-inline-end) and test-pinned -- it stays as
-        // a bridge string while the skin OVERRIDES its inline-end paint at the
-        // same 2rem value (single geometry owner, pinned-class precedent).
-        // Position, block-end inset and z-index are skin-owned.
-        className={`rottay-backtop rottay-backtop--modern end-8 ${className}`}
+        // P2-20: the pass-1 `end-8` bridge utility is drained — the skin is
+        // the single geometry owner (same 2rem logical inline-end default,
+        // mirroring under RTL, plus the safe-area block-end gutter).
+        className={`rottay-backtop rottay-backtop--modern ${className}`}
         style={style}
         onClick={handleClick}
         aria-label={ariaLabel}

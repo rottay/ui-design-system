@@ -15,7 +15,13 @@
  *   (`components.stepper.navigation`, English fallback "Progress steps"
  *   until the catalog key lands — K3-B ficha request); the `<ul>` keeps its
  *   natural list semantics (`role="navigation"` on the `<ul>` itself was
- *   both an axe `listitem` and an `aria-allowed-role` violation).
+ *   both an axe `listitem` and an `aria-allowed-role` violation). A caller
+ *   `aria-label` WINS over the fallback name (the Descriptions idiom).
+ * - The `BaseComponentProps` passthrough (id / aria-* / data-* /
+ *   data-testid) spreads on the `<nav>` (the outermost element) BEFORE the
+ *   engine's stamps; the caller-owned `data-part` hook (P-79) replaces the
+ *   `<ul>`'s default `'root'` anatomy hook — the skin scope detaches by
+ *   contract when a caller claims it.
  * - `size` (sm/md/lg) and `variant` (default/simple/circles) ride
  *   `data-size`/`data-variant` on the root; both were previously accepted
  *   and silently ignored by this engine.
@@ -24,6 +30,27 @@
  * - Status computation deliberately mirrors the Steps family's
  *   `getEffectiveStatus` (bounded per-family duplication, no shared helper
  *   is extracted in this wave — see the K3-B ficha).
+ *
+ * Phase-B Pass 2 (batch-33):
+ * - `subTitle` now renders (`data-part="subtitle"` — rustic parity; the
+ *   contract axis and the skin's disabled rule predate this engine path).
+ * - `labelPlacement` rides `data-label-placement` on the root (the contract
+ *   default is 'horizontal': icon-beside-text; 'vertical' keeps the stacked
+ *   geometry Pass 1 shipped).
+ * - `progressDot` is implemented on the Stepper signature
+ *   (`(dot, info) => ReactNode`): boolean mode rides `data-progress-dot`;
+ *   the render-function mode mounts `data-part="dot-slot"` (Steps idiom).
+ * - A custom item icon now anchors the indicator cell as a direct item
+ *   child (`data-part="icon"`); the skin seats it inside the status circle
+ *   frame and suppresses the numeral via `:has()` — status stays expressed
+ *   by the circle frame/ring, never by icon hue alone.
+ * - `percent` is NOT implementable in this engine: the modern-engine
+ *   contract pins `style.cssText === ''` on every part, so no inline data
+ *   channel can carry the numeric value (the Menu `--rottay-menu-*`
+ *   precedent is closed here); documented as batch-33 debt.
+ * - `responsive` is absorbed by the skin's container query (a horizontal
+ *   track collapses to the vertical geometry at 420px unconditionally);
+ *   the contract's `responsive?: boolean` toggle is noted as drift.
  *
  * @example Basic Usage
  * ```tsx
@@ -98,7 +125,8 @@ function renderModernSteps(
   current: number,
   clickable: boolean,
   onChange?: (current: number) => void,
-  globalStatus?: StepStatus
+  globalStatus?: StepStatus,
+  progressDot?: StepperProps['progressDot']
 ): React.ReactNode {
   return items.map((item, index) => {
     // Priority: explicit item status > global status (only on current step) > positional computation.
@@ -108,8 +136,8 @@ function renderModernSteps(
 
     const text = (
       <>
-        {item.icon && <span data-part="icon">{item.icon}</span>}
         <span data-part="label">{item.title}</span>
+        {item.subTitle && <span data-part="subtitle">{item.subTitle}</span>}
         {item.description && <span data-part="description">{item.description}</span>}
       </>
     );
@@ -123,6 +151,17 @@ function renderModernSteps(
         data-clickable={isClickable || undefined}
         aria-current={status === 'process' ? 'step' : undefined}
       >
+        {item.icon && !progressDot && <span data-part="icon">{item.icon}</span>}
+        {typeof progressDot === 'function' && (
+          <span data-part="dot-slot">
+            {progressDot(<span data-part="dot" />, {
+              index,
+              status,
+              title: item.title,
+              description: item.description,
+            })}
+          </span>
+        )}
         {isClickable ? (
           <button
             type="button"
@@ -161,10 +200,27 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
     variant = STEPPER_DEFAULTS.variant,
     status,
     clickable = STEPPER_DEFAULTS.clickable,
+    labelPlacement = STEPPER_DEFAULTS.labelPlacement,
+    progressDot,
     onChange,
     children,
     className = '',
     style,
+    'data-part': dataPart,
+    'aria-label': callerAriaLabel,
+    engine: _engine,
+    // Consumed contract axes that must NOT leak onto the DOM through the
+    // rest spread: `initial` (deprecated alias of defaultCurrent),
+    // `responsive` (absorbed by the skin's container query — documented
+    // drift), `percent` (batch-33 debt, no governed render channel).
+    initial: _initial,
+    responsive: _responsive,
+    percent: _percent,
+    // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to
+    // the outermost element (the <nav>). It spreads BEFORE the engine's own
+    // stamps so the landmark contract always lands last (the Card modern
+    // idiom; contracts promise BaseComponentProps pass-through).
+    ...rest
   } = props;
 
   // ============================================================================
@@ -207,7 +263,7 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
 
   if (items) {
     // Render from items prop
-    stepsContent = renderModernSteps(items, current, clickable, handleChange, status);
+    stepsContent = renderModernSteps(items, current, clickable, handleChange, status, progressDot);
   } else if (children) {
     // Convert children to items for rendering
     const childItems: StepItem[] = [];
@@ -230,7 +286,7 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
     });
 
     if (childItems.length > 0) {
-      stepsContent = renderModernSteps(childItems, current, clickable, handleChange, status);
+      stepsContent = renderModernSteps(childItems, current, clickable, handleChange, status, progressDot);
     }
   }
 
@@ -252,13 +308,20 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
       : 'Progress steps';
 
   return (
-    <nav aria-label={navigationLabel} className={className || undefined} style={style}>
+    <nav
+      {...rest}
+      aria-label={callerAriaLabel ?? navigationLabel}
+      className={className || undefined}
+      style={style}
+    >
       <ul
         className="rottay-stepper rottay-stepper--modern"
-        data-part="root"
+        data-part={dataPart ?? 'root'}
         data-direction={direction}
         data-size={size}
         data-variant={variant}
+        data-label-placement={labelPlacement}
+        data-progress-dot={progressDot ? 'true' : undefined}
       >
         {stepsContent}
       </ul>

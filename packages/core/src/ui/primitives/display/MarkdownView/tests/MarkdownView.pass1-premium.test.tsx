@@ -58,9 +58,10 @@ describe('MarkdownView premium contract — Pass 1', () => {
     expect(source).not.toMatch(/margin(Left|Right)\b/);
     expect(source).not.toMatch(/padding(Left|Right)\b/);
     expect(source).not.toMatch(/border(Left|Right)\b/);
-    expect(source).toContain("paddingInlineStart: 'var(--ds-spacing-4)'");
-    expect(source).toContain("borderInlineStart: '3px solid var(--ds-color-border)'");
+    expect(skin).toContain('padding-inline-start: var(--ds-spacing-4)');
+    expect(skin).toContain('border-inline-start: 3px solid var(--ds-color-border)');
     expect(source).toContain("paddingInlineStart: 'var(--ds-spacing-6)'");
+    expect(skin).not.toMatch(/padding-(left|right)|border-(left|right)/);
     // Table alignment maps authored columns onto logical CSS.
     expect(source).toContain("if (align === 'right') return 'end'");
     expect(source).toContain("if (align === 'left') return 'start'");

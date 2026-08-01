@@ -29,16 +29,19 @@
   border: var(--ds-alert-border-width, 1px) solid color-mix(in srgb, var(--ds-alert-tone) 30%, var(--ds-color-border));
   border-radius: var(--ds-alert-radius, var(--ds-radius-lg));
   background-color: color-mix(in srgb, var(--ds-alert-tone) 7%, var(--ds-color-surface));
-  background-image: var(--ds-gradient-surface, none);
+  background-image: var(--ds-gradient-surface);
+  /* Optical-edge keyline scales with the governed effect-intensity dial: at 0
+     the decoration dissolves while the tone wash, frame and type hierarchy
+     carry the severity on their own (card.css material law). */
   box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 35%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(35% * var(--ds-effect-intensity)), transparent),
     var(--ds-alert-shadow, var(--ds-shadow-sm));
   color: var(--ds-color-text-primary);
   animation: ds-alert-enter-modern var(--ds-motion-calm, var(--ds-motion-normal)) var(--ds-ease-standard, var(--ds-motion-ease-out)) both;
   transition:
-    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    box-shadow var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out));
+    border-color var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    box-shadow var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    transform var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out));
 }
 
 /* A passive feedback surface must not lift on hover: the only interactive
@@ -76,7 +79,7 @@
   border: 1px solid color-mix(in srgb, var(--ds-alert-tone) 34%, var(--ds-color-border));
   border-radius: var(--ds-alert-icon-well-radius, var(--ds-radius-md));
   background: color-mix(in srgb, var(--ds-alert-tone) 11%, var(--ds-color-surface-raised));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 48%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) calc(48% * var(--ds-effect-intensity)), transparent);
   color: var(--ds-alert-tone);
 }
 
@@ -99,8 +102,11 @@
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-alert-label-size, var(--ds-font-size-sm));
   font-weight: var(--ds-font-weight-semibold);
-  letter-spacing: var(--ds-letter-spacing-heading, -0.01em);
+  letter-spacing: var(--ds-letter-spacing-heading);
   line-height: var(--ds-line-height-tight);
+  /* Long-copy resilience: unbroken strings (URLs, long ES/AR compounds) wrap
+     inside the content grid track instead of protruding past the action. */
+  overflow-wrap: break-word;
 }
 
 .rottay-alert-shell.rottay-alert-shell--modern .rottay-alert-shell__content[data-part='content'] > [data-part='description'] {
@@ -109,6 +115,15 @@
   font-family: var(--ds-font-family-base);
   font-size: var(--ds-alert-description-size, var(--ds-font-size-sm));
   line-height: var(--ds-line-height-relaxed);
+  overflow-wrap: break-word;
+}
+
+/* The composed Alert.Description compound matches the description rule above
+   (same data-part, same paint), but the content grid's `gap` already owns the
+   vertical rhythm here: the compound skin's standalone margin floor is zeroed
+   so both description forms keep identical spacing. */
+.rottay-alert-shell--modern .rottay-alert-shell__content[data-part='content'] > .rottay-alert-description[data-part='description'] {
+  margin-block-start: 0;
 }
 
 .rottay-alert-shell.rottay-alert-shell--modern > [data-part='action'][data-part='action'] {
@@ -125,10 +140,10 @@
   cursor: pointer;
   box-shadow: var(--ds-shadow-xs);
   transition:
-    background-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out)),
-    transform var(--ds-motion-instant, 120ms) var(--ds-ease-standard, var(--ds-motion-ease-out));
+    background-color var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    border-color var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    color var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out)),
+    transform var(--ds-motion-instant) var(--ds-ease-standard, var(--ds-motion-ease-out));
 }
 
 /* Hover only where hover exists: no sticky tinted button on touch pointers
@@ -143,6 +158,22 @@
 
 .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:active {
   transform: var(--ds-alert-action-active-transform, scale(0.94));
+}
+
+/* ---- coarse pointers: the dismiss control keeps its compact 2rem visual
+        size but meets the governed 44px touch floor through an invisible
+        centered hit area (Callout/Badge idiom) -- growing the button
+        physically would break the banner's leading/center alignment. ---- */
+@media (pointer: coarse) {
+  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action'] {
+    position: relative;
+  }
+  .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']::after {
+    content: '';
+    position: absolute;
+    inset: calc(50% - var(--ds-touch-target-min) / 2);
+    border-radius: var(--ds-radius-md);
+  }
 }
 
 .rottay-alert-shell.rottay-alert-shell--modern[data-tone] > [data-part='action']:focus-visible {

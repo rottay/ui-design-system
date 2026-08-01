@@ -153,6 +153,17 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
         ? `mentions-${mentionsId}-option-${focusedIndex}`
         : undefined;
 
+    // Keyboard navigation keeps the active option in view: aria-activedescendant
+    // never moves DOM focus, so the row must be scrolled into the popup's
+    // viewport explicitly (nearest edge, no page scroll). Guarded for jsdom.
+    useEffect(() => {
+      if (!activeOptionId) return;
+      const el = document.getElementById(activeOptionId);
+      if (el && typeof el.scrollIntoView === 'function') {
+        el.scrollIntoView({ block: 'nearest' });
+      }
+    }, [activeOptionId]);
+
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       const newValue = e.target.value;
       const cursorPos = e.target.selectionStart;
@@ -253,6 +264,14 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
         case 'Escape':
           setIsOpen(false);
           break;
+        case 'Home':
+          e.preventDefault();
+          setFocusedIndex(0);
+          break;
+        case 'End':
+          e.preventDefault();
+          setFocusedIndex(filteredOptions.length - 1);
+          break;
       }
     };
 
@@ -275,6 +294,8 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
         className={`ds-mentions ds-mentions--modern ${className || ''}`}
         style={style}
         data-part="root"
+        data-mention-active={isOpen ? 'true' : undefined}
+        data-mention-prefix={isOpen && currentPrefix ? currentPrefix : undefined}
       >
         <textarea
           ref={(node) => {
@@ -329,7 +350,11 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
                     data-active={focusedIndex === index || undefined}
                     data-disabled={option.disabled || undefined}
                   >
-                    {option.label ?? option.value}
+                    {/* Governed label slot: the stable addressable part for
+                        the option's primary content (truncation/typography
+                        live in the skin). Rich ReactNode labels compose
+                        inside it. */}
+                    <span data-part="option-label">{option.label ?? option.value}</span>
                   </button>
                 </li>
               ))

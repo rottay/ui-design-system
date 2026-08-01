@@ -11,10 +11,13 @@
  * The shell mirrors the Modern Input addon branch: a neutral `<div>` owns the
  * chrome, the inner `<input>` stays a transparent passthrough, and the
  * visibility toggle is a real inline button -- keyboard reachable, labeled from
- * the i18n catalog (`common.show_password` / `common.hide_password`), and
- * positioned with logical properties so RTL needs no branch. The strength
- * meter is a real `progressbar` whose fill width/color the skin derives from
- * `data-strength`, so no runtime paint survives on any part.
+ * the i18n catalog (`common.show_password` / `common.hide_password`), painted
+ * with the governed `action.reveal`/`action.conceal` icon roles, and positioned
+ * with logical properties so RTL needs no branch. The strength meter is a real
+ * `progressbar` of four segments whose active count/tone the skin derives from
+ * `data-strength`, paired with a localized level word (visible label +
+ * `aria-valuetext`), so no runtime paint survives on any part and the level is
+ * never carried by color alone.
  *
  * @example
  * ```tsx
@@ -33,6 +36,8 @@ import { partAttributes, useInteractionState } from '../../../../../../foundatio
 import type { PasswordInputProps, PasswordStrengthLevel } from '../../contracts';
 import { PASSWORD_INPUT_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ActionRevealIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-reveal';
+import { ActionConcealIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-conceal';
 
 /** aria-valuenow for the strength progressbar, aligned with STRENGTH_WIDTHS. */
 const STRENGTH_VALUES: Record<PasswordStrengthLevel, number> = {
@@ -42,19 +47,42 @@ const STRENGTH_VALUES: Record<PasswordStrengthLevel, number> = {
   strong: 100,
 };
 
-/** Eye (reveal) / eye-off (conceal) glyphs, decorative -- the button carries the name. */
+/** The meter renders one segment per level; the skin activates them by count. */
+const STRENGTH_SEGMENT_COUNT = 4;
+
+/** English floors for the localized level words (catalogue `passwordInput.*`). */
+const STRENGTH_LABEL_FALLBACK: Record<PasswordStrengthLevel, string> = {
+  weak: 'Weak',
+  fair: 'Fair',
+  good: 'Good',
+  strong: 'Strong',
+};
+
+/**
+ * Catalogued copy with an English floor: when the catalogue entry has not
+ * landed yet the provider echoes the full key, which must never reach visible
+ * copy or an aria-label (the AutoComplete/OTPInput engines' tOr idiom).
+ */
+function usePasswordInputTranslation() {
+  const common = useOptionalTranslation('common');
+  const components = useOptionalTranslation('components');
+  const tCommon = (key: string, fallback: string): string => {
+    const resolved = common?.t(key);
+    if (!resolved || resolved === key || resolved === `common.${key}`) return fallback;
+    return resolved;
+  };
+  const tComponents = (key: string, fallback: string): string => {
+    const resolved = components?.t(key);
+    if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
+    return resolved;
+  };
+  return { tCommon, tComponents };
+}
+
+/** Governed reveal/conceal glyphs (action.reveal / action.conceal roles, the
+    Input compound/Password precedent) -- decorative; the button carries the name. */
 function VisibilityGlyph({ visible }: { visible: boolean }) {
-  return visible ? (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-      <line x1="1" y1="1" x2="23" y2="23" />
-    </svg>
-  ) : (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
-  );
+  return visible ? <ActionConcealIcon decorative size="sm" /> : <ActionRevealIcon decorative size="sm" />;
 }
 
 /**
@@ -98,13 +126,20 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
     'data-testid': dataTestId,
   } = props;
 
-  const translation = useOptionalTranslation('common');
+  const { tCommon, tComponents } = usePasswordInputTranslation();
   const generatedId = useId();
   const inputId = providedId || `password-modern-${generatedId.replace(/:/g, '')}`;
   const errorMessageId = `${inputId}-error`;
   // Local toggle state for password visibility (not exposed to parent)
   const [visible, setVisible] = useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
+
+  // The level word travels three ways at once -- visible label, aria-valuetext
+  // on the progressbar, and the segment count the skin paints -- so strength
+  // is never carried by color alone.
+  const strengthText = strengthLevel
+    ? tComponents(`passwordInput.strength_${strengthLevel}`, STRENGTH_LABEL_FALLBACK[strengthLevel])
+    : undefined;
 
   // The hover/focus triad is decided once, in the behavior core, and the skin
   // keys off `focused` -- a text field's border is not a keyboard-only
@@ -197,8 +232,8 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
             onClick={handleToggleVisibility}
             aria-label={
               visible
-                ? translation?.t('hide_password') ?? 'Hide password'
-                : translation?.t('show_password') ?? 'Show password'
+                ? tCommon('hide_password', 'Hide password')
+                : tCommon('show_password', 'Show password')
             }
           >
             {visible ? (visibleIcon ?? <VisibilityGlyph visible />) : (hiddenIcon ?? <VisibilityGlyph visible={false} />)}
@@ -206,16 +241,28 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
         )}
       </div>
       {strengthIndicator && strengthLevel && (
-        <div
-          data-part="strength-track"
-          data-strength={strengthLevel}
-          role="progressbar"
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={STRENGTH_VALUES[strengthLevel]}
-          aria-label={translation?.t('password_strength') ?? 'Password strength'}
-        >
-          <div data-part="strength-fill" />
+        <div data-part="strength-meter">
+          <div
+            data-part="strength-track"
+            data-strength={strengthLevel}
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={STRENGTH_VALUES[strengthLevel]}
+            aria-valuetext={strengthText}
+            aria-label={tCommon('password_strength', 'Password strength')}
+          >
+            {/* One segment per level; the skin activates them by count from
+                data-strength, so the level reads as segment COUNT + localized
+                word + tone -- never tone alone. Children of a progressbar are
+                presentational by spec. */}
+            {Array.from({ length: STRENGTH_SEGMENT_COUNT }, (_, segment) => (
+              <span key={segment} data-part="strength-segment">
+                <span data-part="strength-fill" />
+              </span>
+            ))}
+          </div>
+          <span data-part="strength-label">{strengthText}</span>
         </div>
       )}
       {error && errorMessage && (

@@ -21,9 +21,10 @@
  * - The spotlight cutout is measured by `Tour/runtime/spotlight-rect`
  * - Spotlight uses box-shadow: 0 0 0 9999px for mask effect
  * - Step indicators/actions are skin-owned, keyed on data-part; close/prev/next
- *   copy uses the common locale (`close`/`previous`/`next`) and `Finish`
- *   resolves through the same channel's `tOr` floor until its key lands
- *   (tracked in the family ficha)
+ *   copy uses the common locale (`close`/`previous`/`next`), `Finish` resolves
+ *   through the same channel (`common.finish`, landed in the en/es/ar/fr
+ *   catalogs) and the step counter through `common.tour.step_progress` -- both
+ *   keep the English `tOr` floor for catalogs without the keys
  *
  * @example Using Modern Engine
  * ```tsx
@@ -87,6 +88,7 @@ const getTargetElement = (target: TourStepProps['target']): HTMLElement | null =
 interface ModernTourChromeProps {
   forwardedRef: React.ForwardedRef<HTMLDivElement>;
   className?: string;
+  style?: React.CSSProperties;
   zIndex: number;
   mask: TourProps['mask'];
   type: TourProps['type'];
@@ -107,6 +109,7 @@ interface ModernTourChromeProps {
 const ModernTourChrome = ({
   forwardedRef,
   className,
+  style,
   zIndex,
   mask,
   type,
@@ -222,7 +225,10 @@ const ModernTourChrome = ({
       // custom property (not a paint key) for both surfaces. Left unset when the
       // caller passes a `mask` object with no `color`, exactly as before: the
       // dependent declarations then drop, painting no scrim and no cutout.
-      style={{ ...portalScope.variables, zIndex, ['--ds-tour-mask-color' as any]: maskColor }}
+      // The contract's root `style` spreads FIRST (rustic sibling idiom): the
+      // tenant-scope snapshot and the runtime z-index/mask channel keep
+      // precedence over caller paint.
+      style={{ ...style, ...portalScope.variables, zIndex, ['--ds-tour-mask-color' as any]: maskColor }}
     >
       {/* Mask. Fixed full-viewport positioning is skin-owned; only the
           consumer's mask.style spread stays inline (public API). */}
@@ -316,9 +322,10 @@ const ModernTourChrome = ({
             ))}
           </div>
 
-          {/* Buttons. `Finish` resolves through the common channel with an
-              English floor until the locale key lands (family ficha); the
-              floor keeps the shipped label byte-identical. */}
+          {/* Buttons. `Finish` resolves through the common channel
+              (`common.finish`, landed in the en/es/ar/fr catalogs) with the
+              English `tOr` floor kept for catalogs without the key; the floor
+              keeps the shipped label byte-identical. */}
           <div data-part="actions">
             {currentStep > 0 && (
               <button
@@ -377,6 +384,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
       mask = TOUR_DEFAULTS.mask,
       zIndex = TOUR_DEFAULTS.zIndex,
       className,
+      style,
     } = props;
 
     // Controlled/uncontrolled step index -- external current takes precedence
@@ -439,7 +447,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
     }, [open, step, currentStep]);
 
     // Return an empty placeholder when closed to preserve ref stability
-    if (!open || typeof document === 'undefined') return <div ref={ref} className={className} />;
+    if (!open || typeof document === 'undefined') return <div ref={ref} className={className} style={style} />;
 
     // Tour is js-branch-only by construction: the chrome is ONE open chain of
     // three stacked parts (backdrop scrim, spotlight cutout, step surface)
@@ -458,6 +466,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
             <ModernTourChrome
               forwardedRef={ref}
               className={className}
+              style={style}
               zIndex={zIndex!}
               mask={mask}
               type={type}

@@ -9,7 +9,7 @@
  * The component supports all step statuses (wait, process, finish, error)
  * and provides visual feedback through colors and icons.
  *
- * @example Basic Usage
+ * @example
  * ```tsx
  * <Stepper current={1}>
  *   <Stepper.Step title="Account" description="Create your account" />
@@ -47,57 +47,10 @@
 'use client';
 
 import React from 'react';
-import type { CSSProperties } from 'react';
-import type { StepProps, StepStatus } from '../../contracts';
-import { SIZE_MAP, FONT_SIZE_MAP } from '../../contracts';
-
-// ============================================================================
-// Icon Components
-// ============================================================================
-
-/**
- * Default check icon for finished steps.
- * @internal
- */
-const CheckIcon = ({ size }: { size: number }) => (
-  <svg
-    width={size * 0.5}
-    height={size * 0.5}
-    viewBox="0 0 16 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M13.5 4.5L6 12L2.5 8.5"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
-/**
- * Default error icon for error state steps.
- * @internal
- */
-const ErrorIcon = ({ size }: { size: number }) => (
-  <svg
-    width={size * 0.5}
-    height={size * 0.5}
-    viewBox="0 0 16 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M12 4L4 12M4 4L12 12"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+import type { StepProps } from '../../contracts';
+import { SIZE_MAP } from '../../contracts';
+import { ActionConfirmIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-confirm';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 // ============================================================================
 // Internal Props Interface
@@ -139,7 +92,12 @@ interface StepInternalProps extends StepProps {
  * @remarks
  * - Supports keyboard navigation (Enter/Space to activate)
  * - Includes ARIA attributes for accessibility
- * - Uses CSS variables for theming consistency
+ * - Status glyphs are the governed `action.confirm` / `action.close` facade
+ *   roles (the former local SVG pair violated the icons law); the indicator
+ *   geometry, typography, connector and every state transition live in
+ *   `stepper-compounds.css`, keyed on the stamped `data-size` /
+ *   `data-direction` / `data-label-placement` / `data-status` hooks — no
+ *   inline paint, no raw durations, logical properties only.
  *
  * @param props - {@link StepInternalProps}
  * @returns Individual step element with indicator and content
@@ -163,14 +121,18 @@ export function StepperStep({
   className = '',
   style,
   children,
+  // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
+  // step root element, BEFORE the engine's own stamps.
+  ...rest
 }: StepInternalProps): React.ReactElement {
   // Get size values from mappings
   const iconSize = SIZE_MAP[size];
-  const fontSize = FONT_SIZE_MAP[size];
 
-  // ============================================================================
+  const isClickable = Boolean(onClick) && !disabled;
+
+  // ========================================================================
   // Event Handlers
-  // ============================================================================
+  // ========================================================================
 
   /**
    * Handles click events on the step.
@@ -195,19 +157,15 @@ export function StepperStep({
   };
 
   // ============================================================================
-  // Status Color Helpers
-  // ============================================================================
-
-  /**
-   * Gets the color configuration based on step status.
-   * Uses CSS variables with fallback values.
-   */
-  // ============================================================================
   // Icon Renderer
   // ============================================================================
 
   /**
-   * Renders the step icon based on status and custom icon prop.
+   * Renders the step icon based on status and custom icon prop. The default
+   * status glyphs are the governed facade roles (`action.confirm` checks a
+   * finished step, `action.close` crosses an errored one — the bare-glyph
+   * equivalents of the former local SVG pair, sized from the contract's
+   * SIZE_MAP as instance geometry, never paint).
    */
   const renderIcon = () => {
     if (icon) {
@@ -215,100 +173,30 @@ export function StepperStep({
     }
 
     if (status === 'finish' && variant !== 'simple') {
-      return <CheckIcon size={iconSize} />;
+      return <ActionConfirmIcon decorative size={iconSize * 0.5} />;
     }
 
     if (status === 'error') {
-      return <ErrorIcon size={iconSize} />;
+      return <ActionCloseIcon decorative size={iconSize * 0.5} />;
     }
 
     return <span>{stepNumber}</span>;
   };
 
-  // ============================================================================
-  // Styles
-  // ============================================================================
-
-  const stepStyle: CSSProperties = {
-    display: 'flex',
-    flexDirection: direction === 'vertical' ? 'row' : labelPlacement === 'vertical' ? 'column' : 'row',
-    alignItems: direction === 'vertical' ? 'flex-start' : labelPlacement === 'vertical' ? 'center' : 'center',
-    gap: 'var(--ds-stepper-item-gap, 12px)',
-    flex: direction === 'horizontal' && !isLast ? 1 : 'none',
-    opacity: disabled ? 0.5 : 1,
-    cursor: onClick && !disabled ? 'pointer' : 'default',
-    ...style,
-  };
-
-  const iconContainerStyle: CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: iconSize,
-    height: iconSize,
-    minWidth: iconSize,
-    fontSize: fontSize.title,
-    fontWeight: 500,
-    transition: 'all 0.3s ease',
-  };
-
-  const contentStyle: CSSProperties = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '2px',
-    textAlign: labelPlacement === 'vertical' && direction === 'horizontal' ? 'center' : 'left',
-    minWidth: 0,
-  };
-
-  const titleStyle: CSSProperties = {
-    fontSize: fontSize.title,
-    fontWeight: 500,
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    whiteSpace: 'nowrap',
-  };
-
-  const subTitleStyle: CSSProperties = {
-    fontSize: fontSize.description,
-    marginLeft: '8px',
-  };
-
-  const descriptionStyle: CSSProperties = {
-    fontSize: fontSize.description,
-  };
-
-  // Connector line style (horizontal or vertical); the fill rides `data-status`
-  // in the skin.
-  const connectorStyle: CSSProperties = direction === 'horizontal' ? {
-    flex: 1,
-    minWidth: '32px',
-    height: '1px',
-    margin: '0 8px',
-    alignSelf: 'center',
-    transition: 'background-color 0.3s ease',
-  } : {
-    width: '1px',
-    minHeight: '32px',
-    marginLeft: `${iconSize / 2}px`,
-    marginTop: '4px',
-    marginBottom: '4px',
-    transition: 'background-color 0.3s ease',
-  };
-
-  // ============================================================================
+  // ========================================================================
   // Render
-  // ============================================================================
+  // ========================================================================
 
   return (
     <>
       <div
+        {...rest}
         className={`rottay-stepper-step rottay-stepper-step--${status} ${active ? 'rottay-stepper-step--active' : ''} ${disabled ? 'rottay-stepper-step--disabled' : ''} ${className}`}
-        style={stepStyle}
+        style={style}
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         role={onClick ? 'button' : undefined}
-        tabIndex={onClick && !disabled ? 0 : undefined}
+        tabIndex={isClickable ? 0 : undefined}
         aria-disabled={disabled}
         aria-current={status === 'process' ? 'step' : undefined}
         data-step={stepIndex}
@@ -316,24 +204,29 @@ export function StepperStep({
         data-status={status}
         data-active={active || undefined}
         data-disabled={disabled || undefined}
+        data-clickable={isClickable || undefined}
+        data-size={size}
+        data-direction={direction}
+        data-label-placement={labelPlacement}
+        data-last={isLast || undefined}
       >
         {/* Step Icon/Number */}
-        <div className="rottay-stepper-step__icon" data-part="icon" data-variant={variant} style={iconContainerStyle}>
+        <div className="rottay-stepper-step__icon" data-part="icon" data-variant={variant}>
           {renderIcon()}
         </div>
 
         {/* Step Content */}
-        <div className="rottay-stepper-step__content" style={contentStyle}>
-          <div className="rottay-stepper-step__title" data-part="label" style={titleStyle}>
+        <div className="rottay-stepper-step__content">
+          <div className="rottay-stepper-step__title" data-part="label">
             {title}
             {subTitle && (
-              <span className="rottay-stepper-step__subtitle" data-part="subtitle" style={subTitleStyle}>
+              <span className="rottay-stepper-step__subtitle" data-part="subtitle">
                 {subTitle}
               </span>
             )}
           </div>
           {description && (
-            <div className="rottay-stepper-step__description" data-part="description" style={descriptionStyle}>
+            <div className="rottay-stepper-step__description" data-part="description">
               {description}
             </div>
           )}
@@ -343,9 +236,17 @@ export function StepperStep({
         {children}
       </div>
 
-      {/* Connector line (not for last step in horizontal mode) */}
-      {!isLast && direction === 'horizontal' && (
-        <div className="rottay-stepper-connector" data-part="connector" data-status={status} style={connectorStyle} />
+      {/* Connector line (never after the last step). The skin owns the box
+          and the fill per `data-direction`/`data-status`; the vertical
+          orientation used to be a dead inline branch — it renders now. */}
+      {!isLast && (
+        <div
+          className="rottay-stepper-connector"
+          data-part="connector"
+          data-status={status}
+          data-direction={direction}
+          data-size={size}
+        />
       )}
     </>
   );

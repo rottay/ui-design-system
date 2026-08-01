@@ -10,7 +10,7 @@
  *
  * **Features:**
  * - Three size variants (sm, md, lg)
- * - SVG X icon for crisp rendering
+ * - Governed `action.close` semantic icon (tenant icon profile)
  * - Hover and focus states
  * - Full accessibility support
  * - CSS custom property theming
@@ -21,7 +21,7 @@
  * - Focus visible states
  *
  * **Styling via CSS Custom Properties:**
- * - `--ds-modal-close-color`: Button color (default: rgba(0, 0, 0, 0.45))
+ * - `--ds-modal-close-color`: Button color (fallback: `--ds-color-text-secondary`)
  *
  * @example Basic Usage
  * ```tsx
@@ -67,6 +67,7 @@
 
 import React, { forwardRef } from 'react';
 import type { ModalCloseButtonProps } from '../../../contracts';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 
 // ============================================================================
 // Constants
@@ -74,16 +75,16 @@ import type { ModalCloseButtonProps } from '../../../contracts';
 
 /**
  * Size mappings for the close button.
- * Defines button dimensions and icon sizes for each variant.
+ * Defines button dimensions and governed icon sizes for each variant.
  * @internal
  */
-const SIZE_MAP: Record<'sm' | 'md' | 'lg', { size: string; icon: string }> = {
+const SIZE_MAP: Record<'sm' | 'md' | 'lg', { size: string; icon: number }> = {
   /** Small - 24px button, 14px icon */
-  sm: { size: '24px', icon: '14px' },
+  sm: { size: '24px', icon: 14 },
   /** Medium - 32px button, 18px icon (default) */
-  md: { size: '32px', icon: '18px' },
+  md: { size: '32px', icon: 18 },
   /** Large - 40px button, 22px icon */
-  lg: { size: '40px', icon: '22px' },
+  lg: { size: '40px', icon: 22 },
 };
 
 // ============================================================================
@@ -98,7 +99,7 @@ const SIZE_MAP: Record<'sm' | 'md' | 'lg', { size: string; icon: string }> = {
  * accessibility with proper button semantics and ARIA attributes.
  *
  * @remarks
- * - Uses inline SVG for crisp icon rendering at any size
+ * - Uses the governed `action.close` semantic icon (no private SVG)
  * - Transparent background with hover state
  * - Forwards ref for DOM access
  * - Integrates with tenant theming via CSS custom properties
@@ -141,28 +142,17 @@ export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonPr
     // -------------------------------------------------------------------------
 
     /**
-     * Button styles for the close button.
-     * Minimal styling for a clean, accessible button.
+     * Instance styles for the close button: only the square size resolves
+     * inline (SIZE_MAP contract enum — sanctioned instance geometry). The
+     * stable frame (flex centering, cursor, shrink) and the hover/color
+     * transition live in the compound skin
+     * (modal-compounds.css `[data-part='close-button']`), which consumes pure
+     * `--ds-motion-*` channels — no literal duration fallbacks.
      */
     const buttonStyle: React.CSSProperties = {
-      // Layout - centered flex container
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-
       // Dimensions - based on size prop
       width: sizeConfig.size,
       height: sizeConfig.size,
-
-      // Reset button defaults
-      padding: 0,
-
-      // Interaction
-      cursor: 'pointer',
-      transition: 'color 0.2s, background-color 0.2s',
-
-      // Prevent shrinking in flex layouts
-      flexShrink: 0,
 
       // Merge user styles (takes precedence)
       ...style,
@@ -182,20 +172,10 @@ export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonPr
         onClick={onClose}
         aria-label={ariaLabel}
       >
-        {/* SVG X Icon */}
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          style={{ width: sizeConfig.icon, height: sizeConfig.icon }}
-          aria-hidden="true"
-        >
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
+        {/* Governed icon role (action.close): tenant icon treatment, sizing
+            and stroke follow the icon profile; decorative — the button's
+            aria-label owns the accessible name. */}
+        <ActionCloseIcon decorative size={sizeConfig.icon} />
       </button>
     );
   }

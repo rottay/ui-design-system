@@ -31,14 +31,18 @@
   gap: var(--_ds-input-resolved-gap);
   color: var(--ds-input-color, var(--ds-color-text-primary));
   caret-color: var(--ds-input-caret-color, var(--ds-input-border-focus, var(--ds-color-primary)));
+  /* The addon-shell branch is a <div> whose whole surface focuses the inner
+     control on click: it must advertise text entry, not the default arrow.
+     The readonly/disabled rules below override this with their own cursors. */
+  cursor: text;
   background: var(--ds-input-bg, var(--ds-surface-control));
-  border: var(--ds-input-border-width, 1px) var(--ds-input-border-style, solid)
+  border: var(--ds-input-border-width) var(--ds-input-border-style)
     var(--ds-input-border, var(--ds-color-border));
   border-radius: var(--ds-input-resolved-radius);
-  box-shadow: var(--ds-input-shadow-rest, none), var(--ds-input-inset-shadow, none);
-  font-family: var(--ds-input-font-family, inherit);
+  box-shadow: var(--ds-input-shadow-rest), var(--ds-input-inset-shadow, none);
+  font-family: var(--ds-input-font-family);
   font-weight: var(--ds-input-font-weight, var(--ds-font-weight-normal));
-  letter-spacing: var(--ds-input-letter-spacing, normal);
+  letter-spacing: var(--ds-input-letter-spacing);
   outline: none;
   transition:
     border-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
@@ -79,13 +83,13 @@ input.rottay-input.rottay-input--modern[data-part='root'] {
 .rottay-input.rottay-input--modern[data-part='root'] > .rottay-input__control::placeholder,
 input.rottay-input.rottay-input--modern[data-part='root']::placeholder {
   color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
-  opacity: var(--ds-input-placeholder-opacity, 1);
+  opacity: var(--ds-input-placeholder-opacity);
 }
 
 .rottay-input.rottay-input--modern[data-part='root'] > .rottay-input__control::selection,
 input.rottay-input.rottay-input--modern[data-part='root']::selection {
   color: var(--ds-input-selection-color, var(--ds-input-color, var(--ds-color-text-primary)));
-  background: var(--ds-input-selection-bg, Highlight);
+  background: var(--ds-input-selection-bg);
 }
 
 .rottay-input.rottay-input--modern[data-part='root'] [data-part='affix-prefix'],
@@ -96,10 +100,10 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
   place-items: center;
   min-inline-size: var(--ds-input-affix-size, var(--ds-input-md-icon-size));
   block-size: var(--ds-input-affix-size, var(--ds-input-md-icon-size));
-  padding-inline: var(--ds-input-affix-padding-x, 0);
+  padding-inline: var(--ds-input-affix-padding-x);
   color: var(--ds-input-affix-color, var(--ds-input-addon-color, var(--ds-color-text-muted)));
-  background: var(--ds-input-affix-bg, transparent);
-  border: var(--ds-input-affix-border, 0 solid transparent);
+  background: var(--ds-input-affix-bg);
+  border: var(--ds-input-affix-border);
   border-radius: var(--ds-input-affix-radius, var(--ds-radius-sm));
   line-height: 1;
 }
@@ -115,8 +119,8 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
   block-size: var(--ds-input-action-size, var(--ds-input-md-icon-size));
   padding: 0;
   color: var(--ds-input-clear-color, var(--ds-input-affix-color, var(--ds-color-text-muted)));
-  background: var(--ds-input-clear-bg, transparent);
-  border: var(--ds-input-clear-border, 1px solid transparent);
+  background: var(--ds-input-clear-bg);
+  border: var(--ds-input-clear-border);
   border-radius: var(--ds-input-action-radius, var(--ds-input-clear-radius, var(--ds-radius-full)));
   cursor: pointer;
   font: inherit;
@@ -141,7 +145,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
   color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
   background: var(--ds-input-clear-bg-hover, var(--ds-surface-inset));
   border-color: var(--ds-input-clear-border-hover, var(--ds-color-border-subtle));
-  box-shadow: var(--ds-input-action-shadow-hover, none);
+  box-shadow: var(--ds-input-action-shadow-hover);
 }
 
 .rottay-input.rottay-input--modern[data-part='root'] [data-part='clear-button']:focus-visible,
@@ -160,7 +164,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 .rottay-input.rottay-input--modern[data-part='root'] [data-part='clear-button']:disabled,
 .rottay-input.rottay-input--modern[data-part='root'] [data-part='visibility-toggle']:disabled,
 .rottay-input.rottay-input--modern[data-part='root'] [data-part='search-button']:disabled {
-  cursor: var(--ds-input-disabled-cursor, not-allowed);
+  cursor: var(--ds-input-disabled-cursor);
   opacity: var(--ds-input-action-disabled-opacity, 0.45);
   pointer-events: none;
 }
@@ -179,10 +183,10 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
   block-size: 100%;
   fill: none;
   stroke: currentColor;
-  stroke-width: var(--ds-input-loading-stroke, 2);
+  stroke-width: var(--ds-input-loading-stroke);
   stroke-linecap: round;
   stroke-dasharray: 42 18;
-  animation: ds-input-spin var(--ds-input-loading-duration, 720ms) linear infinite;
+  animation: ds-input-spin var(--ds-input-loading-duration) linear infinite;
 }
 
 @keyframes ds-input-spin {
@@ -195,7 +199,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
   --ds-input-resolved-radius: var(--ds-input-xs-radius, var(--ds-input-xs-border-radius));
   --_ds-input-resolved-gap: var(--ds-input-xs-gap, var(--ds-input-affix-gap));
   block-size: calc(
-    var(--ds-input-xs-height) * var(--ds-density-effective-scale, 1)
+    var(--ds-input-xs-height) * var(--ds-density-effective-scale)
   );
   padding-inline: var(--ds-input-xs-padding-x);
   font-size: var(--ds-input-xs-font-size);
@@ -206,7 +210,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
   --ds-input-resolved-radius: var(--ds-input-sm-radius, var(--ds-input-sm-border-radius));
   --_ds-input-resolved-gap: var(--ds-input-sm-gap, var(--ds-input-affix-gap));
   block-size: calc(
-    var(--ds-input-sm-height) * var(--ds-density-effective-scale, 1)
+    var(--ds-input-sm-height) * var(--ds-density-effective-scale)
   );
   padding-inline: var(--ds-input-sm-padding-x);
   font-size: var(--ds-input-sm-font-size);
@@ -217,7 +221,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
   --ds-input-resolved-radius: var(--ds-input-md-radius, var(--ds-input-md-border-radius));
   --_ds-input-resolved-gap: var(--ds-input-md-gap, var(--ds-input-affix-gap));
   block-size: calc(
-    var(--ds-input-md-height) * var(--ds-density-effective-scale, 1)
+    var(--ds-input-md-height) * var(--ds-density-effective-scale)
   );
   padding-inline: var(--ds-input-md-padding-x);
   font-size: var(--ds-input-md-font-size);
@@ -228,7 +232,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
   --ds-input-resolved-radius: var(--ds-input-lg-radius, var(--ds-input-lg-border-radius));
   --_ds-input-resolved-gap: var(--ds-input-lg-gap, var(--ds-input-affix-gap));
   block-size: calc(
-    var(--ds-input-lg-height) * var(--ds-density-effective-scale, 1)
+    var(--ds-input-lg-height) * var(--ds-density-effective-scale)
   );
   padding-inline: var(--ds-input-lg-padding-x);
   font-size: var(--ds-input-lg-font-size);
@@ -239,7 +243,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
   --ds-input-resolved-radius: var(--ds-input-xl-radius, var(--ds-input-xl-border-radius));
   --_ds-input-resolved-gap: var(--ds-input-xl-gap, var(--ds-input-affix-gap));
   block-size: calc(
-    var(--ds-input-xl-height) * var(--ds-density-effective-scale, 1)
+    var(--ds-input-xl-height) * var(--ds-density-effective-scale)
   );
   padding-inline: var(--ds-input-xl-padding-x);
   font-size: var(--ds-input-xl-font-size);
@@ -255,7 +259,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 .rottay-input.rottay-input--modern[data-part='root'][data-variant='flushed'] {
   padding-inline: 0;
   background: transparent;
-  border-width: 0 0 var(--ds-input-border-width, 1px);
+  border-width: 0 0 var(--ds-input-border-width);
   border-radius: 0;
   box-shadow: none;
 }
@@ -273,7 +277,7 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 .rottay-input.rottay-input--modern[data-part='root'][data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']):not([data-variant='unstyled']) {
   background: var(--ds-input-bg-hover, var(--ds-input-bg));
   border-color: var(--ds-input-border-hover, var(--ds-color-border-hover));
-  box-shadow: var(--ds-input-shadow-hover, var(--ds-input-shadow-rest, none)), var(--ds-input-inset-shadow, none);
+  box-shadow: var(--ds-input-shadow-hover, var(--ds-input-shadow-rest)), var(--ds-input-inset-shadow, none);
 }
 
 .rottay-input.rottay-input--modern[data-part='root'][data-variant='filled'][data-state~='hovered']:not([data-state~='focused']):not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']) {
@@ -322,8 +326,8 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
   color: var(--ds-input-readonly-color, var(--ds-input-color));
   background: var(--ds-input-readonly-bg, var(--ds-input-bg));
   border-color: var(--ds-input-readonly-border, var(--ds-input-border));
-  border-style: var(--ds-input-readonly-border-style, solid);
-  cursor: var(--ds-input-readonly-cursor, text);
+  border-style: var(--ds-input-readonly-border-style);
+  cursor: var(--ds-input-readonly-cursor);
 }
 
 .rottay-input.rottay-input--modern[data-part='root'][data-disabled='true'] {
@@ -331,8 +335,8 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
   background: var(--ds-input-bg-disabled, var(--ds-surface-disabled));
   border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
   box-shadow: var(--ds-input-shadow-disabled, none);
-  cursor: var(--ds-input-disabled-cursor, not-allowed);
-  opacity: var(--ds-input-disabled-opacity, 0.6);
+  cursor: var(--ds-input-disabled-cursor);
+  opacity: var(--ds-input-disabled-opacity);
 }
 
 .rottay-input.rottay-input--modern[data-part='root'][data-disabled='true'] * {
@@ -352,7 +356,39 @@ input.rottay-input.rottay-input--modern[data-part='root']:-webkit-autofill {
   -webkit-text-fill-color: var(--ds-input-autofill-color, var(--ds-input-color));
   caret-color: var(--ds-input-autofill-caret, var(--ds-input-caret-color));
   box-shadow: 0 0 0 1000px var(--ds-input-autofill-bg, var(--ds-input-bg)) inset;
-  transition: background-color 9999s ease-out 0s;
+}
+
+/* Standard :autofill (Firefox and engines tracking the spec) reads the same
+   channels as the WebKit rule above, so the autofilled posture cannot drift
+   across browsers. */
+.rottay-input.rottay-input--modern[data-part='root'] > .rottay-input__control:autofill,
+input.rottay-input.rottay-input--modern[data-part='root']:autofill {
+  caret-color: var(--ds-input-autofill-caret, var(--ds-input-caret-color));
+  box-shadow: 0 0 0 1000px var(--ds-input-autofill-bg, var(--ds-input-bg)) inset;
+}
+
+/* Native pickers that duplicate governed anatomy are removed: the search
+   cancel button re-implements `clearable` (untokenized, unlabeled, wrong
+   icon profile) and the number spinners compete with the InputNumber
+   family's own steppers. */
+.rottay-input.rottay-input--modern[data-part='root'] > .rottay-input__control::-webkit-search-cancel-button,
+input.rottay-input.rottay-input--modern[data-part='root']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.rottay-input.rottay-input--modern[data-part='root'] > .rottay-input__control::-webkit-outer-spin-button,
+.rottay-input.rottay-input--modern[data-part='root'] > .rottay-input__control::-webkit-inner-spin-button,
+input.rottay-input.rottay-input--modern[data-part='root']::-webkit-outer-spin-button,
+input.rottay-input.rottay-input--modern[data-part='root']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.rottay-input.rottay-input--modern[data-part='root'] > .rottay-input__control[type='number'],
+input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 /* Messages remain in logical flow: no absolute text, no collisions in long
@@ -379,12 +415,12 @@ input.rottay-input.rottay-input--modern[data-part='root']:-webkit-autofill {
   /* State hues follow the solid-fill contrast grammar: raw 500-level hues fail
      on light surfaces, so the fallback deepens toward the tenant-safe dark
      neutral ramp (`--ds-color-neutral-900`) (error >= 5.7:1). */
-  color: var(--ds-input-count-color-error, var(--ds-input-error-color, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900, #171717) 22%)));
+  color: var(--ds-input-count-color-error, var(--ds-input-error-color, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%)));
 }
 
 .rottay-input-field[data-part='field'] > [data-part='count'][data-count-state='warning'],
 .rottay-input-field[data-part='field'] > [data-part='count'][data-count-state='limit'] {
-  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900, #171717) 45%));
+  color: var(--ds-input-count-color-warning, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%));
 }
 
 .rottay-input-field[data-part='field'] > [data-part='count'][data-count-state='limit'] {
@@ -413,16 +449,16 @@ input.rottay-input.rottay-input--modern[data-part='root']:-webkit-autofill {
   .rottay-input.rottay-input--modern[data-part='root'] {
     /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px
        fluid root at narrow widths (measured on the live bundle, Axe R0). */
-    min-block-size: var(--ds-input-touch-target-min, 44px);
+    min-block-size: var(--ds-input-touch-target-min);
   }
 
   .rottay-input.rottay-input--modern[data-part='root'] [data-part='clear-button'],
   .rottay-input.rottay-input--modern[data-part='root'] [data-part='visibility-toggle'],
   .rottay-input.rottay-input--modern[data-part='root'] [data-part='search-button'] {
-    min-inline-size: var(--ds-input-touch-target-min, 44px);
+    min-inline-size: var(--ds-input-touch-target-min);
     /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px
        fluid root at narrow widths (measured on the live bundle, Axe R0). */
-    min-block-size: var(--ds-input-touch-target-min, 44px);
+    min-block-size: var(--ds-input-touch-target-min);
   }
 }
 
@@ -437,7 +473,7 @@ input.rottay-input.rottay-input--modern[data-part='root']:-webkit-autofill {
   /* Keep a slowed spin rather than a frozen frame so the loading posture
      stays legible; the duration derives from the loading channel. */
   .rottay-input.rottay-input--modern[data-part='root'] [data-part='loading-indicator'] svg {
-    animation-duration: calc(var(--ds-input-loading-duration, 720ms) * 2.5);
+    animation-duration: calc(var(--ds-input-loading-duration) * 2.5);
   }
 }
 

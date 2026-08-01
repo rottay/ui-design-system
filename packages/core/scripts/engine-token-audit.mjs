@@ -45,6 +45,7 @@ import { countMotionRecipeConsumers } from './lib/motion-recipe-consumer-counter
 import { countSkinExemptionBreaches } from './lib/skin-exemption-audit.mjs';
 import { countRuntimeSvgPaintByFile } from './lib/runtime-svg-paint-counter.mjs';
 import { countEmbeddedCssPaintByFile, countEmbeddedCssPaintInFile } from './lib/embedded-css-paint-counter.mjs';
+import { stripScriptComments } from './lib/script-source-comment-stripper.mjs';
 import { ARC09_INLINE_PAINT_FILES, collectFleetInlinePaintSourceFiles } from './lib/fleet-inline-paint-census.mjs';
 import { collectSourceFiles as collectRuntimeSvgSourceFiles } from './runtime-svg-paint-census.mjs';
 import { countDeadParts } from './skin-dead-part-audit.mjs';
@@ -91,14 +92,13 @@ function argumentValue(name) {
 const modernFiles = modernEngineFiles;
 const modernColorFiles = modernEngineColorFiles;
 
-/** Strips `/* ... *\/` block comments (replacing their content with spaces, so offsets/line
- * counts are unaffected) before color-literal counting. JSDoc `@example` blocks on several
+/** Strips CSS `/* ... *\/` block comments (replacing their content with spaces, so offsets/line
+ * counts are unaffected) before CSS color-literal counting. JSDoc `@example` blocks on several
  * patterns (EnvironmentToggle, CalendarView, TenantPreview, Rate, ColorPicker) illustrate a
  * free-form `color`/`primaryColor` prop with a sample hex; that sample documents a prop SHAPE
  * for arbitrary consumer data, not a hardcoded engine chrome color, and a comment is never a
- * rendered color regardless. Line comments (`//`) are deliberately NOT stripped: no exemption
- * found in this codebase needed it, and naively stripping `//` risks eating real code that
- * follows a `//` inside a string (e.g. a URL). */
+ * rendered color regardless. Script sources use the TypeScript-scanner-backed
+ * `stripScriptComments` helper instead, so `//` inside strings and URLs remains data. */
 function stripBlockComments(text) {
   return text.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
 }
@@ -161,7 +161,10 @@ function countColorLiterals(files) {
   let hex = 0;
   let rgba = 0;
   for (const file of files) {
-    const text = stripBlockComments(readFileSync(file, 'utf8'));
+    const raw = readFileSync(file, 'utf8');
+    const text = /\.(?:[cm]?[jt]sx?)$/i.test(file)
+      ? stripScriptComments(raw, file)
+      : stripBlockComments(raw);
     const perFile = countColorLiteralsInText(text);
     hex += perFile.hex;
     rgba += perFile.rgba;
@@ -184,7 +187,10 @@ const ORPHAN_MOTION_NAMES = [
  * detection rules per file instead of forking a second regex set (see
  * `countColorLiteralsInText` above for the same rationale).
  */
-function countMotionLiteralsInText(text) {
+function countMotionLiteralsInText(text, fileName = 'source.tsx') {
+  const source = /\.(?:[cm]?[jt]sx?)$/i.test(fileName)
+    ? stripScriptComments(text, fileName)
+    : stripBlockComments(text);
   let cubicBezier = 0;
   let rawDuration = 0;
   const cubicRe = /cubic-bezier\(/g;
@@ -193,9 +199,9 @@ function countMotionLiteralsInText(text) {
   // tempos that legitimately sit outside the 120/200/320 canon and are allowlisted.
   const msRe = /\b\d+(?:\.\d+)?ms\b/g;
   const sRe = /(?<![\w.])(\d*\.?\d+)s(?![\w])/g;
-  cubicBezier += (text.match(cubicRe) || []).length;
-  rawDuration += (text.match(msRe) || []).length;
-  for (const m of text.matchAll(sRe)) {
+  cubicBezier += (source.match(cubicRe) || []).length;
+  rawDuration += (source.match(msRe) || []).length;
+  for (const m of source.matchAll(sRe)) {
     if (Number(m[1]) < 1) rawDuration += 1; // sub-second seconds are interaction durations
   }
   return { cubicBezier, rawDuration };
@@ -208,7 +214,7 @@ function countMotionLiterals(files) {
   const orphanRe = new RegExp(ORPHAN_MOTION_NAMES.map((n) => n.replace(/[-]/g, '\\-')).join('|'), 'g');
   for (const file of files) {
     const text = readFileSync(file, 'utf8');
-    const perFile = countMotionLiteralsInText(text);
+    const perFile = countMotionLiteralsInText(text, file);
     cubicBezier += perFile.cubicBezier;
     rawDuration += perFile.rawDuration;
     orphanTokens += (text.match(orphanRe) || []).length;
@@ -1519,14 +1525,14 @@ function buildTokenCoverage() {
 
   for (const file of coverageFiles) {
     const raw = readFileSync(file, 'utf8');
-    const stripped = stripBlockComments(raw);
+    const stripped = stripScriptComments(raw, file);
     const rel = file.slice(root.length + 1).replace(/\\/g, '/');
 
     const tokens = new Set();
     for (const m of raw.matchAll(DS_TOKEN_RE)) tokens.add(m[1]);
     for (const t of tokens) allTokens.add(t);
 
-    const motionLit = countMotionLiteralsInText(raw);
+    const motionLit = countMotionLiteralsInText(raw, file);
     const colorLit = countColorLiteralsInText(stripped);
     const literalsTotal = motionLit.cubicBezier + motionLit.rawDuration + colorLit.hex + colorLit.rgba;
     literalsOutstandingTotal += literalsTotal;

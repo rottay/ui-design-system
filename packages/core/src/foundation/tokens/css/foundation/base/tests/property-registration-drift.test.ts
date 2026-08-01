@@ -6,7 +6,9 @@
  * with the token's shipped at-rest default silently changes unset rendering.
  * This test parses properties.css and the shipped default sources and fails on
  * any disagreement, on any drift in syntax/inherits, and on any registration
- * that is not accounted for.
+ * that is not accounted for. It also walks every CSS source and rejects
+ * registrations outside this canonical owner; a green allowlist cannot hide a
+ * document-global registration inside a component skin.
  *
  * Shipped-default sources parsed here: foundation/themes/default.css and
  * foundation/animations/transitions.css (the two named default files), plus
@@ -23,14 +25,18 @@
  * No React render, no DOM: source parsing exactly like density-scale-parity and
  * the neutral-derivation contract test.
  */
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const fromRoot = (rel: string) => resolve(process.cwd(), rel);
+const CSS_ROOT = fromRoot("src/foundation/tokens/css");
+const PROPERTIES_PATH = fromRoot(
+  "src/foundation/tokens/css/foundation/base/properties.css",
+);
 
 const PROPERTIES_CSS = readFileSync(
-  fromRoot("src/foundation/tokens/css/foundation/base/properties.css"),
+  PROPERTIES_PATH,
   "utf8",
 );
 const DEFAULT_CSS = readFileSync(
@@ -97,6 +103,11 @@ function readDecl(css: string, name: string): string | null {
  * at-rest default below; keep the two in lockstep.
  */
 const EXPECTED: Record<string, Registration> = {
+  "--_ds-arc-value": {
+    syntax: "<number>",
+    inherits: false,
+    initialValue: "0",
+  },
   "--ds-effect-intensity": {
     syntax: "<number>",
     inherits: true,
@@ -203,6 +214,26 @@ const WIDGET_BOARD_IDENTITIES: Record<string, string> = {
 const registered = parseRegistrations(PROPERTIES_CSS);
 
 describe("@property registration contract", () => {
+  it("keeps every registration in the canonical unlayered owner", () => {
+    const offenders: string[] = [];
+    const visit = (directory: string): void => {
+      for (const entry of readdirSync(directory, { withFileTypes: true })) {
+        const absolute = resolve(directory, entry.name);
+        if (entry.isDirectory()) {
+          visit(absolute);
+          continue;
+        }
+        if (!entry.name.endsWith(".css") || absolute === PROPERTIES_PATH) continue;
+        const source = readFileSync(absolute, "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+        if (/^\s*@property\s+--/m.test(source)) {
+          offenders.push(absolute.slice(CSS_ROOT.length + 1));
+        }
+      }
+    };
+    visit(CSS_ROOT);
+    expect(offenders).toEqual([]);
+  });
+
   it("registers exactly the expected token set", () => {
     expect(Object.keys(registered).sort()).toEqual(
       Object.keys(EXPECTED).sort(),
@@ -231,6 +262,14 @@ describe("@property initial-value drift against shipped defaults", () => {
 });
 
 describe("@property accountability", () => {
+  it("arc-value is a private, non-inheriting fail-closed substrate channel", () => {
+    expect(registered["--_ds-arc-value"]).toEqual({
+      syntax: "<number>",
+      inherits: false,
+      initialValue: "0",
+    });
+  });
+
   it("color-primary is defined in core css (its transparent initial is the unset fallback)", () => {
     // Real value is a var() chain at :root; the transparent initial only applies
     // where the property is unset, so it is not compared to the chain.

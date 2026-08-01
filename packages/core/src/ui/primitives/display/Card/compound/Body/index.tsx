@@ -36,19 +36,7 @@
 'use client';
 
 import React from 'react';
-import type { CSSProperties } from 'react';
 import type { CardBodyProps } from '../../contracts';
-
-/**
- * Padding size to CSS value mapping.
- * @internal
- */
-const PADDING_MAP: Record<string, string> = {
-  none: '0',
-  sm: 'var(--ds-card-body-padding-sm, var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px))',
-  md: 'var(--ds-card-body-padding, var(--ds-spacing-4, 16px) var(--ds-spacing-5, 20px))',
-  lg: 'var(--ds-card-body-padding-lg, var(--ds-spacing-5, 20px) var(--ds-spacing-6, 24px))',
-};
 
 /**
  * Card body compound component.
@@ -58,6 +46,10 @@ const PADDING_MAP: Record<string, string> = {
  * - Flexible content container with configurable padding
  * - Automatically fills available vertical space
  * - Maintains consistent spacing with other card sections
+ *
+ * Layout (flex posture, per-`data-padding` inset) and paint are owned by
+ * `presentation/components/skin/card-compounds.css`; only a caller's own
+ * `style` prop stays inline.
  *
  * @component
  * @example
@@ -88,15 +80,10 @@ export function CardBody({
   style,
   ...rest
 }: CardBodyProps): React.ReactElement {
-  const bodyStyle: CSSProperties = {
-    padding: PADDING_MAP[padding],
-    flex: 1,
-    ...style,
-  };
   const renderedChildren = React.Children.toArray(children);
 
   return (
-    <div {...rest} className={`rottay-card-body ${className}`} data-part="body" style={bodyStyle}>
+    <div {...rest} className={`rottay-card-body ${className}`} data-part="body" data-padding={padding} style={style}>
       {renderedChildren}
     </div>
   );

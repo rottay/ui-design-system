@@ -17,6 +17,15 @@
  * - Context-based prop inheritance (size, color, disabled)
  * - Form integration with name attribute
  *
+ * **Composition law (Phase B):** options mode composes the real `Checkbox`
+ * facade per option (one anatomy, one a11y contract, one skin) instead of
+ * re-implementing a private indicator. Every visual decision — direction,
+ * spacing rhythm, option slots — lives in the engine-agnostic presentation
+ * skin (`presentation/components/skin/checkbox-group.css`) keyed on
+ * `data-part='root'`, `data-direction` and `data-spacing`; this module carries
+ * zero inline paint. Children mode provides the group context that the Modern
+ * engine consumes through `useCheckboxGroup()`.
+ *
  * **Context API:**
  * The group provides a React context that child Checkbox components can use
  * to inherit group settings and register their values. Use `useCheckboxGroup`
@@ -67,25 +76,18 @@
 
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useMemo, useId } from 'react';
-import type { CSSProperties } from 'react';
-import type { CheckboxGroupProps, CheckboxOption, CheckboxSize, CheckboxVariant } from '../../contracts';
-import { CHECKBOX_GROUP_DEFAULTS, SIZE_MAP, SIZE_MAP_NUMERIC, COLOR_MAP } from '../../contracts';
+import React, { useState, useCallback, useMemo, useId } from 'react';
+import type { CheckboxGroupProps, CheckboxOption } from '../../contracts';
+import { CHECKBOX_GROUP_DEFAULTS } from '../../contracts';
+import {
+  CheckboxGroupContext,
+  useCheckboxGroup,
+  type CheckboxGroupContextValue,
+} from '../../runtime/group-context';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { Checkbox } from '../..';
 
-// Context for checkbox group
-interface CheckboxGroupContextValue {
-  value: (string | number)[];
-  name?: string;
-  disabled?: boolean;
-  size?: CheckboxSize;
-  color?: CheckboxVariant;
-  onChange: (checkedValue: string | number, checked: boolean) => void;
-}
-
-const CheckboxGroupContext = createContext<CheckboxGroupContextValue | null>(null);
-
-export const useCheckboxGroup = () => useContext(CheckboxGroupContext);
+export { useCheckboxGroup };
 
 export interface CheckboxGroupComponentProps extends CheckboxGroupProps {}
 
@@ -99,6 +101,7 @@ export function CheckboxGroup({
   color = CHECKBOX_GROUP_DEFAULTS.color,
   disabled = false,
   name,
+  engine,
   onChange,
   children,
   className = '',
@@ -138,30 +141,9 @@ export function CheckboxGroup({
     onChange: handleChange,
   }), [currentValue, groupName, disabled, size, color, handleChange]);
 
-  // Spacing values
-  const spacingMap: Record<string, string> = {
-    sm: '8px',
-    md: '12px',
-    lg: '16px',
-  };
-
-  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
-  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
-  const colors = COLOR_MAP[color] || COLOR_MAP.primary;
-
-  const containerStyle: CSSProperties = {
-    display: 'flex',
-    flexDirection: direction === 'horizontal' ? 'row' : 'column',
-    gap: spacingMap[spacing] || spacingMap.md,
-    flexWrap: direction === 'horizontal' ? 'wrap' : 'nowrap',
-    ...({
-      '--ds-cbg-color-border': colors.border,
-      '--ds-cbg-color-bg': colors.bg,
-    } as CSSProperties),
-    ...style,
-  };
-
-  // Render options if provided
+  // Options mode composes the real Checkbox facade: the option slot keeps the
+  // pinned public hooks (data-testid/data-part/data-*) while the control
+  // itself renders one anatomy, one skin and one a11y contract per engine.
   const renderOptions = () => {
     if (!options || options.length === 0) return null;
 
@@ -170,70 +152,25 @@ export function CheckboxGroup({
       const isDisabled = disabled || option.disabled;
 
       return (
-        <label
+        <div
           key={String(option.value)}
           data-testid={`checkbox-option-${option.value}`}
           data-part="option"
           data-checked={isChecked ? 'true' : 'false'}
           data-disabled={isDisabled ? 'true' : 'false'}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            cursor: isDisabled ? 'not-allowed' : 'pointer',
-            opacity: isDisabled ? 0.5 : 1,
-          }}
         >
-          <span
-            data-part="option-box"
-            style={{
-              position: 'relative',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: sizeValue,
-              height: sizeValue,
-              transition: 'all 0.2s ease-in-out',
-            }}
-          >
-            <input
-              type="checkbox"
-              name={groupName}
-              value={option.value}
-              checked={isChecked}
-              disabled={isDisabled}
-              onChange={(e) => handleChange(option.value, e.target.checked)}
-              style={{
-                position: 'absolute',
-                opacity: 0,
-                width: '100%',
-                height: '100%',
-                margin: 0,
-                padding: 0,
-                cursor: isDisabled ? 'not-allowed' : 'pointer',
-              }}
-            />
-            {isChecked && (
-              <svg
-                width={sizeNumeric * 0.6}
-                height={sizeNumeric * 0.6}
-                viewBox="0 0 12 12"
-                fill="none"
-              >
-                <path
-                  d="M2 6L5 9L10 3"
-                  stroke={colors.check}
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
-          </span>
-          <span style={{ fontSize: sizeNumeric * 0.9, userSelect: 'none' }}>
-            {option.label}
-          </span>
-        </label>
+          <Checkbox
+            engine={engine}
+            value={option.value}
+            name={groupName}
+            label={option.label}
+            checked={isChecked}
+            disabled={isDisabled}
+            size={size}
+            color={color}
+            onChange={(checked) => handleChange(option.value, checked)}
+          />
+        </div>
       );
     });
   };
@@ -244,9 +181,10 @@ export function CheckboxGroup({
         data-testid="checkbox-group"
         data-part="root"
         data-direction={direction}
+        data-spacing={spacing}
         data-disabled={disabled || undefined}
         className={`rottay-checkbox-group rottay-checkbox-group--${direction} ${className}`}
-        style={containerStyle}
+        style={style}
         role="group"
         aria-label={translation?.t('checkbox.group') ?? 'Checkbox group'}
       >

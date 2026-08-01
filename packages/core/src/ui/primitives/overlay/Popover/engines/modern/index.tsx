@@ -7,6 +7,25 @@
  * coordinated material recipes stay token-owned. Native anchor positioning
  * stays in-tree/top-layer; measured positioning uses the shared overlay portal
  * so clipping ancestors cannot cut off the surface.
+ *
+ * Focus ownership posture (B2.4):
+ * - Deliberate initial focus: only activation-driven opens (a click via
+ *   pointer or keyboard) move focus into the surface -- the first focusable
+ *   descendant, or the surface itself when the content is read-only. Hover
+ *   and focus discovery, coarse-pointer taps and controlled/programmatic
+ *   opens never steal focus. Without this, portaled interactive content is
+ *   unreachable by keyboard because the surface lives at the portal root,
+ *   outside the trigger's tab order. The pointer modality persists from
+ *   pointerdown, and keyboard/AT-synthesized clicks (`detail: 0`) refresh it
+ *   so a stale tap never masks a keyboard activation.
+ * - Escape routes through the shared layer stack and returns focus to the
+ *   trigger (pinned behavior, unchanged).
+ * - Every other close path (light dismiss, controlled close, blur-driven
+ *   hide, destroy-on-hide) also returns focus to the trigger when focus is
+ *   stranded inside the surface that is about to become inert; a blur toward
+ *   a real destination stays user-owned and is never hijacked.
+ * - The popover is a non-modal lightweight layer: it joins the shared Escape
+ *   route but never locks page scroll.
  */
 
 import React, {
@@ -66,6 +85,29 @@ type PopoverPortalScope = {
 
 const DEFAULT_EXIT_FALLBACK_MS = 240;
 const EXIT_FALLBACK_GRACE_MS = 64;
+
+/** Interactive descendants eligible to receive deliberate focus. */
+const TRIGGER_FOCUSABLE_SELECTOR =
+  'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/** Menu/listbox surfaces focus their first item before generic controls. */
+const SURFACE_FOCUSABLE_SELECTOR = `[role="menuitem"]:not([aria-disabled="true"]), [role="option"]:not([aria-disabled="true"]), ${TRIGGER_FOCUSABLE_SELECTOR}`;
+
+/**
+ * Moves focus without scrolling the page. With `fallbackToRoot` the root
+ * itself receives focus when no descendant qualifies (read-only content);
+ * the surface carries `tabIndex={-1}` precisely so this is possible without
+ * entering the tab order.
+ */
+function focusFirstWithin(
+  root: HTMLElement,
+  selector: string,
+  fallbackToRoot = false
+): void {
+  const target =
+    root.querySelector<HTMLElement>(selector) ?? (fallbackToRoot ? root : null);
+  target?.focus({ preventScroll: true });
+}
 
 function normalizeTriggers(
   trigger: PopoverTrigger | PopoverTrigger[] | undefined
@@ -327,6 +369,12 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
     const activeReasonsRef = useRef<Set<OpenReason>>(new Set());
     const requestedOpenRef = useRef(Boolean(isOpen));
     const hasBeenOpenRef = useRef(Boolean(isOpen));
+    // Focus-ownership state: whether focus currently lives inside the surface,
+    // whether this open session already ran its initial-focus pass, and the
+    // pointer modality of the latest activation (coarse taps never move focus).
+    const focusInsideSurfaceRef = useRef(false);
+    const didInitialFocusRef = useRef(false);
+    const lastPointerModalityRef = useRef<string | null>(null);
 
     useEffect(() => setMounted(true), []);
 
@@ -461,11 +509,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
     const handleEscape = useCallback(() => {
       closeAll();
       suppressNextFocusRef.current = true;
-      anchorEl
-        ?.querySelector<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        )
-        ?.focus();
+      if (anchorEl) focusFirstWithin(anchorEl, TRIGGER_FOCUSABLE_SELECTOR);
       focusResetTimeoutRef.current = setTimeout(() => {
         suppressNextFocusRef.current = false;
         focusResetTimeoutRef.current = null;
@@ -562,9 +606,75 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       surfaceEl,
     ]);
 
+    // Focus ownership, tracking: remember whether focus lives inside the
+    // surface. A blur toward a real destination clears the flag (that focus
+    // move stays user-owned); an inert/unmount blur has no destination and
+    // keeps the flag so the close path can return the stranded focus.
+    useEffect(() => {
+      const surface = surfaceEl;
+      if (!surface) return undefined;
+      const onFocusIn = (): void => {
+        focusInsideSurfaceRef.current = true;
+      };
+      const onFocusOut = (event: FocusEvent): void => {
+        if (event.relatedTarget) focusInsideSurfaceRef.current = false;
+      };
+      surface.addEventListener('focusin', onFocusIn);
+      surface.addEventListener('focusout', onFocusOut);
+      return () => {
+        surface.removeEventListener('focusin', onFocusIn);
+        surface.removeEventListener('focusout', onFocusOut);
+      };
+    }, [surfaceEl]);
+
+    // Focus ownership, initial focus: only activation-driven opens (a click
+    // via pointer or keyboard) move focus into the surface -- the first
+    // menuitem/option or focusable descendant, else the surface itself.
+    // Hover/focus discovery, coarse taps and controlled opens never steal
+    // focus. Deferred one frame so the measured position lands first.
+    useEffect(() => {
+      if (!isOpen) {
+        didInitialFocusRef.current = false;
+        return undefined;
+      }
+      const surface = surfaceEl;
+      if (!surface || didInitialFocusRef.current) return undefined;
+      if (!activeReasonsRef.current.has('click')) return undefined;
+      if (lastPointerModalityRef.current === 'touch') return undefined;
+      if (typeof window === 'undefined') return undefined;
+      didInitialFocusRef.current = true;
+      const frame = window.requestAnimationFrame(() => {
+        // The open may have been cancelled (Escape, light dismiss) while the
+        // frame was pending; never land focus inside a closing surface.
+        if (!requestedOpenRef.current || !surface.isConnected) return;
+        const active = document.activeElement;
+        if (active && surface.contains(active)) return;
+        focusFirstWithin(surface, SURFACE_FOCUSABLE_SELECTOR, true);
+      });
+      return () => window.cancelAnimationFrame(frame);
+    }, [isOpen, surfaceEl]);
+
+    // Focus ownership, return: closing paths beyond Escape (light dismiss,
+    // controlled close, blur-driven hide, destroy-on-hide) must not strand
+    // focus inside a surface that just became inert. When focus lived inside,
+    // it returns to the trigger's focusable child.
+    useEffect(() => {
+      if (isOpen || typeof document === 'undefined') return;
+      const focusWasInside =
+        focusInsideSurfaceRef.current ||
+        Boolean(surfaceEl?.contains(document.activeElement));
+      focusInsideSurfaceRef.current = false;
+      if (!focusWasInside || !anchorEl) return;
+      focusFirstWithin(anchorEl, TRIGGER_FOCUSABLE_SELECTOR);
+    }, [anchorEl, isOpen, surfaceEl]);
+
     const handleClick = (event: React.MouseEvent<HTMLDivElement>): void => {
       if (!triggers.has('click')) return;
       if (surfaceEl?.contains(event.target as Node)) return;
+      // Keyboard/AT-synthesized clicks carry `detail: 0` and no pointerdown:
+      // refresh the modality or a stale 'touch' from an earlier tap would
+      // wrongly skip the deliberate initial focus for a keyboard activation.
+      if (event.detail === 0) lastPointerModalityRef.current = 'keyboard';
       if (activeReasonsRef.current.has('click')) hide('click');
       else if (
         requestedOpenRef.current &&
@@ -616,6 +726,9 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       event: ReactPointerEvent<HTMLDivElement>
     ): void => {
       pointerDownTypeRef.current = event.pointerType || 'mouse';
+      // The modality must survive pointerup: the click that activates the
+      // trigger fires after pointerup clears pointerDownTypeRef.
+      lastPointerModalityRef.current = event.pointerType || 'mouse';
       if (event.pointerType === 'touch')
         touchStartedOpenRef.current = requestedOpenRef.current;
     };

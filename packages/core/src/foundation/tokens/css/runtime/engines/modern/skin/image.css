@@ -116,12 +116,30 @@
 
 .rottay-image.rottay-image--modern > [data-part='placeholder'] {
   background: var(--ds-surface-inset);
+  /* Continuity (P2): the panel used to UNMOUNT the moment data-status flipped
+     to loaded, vanishing mid-reveal while the img was still fading in. It now
+     stays mounted and crossfades under the img (later in DOM order, paints on
+     top); `visibility` keeps it out of hit-testing and the accessibility tree
+     once hidden, and flips discretely at the right end of the fade. The
+     reveal hooks are reused for the cadence -- one fade law per family. */
+  transition:
+    opacity var(--ds-image-reveal-duration, var(--ds-motion-normal)) var(--ds-image-reveal-timing, var(--ds-motion-ease-out)),
+    visibility var(--ds-image-reveal-duration, var(--ds-motion-normal)) var(--ds-image-reveal-timing, var(--ds-motion-ease-out));
+}
+.rottay-image.rottay-image--modern[data-status='loaded'] > [data-part='placeholder'] {
+  opacity: 0;
+  visibility: hidden;
+}
+/* A hidden pulse keeps animating otherwise (visibility does not pause CSS
+   animations); freeze it once the panel has handed off to the image. */
+.rottay-image.rottay-image--modern[data-status='loaded'] > [data-part='placeholder'] > .rottay-image__pulse {
+  animation-play-state: paused;
 }
 .rottay-image.rottay-image--modern > [data-part='placeholder'] > .rottay-image__pulse {
   inline-size: 100%;
   block-size: 100%;
   background: var(--ds-surface-panel);
-  animation: ds-foundation-pulse var(--ds-image-pulse-duration, 2s) cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: ds-foundation-pulse var(--ds-image-pulse-duration, var(--ds-motion-attention)) cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* ---- error: the default icon reads this `color` through `fill="currentColor"`,
@@ -136,6 +154,26 @@
 }
 
 /* ---- hover ---- */
+/* Enter/exit continuity (P2): both overlays used to MOUNT on hover, popping
+   in with no transition. They now render with their feature prop and the skin
+   gates visibility on the root's interaction state -- hovered, and
+   focus-visible for keyboard parity on the interactive root -- with a
+   compositor-only fade riding the same reveal hooks as the img. */
+.rottay-image.rottay-image--modern > [data-part='hover-overlay'],
+.rottay-image.rottay-image--modern > [data-part='zoom-indicator'] {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--ds-image-reveal-duration, var(--ds-motion-normal)) var(--ds-image-reveal-timing, var(--ds-motion-ease-out)),
+    visibility var(--ds-image-reveal-duration, var(--ds-motion-normal)) var(--ds-image-reveal-timing, var(--ds-motion-ease-out));
+}
+.rottay-image.rottay-image--modern[data-state~='hovered'] > [data-part='hover-overlay'],
+.rottay-image.rottay-image--modern[data-state~='focus-visible'] > [data-part='hover-overlay'],
+.rottay-image.rottay-image--modern[data-state~='hovered'] > [data-part='zoom-indicator'],
+.rottay-image.rottay-image--modern[data-state~='focus-visible'] > [data-part='zoom-indicator'] {
+  opacity: 1;
+  visibility: visible;
+}
 .rottay-image.rottay-image--modern > [data-part='hover-overlay'] {
   background: var(--ds-color-alpha-black-40);
 }
@@ -182,9 +220,13 @@
 }
 
 /* ---- reduced motion: the reveal is instant and the pulse rests (second net
-        behind the personality guard). ---- */
+        behind the personality guard). The placeholder handoff and the overlay
+        fades land in their final state immediately too. ---- */
 @media (prefers-reduced-motion: reduce) {
   .rottay-image.rottay-image--modern [data-part='img'],
+  .rottay-image.rottay-image--modern > [data-part='placeholder'],
+  .rottay-image.rottay-image--modern > [data-part='hover-overlay'],
+  .rottay-image.rottay-image--modern > [data-part='zoom-indicator'],
   .rottay-image.rottay-image--modern > [data-part='placeholder'] > .rottay-image__pulse {
     animation: none;
     transition: none;

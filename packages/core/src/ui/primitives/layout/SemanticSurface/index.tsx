@@ -43,13 +43,16 @@ export const SemanticSurface = forwardRef<HTMLElement, SemanticSurfaceProps>(
         ? { type: type ?? 'button', disabled }
         : { 'aria-disabled': disabled || undefined };
 
+    // P-79: the default root part lands BEFORE the `rest` spread so an
+    // explicit caller data-part wins; the skin anchors on the class +
+    // data-surface-role, never on the part.
     return (
       <Component
+        data-part="root"
         {...rest}
         {...nativeButtonProps}
         ref={ref}
         className={`ds-semantic-surface ${className}`.trim()}
-        data-part="root"
         data-surface-role={surfaceRole}
         data-interactive={isInteractive ? 'true' : undefined}
         data-selected={selected ? 'true' : undefined}

@@ -2,9 +2,12 @@
 
 /**
  * @fileoverview Cascader Modern Engine - Rottay Design System.
- * DaisyUI/Tailwind CSS implementation of a hierarchical option selector.
- * Supports click/hover expansion, cross-level search, async data loading,
- * custom fieldNames mapping, and controlled/uncontrolled value modes.
+ * Skin-painted hierarchical option selector (no DaisyUI classes): every
+ * visual decision lives in `foundation/tokens/css/runtime/engines/modern/skin/cascader.css`,
+ * keyed on the stamped `data-*` contract (`data-size`, `data-status`,
+ * `data-loading`, `data-open`, `data-selected`, ...). Supports click/hover
+ * expansion, cross-level search, async data loading, custom fieldNames
+ * mapping, and controlled/uncontrolled value modes.
  *
  * @example
  * ```tsx
@@ -32,8 +35,8 @@ import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/ge
  */
 function useCascaderTranslation() {
   const i18n = useOptionalTranslation('components');
-  const tOr = (key: string, fallback: string): string => {
-    const resolved = i18n?.t(key);
+  const tOr = (key: string, fallback: string, params?: Record<string, string | number>): string => {
+    const resolved = i18n?.t(key, params);
     if (!resolved || resolved === key || resolved === `components.${key}`) return fallback;
     return resolved;
   };
@@ -132,21 +135,25 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       allowClear = CASCADER_DEFAULTS.allowClear,
       size: sizeProp = CASCADER_DEFAULTS.size,
       notFoundContent: notFoundContentProp,
+      loading,
+      status,
       open: controlledOpen,
       onDropdownVisibleChange,
       fieldNames,
       loadData,
       className,
       style,
+      popupClassName,
     } = props;
 
     // Copy defaults: explicit props win; otherwise localized copy with the
     // historical English defaults (contract + pre-i18n literals) as the floor.
     const placeholder = placeholderProp ?? tOr('cascader.placeholder', 'Please select');
     const notFoundContent = notFoundContentProp ?? tOr('cascader.not_found', 'No data');
+    const loadingLabel = tOr('cascader.loading', 'Loading...');
 
-    // getSizeStyle's switch below is keyed by the legacy 'small' | 'middle' | 'large'
-    // spelling; toLegacySize resolves either spelling to it.
+    // The legacy size spelling keys the skin's per-size geometry channels
+    // (toLegacySize resolves either spelling; geometry itself is skin-owned).
     const size = toLegacySize(sizeProp);
 
     const [internalValue, setInternalValue] = useState<CascaderValue>(defaultValue as CascaderValue || []);
@@ -377,6 +384,18 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
         return;
       }
 
+      // APG listbox completeness: Home/End jump to the first/last enabled
+      // option of the current column (or of the flat search results).
+      if (e.key === 'Home' || e.key === 'End') {
+        e.preventDefault();
+        const columnOptions = Array.from(
+          columnEl.querySelectorAll<HTMLElement>('[data-part="option"]:not(:disabled)'),
+        );
+        if (columnOptions.length === 0) return;
+        (e.key === 'Home' ? columnOptions[0] : columnOptions[columnOptions.length - 1])?.focus();
+        return;
+      }
+
       // Column drills only apply to the cascading layout (not search results).
       if (!optionEl.closest('[data-part="menu-column"]')) return;
       const columnsWrap = optionEl.closest('[data-part="option-list"]');
@@ -435,12 +454,22 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       return labels.join(' / ');
     };
 
-    const getSizeStyle = (): React.CSSProperties => {
-      switch (size) {
-        case 'small': return { height: 'var(--ds-input-sm-height, 32px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', padding: '4px var(--ds-input-sm-padding-x, 10px)' };
-        case 'large': return { height: 'var(--ds-input-lg-height, 44px)', fontSize: 'var(--ds-input-lg-font-size, 15px)', padding: '8px var(--ds-input-lg-padding-x, 14px)' };
-        default: return { height: 'var(--ds-input-md-height, 40px)', fontSize: 'var(--ds-input-md-font-size, 14px)', padding: '6px var(--ds-input-md-padding-x, 12px)' };
-      }
+    /**
+     * Accessible name for the combobox trigger: once a path is committed the
+     * name must convey the selection (the placeholder only names the empty
+     * control). Always the plain joined labels -- displayRender output can be
+     * arbitrary ReactNode, never an aria string.
+     */
+    const getTriggerName = (): string => {
+      if (selectedPath.length === 0) return placeholder;
+      return selectedPath.map((opt) => String(getLabel(opt, fieldNames))).join(' / ');
+    };
+
+    /** Whether a flat search-result path equals the committed value. */
+    const isFlatPathSelected = (fo: FlatOption): boolean => {
+      const committed = (value ?? []) as (string | number)[];
+      if (committed.length !== fo.values.length) return false;
+      return fo.values.every((v, i) => committed[i] === v);
     };
 
     const isSearchMode = showSearch && searchValue.length > 0;
@@ -455,13 +484,14 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
         className={`ds-cascader ds-cascader--modern ${className || ''}`}
         style={style}
         data-part="root"
+        data-size={size}
+        data-loading={loading || undefined}
+        data-status={status || undefined}
       >
+        {/* Geometry is skin-owned per `data-size` (the inline getSizeStyle
+            paint is drained -- single paint owner per family law). */}
         <div
           ref={triggerRef}
-          style={{
-            boxSizing: 'border-box',
-            ...getSizeStyle(),
-          }}
           onClick={() => !disabled && handleOpenChange(!isOpen)}
           onKeyDown={(e) => {
             if (disabled) return;
@@ -479,8 +509,10 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
           role="combobox"
           aria-expanded={isOpen}
           aria-haspopup="listbox"
-          aria-label={placeholder}
+          aria-label={getTriggerName()}
           aria-disabled={disabled || undefined}
+          aria-busy={loading || undefined}
+          aria-invalid={status === 'error' || undefined}
           tabIndex={disabled ? -1 : 0}
         >
           <span
@@ -488,10 +520,15 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
           >
             {selectedPath.length > 0 ? getDisplayValue() : placeholder}
           </span>
-          {/* Governed chevron; the open rotation is skin-owned via data-open. */}
-          <span data-part="arrow-icon" aria-hidden="true">
-            <NavigationDownIcon decorative size={12} />
-          </span>
+          {/* Busy posture replaces the chevron (antd suffix idiom); otherwise
+              the governed chevron rotates skin-side via data-open. */}
+          {loading ? (
+            <span data-part="trigger-loading" aria-hidden="true" />
+          ) : (
+            <span data-part="arrow-icon" aria-hidden="true">
+              <NavigationDownIcon decorative size={12} />
+            </span>
+          )}
         </div>
 
         {/* Clear lives OUTSIDE the combobox trigger: APG forbids interactive
@@ -513,22 +550,28 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
             {/* The dropdown is a plain container (no role): APG forbids
                 interactive content inside a listbox, so the search input sits
                 OUTSIDE any listbox and each column is its own listbox of
-                role="option" rows. */}
-            <div data-part="dropdown" ref={dropdownRef} onKeyDown={handleDropdownKeyDown}>
-            {/* Search input */}
+                role="option" rows. Root `loading` masks the panel content
+                with a loading-state that keeps the empty state's spatial
+                contract (never a spinner floating in a blank panel). */}
+            <div data-part="dropdown" className={popupClassName || undefined} ref={dropdownRef} onKeyDown={handleDropdownKeyDown}>
+            {loading ? (
+              <div data-part="loading-state" role="status">
+                <span data-part="loading-spinner" aria-hidden="true" />
+                <span>{loadingLabel}</span>
+              </div>
+            ) : (
+            <>
+            {/* Search input (geometry drained to the skin). */}
             {showSearch && (
               <div data-part="search-input-wrapper">
                 <input
                   ref={searchInputRef}
                   type="text"
                   data-part="search-input"
-                  style={{
-                    padding: '4px var(--ds-input-sm-padding-x, 10px)',
-                    fontSize: 'var(--ds-input-sm-font-size, 13px)',
-                    height: 'var(--ds-input-sm-height, 32px)',
-                    boxSizing: 'border-box',
-                  }}
                   placeholder={tOr('cascader.search_placeholder', 'Search...')}
+                  /* Placeholder is the accessible-name floor (Mentions K4-D
+                     idiom): without an aria-label the field fails axe `label`. */
+                  aria-label={tOr('cascader.search_placeholder', 'Search...')}
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   onClick={(e) => e.stopPropagation()}
@@ -541,21 +584,28 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                 {/* Flat search results: one listbox of matching leaf paths. */}
                 <ul data-part="option-list" role="listbox" aria-label={tOr('cascader.search_results', 'Search results')}>
                   {filteredFlatOptions.length > 0 ? (
-                    filteredFlatOptions.map((fo, idx) => (
+                    filteredFlatOptions.map((fo, idx) => {
+                      const isResultSelected = isFlatPathSelected(fo);
+                      return (
                       <li key={idx}>
                         <button
                           type="button"
                           onClick={() => handleSearchSelect(fo)}
                           data-part="option"
+                          data-selected={isResultSelected || undefined}
                           role="option"
-                          aria-selected={false}
+                          aria-selected={isResultSelected}
                         >
                           <span data-part="option-label">{fo.labels.join(' / ')}</span>
                         </button>
                       </li>
-                    ))
+                      );
+                    })
                   ) : (
-                    <li data-part="empty">{notFoundContent}</li>
+                    /* Empty posture inside the listbox carries the option
+                       role + aria-disabled (aria-required-children;
+                       Mentions idiom). */
+                    <li data-part="empty" role="option" aria-disabled="true">{notFoundContent}</li>
                   )}
                 </ul>
               </>
@@ -569,7 +619,10 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                       data-part="menu-column"
                       data-last={colIndex === activeColumns.length - 1 || undefined}
                       role="listbox"
-                      aria-label={tOr('cascader.column_label', `Level ${colIndex + 1}`)}
+                      /* The catalog value carries a {level} param
+                         ('Level {level}'): pass it or AT would read the raw
+                         placeholder literally. */
+                      aria-label={tOr('cascader.column_label', `Level ${colIndex + 1}`, { level: colIndex + 1 })}
                     >
                       {column.length > 0 ? (
                         column.map((option) => {
@@ -591,10 +644,13 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                                 data-disabled={option.disabled || undefined}
                                 role="option"
                                 aria-selected={!!isSelected}
+                                aria-busy={isLoading || undefined}
                               >
                                 <span data-part="option-label">{optLabel}</span>
                                 {isLoading ? (
-                                  <span data-part="loading" />
+                                  /* Decorative mini-spinner: aria-busy on the
+                                     option carries the state to AT. */
+                                  <span data-part="loading" aria-hidden="true" />
                                 ) : (
                                   (optChildren && optChildren.length > 0 || (!isLeaf(option, fieldNames) && loadData)) && (
                                     /* Governed chevron; the icon facade mirrors
@@ -609,12 +665,14 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                           );
                         })
                       ) : (
-                        <li data-part="empty">{notFoundContent}</li>
+                        <li data-part="empty" role="option" aria-disabled="true">{notFoundContent}</li>
                       )}
                     </ul>
                   ))}
                 </div>
               </>
+            )}
+            </>
             )}
             </div>
           </>

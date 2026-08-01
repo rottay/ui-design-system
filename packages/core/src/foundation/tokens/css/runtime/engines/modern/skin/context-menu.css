@@ -27,6 +27,19 @@
  * opacity-50`, `relative`). Shipped values are transcribed verbatim; token
  * channels are family-local `--ds-context-menu-*` with fallbacks.
  *
+ * OPTION GRAMMAR (Phase B, Dropdown composed -- not duplicated): rows are
+ * `item-shell > item` with `icon`/`label`/`shortcut`/`submenu-indicator`
+ * parts. `item.children` expands an INLINE (accordion) submenu -- never a
+ * fly-out, because this panel is a scroll container (overflow-block: auto)
+ * and a fly-out would be clipped by its own surface. The submenu indicator
+ * rotates (direction-neutral) instead of nudging physically, so it needs no
+ * `:dir(rtl)` branch; the chevron itself mirrors via the icon facade's
+ * autoMirror. The icon well is the family's only new axis and ships as the
+ * private `--_ds-proto-context-menu-icon-well` (no `--ds-icon-*` channel
+ * exists to consume; Dropdown's well is a family channel of its own). The
+ * shortcut's old `opacity: 0.5` fake-muted is replaced by the semantic
+ * `--ds-color-text-muted` channel.
+ *
  * COHERENCE (Pass 2, K4-A): the panel shares the lane's overlay material
  * register with Dropdown and HoverCard (same widget class): the subtle
  * primary-tinted gradient (sanctioned surface-tint role), tinted border,
@@ -63,8 +76,18 @@
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 @keyframes ds-context-menu-popover-exit-modern {
-  from { opacity: 1; transform: scale(0.96) translateY(-4px); }
+  /* Mirror of the entrance: the exit must START from the settled frame
+     (opacity 1, no travel) and leave toward the frame it arrived from —
+     starting from the pre-enter travel made the panel visibly JUMP the
+     instant the close began (presence keeps it mounted through the exit). */
+  from { opacity: 1; transform: scale(1) translateY(0); }
   to   { opacity: 0; transform: scale(0.96) translateY(-4px); }
+}
+/* Accordion submenu disclosure: a quiet fade only -- geometry does not travel
+   (the parent row already establishes where the nested level lands). */
+@keyframes ds-context-menu-submenu-enter-modern {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ---- positioning context (was the engine's `relative` utility) ---- */
@@ -76,12 +99,12 @@
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] {
   inline-size: var(--ds-context-menu-width, 14rem);
   margin: 0;
-  padding: var(--ds-context-menu-padding, var(--ds-spacing-2, 0.5rem));
+  padding: var(--ds-context-menu-padding, var(--ds-spacing-2));
   list-style: none;
   /* Pass-2 coherence: the lane's overlay surfaces share Dropdown's material
      register (same widget class) -- subtle primary-tinted gradient, tinted
      border, inset highlight, elevation-3, backdrop blur, radius-xl. */
-  border-radius: var(--ds-context-menu-radius, var(--ds-radius-xl, 16px));
+  border-radius: var(--ds-context-menu-radius, var(--ds-radius-xl));
   /* The dark-aware luminance step is its own layer directly above the fill
      (popover.css idiom): inert until a dark surface raises
      --ds-elevation-lift-strength. Level 3 matches the --ds-elevation-3 shadow
@@ -138,11 +161,19 @@
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='group-label'] {
   padding: var(--ds-context-menu-group-padding, 0.375rem 0.75rem);
   color: var(--ds-color-text-muted);
-  font-size: var(--ds-font-size-xs, 0.75rem);
-  font-weight: var(--ds-font-weight-medium, 500);
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-medium);
   letter-spacing: var(--ds-context-menu-group-letter-spacing, 0.05em);
   line-height: 1.2;
   text-transform: uppercase;
+}
+
+/* ---- row shell: wraps the item button AND its inline submenu so nested
+        levels stay one list item (Dropdown's item-shell grammar). ---- */
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item-shell'] {
+  min-inline-size: 0;
+  list-style: none;
 }
 
 /* ---- item rows: layout drained from Tailwind utilities; UA button defaults
@@ -151,29 +182,29 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ds-spacing-2, 0.5rem);
+  gap: var(--ds-spacing-2);
   inline-size: 100%;
   margin: 0;
   padding: var(--ds-context-menu-item-padding, 0.125rem 0.375rem);
   color: inherit;
   background: transparent;
   border: 0;
-  border-radius: var(--ds-context-menu-item-radius, var(--ds-radius-md, 8px));
+  border-radius: var(--ds-context-menu-item-radius, var(--ds-radius-md));
   font: inherit;
   text-align: start;
   cursor: pointer;
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out),
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out),
-    outline-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out);
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    outline-color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 /* The trigger itself is now a keyboard target (Shift+F10 / Menu key opens
    the menu), so it needs a visible focus ring. */
 .rottay-context-menu--modern[data-part='trigger']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
-  border-radius: var(--ds-radius-md, 8px);
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
+  border-radius: var(--ds-radius-md);
 }
 
 /* ---- interaction feedback (leveled in Pass 2): quieter than Dropdown's
@@ -231,11 +262,16 @@
 }
 
 /* forced-colors contract: backgrounds are stripped, so hover/focus must
-   still read -- a plain outline survives the forced palette. */
+   still read -- a plain outline survives the forced palette. The divider is
+   a 1px background-painted strip: with backgrounds forced to Canvas it
+   vanishes, so it re-asserts in a system color. */
 @media (forced-colors: active) {
   .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):hover,
   .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item']:not(:disabled):focus-visible {
     outline: 1px solid;
+  }
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='divider'] {
+    background-color: CanvasText;
   }
 }
 
@@ -252,20 +288,58 @@
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-tone='danger'] {
   color: var(--ds-color-error);
 }
+/* ---- icon well: governed square track (Dropdown grammar) so glyphs optically
+        align across rows instead of drifting with each SVG's intrinsic box.
+        currentColor keeps danger rows tinting their own icon. The size is the
+        family's private proto axis -- no generic icon-size channel exists. ---- */
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='icon'] {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--_ds-proto-context-menu-icon-well, 1.25rem);
+  block-size: var(--_ds-proto-context-menu-icon-well, 1.25rem);
+}
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='label'] {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-spacing-2, 0.5rem);
+  flex: 1 1 auto;
   min-inline-size: 0;
+  overflow-wrap: anywhere;
 }
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='shortcut'] {
-  font-size: var(--ds-font-size-xs, 0.75rem);
-  opacity: 0.5;
+  flex: none;
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs);
+}
+/* ---- submenu indicator: the disclosure chevron rotates on expand -- a
+        direction-neutral transform, so it reads identically in RTL (the
+        chevron glyph itself already mirrors via the icon facade). ---- */
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='submenu-indicator'] {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  color: var(--ds-color-text-muted);
+  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-submenu-open='true'] > [data-part='item'] [data-part='submenu-indicator'] {
+  transform: rotate(90deg);
+}
+/* ---- inline submenu: stacked under its parent row with one logical indent
+        step (never a fly-out -- this panel is a scroll container and would
+        clip it). padding-inline-start mirrors for free in RTL. ---- */
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='submenu'] {
+  display: grid;
+  gap: var(--ds-spacing-1);
+  margin: 0;
+  padding: 0;
+  padding-inline-start: var(--ds-spacing-4);
+  list-style: none;
+  animation: ds-context-menu-submenu-enter-modern var(--ds-motion-fast) var(--ds-motion-ease-out) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'],
-  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'] {
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'],
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='submenu'],
+  .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='submenu-indicator'] {
     animation: none;
     transition: none;
   }

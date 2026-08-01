@@ -19,10 +19,14 @@
  *
  * Typographic rhythm (W10 second visual pass): every block kills the UA
  * margin (`marginBottom: 0`) so vertical rhythm comes ONLY from the density
- * gap above each block. The heading type ramp (size 3xl→sm, heading/display
- * weights, tight leading, slight negative tracking on the large levels) is
- * owned WHOLESALE by the family skin -- inline style producers are counted
- * paint by the engine-token-audit and this file's counter is decrease-only.
+ * gap above each block. Three density-driven gaps compose the prose rhythm
+ * (P2): the inter-block gap, a wider section gap above headings (a heading
+ * reopens the document), and a tighter gap for blocks nested inside a list
+ * item (they belong to the item's marker). The heading type ramp (size
+ * 3xl→sm, heading/display weights, tight leading, slight negative tracking
+ * on the large levels) is owned WHOLESALE by the family skin -- inline style
+ * producers are counted paint by the engine-token-audit and this file's
+ * counter is decrease-only.
  *
  * Security invariant (independent of which element tag wraps the text):
  *   (a) every node is built via React element construction with escaped
@@ -80,11 +84,28 @@ export type {
 export { parseMarkdown, parseInline } from './runtime/parser';
 export { sanitizeHref } from './runtime/link-safety';
 
-const MONO_FONT = 'var(--ds-font-family-mono, ui-monospace, SFMono-Regular, Menlo, monospace)';
+// Fallback parity law: `--ds-font-family-mono` is a declared channel, so the
+// var() stays bare and resolves to the governed default stack.
+const MONO_FONT = 'var(--ds-font-family-mono)';
 
 const BLOCK_GAP: Record<'compact' | 'comfortable', string> = {
   compact: 'var(--ds-spacing-2)',
   comfortable: 'var(--ds-spacing-4)',
+};
+
+// Section rhythm: a heading reopens the document, so it takes a wider margin
+// above than the inter-block gap (still none when it is the first block).
+const HEADING_GAP: Record<'compact' | 'comfortable', string> = {
+  compact: 'var(--ds-spacing-3)',
+  comfortable: 'var(--ds-spacing-6)',
+};
+
+// Nested rhythm: blocks inside a list item belong to the item's marker, so
+// they take a tighter gap than document-level blocks -- the full gap would
+// visually detach a nested list or a second paragraph from its bullet.
+const NESTED_BLOCK_GAP: Record<'compact' | 'comfortable', string> = {
+  compact: 'var(--ds-spacing-1)',
+  comfortable: 'var(--ds-spacing-2)',
 };
 
 const INLINE_CODE_STYLE: React.CSSProperties = {
@@ -196,6 +217,10 @@ interface MarkdownA11yLabels {
   taskChecked: string;
   /** Accessible name for an unchecked task-list indicator. */
   taskUnchecked: string;
+  /** Accessible name for the horizontally scrollable table region. */
+  tableRegion: string;
+  /** Accessible name for the default fenced-code scroll region. */
+  codeRegion: string;
 }
 
 function renderBlocks(
@@ -204,13 +229,16 @@ function renderBlocks(
   density: 'compact' | 'comfortable',
   keyPrefix: string,
   a11y: MarkdownA11yLabels,
+  nested = false,
 ): React.ReactNode[] {
   const policy = props.linkPolicy;
-  const gap = BLOCK_GAP[density];
+  const gap = nested ? NESTED_BLOCK_GAP[density] : BLOCK_GAP[density];
+  const headingGap = nested ? gap : HEADING_GAP[density];
 
   return nodes.map((node, index) => {
     const key = `${keyPrefix}-${index}`;
     const spacing = index === 0 ? undefined : gap;
+    const headingSpacing = index === 0 ? undefined : headingGap;
 
     switch (node.type) {
       case 'heading':
@@ -221,7 +249,7 @@ function renderBlocks(
             'data-part': 'heading',
             // Typography (size/weight/leading/tracking) is skin-owned via
             // `hN[data-part='heading']` selectors (the tag carries the level).
-            style: { marginTop: spacing, marginBottom: 0 },
+            style: { marginTop: headingSpacing, marginBottom: 0 },
           },
           renderInline(node.children, policy, key),
         );
@@ -240,10 +268,21 @@ function renderBlocks(
               <pre
                 data-part="code-block-pre"
                 data-language={node.language}
+                // Scrollable-region law (axe scrollable-region-focusable, the
+                // CodeBlock R4 precedent): `white-space: pre` can always
+                // overflow inline, so the fence is keyboard-reachable with an
+                // accessible name. The CodeBlock interactive slot (copy, line
+                // numbers) stays available through `slots.code`.
+                role="region"
+                tabIndex={0}
+                aria-label={a11y.codeRegion}
                 style={{
                   margin: 0,
                   padding: 'var(--ds-spacing-3)',
                   overflowX: 'auto',
+                  overscrollBehavior: 'contain',
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: 'var(--ds-color-border-secondary) transparent',
                   borderRadius: 'var(--ds-radius-md)',
                   background: 'var(--ds-surface-inset)',
                   border: '1px solid var(--ds-color-border)',
@@ -255,7 +294,12 @@ function renderBlocks(
                     fontSize: 'var(--ds-font-size-sm)',
                     lineHeight: 'var(--ds-line-height-body)',
                     whiteSpace: 'pre',
+                    tabSize: 2,
                     color: 'var(--ds-color-text-primary)',
+                    // Bidi law (same as CodeBlock): the fence picks its base
+                    // direction from its first strong character, so LTR source
+                    // stays LTR inside an RTL document.
+                    unicodeBidi: 'plaintext',
                   }}
                 >
                   {node.value}
@@ -270,13 +314,10 @@ function renderBlocks(
             key={key}
             data-part="blockquote"
             style={{
+              // Density-driven block margin only (family W10 idiom); every
+              // other blockquote property is skin-owned
+              // (markdown-view.css [data-part='blockquote']).
               marginTop: spacing,
-              marginBottom: 0,
-              marginInline: 0,
-              paddingBlock: 'var(--ds-spacing-1)',
-              paddingInlineStart: 'var(--ds-spacing-4)',
-              borderInlineStart: '3px solid var(--ds-color-border)',
-              color: 'var(--ds-color-text-secondary)',
             }}
           >
             {renderBlocks(node.children, props, density, key, a11y)}
@@ -319,17 +360,22 @@ function renderBlocks(
                     marginTop: '0.2em',
                     borderRadius: 'var(--ds-radius-sm)',
                     border: '1px solid var(--ds-color-border)',
+                    // The checked fill rides a family custom property so the
+                    // forced-colors block in the skin can re-map it to system
+                    // colors (custom properties survive forced colors; inline
+                    // paint does not) -- the CodeBlock line-highlight
+                    // precedent. Checked state is DATA, not decoration.
                     background: item.checked
-                      ? 'var(--ds-color-primary)'
+                      ? 'var(--_ds-proto-markdown-task-fill, var(--ds-color-primary))'
                       : 'transparent',
                     boxShadow: item.checked
-                      ? 'inset 0 0 0 0.12em var(--ds-surface-canvas)'
+                      ? 'inset 0 0 0 0.12em var(--_ds-proto-markdown-task-fill-ring, var(--ds-surface-canvas))'
                       : undefined,
                   }}
                 />
               ) : null}
               <span data-part="list-item-content" style={{ flex: '1 1 auto', minWidth: 0 }}>
-                {renderBlocks(item.children, props, density, itemKey, a11y)}
+                {renderBlocks(item.children, props, density, itemKey, a11y, true)}
               </span>
             </li>
           );
@@ -351,7 +397,24 @@ function renderBlocks(
       }
       case 'table':
         return (
-          <div key={key} data-part="table-wrapper" style={{ marginTop: spacing, overflowX: 'auto' }}>
+          // Scrollable-region law (axe scrollable-region-focusable, CodeBlock
+          // R4 precedent): the wrapper scrolls inline when columns exceed the
+          // measure, so it is keyboard-reachable and named; containment keeps
+          // wheel deltas from chaining into the page scroll.
+          <div
+            key={key}
+            data-part="table-wrapper"
+            role="region"
+            tabIndex={0}
+            aria-label={a11y.tableRegion}
+            style={{
+              marginTop: spacing,
+              overflowX: 'auto',
+              overscrollBehavior: 'contain',
+              scrollbarWidth: 'thin',
+              scrollbarColor: 'var(--ds-color-border-secondary) transparent',
+            }}
+          >
             <table data-part="table" style={{ borderCollapse: 'collapse', width: '100%' }}>
               <thead data-part="table-head">
                 <tr>
@@ -368,7 +431,9 @@ function renderBlocks(
                         borderBottom: '2px solid var(--ds-color-border)',
                         fontWeight: 600,
                         fontSize: 'var(--ds-font-size-sm)',
-                        letterSpacing: '0.01em',
+                        // No letter-spacing: any non-normal tracking breaks
+                        // contextual joining in Arabic-script headers, and the
+                        // weight+rule already separate the header row.
                       }}
                     >
                       {renderInline(cell.children, policy, `${key}-h${cellIndex}`)}
@@ -443,6 +508,8 @@ export function MarkdownView({
   const a11y: MarkdownA11yLabels = {
     taskChecked: markdownLabel('markdownView.taskChecked', 'Task completed'),
     taskUnchecked: markdownLabel('markdownView.taskUnchecked', 'Task not completed'),
+    tableRegion: markdownLabel('markdownView.tableRegionLabel', 'Table'),
+    codeRegion: markdownLabel('markdownView.codeRegionLabel', 'Code block'),
   };
 
   return (

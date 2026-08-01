@@ -9,7 +9,7 @@
  * or clicks the search icon/button.
  *
  * **Key Features:**
- * - Built-in magnifying glass SVG icon
+ * - Built-in governed search icon (semantic `action.search` role)
  * - `onSearch` callback triggered on Enter key or button click
  * - Optional custom search button text via `searchButtonText`
  * - Toggleable search button visibility via `showSearchButton`

@@ -39,7 +39,7 @@ describe('Badge modern skin resilience', () => {
     const coarse = SKIN.match(/@media \(pointer: coarse\)\s*\{([\s\S]*?)\n\}/);
     expect(coarse).not.toBeNull();
     // Interactive roots grow to the touch target...
-    expect(coarse![0]).toContain('min-block-size: var(--ds-badge-touch-target, 2.75rem);');
+    expect(coarse![0]).toContain('min-block-size: var(--ds-badge-touch-target);');
     // ...while the remove control keeps its compact visual size and gains an
     // invisible centered hit area instead of a physically larger button that
     // would overflow the badge's height.
@@ -127,7 +127,7 @@ describe('Badge modern skin: accessory-count contrast channel (R0/Axe)', () => {
     const countRule = SKIN.match(/\[data-part='count'\] \{[^}]*\}/);
     expect(countRule).not.toBeNull();
     expect(countRule![0]).toContain(
-      'background: var(--ds-badge-count-bg, var(--ds-filter-pill-count-bg, var(--ds-surface-raised, var(--ds-color-bg-elevated, #fff))));'
+      'background: var(--ds-badge-count-bg, var(--ds-filter-pill-count-bg, var(--ds-surface-raised, var(--ds-color-bg-elevated))));'
     );
     expect(countRule![0]).toContain(
       'color: var(--ds-badge-count-color, var(--ds-badge-tone-soft-color, currentColor));'

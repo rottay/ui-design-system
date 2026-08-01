@@ -34,6 +34,15 @@
  * RTL: the lifetime progress bar spans `inset-inline: 0` and drains toward the
  * reading direction's end edge via the `:dir(rtl)` transform-origin flip at
  * the bottom of the file.
+ *
+ * MOTION: entry direction follows the block edge of the stack's placement
+ * (top stacks drop, bottom stacks rise). Dismissal is graceful: the provider
+ * wraps each card in a display:contents `[data-part='stack-item']` stamped
+ * `data-state='leaving'`, this skin plays the matching exit, and the node
+ * leaves state after the exit window (immediately under reduced motion, which
+ * also neutralizes every animation here). The provider portals the stacks to
+ * the shared top-layer root, so no ancestor transform/filter can trap the
+ * fixed placement; the tenant/locale lineage is re-stamped there.
  */
 
 /* ---- fixed placement and stacking: self-contained, no utility dependency ---- */
@@ -89,7 +98,25 @@
   border: 1px solid color-mix(in srgb, var(--ds-notification-accent) 30%, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-3);
-  animation: ds-notification-enter-modern var(--ds-motion-normal) var(--ds-motion-ease-out) both;
+  animation: ds-notification-enter-top-modern var(--ds-motion-normal) var(--ds-motion-ease-out) both;
+}
+
+/* Enter direction follows the block edge the stack is anchored to: bottom
+   stacks rise from the bottom edge, top stacks keep the drop. */
+.rottay-notification-stack--modern[data-part='stack-container'][data-placement^='bottom'] .rottay-notification--modern[data-part='root'] {
+  animation-name: ds-notification-enter-bottom-modern;
+}
+
+/* Graceful exit: the provider stamps data-state='leaving' on the item's
+   display:contents stack-item wrapper and drops the node after the exit
+   window. The card leaves toward the same edge it entered from and stops
+   taking input at once. */
+.rottay-notification-stack--modern[data-part='stack-container'] [data-part='stack-item'][data-state='leaving'] .rottay-notification--modern[data-part='root'] {
+  pointer-events: none;
+  animation: ds-notification-exit-top-modern var(--ds-motion-fast) var(--ds-motion-ease-exit) both;
+}
+.rottay-notification-stack--modern[data-part='stack-container'][data-placement^='bottom'] [data-part='stack-item'][data-state='leaving'] .rottay-notification--modern[data-part='root'] {
+  animation-name: ds-notification-exit-bottom-modern;
 }
 
 .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'][data-tone='success'] {
@@ -148,7 +175,10 @@
   line-height: var(--ds-line-height-relaxed);
 }
 
-.rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] [data-part='actions'] {
+/* The engine stamps the actions region as data-part='action' with
+   data-slot='actions' (an earlier selector keyed on data-part='actions'
+   matched nothing and the separator/padding were silently lost). */
+.rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] [data-part='action'][data-slot='actions'] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -187,7 +217,7 @@
   }
 }
 .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] [data-part='close-button']:active {
-  transform: scale(var(--ds-state-press-scale, 0.98));
+  transform: scale(var(--ds-state-press-scale));
   color: var(--ds-color-text-primary);
   background-color: var(--ds-surface-highlight);
   border-color: color-mix(in srgb, var(--ds-notification-accent) 32%, var(--ds-color-border-subtle));
@@ -196,6 +226,22 @@
 .rottay-notification--modern[data-part='root'][data-clickable='true']:focus-visible {
   outline: none;
   box-shadow: var(--ds-shadow-focus-ring);
+}
+
+/* Coarse pointers: the dismiss control keeps its compact 2rem visual size but
+   meets the governed 44px touch floor through an invisible centered hit area
+   (Alert/Callout idiom) -- growing the button physically would stretch the
+   card's layout grid. */
+@media (pointer: coarse) {
+  .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] [data-part='close-button'] {
+    position: relative;
+  }
+  .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] [data-part='close-button']::after {
+    content: '';
+    position: absolute;
+    inset: calc(50% - var(--ds-touch-target-min) / 2);
+    border-radius: var(--ds-radius-md);
+  }
 }
 
 .rottay-notification--modern[data-part='root'][data-clickable='true'] {
@@ -229,7 +275,7 @@
   animation: ds-notification-progress-modern var(--ds-notification-duration) linear both;
 }
 
-@keyframes ds-notification-enter-modern {
+@keyframes ds-notification-enter-top-modern {
   from {
     opacity: 0;
     transform: translateY(-0.75rem) scale(0.98);
@@ -237,6 +283,39 @@
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ds-notification-enter-bottom-modern {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ds-notification-exit-top-modern {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.98);
+  }
+}
+
+@keyframes ds-notification-exit-bottom-modern {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.98);
   }
 }
 
@@ -252,8 +331,34 @@
 }
 
 /* forced-colors: shadow rings vanish, so the focus channel degrades to a
-   system outline; the lifetime bar survives as a ButtonText mark. */
+   system outline; the lifetime bar survives as a ButtonText mark. The card
+   itself keeps an explicit system frame (the accent-tinted fill and border
+   would otherwise wash out), and so do the icon well and the actions
+   separator. */
 @media (forced-colors: active) {
+  .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] {
+    background: Canvas;
+    border-color: ButtonText;
+    box-shadow: none;
+  }
+
+  .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] [data-part='icon'] {
+    background: Canvas;
+    border-color: ButtonText;
+    box-shadow: none;
+    color: CanvasText;
+  }
+
+  .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] [data-part='action'][data-slot='actions'] {
+    border-top-color: ButtonText;
+  }
+
+  .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] [data-part='close-button'] {
+    background: Canvas;
+    border-color: ButtonText;
+    color: ButtonText;
+  }
+
   .rottay-notification--modern[data-part='root'] [data-part='close-button']:focus-visible,
   .rottay-notification--modern[data-part='root'][data-clickable='true']:focus-visible {
     outline: 2px solid CanvasText;
@@ -273,6 +378,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'],
+  .rottay-notification-stack--modern[data-part='stack-container'] [data-part='stack-item'][data-state='leaving'] .rottay-notification--modern[data-part='root'],
   .rottay-notification-stack--modern[data-part='stack-container'] .rottay-notification--modern[data-part='root'] > [data-part='progress'] {
     animation: none;
   }

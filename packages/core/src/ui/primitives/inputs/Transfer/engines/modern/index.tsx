@@ -18,12 +18,15 @@
  * @package @rottay/design-system
  */
 import React, { useState, useMemo, useCallback } from 'react';
+import { VisuallyHidden } from '../../../../foundation';
 import type { TransferProps, TransferItem } from '../../contracts';
 import { TRANSFER_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ModernCheckbox } from '../../../../facade';
 import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+import { ActionSearchIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-search';
+import { FeedbackEmptyIcon } from '@/graphics/icons/presentation/semantic/generated/roles/feedback-empty';
 
 /** Catalog lookup with an honest English floor: a bare composition (no
  * I18nProvider above it -- direct engine renders, tests) must still render,
@@ -131,7 +134,12 @@ const TransferList: React.FC<TransferListProps> = ({
   };
 
   return (
-    <div data-part="panel" data-panel={side} style={listStyle}>
+    <div
+      data-part="panel"
+      data-panel={side}
+      data-disabled={disabled || undefined}
+      style={listStyle}
+    >
       {/* Header */}
       <div data-part="panel-header">
         {showSelectAll && (
@@ -139,10 +147,14 @@ const TransferList: React.FC<TransferListProps> = ({
              native input). The accessible name rides the primitive's own
              label slot (sr-only copy), and the wrapper keeps the public
              data-part + name contract for tests and tooling. */
-          <span data-part="panel-select-all" aria-label={tOr('transfer.select_all', 'Select all')}>
+          <span
+            data-part="panel-select-all"
+            data-disabled={disabled || selectableItems.length === 0 || undefined}
+            aria-label={tOr('transfer.select_all', 'Select all')}
+          >
             <ModernCheckbox
               size="sm"
-              label={<span className="ds-sr-only">{tOr('transfer.select_all', 'Select all')}</span>}
+              label={<VisuallyHidden>{tOr('transfer.select_all', 'Select all')}</VisuallyHidden>}
               checked={allSelected}
               indeterminate={someSelected && !allSelected}
               onChange={handleSelectAll}
@@ -152,17 +164,26 @@ const TransferList: React.FC<TransferListProps> = ({
         )}
         <span data-part="panel-title">{title}</span>
         <span data-part="panel-count">
-          {selectedKeys.size}/{items.length}
+          {/* Count + governed unit (contract locale.itemUnit/itemsUnit,
+              catalog-backed). Tabular numerals ride the skin. */}
+          {selectedKeys.size}/{items.length}{' '}
+          {items.length === 1
+            ? (locale?.itemUnit || tOr('transfer.item_unit', 'item'))
+            : (locale?.itemsUnit || tOr('transfer.items_unit', 'items'))}
         </span>
       </div>
 
       {/* Search */}
       {showSearch && (
         <div>
+          <span data-part="panel-search-icon" aria-hidden="true">
+            <ActionSearchIcon decorative size={14} />
+          </span>
           <input
             type="text"
             data-part="panel-search"
             placeholder={locale?.searchPlaceholder || tOr('transfer.search_placeholder', 'Search')}
+            aria-label={locale?.searchPlaceholder || tOr('transfer.search_placeholder', 'Search')}
             value={searchValue}
             onChange={(e) => onSearch(e.target.value)}
             disabled={disabled}
@@ -183,9 +204,12 @@ const TransferList: React.FC<TransferListProps> = ({
                 <div
                   data-part="panel-item"
                   data-selected={selectedKeys.has(item.key) || undefined}
-                  data-disabled={item.disabled || undefined}
+                  data-disabled={disabled || item.disabled || undefined}
                 >
-                  <span data-part="panel-item-checkbox">
+                  <span
+                    data-part="panel-item-checkbox"
+                    data-disabled={disabled || item.disabled || undefined}
+                  >
                     <ModernCheckbox
                       size="sm"
                       label={render ? render(item) : item.title}
@@ -200,6 +224,9 @@ const TransferList: React.FC<TransferListProps> = ({
           </ul>
         ) : (
           <div data-part="panel-empty">
+            <span data-part="panel-empty-icon" aria-hidden="true">
+              <FeedbackEmptyIcon decorative size={20} />
+            </span>
             {locale?.notFoundContent || tOr('transfer.not_found', 'No data')}
           </div>
         )}
@@ -211,7 +238,7 @@ const TransferList: React.FC<TransferListProps> = ({
           <button
             type="button"
             data-part="pagination-button"
-            disabled={currentPage <= 1}
+            disabled={disabled || currentPage <= 1}
             aria-label={tOr('pagination.previous', 'Previous page')}
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           >
@@ -223,7 +250,7 @@ const TransferList: React.FC<TransferListProps> = ({
           <button
             type="button"
             data-part="pagination-button"
-            disabled={currentPage >= totalPages}
+            disabled={disabled || currentPage >= totalPages}
             aria-label={tOr('pagination.next', 'Next page')}
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           >
@@ -345,7 +372,13 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
     };
 
     return (
-      <div ref={ref} data-part="root" className={`rottay-transfer rottay-transfer--modern ${className || ''}`} style={style}>
+      <div
+        ref={ref}
+        data-part="root"
+        data-disabled={disabled || undefined}
+        className={`rottay-transfer rottay-transfer--modern ${className || ''}`}
+        style={style}
+      >
         <TransferList
           side="source"
           title={titles![0]}

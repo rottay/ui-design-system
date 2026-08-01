@@ -23,6 +23,25 @@
  * `inset-inline-start: calc(100% + ...)` and mirror for free; the open-state
  * submenu-indicator nudge flips sign under `:dir(rtl)`. The submenu chevron
  * (NavigationForwardIcon) mirrors through the icon facade's autoMirror.
+ *
+ * DENSITY (Pass-B): the surface stamps `data-density` from the trigger's
+ * lineage (it crosses the portal through PortalScope), and compact/spacious
+ * postures retune the item track via private `-current` indirections -- the
+ * tenant `--ds-dropdown-item-*` channels stay the comfortable-mode source of
+ * truth and are never shadowed. The coarse-pointer 44px floor deliberately
+ * keeps reading the BASE channel: touch geometry never shrinks with density.
+ *
+ * LONG MENUS (Pass-B): the menu list caps its block size and scrolls with
+ * `overscroll-behavior: contain` -- but only when no submenu exists, because
+ * a submenu hangs OUTSIDE the list's box and an overflow clip would amputate
+ * it. Surfaces with submenus keep the natural height (engine-stamped
+ * `data-has-submenu`).
+ *
+ * ARROW TRACKING (Pass-B): the portal branch measures the trigger's
+ * cross-axis center and publishes it as the private
+ * `--_ds-proto-dropdown-arrow-anchor-offset` bridge (logical inline-start,
+ * mirrored under RTL); the tracked rule below wins over the 50% default and
+ * clamps the arrow away from the rounded corners.
  */
 
 @keyframes ds-dropdown-popover-enter-modern {
@@ -78,6 +97,11 @@
    menu). The surface carries its own isolation (the -1 arrow stays
    contained), so the trigger needs none. */
 .rottay-dropdown.rottay-dropdown--modern[data-part='trigger'] {
+  /* Drained from the engine's former inline statics (Pass-2 P0): the relative
+     anchor the in-tree (non-portal) surface positions against, and the
+     inline-flex shrink-wrap around the trigger content. */
+  position: relative;
+  display: inline-flex;
   max-inline-size: 100%;
 }
 
@@ -96,12 +120,19 @@
 .rottay-dropdown__surface.rottay-dropdown__surface[data-part='surface'] {
   isolation: isolate;
   container: rottay-dropdown / inline-size;
+  /* Density indirections (Pass-B): the item track consumes these private
+     proto `-current` channels (the naming law bars new `--ds-*` variables);
+     the tenant `--ds-dropdown-item-*` channels remain the source for the
+     default posture and density postures retune without shadowing them. */
+  --_ds-proto-dropdown-item-height-current: var(--ds-dropdown-item-height, 2.4rem);
+  --_ds-proto-dropdown-item-padding-block-current: var(--ds-dropdown-item-padding-y, 0.45rem);
+  --_ds-proto-dropdown-item-padding-inline-current: var(--ds-dropdown-item-padding-x, 0.55rem);
   min-inline-size: min(var(--ds-dropdown-min-width, 14rem), calc(100vw - 1rem));
   max-inline-size: min(var(--ds-dropdown-max-width, 22rem), calc(100vw - 1rem));
   padding: var(--ds-dropdown-padding);
   overflow: visible;
   color: var(--ds-dropdown-color, var(--ds-color-text-secondary));
-  border-radius: var(--ds-dropdown-radius, var(--ds-radius-xl, 16px));
+  border-radius: var(--ds-dropdown-radius, var(--ds-radius-xl));
   /* The dark-aware luminance step is its own layer directly above the fill
      (popover.css idiom): inert until a dark surface raises
      --ds-elevation-lift-strength. Level 3 matches the --ds-elevation-3 shadow
@@ -127,6 +158,22 @@
   transform-origin: center bottom;
 }
 
+/* Density postures: intentional compositions, not a uniform scale. Compact
+   tightens the block rhythm and the icon gap; spacious lets rows breathe.
+   Values are deliberately fixed per posture -- the tenant tunables stay on
+   the default (`-current` fallback) track. */
+.rottay-dropdown__surface.rottay-dropdown__surface[data-part='surface'][data-density='compact'] {
+  --_ds-proto-dropdown-item-height-current: 2rem;
+  --_ds-proto-dropdown-item-padding-block-current: var(--ds-spacing-1);
+  --_ds-proto-dropdown-item-padding-inline-current: var(--ds-spacing-sm);
+}
+
+.rottay-dropdown__surface.rottay-dropdown__surface[data-part='surface'][data-density='spacious'] {
+  --_ds-proto-dropdown-item-height-current: 2.75rem;
+  --_ds-proto-dropdown-item-padding-block-current: 0.625rem;
+  --_ds-proto-dropdown-item-padding-inline-current: var(--ds-spacing-md);
+}
+
 .rottay-dropdown__surface[data-part='surface'] > [data-part='menu'] {
   display: grid;
   gap: var(--ds-dropdown-item-gap, 0.2rem);
@@ -134,6 +181,16 @@
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* Long menus cap their block size and scroll inside the surface. Menus WITH
+   a submenu are exempt: the submenu hangs outside the list's box and any
+   overflow clip would amputate it (engine stamps `data-has-submenu`). */
+.rottay-dropdown__surface[data-part='surface']:not([data-has-submenu='true']) > [data-part='menu'] {
+  max-block-size: var(--_ds-proto-dropdown-menu-max-block-size, min(21rem, calc(100vh - 2rem)));
+  max-block-size: var(--_ds-proto-dropdown-menu-max-block-size, min(21rem, calc(100dvh - 2rem)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .rottay-dropdown__surface[data-part='surface'] [data-part='item-shell'] {
@@ -146,29 +203,29 @@
   position: relative;
   display: grid;
   grid-template-columns: 1rem auto minmax(0, 1fr) auto;
-  gap: var(--ds-spacing-sm, 0.5rem);
+  gap: var(--ds-spacing-sm);
   inline-size: 100%;
-  min-block-size: var(--ds-dropdown-item-height, 2.4rem);
-  padding: var(--ds-dropdown-item-padding-y, 0.45rem) var(--ds-dropdown-item-padding-x, 0.55rem);
+  min-block-size: var(--_ds-proto-dropdown-item-height-current);
+  padding: var(--_ds-proto-dropdown-item-padding-block-current) var(--_ds-proto-dropdown-item-padding-inline-current);
   align-items: center;
   overflow: hidden;
   color: var(--ds-dropdown-item-color, var(--ds-color-text-secondary));
   border: 1px solid transparent;
-  border-radius: var(--ds-dropdown-item-radius, var(--ds-radius-lg, 12px));
+  border-radius: var(--ds-dropdown-item-radius, var(--ds-radius-lg));
   background: transparent;
   font-family: var(--ds-dropdown-font-family, var(--ds-font-family-base));
   font-size: var(--ds-dropdown-font-size, var(--ds-font-size-sm));
-  font-weight: var(--ds-dropdown-font-weight, var(--ds-font-weight-medium, 500));
+  font-weight: var(--ds-dropdown-font-weight, var(--ds-font-weight-medium));
   line-height: var(--ds-line-height-snug);
   text-align: start;
   cursor: pointer;
   outline: none;
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast) var(--ds-ease-spring);
 }
 
 .rottay-dropdown__surface[data-part='surface'] [data-part='item']::after {
@@ -179,7 +236,7 @@
   opacity: 0;
   transform: translateX(-40%);
   transition:
-    opacity var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
+    opacity var(--ds-motion-fast) var(--ds-ease-standard, ease),
     transform var(--ds-motion-normal) var(--ds-ease-standard, ease);
   content: '';
   pointer-events: none;
@@ -283,8 +340,8 @@
   opacity: 0;
   transform: scale(0.72);
   transition:
-    opacity var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+    opacity var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast) var(--ds-ease-spring);
 }
 
 .rottay-dropdown__surface[data-part='surface'] [data-selected='true'] [data-part='selection-indicator'] {
@@ -297,11 +354,11 @@
   inline-size: var(--ds-dropdown-icon-well-size, 1.75rem);
   block-size: var(--ds-dropdown-icon-well-size, 1.75rem);
   color: var(--ds-dropdown-icon-color, currentColor);
-  border-radius: var(--ds-radius-md, 10px);
+  border-radius: var(--ds-radius-md);
   background: color-mix(in srgb, currentColor 7%, transparent);
   transition:
-    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast) var(--ds-ease-spring);
 }
 
 .rottay-dropdown__surface[data-part='surface'] [data-part='item']:hover [data-part='icon'] {
@@ -334,7 +391,7 @@
   block-size: 1.5rem;
   border-radius: var(--ds-radius-full);
   background: color-mix(in srgb, currentColor 6%, transparent);
-  transition: transform var(--ds-motion-fast, 120ms) var(--ds-ease-spring, ease);
+  transition: transform var(--ds-motion-fast) var(--ds-ease-spring);
 }
 
 .rottay-dropdown__surface[data-part='surface'] [data-submenu-open='true'] > [data-part='item'] [data-part='submenu-indicator'] {
@@ -350,11 +407,11 @@
   margin-block: 0.35rem 0.15rem;
   padding: 0.38rem 0.6rem;
   color: var(--ds-dropdown-group-color, var(--ds-color-text-muted));
-  border-radius: var(--ds-radius-md, 10px);
+  border-radius: var(--ds-radius-md);
   background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent), transparent 78%);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
-  font-size: var(--ds-font-size-xs, 0.75rem);
-  font-weight: var(--ds-font-weight-semibold, 600);
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-semibold);
   letter-spacing: var(--ds-letter-spacing-wide);
   line-height: 1.2;
   text-transform: uppercase;
@@ -383,13 +440,13 @@
   margin: 0;
   padding: var(--ds-dropdown-padding);
   list-style: none;
-  border-radius: var(--ds-dropdown-radius, var(--ds-radius-xl, 16px));
+  border-radius: var(--ds-dropdown-radius, var(--ds-radius-xl));
   background:
     linear-gradient(145deg, color-mix(in srgb, var(--ds-color-primary) 5%, transparent), transparent 45%),
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
     var(--ds-surface-card);
   box-shadow: var(--ds-dropdown-shadow, var(--ds-elevation-3));
-  animation: ds-dropdown-popover-enter-modern var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease) both;
+  animation: ds-dropdown-popover-enter-modern var(--ds-motion-fast) var(--ds-ease-standard, ease) both;
 }
 
 .rottay-dropdown__surface[data-part='surface'] [data-part='submenu'][data-part='submenu'] {
@@ -422,6 +479,18 @@
   inset-inline-start: calc(50% - 0.36rem);
   border-inline-start: 0;
   border-block-start: 0;
+}
+
+/* Arrow anchor tracking (portal branch): the measured inline-start offset of
+   the trigger's center wins over the 50% default, clamped one radius away
+   from the rounded corners so the diamond never sits on the corner curve. */
+.rottay-dropdown__surface[data-part='surface'][data-arrow-tracked='true'][data-placement^='bottom'] > [data-part='arrow'],
+.rottay-dropdown__surface[data-part='surface'][data-arrow-tracked='true'][data-placement^='top'] > [data-part='arrow'] {
+  inset-inline-start: clamp(
+    var(--ds-dropdown-radius, var(--ds-radius-xl)),
+    calc(var(--_ds-proto-dropdown-arrow-anchor-offset) - 0.36rem),
+    calc(100% - var(--ds-dropdown-radius, var(--ds-radius-xl)) - 0.72rem)
+  );
 }
 
 @container rottay-dropdown (max-width: 20rem) {
@@ -467,9 +536,12 @@
   }
 }
 
-/* coarse pointers: physical 44px floor, never a rem floor (tabs.css idiom). */
+/* coarse pointers: physical 44px floor, never a rem floor (tabs.css idiom).
+   The repeated data-part ties the base item rule's specificity so source
+   order lets the floor win; the declaration pins the BASE channel on
+   purpose -- touch geometry never shrinks with density. */
 @media (pointer: coarse) {
-  .rottay-dropdown__surface[data-part='surface'] [data-part='item'] {
+  .rottay-dropdown__surface[data-part='surface'] [data-part='item'][data-part='item'] {
     min-block-size: max(44px, var(--ds-dropdown-item-height, 2.4rem));
   }
 }

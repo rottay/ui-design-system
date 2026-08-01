@@ -21,7 +21,8 @@ import { RADIUS_MAP } from '../../contracts';
  *
  * @param props - ImageSkeletonProps including width, height, radius, and animate toggle
  * @param ref - Forwarded ref to the root div element
- * @returns A div with pulsing skeleton animation and inline keyframe styles
+ * @returns A div whose pulse animation is owned by image-compounds.css,
+ *          keyed on the data-animate stamp
  *
  * @example
  * ```tsx
@@ -44,13 +45,14 @@ export const ImageSkeleton = forwardRef<HTMLDivElement, ImageSkeletonProps>(
     // Get radius CSS value
     const radiusValue = RADIUS_MAP[radius] || RADIUS_MAP.none;
 
-    // The `radius` prop publishes no attribute, so image-compounds.css reads the
-    // resolved value as a custom property.
+    // The `radius` and `animate` props publish no geometry of their own:
+    // radius rides a custom property and the pulse rides the data-animate
+    // stamp -- image-compounds.css owns both paints (no raw-duration
+    // animation inline anymore).
     const skeletonStyles: React.CSSProperties = {
       width: typeof width === 'number' ? `${width}px` : width || '100%',
       height: typeof height === 'number' ? `${height}px` : height || '100%',
       '--ds-image-resolved-radius': radiusValue,
-      animation: animate ? 'ds-image-skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' : 'none',
       ...style,
     } as React.CSSProperties;
 
@@ -59,6 +61,7 @@ export const ImageSkeleton = forwardRef<HTMLDivElement, ImageSkeletonProps>(
         ref={ref}
         className={`rottay-image-skeleton ${className}`}
         data-part="skeleton"
+        data-animate={animate ? 'true' : undefined}
         style={skeletonStyles}
         aria-hidden="true"
         {...props}

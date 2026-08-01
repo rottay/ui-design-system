@@ -3,6 +3,7 @@
 import React from 'react';
 import type { FormFieldProps } from '../../contracts';
 import { FORMFIELD_DEFAULTS } from '../../contracts';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 
 /** Modern, CSS-first form-field anatomy shared by every tenant skin. */
 export default function ModernFormField(props: FormFieldProps): React.ReactElement {
@@ -87,7 +88,11 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
 
           {error && (
             <p id={errorId} data-part="error-message" role="alert">
-              {error}
+              {/* Error posture never travels by color alone: the governed
+                  status.error glyph carries the semantics as shape, aligned
+                  to the first text line by the skin. */}
+              <StatusErrorIcon decorative size={14} data-part="error-icon" />
+              <span data-part="error-text">{error}</span>
             </p>
           )}
 

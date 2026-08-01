@@ -59,7 +59,8 @@ describe('Kbd modern skin resilience', () => {
       expect(SKIN).toContain(`[data-size='${size}']`);
       expect(SKIN).toContain(`--ds-kbd-${size}-padding-inline`);
     }
-    expect(SKIN).toContain('var(--ds-density-effective-scale, 1)');
+    expect(SKIN).toContain('var(--ds-density-effective-scale)');
+    expect(SKIN).not.toContain('var(--ds-density-effective-scale, 1)');
     expect(SKIN).not.toMatch(/margin-(left|right)\s*:/);
     expect(SKIN).not.toMatch(/padding-(left|right)\s*:/);
   });

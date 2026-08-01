@@ -220,7 +220,8 @@ describe('Carousel modern real engine', () => {
     );
 
     it('owns arrow size with a coarse-pointer 44px floor (touch law)', () => {
-      expect(skin).toContain('inline-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale, 1));');
+      expect(skin).toContain('inline-size: calc(var(--ds-carousel-arrow-size, 32px) * var(--ds-density-effective-scale));');
+      expect(skin).not.toContain('var(--ds-density-effective-scale, 1)');
       expect(skin).toContain('@media (pointer: coarse)');
       expect(skin).toContain('var(--ds-carousel-arrow-size-coarse, 44px);');
     });

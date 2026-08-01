@@ -14,6 +14,15 @@
  * channel `--ds-density-effective-scale`; the thumb travel is a pure CSS
  * `calc()` flipped under `:dir(rtl)`, so RTL needs no runtime branch.
  *
+ * State never reads through track color alone (Phase B law): the thumb
+ * travels AND a governed state glyph (`action.confirm` / `action.close` from
+ * the icon facade, `decorative`, skin-sized via the
+ * `--_ds-proto-toggle-state-icon-size` proto) docks on the side opposite the
+ * thumb. The busy state is the governed border-spinner idiom
+ * (`ds-foundation-spin`, skin-painted) docked inside the thumb -- the raw
+ * inline SVG is gone. The contract's switch semantics (`role="switch"`,
+ * `aria-checked`) are pinned by tests and stay untouched.
+ *
  * @example
  * ```tsx
  * <Toggle engine="modern" color="primary" size="lg" label="Enable feature" />
@@ -29,6 +38,8 @@
 import React, { useState, useCallback, useId } from 'react';
 import type { ToggleProps } from '../../contracts';
 import { TOGGLE_DEFAULTS } from '../../contracts';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+import { ActionConfirmIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-confirm';
 
 /**
  * Modern (pure DS tokens) implementation of Toggle.
@@ -131,7 +142,26 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
           {...rest}
         />
         <span data-part="track" aria-hidden="true">
-          <span data-part="thumb" />
+          <span data-part="thumb">
+            {/* Loading: the governed border-spinner idiom (ds-foundation-spin,
+                skin-painted -- the raw inline SVG is gone). It docks INSIDE the
+                thumb so the busy state stays physically attached to the moving
+                part and the track geometry never shifts. */}
+            {loading && <span data-part="loading-indicator" />}
+          </span>
+          {/* State icon (Phase B): checked/unchecked reads unmistakably through
+              position + governed glyph, never track color alone. The skin
+              docks it on the side opposite the thumb, scales it with the size
+              channel and hides it at xs where no glyph stays legible. */}
+          {!loading && (
+            <span data-part="state-icon" data-on={isChecked ? 'true' : 'false'}>
+              {isChecked ? (
+                <ActionConfirmIcon decorative size={10} />
+              ) : (
+                <ActionCloseIcon decorative size={10} />
+              )}
+            </span>
+          )}
         </span>
         {hasText && (
           <span data-part="text">
@@ -144,25 +174,6 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
             {description && (
               <span data-part="description">{description}</span>
             )}
-          </span>
-        )}
-        {loading && (
-          <span data-part="loading-indicator" aria-hidden="true">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <circle
-                data-part="loading-track"
-                cx="7"
-                cy="7"
-                r="5.5"
-                strokeWidth="1.5"
-              />
-              <path
-                data-part="loading-arc"
-                d="M12.5 7A5.5 5.5 0 0 0 7 1.5"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
           </span>
         )}
       </label>

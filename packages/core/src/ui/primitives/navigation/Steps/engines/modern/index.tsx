@@ -20,6 +20,26 @@
  * - `progressDot` supports both the boolean dot mode and the custom render
  *   function (`data-part="dot-slot"`), matching the rustic engine's contract.
  *
+ * Phase-B Pass 2 (batch-33):
+ * - `labelPlacement` rides `data-label-placement` on the root (the contract
+ *   default is 'horizontal': indicator-beside-text; 'vertical' keeps the
+ *   stacked geometry Pass 1 shipped).
+ * - `initial` is honored: without a controlled `current` the component
+ *   tracks its own position and `onChange` advances it (the contract
+ *   documents the uncontrolled mode; Pass 1 silently ignored `initial`).
+ * - A custom item icon now anchors the indicator cell as a direct item
+ *   child (`data-part="icon"`); the skin seats it inside the status circle
+ *   frame and suppresses the numeral via `:has()` — status stays expressed
+ *   by the circle frame/ring, never by icon hue alone.
+ * - `percent` is NOT implementable in this engine: the modern-engine
+ *   contract pins `style.cssText === ''` on every part, so no inline data
+ *   channel can carry the numeric value; documented as batch-33 debt.
+ * - `type` ('navigation' | 'inline') is a visual recipe axis with no
+ *   governed frame grammar in this wave; documented as debt, not invented.
+ * - `responsive` (contract default true) is absorbed by the skin's
+ *   container query: a horizontal track collapses to the vertical geometry
+ *   at 420px unconditionally — matching the contract default.
+ *
  * @example
  * ```tsx
  * <Steps
@@ -39,7 +59,7 @@
  * @package @rottay/design-system
  */
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import type { StepsProps, StepStatus, ProgressDotInfo } from '../../contracts';
 import { STEPS_DEFAULTS } from '../../contracts';
 
@@ -95,16 +115,31 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
     // ========================================================================
 
     const {
-      current = STEPS_DEFAULTS.current!,
+      current,
       direction = STEPS_DEFAULTS.direction,
       size = STEPS_DEFAULTS.size,
       status: overallStatus = STEPS_DEFAULTS.status,
+      labelPlacement = STEPS_DEFAULTS.labelPlacement,
+      initial = STEPS_DEFAULTS.initial,
       progressDot,
       onChange,
       items,
       className = '',
       style,
     } = props;
+
+    // ========================================================================
+    // State Management
+    // ========================================================================
+
+    /**
+     * Uncontrolled position: only used when `current` is not provided (the
+     * contract's documented uncontrolled mode, seeded by `initial`).
+     */
+    const [internalCurrent, setInternalCurrent] = useState(initial ?? 0);
+
+    /** Resolved position — controlled `current` wins when provided. */
+    const activeCurrent = current ?? internalCurrent;
 
     // ========================================================================
     // Memoized Step Computation
@@ -117,10 +152,10 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
      */
     const computedSteps = useMemo(() => {
       return items.map((item, index) => {
-        const effectiveStatus = getEffectiveStatus(index, current, item.status, overallStatus);
+        const effectiveStatus = getEffectiveStatus(index, activeCurrent, item.status, overallStatus);
         return { ...item, effectiveStatus };
       });
-    }, [items, current, overallStatus]);
+    }, [items, activeCurrent, overallStatus]);
 
     // ========================================================================
     // Event Handlers
@@ -128,10 +163,15 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
 
     /**
      * Handle step click for navigation.
-     * Only triggers onChange if step is not disabled.
+     * Only triggers onChange if step is not disabled; advances the internal
+     * position when running uncontrolled.
      */
     const handleStepClick = (index: number, disabled?: boolean) => {
-      if (!disabled && onChange) onChange(index);
+      if (disabled || !onChange) return;
+      if (current === undefined) {
+        setInternalCurrent(index);
+      }
+      onChange(index);
     };
 
     // ========================================================================
@@ -146,6 +186,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
         data-part="root"
         data-direction={direction}
         data-size={size}
+        data-label-placement={labelPlacement}
         data-progress-dot={progressDot ? 'true' : undefined}
       >
         {computedSteps.map((step, index) => {
@@ -153,7 +194,6 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
 
           const text = (
             <>
-              {step.icon && !progressDot && <span data-part="icon">{step.icon}</span>}
               <span data-part="label">{step.title}</span>
               {step.subTitle && <span data-part="subtitle">{step.subTitle}</span>}
               {step.description && <span data-part="description">{step.description}</span>}
@@ -169,6 +209,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
               data-clickable={isClickable || undefined}
               aria-current={step.effectiveStatus === 'process' ? 'step' : undefined}
             >
+              {step.icon && !progressDot && <span data-part="icon">{step.icon}</span>}
               {typeof progressDot === 'function' && (
                 <span data-part="dot-slot">
                   {progressDot({

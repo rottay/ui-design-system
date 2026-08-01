@@ -71,29 +71,29 @@
 
 /* Size geometry on the canonical radio scale + density plane. */
 .ds-radio.ds-radio--modern[data-part='root'][data-size='xs'] [data-part='circle'] {
-  inline-size: calc(var(--ds-radio-xs-size) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-radio-xs-size) * var(--ds-density-effective-scale, 1));
-  min-inline-size: calc(var(--ds-radio-xs-size) * var(--ds-density-effective-scale, 1));
+  inline-size: calc(var(--ds-radio-xs-size) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-radio-xs-size) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-radio-xs-size) * var(--ds-density-effective-scale));
 }
 .ds-radio.ds-radio--modern[data-part='root'][data-size='sm'] [data-part='circle'] {
-  inline-size: calc(var(--ds-radio-sm-size) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-radio-sm-size) * var(--ds-density-effective-scale, 1));
-  min-inline-size: calc(var(--ds-radio-sm-size) * var(--ds-density-effective-scale, 1));
+  inline-size: calc(var(--ds-radio-sm-size) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-radio-sm-size) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-radio-sm-size) * var(--ds-density-effective-scale));
 }
 .ds-radio.ds-radio--modern[data-part='root'][data-size='md'] [data-part='circle'] {
-  inline-size: calc(var(--ds-radio-md-size) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-radio-md-size) * var(--ds-density-effective-scale, 1));
-  min-inline-size: calc(var(--ds-radio-md-size) * var(--ds-density-effective-scale, 1));
+  inline-size: calc(var(--ds-radio-md-size) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-radio-md-size) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-radio-md-size) * var(--ds-density-effective-scale));
 }
 .ds-radio.ds-radio--modern[data-part='root'][data-size='lg'] [data-part='circle'] {
-  inline-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale, 1));
-  min-inline-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale, 1));
+  inline-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-radio-lg-size) * var(--ds-density-effective-scale));
 }
 .ds-radio.ds-radio--modern[data-part='root'][data-size='xl'] [data-part='circle'] {
-  inline-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale, 1));
-  min-inline-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale, 1));
+  inline-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-radio-xl-size) * var(--ds-density-effective-scale));
 }
 
 /* press: the circle dips on pointer-press, mirroring the checkbox. */
@@ -126,56 +126,79 @@
   border-color: var(--ds-radio-error-bg, var(--ds-color-error));
 }
 
-/* Error frame on an unchecked ring; aria-invalid carries the semantics. */
+/* Error frame on an unchecked ring; aria-invalid carries the semantics. The
+   border pairs with a faint wash of the same channel (never a lone border
+   recolor; 8% reads one step louder than the 6% hover wash), and the
+   hover/press strengtheners below opt out of error so the frame survives
+   interaction. */
 .ds-radio.ds-radio--modern[data-error='true'][data-checked='false'] [data-part='circle'] {
   border-color: var(--ds-radio-error-border-color, var(--ds-color-error));
+  background-color: color-mix(in srgb, var(--ds-radio-error-border-color, var(--ds-color-error)) 8%, transparent);
 }
 
-/* hover (not disabled): the unchecked ring STRENGTHENS toward the ink (the
-   previous fallback read `--ds-color-border`, which is QUIETER than the
-   resting border-secondary on the governed dark source — a backwards hover);
-   the checked ring deepens its own hue instead of jumping to primary. */
-.ds-radio.ds-radio--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='circle'] {
+/* hover (not disabled, pointer-fine only): the unchecked ring STRENGTHENS
+   toward the ink (the previous fallback read `--ds-color-border`, which is
+   QUIETER than the resting border-secondary on the governed dark source — a
+   backwards hover) plus a faint interaction wash; the checked ring deepens
+   its own hue instead of jumping to primary. The unchecked hover opts out of
+   error (`:not`) so the error frame never disappears under the pointer
+   (input.css invalid precedent). Touch parity on :active below. */
+@media (hover: hover) {
+  .ds-radio.ds-radio--modern[data-checked='false']:not([data-error='true']):hover:not([data-disabled='true']) [data-part='circle'] {
+    border-color: var(
+      --ds-radio-border-hover,
+      color-mix(in srgb, var(--ds-color-text-secondary) 40%, var(--ds-color-border-secondary))
+    );
+    background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+  }
+  .ds-radio.ds-radio--modern[data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+    border-color: var(--ds-color-primary-hover);
+  }
+  .ds-radio.ds-radio--modern[data-color='default'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+    border-color: color-mix(in srgb, var(--ds-radio-default-bg, var(--ds-color-neutral-600)) 82%, var(--ds-color-neutral-900));
+  }
+  .ds-radio.ds-radio--modern[data-color='secondary'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+    border-color: color-mix(in srgb, var(--ds-radio-secondary-bg, var(--ds-color-secondary)) 82%, var(--ds-color-neutral-900));
+  }
+  .ds-radio.ds-radio--modern[data-color='success'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+    border-color: color-mix(in srgb, var(--ds-radio-success-bg, var(--ds-color-success)) 82%, var(--ds-color-neutral-900));
+  }
+  .ds-radio.ds-radio--modern[data-color='warning'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+    border-color: color-mix(in srgb, var(--ds-radio-warning-bg, var(--ds-color-warning)) 82%, var(--ds-color-neutral-900));
+  }
+  .ds-radio.ds-radio--modern[data-color='error'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+    border-color: color-mix(in srgb, var(--ds-radio-error-bg, var(--ds-color-error)) 82%, var(--ds-color-neutral-900));
+  }
+}
+/* Touch equivalent of the unchecked hover while the row is pressed. */
+.ds-radio.ds-radio--modern[data-checked='false']:not([data-error='true']):active:not([data-disabled='true']) [data-part='circle'] {
   border-color: var(
     --ds-radio-border-hover,
     color-mix(in srgb, var(--ds-color-text-secondary) 40%, var(--ds-color-border-secondary))
   );
-}
-.ds-radio.ds-radio--modern[data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
-  border-color: var(--ds-color-primary-hover);
-}
-.ds-radio.ds-radio--modern[data-color='default'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
-  border-color: color-mix(in srgb, var(--ds-radio-default-bg, var(--ds-color-neutral-600)) 82%, var(--ds-color-neutral-900, #171717));
-}
-.ds-radio.ds-radio--modern[data-color='secondary'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
-  border-color: color-mix(in srgb, var(--ds-radio-secondary-bg, var(--ds-color-secondary)) 82%, var(--ds-color-neutral-900, #171717));
-}
-.ds-radio.ds-radio--modern[data-color='success'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
-  border-color: color-mix(in srgb, var(--ds-radio-success-bg, var(--ds-color-success)) 82%, var(--ds-color-neutral-900, #171717));
-}
-.ds-radio.ds-radio--modern[data-color='warning'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
-  border-color: color-mix(in srgb, var(--ds-radio-warning-bg, var(--ds-color-warning)) 82%, var(--ds-color-neutral-900, #171717));
-}
-.ds-radio.ds-radio--modern[data-color='error'][data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
-  border-color: color-mix(in srgb, var(--ds-radio-error-bg, var(--ds-color-error)) 82%, var(--ds-color-neutral-900, #171717));
+  background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
 }
 
 /* focus ring from the hidden input's :focus-visible. */
 .ds-radio.ds-radio--modern input:focus-visible ~ [data-part='circle'] {
-  outline: var(--ds-radio-focus-ring-width, 2px) solid var(--ds-radio-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-radio-focus-ring-offset, 2px);
+  outline: var(--ds-radio-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-radio-focus-ring-color, var(--ds-focus-ring-color, var(--ds-color-primary)));
+  outline-offset: var(--ds-radio-focus-ring-offset, var(--ds-focus-ring-offset));
 }
 
 /* disabled: the indicator quiets, semantics stay on the input. */
 .ds-radio.ds-radio--modern[data-disabled='true'] [data-part='circle'] {
-  opacity: var(--ds-radio-disabled-opacity, 0.5);
+  opacity: var(--ds-radio-disabled-opacity);
 }
 
 /* Dot: scales in with the checked state; color follows the same channel the
-   ring uses, so the two can never drift apart. */
+   ring uses, so the two can never drift apart. The governed token carries a
+   unitless RATIO (`--ds-radio-dot-scale: 0.5`), so the size must multiply it
+   back into a percentage -- reading it as a raw length was invalid at
+   computed-value time and collapsed the dot to zero (invisible checked
+   state) wherever the token file shipped. */
 .ds-radio.ds-radio--modern [data-part='dot'] {
-  inline-size: var(--ds-radio-dot-scale, 40%);
-  block-size: var(--ds-radio-dot-scale, 40%);
+  inline-size: calc(var(--ds-radio-dot-scale) * 100%);
+  block-size: calc(var(--ds-radio-dot-scale) * 100%);
   border-radius: 50%;
   background-color: var(--ds-radio-checked-bg, var(--ds-color-primary));
   transform: scale(0);

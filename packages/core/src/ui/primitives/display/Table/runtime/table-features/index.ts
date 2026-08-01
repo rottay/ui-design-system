@@ -170,6 +170,7 @@ export interface UseTableFeaturesReturn<T> {
   handleSelectAll: (checked: boolean) => void;
   handleSelectRow: (record: T, index: number, checked: boolean) => void;
   isAllSelected: boolean;
+  isSomeSelected: boolean;
 
   // Expandable rows
   expandedRowKeys: Set<TableKey>;
@@ -406,15 +407,33 @@ export function useTableFeatures<T extends object>(
     )
   );
 
+  // Rows whose selection control is NOT disabled via `getCheckboxProps`.
+  // Disabled rows stay visible but can neither be toggled individually nor
+  // swept up by select-all, so every "all selected" computation runs over
+  // this subset. Entries keep their paginated index so row keys stay stable.
+  const selectableEntries = useMemo(
+    () =>
+      paginatedData
+        .map((record, index) => ({ record, index }))
+        .filter(({ record }) => !rowSelection?.getCheckboxProps?.(record)?.disabled),
+    [paginatedData, rowSelection]
+  );
+
   const handleSelectAll = useCallback(
     (checked: boolean) => {
-      const allKeys = checked ? paginatedData.map((record, i) => getRowKey(record, i)) : [];
+      const allKeys = checked
+        ? selectableEntries.map(({ record, index }) => getRowKey(record, index))
+        : [];
       setSelectedRowKeys(allKeys);
-      rowSelection?.onChange?.(allKeys, checked ? paginatedData : [], {
-        type: checked ? 'all' : 'none',
-      });
+      rowSelection?.onChange?.(
+        allKeys,
+        checked ? selectableEntries.map(({ record }) => record) : [],
+        {
+          type: checked ? 'all' : 'none',
+        }
+      );
     },
-    [paginatedData, rowSelection, getRowKey]
+    [selectableEntries, rowSelection, getRowKey]
   );
 
   const handleSelectRow = useCallback(
@@ -430,7 +449,20 @@ export function useTableFeatures<T extends object>(
     [paginatedData, rowSelection, getRowKey]
   );
 
-  const isAllSelected = paginatedData.length > 0 && selectedRowKeys.length === paginatedData.length;
+  // Membership-based (not length-based) so selections carried over from other
+  // pages cannot masquerade as a fully selected current page.
+  const isAllSelected =
+    selectableEntries.length > 0 &&
+    selectableEntries.every(({ record, index }) =>
+      selectedRowKeys.includes(getRowKey(record, index))
+    );
+  // The header select-all control's indeterminate posture: at least one
+  // selectable row on the current page is checked, but not all of them.
+  const isSomeSelected =
+    !isAllSelected &&
+    selectableEntries.some(({ record, index }) =>
+      selectedRowKeys.includes(getRowKey(record, index))
+    );
 
   // ---- Expandable rows ----
   const [expandedKeys, setExpandedKeys] = useState<Set<TableKey>>(() => {
@@ -734,6 +766,7 @@ export function useTableFeatures<T extends object>(
     handleSelectAll,
     handleSelectRow,
     isAllSelected,
+    isSomeSelected,
     expandedRowKeys: expandedKeys,
     handleToggleExpand,
     isRowExpandable,

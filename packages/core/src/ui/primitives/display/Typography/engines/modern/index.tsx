@@ -50,6 +50,7 @@ import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, LINE_HEIGHT_MAP } from '../../contracts'
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '@/infrastructure/runtime/responsive/runtime/style-properties';
 import type { ResponsiveValue } from '@/foundation/contracts/kernel/responsive/values';
 import {
+  isJoiningScriptLang,
   normalizeLineClamp,
   resolveFluidTypographySize,
   resolveTypographyCraftStyle,
@@ -63,17 +64,19 @@ import {
  */
 /**
  * Heading sizes mapped to DS font-size tokens via inline styles.
- * Each entry returns the CSS custom property with a Tailwind-equivalent fallback.
+ * Every `--ds-font-size-*` channel is declared in
+ * `foundation/base/typography.css`, so the reference is bare (fallback
+ * parity law: declared channels never carry a literal fallback).
  * The one-step-up offset (xs -> base, sm -> lg, etc.) is preserved.
  */
 const HEADING_SIZE_STYLES: Record<string, string> = {
-  xs: 'var(--ds-font-size-base, 0.9375rem)',
-  sm: 'var(--ds-font-size-lg, 1rem)',
-  md: 'var(--ds-font-size-xl, 1.125rem)',
-  lg: 'var(--ds-font-size-2xl, 1.25rem)',
-  xl: 'var(--ds-font-size-3xl, 1.5rem)',
-  '2xl': 'var(--ds-font-size-4xl, 2rem)',
-  '3xl': 'var(--ds-font-size-5xl, 2.5rem)',
+  xs: 'var(--ds-font-size-base)',
+  sm: 'var(--ds-font-size-lg)',
+  md: 'var(--ds-font-size-xl)',
+  lg: 'var(--ds-font-size-2xl)',
+  xl: 'var(--ds-font-size-3xl)',
+  '2xl': 'var(--ds-font-size-4xl)',
+  '3xl': 'var(--ds-font-size-5xl)',
 };
 
 /**
@@ -122,16 +125,16 @@ const HEADING_LEVEL_WEIGHTS: Record<string, string> = {
 
 /**
  * Text sizes mapped to DS font-size tokens via inline styles.
- * Each entry returns the CSS custom property with a Tailwind-equivalent fallback.
+ * Bare references: the `--ds-font-size-*` channels are always declared.
  */
 const TEXT_SIZE_STYLES: Record<string, string> = {
-  xs: 'var(--ds-font-size-xs, 0.75rem)',
-  sm: 'var(--ds-font-size-sm, 0.875rem)',
-  md: 'var(--ds-font-size-base, 0.9375rem)',
-  lg: 'var(--ds-font-size-lg, 1rem)',
-  xl: 'var(--ds-font-size-xl, 1.125rem)',
-  '2xl': 'var(--ds-font-size-2xl, 1.25rem)',
-  '3xl': 'var(--ds-font-size-3xl, 1.5rem)',
+  xs: 'var(--ds-font-size-xs)',
+  sm: 'var(--ds-font-size-sm)',
+  md: 'var(--ds-font-size-base)',
+  lg: 'var(--ds-font-size-lg)',
+  xl: 'var(--ds-font-size-xl)',
+  '2xl': 'var(--ds-font-size-2xl)',
+  '3xl': 'var(--ds-font-size-3xl)',
 };
 
 /**
@@ -235,6 +238,9 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     const reactId = useId();
     const responsiveEntries: ResponsivePropEntry<any>[] = [];
     const sizeIsResponsive = isResponsiveValue(size);
+    // Joining scripts (Arabic, Persian, Urdu, …) must never be tracked:
+    // letter-spacing visibly breaks the letter joining.
+    const suppressTracking = isJoiningScriptLang(lang);
 
     if (sizeIsResponsive) {
       responsiveEntries.push({
@@ -247,11 +253,13 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
         value: size,
         resolve: (v: TextSize) => LINE_HEIGHT_MAP.heading[v] || '1.2',
       } as ResponsivePropEntry<any>);
-      responsiveEntries.push({
-        cssProperty: 'letter-spacing',
-        value: size,
-        resolve: (v: TextSize) => HEADING_LETTER_SPACING[v] || '0',
-      } as ResponsivePropEntry<any>);
+      if (!suppressTracking) {
+        responsiveEntries.push({
+          cssProperty: 'letter-spacing',
+          value: size,
+          resolve: (v: TextSize) => HEADING_LETTER_SPACING[v] || '0',
+        } as ResponsivePropEntry<any>);
+      }
     }
 
     const needsResponsiveCSS = responsiveEntries.length > 0;
@@ -295,7 +303,7 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     if (!sizeIsResponsive && !textStyle) {
       typographyStyle.fontSize = HEADING_SIZE_STYLES[effectiveSize] || HEADING_SIZE_STYLES.md;
       const ls = HEADING_LETTER_SPACING[effectiveSize];
-      if (ls && ls !== '0') {
+      if (!suppressTracking && ls && ls !== '0') {
         typographyStyle.letterSpacing = ls;
       }
       typographyStyle.lineHeight = HEADING_LINE_HEIGHT[effectiveSize] || '1.25';
@@ -311,6 +319,7 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       hyphenate,
       contrast,
       motion,
+      lang,
     };
     const craftStyle = resolveTypographyCraftStyle({
       ...craftProps,
@@ -321,6 +330,13 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
       lineClamp,
       responsive: sizeIsResponsive,
     });
+
+    // Truncated plain-string content self-declares its full value through the
+    // native `title` disclosure when the caller forgot one, so the ellipsis
+    // never destroys the information (an explicit `title` always wins).
+    const resolvedTitle =
+      title ??
+      ((truncate || normalizedClamp) && typeof children === 'string' ? children : undefined);
 
     return (
       <>
@@ -333,7 +349,7 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
           lang={lang}
           dir={dir}
           translate={translate}
-          title={title}
+          title={resolvedTitle}
           {...props}
           {...(responsive ? responsive.attrs : {})}
           data-part={dataPart ?? "root"}
@@ -472,6 +488,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
       hyphenate,
       contrast,
       motion,
+      lang,
     };
     const craftStyle = resolveTypographyCraftStyle({
       ...craftProps,
@@ -482,6 +499,12 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
       lineClamp,
       responsive: sizeIsResponsive,
     });
+
+    // Truncated plain-string content self-declares its full value through the
+    // native `title` disclosure when the caller forgot one (explicit wins).
+    const resolvedTitle =
+      title ??
+      ((truncate || normalizedClamp) && typeof children === 'string' ? children : undefined);
 
     return (
       <>
@@ -494,7 +517,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
           lang={lang}
           dir={dir}
           translate={translate}
-          title={title}
+          title={resolvedTitle}
           {...props}
           {...(responsive ? responsive.attrs : {})}
           data-part={dataPart ?? "root"}
@@ -608,6 +631,7 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       hyphenate,
       contrast,
       motion,
+      lang,
     };
     const craftStyle = resolveTypographyCraftStyle({
       ...craftProps,
@@ -619,6 +643,12 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       responsive: sizeIsResponsive,
     });
 
+    // Truncated plain-string content self-declares its full value through the
+    // native `title` disclosure when the caller forgot one (explicit wins).
+    const resolvedTitle =
+      title ??
+      ((truncate || normalizedClamp) && typeof children === 'string' ? children : undefined);
+
     return (
       <>
         {responsive?.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
@@ -628,7 +658,7 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
           lang={lang}
           dir={dir}
           translate={translate}
-          title={title}
+          title={resolvedTitle}
           {...props}
           {...(responsive ? responsive.attrs : {})}
           data-part={dataPart ?? "root"}
@@ -750,6 +780,7 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
       hyphenate,
       contrast,
       motion,
+      lang,
     };
     const craftStyle = resolveTypographyCraftStyle({
       ...craftProps,

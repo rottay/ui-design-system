@@ -90,33 +90,33 @@
 
 /* Size geometry on the canonical checkbox scale + density plane. */
 .ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='xs'] [data-part='box'] {
-  inline-size: calc(var(--ds-checkbox-xs-size) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-checkbox-xs-size) * var(--ds-density-effective-scale, 1));
-  min-inline-size: calc(var(--ds-checkbox-xs-size) * var(--ds-density-effective-scale, 1));
+  inline-size: calc(var(--ds-checkbox-xs-size) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-checkbox-xs-size) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-checkbox-xs-size) * var(--ds-density-effective-scale));
 }
 .ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='sm'] [data-part='box'] {
-  inline-size: calc(var(--ds-checkbox-sm-size) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-checkbox-sm-size) * var(--ds-density-effective-scale, 1));
-  min-inline-size: calc(var(--ds-checkbox-sm-size) * var(--ds-density-effective-scale, 1));
+  inline-size: calc(var(--ds-checkbox-sm-size) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-checkbox-sm-size) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-checkbox-sm-size) * var(--ds-density-effective-scale));
 }
 .ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='md'] [data-part='box'] {
-  inline-size: calc(var(--ds-checkbox-md-size) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-checkbox-md-size) * var(--ds-density-effective-scale, 1));
-  min-inline-size: calc(var(--ds-checkbox-md-size) * var(--ds-density-effective-scale, 1));
+  inline-size: calc(var(--ds-checkbox-md-size) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-checkbox-md-size) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-checkbox-md-size) * var(--ds-density-effective-scale));
 }
 .ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='lg'] [data-part='box'] {
-  inline-size: calc(var(--ds-checkbox-lg-size) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-checkbox-lg-size) * var(--ds-density-effective-scale, 1));
-  min-inline-size: calc(var(--ds-checkbox-lg-size) * var(--ds-density-effective-scale, 1));
+  inline-size: calc(var(--ds-checkbox-lg-size) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-checkbox-lg-size) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-checkbox-lg-size) * var(--ds-density-effective-scale));
 }
 .ds-checkbox.ds-checkbox--modern[data-part='root'][data-size='xl'] [data-part='box'] {
-  inline-size: calc(var(--ds-checkbox-xl-size) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-checkbox-xl-size) * var(--ds-density-effective-scale, 1));
-  min-inline-size: calc(var(--ds-checkbox-xl-size) * var(--ds-density-effective-scale, 1));
+  inline-size: calc(var(--ds-checkbox-xl-size) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-checkbox-xl-size) * var(--ds-density-effective-scale));
+  min-inline-size: calc(var(--ds-checkbox-xl-size) * var(--ds-density-effective-scale));
 }
 
 /* Radius grammar: the prop picks a canonical channel, never a literal. */
-.ds-checkbox.ds-checkbox--modern[data-part='root'][data-radius='none'] [data-part='box'] { border-radius: var(--ds-checkbox-radius-none, 0); }
+.ds-checkbox.ds-checkbox--modern[data-part='root'][data-radius='none'] [data-part='box'] { border-radius: var(--ds-checkbox-radius-none); }
 .ds-checkbox.ds-checkbox--modern[data-part='root'][data-radius='sm'] [data-part='box'] { border-radius: var(--ds-checkbox-radius-sm, var(--ds-radius-sm)); }
 .ds-checkbox.ds-checkbox--modern[data-part='root'][data-radius='md'] [data-part='box'] { border-radius: var(--ds-checkbox-radius-md, var(--ds-radius-md)); }
 .ds-checkbox.ds-checkbox--modern[data-part='root'][data-radius='lg'] [data-part='box'] { border-radius: var(--ds-checkbox-radius-lg, var(--ds-radius-lg)); }
@@ -130,7 +130,7 @@
   transform: scale(var(--ds-state-press-scale));
 }
 .ds-checkbox.ds-checkbox--modern[data-standalone='true'] [data-part='box'] {
-  border-radius: var(--ds-radius-full, 9999px);
+  border-radius: var(--ds-radius-full);
 }
 
 /* box border: normal (base), standalone (not active), active. */
@@ -169,33 +169,73 @@
 }
 
 /* Error frame: an unchecked box in an error field announces the problem on
-   the indicator itself; aria-invalid carries the semantics. */
+   the indicator itself; aria-invalid carries the semantics. The border pairs
+   with a faint wash of the same channel (never a lone border recolor; 8%
+   reads one step louder than the 6% hover wash), and the hover/press
+   strengtheners below opt out of error so the frame survives interaction. */
 .ds-checkbox.ds-checkbox--modern[data-error='true']:not([data-active='true']) [data-part='box'] {
   border-color: var(--ds-checkbox-error-border-color, var(--ds-color-error));
+  background-color: color-mix(in srgb, var(--ds-checkbox-error-border-color, var(--ds-color-error)) 8%, transparent);
 }
 
-/* hover (not disabled): active, standalone-not-active, normal-not-active. */
-.ds-checkbox.ds-checkbox--modern[data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
-  border-color: var(--ds-color-primary-hover);
-  background-color: var(--ds-color-primary-hover);
+/* hover (not disabled, pointer-fine only): active deepens its own hue per
+   color (mirroring the radio grammar instead of jumping every variant to
+   primary), standalone strengthens its wash, and the normal unchecked box
+   STRENGTHENS its border toward the ink plus a faint interaction wash -- the
+   previous fallback read `--ds-color-border`, QUIETER than the resting
+   border-secondary. Unchecked hovers opt out of error (`:not`) so the error
+   frame never disappears under the pointer (input.css invalid precedent).
+   Touch parity lives on the :active rules below. */
+@media (hover: hover) {
+  .ds-checkbox.ds-checkbox--modern[data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
+    border-color: var(--ds-color-primary-hover);
+    background-color: var(--ds-color-primary-hover);
+  }
+  .ds-checkbox.ds-checkbox--modern[data-color='default'][data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
+    border-color: color-mix(in srgb, var(--ds-checkbox-default-bg, var(--ds-color-neutral-600)) 82%, var(--ds-color-neutral-900));
+    background-color: color-mix(in srgb, var(--ds-checkbox-default-bg, var(--ds-color-neutral-600)) 82%, var(--ds-color-neutral-900));
+  }
+  .ds-checkbox.ds-checkbox--modern[data-color='secondary'][data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
+    border-color: color-mix(in srgb, var(--ds-checkbox-secondary-bg, var(--ds-color-secondary)) 82%, var(--ds-color-neutral-900));
+    background-color: color-mix(in srgb, var(--ds-checkbox-secondary-bg, var(--ds-color-secondary)) 82%, var(--ds-color-neutral-900));
+  }
+  .ds-checkbox.ds-checkbox--modern[data-color='success'][data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
+    border-color: color-mix(in srgb, var(--ds-checkbox-success-bg, var(--ds-color-success)) 82%, var(--ds-color-neutral-900));
+    background-color: color-mix(in srgb, var(--ds-checkbox-success-bg, var(--ds-color-success)) 82%, var(--ds-color-neutral-900));
+  }
+  .ds-checkbox.ds-checkbox--modern[data-color='warning'][data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
+    border-color: color-mix(in srgb, var(--ds-checkbox-warning-bg, var(--ds-color-warning)) 82%, var(--ds-color-neutral-900));
+    background-color: color-mix(in srgb, var(--ds-checkbox-warning-bg, var(--ds-color-warning)) 82%, var(--ds-color-neutral-900));
+  }
+  .ds-checkbox.ds-checkbox--modern[data-color='error'][data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
+    border-color: color-mix(in srgb, var(--ds-checkbox-error-bg, var(--ds-color-error)) 82%, var(--ds-color-neutral-900));
+    background-color: color-mix(in srgb, var(--ds-checkbox-error-bg, var(--ds-color-error)) 82%, var(--ds-color-neutral-900));
+  }
+  .ds-checkbox.ds-checkbox--modern[data-standalone='true']:not([data-active='true']):not([data-error='true']):hover:not([data-disabled='true']) [data-part='box'] {
+    border-color: var(--ds-color-text-secondary);
+    background-color: color-mix(in srgb, var(--ds-surface-panel) 68%, var(--ds-color-text-primary) 32%);
+  }
+  .ds-checkbox.ds-checkbox--modern:not([data-active='true']):not([data-standalone='true']):not([data-error='true']):hover:not([data-disabled='true']) [data-part='box'] {
+    border-color: color-mix(in srgb, var(--ds-color-text-secondary) 40%, var(--ds-color-border-secondary));
+    background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+  }
 }
-.ds-checkbox.ds-checkbox--modern[data-standalone='true']:not([data-active='true']):hover:not([data-disabled='true']) [data-part='box'] {
-  border-color: var(--ds-color-text-secondary);
-  background-color: color-mix(in srgb, var(--ds-surface-panel) 68%, var(--ds-color-text-primary) 32%);
-}
-.ds-checkbox.ds-checkbox--modern:not([data-active='true']):not([data-standalone='true']):hover:not([data-disabled='true']) [data-part='box'] {
-  border-color: var(--ds-checkbox-border, var(--ds-color-border));
+/* Touch equivalent of the unchecked hover: the same strengthening shows
+   while the row is pressed, so coarse pointers get identical state parity. */
+.ds-checkbox.ds-checkbox--modern:not([data-active='true']):not([data-standalone='true']):not([data-error='true']):active:not([data-disabled='true']) [data-part='box'] {
+  border-color: color-mix(in srgb, var(--ds-color-text-secondary) 40%, var(--ds-color-border-secondary));
+  background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
 }
 
 /* focus ring from the hidden input's :focus-visible. */
 .ds-checkbox.ds-checkbox--modern input:focus-visible ~ [data-part='box'] {
-  outline: var(--ds-checkbox-focus-ring-width, 2px) solid var(--ds-checkbox-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-checkbox-focus-ring-offset, 2px);
+  outline: var(--ds-checkbox-focus-ring-width, var(--ds-focus-ring-width)) solid var(--ds-checkbox-focus-ring-color, var(--ds-focus-ring-color, var(--ds-color-primary)));
+  outline-offset: var(--ds-checkbox-focus-ring-offset, var(--ds-focus-ring-offset));
 }
 
 /* disabled: the whole row quiets, semantics stay on the input. */
 .ds-checkbox.ds-checkbox--modern[data-disabled='true'] [data-part='box'] {
-  opacity: var(--ds-checkbox-disabled-opacity, 0.5);
+  opacity: var(--ds-checkbox-disabled-opacity);
 }
 
 /* Checkmark ------------------------------------------------------------- */
@@ -258,11 +298,12 @@
 }
 
 /* hidden accessibility input (visually clipped): the canonical sr-only idiom,
-   owned here with every other visual decision (was an inline style object). */
+   owned here with every other visual decision (was an inline style object).
+   Logical geometry, matching the radio/switch/toggle skins (RTL law). */
 .ds-checkbox.ds-checkbox--modern input {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  inline-size: 1px;
+  block-size: 1px;
   margin: -1px;
   padding: 0;
   overflow: hidden;

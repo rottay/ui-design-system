@@ -107,7 +107,7 @@ export interface SkeletonListItemProps {
  * @internal
  */
 const shimmerStyle: React.CSSProperties = {
-  animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration, 1.5s) infinite',
+  animation: 'ds-skeleton-shimmer var(--ds-skeleton-animation-duration) infinite',
 };
 
 // ============================================================================
@@ -150,50 +150,34 @@ export const SkeletonListItem = forwardRef<HTMLDivElement, SkeletonListItemProps
     // Style Generation
     // -------------------------------------------------------------------------
 
-    /**
-     * Container styles for horizontal avatar + text layout.
-     * Vertical padding creates spacing when items are stacked in a list.
-     */
-    const containerStyle: React.CSSProperties = {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '12px',
-      padding: '8px 0',
-      ...style,
-    };
+    // The whole static layout — the row's flex alignment and rhythm, the 40px
+    // avatar block with its squish guard, the content column and the varied
+    // line geometry (first 40% at title height, last 60%, middle 80%) — paints
+    // from the unlayered skeleton-compounds skin. Inline style keeps only the
+    // caller's `style` plus the shared canon animation reference per block.
+    const containerStyle: React.CSSProperties = { ...style };
 
     // -------------------------------------------------------------------------
     // Render
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} data-part="root" className={`rottay-skeleton-list-item ${className}`} style={containerStyle}>
+      <div ref={ref} data-part="root" className={`rottay-skeleton-list-item ${className}`} style={containerStyle} aria-hidden="true">
         {/* Optional circular avatar placeholder */}
         {hasAvatar && (
           <div
             data-part="avatar"
-            style={{
-              ...shimmerStyle,
-              width: 40,
-              height: 40,
-              flexShrink: 0,
-            }}
+            style={shimmerStyle}
           />
         )}
 
         {/* Text lines container */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <div data-part="content">
           {Array.from({ length: lines }).map((_, index) => (
             <div
               key={index}
               data-part="line"
-              style={{
-                ...shimmerStyle,
-                // First line is taller (title), rest are shorter (subtitle/meta)
-                height: index === 0 ? '14px' : '12px',
-                // Width varies: 40% for title, 60% for last line, 80% for middle
-                width: index === 0 ? '40%' : index === lines - 1 ? '60%' : '80%',
-              }}
+              style={shimmerStyle}
             />
           ))}
         </div>

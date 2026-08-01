@@ -1,0 +1,52 @@
+/**
+ * Tag compounds skin — Tag.Group layout (engine-independent compound).
+ *
+ * LAYER: rottay-components.
+ * SCOPE: `.rottay-tag-group` and its `data-*` axes (gap/direction/wrap/
+ * align), stamped by the Modern compound. The BEM modifier classes
+ * (`--horizontal/--vertical/--wrap`) stay as landing hooks; the paint
+ * contract below is data-attr-driven.
+ * SPECIFICITY: single class, no repetition, no `!important`, logical
+ * properties. Gaps consume the governed spacing ramp (density-scaled).
+ */
+
+.rottay-tag-group {
+  display: flex;
+}
+
+.rottay-tag-group[data-direction='horizontal'] {
+  flex-direction: row;
+}
+.rottay-tag-group[data-direction='vertical'] {
+  flex-direction: column;
+}
+
+.rottay-tag-group[data-wrap='true'] {
+  flex-wrap: wrap;
+}
+.rottay-tag-group[data-wrap='false'] {
+  flex-wrap: nowrap;
+}
+
+.rottay-tag-group[data-gap='xs'] {
+  gap: var(--ds-spacing-1);
+}
+.rottay-tag-group[data-gap='sm'] {
+  gap: var(--ds-spacing-2);
+}
+.rottay-tag-group[data-gap='md'] {
+  gap: var(--ds-spacing-3);
+}
+.rottay-tag-group[data-gap='lg'] {
+  gap: var(--ds-spacing-4);
+}
+
+.rottay-tag-group[data-align='start'] {
+  align-items: flex-start;
+}
+.rottay-tag-group[data-align='center'] {
+  align-items: center;
+}
+.rottay-tag-group[data-align='end'] {
+  align-items: flex-end;
+}

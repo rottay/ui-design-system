@@ -110,18 +110,27 @@ const MessageContext = createContext<MessageInstance | null>(null);
 let messageId = 0;
 
 /**
- * Exit-lifecycle cadence in milliseconds. Kept in lockstep with the skin's
- * `--ds-motion-fast` exit animation (skin/message.css, data-state='exit'):
- * the node stays mounted for exactly one cadence so the exit can paint.
- * @internal
- */
-const MESSAGE_EXIT_DURATION_MS = 160;
-
-/**
  * Generates a unique message ID.
  * @internal
  */
 const generateId = () => `modern-message-${++messageId}`;
+
+/**
+ * Resolves the exit window from the element's computed style (the governed
+ * `--ds-motion-*` value the skin actually applied), plus a small buffer.
+ * Returns 0 when no animation/transition is declared (reduced motion, tests).
+ * @internal
+ */
+const governedExitMs = (el: HTMLElement): number => {
+  const { animationDuration, transitionDuration } = getComputedStyle(el);
+  const toMs = (raw: string) =>
+    raw.split(',').reduce((max, part) => {
+      const t = part.trim();
+      const v = t.endsWith('ms') ? parseFloat(t) : t.endsWith('s') ? parseFloat(t) * 1000 : 0;
+      return Number.isFinite(v) && v > max ? v : max;
+    }, 0);
+  return Math.max(toMs(animationDuration), toMs(transitionDuration)) + 50;
+};
 
 // ============================================================================
 // Message Provider Component
@@ -418,20 +427,44 @@ export const MessageItem: React.FC<MessageItemProps> = ({
   const i18n = useOptionalTranslation('common');
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const exitTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cardRef = useRef<HTMLDivElement | null>(null);
 
   // Exit lifecycle (parity with the rustic engine): close/auto-expiry first
   // plays the skin's exit animation, then removes the node, so the stack
-  // never witnesses an abrupt disappearance.
+  // never witnesses an abrupt disappearance. The window is NOT a fixed JS
+  // constant: `animationend` on the card is the primary path and the fallback
+  // timer reads the resolved duration from the element's computed style, so
+  // the exit always lands exactly when the governed animation ends (0ms under
+  // reduced motion, which the global guard zeroes).
   const [exiting, setExiting] = useState(false);
+
+  const finalizeExit = useCallback(() => {
+    if (exitTimerRef.current) {
+      clearTimeout(exitTimerRef.current);
+      exitTimerRef.current = null;
+    }
+    onRemove?.(id);
+    onClose?.();
+  }, [id, onRemove, onClose]);
 
   const beginExit = useCallback(() => {
     if (exitTimerRef.current) return; // exit already in flight
     setExiting(true);
-    exitTimerRef.current = setTimeout(() => {
-      onRemove?.(id);
-      onClose?.();
-    }, MESSAGE_EXIT_DURATION_MS);
-  }, [id, onRemove, onClose]);
+    const el = cardRef.current;
+    exitTimerRef.current = setTimeout(finalizeExit, el ? governedExitMs(el) : 0);
+  }, [finalizeExit]);
+
+  const handleAnimationEnd = useCallback(
+    (event: React.AnimationEvent<HTMLDivElement>) => {
+      // Only the skin's exit keyframes finalize the exit: an early dismissal
+      // can land while the enter animation is still playing, and its
+      // `animationend` must not remove the card prematurely.
+      if (exiting && event.target === cardRef.current && event.animationName.startsWith('ds-message-exit')) {
+        finalizeExit();
+      }
+    },
+    [exiting, finalizeExit]
+  );
 
   // Auto-close countdown with hover AND focus pause (Toast family parity):
   // hovering or tabbing into the card freezes BOTH the JS countdown
@@ -480,6 +513,14 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     setIsPaused(true);
   };
   const resumeCountdown = () => setIsPaused(false);
+  // Keyboard parity for the hover pause (Toast engine's contains-check
+  // precedent): focus bubbles in React, so a blur that lands on ANOTHER
+  // descendant of the same card must not resume the countdown -- only a blur
+  // that leaves the card entirely does.
+  const handleBlurResume = (event: React.FocusEvent<HTMLDivElement>) => {
+    const next = event.relatedTarget as Node | null;
+    if (!next || !event.currentTarget.contains(next)) resumeCountdown();
+  };
 
   // Manual close must cancel the auto-close timer first to prevent
   // a double-removal race condition (user clicks close, then timer fires).
@@ -511,6 +552,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
   // mirrors the rustic engine's announcement posture.
   return (
     <div
+      ref={cardRef}
       data-part="root"
       data-tone={type}
       data-state={exiting ? 'exit' : 'enter'}
@@ -523,10 +565,11 @@ export const MessageItem: React.FC<MessageItemProps> = ({
       } as React.CSSProperties}
       role="alert"
       aria-live="polite"
+      onAnimationEnd={handleAnimationEnd}
       onMouseEnter={pauseCountdown}
       onMouseLeave={resumeCountdown}
       onFocus={pauseCountdown}
-      onBlur={resumeCountdown}
+      onBlur={handleBlurResume}
     >
       <span data-part="icon">{icon || icons[type]}</span>
       <span data-part="body">{content}</span>

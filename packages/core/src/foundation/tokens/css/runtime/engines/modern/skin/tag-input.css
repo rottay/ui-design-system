@@ -34,6 +34,15 @@
  * `[data-part='root'][data-part='root']` selectors here is zero. Everything
  * else here is non-border paint (background, color, border-radius) and wins
  * unlayered at (0,3,0).
+ *
+ * PHASE-B SECOND PASS 2 (2026-07-31, P2-14): the error message leaves the
+ * raw `var(--ds-color-error)` + `line-height: 16px` literal for the
+ * certified `--ds-input-error-message-color`/`-font-weight` +
+ * `--ds-input-helper-line-height` grammar (the xs raw error ink measured
+ * 4.25:1 on bithire's canvas, sub-AA); under forced-colors the error frame
+ * re-expresses as DASHED so it stays distinct from the rest frame once
+ * system colors force the hue away (OTPInput precedent), and the shell
+ * wrapper gains the stable `data-part='field'` hook in the engine.
  */
 
 .ds-tag-input-shell.ds-tag-input-shell--modern {
@@ -46,18 +55,21 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--ds-tag-input-gap, 4px);
-  padding-block: var(--ds-tag-input-padding-y, 4px);
-  padding-inline: var(--ds-tag-input-padding-x, 8px);
+  gap: calc(var(--ds-tag-input-gap, 4px) * var(--ds-density-effective-scale));
+  padding-block: calc(var(--ds-tag-input-padding-y, 4px) * var(--ds-density-effective-scale));
+  padding-inline: calc(var(--ds-tag-input-padding-x, 8px) * var(--ds-density-effective-scale));
   border-radius: var(--ds-radius-md);
   /* Same channel alignment as input-number.css: the certified Input
      family's `--ds-input-bg` (TMM resolves it light, measured #FFFEFB);
      the generic `--ds-color-bg-input` resolves near-black under TMM's
      dark-text theme (1.29:1 on the inline input text, axe-reproduced). */
   background: var(--ds-input-bg, var(--ds-surface-control));
+  /* The whole container is the click target that focuses the inline input:
+     the text cursor says so even over the gaps between chips. */
+  cursor: text;
   transition:
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 /* Governed channel usage (K2-V Pass-2): the composed primary Tags' SOLID
@@ -75,13 +87,13 @@
 
 /* Public size geometry (density-scaled, physical px channels). */
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='sm'] {
-  min-block-size: calc(var(--ds-tag-input-sm-height, 32px) * var(--ds-density-effective-scale, 1));
+  min-block-size: calc(var(--ds-tag-input-sm-height, 32px) * var(--ds-density-effective-scale));
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='md'] {
-  min-block-size: calc(var(--ds-tag-input-md-height, 40px) * var(--ds-density-effective-scale, 1));
+  min-block-size: calc(var(--ds-tag-input-md-height, 40px) * var(--ds-density-effective-scale));
 }
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='lg'] {
-  min-block-size: calc(var(--ds-tag-input-lg-height, 48px) * var(--ds-density-effective-scale, 1));
+  min-block-size: calc(var(--ds-tag-input-lg-height, 48px) * var(--ds-density-effective-scale));
 }
 
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size] {
@@ -103,6 +115,17 @@
   border-color: var(--ds-tag-input-border-focus, var(--ds-color-primary));
   box-shadow: var(--ds-tag-input-shadow-focus, var(--ds-focus-ring));
 }
+/* Rejection feedback (duplicate / maxTags / validateTag add-refusals): a
+   transient warning frame + halo while the engine stamps `data-rejected`.
+   Never hue-only -- the reason is announced through the polite live region
+   and the draft text is kept for correction. Placed after the focus grammar
+   so the flash wins the tie during the beat, then transitions back out on
+   the governed channels (reduced motion lands in each state directly). */
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-rejected] {
+  --_ds-tag-input-rejected-ink: var(--_ds-proto-tag-input-rejected-color, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%));
+  border-color: var(--_ds-tag-input-rejected-ink);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--_ds-tag-input-rejected-ink) 24%, transparent);
+}
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-disabled='true'] {
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
@@ -116,6 +139,29 @@
   background: transparent;
   border: none;
   color: var(--ds-color-text-primary);
+  caret-color: var(--ds-input-border-focus, var(--ds-color-primary));
+  /* The UA control font is not a semantic role: inherit the family/weight
+     and take the certified Input scale per size (below), so typed text,
+     chips and the Input family share one typography grammar. */
+  font-family: inherit;
+  font-weight: inherit;
+  line-height: var(--ds-line-height-normal);
+}
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='sm'] [data-part='input'] {
+  font-size: var(--ds-input-sm-font-size);
+}
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='md'] [data-part='input'] {
+  font-size: var(--ds-input-md-font-size);
+}
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-size='lg'] [data-part='input'] {
+  font-size: var(--ds-input-lg-font-size);
+}
+/* Placeholder, entered text and disabled ink stay visibly distinct: muted
+   placeholder on the certified channel, primary entered text (above),
+   disabled through the container's opacity + not-allowed posture. */
+.ds-tag-input.ds-tag-input--modern [data-part='input']::placeholder {
+  color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
+  opacity: var(--ds-input-placeholder-opacity);
 }
 .ds-tag-input.ds-tag-input--modern [data-part='input']:disabled {
   cursor: not-allowed;
@@ -125,9 +171,16 @@
   margin-block-start: var(--ds-tag-input-error-gap, 4px);
 }
 .ds-tag-input.ds-tag-input--modern ~ * [data-part='error-message'] {
-  font-size: var(--ds-font-size-xs, 12px);
-  line-height: 16px;
-  color: var(--ds-color-error);
+  font-size: var(--ds-font-size-xs);
+  /* Certified Input error-message grammar (P2-14): the raw error channel at
+     xs size fails AA on governed-source canvases (bithire #C5504C on
+     #F4F8FB = 4.25:1, measured by the OTP lane), so the ink/weight/leading
+     consume the same `--ds-input-error-message-*` + helper channels the
+     certified Input and PasswordInput already read -- no more raw
+     `var(--ds-color-error)` text or `line-height: 16px` literal. */
+  line-height: var(--ds-input-helper-line-height, var(--ds-line-height-snug));
+  color: var(--ds-input-error-message-color, var(--ds-color-error));
+  font-weight: var(--ds-input-error-message-font-weight, var(--ds-font-weight-medium));
 }
 
 /* Coarse-pointer floor: physical px, never rem (the fluid 15px root erodes
@@ -152,10 +205,22 @@
   .ds-tag-input.ds-tag-input--modern[data-part='root'][data-size] {
     border-color: ButtonText;
   }
+  /* Error re-expresses as a DASHED frame (form, not hue -- the OTPInput
+     precedent): a solid ButtonText frame would be indistinguishable from
+     rest once system colors force the hue away. The message travels as
+     TEXT below, so the state is never hue-only. */
   .ds-tag-input.ds-tag-input--modern[data-part='root'][data-error='true'] {
     border-color: ButtonText;
+    border-style: dashed;
   }
   .ds-tag-input.ds-tag-input--modern[data-part='root']:focus-within {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+    box-shadow: none;
+  }
+  /* The rejection flash keeps a system-color silhouette (hue washes are
+     forced away); the live region carries the reason as text. */
+  .ds-tag-input.ds-tag-input--modern[data-part='root'][data-rejected] {
     outline: 2px solid Highlight;
     outline-offset: 1px;
     box-shadow: none;

@@ -23,7 +23,16 @@ export const BaseAffix = forwardRef<HTMLDivElement, AffixProps>((props, ref) => 
   };
 
   return (
-    <div ref={ref} className={`rottay-affix ${className}`} style={stickyStyle}>
+    // Stamp parity with the engine TSX (P2-20): the fallback carries the same
+    // stable hooks (`data-part='root'` + `data-affix-edge`) the Modern engine
+    // stamps, so selectors/tests observe one contract across render paths.
+    <div
+      ref={ref}
+      className={`rottay-affix ${className}`}
+      style={stickyStyle}
+      data-part="root"
+      data-affix-edge={offsetBottom !== undefined ? 'bottom' : 'top'}
+    >
       {children}
     </div>
   );

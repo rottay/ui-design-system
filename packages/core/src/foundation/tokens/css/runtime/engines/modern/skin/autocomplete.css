@@ -1,6 +1,6 @@
 /**
  * Modern AutoComplete skin (lane-A Quiet Premium pass over WO-SKIN-02
- * checkpoint B).
+ * checkpoint B; Phase-B second pass 2026-07-31).
  *
  * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
  * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
@@ -8,10 +8,11 @@
  * preflight + DaisyUI and still yields to a caller's inline `style`.
  *
  * SCOPE ROOT is the wrapper `<div>`, which carries the pair
- * `ds-autocomplete ds-autocomplete--modern` + `data-part='root'`; every painted
- * element is an IN-TREE descendant with a `data-part` (AutoComplete never
- * portals in either engine). The `input` border reaches (0,4,0) via the two
- * root classes (0,2,0) + `[data-part='root']` + the descendant `[data-part]`.
+ * `ds-autocomplete ds-autocomplete--modern` + `data-part='root'` plus the
+ * `data-size`/`data-status` state axes; every painted element is an IN-TREE
+ * descendant with a `data-part` (AutoComplete never portals in either engine).
+ * The `input` border reaches (0,4,0) via the two root classes (0,2,0) +
+ * `[data-part='root']` + the descendant `[data-part]`.
  *
  * LANE-A PASS:
  * - The dropdown's position/z-index/padding/max-height and the clear button's
@@ -24,6 +25,46 @@
  * - The input gained hover/focus-visible states (its outline was suppressed
  *   with no replacement) and an inline-end reserve so the value never runs
  *   under the clear button.
+ *
+ * PHASE-B SECOND PASS:
+ * - Per-size geometry drained from the engine's inline `getSizeStyle()` into
+ *   `[data-size]` rules on the canonical `--ds-input-{sm,md,lg}-*` scale
+ *   multiplied by `--ds-density-effective-scale` (Input/PasswordInput idiom):
+ *   AutoComplete now tracks the tenant density plane like every sibling field.
+ * - `status='error'|'warning'` (a contract prop the engine used to drop) is
+ *   wired: the input reads the Input family's error/warning grammar --
+ *   surface tint + border step + status-tinted focus ring, never a bare hue
+ *   swap -- consuming the pre-existing `--ds-autocomplete-{error,warning}-border`
+ *   tenant channels and the certified `--ds-input-*-bg/-shadow-focus` hooks.
+ * - Option anatomy aligned with the Select dropdown grammar (the overlay this
+ *   family shares its material contract with): transparent hairline frame at
+ *   rest (no geometry jump on hover), hairline + primary-tinted wash + ink
+ *   step on hover/`data-active`, density-scaled option floor, consuming the
+ *   pre-existing `--ds-autocomplete-option-bg-hover` tenant channel.
+ * - The empty posture adopts the Select empty well's spatial contract
+ *   (dashed hairline, 4.5rem min-block, radius, muted helper ink) instead of
+ *   a bare centered string; ink consumes the pre-existing
+ *   `--ds-autocomplete-empty-color` channel.
+ * - Placeholder/selection/autofill (webkit + standard) read the certified
+ *   `--ds-input-*` channels; the input base surface reads the certified
+ *   `--ds-input-bg` chain (never the generic `--ds-color-bg-input`, which
+ *   resolves near-black under the TMM DB projection -- the OTP CONTROL
+ *   SURFACE law), with `--ds-autocomplete-bg` kept as the tenant override.
+ * - Clear-button hover no longer flashes the ERROR hue (a destructive miscue
+ *   for a neutral reset): it reads the Input clear grammar's ink step.
+ * - `popupMatchSelectWidth={false}` (contract) resolves to content width
+ *   bounded by a proto max (Select's 28rem dropdown dial), still viewport-safe.
+ *
+ * PHASE B2 (P2 deep pass, 2026-07-31):
+ * - The input gained an accessible name (axe `label` critical; Mentions
+ *   K4-D idiom): placeholder is the floor, `autocomplete.input_label` the
+ *   localized default (engine).
+ * - Option rows grew the governed `option-label` slot (Cascader/Mentions
+ *   parity): the ellipsis lives on the flex child, never on the row.
+ * - The empty row inside the listbox carries role="option" + aria-disabled
+ *   (aria-required-children; Mentions idiom).
+ * - Hover states paint their touch `:active` equivalents (input border,
+ *   option wash, clear-button ink step -- 4th-tanda law).
  */
 
 @keyframes ds-autocomplete-slide-in {
@@ -50,17 +91,57 @@
   box-sizing: border-box;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
-  background: var(--ds-color-bg-input);
+  /* Certified Input control surface chain (OTP CONTROL SURFACE law): the
+     generic --ds-color-bg-input resolves near-black under TMM DB; the tenant
+     override --ds-autocomplete-bg stays first. */
+  background: var(--ds-autocomplete-bg, var(--ds-input-bg, var(--ds-surface-control)));
   color: var(--ds-color-text-primary);
+  caret-color: var(--ds-input-caret-color, var(--ds-input-border-focus, var(--ds-color-primary)));
   outline: none;
   transition:
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
+
+/* Public size geometry on the canonical input scale + the density plane
+   (drained from the engine's inline getSizeStyle; same fallbacks). */
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'][data-size='sm'] [data-part='input'] {
+  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale));
+  padding-block: var(--ds-spacing-1);
+  padding-inline: var(--ds-input-sm-padding-x);
+  font-size: var(--ds-input-sm-font-size);
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'][data-size='md'] [data-part='input'] {
+  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale));
+  padding-block: calc(var(--ds-spacing-3) / 2);
+  padding-inline: var(--ds-input-md-padding-x);
+  font-size: var(--ds-input-md-font-size);
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'][data-size='lg'] [data-part='input'] {
+  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale));
+  padding-block: var(--ds-spacing-2);
+  padding-inline: var(--ds-input-lg-padding-x);
+  font-size: var(--ds-input-lg-font-size);
+}
+
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']::placeholder {
+  color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
+  opacity: var(--ds-input-placeholder-opacity);
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']::selection {
+  color: var(--ds-input-selection-color, var(--ds-color-text-primary));
+  background: var(--ds-input-selection-bg);
+}
+
 @media (hover: hover) {
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:where(:hover):not(:disabled) {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:where(:hover):not(:disabled):not(:focus-visible) {
     border-color: var(--ds-autocomplete-border-hover, var(--ds-color-border-hover));
   }
+}
+/* Touch/active equivalent of the hover border (4th-tanda law). */
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:active:not(:disabled):not(:focus-visible) {
+  border-color: var(--ds-autocomplete-border-hover, var(--ds-color-border-hover));
 }
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:focus-visible {
   border-color: var(--ds-autocomplete-border-focus, var(--ds-color-primary));
@@ -70,6 +151,38 @@
   opacity: var(--ds-disabled-opacity, 0.5);
   cursor: not-allowed;
 }
+
+/* Status grammar (contract `status`, wired in the Phase-B engine pass): the
+   Input family's error/warning posture -- surface tint + border step +
+   status-tinted ring on focus. Ordered AFTER hover/focus so equal-specificity
+   state rules yield to the semantic state. */
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'][data-status='error'] [data-part='input'] {
+  background: var(--ds-input-error-bg, var(--ds-autocomplete-bg, var(--ds-input-bg, var(--ds-surface-control))));
+  border-color: var(--ds-autocomplete-error-border, var(--ds-color-error));
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'][data-status='error'] [data-part='input']:focus-visible {
+  border-color: var(--ds-autocomplete-error-border, var(--ds-color-error));
+  box-shadow: var(--ds-input-error-shadow-focus, var(--ds-autocomplete-shadow-focus, var(--ds-shadow-focus-ring)));
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'][data-status='warning'] [data-part='input'] {
+  background: var(--ds-input-warning-bg, var(--ds-autocomplete-bg, var(--ds-input-bg, var(--ds-surface-control))));
+  border-color: var(--ds-autocomplete-warning-border, var(--ds-color-warning));
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'][data-status='warning'] [data-part='input']:focus-visible {
+  border-color: var(--ds-autocomplete-warning-border, var(--ds-color-warning));
+  box-shadow: var(--ds-input-warning-shadow-focus, var(--ds-autocomplete-shadow-focus, var(--ds-shadow-focus-ring)));
+}
+
+/* Browser chrome: keep autofill legible and on-surface (webkit + standard). */
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:-webkit-autofill {
+  -webkit-text-fill-color: var(--ds-input-autofill-color, var(--ds-color-text-primary));
+  caret-color: var(--ds-input-autofill-caret, var(--ds-input-caret-color, var(--ds-color-primary)));
+  box-shadow: 0 0 0 1000px var(--ds-input-autofill-bg, var(--ds-autocomplete-bg, var(--ds-input-bg, var(--ds-surface-control)))) inset;
+}
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input']:autofill {
+  box-shadow: 0 0 0 1000px var(--ds-input-autofill-bg, var(--ds-autocomplete-bg, var(--ds-input-bg, var(--ds-surface-control)))) inset;
+}
+
 /* Inline-end reserve so a long value never runs under the clear button. */
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input-wrapper']:has([data-part='clear-button']) [data-part='input'] {
   padding-inline-end: var(--ds-autocomplete-clear-reserve, 32px);
@@ -77,10 +190,12 @@
 
 /* Clear button: positioning drained from the physical `right-2 top-1/2
    -translate-y-1/2` utilities -- logical, RTL-free. Geometry drained from the
-   inline style (24px square, inline-flex centering). */
+   inline style (24px square, inline-flex centering). Hover reads the Input
+   clear grammar's ink step, never the error hue (a destructive miscue for a
+   neutral reset). */
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button'] {
   position: absolute;
-  inset-inline-end: var(--ds-spacing-2, 8px);
+  inset-inline-end: var(--ds-spacing-2);
   inset-block-start: 50%;
   transform: translateY(-50%);
   inline-size: var(--ds-autocomplete-clear-size, 24px);
@@ -91,15 +206,19 @@
   padding: 0;
   cursor: pointer;
   background: transparent;
-  color: var(--ds-color-text-primary);
+  color: var(--ds-autocomplete-clear-color, var(--ds-color-text-muted));
   border: none;
   border-radius: 50%;
-  transition: color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 @media (hover: hover) {
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button']:hover {
-    color: var(--ds-color-error);
+    color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
   }
+}
+/* Touch/active equivalent of the hover ink step. */
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button']:active {
+  color: var(--ds-input-clear-color-hover, var(--ds-color-text-primary));
 }
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button']:focus-visible {
   outline: none;
@@ -108,14 +227,15 @@
 
 /* Dropdown: geometry drained from the inline style. z rides the token scale
    (pre-flag 7): dropdown tier, not a magic 50. The dark-aware luminance step
-   is its own layer directly above the fill (lane overlay register). */
+   is its own layer directly above the fill (lane overlay register) -- the
+   same surface/elevation register as the Select dropdown. */
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='dropdown'] {
   position: absolute;
   inset-inline: 0;
-  z-index: var(--ds-autocomplete-dropdown-z, var(--ds-z-index-dropdown, 1000));
+  z-index: var(--ds-autocomplete-dropdown-z, var(--ds-z-index-dropdown));
   margin: 0;
-  margin-block-start: var(--ds-spacing-1, 4px);
-  padding: var(--ds-spacing-1, 4px);
+  margin-block-start: var(--ds-spacing-1);
+  padding: var(--ds-spacing-1);
   max-block-size: var(--ds-autocomplete-dropdown-max-height, 240px);
   overflow-y: auto;
   list-style: none;
@@ -125,46 +245,90 @@
   mask-image: linear-gradient(
     to bottom,
     transparent,
-    black var(--ds-spacing-2, 8px),
-    black calc(100% - var(--ds-spacing-2, 8px)),
+    black var(--ds-spacing-2),
+    black calc(100% - var(--ds-spacing-2)),
     transparent
   );
-  border-radius: var(--ds-radius-lg);
+  border-radius: var(--ds-autocomplete-dropdown-radius, var(--ds-radius-lg));
   background:
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
-    var(--ds-surface-card);
+    var(--ds-autocomplete-dropdown-bg, var(--ds-surface-card));
   border: 1px solid var(--ds-color-border-subtle);
-  box-shadow: var(--ds-elevation-2);
-  animation: ds-autocomplete-slide-in var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  box-shadow: var(--ds-autocomplete-dropdown-shadow, var(--ds-elevation-2));
+  animation: ds-autocomplete-slide-in var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+/* Contract `popupMatchSelectWidth={false}`: content width, never narrower
+   than the field, bounded by the family dial (Select's 28rem register) and
+   the viewport. A numeric prop is sanctioned instance geometry and arrives
+   inline from the engine (no skin rule needed). */
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='dropdown'][data-match-width='false'] {
+  inline-size: max-content;
+  min-inline-size: 100%;
+  max-inline-size: min(var(--_ds-proto-autocomplete-dropdown-max-width, 28rem), calc(100vw - 1rem));
 }
 
 /* Option rows: the states that used to ride the dead DaisyUI `active` /
-   `disabled` class tokens, now real rules (Select/Cascader idiom). */
+   `disabled` class tokens, now real rules (Select/Cascader idiom) carrying
+   the Select dropdown's option grammar: transparent hairline at rest (state
+   changes never move geometry), hairline + primary-tinted wash + ink step on
+   hover/keyboard-active, density-scaled floor. */
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'] {
   display: flex;
   align-items: center;
+  box-sizing: border-box;
   inline-size: 100%;
-  padding-block: var(--ds-spacing-1, 4px);
-  padding-inline: var(--ds-spacing-2, 8px);
-  border-radius: var(--ds-radius-sm, 6px);
-  border: none;
+  min-block-size: calc(var(--_ds-proto-autocomplete-option-height, 2.25rem) * var(--ds-density-effective-scale));
+  padding-block: var(--ds-spacing-1);
+  padding-inline: var(--ds-spacing-2);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid transparent;
   background: transparent;
-  color: var(--ds-color-text-primary);
-  font-size: var(--ds-input-sm-font-size, 13px);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-input-sm-font-size);
   text-align: start;
   cursor: pointer;
   overflow: hidden;
+  transition:
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+/* Governed label slot (Cascader/Mentions parity): the ellipsis lives on the
+   flex child, never on the row (a flex container cannot ellipsis its span). */
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'] > [data-part='option-label'] {
+  min-inline-size: 0;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
 }
 @media (hover: hover) {
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:where(:hover):not([data-disabled='true']) {
-    background: var(--ds-color-bg-hover);
+    color: var(--ds-color-text-primary);
+    border-color: var(--ds-color-border-subtle);
+    background: var(
+      --ds-autocomplete-option-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))
+    );
   }
 }
+/* Touch/active equivalent of the hover wash (4th-tanda law: every hover
+   paints an equivalent active state). */
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:active:not([data-disabled='true']) {
+  color: var(--ds-color-text-primary);
+  border-color: var(--ds-color-border-subtle);
+  background: var(
+    --ds-autocomplete-option-bg-hover,
+    color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))
+  );
+}
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-active='true'] {
-  background: var(--ds-color-bg-hover);
+  color: var(--ds-color-text-primary);
+  border-color: var(--ds-color-border-subtle);
+  background: var(
+    --ds-autocomplete-option-bg-hover,
+    color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))
+  );
 }
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option']:focus-visible {
   outline: none;
@@ -175,15 +339,26 @@
   cursor: not-allowed;
 }
 
+/* Empty posture: the Select empty well's spatial contract (dashed hairline,
+   4.5rem min-block, radius, muted helper ink) -- never a bare centered
+   string. Ink rides the pre-existing tenant channel. */
 .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='empty'] {
-  padding: var(--ds-spacing-2, 8px);
+  display: grid;
+  place-items: center;
+  min-block-size: 4.5rem;
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  border: 1px dashed var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-autocomplete-empty-color, var(--ds-color-text-muted));
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-snug);
   text-align: center;
-  color: var(--ds-color-text-secondary);
 }
 
-/* Coarse pointer: suggestions and the clear button reach the 44px floor via
-   min-block-size (wins over inline heights, fine pointers untouched). */
+/* Coarse pointer: the field, suggestions and the clear button reach the 44px
+   floor via min-block-size (wins over inline heights, fine pointers untouched). */
 @media (hover: none) and (pointer: coarse) {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input'],
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'],
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button'] {
     min-block-size: var(--ds-autocomplete-touch-target-min, 44px);
@@ -204,7 +379,8 @@
 
 /* Forced colors (system colors only): the active option reads as a system
    selection; focus rings re-map to Highlight outlines (box-shadows are
-   dropped); disabled options read GrayText. */
+   dropped); disabled options read GrayText; the empty well keeps its frame
+   so the posture survives the stripped fill. */
 @media (forced-colors: active) {
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-active='true'] {
     background: Highlight;
@@ -219,5 +395,8 @@
   }
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
     color: GrayText;
+  }
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='empty'] {
+    border-color: ButtonText;
   }
 }

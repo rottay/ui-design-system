@@ -16,7 +16,7 @@
   --ds-button-xs-padding-x: 0.5rem;        /* 8px */
   --ds-button-xs-padding-y: 0.125rem;      /* 2px */
   --ds-button-xs-padding: 0 0.5rem;        /* 0 8px - shorthand */
-  --ds-button-xs-font-size: 0.75rem;       /* 12px */
+  --ds-button-xs-font-size: var(--ds-font-size-xs);  /* 12px via the semantic type role, so the xs label tracks --ds-type-scale like every other size */
   --ds-button-xs-line-height: 1.25rem;     /* 20px */
   --ds-button-xs-icon-size: 0.75rem;       /* 12px */
   --ds-button-xs-gap: 0.25rem;             /* 4px */

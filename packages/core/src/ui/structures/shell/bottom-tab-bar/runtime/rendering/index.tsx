@@ -43,7 +43,6 @@
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { Box } from '@/ui/primitives/layout/Box';
 import { Flex } from '@/ui/primitives/layout/Flex';
-import { Text } from '@/ui/primitives/display/Typography';
 
 import type { BottomTabBarProps, BottomTabBarItem } from '../../contracts';
 
@@ -102,17 +101,17 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
             data-wide={item.badge > 99 || undefined}
             data-testid={`tab-badge-${item.key}`}
           >
-            <Text data-part="badge-text" className="rottay-bottom-tab-bar__badge-text">
+            <Box as="span" data-part="badge-text" className="rottay-bottom-tab-bar__badge-text">
               {item.badge > 99 ? '99+' : String(item.badge)}
-            </Text>
+            </Box>
           </Box>
         )}
       </Box>
 
       {/* Label */}
-      <Text data-part="label" className="rottay-bottom-tab-bar__label">
+      <Box as="span" data-part="label" className="rottay-bottom-tab-bar__label">
         {item.label}
-      </Text>
+      </Box>
     </Box>
   );
 }

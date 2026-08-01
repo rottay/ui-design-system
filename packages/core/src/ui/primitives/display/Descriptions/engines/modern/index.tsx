@@ -60,6 +60,12 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
       children,
       className = '',
       style,
+      'data-part': dataPart,
+      'aria-label': ariaLabel,
+      // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to
+      // the root element. It spreads BEFORE the engine's own stamps so the
+      // skin contract always lands last.
+      ...rest
     } = props;
 
     const i18n = useOptionalTranslation('components');
@@ -80,13 +86,14 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
 
     return (
       <div
+        {...rest}
         ref={ref}
         className={`rottay-descriptions rottay-descriptions--modern${layout === 'vertical' ? ' rottay-descriptions-vertical' : ''}${!bordered ? ' rottay-descriptions-borderless' : ''} ${className}`}
         style={{
           '--ds-descriptions-column-count': columnCount,
           ...style,
         } as React.CSSProperties}
-        data-part="root"
+        data-part={dataPart ?? 'root'}
         data-engine="modern"
         data-layout={layout}
         data-bordered={bordered ? 'true' : 'false'}
@@ -96,7 +103,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         data-has-header={hasHeader}
         data-has-extra={!!extra}
         role="region"
-        aria-label={typeof title === 'string' ? title : regionLabel}
+        aria-label={ariaLabel ?? (typeof title === 'string' ? title : regionLabel)}
       >
         {/* Header section with title and extra content */}
         {(title || extra) && (

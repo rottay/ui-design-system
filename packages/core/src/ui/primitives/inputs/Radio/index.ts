@@ -98,7 +98,7 @@
 
 import { createEngineComponent } from '../../../../infrastructure/runtime/engines/presentation/component-factory';
 import type { RadioProps } from './contracts';
-import { RadioGroup } from './compound';
+import { RadioGroup } from './compound/Group';
 
 export {
   type RadioProps,
@@ -111,7 +111,7 @@ export {
   RADIO_GROUP_DEFAULTS,
 } from './contracts';
 
-export { RadioGroup } from './compound';
+export { RadioGroup } from './compound/Group';
 
 export const Radio = Object.assign(
   createEngineComponent<RadioProps>('Radio', {

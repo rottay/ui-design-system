@@ -25,16 +25,46 @@
  */
 
 .rottay-image-fallback[data-part='fallback'][data-part='fallback'] {
-  background-color: var(--ds-color-neutral-100, #f5f5f5);
-  color: var(--ds-color-neutral-500, #737373);
+  background-color: var(--ds-color-neutral-100);
+  color: var(--ds-color-neutral-500);
+  /* Semantic type role (P2 inline-drain from the compound's style prop; the
+     declared channel resolves its own default, so it stays bare per fallback
+     parity). */
+  font-size: var(--ds-font-size-sm);
 }
 
 .rottay-image-skeleton[data-part='skeleton'][data-part='skeleton'] {
-  background-color: var(--ds-color-neutral-200, #e5e5e5);
+  background-color: var(--ds-color-neutral-200);
   border-radius: var(--ds-image-resolved-radius);
+}
+
+/* The `animate` prop used to write a raw `2s` animation inline (P0 sweep
+   residual: paint + a crude duration in the style prop). It now stamps
+   data-animate and the pulse rides the family hook here -- same resolved
+   cadence as the engine skin's loading pulse, and the global reduced-motion
+   guard neutralizes it. */
+.rottay-image-skeleton[data-part='skeleton'][data-part='skeleton'][data-animate='true'] {
+  animation: ds-image-skeleton-pulse var(--ds-image-pulse-duration, var(--ds-motion-attention)) cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes ds-image-skeleton-pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
+}
+
+/* ---- forced colors: neutral-ramp fills strip to nothing, so the skeleton's
+        reserved region and the fallback panel re-express in system colors.
+        The skeleton keeps a border so the pending geometry stays perceivable;
+        the fallback mirrors the modern skin's dashed-frame idiom. ---- */
+@media (forced-colors: active) {
+  .rottay-image-fallback[data-part='fallback'][data-part='fallback'] {
+    background-color: Canvas;
+    color: CanvasText;
+    border: 1px dashed ButtonText;
+  }
+
+  .rottay-image-skeleton[data-part='skeleton'][data-part='skeleton'] {
+    background-color: Canvas;
+    border: 1px solid CanvasText;
+  }
 }

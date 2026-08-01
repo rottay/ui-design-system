@@ -81,9 +81,15 @@ export function ResponsiveVisibility({
 
   if (mediaQuery === null) return <Tag>{children}</Tag>;
 
+  /* Both modes are box-transparent while visible (`display: contents`): the
+     boundary never inserts an anonymous block/flex box of its own into the
+     parent's layout, so an empty or hidden payload leaves no accidental box
+     behind (Show already worked this way; Hide's visible state used to be a
+     plain div box -- the second-pass symmetry fix). The hide rule keeps its
+     pinned `!important`: hiding must beat any display the children carry. */
   const css = mode === 'show'
     ? `.${className} { display: none; }\n@media ${mediaQuery} { .${className} { display: contents; } }`
-    : `@media ${mediaQuery} { .${className} { display: none !important; } }`;
+    : `.${className} { display: contents; }\n@media ${mediaQuery} { .${className} { display: none !important; } }`;
 
   return (
     <>

@@ -1,10 +1,11 @@
 'use client';
 
 /**
- * @fileoverview Modern (Token-driven/Tailwind) engine for the Popconfirm overlay component.
+ * @fileoverview Modern (token-driven) engine for the Popconfirm overlay component.
  * Stamps `data-part` anatomy and owns behavior (async-aware confirm handling
  * with auto-loading state, click-outside dismissal, shared overlay
- * positioning); all paint lives in the `popconfirm.css` modern skin.
+ * positioning); all paint AND static layout live in the `popconfirm.css`
+ * modern skin (the former in-engine utility classes are drained).
  *
  * @remarks
  * **Positioning:**
@@ -29,6 +30,7 @@ import React, { useState, useCallback, useEffect, useId } from 'react';
 import type { PopconfirmProps } from '../../contracts';
 import { POPCONFIRM_DEFAULTS, POPCONFIRM_TO_OVERLAY_PLACEMENT } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
 import { ModernButton as Button } from '../../../../facade';
 import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
 
@@ -39,8 +41,10 @@ import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
  * The component tracks an internal loading state that activates automatically
  * when `onConfirm` returns a Promise, disabling both buttons until the promise
  * settles. Supports controlled/uncontrolled open state and maps the unified
- * `okType` prop to `data-ok-type`, which the skin resolves to semantic token
- * fills (primary, error, ghost backgrounds).
+ * `okType` prop to `data-ok-type` (the skin resolves the surface/icon tone)
+ * and to the confirm action's Button variant -- danger, primary, or the
+ * bordered `default`, so a neutral confirm never reads identical to the
+ * ghost cancel.
  *
  * @param props - {@link PopconfirmProps} shared across all engines.
  * @returns A ref-forwarded relatively-positioned container with an in-tree, positioned panel.
@@ -77,6 +81,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       placement = POPCONFIRM_DEFAULTS.placement,
       okButtonLoading,
       className,
+      style,
       overlayClassName,
       overlayStyle,
     } = props;
@@ -208,6 +213,13 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
     const titleId = `${dialogTextId}-title`;
     const descriptionId = description ? `${dialogTextId}-description` : undefined;
 
+    // Tone icon: a consumer `icon` wins; the governed semantic warning glyph
+    // is the default; `icon={null}` explicitly opts out. The skin tints the
+    // well per `data-ok-type` (warning default, error for the destructive
+    // confirm, primary otherwise).
+    const resolvedIcon =
+      icon === null ? undefined : icon ?? <StatusWarningIcon decorative size={16} />;
+
     return (
       <div
         ref={(node) => {
@@ -217,16 +229,18 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
         }}
         data-part="trigger"
         data-open={isOpen ? 'true' : 'false'}
-        className={`relative inline-block rottay-popconfirm--modern ${className || ''}`}
+        className={`rottay-popconfirm--modern ${className || ''}`}
+        style={style}
         {...anchorAttrs}
       >
-        <div onClick={handleTriggerClick}>{children}</div>
+        <div data-part="trigger-content" onClick={handleTriggerClick}>{children}</div>
 
         {isOpen && mounted && (
           <div
             ref={setSurfaceEl}
             data-part="surface"
             data-open="true"
+            data-ok-type={okType}
             data-ds-position-strategy={strategy}
             role="dialog"
             aria-labelledby={titleId}
@@ -234,9 +248,11 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
             className={overlayClassName || undefined}
             style={surfaceStyle}
           >
-            <div className="flex items-start gap-2">
-              {icon && <span data-part="icon">{icon}</span>}
-              <div className="flex-1">
+            {/* Content row + copy column: layout is skin-owned (drained from
+                the former `flex items-start gap-2` / `flex-1` utilities). */}
+            <div data-part="content">
+              {resolvedIcon && <span data-part="icon">{resolvedIcon}</span>}
+              <div data-part="copy">
                 <div id={titleId} data-part="title">{title}</div>
                 {description && (
                   <div id={descriptionId} data-part="description">
@@ -255,13 +271,13 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
                 size="sm"
                 data-part="action"
                 data-action="cancel"
-                disabled={disabled}
+                disabled={disabled || loading || okButtonLoading}
                 onClick={handleCancel}
               >
                 {cancelText}
               </Button>
               <Button
-                variant={okType === 'danger' ? 'danger' : okType === 'primary' ? 'primary' : 'ghost'}
+                variant={okType === 'danger' ? 'danger' : okType === 'primary' ? 'primary' : 'default'}
                 size="sm"
                 data-part="action"
                 data-action="confirm"

@@ -22,46 +22,46 @@
   align-items: center;
   justify-content: center;
   min-inline-size: 0;
-  max-inline-size: var(--ds-badge-max-inline-size, 18rem);
+  max-inline-size: var(--ds-badge-max-inline-size);
   block-size: var(--ds-badge-resolved-height, var(--ds-badge-md-height));
   padding-inline: calc(
     var(--ds-badge-resolved-padding-inline, var(--ds-badge-padding-x)) *
-      var(--ds-density-effective-scale, 1)
+      var(--ds-density-effective-scale)
   );
-  gap: calc(var(--ds-badge-gap, var(--ds-badge-icon-gap)) * var(--ds-density-effective-scale, 1));
+  gap: calc(var(--ds-badge-gap, var(--ds-badge-icon-gap)) * var(--ds-density-effective-scale));
   box-sizing: border-box;
   overflow: visible;
   vertical-align: middle;
   isolation: isolate;
   font-family: var(--ds-badge-font-family, var(--ds-font-family-base));
   font-size: var(--ds-badge-resolved-font-size, var(--ds-badge-md-font-size));
-  font-weight: var(--ds-badge-font-weight, 500);
+  font-weight: var(--ds-badge-font-weight);
   font-variant-numeric: tabular-nums;
-  line-height: var(--ds-badge-line-height, 1);
-  letter-spacing: var(--ds-badge-letter-spacing, -0.01em);
-  border: var(--ds-badge-frame-width, 1px) solid
+  line-height: var(--ds-badge-line-height);
+  letter-spacing: var(--ds-badge-letter-spacing);
+  border: var(--ds-badge-frame-width) solid
     var(--ds-badge-frame, color-mix(in srgb, currentColor 14%, transparent));
   border-radius: var(--ds-badge-radius, var(--ds-radius-sm));
   background: var(--ds-badge-surface, var(--ds-color-neutral-200));
   color: var(--ds-badge-ink, var(--ds-color-text-primary));
   box-shadow:
-    var(--ds-badge-highlight, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white, white) 46%, transparent)),
+    var(--ds-badge-highlight, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) 46%, transparent)),
     var(--ds-badge-shadow, 0 1px 2px color-mix(in srgb, currentColor 7%, transparent));
   transform: var(--ds-badge-position-transform, translateY(0));
   transform-origin: center;
   transition:
     transform var(--ds-badge-motion-duration, var(--ds-motion-fast))
-      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out)),
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
     background-color var(--ds-badge-motion-duration, var(--ds-motion-fast))
-      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out)),
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
     border-color var(--ds-badge-motion-duration, var(--ds-motion-fast))
-      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out)),
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
     box-shadow var(--ds-badge-motion-duration, var(--ds-motion-fast))
-      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out)),
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
     color var(--ds-badge-motion-duration, var(--ds-motion-fast))
-      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out)),
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
     opacity var(--ds-badge-motion-duration, var(--ds-motion-fast))
-      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out));
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out));
 }
 
 /* Compact sizes render at 9–10px: at that scale the shared 500 weight reads
@@ -73,18 +73,18 @@
 }
 
 .rottay-badge.rottay-badge--modern[data-part='root'][data-kind='chip'] {
-  --ds-badge-max-inline-size: var(--ds-badge-chip-max-inline-size, 22rem);
+  --ds-badge-max-inline-size: var(--ds-badge-chip-max-inline-size);
   min-block-size: var(--ds-badge-chip-min-height, var(--ds-badge-resolved-height));
   border-radius: var(--ds-badge-chip-radius, var(--ds-badge-radius, var(--ds-radius-md)));
 }
 .rottay-badge.rottay-badge--modern[data-part='root'][data-kind='pill'] {
-  --ds-badge-max-inline-size: var(--ds-badge-pill-max-inline-size, 22rem);
+  --ds-badge-max-inline-size: var(--ds-badge-pill-max-inline-size);
   min-block-size: var(--ds-badge-pill-min-height, var(--ds-badge-resolved-height));
   border-radius: var(--ds-badge-pill-radius, var(--ds-badge-radius, var(--ds-radius-full)));
 }
 
 .rottay-badge.rottay-badge--modern[data-part='root'][data-radius='none'] {
-  border-radius: var(--ds-badge-radius-none, 0);
+  border-radius: var(--ds-badge-radius-none);
 }
 .rottay-badge.rottay-badge--modern[data-part='root'][data-radius='sm'] {
   border-radius: var(--ds-badge-radius-sm, var(--ds-radius-sm));
@@ -96,7 +96,7 @@
   border-radius: var(--ds-badge-radius-lg, var(--ds-radius-lg));
 }
 .rottay-badge.rottay-badge--modern[data-part='root'][data-radius='full'] {
-  border-radius: var(--ds-badge-radius-full, 9999px);
+  border-radius: var(--ds-badge-radius-full);
 }
 
 /* Main control and passive content share one geometry contract. */
@@ -135,12 +135,12 @@
 }
 
 .rottay-badge.rottay-badge--modern[data-disabled='true'] {
-  opacity: var(--ds-badge-disabled-opacity, 0.48);
+  opacity: var(--ds-badge-disabled-opacity);
   filter: var(--ds-badge-disabled-filter, saturate(0.62));
 }
 
 .rottay-badge.rottay-badge--modern[data-loading='true'] {
-  opacity: var(--ds-badge-loading-opacity, 0.76);
+  opacity: var(--ds-badge-loading-opacity);
 }
 
 /* Inner anatomy. All gaps are logical; RTL needs no paint fork. */
@@ -162,8 +162,8 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  inline-size: var(--ds-badge-icon-size, 1em);
-  block-size: var(--ds-badge-icon-size, 1em);
+  inline-size: var(--ds-badge-icon-size);
+  block-size: var(--ds-badge-icon-size);
   color: var(--ds-badge-icon-color, currentColor);
 }
 
@@ -173,7 +173,7 @@
     var(--ds-badge-icon-border, color-mix(in srgb, currentColor 16%, transparent));
   border-radius: var(--ds-badge-icon-radius, 9999px);
   background: var(--ds-badge-icon-bg, color-mix(in srgb, currentColor 8%, transparent));
-  box-shadow: var(--ds-badge-icon-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white, white) 32%, transparent));
+  box-shadow: var(--ds-badge-icon-shadow, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) 32%, transparent));
 }
 
 .rottay-badge.rottay-badge--modern [data-part='avatar'] {
@@ -183,7 +183,7 @@
   justify-content: center;
   inline-size: var(--ds-badge-avatar-size, calc(var(--ds-badge-resolved-height) - 0.25rem));
   block-size: var(--ds-badge-avatar-size, calc(var(--ds-badge-resolved-height) - 0.25rem));
-  margin-inline-start: calc(var(--ds-badge-avatar-bleed, 0.125rem) * -1);
+  margin-inline-start: calc(var(--ds-badge-avatar-bleed) * -1);
   overflow: hidden;
   border: var(--ds-badge-avatar-border-width, 1px) solid
     var(--ds-badge-avatar-border, color-mix(in srgb, currentColor 18%, transparent));
@@ -224,7 +224,7 @@
     --ds-badge-count-size,
     min(1rem, calc(var(--ds-badge-resolved-height, 1.25rem) - 0.25rem))
   );
-  padding-inline: var(--ds-badge-count-padding-inline, 0.25rem);
+  padding-inline: var(--ds-badge-count-padding-inline);
   border: var(--ds-badge-count-border-width, 1px) solid
     var(--ds-badge-count-border, var(--ds-filter-pill-count-border, color-mix(in srgb, currentColor 16%, transparent)));
   border-radius: var(--ds-badge-count-radius, 9999px);
@@ -235,10 +235,10 @@
      light chip: >= 5.0 on both governed sources); the chip surface falls back
      to the raised surface, matching the bithire `--ds-filter-pill-count-bg:
      #ffffff` design exactly. */
-  background: var(--ds-badge-count-bg, var(--ds-filter-pill-count-bg, var(--ds-surface-raised, var(--ds-color-bg-elevated, #fff))));
+  background: var(--ds-badge-count-bg, var(--ds-filter-pill-count-bg, var(--ds-surface-raised, var(--ds-color-bg-elevated))));
   color: var(--ds-badge-count-color, var(--ds-badge-tone-soft-color, currentColor));
   box-shadow: var(--ds-badge-count-ring, var(--ds-filter-pill-count-ring, none));
-  font-family: var(--ds-badge-count-font-family, var(--ds-font-family-mono, inherit));
+  font-family: var(--ds-badge-count-font-family, var(--ds-font-family-mono));
   font-size: var(--ds-badge-count-font-size, 0.82em);
   font-weight: var(--ds-badge-count-font-weight, 700);
 }
@@ -254,9 +254,20 @@
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  inline-size: var(--ds-badge-remove-size, 1.125rem);
-  block-size: var(--ds-badge-remove-size, 1.125rem);
-  margin-inline-end: calc(var(--ds-badge-remove-bleed, 0.1875rem) * -1);
+  box-sizing: border-box;
+  /* Never taller than the badge that hosts it: the fixed 1.125rem remove well
+     pokes 3px out of an xs (0.875rem) pill on both block sides, breaking the
+     pill's vertical rhythm -- the well caps at the resolved height minus one
+     optical inset, exactly like the accessory count chip does. */
+  inline-size: min(
+    var(--ds-badge-remove-size),
+    calc(var(--ds-badge-resolved-height, 1.25rem) - 0.125rem)
+  );
+  block-size: min(
+    var(--ds-badge-remove-size),
+    calc(var(--ds-badge-resolved-height, 1.25rem) - 0.125rem)
+  );
+  margin-inline-end: calc(var(--ds-badge-remove-bleed) * -1);
   padding: 0;
   border: var(--ds-badge-remove-border-width, 1px) solid
     var(--ds-badge-remove-border, color-mix(in srgb, currentColor 16%, transparent));
@@ -270,15 +281,24 @@
   -webkit-tap-highlight-color: transparent;
   transition:
     transform var(--ds-badge-motion-duration, var(--ds-motion-fast))
-      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out)),
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
     background-color var(--ds-badge-motion-duration, var(--ds-motion-fast))
-      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out)),
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out)),
     opacity var(--ds-badge-motion-duration, var(--ds-motion-fast))
-      var(--ds-badge-motion-easing, var(--ds-motion-ease-out, ease-out));
+      var(--ds-badge-motion-easing, var(--ds-motion-ease-out));
 }
 
-.rottay-badge.rottay-badge--modern > [data-part='close']:hover {
-  transform: var(--ds-badge-remove-hover-transform, scale(1.06));
+/* Remove affordance: hover lift only where hover exists; touch gets the same
+   tint through :active, without the grow (a press does not scale up). */
+@media (hover: hover) {
+  .rottay-badge.rottay-badge--modern > [data-part='close']:hover {
+    transform: var(--ds-badge-remove-hover-transform, scale(1.06));
+    background: var(--ds-badge-remove-hover-bg, color-mix(in srgb, currentColor 12%, transparent));
+    opacity: 1;
+  }
+}
+
+.rottay-badge.rottay-badge--modern > [data-part='close']:active {
   background: var(--ds-badge-remove-hover-bg, color-mix(in srgb, currentColor 12%, transparent));
   opacity: 1;
 }
@@ -293,7 +313,12 @@
 }
 
 .rottay-badge.rottay-badge--modern [data-part='spinner'] {
-  animation: ds-badge-spin var(--ds-badge-spinner-duration, 800ms) linear infinite;
+  /* Undeclared hook: its fallback rides the motion scale (Spinner skin's
+     two-`--ds-motion-slow`-rungs idiom), never a raw literal, so the motion
+     authority's reduced-motion zeroing still propagates through the channel. */
+  animation: ds-badge-spin
+    var(--ds-badge-spinner-duration, calc(var(--ds-motion-slow) * 2))
+    linear infinite;
 }
 
 @keyframes ds-badge-spin {
@@ -303,7 +328,7 @@
 /* Indicator mode is always compact and anchored. */
 .rottay-badge.rottay-badge--modern[data-indicator='true'] {
   position: absolute;
-  z-index: var(--ds-badge-z-index, 1);
+  z-index: var(--ds-badge-z-index);
   min-inline-size: var(--ds-badge-resolved-height);
   max-inline-size: var(--ds-badge-indicator-max-inline-size, 6rem);
   border-radius: var(--ds-badge-indicator-radius, 9999px);
@@ -434,7 +459,7 @@
    tone tokens, so a tenant that never configures `chrome.badge` still gets a
    legible, treatment-faithful hover instead of an unpainted (transparent) one. */
 .rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='solid'] {
-  --_ds-badge-hover-bg-fallback: color-mix(in srgb, var(--ds-badge-tone-solid-bg) 90%, var(--ds-color-neutral-900, #171717) 10%);
+  --_ds-badge-hover-bg-fallback: color-mix(in srgb, var(--ds-badge-tone-solid-bg) 90%, var(--ds-color-neutral-900) 10%);
   --ds-badge-hover-ink-fallback: var(--ds-badge-tone-solid-color);
 }
 .rottay-badge.rottay-badge--modern[data-part='root'][data-badge-style='soft'] {
@@ -447,18 +472,23 @@
   --ds-badge-hover-ink-fallback: var(--ds-badge-tone-soft-color);
 }
 
-.rottay-badge.rottay-badge--modern[data-state~='hovered'] {
-  background: var(--ds-badge-surface-hover, var(--_ds-badge-hover-bg-fallback));
-  color: var(--ds-badge-ink-hover, var(--ds-badge-hover-ink-fallback));
-  border-color: var(
-    --ds-badge-frame-hover,
-    color-mix(in srgb, currentColor 24%, transparent)
-  );
-  box-shadow:
-    var(--ds-badge-highlight-hover, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white, white) 58%, transparent)),
-    var(--ds-badge-shadow-hover, 0 6px 14px -10px color-mix(in srgb, currentColor 42%, transparent));
-  transform: var(--ds-badge-position-transform, translateY(0))
-    var(--ds-badge-hover-transform, translateY(-1px));
+/* Hover paint only where hover exists (4th-wave law): on touch the JS pointer
+   state still sets `data-state~='hovered'` for the duration of the tap, but
+   the tap's physical answer is the pressed state below, which stays ungated. */
+@media (hover: hover) {
+  .rottay-badge.rottay-badge--modern[data-state~='hovered'] {
+    background: var(--ds-badge-surface-hover, var(--_ds-badge-hover-bg-fallback));
+    color: var(--ds-badge-ink-hover, var(--ds-badge-hover-ink-fallback));
+    border-color: var(
+      --ds-badge-frame-hover,
+      color-mix(in srgb, currentColor 24%, transparent)
+    );
+    box-shadow:
+      var(--ds-badge-highlight-hover, inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) 58%, transparent)),
+      var(--ds-badge-shadow-hover, 0 6px 14px -10px color-mix(in srgb, currentColor 42%, transparent));
+    transform: var(--ds-badge-position-transform, translateY(0))
+      var(--ds-badge-hover-transform, translateY(-1px));
+  }
 }
 
 .rottay-badge.rottay-badge--modern[data-state~='pressed'] {
@@ -471,9 +501,15 @@
 }
 
 .rottay-badge.rottay-badge--modern[data-state~='focus-visible'] {
+  /* Chain: tenant badge channel -> legacy filter-pill channel -> the governed
+     global focus ring -> crafted literal. Focus rings live in `--ds-focus-ring-*`
+     channels; the literal only guards an unlayered standalone render. */
   box-shadow: var(
     --ds-badge-focus-ring,
-    var(--ds-filter-pill-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent))
+    var(
+      --ds-filter-pill-focus-ring,
+      var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent))
+    )
   );
 }
 
@@ -485,13 +521,13 @@
   border: 1px solid currentColor;
   border-radius: inherit;
   pointer-events: none;
-  animation: ds-badge-pulse var(--ds-badge-pulse-duration, 1.6s)
-    var(--ds-badge-pulse-timing, ease-out) infinite;
+  animation: ds-badge-pulse var(--ds-badge-pulse-duration)
+    var(--ds-badge-pulse-timing) infinite;
 }
 
 @keyframes ds-badge-pulse {
   0%, 35% { opacity: 0.34; transform: scale(1); }
-  100% { opacity: 0; transform: scale(var(--ds-badge-pulse-scale, 1.18)); }
+  100% { opacity: 0; transform: scale(var(--ds-badge-pulse-scale)); }
 }
 
 @container (max-width: 12rem) {
@@ -504,7 +540,7 @@
 
 @media (pointer: coarse) {
   .rottay-badge.rottay-badge--modern[data-interactive='true'] {
-    min-block-size: var(--ds-badge-touch-target, 2.75rem);
+    min-block-size: var(--ds-badge-touch-target);
   }
   /* The remove control keeps its compact visual size but meets the 44px coarse
      floor through an invisible centered hit area -- a physically larger button
@@ -543,6 +579,16 @@
     color: CanvasText;
     box-shadow: none;
     forced-color-adjust: auto;
+  }
+  /* Status dots re-express as filled system-ink markers: an unstripped tint
+     would vanish against the forced Canvas, and a hollow ring loses the
+     "present" reading of a dot. CanvasText is the foreground paired with the
+     forced Canvas fill. */
+  .rottay-badge.rottay-badge--modern [data-part='dot'],
+  .rottay-badge.rottay-badge--modern[data-indicator='true'][data-has-dot='true'] {
+    background: CanvasText;
+    border-color: CanvasText;
+    box-shadow: none;
   }
   .rottay-badge.rottay-badge--modern[data-selected='true'] {
     border-color: Highlight;

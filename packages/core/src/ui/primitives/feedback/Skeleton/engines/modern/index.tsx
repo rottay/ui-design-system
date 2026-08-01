@@ -180,7 +180,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
           '--ds-skeleton-shape-radius': variant === 'circular'
             ? '50%'
             : variant === 'rounded'
-              ? 'var(--ds-skeleton-radius, var(--ds-radius-md, 0.5rem))'
+              ? 'var(--ds-skeleton-radius)'
               : '0',
           '--ds-skeleton-animation-name': animationName,
         } as React.CSSProperties}
@@ -214,8 +214,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
           style={{
             width: avatarSize,
             height: avatarSize,
-            '--ds-skeleton-avatar-radius': avatarShape === 'circle' ? '50%' : 'var(--ds-skeleton-radius, var(--ds-radius-md, 0.5rem))',
-            flexShrink: 0,
+            '--ds-skeleton-avatar-radius': avatarShape === 'circle' ? '50%' : 'var(--ds-skeleton-radius)',
           } as React.CSSProperties}
         />
       )}

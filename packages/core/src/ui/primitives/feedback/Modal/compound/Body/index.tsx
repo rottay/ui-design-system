@@ -115,23 +115,14 @@ export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(
     // -------------------------------------------------------------------------
 
     /**
-     * Container styles for the body section.
-     * Designed to fill available space and handle overflow.
+     * Instance styles for the body section: only the `padding` prop (a
+     * PADDING_MAP contract enum) resolves inline — sanctioned instance
+     * geometry. Flex growth and the scroll behavior are stable and live in
+     * the compound skin (modal-compounds.css `[data-part='body']`).
      */
     const bodyStyle: React.CSSProperties = {
-      // Layout - fill available vertical space
-      flex: 1,
-
       // Spacing - uses PADDING_MAP for consistent sizing
       padding: PADDING_MAP[padding] || PADDING_MAP.lg,
-
-      // Overflow handling - scroll vertically, hide horizontal
-      overflowY: 'auto',
-      overflowX: 'hidden',
-
-      // Typography - uses CSS custom properties for tenant theming
-      fontSize: 'var(--ds-modal-body-font-size, 14px)',
-      lineHeight: 1.6,
 
       // Merge user styles (takes precedence)
       ...style,

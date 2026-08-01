@@ -32,11 +32,24 @@
  * K3-C PASS-2 REMEDIATION (scrollable-region-focusable): the engine made the
  * root a keyboard-focusable `role="region"` (tabIndex + localized
  * aria-label), so the skin must paint a visible keyboard focus ring.
+ *
+ * PHASE-B SECOND PASS (2026-07-31):
+ *  - Firefox `scrollbar-width` now honors the size enum (`wide` -> `auto`;
+ *    was always `thin`, so the wide channel was dead in Firefox);
+ *  - the WebKit `::-webkit-scrollbar-corner` junction (orientation='both')
+ *    stays transparent instead of the UA's opaque square;
+ *  - the hover-reveal gains a FOCUS reveal: keyboard users scrolling a
+ *    `hide-scrollbar` region saw no thumb at all (the root is the focusable
+ *    region; `:focus-within` covers focus on inner controls);
+ *  - the vertical orientation reserves `scrollbar-gutter: stable` so the
+ *    bar's appearance never reflows the content inline size (same posture
+ *    as drawer/popover/tabs/data-table; a no-op on overlay-scrollbar
+ *    platforms).
  */
 
 /* ---- keyboard focus ring (the root is a focusable scroll region). ---- */
 .rottay-scroll-area.rottay-scroll-area--modern[data-part='root']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-scroll-area-focus-ring-offset, 2px);
   border-radius: var(--ds-scroll-area-focus-ring-radius, var(--ds-radius-sm));
 }
@@ -61,6 +74,15 @@
   overscroll-behavior: var(--ds-scroll-area-overscroll-behavior, contain);
 }
 
+/* ---- geometry reservation (vertical): the bar's appearance never reflows
+        the content inline size. Literal `stable` matches the sibling
+        posture (drawer/popover/tabs/data-table); a no-op on
+        overlay-scrollbar platforms. Horizontal/both stay unreserved: a
+        block-axis gutter would burn dead space when no bar is present. ---- */
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-orientation='vertical'] {
+  scrollbar-gutter: stable;
+}
+
 /* ---- scrollbar size channels (closed enum; values transcribed verbatim). ---- */
 .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-scrollbar-size='thin'] {
   --ds-scroll-area-scrollbar-size: 4px;
@@ -73,6 +95,10 @@
 .rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-scrollbar-size='wide'] {
   --ds-scroll-area-scrollbar-size: 12px;
   --ds-scroll-area-scrollbar-radius: 6px;
+  /* Firefox has only thin/auto postures; wide is the sole size that maps to
+     `auto`. Keeping this in the existing enum owner avoids a second rule for
+     the same exact selector. */
+  scrollbar-width: auto;
 }
 
 /* ---- Firefox standard scrollbar pair (modern never had one). ---- */
@@ -114,6 +140,12 @@
 .rottay-scroll-area.rottay-scroll-area--modern[data-part='root']::-webkit-scrollbar {
   width: var(--ds-scroll-area-scrollbar-size);
   height: var(--ds-scroll-area-scrollbar-size);
+}
+
+/* ---- WebKit corner: the orientation='both' junction stays transparent
+        (was the UA's opaque square, visible against any panel surface). ---- */
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root']::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 /* ---- WebKit track: transparent by default (premium minimal rail). ---- */
@@ -169,6 +201,27 @@
       color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent)
     );
   }
+}
+
+/* ---- focus reveal (Phase-B): keyboard users get the same thumb feedback
+        hover users do — the root is the focusable scroll region
+        (scrollable-region-focusable), and `:focus-within` keeps the thumb
+        visible while an inner control holds focus. No media gating: focus
+        modality is not hover. ---- */
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:focus-visible::-webkit-scrollbar-thumb,
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:focus-within::-webkit-scrollbar-thumb {
+  background: var(
+    --ds-scroll-area-thumb-bg,
+    color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent)
+  );
+}
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:focus-visible,
+.rottay-scroll-area.rottay-scroll-area--modern[data-part='root'][data-hide-scrollbar='true']:focus-within {
+  scrollbar-color: var(
+      --ds-scroll-area-thumb-bg,
+      color-mix(in srgb, var(--ds-color-text-primary) 28%, transparent)
+    )
+    var(--ds-scroll-area-track-bg, transparent);
 }
 
 @media (forced-colors: active) {

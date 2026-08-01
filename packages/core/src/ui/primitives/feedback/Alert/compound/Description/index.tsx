@@ -10,7 +10,7 @@
  *
  * **Visual Characteristics:**
  * - Smaller font size than the main message
- * - Slightly reduced opacity for visual hierarchy
+ * - Secondary ink for visual hierarchy
  * - Consistent spacing from the message
  * - Inherits parent alert's color scheme
  *
@@ -101,7 +101,7 @@ export interface AlertDescriptionProps {
 
   /**
    * Inline styles to apply.
-   * Merged with the default description styling.
+   * Applied on top of the compound skin's paint; your styles take precedence.
    */
   style?: React.CSSProperties;
 }
@@ -118,14 +118,15 @@ export interface AlertDescriptionProps {
  * Provides visual hierarchy through reduced font size and opacity.
  *
  * @remarks
- * **Default Styling:**
- * - `marginTop`: 4px (spacing from message)
- * - `fontSize`: 14px (smaller than message)
- * - `lineHeight`: 1.6 (readable text)
- * - `opacity`: 0.85 (subtle de-emphasis)
+ * **Skin-owned paint:**
+ * - Secondary-ink color (`--ds-color-text-secondary`)
+ * - Description font-size role chain (`--ds-alert-description-size`)
+ * - Relaxed line height for readable detail text
+ * - Long-copy wrapping inside the parent's content track
  *
- * **CSS Classes:**
- * - `rottay-alert-description`: Base class for styling hooks
+ * **CSS Classes / parts:**
+ * - `rottay-alert-description` + `data-part="description"`: stable hooks the
+ *   engine-agnostic compound skin (`alert-compounds.css`) paints
  * - Additional classes from `className` prop are appended
  *
  * @param props - {@link AlertDescriptionProps}
@@ -145,30 +146,17 @@ export const AlertDescription = forwardRef<HTMLDivElement, AlertDescriptionProps
     // Props Destructuring
     // -------------------------------------------------------------------------
 
-    const { children, className = '', style = {} } = props;
-
-    // -------------------------------------------------------------------------
-    // Style Definitions
-    // -------------------------------------------------------------------------
-
-    /**
-     * Default styles for the description container.
-     * Creates visual hierarchy below the main alert message.
-     */
-    const descriptionStyle: React.CSSProperties = {
-      marginTop: '4px',
-      fontSize: '14px',
-      lineHeight: 1.6,
-      opacity: 0.85,
-      ...style,
-    };
+    const { children, className = '', style } = props;
 
     // -------------------------------------------------------------------------
     // Render
     // -------------------------------------------------------------------------
 
+    // Paint lives in alert-compounds.css (the engine-agnostic compound skin):
+    // secondary-ink color, the `--ds-alert-description-size` role chain and
+    // long-copy wrapping. No inline literals; a caller's `style` still wins.
     return (
-      <div ref={ref} className={`rottay-alert-description ${className}`} style={descriptionStyle}>
+      <div ref={ref} data-part="description" className={`rottay-alert-description ${className}`} style={style}>
         {children}
       </div>
     );

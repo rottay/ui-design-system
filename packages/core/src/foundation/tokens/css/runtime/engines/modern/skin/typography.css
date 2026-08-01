@@ -28,9 +28,9 @@
 .rottay-typography.rottay-typography--modern.rottay-typography--modern {
   color: var(--ds-type-color-default, var(--ds-color-text-primary));
   overflow-wrap: anywhere;
-  font-optical-sizing: var(--ds-type-optical-sizing, auto);
-  font-synthesis: var(--ds-type-font-synthesis, none);
-  font-variation-settings: var(--ds-type-font-variation-settings, normal);
+  font-optical-sizing: var(--ds-type-optical-sizing);
+  font-synthesis: var(--ds-type-font-synthesis);
+  font-variation-settings: var(--ds-type-font-variation-settings);
 }
 
 /* Public craft attributes keep the DOM stable while every visual channel is
@@ -45,7 +45,7 @@
   font-family: var(--ds-font-family-display, var(--ds-font-family-heading));
 }
 .rottay-typography.rottay-typography--modern[data-family='mono'] {
-  font-family: var(--ds-font-family-mono, ui-monospace, monospace);
+  font-family: var(--ds-font-family-mono);
 }
 .rottay-typography.rottay-typography--modern[data-family='inherit'] {
   font-family: inherit;
@@ -126,11 +126,28 @@
   font: var(--ds-type-numeric);
   letter-spacing: var(--ds-type-numeric-letter-spacing);
   text-transform: var(--ds-type-numeric-text-transform);
-  font-variant-numeric: var(--ds-type-numeric-font-variant-numeric, tabular-nums);
+  font-variant-numeric: var(--ds-type-numeric-font-variant-numeric);
 }
 
 .rottay-typography.rottay-typography--modern[data-fluid='true'][data-size='3xl']:is(h1, h2, h3, h4, h5, h6) {
   font-size: var(--ds-font-size-fluid-5xl, var(--ds-font-size-5xl));
+}
+
+/* ---- wrap channel (Phase B batch-01): every engine render stamps
+   `data-wrap`, but until now no skin painted it -- the channel only existed
+   as engine inline paint, unreachable for statically rendered or re-stamped
+   DOM. The engine still resolves the same values inline (a caller's inline
+   `style` outranks these rules, per the P-47/P-48 law), so these rules are
+   the governance floor that keeps the public attribute skin-owned. `auto`
+   needs no rule: it is the UA default the engine also leaves unpainted. ---- */
+.rottay-typography.rottay-typography--modern[data-wrap='balance'] {
+  text-wrap: balance;
+}
+.rottay-typography.rottay-typography--modern[data-wrap='pretty'] {
+  text-wrap: pretty;
+}
+.rottay-typography.rottay-typography--modern[data-wrap='nowrap'] {
+  white-space: nowrap;
 }
 .rottay-typography.rottay-typography--modern[data-line-clamp] {
   display: -webkit-box;
@@ -145,7 +162,7 @@
 }
 
 @keyframes ds-type-enter {
-  from { opacity: 0; transform: translateY(var(--ds-type-motion-distance, 0.2em)); }
+  from { opacity: 0; transform: translateY(var(--ds-type-motion-distance)); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -162,7 +179,7 @@
 }
 
 .rottay-typography.rottay-typography--modern.font-mono {
-  font-family: var(--ds-font-family-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-family: var(--ds-font-family-mono);
   font-variant-ligatures: none;
 }
 
@@ -197,6 +214,45 @@
   color: var(--ds-color-error);
 }
 
+/* ---- contrast precedence repair (Phase B batch-01): `data-contrast` is only
+   ever stamped on EXPLICIT consumer request, but it lost the cascade to the
+   (0,4,0) color lookup above whenever `color` stayed at its stamped default
+   -- the tone channel was dead in exactly its primary use case. An explicit
+   tone must outrank the DEFAULT ink, while an explicitly chosen STATUS color
+   (success/warning/error/primary/…) still wins over the tone; chaining
+   `[data-color='default']` buys (0,5,0) for precisely that case. ---- */
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='default'][data-contrast='strong'] {
+  color: var(--ds-type-color-strong, var(--ds-color-text-primary));
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='default'][data-contrast='muted'] {
+  color: var(--ds-type-color-muted, var(--ds-color-text-secondary));
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='default'][data-contrast='subtle'] {
+  color: var(--ds-type-color-subtle, var(--ds-color-text-tertiary));
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='default'][data-contrast='inverse'] {
+  color: var(--ds-type-color-inverse, var(--ds-color-text-inverse));
+}
+
+/* ---- link interaction states (Phase B batch-01 B2): the skin painted no
+   keyboard focus ring and no pressed cue for typography links -- only the
+   engine's pinned `hover:underline` utility carried interactivity. Focus is
+   now an independent, channel-driven ring (the same `--ds-focus-ring-*`
+   grammar as anchor.css), and the press cue is a decoration-thickness step
+   that works on touch (no hover there) without depending on the link's
+   resolved ink. Geometry never moves: outline + decoration only. ---- */
+.rottay-typography.rottay-typography--modern:is(a):focus-visible {
+  outline: var(--ds-focus-ring-width) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
+  border-radius: var(--ds-radius-sm);
+}
+
+.rottay-typography.rottay-typography--modern:is(a):not([data-disabled='true']):active {
+  text-decoration-line: underline;
+  text-decoration-thickness: calc(var(--ds-type-decoration-thickness) * 2);
+}
+
 /* ---- inline semantic elements the contract's `as` exposes ---- */
 
 /* `code`: inline code rides the governed code type channel (same family as
@@ -217,7 +273,7 @@
    text stays AA on every tenant surface. */
 .rottay-typography.rottay-typography--modern:is(mark) {
   padding-inline: var(--ds-type-mark-padding, 0.125em);
-  border-radius: var(--ds-type-mark-radius, var(--ds-radius-xs, 3px));
+  border-radius: var(--ds-type-mark-radius, var(--ds-radius-xs));
   background: var(
     --ds-type-mark-bg,
     color-mix(in srgb, var(--ds-color-warning) 28%, transparent)
@@ -253,6 +309,12 @@
   .rottay-typography.rottay-typography--modern:is(mark) {
     background: Mark;
     color: MarkText;
+  }
+  /* Disabled links keep the SYSTEM inactive signal: opacity alone is not a
+     forced-colors idiom, so the disabled link loses the link affordance. */
+  .rottay-typography.rottay-typography--modern:is(a)[data-disabled='true'] {
+    color: GrayText;
+    text-decoration: none;
   }
 }
 

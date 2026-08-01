@@ -32,21 +32,27 @@
  */
 
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'] {
-  min-width: 0;
+  min-inline-size: 0;
   container-type: inline-size;
   color: var(--ds-descriptions-color, var(--ds-color-text-primary));
   /* --ds-motion-calm has no base-token definition today (only the
      reduced-motion override), so the entrance binds to the reveal intent. */
-  animation: ds-descriptions-enter var(--ds-motion-calm, var(--ds-motion-reveal, 220ms))
-    var(--ds-motion-ease-out, ease-out) both;
+  animation: ds-descriptions-enter var(--ds-motion-calm, var(--ds-motion-reveal))
+    var(--ds-motion-ease-out) both;
 }
 
 /* ---- header title ---- */
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header'][data-part='header'] {
   display: flex;
+  /* Wrapping is deliberate at every size: a long balanced title plus a wide
+     extra tray used to overflow the header box on narrow containers; the pair
+     now wraps with a governed row gap instead of colliding. */
+  flex-wrap: wrap;
+  row-gap: var(--ds-spacing-2);
+  column-gap: var(--ds-spacing-3);
   justify-content: space-between;
   align-items: center;
-  min-height: var(--ds-descriptions-header-min-height, 3.5rem);
+  min-block-size: var(--ds-descriptions-header-min-height, 3.5rem);
   margin: 0 0 var(--ds-descriptions-section-gap, 0.625rem);
   padding: var(--ds-descriptions-header-padding, 0.75rem 1rem);
   border: 1px solid
@@ -66,12 +72,12 @@
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent),
     var(--ds-descriptions-header-shadow, var(--ds-elevation-1));
   transition:
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
     /* --ds-motion-deliberate has no base definition either; the slow cadence
        (320ms, closed set) is the authority's channel for this sweep. */
-    background-position var(--ds-motion-deliberate, var(--ds-motion-slow, 320ms))
-      var(--ds-motion-ease-out, ease-out);
+    background-position var(--ds-motion-deliberate, var(--ds-motion-slow))
+      var(--ds-motion-ease-out);
 }
 
 @media (hover: hover) {
@@ -90,9 +96,13 @@
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='header'] > [data-part='title'] {
   color: var(--ds-color-text-primary);
   margin: 0;
+  /* flex item of the wrapping header: allow it to shrink and wrap instead of
+     forcing the extra tray out of the box (long EN/ES/AR titles). */
+  min-inline-size: 0;
+  overflow-wrap: break-word;
   font-family: var(--ds-descriptions-title-font-family, var(--ds-font-family-heading));
   font-size: var(--ds-descriptions-title-font-size, var(--ds-font-size-lg));
-  font-weight: var(--ds-descriptions-title-font-weight, var(--ds-font-weight-semibold, 600));
+  font-weight: var(--ds-descriptions-title-font-weight, var(--ds-font-weight-semibold));
   line-height: var(--ds-descriptions-title-line-height, 1.25);
   letter-spacing: var(--ds-descriptions-title-letter-spacing, -0.02em);
   text-wrap: balance;
@@ -101,7 +111,9 @@
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-extra='true'] > [data-part='header'] > [data-part='extra'][data-part='extra'] {
   display: inline-flex;
   align-items: center;
-  gap: var(--ds-spacing-2, 0.5rem);
+  gap: var(--ds-spacing-2);
+  /* Keeps the action tray trailing when the header wraps (logical, RTL-safe). */
+  margin-inline-start: auto;
   padding: var(--ds-descriptions-extra-padding, 0.1875rem);
   border: 1px solid
     var(--ds-descriptions-extra-border, var(--ds-color-border-subtle));
@@ -115,7 +127,7 @@
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-bordered='true'] > [data-part='body'] {
   overflow: hidden;
   border: 1px solid var(--ds-descriptions-border, var(--ds-color-border));
-  border-radius: var(--ds-descriptions-radius, var(--ds-radius-xl, 14px));
+  border-radius: var(--ds-descriptions-radius, var(--ds-radius-xl));
   background: var(
     --ds-descriptions-bg,
     linear-gradient(
@@ -145,7 +157,7 @@
 }
 
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
-  min-width: 0;
+  min-inline-size: 0;
   grid-column: span var(--ds-descriptions-item-span, 1);
   padding: var(--ds-descriptions-row-padding, 0.75rem 0.875rem);
   border-radius: var(--ds-descriptions-row-radius, var(--ds-radius-md));
@@ -156,10 +168,10 @@
   box-shadow: inset 0 1px 0
     color-mix(in srgb, var(--ds-color-bg-elevated) 68%, transparent);
   transition:
-    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 @media (hover: hover) {
@@ -177,6 +189,17 @@
       inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 82%, transparent),
       0 7px 18px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
   }
+}
+
+/* Touch equivalent of the hover wash: coarse pointers never fire :hover, so
+   the pressed row settles into the same tinted material with the lift
+   removed (pressed = physically connected, no upward motion). */
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row']:active {
+  transform: none;
+  background: var(
+    --ds-descriptions-row-bg-hover,
+    color-mix(in srgb, var(--ds-surface-card) 91%, var(--ds-color-primary) 9%)
+  );
 }
 
 /* ---- label + value (both layouts share one rule pair) ---- */
@@ -197,20 +220,20 @@
     )
   );
   font-size: var(--ds-descriptions-label-font-size, var(--ds-font-size-xs));
-  font-weight: var(--ds-descriptions-label-font-weight, var(--ds-font-weight-medium, 500));
+  font-weight: var(--ds-descriptions-label-font-weight, var(--ds-font-weight-medium));
   line-height: var(--ds-descriptions-label-line-height, 1.25);
   letter-spacing: var(--ds-descriptions-label-letter-spacing, 0.045em);
   text-transform: var(--ds-descriptions-label-transform, uppercase);
 }
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
-  min-width: 0;
+  min-inline-size: 0;
   /* UA <dd> margin (incl. the 40px inline-start indent) is reset: the grid
      tracks own the label/value split. */
   margin: 0;
   margin-inline-start: 0;
   color: var(--ds-descriptions-content-color, var(--ds-color-text-primary));
   font-size: var(--ds-descriptions-content-font-size, var(--ds-font-size-sm));
-  font-weight: var(--ds-descriptions-content-font-weight, var(--ds-font-weight-medium, 500));
+  font-weight: var(--ds-descriptions-content-font-weight, var(--ds-font-weight-medium));
   line-height: var(--ds-descriptions-content-line-height, 1.45);
   overflow-wrap: anywhere;
   text-wrap: pretty;
@@ -239,7 +262,7 @@
 }
 
 .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
-  width: auto;
+  inline-size: auto;
   margin: 0;
 }
 
@@ -254,12 +277,13 @@
    (minmax(7.5rem, 0.36fr) minmax(0, 1fr)) still paints the per-row split.
    HORIZONTAL layout stacks label above value -- no label column exists -- so it
    is excluded by the `[data-layout='vertical']` scope. Subgrid inherits the
-   parent `column-gap`, so the 24px gutter is declared once on the grid. */
+   parent `column-gap`, so the gutter is declared once on the grid and rides
+   the same `--ds-descriptions-column-gap` axis as the non-subgrid path. */
 @supports (grid-template-columns: subgrid) {
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] {
     display: grid;
-    grid-template-columns: minmax(120px, max-content) 1fr;
-    column-gap: 24px;
+    grid-template-columns: minmax(7.5rem, max-content) minmax(0, 1fr);
+    column-gap: var(--ds-descriptions-column-gap, 1.5rem);
   }
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
     display: grid;
@@ -268,10 +292,10 @@
     align-items: baseline;
   }
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
-    width: auto;
+    inline-size: auto;
   }
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
-    min-width: 0;
+    min-inline-size: 0;
   }
 }
 
@@ -302,12 +326,12 @@
 
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-layout='vertical'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--ds-spacing-2, 0.5rem);
+    gap: var(--ds-spacing-2);
   }
 
   .rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-has-header='true'] > [data-part='header'] {
     align-items: flex-start;
-    gap: var(--ds-spacing-3, 0.75rem);
+    gap: var(--ds-spacing-3);
   }
 }
 

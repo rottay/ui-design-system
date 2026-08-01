@@ -79,11 +79,12 @@ const CASES: Array<{ variant: string; source: string; tone: string; surface: str
 describe('Link modern skin: base-ink contrast channel (R0/Axe round 2)', () => {
   it('keeps the single-tone architecture with a bounded darkened base mix', () => {
     expect(SKIN).toContain(
-      'color-mix(in srgb, var(--ds-link-tone) 84%, var(--ds-color-neutral-900, #171717) 16%)'
+      'color-mix(in srgb, var(--ds-link-tone) 84%, var(--ds-color-neutral-900) 16%)'
     );
     expect(SKIN).toContain('--ds-link-color,');
     // The failing raw-tone base must not return.
     expect(SKIN).not.toContain('color: var(--ds-link-color, var(--ds-link-tone));');
+    expect(SKIN).not.toContain('var(--ds-color-neutral-900, #171717)');
   });
 
   it('clears WCAG AA on base/hover/active for every variant and source', () => {

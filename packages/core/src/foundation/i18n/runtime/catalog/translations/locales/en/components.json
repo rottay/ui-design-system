@@ -51,7 +51,8 @@
     "go_to": "Go to page",
     "items_per_page": "{count} per page",
     "total_items": "Total {total} items",
-    "navigation": "Pagination"
+    "navigation": "Pagination",
+    "size_changer": "Items per page"
   },
   "table": {
     "empty": "No data",
@@ -88,7 +89,8 @@
     "max_size": "Max size: {size}",
     "accepted_formats": "Accepted formats: {formats}",
     "progress": "Upload progress: {percent}%",
-    "file_list": "Uploaded files"
+    "file_list": "Uploaded files",
+    "retry_named": "Retry {name}"
   },
   "datepicker": {
     "placeholder": "Select date",
@@ -122,7 +124,11 @@
     "minutes_label": "Min",
     "seconds_label": "Sec",
     "start_time": "Start time",
-    "end_time": "End time"
+    "end_time": "End time",
+    "am": "AM",
+    "pm": "PM",
+    "meridiem_label": "AM/PM",
+    "time_picker": "Time picker"
   },
   "search": {
     "placeholder": "Search...",
@@ -213,14 +219,30 @@
     "navNextMonth": "Next month",
     "navNextYear": "Next year",
     "gridLabel": "Dates grid",
-    "monthsGridLabel": "Months grid"
+    "monthsGridLabel": "Months grid",
+    "months_short": {
+      "january": "Jan",
+      "february": "Feb",
+      "march": "Mar",
+      "april": "Apr",
+      "may": "May",
+      "june": "Jun",
+      "july": "Jul",
+      "august": "Aug",
+      "september": "Sep",
+      "october": "Oct",
+      "november": "Nov",
+      "december": "Dec"
+    }
   },
   "colorpicker": {
     "clear": "Clear",
     "chooseColor": "Choose color",
     "hexLabel": "Hex color",
     "selectColor": "Select color {color}",
-    "invalidHex": "Enter a valid hex color (e.g. #1677ff)"
+    "invalidHex": "Enter a valid hex color (e.g. #1677ff)",
+    "triggerLabel": "Color picker",
+    "formatLabel": "Color format"
   },
   "qrcode": {
     "loading": "Loading",
@@ -232,7 +254,9 @@
   },
   "markdownView": {
     "taskChecked": "Task completed",
-    "taskUnchecked": "Task not completed"
+    "taskUnchecked": "Task not completed",
+    "tableRegionLabel": "Table",
+    "codeRegionLabel": "Code block"
   },
   "mentions": {
     "not_found": "No results",
@@ -381,7 +405,8 @@
   },
   "autocomplete": {
     "not_found": "No results",
-    "clear": "Clear"
+    "clear": "Clear",
+    "input_label": "Autocomplete"
   },
   "calendarView": {
     "today": "Today",
@@ -398,7 +423,8 @@
     "not_found": "No data",
     "clear": "Clear",
     "column_label": "Level {level}",
-    "search_results": "Search results"
+    "search_results": "Search results",
+    "loading": "Loading..."
   },
   "stepper": {
     "navigation": "Progress steps"
@@ -406,7 +432,8 @@
   "tree": {
     "collapse": "Collapse",
     "expand": "Expand",
-    "select_node": "Select {title}"
+    "select_node": "Select {title}",
+    "label": "Tree"
   },
   "descriptions": {
     "region_label": "Description list"
@@ -1019,7 +1046,10 @@
     "actions": "Wizard actions"
   },
   "taginput": {
-    "placeholder": "Type and press Enter"
+    "placeholder": "Type and press Enter",
+    "feedback_duplicate": "Tag already exists",
+    "feedback_max": "Maximum number of tags reached",
+    "feedback_invalid": "Tag is not allowed"
   },
   "tenantPreview": {
     "colorPalette": "Color Palette",
@@ -1273,5 +1303,26 @@
   "viewModeSwitcher": {
     "groupLabel": "View mode",
     "disabledWithReason": "{label} (unavailable: {reason})"
+  },
+  "image": {
+    "failedToLoad": "Image failed to load"
+  },
+  "statistic": {
+    "trendPositive": "Increasing",
+    "trendNegative": "Decreasing",
+    "trendWarning": "Warning"
+  },
+  "passwordInput": {
+    "strength_weak": "Weak",
+    "strength_fair": "Fair",
+    "strength_good": "Good",
+    "strength_strong": "Strong"
+  },
+  "meter": {
+    "threshold": {
+      "optimal": "optimal range",
+      "suboptimal": "suboptimal range",
+      "critical": "critical range"
+    }
   }
 }

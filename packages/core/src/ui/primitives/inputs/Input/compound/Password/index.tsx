@@ -5,12 +5,13 @@
  *
  * @remarks
  * InputPassword wraps the BaseInput component, toggling between `type="password"`
- * and `type="text"` based on user interaction. It includes built-in eye/eye-off
- * SVG icons but supports custom icons via `visibleIcon` and `hiddenIcon` props.
+ * and `type="text"` based on user interaction. The visibility affordance uses
+ * the governed `action.reveal` / `action.conceal` semantic icon roles; custom
+ * icons remain supported via `visibleIcon` and `hiddenIcon` props.
  *
  * **Key Features:**
  * - Toggleable password visibility via suffix button
- * - Built-in accessible eye/eye-off SVG icons
+ * - Governed semantic reveal/conceal icons (tenant icon profile applies)
  * - Custom icon override support
  * - Inherits all BaseInput props (size, variant, status, etc.)
  * - Pointer activation preserves input focus; keyboard users can still reach
@@ -57,8 +58,8 @@
 import { useState } from "react";
 import type { InputPasswordProps } from "../../contracts";
 import { BaseInput } from "../../engines";
-import { EyeIcon } from "@/graphics/icons/presentation/legacy/EyeIcon";
-import { EyeOffIcon } from "@/graphics/icons/presentation/legacy/EyeOffIcon";
+import { ActionRevealIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-reveal";
+import { ActionConcealIcon } from "@/graphics/icons/presentation/semantic/generated/roles/action-conceal";
 import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
 
 /**
@@ -106,8 +107,8 @@ export const InputPassword = (props: InputPasswordProps) => {
       aria-pressed={visible}
     >
       {visible
-        ? hiddenIcon || <EyeOffIcon decorative size="sm" />
-        : visibleIcon || <EyeIcon decorative size="sm" />}
+        ? hiddenIcon || <ActionConcealIcon decorative size="sm" />
+        : visibleIcon || <ActionRevealIcon decorative size="sm" />}
     </button>
   ) : null;
 

@@ -14,7 +14,16 @@
  * this engine stamps, so it stays orphaned exactly as before.
  *
  * SCOPE ROOT carries `rottay-pagination rottay-pagination--modern` +
- * `data-part='root'`. All control parts are anchored under it.
+ * `data-part='root'`. All control parts are anchored under it. The root is
+ * one wrapping flex toolbar: the optional range readout (`showTotal`), the
+ * joined controls row, and the page-size changer (`showSizeChanger`, a
+ * native select in the select.css native-trigger idiom with a governed
+ * chevron part) sit inline and wrap as one composition on narrow frames.
+ *
+ * Pass P2 (Phase B segunda pasada): the disabled size changer dims control
+ * and chevron as one unit (`data-disabled` on the wrapper — the chevron is
+ * the select's sibling, not its child), and forced-colors adds the ellipsis
+ * to the joined frame and remaps the disabled chevron to GrayText.
  *
  * THE JOINED-BUTTON BORDER IS ORDER-DEPENDENT. Every control gets the full
  * `border` shorthand; then prev/page/ellipsis drop their INLINE-END edge so
@@ -33,16 +42,24 @@
  * `border-radius` are non-border paint and win at (0,3,0).
  */
 
-/* ---- root, range readout, controls row. ---- */
+/* ---- root: one wrapping toolbar (range readout · joined controls · size
+        changer) instead of a stacked block; the range's margin channel
+        defaults to 0 now that the regions sit inline. ---- */
 .rottay-pagination--modern[data-part='root'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--ds-spacing-3);
+  row-gap: var(--ds-spacing-2);
   color: var(--ds-pagination-color, var(--ds-color-text-primary));
-  font-size: var(--ds-pagination-font-size, var(--ds-font-size-sm, 14px));
+  font-size: var(--ds-pagination-font-size, var(--ds-font-size-sm));
 }
 
 .rottay-pagination--modern[data-part='root'] [data-part='pagination-range'] {
-  margin-block-end: var(--ds-pagination-range-margin-block-end, 8px);
+  flex: 0 0 auto;
+  margin-block-end: var(--ds-pagination-range-margin-block-end, 0);
   color: var(--ds-pagination-range-color, var(--ds-color-text-secondary));
-  font-size: var(--ds-pagination-range-font-size, var(--ds-font-size-sm, 14px));
+  font-size: var(--ds-pagination-range-font-size, var(--ds-font-size-sm));
   font-variant-numeric: var(--ds-pagination-numeric, tabular-nums);
 }
 
@@ -95,7 +112,7 @@
   justify-content: center;
   padding: 0 var(--ds-pagination-current-padding-x);
   border-radius: 0;
-  background: var(--ds-pagination-item-bg, transparent);
+  background: var(--ds-pagination-item-bg);
   color: var(--ds-pagination-item-color, var(--ds-color-text-primary));
   font: inherit;
   font-size: var(--ds-pagination-current-font-size);
@@ -103,9 +120,9 @@
   font-variant-numeric: var(--ds-pagination-numeric, tabular-nums);
   cursor: pointer;
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease);
 }
 
 /* ---- glyph nav buttons read square next to the padded numeral cells:
@@ -137,18 +154,22 @@
   border-end-end-radius: var(--ds-pagination-radius, var(--ds-radius-md));
 }
 
-/* ---- hover only on live buttons; the ellipsis and disabled stay put. ---- */
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:not(:disabled):hover,
-.rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button']:not(:disabled):not([data-current='true']):hover {
-  /* `--ds-color-bg-hover` is a dark inset under both first-party themes
-     (#18181c) — dark-on-dark with the hover ink. The hover surface mixes
-     from the paired card chrome instead (measured: text-primary on
-     `--ds-card-bg` = 15.0:1 BitHire / 14.8:1 TMM). */
-  background: var(
-    --ds-pagination-item-bg-hover,
-    color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-surface-card)))
-  );
-  color: var(--ds-pagination-item-color-hover, var(--ds-color-text-primary));
+/* ---- hover only on live buttons; the ellipsis and disabled stay put. Gated
+        to hover-capable pointers; the `:active` rule below is the touch
+        equivalent (lane law: no hover paint without a touch counterpart). ---- */
+@media (hover: hover) {
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:not(:disabled):hover,
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button']:not(:disabled):not([data-current='true']):hover {
+    /* `--ds-color-bg-hover` is a dark inset under both first-party themes
+       (#18181c) — dark-on-dark with the hover ink. The hover surface mixes
+       from the paired card chrome instead (measured: text-primary on
+       `--ds-card-bg` = 15.0:1 BitHire / 14.8:1 TMM). */
+    background: var(
+      --ds-pagination-item-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-surface-card)))
+    );
+    color: var(--ds-pagination-item-color-hover, var(--ds-color-text-primary));
+  }
 }
 
 /* ---- a held press inks the button one step deeper. ---- */
@@ -173,40 +194,134 @@
   cursor: default;
 }
 
+/* ---- page-size changer (contract `showSizeChanger`): a native select in
+        the select.css native-trigger idiom — same height scale, hairline,
+        radius and typography as the joined controls, with the governed
+        chevron docked at the inline end. The two `--_ds-proto-*` axes are
+        private experiments (batch-28 ledger); both fall back to existing DS
+        channels. `tabular-nums` here is a plain value, not the
+        `--ds-pagination-numeric` channel expression: the modern-engine test
+        pins that channel to exactly two declaration sites. ---- */
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-changer'] {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'][data-part='pagination-size-select'] {
+  border: 1px solid var(--ds-pagination-border, var(--ds-color-border));
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'] {
+  appearance: none;
+  display: inline-flex;
+  block-size: var(--ds-pagination-current-height);
+  align-items: center;
+  padding-block: 0;
+  padding-inline-start: var(--ds-pagination-current-padding-x);
+  padding-inline-end: var(
+    --_ds-proto-pagination-size-arrow-clearance,
+    var(--ds-select-native-arrow-clearance, 2rem)
+  );
+  border-radius: var(--ds-pagination-radius, var(--ds-radius-md));
+  background: var(--ds-pagination-item-bg);
+  color: var(--ds-pagination-item-color, var(--ds-color-text-primary));
+  font: inherit;
+  font-size: var(--ds-pagination-current-font-size);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease);
+}
+
+@media (hover: hover) {
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select']:not(:disabled):hover {
+    background: var(
+      --ds-pagination-item-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-surface-card)))
+    );
+    color: var(--ds-pagination-item-color-hover, var(--ds-color-text-primary));
+  }
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select']:not(:disabled):active {
+  background: var(
+    --ds-pagination-item-bg-active,
+    color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg, var(--ds-surface-card)))
+  );
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
+}
+
+/* Disabled dims control AND chevron as one unit: the opacity rides the
+   wrapper (the chevron is a sibling part, not a child of the select), while
+   the select keeps the refusal cursor. */
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-changer'][data-disabled='true'] {
+  opacity: var(--ds-pagination-disabled-opacity, var(--ds-button-disabled-opacity));
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select']:disabled {
+  cursor: not-allowed;
+}
+
+/* Governed chevron docked at the inline end: decorative, `pointer-events:
+   none`, centered with the `translate` property so it never fights the
+   semantic-icon facade's own `transform` (RTL auto-mirror) channel. */
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-size-icon'] {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--_ds-proto-pagination-size-arrow-inset, var(--ds-spacing-2));
+  translate: 0 -50%;
+  pointer-events: none;
+  color: var(--ds-color-text-muted);
+}
+
 /* ---- disabled controls dim and refuse the pointer. ---- */
 .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:disabled,
 .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button']:disabled {
-  opacity: var(--ds-pagination-disabled-opacity, var(--ds-button-disabled-opacity, 0.6));
+  opacity: var(--ds-pagination-disabled-opacity, var(--ds-button-disabled-opacity));
   cursor: not-allowed;
 }
 
 /* ---- keyboard focus ring. ---- */
 .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:focus-visible,
 .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 /* ---- coarse pointers: physical 44px floor, never a rem floor. ---- */
 @media (hover: none), (pointer: coarse) {
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'] {
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'] {
     min-block-size: var(--ds-pagination-touch-target-min, 44px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'] {
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'] {
     transition: none;
   }
 }
 
 /* ---- forced colors: the frame and the current page must survive. Doubled
-        data-part ties the (0,4,0) border shorthand, later source wins. ---- */
+        data-part ties the (0,4,0) border shorthand, later source wins.
+        Opacity is stripped in this mode, so disabled ink remaps to the
+        GrayText system color instead of vanishing into the frame. ---- */
 @media (forced-colors: active) {
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-part='pagination-nav-button'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-part='pagination-page-button'] {
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-part='pagination-page-button'],
+  .rottay-pagination--modern[data-part='root'] [data-part='ellipsis'][data-part='ellipsis'],
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'][data-part='pagination-size-select'] {
     forced-color-adjust: auto;
     border-color: ButtonText;
   }
@@ -214,5 +329,19 @@
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-current='true'] {
     background: Highlight;
     color: HighlightText;
+  }
+
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:disabled,
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button']:disabled,
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select']:disabled {
+    color: GrayText;
+  }
+
+  /* Opacity is stripped in this mode, so the disabled size-changer chevron
+     remaps to GrayText with its control instead of reading enabled. */
+  .rottay-pagination--modern[data-part='root']
+    [data-part='pagination-size-changer'][data-disabled='true']
+    [data-part='pagination-size-icon'] {
+    color: GrayText;
   }
 }

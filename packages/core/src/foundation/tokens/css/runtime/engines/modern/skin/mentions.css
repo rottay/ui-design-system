@@ -55,6 +55,14 @@
  * dynamic per keystroke.
  *
  * Values are transcribed verbatim from `engines/modern/index.tsx`.
+ *
+ * PHASE B2 (P2 deep pass, 2026-07-31): the textarea's text selection now
+ * reads the certified `--ds-input-selection-*` grammar (AutoComplete/Input
+ * parity). The rest of the matrix verified clean against the 12 axes:
+ * quiet empty/loading block (pinned), loading spinner pseudo on Spinner
+ * channels, gated hover + :active, focus grammar with status-aware halos,
+ * disabled/readonly postures, coarse 44px floor, logical RTL, forced-colors
+ * remap, reduced-motion final state.
  */
 
 .ds-mentions.ds-mentions--modern[data-part='root'] {
@@ -63,8 +71,8 @@
 
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'] {
   inline-size: 100%;
-  padding: var(--ds-input-md-padding-y, 8px) var(--ds-input-md-padding-x, 12px);
-  font-size: var(--ds-input-md-font-size, 14px);
+  padding: var(--ds-input-md-padding-y) var(--ds-input-md-padding-x);
+  font-size: var(--ds-input-md-font-size);
   font-family: inherit;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-md);
@@ -72,6 +80,7 @@
      generic --ds-color-bg-input (near-black under TMM). */
   background: var(--ds-mentions-input-bg, var(--ds-input-bg, var(--ds-surface-control)));
   color: var(--ds-color-text-primary);
+  caret-color: var(--ds-input-border-focus, var(--ds-color-primary));
   outline: none;
   transition:
     border-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
@@ -82,13 +91,26 @@
   resize: none;
 }
 /* Default-status hover: the Input grammar's border repaint (status borders
-   stay sovereign on error/warning; focus and disabled opt out). */
-.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:not([data-disabled='true']):not([data-status]):hover:not(:focus) {
+   stay sovereign on error/warning; focus and disabled opt out). Hover is
+   pointer-capable only (4th-tanda hover law); coarse pointers get the
+   `:active` equivalent, and the focused tap rides the focus grammar. */
+@media (hover: hover) {
+  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:not([data-disabled='true']):not([data-status]):hover:not(:focus) {
+    border-color: var(--ds-mentions-border-hover, var(--ds-color-border-hover));
+  }
+}
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']:not([data-disabled='true']):not([data-status]):active:not(:focus) {
   border-color: var(--ds-mentions-border-hover, var(--ds-color-border-hover));
 }
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']::placeholder {
   color: var(--ds-mentions-placeholder-color, var(--ds-input-color-placeholder, var(--ds-color-text-muted)));
-  opacity: var(--ds-input-placeholder-opacity, 1);
+  opacity: var(--ds-input-placeholder-opacity);
+}
+/* Text selection reads the certified Input grammar (AutoComplete parity --
+   the channel pair the field family already consumes). */
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea']::selection {
+  color: var(--ds-input-selection-color, var(--ds-color-text-primary));
+  background: var(--ds-input-selection-bg);
 }
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'][data-status='error'] {
   border-color: var(--ds-color-error);
@@ -119,10 +141,10 @@
    opacity. */
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'][data-disabled='true'] {
   color: var(--ds-color-text-disabled);
-  background: var(--ds-mentions-input-bg-disabled, var(--ds-input-bg-disabled, #fafafa));
+  background: var(--ds-mentions-input-bg-disabled, var(--ds-input-bg-disabled));
   border-color: var(--ds-mentions-border-disabled, var(--ds-input-border-disabled, var(--ds-color-border)));
   cursor: not-allowed;
-  opacity: var(--ds-mentions-disabled-opacity, var(--ds-input-disabled-opacity, 0.6));
+  opacity: var(--ds-mentions-disabled-opacity, var(--ds-input-disabled-opacity));
 }
 
 /* Readonly mirrors the certified Input floor channels (quiet, not disabled). */
@@ -138,11 +160,11 @@
      test pin and old engines; the channel wins and maps the layer to the
      governed popover scale. */
   z-index: 50;
-  z-index: var(--ds-mentions-dropdown-z, var(--ds-z-popover, 1600));
+  z-index: var(--ds-mentions-dropdown-z, var(--ds-z-popover));
   inline-size: 100%;
   list-style: none;
   margin: 0;
-  padding: var(--ds-dropdown-padding, 6px);
+  padding: var(--ds-dropdown-padding);
   max-block-size: var(--ds-dropdown-max-height, 192px);
   overflow-y: auto;
   scrollbar-width: thin;
@@ -157,7 +179,7 @@
   box-shadow: var(--ds-dropdown-shadow, var(--ds-elevation-3));
   /* Direction-aware entry (mount runs it once): bottom opens rise, top opens
      settle down; reduced-motion cancels it below. */
-  animation: ds-mentions-dropdown-enter var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-enter, var(--ds-motion-ease-out, ease-out)) both;
+  animation: ds-mentions-dropdown-enter var(--ds-motion-feedback, var(--ds-motion-fast)) var(--ds-motion-ease-enter, var(--ds-motion-ease-out)) both;
 }
 @keyframes ds-mentions-dropdown-enter {
   from {
@@ -172,12 +194,19 @@
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'][data-placement='top'] {
   --_ds-mentions-dropdown-enter-offset: -0.25rem;
   inset-block-end: 100%;
-  margin-block-end: var(--ds-spacing-1, 4px);
+  margin-block-end: var(--ds-spacing-1);
 }
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'][data-placement='bottom'] {
   --_ds-mentions-dropdown-enter-offset: 0.25rem;
   inset-block-start: 100%;
-  margin-block-start: var(--ds-spacing-1, 4px);
+  margin-block-start: var(--ds-spacing-1);
+}
+
+/* Trigger feedback: while a mention session is armed the popup frame takes
+   a quiet primary accent, so the trigger keystroke reads as "listening"
+   even before the first filtered match lands. */
+.ds-mentions.ds-mentions--modern[data-part='root'][data-mention-active='true'] [data-part='dropdown'] {
+  border-color: var(--_ds-proto-mentions-trigger-accent, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-color-border-subtle)));
 }
 
 /* Option rows (K4-D Pass 2): the migrated markup carried only the external
@@ -190,7 +219,7 @@
   display: block;
   inline-size: 100%;
   min-inline-size: 0;
-  padding: var(--ds-mentions-option-padding, var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px));
+  padding: var(--ds-mentions-option-padding, var(--ds-spacing-2) var(--ds-spacing-3));
   border: 1px solid transparent;
   border-radius: var(--ds-mentions-option-radius, var(--ds-radius-md));
   background: transparent;
@@ -202,20 +231,69 @@
   cursor: pointer;
   transition: background-color var(--ds-motion-fast), color var(--ds-motion-fast);
 }
+/* Hover/active repaint as a primary tint over the dropdown surface. The
+   group lives under `@media (hover: hover)` (4th-tanda hover law); it stays
+   at column 0 inside the media block because the paint-ownership test pins
+   the exact `hover,\n.ds-mentions...` selector pair -- indenting it would
+   break the pin. Keyboard/touch active is re-asserted always-on below. */
+@media (hover: hover) {
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option']:not([data-disabled='true']):hover,
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-active='true'] {
   background: var(--ds-mentions-option-bg-hover, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)));
 }
+}
+/* Keyboard-active stays painted where no hover exists (touch + hardware
+   keyboards): the same tint, plus a quiet frame so the active row is never
+   a hue-only signal. */
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-active='true'] {
+  background: var(--ds-mentions-option-bg-hover, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)));
+  border-color: var(--_ds-proto-mentions-option-active-border, color-mix(in srgb, var(--ds-color-primary) 28%, transparent));
+}
+/* Pointer-focused rows (real click targets) keep a visible ring inside the
+   popup's overflow clip (inset outline, splitter idiom). */
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-focus-ring-width));
+}
+/* Option label slot (B1.1): the stable addressable part for the option's
+   primary content; wraps long words like the row and composes rich
+   ReactNode labels (avatar/meta anatomy is contract debt, see batch log). */
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option-label'] {
+  display: block;
+  min-inline-size: 0;
+  overflow-wrap: break-word;
+}
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
   cursor: var(--ds-mentions-option-disabled-cursor, not-allowed);
-  opacity: var(--ds-mentions-option-disabled-opacity, var(--ds-button-disabled-opacity, 0.6));
+  opacity: var(--ds-mentions-option-disabled-opacity, var(--ds-button-disabled-opacity));
 }
 
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='empty'],
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='loading'] {
-  padding: var(--ds-spacing-3, 12px);
+  padding: var(--ds-spacing-3);
   text-align: center;
   color: var(--ds-color-text-secondary);
+}
+
+/* Loading quiet-state gets a progress cue (B2.3): a decorative CSS spinner
+   on the Spinner family's own channels/cadence -- painted as a pseudo so
+   the `loading` hook keeps its text-node contract verbatim. */
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='loading']::before {
+  content: '';
+  display: inline-block;
+  inline-size: 0.8125em;
+  block-size: 0.8125em;
+  margin-inline-end: 0.5em;
+  vertical-align: -0.125em;
+  border: 2px solid var(--ds-spinner-track-color, var(--ds-color-border));
+  border-block-start-color: var(--ds-spinner-color, var(--ds-color-primary));
+  border-radius: var(--ds-radius-full);
+  animation: ds-mentions-loading-spin var(--ds-spinner-duration, calc(var(--ds-motion-slow) * 2)) linear infinite;
+}
+@keyframes ds-mentions-loading-spin {
+  to {
+    transform: rotate(1turn);
+  }
 }
 
 /* Coarse pointers: option rows meet the physical 44px touch floor. */
@@ -252,6 +330,10 @@
     color: GrayText;
     opacity: 1;
   }
+  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='loading']::before {
+    border-color: CanvasText;
+    border-block-start-color: Highlight;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -260,6 +342,10 @@
     transition-duration: 0.01ms;
   }
   .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'] {
+    animation: none;
+  }
+  /* The progress cue rests as a static two-tone arc (Spinner grammar). */
+  .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='loading']::before {
     animation: none;
   }
 }

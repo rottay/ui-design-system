@@ -19,16 +19,29 @@
  * ```tsx
  * <ModernHoverCard
  *   content={<UserProfileCard />}
- *   trigger={<span>@username</span>}
+ *   trigger={<a href="/users/42">@username</a>}
  *   side="bottom"
  * />
  * ```
+ *
+ * The trigger MUST be a focusable element (link/button) for the card to be
+ * keyboard-reachable: the engine wires focus/blur parity and clones
+ * aria-controls/aria-expanded onto the trigger ELEMENT, but it never
+ * fabricates interactivity on a non-interactive child (a plain <span>
+ * receives no tabIndex -- a focusable-but-actionless trigger is a worse
+ * accessibility outcome than a documented contract). Enforcing an
+ * interactive trigger at the type level is registered contract debt.
+ *
+ * TOUCH (P2): coarse pointers get no reliable `mouseleave`, so a tapped-open
+ * card also dismisses on an outside pointerdown (Popover's idiom); hover
+ * intent, debounces and the presence-driven exit are unchanged.
  */
 
 import React, { useState, useRef, useCallback, useEffect, useId, isValidElement, cloneElement } from 'react';
 import type { HoverCardProps } from '../../contracts';
 import { HOVERCARD_DEFAULTS, resolveOverlayPlacement } from '../../contracts';
 import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
+import { usePresence } from '@/graphics/motion/react/runtime';
 
 /**
  * HoverCard implementation positioned by the shared overlay runtime.
@@ -64,6 +77,11 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
 
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const [surfaceEl, setSurfaceEl] = useState<HTMLDivElement | null>(null);
+  // Presence owns WHEN React stops rendering the card: on close the node
+  // stays mounted with dataState='closed' until its own CSS exit animation
+  // ends (the skin owns both visuals), so the card no longer pops out
+  // instantly the way the old `isOpen &&` gate did.
+  const { shouldRender, dataState, ref: presenceRef } = usePresence(isOpen);
   // The card never portals, so it must not join server markup:
   // `overlayCapabilities` resolves against `CSS`/`HTMLElement`, which differ
   // between the SSR probe (always false) and a capable browser, and
@@ -74,6 +92,16 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // The surface's ref fans out to the positioning runtime (measurement) and
+  // to presence (its animationend gates unmount).
+  const setSurfaceRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      setSurfaceEl(node);
+      presenceRef(node);
+    },
+    [presenceRef],
+  );
 
   // Timer refs allow cancellation of pending open/close when the cursor
   // moves between the trigger and the card within the delay window
@@ -129,6 +157,27 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
     },
     [isOpen, handleOpen, anchorEl],
   );
+
+  // Touch parity (Popover's outside-pointerdown idiom, composed): coarse
+  // pointers synthesize mouseenter on tap but produce no reliable mouseleave,
+  // so without an outside dismiss a tapped-open card stayed stuck until
+  // Escape. A pointerdown landing outside BOTH the trigger wrapper and the
+  // card closes immediately, cancelling any pending open/close debounce.
+  // Mouse users are unaffected: moving the pointer to the tap target already
+  // started the close debounce, so this only changes the touch posture.
+  useEffect(() => {
+    if (!isOpen) return;
+    const onPointerDown = (event: PointerEvent) => {
+      const target = event.target as Node | null;
+      if (!target) return;
+      if (anchorEl?.contains(target) || surfaceEl?.contains(target)) return;
+      clearTimeout(openTimerRef.current);
+      clearTimeout(closeTimerRef.current);
+      handleOpen(false);
+    };
+    document.addEventListener('pointerdown', onPointerDown, true);
+    return () => document.removeEventListener('pointerdown', onPointerDown, true);
+  }, [isOpen, anchorEl, surfaceEl, handleOpen]);
 
   // The trigger wrapper is the anchor; the surface is the positioned
   // overlay. The surface only mounts while open, so element presence drives
@@ -192,6 +241,7 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
       ref={setAnchorEl}
       data-part="trigger"
       data-open={isOpen ? 'true' : 'false'}
+      data-disabled={disabled ? 'true' : undefined}
       className={`rottay-hover-card--modern ${className || ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -201,12 +251,12 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
       {...anchorAttrs}
     >
       {describedTrigger}
-      {isOpen && mounted && (
+      {shouldRender && mounted && (
         <div
-          ref={setSurfaceEl}
+          ref={setSurfaceRef}
           id={surfaceId}
           data-part="surface"
-          data-open="true"
+          data-open={dataState === 'open' ? 'true' : 'false'}
           data-placement={logicalPlacement}
           data-ds-position-strategy={strategy}
           className={overlayClassName || undefined}

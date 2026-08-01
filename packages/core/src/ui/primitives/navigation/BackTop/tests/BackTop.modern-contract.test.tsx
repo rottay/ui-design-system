@@ -11,10 +11,17 @@
  * the new contract.
  */
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { BackTop } from '../engines/modern';
+
+const SKIN = readFileSync(
+  resolve(__dirname, '../../../../../foundation/tokens/css/runtime/engines/modern/skin/back-top.css'),
+  'utf8',
+);
 
 function scrollWindowTo(top: number) {
   Object.defineProperty(document.documentElement, 'scrollTop', {
@@ -42,11 +49,13 @@ describe('BackTop modern contract: anatomy', () => {
     expect(screen.queryByRole('button')).toBeNull();
   });
 
-  it('uses LOGICAL end-8 placement, never physical right-8', () => {
+  it('uses skin-owned logical end placement, never physical right placement', () => {
     render(<BackTop visibilityHeight={0} />);
     const button = screen.getByRole('button', { name: 'Back to top' });
-    expect(button.className).toContain('end-8');
+    expect(button.className).not.toContain('end-8');
     expect(button.className).not.toContain('right-8');
+    expect(SKIN).toContain('inset-inline-end: var(--ds-backtop-inset-inline-end, 2rem)');
+    expect(SKIN).not.toMatch(/\bright\s*:/);
     expect(button.className).toContain('rottay-backtop');
     expect(button.className).toContain('rottay-backtop--modern');
     expect(button.getAttribute('data-part')).toBe('trigger');

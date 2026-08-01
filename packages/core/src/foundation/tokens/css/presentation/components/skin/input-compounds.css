@@ -14,7 +14,7 @@
 }
 
 .rottay-input-group[data-part='group'][data-compact='true'] {
-  gap: var(--ds-input-group-gap, 0);
+  gap: var(--ds-input-group-gap);
   flex-wrap: nowrap;
 }
 
@@ -23,11 +23,14 @@
 }
 
 .rottay-input-group[data-part='group'][data-compact='false'] > * {
-  flex: 1 1 var(--ds-input-group-min-item-width, 12rem);
+  flex: 1 1 var(--ds-input-group-min-item-width);
 }
 
 .rottay-input-group[data-part='group'][data-compact='true'] > :not(:first-child) {
-  margin-inline-start: var(--ds-input-group-overlap, -1px);
+  /* Join stays exact at ANY tenant border width: the overlap tracks the
+     input's own border-width channel instead of assuming 1px, so a 2px
+     tenant frame cannot reopen the double-border seam. */
+  margin-inline-start: var(--ds-input-group-overlap, calc(-1 * var(--ds-input-border-width)));
 }
 
 .rottay-input-group[data-part='group'][data-compact='true'] > *:focus-within {
@@ -65,12 +68,12 @@
   /* P-48: width/style ride this base (0,3,0) rule; the COLOR lives on the
      doubled-anatomy booster below at (0,4,0) so it clears the tenant
      `html[data-tenant]:not([data-theme]):not(.light) *` border floor (0,3,1). */
-  border-width: var(--ds-input-border-width, 1px);
-  border-style: var(--ds-input-border-style, solid);
+  border-width: var(--ds-input-border-width);
+  border-style: var(--ds-input-border-style);
   border-radius: var(--ds-input-addon-radius, var(--ds-radius-input));
-  font-family: var(--ds-input-font-family, inherit);
+  font-family: var(--ds-input-font-family);
   font-weight: var(--ds-input-addon-font-weight, var(--ds-font-weight-medium));
-  letter-spacing: var(--ds-input-letter-spacing, normal);
+  letter-spacing: var(--ds-input-letter-spacing);
   white-space: nowrap;
   transition:
     color var(--ds-input-transition-duration) var(--ds-input-transition-timing),
@@ -89,19 +92,52 @@
 }
 
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='xs'] {
-  block-size: var(--ds-input-xs-height); font-size: var(--ds-input-xs-font-size);
+  block-size: calc(var(--ds-input-xs-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-xs-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='sm'] {
-  block-size: var(--ds-input-sm-height); font-size: var(--ds-input-sm-font-size);
+  block-size: calc(var(--ds-input-sm-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-sm-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='md'] {
-  block-size: var(--ds-input-md-height); font-size: var(--ds-input-md-font-size);
+  block-size: calc(var(--ds-input-md-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-md-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='lg'] {
-  block-size: var(--ds-input-lg-height); font-size: var(--ds-input-lg-font-size);
+  block-size: calc(var(--ds-input-lg-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-lg-font-size);
 }
 .rottay-input-addon.ds-input-addon[data-part='root'][data-size='xl'] {
-  block-size: var(--ds-input-xl-height); font-size: var(--ds-input-xl-font-size);
+  block-size: calc(var(--ds-input-xl-height) * var(--ds-density-effective-scale)); font-size: var(--ds-input-xl-font-size);
+}
+
+/* State sync across the compact join: a focused, invalid, warning, success or
+   disabled field and its addons must read as ONE control. The addon's own
+   border adopts the field's state hue on the joined side so no neutral seam
+   survives next to a state border (roadmap 4.2: slots share focus treatment).
+   Selectors reach (0,8,0), clearing the contractual P-48 border booster at
+   (0,4,0) without touching it. */
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .rottay-input-field:focus-within),
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-field:focus-within + .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']) {
+  border-color: var(--ds-input-border-focus, var(--ds-color-primary));
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .rottay-input-field:has([data-invalid='true'])),
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-field:has([data-invalid='true']) + .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']) {
+  border-color: var(--ds-input-error-border, var(--ds-color-error));
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .rottay-input-field:has([data-warning='true'])),
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-field:has([data-warning='true']) + .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']) {
+  border-color: var(--ds-input-warning-border, var(--ds-color-warning));
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .rottay-input-field:has([data-success='true'])),
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-field:has([data-success='true']) + .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']) {
+  border-color: var(--ds-input-success-border, var(--ds-color-success));
+}
+
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .rottay-input-field:has([data-disabled='true'])),
+.rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-field:has([data-disabled='true']) + .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']) {
+  color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
+  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled));
+  border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
 }
 
 /* TextArea --------------------------------------------------------------- */
@@ -121,19 +157,19 @@
   min-block-size: var(--ds-textarea-min-height);
   max-block-size: var(--ds-textarea-max-height);
   padding: var(--ds-textarea-padding-y, var(--ds-input-md-padding-y)) var(--ds-textarea-padding-x, var(--ds-input-md-padding-x));
-  resize: var(--ds-textarea-resize, vertical);
+  resize: var(--ds-textarea-resize);
   color: var(--ds-input-color);
   caret-color: var(--ds-input-caret-color);
   background: var(--ds-input-bg);
-  border: var(--ds-input-border-width, 1px) var(--ds-input-border-style, solid) var(--ds-input-border);
+  border: var(--ds-input-border-width) var(--ds-input-border-style) var(--ds-input-border);
   border-radius: var(
     --ds-textarea-responsive-radius,
     var(--ds-textarea-radius, var(--ds-radius-input))
   );
-  box-shadow: var(--ds-input-shadow-rest, none), var(--ds-input-inset-shadow, none);
-  font-family: var(--ds-input-font-family, inherit);
+  box-shadow: var(--ds-input-shadow-rest), var(--ds-input-inset-shadow, none);
+  font-family: var(--ds-input-font-family);
   font-weight: var(--ds-input-font-weight, var(--ds-font-weight-normal));
-  letter-spacing: var(--ds-input-letter-spacing, normal);
+  letter-spacing: var(--ds-input-letter-spacing);
   line-height: var(--ds-input-md-line-height);
   outline: 0;
   transition:
@@ -144,7 +180,7 @@
 
 .rottay-textarea.ds-input-textarea[data-part='root'] [data-part='control']::selection {
   color: var(--ds-input-selection-color, var(--ds-input-color));
-  background: var(--ds-input-selection-bg, Highlight);
+  background: var(--ds-input-selection-bg);
 }
 
 .rottay-textarea.ds-input-textarea[data-part='root'][data-resize='none'] [data-part='control'] {
@@ -191,7 +227,7 @@
 .rottay-textarea.ds-input-textarea[data-part='root'][data-variant='flushed'] [data-part='control'] {
   padding-inline: 0;
   background: transparent;
-  border-width: 0 0 var(--ds-input-border-width, 1px);
+  border-width: 0 0 var(--ds-input-border-width);
   border-radius: 0;
   box-shadow: none;
 }
@@ -207,7 +243,7 @@
 .rottay-textarea.ds-input-textarea[data-part='root']:not([data-disabled='true']):not([data-readonly='true']):not([data-invalid='true']):hover [data-part='control'] {
   background: var(--ds-input-bg-hover, var(--ds-input-bg));
   border-color: var(--ds-input-border-hover);
-  box-shadow: var(--ds-input-shadow-hover, var(--ds-input-shadow-rest, none)), var(--ds-input-inset-shadow, none);
+  box-shadow: var(--ds-input-shadow-hover, var(--ds-input-shadow-rest)), var(--ds-input-inset-shadow, none);
 }
 
 .rottay-textarea.ds-input-textarea.rottay-textarea--focused[data-part='root']:not([data-disabled='true']):not([data-invalid='true']):not([data-warning='true']):not([data-success='true']) [data-part='control'] {
@@ -315,6 +351,13 @@
 }
 
 @media (pointer: coarse) {
+  /* The input grows to the 44px touch floor; the addon must grow with it or
+     the joined pair steps by the difference (the input's explicit
+     min-block-size overrides stretch). Physical px, never rem. */
+  .rottay-input-addon.ds-input-addon[data-part='root'] {
+    min-block-size: var(--ds-input-touch-target-min);
+  }
+
   .rottay-textarea.ds-input-textarea[data-part='root'] [data-part='control'] {
     min-block-size: max(var(--ds-textarea-min-height), var(--ds-input-touch-target-min));
   }

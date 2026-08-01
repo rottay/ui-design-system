@@ -17,6 +17,27 @@
  * - Headers are real keyboard controls: `role="button"`, `tabIndex`,
  *   Enter/Space toggle, `aria-expanded` + `aria-disabled`.
  *
+ * Phase-B second pass:
+ * - Header/content TYPOGRAPHY moved out of the inline styles into the skin
+ *   (semantic font channels; the engine keeps zero paint).
+ * - A collapsed panel's content is `aria-hidden` + `inert`: the grid 0fr
+ *   track already hides it visually, and now it also leaves the tab order
+ *   and the accessibility tree (focus can no longer land on invisible
+ *   descendants).
+ *
+ * Phase-B second pass 2 (P2-18):
+ * - The chevron renders with `mirrored={false}`: the semantic-icon facade
+ *   auto-mirrors `NavigationForwardIcon` under RTL, which double-mirrored
+ *   the skin's own RTL flip (and pointed the expanded 90-degree turn UP in
+ *   RTL). The skin's `:dir(rtl)` rule is now the single mirror owner (Tree
+ *   precedent).
+ * - In `collapsible='icon'` mode the arrow IS the toggle button but had no
+ *   accessible name (decorative glyph only): it now takes one from the
+ *   header label via `aria-labelledby`.
+ * - Disabled opacity/cursor and the header cursor policy/user-select moved
+ *   from inline styles to the skin (keyed on data-disabled/data-collapsible);
+ *   inline style is reserved for instance geometry (the 0fr/1fr track).
+ *
  * @example
  * ```tsx
  * <Collapse engine="modern" accordion>
@@ -118,6 +139,9 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
     const isActive = context.activeKeys.includes(key);
     // APG accordion: the toggle points at the region it controls.
     const contentId = `collapse-content-${reactId.replace(/:/g, '')}`;
+    // The header label's id doubles as the accessible-name source for the
+    // arrow when `collapsible='icon'` makes the arrow the toggle button.
+    const labelId = `collapse-label-${reactId.replace(/:/g, '')}`;
 
     // `collapsible='disabled'` renders every header inert; a disabled panel is
     // inert on its own. `collapsible='icon'` moves the toggle affordance to
@@ -156,9 +180,15 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
 
     // Arrow indicator rotates 90deg when panel is expanded (skin-owned). In
     // `collapsible='icon'` mode the arrow IS the toggle control, so it carries
-    // the button role + expanded state; otherwise it is decorative and the
-    // header owns the toggle semantics. The glyph is the governed semantic
-    // forward chevron (no unicode arrows), mirrored in RTL by the skin.
+    // the button role + expanded state AND takes its accessible name from the
+    // header label (aria-labelledby -- the glyph alone is decorative, so the
+    // button would otherwise have no name); otherwise it is decorative and
+    // the header owns the toggle semantics. The glyph is the governed
+    // semantic forward chevron (no unicode arrows). `mirrored={false}` opts
+    // out of the icon facade's RTL auto-mirror: the skin's `:dir(rtl)` flip
+    // is the single mirror owner, and the 90deg expansion turn must rotate a
+    // right-pointing glyph to land pointing down in BOTH directions (Tree
+    // precedent; the facade's mirror made it point up in RTL).
     const arrowIcon = showArrow && (
       <span
         className="rottay-collapse-arrow"
@@ -171,12 +201,13 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
               tabIndex: 0,
               'aria-expanded': isActive,
               'aria-controls': contentId,
+              'aria-labelledby': labelId,
               onClick: handleArrowClick,
               onKeyDown: handleArrowKeyDown,
             }
           : {})}
       >
-        <NavigationForwardIcon decorative size={12} />
+        <NavigationForwardIcon decorative mirrored={false} size={12} />
       </span>
     );
 
@@ -187,15 +218,7 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
         data-part="panel"
         data-expanded={isActive ? 'true' : 'false'}
         data-disabled={disabled ? 'true' : 'false'}
-        style={{
-          ...(disabled
-            ? {
-                opacity: 'var(--ds-collapse-header-default-disabled-opacity, 0.5)',
-                cursor: 'var(--ds-collapse-header-default-disabled-cursor, not-allowed)',
-              }
-            : {}),
-          ...style,
-        }}
+        style={style}
       >
         {/* Header row: the TOGGLE (data-part='header', role=button) and the
             extra actions slot are SIBLINGS inside a plain layout row — an
@@ -213,18 +236,7 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
               minWidth: 0,
               display: 'flex',
               alignItems: 'center',
-              gap: 'var(--ds-collapse-header-gap, var(--ds-spacing-2, 8px))',
-              cursor: inert
-                ? disabled
-                  ? 'var(--ds-collapse-header-default-disabled-cursor, not-allowed)'
-                  : 'default'
-                : iconOnly
-                  ? 'default'
-                  : 'var(--ds-collapse-header-default-idle-cursor, pointer)',
-              userSelect: 'none',
-              fontSize: 'var(--ds-collapse-header-default-idle-font-size, inherit)',
-              fontWeight: 'var(--ds-collapse-header-default-idle-font-weight, 500)',
-              lineHeight: 'var(--ds-collapse-header-default-idle-line-height, normal)',
+              gap: 'var(--ds-collapse-header-gap, var(--ds-spacing-2))',
             }}
             onClick={handleClick}
             {...(iconOnly
@@ -243,7 +255,7 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
             data-collapsible={context.collapsible ?? 'header'}
           >
             {context.expandIconPosition === 'start' && arrowIcon}
-            <span data-part="label" style={{ flex: 1 }}>{header}</span>
+            <span data-part="label" id={labelId} style={{ flex: 1 }}>{header}</span>
             {context.expandIconPosition === 'end' && arrowIcon}
           </div>
           {extra && <span data-part="extra">{extra}</span>}
@@ -251,12 +263,16 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
         {/* Content area: the outer element is the grid-template-rows track
             (0fr collapsed / 1fr expanded); the inner element carries
             min-height:0 (see COLLAPSE_STYLES) plus the opacity/padding fade
-            so the whole reveal reads as one motion. */}
+            so the whole reveal reads as one motion. While collapsed the
+            region is also aria-hidden + inert: invisible content must leave
+            the tab order and the accessibility tree, not just the viewport. */}
         <div
           className="rottay-collapse-content"
           data-part="content"
           data-expanded={isActive ? 'true' : 'false'}
           id={contentId}
+          aria-hidden={isActive ? undefined : true}
+          inert={isActive ? undefined : true}
           style={{
             gridTemplateRows: isActive ? '1fr' : '0fr',
           }}
@@ -267,8 +283,6 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
             data-expanded={isActive ? 'true' : 'false'}
             style={{
               opacity: isActive ? 1 : 0,
-              fontSize: 'var(--ds-collapse-content-default-idle-font-size, inherit)',
-              lineHeight: 'var(--ds-collapse-content-default-idle-line-height, normal)',
             }}
           >
             {children}
@@ -357,7 +371,7 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
           style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: 'var(--ds-spacing-1, 4px)',
+            gap: 'var(--ds-spacing-1)',
             ...style,
           }}
         >

@@ -48,9 +48,14 @@ import { UPLOAD_DEFAULTS } from '../../contracts';
 import { removeUploadFile, resolveAcceptedUploadFiles } from '../../runtime/upload-behavior';
 import { Progress } from '../../../../facade';
 import { useTranslation, formatFileSize } from '@/infrastructure/runtime/i18n';
+import { ActionAddIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-add';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 import { ActionDeleteIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-delete';
+import { ActionRetryIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-retry';
+import { ActionRevealIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-reveal';
+import { ActionUploadIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-upload';
 import { ContentFileIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-file';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -93,6 +98,114 @@ function readThumbUrl(thumbUrls: Record<string, string>, uid: string): string | 
 }
 
 /**
+ * Marks freshly accepted files as `uploading` (percent 0) when a
+ * `customRequest` pipeline will actually transmit them. Pure: returns the
+ * transformed list + accepted set so the accept flow can fire its onChange
+ * snapshots before the async request lifecycle starts.
+ */
+function markAcceptedAsUploading(
+  nextFileList: UploadFile[],
+  acceptedFiles: UploadFile[]
+): { nextFileList: UploadFile[]; acceptedFiles: UploadFile[] } {
+  const uploading = acceptedFiles.map((file) => ({ ...file, status: 'uploading' as const, percent: 0 }));
+  const byUid = new Map(uploading.map((file) => [file.uid, file]));
+  return {
+    nextFileList: nextFileList.map((file) => byUid.get(file.uid) ?? file),
+    acceptedFiles: uploading,
+  };
+}
+
+/**
+ * Shared `customRequest` lifecycle for the Modern Upload and Dragger
+ * (Phase B: the contract prop was dead in this engine -- Classic forwarded it
+ * to Ant, Modern silently dropped it). For each transmitted file the request
+ * option carries the contract's action/filename/data/headers/withCredentials,
+ * and the onProgress/onSuccess/onError callbacks patch the file in the list
+ * (uploading -> done/error) while firing onChange with the updated snapshot.
+ *
+ * The latest-list ref mirrors the last committed list so rapid async
+ * progress ticks chain off each other instead of a stale render closure; in
+ * controlled mode the ref tracks the consumer-provided list (onChange
+ * snapshots stay best-effort, matching the accept flow).
+ */
+function useModernUploadRequest(options: {
+  customRequest?: UploadProps['customRequest'];
+  action?: UploadProps['action'];
+  data?: UploadProps['data'];
+  headers?: UploadProps['headers'];
+  name?: string;
+  withCredentials?: boolean;
+  actualFileList: UploadFile[];
+  setFileList: React.Dispatch<React.SetStateAction<UploadFile[]>>;
+  onChange?: UploadProps['onChange'];
+}) {
+  const { customRequest, action, data, headers, name, withCredentials, actualFileList, setFileList, onChange } = options;
+  const listRef = useRef<UploadFile[]>(actualFileList);
+  useEffect(() => {
+    listRef.current = actualFileList;
+  });
+
+  const commitList = useCallback((next: UploadFile[]) => {
+    listRef.current = next;
+    setFileList(next);
+  }, [setFileList]);
+
+  const patchFile = useCallback((uid: string, patch: Partial<UploadFile>) => {
+    const next = listRef.current.map((item) => (item.uid === uid ? { ...item, ...patch } : item));
+    commitList(next);
+    return next.find((item) => item.uid === uid);
+  }, [commitList]);
+
+  const startUpload = useCallback(async (uploadFile: UploadFile) => {
+    if (!customRequest) return;
+    const rawFile = uploadFile.originFileObj;
+    if (!rawFile) return;
+    const resolvedAction = typeof action === 'function' ? await action(rawFile) : action;
+    customRequest({
+      action: resolvedAction ?? '',
+      filename: name ?? UPLOAD_DEFAULTS.name,
+      // NOTE: originFileObj is the pre-transform File; a beforeUpload
+      // transform only renames/re-sizes the descriptor (contract UploadFile
+      // stores no transformed File instance) -- same floor as rustic.
+      file: rawFile,
+      data: typeof data === 'function' ? data(uploadFile) : data,
+      headers,
+      withCredentials,
+      onProgress: (event) => {
+        const percent = Math.min(Math.round(event.percent), 100);
+        const patched = patchFile(uploadFile.uid, { status: 'uploading', percent });
+        if (patched) onChange?.({ file: patched, fileList: listRef.current });
+      },
+      onSuccess: (response) => {
+        const patched = patchFile(uploadFile.uid, { status: 'done', percent: 100, response });
+        if (patched) onChange?.({ file: patched, fileList: listRef.current });
+      },
+      onError: (error) => {
+        const patched = patchFile(uploadFile.uid, { status: 'error', error });
+        if (patched) onChange?.({ file: patched, fileList: listRef.current });
+      },
+    });
+  }, [customRequest, action, data, headers, name, withCredentials, patchFile, onChange]);
+
+  // Retry rides the same request pipeline: the failed file re-enters the
+  // uploading state and customRequest runs again (recovery next to the item).
+  const retryUpload = useCallback((uploadFile: UploadFile) => {
+    if (!customRequest) return;
+    const uploading: UploadFile = { ...uploadFile, status: 'uploading', percent: 0, error: undefined };
+    const next = listRef.current.map((item) => (item.uid === uploadFile.uid ? uploading : item));
+    commitList(next);
+    onChange?.({ file: uploading, fileList: next });
+    void startUpload(uploading);
+  }, [customRequest, commitList, onChange, startUpload]);
+
+  return {
+    hasCustomRequest: Boolean(customRequest),
+    startUpload,
+    retryUpload,
+  };
+}
+
+/**
  * Localized label with an English floor: when the catalogue entry has not
  * landed yet the provider echoes the full key, which must never reach an
  * aria-label.
@@ -124,10 +237,16 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
   const closeRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    // The dialog mounts with no other focusable surface: land focus on the
-    // close button so keyboard users have an immediate exit (Escape also
-    // works), instead of dropping focus on <body>.
+    // Focus ownership (B2.4): remember the element that opened the dialog and
+    // land focus on the close button (the dialog's only control), so keyboard
+    // users have an immediate exit instead of dropping focus on <body>.
+    const previouslyFocused = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
     closeRef.current?.focus();
+    // On close, focus returns to the opener (a detached opener -- e.g. its
+    // file item was removed while previewing -- no-ops silently).
+    return () => previouslyFocused?.focus();
   }, []);
 
   useEffect(() => {
@@ -141,13 +260,21 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
   return (
     <div
       data-part="preview-modal"
-      className="fixed inset-0 flex items-center justify-center"
       onClick={onClose}
+      onKeyDown={(e) => {
+        // aria-modal trap: the close button is the only focusable surface, so
+        // Tab/Shift+Tab cycle back onto it instead of leaking to the page
+        // behind the scrim.
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          closeRef.current?.focus();
+        }
+      }}
       role="dialog"
       aria-modal="true"
       aria-label={t('upload.preview', { name: alt })}
     >
-      <div className="relative max-w-[90vw] max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+      <div data-part="preview-content" onClick={(e) => e.stopPropagation()}>
         <button
           ref={closeRef}
           type="button"
@@ -157,7 +284,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
         >
           <ActionCloseIcon decorative size={14} />
         </button>
-        <img src={src} alt={alt} className="max-w-full max-h-[85vh] rounded-lg object-contain" />
+        <img data-part="preview-image" src={src} alt={alt} />
       </div>
     </div>
   );
@@ -205,9 +332,14 @@ interface FileItemProps {
   listType: UploadListType;
   onRemove: (file: UploadFile) => void;
   onPreview?: (file: UploadFile) => void;
+  /** Present only when a `customRequest` pipeline exists to re-run. */
+  onRetry?: (file: UploadFile) => void;
   itemRender?: UploadProps['itemRender'];
+  iconRender?: UploadProps['iconRender'];
   progress?: UploadProps['progress'];
   thumbUrls: Record<string, string>;
+  showPreviewAction: boolean;
+  showRemoveAction: boolean;
 }
 
 /**
@@ -221,18 +353,27 @@ const FileItem: React.FC<FileItemProps> = ({
   listType,
   onRemove,
   onPreview,
+  onRetry,
   itemRender,
+  iconRender,
   progress,
   thumbUrls,
+  showPreviewAction,
+  showRemoveAction,
 }) => {
   const { t, locale } = useTranslation('components');
   const thumb = file.thumbUrl || file.url || readThumbUrl(thumbUrls, file.uid);
   const isImg = isImageFile(file);
   const isUploading = file.status === 'uploading';
+  const isError = file.status === 'error';
   // Product law: file rows carry a semantic file icon and the size in
   // locale-formatted bytes (skin paints it tabular). Size is optional in the
   // contract (server-returned entries may lack it) -- no size, no span.
   const sizeText = typeof file.size === 'number' ? formatFileSize(file.size, locale) : undefined;
+  // Recovery sits next to the failed item (B2.3): retry only exists when the
+  // engine has a request pipeline to re-run and the raw File is still held.
+  const canRetry = isError && Boolean(onRetry) && Boolean(file.originFileObj);
+  const errorText = isError ? (file.error?.message || translateOr(t, 'upload.error', 'Error uploading file')) : undefined;
 
   const actions = {
     download: () => { if (file.url) window.open(file.url, '_blank'); },
@@ -242,6 +383,14 @@ const FileItem: React.FC<FileItemProps> = ({
 
   const previewLabel = translateOr(t, 'upload.preview', `Preview ${file.name}`, { name: file.name });
   const removeLabel = translateOr(t, 'upload.remove_named', `Remove ${file.name}`, { name: file.name });
+  const retryLabel = translateOr(t, 'upload.retry_named', `Retry ${file.name}`, { name: file.name });
+
+  const retryIconSize = listType === 'picture-card' ? 16 : listType === 'picture-circle' ? 12 : 14;
+  const retryButton = canRetry ? (
+    <button type="button" data-part="file-item-action" data-action="retry" onClick={() => onRetry?.(file)} aria-label={retryLabel}>
+      <ActionRetryIcon decorative size={retryIconSize} />
+    </button>
+  ) : null;
 
   // -- picture-card: 104x104 grid tile; the action overlay is ALWAYS rendered
   // (never hover-gated in React): the skin gates its visibility with
@@ -268,14 +417,17 @@ const FileItem: React.FC<FileItemProps> = ({
         )}
         {!isUploading && (
           <div data-part="file-item-overlay">
-            {isImg && (
+            {isImg && showPreviewAction && (
               <button type="button" data-part="file-item-action" data-action="preview" onClick={() => onPreview?.(file)} aria-label={previewLabel}>
-                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                <ActionRevealIcon decorative size={16} />
               </button>
             )}
-            <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
-              <ActionDeleteIcon decorative size={16} />
-            </button>
+            {retryButton}
+            {showRemoveAction && (
+              <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
+                <ActionDeleteIcon decorative size={16} />
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -288,32 +440,35 @@ const FileItem: React.FC<FileItemProps> = ({
   if (listType === 'picture-circle') {
     const originNode = (
       <div
-        className="ds-upload__file-item relative group rounded-full overflow-hidden flex items-center justify-center border-2"
+        className="ds-upload__file-item"
         role="listitem"
         aria-label={file.name}
         data-part="file-item"
         data-status={file.status || undefined}
       >
         {isImg && thumb ? (
-          <img src={thumb} alt={file.name} className="w-full h-full object-cover" />
+          <img data-part="file-thumb" src={thumb} alt={file.name} />
         ) : (
-          <span className="text-xs truncate px-2 text-center">{file.name}</span>
+          <span data-part="file-name">{file.name}</span>
         )}
         {isUploading && (
-          <div className="absolute inset-x-2 bottom-2">
+          <div data-part="file-progress">
             <UploadProgress percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />
           </div>
         )}
         {!isUploading && (
-          <div data-part="file-item-overlay" className="absolute inset-0 rounded-full flex items-center justify-center gap-1">
-            {isImg && (
+          <div data-part="file-item-overlay">
+            {isImg && showPreviewAction && (
               <button type="button" data-part="file-item-action" data-action="preview" onClick={() => onPreview?.(file)} aria-label={previewLabel}>
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                <ActionRevealIcon decorative size={12} />
               </button>
             )}
-            <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
-              <ActionDeleteIcon decorative size={12} />
-            </button>
+            {retryButton}
+            {showRemoveAction && (
+              <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
+                <ActionDeleteIcon decorative size={12} />
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -324,22 +479,31 @@ const FileItem: React.FC<FileItemProps> = ({
   // -- picture: horizontal row with a small thumbnail on the left --
   if (listType === 'picture') {
     const originNode = (
-      <div data-part="file-item" data-status={file.status || undefined} className="ds-upload__file-item flex items-center gap-2 p-2" role="listitem" aria-label={file.name}>
+      <div data-part="file-item" data-status={file.status || undefined} className="ds-upload__file-item" role="listitem" aria-label={file.name}>
         {isImg && thumb ? (
-          <img src={thumb} alt={file.name} className="w-12 h-12 object-cover rounded flex-shrink-0 cursor-pointer" onClick={() => onPreview?.(file)} />
+          <img data-part="file-thumb" src={thumb} alt={file.name} onClick={() => onPreview?.(file)} />
         ) : (
-          <div className="w-12 h-12 rounded flex items-center justify-center flex-shrink-0">
-            <ContentFileIcon decorative size={24} />
+          <div data-part="file-icon-slot">
+            {iconRender ? iconRender(file, listType) : <ContentFileIcon decorative size={24} />}
           </div>
         )}
-        <div className="flex-1 min-w-0">
-          <span data-part="file-name" className="text-sm truncate block">{file.name}</span>
+        <div data-part="file-content">
+          <span data-part="file-name">{file.name}</span>
           {sizeText && <span data-part="file-size">{sizeText}</span>}
           {isUploading && <UploadProgress percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />}
+          {errorText && (
+            <span data-part="file-error">
+              <StatusErrorIcon decorative size={12} data-part="file-error-icon" />
+              <span data-part="file-error-text">{errorText}</span>
+            </span>
+          )}
         </div>
-        <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
-          <ActionDeleteIcon decorative size={14} />
-        </button>
+        {retryButton}
+        {showRemoveAction && (
+          <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
+            <ActionDeleteIcon decorative size={14} />
+          </button>
+        )}
       </div>
     );
     return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
@@ -347,18 +511,27 @@ const FileItem: React.FC<FileItemProps> = ({
 
   // -- text (default): simple filename row with remove button --
   const originNode = (
-    <div data-part="file-item" data-status={file.status || undefined} className="ds-upload__file-item flex items-center justify-between gap-2 p-2" role="listitem" aria-label={file.name}>
+    <div data-part="file-item" data-status={file.status || undefined} className="ds-upload__file-item" role="listitem" aria-label={file.name}>
       <span data-part="file-icon">
-        <ContentFileIcon decorative size={16} />
+        {iconRender ? iconRender(file, listType) : <ContentFileIcon decorative size={16} />}
       </span>
-      <div className="flex-1 min-w-0">
-        <span data-part="file-name" className="text-sm truncate block">{file.name}</span>
+      <div data-part="file-content">
+        <span data-part="file-name">{file.name}</span>
         {sizeText && <span data-part="file-size">{sizeText}</span>}
         {isUploading && <UploadProgress percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />}
+        {errorText && (
+          <span data-part="file-error">
+            <StatusErrorIcon decorative size={12} data-part="file-error-icon" />
+            <span data-part="file-error-text">{errorText}</span>
+          </span>
+        )}
       </div>
-      <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
-        <ActionDeleteIcon decorative size={14} />
-      </button>
+      {retryButton}
+      {showRemoveAction && (
+        <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} aria-label={removeLabel}>
+          <ActionDeleteIcon decorative size={14} />
+        </button>
+      )}
     </div>
   );
   return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
@@ -393,10 +566,17 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
       listType = UPLOAD_DEFAULTS.listType,
       directory = false,
       beforeUpload,
+      customRequest,
+      action,
+      data,
+      headers,
+      name,
+      withCredentials,
       onChange,
       onRemove,
       onPreview,
       itemRender,
+      iconRender,
       progress,
       children,
       className = '',
@@ -409,6 +589,24 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
     const inputRef = useRef<HTMLInputElement>(null);
     const actualFileList = controlledFileList ?? fileList;
     const inputId = useRef(`upload-input-${Date.now()}-${Math.random().toString(36).slice(2)}`).current;
+
+    // showUploadList's object form gates which per-item actions render
+    // (download stays contract debt -- see the family report).
+    const uploadListConfig = typeof showUploadList === 'object' ? showUploadList : undefined;
+    const showPreviewAction = uploadListConfig?.showPreviewIcon !== false;
+    const showRemoveAction = uploadListConfig?.showRemoveIcon !== false;
+
+    const { hasCustomRequest, startUpload, retryUpload } = useModernUploadRequest({
+      customRequest,
+      action,
+      data,
+      headers,
+      name,
+      withCredentials,
+      actualFileList,
+      setFileList,
+      onChange,
+    });
 
     // Generate thumbnails for picture modes
     useEffect(() => {
@@ -426,14 +624,20 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
       const files = Array.from(e.target.files || []);
       if (!files.length) return;
 
-      const { nextFileList, acceptedFiles } = await resolveAcceptedUploadFiles(
+      const resolved = await resolveAcceptedUploadFiles(
         actualFileList, files, maxCount, beforeUpload
       );
 
-      if (acceptedFiles.length === 0) {
+      if (resolved.acceptedFiles.length === 0) {
         if (inputRef.current) inputRef.current.value = '';
         return;
       }
+
+      // With a customRequest pipeline the accepted files enter the uploading
+      // state and the request lifecycle drives them to done/error.
+      const { nextFileList, acceptedFiles } = hasCustomRequest
+        ? markAcceptedAsUploading(resolved.nextFileList, resolved.acceptedFiles)
+        : resolved;
 
       setFileList(nextFileList);
       acceptedFiles.forEach((acceptedFile, index) => {
@@ -441,6 +645,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
         const info: UploadChangeInfo = { file: acceptedFile, fileList: fileListSnapshot };
         onChange?.(info);
       });
+      if (hasCustomRequest) acceptedFiles.forEach((acceptedFile) => void startUpload(acceptedFile));
       if (inputRef.current) inputRef.current.value = '';
     };
 
@@ -499,9 +704,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
               htmlFor={inputId}
               data-part="add-button"
               data-disabled={disabled || undefined}
-              className={`ds-upload__add-button flex items-center justify-center border-2 border-dashed hover:border-primary hover:bg-primary/5 transition-all duration-300 ${
-                listType === 'picture-circle' ? 'rounded-full' : 'rounded-lg'
-              } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+              className="ds-upload__add-button"
               role="button"
               tabIndex={disabled ? -1 : 0}
               aria-label={t('upload.add_file')}
@@ -510,9 +713,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
               }}
             >
               {children || (
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
+                <ActionAddIcon decorative size={32} />
               )}
             </label>
           )
@@ -537,16 +738,20 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
         listType={listType}
         onRemove={handleRemove}
         onPreview={handlePreview}
+        onRetry={hasCustomRequest ? retryUpload : undefined}
         itemRender={itemRender}
+        iconRender={iconRender}
         progress={progress}
         thumbUrls={thumbUrls}
+        showPreviewAction={showPreviewAction}
+        showRemoveAction={showRemoveAction}
       />
     ));
 
     return (
       <div ref={ref} data-part="root" className={rootClassName} style={style}>
         {isPictureCardOrCircle ? (
-          <div data-part="file-list" className="flex flex-wrap gap-2" role="list" aria-label={fileListLabel}>
+          <div data-part="file-list" role="list" aria-label={fileListLabel}>
             {showUploadList && fileItems}
             {uploadTrigger}
           </div>
@@ -554,7 +759,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
           <>
             {uploadTrigger}
             {showUploadList && actualFileList.length > 0 && (
-              <div data-part="file-list" className="mt-2 space-y-2" role="list" aria-label={fileListLabel}>
+              <div data-part="file-list" role="list" aria-label={fileListLabel}>
                 {fileItems}
               </div>
             )}
@@ -600,11 +805,18 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       listType = UPLOAD_DEFAULTS.listType,
       directory = false,
       beforeUpload,
+      customRequest,
+      action,
+      data,
+      headers,
+      name,
+      withCredentials,
       onChange,
       onRemove,
       onDrop,
       onPreview,
       itemRender,
+      iconRender,
       progress,
       children,
       className = '',
@@ -619,6 +831,22 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
     const inputRef = useRef<HTMLInputElement>(null);
     const actualFileList = controlledFileList ?? fileList;
 
+    const uploadListConfig = typeof showUploadList === 'object' ? showUploadList : undefined;
+    const showPreviewAction = uploadListConfig?.showPreviewIcon !== false;
+    const showRemoveAction = uploadListConfig?.showRemoveIcon !== false;
+
+    const { hasCustomRequest, startUpload, retryUpload } = useModernUploadRequest({
+      customRequest,
+      action,
+      data,
+      headers,
+      name,
+      withCredentials,
+      actualFileList,
+      setFileList,
+      onChange,
+    });
+
     useEffect(() => {
       if (listType === 'text') return;
       actualFileList.forEach(async (file) => {
@@ -631,13 +859,17 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
     // Shared file processing for both drag-drop and manual selection paths
     const processFiles = async (files: File[]) => {
       if (disabled) { if (inputRef.current) inputRef.current.value = ''; return; }
-      const { nextFileList, acceptedFiles } = await resolveAcceptedUploadFiles(actualFileList, files, maxCount, beforeUpload);
-      if (acceptedFiles.length === 0) { if (inputRef.current) inputRef.current.value = ''; return; }
+      const resolved = await resolveAcceptedUploadFiles(actualFileList, files, maxCount, beforeUpload);
+      if (resolved.acceptedFiles.length === 0) { if (inputRef.current) inputRef.current.value = ''; return; }
+      const { nextFileList, acceptedFiles } = hasCustomRequest
+        ? markAcceptedAsUploading(resolved.nextFileList, resolved.acceptedFiles)
+        : resolved;
       setFileList(nextFileList);
       acceptedFiles.forEach((acceptedFile, index) => {
         const fileListSnapshot = nextFileList.slice(0, actualFileList.length + index + 1);
         onChange?.({ file: acceptedFile, fileList: fileListSnapshot });
       });
+      if (hasCustomRequest) acceptedFiles.forEach((acceptedFile) => void startUpload(acceptedFile));
       if (inputRef.current) inputRef.current.value = '';
     };
 
@@ -681,27 +913,31 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       <div ref={ref} data-part="root" className={rootClassName} style={style}>
         <div
           onDragOver={(e) => { e.preventDefault(); if (!disabled) setIsDragOver(true); }}
-          onDragLeave={() => { if (!disabled) setIsDragOver(false); }}
+          onDragLeave={(e) => {
+            /* dragleave bubbles from every child boundary (the hint text, the
+               icon): only clear the drag state when the pointer actually
+               exits the dropzone, or the frame flickers while crossing the
+               default content. relatedTarget is null when leaving the window
+               (still an exit). */
+            if (disabled) return;
+            const next = e.relatedTarget as Node | null;
+            if (next && e.currentTarget.contains(next)) return;
+            setIsDragOver(false);
+          }}
           onDrop={handleDrop}
           onClick={() => { if (!disabled) inputRef.current?.click(); }}
           role="button"
           tabIndex={disabled ? -1 : 0}
           aria-label={t('upload.drop_hint')}
+          aria-disabled={disabled || undefined}
           onKeyDown={(e) => {
             if (!disabled && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); inputRef.current?.click(); }
           }}
           data-part="dropzone"
           data-state={isDragOver ? 'dragging' : 'idle'}
           data-disabled={disabled || undefined}
-          className={`border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ${
-            isDragOver ? 'border-primary bg-primary/5 shadow-lg scale-[1.01]' : 'hover:border-primary hover:bg-primary/5'
-          } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
           /* Runtime prop-driven height rides the governed channel; the skin
-             owns the block-size declaration. The Tailwind paint utilities in
-             className stay for a test-anchored assertion (`border-primary`
-             during drag) but the skin OVERRIDES their effective paint by
-             layer ownership (quiet hairline + tint, token motion) -- see the
-             upload.css header, deviation #1. */
+             owns the block-size declaration. */
           style={{ '--ds-upload-dropzone-height': typeof height === 'number' ? `${height}px` : height } as React.CSSProperties}
         >
           <input
@@ -717,16 +953,14 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
           />
           {children || (
             <>
-              <svg className="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-              </svg>
-              <p>{t('upload.drag_drop')}</p>
+              <ActionUploadIcon decorative size={48} />
+              <p data-part="dropzone-hint">{t('upload.drag_drop')}</p>
             </>
           )}
         </div>
 
         {showUploadList && actualFileList.length > 0 && (
-          <div data-part="file-list" className="mt-2 space-y-2" role="list" aria-label={fileListLabel}>
+          <div data-part="file-list" role="list" aria-label={fileListLabel}>
             {actualFileList.map(file => (
               <FileItem
                 key={file.uid}
@@ -734,9 +968,13 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
                 listType={listType}
                 onRemove={handleRemove}
                 onPreview={handlePreview}
+                onRetry={hasCustomRequest ? retryUpload : undefined}
                 itemRender={itemRender}
+                iconRender={iconRender}
                 progress={progress}
                 thumbUrls={thumbUrls}
+                showPreviewAction={showPreviewAction}
+                showRemoveAction={showRemoveAction}
               />
             ))}
           </div>

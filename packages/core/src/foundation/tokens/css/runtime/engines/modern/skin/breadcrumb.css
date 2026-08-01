@@ -8,10 +8,17 @@
  * the text tokens). BitHire's `--ds-card-bg` IS `--ds-surface-card`, so the
  * light visuals are byte-identical.
  *
+ * PASS-2 LAW (batch-28): clickable crumbs carry a quiet underline at rest
+ * (interactive affordance is never color-only) that strengthens on
+ * hover/focus; the current crumb's inset keyline scales by
+ * `--ds-effect-intensity`; geometry is logical-property clean
+ * (`max-inline-size`, `inline-size`/`block-size`, `min-inline-size`) so the
+ * trail composes identically in RTL; in forced-colors the current location
+ * fills Highlight and the underline survives as solid system ink.
  */
 
 .rottay-breadcrumb-shell.rottay-breadcrumb-shell--modern[data-part='root'] {
-  max-width: 100%;
+  max-inline-size: 100%;
   overflow-x: auto;
   padding: var(--ds-breadcrumb-padding, 4px);
   color: var(--ds-breadcrumb-color, var(--ds-color-text-secondary));
@@ -19,7 +26,7 @@
     --ds-breadcrumb-bg,
     linear-gradient(180deg, color-mix(in srgb, var(--ds-card-bg, var(--ds-surface-card)) 97%, var(--ds-color-primary) 3%), var(--ds-card-bg, var(--ds-surface-card)))
   );
-  border-radius: var(--ds-breadcrumb-radius, var(--ds-radius-lg, 12px));
+  border-radius: var(--ds-breadcrumb-radius, var(--ds-radius-lg));
   box-shadow: var(--ds-breadcrumb-shadow, var(--ds-shadow-xs));
   scrollbar-width: none;
 }
@@ -58,22 +65,22 @@
   gap: var(--ds-spacing-1-5, 6px);
   padding-block: 0;
   padding-inline: var(--ds-breadcrumb-item-padding-inline, 9px);
-  border-radius: var(--ds-breadcrumb-item-radius, var(--ds-radius-md, 10px));
+  border-radius: var(--ds-breadcrumb-item-radius, var(--ds-radius-md));
   background: transparent;
   color: var(--ds-breadcrumb-item-color, var(--ds-color-text-secondary));
   font-family: inherit;
-  font-size: var(--ds-breadcrumb-font-size, var(--ds-font-size-sm, 14px));
+  font-size: var(--ds-breadcrumb-font-size, var(--ds-font-size-sm));
   font-weight: var(--ds-breadcrumb-font-weight, 520);
   line-height: 1;
   text-decoration: none;
   white-space: nowrap;
   cursor: default;
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    background var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease),
-    transform var(--ds-motion-fast, 120ms) var(--ds-ease-standard, ease);
+    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    transform var(--ds-motion-fast) var(--ds-ease-standard, ease);
 }
 
 /* Crumbs are anchors, buttons (onClick items) or inert spans: the UA chrome
@@ -93,6 +100,23 @@
   text-overflow: ellipsis;
 }
 
+/* Interactive affordance, never color-only (B1.4): a clickable crumb's label
+   carries a quiet underline AT REST — readable as a navigation action before
+   any hover — that strengthens to the full ink on hover/focus. The current
+   page and the truncation ellipsis carry no `data-clickable`, so they stay
+   plain. Applied to the label span, not the crumb: the crumb is a flex box,
+   and text-decoration does not propagate through blockified flex items. The
+   proto axis is private (batch-28 ledger); forced-colors strips the alpha,
+   so the underline survives there as a solid system-colored one. */
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true'] [data-part='label'] {
+  text-decoration: underline;
+  text-decoration-color: var(
+    --_ds-proto-breadcrumb-link-underline-color,
+    color-mix(in srgb, currentColor 32%, transparent)
+  );
+  text-underline-offset: 0.18em;
+}
+
 .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true'] {
   cursor: pointer;
 }
@@ -109,6 +133,16 @@
     box-shadow: var(--ds-shadow-xs);
     transform: translateY(-1px);
   }
+
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:hover [data-part='label'] {
+    text-decoration-color: currentColor;
+  }
+}
+
+/* Keyboard parity for the affordance: the quiet underline strengthens on
+   focus too, on every pointer class. */
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true']:focus-visible [data-part='label'] {
+  text-decoration-color: currentColor;
 }
 
 /* A held press keeps the hover wash but drops the lift back onto the surface
@@ -125,32 +159,34 @@
   color: var(--ds-breadcrumb-active-color, var(--ds-breadcrumb-color-active, var(--ds-color-text-primary)));
   background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-card-bg, var(--ds-surface-card)));
   border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-subtle));
-  box-shadow: inset 0 1px 0 color-mix(in srgb, white 58%, transparent);
-  font-weight: var(--ds-font-weight-semibold, 600);
+  /* intensity-scaled optical keyline: at `--ds-effect-intensity: 0` the inset
+     dissolves while the tint + frame keep the current-location hierarchy. */
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white calc(58% * var(--ds-effect-intensity)), transparent);
+  font-weight: var(--ds-font-weight-semibold);
 }
 
 .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='icon'] {
   display: inline-flex;
-  width: 18px;
-  height: 18px;
+  inline-size: 18px;
+  block-size: 18px;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  border-radius: var(--ds-radius-sm, 8px);
+  border-radius: var(--ds-radius-sm);
   color: var(--ds-breadcrumb-link-color, var(--ds-color-primary));
   background: color-mix(in srgb, currentColor 7%, transparent);
 }
 
 .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='separator'] {
-  width: 18px;
-  height: 18px;
+  inline-size: 18px;
+  block-size: 18px;
   justify-content: center;
   color: var(--ds-breadcrumb-separator-color, var(--ds-color-text-tertiary));
   opacity: 0.72;
 }
 
 .rottay-breadcrumb-shell--modern[data-part='root'] [data-ellipsis='true'] [data-part='crumb'] {
-  min-width: 30px;
+  min-inline-size: 30px;
   justify-content: center;
   padding-inline: 7px;
   color: var(--ds-color-text-muted);
@@ -158,8 +194,8 @@
 }
 
 .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: var(--ds-focus-ring-offset, 2px);
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
 }
 
 /* The default separator is a governed NavigationForwardIcon whose facade
@@ -178,7 +214,11 @@
 /* ---- forced colors: every crumb keeps a frame; the current page survives.
         The distinct `[data-current]` attribute (stamped on EVERY crumb) ties
         the (0,4,0) border shorthand -- no repetition -- and this later media
-        block wins on source order. ---- */
+        block wins on source order. The current location fills Highlight (the
+        batch-28 law shared with Pagination's current page and Segmented's
+        selected option); the quiet link underline loses its alpha and reads
+        as a solid system-colored underline, so the interactive affordance
+        survives untouched. ---- */
 @media (forced-colors: active) {
   .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-current] {
     forced-color-adjust: auto;
@@ -186,6 +226,8 @@
   }
 
   .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-current='true'] {
+    background: Highlight;
+    color: HighlightText;
     border-color: Highlight;
   }
 }

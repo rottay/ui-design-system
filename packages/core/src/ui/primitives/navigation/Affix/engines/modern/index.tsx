@@ -18,6 +18,9 @@
  *   empty).
  * - Never hardcode bg/shadow utilities on children: the affixed surface is
  *   token-owned.
+ * - `data-affix-edge` stamps which viewport edge the element pins to
+ *   (`top` by default, `bottom` in offsetBottom mode) so the skin can aim
+ *   the content-facing keyline/hairline at the correct edge (B9 pass 2).
  *
  * @example Modern Engine Usage
  * ```tsx
@@ -311,6 +314,7 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
           className={`rottay-affix rottay-affix--modern ${className}`.trim()}
           style={stickyStyle}
           data-part="root"
+          data-affix-edge={offsetBottom !== undefined ? 'bottom' : 'top'}
         >
           {children}
         </div>
@@ -326,8 +330,10 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
     // The ref callback merges internal and forwarded refs so both the
     // component's measurement logic and parent consumers share the same node.
     // The affixed surface + transition paint is skin-owned (`affix.css`).
+    // P2-20: the placeholder is a stable anatomy region (`data-part`), so the
+    // space reservation is addressable/observable like every other part.
     return (
-      <div ref={placeholderRef} style={state.placeholderStyle}>
+      <div ref={placeholderRef} style={state.placeholderStyle} data-part="placeholder">
         <div
           ref={(node) => {
             (affixRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
@@ -345,6 +351,7 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
           }
           data-part="root"
           data-sticky={state.affixed || undefined}
+          data-affix-edge={offsetBottom !== undefined ? 'bottom' : 'top'}
         >
           {children}
         </div>

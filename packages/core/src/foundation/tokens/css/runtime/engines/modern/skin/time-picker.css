@@ -60,6 +60,29 @@
  * idiom. Non-border paint (background, color, box-shadow, outline,
  * border-radius) and pure `border: none` resets win unlayered at (0,3,0) or a
  * single class.
+ *
+ * B5-03 (Phase B second pass): contract-driven option states + craft.
+ * - Option cells can now be DISABLED (`data-disabled`, from the contract
+ *   `disabledTime`): muted ink via the shared `--ds-disabled-opacity`
+ *   channel + `cursor: not-allowed` (never opacity-only in forced-colors --
+ *   the FC block remaps to GrayText).
+ * - Scroll snap (`proximity`, never `mandatory`): wheel/keyboard scrolling
+ *   settles on a cell instead of parking between two, without trapping the
+ *   scroll port; reduced-motion keeps the instant placement.
+ * - Range trigger gains the governed clear button (contract `allowClear`):
+ *   same opacity-swap idiom as the single picker's.
+ * - Variant frame grammar on the trigger: `filled` (inset well) and
+ *   `borderless` (frame dropped, focus ring + status channels kept).
+ * - `data-part='extra-footer'` carries the contract `renderExtraFooter`
+ *   row with the same hairline grammar as the Now footer.
+ *
+ * P2 (2026-07 second pass): `min-inline-size: 0` on the range trigger pair
+ * (320px flex overflow), the retired `font-size: 16px; line-height: 1`
+ * glyph metrics dropped from the single clear-button (the icon role sizes
+ * itself), the panel is a real `role="dialog"` (the trigger's
+ * `aria-haspopup="dialog"` now resolves), Now-selection returns focus to
+ * the invoking input, and the range separator defaults to the
+ * direction-neutral '~' (the '→' glyph read wrong under RTL).
  */
 
 /* ---- trigger roots (in-tree): layout drained from live Tailwind utilities
@@ -74,7 +97,7 @@
 .rottay-timepicker-range.rottay-timepicker-range--modern[data-part='root'] {
   display: flex;
   align-items: center;
-  gap: var(--ds-spacing-2, 8px);
+  gap: var(--ds-spacing-2);
   inline-size: 100%;
 }
 
@@ -85,7 +108,38 @@
 .rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'],
 .rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'] {
   inline-size: 100%;
+  /* Flex shrink floor (P2): an <input> keeps an intrinsic min-content width,
+     so without this the start/end pair overflows a 320px container instead
+     of narrowing (responsive law, DatePicker range parity). */
+  min-inline-size: 0;
   cursor: pointer;
+  /* Reserve room for the clear + clock suffix wells (geometry drained from
+     the engine's inline `paddingInlineEnd: 48`). */
+  padding-inline-end: 48px;
+}
+
+/* Size steps keyed on the engine-stamped `data-size` (drained from the
+   engine's inline sizeStyleMap). */
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-size='sm'],
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-size='sm'] {
+  block-size: var(--ds-input-sm-height);
+  font-size: var(--ds-input-sm-font-size);
+  padding-block: 4px;
+  padding-inline-start: var(--ds-input-sm-padding-x);
+}
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-size='md'],
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-size='md'] {
+  block-size: var(--ds-input-md-height);
+  font-size: var(--ds-input-md-font-size);
+  padding-block: 6px;
+  padding-inline-start: var(--ds-input-md-padding-x);
+}
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-size='lg'],
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-size='lg'] {
+  block-size: var(--ds-input-lg-height);
+  font-size: var(--ds-input-lg-font-size);
+  padding-block: 8px;
+  padding-inline-start: var(--ds-input-lg-padding-x);
 }
 
 /* ---- trigger (in-tree): base + range share identical rest-state paint ---- */
@@ -140,21 +194,79 @@
         renders neither. ---- */
 
 .rottay-timepicker.rottay-timepicker--modern [data-part='clear-button'] {
+  /* Chrome geometry drained from the engine's inline style (single picker:
+     absolutely positioned inside the trigger, before the clock well). No
+     font-size: the governed close icon sizes itself (the drained `16px/1`
+     pair only existed for the retired '×' text glyph). */
+  position: absolute;
+  inset-inline-end: 28px;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-1);
+  cursor: pointer;
   transform: translateY(-50%);
   background: none;
   border: none;
   border-radius: 50%;
   color: var(--ds-color-text-primary);
   opacity: var(--ds-timepicker-clear-opacity, 0.5);
-  transition: opacity var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .rottay-timepicker.rottay-timepicker--modern [data-part='clear-button']:hover {
   opacity: 1;
 }
 
 .rottay-timepicker.rottay-timepicker--modern [data-part='clock-icon'] {
+  /* Positioning drained from the engine's inline style. */
+  position: absolute;
+  inset-inline-end: 10px;
+  top: 50%;
+  display: flex;
+  pointer-events: none;
   transform: translateY(-50%);
   color: var(--ds-color-text-muted);
+}
+
+/* Range clear-button (B5-03): the contract `allowClear` now reaches the
+   range trigger -- same governed close role and opacity-swap idiom as the
+   single picker, sitting as the flex row's trailing item. */
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='clear-button'] {
+  /* Chrome geometry drained from the engine's inline style. */
+  inline-size: 24px;
+  block-size: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: var(--ds-font-size-xs);
+  cursor: pointer;
+  flex-shrink: 0;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: none;
+  opacity: var(--ds-timepicker-clear-opacity, 0.5);
+  transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='clear-button']:hover {
+  opacity: 1;
+}
+
+/* Variant frame grammar (B5-03): `filled` reads as an inset well; `borderless`
+   drops the frame (the legacy `bordered={false}` alias lands here too) while
+   the focus ring and the error/warning border-color channels keep their own
+   rules. Doubled data-part keeps border-color above the Platform (0,3,1)
+   floor. */
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-variant='filled'],
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-variant='filled'] {
+  background: var(--ds-surface-inset, var(--ds-color-bg-input, var(--ds-surface-control)));
+}
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-part='trigger-input'][data-status][data-variant='borderless'],
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status][data-variant='borderless'] {
+  border-color: transparent;
+  background: transparent;
 }
 
 /* ---------------------------------------------------------------------
@@ -162,39 +274,53 @@
    --------------------------------------------------------------------- */
 
 .rottay-timepicker__panel {
+  /* Geometry drained from the engine's inline panelStyle (B-correction):
+     the portal mounts outside the field's font scope and the entrance
+     animation needs the clip. */
+  font-family: inherit;
+  overflow: hidden;
   /* The dark-aware luminance step is its own layer directly above the fill
      (lane overlay register, dropdown.css idiom): inert until a dark surface
      raises --ds-elevation-lift-strength. */
   background:
     linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3)),
     var(--ds-color-bg-elevated);
-  border-radius: var(--ds-radius-lg, 12px);
+  border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-timepicker-panel-shadow, var(--ds-shadow-popover, var(--ds-card-shadow)));
   /* Skin-owned entrance (drained from inline panelStyle.animation) so the
      reduced-motion block below can govern it; inline styles would win. */
-  animation: ds-time-picker-slide-in var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  animation: ds-time-picker-slide-in var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .rottay-timepicker__panel.rottay-timepicker__panel[data-part='panel'][data-part='panel'] {
   border: 1px solid var(--ds-color-border);
 }
 
-/* column divider: a bare `<div>` with no data-part, always the immediate next
-   sibling of a `[data-part='time-column']` in both the 2-column and 3-column
-   (showSeconds) layouts. */
-.rottay-timepicker__panel [data-part='time-column'] + div {
+/* column divider: a bare `<div data-part='column-divider'>` between the
+   scroll columns (geometry + hairline drained from the engine's inline
+   dividerStyle). */
+.rottay-timepicker__panel [data-part='column-divider'] {
+  inline-size: 1px;
+  flex-shrink: 0;
   background: var(--ds-color-border);
 }
 
 /* Scrollport craft: quiet thin scrollbar and a mask fade at both edges (a
    luminance mask, never a color gradient) so long columns read as scrollable
-   without chrome weight. */
+   without chrome weight. Scroll snap is PROXIMITY (B5-03): wheel/keyboard
+   scrolling settles on a cell instead of parking between two, without ever
+   trapping the port the way a mandatory snap would. Geometry drained from
+   the engine's inline colStyle. */
 .rottay-timepicker__panel [data-part='time-column'] {
+  overflow-y: auto;
+  block-size: var(--ds-time-column-height, 200px);
+  padding: var(--ds-spacing-1) 2px;
   scrollbar-width: var(--ds-timepicker-column-scrollbar-width, thin);
+  scroll-snap-type: y proximity;
   mask-image: linear-gradient(
     to bottom,
     transparent,
-    black var(--ds-spacing-3, 12px),
-    black calc(100% - var(--ds-spacing-3, 12px)),
+    black var(--ds-spacing-3),
+    black calc(100% - var(--ds-spacing-3)),
     transparent
   );
 }
@@ -202,24 +328,69 @@
 .rottay-timepicker__panel.rottay-timepicker__panel [data-part='header'][data-part='header'] {
   border-bottom: 1px solid var(--ds-color-border);
 }
+/* Header layout + labels (geometry drained from the engine's inline
+   headerStyle/labelStyle). */
+.rottay-timepicker__panel [data-part='header'] {
+  display: flex;
+  align-items: center;
+  padding: var(--ds-spacing-2) var(--ds-spacing-3) var(--ds-spacing-1);
+  gap: var(--ds-spacing-2);
+}
+.rottay-timepicker__panel [data-part='column-label'] {
+  font-size: var(--ds-font-size-2xs);
+  text-transform: uppercase;
+  letter-spacing: var(--ds-letter-spacing-wide);
+  text-align: center;
+  flex: 1;
+}
+.rottay-timepicker__panel [data-part='label-separator'] {
+  flex: 0;
+  inline-size: 1px;
+}
+.rottay-timepicker__panel [data-part='columns'] {
+  display: flex;
+  padding: var(--ds-spacing-1);
+}
 /* column-label spans (Hr/Min/Sec + the two zero-width spacer spans) share one
-   color; all are bare `<span>` children of header, no individual data-part.
-   Font weight drained from the inline labelStyle. */
+   color; the data-part hooks above carry the geometry. Font weight drained
+   from the inline labelStyle. */
 .rottay-timepicker__panel [data-part='header'] > span {
   color: var(--ds-color-text-muted);
-  font-weight: var(--ds-font-weight-semibold, 600);
+  font-weight: var(--ds-font-weight-semibold);
 }
 
 .rottay-timepicker__panel [data-part='time-option'] {
-  border-radius: var(--ds-radius-md, 8px);
+  /* Cell geometry drained from the engine's inline itemStyle. */
+  inline-size: 44px;
+  block-size: var(--ds-input-sm-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--ds-input-sm-font-size);
+  cursor: pointer;
+  margin: 1px auto;
+  border-radius: var(--ds-radius-md);
   border: none;
   outline: none;
   background: transparent;
   color: var(--ds-color-text-primary);
   /* Tabular figures keep every column of two-digit options optically aligned. */
   font-variant-numeric: tabular-nums;
+  /* Cells settle on the snap port's center (proximity snap -- see column). */
+  scroll-snap-align: center;
   /* Skin-owned so reduced-motion can silence it (inline would win). */
-  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+/* Disabled option (contract `disabledTime`): muted ink + unmistakable
+   cursor, not just color; the FC block remaps the ink to GrayText. The
+   hover guard repeats the panel class to outrank the generic option hover
+   (a disabled cell never paints the hover wash). */
+.rottay-timepicker__panel [data-part='time-option'][data-disabled='true'] {
+  opacity: var(--ds-disabled-opacity, 0.5);
+  cursor: not-allowed;
+}
+.rottay-timepicker__panel.rottay-timepicker__panel [data-part='time-option'][data-disabled='true']:hover {
+  background: transparent;
 }
 /* Keyboard focus replacement for the suppressed outline. */
 .rottay-timepicker__panel [data-part='time-option']:focus-visible {
@@ -229,7 +400,7 @@
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary, var(--ds-color-white));
   /* Emphasis paint drained from the inline getItemStyle ternary. */
-  font-weight: var(--ds-font-weight-semibold, 600);
+  font-weight: var(--ds-font-weight-semibold);
 }
 .rottay-timepicker__panel [data-part='time-option']:hover:not([data-selected='true']) {
   background: var(--ds-color-bg-hover);
@@ -238,17 +409,41 @@
 .rottay-timepicker__panel.rottay-timepicker__panel [data-part='footer'][data-part='footer'] {
   border-top: 1px solid var(--ds-color-border);
 }
+.rottay-timepicker__panel [data-part='footer'] {
+  padding: var(--ds-spacing-1-5, 6px) var(--ds-spacing-2);
+}
+/* Extra footer (contract renderExtraFooter): consumer content under the
+   picker chrome, same hairline grammar as the Now footer. */
+.rottay-timepicker__panel.rottay-timepicker__panel [data-part='extra-footer'][data-part='extra-footer'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+.rottay-timepicker__panel [data-part='extra-footer'] {
+  padding: var(--ds-spacing-1-5, 6px) var(--ds-spacing-2);
+}
+
+/* Popup shell (portal): positioning is skin-owned; only the measured
+   top/left coordinates stay inline (truly dynamic per open). Scoped via the
+   inner panel class — `data-part='popup'` is shared with map-view. */
+[data-part='popup']:has(> .rottay-timepicker__panel) {
+  position: fixed;
+  z-index: var(--ds-timepicker-z-index, 1050);
+}
 
 /* now-button: primary CTA treatment with the standard hover/focus posture
    (closes the old "static, no hover" gap, same fix as the DatePicker
    today-button). */
 .rottay-timepicker__panel [data-part='now-button'] {
-  border-radius: var(--ds-radius-md, 8px);
+  /* Geometry drained from the engine's inline style. */
+  inline-size: 100%;
+  padding: 4px var(--ds-spacing-3);
+  font-size: var(--ds-font-size-xs);
+  cursor: pointer;
+  border-radius: var(--ds-radius-md);
   border: none;
   background: var(--ds-color-primary);
   color: var(--ds-color-text-on-primary, var(--ds-color-white));
-  font-weight: var(--ds-font-weight-medium, 500);
-  transition: background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  font-weight: var(--ds-font-weight-medium);
+  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .rottay-timepicker__panel [data-part='now-button']:hover {
   background: var(--ds-color-primary-hover, var(--ds-color-primary));
@@ -308,6 +503,7 @@
     animation: none;
   }
   .rottay-timepicker.rottay-timepicker--modern [data-part='clear-button'],
+  .rottay-timepicker-range.rottay-timepicker-range--modern [data-part='clear-button'],
   .rottay-timepicker__panel [data-part='time-option'],
   .rottay-timepicker__panel [data-part='now-button'] {
     transition: none;
@@ -320,6 +516,12 @@
   .rottay-timepicker__panel [data-part='time-option'][data-selected='true'] {
     background: Highlight;
     color: HighlightText;
+  }
+  /* Disabled cells: the forced palette's own GrayText (opacity alone is not
+     a state signal once the palette strips). */
+  .rottay-timepicker__panel [data-part='time-option'][data-disabled='true'] {
+    color: GrayText;
+    opacity: 1;
   }
   .rottay-timepicker__panel [data-part='time-option']:hover:not([data-selected='true']) {
     outline: 1px solid;

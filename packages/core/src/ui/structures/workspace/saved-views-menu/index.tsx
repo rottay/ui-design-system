@@ -785,12 +785,9 @@ function Section({
   return (
     <Box style={{ marginBottom: 12 }}>
       <Flex align="center" justify="between" style={{ padding: '0 6px 8px' }}>
-        <Text
-          data-part="section-header"
-          size="xs"
-        >
+        <Box as="span" data-part="section-header">
           {title}
-        </Text>
+        </Box>
         <CountPill label={String(count)} />
       </Flex>
       <Flex direction="column" gap={8}>

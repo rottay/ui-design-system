@@ -40,7 +40,6 @@
 'use client';
 
 import React from 'react';
-import type { CSSProperties } from 'react';
 import type { MenuItemProps } from '../../contracts';
 
 // ============================================================================
@@ -80,6 +79,11 @@ export function MenuItem({
   children,
   className = '',
   style,
+  'data-part': dataPart,
+  // Caller passthrough (id / aria-* / data-* / data-testid): forwarded to the
+  // item element. It spreads BEFORE the engine's own stamps so the skin
+  // contract (data-part default, role, data-*) always lands last.
+  ...rest
 }: MenuItemProps): React.ReactElement {
   // ========================================================================
   // Event Handlers
@@ -110,37 +114,24 @@ export function MenuItem({
   };
 
   // ========================================================================
-  // Styles
-  // ========================================================================
-
-  /**
-   * CSS styles using CSS variables for theming.
-   */
-  const itemStyle: CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: 'var(--ds-menu-item-gap, 8px)',
-    padding: 'var(--ds-menu-item-padding, 8px 16px)',
-    minHeight: 'var(--ds-menu-item-height, 40px)',
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    opacity: disabled ? 0.5 : 1,
-    transition: 'all 0.2s ease',
-    userSelect: 'none',
-    ...style,
-  };
-
-  // ========================================================================
   // Render
   // ========================================================================
 
+  /* Layout and paint live in `menu-compounds.css` (anchored on the
+     `rottay-menu-item` BEM class); only the caller's own `style` stays
+     inline. The former inline block mixed static paint with a raw
+     `all 0.2s ease` duration and a blanket 0.5 disabled opacity whose text
+     composite measured 3.05:1 (fail) — the skin now owns the motion channels
+     and the AA-legible disabled treatment. */
   return (
     <li
+      {...rest}
       className={`rottay-menu-item ${disabled ? 'rottay-menu-item--disabled' : ''} ${danger ? 'rottay-menu-item--danger' : ''} ${className}`}
-      style={itemStyle}
+      style={style}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       role="menuitem"
-      data-part="item"
+      data-part={dataPart ?? 'item'}
       data-disabled={disabled || undefined}
       data-tone={danger ? 'danger' : undefined}
       tabIndex={disabled ? -1 : 0}

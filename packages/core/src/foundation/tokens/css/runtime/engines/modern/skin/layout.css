@@ -47,6 +47,17 @@
  * (`background`, `color`) and clears preflight unlayered at (0,3,0); each
  * part's own two-class pair + `[data-part='...']` already reaches it.
  * Values transcribed verbatim from `engines/modern.tsx`.
+ *
+ * PHASE-B P2 ADDENDUM (2026-07-31): (1) the RTL `[dir='rtl'] scaleX(-1)` flip
+ * on the sider `trigger-icon` was REMOVED -- both governed trigger roles are
+ * `autoMirror: true`, so the semantic-icon facade already mirrors them under
+ * RTL and the local flip double-mirrored (same defect menu.css /
+ * breadcrumb.css fixed); (2) dead fallbacks on DECLARED channels stripped to
+ * bare `var()` (fallback parity): `--ds-material-panel-background`,
+ * `--ds-material-panel-foreground`, `--ds-material-card-background` inside the
+ * `--ds-layout-sider-*` hook chains, and `--ds-focus-ring-color` on the
+ * trigger focus ring. Undeclared `--ds-layout-*`/`--ds-sidebar-*` hooks keep
+ * their fallbacks -- the fallback IS the hook's contract.
  */
 
 /* ---- header: static token background (was the inline `style`). ---- */
@@ -63,21 +74,18 @@
         own sider surface declaration (TMM: #FFFEFB, BitHire: #fff), and the
         material panel foreground is the coherent ink for it. The light
         branch sets no `color` at all -- an inherited text color, not an
-        omission. ---- */
+        omission. The `--ds-layout-sider-*` names stay undeclared hooks (their
+        fallback chain IS their contract); the `--ds-material-*` channels
+        inside those chains are declared in the default theme, so they go
+        bare (P2 fallback parity -- the stripped fallbacks never fired). ---- */
 .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-theme='dark'] {
-  background: var(
-    --ds-layout-sider-bg,
-    var(--ds-material-panel-background, var(--ds-surface-panel))
-  );
-  color: var(
-    --ds-layout-sider-color,
-    var(--ds-material-panel-foreground, var(--ds-color-text-primary))
-  );
+  background: var(--ds-layout-sider-bg, var(--ds-material-panel-background));
+  color: var(--ds-layout-sider-color, var(--ds-material-panel-foreground));
 }
 .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-theme='light'] {
   background: var(
     --ds-layout-sider-light-bg,
-    var(--ds-layout-sider-bg, var(--ds-material-card-background, var(--ds-surface-card)))
+    var(--ds-layout-sider-bg, var(--ds-material-card-background))
   );
 }
 
@@ -112,8 +120,27 @@
 .rottay-layout.rottay-layout--modern[data-part='root'] {
   display: flex;
   flex-direction: column;
+  /* Ant parity (`flex: auto`): a root that lands INSIDE another flex root (the
+     canonical Sider + Layout composition) grows to fill the remaining cross
+     space instead of shrink-wrapping its widest child. Inert when the root is
+     not a flex item (standalone shell under a block parent), so the
+     standalone case is unchanged. */
+  flex: 1 1 auto;
+  /* A nested root must shrink below its content's max-content instead of
+     forcing the parent shell wider (B1.1 min-inline-size: 0 law). */
+  min-inline-size: 0;
   min-block-size: var(--ds-layout-root-min-block-size, 100vh);
   min-block-size: var(--ds-layout-root-min-block-size, 100dvh);
+}
+/* A layout inside a layout is a REGION, not the shell: the viewport lock
+   yields so stacked chrome (header above, footer below) stays inside the
+   viewport instead of pushing the parent past it. The repeated triple is a
+   real ancestor→descendant relationship (layout-in-layout), not a
+   specificity stack. Inline consumer opt-back-in (e.g. the stories'
+   `minHeight`) still wins. */
+.rottay-layout.rottay-layout--modern[data-part='root']
+  .rottay-layout.rottay-layout--modern[data-part='root'] {
+  min-block-size: 0;
 }
 /* With a sider the shell goes row and COLLAPSES BY CONTENT, not by viewport:
    no width-driven query (the audit's viewportMqInSkins law). The content asks
@@ -138,7 +165,7 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  padding-inline: var(--ds-layout-header-padding-inline, var(--ds-spacing-4, 16px));
+  padding-inline: var(--ds-layout-header-padding-inline, var(--ds-spacing-4));
 }
 
 /* ---- sider: no shrink, own scroll, token-motion collapse transition. The
@@ -149,8 +176,16 @@
 .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] {
   flex-shrink: 0;
   overflow-block: auto;
-  transition: width var(--ds-layout-sider-collapse-duration, var(--ds-motion-slow, 320ms))
+  transition: width var(--ds-layout-sider-collapse-duration, var(--ds-motion-slow))
     var(--ds-layout-sider-collapse-timing, var(--ds-motion-ease-out));
+}
+/* Collapsed rail: wide nav content must not bleed past the narrowed inline
+   edge over the content area (inline overflow is `visible` by default under
+   `overflow-block: auto`). Scoped to the collapsed state only, so expanded
+   focus rings and intentional overflow survive untouched; the attribute
+   flips at gesture start, so the clip also covers the collapse transition. */
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-collapsed='true'] {
+  overflow-inline: hidden;
 }
 
 /* ---- sider collapse-trigger: sizing + interaction cursor (was a 32px
@@ -163,9 +198,9 @@
   justify-content: center;
   inline-size: 100%;
   block-size: var(--ds-layout-sider-trigger-block-size, 32px);
-  padding-inline: var(--ds-spacing-3, 12px);
-  margin-block-start: var(--ds-spacing-2, 8px);
-  font-size: var(--ds-layout-sider-trigger-font-size, 13px);
+  padding-inline: var(--ds-spacing-3);
+  margin-block-start: var(--ds-spacing-2);
+  font-size: var(--ds-layout-sider-trigger-font-size, var(--ds-font-size-sm));
   cursor: pointer;
   transition:
     color var(--ds-motion-fast) var(--ds-motion-ease-out),
@@ -185,16 +220,20 @@
 }
 
 .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
-  outline-offset: calc(-1 * var(--ds-focus-ring-offset, 2px));
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color);
+  outline-offset: calc(-1 * var(--ds-focus-ring-offset));
 }
 
 /* The collapse/expand glyph is directional: in RTL the sider sits at the
-   inline-end, so the arrow mirrors (the skin owns the flip; the engine only
-   stamps the part). */
-[dir='rtl'] .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger-icon'] {
-  transform: scaleX(-1);
-}
+   inline-end, so the arrow must mirror -- and it does, through the
+   semantic-icon facade (`semantic-icon.css`:
+   `.rottay-semantic-icon[data-icon-mirrored='auto']:dir(rtl)`). Both
+   NavigationBackIcon and NavigationForwardIcon are `autoMirror: true`
+   generated roles, so this family declares NO flip of its own: the former
+   `[dir='rtl'] scaleX(-1)` rule on `trigger-icon` double-mirrored the
+   facade's auto-mirror and left the glyph pointing the LTR way under RTL
+   (the exact defect menu.css and breadcrumb.css document). A
+   consumer-supplied custom `trigger` node owns its own RTL posture. */
 
 @media (prefers-reduced-motion: reduce) {
   .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'],
@@ -210,11 +249,31 @@
 }
 
 /* Forced colors: the shell's cut lines and the collapse affordance must
-   survive color stripping -- sider hairline on the content edge, a bordered
-   trigger, and a Highlight focus ring. System colors only. */
+   survive color stripping -- sider hairline on the content edge, header/footer
+   cut lines on their content-facing edges, a bordered trigger, and a
+   Highlight focus ring. System colors only. */
 @media (forced-colors: active) {
   .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] {
     border-inline-end: 1px solid ButtonText;
+  }
+
+  /* RTL mirrors the sider to the inline-end, so its content-facing edge is
+     the inline-START one; move the hairline there. */
+  [dir='rtl'] .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] {
+    border-inline-end: 0;
+    border-inline-start: 1px solid ButtonText;
+  }
+
+  /* Header/footer paint `--ds-surface-inset`, which color stripping removes;
+     without a cut line both regions merge with the content. Their
+     content-facing edges (block-end / block-start) are composition-order
+     independent, unlike the sider's. */
+  .rottay-layout-header.rottay-layout-header--modern[data-part='header'] {
+    border-block-end: 1px solid ButtonText;
+  }
+
+  .rottay-layout-footer.rottay-layout-footer--modern[data-part='footer'] {
+    border-block-start: 1px solid ButtonText;
   }
 
   .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger'] {
@@ -231,38 +290,38 @@
 .rottay-layout-content.rottay-layout-content--modern[data-part='content'] {
   flex: 1 1 0%;
   min-inline-size: 0;
-  padding: var(--ds-layout-content-padding, var(--ds-spacing-4, 16px));
+  padding: var(--ds-layout-content-padding, var(--ds-spacing-4));
   overflow: auto;
 }
 
 /* ---- footer: no shrink, spacing rhythm. ---- */
 .rottay-layout-footer.rottay-layout-footer--modern[data-part='footer'] {
   flex-shrink: 0;
-  padding-inline: var(--ds-layout-footer-padding-inline, var(--ds-spacing-4, 16px));
-  padding-block: var(--ds-layout-footer-padding-block, var(--ds-spacing-2, 8px));
+  padding-inline: var(--ds-layout-footer-padding-inline, var(--ds-spacing-4));
+  padding-block: var(--ds-layout-footer-padding-block, var(--ds-spacing-2));
 }
 
 /* ---- Box: token radius/shadow selected by engine-stamped attributes. ---- */
 .rottay-box.rottay-box--modern[data-radius='xs'] {
-  border-radius: var(--ds-radius-xs, 0.1875rem);
+  border-radius: var(--ds-radius-xs);
 }
 .rottay-box.rottay-box--modern[data-radius='sm'] {
-  border-radius: var(--ds-radius-sm, 0.375rem);
+  border-radius: var(--ds-radius-sm);
 }
 .rottay-box.rottay-box--modern[data-radius='md'] {
-  border-radius: var(--ds-radius-md, 0.5rem);
+  border-radius: var(--ds-radius-md);
 }
 .rottay-box.rottay-box--modern[data-radius='lg'] {
-  border-radius: var(--ds-radius-lg, 0.75rem);
+  border-radius: var(--ds-radius-lg);
 }
 .rottay-box.rottay-box--modern[data-radius='xl'] {
-  border-radius: var(--ds-radius-xl, 1rem);
+  border-radius: var(--ds-radius-xl);
 }
 .rottay-box.rottay-box--modern[data-radius='2xl'] {
-  border-radius: var(--ds-radius-2xl, 1.25rem);
+  border-radius: var(--ds-radius-2xl);
 }
 .rottay-box.rottay-box--modern[data-radius='full'] {
-  border-radius: var(--ds-radius-full, 9999px);
+  border-radius: var(--ds-radius-full);
 }
 
 /* Shadows ride the DS elevation scale only -- the tenant re-themes depth from
@@ -311,18 +370,18 @@
 
 /* sidebar panel: the wide, comfortable default; roomy item rhythm, left-read. */
 [data-anatomy-sidebar='panel'] .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] {
-  --ds-sidebar-item-padding-inline: var(--ds-spacing-3, 12px);
-  --ds-sidebar-item-gap: var(--ds-spacing-2, 8px);
-  padding-inline: var(--ds-sidebar-shell-padding-inline, var(--ds-spacing-2, 8px));
+  --ds-sidebar-item-padding-inline: var(--ds-spacing-3);
+  --ds-sidebar-item-gap: var(--ds-spacing-2);
+  padding-inline: var(--ds-sidebar-shell-padding-inline, var(--ds-spacing-2));
 }
 
 /* sidebar rail: narrow, icon-first; tight rhythm, centred, best-effort width. */
 [data-anatomy-sidebar='rail'] .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] {
   --ds-sidebar-item-padding-inline: 0px;
-  --ds-sidebar-item-gap: var(--ds-spacing-1, 4px);
+  --ds-sidebar-item-gap: var(--ds-spacing-1);
   align-items: center;
   text-align: center;
-  padding-inline: var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-1, 4px));
+  padding-inline: var(--ds-sidebar-shell-padding-collapsed, var(--ds-spacing-1));
   inline-size: var(--ds-sidebar-collapsed-width, 68px);
 }
 
@@ -337,7 +396,7 @@
 /* layout floating: the shell header lifts into an inset, rounded, elevated card. */
 [data-anatomy-layout='floating'] .rottay-layout-header.rottay-layout-header--modern[data-part='header'] {
   border-bottom: 0;
-  border-radius: var(--ds-radius-lg, 12px);
+  border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-2);
-  margin: var(--ds-spacing-2, 8px);
+  margin: var(--ds-spacing-2);
 }

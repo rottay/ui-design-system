@@ -1,9 +1,21 @@
 'use client';
 
 /**
- * @fileoverview TreeSelect Modern Engine -- DaisyUI/Tailwind implementation for
- * the Rottay Design System. Renders a fully custom tree dropdown using Tailwind
- * utility classes, with no dependency on Ant Design's rc-tree.
+ * @fileoverview TreeSelect Modern Engine -- token implementation for the
+ * Rottay Design System. Renders a fully custom tree dropdown with no
+ * dependency on Ant Design's rc-tree. Paint and static geometry are owned by
+ * the modern skin (`skin/tree-select.css`) keyed on `data-part`/`data-*`
+ * hooks; the only inline geometry left is the sanctioned per-level indent
+ * calc (runtime value over governed channels).
+ *
+ * B6-02 (Phase B premium pass): the engine now consumes the contract's
+ * `loading` (governed Spinner posture inside the panel), `status`
+ * (error/warning frame on the trigger), `maxTagCount` (numeric overflow
+ * marker; 'responsive' documented as debt) and `popupClassName`; the
+ * keyboard contract gained APG roving tabindex + typeahead (Tree B4-04
+ * idioms); a zero-results search renders the empty state instead of a blank
+ * tree; the trigger links the popup via `aria-controls` and multi-select
+ * trees stamp `aria-multiselectable`.
  *
  * @example
  * ```tsx
@@ -14,7 +26,7 @@
  * @category Inputs
  * @package @rottay/design-system
  */
-import React, { useState, useRef, useEffect, useCallback, useMemo, type ReactNode } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, useId, type ReactNode } from 'react';
 import type { TreeSelectProps, TreeSelectNode, TreeSelectValue } from '../../contracts';
 import { TREESELECT_DEFAULTS } from '../../contracts';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
@@ -22,6 +34,7 @@ import { toLegacySize } from '../../../../../../foundation/contracts/kernel/comm
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+import { LoadingIndicator } from '../../../../foundation/loading-indicator';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -134,6 +147,47 @@ function defaultFilterFn(inputValue: string, node: TreeSelectNode): boolean {
   return title.toLowerCase().includes(inputValue.toLowerCase());
 }
 
+/**
+ * Search visibility walk — MUST mirror TreeNode's own filter rule exactly
+ * (a node renders when it self-matches or any descendant matches). Shared
+ * by the roving-tabindex key list and the zero-results empty state so the
+ * keyboard model and the rendered rows never diverge.
+ */
+function nodeMatchesFilter(
+  node: TreeSelectNode,
+  searchValue: string,
+  filterFn: (inputValue: string, treeNode: TreeSelectNode) => boolean
+): boolean {
+  if (filterFn(searchValue, node)) return true;
+  return (node.children ?? []).some((child) => nodeMatchesFilter(child, searchValue, filterFn));
+}
+
+/**
+ * Keys of the rows the keyboard can land on, in DOM order: visible under
+ * the active filter, not disabled, descendants only while expanded (a
+ * collapsed parent's subtree is not rendered). Backs the roving tabindex.
+ */
+function collectTabbableKeys(
+  nodes: TreeSelectNode[],
+  expandedKeys: Set<string | number>,
+  searchValue: string,
+  filterFn: ((inputValue: string, treeNode: TreeSelectNode) => boolean) | null
+): (string | number)[] {
+  const keys: (string | number)[] = [];
+  const walk = (list: TreeSelectNode[]) => {
+    for (const node of list) {
+      if (searchValue && filterFn && !nodeMatchesFilter(node, searchValue, filterFn)) continue;
+      const key = node.key ?? node.value;
+      if (!node.disabled) keys.push(key);
+      if (node.children && node.children.length > 0 && expandedKeys.has(key)) {
+        walk(node.children);
+      }
+    }
+  };
+  walk(nodes);
+  return keys;
+}
+
 // ---------------------------------------------------------------------------
 // TreeNode component
 // ---------------------------------------------------------------------------
@@ -152,6 +206,10 @@ interface TreeNodeProps {
   loadingKeys: Set<string | number>;
   searchValue: string;
   filterFn: ((inputValue: string, treeNode: TreeSelectNode) => boolean) | null;
+  /** APG roving tabindex: the single key currently in the tab order. */
+  rovingKey: string | number | null;
+  /** Syncs the roving key when a row takes focus (pointer or keyboard). */
+  onRovingFocus: (key: string | number) => void;
 }
 
 /** Renders a single tree node row with expand toggle, optional checkbox, and
@@ -171,6 +229,8 @@ const TreeNode: React.FC<TreeNodeProps> = ({
   loadingKeys,
   searchValue,
   filterFn,
+  rovingKey,
+  onRovingFocus,
 }) => {
   const { t } = useTranslation('components');
   const key = node.key ?? node.value;
@@ -228,8 +288,10 @@ const TreeNode: React.FC<TreeNodeProps> = ({
       <div
         style={{
           // Logical indent (RTL flips it free) riding the governed channels:
-          // per-level step + base offset, all skin-tunable.
-          paddingInlineStart: `calc(${level} * var(--ds-tree-select-indent, 16px) + var(--ds-spacing-2, 8px))`,
+          // per-level step + base offset, all skin-tunable. The step scales
+          // with the density channel (Tree B4-04 idiom) so deep trees in
+          // compact mode do not waste the panel's inline track.
+          paddingInlineStart: `calc(${level} * var(--ds-tree-select-indent, 16px) * var(--ds-density-effective-scale, 1) + var(--ds-spacing-2, 8px))`,
         }}
         onClick={() => !node.disabled && onSelect(node)}
         data-part="option"
@@ -245,7 +307,10 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         aria-level={level + 1}
         aria-disabled={node.disabled || undefined}
         aria-checked={checkable ? (isIndeterminate ? 'mixed' : isSelected) : undefined}
-        tabIndex={node.disabled ? -1 : 0}
+        tabIndex={!node.disabled && key === rovingKey ? 0 : -1}
+        onFocus={() => {
+          if (!node.disabled) onRovingFocus(key);
+        }}
         onKeyDown={(e) => {
           if ((e.key === 'Enter' || e.key === ' ') && !node.disabled) {
             e.preventDefault();
@@ -257,7 +322,6 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         {!isLeaf ? (
           <button
             type="button"
-            style={{ height: 24, padding: '0 var(--ds-spacing-2, 8px)', fontSize: 'var(--ds-font-size-xs, 12px)', cursor: 'pointer', marginInlineEnd: 'var(--ds-spacing-1, 4px)' }}
             onClick={handleExpand}
             data-part="tree-node-toggle"
             aria-label={isExpanded ? t('treeselect.collapse') : t('treeselect.expand')}
@@ -283,11 +347,6 @@ const TreeNode: React.FC<TreeNodeProps> = ({
           <input
             type="checkbox"
             data-part="option-icon"
-            style={{
-              width: 16,
-              height: 16,
-              cursor: node.disabled || node.disableCheckbox ? 'not-allowed' : 'pointer',
-            }}
             checked={isSelected}
             ref={(el) => { if (el) el.indeterminate = isIndeterminate; }}
             disabled={node.disabled || node.disableCheckbox}
@@ -317,6 +376,8 @@ const TreeNode: React.FC<TreeNodeProps> = ({
               loadingKeys={loadingKeys}
               searchValue={searchValue}
               filterFn={filterFn}
+              rovingKey={rovingKey}
+              onRovingFocus={onRovingFocus}
             />
           ))}
         </ul>
@@ -362,6 +423,9 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       disabled,
       allowClear = TREESELECT_DEFAULTS.allowClear,
       size: sizeProp = TREESELECT_DEFAULTS.size,
+      maxTagCount,
+      status,
+      loading,
       notFoundContent,
       open: controlledOpen,
       onDropdownVisibleChange,
@@ -370,10 +434,11 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       loadData,
       className,
       style,
+      popupClassName,
     } = props;
 
-    // getSizeStyle's switch below is keyed by the legacy 'small' | 'middle' | 'large'
-    // spelling; toLegacySize resolves either spelling to it.
+    // The skin's data-size rules are keyed by the legacy 'small' | 'middle' |
+    // 'large' spelling; toLegacySize resolves either spelling to it.
     const size = toLegacySize(sizeProp);
 
     const displayPlaceholder = placeholder ?? t('treeselect.placeholder');
@@ -414,6 +479,14 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
     const [internalOpen, setInternalOpen] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const [loadingKeys, setLoadingKeys] = useState<Set<string | number>>(new Set());
+    /** APG roving tabindex: the one row in the tab order (Tree B4-04 idiom). */
+    const [rovingKey, setRovingKey] = useState<string | number | null>(null);
+    /** Typeahead rolling buffer (500ms window, Tree B4-04 cadence). */
+    const typeaheadBufferRef = useRef('');
+    const typeaheadAtRef = useRef(0);
+    /** Trigger↔popup linkage (aria-controls lives on the dropdown shell: the
+     *  tree unmounts under the empty/loading branches, the shell does not). */
+    const dropdownId = useId();
 
     const isControlled = controlledValue !== undefined;
     const selectedKeys = isControlled ? normalizeValue(controlledValue) : internalValue;
@@ -421,6 +494,27 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
     const expandedKeys = controlledExpandedKeys !== undefined
       ? new Set(controlledExpandedKeys)
       : internalExpandedKeys;
+
+    // Roving tabindex: the rows the keyboard can land on (DOM order), and the
+    // effective roving row — the tracked one while it is still rendered, else
+    // the first selected row, else the first row. Tab always lands somewhere
+    // meaningful, even after a search re-filters the tree.
+    const tabbableKeys = useMemo(
+      () => collectTabbableKeys(treeData, expandedKeys, searchValue, filterFn),
+      [treeData, expandedKeys, searchValue, filterFn]
+    );
+    const effectiveRovingKey = useMemo(() => {
+      if (rovingKey !== null && tabbableKeys.includes(rovingKey)) return rovingKey;
+      const firstSelected = tabbableKeys.find((k) => selectedKeys.has(k));
+      return firstSelected ?? tabbableKeys[0] ?? null;
+    }, [rovingKey, tabbableKeys, selectedKeys]);
+
+    // A zero-results search must render the empty state, not a blank <ul>
+    // (B2.3: no state becomes an unstructured blank box).
+    const hasVisibleNodes = useMemo(() => {
+      if (!searchValue || !filterFn) return treeData.length > 0;
+      return treeData.some((n) => nodeMatchesFilter(n, searchValue, filterFn));
+    }, [treeData, searchValue, filterFn]);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
@@ -451,10 +545,15 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       }
     }, [controlledOpen, onDropdownVisibleChange]);
 
-    // Focus search on open
+    // Focus search on open. The dropdown mounts in the SAME commit that
+    // flips `isOpen`, so the input ref is already populated when this
+    // post-commit effect runs -- the former `setTimeout(50)` was an unsynced
+    // fixed delay (P0 law: no const-ms timers), not mount synchronization,
+    // and it could fire after the dropdown had already closed (the ref read
+    // silently no-oped). Focus lands on open, never on an animation frame.
     useEffect(() => {
       if (isOpen && showSearch) {
-        setTimeout(() => searchInputRef.current?.focus(), 50);
+        searchInputRef.current?.focus();
       }
     }, [isOpen, showSearch]);
 
@@ -591,6 +690,42 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
         return;
       }
 
+      // APG typeahead (Tree B4-04 idiom): printable characters — Space
+      // excluded, it toggles selection — move focus to the next visible row
+      // whose label starts with the rolling 500ms buffer. A buffer that is
+      // still growing matches from the CURRENT row (it may be the only
+      // match); a fresh character starts from the next one; a buffer that
+      // stopped matching restarts from the fresh character, which cycles
+      // repeated letters across same-initial rows.
+      if (e.key.length === 1 && e.key !== ' ' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        const now = Date.now();
+        const extending =
+          now - typeaheadAtRef.current < 500 && typeaheadBufferRef.current.length > 0;
+        let buffer = (extending ? typeaheadBufferRef.current : '') + e.key.toLowerCase();
+        typeaheadAtRef.current = now;
+        const labels = rows.map((r) =>
+          (r.querySelector('[data-part="tree-node-label"]')?.textContent ?? '').trim().toLowerCase()
+        );
+        const findMatch = (needle: string, offset: number): number => {
+          for (let i = 0; i < rows.length; i += 1) {
+            const idx = (currentIndex + offset + i) % rows.length;
+            if (labels[idx]?.startsWith(needle)) return idx;
+          }
+          return -1;
+        };
+        let match = findMatch(buffer, extending ? 0 : 1);
+        if (match < 0 && buffer.length > 1) {
+          buffer = e.key.toLowerCase();
+          match = findMatch(buffer, 1);
+        }
+        typeaheadBufferRef.current = buffer;
+        if (match >= 0) {
+          e.preventDefault();
+          rows[match]?.focus();
+        }
+        return;
+      }
+
       const rtl = isRtl(row);
       const forwardKey = rtl ? 'ArrowLeft' : 'ArrowRight';
       const backwardKey = rtl ? 'ArrowRight' : 'ArrowLeft';
@@ -638,31 +773,45 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen, handleOpenChange]);
 
-    const getDisplayValue = (): string => {
-      if (selectedKeys.size === 0) return '';
-      const findTitle = (nodes: TreeSelectNode[], value: string | number): ReactNode => {
-        for (const node of nodes) {
-          if (node.value === value) return node.title;
-          if (node.children) {
-            const found = findTitle(node.children, value);
-            if (found) return found;
-          }
+    const findTitle = (nodes: TreeSelectNode[], value: string | number): ReactNode => {
+      for (const node of nodes) {
+        if (node.value === value) return node.title;
+        if (node.children) {
+          const found = findTitle(node.children, value);
+          if (found) return found;
         }
-        return null;
-      };
-
-      const titles = Array.from(selectedKeys)
-        .map((v) => findTitle(treeData, v))
-        .filter(Boolean);
-      return titles.join(', ');
+      }
+      return null;
     };
 
-    const getSizeStyle = (): React.CSSProperties => {
-      switch (size) {
-        case 'small': return { height: 'var(--ds-input-sm-height, 32px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', padding: '4px var(--ds-input-sm-padding-x, 10px)' };
-        case 'large': return { height: 'var(--ds-input-lg-height, 44px)', fontSize: 'var(--ds-input-lg-font-size, 15px)', padding: '8px var(--ds-input-lg-padding-x, 14px)' };
-        default: return { height: 'var(--ds-input-md-height, 40px)', fontSize: 'var(--ds-input-md-font-size, 14px)', padding: '6px var(--ds-input-md-padding-x, 12px)' };
+    const selectedTitles = Array.from(selectedKeys)
+      .map((v) => findTitle(treeData, v))
+      .filter(Boolean)
+      .map((t) => String(t));
+
+    /** Full joined selection — the accessible full-value affordance for both
+     *  the CSS ellipsis and the maxTagCount truncation (native `title`). */
+    const fullDisplayValue = selectedTitles.join(', ');
+
+    /**
+     * Contract `maxTagCount`: past the cap, the trigger shows the first N
+     * titles plus a numeric overflow marker (`+k` — locale-safe, no copy).
+     * The 'responsive' spelling is documented as unimplemented (debt): no
+     * measurement machinery exists in this engine.
+     */
+    const getDisplayValue = (): string => {
+      if (selectedKeys.size === 0) return '';
+      if (
+        (multiple || treeCheckable) &&
+        typeof maxTagCount === 'number' &&
+        maxTagCount >= 0 &&
+        selectedTitles.length > maxTagCount
+      ) {
+        const shown = selectedTitles.slice(0, maxTagCount);
+        const overflow = `+${selectedTitles.length - maxTagCount}`;
+        return shown.length > 0 ? `${shown.join(', ')} ${overflow}` : overflow;
       }
+      return fullDisplayValue;
     };
 
     return (
@@ -675,13 +824,10 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
         className={`ds-tree-select ds-tree-select--modern ${className || ''}`}
         style={style}
         data-part="root"
+        data-loading={loading || undefined}
       >
         <div
           ref={triggerRef}
-          style={{
-            boxSizing: 'border-box',
-            ...getSizeStyle(),
-          }}
           onClick={() => !disabled && handleOpenChange(!isOpen)}
           onKeyDown={(e) => {
             if (disabled) return;
@@ -694,17 +840,21 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
             }
           }}
           data-part="trigger"
+          data-size={size}
+          data-status={status || undefined}
           data-open={isOpen || undefined}
           data-disabled={disabled || undefined}
           role="combobox"
           aria-expanded={isOpen}
           aria-haspopup="tree"
+          aria-controls={isOpen ? dropdownId : undefined}
           aria-label={displayPlaceholder}
           aria-disabled={disabled || undefined}
           tabIndex={disabled ? -1 : 0}
         >
           <span
             data-part={selectedKeys.size > 0 ? 'value' : 'placeholder'}
+            title={selectedKeys.size > 0 ? fullDisplayValue : undefined}
           >
             {selectedKeys.size > 0 ? getDisplayValue() : displayPlaceholder}
           </span>
@@ -716,9 +866,10 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
 
         {/* Clear lives OUTSIDE the combobox trigger (APG: no nested
             interactives); the skin overlays it at the trigger's inline end.
-            The `sr-only` ✕ text is a test-pinned bridge (engine-advanced
-            queries the clear button by its text content); the visible
-            affordance is the governed icon. */}
+            The affordance is the governed ActionClose role with a localized
+            aria-label (the former sr-only `✕` text bridge was retired in
+            the second pass; the engine-advanced query that looked for it is
+            queued for a Codex repin). */}
         {allowClear && selectedKeys.size > 0 && !disabled && (
           <button
             type="button"
@@ -727,7 +878,6 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
             aria-label={t('treeselect.clear')}
           >
             <ActionCloseIcon decorative size={12} />
-            <span className="sr-only" aria-hidden="true">✕</span>
           </button>
         )}
 
@@ -735,7 +885,14 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
           /* The dropdown is a plain container (no role): APG forbids
              interactive content inside a listbox, so the search input sits
              OUTSIDE the tree, and the tree itself owns the roles. */
-          <div data-part="dropdown" ref={dropdownRef} onKeyDown={handleDropdownKeyDown}>
+          <div
+            data-part="dropdown"
+            ref={dropdownRef}
+            onKeyDown={handleDropdownKeyDown}
+            id={dropdownId}
+            className={popupClassName || undefined}
+            aria-busy={loading || undefined}
+          >
             {/* Search input */}
             {showSearch && (
               <div data-part="search-input-wrapper">
@@ -743,21 +900,28 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
                   ref={searchInputRef}
                   type="text"
                   data-part="search-input"
-                  style={{
-                    padding: '4px var(--ds-input-sm-padding-x, 10px)',
-                    fontSize: 'var(--ds-input-sm-font-size, 13px)',
-                    height: 'var(--ds-input-sm-height, 32px)',
-                    boxSizing: 'border-box',
-                  }}
                   placeholder={t('treeselect.search_placeholder')}
+                  aria-label={t('treeselect.search_placeholder')}
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   onClick={(e) => e.stopPropagation()}
                 />
               </div>
             )}
-            {treeData.length > 0 ? (
-              <ul data-part="tree-list" role="tree" aria-label={displayPlaceholder}>
+            {/* Contract `loading`: the governed Spinner keeps the panel's
+                spatial contract while data streams (Select loading-state
+                grammar); it replaces the tree, never stacks above it. */}
+            {loading ? (
+              <div data-part="loading-state">
+                <LoadingIndicator size="sm" />
+              </div>
+            ) : hasVisibleNodes ? (
+              <ul
+                data-part="tree-list"
+                role="tree"
+                aria-label={displayPlaceholder}
+                aria-multiselectable={(multiple || treeCheckable) || undefined}
+              >
                 {treeData.map((node) => (
                   <TreeNode
                     key={node.key ?? node.value}
@@ -774,6 +938,8 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
                     loadingKeys={loadingKeys}
                     searchValue={searchValue}
                     filterFn={filterFn}
+                    rovingKey={effectiveRovingKey}
+                    onRovingFocus={setRovingKey}
                   />
                 ))}
               </ul>

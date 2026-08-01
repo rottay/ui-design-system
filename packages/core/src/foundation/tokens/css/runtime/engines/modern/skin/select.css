@@ -26,6 +26,20 @@
  *
  * Native and custom branches share one visual language; the popup is portaled
  * and owns a standalone anatomy (`.ds-select-shell__dropdown`).
+ *
+ * SECOND PREMIUM PASS (Phase B, 2026-07-31):
+ * - Density: trigger, option row, search row and tag heights ride the
+ *   governed `--ds-density-effective-scale` channel (the Input/Button skin
+ *   idiom), so compact/comfortable/spacious tenant postures compose instead
+ *   of leaving Select frozen at comfortable.
+ * - Loading anatomy: both trigger branches announce through a `role="status"`
+ *   wrapper (`loading` native / `loading-status` custom) with a visually
+ *   hidden `loading-label`; the portaled panel renders a `loading-state`
+ *   posture with the same spatial contract as `empty` (never a bare spinner,
+ *   never a false "no options").
+ * - Keyboard completeness lives in the engine (type-ahead, Space to select,
+ *   Backspace tag peel, PageUp/PageDown, focused-row scroll into view); the
+ *   skin only has to keep `[data-active]` visually distinct at every density.
  */
 
 @keyframes ds-select-appear {
@@ -54,10 +68,15 @@
   inline-size: 100%;
   min-inline-size: 0;
   align-items: center;
-  gap: var(--ds-select-trigger-gap, var(--ds-spacing-2, 8px));
-  min-block-size: var(
-    --ds-select-trigger-responsive-height,
-    var(--ds-select-trigger-height, 36px)
+  gap: var(--ds-select-trigger-gap, var(--ds-spacing-2));
+  /* Density: the tenant density axis scales the control height like every
+     other input sibling (Input/Button/textarea idiom); the 44px coarse
+     pointer floor below still wins. */
+  min-block-size: calc(
+    var(
+      --ds-select-trigger-responsive-height,
+      var(--ds-select-trigger-height, 36px)
+    ) * var(--ds-density-effective-scale)
   );
   padding-inline: var(
     --ds-select-trigger-responsive-padding-x,
@@ -79,10 +98,10 @@
   cursor: pointer;
   outline: none;
   transition:
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 /* The custom branch is a plain div and lays its parts out with flex; the
@@ -93,7 +112,7 @@
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-part='trigger'],
 .ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-part='trigger'] {
-  border: var(--ds-select-border-width, 1px) solid
+  border: var(--ds-select-border-width) solid
     var(--ds-select-border-color, var(--ds-color-border));
 }
 
@@ -178,7 +197,7 @@
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-variant='flushed'] {
   padding-inline: 0;
   background: transparent;
-  border-width: 0 0 var(--ds-select-border-width, 1px);
+  border-width: 0 0 var(--ds-select-border-width);
   border-radius: 0;
   box-shadow: none;
 }
@@ -195,6 +214,12 @@
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='success'] {
   border-color: var(--ds-select-success-border, var(--ds-color-success));
+  /* Surface parity with error/warning (P2): their bg hooks predate the
+     naming law, so the new axis rides a prototoken instead. */
+  background: var(
+    --_ds-proto-select-success-bg,
+    var(--ds-select-bg, var(--ds-surface-control))
+  );
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-disabled='true'] [data-part='trigger'],
@@ -235,7 +260,7 @@
   min-inline-size: 0;
   overflow: hidden;
   color: var(--ds-select-color, var(--ds-color-text-primary));
-  font-weight: var(--ds-select-value-font-weight, var(--ds-font-weight-medium, 500));
+  font-weight: var(--ds-select-value-font-weight, var(--ds-font-weight-medium));
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -253,19 +278,19 @@
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag'],
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-count'] {
   display: inline-flex;
-  min-block-size: 1.42rem;
+  min-block-size: calc(1.42rem * var(--ds-density-effective-scale));
   max-inline-size: var(--ds-select-tag-max-width, 10rem);
   padding: 0.08rem 0.4rem;
   align-items: center;
   gap: 0.28rem;
   color: var(--ds-select-tag-color, var(--ds-color-text-primary));
-  border-radius: var(--ds-select-tag-radius, var(--ds-radius-sm, 6px));
+  border-radius: var(--ds-select-tag-radius, var(--ds-radius-sm));
   background: var(
     --ds-select-tag-bg,
     color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card))
   );
-  font-size: var(--ds-font-size-xs, 0.75rem);
-  font-weight: var(--ds-font-weight-medium, 500);
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-medium);
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
 }
@@ -304,10 +329,10 @@
   background: transparent;
   cursor: pointer;
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove'][data-part='tag-remove'],
@@ -340,8 +365,8 @@
   color: var(--ds-select-arrow-color, var(--ds-color-text-muted));
   transform: rotate(var(--ds-select-arrow-rotate, 0deg));
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-open='true'] [data-part='arrow-icon'] {
@@ -377,10 +402,32 @@
   pointer-events: none;
 }
 
+/* Custom branch: the status wrapper stays in the trigger-actions flex flow
+   (the absolute parking above is native-only). */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-status'] {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+}
+
+/* Accessible announcement: audible through role="status" on the wrapper,
+   invisible on screen (the Button `accessible-label` idiom). */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-label'] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-spinner'] {
   display: inline-block;
-  inline-size: var(--ds-select-loading-size, 12px);
-  block-size: var(--ds-select-loading-size, 12px);
+  inline-size: var(--ds-select-loading-size);
+  block-size: var(--ds-select-loading-size);
   animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
 }
 
@@ -398,16 +445,16 @@
   isolation: isolate;
   min-inline-size: min(var(--ds-select-dropdown-min-width, 15rem), calc(100vw - 1rem));
   max-inline-size: min(var(--ds-select-dropdown-max-width, 28rem), calc(100vw - 1rem));
-  padding: var(--ds-select-dropdown-padding, 0.42rem);
+  padding: var(--ds-select-dropdown-padding);
   overflow: hidden;
   color: var(--ds-color-text-primary);
   font-family: var(--ds-select-font-family, var(--ds-font-family-base));
-  border-radius: var(--ds-select-dropdown-radius, var(--ds-radius-lg, 12px));
+  border-radius: var(--ds-select-dropdown-radius, var(--ds-radius-lg));
   background: var(--ds-select-dropdown-bg, var(--ds-surface-card));
   box-shadow: var(--ds-select-dropdown-shadow, var(--ds-elevation-3));
   backdrop-filter: var(--ds-select-backdrop-filter, none);
   transform-origin: center top;
-  animation: ds-select-appear var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+  animation: ds-select-appear var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 .ds-select-shell__dropdown.ds-select-shell__dropdown[data-part='dropdown'][data-part='dropdown'] {
@@ -426,17 +473,29 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   gap: 0.55rem;
-  min-block-size: 2.55rem;
+  min-block-size: calc(2.55rem * var(--ds-density-effective-scale));
   margin-block-end: 0.35rem;
   padding: 0.45rem 0.65rem;
   align-items: center;
   color: var(--ds-color-text-secondary);
-  border-radius: var(--ds-select-search-radius, var(--ds-radius-md, 8px));
+  border-radius: var(--ds-select-search-radius, var(--ds-radius-md));
   background: var(--ds-select-search-bg, var(--ds-surface-inset, var(--ds-surface-canvas)));
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'][data-part='search-input-wrapper'] {
   border: 1px solid var(--ds-select-search-border, var(--ds-color-border-subtle));
+}
+
+/* The internal filter field owns no chrome of its own: focus surfaces on the
+   well, mirroring the trigger's border + ring grammar (one focus language). */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input-wrapper']:focus-within {
+  border-color: var(--ds-select-border-color-focus, var(--ds-color-primary));
+  background: var(--ds-select-bg-focus, var(--ds-select-search-bg, var(--ds-surface-inset, var(--ds-surface-canvas))));
+  box-shadow: var(--ds-select-shadow-focus, var(--ds-focus-ring));
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-icon'] {
@@ -495,8 +554,8 @@
   align-items: center;
   color: var(--ds-select-group-color, var(--ds-color-text-muted));
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
-  font-size: var(--ds-font-size-xs, 0.75rem);
-  font-weight: var(--ds-font-weight-semibold, 600);
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-semibold);
   letter-spacing: var(--ds-letter-spacing-wide);
   line-height: 1.2;
   text-transform: uppercase;
@@ -517,13 +576,15 @@
   position: relative;
   display: flex;
   inline-size: 100%;
-  min-block-size: var(--ds-select-option-height, 2.25rem);
+  min-block-size: calc(
+    var(--ds-select-option-height) * var(--ds-density-effective-scale)
+  );
   padding: var(--ds-select-option-padding-y, 0.48rem) var(--ds-select-option-padding-x, 0.62rem);
   align-items: center;
   gap: 0.55rem;
   overflow: hidden;
   color: var(--ds-select-option-color, var(--ds-color-text-secondary));
-  border-radius: var(--ds-select-option-radius, var(--ds-radius-md, 8px));
+  border-radius: var(--ds-select-option-radius, var(--ds-radius-md));
   background: transparent;
   font-family: var(--ds-font-family-base);
   font-size: var(--ds-select-option-font-size, var(--ds-font-size-sm));
@@ -533,9 +594,9 @@
   outline: none;
   user-select: none;
   transition:
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'] {
@@ -562,7 +623,7 @@
     --ds-select-option-bg-selected,
     color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card))
   );
-  font-weight: var(--ds-font-weight-semibold, 600);
+  font-weight: var(--ds-font-weight-semibold);
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-disabled='true'] {
@@ -580,11 +641,11 @@
   block-size: 1.05rem;
   place-items: center;
   color: var(--ds-color-text-on-primary, var(--ds-color-white));
-  border-radius: var(--ds-radius-sm, 6px);
+  border-radius: var(--ds-radius-sm);
   background: var(--ds-surface-card);
   transition:
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-checkbox'][data-part='option-checkbox'] {
@@ -603,10 +664,10 @@
   block-size: var(--ds-select-option-icon-well-size, 1.8rem);
   place-items: center;
   color: var(--ds-color-primary);
-  border-radius: var(--ds-radius-md, 10px);
+  border-radius: var(--ds-radius-md);
   background: color-mix(in srgb, currentColor 7%, transparent);
   transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option']:hover [data-part='option-icon'] {
@@ -631,13 +692,13 @@
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-label'] {
   color: currentColor;
-  font-weight: var(--ds-font-weight-medium, 500);
+  font-weight: var(--ds-font-weight-medium);
 }
 
 .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-description'] {
   color: var(--ds-color-text-muted);
-  font-size: var(--ds-font-size-xs, 0.75rem);
-  font-weight: var(--ds-font-weight-normal, 400);
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-normal);
   line-height: 1.35;
 }
 
@@ -660,7 +721,7 @@
   padding: 1rem;
   place-items: center;
   color: var(--ds-color-text-muted);
-  border-radius: var(--ds-radius-md, 8px);
+  border-radius: var(--ds-radius-md);
   background: var(--ds-select-empty-bg, transparent);
   font-size: var(--ds-font-size-sm);
   line-height: var(--ds-line-height-relaxed);
@@ -671,12 +732,51 @@
   border: 1px dashed var(--ds-select-empty-border, var(--ds-color-border));
 }
 
+/* ---- Loading posture: the empty well's spatial contract, spinner + copy.
+       Async search never flashes "no options" while results stream in. ---- */
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='loading-state'] {
+  display: flex;
+  min-block-size: 4.5rem;
+  padding: 1rem;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-2);
+  color: var(--ds-select-loading-color, var(--ds-color-text-muted));
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-select-empty-bg, transparent);
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-relaxed);
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='loading-state'][data-part='loading-state'] {
+  border: 1px dashed var(--ds-select-empty-border, var(--ds-color-border));
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='loading-state'] [data-part='loading-spinner'] {
+  display: inline-block;
+  flex: none;
+  inline-size: var(--ds-select-loading-size);
+  block-size: var(--ds-select-loading-size);
+  animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
+}
+
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='loading-state'] [data-part='loading-spinner'][data-part='loading-spinner'] {
+  border: 2px solid
+    color-mix(in srgb, var(--ds-color-primary) 28%, var(--ds-color-border));
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
 /* ---- Coarse pointers: the option row meets the touch floor. ---- */
 
 @media (pointer: coarse) {
   .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'] {
     min-block-size: max(
-      var(--ds-select-trigger-responsive-height, var(--ds-select-trigger-height, 36px)),
+      calc(
+        var(--ds-select-trigger-responsive-height, var(--ds-select-trigger-height, 36px)) *
+          var(--ds-density-effective-scale)
+      ),
       var(--ds-select-touch-target-min, 44px)
     );
   }
@@ -694,7 +794,10 @@
   }
 
   .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] {
-    min-block-size: max(var(--ds-select-option-height, 2.25rem), var(--ds-select-touch-target-min, 44px));
+    min-block-size: max(
+      calc(var(--ds-select-option-height) * var(--ds-density-effective-scale)),
+      var(--ds-select-touch-target-min, 44px)
+    );
   }
 }
 
@@ -706,15 +809,17 @@
   .ds-select-shell__dropdown[data-part='dropdown'],
   .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'],
   .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-icon'],
-  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-checkbox'] {
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-checkbox'],
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'] {
     animation: none;
     transition: none;
   }
 
   /* Keep a slowed spin rather than a frozen frame so the loading posture
      stays legible; the duration derives from the motion scale. */
-  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-spinner'] {
-    animation-duration: calc(var(--ds-motion-glacial, 500ms) * 2);
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-spinner'],
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='loading-state'] [data-part='loading-spinner'] {
+    animation-duration: calc(var(--ds-motion-glacial) * 2);
   }
 }
 
@@ -736,7 +841,45 @@
     border-color: GrayText;
   }
 
-  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] {
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag'],
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-count'] {
+    border-color: ButtonText;
+  }
+
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button'],
+  .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove'] {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+  }
+
+  /* Keyboard focus inside the listbox must survive the forced palette: the
+     active option gets the same Highlight grammar as the selected one. */
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'],
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-active='true'] {
     outline: 1px solid Highlight;
+  }
+
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-active='true'] {
+    outline-offset: -1px;
+  }
+
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-checkbox'] {
+    border-color: ButtonText;
+  }
+
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-selected='true'] [data-part='option-checkbox'] {
+    color: HighlightText;
+    border-color: Highlight;
+    background: Highlight;
+  }
+
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-check'] {
+    color: Highlight;
+    background: transparent;
+  }
+
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='empty'],
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='loading-state'] {
+    border-color: ButtonText;
   }
 }

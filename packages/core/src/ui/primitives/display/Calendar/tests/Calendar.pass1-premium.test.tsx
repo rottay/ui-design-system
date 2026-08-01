@@ -276,9 +276,9 @@ describe('Modern Calendar remediation (K4-B)', () => {
     expect(skin).not.toMatch(/color:\s*var\(--ds-color-text-inverse/);
     expect(skin).not.toMatch(/color:\s*var\(--ds-color-text-on-primary/);
     expect(skin).toContain(
-      'color: var(--ds-calendar-selected-ink, var(--ds-color-white, #fff))',
+      'color: var(--ds-calendar-selected-ink, var(--ds-color-white))',
     );
-    expect(skin).toContain('color: var(--ds-calendar-active-ink, var(--ds-color-white, #fff))');
+    expect(skin).toContain('color: var(--ds-calendar-active-ink, var(--ds-color-white))');
 
     // Measured on the compiled BrandThemes (same method as the CodeBlock
     // gutter measurement): white ink on BOTH raw primaries clears AA with
@@ -385,14 +385,14 @@ describe('Modern Calendar W10 second visual pass', () => {
 
   it('establishes typographic hierarchy: period title semibold, weekday micro-labels', () => {
     expect(skin).toMatch(
-      /\[data-part='mode-toggle'\]\[data-mode='month'\]\s*\{\s*font-size:\s*var\(--ds-font-size-sm, 14px\);\s*font-weight:\s*var\(--ds-font-weight-semibold, 600\)/,
+      /\[data-part='mode-toggle'\]\[data-mode='month'\]\s*\{\s*font-size:\s*var\(--ds-font-size-sm\);\s*font-weight:\s*var\(--ds-font-weight-semibold\)/,
     );
     expect(skin).toMatch(
-      /\[data-part='weekday-header'\]\s*\{\s*font-size:\s*var\(--ds-font-size-xs, 12px\);\s*font-weight:\s*var\(--ds-font-weight-medium, 500\);\s*letter-spacing:\s*0\.04em;\s*text-transform:\s*uppercase/,
+      /\[data-part='weekday-header'\]\s*\{\s*font-size:\s*var\(--ds-font-size-xs\);\s*font-weight:\s*var\(--ds-font-weight-medium\);\s*letter-spacing:\s*0\.04em;\s*text-transform:\s*uppercase/,
     );
     // The selected day is the grid's focal point (weight on the primary fill).
     expect(skin).toMatch(
-      /\[data-selected='true'\]\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-semibold, 600\)/,
+      /\[data-selected='true'\]\s*\{[^}]*font-weight:\s*var\(--ds-font-weight-semibold\)/,
     );
   });
 

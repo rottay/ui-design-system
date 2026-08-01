@@ -8,6 +8,13 @@
 
 import React, { forwardRef } from 'react';
 import type { ImageFallbackProps } from '../../contracts';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { ContentImageIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-image';
+
+/** Accessible name for the fallback panel; the i18n catalogue wins when a
+ * provider is mounted, the pinned English floor keeps standalone renders
+ * (and the provider-less test contract) byte-identical. */
+const FALLBACK_A11Y = { key: 'image.failedToLoad', fallback: 'Image failed to load' };
 
 /**
  * Image.Fallback component for displaying fallback content when image load fails.
@@ -31,32 +38,19 @@ import type { ImageFallbackProps } from '../../contracts';
  */
 export const ImageFallback = forwardRef<HTMLDivElement, ImageFallbackProps>(
   ({ children, className = '', style, width, height, ...props }, ref) => {
-    /**
-     * Default fallback icon displayed when no children provided.
-     */
-    const DefaultFallbackIcon = () => (
-      <svg
-        width="48"
-        height="48"
-        viewBox="0 0 48 48"
-        fill="none"
-        aria-hidden="true"
-      >
-        <path
-          d="M40 8H8C6.9 8 6 8.9 6 10V38C6 39.1 6.9 40 8 40H40C41.1 40 42 39.1 42 38V10C42 8.9 41.1 8 40 8ZM16 34L22 26L26 32L32 24L38 34H16Z"
-          fill="currentColor"
-        />
-      </svg>
-    );
+    // Optional provider + English floor, the same idiom as Avatar's status
+    // names: bare compositions (tests, lightweight consumers) must not crash.
+    const i18n = useOptionalTranslation('components');
 
-    // Container styles
+    // Container styles — inline is caller geometry only (width/height); the
+    // semantic type role moved to image-compounds.css with the rest of the
+    // fallback paint (P2 inline-drain).
     const fallbackStyles: React.CSSProperties = {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       width: typeof width === 'number' ? `${width}px` : width || '100%',
       height: typeof height === 'number' ? `${height}px` : height || '100%',
-      fontSize: '0.875rem',
       ...style,
     };
 
@@ -67,10 +61,12 @@ export const ImageFallback = forwardRef<HTMLDivElement, ImageFallbackProps>(
         data-part="fallback"
         style={fallbackStyles}
         role="img"
-        aria-label="Image failed to load"
+        aria-label={i18n?.tOr(FALLBACK_A11Y.key, FALLBACK_A11Y.fallback) ?? FALLBACK_A11Y.fallback}
         {...props}
       >
-        {children || <DefaultFallbackIcon />}
+        {/* The governed content.image role replaces the local ad-hoc SVG at the
+            same 48px (icon 2xl = 3rem), same currentColor ink, decorative. */}
+        {children || <ContentImageIcon decorative size="2xl" />}
       </div>
     );
   }

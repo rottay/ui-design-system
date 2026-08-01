@@ -22,6 +22,14 @@
  * scales rems down on small viewports), the hover lift + pressed dip on the
  * canonical motion tokens, and the keyboard focus ring.
  *
+ * B9 ADDENDUM (pass 2): the footprint joins the canonical density scale
+ * (`--ds-density-effective-scale`, the Button/FloatButton skin idiom) with
+ * the 44px coarse-pointer floor kept absolute under `@media (pointer:
+ * coarse)` — compact tenants compose a smaller button on fine pointers
+ * without ever dropping below the touch floor. Touch micro-craft added:
+ * `touch-action: manipulation` (no double-tap zoom delay) and a transparent
+ * tap highlight, matching the link.css idiom.
+ *
  * SPECIFICITY (P-48): `border: none` is a color-free reset, exempt from the
  * (0,4,0) border floor. All other channels are non-border paint and win
  * unlayered at (0,3,0).
@@ -29,22 +37,27 @@
 
 .rottay-backtop.rottay-backtop--modern[data-part='trigger'] {
   /* Position/geometry drained from the `fixed bottom-8 z-50` utilities; the
-     pinned `end-8` bridge string keeps the same inline-end default here, so
-     the skin is the single owner and the utility is inert. The block-end
-     inset adds the device safe area so the button never parks under the home
-     indicator. */
+     pass-1 `end-8` bridge string is drained too (P2-20), leaving this file as
+     the single geometry owner. The block-end inset adds the device safe area
+     so the button never parks under the home indicator. */
   position: fixed;
   inset-block-end: calc(var(--ds-backtop-inset-block-end, 2rem) + env(safe-area-inset-bottom, 0px));
   inset-inline-end: var(--ds-backtop-inset-inline-end, 2rem);
-  z-index: var(--ds-backtop-z-index, var(--ds-z-index-fixed, 1200));
+  z-index: var(--ds-backtop-z-index, var(--ds-z-index-fixed));
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* 44px PHYSICAL coarse-pointer floor (was a 40px inline size). */
-  inline-size: var(--ds-backtop-size, 44px);
-  block-size: var(--ds-backtop-size, 44px);
+  /* 44px PHYSICAL coarse-pointer floor (was a 40px inline size), now riding
+     the canonical density scale (B9 pass 2 — the Button/FloatButton skin
+     idiom): scale 1 keeps the exact 44px default; compact densities compose
+     a smaller button on fine pointers while the coarse-pointer rule below
+     re-asserts the 44px floor absolutely. */
+  inline-size: calc(var(--ds-backtop-size, 44px) * var(--ds-density-effective-scale));
+  block-size: calc(var(--ds-backtop-size, 44px) * var(--ds-density-effective-scale));
   padding: 0;
   cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
   border-radius: 50%;
   border: none;
   background: var(--ds-backtop-bg, var(--ds-color-primary));
@@ -52,13 +65,13 @@
   box-shadow: var(--ds-backtop-shadow, var(--ds-elevation-2));
   /* The engine UNMOUNTS below the threshold, so only the ENTRANCE is
      choreographed (there is no exit state to animate). */
-  animation: ds-backtop-enter-modern var(--ds-backtop-enter-duration, var(--ds-motion-normal, 200ms)) var(--ds-motion-ease-out, ease-out) both;
+  animation: ds-backtop-enter-modern var(--ds-backtop-enter-duration, var(--ds-motion-normal)) var(--ds-motion-ease-out) both;
   transition:
-    transform var(--ds-backtop-transition-duration, var(--ds-motion-fast, 120ms))
+    transform var(--ds-backtop-transition-duration, var(--ds-motion-fast))
       var(--ds-backtop-transition-timing, var(--ds-motion-ease-out)),
-    box-shadow var(--ds-backtop-transition-duration, var(--ds-motion-fast, 120ms))
+    box-shadow var(--ds-backtop-transition-duration, var(--ds-motion-fast))
       var(--ds-backtop-transition-timing, var(--ds-motion-ease-out)),
-    background-color var(--ds-backtop-transition-duration, var(--ds-motion-fast, 120ms))
+    background-color var(--ds-backtop-transition-duration, var(--ds-motion-fast))
       var(--ds-backtop-transition-timing, var(--ds-motion-ease-out));
 }
 
@@ -73,16 +86,26 @@
   }
 }
 
+/* ---- coarse pointers: the 44px touch floor is absolute law and never
+        scales down with density (B9 pass 2; FloatButton K4-C Pass-2
+        precedent). ---- */
+@media (pointer: coarse) {
+  .rottay-backtop.rottay-backtop--modern[data-part='trigger'] {
+    min-inline-size: 44px;
+    min-block-size: 44px;
+  }
+}
+
 /* ---- hover: a quiet lift (the premium reading of the drained
         `hover:scale-110` docblock) + deepened elevation, gated to devices
         with real hover (4th-tanda law). ---- */
 @media (hover: hover) {
   .rottay-backtop.rottay-backtop--modern[data-part='trigger']:hover {
     transform: var(--ds-backtop-hover-transform, translateY(-2px));
-    box-shadow: var(
-      --ds-backtop-shadow-hover,
-      var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1))
-    );
+    /* P2-20 fallback parity: `--ds-elevation-3` is a DECLARED channel — bare
+       reference resolves the tenant default (the drained literal was a P0
+       leftover). */
+    box-shadow: var(--ds-backtop-shadow-hover, var(--ds-elevation-3));
   }
 }
 
@@ -96,7 +119,7 @@
 
 /* ---- keyboard focus ring. ---- */
 .rottay-backtop.rottay-backtop--modern[data-part='trigger']:focus-visible {
-  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-backtop-focus-ring-offset, 2px);
 }
 

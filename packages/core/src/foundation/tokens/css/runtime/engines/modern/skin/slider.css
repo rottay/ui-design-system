@@ -35,9 +35,12 @@
  * slider read as a floating dot). The same channel paints the range rail so
  * both modes share one rail grammar.
  *
- * INTERACTION PAINT: thumb hover/press (`:hover`, `:active`) and the keyboard
- * ring (`:focus-visible` -> thumb box-shadow) live here, gated
- * `:not(:disabled)`. Runtime position percentages stay inline (rail/track/
+ * INTERACTION PAINT: thumb hover/press and the keyboard ring
+ * (`:focus-visible` -> thumb box-shadow) live here, gated `:not(:disabled)`.
+ * Hover paint is pointer-capability gated (`@media (hover: hover)`, the
+ * 12-axis law) with `:active` as the touch equivalent -- a sticky post-tap
+ * hover no longer holds the thumb repaint or the value tooltip open on
+ * coarse pointers. Runtime position percentages stay inline (rail/track/
  * handle/mark offsets) and are unaffected.
  *
  * RTL (K2-V sweep): the engine's horizontal offsets are logical
@@ -46,10 +49,31 @@
  * `--tw-translate-x`) and the single-mode fill gradient under `:dir(rtl)`.
  * Vertical-mode offsets stay physical.
  *
+ * VALUE TOOLTIP + STEP DOTS + MARK STATE (Phase B second pass): the engine's
+ * `tooltip` contract renders `data-part='tooltip'` readouts anchored at each
+ * thumb point (aria-hidden -- the native input already announces the value);
+ * visibility is sibling-driven (`input:hover/:focus-visible/:active` on the
+ * single input, `+ handle + tooltip` in range mode) or forced with
+ * `data-open='true'`. Surface/ink consume the global material overlay
+ * channels; the thumb gap rides the `--_ds-proto-slider-tooltip-gap` proto.
+ * `data-part='dot'` step markers center on the rail (pointer-transparent) and
+ * `data-active` marks/dots gain weight + ink inside the filled span (never
+ * color-only: position and weight carry the state).
+ *
+ * VERTICAL NATIVE AXIS (Phase B second pass): vertical inputs take the
+ * standards-track `writing-mode: vertical-lr` + `direction: rtl` (min at the
+ * block end, matching the bottom-anchored overlay grammar); the WebKit fill
+ * gradient repaints `to top` and the thumb re-centers on the inline axis.
+ * Engines without vertical writing-mode support keep the horizontal paint
+ * (previous behavior -- progressive enhancement, SIGHTED pending Codex).
+ * Range-mode rail/track clicks are engine-handled (nearest-handle seek); the
+ * parts only gain `cursor: pointer` here.
+ *
  * SPECIFICITY (P-48): the handle border-color reaches (0,4,0) via the repeated
  * `[data-part='handle']`; the thumb border-color reaches it via the doubled
  * `::-webkit-slider-thumb` pseudo chain. Non-border paint wins unlayered at
- * (0,3,0).
+ * (0,3,0). The vertical runnable-track repaint ties the horizontal `:dir(rtl)`
+ * variant at (0,5,0) and wins by source order.
  */
 
 /* Root layout (drained from the engine's Tailwind utilities: `relative`,
@@ -72,7 +96,7 @@
 .ds-slider.ds-slider--modern [data-part='rail'] {
   background: var(--ds-slider-rail-bg, color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent));
   position: absolute;
-  border-radius: var(--ds-radius-full, 9999px);
+  border-radius: var(--ds-radius-full);
 }
 .ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='rail'] {
   inset-block-start: 50%;
@@ -90,7 +114,7 @@
 .ds-slider.ds-slider--modern [data-part='track'] {
   background: var(--ds-color-primary);
   position: absolute;
-  border-radius: var(--ds-radius-full, 9999px);
+  border-radius: var(--ds-radius-full);
 }
 .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='track'] {
   inline-size: var(--ds-slider-track-size, 4px);
@@ -109,14 +133,14 @@
   position: absolute;
   inline-size: var(--ds-slider-thumb-size, 16px);
   block-size: var(--ds-slider-thumb-size, 16px);
-  border-radius: var(--ds-radius-full, 9999px);
+  border-radius: var(--ds-radius-full);
   background: var(--ds-color-primary);
   box-shadow: var(--ds-slider-thumb-shadow, var(--ds-shadow-sm));
   pointer-events: none;
   transition:
-    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .ds-slider.ds-slider--modern [data-part='handle'][data-part='handle'] {
   border: 2px solid var(--ds-color-bg-primary);
@@ -208,8 +232,12 @@
 .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:focus-visible + [data-part='handle'] {
   box-shadow: var(--ds-slider-thumb-shadow-focus, var(--ds-focus-ring));
 }
-.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):hover + [data-part='handle'] {
-  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
+/* Hover repaint is pointer-gated (12-axis law); :active below is the touch
+   equivalent so coarse pointers still get press feedback. */
+@media (hover: hover) {
+  .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):hover + [data-part='handle'] {
+    background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
+  }
 }
 .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):active + [data-part='handle'] {
   background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
@@ -240,7 +268,7 @@
 
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-runnable-track {
   block-size: var(--ds-slider-track-size, 4px);
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   /* antd two-tone grammar: primary fill up to the runtime value hatch, then
      the rail channel (the engine stamps --ds-slider-single-percent). */
   background: linear-gradient(
@@ -268,9 +296,9 @@
   background: var(--ds-slider-thumb-bg, var(--ds-color-primary));
   box-shadow: var(--ds-slider-thumb-shadow, var(--ds-shadow-sm));
   transition:
-    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-thumb {
   border: 2px solid var(--ds-color-bg-primary);
@@ -278,7 +306,7 @@
 
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-track {
   block-size: var(--ds-slider-track-size, 4px);
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   background: var(--ds-slider-rail-bg, color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent));
 }
 /* Gecko fill pseudo: primary, mirroring the WebKit gradient (Gecko follows
@@ -286,7 +314,7 @@
    is needed). */
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-progress {
   block-size: var(--ds-slider-track-size, 4px);
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full);
   background: var(--ds-color-primary);
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-thumb {
@@ -296,20 +324,23 @@
   background: var(--ds-slider-thumb-bg, var(--ds-color-primary));
   box-shadow: var(--ds-slider-thumb-shadow, var(--ds-shadow-sm));
   transition:
-    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+    background var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-thumb {
   border: 2px solid var(--ds-color-bg-primary);
 }
 
-/* Thumb interaction states (single mode). */
-.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):hover::-webkit-slider-thumb {
-  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
-}
-.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):hover::-moz-range-thumb {
-  background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
+/* Thumb interaction states (single mode). Hover is pointer-gated; :active is
+   the touch equivalent. */
+@media (hover: hover) {
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):hover::-webkit-slider-thumb {
+    background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
+  }
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):hover::-moz-range-thumb {
+    background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
+  }
 }
 .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):active::-webkit-slider-thumb {
   background: var(--ds-slider-thumb-bg-hover, color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary)));
@@ -396,6 +427,198 @@
   .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:focus-visible + [data-part='handle'] {
     outline: 2px solid Highlight;
     outline-offset: 2px;
+    box-shadow: none;
+  }
+}
+
+/* ---- Phase B second pass: track click, dots, mark state, tooltip, vertical
+        native axis. All additive; the K2-V pins above are untouched. ---- */
+
+/* Track click affordance (range mode): the engine seeks the nearest handle on
+   rail/track press -- the parts advertise it. Single mode clicks land on the
+   native input itself. */
+.ds-slider.ds-slider--modern[data-range='true']:not([data-disabled='true']) [data-part='rail'],
+.ds-slider.ds-slider--modern[data-range='true']:not([data-disabled='true']) [data-part='track'] {
+  cursor: pointer;
+}
+
+/* ---- Step dots (contract `dots`): centered on the rail, pointer-transparent
+        so they never steal the input's hit region. Active = inside the filled
+        span: border AND center fill change (position already carries state). */
+.ds-slider.ds-slider--modern[data-part='root'] [data-part='dot'] {
+  position: absolute;
+  inline-size: calc(var(--ds-slider-track-size, 4px) + 4px);
+  block-size: calc(var(--ds-slider-track-size, 4px) + 4px);
+  border: 2px solid var(--ds-slider-rail-bg, color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent));
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-color-bg-primary);
+  pointer-events: none;
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.ds-slider.ds-slider--modern[data-part='root'][data-orientation='horizontal'] [data-part='dot'] {
+  transform: translate(-50%, -50%);
+}
+.ds-slider.ds-slider--modern[data-part='root'][data-orientation='horizontal'] [data-part='dot']:dir(rtl) {
+  transform: translate(50%, -50%);
+}
+.ds-slider.ds-slider--modern[data-part='root'][data-orientation='vertical'] [data-part='dot'] {
+  transform: translate(-50%, 50%);
+}
+.ds-slider.ds-slider--modern[data-part='root'] [data-part='dot'][data-active='true'] {
+  border-color: var(--ds-color-primary);
+  background: var(--ds-color-primary);
+}
+.ds-slider.ds-slider--modern[data-part='root'][data-disabled='true'] [data-part='dot'] {
+  opacity: var(--ds-disabled-opacity, 0.5);
+}
+
+/* Mark labels inside the filled span: ink + weight, never color alone (the
+   dot/fill position carries the same fact redundantly). */
+.ds-slider.ds-slider--modern [data-part='mark-label'][data-active='true'] {
+  color: var(--ds-color-text-primary);
+  font-weight: var(--ds-font-weight-medium);
+}
+
+/* ---- Value tooltip (contract `tooltip`). Anchored at the thumb point by the
+        engine (physical left/bottom in vertical, logical insetInlineStart in
+        horizontal); the transforms below place the bubble relative to that
+        anchor. Surface/ink ride the global material overlay channels (same
+        grammar as the Tooltip family recipe), the thumb gap is the
+        `--_ds-proto-slider-tooltip-gap` proto. aria-hidden in the engine --
+        visibility here is purely visual. */
+.ds-slider.ds-slider--modern [data-part='tooltip'] {
+  position: absolute;
+  max-inline-size: max-content;
+  padding-block: var(--ds-spacing-1);
+  padding-inline: var(--ds-spacing-2);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-material-overlay-background, var(--ds-surface-overlay, var(--ds-color-bg-primary)));
+  color: var(--ds-material-overlay-foreground, var(--ds-color-text-primary));
+  box-shadow: var(--ds-elevation-2, var(--ds-shadow-md));
+  font-size: var(--ds-font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--ds-line-height-snug);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
+    visibility var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+/* Horizontal placements: the anchor is the thumb center (top: 50% + logical
+   inline offset). The Y shift composes the bubble's own half, half the thumb
+   and the proto gap; X centers, mirrored under :dir(rtl). */
+.ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='tooltip'][data-placement='top'] {
+  transform: translate(-50%, calc(-50% - (var(--ds-slider-thumb-size, 16px) / 2) - var(--_ds-proto-slider-tooltip-gap, 6px)));
+}
+.ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='tooltip'][data-placement='bottom'] {
+  transform: translate(-50%, calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-proto-slider-tooltip-gap, 6px)));
+}
+/* RTL centering mirror (the mark-label idiom): the logical inline anchor
+   flips side under dir=rtl, so the X centering flips sign per placement. */
+.ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='tooltip'][data-placement='top']:dir(rtl) {
+  transform: translate(50%, calc(-50% - (var(--ds-slider-thumb-size, 16px) / 2) - var(--_ds-proto-slider-tooltip-gap, 6px)));
+}
+.ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='tooltip'][data-placement='bottom']:dir(rtl) {
+  transform: translate(50%, calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-proto-slider-tooltip-gap, 6px)));
+}
+/* Vertical placements: the anchor is the thumb center (left: 50% + bottom).
+   Placements are physical (antd contract), so no direction mirror applies. */
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='right'] {
+  transform: translate(calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-proto-slider-tooltip-gap, 6px)), 50%);
+}
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='left'] {
+  transform: translate(calc(-50% - (var(--ds-slider-thumb-size, 16px) / 2) - var(--_ds-proto-slider-tooltip-gap, 6px)), 50%);
+}
+
+/* Visibility: focus/press on the driving input (single: adjacent sibling;
+   range: input + handle + tooltip chain), or forced open. Hover visibility
+   is pointer-gated below (a sticky touch hover no longer pins the readout
+   open -- press still shows it via :active). Disabled roots never show the
+   readout. */
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):focus-visible + [data-part='tooltip'],
+.ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):active + [data-part='tooltip'],
+.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):focus-visible + [data-part='handle'] + [data-part='tooltip'],
+.ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):active + [data-part='handle'] + [data-part='tooltip'],
+.ds-slider.ds-slider--modern [data-part='tooltip'][data-open='true'] {
+  opacity: 1;
+  visibility: visible;
+}
+@media (hover: hover) {
+  .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']):not(:disabled):hover + [data-part='tooltip'],
+  .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']:not(:disabled):hover + [data-part='handle'] + [data-part='tooltip'] {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+.ds-slider.ds-slider--modern[data-disabled='true'] [data-part='tooltip'] {
+  opacity: 0;
+  visibility: hidden;
+  transition: none;
+}
+
+/* ---- Vertical native axis (progressive enhancement): writing-mode turns the
+        native scale vertical; direction: rtl puts min at the block end so the
+        native thumb agrees with the bottom-anchored overlay grammar. The fill
+        gradient repaints along the block axis and the WebKit thumb re-centers
+        on the inline axis (its horizontal margin-block hack no longer
+        applies). Gecko follows direction natively for ::-moz-range-progress. */
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='native-input']:not([data-variant='overlay']) {
+  inline-size: 100%;
+  block-size: 100%;
+  writing-mode: vertical-lr;
+  direction: rtl;
+}
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='native-input'][data-variant='overlay'] {
+  writing-mode: vertical-lr;
+  direction: rtl;
+}
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    to top,
+    var(--ds-color-primary) 0 var(--ds-slider-single-percent, 0%),
+    var(--ds-slider-rail-bg, color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent)) var(--ds-slider-single-percent, 0%) 100%
+  );
+}
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-thumb {
+  margin-block-start: 0;
+  margin-inline-start: calc((var(--ds-slider-track-size, 4px) - var(--ds-slider-thumb-size, 16px)) / 2);
+}
+
+/* Coarse pointer (vertical): the root gains an inline floor and the single
+   native input widens to it; the overlay thumb floor already applied above. */
+@media (pointer: coarse) {
+  .ds-slider.ds-slider--modern[data-orientation='vertical'] {
+    min-inline-size: var(--ds-slider-touch-target-min, 44px);
+  }
+  .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='native-input']:not([data-variant='overlay']) {
+    inline-size: var(--ds-slider-touch-target-min, 44px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-slider.ds-slider--modern [data-part='tooltip'],
+  .ds-slider.ds-slider--modern[data-part='root'] [data-part='dot'] {
+    transition: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-slider.ds-slider--modern[data-part='root'] [data-part='dot'] {
+    background: Canvas;
+    border-color: ButtonText;
+  }
+  .ds-slider.ds-slider--modern[data-part='root'] [data-part='dot'][data-active='true'] {
+    background: Highlight;
+    border-color: Highlight;
+  }
+  .ds-slider.ds-slider--modern [data-part='tooltip'] {
+    background: Canvas;
+    color: ButtonText;
+    border: 1px solid ButtonText;
     box-shadow: none;
   }
 }

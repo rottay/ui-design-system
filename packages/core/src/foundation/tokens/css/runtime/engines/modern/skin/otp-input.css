@@ -52,17 +52,56 @@
  * `media (pointer: coarse)` (the sm tier's 36px box fails the wave touch
  * floor); border/box-shadow transitions carry the standard reduced-motion
  * guard.
+ *
+ * PHASE-B SECOND PASS (2026-07-31):
+ * - `direction: ltr` on the root: an OTP is a positional code, NEVER a
+ *   mirrored string -- the digit order stays LTR in RTL locales (the error
+ *   message follows the locale direction, it is plain text). Keyboard
+ *   ArrowLeft/Right stay index-based in the engine, which is correct under
+ *   the forced-LTR row.
+ * - Filled slots gain a SHAPE signal beyond the border hue step: an inset
+ *   block-end keyline (`--_ds-proto-otp-filled-keyline`, painted as a
+ *   background gradient so it never fights the focus halo's box-shadow).
+ *   Under forced-colors the gradient is stripped and the typed digit itself
+ *   is the filled signal (content, not paint).
+ * - Error slots gain the certified Input error surface (`--ds-input-error-bg`
+ *   consumed with a measured 6% mix fallback) under the pinned red frame; the
+ *   non-color carriers are the `role='alert'` message + `aria-invalid`/
+ *   `aria-describedby` the engine now stamps. Forced-colors re-expresses the
+ *   frame as a DASHED border (form, not hue).
+ * - Slots read the Input caret/selection channels; the engine wires the
+ *   contract `name` prefix (`{name}-{index}`) for native form submission.
+ *
+ * PHASE-B SECOND PASS 2 (2026-07-31, P2-14):
+ * - The row no longer overflows 320px viewports: slots are fluid-capped
+ *   squares (`flex: 1 1 0` + `aspect-ratio: 1` + a per-tier
+ *   `max-inline-size`) instead of fixed boxes -- a 6-digit lg row measured
+ *   352px (6x52 + 5x8 gaps), md 304px plus page chrome. Wide containers
+ *   render the identical capped tier boxes, left-packed as before; narrow
+ *   containers shrink every slot equally and the square reads intentional.
+ *   The coarse-pointer 44px floor still wins when both collide (a11y law).
+ * - The outermost engine wrapper now carries `data-part='field'` (stable
+ *   anatomy hook, the PasswordInput/Textarea field idiom).
  */
 
 .ds-otp-input.ds-otp-input--modern[data-part='root'] {
   display: flex;
   gap: var(--ds-otp-slot-gap, 8px);
+  /* Positional code: the digit row NEVER mirrors in RTL locales. */
+  direction: ltr;
 }
 
 .ds-otp-input.ds-otp-input--modern [data-part='slot'] {
+  /* Fluid-capped square: grow/shrink share the row equally (basis 0), the
+     per-tier `max-inline-size` below restores the exact certified box on wide
+     containers, and `aspect-ratio` keeps the slot square as it shrinks --
+     a 6-digit lg row no longer overflows a 320px viewport. */
+  flex: 1 1 0;
+  min-inline-size: 0;
+  aspect-ratio: 1;
   padding: 0;
   text-align: center;
-  font-family: var(--ds-font-family-mono, monospace);
+  font-family: var(--ds-font-family-mono);
   font-weight: 700;
   cursor: text;
   border-radius: var(--ds-radius-md);
@@ -70,10 +109,16 @@
      generic --ds-color-bg-input (near-black under TMM). */
   background: var(--ds-otp-slot-bg, var(--ds-input-bg, var(--ds-surface-control)));
   color: var(--ds-color-text-primary);
+  caret-color: var(--ds-input-caret-color, var(--ds-color-primary));
   outline: none;
   transition:
     border-color var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out)),
     box-shadow var(--ds-input-transition-duration, var(--ds-motion-fast)) var(--ds-input-transition-timing, var(--ds-motion-ease-out));
+}
+
+.ds-otp-input.ds-otp-input--modern [data-part='slot']::selection {
+  color: var(--ds-input-selection-color, var(--ds-color-text-primary));
+  background: var(--ds-input-selection-bg);
 }
 /* The base border reaches (0,4,0) via the two scope classes plus the root's
    always-present `[data-part='root']` and the slot's own `[data-part='slot']`
@@ -93,12 +138,26 @@
   }
 }
 /* Filled slots read one step stronger than empty (state distinction, K4-D
-   Pass 2); the focus/error chains below stay sovereign. */
+   Pass 2) PLUS an inset block-end keyline so "filled" is a shape signal, not
+   a hue swap; the focus/error chains below stay sovereign (the keyline rides
+   background-image precisely so it cannot clobber the halo's box-shadow). */
 .ds-otp-input.ds-otp-input--modern [data-part='slot'][data-part='slot'][data-filled='true'] {
   border-color: var(--ds-otp-slot-border-filled, var(--ds-color-border-hover));
+  background-image: linear-gradient(
+    to top,
+    var(--_ds-proto-otp-filled-keyline, var(--ds-color-border-hover)) 2px,
+    transparent 2px
+  );
 }
 .ds-otp-input.ds-otp-input--modern [data-part='slot'][data-part='slot'][data-error='true'] {
   border: 1px solid var(--ds-color-error);
+  /* The certified Input error surface under the pinned frame (channel
+     consumption, not a family fork); the measured 6% mix fallback keeps the
+     digit ink's contrast untouched on both sources. */
+  background-color: var(
+    --ds-input-error-bg,
+    color-mix(in srgb, var(--ds-color-error) 6%, var(--ds-otp-slot-bg, var(--ds-input-bg, var(--ds-surface-control))))
+  );
 }
 .ds-otp-input.ds-otp-input--modern [data-part='slot']:focus:not([data-error='true']) {
   border-color: var(--ds-color-primary);
@@ -113,20 +172,19 @@
   box-shadow: var(--ds-input-error-shadow-focus, var(--ds-otp-slot-shadow-focus, var(--ds-focus-ring)));
 }
 
-/* Public size geometry (density-scaled box, fixed font step per tier). */
+/* Public size geometry (density-scaled cap, fixed font step per tier). The
+   cap is a MAX: the fluid square in the base rule fills up to it, so the
+   tier box is exact on wide containers and shrinks square on narrow ones. */
 .ds-otp-input.ds-otp-input--modern[data-part='root'][data-size='sm'] [data-part='slot'] {
-  inline-size: calc(var(--ds-otp-slot-sm-size, 36px) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-otp-slot-sm-size, 36px) * var(--ds-density-effective-scale, 1));
+  max-inline-size: calc(var(--ds-otp-slot-sm-size, 36px) * var(--ds-density-effective-scale));
   font-size: var(--ds-otp-slot-sm-font-size, 16px);
 }
 .ds-otp-input.ds-otp-input--modern[data-part='root'][data-size='md'] [data-part='slot'] {
-  inline-size: calc(var(--ds-otp-slot-md-size, 44px) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-otp-slot-md-size, 44px) * var(--ds-density-effective-scale, 1));
+  max-inline-size: calc(var(--ds-otp-slot-md-size, 44px) * var(--ds-density-effective-scale));
   font-size: var(--ds-otp-slot-md-font-size, 20px);
 }
 .ds-otp-input.ds-otp-input--modern[data-part='root'][data-size='lg'] [data-part='slot'] {
-  inline-size: calc(var(--ds-otp-slot-lg-size, 52px) * var(--ds-density-effective-scale, 1));
-  block-size: calc(var(--ds-otp-slot-lg-size, 52px) * var(--ds-density-effective-scale, 1));
+  max-inline-size: calc(var(--ds-otp-slot-lg-size, 52px) * var(--ds-density-effective-scale));
   font-size: var(--ds-otp-slot-lg-font-size, 24px);
 }
 
@@ -164,8 +222,8 @@
    wave touch floor; md/lg already pass, the floor is a min, not a resize. */
 @media (pointer: coarse) {
   .ds-otp-input.ds-otp-input--modern [data-part='slot'] {
-    min-inline-size: var(--ds-input-touch-target-min, 44px);
-    min-block-size: var(--ds-input-touch-target-min, 44px);
+    min-inline-size: var(--ds-input-touch-target-min);
+    min-block-size: var(--ds-input-touch-target-min);
   }
 }
 
@@ -177,11 +235,17 @@
 
 /* Forced colors: the focus halo (a box-shadow) is stripped, so keyboard
    focus degrades to a Highlight outline; slot frames and the disabled
-   posture re-express in system colors. */
+   posture re-express in system colors; the error frame becomes DASHED so it
+   survives as a shape signal (the gradient keyline is stripped -- the typed
+   digit itself carries "filled"). */
 @media (forced-colors: active) {
   .ds-otp-input.ds-otp-input--modern[data-part='root'] [data-part='slot'] {
     forced-color-adjust: auto;
     border-color: ButtonText;
+  }
+
+  .ds-otp-input.ds-otp-input--modern[data-part='root'] [data-part='slot'][data-error='true'] {
+    border-style: dashed;
   }
 
   .ds-otp-input.ds-otp-input--modern[data-part='root'] [data-part='slot']:focus {

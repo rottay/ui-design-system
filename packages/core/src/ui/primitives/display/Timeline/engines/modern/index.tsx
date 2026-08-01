@@ -2,12 +2,15 @@
  * @fileoverview Modern engine for the Timeline component.
  * Renders a vertical timeline with automatic alternate positioning and
  * color-coded dots. All paint AND geometry (the item grid, the connectors,
- * dot placement, pending spinner) live in the modern skin
+ * dot placement) live in the modern skin
  * (`foundation/tokens/css/runtime/engines/modern/skin/timeline.css`), keyed on
  * the `data-part` / `data-side` / `data-tone` / `data-edge` hooks stamped here.
- * The DaisyUI `timeline` / `timeline-start` / `timeline-middle` /
- * `timeline-end` classes are gone -- the skin is the single paint owner, and
- * the grid is direction-aware, so the start/end sides flip with RTL.
+ * The pending node's loading indicator composes the canonical Spinner
+ * primitive (iconography law: loading states never grow a private CSS
+ * spinner); the skin only lays the composed part out. The DaisyUI `timeline`
+ * / `timeline-start` / `timeline-middle` / `timeline-end` classes are gone --
+ * the skin is the single paint owner, and the grid is direction-aware, so the
+ * start/end sides flip with RTL.
  *
  * @example
  * ```tsx
@@ -24,6 +27,7 @@
 'use client';
 
 import React, { forwardRef } from 'react';
+import { LoadingIndicator } from '../../../../foundation/loading-indicator';
 import type { TimelineProps, TimelineItemProps } from '../../contracts';
 import { TIMELINE_DEFAULTS } from '../../contracts';
 
@@ -55,6 +59,7 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
   const {
     mode = TIMELINE_DEFAULTS.mode,
     pending,
+    pendingDot,
     reverse = TIMELINE_DEFAULTS.reverse,
     items,
     children,
@@ -101,7 +106,10 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
 
         return (
           <li key={index} data-part="item" data-side={side} data-tone={itemProps.color || 'primary'}>
-            {index > 0 && <hr data-part="connector" data-edge="leading" />}
+            {/* Connectors are pure visual rails between nodes: hidden from AT
+                so the sequence reads as exactly its items (an hr would
+                otherwise announce as a separator between every row). */}
+            {index > 0 && <hr aria-hidden="true" data-part="connector" data-edge="leading" />}
             <div data-part="content" data-side={side}>
               {itemProps.label && (
                 <div data-part="label">
@@ -117,22 +125,26 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
                 <div data-part="dot-marker" />
               )}
             </div>
-            {index < orderedItems.length - 1 && <hr data-part="connector" data-edge="trailing" />}
+            {index < orderedItems.length - 1 && <hr aria-hidden="true" data-part="connector" data-edge="trailing" />}
           </li>
         );
       })}
 
-      {/* Pending item: the spinner + pulsing dot visually indicate an
-          in-progress or upcoming event; both are painted by the skin. */}
+      {/* Pending item: the loading indicator composes the canonical Spinner
+          primitive (its own governed ring, role=status announcement and
+          reduced-motion/forced-colors skins) as the timeline's `spinner`
+          part (P-79 caller-wins); the contract's pendingDot slot replaces
+          the pulsing marker when provided. `aria-busy` marks the row as the
+          live edge of the sequence. */}
       {pending && (
-        <li data-part="item" data-side="start" data-pending="true">
-          <hr data-part="connector" data-edge="leading" />
+        <li data-part="item" data-side="start" data-pending="true" aria-busy="true">
+          <hr aria-hidden="true" data-part="connector" data-edge="leading" />
           <div data-part="content" data-side="start">
-            <span data-part="spinner" aria-hidden="true" />
+            <LoadingIndicator size="sm" data-part="spinner" />
             {pending}
           </div>
           <div data-part="dot" data-pending="true">
-            <div data-part="dot-marker" />
+            {pendingDot || <div data-part="dot-marker" />}
           </div>
         </li>
       )}

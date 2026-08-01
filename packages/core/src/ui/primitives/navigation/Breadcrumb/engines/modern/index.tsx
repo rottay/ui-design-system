@@ -22,6 +22,7 @@ import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/ge
 export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactElement {
   const translation = useOptionalTranslation('common');
   const { items, separator, maxItems, className = '', style } = props;
+  const rootRef = React.useRef<HTMLElement | null>(null);
 
   // Localized chrome copy with an English floor: a missing catalogue entry
   // echoes the full key back, which must never reach an aria-label.
@@ -40,8 +41,22 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
 
   const separatorNode = separator ?? <NavigationForwardIcon decorative size={12} />;
 
+  // Overflow safety (P2): when the trail clips horizontally (no maxItems, a
+  // narrow viewport, or long labels under the per-label cap), the CURRENT
+  // location must be the visible edge on first paint -- it is always the
+  // trail's inline end. Scroll geometry is physical, so the direction comes
+  // from the computed style (RTL follows the negative scrollLeft model).
+  React.useEffect(() => {
+    const root = rootRef.current;
+    if (!root || root.scrollWidth <= root.clientWidth) return;
+    const maxScroll = root.scrollWidth - root.clientWidth;
+    root.scrollLeft =
+      window.getComputedStyle(root).direction === 'rtl' ? -maxScroll : maxScroll;
+  }, [items, maxItems]);
+
   return (
     <nav
+      ref={rootRef}
       className={`rottay-breadcrumb-shell rottay-breadcrumb-shell--modern ${className}`.trim()}
       style={style}
       data-part="root"
@@ -89,15 +104,17 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
                   <span
                     data-part="crumb"
                     data-current={isCurrent ? 'true' : 'false'}
-                    data-clickable={item.onClick ? 'true' : undefined}
                     aria-current={isCurrent ? 'page' : undefined}
                     /* The truncation indicator is inert by contract (no expand
                        action exists), but it is not decorative: it tells the
                        trail is collapsed. `role="note"` gives its accessible
-                       name a valid host. */
+                       name a valid host. The CURRENT page is inert too: a span
+                       wiring onClick would be a keyboard-invisible click
+                       target, and its quiet-underline affordance would
+                       contradict aria-current="page" -- so a current item's
+                       onClick is deliberately dropped here (P2 fix). */
                     role={isEllipsis ? 'note' : undefined}
                     aria-label={isEllipsis ? ellipsisLabel : undefined}
-                    onClick={item.onClick}
                   >
                     {item.icon && <span data-part="icon">{item.icon}</span>}
                     <span data-part="label" title={labelTitle}>{item.label}</span>

@@ -22,6 +22,13 @@
  *
  * RTL: the secondary arc segment uses the logical `border-inline-end-color`
  * so the resting arc mirrors with the document direction.
+ *
+ * PHASE B (B7-03): the label is status METADATA, not body copy — it rides the
+ * governed caption role channels (family/leading/tracking) so tenant type
+ * ramps and the Arabic zero-tracking override (language-arabic.css, which
+ * zeroes --ds-type-caption-letter-spacing) propagate; the family dial
+ * --ds-spinner-label-size still wins when a tenant sets it. Long labels wrap
+ * centered inside a ch measure instead of pushing the indicator off-axis.
  */
 
 @keyframes ds-spinner-modern-spin {
@@ -39,7 +46,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--ds-spinner-label-gap, var(--ds-spacing-sm, 0.5rem));
+  gap: var(--ds-spinner-label-gap, var(--ds-spacing-sm));
 }
 
 .rottay-spinner.rottay-spinner--modern [data-part='indicator'][data-part='indicator'] {
@@ -70,29 +77,38 @@
 /* Ring geometry per size: diameter + stroke, both tenant-tunable. Stroke
    stays ~1:10 of the diameter — neither thread nor donut. */
 .rottay-spinner.rottay-spinner--modern[data-size='sm'] [data-part='indicator'][role='status'] {
-  inline-size: var(--ds-spinner-sm-size, 20px);
-  block-size: var(--ds-spinner-sm-size, 20px);
+  inline-size: var(--ds-spinner-sm-size);
+  block-size: var(--ds-spinner-sm-size);
   --_ds-spinner-ring-width: var(--ds-spinner-sm-ring-width, 2px);
 }
 .rottay-spinner.rottay-spinner--modern[data-size='md'] [data-part='indicator'][role='status'] {
-  inline-size: var(--ds-spinner-md-size, 24px);
-  block-size: var(--ds-spinner-md-size, 24px);
+  inline-size: var(--ds-spinner-md-size);
+  block-size: var(--ds-spinner-md-size);
   --_ds-spinner-ring-width: var(--ds-spinner-md-ring-width, 2px);
 }
 .rottay-spinner.rottay-spinner--modern[data-size='lg'] [data-part='indicator'][role='status'] {
-  inline-size: var(--ds-spinner-lg-size, 32px);
-  block-size: var(--ds-spinner-lg-size, 32px);
+  inline-size: var(--ds-spinner-lg-size);
+  block-size: var(--ds-spinner-lg-size);
   --_ds-spinner-ring-width: var(--ds-spinner-lg-ring-width, 3px);
 }
 .rottay-spinner.rottay-spinner--modern[data-size='xl'] [data-part='indicator'][role='status'] {
-  inline-size: var(--ds-spinner-xl-size, 40px);
-  block-size: var(--ds-spinner-xl-size, 40px);
+  inline-size: var(--ds-spinner-xl-size);
+  block-size: var(--ds-spinner-xl-size);
   --_ds-spinner-ring-width: var(--ds-spinner-xl-ring-width, 3px);
 }
 
 .rottay-spinner.rottay-spinner--modern [data-part='label'] {
   color: var(--ds-spinner-label-color, var(--ds-color-text-secondary));
-  font-size: var(--ds-spinner-label-size, var(--ds-font-size-sm, 14px));
+  font-family: var(--ds-type-caption-font-family, var(--ds-font-family-base));
+  font-size: var(
+    --ds-spinner-label-size,
+    var(--ds-type-caption-font-size, var(--ds-font-size-sm))
+  );
+  line-height: var(--ds-type-caption-line-height);
+  letter-spacing: var(--ds-type-caption-letter-spacing);
+  text-align: center;
+  max-inline-size: var(--_ds-proto-spinner-label-measure, 28ch);
+  overflow-wrap: break-word;
 }
 
 @media (prefers-reduced-motion: reduce) {
