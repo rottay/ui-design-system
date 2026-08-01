@@ -355,6 +355,26 @@
   text-align: center;
 }
 
+/* Loading posture: the empty well's spatial contract, with the indicator and
+   its copy centered on one line. The indicator keeps its own geometry and
+   cadence from the canonical spinner skin, so nothing is restated here. Ink
+   rides the empty posture's channel -- it is the same well, in the same
+   muted register. */
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='loading-state'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-2);
+  min-block-size: 4.5rem;
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  border: 1px dashed var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-autocomplete-empty-color, var(--ds-color-text-muted));
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-snug);
+  text-align: center;
+}
+
 /* Coarse pointer: the field, suggestions and the clear button reach the 44px
    floor via min-block-size (wins over inline heights, fine pointers untouched). */
 @media (hover: none) and (pointer: coarse) {
@@ -396,7 +416,8 @@
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
     color: GrayText;
   }
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='empty'] {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='empty'],
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='loading-state'] {
     border-color: ButtonText;
   }
 }

@@ -212,13 +212,15 @@
 }
 
 .ds-meter[data-threshold='suboptimal'] [data-part='fill'] {
+  /* Stripe ink rides the on-tone authority, so the pattern stays visible on
+     ANY tenant's warning fill instead of assuming a dark one. */
   background-image: linear-gradient(
     45deg,
-    color-mix(in srgb, white 14%, transparent) 25%,
+    color-mix(in srgb, var(--ds-color-on-warning) 14%, transparent) 25%,
     transparent 25%,
     transparent 50%,
-    color-mix(in srgb, white 14%, transparent) 50%,
-    color-mix(in srgb, white 14%, transparent) 75%,
+    color-mix(in srgb, var(--ds-color-on-warning) 14%, transparent) 50%,
+    color-mix(in srgb, var(--ds-color-on-warning) 14%, transparent) 75%,
     transparent 75%
   );
   background-size: var(--ds-spacing-2) var(--ds-spacing-2);
@@ -231,11 +233,11 @@
 .ds-meter[data-threshold='critical'] [data-part='fill'] {
   background-image: linear-gradient(
     45deg,
-    color-mix(in srgb, white 26%, transparent) 25%,
+    color-mix(in srgb, var(--ds-color-on-error) 26%, transparent) 25%,
     transparent 25%,
     transparent 50%,
-    color-mix(in srgb, white 26%, transparent) 50%,
-    color-mix(in srgb, white 26%, transparent) 75%,
+    color-mix(in srgb, var(--ds-color-on-error) 26%, transparent) 50%,
+    color-mix(in srgb, var(--ds-color-on-error) 26%, transparent) 75%,
     transparent 75%
   );
   background-size: var(--ds-spacing-2) var(--ds-spacing-2);

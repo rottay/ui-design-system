@@ -1613,7 +1613,16 @@
     var(--ds-surface-card) 94%,
     var(--ds-color-bg-primary)
   );
-  --ds-surface-overlay: rgba(0, 0, 0, 0.5);
+  /* Floating-panel surface for the overlay ROLE. Every in-tree consumer of
+     this channel paints a PANEL (popover, tooltip, slider tooltip, the
+     semantic-surface overlay role), so it derives from the elevated ground.
+     The veil that dims content behind modal surfaces is a different
+     authority: --ds-overlay-scrim below. */
+  --ds-surface-overlay: var(--ds-color-bg-elevated, var(--ds-surface-card));
+  /* Dimming veil behind modal/blocking surfaces. Tenants reach it through
+     --ds-color-bg-overlay (palette veil) or their backdrop component
+     channels; components must never hand-roll an rgba() veil. */
+  --ds-overlay-scrim: var(--ds-color-bg-overlay, rgba(0, 0, 0, 0.5));
   --ds-surface-highlight: var(--ds-color-bg-hover, rgba(255, 255, 255, 0.06));
 
   --ds-material-canvas-background: var(--ds-surface-canvas);
@@ -1751,6 +1760,48 @@
   --ds-material-raised-background: var(--ds-surface-raised);
   --ds-material-raised-foreground: var(--ds-color-text-primary);
   --ds-material-overlay-background: var(--ds-surface-overlay);
+  /* Opaque counterpart every translucent overlay material collapses to under
+     prefers-reduced-transparency; family skins chain their reduced-
+     transparency hooks here instead of picking a surface ad hoc. */
+  --ds-material-overlay-opaque: var(--ds-surface-card);
+
+  /* ──────────────────────────────────────────────────────────────────────────
+     1b. DERIVED SEMANTIC AUTHORITIES
+     Foundation-owned derivations over tenant channels. None of these is a
+     tenant dial: tenants move the seeds they already own and these follow.
+     ────────────────────────────────────────────────────────────────────────── */
+
+  /* Readable ink over each status tone's SOLID fill. Both compilers emit
+     tenant values from their seeds through the shared readable-ink
+     derivation; these are the floor for the default ramp steps, where the
+     WCAG pick lands on the dark ink for all four tones. */
+  --ds-color-on-success: #171717;
+  --ds-color-on-warning: #171717;
+  --ds-color-on-error: #171717;
+  --ds-color-on-info: #171717;
+  --ds-color-on-primary: var(--ds-color-text-on-primary);
+
+  /* Interaction-wash ramp: the one derivation for selection/hover/band
+     washes the skins used to mix ad hoc. Interaction feedback is NOT
+     decoration, so these do not scale with --ds-effect-intensity. */
+  --ds-wash-hover: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  --ds-wash-active: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+  --ds-wash-selected: color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  --ds-wash-band: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
+  --ds-wash-band-preview: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+
+  /* Icon optical-size roles: the three recurring icon wells families sized
+     with local literals (status glyphs, option wells, feature medallions).
+     Values preserve today's consumer pixels; a future icon profile modulates
+     the roles, never the consumers. */
+  --ds-icon-size-status: 0.875rem;
+  --ds-icon-size-well: 1.25rem;
+  --ds-icon-size-feature: 2.5rem;
+
+  /* Nested-radius law: an inner surface's radius is
+     max(0, outer radius - this inset), so nested corners read as one
+     geometry. Card and SemanticSurface consume the SAME inset. */
+  --ds-radius-nest-inset: 4px;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      2. TYPOGRAPHY - Geist/Inter Style
@@ -5321,14 +5372,13 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
  *
  * MATERIAL: every variant derives from existing semantic channels — subtle
  *   (color-mix tone wash, button.css/card.css precedent), outline (tone
- *   edge) and glass (the governed frost recipe of semantic-surface.css: blur
- *   scaled by the tenant effect intensity, collapsing to solid when the
- *   channel is opaque). A solid `filled` variant needs the per-tone on-ink
- *   authority (`--ds-color-on-<tone>`, emitted by both theme paths): one
- *   shared ink cannot pass contrast on all six tones under every tenant, so
- *   the recipe ships only with that authority. Tenants reshape radically
- *   through radius-scale/effect-intensity/type/density; there is no parallel
- *   color system here.
+ *   edge), filled (tone solid; its ink is the per-tone
+ *   `--ds-color-on-<tone>` authority both theme paths emit, so contrast
+ *   follows every tenant's own tones) and glass (the governed frost recipe
+ *   of semantic-surface.css: blur scaled by the tenant effect intensity,
+ *   collapsing to solid when the channel is opaque). Tenants reshape
+ *   radically through radius-scale/effect-intensity/type/density; there is
+ *   no parallel color system here.
  *
  * STATES: presentation only — the frame is never a control, so it paints no
  *   hover, focus or active chrome (icon-only actions are `Button.Icon`).
@@ -5403,21 +5453,29 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 
 .ds-icon-frame[data-tone='neutral'] {
   --_icon-frame-ink: var(--ds-color-text-secondary);
+  /* Solid neutral inverts against the page: the canvas is the readable ink
+     over the secondary-text fill in both schemes. */
+  --_icon-frame-on-ink: var(--ds-surface-canvas, var(--ds-color-bg-primary));
 }
 .ds-icon-frame[data-tone='primary'] {
   --_icon-frame-ink: var(--ds-color-primary);
+  --_icon-frame-on-ink: var(--ds-color-on-primary, var(--ds-color-text-on-primary));
 }
 .ds-icon-frame[data-tone='success'] {
   --_icon-frame-ink: var(--ds-color-success);
+  --_icon-frame-on-ink: var(--ds-color-on-success);
 }
 .ds-icon-frame[data-tone='warning'] {
   --_icon-frame-ink: var(--ds-color-warning);
+  --_icon-frame-on-ink: var(--ds-color-on-warning);
 }
 .ds-icon-frame[data-tone='error'] {
   --_icon-frame-ink: var(--ds-color-error);
+  --_icon-frame-on-ink: var(--ds-color-on-error);
 }
 .ds-icon-frame[data-tone='info'] {
   --_icon-frame-ink: var(--ds-color-info);
+  --_icon-frame-on-ink: var(--ds-color-on-info);
 }
 
 /* ---- variants (material recipes over the tone ink) ---- */
@@ -5435,6 +5493,11 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
   background: transparent;
   border-color: color-mix(in srgb, var(--_icon-frame-ink) 45%, transparent);
   color: var(--_icon-frame-ink);
+}
+
+.ds-icon-frame[data-variant='filled'] {
+  background: var(--_icon-frame-ink);
+  color: var(--_icon-frame-on-ink);
 }
 
 .ds-icon-frame[data-variant='glass'] {
@@ -5472,6 +5535,10 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
     border-color: CanvasText;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
+  }
+  .ds-icon-frame[data-variant='filled'] {
+    background: ButtonFace;
+    color: ButtonText;
   }
   .ds-icon-frame[data-disabled='true'] {
     opacity: 1;
@@ -5796,13 +5863,15 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 }
 
 .ds-meter[data-threshold='suboptimal'] [data-part='fill'] {
+  /* Stripe ink rides the on-tone authority, so the pattern stays visible on
+     ANY tenant's warning fill instead of assuming a dark one. */
   background-image: linear-gradient(
     45deg,
-    color-mix(in srgb, white 14%, transparent) 25%,
+    color-mix(in srgb, var(--ds-color-on-warning) 14%, transparent) 25%,
     transparent 25%,
     transparent 50%,
-    color-mix(in srgb, white 14%, transparent) 50%,
-    color-mix(in srgb, white 14%, transparent) 75%,
+    color-mix(in srgb, var(--ds-color-on-warning) 14%, transparent) 50%,
+    color-mix(in srgb, var(--ds-color-on-warning) 14%, transparent) 75%,
     transparent 75%
   );
   background-size: var(--ds-spacing-2) var(--ds-spacing-2);
@@ -5815,11 +5884,11 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 .ds-meter[data-threshold='critical'] [data-part='fill'] {
   background-image: linear-gradient(
     45deg,
-    color-mix(in srgb, white 26%, transparent) 25%,
+    color-mix(in srgb, var(--ds-color-on-error) 26%, transparent) 25%,
     transparent 25%,
     transparent 50%,
-    color-mix(in srgb, white 26%, transparent) 50%,
-    color-mix(in srgb, white 26%, transparent) 75%,
+    color-mix(in srgb, var(--ds-color-on-error) 26%, transparent) 50%,
+    color-mix(in srgb, var(--ds-color-on-error) 26%, transparent) 75%,
     transparent 75%
   );
   background-size: var(--ds-spacing-2) var(--ds-spacing-2);
@@ -6327,12 +6396,16 @@ html[data-ds-motion='reduced']::view-transition-new(*) {
 
 /* Nested-radius grammar: an inner surface derives its corner from the parent
    radius minus a bounded inset, so nested regions read as one concentric
-   family instead of two unrelated rounded rectangles. The inset is a private
-   proto axis pending adjudication, never a public dial. */
+   family instead of two unrelated rounded rectangles. `--ds-radius-nest-inset`
+   is the ONE inset authority for this law; the proto stays a private local
+   override hook, never a public dial. */
 .ds-semantic-surface .ds-semantic-surface {
   border-radius: max(
     0px,
-    calc(var(--ds-surface-radius-md, var(--ds-radius-md)) - var(--_ds-proto-semanticsurface-nest-inset, 4px))
+    calc(
+      var(--ds-surface-radius-md, var(--ds-radius-md)) -
+        var(--_ds-proto-semanticsurface-nest-inset, var(--ds-radius-nest-inset, 4px))
+    )
   );
 }
 
@@ -30034,6 +30107,19 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
   gap: var(--ds-input-message-gap, var(--ds-spacing-1));
 }
 
+/* `reserveMessageSpace`: the message region always mounts, so its box floor
+   never collapses to 0 while empty and never grows past the toggle either --
+   the reserved height rides the SAME two channels the message roles below
+   already use (font-size x line-height = one line box), multiplied by the
+   per-instance line count the engine stamps inline. */
+.ds-form-field.ds-form-field--modern[data-part='root'] [data-part='message-region'][data-reserve-message='true'] {
+  min-block-size: calc(
+    var(--_ds-form-field-message-lines, 1) *
+      var(--ds-input-helper-font-size, var(--ds-font-size-xs)) *
+      var(--ds-input-helper-line-height, var(--ds-line-height-snug))
+  );
+}
+
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='help-text'],
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='error-message'] {
   margin: 0;
@@ -30095,12 +30181,12 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
    alone), optically centered on the first line box of the message. */
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='error-icon'] {
   flex: none;
-  inline-size: var(--_ds-proto-form-field-error-icon-size, 14px);
-  block-size: var(--_ds-proto-form-field-error-icon-size, 14px);
+  inline-size: var(--_ds-proto-form-field-error-icon-size, var(--ds-icon-size-status, 14px));
+  block-size: var(--_ds-proto-form-field-error-icon-size, var(--ds-icon-size-status, 14px));
   margin-block-start: calc(
     (
       1em * var(--ds-input-helper-line-height, var(--ds-line-height-snug)) -
-        var(--_ds-proto-form-field-error-icon-size, 14px)
+        var(--_ds-proto-form-field-error-icon-size, var(--ds-icon-size-status, 14px))
     ) / 2
   );
   color: var(
@@ -31939,6 +32025,17 @@ div:has(> .ds-input-number.ds-input-number--rustic[data-part='root']) ~ [data-pa
   font-weight: var(--ds-font-weight-medium);
   line-height: var(--ds-input-helper-line-height, var(--ds-line-height-snug));
   white-space: nowrap;
+}
+
+/* Caps Lock hint: same ink and typography as the strength label / help role
+   neighbor -- a status line, not a warning, so it never borrows error ink.
+   The engine already suppresses it when `error` is set, so this rule never
+   needs to arbitrate against the error-message rule below. */
+.ds-password-input-field[data-part='field'] > [data-part='caps-lock-hint'] {
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-input-helper-font-size, var(--ds-font-size-xs));
+  font-weight: var(--ds-font-weight-medium);
+  line-height: var(--ds-input-helper-line-height, var(--ds-line-height-snug));
 }
 
 /* Error message stays in logical flow: no absolute text, no collisions in
@@ -35050,8 +35147,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    idiom), optically centered on the message line box. */
 .ds-form-item.ds-form-item--modern [data-part='error-icon'] {
   flex: none;
-  inline-size: var(--_ds-proto-form-error-icon-size, 13px);
-  block-size: var(--_ds-proto-form-error-icon-size, 13px);
+  inline-size: var(--_ds-proto-form-error-icon-size, var(--ds-icon-size-status, 14px));
+  block-size: var(--_ds-proto-form-error-icon-size, var(--ds-icon-size-status, 14px));
   color: var(--ds-color-error);
 }
 
@@ -35968,10 +36065,13 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  *       scroll shadows via the background-attachment idiom -- paint the inline
  *       styles cannot layer without re-owning the region's background, and the
  *       cover tint must read the surface token, which only a stylesheet rule
- *       can keep in sync with the skin grammar.
- * Every other part (root surface, header, language badge, gutter, code) keeps
- * its inline paint in `index.tsx`. Inline styles cannot express :hover/:focus-visible
- * or selection state, which is why the interactive paint lives here.
+ *       can keep in sync with the skin grammar; and
+ *   (e) the language-badge chip on the header title -- conditional paint keyed
+ *       on `data-language-badge`, expressed as a rule so the chip is a skin
+ *       state rather than a branch inside a style object.
+ * Every other part (root surface, header, gutter, code) keeps its inline paint
+ * in `index.tsx`. Inline styles cannot express :hover/:focus-visible, selection
+ * or attribute-conditional state, which is why that paint lives here.
  *
  * Hover grammar: the certified ghost-button law (same as Transfer's
  * move/pagination buttons and Calendar's header chrome) --
@@ -36029,6 +36129,23 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    surface the root paints, so the masks are invisible at rest; when the
    region cannot scroll (wrap, no maxHeight) covers and shadows coincide and
    nothing shows. No JS, no scroll listeners, compositor-free static paint. */
+/* Language badge: the bare language tag wears a quiet chip (hairline frame +
+   whisper tint, no second box) so it reads as METADATA instead of floating
+   header copy. A filename title stays bare -- it is content, not a tag -- so
+   the chip is gated on `data-language-badge`, which the TSX stamps only when
+   `language` arrives without `title`. The part keeps `data-part='title'`: the
+   badge is a MODE of the title, not a second part. */
+.ds-code-block[data-part='root'] [data-part='title'][data-language-badge='true'] {
+  padding: 0 var(--ds-spacing-2);
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-sm);
+  background: var(
+    --_ds-proto-codeblock-language-badge-bg,
+    color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+  );
+  line-height: var(--ds-line-height-snug);
+}
+
 .ds-code-block[data-part='root'] [data-part='scroll'] {
   background-image:
     linear-gradient(to bottom, var(--ds-surface-inset) 30%, transparent),
@@ -40149,12 +40266,18 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-in-range='true']:not([data-selected='true']) {
   border-radius: 0;
   background: var(--ds-color-bg-hover);
-  background: var(--_ds-proto-datepicker-range-band-bg, color-mix(in srgb, var(--ds-color-primary) 12%, transparent));
+  background: var(
+    --_ds-proto-datepicker-range-band-bg,
+    var(--ds-wash-band, color-mix(in srgb, var(--ds-color-primary) 12%, transparent))
+  );
 }
 .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-range-preview='true']:not([data-selected='true']) {
   border-radius: 0;
   background: var(--ds-color-bg-hover);
-  background: var(--_ds-proto-datepicker-range-preview-bg, color-mix(in srgb, var(--ds-color-primary) 6%, transparent));
+  background: var(
+    --_ds-proto-datepicker-range-preview-bg,
+    var(--ds-wash-band-preview, color-mix(in srgb, var(--ds-color-primary) 6%, transparent))
+  );
 }
 /* Endpoints keep the primary fill but open their inner corners toward the
    band (logical radii: the grammar mirrors itself under RTL). A same-day
@@ -41035,6 +41158,26 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   text-align: center;
 }
 
+/* Loading posture: the empty well's spatial contract, with the indicator and
+   its copy centered on one line. The indicator keeps its own geometry and
+   cadence from the canonical spinner skin, so nothing is restated here. Ink
+   rides the empty posture's channel -- it is the same well, in the same
+   muted register. */
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='loading-state'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-2);
+  min-block-size: 4.5rem;
+  padding: var(--ds-spacing-2) var(--ds-spacing-3);
+  border: 1px dashed var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-autocomplete-empty-color, var(--ds-color-text-muted));
+  font-size: var(--ds-font-size-sm);
+  line-height: var(--ds-line-height-snug);
+  text-align: center;
+}
+
 /* Coarse pointer: the field, suggestions and the clear button reach the 44px
    floor via min-block-size (wins over inline heights, fine pointers untouched). */
 @media (hover: none) and (pointer: coarse) {
@@ -41076,7 +41219,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='option'][data-disabled='true'] {
     color: GrayText;
   }
-  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='empty'] {
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='empty'],
+  .ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='loading-state'] {
     border-color: ButtonText;
   }
 }
@@ -49842,6 +49986,58 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   background: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
 }
 
+/* overflow-trigger (contract `overflow`): the SAME ink and hover/active
+   grammar as a clickable crumb link (`--ds-breadcrumb-item-color`, the
+   shared hover/active tint) but WITHOUT the link underline proto -- that
+   law is link-specific (interactive-affordance-as-underline), while this is
+   a disclosure control, not a navigable link. */
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger'] {
+  display: inline-flex;
+  min-height: var(--ds-breadcrumb-item-height, 30px);
+  align-items: center;
+  gap: var(--ds-spacing-1-5, 6px);
+  padding-block: 0;
+  padding-inline: var(--ds-breadcrumb-item-padding-inline, 9px);
+  border: 1px solid transparent;
+  border-radius: var(--ds-breadcrumb-item-radius, var(--ds-radius-md));
+  background: transparent;
+  color: var(--ds-breadcrumb-item-color, var(--ds-color-text-secondary));
+  font-family: inherit;
+  font-size: var(--ds-breadcrumb-font-size, var(--ds-font-size-sm));
+  font-weight: var(--ds-breadcrumb-font-weight, 520);
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease);
+}
+
+/* The button's UA chrome must never leak through the skin (crumb link
+   precedent above). */
+.rottay-breadcrumb-shell--modern[data-part='root'] button[data-part='overflow-trigger'] {
+  appearance: none;
+}
+
+@media (hover: hover) {
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger']:hover {
+    color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
+    background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)));
+    border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
+  }
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger']:active {
+  color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
+  background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)));
+  border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
+}
+
 .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb']:focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset);
@@ -49855,7 +50051,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 /* ---- coarse pointers: physical 44px floor, never a rem floor. ---- */
 @media (hover: none), (pointer: coarse) {
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true'] {
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true'],
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger'] {
     min-block-size: var(--ds-breadcrumb-touch-target-min, 44px);
   }
 }
@@ -49879,10 +50076,19 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
     color: HighlightText;
     border-color: Highlight;
   }
+
+  /* The overflow trigger is a disclosure control, not a crumb -- it carries
+     no `[data-current]` to tie the border shorthand, so it gets its own
+     (0,4,0) doubled-selector rule instead of piggybacking the one above. */
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger'][data-part='overflow-trigger'] {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'] {
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'],
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger'] {
     transition: none;
   }
 }
@@ -50096,8 +50302,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  inline-size: var(--_ds-proto-confirm-dialog-icon-size, 2.5rem);
-  block-size: var(--_ds-proto-confirm-dialog-icon-size, 2.5rem);
+  inline-size: var(--_ds-proto-confirm-dialog-icon-size, var(--ds-icon-size-feature, 2.5rem));
+  block-size: var(--_ds-proto-confirm-dialog-icon-size, var(--ds-icon-size-feature, 2.5rem));
   border-radius: var(--ds-radius-full);
 }
 .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='content'] > [data-part='copy'] {
@@ -50608,13 +50814,15 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* ---- icon well: governed square track (Dropdown grammar) so glyphs optically
         align across rows instead of drifting with each SVG's intrinsic box.
         currentColor keeps danger rows tinting their own icon. The size is the
-        family's private proto axis -- no generic icon-size channel exists. ---- */
+        family's private proto axis over the `--ds-icon-size-well` role: the
+        role is the authority for every option well, the proto only a local
+        override hook. ---- */
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='icon'] {
   display: inline-grid;
   place-items: center;
   flex: none;
-  inline-size: var(--_ds-proto-context-menu-icon-well, 1.25rem);
-  block-size: var(--_ds-proto-context-menu-icon-well, 1.25rem);
+  inline-size: var(--_ds-proto-context-menu-icon-well, var(--ds-icon-size-well, 1.25rem));
+  block-size: var(--_ds-proto-context-menu-icon-well, var(--ds-icon-size-well, 1.25rem));
 }
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='label'] {
   flex: 1 1 auto;
@@ -52095,7 +52303,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
         + the hover-grade underline thickness carry it (the ink itself is
         unchanged so the tone ramp stays coherent). ---- */
 .rottay-link-shell.rottay-link-shell--modern[data-part='root'][aria-current]:not([aria-current='false']) {
-  font-weight: var(--_ds-proto-link-current-font-weight, 500);
+  font-weight: var(--_ds-proto-link-current-font-weight, var(--ds-font-weight-medium, 500));
   text-decoration-thickness: var(--ds-link-underline-thickness-hover, 1.5px);
 }
 
@@ -52640,7 +52848,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='trigger'][data-level='top'] {
   inline-size: auto;
   flex-shrink: 0;
-  block-size: var(--_ds-proto-menu-horizontal-block-size, 44px);
+  block-size: var(--_ds-proto-menu-horizontal-block-size, var(--ds-spacing-11, 44px));
 }
 
 .rottay-menu--modern[data-part='root'][data-mode='horizontal']::-webkit-scrollbar {
@@ -53608,6 +53816,88 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   cursor: default;
 }
 
+/* ---- simple mode (contract `simple`): the 3-item cluster (prev, readout,
+        next) reads tighter with the next spacing rung down instead of the
+        default toolbar gap. ---- */
+.rottay-pagination--modern[data-part='root'][data-simple='true'] {
+  column-gap: var(--ds-spacing-2);
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-simple-text'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  padding-inline: var(--ds-pagination-current-padding-x);
+  color: var(--ds-pagination-item-color, var(--ds-color-text-primary));
+  font-size: var(--ds-pagination-current-font-size);
+  /* Bare value, not the `--ds-pagination-numeric` channel expression: the
+     modern-engine test pins that channel to exactly two declaration sites
+     (pagination-size-select carries the same precedent, same reason). */
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---- quick jumper (contract `showQuickJumper`): the same height scale,
+        hairline, radius and typography as the joined controls / size
+        select -- the family's one control grammar, reused rather than
+        reinvented. The width is instance geometry with no existing channel,
+        so it rides a private proto axis (batch-28 ledger convention) with a
+        literal fallback, following the size-changer's arrow-clearance
+        precedent above. ---- */
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-jumper'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'][data-part='quick-jumper'] {
+  border: 1px solid var(--ds-pagination-border, var(--ds-color-border));
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
+  display: inline-flex;
+  inline-size: var(--_ds-proto-pagination-jumper-width, 56px);
+  block-size: var(--ds-pagination-current-height);
+  padding-inline: var(--ds-pagination-current-padding-x);
+  border-radius: var(--ds-pagination-radius, var(--ds-radius-md));
+  background: var(--ds-pagination-item-bg);
+  color: var(--ds-pagination-item-color, var(--ds-color-text-primary));
+  font: inherit;
+  font-size: var(--ds-pagination-current-font-size);
+  /* Bare value; see the simple-text rule above for why this stays outside
+     the pinned `--ds-pagination-numeric` channel expression. */
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  transition:
+    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease);
+}
+
+@media (hover: hover) {
+  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper']:not(:disabled):hover {
+    background: var(
+      --ds-pagination-item-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-surface-card)))
+    );
+    color: var(--ds-pagination-item-color-hover, var(--ds-color-text-primary));
+  }
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='quick-jumper']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
+}
+
+/* Disabled dims control as one unit, same posture as the size-changer. */
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-jumper'][data-disabled='true'] {
+  opacity: var(--ds-pagination-disabled-opacity, var(--ds-button-disabled-opacity));
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='quick-jumper']:disabled {
+  cursor: not-allowed;
+}
+
 /* ---- page-size changer (contract `showSizeChanger`): a native select in
         the select.css native-trigger idiom — same height scale, hairline,
         radius and typography as the joined controls, with the governed
@@ -53714,7 +54004,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 @media (hover: none), (pointer: coarse) {
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'] {
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'],
+  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
     min-block-size: var(--ds-pagination-touch-target-min, 44px);
   }
 }
@@ -53722,7 +54013,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 @media (prefers-reduced-motion: reduce) {
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'] {
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'],
+  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
     transition: none;
   }
 }
@@ -53735,7 +54027,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-part='pagination-nav-button'],
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-part='pagination-page-button'],
   .rottay-pagination--modern[data-part='root'] [data-part='ellipsis'][data-part='ellipsis'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'][data-part='pagination-size-select'] {
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'][data-part='pagination-size-select'],
+  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'][data-part='quick-jumper'] {
     forced-color-adjust: auto;
     border-color: ButtonText;
   }
@@ -53747,7 +54040,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:disabled,
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button']:disabled,
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select']:disabled {
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select']:disabled,
+  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper']:disabled {
     color: GrayText;
   }
 
@@ -54879,12 +55173,16 @@ html[data-ds-motion="reduced"]
   }
 
   /* The arrow inherits the redefined custom properties from the surface, so
-     its fill and motif follow without a second declaration. */
+     its fill and motif follow without a second declaration.
+     The family's own opaque fill still wins: `--ds-popover-bg` is a declared
+     solid a tenant owns, so the guard must not overwrite it.
+     `--ds-material-overlay-opaque` replaces only the ad-hoc surface pick that
+     used to close this chain. */
   .rottay-popover--modern[data-part="trigger"]
     > [data-part="surface"][data-part="surface"]:not([data-recipe="inverse"]) {
     --ds-popover-surface: var(
       --_ds-proto-popover-opaque-surface,
-      var(--ds-popover-bg, var(--ds-surface-card))
+      var(--ds-popover-bg, var(--ds-material-overlay-opaque, var(--ds-surface-card)))
     );
   }
 }
@@ -66557,11 +66855,11 @@ html[data-ds-motion='reduced'] .rottay-tour--modern[data-part='root'] [data-part
      resolved root height minus one optical inset (Badge remove precedent). */
   inline-size: min(
     var(--ds-tag-close-size, 1rem),
-    calc(var(--_ds-proto-tag-root-height, 1.75rem) - 0.125rem)
+    calc(var(--_ds-proto-tag-root-height, var(--ds-tag-md-height, 1.75rem)) - 0.125rem)
   );
   block-size: min(
     var(--ds-tag-close-size, 1rem),
-    calc(var(--_ds-proto-tag-root-height, 1.75rem) - 0.125rem)
+    calc(var(--_ds-proto-tag-root-height, var(--ds-tag-md-height, 1.75rem)) - 0.125rem)
   );
   margin-inline-start: var(--ds-tag-close-gap);
   padding: 0;
@@ -67930,11 +68228,16 @@ html[data-ds-motion="reduced"]
   }
 
   /* The arrow consumes --ds-tooltip-surface, so its fill follows without a
-     second declaration (same single-source law as the seam overlap). */
+     second declaration (same single-source law as the seam overlap).
+     `--ds-surface-overlay` is the floating PANEL channel. A panel recipe may
+     still be translucent, so reduced-transparency resolves through the
+     explicitly opaque material authority. The dimming veil is separately
+     owned by `--ds-overlay-scrim` / `--ds-color-bg-overlay` and never enters
+     this chain. */
   .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-part="bubble"][data-tone="default"]:not([data-recipe="inverse"]) {
     --ds-tooltip-surface: var(
       --_ds-proto-tooltip-opaque-surface,
-      var(--ds-surface-overlay, var(--ds-surface-card))
+      var(--ds-material-overlay-opaque, var(--ds-surface-card))
     );
   }
 }
@@ -104997,6 +105300,10 @@ html[lang]:lang(ar) {
   --ds-color-info-700: #1D4ED8;
   --ds-color-info-800: #1E40AF;
   --ds-color-info-900: #1E3A8A;
+  --ds-color-on-error: #171717;
+  --ds-color-on-info: #171717;
+  --ds-color-on-success: #171717;
+  --ds-color-on-warning: #171717;
   --ds-color-primary: #FFFFFF;
   --ds-color-primary-100: #131316;
   --ds-color-primary-200: #1A1A1E;
@@ -105469,6 +105776,8 @@ html[lang]:lang(ar) {
   --ds-color-neutral-700: #3D3D3D;
   --ds-color-neutral-800: #2A2A2A;
   --ds-color-neutral-900: #171717;
+  --ds-color-on-error: #ffffff;
+  --ds-color-on-info: #ffffff;
   --ds-color-primary: #0A0A0A;
   --ds-color-primary-100: #F4F4F3;
   --ds-color-primary-200: #E5E5E3;
@@ -107818,6 +108127,7 @@ html[lang]:lang(ar) {
   --ds-color-bg: #F4F8FB;
   --ds-color-bg-elevated: #ffffff;
   --ds-color-bg-input: #ffffff;
+  --ds-color-bg-overlay: rgba(20, 40, 59, 0.42);
   --ds-color-bg-primary: #F4F8FB;
   --ds-color-bg-secondary: #f3f2ef;
   --ds-color-bg-tertiary: #e8eef6;
@@ -107848,6 +108158,10 @@ html[lang]:lang(ar) {
   --ds-color-info-700: #0F3867;
   --ds-color-info-800: #052243;
   --ds-color-info-900: #020D1E;
+  --ds-color-on-error: #ffffff;
+  --ds-color-on-info: #ffffff;
+  --ds-color-on-success: #ffffff;
+  --ds-color-on-warning: #171717;
   --ds-color-primary: #3A6FB0;
   --ds-color-primary-100: #C1DCFF;
   --ds-color-primary-200: #93BFF8;
@@ -108187,7 +108501,7 @@ html[lang]:lang(ar) {
   --ds-material-inset-border: #D7E2EA;
   --ds-material-inset-foreground: #31506B;
   --ds-material-overlay-background: var(--ds-surface-overlay);
-  --ds-material-overlay-foreground: #FFFFFF;
+  --ds-material-overlay-foreground: #14283B;
   --ds-material-panel-background: var(--ds-surface-panel);
   --ds-material-panel-background-active: linear-gradient(180deg, #F6FAFC 0%, #EBF3F8 100%);
   --ds-material-panel-background-disabled: #EFF3F6;
@@ -108384,7 +108698,7 @@ html[lang]:lang(ar) {
   --ds-surface-control: #FFFFFF;
   --ds-surface-control-bg: var(--ds-surface-control);
   --ds-surface-inset: #EDF3F7;
-  --ds-surface-overlay: rgba(20, 40, 59, 0.42);
+  --ds-surface-overlay: #ffffff;
   --ds-surface-panel: #f4f8fd;
   --ds-surface-panel-bg: var(--ds-surface-panel);
   --ds-surface-raised: linear-gradient(180deg, #FFFFFF 0%, #F8FBFD 100%);
@@ -108723,6 +109037,9 @@ html[lang]:lang(ar) {
   --ds-color-neutral-700: #7a90a5;
   --ds-color-neutral-800: #9aacbf;
   --ds-color-neutral-900: #c0cdd8;
+  --ds-color-on-error: #171717;
+  --ds-color-on-info: #171717;
+  --ds-color-on-success: #171717;
   --ds-color-primary: #1e84e6;
   --ds-color-primary-100: #112840;
   --ds-color-primary-200: #163555;
@@ -108772,6 +109089,7 @@ html[lang]:lang(ar) {
   --ds-letter-spacing-display: -0.02em;
   --ds-letter-spacing-heading: -0.01em;
   --ds-line-height-body: 1.6;
+  --ds-material-overlay-foreground: #e4e8ed;
   --ds-radius-full: 9999px;
   --ds-shadow-lg: 0 8px 24px rgba(20, 40, 59, 0.1);
   --ds-shadow-md: 0 4px 12px rgba(20, 40, 59, 0.08);
@@ -108794,6 +109112,7 @@ html[lang]:lang(ar) {
   --ds-sidebar-item-indent: 6px;
   --ds-sidebar-text: #9aacbf;
   --ds-sidebar-text-muted: #5a7085;
+  --ds-surface-overlay: #1f2940;
   --ds-table-bg: #0f1520;
   --ds-table-border: #1d2a38;
   --ds-table-cell-color: #e4e8ed;
@@ -108850,7 +109169,6 @@ html[lang]:lang(ar) {
   /* Backgrounds - Light, professional */
   --ds-color-bg-primary: #ffffff;
   --ds-color-bg-surface: #ffffff;
-  --ds-color-bg-overlay: rgba(20, 40, 59, 0.42);
 
   /* Text - BitHire blue-gray, never inherited browser defaults */
   --ds-color-text-tertiary: #7f859b;
@@ -109620,6 +109938,10 @@ html[lang]:lang(ar) {
   --ds-color-info-700: #2F3A49;
   --ds-color-info-800: #1B232D;
   --ds-color-info-900: #0A0E13;
+  --ds-color-on-error: #ffffff;
+  --ds-color-on-info: #ffffff;
+  --ds-color-on-success: #ffffff;
+  --ds-color-on-warning: #ffffff;
   --ds-color-primary: #171717;
   --ds-color-primary-100: #DDDDDD;
   --ds-color-primary-200: #BFBFBF;

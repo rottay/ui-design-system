@@ -49,6 +49,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { StepContentProps } from '../../contracts';
+import { governedExitMs } from '@/graphics/motion/react/runtime/presence/duration';
 
 // ============================================================================
 // Internal Props Interface
@@ -64,29 +65,6 @@ interface StepContentInternalProps extends StepContentProps {
   /** Previous step for animation direction */
   previousStep?: number;
 }
-
-// ============================================================================
-// Governed exit window
-// ============================================================================
-
-/**
- * Resolves the exit window from the element's computed style (the governed
- * `--ds-motion-*` value the skin actually applied), plus a small buffer.
- * Returns ~50ms when no transition is declared (`animation='none'`, reduced
- * motion, tests). Bounded per-family duplication of the Message modern
- * engine's `governedExitMs` — no shared helper exists in this wave.
- * @internal
- */
-const governedExitMs = (el: HTMLElement): number => {
-  const { animationDuration, transitionDuration } = getComputedStyle(el);
-  const toMs = (raw: string) =>
-    raw.split(',').reduce((max, part) => {
-      const t = part.trim();
-      const v = t.endsWith('ms') ? parseFloat(t) : t.endsWith('s') ? parseFloat(t) * 1000 : 0;
-      return Number.isFinite(v) && v > max ? v : max;
-    }, 0);
-  return Math.max(toMs(animationDuration), toMs(transitionDuration)) + 50;
-};
 
 // ============================================================================
 // Main Component

@@ -29,7 +29,10 @@ import { BreadcrumbItem } from './compound';
 export {
   type BreadcrumbProps,
   type BreadcrumbItem as BreadcrumbItemType,
+  type BreadcrumbMenuItem,
+  type BreadcrumbOverflowConfig,
   BREADCRUMB_DEFAULTS,
+  BREADCRUMB_OVERFLOW_DEFAULTS,
 } from './contracts';
 
 export { BreadcrumbItem };

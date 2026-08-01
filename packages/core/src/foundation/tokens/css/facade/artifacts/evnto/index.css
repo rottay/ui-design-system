@@ -83,6 +83,10 @@
   --ds-color-info-700: #2F3A49;
   --ds-color-info-800: #1B232D;
   --ds-color-info-900: #0A0E13;
+  --ds-color-on-error: #ffffff;
+  --ds-color-on-info: #ffffff;
+  --ds-color-on-success: #ffffff;
+  --ds-color-on-warning: #ffffff;
   --ds-color-primary: #171717;
   --ds-color-primary-100: #DDDDDD;
   --ds-color-primary-200: #BFBFBF;

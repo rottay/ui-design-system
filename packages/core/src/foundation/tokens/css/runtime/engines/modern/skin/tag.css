@@ -249,11 +249,11 @@
      resolved root height minus one optical inset (Badge remove precedent). */
   inline-size: min(
     var(--ds-tag-close-size, 1rem),
-    calc(var(--_ds-proto-tag-root-height, 1.75rem) - 0.125rem)
+    calc(var(--_ds-proto-tag-root-height, var(--ds-tag-md-height, 1.75rem)) - 0.125rem)
   );
   block-size: min(
     var(--ds-tag-close-size, 1rem),
-    calc(var(--_ds-proto-tag-root-height, 1.75rem) - 0.125rem)
+    calc(var(--_ds-proto-tag-root-height, var(--ds-tag-md-height, 1.75rem)) - 0.125rem)
   );
   margin-inline-start: var(--ds-tag-close-gap);
   padding: 0;

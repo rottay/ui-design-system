@@ -65,6 +65,7 @@ import {
   readDsPortalVariables,
   type DsPortalVariableStyle,
 } from '../../../../runtime/overlay/foundation/portal-theme';
+import { resolveExitFallbackMs } from '@/graphics/motion/react/runtime/presence/duration';
 
 type OpenReason = 'hover' | 'focus' | 'click' | 'touch';
 
@@ -127,31 +128,12 @@ function toCssDimension(value: PopoverProps['maxWidth']): string | undefined {
   return typeof value === 'number' ? `${value}px` : value;
 }
 
-function parseCssTime(value: string | undefined): number {
-  const normalized = value?.trim() ?? '';
-  if (normalized.endsWith('ms')) return Number.parseFloat(normalized) || 0;
-  if (normalized.endsWith('s'))
-    return (Number.parseFloat(normalized) || 0) * 1000;
-  return 0;
-}
-
-function resolveExitFallbackMs(surface: HTMLElement | null): number {
-  if (!surface || typeof window === 'undefined') return DEFAULT_EXIT_FALLBACK_MS;
-  const style = window.getComputedStyle(surface);
-  const durations = style.animationDuration
-    .split(',')
-    .map(parseCssTime);
-  const delays = style.animationDelay.split(',').map(parseCssTime);
-  const slotCount = Math.max(durations.length, delays.length);
-  let longest = 0;
-  for (let index = 0; index < slotCount; index += 1) {
-    longest = Math.max(
-      longest,
-      durations[index % durations.length] + delays[index % delays.length]
-    );
-  }
-  return longest > 0 ? longest + EXIT_FALLBACK_GRACE_MS : 0;
-}
+/** The surface declares its exit as keyframes, so the animation channel is the one that governs the window. */
+const POPOVER_EXIT_FALLBACK = {
+  channel: 'animation',
+  graceMs: EXIT_FALLBACK_GRACE_MS,
+  detachedFallbackMs: DEFAULT_EXIT_FALLBACK_MS,
+} as const;
 
 function readLocaleContext(anchor: HTMLElement): {
   direction: 'ltr' | 'rtl';
@@ -395,7 +377,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
           setPositioningActive(false);
           if (destroyTooltipOnHide) setPresent(false);
         },
-        resolveExitFallbackMs(surfaceEl)
+        resolveExitFallbackMs(surfaceEl, POPOVER_EXIT_FALLBACK)
       );
       return () => {
         if (exitTimeoutRef.current) clearTimeout(exitTimeoutRef.current);

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rottay.dev/schemas/prototype-ledger.schema.json",
+  "title": "Rottay private prototoken ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "description", "categories", "entries"],
+  "properties": {
+    "$schema": {
+      "const": "./prototype-ledger.schema.json"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "categories": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "uniqueItems": true,
+      "prefixItems": [
+        { "const": "PRIVATE" },
+        { "const": "DERIVE_FROM_EXISTING" },
+        { "const": "FOUNDATION_AUTHORITY" },
+        { "const": "RECIPE_AXIS" },
+        { "const": "MERGE_RENAME" },
+        { "const": "APP_SLOT" },
+        { "const": "RUNTIME_INSTANCE_BRIDGE" },
+        { "const": "PRODUCT_DOMAIN" },
+        { "const": "DELETE" }
+      ],
+      "items": false
+    },
+    "entries": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/entry" }
+    }
+  },
+  "$defs": {
+    "consumer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "line", "kind"],
+      "properties": {
+        "file": { "type": "string", "minLength": 1 },
+        "line": { "type": "integer", "minimum": 1 },
+        "kind": { "enum": ["def", "use"] }
+      }
+    },
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "family",
+        "axis",
+        "purpose",
+        "cssType",
+        "fallback",
+        "consumers",
+        "scope",
+        "category",
+        "owner",
+        "status"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^--_ds-proto-[a-z0-9-]+$"
+        },
+        "family": { "type": "string", "minLength": 1 },
+        "axis": { "type": "string", "minLength": 1 },
+        "purpose": { "type": "string", "minLength": 1 },
+        "cssType": { "type": "string", "minLength": 1 },
+        "fallback": { "type": "string", "minLength": 1 },
+        "consumers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/consumer" }
+        },
+        "scope": { "const": "private" },
+        "category": {
+          "enum": [
+            "PRIVATE",
+            "DERIVE_FROM_EXISTING",
+            "FOUNDATION_AUTHORITY",
+            "RECIPE_AXIS",
+            "MERGE_RENAME",
+            "APP_SLOT",
+            "RUNTIME_INSTANCE_BRIDGE",
+            "PRODUCT_DOMAIN",
+            "DELETE"
+          ]
+        },
+        "owner": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["active", "retired"] },
+        "retiredBy": { "type": "string", "minLength": 1 },
+        "notes": { "type": "string", "minLength": 1 }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "const": "active" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "consumers": { "minItems": 1 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "status": { "const": "retired" } },
+            "required": ["status"]
+          },
+          "then": { "required": ["retiredBy"] }
+        }
+      ]
+    }
+  }
+}

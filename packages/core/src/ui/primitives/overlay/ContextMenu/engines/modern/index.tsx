@@ -44,33 +44,11 @@ import React, { useState, useRef, useEffect, useCallback, useId, isValidElement,
 import type { ContextMenuProps, ContextMenuItem } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { useOverlayPosition } from '../../../../runtime/overlay/positioning';
+import { resolveTypeaheadPrefix } from '../../../../runtime/collection/typeahead';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 
 const MOTION_DURATION = 'var(--ds-motion-fast)';
 const MOTION_EASING = 'var(--ds-motion-ease-out)';
-
-/**
- * Typeahead state for the menu keyboard contract below (Dropdown's idiom,
- * shared verbatim): printable characters focus the next enabled item whose
- * visible text starts with the typed prefix (wrapping). The buffer lives per
- * menu LEVEL, keyed weakly by the <ul> element, so no two menu instances --
- * nor two levels of one menu -- ever share a prefix; it resets after a pause
- * and dies with its DOM node.
- */
-const TYPEAHEAD_RESET_MS = 500;
-const typeaheadStateByMenu = new WeakMap<
-  HTMLElement,
-  { buffer: string; lastKeyTime: number }
->();
-
-function resolveTypeaheadPrefix(menu: HTMLElement, key: string): string {
-  const now = Date.now();
-  const state = typeaheadStateByMenu.get(menu) ?? { buffer: '', lastKeyTime: 0 };
-  state.buffer = now - state.lastKeyTime > TYPEAHEAD_RESET_MS ? key : state.buffer + key;
-  state.lastKeyTime = now;
-  typeaheadStateByMenu.set(menu, state);
-  return state.buffer.toLowerCase();
-}
 
 /**
  * APG menu keyboard contract for ONE menu level (Dropdown's handler, shared

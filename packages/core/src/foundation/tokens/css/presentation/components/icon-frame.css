@@ -18,14 +18,13 @@
  *
  * MATERIAL: every variant derives from existing semantic channels — subtle
  *   (color-mix tone wash, button.css/card.css precedent), outline (tone
- *   edge) and glass (the governed frost recipe of semantic-surface.css: blur
- *   scaled by the tenant effect intensity, collapsing to solid when the
- *   channel is opaque). A solid `filled` variant needs the per-tone on-ink
- *   authority (`--ds-color-on-<tone>`, emitted by both theme paths): one
- *   shared ink cannot pass contrast on all six tones under every tenant, so
- *   the recipe ships only with that authority. Tenants reshape radically
- *   through radius-scale/effect-intensity/type/density; there is no parallel
- *   color system here.
+ *   edge), filled (tone solid; its ink is the per-tone
+ *   `--ds-color-on-<tone>` authority both theme paths emit, so contrast
+ *   follows every tenant's own tones) and glass (the governed frost recipe
+ *   of semantic-surface.css: blur scaled by the tenant effect intensity,
+ *   collapsing to solid when the channel is opaque). Tenants reshape
+ *   radically through radius-scale/effect-intensity/type/density; there is
+ *   no parallel color system here.
  *
  * STATES: presentation only — the frame is never a control, so it paints no
  *   hover, focus or active chrome (icon-only actions are `Button.Icon`).
@@ -100,21 +99,29 @@
 
 .ds-icon-frame[data-tone='neutral'] {
   --_icon-frame-ink: var(--ds-color-text-secondary);
+  /* Solid neutral inverts against the page: the canvas is the readable ink
+     over the secondary-text fill in both schemes. */
+  --_icon-frame-on-ink: var(--ds-surface-canvas, var(--ds-color-bg-primary));
 }
 .ds-icon-frame[data-tone='primary'] {
   --_icon-frame-ink: var(--ds-color-primary);
+  --_icon-frame-on-ink: var(--ds-color-on-primary, var(--ds-color-text-on-primary));
 }
 .ds-icon-frame[data-tone='success'] {
   --_icon-frame-ink: var(--ds-color-success);
+  --_icon-frame-on-ink: var(--ds-color-on-success);
 }
 .ds-icon-frame[data-tone='warning'] {
   --_icon-frame-ink: var(--ds-color-warning);
+  --_icon-frame-on-ink: var(--ds-color-on-warning);
 }
 .ds-icon-frame[data-tone='error'] {
   --_icon-frame-ink: var(--ds-color-error);
+  --_icon-frame-on-ink: var(--ds-color-on-error);
 }
 .ds-icon-frame[data-tone='info'] {
   --_icon-frame-ink: var(--ds-color-info);
+  --_icon-frame-on-ink: var(--ds-color-on-info);
 }
 
 /* ---- variants (material recipes over the tone ink) ---- */
@@ -132,6 +139,11 @@
   background: transparent;
   border-color: color-mix(in srgb, var(--_icon-frame-ink) 45%, transparent);
   color: var(--_icon-frame-ink);
+}
+
+.ds-icon-frame[data-variant='filled'] {
+  background: var(--_icon-frame-ink);
+  color: var(--_icon-frame-on-ink);
 }
 
 .ds-icon-frame[data-variant='glass'] {
@@ -169,6 +181,10 @@
     border-color: CanvasText;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
+  }
+  .ds-icon-frame[data-variant='filled'] {
+    background: ButtonFace;
+    color: ButtonText;
   }
   .ds-icon-frame[data-disabled='true'] {
     opacity: 1;

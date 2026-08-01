@@ -38,5 +38,14 @@ export type {
 } from './view-transition';
 export { usePresence } from './presence';
 export type { UsePresenceOptions, UsePresenceResult } from './presence';
+export {
+  governedExitMs,
+  governedFlashMs,
+  resolveExitFallbackMs,
+} from './presence/duration';
+export type {
+  ExitFallbackOptions,
+  GovernedMotionChannel,
+} from './presence/duration';
 export { useFlipLayout } from './flip-layout';
 export type { UseFlipLayoutOptions, UseFlipLayoutResult } from './flip-layout';

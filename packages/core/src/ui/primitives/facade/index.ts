@@ -14,6 +14,7 @@
  */
 
 export { Dropdown } from '../overlay/Dropdown';
+export type { DropdownMenuItem } from '../overlay/Dropdown';
 export { Empty } from '../display/Empty';
 export {
   Modal,

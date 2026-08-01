@@ -20,10 +20,13 @@
  *       scroll shadows via the background-attachment idiom -- paint the inline
  *       styles cannot layer without re-owning the region's background, and the
  *       cover tint must read the surface token, which only a stylesheet rule
- *       can keep in sync with the skin grammar.
- * Every other part (root surface, header, language badge, gutter, code) keeps
- * its inline paint in `index.tsx`. Inline styles cannot express :hover/:focus-visible
- * or selection state, which is why the interactive paint lives here.
+ *       can keep in sync with the skin grammar; and
+ *   (e) the language-badge chip on the header title -- conditional paint keyed
+ *       on `data-language-badge`, expressed as a rule so the chip is a skin
+ *       state rather than a branch inside a style object.
+ * Every other part (root surface, header, gutter, code) keeps its inline paint
+ * in `index.tsx`. Inline styles cannot express :hover/:focus-visible, selection
+ * or attribute-conditional state, which is why that paint lives here.
  *
  * Hover grammar: the certified ghost-button law (same as Transfer's
  * move/pagination buttons and Calendar's header chrome) --
@@ -81,6 +84,23 @@
    surface the root paints, so the masks are invisible at rest; when the
    region cannot scroll (wrap, no maxHeight) covers and shadows coincide and
    nothing shows. No JS, no scroll listeners, compositor-free static paint. */
+/* Language badge: the bare language tag wears a quiet chip (hairline frame +
+   whisper tint, no second box) so it reads as METADATA instead of floating
+   header copy. A filename title stays bare -- it is content, not a tag -- so
+   the chip is gated on `data-language-badge`, which the TSX stamps only when
+   `language` arrives without `title`. The part keeps `data-part='title'`: the
+   badge is a MODE of the title, not a second part. */
+.ds-code-block[data-part='root'] [data-part='title'][data-language-badge='true'] {
+  padding: 0 var(--ds-spacing-2);
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-sm);
+  background: var(
+    --_ds-proto-codeblock-language-badge-bg,
+    color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+  );
+  line-height: var(--ds-line-height-snug);
+}
+
 .ds-code-block[data-part='root'] [data-part='scroll'] {
   background-image:
     linear-gradient(to bottom, var(--ds-surface-inset) 30%, transparent),

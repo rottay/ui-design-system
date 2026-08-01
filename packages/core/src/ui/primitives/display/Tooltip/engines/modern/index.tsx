@@ -75,6 +75,7 @@ import {
   OverlayPortalBoundary,
   useOverlayPosition,
 } from "../../../../runtime/overlay/positioning";
+import { resolveExitFallbackMs } from "@/graphics/motion/react/runtime/presence/duration";
 
 type OpenReason = "hover" | "focus" | "click" | "content" | "touch";
 
@@ -116,33 +117,12 @@ function toCssDimension(value: TooltipProps["maxWidth"]): string | undefined {
   return typeof value === "number" ? `${value}px` : value;
 }
 
-function parseCssTime(value: string | undefined): number {
-  const normalized = value?.trim() ?? "";
-  if (normalized.endsWith("ms")) return Number.parseFloat(normalized) || 0;
-  if (normalized.endsWith("s"))
-    return (Number.parseFloat(normalized) || 0) * 1000;
-  return 0;
-}
-
-function resolveExitFallbackMs(bubble: HTMLElement | null): number {
-  if (!bubble || typeof window === "undefined") return DEFAULT_EXIT_FALLBACK_MS;
-
-  const style = window.getComputedStyle(bubble);
-  const durations = style.transitionDuration
-    .split(",")
-    .map(parseCssTime);
-  const delays = style.transitionDelay.split(",").map(parseCssTime);
-  const slotCount = Math.max(durations.length, delays.length);
-  let longest = 0;
-  for (let index = 0; index < slotCount; index += 1) {
-    longest = Math.max(
-      longest,
-      durations[index % durations.length] + delays[index % delays.length]
-    );
-  }
-
-  return longest > 0 ? longest + EXIT_FALLBACK_GRACE_MS : 0;
-}
+/** The bubble declares its exit as a transition, so the transition channel is the one that governs the window. */
+const TOOLTIP_EXIT_FALLBACK = {
+  channel: "transition",
+  graceMs: EXIT_FALLBACK_GRACE_MS,
+  detachedFallbackMs: DEFAULT_EXIT_FALLBACK_MS,
+} as const;
 
 function toPhysicalPlacement(
   placement: NonNullable<TooltipProps["placement"]>,
@@ -450,7 +430,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>((props, ref) => {
         exitTimeoutRef.current = null;
         setPresent(false);
       },
-      resolveExitFallbackMs(bubbleEl)
+      resolveExitFallbackMs(bubbleEl, TOOLTIP_EXIT_FALLBACK)
     );
     return () => {
       if (exitTimeoutRef.current) clearTimeout(exitTimeoutRef.current);

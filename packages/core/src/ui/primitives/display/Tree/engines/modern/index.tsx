@@ -53,6 +53,8 @@ import { TREE_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 import { LoadingIndicator } from '../../../../foundation/loading-indicator';
+import { advanceTypeahead } from '../../../../runtime/collection/typeahead';
+import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
 import {
   type TreeEngineKey,
   normalizeTreeKey,
@@ -589,7 +591,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
   const nodeRefs = useRef<Map<TreeEngineKey, HTMLDivElement>>(new Map());
   const loadedKeysRef = useRef<Set<TreeEngineKey>>(new Set());
   // APG typeahead rolling buffer (printable characters, 500ms window).
-  const typeaheadRef = useRef<{ buffer: string; lastTime: number }>({ buffer: '', lastTime: 0 });
+  const typeaheadRef = useRef<TypeaheadState>({ buffer: '', lastKeyTime: 0 });
 
   const registerNodeRef = useCallback((key: TreeEngineKey, el: HTMLDivElement | null) => {
     if (el) nodeRefs.current.set(key, el);
@@ -965,11 +967,12 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
           // Nodes with non-string titles (ReactNode) do not participate.
           if (e.key.length !== 1 || e.ctrlKey || e.metaKey || e.altKey) break;
           e.preventDefault();
-          const now = Date.now();
-          const state = typeaheadRef.current;
           const char = e.key.toLowerCase();
-          let buffer = now - state.lastTime < 500 ? state.buffer + char : char;
-          state.lastTime = now;
+          const advanced = advanceTypeahead(typeaheadRef.current, char, Date.now());
+          // The window advances on every keystroke; the buffer only survives a
+          // match, so a dead prefix cannot poison the next character.
+          typeaheadRef.current.lastKeyTime = advanced.state.lastKeyTime;
+          let buffer = advanced.prefix;
 
           const titleOf = (key: TreeEngineKey): string | null => {
             const node = findNode(key);

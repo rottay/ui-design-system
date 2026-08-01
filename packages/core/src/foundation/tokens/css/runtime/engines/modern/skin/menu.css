@@ -388,7 +388,7 @@
 .rottay-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='trigger'][data-level='top'] {
   inline-size: auto;
   flex-shrink: 0;
-  block-size: var(--_ds-proto-menu-horizontal-block-size, 44px);
+  block-size: var(--_ds-proto-menu-horizontal-block-size, var(--ds-spacing-11, 44px));
 }
 
 .rottay-menu--modern[data-part='root'][data-mode='horizontal']::-webkit-scrollbar {

@@ -17,7 +17,11 @@
  * `progressbar` of four segments whose active count/tone the skin derives from
  * `data-strength`, paired with a localized level word (visible label +
  * `aria-valuetext`), so no runtime paint survives on any part and the level is
- * never carried by color alone.
+ * never carried by color alone. When `capsLockHint` (default true) is on, a
+ * `data-part="caps-lock-hint"` `role="status"` announces an active Caps Lock
+ * key -- detected via `getModifierState('CapsLock')` on keydown/keyup, reset
+ * on every focus and blur -- and is suppressed whenever `error` is set, so
+ * the error state always owns the message zone.
  *
  * @example
  * ```tsx
@@ -109,6 +113,7 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
     showToggle = PASSWORD_INPUT_DEFAULTS.showToggle,
     strengthIndicator = PASSWORD_INPUT_DEFAULTS.strengthIndicator,
     strengthLevel,
+    capsLockHint = PASSWORD_INPUT_DEFAULTS.capsLockHint,
     visibleIcon,
     hiddenIcon,
     onChange,
@@ -134,6 +139,13 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
   const [visible, setVisible] = useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
+  // Caps Lock tracking (not exposed to parent). `getModifierState` only
+  // exists on KeyboardEvent -- FocusEvent has no modifier introspection --
+  // so keydown/keyup are the only real detection sites; focus/blur bound the
+  // window during which a stale reading could survive and always reset it,
+  // so a session starts clean and every session ends clean.
+  const [capsLockOn, setCapsLockOn] = useState(false);
+
   // The level word travels three ways at once -- visible label, aria-valuetext
   // on the progressbar, and the segment count the skin paints -- so strength
   // is never carried by color alone.
@@ -152,20 +164,32 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     onKeyDown?.(e);
+    if (capsLockHint) setCapsLockOn(e.getModifierState('CapsLock'));
     if (e.key === 'Enter') {
       onPressEnter?.(e);
     }
-  }, [onKeyDown, onPressEnter]);
+  }, [onKeyDown, onPressEnter, capsLockHint]);
+
+  // keyup catches the Caps Lock key's OWN press (its down state precedes the
+  // modifier taking effect on some platforms) and any release that changes
+  // the active modifier set while focus never left the field.
+  const handleKeyUp = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (capsLockHint) setCapsLockOn(e.getModifierState('CapsLock'));
+  }, [capsLockHint]);
 
   const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
     interactionHandlers.onFocus(e);
+    // A new focus session cannot know the modifier state yet (FocusEvent
+    // carries none); it starts clean and the next keydown/keyup corrects it.
+    if (capsLockHint) setCapsLockOn(false);
     onFocus?.(e);
-  }, [interactionHandlers, onFocus]);
+  }, [interactionHandlers, onFocus, capsLockHint]);
 
   const handleBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
     interactionHandlers.onBlur(e);
+    if (capsLockHint) setCapsLockOn(false);
     onBlur?.(e);
-  }, [interactionHandlers, onBlur]);
+  }, [interactionHandlers, onBlur, capsLockHint]);
 
   const handleToggleVisibility = useCallback(() => {
     setVisible((previous) => !previous);
@@ -174,6 +198,9 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
 
   const isFilled = String(value ?? defaultValue ?? '').length > 0;
   const describedBy = error && errorMessage ? errorMessageId : undefined;
+  // The error state always wins the message zone: a caps-lock hint next to
+  // an error border would contradict "the error is what needs attention".
+  const showCapsLockHint = capsLockHint && capsLockOn && !error;
 
   return (
     <div
@@ -215,6 +242,7 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
           onFocus={handleFocus}
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
+          onKeyUp={handleKeyUp}
           name={name}
           autoComplete={autoComplete}
           autoFocus={autoFocus}
@@ -240,6 +268,11 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
           </button>
         )}
       </div>
+      {showCapsLockHint && (
+        <span data-part="caps-lock-hint" role="status" aria-live="polite">
+          {tComponents('passwordinput.caps_lock_on', 'Caps Lock is on')}
+        </span>
+      )}
       {strengthIndicator && strengthLevel && (
         <div data-part="strength-meter">
           <div

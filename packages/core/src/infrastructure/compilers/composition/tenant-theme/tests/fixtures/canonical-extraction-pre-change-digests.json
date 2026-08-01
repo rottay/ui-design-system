@@ -1,8 +1,9 @@
 {
   "capturedBefore": "canonicalization extraction to foundation/kernel/serialization",
+  "reanchored": "C1 (2026-08-01): document schema digest moved exactly once because TENANT_THEME_OVERRIDE_TOKENS gained --ds-color-bg-overlay, the scrim veil channel of the panel/scrim split (SC-7). Every other digest is byte-identical.",
   "compilerVersion": "tenant-theme-compiler@4",
-  "documentSchemaDigest": "sha256-2b898d706c1e5a5baa2fdfa0c09936ea5df5d5d35c213d674f140aaa020b489d",
-  "configSchemaDigest": "sha256-54ed81d4aff6c676da3b48994eeb225698ec81eefdbb2f89d0b38a28850373bd",
+  "documentSchemaDigest": "sha256-c5911745647df6d1e6b0cc7072adfa3313c47f1137f8f84db44bd06e3ac97fb3",
+  "configSchemaDigest": "sha256-5bc1ff01812a80f1276143d57ef77a91e315ffe9786d3dbed1f40b2012f6c927",
   "nullOverrideDigest": "sha256-f594475c5aba01a40f2fe9f4b3f08d6343a4e2df3640ecd4d2abd9acaece8a6c",
   "nullOverrideEnvelopeDigest": "sha256-65da54f9b7e5bb192b79f73ae996855a43a9ce15ab8c6a419c69dca2a18d783f",
   "populatedSimpleDigest": "sha256-03f7df98105cfe11a51a994f8e9277f4d3fb96cf016f211e23ce16b7f288dd8f",

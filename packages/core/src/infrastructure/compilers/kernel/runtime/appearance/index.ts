@@ -36,6 +36,11 @@ import {
   type TextContrastResult,
 } from '@/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect';
 import { contrastRatio } from '@/foundation/kernel/color/contrast';
+import {
+  ON_TONE_ROLES,
+  deriveReadableInk,
+  onToneChannel,
+} from '@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink';
 import { TYPE_PAIRINGS } from '@/foundation/tokens/ts/presentation/typography/pairings';
 import {
   DENSITY_MODE_FACTOR_VARIABLE,
@@ -96,16 +101,23 @@ function setResolvedColor(
 }
 
 /**
- * Best-effort readable ink on a hex seed, chosen by WCAG contrast ratio
- * between the canonical white and dark inks (WCAG, not APCA: the axe gates
- * grade these pairs with WCAG math, so the derivation must optimize the same
- * metric — on light teals APCA favors white where WCAG measures ≈2.5:1).
+ * Compiler-owned readable ink for every hex status tone in the FINAL merged
+ * map: `--ds-color-on-{success,warning,error,info}`. Runs after Advanced so a
+ * tenant that overrides `--ds-color-error` drags its on-error ink along; a
+ * tenant without a hex tone emits nothing and the DS root floor decides. The
+ * derivation itself is the shared `readable-ink` module, so the static path
+ * cannot drift from this math.
  */
-function deriveReadableInk(seedHex: string): string {
-  const normalized = normalizeHexColor(seedHex);
-  const white = '#ffffff';
-  const dark = '#171717';
-  return contrastRatio(white, normalized) >= contrastRatio(dark, normalized) ? white : dark;
+function deriveAppearanceOnToneInks(
+  compiledBaseVariables: Readonly<Record<string, string>>,
+): Record<string, string> {
+  const vars: Record<string, string> = {};
+  for (const role of ON_TONE_ROLES) {
+    const seed = compiledBaseVariables[`--ds-color-${role}`];
+    if (!seed || !isHexColor(seed)) continue;
+    vars[onToneChannel(role)] = deriveReadableInk(seed);
+  }
+  return vars;
 }
 
 /**
@@ -697,6 +709,7 @@ export function appearanceToVariables(
   // emission may rewrite `--ds-color-primary` into a non-hex function value.
   const chartSeriesSeed = vars['--ds-color-primary'];
   Object.assign(vars, deriveAppearanceColorRamps(appearance.general ?? {}, vars));
+  Object.assign(vars, deriveAppearanceOnToneInks(vars));
 
   // Generated categorical series are compiler-owned and always emitted when a
   // concrete seed exists. Tenant-authored `--ds-chart-category-N` stays the

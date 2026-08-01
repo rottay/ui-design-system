@@ -14,13 +14,11 @@ export type IconFrameShape = 'circle' | 'square' | 'rounded';
 
 /**
  * Material axis. Every variant derives from existing semantic channels:
- * `subtle` (tone wash), `outline` (tone edge) and `glass` (bounded frost
- * riding the governed glass recipe). A solid `filled` variant requires the
- * per-tone on-ink authority (`--ds-color-on-<tone>`, emitted by BOTH theme
- * paths) — a single shared ink cannot pass contrast on all six tones under
- * every tenant, so the variant ships only once that authority exists.
+ * `subtle` (tone wash), `outline` (tone edge), `filled` (tone solid whose ink
+ * is the per-tone `--ds-color-on-<tone>` authority, emitted by both theme
+ * paths) and `glass` (bounded frost riding the governed glass recipe).
  */
-export type IconFrameVariant = 'subtle' | 'outline' | 'glass';
+export type IconFrameVariant = 'subtle' | 'outline' | 'filled' | 'glass';
 
 /** Semantic tone. `neutral` follows the secondary text channel. */
 export type IconFrameTone = 'neutral' | 'primary' | 'success' | 'warning' | 'error' | 'info';

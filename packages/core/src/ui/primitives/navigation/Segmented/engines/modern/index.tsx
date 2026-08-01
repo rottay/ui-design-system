@@ -9,10 +9,11 @@
  * Segments render as an inline-flex group with connected border-radius and a
  * framed selected indicator.
  *
- * Keyboard contract (hand-rolled per family, APG radiogroup): one roving tab
- * stop (the selected option, else the first enabled one), Arrow keys move and
- * select (Left/Right mirror in RTL), Home/End jump to the edges, disabled
- * options are skipped.
+ * Keyboard contract (APG radiogroup, owned by the roving-focus kernel): one
+ * roving tab stop (the selected option, else the first enabled one), Arrow
+ * keys move and select (Left/Right mirror in RTL), Home/End jump to the edges,
+ * disabled options are skipped. The family owns the value; the kernel owns the
+ * tab model and the direction mapping.
  *
  * @example Basic Usage
  * ```tsx
@@ -58,19 +59,10 @@
 
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import type { SegmentedProps, SegmentedOption } from "../../contracts";
 import { SEGMENTED_DEFAULTS } from "../../contracts";
-
-/**
- * Reading-direction probe for the RTL-mirrored arrow contract. The nearest
- * explicit `dir` wins; otherwise the document direction applies.
- */
-function isRtlContext(el: HTMLElement): boolean {
-  const scoped = el.closest("[dir]");
-  if (scoped) return scoped.getAttribute("dir") === "rtl";
-  return document.documentElement.dir === "rtl";
-}
+import { useRovingFocus } from "@/ui/primitives/runtime/collection/roving-focus";
 
 // ============================================================================
 // Component
@@ -89,8 +81,8 @@ function isRtlContext(el: HTMLElement): boolean {
  * - Supports both controlled and uncontrolled modes
  * - Normalizes simple options to SegmentedOption objects
  * - Handles individual option disabled states
- * - Roving tabindex + Arrow/Home/End navigation (RTL-mirrored), hand-rolled
- *   per family (no shared collection hook exists in this wave)
+ * - Roving tabindex + Arrow/Home/End navigation (RTL-mirrored) delegated to
+ *   the shared roving-focus kernel
  *
  * **Accessibility:**
  * - `role="radiogroup"` / `role="radio"` with `aria-checked`
@@ -162,65 +154,31 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
     };
 
     // ---------------------------------------------------------------------------
-    // Roving tabindex + arrow navigation (APG radiogroup)
+    // Roving tabindex + arrow navigation (APG radiogroup, kernel-owned)
     // ---------------------------------------------------------------------------
 
-    /** Live option buttons, in DOM order, for focus movement. */
-    const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
+    /**
+     * The collection's identity is the option value, so the tab stop is
+     * DERIVED state (the selection) and the kernel stays controlled: it
+     * resolves and reports, the family owns the value.
+     */
+    const optionIds = normalizedOptions.map((opt) => String(opt.value));
 
-    /** Indexes of the options the user can actually reach. */
-    const enabledIndexes = normalizedOptions
-      .map((opt, index) => (disabled || opt.disabled ? -1 : index))
-      .filter((index) => index >= 0);
-
-    const selectedIndex = normalizedOptions.findIndex((opt) => opt.value === currentValue);
-
-    /** The one tab stop: the selected option when reachable, else the first enabled. */
-    const tabStopIndex =
-      selectedIndex >= 0 && enabledIndexes.includes(selectedIndex)
-        ? selectedIndex
-        : enabledIndexes[0] ?? -1;
-
-    /** Move focus to an enabled option and select it (arrows select, per APG). */
-    const focusAndSelect = (index: number) => {
-      optionRefs.current[index]?.focus();
-      handleClick(normalizedOptions[index].value);
-    };
-
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
-      const position = enabledIndexes.indexOf(index);
-      if (position === -1) return;
-
-      const last = enabledIndexes.length - 1;
-      const rtl = isRtlContext(event.currentTarget);
-      let target: number | undefined;
-
-      switch (event.key) {
-        case "ArrowRight":
-          target = enabledIndexes[position + (rtl ? -1 : 1)] ?? enabledIndexes[rtl ? last : 0];
-          break;
-        case "ArrowLeft":
-          target = enabledIndexes[position + (rtl ? 1 : -1)] ?? enabledIndexes[rtl ? 0 : last];
-          break;
-        case "ArrowDown":
-          target = enabledIndexes[position + 1] ?? enabledIndexes[0];
-          break;
-        case "ArrowUp":
-          target = enabledIndexes[position - 1] ?? enabledIndexes[last];
-          break;
-        case "Home":
-          target = enabledIndexes[0];
-          break;
-        case "End":
-          target = enabledIndexes[last];
-          break;
-        default:
-          return;
-      }
-
-      event.preventDefault();
-      if (target !== undefined && target !== index) focusAndSelect(target);
-    };
+    const roving = useRovingFocus({
+      ids: optionIds,
+      // Both axes navigate: the vertical arrows are the radiogroup's
+      // direction-neutral pair, the horizontal ones mirror under RTL.
+      orientation: "both",
+      disabledIds: normalizedOptions
+        .filter((opt) => disabled || opt.disabled)
+        .map((opt) => String(opt.value)),
+      activeId: currentValue === undefined ? undefined : String(currentValue),
+      // APG radiogroup: arrows move the selection with the focus.
+      onActiveChange: (id) => {
+        const option = normalizedOptions.find((opt) => String(opt.value) === id);
+        if (option) handleClick(option.value);
+      },
+    });
 
     // ---------------------------------------------------------------------------
     // Render
@@ -238,22 +196,25 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
         role="radiogroup"
         aria-label={ariaLabel}
       >
-        {normalizedOptions.map((opt, index) => {
+        {normalizedOptions.map((opt) => {
           const isActive = currentValue === opt.value;
           const isDisabled = disabled || opt.disabled;
+          // Explicit attributes: the inline-paint ratchet fails closed on a
+          // spread of an unresolvable call result; this bag is focus wiring
+          // policed by the kernel's own zero-pinned counter.
+          const itemProps = roving.getItemProps(String(opt.value));
 
           return (
             <button
               key={String(opt.value)}
-              ref={(el) => {
-                optionRefs.current[index] = el;
-              }}
+              ref={itemProps.ref}
+              tabIndex={itemProps.tabIndex}
+              onKeyDown={itemProps.onKeyDown}
+              onFocus={itemProps.onFocus}
               type="button"
               className={opt.className || undefined}
               onClick={() => handleClick(opt.value)}
-              onKeyDown={(event) => handleKeyDown(event, index)}
               disabled={isDisabled}
-              tabIndex={index === tabStopIndex ? 0 : -1}
               data-part="option"
               data-selected={isActive}
               data-disabled={isDisabled || undefined}

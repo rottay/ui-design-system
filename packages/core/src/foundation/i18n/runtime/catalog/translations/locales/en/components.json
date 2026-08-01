@@ -406,7 +406,14 @@
   "autocomplete": {
     "not_found": "No results",
     "clear": "Clear",
-    "input_label": "Autocomplete"
+    "input_label": "Autocomplete",
+    "loading": "Loading suggestions..."
+  },
+  "breadcrumb": {
+    "expand_hidden": "Show hidden items"
+  },
+  "passwordinput": {
+    "caps_lock_on": "Caps Lock is on"
   },
   "calendarView": {
     "today": "Today",

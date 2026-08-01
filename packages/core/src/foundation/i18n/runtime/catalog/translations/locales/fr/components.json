@@ -1106,7 +1106,14 @@
     "strength_strong": "Fort"
   },
   "autocomplete": {
-    "input_label": "Saisie semi-automatique"
+    "input_label": "Saisie semi-automatique",
+    "loading": "Chargement des suggestions..."
+  },
+  "breadcrumb": {
+    "expand_hidden": "Afficher les éléments masqués"
+  },
+  "passwordinput": {
+    "caps_lock_on": "Verr. Maj est activé"
   },
   "meter": {
     "threshold": {

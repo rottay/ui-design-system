@@ -71,6 +71,7 @@ import { NOTIFICATION_DEFAULTS } from '../../contracts';
 import { warnOnceInDev } from '@/infrastructure/runtime/foundation/diagnostics/development-logging';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useReducedMotion } from '@/graphics/motion/react/runtime';
+import { governedExitMs } from '@/graphics/motion/react/runtime/presence/duration';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
 import { StatusInfoIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-info';
@@ -125,23 +126,6 @@ let notificationId = 0;
  * @internal
  */
 const generateId = () => `modern-notification-${++notificationId}`;
-
-/**
- * Resolves the exit window from the element's computed style (the governed
- * `--ds-motion-*` value the skin actually applied), plus a small buffer.
- * Returns 0 when no animation/transition is declared (reduced motion, tests).
- * @internal
- */
-const governedExitMs = (el: HTMLElement): number => {
-  const { animationDuration, transitionDuration } = getComputedStyle(el);
-  const toMs = (raw: string) =>
-    raw.split(',').reduce((max, part) => {
-      const t = part.trim();
-      const v = t.endsWith('ms') ? parseFloat(t) : t.endsWith('s') ? parseFloat(t) * 1000 : 0;
-      return Number.isFinite(v) && v > max ? v : max;
-    }, 0);
-  return Math.max(toMs(animationDuration), toMs(transitionDuration)) + 50;
-};
 
 // ============================================================================
 // Notification Provider

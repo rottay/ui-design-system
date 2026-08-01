@@ -225,21 +225,6 @@ export function CodeBlock({
             fontWeight: title ? 500 : 600,
             textTransform: title ? undefined : 'uppercase',
             letterSpacing: title ? undefined : 'var(--ds-letter-spacing-wider)',
-            // Language badge: the bare language tag gets a quiet chip (hairline
-            // frame + whisper tint, no second box) so it reads as METADATA
-            // instead of floating header copy. The filename title stays bare --
-            // it is content, not a tag. No chip is stamped when both are absent
-            // (an empty bordered pill would be a pure artifact).
-            ...(!title && language
-              ? {
-                  padding: '0 var(--ds-spacing-2)',
-                  border: '1px solid var(--ds-color-border)',
-                  borderRadius: 'var(--ds-radius-sm)',
-                  background:
-                    'var(--_ds-proto-codeblock-language-badge-bg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent))',
-                  lineHeight: 'var(--ds-line-height-snug)',
-                }
-              : undefined),
           }}
         >
           {title ?? language ?? ''}

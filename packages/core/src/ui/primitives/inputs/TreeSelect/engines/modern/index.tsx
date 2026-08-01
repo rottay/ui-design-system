@@ -35,6 +35,8 @@ import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generate
 import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 import { LoadingIndicator } from '../../../../foundation/loading-indicator';
+import { advanceTypeahead } from '../../../../runtime/collection/typeahead';
+import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -482,8 +484,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
     /** APG roving tabindex: the one row in the tab order (Tree B4-04 idiom). */
     const [rovingKey, setRovingKey] = useState<string | number | null>(null);
     /** Typeahead rolling buffer (500ms window, Tree B4-04 cadence). */
-    const typeaheadBufferRef = useRef('');
-    const typeaheadAtRef = useRef(0);
+    const typeaheadRef = useRef<TypeaheadState>({ buffer: '', lastKeyTime: 0 });
     /** Trigger↔popup linkage (aria-controls lives on the dropdown shell: the
      *  tree unmounts under the empty/loading branches, the shell does not). */
     const dropdownId = useId();
@@ -698,11 +699,13 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       // stopped matching restarts from the fresh character, which cycles
       // repeated letters across same-initial rows.
       if (e.key.length === 1 && e.key !== ' ' && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        const now = Date.now();
-        const extending =
-          now - typeaheadAtRef.current < 500 && typeaheadBufferRef.current.length > 0;
-        let buffer = (extending ? typeaheadBufferRef.current : '') + e.key.toLowerCase();
-        typeaheadAtRef.current = now;
+        const advanced = advanceTypeahead(typeaheadRef.current, e.key.toLowerCase(), Date.now());
+        let buffer = advanced.prefix;
+        // A buffer longer than the keystroke that produced it is still
+        // growing, so the search includes the CURRENT row (it may be the only
+        // match); a buffer that restarted begins at the next row.
+        const extending = buffer.length > 1;
+        typeaheadRef.current.lastKeyTime = advanced.state.lastKeyTime;
         const labels = rows.map((r) =>
           (r.querySelector('[data-part="tree-node-label"]')?.textContent ?? '').trim().toLowerCase()
         );
@@ -718,7 +721,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
           buffer = e.key.toLowerCase();
           match = findMatch(buffer, 1);
         }
-        typeaheadBufferRef.current = buffer;
+        typeaheadRef.current.buffer = buffer;
         if (match >= 0) {
           e.preventDefault();
           rows[match]?.focus();

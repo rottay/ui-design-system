@@ -406,7 +406,14 @@
   "autocomplete": {
     "not_found": "لا توجد نتائج",
     "clear": "مسح",
-    "input_label": "الإكمال التلقائي"
+    "input_label": "الإكمال التلقائي",
+    "loading": "جارٍ تحميل الاقتراحات..."
+  },
+  "breadcrumb": {
+    "expand_hidden": "إظهار العناصر المخفية"
+  },
+  "passwordinput": {
+    "caps_lock_on": "مفتاح Caps Lock مفعّل"
   },
   "calendarView": {
     "today": "اليوم",

@@ -125,6 +125,19 @@ export interface PasswordInputProps extends EngineAwareProps {
   strengthIndicator?: boolean;
   /** Current strength level, controls the color and width of the strength bar */
   strengthLevel?: PasswordStrengthLevel;
+  /**
+   * Whether to announce an active Caps Lock key while the input is focused.
+   * When a Caps Lock press is detected, a `role="status"` hint renders in the
+   * field's message zone using the `passwordinput.caps_lock_on` catalog
+   * entry; the hint is suppressed whenever `error` is set (the error state
+   * always wins) and clears on blur.
+   *
+   * @default true
+   * @remarks Implemented by the modern engine only; classic and rustic do
+   * not detect Caps Lock yet (the axis is typed for all three, but only
+   * modern renders the hint).
+   */
+  capsLockHint?: boolean;
   /** Custom icon rendered when the password is visible (eye-open state) */
   visibleIcon?: ReactNode;
   /** Custom icon rendered when the password is hidden (eye-closed state) */
@@ -210,4 +223,6 @@ export const PASSWORD_INPUT_DEFAULTS = {
   strengthIndicator: false,
   /** Default autocomplete hint for password managers */
   autoComplete: 'current-password',
+  /** Caps Lock hint shown by default */
+  capsLockHint: true,
 };

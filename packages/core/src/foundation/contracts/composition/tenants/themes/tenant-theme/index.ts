@@ -140,6 +140,7 @@ export const TENANT_THEME_OVERRIDE_TOKENS = [
   "--ds-color-bg-primary",
   "--ds-color-bg",
   "--ds-color-background",
+  "--ds-color-bg-overlay",
   "--ds-color-text-primary",
   "--ds-color-text-secondary",
   "--ds-color-text-muted",

@@ -38,7 +38,6 @@ html[data-tenant="bithire"]:not([data-theme="dark"]):not(.dark) {
   /* Backgrounds - Light, professional */
   --ds-color-bg-primary: #ffffff;
   --ds-color-bg-surface: #ffffff;
-  --ds-color-bg-overlay: rgba(20, 40, 59, 0.42);
 
   /* Text - BitHire blue-gray, never inherited browser defaults */
   --ds-color-text-tertiary: #7f859b;

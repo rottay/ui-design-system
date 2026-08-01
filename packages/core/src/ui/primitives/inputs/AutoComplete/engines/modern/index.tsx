@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * @fileoverview AutoComplete Modern engine -- custom dropdown built with DaisyUI/Tailwind classes.
+ * @fileoverview AutoComplete Modern engine -- custom listbox-backed input painted by the Rottay skin.
  * Unlike the Classic engine, this manages its own controlled/uncontrolled state, keyboard
  * navigation, click-outside dismissal, and option filtering without relying on Ant Design.
  *
@@ -22,6 +22,8 @@ import { AUTOCOMPLETE_DEFAULTS } from '../../contracts';
 import { toCanonicalSize } from '../../../../../../foundation/contracts/kernel/common';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+import { LoadingIndicator } from '../../../../foundation/loading-indicator';
+import { useComboboxFoundation } from '../../../../runtime/collection/combobox';
 
 /**
  * Hook-local `tOr`: catalogue value with an English floor -- when the
@@ -39,7 +41,7 @@ function useAutoCompleteTranslation() {
 }
 
 /**
- * Modern (DaisyUI) implementation of the AutoComplete input.
+ * Modern Rottay implementation of the AutoComplete input.
  *
  * Renders a plain `<input>` with a skin-painted dropdown list. Supports both
  * controlled (`value` + `onChange`) and uncontrolled (`defaultValue`) modes.
@@ -53,7 +55,7 @@ function useAutoCompleteTranslation() {
  *
  * @param props - Standardized AutoCompleteProps from the DS type contract.
  * @param ref   - Forwarded ref attached to the outer wrapper div.
- * @returns A DaisyUI-styled autocomplete input with dropdown suggestion list.
+ * @returns A Rottay-skinned autocomplete input with dropdown suggestion list.
  */
 export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
   (props, ref) => {
@@ -76,6 +78,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       size: sizeProp = AUTOCOMPLETE_DEFAULTS.size,
       status,
       notFoundContent: notFoundContentProp,
+      loading,
+      loadingText: loadingTextProp,
       popupClassName,
       popupMatchSelectWidth = AUTOCOMPLETE_DEFAULTS.popupMatchSelectWidth,
       className,
@@ -85,6 +89,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
     // Explicit prop wins; otherwise localized copy with the historical
     // English default as the floor.
     const notFoundContent = notFoundContentProp ?? tOr('autocomplete.not_found', 'No results');
+    const loadingText = loadingTextProp ?? tOr('autocomplete.loading', 'Loading suggestions...');
     // Accessible name (axe `label` critical, Mentions K4-D idiom): the
     // contract exposes no `aria-label` axis, so the visible placeholder is
     // the floor and a localized default names the bare control. A consumer
@@ -95,12 +100,11 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
     // 'sm' | 'md' | 'lg' vocabulary; toCanonicalSize resolves either spelling.
     const size = toCanonicalSize(sizeProp);
 
-    // Three pieces of internal state mirror what Ant Design manages automatically
-    // in the Classic engine: the text value, dropdown visibility, and the
-    // keyboard-focused option index (-1 means no option is focused).
+    // Two pieces of internal state mirror what Ant Design manages automatically
+    // in the Classic engine: the text value and dropdown visibility. The
+    // active option and its ARIA belong to the combobox kernel below.
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [internalOpen, setInternalOpen] = useState(defaultOpen ?? false);
-    const [focusedIndex, setFocusedIndex] = useState(-1);
 
     // Controlled vs uncontrolled detection -- when the consumer passes `value`
     // we defer to it; otherwise we own the value in local state.
@@ -113,6 +117,37 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
     // APG combobox wiring: the input owns focus permanently; the active
     // option is announced via aria-activedescendant against the listbox id.
     const listboxId = useId();
+
+    // Memoized filtering: `filterOption === true` enables the default
+    // case-insensitive substring match; a function enables custom logic;
+    // `false` disables client-side filtering (useful for server-side search).
+    const filteredOptions = useMemo(() => {
+      if (!filterOption) return options;
+      if (filterOption === true) {
+        return options.filter((opt) =>
+          opt.value.toLowerCase().includes(value.toLowerCase())
+        );
+      }
+      return options.filter((opt) => filterOption(value, opt));
+    }, [options, value, filterOption]);
+
+    // Disabled suggestions render but never hold the active descendant.
+    const isItemSelectable = useCallback(
+      (index: number) => !arrayValueAt(filteredOptions, index)?.disabled,
+      [filteredOptions]
+    );
+
+    // The combobox kernel owns the active descendant, the panel posture and
+    // every ARIA attribute that has to agree with both.
+    const combobox = useComboboxFoundation({
+      open: isOpen,
+      itemCount: filteredOptions.length,
+      isItemSelectable,
+      loading,
+      query: value,
+      listboxId,
+    });
+    const { activeIndex, listState, setActiveIndex, nextSelectableFrom } = combobox;
 
     // Only update internal open state when the dropdown is uncontrolled;
     // always notify the parent so controlled consumers stay in sync.
@@ -133,8 +168,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       onChange?.(newValue);
       onSearch?.(newValue);
       handleOpenChange(true);
-      setFocusedIndex(-1);
-    }, [isControlled, onChange, onSearch, handleOpenChange]);
+      setActiveIndex(-1);
+    }, [isControlled, onChange, onSearch, handleOpenChange, setActiveIndex]);
 
     // Commits a selected option: updates the text value, notifies parent,
     // closes the dropdown, and resets the keyboard focus index.
@@ -146,21 +181,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       onChange?.(newValue);
       onSelect?.(newValue, option);
       handleOpenChange(false);
-      setFocusedIndex(-1);
-    }, [isControlled, onChange, onSelect, handleOpenChange]);
-
-    // Memoized filtering: `filterOption === true` enables the default
-    // case-insensitive substring match; a function enables custom logic;
-    // `false` disables client-side filtering (useful for server-side search).
-    const filteredOptions = useMemo(() => {
-      if (!filterOption) return options;
-      if (filterOption === true) {
-        return options.filter((opt) =>
-          opt.value.toLowerCase().includes(value.toLowerCase())
-        );
-      }
-      return options.filter((opt) => filterOption(value, opt));
-    }, [options, value, filterOption]);
+      setActiveIndex(-1);
+    }, [isControlled, onChange, onSelect, handleOpenChange, setActiveIndex]);
 
     // Dismiss the dropdown when the user clicks outside the component.
     // The listener is only attached while the dropdown is open to avoid
@@ -177,47 +199,26 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen, handleOpenChange]);
 
-    // A controlled value change from the parent can shrink the filtered list
-    // under the keyboard focus index; clamp it back to "no option focused".
-    useEffect(() => {
-      if (focusedIndex >= filteredOptions.length) setFocusedIndex(-1);
-    }, [filteredOptions.length, focusedIndex]);
-
-    // Index of the next ENABLED option scanning in `direction` from `from`
-    // (wraps at both ends); -1 when every option is disabled or the list is
-    // empty. `from = -1` scans from the first option downward / from the last
-    // upward, so ArrowUp on a fresh dropdown lands on the LAST enabled option
-    // (the historical wrap contract the tests pin).
-    const enabledIndexFrom = useCallback((from: number, direction: 1 | -1): number => {
-      const count = filteredOptions.length;
-      if (count === 0) return -1;
-      const start = from < 0 ? (direction === 1 ? -1 : count) : from;
-      for (let step = 1; step <= count; step++) {
-        const candidate = (start + direction * step + count * step) % count;
-        if (!arrayValueAt(filteredOptions, candidate)?.disabled) return candidate;
-      }
-      return -1;
-    }, [filteredOptions]);
-
     // Keyboard-originated focus moves mark themselves so the scroll effect
-    // below can tell them apart from hover (hover must never drag the
-    // scrollport -- the Select batch's keyboardNavRef idiom).
-    const keyboardNavRef = useRef(false);
-    const moveFocus = useCallback((index: number) => {
-      keyboardNavRef.current = true;
-      setFocusedIndex(index);
-    }, []);
+    // below can tell them apart from hover: hover must never drag the
+    // scrollport out from under the pointer.
+    const moveFocus = useCallback(
+      (index: number) => setActiveIndex(index, 'keyboard'),
+      [setActiveIndex]
+    );
 
     // Keep the keyboard-focused option inside the dropdown scrollport.
     // jsdom lacks scrollIntoView -- guard like the Select engine does.
+    // Consuming the keyboard marker LAST keeps a move that could not be acted
+    // upon (closed panel, no active row) alive for the next render.
+    const { consumeKeyboardMove, getOptionId } = combobox;
     useEffect(() => {
-      if (!isOpen || focusedIndex < 0 || !keyboardNavRef.current) return;
-      keyboardNavRef.current = false;
-      const node = document.getElementById(`${listboxId}-option-${focusedIndex}`);
+      if (!isOpen || activeIndex < 0 || !consumeKeyboardMove()) return;
+      const node = document.getElementById(getOptionId(activeIndex));
       if (node && typeof node.scrollIntoView === 'function') {
         node.scrollIntoView({ block: 'nearest' });
       }
-    }, [isOpen, focusedIndex, listboxId]);
+    }, [isOpen, activeIndex, consumeKeyboardMove, getOptionId]);
 
     // Keyboard navigation with circular wrapping over ENABLED options
     // (ArrowDown at the end goes back to the first option, ArrowUp at the
@@ -234,30 +235,33 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault();
-          moveFocus(enabledIndexFrom(focusedIndex, 1));
+          moveFocus(nextSelectableFrom(activeIndex, 1));
           break;
         case 'ArrowUp':
           e.preventDefault();
-          moveFocus(enabledIndexFrom(focusedIndex, -1));
+          moveFocus(nextSelectableFrom(activeIndex, -1));
           break;
         case 'Home':
           e.preventDefault();
-          moveFocus(enabledIndexFrom(-1, 1));
+          moveFocus(nextSelectableFrom(-1, 1));
           break;
         case 'End':
           e.preventDefault();
-          moveFocus(enabledIndexFrom(filteredOptions.length, -1));
+          moveFocus(nextSelectableFrom(filteredOptions.length, -1));
           break;
         case 'PageDown': {
+          // Paged movement counts RENDERED rows, not selectable ones, then
+          // recovers to the nearest enabled row -- so it stays here rather
+          // than in the kernel, whose scan is selectable-only.
           e.preventDefault();
-          const target = Math.min((focusedIndex < 0 ? -1 : focusedIndex) + 10, filteredOptions.length - 1);
-          moveFocus(arrayValueAt(filteredOptions, target)?.disabled ? enabledIndexFrom(target - 1, 1) : target);
+          const target = Math.min((activeIndex < 0 ? -1 : activeIndex) + 10, filteredOptions.length - 1);
+          moveFocus(arrayValueAt(filteredOptions, target)?.disabled ? nextSelectableFrom(target - 1, 1) : target);
           break;
         }
         case 'PageUp': {
           e.preventDefault();
-          const target = Math.max((focusedIndex < 0 ? filteredOptions.length : focusedIndex) - 10, 0);
-          moveFocus(arrayValueAt(filteredOptions, target)?.disabled ? enabledIndexFrom(target + 1, -1) : target);
+          const target = Math.max((activeIndex < 0 ? filteredOptions.length : activeIndex) - 10, 0);
+          moveFocus(arrayValueAt(filteredOptions, target)?.disabled ? nextSelectableFrom(target + 1, -1) : target);
           break;
         }
         case 'Enter': {
@@ -265,7 +269,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
           // active descendant the keystroke belongs to the surrounding form.
           // Disabled options are unreachable (arrow nav skips them), but a
           // stale index could still point at one -- guard the commit.
-          const focusedOption = focusedIndex >= 0 ? arrayValueAt(filteredOptions, focusedIndex) : undefined;
+          const focusedOption = activeIndex >= 0 ? arrayValueAt(filteredOptions, activeIndex) : undefined;
           if (focusedOption && !focusedOption.disabled) {
             e.preventDefault();
             handleSelect(focusedOption);
@@ -281,6 +285,13 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
           break;
       }
     };
+
+    // The kernel bags are read into explicit attributes: the inline-paint
+    // ratchet fails closed on a spread of an unresolvable call result, and
+    // these getters are aria/id wiring the kernel's own zero-pinned counter
+    // already polices.
+    const inputProps = combobox.getInputProps();
+    const listboxProps = combobox.getListboxProps();
 
     return (
       <div
@@ -311,16 +322,14 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             data-part="input"
             data-open={isOpen || undefined}
             data-disabled={disabled || undefined}
-            role="combobox"
             aria-label={inputLabel}
-            aria-autocomplete="list"
-            aria-haspopup="listbox"
-            aria-expanded={isOpen}
             aria-invalid={status === 'error' || undefined}
-            aria-controls={isOpen ? listboxId : undefined}
-            aria-activedescendant={
-              isOpen && focusedIndex >= 0 ? `${listboxId}-option-${focusedIndex}` : undefined
-            }
+            role={inputProps.role}
+            aria-haspopup={inputProps['aria-haspopup']}
+            aria-expanded={inputProps['aria-expanded']}
+            aria-controls={inputProps['aria-controls']}
+            aria-activedescendant={inputProps['aria-activedescendant']}
+            aria-autocomplete={inputProps['aria-autocomplete']}
           />
           {/* Clear button only visible when there is a non-empty value and the input is interactive.
               Positioning/paint are skin-owned (the old `right-2` utility was
@@ -354,8 +363,10 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
         {isOpen && (
           <ul
             data-part="dropdown"
-            role="listbox"
-            id={listboxId}
+            role={listboxProps.role}
+            id={listboxProps.id}
+            aria-busy={listboxProps['aria-busy']}
+            aria-multiselectable={listboxProps['aria-multiselectable']}
             className={popupClassName || undefined}
             data-match-width={popupMatchSelectWidth === false ? 'false' : undefined}
             style={
@@ -364,9 +375,32 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
                 : undefined
             }
           >
-            {filteredOptions.length > 0 ? (
-              filteredOptions.map((option, index) => (
-                <li key={option.value}>
+            {listState === 'loading' ? (
+              /* Async posture, same listbox-child contract as the empty one.
+                 It replaces the not-found copy rather than stacking above it:
+                 a list still awaiting results must not claim it found nothing.
+                 Suggestions already loaded keep rendering (the kernel ranks
+                 results above loading), so a refresh never blanks the list. */
+              <li data-part="loading-state" role="option" aria-disabled="true">
+                <LoadingIndicator size="sm" />
+                <span data-part="loading-state-label">{loadingText}</span>
+              </li>
+            ) : listState === 'empty' ? (
+              /* Empty posture sits inside the listbox: it must carry the
+                 option role (aria-required-children) and read as disabled
+                 (Mentions idiom) -- a role-less <li> breaks the listbox
+                 contract for AT. */
+              <li data-part="empty" role="option" aria-disabled="true">
+                {notFoundContent}
+              </li>
+            ) : (
+              filteredOptions.map((option, index) => {
+                const itemProps = combobox.getItemProps(index, {
+                  selected: option.value === value,
+                  disabled: option.disabled,
+                });
+                return (
+                <li key={option.value} role="none">
                   <button
                     type="button"
                     disabled={option.disabled}
@@ -375,18 +409,16 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
                     // Sync keyboard focus index on hover so mouse and keyboard
                     // navigation stay coordinated -- without tripping the
                     // keyboard-only scroll-into-view.
-                    onMouseEnter={() => {
-                      keyboardNavRef.current = false;
-                      setFocusedIndex(index);
-                    }}
+                    onMouseEnter={() => setActiveIndex(index, 'pointer')}
                     data-part="option"
-                    data-active={focusedIndex === index || undefined}
                     data-disabled={option.disabled || undefined}
-                    role="option"
-                    id={`${listboxId}-option-${index}`}
-                    aria-selected={focusedIndex === index}
                     // Truncated rows keep a full-value affordance (Select idiom).
                     title={typeof option.label === 'string' ? option.label : option.value}
+                    role={itemProps.role}
+                    id={itemProps.id}
+                    aria-selected={itemProps['aria-selected']}
+                    aria-disabled={itemProps['aria-disabled']}
+                    data-active={itemProps['data-active']}
                   >
                     {/* Governed label slot (Cascader/Mentions parity): the
                         stable addressable part for the option's primary
@@ -394,15 +426,8 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
                     <span data-part="option-label">{option.label ?? option.value}</span>
                   </button>
                 </li>
-              ))
-            ) : (
-              /* Empty posture sits inside the listbox: it must carry the
-                 option role (aria-required-children) and read as disabled
-                 (Mentions idiom) -- a role-less <li> breaks the listbox
-                 contract for AT. */
-              <li data-part="empty" role="option" aria-disabled="true">
-                {notFoundContent}
-              </li>
+                );
+              })
             )}
           </ul>
         )}

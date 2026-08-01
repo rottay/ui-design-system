@@ -226,11 +226,14 @@ describe("TenantThemeConfig v1 server contract", () => {
   });
 
   it("publishes immutable schema/document drift sentinels", () => {
+    // C1 re-anchor: the document schema digest moved exactly once because the
+    // tokenOverrides allowlist gained --ds-color-bg-overlay (the scrim veil
+    // channel of the SC-7 panel/scrim split).
     expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
-      "sha256-2b898d706c1e5a5baa2fdfa0c09936ea5df5d5d35c213d674f140aaa020b489d"
+      "sha256-c5911745647df6d1e6b0cc7072adfa3313c47f1137f8f84db44bd06e3ac97fb3"
     );
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
-      "sha256-54ed81d4aff6c676da3b48994eeb225698ec81eefdbb2f89d0b38a28850373bd"
+      "sha256-5bc1ff01812a80f1276143d57ef77a91e315ffe9786d3dbed1f40b2012f6c927"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(

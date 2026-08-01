@@ -92,6 +92,19 @@
   gap: var(--ds-input-message-gap, var(--ds-spacing-1));
 }
 
+/* `reserveMessageSpace`: the message region always mounts, so its box floor
+   never collapses to 0 while empty and never grows past the toggle either --
+   the reserved height rides the SAME two channels the message roles below
+   already use (font-size x line-height = one line box), multiplied by the
+   per-instance line count the engine stamps inline. */
+.ds-form-field.ds-form-field--modern[data-part='root'] [data-part='message-region'][data-reserve-message='true'] {
+  min-block-size: calc(
+    var(--_ds-form-field-message-lines, 1) *
+      var(--ds-input-helper-font-size, var(--ds-font-size-xs)) *
+      var(--ds-input-helper-line-height, var(--ds-line-height-snug))
+  );
+}
+
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='help-text'],
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='error-message'] {
   margin: 0;
@@ -153,12 +166,12 @@
    alone), optically centered on the first line box of the message. */
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='error-icon'] {
   flex: none;
-  inline-size: var(--_ds-proto-form-field-error-icon-size, 14px);
-  block-size: var(--_ds-proto-form-field-error-icon-size, 14px);
+  inline-size: var(--_ds-proto-form-field-error-icon-size, var(--ds-icon-size-status, 14px));
+  block-size: var(--_ds-proto-form-field-error-icon-size, var(--ds-icon-size-status, 14px));
   margin-block-start: calc(
     (
       1em * var(--ds-input-helper-line-height, var(--ds-line-height-snug)) -
-        var(--_ds-proto-form-field-error-icon-size, 14px)
+        var(--_ds-proto-form-field-error-icon-size, var(--ds-icon-size-status, 14px))
     ) / 2
   );
   color: var(

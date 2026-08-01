@@ -194,6 +194,88 @@
   cursor: default;
 }
 
+/* ---- simple mode (contract `simple`): the 3-item cluster (prev, readout,
+        next) reads tighter with the next spacing rung down instead of the
+        default toolbar gap. ---- */
+.rottay-pagination--modern[data-part='root'][data-simple='true'] {
+  column-gap: var(--ds-spacing-2);
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-simple-text'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  padding-inline: var(--ds-pagination-current-padding-x);
+  color: var(--ds-pagination-item-color, var(--ds-color-text-primary));
+  font-size: var(--ds-pagination-current-font-size);
+  /* Bare value, not the `--ds-pagination-numeric` channel expression: the
+     modern-engine test pins that channel to exactly two declaration sites
+     (pagination-size-select carries the same precedent, same reason). */
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---- quick jumper (contract `showQuickJumper`): the same height scale,
+        hairline, radius and typography as the joined controls / size
+        select -- the family's one control grammar, reused rather than
+        reinvented. The width is instance geometry with no existing channel,
+        so it rides a private proto axis (batch-28 ledger convention) with a
+        literal fallback, following the size-changer's arrow-clearance
+        precedent above. ---- */
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-jumper'] {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'][data-part='quick-jumper'] {
+  border: 1px solid var(--ds-pagination-border, var(--ds-color-border));
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
+  display: inline-flex;
+  inline-size: var(--_ds-proto-pagination-jumper-width, 56px);
+  block-size: var(--ds-pagination-current-height);
+  padding-inline: var(--ds-pagination-current-padding-x);
+  border-radius: var(--ds-pagination-radius, var(--ds-radius-md));
+  background: var(--ds-pagination-item-bg);
+  color: var(--ds-pagination-item-color, var(--ds-color-text-primary));
+  font: inherit;
+  font-size: var(--ds-pagination-current-font-size);
+  /* Bare value; see the simple-text rule above for why this stays outside
+     the pinned `--ds-pagination-numeric` channel expression. */
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  transition:
+    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease);
+}
+
+@media (hover: hover) {
+  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper']:not(:disabled):hover {
+    background: var(
+      --ds-pagination-item-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-card-bg, var(--ds-surface-card)))
+    );
+    color: var(--ds-pagination-item-color-hover, var(--ds-color-text-primary));
+  }
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='quick-jumper']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
+}
+
+/* Disabled dims control as one unit, same posture as the size-changer. */
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-jumper'][data-disabled='true'] {
+  opacity: var(--ds-pagination-disabled-opacity, var(--ds-button-disabled-opacity));
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='quick-jumper']:disabled {
+  cursor: not-allowed;
+}
+
 /* ---- page-size changer (contract `showSizeChanger`): a native select in
         the select.css native-trigger idiom — same height scale, hairline,
         radius and typography as the joined controls, with the governed
@@ -300,7 +382,8 @@
 @media (hover: none), (pointer: coarse) {
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'] {
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'],
+  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
     min-block-size: var(--ds-pagination-touch-target-min, 44px);
   }
 }
@@ -308,7 +391,8 @@
 @media (prefers-reduced-motion: reduce) {
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'] {
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'],
+  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
     transition: none;
   }
 }
@@ -321,7 +405,8 @@
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-part='pagination-nav-button'],
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-part='pagination-page-button'],
   .rottay-pagination--modern[data-part='root'] [data-part='ellipsis'][data-part='ellipsis'],
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'][data-part='pagination-size-select'] {
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'][data-part='pagination-size-select'],
+  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'][data-part='quick-jumper'] {
     forced-color-adjust: auto;
     border-color: ButtonText;
   }
@@ -333,7 +418,8 @@
 
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button']:disabled,
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button']:disabled,
-  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select']:disabled {
+  .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select']:disabled,
+  .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper']:disabled {
     color: GrayText;
   }
 

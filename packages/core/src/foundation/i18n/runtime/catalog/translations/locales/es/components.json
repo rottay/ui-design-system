@@ -406,7 +406,14 @@
   "autocomplete": {
     "not_found": "Sin resultados",
     "clear": "Limpiar",
-    "input_label": "Autocompletado"
+    "input_label": "Autocompletado",
+    "loading": "Cargando sugerencias..."
+  },
+  "breadcrumb": {
+    "expand_hidden": "Mostrar elementos ocultos"
+  },
+  "passwordinput": {
+    "caps_lock_on": "Bloq Mayús está activado"
   },
   "calendarView": {
     "today": "Hoy",

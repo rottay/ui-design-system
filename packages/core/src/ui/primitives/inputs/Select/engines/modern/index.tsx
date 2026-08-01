@@ -46,6 +46,9 @@ import {
   useOverlayPosition,
 } from '../../../../runtime/overlay/positioning';
 import { useOverlayLayer } from '../../../../runtime/overlay/layer-stack';
+import { advanceTypeahead } from '../../../../runtime/collection/typeahead';
+import type { TypeaheadState } from '../../../../runtime/collection/typeahead';
+import { resolveComboboxListState } from '../../../../runtime/collection/combobox';
 import {
   isResponsiveValue,
   generateResponsiveCSS,
@@ -310,10 +313,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
    * character. Inert while `searchable` — keystrokes belong to the filter
    * input there.
    */
-  const typeaheadRef = useRef<{ buffer: string; timer: ReturnType<typeof setTimeout> | null }>({
-    buffer: '',
-    timer: null,
-  });
+  const typeaheadRef = useRef<TypeaheadState>({ buffer: '', lastKeyTime: 0 });
 
   const setContainerNode = useCallback((node: HTMLDivElement | null) => {
     containerRef.current = node;
@@ -407,6 +407,21 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       offsetY: startIdx * itemHeight,
     };
   }, [renderableItems, virtualEnabled, scrollTop, itemHeight, containerHeight]);
+
+  // Panel posture. Both branches ask the kernel the same question against
+  // their own row count -- the virtual branch renders the window, the plain
+  // branch the whole list -- so the "loading outranks empty" law is stated
+  // once instead of twice.
+  const panelState = resolveComboboxListState({
+    open: isOpen,
+    loading,
+    itemCount: renderableItems.length,
+  });
+  const virtualPanelState = resolveComboboxListState({
+    open: isOpen,
+    loading,
+    itemCount: visibleItems.length,
+  });
 
   // Selected options
   const selectedOptions = useMemo(() => {
@@ -515,12 +530,11 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     (char: string): number => {
       if (isSearchable || selectableIndices.length === 0) return -1;
       const state = typeaheadRef.current;
-      if (state.timer) clearTimeout(state.timer);
-      const next = (state.buffer + char).toLowerCase();
-      state.timer = setTimeout(() => {
-        typeaheadRef.current.buffer = '';
-        typeaheadRef.current.timer = null;
-      }, 500);
+      const advanced = advanceTypeahead(state, char, Date.now());
+      const next = advanced.prefix;
+      // The window advances on every keystroke; which buffer survives is the
+      // matcher's call below.
+      state.lastKeyTime = advanced.state.lastKeyTime;
 
       const currentPos = selectableIndices.indexOf(focusedIndex);
       // A run of one repeated character ("aaa") cycles through the options
@@ -747,13 +761,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       optionEl.scrollIntoView({ block: 'nearest' });
     }
   }, [isOpen, focusedIndex, virtualEnabled, itemHeight, selectId]);
-
-  // The type-ahead buffer timer never outlives the component.
-  useEffect(() => {
-    return () => {
-      if (typeaheadRef.current.timer) clearTimeout(typeaheadRef.current.timer);
-    };
-  }, []);
 
   const closeDropdown = useCallback(() => {
     setIsOpen(false);
@@ -1256,17 +1263,15 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                       insetInline: 0,
                     }}
                   >
-                    {visibleItems.length === 0 ? (
-                      loading ? (
-                        <div data-part="loading-state" data-virtual="true" role="status">
-                          <span data-part="loading-spinner" aria-hidden="true" />
-                          <span data-part="loading-state-label">{loadingText}</span>
-                        </div>
-                      ) : (
-                        <div data-part="empty" data-virtual="true">
-                          {noOptionsText}
-                        </div>
-                      )
+                    {virtualPanelState === 'loading' ? (
+                      <div data-part="loading-state" data-virtual="true" role="status">
+                        <span data-part="loading-spinner" aria-hidden="true" />
+                        <span data-part="loading-state-label">{loadingText}</span>
+                      </div>
+                    ) : virtualPanelState === 'empty' ? (
+                      <div data-part="empty" data-virtual="true">
+                        {noOptionsText}
+                      </div>
                     ) : (
                       visibleItems.map((item, idx) => {
                         const realIdx = Math.max(0, Math.floor(scrollTop / itemHeight) - VIRTUAL_BUFFER) + idx;
@@ -1343,20 +1348,18 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                     )}
                   </div>
                 </div>
-              ) : renderableItems.length === 0 ? (
-                loading ? (
-                  /* Async posture: while options stream in, the panel keeps
-                     the same spatial contract as the empty state (same part
-                     geometry in the skin) instead of lying "no options". */
-                  <div data-part="loading-state" role="status">
-                    <span data-part="loading-spinner" aria-hidden="true" />
-                    <span data-part="loading-state-label">{loadingText}</span>
-                  </div>
-                ) : (
-                  <div data-part="empty">
-                    {noOptionsText}
-                  </div>
-                )
+              ) : panelState === 'loading' ? (
+                /* Async posture: while options stream in, the panel keeps
+                   the same spatial contract as the empty state (same part
+                   geometry in the skin) instead of lying "no options". */
+                <div data-part="loading-state" role="status">
+                  <span data-part="loading-spinner" aria-hidden="true" />
+                  <span data-part="loading-state-label">{loadingText}</span>
+                </div>
+              ) : panelState === 'empty' ? (
+                <div data-part="empty">
+                  {noOptionsText}
+                </div>
               ) : (
                 renderableItems.map((item, idx) => renderOptionItem(item, idx, idx === focusedIndex))
               )}

@@ -291,13 +291,15 @@
 /* ---- icon well: governed square track (Dropdown grammar) so glyphs optically
         align across rows instead of drifting with each SVG's intrinsic box.
         currentColor keeps danger rows tinting their own icon. The size is the
-        family's private proto axis -- no generic icon-size channel exists. ---- */
+        family's private proto axis over the `--ds-icon-size-well` role: the
+        role is the authority for every option well, the proto only a local
+        override hook. ---- */
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='icon'] {
   display: inline-grid;
   place-items: center;
   flex: none;
-  inline-size: var(--_ds-proto-context-menu-icon-well, 1.25rem);
-  block-size: var(--_ds-proto-context-menu-icon-well, 1.25rem);
+  inline-size: var(--_ds-proto-context-menu-icon-well, var(--ds-icon-size-well, 1.25rem));
+  block-size: var(--_ds-proto-context-menu-icon-well, var(--ds-icon-size-well, 1.25rem));
 }
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='label'] {
   flex: 1 1 auto;

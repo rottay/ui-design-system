@@ -22,6 +22,7 @@ import type { ReactElement, ReactNode } from 'react';
 import type { DropdownProps, DropdownMenuItem, DropdownPlacement } from '../../contracts';
 import { Portal } from '../../../../runtime/overlay/portal';
 import { PortalScope, usePortalScope } from '../../../../runtime/overlay/portal-scope';
+import { resolveTypeaheadPrefix } from '../../../../runtime/collection/typeahead';
 import { DROPDOWN_DEFAULTS } from '../../contracts';
 import { usePresence } from '@/graphics/motion/react/runtime';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
@@ -110,28 +111,6 @@ function describeTrigger(
       'aria-disabled': disabled || undefined,
     },
   );
-}
-
-/**
- * Typeahead state for the menu keyboard contract below: printable characters
- * focus the next enabled item whose visible text starts with the typed
- * prefix (wrapping). The buffer lives per menu LEVEL, keyed weakly by the
- * <ul> element, so no two menu instances -- nor two levels of one menu --
- * ever share a prefix; it resets after a pause and dies with its DOM node.
- */
-const TYPEAHEAD_RESET_MS = 500;
-const typeaheadStateByMenu = new WeakMap<
-  HTMLElement,
-  { buffer: string; lastKeyTime: number }
->();
-
-function resolveTypeaheadPrefix(menu: HTMLElement, key: string): string {
-  const now = Date.now();
-  const state = typeaheadStateByMenu.get(menu) ?? { buffer: '', lastKeyTime: 0 };
-  state.buffer = now - state.lastKeyTime > TYPEAHEAD_RESET_MS ? key : state.buffer + key;
-  state.lastKeyTime = now;
-  typeaheadStateByMenu.set(menu, state);
-  return state.buffer.toLowerCase();
 }
 
 /**

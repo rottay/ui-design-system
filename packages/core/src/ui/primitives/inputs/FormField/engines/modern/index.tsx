@@ -18,6 +18,7 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
     labelWidth = FORMFIELD_DEFAULTS.labelWidth,
     size = FORMFIELD_DEFAULTS.size,
     disabled = FORMFIELD_DEFAULTS.disabled,
+    reserveMessageSpace = FORMFIELD_DEFAULTS.reserveMessageSpace,
     className = '',
     style,
     'data-testid': testId,
@@ -32,6 +33,38 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
     '--ds-form-field-label-width': labelWidth,
     ...style,
   } as React.CSSProperties;
+
+  // `true` reserves one line; a number reserves that many. `false`/absent
+  // keeps the pre-existing conditional mount (undefined below) so the
+  // region wrapper -- and its DOM -- only appears for callers who opt in.
+  const reserveMessageLines =
+    reserveMessageSpace === true
+      ? 1
+      : typeof reserveMessageSpace === 'number'
+        ? reserveMessageSpace
+        : undefined;
+
+  // The error/help swap is the SAME logic either way; only whether it is
+  // wrapped by the space-reserving region changes below.
+  const messageContent = (
+    <>
+      {error && (
+        <p id={errorId} data-part="error-message" role="alert">
+          {/* Error posture never travels by color alone: the governed
+              status.error glyph carries the semantics as shape, aligned
+              to the first text line by the skin. */}
+          <StatusErrorIcon decorative size={14} data-part="error-icon" />
+          <span data-part="error-text">{error}</span>
+        </p>
+      )}
+
+      {!error && help && (
+        <p id={helpId} data-part="help-text">
+          {help}
+        </p>
+      )}
+    </>
+  );
 
   return (
     <div
@@ -86,20 +119,16 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
             })}
           </div>
 
-          {error && (
-            <p id={errorId} data-part="error-message" role="alert">
-              {/* Error posture never travels by color alone: the governed
-                  status.error glyph carries the semantics as shape, aligned
-                  to the first text line by the skin. */}
-              <StatusErrorIcon decorative size={14} data-part="error-icon" />
-              <span data-part="error-text">{error}</span>
-            </p>
-          )}
-
-          {!error && help && (
-            <p id={helpId} data-part="help-text">
-              {help}
-            </p>
+          {reserveMessageLines !== undefined ? (
+            <div
+              data-part="message-region"
+              data-reserve-message="true"
+              style={{ '--_ds-form-field-message-lines': reserveMessageLines } as React.CSSProperties}
+            >
+              {messageContent}
+            </div>
+          ) : (
+            messageContent
           )}
         </div>
       </div>

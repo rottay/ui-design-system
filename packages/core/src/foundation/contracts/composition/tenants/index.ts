@@ -20,6 +20,26 @@ import type { PersonalityTokens } from '../../kernel/tokens/personality';
 import type { SurfaceTokens, MotionTokens } from '../../kernel/tokens';
 import type { MotionProfile, VerticalKey } from '../../kernel/verticals';
 
+// Public, data-only customization manifest. Product configurators consume
+// this sanctioned contract rather than importing compiler or token internals.
+export {
+  FOUNDATION_AUTHORITIES,
+  TENANT_CAPABILITY_REGISTRY,
+  TENANT_INTERNAL_MANIFEST,
+  TENANT_PRO_MANIFEST,
+  TENANT_STANDARD_MANIFEST,
+} from './capabilities';
+export type {
+  ActiveTenantCapabilityId,
+  CapabilityStatus,
+  CapabilityTier,
+  CapabilityValueType,
+  FoundationAuthorityDeclaration,
+  TenantCapabilityDeclaration,
+  TenantCapabilityEntry,
+  TenantCapabilityId,
+} from './capabilities';
+
 /**
  * Wire-format locale vocabulary owned by the tenant DTO boundary.
  *

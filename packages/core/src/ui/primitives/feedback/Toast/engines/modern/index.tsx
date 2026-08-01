@@ -54,28 +54,11 @@ import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/genera
 import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 import { CommunicationNotificationIcon } from '@/graphics/icons/presentation/semantic/generated/roles/communication-notification';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+import { governedExitMs } from '@/graphics/motion/react/runtime/presence/duration';
 
 // ============================================================================
 // Helper Functions
 // ============================================================================
-
-/**
- * Resolves the exit window from the element's computed style (the governed
- * `--ds-toast-exit-duration` value the inline animation actually applied),
- * plus a small buffer. Returns 0 when no animation/transition is declared
- * (reduced motion, tests). Message engine parity (`governedExitMs`).
- * @internal
- */
-const governedExitMs = (el: HTMLElement): number => {
-  const { animationDuration, transitionDuration } = getComputedStyle(el);
-  const toMs = (raw: string) =>
-    raw.split(',').reduce((max, part) => {
-      const t = part.trim();
-      const v = t.endsWith('ms') ? parseFloat(t) : t.endsWith('s') ? parseFloat(t) * 1000 : 0;
-      return Number.isFinite(v) && v > max ? v : max;
-    }, 0);
-  return Math.max(toMs(animationDuration), toMs(transitionDuration)) + 50;
-};
 
 /**
  * Returns the default icon SVG for a given variant.

@@ -131,6 +131,10 @@
   --ds-color-info-700: #1D4ED8;
   --ds-color-info-800: #1E40AF;
   --ds-color-info-900: #1E3A8A;
+  --ds-color-on-error: #171717;
+  --ds-color-on-info: #171717;
+  --ds-color-on-success: #171717;
+  --ds-color-on-warning: #171717;
   --ds-color-primary: #FFFFFF;
   --ds-color-primary-100: #131316;
   --ds-color-primary-200: #1A1A1E;
@@ -603,6 +607,8 @@
   --ds-color-neutral-700: #3D3D3D;
   --ds-color-neutral-800: #2A2A2A;
   --ds-color-neutral-900: #171717;
+  --ds-color-on-error: #ffffff;
+  --ds-color-on-info: #ffffff;
   --ds-color-primary: #0A0A0A;
   --ds-color-primary-100: #F4F4F3;
   --ds-color-primary-200: #E5E5E3;

@@ -265,7 +265,16 @@
     var(--ds-surface-card) 94%,
     var(--ds-color-bg-primary)
   );
-  --ds-surface-overlay: rgba(0, 0, 0, 0.5);
+  /* Floating-panel surface for the overlay ROLE. Every in-tree consumer of
+     this channel paints a PANEL (popover, tooltip, slider tooltip, the
+     semantic-surface overlay role), so it derives from the elevated ground.
+     The veil that dims content behind modal surfaces is a different
+     authority: --ds-overlay-scrim below. */
+  --ds-surface-overlay: var(--ds-color-bg-elevated, var(--ds-surface-card));
+  /* Dimming veil behind modal/blocking surfaces. Tenants reach it through
+     --ds-color-bg-overlay (palette veil) or their backdrop component
+     channels; components must never hand-roll an rgba() veil. */
+  --ds-overlay-scrim: var(--ds-color-bg-overlay, rgba(0, 0, 0, 0.5));
   --ds-surface-highlight: var(--ds-color-bg-hover, rgba(255, 255, 255, 0.06));
 
   --ds-material-canvas-background: var(--ds-surface-canvas);
@@ -403,6 +412,48 @@
   --ds-material-raised-background: var(--ds-surface-raised);
   --ds-material-raised-foreground: var(--ds-color-text-primary);
   --ds-material-overlay-background: var(--ds-surface-overlay);
+  /* Opaque counterpart every translucent overlay material collapses to under
+     prefers-reduced-transparency; family skins chain their reduced-
+     transparency hooks here instead of picking a surface ad hoc. */
+  --ds-material-overlay-opaque: var(--ds-surface-card);
+
+  /* ──────────────────────────────────────────────────────────────────────────
+     1b. DERIVED SEMANTIC AUTHORITIES
+     Foundation-owned derivations over tenant channels. None of these is a
+     tenant dial: tenants move the seeds they already own and these follow.
+     ────────────────────────────────────────────────────────────────────────── */
+
+  /* Readable ink over each status tone's SOLID fill. Both compilers emit
+     tenant values from their seeds through the shared readable-ink
+     derivation; these are the floor for the default ramp steps, where the
+     WCAG pick lands on the dark ink for all four tones. */
+  --ds-color-on-success: #171717;
+  --ds-color-on-warning: #171717;
+  --ds-color-on-error: #171717;
+  --ds-color-on-info: #171717;
+  --ds-color-on-primary: var(--ds-color-text-on-primary);
+
+  /* Interaction-wash ramp: the one derivation for selection/hover/band
+     washes the skins used to mix ad hoc. Interaction feedback is NOT
+     decoration, so these do not scale with --ds-effect-intensity. */
+  --ds-wash-hover: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  --ds-wash-active: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+  --ds-wash-selected: color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  --ds-wash-band: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
+  --ds-wash-band-preview: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+
+  /* Icon optical-size roles: the three recurring icon wells families sized
+     with local literals (status glyphs, option wells, feature medallions).
+     Values preserve today's consumer pixels; a future icon profile modulates
+     the roles, never the consumers. */
+  --ds-icon-size-status: 0.875rem;
+  --ds-icon-size-well: 1.25rem;
+  --ds-icon-size-feature: 2.5rem;
+
+  /* Nested-radius law: an inner surface's radius is
+     max(0, outer radius - this inset), so nested corners read as one
+     geometry. Card and SemanticSurface consume the SAME inset. */
+  --ds-radius-nest-inset: 4px;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      2. TYPOGRAPHY - Geist/Inter Style

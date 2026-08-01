@@ -14,19 +14,21 @@
  * data-* / data-testid + the caller-owned `data-part` hook, P-79) spreads on
  * the root BEFORE the engine's stamps so the skin contract always lands last.
  *
- * Keyboard contract (hand-rolled per family — no shared collection hook
- * exists in this wave): every enabled item and submenu trigger remains its
- * own tab stop (the K3-B tab model is preserved); Enter/Space activates.
- * Phase-B Pass 2 ADDS the APG arrow layer on top of that model: orientation
- * -aware arrows move DOM focus between the visible enabled rows with
- * wrap-around (vertical/inline: Up/Down; horizontal: Left/Right, mirrored
- * under RTL), Home/End jump to the first/last row, the forward arrow on a
- * closed submenu trigger opens it (vertical: Right in LTR / Left in RTL;
+ * Keyboard contract (owned by the shared roving-focus kernel): the menu is a
+ * SINGLE tab stop. The K3-B model — every enabled row its own tab stop — made
+ * Tab walk the whole menu, which `role="menu"` forbids; the panels here are
+ * inline `role="group"` children of one menu rather than separate popups, so
+ * all visible enabled rows form ONE roving collection in semantic order and
+ * exactly one of them is tabbable. Enter/Space activates. Orientation-aware
+ * arrows move focus with wrap-around (vertical/inline: Up/Down; horizontal:
+ * Left/Right, mirrored under RTL by the kernel's logical mapping, never by a
+ * key-name flip here), Home/End jump to the first/last row, the forward arrow
+ * on a closed submenu trigger opens it (vertical: Right in LTR / Left in RTL;
  * horizontal: Down) and the back arrow closes an open trigger or, on a row
  * nested inside a panel, returns focus to the parent trigger. Focus stays
  * on the trigger when a submenu opens (inline disclosure, not a popup).
  * Typeahead is NOT implemented: the contract declares no axis for it (see
- * the batch-33 ficha). A roving-tabindex model is still deliberately absent.
+ * the batch-33 ficha).
  *
  * @example
  * ```tsx
@@ -61,6 +63,77 @@ import type { CSSProperties } from 'react';
 import type { MenuProps, MenuItem as MenuItemInterface, MenuSelectInfo, MenuClickInfo } from '../../contracts';
 import { MENU_DEFAULTS } from '../../contracts';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
+import {
+  resolveNavigationIntent,
+  resolveNavigationTarget,
+  resolveReadingDirectionIsRtl,
+  useRovingFocus,
+  type CollectionOrientation,
+  type RovingFocus,
+} from '@/ui/primitives/runtime/collection/roving-focus';
+
+// ============================================================================
+// Render context
+// ============================================================================
+
+/**
+ * Everything the recursive renderer needs, carried as one owner instead of a
+ * positional parameter list that grows with each contract axis.
+ */
+interface MenuRenderContext {
+  onItemClick: (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => void;
+  onSubmenuToggle: (key: string, nextOpen: boolean) => void;
+  selectedKeys: string[];
+  openKeys: string[];
+  inlineIndent: number;
+  expandIcon?: React.ReactNode;
+  roving: RovingFocus;
+  /**
+   * The axis the submenu disclosure owns: always the CROSS axis of the menu,
+   * so the kernel and the disclosure can never claim the same key.
+   */
+  disclosureAxis: CollectionOrientation;
+}
+
+/**
+ * The rows a keyboard user can reach, in semantic order — derived from the
+ * item tree and `openKeys` rather than from a DOM query, so the collection is
+ * known during render. Closed submenus contribute nothing because their panels
+ * do not mount; group panels always do.
+ */
+function collectNavigableRows(
+  items: MenuItemInterface[],
+  openKeys: string[]
+): { ids: string[]; disabledIds: string[] } {
+  const ids: string[] = [];
+  const disabledIds: string[] = [];
+
+  const walk = (nodes: MenuItemInterface[]): void => {
+    for (const node of nodes) {
+      if (node.type === 'divider') {
+        continue;
+      }
+
+      if (node.type === 'group') {
+        if (node.children) walk(node.children);
+        continue;
+      }
+
+      ids.push(node.key);
+      if (node.disabled) {
+        disabledIds.push(node.key);
+      }
+
+      if (node.children && node.children.length > 0 && openKeys.includes(node.key)) {
+        walk(node.children);
+      }
+    }
+  };
+
+  walk(items);
+
+  return { ids, disabledIds };
+}
 
 // ============================================================================
 // Hierarchy data channel (custom properties are configuration, never paint)
@@ -91,16 +164,18 @@ function MenuItemRow({
   item,
   isSelected,
   level,
-  inlineIndent,
-  onItemClick,
+  parentKey,
+  context,
 }: {
   item: MenuItemInterface;
   isSelected: boolean;
   level: number;
-  inlineIndent: number;
-  onItemClick: (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => void;
+  parentKey?: string;
+  context: MenuRenderContext;
 }) {
   const isChild = level > 0;
+  const { onItemClick, inlineIndent, roving, disclosureAxis } = context;
+  const rovingProps = roving.getItemProps(item.key);
 
   return (
     <li key={item.key} data-part="row" role="none">
@@ -111,7 +186,9 @@ function MenuItemRow({
         data-disabled={item.disabled || undefined}
         data-tone={item.danger ? 'danger' : undefined}
         data-level={isChild ? 'child' : 'top'}
-        tabIndex={item.disabled ? -1 : 0}
+        ref={rovingProps.ref}
+        tabIndex={rovingProps.tabIndex}
+        onFocus={rovingProps.onFocus}
         style={getLevelStyleVars(level, inlineIndent)}
         aria-disabled={item.disabled || undefined}
         aria-current={isSelected ? 'page' : undefined}
@@ -119,7 +196,24 @@ function MenuItemRow({
           if ((e.key === 'Enter' || e.key === ' ') && !item.disabled) {
             e.preventDefault();
             onItemClick(item.key, [item.key], e as unknown as React.MouseEvent<HTMLElement>);
+            return;
           }
+
+          // Cross-axis back key: a row inside a panel returns focus to its
+          // parent trigger. The panel stays open — inline disclosure.
+          if (
+            parentKey &&
+            resolveNavigationIntent(e.key, {
+              orientation: disclosureAxis,
+              rtl: roving.resolveIsRtl(e.currentTarget),
+            }) === 'previous'
+          ) {
+            e.preventDefault();
+            roving.setActive(parentKey, { focus: true });
+            return;
+          }
+
+          rovingProps.onKeyDown(e);
         }}
         onClick={(e) => {
           e.preventDefault();
@@ -149,26 +243,18 @@ function MenuItemRow({
 function SubmenuRow({
   item,
   level,
-  inlineIndent,
-  openKeys,
   isOpen,
-  onSubmenuToggle,
-  onItemClick,
-  selectedKeys,
-  mode,
-  expandIcon,
+  parentKey,
+  context,
 }: {
   item: MenuItemInterface;
   level: number;
-  inlineIndent: number;
-  openKeys: string[];
   isOpen: boolean;
-  onSubmenuToggle: (key: string, nextOpen: boolean) => void;
-  onItemClick: (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => void;
-  selectedKeys: string[];
-  mode: 'vertical' | 'horizontal' | 'inline';
-  expandIcon?: React.ReactNode;
+  parentKey?: string;
+  context: MenuRenderContext;
 }) {
+  const { onSubmenuToggle, selectedKeys, inlineIndent, expandIcon, roving, disclosureAxis } = context;
+  const rovingProps = roving.getItemProps(item.key);
   const hadSelectedDescendantRef = useRef(false);
 
   const hasSelectedDescendant =
@@ -195,7 +281,9 @@ function SubmenuRow({
         role="menuitem"
         data-disabled={item.disabled || undefined}
         data-level={level > 0 ? 'child' : 'top'}
-        tabIndex={item.disabled ? -1 : 0}
+        ref={rovingProps.ref}
+        tabIndex={rovingProps.tabIndex}
+        onFocus={rovingProps.onFocus}
         aria-disabled={item.disabled || undefined}
         aria-expanded={isOpen}
         data-open={isOpen ? 'true' : undefined}
@@ -206,22 +294,43 @@ function SubmenuRow({
             onSubmenuToggle(item.key, !isOpen);
             return;
           }
-          // APG disclosure arrows: the forward arrow opens a closed submenu
-          // (vertical: Right in LTR / Left in RTL; horizontal menubar: Down),
-          // the back arrow closes an open one (vertical: Left in LTR /
-          // Right in RTL; horizontal: Up). Focus stays on the trigger —
-          // this is an inline disclosure, not a popup handoff. The
-          // panel-focus and movement keys live on the root handler.
-          const rtl = e.currentTarget.closest('[dir]')?.getAttribute('dir') === 'rtl';
-          const forwardKey = mode === 'horizontal' ? 'ArrowDown' : rtl ? 'ArrowLeft' : 'ArrowRight';
-          const backKey = mode === 'horizontal' ? 'ArrowUp' : rtl ? 'ArrowRight' : 'ArrowLeft';
-          if (e.key === forwardKey && !isOpen && !item.disabled) {
-            e.preventDefault();
-            onSubmenuToggle(item.key, true);
-          } else if (e.key === backKey && isOpen && !item.disabled) {
-            e.preventDefault();
-            onSubmenuToggle(item.key, false);
+
+          // APG disclosure arrows, resolved on the CROSS axis so the kernel
+          // and the disclosure never claim the same key: forward opens a
+          // closed submenu (vertical: Right in LTR / Left in RTL; horizontal
+          // menubar: Down), back closes an open one, and on a closed nested
+          // trigger back returns focus to the parent trigger. Focus stays on
+          // the trigger when a submenu opens — inline disclosure, not a popup
+          // handoff. The direction comes from the collection's single
+          // capture, never from a key-name flip here.
+          const disclosure = resolveNavigationIntent(e.key, {
+            orientation: disclosureAxis,
+            rtl: roving.resolveIsRtl(e.currentTarget),
+          });
+
+          if (!item.disabled) {
+            if (disclosure === 'next' && !isOpen) {
+              e.preventDefault();
+              onSubmenuToggle(item.key, true);
+              return;
+            }
+
+            if (disclosure === 'previous') {
+              if (isOpen) {
+                e.preventDefault();
+                onSubmenuToggle(item.key, false);
+                return;
+              }
+
+              if (parentKey) {
+                e.preventDefault();
+                roving.setActive(parentKey, { focus: true });
+                return;
+              }
+            }
           }
+
+          rovingProps.onKeyDown(e);
         }}
         onClick={(e) => {
           e.preventDefault();
@@ -241,17 +350,7 @@ function SubmenuRow({
       </div>
       {isOpen && (
         <ul role="group" data-part="panel">
-          {renderModernMenuItems(
-            item.children || [],
-            onItemClick,
-            selectedKeys,
-            openKeys,
-            onSubmenuToggle,
-            level + 1,
-            inlineIndent,
-            mode,
-            expandIcon
-          )}
+          {renderModernMenuItems(item.children || [], context, level + 1, item.key)}
         </ul>
       )}
     </li>
@@ -266,23 +365,19 @@ function SubmenuRow({
  * Renders menu items recursively for the modern skin.
  *
  * @param items - Array of menu item configurations
- * @param onItemClick - Click handler for menu items
- * @param selectedKeys - Currently selected item keys
+ * @param context - Shared render context (callbacks, state, roving collection)
  * @param level - Current nesting level
+ * @param parentKey - Key of the enclosing submenu trigger, for the back key.
+ *   A group is presentational and passes its own parent through.
  * @returns Rendered menu item nodes
  *
  * @internal
  */
 function renderModernMenuItems(
   items: MenuItemInterface[],
-  onItemClick: (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => void,
-  selectedKeys: string[],
-  openKeys: string[],
-  onSubmenuToggle: (key: string, nextOpen: boolean) => void,
+  context: MenuRenderContext,
   level: number = 0,
-  inlineIndent: number = MENU_DEFAULTS.inlineIndent,
-  mode: 'vertical' | 'horizontal' | 'inline' = MENU_DEFAULTS.mode,
-  expandIcon?: React.ReactNode
+  parentKey?: string
 ): React.ReactNode {
   return items.map((item) => {
     // Divider
@@ -297,17 +392,7 @@ function renderModernMenuItems(
           <div data-part="group-label">{item.title || item.label}</div>
           {item.children && (
             <ul role="group" data-part="panel">
-              {renderModernMenuItems(
-                item.children,
-                onItemClick,
-                selectedKeys,
-                openKeys,
-                onSubmenuToggle,
-                level + 1,
-                inlineIndent,
-                mode,
-                expandIcon
-              )}
+              {renderModernMenuItems(item.children, context, level + 1, parentKey)}
             </ul>
           )}
         </li>
@@ -321,28 +406,22 @@ function renderModernMenuItems(
           key={item.key}
           item={item}
           level={level}
-          inlineIndent={inlineIndent}
-          openKeys={openKeys}
-          isOpen={openKeys.includes(item.key)}
-          onSubmenuToggle={onSubmenuToggle}
-          onItemClick={onItemClick}
-          selectedKeys={selectedKeys}
-          mode={mode}
-          expandIcon={expandIcon}
+          isOpen={context.openKeys.includes(item.key)}
+          parentKey={parentKey}
+          context={context}
         />
       );
     }
 
     // Regular leaf item
-    const isSelected = selectedKeys.includes(item.key);
     return (
       <MenuItemRow
         key={item.key}
         item={item}
-        isSelected={isSelected}
+        isSelected={context.selectedKeys.includes(item.key)}
         level={level}
-        inlineIndent={inlineIndent}
-        onItemClick={onItemClick}
+        parentKey={parentKey}
+        context={context}
       />
     );
   });
@@ -492,107 +571,84 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
   );
 
   // ========================================================================
-  // Keyboard Navigation (APG arrow layer on top of the tab-stop model)
+  // Keyboard Navigation (roving collection owned by the shared kernel)
   // ========================================================================
 
+  /** The axis the menu itself navigates; the disclosure takes the other one. */
+  const orientation: CollectionOrientation = mode === 'horizontal' ? 'horizontal' : 'vertical';
+  const disclosureAxis: CollectionOrientation = mode === 'horizontal' ? 'vertical' : 'horizontal';
+
+  const navigableRows = collectNavigableRows(items ?? [], openKeys);
+
+  const roving = useRovingFocus({
+    ids: navigableRows.ids,
+    orientation,
+    disabledIds: navigableRows.disabledIds,
+  });
+
   /**
-   * Orientation-aware arrow/Home/End focus movement between the visible
-   * enabled rows. Runs at the root so closed submenus (whose panels are
-   * unmounted) simply drop out of the focus order — the query always sees
-   * exactly the rows a keyboard user can reach. Enter/Space stay owned by
-   * the row handlers above; the trigger disclosure arrows live in
-   * SubmenuRow (they need the item key and the open state).
+   * COMPOUND-PATH LAW: rows passed as `children` belong to the compound
+   * components, which stamp their own tab model, so the engine cannot register
+   * them with the kernel and reads the collection from the DOM here instead.
+   * The DECISION model stays the kernel's (key → intent → target), so this
+   * path never opens a second reading-direction model. It is attached only
+   * when the engine is not rendering `items`.
    */
-  const handleRootKeyDown = useCallback(
+  const handleCompoundKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLUListElement>) => {
       const root = e.currentTarget;
       const row = (e.target as HTMLElement).closest("[data-part='item'], [data-part='trigger']");
       if (!row || !root.contains(row)) return;
 
-      const horizontal = mode === 'horizontal';
-      const rtl = root.closest('[dir]')?.getAttribute('dir') === 'rtl';
+      const rtl = resolveReadingDirectionIsRtl(root);
+      const intent = resolveNavigationIntent(e.key, { orientation, rtl });
 
-      const focusableRows = Array.from(
-        root.querySelectorAll("[data-part='item']:not([data-disabled]), [data-part='trigger']:not([data-disabled])")
-      ) as HTMLElement[];
-      const currentIndex = focusableRows.indexOf(row as HTMLElement);
-      if (currentIndex === -1) return;
-
-      let nextIndex: number | null = null;
-
-      switch (e.key) {
-        case 'ArrowDown':
-          if (horizontal) return; // horizontal menubar: Down is the trigger's open key
-          nextIndex = (currentIndex + 1) % focusableRows.length;
-          break;
-        case 'ArrowUp':
-          if (horizontal) return; // horizontal menubar: Up is the trigger's close key
-          nextIndex = (currentIndex - 1 + focusableRows.length) % focusableRows.length;
-          break;
-        case 'ArrowRight': {
-          if (!horizontal) {
-            // Vertical RTL back key: return focus from a panel row to its
-            // parent trigger (the panel stays open — inline disclosure).
-            // In LTR, Right is the trigger's forward/open key (row-owned).
-            if (rtl) {
-              const panel = (row as HTMLElement).closest("[data-part='panel']");
-              const parentTrigger = panel?.parentElement?.querySelector(
-                ":scope > [data-part='trigger']:not([data-disabled])"
-              ) as HTMLElement | null;
-              if (parentTrigger) {
-                e.preventDefault();
-                parentTrigger.focus();
-              }
-            }
-            return;
-          }
-          nextIndex = rtl
-            ? (currentIndex - 1 + focusableRows.length) % focusableRows.length
-            : (currentIndex + 1) % focusableRows.length;
-          break;
-        }
-        case 'ArrowLeft': {
-          if (!horizontal) {
-            // Vertical LTR back key: panel row → parent trigger. In RTL,
-            // Left is the trigger's forward/open key (row-owned).
-            if (!rtl) {
-              const panel = (row as HTMLElement).closest("[data-part='panel']");
-              const parentTrigger = panel?.parentElement?.querySelector(
-                ":scope > [data-part='trigger']:not([data-disabled])"
-              ) as HTMLElement | null;
-              if (parentTrigger) {
-                e.preventDefault();
-                parentTrigger.focus();
-              }
-            }
-            return;
-          }
-          nextIndex = rtl
-            ? (currentIndex + 1) % focusableRows.length
-            : (currentIndex - 1 + focusableRows.length) % focusableRows.length;
-          break;
-        }
-        case 'Home':
-          nextIndex = 0;
-          break;
-        case 'End':
-          nextIndex = focusableRows.length - 1;
-          break;
-        default:
+      if (intent === null) {
+        // Cross-axis back key: a panel row returns focus to its parent trigger.
+        if (resolveNavigationIntent(e.key, { orientation: disclosureAxis, rtl }) !== 'previous') {
           return;
+        }
+
+        const parentTrigger = row
+          .closest("[data-part='panel']")
+          ?.parentElement?.querySelector(
+            ":scope > [data-part='trigger']:not([data-disabled])"
+          ) as HTMLElement | null;
+        if (!parentTrigger) return;
+
+        e.preventDefault();
+        parentTrigger.focus();
+        return;
       }
 
-      if (nextIndex !== null) {
-        e.preventDefault();
-        focusableRows[nextIndex]?.focus();
-      }
+      const rows = Array.from(
+        root.querySelectorAll(
+          "[data-part='item']:not([data-disabled]), [data-part='trigger']:not([data-disabled])"
+        )
+      ) as HTMLElement[];
+      const index = rows.indexOf(row as HTMLElement);
+      if (index === -1) return;
+
+      e.preventDefault();
+      rows[resolveNavigationTarget(intent, { index, length: rows.length, wrap: true })]?.focus();
     },
-    [mode]
+    [orientation, disclosureAxis]
   );
 
   // ========================================================================
   // Render
   // ========================================================================
+
+  const renderContext: MenuRenderContext = {
+    onItemClick: handleItemClick,
+    onSubmenuToggle: handleSubmenuToggle,
+    selectedKeys,
+    openKeys,
+    inlineIndent,
+    expandIcon,
+    roving,
+    disclosureAxis,
+  };
 
   return (
     <ul
@@ -605,11 +661,9 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
       data-mode={mode}
       data-collapsed={inlineCollapsed || undefined}
       data-has-selection={selectedKeys.length > 0 || undefined}
-      onKeyDown={handleRootKeyDown}
+      onKeyDown={items ? undefined : handleCompoundKeyDown}
     >
-      {items
-        ? renderModernMenuItems(items, handleItemClick, selectedKeys, openKeys, handleSubmenuToggle, 0, inlineIndent, mode, expandIcon)
-        : children}
+      {items ? renderModernMenuItems(items, renderContext) : children}
     </ul>
   );
 }

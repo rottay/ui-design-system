@@ -17,6 +17,8 @@ export type {
   IconFrameTone,
   IconFrameVariant,
 } from './IconFrame';
+export { LoadingIndicator } from './loading-indicator';
+export type { LoadingIndicatorProps, LoadingIndicatorSize } from './loading-indicator';
 export { Meter, resolveMeterThreshold } from './Meter';
 export type {
   MeterFormat,

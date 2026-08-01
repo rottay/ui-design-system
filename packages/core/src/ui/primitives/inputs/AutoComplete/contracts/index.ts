@@ -126,6 +126,18 @@ export interface AutoCompleteProps {
   status?: 'error' | 'warning';
   /** Not found content */
   notFoundContent?: ReactNode;
+  /**
+   * Async posture for the suggestion list. While `true` the open panel shows
+   * the loading state and never the not-found copy: a list still awaiting
+   * results must not claim it found nothing. Suggestions that are already
+   * loaded keep rendering, so a background refresh does not blank the list.
+   */
+  loading?: boolean;
+  /**
+   * Copy shown beside the loading indicator. Defaults to the localized
+   * `autocomplete.loading` entry.
+   */
+  loadingText?: ReactNode;
   /** Dropdown class name */
   popupClassName?: string;
   /** Dropdown match select width */

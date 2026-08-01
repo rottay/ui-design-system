@@ -193,6 +193,58 @@
   background: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
 }
 
+/* overflow-trigger (contract `overflow`): the SAME ink and hover/active
+   grammar as a clickable crumb link (`--ds-breadcrumb-item-color`, the
+   shared hover/active tint) but WITHOUT the link underline proto -- that
+   law is link-specific (interactive-affordance-as-underline), while this is
+   a disclosure control, not a navigable link. */
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger'] {
+  display: inline-flex;
+  min-height: var(--ds-breadcrumb-item-height, 30px);
+  align-items: center;
+  gap: var(--ds-spacing-1-5, 6px);
+  padding-block: 0;
+  padding-inline: var(--ds-breadcrumb-item-padding-inline, 9px);
+  border: 1px solid transparent;
+  border-radius: var(--ds-breadcrumb-item-radius, var(--ds-radius-md));
+  background: transparent;
+  color: var(--ds-breadcrumb-item-color, var(--ds-color-text-secondary));
+  font-family: inherit;
+  font-size: var(--ds-breadcrumb-font-size, var(--ds-font-size-sm));
+  font-weight: var(--ds-breadcrumb-font-weight, 520);
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    color var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    background var(--ds-motion-fast) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-fast) var(--ds-ease-standard, ease);
+}
+
+/* The button's UA chrome must never leak through the skin (crumb link
+   precedent above). */
+.rottay-breadcrumb-shell--modern[data-part='root'] button[data-part='overflow-trigger'] {
+  appearance: none;
+}
+
+@media (hover: hover) {
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger']:hover {
+    color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
+    background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)));
+    border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
+  }
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger']:active {
+  color: var(--ds-breadcrumb-color-hover, var(--ds-color-text-primary));
+  background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-card-bg, var(--ds-surface-card)));
+  border-color: color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-subtle));
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger']:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
+}
+
 .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb']:focus-visible {
   outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset);
@@ -206,7 +258,8 @@
 
 /* ---- coarse pointers: physical 44px floor, never a rem floor. ---- */
 @media (hover: none), (pointer: coarse) {
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true'] {
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true'],
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger'] {
     min-block-size: var(--ds-breadcrumb-touch-target-min, 44px);
   }
 }
@@ -230,10 +283,19 @@
     color: HighlightText;
     border-color: Highlight;
   }
+
+  /* The overflow trigger is a disclosure control, not a crumb -- it carries
+     no `[data-current]` to tie the border shorthand, so it gets its own
+     (0,4,0) doubled-selector rule instead of piggybacking the one above. */
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger'][data-part='overflow-trigger'] {
+    forced-color-adjust: auto;
+    border-color: ButtonText;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'] {
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'],
+  .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger'] {
     transition: none;
   }
 }

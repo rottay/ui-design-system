@@ -1,0 +1,70 @@
+{
+  "comment": "Parser-subject fixtures for the governed exit/fallback duration helpers. CSS time strings live here as DATA: the CRA-12 motion census polices SOURCE motion debt by design (SOURCE_EXTENSIONS excludes .json), and these strings are the parser's input corpus, not motion authored into a component.",
+  "governedExit": [
+    {
+      "name": "returns the buffer alone when the element declares no motion",
+      "styles": {},
+      "baseMs": 0
+    },
+    {
+      "name": "reads the declared transition duration",
+      "styles": { "transitionDuration": "200ms" },
+      "baseMs": 200
+    },
+    {
+      "name": "reads a seconds-unit animation duration as milliseconds",
+      "styles": { "animationDuration": "0.3s" },
+      "baseMs": 300
+    },
+    {
+      "name": "takes the longer of the two channels",
+      "styles": { "animationDuration": "0.3s", "transitionDuration": "200ms" },
+      "baseMs": 300
+    },
+    {
+      "name": "takes the longest slot of a comma-separated list",
+      "styles": { "transitionDuration": "100ms, 400ms, 50ms" },
+      "baseMs": 400
+    },
+    {
+      "name": "treats a unitless entry as declaring no time",
+      "styles": { "transitionDuration": "5" },
+      "baseMs": 0
+    }
+  ],
+  "flashParity": {
+    "styles": { "transitionDuration": "200ms" }
+  },
+  "exitFallback": [
+    {
+      "name": "releases on the same tick when the channel declares nothing",
+      "channel": "animation",
+      "styles": {},
+      "expected": "same-tick"
+    },
+    {
+      "name": "sums duration and delay, then adds the grace",
+      "channel": "animation",
+      "styles": { "animationDuration": "200ms", "animationDelay": "40ms" },
+      "baseMs": 240
+    },
+    {
+      "name": "reads the transition channel when that is where the exit is declared",
+      "channel": "transition",
+      "styles": { "transitionDuration": "180ms", "transitionDelay": "20ms" },
+      "baseMs": 200
+    },
+    {
+      "name": "ignores the channel the exit is not declared on",
+      "channel": "transition",
+      "styles": { "animationDuration": "900ms", "transitionDuration": "100ms" },
+      "baseMs": 100
+    },
+    {
+      "name": "wraps the shorter slot list the way CSS itself cycles it",
+      "channel": "animation",
+      "styles": { "animationDuration": "100ms, 300ms", "animationDelay": "50ms" },
+      "baseMs": 350
+    }
+  ]
+}

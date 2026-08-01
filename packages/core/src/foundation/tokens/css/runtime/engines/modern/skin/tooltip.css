@@ -731,11 +731,16 @@ html[data-ds-motion="reduced"]
   }
 
   /* The arrow consumes --ds-tooltip-surface, so its fill follows without a
-     second declaration (same single-source law as the seam overlap). */
+     second declaration (same single-source law as the seam overlap).
+     `--ds-surface-overlay` is the floating PANEL channel. A panel recipe may
+     still be translucent, so reduced-transparency resolves through the
+     explicitly opaque material authority. The dimming veil is separately
+     owned by `--ds-overlay-scrim` / `--ds-color-bg-overlay` and never enters
+     this chain. */
   .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-part="bubble"][data-tone="default"]:not([data-recipe="inverse"]) {
     --ds-tooltip-surface: var(
       --_ds-proto-tooltip-opaque-surface,
-      var(--ds-surface-overlay, var(--ds-surface-card))
+      var(--ds-material-overlay-opaque, var(--ds-surface-card))
     );
   }
 }

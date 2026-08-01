@@ -198,6 +198,7 @@
   --ds-color-bg: #F4F8FB;
   --ds-color-bg-elevated: #ffffff;
   --ds-color-bg-input: #ffffff;
+  --ds-color-bg-overlay: rgba(20, 40, 59, 0.42);
   --ds-color-bg-primary: #F4F8FB;
   --ds-color-bg-secondary: #f3f2ef;
   --ds-color-bg-tertiary: #e8eef6;
@@ -228,6 +229,10 @@
   --ds-color-info-700: #0F3867;
   --ds-color-info-800: #052243;
   --ds-color-info-900: #020D1E;
+  --ds-color-on-error: #ffffff;
+  --ds-color-on-info: #ffffff;
+  --ds-color-on-success: #ffffff;
+  --ds-color-on-warning: #171717;
   --ds-color-primary: #3A6FB0;
   --ds-color-primary-100: #C1DCFF;
   --ds-color-primary-200: #93BFF8;
@@ -567,7 +572,7 @@
   --ds-material-inset-border: #D7E2EA;
   --ds-material-inset-foreground: #31506B;
   --ds-material-overlay-background: var(--ds-surface-overlay);
-  --ds-material-overlay-foreground: #FFFFFF;
+  --ds-material-overlay-foreground: #14283B;
   --ds-material-panel-background: var(--ds-surface-panel);
   --ds-material-panel-background-active: linear-gradient(180deg, #F6FAFC 0%, #EBF3F8 100%);
   --ds-material-panel-background-disabled: #EFF3F6;
@@ -764,7 +769,7 @@
   --ds-surface-control: #FFFFFF;
   --ds-surface-control-bg: var(--ds-surface-control);
   --ds-surface-inset: #EDF3F7;
-  --ds-surface-overlay: rgba(20, 40, 59, 0.42);
+  --ds-surface-overlay: #ffffff;
   --ds-surface-panel: #f4f8fd;
   --ds-surface-panel-bg: var(--ds-surface-panel);
   --ds-surface-raised: linear-gradient(180deg, #FFFFFF 0%, #F8FBFD 100%);
@@ -1103,6 +1108,9 @@
   --ds-color-neutral-700: #7a90a5;
   --ds-color-neutral-800: #9aacbf;
   --ds-color-neutral-900: #c0cdd8;
+  --ds-color-on-error: #171717;
+  --ds-color-on-info: #171717;
+  --ds-color-on-success: #171717;
   --ds-color-primary: #1e84e6;
   --ds-color-primary-100: #112840;
   --ds-color-primary-200: #163555;
@@ -1152,6 +1160,7 @@
   --ds-letter-spacing-display: -0.02em;
   --ds-letter-spacing-heading: -0.01em;
   --ds-line-height-body: 1.6;
+  --ds-material-overlay-foreground: #e4e8ed;
   --ds-radius-full: 9999px;
   --ds-shadow-lg: 0 8px 24px rgba(20, 40, 59, 0.1);
   --ds-shadow-md: 0 4px 12px rgba(20, 40, 59, 0.08);
@@ -1174,6 +1183,7 @@
   --ds-sidebar-item-indent: 6px;
   --ds-sidebar-text: #9aacbf;
   --ds-sidebar-text-muted: #5a7085;
+  --ds-surface-overlay: #1f2940;
   --ds-table-bg: #0f1520;
   --ds-table-border: #1d2a38;
   --ds-table-cell-color: #e4e8ed;
@@ -1230,7 +1240,6 @@
   /* Backgrounds - Light, professional */
   --ds-color-bg-primary: #ffffff;
   --ds-color-bg-surface: #ffffff;
-  --ds-color-bg-overlay: rgba(20, 40, 59, 0.42);
 
   /* Text - BitHire blue-gray, never inherited browser defaults */
   --ds-color-text-tertiary: #7f859b;

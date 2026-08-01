@@ -76,6 +76,21 @@ export interface FormFieldProps extends EngineAwareProps {
   help?: string;
 
   /**
+   * Reserves space for the error/help message region so the control below
+   * does not shift when a message appears or disappears. `true` reserves one
+   * line; a number reserves that many lines. The reserved region always
+   * mounts (`data-part="message-region"` wrapping the existing error/help
+   * swap), stamping the per-instance geometry variable
+   * `--_ds-form-field-message-lines` that the skin reads.
+   *
+   * @default false
+   * @remarks Implemented by the modern engine only; classic and rustic keep
+   * their current conditional mount (the axis is typed for all three, but
+   * only modern reserves the space).
+   */
+  reserveMessageSpace?: boolean | number;
+
+  /**
    * The input element(s) to render inside the field.
    */
   children: ReactNode;
@@ -129,4 +144,5 @@ export const FORMFIELD_DEFAULTS = {
   size: 'md' as const,
   required: false,
   disabled: false,
+  reserveMessageSpace: false as boolean | number,
 };

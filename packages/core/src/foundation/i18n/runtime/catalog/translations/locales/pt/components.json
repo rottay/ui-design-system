@@ -1089,7 +1089,14 @@
     "strength_strong": "Forte"
   },
   "autocomplete": {
-    "input_label": "Preenchimento automático"
+    "input_label": "Preenchimento automático",
+    "loading": "Carregando sugestões..."
+  },
+  "breadcrumb": {
+    "expand_hidden": "Mostrar itens ocultos"
+  },
+  "passwordinput": {
+    "caps_lock_on": "Caps Lock está ativado"
   },
   "meter": {
     "threshold": {

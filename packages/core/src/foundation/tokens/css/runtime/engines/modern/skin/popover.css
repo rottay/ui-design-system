@@ -758,12 +758,16 @@ html[data-ds-motion="reduced"]
   }
 
   /* The arrow inherits the redefined custom properties from the surface, so
-     its fill and motif follow without a second declaration. */
+     its fill and motif follow without a second declaration.
+     The family's own opaque fill still wins: `--ds-popover-bg` is a declared
+     solid a tenant owns, so the guard must not overwrite it.
+     `--ds-material-overlay-opaque` replaces only the ad-hoc surface pick that
+     used to close this chain. */
   .rottay-popover--modern[data-part="trigger"]
     > [data-part="surface"][data-part="surface"]:not([data-recipe="inverse"]) {
     --ds-popover-surface: var(
       --_ds-proto-popover-opaque-surface,
-      var(--ds-popover-bg, var(--ds-surface-card))
+      var(--ds-popover-bg, var(--ds-material-overlay-opaque, var(--ds-surface-card)))
     );
   }
 }

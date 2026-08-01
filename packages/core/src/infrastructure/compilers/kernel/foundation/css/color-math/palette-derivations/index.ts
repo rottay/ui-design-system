@@ -142,10 +142,10 @@ export function deriveGroundLadder(background: string): GroundLadder {
 /**
  * Semantic channels derived from the PRIMARY seed: button primary chrome and
  * the focused-control treatment, both keyed to the one seed a tenant reliably
- * sets. `--ds-color-text-on-primary` is not among them — the Appearance
- * compiler derives that ink with WCAG math the axe gates grade against, and a
- * second author for the same channel is what `assertSingleLightEmitter` exists
- * to reject.
+ * sets. `--ds-color-text-on-primary` is not among them — each compile path
+ * emits that ink itself through the shared `color-math/readable-ink`
+ * derivation, and a second author for the same channel is what
+ * `assertSingleLightEmitter` exists to reject.
  */
 function derivePrimarySemantics(
   seeds: PaletteDerivationSeeds

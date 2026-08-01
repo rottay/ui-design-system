@@ -22,7 +22,11 @@
  *   models)
  * - Roving tabindex on the radios (W6): exactly one star is tabbable -- the
  *   checked one, or the first when the value is 0 -- the radiogroup root is
- *   never a tab stop, and arrows move focus together with the selection.
+ *   never a tab stop, and arrows move focus together with the selection. The
+ *   tab stop is derived from the committed value rather than from the
+ *   roving-focus kernel's collection state, because the navigable steps are
+ *   VALUES (0.5 apart under `allowHalf`) and not the five star elements; the
+ *   kernel still owns the key-to-direction mapping.
  *   The checked radio announces the committed VALUE, preserving half-point
  *   identity (2.5 reads as "2.5 stars", never "third star")
  * - Single hidden `type="hidden"` input mirrors the committed value for
@@ -56,6 +60,7 @@ import React, { useState, useCallback, useRef, useEffect, useId } from 'react';
 import type { RateProps, RateCharacterProps } from '../../contracts';
 import { RATE_DEFAULTS } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { resolveNavigationIntent } from '@/ui/primitives/runtime/collection/roving-focus';
 
 // ============================================================================
 // Component
@@ -225,47 +230,41 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
      * Handle keyboard navigation on a star (APG radio-group: arrows move
      * BOTH the selection and the focus to the star the new value falls on).
      *
-     * Under `direction="rtl"` the horizontal arrows mirror (contract:
-     * "direction affects keyboard navigation"): the fill leads from the
-     * right edge, so ArrowLeft steps the value UP and ArrowRight steps it
-     * DOWN, keeping the key's visual motion aligned with the value delta.
-     * Vertical arrows and Home/End stay direction-neutral (APG).
+     * The STEP is family-owned because Rate navigates a VALUE, not a
+     * collection of elements: with `allowHalf` the step is 0.5 while only
+     * `count` stars exist, so half-points have no id to rove to. The
+     * DIRECTION is not family-owned: the key-to-intent mapping comes from the
+     * roving-focus kernel, which is why `direction="rtl"` no longer flips a
+     * step sign here (contract: "direction affects keyboard navigation" --
+     * the fill leads from the right edge, so under RTL ArrowLeft steps the
+     * value UP). Vertical arrows and Home/End stay direction-neutral (APG).
      */
     const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
       if (!keyboard || !isInteractive) return;
 
-      let newValue = currentValue || 0;
-      const step = allowHalf ? 0.5 : 1;
-      const horizontalStep = direction === 'rtl' ? -step : step;
+      // The stars lay out on the HORIZONTAL axis, so that is the only axis
+      // whose keys carry a reading direction. The vertical pair is the slider
+      // convention (ArrowUp raises the value) rather than a list axis, and is
+      // direction-neutral by contract -- it therefore never reaches the
+      // kernel's key-to-direction mapping and holds no RTL logic of its own.
+      const intent = resolveNavigationIntent(e.key, {
+        orientation: 'horizontal',
+        rtl: direction === 'rtl',
+      });
+      const verticalDelta = e.key === 'ArrowUp' ? 1 : e.key === 'ArrowDown' ? -1 : 0;
+      if (intent === null && verticalDelta === 0) return;
 
-      switch (e.key) {
-        case 'ArrowRight':
-          e.preventDefault();
-          newValue = Math.min(count, Math.max(0, newValue + horizontalStep));
-          break;
-        case 'ArrowUp':
-          e.preventDefault();
-          newValue = Math.min(count, newValue + step);
-          break;
-        case 'ArrowLeft':
-          e.preventDefault();
-          newValue = Math.min(count, Math.max(0, newValue - horizontalStep));
-          break;
-        case 'ArrowDown':
-          e.preventDefault();
-          newValue = Math.max(0, newValue - step);
-          break;
-        case 'Home':
-          e.preventDefault();
-          newValue = 0;
-          break;
-        case 'End':
-          e.preventDefault();
-          newValue = count;
-          break;
-        default:
-          return;
-      }
+      e.preventDefault();
+
+      const step = allowHalf ? 0.5 : 1;
+      const current = currentValue || 0;
+      const delta = intent === null ? verticalDelta : intent === 'next' ? 1 : -1;
+      const newValue =
+        intent === 'first'
+          ? 0
+          : intent === 'last'
+            ? count
+            : Math.min(count, Math.max(0, current + delta * step));
 
       if (!isControlled) {
         setInternalValue(newValue);

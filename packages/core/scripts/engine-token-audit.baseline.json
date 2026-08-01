@@ -3277,5 +3277,16 @@
   "embeddedCssPaint.primitives/foundation/index.ts": 0,
   "fleet.inlinePaint.primitives/foundation/calendar/index.ts": 0,
   "runtimeSvgPaint.primitives/foundation/calendar/index.ts": 0,
-  "embeddedCssPaint.primitives/foundation/calendar/index.ts": 0
+  "embeddedCssPaint.primitives/foundation/calendar/index.ts": 0,
+  "fleet.inlinePaint.primitives/runtime/collection/combobox/index.ts": 0,
+  "fleet.inlinePaint.primitives/runtime/collection/roving-focus/index.ts": 0,
+  "fleet.inlinePaint.primitives/runtime/collection/typeahead/index.ts": 0,
+  "runtimeSvgPaint.primitives/foundation/loading-indicator/contracts/index.ts": 0,
+  "runtimeSvgPaint.primitives/runtime/collection/combobox/index.ts": 0,
+  "runtimeSvgPaint.primitives/runtime/collection/roving-focus/index.ts": 0,
+  "runtimeSvgPaint.primitives/runtime/collection/typeahead/index.ts": 0,
+  "embeddedCssPaint.primitives/foundation/loading-indicator/contracts/index.ts": 0,
+  "embeddedCssPaint.primitives/runtime/collection/combobox/index.ts": 0,
+  "embeddedCssPaint.primitives/runtime/collection/roving-focus/index.ts": 0,
+  "embeddedCssPaint.primitives/runtime/collection/typeahead/index.ts": 0
 }

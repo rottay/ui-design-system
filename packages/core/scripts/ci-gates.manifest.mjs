@@ -49,6 +49,15 @@ export const CI_GATES = Object.freeze([
   { id: 'pattern-surface-ownership', run: ['node', 'scripts/pattern-surface-ownership-gate.mjs', '--check'], blocking: true },
   { id: 'engine-freeze-gate', run: ['node', 'scripts/engine-freeze-gate.mjs', '--check'], blocking: true },
   { id: 'portal-substrate-gate', run: ['node', 'scripts/portal-substrate-gate.mjs', '--check'], blocking: true },
+  // Bidirectional identity between every `--_ds-proto-*` in the sources and its
+  // row in `foundation/tokens/prototype-ledger.json`. It ships with NO
+  // baseline, so the drill carries the whole burden of proving the scan can
+  // fail -- including that a name quoted in prose is not a declaration, and
+  // that a governed prototoken compiled into a shipped bundle is legal while an
+  // ungoverned one is not. Drill first: a census computed by a broken scanner
+  // would report zero findings and look identical to a clean tree.
+  { id: 'prototype-ledger-drill', run: ['node', '--test', 'scripts/prototype-ledger-gate.test.mjs'], blocking: true },
+  { id: 'prototype-ledger', run: ['node', 'scripts/prototype-ledger-gate.mjs', '--check'], blocking: true },
 
   // --- white-label channel + theme parity ---
   { id: 'theme-channel-parity', run: ['node', 'scripts/theme-channel-parity-gate.mjs', '--check', '--quiet'], blocking: true },

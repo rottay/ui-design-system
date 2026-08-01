@@ -197,6 +197,12 @@ export const bithireBrandTheme: BrandTheme = {
           lg: "0 8px 24px rgba(20, 40, 59, 0.1)",
           xl: "0 16px 48px rgba(20, 40, 59, 0.12)",
         },
+        surfaceRoles: {
+          overlay: {
+            background: "#1f2940",
+            foreground: "#e4e8ed",
+          },
+        },
       },
       chrome: {
         controls: {
@@ -302,6 +308,7 @@ export const bithireBrandTheme: BrandTheme = {
     warningColor: "#D6A04E",
     errorColor: "#C5504C",
     infoColor: "#3A6FB0",
+    backgroundOverlayColor: "rgba(20, 40, 59, 0.42)",
   },
 
   typography: {
@@ -446,8 +453,8 @@ export const bithireBrandTheme: BrandTheme = {
           "0 16px 36px -24px rgba(20, 40, 59, 0.36), 0 4px 12px rgba(20, 40, 59, 0.08)",
       },
       overlay: {
-        background: "rgba(20, 40, 59, 0.42)",
-        foreground: "#FFFFFF",
+        background: "#ffffff",
+        foreground: "#14283B",
       },
     },
     glass: {

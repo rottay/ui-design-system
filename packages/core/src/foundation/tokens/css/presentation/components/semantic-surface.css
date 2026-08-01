@@ -254,12 +254,16 @@
 
 /* Nested-radius grammar: an inner surface derives its corner from the parent
    radius minus a bounded inset, so nested regions read as one concentric
-   family instead of two unrelated rounded rectangles. The inset is a private
-   proto axis pending adjudication, never a public dial. */
+   family instead of two unrelated rounded rectangles. `--ds-radius-nest-inset`
+   is the ONE inset authority for this law; the proto stays a private local
+   override hook, never a public dial. */
 .ds-semantic-surface .ds-semantic-surface {
   border-radius: max(
     0px,
-    calc(var(--ds-surface-radius-md, var(--ds-radius-md)) - var(--_ds-proto-semanticsurface-nest-inset, 4px))
+    calc(
+      var(--ds-surface-radius-md, var(--ds-radius-md)) -
+        var(--_ds-proto-semanticsurface-nest-inset, var(--ds-radius-nest-inset, 4px))
+    )
   );
 }
 

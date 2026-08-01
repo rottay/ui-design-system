@@ -54,6 +54,12 @@ import {
 } from "@/foundation/kernel/color/oklch/ramp";
 import { chromeToVariables } from "../../foundation/css/chrome-variables";
 import { derivePaletteSemantics } from "../../foundation/css/color-math/palette-derivations";
+import { isHexColor } from "../../foundation/css/color-math";
+import {
+  ON_TONE_ROLES,
+  deriveReadableInk,
+  onToneChannel,
+} from "../../foundation/css/color-math/readable-ink";
 import {
   springLinearEasing,
   springLinearEasingGentle,
@@ -587,6 +593,16 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
       vars["--ds-color-warning"] = bt.palette.warningColor;
     if (bt.palette.errorColor) vars["--ds-color-error"] = bt.palette.errorColor;
     if (bt.palette.infoColor) vars["--ds-color-info"] = bt.palette.infoColor;
+    // Readable ink over each hex status tone, from the shared derivation the
+    // DB path also uses. A mode overlay re-enters this function with its own
+    // merged palette, so a dark-mode tone re-derives its own ink; a future
+    // authored on-<tone> field would simply overwrite these entries below.
+    for (const role of ON_TONE_ROLES) {
+      const seed = bt.palette[`${role}Color`];
+      if (seed && isHexColor(seed)) {
+        vars[onToneChannel(role)] = deriveReadableInk(seed);
+      }
+    }
     setExtendedPaletteVariables(vars, bt.palette);
 
     // Dark-mode palette aliases consumed by ThemeProvider.

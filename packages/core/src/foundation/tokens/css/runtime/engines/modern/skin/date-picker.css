@@ -487,12 +487,18 @@
 .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-in-range='true']:not([data-selected='true']) {
   border-radius: 0;
   background: var(--ds-color-bg-hover);
-  background: var(--_ds-proto-datepicker-range-band-bg, color-mix(in srgb, var(--ds-color-primary) 12%, transparent));
+  background: var(
+    --_ds-proto-datepicker-range-band-bg,
+    var(--ds-wash-band, color-mix(in srgb, var(--ds-color-primary) 12%, transparent))
+  );
 }
 .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-range-preview='true']:not([data-selected='true']) {
   border-radius: 0;
   background: var(--ds-color-bg-hover);
-  background: var(--_ds-proto-datepicker-range-preview-bg, color-mix(in srgb, var(--ds-color-primary) 6%, transparent));
+  background: var(
+    --_ds-proto-datepicker-range-preview-bg,
+    var(--ds-wash-band-preview, color-mix(in srgb, var(--ds-color-primary) 6%, transparent))
+  );
 }
 /* Endpoints keep the primary fill but open their inner corners toward the
    band (logical radii: the grammar mirrors itself under RTL). A same-day

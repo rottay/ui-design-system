@@ -2,23 +2,7 @@
 
 import React from 'react';
 
-export type LoadingIndicatorSize = 'sm' | 'md' | 'lg' | 'xl';
-
-export interface LoadingIndicatorProps {
-  size?: LoadingIndicatorSize;
-  color?: string;
-  /** Visible supporting copy rendered beside the indicator. */
-  label?: string;
-  /**
-   * Announces this indicator as a status. Omit when the composing owner
-   * already carries aria-busy and the glyph is decorative.
-   */
-  statusLabel?: string;
-  children?: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-  'data-part'?: string;
-}
+import type { LoadingIndicatorProps } from './contracts';
 
 /**
  * Engine-neutral loading glyph substrate used by Spinner and by primitive
@@ -57,3 +41,5 @@ export function LoadingIndicator({
     </div>
   );
 }
+
+export type { LoadingIndicatorProps, LoadingIndicatorSize } from './contracts';

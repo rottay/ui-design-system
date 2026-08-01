@@ -281,8 +281,8 @@
    idiom), optically centered on the message line box. */
 .ds-form-item.ds-form-item--modern [data-part='error-icon'] {
   flex: none;
-  inline-size: var(--_ds-proto-form-error-icon-size, 13px);
-  block-size: var(--_ds-proto-form-error-icon-size, 13px);
+  inline-size: var(--_ds-proto-form-error-icon-size, var(--ds-icon-size-status, 14px));
+  block-size: var(--_ds-proto-form-error-icon-size, var(--ds-icon-size-status, 14px));
   color: var(--ds-color-error);
 }
 

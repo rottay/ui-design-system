@@ -16,11 +16,23 @@
  *   documented 32/36/44px control heights.
  * - `showSizeChanger` renders a native `<select>` trailing the joined
  *   controls (the modern select.css native-trigger idiom: `appearance: none`
- *   + a governed `NavigationDownIcon` part). Changing the page size resets to
- *   page 1 and reports through the contract's only callback,
- *   `onChange(1, nextPageSize)` — the contract declares no
- *   `pageSizeOptions`/`onShowSizeChange` axes, so the option list is the
- *   conventional 10/20/50/100 with the active `pageSize` merged in.
+ *   + a governed `NavigationDownIcon` part). `pageSizeOptions` supplies the
+ *   option list (default 10/20/50/100), always merged with the active
+ *   `pageSize` so it never shows a phantom value. Changing the page size
+ *   keeps the existing `onChange(1, nextPageSize)` reset-to-page-1 contract
+ *   AND additionally fires `onShowSizeChange(current', nextPageSize)` with
+ *   the RE-CLAMPED previous current page (AntD parity: two callbacks, two
+ *   different current-page values).
+ * - `siblingCount`/`boundaryCount` (default 1/1) parameterize the page-button
+ *   window; the defaults reproduce the original fixed 1-sibling/1-boundary
+ *   algorithm branch-for-branch.
+ * - `showQuickJumper` renders a "go to page" input trailing the joined
+ *   controls; it commits on Enter and on blur, clamps to `[1, totalPages]`,
+ *   and ignores an empty or non-numeric value.
+ * - `simple` replaces the page-button cluster with a single `current / total`
+ *   readout between the prev/next controls; it is orthogonal to `showTotal`,
+ *   `showSizeChanger` and `showQuickJumper`, which keep rendering
+ *   independently.
  *
  * @example Basic Usage
  * ```tsx
@@ -66,11 +78,6 @@ import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/gener
  * English fallbacks mirror the `components.pagination.*` catalog keys so the
  * primitive keeps its documented standalone rendering contract when no
  * I18nProvider is mounted (the `useOptionalTranslation` rationale).
- *
- * `pagination.navigation` is NOT yet in the catalog (requested through the
- * K3-B lane ficha): the missing-key marker the provider returns
- * (`i18n:missing:<locale>:<key>`) is detected and swapped for the fallback
- * until the key lands.
  */
 const EN_FALLBACK = {
   previous: 'Previous',
@@ -79,13 +86,14 @@ const EN_FALLBACK = {
   totalItems: 'Total {total} items',
   itemsPerPage: '{count} per page',
   sizeChanger: 'Items per page',
+  page: 'Page {current} of {total}',
+  goTo: 'Go to page',
 } as const;
 
 /**
- * Page-size choices for the contract's `showSizeChanger`. The contract declares
- * no `pageSizeOptions` axis, so the conventional Ant-aligned set applies; the
- * active `pageSize` is always merged in so the select never shows a phantom
- * value.
+ * Default page-size choices for `showSizeChanger`, used whenever the caller
+ * does not supply `pageSizeOptions`. The active `pageSize` is always merged
+ * in so the select never shows a phantom value.
  */
 const BASE_PAGE_SIZE_OPTIONS: readonly number[] = [10, 20, 50, 100];
 
@@ -97,6 +105,68 @@ function interpolate(template: string, params?: Record<string, string | number>)
   return template.replace(/\{(\w+)\}/g, (match, key: string) =>
     key in params ? String(params[key]) : match
   );
+}
+
+// ============================================================================
+// Page Number Generation
+// ============================================================================
+
+/**
+ * Generates the page-button sequence (numbers and `'...'` ellipsis markers)
+ * for the joined controls row.
+ *
+ * @remarks
+ * A direct parameterization of the family's original fixed 1-sibling/
+ * 1-boundary algorithm: every branch below (the full-range fast path, the
+ * leading/trailing ellipsis conditions, the sibling window, the boundary
+ * pages) collapses to the ORIGINAL expression when `siblingCount=1` and
+ * `boundaryCount=1` — the documented default behavior is therefore provably
+ * unchanged, not just re-implemented to taste.
+ *
+ * @param current - Current active page (1-indexed)
+ * @param totalPages - Total number of pages
+ * @param siblingCount - Page buttons kept on each side of `current`
+ * @param boundaryCount - Page buttons always kept at each end of the range
+ */
+function getPageNumbers(
+  current: number,
+  totalPages: number,
+  siblingCount: number,
+  boundaryCount: number
+): (number | string)[] {
+  const pages: (number | string)[] = [];
+
+  // When every page fits inside one boundary+sibling window, show them all
+  // without an ellipsis. At the 1/1 defaults this is the original `<= 5`.
+  const fullRangeThreshold = boundaryCount * 2 + siblingCount * 2 + 1;
+  if (totalPages <= fullRangeThreshold) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  // Leading boundary pages (always shown as navigation anchors).
+  for (let i = 1; i <= boundaryCount; i++) pages.push(i);
+
+  // Leading ellipsis once the current page has drifted past the boundary +
+  // sibling window. At 1/1 this is the original `current > 3`.
+  if (current > boundaryCount + siblingCount + 1) {
+    pages.push('...');
+  }
+
+  // Sliding sibling window around the current page, clamped inside the
+  // boundary pages already pushed above/below.
+  const siblingsStart = Math.max(boundaryCount + 1, current - siblingCount);
+  const siblingsEnd = Math.min(totalPages - boundaryCount, current + siblingCount);
+  for (let i = siblingsStart; i <= siblingsEnd; i++) pages.push(i);
+
+  // Trailing ellipsis. At 1/1 this is the original `current < totalPages - 2`.
+  if (current < totalPages - boundaryCount - siblingCount) {
+    pages.push('...');
+  }
+
+  // Trailing boundary pages.
+  for (let i = totalPages - boundaryCount + 1; i <= totalPages; i++) pages.push(i);
+
+  return pages;
 }
 
 // ============================================================================
@@ -119,6 +189,12 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
     size = PAGINATION_DEFAULTS.size,
     showSizeChanger = PAGINATION_DEFAULTS.showSizeChanger,
     showTotal = PAGINATION_DEFAULTS.showTotal,
+    showQuickJumper = PAGINATION_DEFAULTS.showQuickJumper,
+    simple = PAGINATION_DEFAULTS.simple,
+    pageSizeOptions,
+    onShowSizeChange,
+    siblingCount = PAGINATION_DEFAULTS.siblingCount!,
+    boundaryCount = PAGINATION_DEFAULTS.boundaryCount!,
     disabled,
     onChange,
     className = '',
@@ -144,12 +220,16 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
   const totalPages = Math.ceil(total / pageSize);
 
   /**
-   * Size-changer option list: the base set plus the active pageSize, deduped
-   * and sorted so a contract-driven pageSize (say 25) reads in place.
+   * Size-changer option list: the caller's `pageSizeOptions` (default the
+   * conventional 10/20/50/100 set) plus the active pageSize, deduped and
+   * sorted so a non-listed active size (say 25) reads in place.
    */
-  const pageSizeOptions = React.useMemo(
-    () => Array.from(new Set([...BASE_PAGE_SIZE_OPTIONS, pageSize])).sort((a, b) => a - b),
-    [pageSize]
+  const resolvedPageSizeOptions = React.useMemo(
+    () =>
+      Array.from(new Set([...(pageSizeOptions ?? BASE_PAGE_SIZE_OPTIONS), pageSize])).sort(
+        (a, b) => a - b
+      ),
+    [pageSizeOptions, pageSize]
   );
 
   /**
@@ -182,66 +262,49 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
   };
 
   /**
-   * Handles page-size changes. A new page size invalidates the current page
-   * index, so the contract's single callback reports a reset to page 1 —
-   * `onChange(1, nextPageSize)` — matching the classic engine's Ant behavior.
+   * Handles page-size changes. `onChange` keeps its documented reset-to-
+   * page-1 contract unchanged (`onChange(1, nextPageSize)`); `onShowSizeChange`
+   * is the ADDITIONAL AntD-parity callback and reports a DIFFERENT value on
+   * purpose — the previous current page re-clamped into the new total —
+   * so a consumer that wants to stay near its place (rather than snap to
+   * page 1) has the number to do it with.
    */
   const handlePageSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const nextPageSize = Number(event.target.value);
     if (disabled || nextPageSize === pageSize || nextPageSize <= 0) return;
+    const nextTotalPages = Math.max(1, Math.ceil(total / nextPageSize));
+    const reclampedCurrent = Math.min(Math.max(current, 1), nextTotalPages);
     onChange?.(1, nextPageSize);
+    onShowSizeChange?.(reclampedCurrent, nextPageSize);
   };
 
-  // ============================================================================
-  // Page Number Generation
-  // ============================================================================
+  /** Quick-jumper free-typed buffer (not synced to `current`; AntD idiom). */
+  const [jumpValue, setJumpValue] = React.useState('');
 
   /**
-   * Generates array of page numbers with ellipsis for large ranges.
-   *
-   * @remarks
-   * Algorithm:
-   * - Shows first and last page always
-   * - Shows current page and neighbors
-   * - Uses ellipsis (...) to indicate skipped pages
-   *
-   * @returns Array of page numbers and ellipsis strings
+   * Commits the quick jumper: empty or non-numeric input is ignored (and the
+   * buffer clears on the non-numeric path), otherwise the target page is
+   * clamped to `[1, totalPages]` and routed through the same boundary-checked
+   * `handlePageChange` the page buttons use.
    */
-  const getPageNumbers = () => {
-    const pages: (number | string)[] = [];
-    const showPages = 5;
-
-    // When total pages fit within the visible window, show all without ellipsis
-    if (totalPages <= showPages) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
+  const commitJump = () => {
+    const trimmed = jumpValue.trim();
+    if (trimmed === '') return;
+    const parsed = Number(trimmed);
+    if (!Number.isFinite(parsed)) {
+      setJumpValue('');
+      return;
     }
+    const clamped = Math.min(Math.max(Math.trunc(parsed), 1), Math.max(totalPages, 1));
+    handlePageChange(clamped);
+    setJumpValue('');
+  };
 
-    // Always show page 1 as an anchor point for navigation
-    pages.push(1);
-
-    // Insert leading ellipsis when the current page is far from the start
-    if (current > 3) {
-      pages.push('...');
+  const handleJumpKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      commitJump();
     }
-
-    // Show a sliding window of pages around the current position.
-    // The window is clamped to [2, totalPages-1] to avoid duplicating
-    // the first/last page that are always shown separately.
-    for (let i = Math.max(2, current - 1); i <= Math.min(totalPages - 1, current + 1); i++) {
-      pages.push(i);
-    }
-
-    // Insert trailing ellipsis when the current page is far from the end
-    if (current < totalPages - 2) {
-      pages.push('...');
-    }
-
-    // Always show the last page as an anchor point
-    if (totalPages > 1) {
-      pages.push(totalPages);
-    }
-
-    return pages;
   };
 
   // ============================================================================
@@ -255,6 +318,7 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
       data-part="root"
       data-size={size ?? 'md'}
       data-disabled={disabled || undefined}
+      data-simple={simple || undefined}
       aria-label={translate('pagination.navigation', EN_FALLBACK.navigation)}
     >
       {/* Total items display */}
@@ -279,24 +343,32 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
           <NavigationBackIcon decorative size="sm" />
         </button>
 
-        {/* Page number buttons: the visible number IS the accessible name */}
-        {getPageNumbers().map((page, index) =>
-          typeof page === 'number' ? (
-            <button
-              key={page}
-              type="button"
-              onClick={() => handlePageChange(page)}
-              disabled={disabled}
-              data-part="pagination-page-button"
-              data-current={page === current}
-              aria-current={page === current ? 'page' : undefined}
-            >
-              {page}
-            </button>
-          ) : (
-            <span key={`ellipsis-${index}`} data-part="ellipsis" aria-hidden="true">
-              {page}
-            </span>
+        {simple ? (
+          /* Simple mode: a single localized readout replaces the page-button
+             cluster entirely; prev/next stay the same real controls. */
+          <span data-part="pagination-simple-text">
+            {translate('pagination.page', EN_FALLBACK.page, { current, total: totalPages })}
+          </span>
+        ) : (
+          /* Page number buttons: the visible number IS the accessible name */
+          getPageNumbers(current, totalPages, siblingCount, boundaryCount).map((page, index) =>
+            typeof page === 'number' ? (
+              <button
+                key={page}
+                type="button"
+                onClick={() => handlePageChange(page)}
+                disabled={disabled}
+                data-part="pagination-page-button"
+                data-current={page === current}
+                aria-current={page === current ? 'page' : undefined}
+              >
+                {page}
+              </button>
+            ) : (
+              <span key={`ellipsis-${index}`} data-part="ellipsis" aria-hidden="true">
+                {page}
+              </span>
+            )
           )
         )}
 
@@ -313,6 +385,25 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
         </button>
       </div>
 
+      {/* Quick jumper: commits on Enter and on blur; clamps to
+          [1, totalPages] and ignores an empty or non-numeric value. */}
+      {showQuickJumper && (
+        <span data-part="pagination-jumper" data-disabled={disabled || undefined}>
+          <input
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            data-part="quick-jumper"
+            value={jumpValue}
+            disabled={disabled}
+            onChange={(event) => setJumpValue(event.target.value)}
+            onKeyDown={handleJumpKeyDown}
+            onBlur={commitJump}
+            aria-label={translate('pagination.go_to', EN_FALLBACK.goTo)}
+          />
+        </span>
+      )}
+
       {/* Page-size changer: a native select (keyboard, mobile picker and
           forced-colors behavior for free) in the select.css native-trigger
           idiom — the governed chevron is decorative; the select carries the
@@ -327,7 +418,7 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
             onChange={handlePageSizeChange}
             aria-label={translate('pagination.size_changer', EN_FALLBACK.sizeChanger)}
           >
-            {pageSizeOptions.map((option) => (
+            {resolvedPageSizeOptions.map((option) => (
               <option key={option} value={option}>
                 {translate('pagination.items_per_page', EN_FALLBACK.itemsPerPage, {
                   count: option,
