@@ -251,3 +251,89 @@ describe('PatternSavedViewsBar advanced engine coverage', () => {
     }
   );
 });
+
+/**
+ * VISIBILITY LAW — Codex blocker 1.
+ *
+ * `contracts/index.ts:80-82` states it outright: an absent mutation handler
+ * means the action is NOT AVAILABLE and the bar renders WITHOUT it. The `allow*`
+ * flags default to `true`, so before this batch a read-only bar (no handlers)
+ * rendered a create button and a menu carrying rename/delete — all three
+ * VISIBLE and INERT, because the engines invoked `onViewX?.()` and the optional
+ * call silently did nothing.
+ *
+ * These contracts are negative on purpose and asserted on the ACCESSIBLE
+ * surface, not on internals: an action a user cannot see is the guarantee, so
+ * "no such button / no such trigger" is the assertion. Absence is never
+ * expressed as `disabled` — the contract says OMIT, and a disabled control
+ * still advertises a capability the product does not have.
+ */
+describe('SavedViews visibility law — handlerless actions are omitted', () => {
+  const readOnlyProps = (): SavedViewsBarProps => ({
+    views: baseViews,
+    activeViewId: 'view-1',
+    onViewSelect: vi.fn(),
+  });
+
+  it.each(STABLE_ENGINES)(
+    '%s: a read-only config shows no create, no rename, no delete, and no empty menu',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+      renderWithEngine(<Component {...readOnlyProps()} />, engine);
+
+      // The bar still renders its views — read-only is a valid product state.
+      expect(screen.getByText('All Items')).toBeInTheDocument();
+
+      expect(screen.queryByLabelText(/New view/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/New view/i)).not.toBeInTheDocument();
+      // No trigger at all: an empty menu is itself an inert affordance.
+      expect(screen.queryByLabelText(/options$/i)).not.toBeInTheDocument();
+      expect(screen.queryByText('Rename')).not.toBeInTheDocument();
+      expect(screen.queryByText('Delete')).not.toBeInTheDocument();
+    }
+  );
+
+  it.each(STABLE_ENGINES)(
+    '%s: supplying the handlers restores every action',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+      renderWithEngine(<Component {...createBarProps()} />, engine);
+
+      const trigger = screen.getByLabelText('Active Only options');
+      expect(trigger).toBeInTheDocument();
+      act(() => {
+        fireEvent.click(trigger);
+      });
+
+      expect(screen.getByText('Rename')).toBeInTheDocument();
+      expect(screen.getByText('Delete')).toBeInTheDocument();
+    }
+  );
+
+  it.each(STABLE_ENGINES)(
+    '%s: only onViewRename present ⇒ only rename is offered',
+    (engine) => {
+      const Component = COMPONENTS[engine];
+      renderWithEngine(
+        <Component
+          views={baseViews}
+          activeViewId="view-1"
+          onViewSelect={vi.fn()}
+          onViewRename={vi.fn()}
+        />,
+        engine
+      );
+
+      // Create needs onViewCreate, which is absent.
+      expect(screen.queryByLabelText(/New view/i)).not.toBeInTheDocument();
+
+      const trigger = screen.getByLabelText('Active Only options');
+      act(() => {
+        fireEvent.click(trigger);
+      });
+
+      expect(screen.getByText('Rename')).toBeInTheDocument();
+      expect(screen.queryByText('Delete')).not.toBeInTheDocument();
+    }
+  );
+});

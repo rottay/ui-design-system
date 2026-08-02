@@ -17,7 +17,16 @@ type PartialChartPersonality = Partial<ChartPersonalityTokens>;
 export interface ChartPersonalityResolutionInput {
   /** Active tenant configuration, including the premium or legacy visual path. */
   tenantConfig?: Readonly<{
-    brandTheme?: Pick<BrandTheme, 'charts'> | null;
+    /**
+     * The active BrandTheme, of which only `charts` is read.
+     *
+     * `Partial`, not `Pick<BrandTheme, 'charts'>`: presence of a BrandTheme is
+     * itself the signal that selects the premium path, so a theme that carries
+     * no `charts` at all is a resolvable input this function is documented to
+     * handle. `Pick` made `charts` mandatory and rejected every other field of
+     * the real theme object callers already hold.
+     */
+    brandTheme?: Partial<BrandTheme> | null;
     personality?: Readonly<{ chart?: PartialChartPersonality }> | null;
   }> | null;
   /** Active vertical baseline, when a vertical has been resolved. */

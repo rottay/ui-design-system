@@ -1,7 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    // Declaration correction, not a capability widening: the suites run on a
+    // Node/jsdom runtime that already ships the full ES2021 `Intl` surface
+    // (`Intl.ListFormat`), while the inherited ES2020 `lib` under-reported it --
+    // so a formatter test could exercise an API the checker denied existed.
+    // Production stays on ES2020 (`tsconfig.json`); this raises only what the
+    // TEST runtime actually provides.
+    "lib": ["ES2021", "DOM", "DOM.Iterable"]
   },
   "include": [
     "src/**/*.test.ts",

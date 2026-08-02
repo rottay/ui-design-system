@@ -317,7 +317,7 @@
   object-fit: var(--ds-card-media-object-fit);
   object-position: var(--ds-card-cover-object-position);
   opacity: 0;
-  transition: opacity var(--ds-motion-reveal) var(--ds-motion-ease-enter);
+  transition: var(--ds-transition-fade);
 }
 .rottay-card-image[data-loaded='true'] > img {
   opacity: 1;

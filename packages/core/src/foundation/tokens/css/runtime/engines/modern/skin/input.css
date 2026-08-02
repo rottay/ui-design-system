@@ -35,7 +35,7 @@
      control on click: it must advertise text entry, not the default arrow.
      The readonly/disabled rules below override this with their own cursors. */
   cursor: text;
-  background: var(--ds-input-bg, var(--ds-surface-control));
+  background: var(--ds-input-bg, var(--ds-material-control-background, var(--ds-surface-control)));
   border: var(--ds-input-border-width) var(--ds-input-border-style)
     var(--ds-input-border, var(--ds-color-border));
   border-radius: var(--ds-input-resolved-radius);
@@ -82,7 +82,10 @@ input.rottay-input.rottay-input--modern[data-part='root'] {
 
 .rottay-input.rottay-input--modern[data-part='root'] > .rottay-input__control::placeholder,
 input.rottay-input.rottay-input--modern[data-part='root']::placeholder {
-  color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
+  color: var(
+    --ds-input-placeholder,
+    var(--ds-input-color-placeholder, var(--ds-color-text-muted))
+  );
   opacity: var(--ds-input-placeholder-opacity);
 }
 
@@ -332,7 +335,11 @@ input.rottay-input.rottay-input--modern[data-part='root']::selection {
 
 .rottay-input.rottay-input--modern[data-part='root'][data-disabled='true'] {
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
-  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled));
+  /* --ds-surface-disabled is an OPTIONAL foundation surface: nothing declares
+     it, so a bare read here would be invalid at computed-value time and the
+     background would fall back to `initial` (transparent). The terminal chain
+     is the one Select already authors for the same state. */
+  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
   border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
   box-shadow: var(--ds-input-shadow-disabled, none);
   cursor: var(--ds-input-disabled-cursor);
@@ -500,5 +507,12 @@ input.rottay-input.rottay-input--modern[data-part='root'][type='number'] {
   .rottay-input.rottay-input--modern[data-part='root'] [data-part='search-button']:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 1px;
+  }
+}
+
+/* ---- C2b a11y floor: coarse-pointer inputs keep the 44px target. ---- */
+@media (hover: none), (pointer: coarse) {
+  .rottay-input-shell--modern [data-part='control'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

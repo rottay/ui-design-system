@@ -143,16 +143,18 @@ describe("Grid advanced engine coverage", () => {
       display: "grid",
       gridTemplateColumns: "auto",
     });
-    expect(screen.getByTestId("modern-auto-grid").style.gap).toBe(
-      "var(--ds-spacing-1, 0.25rem)"
-    );
+    // The rung travels the channel, not an inline `gap` a stylesheet cannot
+    // reach; the resolved value is unchanged.
+    expect(
+      screen.getByTestId("modern-auto-grid").getAttribute("style")
+    ).toContain("--ds-grid-gap: var(--ds-spacing-1, 0.25rem)");
     expect(screen.getByTestId("modern-none-grid")).toHaveStyle({
       display: "grid",
       gridTemplateColumns: "none",
     });
-    expect(screen.getByTestId("modern-none-grid").style.gap).toBe(
-      "var(--ds-spacing-16, 4rem)"
-    );
+    expect(
+      screen.getByTestId("modern-none-grid").getAttribute("style")
+    ).toContain("--ds-grid-gap: var(--ds-spacing-16, 4rem)");
 
     const styleTag = container.querySelector("style");
     expect(screen.getByTestId("modern-responsive-grid")).toHaveStyle({

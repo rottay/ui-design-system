@@ -36,10 +36,10 @@
   --ds-checkbox-xl-font-size: 1.125rem;    /* 18px */
   --ds-checkbox-xl-border-width: 2px;
 
-  /* Default size (can be overridden) */
-  --ds-checkbox-default-size: var(--ds-checkbox-md-size);
-  --ds-checkbox-default-font-size: var(--ds-checkbox-md-font-size);
-  --ds-checkbox-default-border-width: var(--ds-checkbox-md-border-width);
+  /* Size-agnostic default. The base component rule sizes an unqualified
+     checkbox, so it needs a rung to read; this DERIVES from md rather than
+     restating 18px, which would create a second scale to keep in sync. */
+  --ds-checkbox-size: var(--ds-checkbox-md-size);
 
   /* ========================================================================
      RADIUS - Checkbox Border Radius
@@ -50,9 +50,6 @@
   --ds-checkbox-radius-md: 4px;
   --ds-checkbox-radius-lg: 6px;
   --ds-checkbox-radius-full: 9999px;
-
-  /* Default radius */
-  --ds-checkbox-default-radius: var(--ds-checkbox-radius-sm);
 
   /* ========================================================================
      COLORS - Checkbox Color Variants

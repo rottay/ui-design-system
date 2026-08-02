@@ -107,7 +107,12 @@ describe('useComboboxFoundation state', () => {
   it('releases an active descendant when its row becomes disabled without shrinking', () => {
     const { result, rerender } = renderHook(
       (props: ComboboxFoundationOptions) => useComboboxFoundation(props),
-      { initialProps: { ...OPTIONS, isItemSelectable: () => true } }
+      {
+        initialProps: {
+          ...OPTIONS,
+          isItemSelectable: () => true,
+        } as ComboboxFoundationOptions,
+      }
     );
 
     act(() => result.current.setActiveIndex(1, 'keyboard'));

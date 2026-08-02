@@ -42,11 +42,19 @@
 
 /* ---- root: card surface + bottom border (both loading and main roots) ---- */
 .ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] {
-  --ds-cockpit-header-padding: clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px));
-  --ds-cockpit-header-padding-compact: var(--ds-spacing-3, 12px) clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px));
-  --ds-cockpit-header-section-gap: var(--ds-spacing-4, 16px);
-  --ds-cockpit-header-item-gap: var(--ds-workspace-card-gap, var(--ds-spacing-3, 12px));
-  --ds-cockpit-header-action-gap: var(--ds-spacing-2, 8px);
+  /* RHYTHM: room channels are PRESET tiers, so the axis mounts once here and
+     every consume site stays a plain channel read. The compact padding
+     multiplies per component (a scale cannot apply to a shorthand) and stays
+     compact relative to the full padding at every scale, so the scroll-driven
+     compact transition keeps its shape. `--ds-workspace-card-gap` is a TENANT
+     hook: only its FALLBACK is multiplied. */
+  --ds-cockpit-header-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));
+  --ds-cockpit-header-padding-compact:
+    calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))
+    calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));
+  --ds-cockpit-header-section-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-cockpit-header-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+  --ds-cockpit-header-action-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   overflow: hidden;
   background: var(
     --ds-cockpit-header-bg,
@@ -514,5 +522,14 @@
   .ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'] {
     animation: none;
     transition: none;
+  }
+}
+
+/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
+   below the canonical --ds-touch-target-min channel; fine pointers keep the
+   authored size untouched. */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

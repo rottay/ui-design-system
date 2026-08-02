@@ -166,8 +166,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  inline-size: var(--_ds-proto-confirm-dialog-icon-size, var(--ds-icon-size-feature, 2.5rem));
-  block-size: var(--_ds-proto-confirm-dialog-icon-size, var(--ds-icon-size-feature, 2.5rem));
+  inline-size: var(--ds-icon-size-feature, 2.5rem);
+  block-size: var(--ds-icon-size-feature, 2.5rem);
   border-radius: var(--ds-radius-full);
 }
 .rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='content'] > [data-part='copy'] {

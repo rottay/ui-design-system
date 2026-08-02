@@ -10,6 +10,8 @@
  * each widget's content and meaning in app-level config.
  */
 
+import { useMemo, useRef } from "react";
+
 import {
   Button,
   Card,
@@ -31,6 +33,11 @@ import type {
   DashboardSurfaceSection,
 } from "../../../../foundation/contracts";
 import { PageShellSurface } from "../../../../composition/layout/page-shell";
+import { resolveAdaptiveLayout } from "../../../../../patterns/data/widget-board/runtime/solver";
+import {
+  useAdaptiveEnvironment,
+  useContainerPosture,
+} from "../../../../../patterns/data/widget-board/runtime/solver/react";
 import { useSurfaceProfileDefaultsWithOverrides } from "../../../../runtime/profile-defaults/overrides";
 import {
   resolveResponsiveColumnCount,
@@ -195,6 +202,101 @@ export function DashboardSurface({
       ? config.visual.mobileSectionsColumns ?? 1
       : config.visual.sectionsColumns ?? 12;
 
+  // C2 convergence: the SAME deterministic solver WidgetBoard uses resolves
+  // section spans (since C2c for EVERY numeric-span sections area — the
+  // flag only decides solver freedom vs pinned spans, see below). Sections
+  // keep their DOM order (the solver never backfills); under solver freedom
+  // spans may grow into row residue or shrink toward their mobile span to
+  // complete a row, so authored 5+5 / 6+4 combinations stop stranding dead
+  // columns. The one-column mobile stacking path is the single remaining
+  // early-out — with one column there are zero packing decisions to make.
+  // C2b: the packing posture is CONTAINER-first through the shared adaptive
+  // runtime (one observer on the sections region); the viewport breakpoint
+  // is only the unmeasurable-environment fallback (SSR/jsdom).
+  const sectionsRegionRef = useRef<HTMLDivElement | null>(null);
+  const packedPosture = useContainerPosture(
+    sectionsRegionRef,
+    isMobile ? "compact" : "expanded"
+  );
+
+  // C2c: NO packing bypass. Every section lowers into the same solver —
+  // `adaptivePacking: true` gives the solver freedom (shrink toward the
+  // mobile span, grow into row residue); the authored posture PINS each
+  // span (min = preferred = max), which the solver reproduces exactly
+  // (row-major, no backfill, pinned spans are untouchable), so authored
+  // geometry is now an INTENT, not a second layout engine. The single
+  // remaining early-out is one-column mobile stacking: with one column
+  // there are zero packing decisions to make.
+  const adaptiveEnvironment = useAdaptiveEnvironment();
+  // The solver reasons over NUMERIC capacity. A responsive/auto template is
+  // a different layout model (CSS-owned tracks), not packing intent — it has
+  // no numeric spans to pin, so it stays with its authored template.
+  const numericSectionsColumns =
+    typeof sectionsColumns === 'number' ? sectionsColumns : null;
+  const solverColumns = config.visual.adaptivePacking
+    ? 12
+    : numericSectionsColumns ?? 12;
+  const packedSectionSpans = useMemo(() => {
+    if (isMobile && config.visual.stackSectionsOnMobile !== false) {
+      return undefined;
+    }
+    const free = config.visual.adaptivePacking === true;
+    if (!free && numericSectionsColumns === null) return undefined;
+    const numericSpan = (value: unknown): number | null =>
+      typeof value === 'number' && Number.isFinite(value) ? value : null;
+    const contracts = visibleSections.map((section, index) => {
+      const authoredRaw = isMobile
+        ? numericSpan(section.mobileSpan) ?? numericSpan(section.span)
+        : numericSpan(section.span);
+      const authored = Math.max(
+        1,
+        Math.min(solverColumns, authoredRaw ?? solverColumns)
+      );
+      const min = free
+        ? Math.max(
+            1,
+            Math.min(numericSpan(section.mobileSpan) ?? authored, authored)
+          )
+        : authored;
+      return {
+        id: section.key,
+        accessibleTitle: String(section.key ?? index),
+        minSpan: { cols: min },
+        preferredSpan: { cols: authored },
+        maxSpan: { cols: free ? solverColumns : authored },
+        blockPolicy: { mode: 'intrinsic' as const, minRows: 1 },
+        contentModes: [{ id: 'full' as const, minSpan: { cols: 1 } }],
+        priority: 'primary' as const,
+        overflowPolicy: 'shrink-to-min' as const,
+        visualReorder: 'forbid' as const,
+      };
+    });
+    // Door 2 only; the real environment invalidates through the memo deps
+    // (adaptiveEnvironment identity folds dir/locale/density/type/fonts/
+    // artifact-revision — door 1).
+    const result = resolveAdaptiveLayout(contracts, [], {
+      cols: solverColumns,
+      posture: packedPosture,
+      // E2: the tenant responsive posture biases where each section resolves
+      // inside its authored min..max. Sections columns are JS-owned here (the
+      // same number is handed to the grid as a prop), so unlike WidgetBoard
+      // this surface has no CSS-pinned track count to contradict.
+      spanBias: adaptiveEnvironment.posture.spanBias,
+    });
+    return Object.fromEntries(
+      result.placements.map((placement) => [placement.itemId, placement.colSpan])
+    ) as Record<string, number>;
+  }, [
+    config.visual.adaptivePacking,
+    config.visual.stackSectionsOnMobile,
+    isMobile,
+    packedPosture,
+    visibleSections,
+    solverColumns,
+    numericSectionsColumns,
+    adaptiveEnvironment,
+  ]);
+
   const actionsNode = (
     <Flex gap={8} wrap="wrap" justify="end">
       {headerActions.map((action) => (
@@ -271,7 +373,13 @@ export function DashboardSurface({
           ) : null}
 
           {visibleSections.length > 0 && (
-            <Grid columns={sectionsColumns} gap={sectionSpacing}>
+            /* Packed spans are resolved on a 12-column tier, so the grid
+               must expose those 12 tracks whenever the solver is active. */
+            <Grid
+              ref={sectionsRegionRef}
+              columns={packedSectionSpans ? solverColumns : sectionsColumns}
+              gap={sectionSpacing}
+            >
               {visibleSections.map((section) => {
                 // Sections can opt out of the card shell when the content already brings its own chrome.
                 const sectionContent =
@@ -320,6 +428,8 @@ export function DashboardSurface({
                     span={
                       isMobile && config.visual.stackSectionsOnMobile !== false
                         ? undefined
+                        : packedSectionSpans
+                        ? packedSectionSpans[section.key]
                         : isMobile
                         ? section.mobileSpan
                         : section.span

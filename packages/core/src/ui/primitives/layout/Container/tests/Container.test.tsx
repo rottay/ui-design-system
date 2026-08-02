@@ -234,8 +234,8 @@ describe("Container", () => {
 
 describe("Container Types", () => {
   it("exports ContainerProps type", async () => {
-    const { ContainerProps } = await import("../contracts");
-    expect(ContainerProps).toBeUndefined(); // Types are compile-time only
+    const contracts: Record<string, unknown> = await import("../contracts");
+    expect(contracts.ContainerProps).toBeUndefined(); // Types are compile-time only
   });
 
   it("exports CONTAINER_DEFAULTS constant", async () => {

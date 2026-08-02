@@ -91,7 +91,22 @@ export type MenuItemType = 'group' | 'divider';
  * };
  * ```
  */
-export interface MenuItem {
+/**
+ * A separator rule. It renders as `<li data-part="divider" role="separator" />`
+ * and carries no content, so it takes no label, icon or handler.
+ */
+export interface MenuDivider {
+  /** Unique key for the divider */
+  key: string;
+  type: 'divider';
+}
+
+/**
+ * A selectable entry or a titled group. Both render content, so both label —
+ * a group header renders `title || label`, which makes `label` its fallback
+ * copy rather than dead weight.
+ */
+export interface MenuEntry {
   /** Unique key for the menu item (required for selection and navigation) */
   key: string;
 
@@ -110,12 +125,18 @@ export interface MenuItem {
   /** Child menu items (creates a submenu when present) */
   children?: MenuItem[];
 
-  /** Type of menu item ('group' | 'divider') */
-  type?: MenuItemType;
+  /** Type of menu item; only 'group' is expressible here — see MenuDivider */
+  type?: Extract<MenuItemType, 'group'>;
 
-  /** Title for group type items */
+  /** Title for group type items; falls back to `label` when absent */
   title?: string;
 }
+
+/**
+ * A menu entry, discriminated on `type`. Same shape as `DropdownMenuItem` and
+ * `ContextMenuItem`: a divider renders no content, so it takes no label.
+ */
+export type MenuItem = MenuEntry | MenuDivider;
 
 // ============================================================================
 // Event Info Interfaces

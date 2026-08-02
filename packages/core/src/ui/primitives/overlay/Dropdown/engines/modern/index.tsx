@@ -171,9 +171,11 @@ function handleMenuKeyDown(event: React.KeyboardEvent<HTMLUListElement>): void {
  */
 function itemsHaveSubmenu(items: DropdownMenuItem[] | undefined): boolean {
   return Boolean(
-    items?.some(
-      (item) => Boolean(item.children?.length) || itemsHaveSubmenu(item.children),
-    ),
+    items?.some((item) => {
+      // Dividers carry no children; only the entry arm of the union nests.
+      if (item.type === 'divider') return false;
+      return Boolean(item.children?.length) || itemsHaveSubmenu(item.children);
+    }),
   );
 }
 
@@ -560,7 +562,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>((props, 
         // Measured geometry bridge (private proto per the naming law): the
         // trigger's center offset from the surface's inline-start edge.
         ...(arrowAnchorOffset
-          ? ({ '--_ds-proto-dropdown-arrow-anchor-offset': arrowAnchorOffset } as React.CSSProperties)
+          ? ({ '--_ds-dropdown-arrow-anchor-offset': arrowAnchorOffset } as React.CSSProperties)
           : {}),
         // Direction-aware choreography: a surface opening ABOVE the trigger
         // travels from below (and exits downward), mirroring the bottom

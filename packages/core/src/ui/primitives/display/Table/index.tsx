@@ -27,6 +27,7 @@
 import React from "react";
 import { createEngineComponent } from "../../../../infrastructure/runtime/engines/presentation/component-factory";
 import type { TableProps } from "./contracts";
+import type { EngineName } from "../../../../foundation/contracts/runtime/engine";
 
 export type {
   TableProps,
@@ -47,11 +48,24 @@ export { TABLE_DEFAULTS } from "./contracts";
 /**
  * Engine-aware Table.
  *
- * The cast to `ComponentType<TableProps>` bridges the dynamic import boundary
- * because `createEngineComponent` works with non-generic signatures internally.
- * Generic type safety is preserved at the public prop level for consumers.
+ * GENERIC-PRESERVING EXPORT. `createEngineComponent<TableProps>` instantiates
+ * the row type once, at `unknown`, and returns a NON-generic component — so
+ * every consumer was forced through `ColumnType<unknown>`. That is not a
+ * cosmetic loss: `ColumnType.sorter` is `(a: T, b: T) => number`, a
+ * contravariant position, which makes `ColumnType<T>` invariant. A perfectly
+ * correct `ColumnType<Row>[]` is therefore REJECTED against
+ * `ColumnType<unknown>[]`, and an app's only escape was to widen its own row
+ * type or cast. (The previous docblock here claimed generic safety "is
+ * preserved at the public prop level". It was not; that claim is what this
+ * comment replaces.)
+ *
+ * The factory stays non-generic internally — the lazy() boundary genuinely
+ * erases P — so the generic lives on the EXPORT: the runtime value is
+ * unchanged (same object, `displayName` and all), and the call signature
+ * re-introduces the row type. Untyped calls still infer `unknown` exactly as
+ * before, so existing callers are unaffected.
  */
-export const Table = createEngineComponent<TableProps>("Table", {
+const TableComponent = createEngineComponent<TableProps<any>>("Table", {
   classic: () =>
     import("./engines/classic") as Promise<{
       default: React.ComponentType<TableProps>;
@@ -65,3 +79,10 @@ export const Table = createEngineComponent<TableProps>("Table", {
       default: React.ComponentType<TableProps>;
     }>,
 });
+
+export const Table = TableComponent as (<T = unknown>(
+  props: TableProps<T> & {
+    engine?: EngineName;
+    ref?: React.Ref<any>;
+  }
+) => React.ReactElement | null) & { displayName?: string };

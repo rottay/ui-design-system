@@ -114,7 +114,7 @@ describe('generateResponsiveCSS', () => {
   });
 
   it('uses custom resolve function', () => {
-    const entries: ResponsivePropEntry[] = [
+    const entries: ResponsivePropEntry<number>[] = [
       {
         cssProperty: 'gap',
         value: { xs: 16, lg: 32 },

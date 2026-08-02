@@ -177,7 +177,6 @@
   --ds-color-accent: var(--ds-color-secondary);
   --ds-color-accent-hover: var(--ds-color-secondary-hover);
   --ds-color-accent-live: var(--ds-color-success);
-  --ds-color-accent-live-bg: rgba(34, 197, 94, 0.08);
 
   --ds-color-alpha-primary-10: rgba(var(--ds-color-primary-rgb), 0.10);
   --ds-color-alpha-primary-20: rgba(var(--ds-color-primary-rgb), 0.20);
@@ -190,12 +189,16 @@
   --ds-color-alpha-error-10: rgba(239, 68, 68, 0.10);
   --ds-color-alpha-error-20: rgba(239, 68, 68, 0.20);
   --ds-color-alpha-info-10: rgba(59, 130, 246, 0.10);
-  --ds-color-alpha-info-20: rgba(59, 130, 246, 0.20);
 
   --ds-color-bg-primary: #0A0A0C;
   --ds-color-bg-secondary: #0F0F12;
   --ds-color-bg-tertiary: #141417;
-  --ds-color-bg-subtle: #0D0D10;
+  /* Derived, not literal: bithire and evnto override the whole bg-* family to
+     a light canvas but never authored a subtle rung, so a literal here left
+     them resolving near-black in light mode while every sibling was light.
+     Following bg-secondary keeps one definition and makes a vertical's canvas
+     carry its own subtle; the verticals that DO author a literal still win. */
+  --ds-color-bg-subtle: var(--ds-color-bg-secondary, #0D0D10);
   --ds-color-bg-hover: #18181C;
   --ds-color-bg-canvas: #0A0A0C;
   --ds-color-bg-elevated: #18181C;
@@ -215,6 +218,7 @@
   --ds-color-text-muted: #96969E;
   --ds-color-text-disabled: #4A4A50;
   --ds-color-text-on-primary: #0C0C0E;
+  --ds-color-text-inverse: var(--ds-color-text-on-primary);
   --ds-color-text: var(--ds-color-text-primary);
 
   --ds-color-border: #1C1C20;
@@ -327,7 +331,7 @@
   --ds-material-card-background: var(--ds-surface-card);
   --ds-material-card-background-hover: var(
     --ds-color-bg-hover,
-    color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card))
+    color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift, 4%), var(--ds-surface-card))
   );
   --ds-material-card-background-active: var(
     --ds-color-bg-active,
@@ -371,7 +375,7 @@
   --ds-material-control-background: var(--ds-surface-control);
   --ds-material-control-background-hover: var(
     --ds-color-bg-hover,
-    color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-control))
+    color-mix(in srgb, var(--ds-color-primary) var(--ds-state-hover-shift, 4%), var(--ds-surface-control))
   );
   --ds-material-control-background-active: var(
     --ds-color-bg-active,
@@ -433,12 +437,38 @@
   --ds-color-on-info: #171717;
   --ds-color-on-primary: var(--ds-color-text-on-primary);
 
+  /* Readable ink over each status tone's NEUTRAL WELL (AUT-1). This is the
+     SIBLING of --ds-color-on-{tone}, not a duplicate of it, and the distinction
+     is the whole reason it exists:
+       --ds-color-on-{tone}  = ink on a SOLID tone fill. Stays the flat dark
+                               neutral in both themes, because a solid warning
+                               fill is dark-on-bright in light AND dark.
+       --ds-color-{tone}-ink = ink on a tone-TINTED well over the page surface
+                               (callout bodies, rejection frames). The well
+                               flips with the theme, so this ink must flip too.
+     Values are the AA-measured Tag R0/Axe mixes: info keeps the raw hue (it
+     already clears the floor); warning/error/success deepen toward the neutral
+     end because the raw hue reads ~2.2:1 on the light well, under the 3:1 floor
+     for a 20px semantic glyph.
+
+     THE DARK FLIP IS BY CONSTRUCTION, NOT BY OVERRIDE. Each mix references
+     var(--ds-color-neutral-900), which the dark block below re-declares on this
+     SAME element (#171717 -> #f8fafc). A custom property's computed value has
+     its var() references already substituted, so in dark these inks compute
+     against the light-on-dark neutral automatically. Re-stating them in the
+     dark block would either be a no-op duplicate or a silent repaint; the
+     single declaration is the authority. `tone-ink-authority.test.ts` pins both
+     legs: the light values byte-for-byte per shipped bundle, and the structural
+     chain that produces the flip. This is precisely what --ds-color-on-{tone}
+     could NOT offer, which is why migrating these inks onto it was blocked. */
+  --ds-color-info-ink: var(--ds-color-info);
+  --ds-color-warning-ink: color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%);
+  --ds-color-error-ink: color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%);
+  --ds-color-success-ink: color-mix(in srgb, var(--ds-color-success) 60%, var(--ds-color-neutral-900) 40%);
+
   /* Interaction-wash ramp: the one derivation for selection/hover/band
      washes the skins used to mix ad hoc. Interaction feedback is NOT
      decoration, so these do not scale with --ds-effect-intensity. */
-  --ds-wash-hover: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
-  --ds-wash-active: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
-  --ds-wash-selected: color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
   --ds-wash-band: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
   --ds-wash-band-preview: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
 
@@ -467,7 +497,6 @@
   --ds-font-family-base: var(--ds-font-sans);
   --ds-font-family-heading: var(--ds-font-sans);
   --ds-font-family-mono: var(--ds-font-mono);
-
 
   /* DS-A007 semantic type-role defaults: every role channel resolves even
      when a theme authors no roles, so components can consume roles without
@@ -608,6 +637,25 @@
     ),
     3
   );
+  /* C-E1 · Layout rhythm — the DS-owned floor for the tenant `appearance.rhythm` /
+     BrandTheme `surfaces.rhythm` axis. DELIBERATELY NOT part of the
+     --ds-spacing-* ramp above: those steps also size controls, and rhythm
+     must never reach a control height or a touch target. It is applied at
+     the point of USE, and only where a step expresses a LAYOUT RELATION
+     (gap, layout padding):
+         gap: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1))
+     A chain carrying both factors is correct, not double-scaling: density
+     sized the control, rhythm sizes the room around it.
+
+     Two tiers for the same reason density has two: --ds-rhythm-scale is the
+     WRITABLE seed (compiler artifact, BrandTheme lowering, or a raw
+     tokenOverride), and --ds-rhythm-effective-scale is what consumers read.
+     Because the clamp lives in the derived channel rather than in the seed,
+     it binds EVERY writer — an artifact that emits 1.2 and a tokenOverride
+     that tries 5 both land inside 0.8-1.25. Unset resolves to 1, which is
+     byte-identical to the pre-rhythm cascade. */
+  --ds-rhythm-scale: 1;
+  --ds-rhythm-effective-scale: clamp(0.8, var(--ds-rhythm-scale, 1), 1.25);
   --ds-spacing-0: 0;
   --ds-spacing-1: calc(0.25rem * var(--ds-density-effective-scale, 1));
   --ds-spacing-2: calc(0.5rem * var(--ds-density-effective-scale, 1));
@@ -655,11 +703,25 @@
   --ds-edge-hairline-width: 1px;
   --ds-edge-standard-width: 1px;
   --ds-edge-emphasis-width: 1px;
+  /* C2: the edge grammar also owns container border STYLE — an inset-double
+     posture renders genuine double keylines through the same single channel
+     every container consumer reads. Border CONTRAST stays a residual: border
+     colors are tenant palette authority and need a derivation pass (like the
+     ground ladder) before any dial can honestly modulate them. */
+  --ds-edge-standard-style: solid;
+  /* Surface separation: SemanticSurface has consumed these two channels with
+     local fallbacks since W4 while nothing declared them. They now derive
+     from the edge grammar, so every governed surface separates consistently
+     with the tenant's edge posture. */
+  --ds-surface-border-width: var(--ds-edge-standard-width);
+  --ds-surface-border-style: var(--ds-edge-standard-style);
   /* Component channels the edge grammar reaches by default. Tenant chrome may
      still claim each specific channel; the floor merely routes the silent
      case through the role instead of a dead literal. */
   --ds-table-border-width: var(--ds-edge-standard-width);
   --ds-table-header-rule-width: var(--ds-edge-emphasis-width);
+  --ds-menu-border-width: var(--ds-edge-standard-width);
+  --ds-page-shell-border-width: var(--ds-edge-standard-width);
   /* Overline case channels (C1b type axis): chrome micro-labels whose
      uppercase used to be hardcoded at their read sites. Floors restate the
      historic value, so unset profiles stay byte-neutral. */
@@ -698,12 +760,28 @@
      --ds-shadow-* are aliases of the elevation steps; classic/rustic components and
      the brand-theme compiler consume the --ds-shadow-* names.
      ───────────────────────────────────────────────────────────────────────────── */
+  /* C2 elevation authorities. The ramp below is now PARAMETRIC over three
+     semantic roles instead of baked black literals:
+     - --ds-shadow-tint: the shadow COLOR (brand-tintable; #000 floor keeps
+       every computed value byte-identical to the historic rgba(0,0,0,*));
+     - --ds-shadow-key-strength: multiplier for the directional near layers;
+     - --ds-shadow-ambient-strength: multiplier for the final soft omni layer.
+     Profiles and tenants move the DIALS or the tint; nobody re-authors
+     per-component shadows — the component roles in base/shadows.css already
+     derive from this ramp. Floors = 1/1/#000 => computed-neutral. */
+  --ds-shadow-tint: #000;
+  --ds-shadow-key-strength: 1;
+  --ds-shadow-ambient-strength: 1;
   --ds-elevation-0: none;
-  --ds-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.03), 0 4px 8px rgba(0, 0, 0, 0.02);
-  --ds-elevation-2: 0 2px 4px rgba(0, 0, 0, 0.03), 0 4px 8px rgba(0, 0, 0, 0.04), 0 8px 16px rgba(0, 0, 0, 0.03);
-  --ds-elevation-3: 0 2px 4px rgba(0, 0, 0, 0.02), 0 4px 8px rgba(0, 0, 0, 0.03), 0 8px 16px rgba(0, 0, 0, 0.04), 0 16px 32px rgba(0, 0, 0, 0.04);
-  --ds-elevation-4: 0 4px 8px rgba(0, 0, 0, 0.02), 0 8px 16px rgba(0, 0, 0, 0.03), 0 16px 32px rgba(0, 0, 0, 0.04), 0 32px 64px rgba(0, 0, 0, 0.06);
-  --ds-elevation-5: 0 8px 16px rgba(0, 0, 0, 0.04), 0 16px 32px rgba(0, 0, 0, 0.06), 0 32px 64px rgba(0, 0, 0, 0.08);
+  --ds-elevation-1: 0 1px 2px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-ambient-strength)), transparent);
+  --ds-elevation-2: 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-ambient-strength)), transparent);
+  --ds-elevation-3: 0 2px 4px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-key-strength)), transparent), 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-ambient-strength)), transparent);
+  --ds-elevation-4: 0 4px 8px color-mix(in srgb, var(--ds-shadow-tint) calc(2% * var(--ds-shadow-key-strength)), transparent), 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(3% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 32px 64px color-mix(in srgb, var(--ds-shadow-tint) calc(6% * var(--ds-shadow-ambient-strength)), transparent);
+  --ds-elevation-5: 0 8px 16px color-mix(in srgb, var(--ds-shadow-tint) calc(4% * var(--ds-shadow-key-strength)), transparent), 0 16px 32px color-mix(in srgb, var(--ds-shadow-tint) calc(6% * var(--ds-shadow-key-strength)), transparent), 0 32px 64px color-mix(in srgb, var(--ds-shadow-tint) calc(8% * var(--ds-shadow-ambient-strength)), transparent);
+  /* Canonical step 6 — closes the previously dangling read (modern Box
+     data-shadow='2xl' fell back to step 5). Registered visual delta: that one
+     consumer now gets a genuine deeper step instead of the stopgap. */
+  --ds-elevation-6: 0 12px 24px color-mix(in srgb, var(--ds-shadow-tint) calc(5% * var(--ds-shadow-key-strength)), transparent), 0 24px 48px color-mix(in srgb, var(--ds-shadow-tint) calc(7% * var(--ds-shadow-key-strength)), transparent), 0 48px 96px color-mix(in srgb, var(--ds-shadow-tint) calc(10% * var(--ds-shadow-ambient-strength)), transparent);
 
   /* Surface luminance lift (additive beside the --ds-elevation-1..5 shadow ramp,
      which stays the sole tenant-overridable depth channel). On a dark surface the
@@ -738,9 +816,6 @@
      --ds-elevation ramp. The alpha stays low so this reads as a colored ambient
      shadow, not a glow. */
   --ds-shadow-primary: 0 4px 14px 0 color-mix(in oklch, var(--ds-color-primary) 25%, transparent), 0 8px 24px color-mix(in oklch, var(--ds-color-primary) 12%, transparent);
-  --ds-shadow-success: 0 4px 14px 0 rgba(34, 197, 94, 0.15), 0 8px 24px rgba(34, 197, 94, 0.08);
-  --ds-shadow-warning: 0 4px 14px 0 rgba(245, 158, 11, 0.15), 0 8px 24px rgba(245, 158, 11, 0.08);
-  --ds-shadow-error: 0 4px 14px 0 rgba(239, 68, 68, 0.15), 0 8px 24px rgba(239, 68, 68, 0.08);
 
   /* Focus Ring. The single-layer ring is primary-tinted (24%), not a neutral
      black wash: it must track the tenant accent like every other focus
@@ -813,8 +888,18 @@
      its normal rendered size untouched. 44px matches the WCAG AAA target size
      already hardcoded at foundation/base.css's unlayered coarse-pointer rule
      and at foundation/responsive/button.css and avatar.css.
+     C2c: the ONE canonical declaration (a C2b duplicate in the edge block was
+     removed). EXECUTABLE, not declarative: the modern engine floors every
+     interactive target under coarse pointers through skin rules plus the
+     generic touch-targets.css authority; no density, profile or tenant dial
+     can cross it.
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-touch-target-min: 44px;
+  /* D-PROTO floor: the select status-bg hooks are DS-owned channels (the
+     success one replaced its proto as the structural peer of error/warning);
+     the floor aliases the same chain the consumption site falls back to, so
+     unset stays byte-identical. */
+  --ds-select-success-bg: var(--ds-select-bg, var(--ds-surface-control));
 
   /* ─────────────────────────────────────────────────────────────────────────────
      6. Z-INDEX
@@ -841,7 +926,6 @@
      spec section 7) so a var()-unaware consumer still resolves the same
      tier. Do not add a second literal scale here -- these are aliases only.
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-z-base: var(--ds-z-index-base, 0);
   --ds-z-dropdown: var(--ds-z-index-dropdown, 1000);
   --ds-z-sticky: var(--ds-z-index-sticky, 1100);
   --ds-z-fixed: var(--ds-z-index-fixed, 1200);
@@ -861,15 +945,6 @@
   --ds-transition-slower: 500ms cubic-bezier(0.16, 1, 0.3, 1);
   --ds-transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* ─────────────────────────────────────────────────────────────────────────────
-     8. RESPONSIVE BREAKPOINTS
-     ───────────────────────────────────────────────────────────────────────────── */
-  --ds-breakpoint-sm: 640px;
-  --ds-breakpoint-md: 768px;
-  --ds-breakpoint-lg: 1024px;
-  --ds-breakpoint-xl: 1280px;
-  --ds-breakpoint-2xl: 1536px;
-
   /* ═══════════════════════════════════════════════════════════════════════════
      2. SEMANTIC TOKENS
      ═══════════════════════════════════════════════════════════════════════════ */
@@ -878,17 +953,8 @@
   --ds-text-primary: var(--ds-color-text-primary);
   --ds-text-secondary: var(--ds-color-text-secondary);
   --ds-text-tertiary: var(--ds-color-text-tertiary);
-  --ds-text-muted: var(--ds-color-text-muted);
   --ds-text-disabled: var(--ds-color-text-disabled);
   --ds-text-inverse: var(--ds-color-text-on-primary);
-
-  /* Background Colors */
-  --ds-bg-primary: var(--ds-color-bg-primary);
-  --ds-bg-secondary: var(--ds-color-bg-secondary);
-  --ds-bg-tertiary: var(--ds-color-bg-tertiary);
-  --ds-bg-hover: var(--ds-color-bg-hover);
-  --ds-bg-active: var(--ds-color-neutral-200);
-  --ds-bg-disabled: var(--ds-color-bg-subtle);
 
   /* Border Colors */
   --ds-border-color: var(--ds-color-border);
@@ -897,7 +963,6 @@
   --ds-border-color-strong: var(--ds-color-border-secondary);
   --ds-border-color-hover: var(--ds-color-border-secondary);
   --ds-border-color-focus: var(--ds-color-border-focus);
-  --ds-border-color-disabled: var(--ds-color-border-subtle);
 
   /* Interactive colors */
   --ds-color-interactive-border: var(--ds-color-border-secondary);
@@ -924,10 +989,6 @@
 
   /* Button Sizes */
 
-
-
-
-
   /* Button Primary Variant - Vercel Black */
   /* Hover = +1 elevation step (WO-ENG-04 interaction-state contract). */
 
@@ -945,16 +1006,9 @@
 
   /* Button Semantic Variants */
 
-
-
-
   /* Button States */
   --ds-button-disabled-border: #e5e5e5;
   /* Canonical disabled dim (WO-ENG-04 state contract). */
-
-  /* Button Common */
-  --ds-button-line-height: 1.25;
-  --ds-button-icon-gap: 0.5rem;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      INPUT
@@ -962,14 +1016,7 @@
 
   /* Input Sizes */
 
-
-
-
-
   /* Input Base */
-
-
-
 
   /* Input Status Colors */
 
@@ -1056,31 +1103,10 @@
 
   /* Avatar Sizes */
 
-
-
-
-
-
-
   /* Avatar Shapes */
   --ds-avatar-radius-circle: 50%;
   --ds-avatar-radius-square: 0;
   --ds-avatar-radius-rounded: var(--ds-radius-md);
-
-  /* Avatar Variants */
-  --ds-avatar-default-border: #e5e5e5;
-
-  --ds-avatar-primary-border: #171717;
-
-  --ds-avatar-secondary-border: #e5e5e5;
-
-  --ds-avatar-success-border: #bbf7d0;
-
-  --ds-avatar-warning-border: #fde68a;
-
-  --ds-avatar-error-border: #fecaca;
-
-  --ds-avatar-gradient-border: transparent;
 
   /* Avatar Status */
   --ds-avatar-status-online: #22c55e;
@@ -1101,7 +1127,6 @@
 
   /* Avatar Group */
   --ds-avatar-group-spacing: -0.5rem;
-  --ds-avatar-group-border-color: #ffffff;
 
   /* Avatar Common */
   --ds-avatar-font-weight: 500;
@@ -1112,19 +1137,9 @@
 
   /* Badge Sizes */
 
-
-
-
-
   /* Badge Dot Sizes */
 
   /* Badge Variants */
-
-
-
-
-
-
 
   /* Badge Common */
   --ds-badge-radius: var(--ds-radius-full);
@@ -1140,12 +1155,7 @@
 
   /* Tag Sizes */
 
-  --ds-tag-sm-padding-x: 0.5rem;
-
   --ds-tag-md-padding-x: 0.625rem;
-
-  --ds-tag-lg-padding-x: 0.75rem;
-
 
   /* Tag Variants - Vercel Style */
   --ds-tag-default-bg: #f5f5f5;
@@ -1258,7 +1268,6 @@
   --ds-checkbox-bg-disabled: #f5f5f5;
   --ds-checkbox-border: #d4d4d4;
   --ds-checkbox-border-hover: #a3a3a3;
-  --ds-checkbox-border-disabled: #e5e5e5;
   --ds-checkbox-radius: var(--ds-radius-xs);
 
   /* Checkbox Checked State */
@@ -1287,7 +1296,6 @@
   --ds-radio-bg-disabled: #f5f5f5;
   --ds-radio-border: #d4d4d4;
   --ds-radio-border-hover: #a3a3a3;
-  --ds-radio-border-disabled: #e5e5e5;
 
   /* Radio Checked State */
   --ds-radio-checked-bg: #ffffff;
@@ -1304,13 +1312,6 @@
   --ds-radio-label-color: #171717;
   --ds-radio-label-color-disabled: #a3a3a3;
   --ds-radio-description-color: #737373;
-
-  /* Radio Button Style */
-  --ds-radio-button-bg: #ffffff;
-  --ds-radio-button-bg-checked: #171717;
-  --ds-radio-button-border: #e5e5e5;
-  --ds-radio-button-color-checked: #ffffff;
-  --ds-radio-button-radius: var(--ds-radius-sm);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      SWITCH
@@ -1332,7 +1333,6 @@
   /* Switch Base */
   --ds-switch-bg: #d4d4d4;
   --ds-switch-bg-hover: #a3a3a3;
-  --ds-switch-bg-disabled: #e5e5e5;
   --ds-switch-radius: 9999px;
   --ds-switch-transition: var(--ds-transition-fast);
 
@@ -1370,7 +1370,6 @@
   --ds-slider-handle-border: #ffffff;
   --ds-slider-handle-border-width: 2px;
   --ds-slider-handle-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-  --ds-slider-handle-shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.2);
 
   /* Slider Focus */
   --ds-slider-focus-ring: var(--ds-shadow-focus-ring);
@@ -1378,11 +1377,6 @@
   /* Slider Marks */
   --ds-slider-mark-color: #737373;
   --ds-slider-mark-font-size: var(--ds-font-size-xs);
-
-  /* Slider Tooltip */
-  --ds-slider-tooltip-bg: #171717;
-  --ds-slider-tooltip-color: #ffffff;
-  --ds-slider-tooltip-radius: var(--ds-radius-sm);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      SELECT
@@ -1424,7 +1418,6 @@
   --ds-datepicker-bg: #ffffff;
   --ds-datepicker-bg-disabled: #fafafa;
   --ds-datepicker-color: #171717;
-  --ds-datepicker-color-placeholder: #a3a3a3;
   --ds-datepicker-border: #e5e5e5;
   --ds-datepicker-border-hover: #d4d4d4;
   --ds-datepicker-border-focus: #171717;
@@ -1447,7 +1440,6 @@
   /* DatePicker Icon */
   --ds-datepicker-icon-color: #a3a3a3;
   --ds-datepicker-clear-color: #a3a3a3;
-  --ds-datepicker-clear-color-hover: #525252;
 
   /* DatePicker Separator */
   --ds-datepicker-separator-color: #a3a3a3;
@@ -1461,7 +1453,6 @@
   --ds-inputnumber-bg-disabled: #fafafa;
   --ds-inputnumber-color: #171717;
   --ds-inputnumber-border: #e5e5e5;
-  --ds-inputnumber-border-hover: #d4d4d4;
   --ds-inputnumber-border-focus: #171717;
   --ds-inputnumber-radius: var(--ds-radius-md);
   --ds-inputnumber-shadow-focus: 0 0 0 1px #171717;
@@ -1485,7 +1476,6 @@
   /* InputNumber Controls */
   --ds-inputnumber-control-bg: transparent;
   --ds-inputnumber-control-color: #737373;
-  --ds-inputnumber-control-color-hover: #171717;
 
   /* InputNumber Addon */
   --ds-inputnumber-addon-bg: #fafafa;
@@ -1651,7 +1641,6 @@
   --ds-autocomplete-dropdown-shadow: var(--ds-shadow-lg);
   --ds-autocomplete-dropdown-radius: var(--ds-radius-md);
   --ds-autocomplete-option-bg-hover: #f5f5f5;
-  --ds-autocomplete-option-bg-selected: #f5f5f5;
   --ds-autocomplete-empty-color: #a3a3a3;
   --ds-autocomplete-clear-color: #a3a3a3;
 
@@ -1724,8 +1713,6 @@
      PROGRESS
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-progress-height: 0.375rem;
-  --ds-progress-height-sm: 0.25rem;
-  --ds-progress-height-lg: 0.5rem;
   --ds-progress-bg: #e5e5e5;
   --ds-progress-radius: var(--ds-radius-full);
 
@@ -1758,8 +1745,6 @@
   --ds-spinner-color: #171717;
   --ds-spinner-track: #e5e5e5;
 
-  --ds-spinner-xs-size: 1rem;
-
   /* ─────────────────────────────────────────────────────────────────────────────
      DIVIDER
      ───────────────────────────────────────────────────────────────────────────── */
@@ -1775,7 +1760,6 @@
      DROPDOWN
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-dropdown-bg: #ffffff;
-  --ds-dropdown-border: #e5e5e5;
   --ds-dropdown-shadow: var(--ds-shadow-lg);
   --ds-dropdown-radius: var(--ds-radius-lg);
   --ds-dropdown-padding: 0.375rem;
@@ -1807,18 +1791,15 @@
   --ds-drawer-shadow: var(--ds-shadow-2xl);
   --ds-drawer-header-border: #e5e5e5;
   --ds-drawer-footer-border: #e5e5e5;
-  --ds-drawer-padding: 1.5rem;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      NOTIFICATION / MESSAGE
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-notification-bg: #ffffff;
-  --ds-notification-border: #e5e5e5;
   --ds-notification-shadow: var(--ds-shadow-lg);
   --ds-notification-radius: var(--ds-radius-lg);
   --ds-notification-padding: 1.25rem;
   --ds-notification-title-color: #171717;
-  --ds-notification-content-color: #525252;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      PAGINATION
@@ -1830,7 +1811,6 @@
   --ds-pagination-item-color-hover: #171717;
   --ds-pagination-item-color-active: #ffffff;
   --ds-pagination-item-border: #e5e5e5;
-  --ds-pagination-item-border-active: #171717;
   --ds-pagination-item-radius: var(--ds-radius-md);
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -1878,10 +1858,8 @@
   --ds-steps-connector-color-active: #171717;
   --ds-steps-item-bg: #f5f5f5;
   --ds-steps-item-bg-active: #171717;
-  --ds-steps-item-bg-complete: #171717;
   --ds-steps-item-color: #737373;
   --ds-steps-item-color-active: #ffffff;
-  --ds-steps-item-color-complete: #ffffff;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      COLLAPSE / ACCORDION
@@ -1899,17 +1877,7 @@
   --ds-calendar-bg: #ffffff;
   --ds-calendar-border: #e5e5e5;
   --ds-calendar-header-color: #171717;
-  --ds-calendar-day-color: #171717;
   --ds-calendar-day-color-other: #a3a3a3;
-  --ds-calendar-day-bg-hover: #f5f5f5;
-  --ds-calendar-day-bg-selected: #171717;
-  --ds-calendar-day-color-selected: #ffffff;
-  --ds-calendar-day-bg-today: #f5f5f5;
-
-  /* ─────────────────────────────────────────────────────────────────────────────
-     TREE
-     ───────────────────────────────────────────────────────────────────────────── */
-  --ds-tree-connector-color: #e5e5e5;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      TIMELINE
@@ -1925,9 +1893,7 @@
      RESULT
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-result-icon-success: #22c55e;
-  --ds-result-icon-error: #ef4444;
   --ds-result-icon-warning: #f59e0b;
-  --ds-result-icon-info: #3b82f6;
   --ds-result-title-color: #171717;
   --ds-result-subtitle-color: #737373;
   --ds-result-success-color: var(--ds-color-success);
@@ -1964,8 +1930,6 @@
   /* ─────────────────────────────────────────────────────────────────────────────
      IMAGE
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-image-bg: #f5f5f5;
-  --ds-image-border: #e5e5e5;
   --ds-image-radius: var(--ds-radius-md);
   --ds-image-overlay-bg: rgba(0, 0, 0, 0.5);
 
@@ -1974,8 +1938,6 @@
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-list-bg: #ffffff;
   --ds-list-item-bg-hover: #fafafa;
-  --ds-list-item-border: #e5e5e5;
-  --ds-list-item-padding: 0.75rem 1rem;
   --ds-list-skeleton-bg: var(--ds-color-bg-tertiary);
 
   /* ─────────────────────────────────────────────────────────────────────────────
@@ -2026,7 +1988,6 @@
   --ds-stats-grid-card-filled-bg: var(--ds-color-bg-secondary);
   --ds-stats-grid-card-glass-bg: var(--ds-color-alpha-white-50);
   --ds-stats-grid-card-glass-border: var(--ds-color-alpha-white-20);
-  --ds-stats-grid-hover-shadow: var(--ds-shadow-md);
   --ds-stats-grid-label-color: var(--ds-color-text-secondary);
   --ds-stats-grid-value-color: var(--ds-color-text-primary);
   --ds-stats-grid-description-color: var(--ds-color-text-muted);
@@ -2054,10 +2015,8 @@
      BACK TOP
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-backtop-bg: #171717;
-  --ds-backtop-bg-hover: #000000;
   --ds-backtop-color: #ffffff;
   --ds-backtop-shadow: var(--ds-shadow-md);
-  --ds-backtop-radius: var(--ds-radius-full);
 
   /* ─────────────────────────────────────────────────────────────────────────────
      AFFIX
@@ -2070,7 +2029,6 @@
   --ds-anchor-link-color: #737373;
   --ds-anchor-link-color-active: #171717;
   --ds-anchor-ink-color: #171717;
-  --ds-anchor-border-color: #e5e5e5;
 
   /* ─────────────────────────────────────────────────────────────────────────────
      WATERMARK
@@ -2127,11 +2085,9 @@ html.dark {
 
   --ds-text-primary: var(--ds-color-text-primary);
   --ds-text-secondary: var(--ds-color-text-secondary);
-  --ds-bg-primary: var(--ds-color-bg-primary);
-  --ds-bg-secondary: var(--ds-color-bg-secondary);
 
   --ds-card-bg: var(--ds-color-bg-elevated);
-  --ds-card-border-default: var(--ds-color-border-secondary);
+  --ds-card-border: var(--ds-color-border-secondary);
   --ds-card-shadow-sm: 0 1px 2px rgba(2, 6, 23, 0.35);
   --ds-card-shadow-md: 0 10px 24px rgba(2, 6, 23, 0.35);
 
@@ -2175,7 +2131,6 @@ html.dark {
   --ds-anchor-link-color: var(--ds-color-text-secondary);
   --ds-anchor-link-color-active: var(--ds-color-text-primary);
   --ds-anchor-ink-color: var(--ds-color-primary-400);
-  --ds-anchor-border-color: var(--ds-color-border-secondary);
 
   --ds-watermark-color: rgba(255, 255, 255, 0.06);
 

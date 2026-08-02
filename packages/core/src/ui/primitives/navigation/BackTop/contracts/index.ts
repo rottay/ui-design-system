@@ -36,6 +36,7 @@
  */
 
 import type { ReactNode, CSSProperties, MouseEvent } from 'react';
+import type { EngineAwareProps } from '@/foundation/contracts/runtime/engine';
 
 // ============================================================================
 // Main Props Interface
@@ -60,7 +61,7 @@ import type { ReactNode, CSSProperties, MouseEvent } from 'react';
  * };
  * ```
  */
-export interface BackTopProps {
+export interface BackTopProps extends EngineAwareProps {
   /**
    * Function that returns the scrollable target element.
    * When omitted, defaults to the window object.

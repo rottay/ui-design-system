@@ -130,3 +130,15 @@ export {
   type ResolvedTheme,
   type TenantThemeMode,
 } from '@/infrastructure/runtime/foundation/root-attributes/ssr';
+
+/**
+ * C2b: server half of the RSC-safe icon posture seam. Call once per request
+ * where the tenant artifact reaches SSR (the same integration point that
+ * mounts the compiled CSS); the per-request React.cache box cannot leak
+ * between concurrent tenants. The client half is owned by
+ * DesignSystemProvider and needs no application wiring.
+ */
+export {
+  provideServerIconExpressiveProfile,
+  resolveActiveIconExpressiveProfile,
+} from '../../infrastructure/runtime/foundation/icons/active-profile';

@@ -13,7 +13,9 @@ describe('useTheme hook', () => {
   it('returns the current theme and setter when context is present', () => {
     const setTheme = vi.fn();
     const wrapper = ({ children }: { children: React.ReactNode }) => (
-      <ThemeContext.Provider value={{ theme: 'dark', setTheme, config: { mode: 'dark' } }}>
+      <ThemeContext.Provider
+        value={{ theme: 'dark', setTheme, config: { name: 'dark', variables: {} } }}
+      >
         {children}
       </ThemeContext.Provider>
     );
@@ -21,7 +23,7 @@ describe('useTheme hook', () => {
     const { result } = renderHook(() => useTheme(), { wrapper });
 
     expect(result.current.theme).toBe('dark');
-    expect(result.current.config).toEqual({ mode: 'dark' });
+    expect(result.current.config).toEqual({ name: 'dark', variables: {} });
     result.current.setTheme('light');
     expect(setTheme).toHaveBeenCalledWith('light');
   });

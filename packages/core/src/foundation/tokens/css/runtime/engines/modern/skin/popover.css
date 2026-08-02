@@ -765,10 +765,7 @@ html[data-ds-motion="reduced"]
      used to close this chain. */
   .rottay-popover--modern[data-part="trigger"]
     > [data-part="surface"][data-part="surface"]:not([data-recipe="inverse"]) {
-    --ds-popover-surface: var(
-      --_ds-proto-popover-opaque-surface,
-      var(--ds-popover-bg, var(--ds-material-overlay-opaque, var(--ds-surface-card)))
-    );
+    --ds-popover-surface: var(--ds-popover-bg, var(--ds-material-overlay-opaque, var(--ds-surface-card)));
   }
 }
 

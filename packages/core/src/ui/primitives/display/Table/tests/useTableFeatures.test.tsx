@@ -85,7 +85,7 @@ function createTableProps(overrides: Partial<TableProps<TableRow>> = {}): TableP
 
 describe('useTableFeatures', () => {
   it('covers helper utilities for nested columns and keys', () => {
-    const columns = BASE_COLUMNS as unknown as TableProps<TableRow>['columns'];
+    const columns = BASE_COLUMNS as unknown as NonNullable<TableProps<TableRow>['columns']>;
     const leafColumns = flattenColumns(columns);
     const headerDepth = getHeaderDepth(columns);
     const headerRows = buildHeaderRows(columns, headerDepth);

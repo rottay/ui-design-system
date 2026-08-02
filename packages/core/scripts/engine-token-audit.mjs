@@ -148,7 +148,10 @@ const CONTENT_ATTRIBUTE_RE =
 function countColorLiteralsInText(strippedText) {
   const withoutContentAttributes = strippedText.replace(CONTENT_ATTRIBUTE_RE, '');
   const hexRe = /(?<!&)#[0-9a-fA-F]{3,8}\b/g;
-  const rgbaRe = /\brgba?\(/g;
+  // `rgb(${r}, ...)` is a CONSTRUCTOR serializing the user's own picked
+  // channels (ColorPicker), not paint: a template interpolation right after
+  // the paren is excluded, or this counter is structurally unable to reach 0.
+  const rgbaRe = /\brgba?\((?!\$\{)/g;
   return {
     hex: (withoutContentAttributes.match(hexRe) || []).length,
     rgba: (withoutContentAttributes.match(rgbaRe) || []).length,
@@ -348,7 +351,9 @@ function countFontSizeLiterals() {
   const literalLen = /(?<![\w-])-?\d*\.?\d+(?:px|rem|em)\b/;
   let total = 0;
   for (const file of collectSkinFiles()) {
-    const t = readFileSync(file, 'utf8');
+    // A `font-size` mentioned in prose is not a declaration: strip comments
+    // first, or the counter reads one higher than the tree.
+    const t = stripBlockComments(readFileSync(file, 'utf8'));
     for (const m of t.matchAll(declRe)) {
       const val = m[1];
       if (/var\(\s*--/.test(val)) continue;
@@ -2688,26 +2693,10 @@ function countUnwiredSkins() {
   return unwired;
 }
 
-/** Every unlayered skin stylesheet: the per-engine homes plus the agnostic one. */
-function collectSkinFiles() {
-  const skins = [];
-  const walk = (dir) => {
-    let entries;
-    try {
-      entries = readdirSync(dir, { withFileTypes: true });
-    } catch {
-      return;
-    }
-    for (const entry of entries) {
-      const full = join(dir, entry.name);
-      if (entry.isDirectory()) walk(full);
-      else if (entry.isFile() && entry.name.endsWith('.css') && full.includes(`${sep}skin${sep}`)) skins.push(full);
-    }
-  };
-  walk(join(root, 'src/foundation/tokens/css/runtime/engines'));
-  walk(join(root, 'src/foundation/tokens/css/presentation/components/skin'));
-  return skins;
-}
+// collectSkinFiles lives in ./lib/skin-files.mjs (one walker, importable
+// without executing this module's top-level census). Re-exported for compat.
+import { collectSkinFiles } from './lib/skin-files.mjs';
+export { collectSkinFiles };
 
 function countViewportMediaQueriesInSkins() {
   const skins = [];

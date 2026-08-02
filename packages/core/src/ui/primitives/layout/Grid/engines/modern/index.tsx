@@ -81,6 +81,32 @@ const resolveGap = (gap: GridGap | number | undefined): string | undefined => {
   return GAP_MAP[gap as GridGap] || GAP_MAP.md;
 };
 
+/** Inline style plus the bounded gap channel the preset path writes. */
+type GridParameterStyle = CSSProperties & { "--ds-grid-gap"?: string };
+
+/**
+ * The gap spellings layout rhythm may scale. Mirrors Flex's
+ * FLEX_GAP_RHYTHM_PRESETS and the selector list in layout-primitives.css:
+ * numbers are exact geometry, and `none` has no room to scale.
+ */
+const GRID_GAP_RHYTHM_PRESETS: readonly string[] = [
+  "xs",
+  "sm",
+  "md",
+  "lg",
+  "xl",
+  "2xl",
+  "3xl",
+  "4xl",
+];
+
+const gridGapPresetSpelling = (
+  gap: GridGap | number | undefined
+): string | undefined => {
+  if (gap === undefined || typeof gap === "number") return undefined;
+  return GRID_GAP_RHYTHM_PRESETS.includes(gap) ? gap : undefined;
+};
+
 /** Defensive runtime normalization for values crossing untyped boundaries. */
 const resolveTrackCount = (value: number): number => {
   if (!Number.isFinite(value)) return GRID_DEFAULTS.columns as number;
@@ -186,7 +212,18 @@ const buildGridStyles = (props: GridProps): CSSProperties => {
     );
   if (templateAreas) computedStyle.gridTemplateAreas = templateAreas;
   const resolvedGap = resolveGap(effectiveGap);
-  if (resolvedGap) computedStyle.gap = resolvedGap;
+  // A RUNG travels the channel so layout-primitives.css can size the room with
+  // the tenant rhythm axis; a MEASUREMENT stays an inline `gap`, which no
+  // stylesheet can reach and is therefore sovereign by construction. The two
+  // paths are mutually exclusive, so a gap is never declared twice.
+  const gapPreset = gridGapPresetSpelling(effectiveGap);
+  if (resolvedGap) {
+    if (gapPreset) {
+      (computedStyle as GridParameterStyle)["--ds-grid-gap"] = resolvedGap;
+    } else {
+      computedStyle.gap = resolvedGap;
+    }
+  }
   if (columnGap !== undefined) computedStyle.columnGap = resolveGap(columnGap);
   if (rowGap !== undefined) computedStyle.rowGap = resolveGap(rowGap);
   if (autoFlow) computedStyle.gridAutoFlow = autoFlow;
@@ -389,6 +426,9 @@ const ModernGrid = forwardRef<HTMLElement, GridProps>((props, ref) => {
           style: computedStyle,
           id,
           "data-component": "grid",
+          "data-gap-preset": gridGapPresetSpelling(
+            props.gap ?? props.spacing ?? GRID_DEFAULTS.gap
+          ),
           "data-grid-id": needsResponsiveCSS ? gridId : undefined,
           "data-layout-motion":
             props.motion === "rearrange" ? "rearrange" : undefined,

@@ -420,7 +420,6 @@ function darkSemanticVariables(config: TenantConfig): Record<string, string | nu
 
     /* ── Surfaces ── */
     '--ds-color-surface': '#111827',
-    '--ds-color-surface-primary': '#111827',
     '--ds-color-surface-secondary': '#162033',
     '--ds-color-surface-muted': '#1a2332',
 
@@ -462,7 +461,6 @@ function darkSemanticVariables(config: TenantConfig): Record<string, string | nu
     '--ds-modal-bg': '#111827',
     '--ds-drawer-bg': '#111827',
     '--ds-message-bg': '#111827',
-    '--ds-toast-bg': '#111827',
     '--ds-notification-bg': '#111827',
     '--ds-tooltip-bg': '#0f172a',
 
@@ -477,7 +475,6 @@ function darkSemanticVariables(config: TenantConfig): Record<string, string | nu
     '--ds-input-bg': '#0f172a',
     '--ds-input-border': 'rgba(255, 255, 255, 0.12)',
     '--ds-input-border-hover': 'rgba(255, 255, 255, 0.2)',
-    '--ds-input-placeholder-color': '#94a3b8',
     '--ds-input-color': '#fafafa',
 
     /* ── Depth tokens alias the dark elevation ramp so every --ds-shadow-* /
@@ -500,8 +497,6 @@ function darkSemanticVariables(config: TenantConfig): Record<string, string | nu
     /* ── Alias shortcuts ── */
     '--ds-text-primary': 'var(--ds-color-text-primary)',
     '--ds-text-secondary': 'var(--ds-color-text-secondary)',
-    '--ds-bg-primary': 'var(--ds-color-bg-primary)',
-    '--ds-bg-secondary': 'var(--ds-color-bg-secondary)',
     '--ds-border-color-default': 'var(--ds-color-border-primary)',
   };
 }

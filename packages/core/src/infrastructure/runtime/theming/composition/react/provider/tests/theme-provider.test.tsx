@@ -49,7 +49,7 @@ describe('ThemeProvider', () => {
       if (tagName === 'link') {
         // Simulate async CSS loading with tracked timeout
         const timeoutId = setTimeout(() => {
-          if (linkBehavior === 'success' || (element.href && element.href.includes('rottay'))) {
+          if (linkBehavior === 'success' || ((element as HTMLLinkElement).href && (element as HTMLLinkElement).href.includes('rottay'))) {
             if (element.onload) {
               element.onload(new Event('load'));
             }
@@ -100,11 +100,11 @@ describe('ThemeProvider', () => {
       if (tagName === 'link') {
         const timeoutId = setTimeout(() => {
           // Custom tenant fails, rottay succeeds
-          if (element.href && element.href.includes('custom-tenant')) {
+          if ((element as HTMLLinkElement).href && (element as HTMLLinkElement).href.includes('custom-tenant')) {
             if (element.onerror) {
               element.onerror(new Event('error'));
             }
-          } else if (element.href && element.href.includes('rottay')) {
+          } else if ((element as HTMLLinkElement).href && (element as HTMLLinkElement).href.includes('rottay')) {
             if (element.onload) {
               element.onload(new Event('load'));
             }
@@ -143,11 +143,11 @@ describe('ThemeProvider', () => {
       const element = originalCreateElement(tagName);
       if (tagName === 'link') {
         const timeoutId = setTimeout(() => {
-          if (element.href && element.href.includes('nonexistent')) {
+          if ((element as HTMLLinkElement).href && (element as HTMLLinkElement).href.includes('nonexistent')) {
             if (element.onerror) {
               element.onerror(new Event('error'));
             }
-          } else if (element.href && element.href.includes('rottay')) {
+          } else if ((element as HTMLLinkElement).href && (element as HTMLLinkElement).href.includes('rottay')) {
             if (element.onload) {
               element.onload(new Event('load'));
             }
@@ -180,11 +180,11 @@ describe('ThemeProvider', () => {
       const element = originalCreateElement(tagName);
       if (tagName === 'link') {
         const timeoutId = setTimeout(() => {
-          if (element.href && element.href.includes('nonexistent')) {
+          if ((element as HTMLLinkElement).href && (element as HTMLLinkElement).href.includes('nonexistent')) {
             if (element.onerror) {
               element.onerror(new Event('error'));
             }
-          } else if (element.href && element.href.includes('rottay')) {
+          } else if ((element as HTMLLinkElement).href && (element as HTMLLinkElement).href.includes('rottay')) {
             if (element.onload) {
               element.onload(new Event('load'));
             }
@@ -243,6 +243,7 @@ describe('ThemeProvider', () => {
 
   it('applies branding CSS variables', async () => {
     const branding = {
+      companyName: 'Test Co',
       primaryColor: '#FF0000',
       secondaryColor: '#0000FF',
       accentColor: '#00FF00',
@@ -274,7 +275,8 @@ describe('ThemeProvider', () => {
       <ThemeProvider
         skipCssLoading
         branding={{
-          primaryColor: '#FF0000',
+          companyName: 'Test Co',
+      primaryColor: '#FF0000',
           secondaryColor: '#0000FF',
           accentColor: '#00FF00',
         }}
@@ -306,7 +308,8 @@ describe('ThemeProvider', () => {
         tenant="acme"
         visualAuthority="compiled-artifact"
         branding={{
-          primaryColor: '#FF0000',
+          companyName: 'Test Co',
+      primaryColor: '#FF0000',
           secondaryColor: '#0000FF',
           accentColor: '#00FF00',
         }}

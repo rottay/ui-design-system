@@ -111,7 +111,7 @@
 .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true'] [data-part='label'] {
   text-decoration: underline;
   text-decoration-color: var(
-    --_ds-proto-breadcrumb-link-underline-color,
+    --_ds-breadcrumb-link-underline-color,
     color-mix(in srgb, currentColor 32%, transparent)
   );
   text-underline-offset: 0.18em;
@@ -260,7 +260,7 @@
 @media (hover: none), (pointer: coarse) {
   .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='crumb'][data-clickable='true'],
   .rottay-breadcrumb-shell--modern[data-part='root'] [data-part='overflow-trigger'] {
-    min-block-size: var(--ds-breadcrumb-touch-target-min, 44px);
+    min-block-size: var(--ds-breadcrumb-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

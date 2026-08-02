@@ -71,6 +71,9 @@ const FULL_SURFACE_DOCUMENT: TenantThemeDocument = {
       shape: { buttonStyle: 'sharp', radiusScale: 0.9 },
       // density.mode
       density: 'spacious',
+      // spacing.rhythm — authored ALONGSIDE a non-default density on purpose:
+      // the two axes must both survive, which is the orthogonality proof.
+      rhythm: 'airy',
       // motion.dial
       motion: { intensity: 0.62, durationScale: 1.15, ambient: 'subtle' },
       // surfaces.elevation-posture + surfaces.effect-intensity
@@ -94,7 +97,10 @@ const FULL_SURFACE_DOCUMENT: TenantThemeDocument = {
       },
       // profiles.expressive (C1b) — edge overrides the experience profile's
       // own `ruled`, proving the per-axis Pro layer wins over the composition.
-      profiles: { edge: 'inset-double', motif: 'micro-grid' },
+      // profiles.icon (C2) — the opened icon axis travels as data.
+      profiles: { edge: 'inset-double', motif: 'micro-grid', icon: 'duotone' },
+      // responsive.posture (E2) — the opened adaptive ladder, also data-only.
+      responsivePosture: 'expansive',
     },
     // recipe-profile
     recipeProfile: 'rottay/editorial-round@1',
@@ -120,13 +126,27 @@ const ACTIVE_CAPABILITY_PROBES = {
   'typography.scale': (artifact) =>
     expect(artifact.variables['--ds-type-scale']).toBe('1.05'),
   'shape.radius-scale': (artifact) =>
-    expect(artifact.variables['--ds-radius-scale']).toBe('0.9'),
+    // C2 envelope law: the document authors 0.9, but this probe document also
+    // selects rottay/management-editorial@1 whose envelope floors the radius
+    // dial at 1.0 — the explicit override bends the posture, never breaks it.
+    expect(artifact.variables['--ds-radius-scale']).toBe('1'),
   'shape.button-style': (artifact) =>
     expect(artifact.variables['--ds-radius-button']).toBe('2px'),
   'density.mode': (artifact) =>
     expect(artifact.variables['--ds-density-mode-factor']).toBeDefined(),
   'motion.dial': (artifact) =>
     expect(artifact.variables['--ds-motion-intensity']).toBe('0.62'),
+  'spacing.rhythm': (artifact) => {
+    // airy -> 1.2, inside the 0.8-1.25 envelope.
+    expect(artifact.variables['--ds-rhythm-scale']).toBe('1.2');
+    // Orthogonality, asserted rather than asserted-about: the document also
+    // authors density 'spacious', and BOTH axes reach the artifact. If rhythm
+    // had been folded into the density factor this key would be missing or
+    // the density one would have moved.
+    expect(artifact.variables['--ds-density-mode-factor']).toBeDefined();
+    // Rhythm must never reach a control-sizing channel.
+    expect(artifact.variables['--ds-density-effective-scale']).toBeUndefined();
+  },
   'surfaces.elevation-posture': (artifact) =>
     expect(artifact.variables['--ds-elevation-1']).toBeDefined(),
   'surfaces.effect-intensity': (artifact) =>
@@ -151,6 +171,29 @@ const ACTIVE_CAPABILITY_PROBES = {
     expect(artifact.variables['--ds-material-card-highlight']).toContain(
       'color-mix'
     );
+  },
+  'profiles.icon': (artifact) => {
+    // The icon posture is DATA, not CSS: it must survive into the artifact's
+    // normalized appearance (the shape the bootstrap provider threads into
+    // the icon context) and select the governed duotone table.
+    expect(
+      (artifact.normalizedAppearance.advanced?.profiles as { icon?: string })
+        ?.icon
+    ).toBe('duotone');
+    expect(artifact.variables['--ds-icon-posture']).toBeUndefined();
+  },
+  'responsive.posture': (artifact) => {
+    // Like the icon posture, the ladder is DATA, not CSS: it must survive into
+    // the artifact's normalized appearance — the shape the adaptive runtime
+    // reads through resolveActiveResponsivePosture.
+    expect(artifact.normalizedAppearance.advanced?.responsivePosture).toBe(
+      'expansive'
+    );
+    // A container ladder must never leak into a sizing channel: this axis
+    // changes WHEN a posture flips, never how large anything is. The
+    // exhaustive "emits no channel at all" proof is its own test below —
+    // asserting one invented variable name absent would prove nothing.
+    expect(artifact.variables['--ds-density-effective-scale']).toBeUndefined();
   },
   'profiles.expressive': (artifact) => {
     // inset-double (explicit Pro axis) beats the experience profile's ruled.
@@ -202,17 +245,25 @@ describe('tenant capability registry reachability', () => {
       'palette.seeds',
       'shape.button-style',
       'shape.radius-scale',
+      'spacing.rhythm',
       'surfaces.effect-intensity',
       'surfaces.elevation-posture',
       'typography.families',
       'typography.pairing',
       'typography.scale',
     ]);
+    // E2 written reason: `responsive.posture` moves frontier → PRO. It is a
+    // bounded selection from a closed first-party ladder registry, not a
+    // free dial, and it changes layout capacity rather than brand surface —
+    // which is Pro's remit, not Standard's. Its absent value resolves to the
+    // pre-capability thresholds, so admitting it moves no existing tenant.
     expect([...TENANT_PRO_MANIFEST].sort()).toEqual([
       'chrome.anatomy',
       'chrome.families',
       'profiles.expressive',
+      'profiles.icon',
       'recipe-profile',
+      'responsive.posture',
       'token-overrides',
     ]);
     expect([...TENANT_INTERNAL_MANIFEST]).toEqual(['palette.dark-mode']);
@@ -241,30 +292,111 @@ describe('tenant capability registry reachability', () => {
     expect(artifact.variables['--ds-color-on-error']).toBe('#ffffff');
   });
 
-  it('drill: every frontier capability is still rejected by the schema', () => {
+  it('responsive.posture emits NO css channel: the same variable set with and without it', () => {
+    // The data-only claim, proven exhaustively rather than by naming a channel
+    // that was never going to exist. Two compilations of the SAME document,
+    // differing only by the authored ladder, must produce an identical
+    // variable map — identical keys AND identical values.
+    const withoutLadder = structuredClone(FULL_SURFACE_DOCUMENT);
+    if (withoutLadder.mode !== 'advanced') throw new Error('advanced fixture');
+    delete (withoutLadder.visualFoundation.advanced as Record<string, unknown>)
+      .responsivePosture;
+
+    const compile = (document: TenantThemeDocument) =>
+      compileTenantThemeConfig(hydrateTenantThemeConfig(document, IDENTITY), {
+        verticalEnvelope: ENVELOPE,
+      });
+
+    const bare = compile(withoutLadder);
+    const laddered = compile(FULL_SURFACE_DOCUMENT);
+
+    expect(laddered.normalizedAppearance.advanced?.responsivePosture).toBe(
+      'expansive'
+    );
+    expect(bare.normalizedAppearance.advanced?.responsivePosture).toBeUndefined();
+    expect(laddered.variables).toEqual(bare.variables);
+
+    // The emitted stylesheet differs in exactly ONE place — the provenance
+    // comment, which embeds the artifact digest, and the digest legitimately
+    // moves because the DOCUMENT gained a field. Every declaration is
+    // identical, which is what "no channel" means.
+    const declarations = (css: string) =>
+      css.split('\n').filter((line) => !line.trimStart().startsWith('/*'));
+    expect(declarations(laddered.css)).toEqual(declarations(bare.css));
+  });
+
+  it('drill: frontier paths stay rejected and every opened vocabulary stays closed', () => {
     const statusSeeds = structuredClone(FULL_SURFACE_DOCUMENT);
     if (statusSeeds.mode !== 'advanced') throw new Error('advanced fixture');
     (statusSeeds.visualFoundation.general!.palette as Record<string, unknown>).success =
       '#5B8A3A';
     expect(validateTenantThemeDocument(statusSeeds).success).toBe(false);
 
-    const posture = structuredClone(FULL_SURFACE_DOCUMENT);
-    if (posture.mode !== 'advanced') throw new Error('advanced fixture');
-    (posture.visualFoundation as Record<string, unknown>).responsivePosture =
-      'dashboard-default@1';
-    expect(validateTenantThemeDocument(posture).success).toBe(false);
+    // E2: responsive.posture is OPEN now, so this drill flips from whole-path
+    // rejection to vocabulary closure. All three published ladders validate...
+    for (const id of ['compact', 'balanced', 'expansive']) {
+      const real = structuredClone(FULL_SURFACE_DOCUMENT);
+      if (real.mode !== 'advanced') throw new Error('advanced fixture');
+      (real.visualFoundation.advanced as Record<string, unknown>)
+        .responsivePosture = id;
+      expect(validateTenantThemeDocument(real).success, id).toBe(true);
+    }
 
-    const iconAxis = structuredClone(FULL_SURFACE_DOCUMENT);
-    if (iconAxis.mode !== 'advanced') throw new Error('advanced fixture');
+    // ...and an invented ladder fails closed rather than resolving to the
+    // baseline, which is the whole difference between a closed vocabulary and
+    // a suggestion: a typo must never silently ship the default.
+    const hostilePosture = structuredClone(FULL_SURFACE_DOCUMENT);
+    if (hostilePosture.mode !== 'advanced') throw new Error('advanced fixture');
+    (hostilePosture.visualFoundation.advanced as Record<string, unknown>)
+      .responsivePosture = 'cavernous';
+    expect(validateTenantThemeDocument(hostilePosture).success).toBe(false);
+
+    // The OLD frontier path stays rejected. The capability opened at
+    // `advanced.responsivePosture`; a document that authors it one level up —
+    // the exact shape this drill asserted while the row was frontier — is
+    // still an unknown key, so opening the axis widened nothing by accident.
+    const misplacedPosture = structuredClone(FULL_SURFACE_DOCUMENT);
+    if (misplacedPosture.mode !== 'advanced')
+      throw new Error('advanced fixture');
     (
-      iconAxis.visualFoundation.advanced!.profiles as Record<string, unknown>
-    ).icon = 'duotone';
-    expect(validateTenantThemeDocument(iconAxis).success).toBe(false);
+      misplacedPosture.visualFoundation as Record<string, unknown>
+    ).responsivePosture = 'expansive';
+    expect(validateTenantThemeDocument(misplacedPosture).success).toBe(false);
+
+    // C2: the icon axis is OPEN now — the drill flips from field rejection
+    // to vocabulary closure: a hostile posture value still fails closed.
+    const hostileIcon = structuredClone(FULL_SURFACE_DOCUMENT);
+    if (hostileIcon.mode !== 'advanced') throw new Error('advanced fixture');
+    (
+      hostileIcon.visualFoundation.advanced!.profiles as Record<string, unknown>
+    ).icon = 'stroke-9000';
+    expect(validateTenantThemeDocument(hostileIcon).success).toBe(false);
+
+    // E1: spacing.rhythm is a CLOSED domain. An out-of-vocabulary posture is
+    // rejected outright rather than clamped into the envelope, so a typo can
+    // never silently resolve to `normal`.
+    const hostileRhythm = structuredClone(FULL_SURFACE_DOCUMENT);
+    if (hostileRhythm.mode !== 'advanced') throw new Error('advanced fixture');
+    (hostileRhythm.visualFoundation.general as Record<string, unknown>).rhythm =
+      'cavernous';
+    expect(validateTenantThemeDocument(hostileRhythm).success).toBe(false);
+
+    // ...and a raw number cannot smuggle past the enumeration either, which
+    // is what keeps 0.8-1.25 an envelope rather than the contract.
+    const numericRhythm = structuredClone(FULL_SURFACE_DOCUMENT);
+    if (numericRhythm.mode !== 'advanced') throw new Error('advanced fixture');
+    (numericRhythm.visualFoundation.general as Record<string, unknown>).rhythm = 1.2;
+    expect(validateTenantThemeDocument(numericRhythm).success).toBe(false);
   });
 
   it('declares every C1 foundation authority with channels and consumers', () => {
     expect(FOUNDATION_AUTHORITIES.map((authority) => authority.id)).toEqual([
       'on-tone-ink',
+      // P1: the AUT-1 absorption minted a SECOND tone-ink axis. It is declared
+      // here — not in the capability registry — because it is a foundation
+      // derivation, not a tenant dial: tenants move the tone seeds and this
+      // follows. Listing it is what keeps it from being mistaken for either.
+      'tinted-well-tone-ink',
       'interaction-wash',
       'overlay-panel-scrim-split',
       'icon-size-roles',

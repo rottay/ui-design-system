@@ -327,7 +327,14 @@ describe('personality subordination — if contention became reachable', () => {
 
     // 3. Therefore, on a shared channel the tenant wins. Asserted as the
     //    RESOLUTION, not as an ordering of two indices.
-    expect(resolveContested(ARTIFACT, buildPersonalityRootRuleText())).toBe('artifact');
+    // `TenantThemeArtifact` carries its selector as `scopes.combinedSelector`
+    // -- the provider-owned selector the generated CSS block actually uses.
+    expect(
+      resolveContested(
+        { css: ARTIFACT.css, selector: ARTIFACT.scopes.combinedSelector },
+        buildPersonalityRootRuleText(),
+      ),
+    ).toBe('artifact');
   });
 
   it('DRILL: goes red if a layer is ever reserved for tenant paint again', () => {
@@ -343,7 +350,7 @@ describe('personality subordination — if contention became reachable', () => {
     // Under that order the artifact would be layered BELOW personality...
     const planted = {
       css: `@layer rottay-tenants {\n${ARTIFACT.css}\n}`,
-      selector: ARTIFACT.selector,
+      selector: ARTIFACT.scopes.combinedSelector,
     };
     expect(inverted.indexOf('rottay-tenants')).toBeLessThan(
       inverted.indexOf(PERSONALITY_CASCADE_LAYER),

@@ -19,7 +19,11 @@
    than re-doubling an attribute. */
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone] {
   --ds-callout-tone: var(--ds-color-info);
-  --_ds-proto-callout-tone-ink: var(--ds-color-info);
+  /* AUT-1 absorbed: the per-tone ink now comes from the foundation authority
+     --ds-color-{tone}-ink. The private relay survives because the consumer
+     below reads ONE name across every tone; the fallbacks are the pre-authority
+     mixes verbatim, so an app on an older token bundle paints identically. */
+  --_ds-callout-tone-ink: var(--ds-color-info-ink, var(--ds-color-info));
   position: relative;
   isolation: isolate;
   display: flex;
@@ -53,17 +57,17 @@
      light well -- under the 3:1 floor for a 20px semantic glyph. The ink
      deepens toward the tenant-safe dark neutral; frames and washes keep the
      raw hue because they are decorative, not signal. */
-  --_ds-proto-callout-tone-ink: color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%);
+  --_ds-callout-tone-ink: var(--ds-color-warning-ink, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%));
 }
 
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='error'] {
   --ds-callout-tone: var(--ds-color-error);
-  --_ds-proto-callout-tone-ink: color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%);
+  --_ds-callout-tone-ink: var(--ds-color-error-ink, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%));
 }
 
 .rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='success'] {
   --ds-callout-tone: var(--ds-color-success);
-  --_ds-proto-callout-tone-ink: color-mix(in srgb, var(--ds-color-success) 60%, var(--ds-color-neutral-900) 40%);
+  --_ds-callout-tone-ink: var(--ds-color-success-ink, color-mix(in srgb, var(--ds-color-success) 60%, var(--ds-color-neutral-900) 40%));
 }
 
 /* The anatomy class already contributes the 4th specificity unit for every
@@ -80,7 +84,7 @@
   box-shadow:
     inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-on-primary) 50%, transparent),
     0 8px 18px color-mix(in srgb, var(--ds-callout-tone) 11%, transparent);
-  color: var(--_ds-proto-callout-tone-ink, var(--ds-callout-tone));
+  color: var(--_ds-callout-tone-ink, var(--ds-callout-tone));
 }
 
 .rottay-callout-shell.rottay-callout-shell--modern > .rottay-callout-shell__body[data-part='body'] {

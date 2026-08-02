@@ -106,14 +106,6 @@
     --_ds-personality-resolved-typography-label-transform,
     initial
   );
-  --ds-typography-body-letter-spacing: var(--ds-letter-spacing-body, normal);
-  --ds-typography-display-letter-spacing: var(
-    --ds-letter-spacing-display,
-    normal
-  );
-  --ds-typography-heading-line-height: var(--ds-line-height-heading, 1.2);
-  --ds-typography-body-line-height: var(--ds-line-height-body, 1.6);
-  --ds-typography-display-line-height: var(--ds-line-height-display, 1);
 
   /* Button projection */
   --ds-button-transition: var(

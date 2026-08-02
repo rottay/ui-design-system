@@ -4,6 +4,18 @@ import { describe, expect, it } from 'vitest';
 
 import { ChartScaffold, describeChart } from '../presentation/scaffold';
 
+/**
+ * The scaffold outside its loading branch.
+ *
+ * `loadingLabel` is required because a scaffold that flips to `state="loading"`
+ * must have a screen-reader name ready; it is read nowhere else. The two
+ * renders below assert resting typography and header anatomy, so the label is
+ * genuinely absent from the shape under test rather than merely unset.
+ */
+const RestingChartScaffold = ChartScaffold as unknown as React.ComponentType<
+  Omit<React.ComponentProps<typeof ChartScaffold>, 'loadingLabel'>
+>;
+
 function expectExternalIdReferences(
   svg: SVGSVGElement,
   attribute: 'aria-labelledby' | 'aria-describedby',
@@ -45,7 +57,7 @@ describe('ChartScaffold', () => {
     const svgRef = createRef<SVGSVGElement>();
 
     render(
-      <ChartScaffold
+      <RestingChartScaffold
         containerRef={containerRef}
         svgRef={svgRef}
         width={420}
@@ -75,7 +87,7 @@ describe('ChartScaffold', () => {
     const svgRef = createRef<SVGSVGElement>();
 
     render(
-      <ChartScaffold
+      <RestingChartScaffold
         containerRef={containerRef}
         svgRef={svgRef}
         width={420}

@@ -16,6 +16,7 @@ import {
   assertMandatoryFontFallback,
   withArabicSafeFallback,
 } from "@/foundation/kernel/typography";
+import { TENANT_THEME_RHYTHM_FACTORS } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import type {
   BrandTheme,
   BrandPalette,
@@ -48,7 +49,7 @@ import type {
   TenantBranding,
   TenantTokenOverrides,
 } from "@/foundation/contracts/composition/tenants";
-import type { PersonalityTokens } from "@/foundation/contracts/kernel/tokens/personality";
+import type { PartialPersonalityTokens, PersonalityTokens } from "@/foundation/contracts/kernel/tokens/personality";
 import {
   SEMANTIC_SURFACE_ROLES,
   type SemanticSurfaceRoleMap,
@@ -260,9 +261,9 @@ export function deepMergeTokenOverrides(
 
 /** Merge two partial PersonalityTokens (per-dimension spread). */
 export function mergePartialPersonality(
-  base: Partial<PersonalityTokens> | undefined,
-  override: Partial<PersonalityTokens>
-): Partial<PersonalityTokens> {
+  base: PartialPersonalityTokens | undefined,
+  override: PartialPersonalityTokens
+): PartialPersonalityTokens {
   if (!base) return override;
   return {
     animation: override.animation
@@ -560,6 +561,19 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
     "--ds-radius-scale": "1",
     "--ds-density-scale": String(bt.surfaces?.densityScale ?? 1),
   };
+  // Static/DB parity for the rhythm axis (E1): the SAME factor table the
+  // appearance compiler uses lowers `surfaces.rhythm` here, so a static
+  // vertical and a DB tenant authoring the same word get the same scale.
+  // Absent -> no emission (the :root seed 1 governs; zero-delta).
+  if (bt.surfaces?.rhythm) {
+    const rhythmFactor =
+      TENANT_THEME_RHYTHM_FACTORS[
+        bt.surfaces.rhythm as keyof typeof TENANT_THEME_RHYTHM_FACTORS
+      ];
+    if (rhythmFactor !== undefined) {
+      vars["--ds-rhythm-scale"] = String(rhythmFactor);
+    }
+  }
   // Profile channels land OVER the neutral structural seeds and UNDER every
   // authored write below: each authored field emits only when present, so
   // the later assignments restore exactly the "authored wins over profile"

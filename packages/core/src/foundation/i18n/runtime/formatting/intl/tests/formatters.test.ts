@@ -63,7 +63,7 @@ describe('i18n formatters', () => {
       return {
         format: formatter.format.bind(formatter),
       } as Intl.DateTimeFormat;
-    }) as typeof Intl.DateTimeFormat);
+    }) as unknown as typeof Intl.DateTimeFormat);
 
     const range = formatDateRange(startDate, endDate, 'en-US');
     expect(range).toContain('2026');
@@ -71,8 +71,14 @@ describe('i18n formatters', () => {
   });
 
   it('uses locale-specific manual list and date range fallbacks when Intl helpers are unavailable', () => {
-    const originalListFormat = (Intl as typeof Intl & { ListFormat?: typeof Intl.ListFormat }).ListFormat;
-    const listIntl = Intl as typeof Intl & { ListFormat?: typeof Intl.ListFormat };
+    // `Omit`, not an intersection: `Intl.ListFormat` is a REQUIRED member of the
+    // ES2021 lib, so intersecting cannot make it removable. Deleting it is the
+    // point of this case -- it is how a runtime that predates `Intl.ListFormat`
+    // is simulated, which is the only way to reach the manual-list fallback.
+    const listIntl = Intl as Omit<typeof Intl, 'ListFormat'> & {
+      ListFormat?: typeof Intl.ListFormat;
+    };
+    const originalListFormat = listIntl.ListFormat;
     listIntl.ListFormat = undefined;
 
     expect(formatList(['A', 'B'], 'en-US')).toBe('A and B');
@@ -88,7 +94,7 @@ describe('i18n formatters', () => {
       return {
         format: formatter.format.bind(formatter),
       } as Intl.DateTimeFormat;
-    }) as typeof Intl.DateTimeFormat);
+    }) as unknown as typeof Intl.DateTimeFormat);
 
     const spanishRange = formatDateRange(
       new Date('2026-03-10T00:00:00Z'),
@@ -103,7 +109,7 @@ describe('i18n formatters', () => {
 
     const numberSpy = vi.spyOn(Intl, 'NumberFormat').mockImplementation((() => {
       throw new Error('number boom');
-    }) as typeof Intl.NumberFormat);
+    }) as unknown as typeof Intl.NumberFormat);
     expect(formatNumber(42, 'en-US')).toBe('42');
     expect(formatCurrency(50, 'en-US', 'USD')).toBe('USD 50.00');
     expect(formatPercent(0.5, 'en-US', 0)).toBe('50%');
@@ -111,7 +117,7 @@ describe('i18n formatters', () => {
 
     vi.spyOn(Intl, 'DateTimeFormat').mockImplementation((() => {
       throw new Error('date boom');
-    }) as typeof Intl.DateTimeFormat);
+    }) as unknown as typeof Intl.DateTimeFormat);
     expect(formatDate(new Date('2026-03-13T12:00:00Z'), 'en-US')).toBe(
       new Date('2026-03-13T12:00:00Z').toLocaleDateString()
     );
@@ -125,12 +131,16 @@ describe('i18n formatters', () => {
       `${new Date('2026-03-10T00:00:00Z').toLocaleDateString()} - ${new Date('2026-03-13T00:00:00Z').toLocaleDateString()}`
     );
 
-    vi.spyOn(Intl, 'RelativeTimeFormat').mockImplementation((() => {
+    // No cast: a function that always throws returns `never`, which is
+    // assignable to whatever the spied constructor is declared to produce.
+    // Casting to `typeof Intl.X` was what made these unassignable, because
+    // `mockImplementation` takes the CALL signature, not the constructor.
+    vi.spyOn(Intl, 'RelativeTimeFormat').mockImplementation(() => {
       throw new Error('relative boom');
-    }) as typeof Intl.RelativeTimeFormat);
-    vi.spyOn(Intl, 'ListFormat').mockImplementation((() => {
+    });
+    vi.spyOn(Intl, 'ListFormat').mockImplementation(() => {
       throw new Error('list boom');
-    }) as typeof Intl.ListFormat);
+    });
 
     const relativeDate = new Date(Date.now() - (2 * 24 * 60 * 60 * 1000));
     const relativeFallback = formatRelativeTime(relativeDate, 'en-US');
@@ -152,7 +162,7 @@ describe('i18n formatters', () => {
     vi.spyOn(console, 'error').mockImplementation(() => undefined);
     vi.spyOn(Intl, 'NumberFormat').mockImplementation((() => {
       throw new Error('boom');
-    }) as typeof Intl.NumberFormat);
+    }) as unknown as typeof Intl.NumberFormat);
 
     expect(formatCurrency(50, 'en-US', 'USD')).toBe('USD 50.00');
     expect(formatPercent(0.5, 'en-US', 0)).toBe('50%');

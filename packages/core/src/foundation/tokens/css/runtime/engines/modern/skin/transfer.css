@@ -78,7 +78,7 @@
  * B6-02 (Phase B premium pass): the search field gains its governed
  * leading-icon affordance (`panel-search-icon`, ActionSearch role — the
  * input's inline-start padding reserves the icon box via the
- * `--_ds-proto-transfer-search-icon-inset` axis, ADDED after the pinned
+ * `--_ds-transfer-search-icon-inset` axis, ADDED after the pinned
  * padding shorthand so the K4-D pin keeps matching); the header count
  * consumes the contract's locale units (engine side); the empty state gains
  * the governed FeedbackEmpty glyph (`panel-empty-icon`); item rows get real
@@ -189,7 +189,7 @@
      pinned shorthand — the K4-D paint-ownership pin matches the shorthand
      verbatim and keeps passing; the logical longhand wins in cascade order
      and flips free under RTL. */
-  padding-inline-start: var(--_ds-proto-transfer-search-icon-inset, 1.75rem);
+  padding-inline-start: var(--_ds-transfer-search-icon-inset, 1.75rem);
   font-size: var(--ds-input-sm-font-size, 13px);
   transition: border-color var(--ds-motion-normal);
   border-radius: var(--ds-input-radius, var(--ds-radius-md));
@@ -411,15 +411,15 @@
    governed channel (bithire emits 44px). */
 @media (pointer: coarse) {
   .rottay-transfer.rottay-transfer--modern [data-part='panel-search'] {
-    min-block-size: var(--ds-input-touch-target-min, 44px);
+    min-block-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
   }
   .rottay-transfer.rottay-transfer--modern [data-part='move-button'] {
-    min-inline-size: var(--ds-input-touch-target-min, 44px);
-    min-block-size: var(--ds-input-touch-target-min, 44px);
+    min-inline-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
+    min-block-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
   }
   .rottay-transfer.rottay-transfer--modern [data-part='pagination-button'] {
-    min-inline-size: var(--ds-input-touch-target-min, 44px);
-    min-block-size: var(--ds-input-touch-target-min, 44px);
+    min-inline-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
+    min-block-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

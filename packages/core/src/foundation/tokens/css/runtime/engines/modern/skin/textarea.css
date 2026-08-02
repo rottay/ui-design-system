@@ -110,7 +110,10 @@
 }
 .ds-textarea.ds-textarea--modern[data-part='root'][data-disabled='true'] {
   color: var(--ds-color-text-disabled);
-  background-color: var(--ds-textarea-bg-disabled, var(--ds-surface-disabled));
+  /* Optional foundation surface: terminate the chain so an unset
+     --ds-surface-disabled cannot make this declaration invalid at
+     computed-value time (same terminal Select authors for this state). */
+  background-color: var(--ds-textarea-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
   cursor: var(--ds-input-disabled-cursor);
   opacity: var(--ds-input-disabled-opacity);
   resize: none;
@@ -292,14 +295,14 @@
    hover so the intended target is exposed before the drag starts. Painted
    only when a resize can actually happen: never when disabled, never under
    autoSize. Tenants that set `--ds-textarea-resize: none` should also set
-   `--_ds-proto-textarea-resize-grip-ink: transparent` (CSS cannot read the
+   `--_ds-textarea-resize-grip-ink: transparent` (CSS cannot read the
    resolved `resize` value). RTL flips the layer to the logical inline-end
    corner with the mirrored diagonal. */
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-disabled='true']):not([data-autosize='true']) {
-  --_ds-textarea-grip-ink: var(--_ds-proto-textarea-resize-grip-ink, color-mix(in srgb, var(--ds-color-text-muted) 62%, transparent));
+  --_ds-textarea-grip-ink: var(--_ds-textarea-resize-grip-ink, color-mix(in srgb, var(--ds-color-text-muted) 62%, transparent));
   background-image: repeating-linear-gradient(135deg, transparent 0 2px, var(--_ds-textarea-grip-ink) 2px 3px);
   background-repeat: no-repeat;
-  background-size: var(--_ds-proto-textarea-resize-grip-size, 0.625rem) var(--_ds-proto-textarea-resize-grip-size, 0.625rem);
+  background-size: var(--_ds-textarea-resize-grip-size, 0.625rem) var(--_ds-textarea-resize-grip-size, 0.625rem);
   background-position: calc(100% - 2px) calc(100% - 2px);
 }
 .ds-textarea.ds-textarea--modern[data-part='root']:not([data-disabled='true']):not([data-autosize='true']):dir(rtl) {
@@ -308,14 +311,16 @@
 }
 @media (hover: hover) {
   .ds-textarea.ds-textarea--modern[data-part='root']:not([data-disabled='true']):not([data-autosize='true']):hover {
-    --_ds-textarea-grip-ink: var(--_ds-proto-textarea-resize-grip-ink-hover, color-mix(in srgb, var(--ds-color-text-primary) 50%, transparent));
+    --_ds-textarea-grip-ink: var(--_ds-textarea-resize-grip-ink-hover, color-mix(in srgb, var(--ds-color-text-primary) 50%, transparent));
   }
 }
 
 /* Browser chrome: keep autofill legible and on-surface. */
 .ds-textarea.ds-textarea--modern[data-part='root']:-webkit-autofill {
   -webkit-text-fill-color: var(--ds-input-autofill-color, var(--ds-textarea-color, var(--ds-color-text-primary)));
-  caret-color: var(--ds-input-autofill-caret, var(--ds-textarea-caret-color));
+  /* Terminal matches the governed caret rule above; Input authors the same
+     shape with --ds-input-caret-color, which unlike this one is declared. */
+  caret-color: var(--ds-input-autofill-caret, var(--ds-textarea-caret-color, var(--ds-input-border-focus, var(--ds-color-primary))));
   box-shadow: 0 0 0 1000px var(--ds-input-autofill-bg, var(--ds-textarea-bg, var(--ds-surface-control))) inset;
 }
 
@@ -323,14 +328,14 @@
   .ds-textarea.ds-textarea--modern[data-part='root'] {
     /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px
        fluid root at narrow widths (measured on the live bundle, Axe R0). */
-    min-block-size: var(--ds-input-touch-target-min);
+    min-block-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 
   .ds-textarea-field[data-part='field'] > [data-part='clear-button'] {
-    min-inline-size: var(--ds-input-touch-target-min);
+    min-inline-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
     /* Physical floor, not rem: 2.75rem erodes to 41.25px under the 15px
        fluid root at narrow widths (measured on the live bundle, Axe R0). */
-    min-block-size: var(--ds-input-touch-target-min);
+    min-block-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

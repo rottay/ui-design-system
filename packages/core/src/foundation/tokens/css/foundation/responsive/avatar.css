@@ -11,11 +11,6 @@
    ======================================================================== */
 @media (max-width: 639px) {
   :root {
-    /* Reduce default avatar size on mobile */
-    --ds-avatar-default-size: var(--ds-avatar-sm-size);
-    --ds-avatar-default-font-size: var(--ds-avatar-sm-font-size);
-    --ds-avatar-default-status-size: var(--ds-avatar-sm-status-size);
-
     /* Adjust group spacing for mobile */
     --ds-avatar-group-default-spacing: var(--ds-avatar-group-compact-spacing);
 
@@ -24,7 +19,7 @@
     --ds-avatar-badge-font-size: 0.5rem;   /* 8px */
 
     /* Adjust touch targets for mobile */
-    --ds-avatar-touch-target-min: 2.75rem; /* 44px - Maintain WCAG minimum */
+    --ds-avatar-touch-target-min: var(--ds-touch-target-min, 2.75rem); /* 44px - Maintain WCAG minimum */
 
     /* Reduce max count for mobile */
     --ds-avatar-group-max-count: 3;
@@ -37,10 +32,6 @@
    ======================================================================== */
 @media (min-width: 640px) and (max-width: 1023px) {
   :root {
-    /* Keep default sizes on tablet */
-    --ds-avatar-default-size: var(--ds-avatar-md-size);
-    --ds-avatar-default-font-size: var(--ds-avatar-md-font-size);
-
     /* Standard group spacing */
     --ds-avatar-group-default-spacing: var(--ds-avatar-group-normal-spacing);
 
@@ -55,18 +46,11 @@
    ======================================================================== */
 @media (min-width: 1024px) {
   :root {
-    /* Full default sizes on desktop */
-    --ds-avatar-default-size: var(--ds-avatar-md-size);
-    --ds-avatar-default-font-size: var(--ds-avatar-md-font-size);
-
     /* Loose spacing option available */
     --ds-avatar-group-default-spacing: var(--ds-avatar-group-normal-spacing);
 
     /* Full max count */
     --ds-avatar-group-max-count: 5;
-
-    /* Enable hover effects on desktop */
-    --ds-avatar-hover-enabled: 1;
   }
 }
 
@@ -96,7 +80,6 @@
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   :root {
     /* Sharper borders on retina */
-    --ds-avatar-default-border-width: 0.5px;
     --ds-avatar-sm-border-width: 0.5px;
 
     /* More subtle shadows on retina */
@@ -129,9 +112,6 @@
    ======================================================================== */
 @media (max-width: 1023px) and (orientation: landscape) {
   :root {
-    /* Slightly smaller avatars in landscape to save vertical space */
-    --ds-avatar-default-size: var(--ds-avatar-sm-size);
-
     /* Compact group spacing */
     --ds-avatar-group-default-spacing: var(--ds-avatar-group-compact-spacing);
   }
@@ -150,7 +130,6 @@
     --ds-avatar-hover-shadow: none;
 
     /* Ensure borders are visible in print */
-    --ds-avatar-default-border-width: 1px;
     --ds-avatar-default-border-color: var(--ds-color-neutral-400);
 
     /* Disable status indicators in print (save ink) */

@@ -9,7 +9,11 @@ import { describe, expect, it } from 'vitest';
 import { MOTION_DIAL_BOUNDS } from '@/foundation/contracts/runtime/motion';
 import { TENANT_THEME_RADIUS_SCALE_BOUNDS } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import {
+  clampDensityIntoExpressiveEnvelope,
+  clampIntoExpressiveEnvelope,
+  EXPERIENCE_PROFILE_ENVELOPES,
   EXPERIENCE_PROFILES,
+  EXPRESSIVE_A11Y_FLOORS,
   EXPRESSIVE_EDGE_PROFILES,
   EXPRESSIVE_ELEVATION_PROFILES,
   EXPRESSIVE_GEOMETRY_PROFILES,
@@ -19,6 +23,7 @@ import {
   EXPRESSIVE_PROFILE_SCHEMA_VERSION,
   EXPRESSIVE_TYPE_PROFILES,
   resolveExpressiveAxes,
+  type ExpressiveAxes,
   sanitizeExpressiveOverrides,
   validateExperienceProfileSelection,
 } from '..';
@@ -39,7 +44,9 @@ describe('experience profile registry', () => {
 
   it('keeps every composition inside the closed vocabularies and global bounds', () => {
     for (const profile of EXPERIENCE_PROFILES) {
-      const axes = profile.axes;
+      // Widen to the declared contract: per-profile literals omit optional
+      // axes, and the vocabulary sweep must read them as optional, not absent.
+      const axes: ExpressiveAxes = profile.axes;
       if (axes.type) expect(EXPRESSIVE_TYPE_PROFILES).toContain(axes.type);
       if (axes.geometry) {
         expect(EXPRESSIVE_GEOMETRY_PROFILES).toContain(axes.geometry);
@@ -115,6 +122,78 @@ describe('experience profile registry', () => {
     expect(
       sanitizeExpressiveOverrides({ material: 'paper', elevation: 'orbital' })
     ).toEqual({ material: 'paper' });
+  });
+
+  it('keeps every published composition inside its OWN envelope and the a11y floors', () => {
+    for (const profile of EXPERIENCE_PROFILES) {
+      const envelope = EXPERIENCE_PROFILE_ENVELOPES[profile.id];
+      expect(envelope, profile.id).toBeDefined();
+      const defaults = expandExpressiveProfiles(profile.axes).fieldDefaults;
+      if (defaults.radiusScale !== undefined) {
+        expect(defaults.radiusScale).toBeGreaterThanOrEqual(envelope.radiusScale.min);
+        expect(defaults.radiusScale).toBeLessThanOrEqual(envelope.radiusScale.max);
+      }
+      if (defaults.density !== undefined) {
+        expect(envelope.densityModes).toContain(defaults.density);
+      }
+      if (defaults.motion?.intensity !== undefined) {
+        expect(defaults.motion.intensity).toBeLessThanOrEqual(
+          envelope.motionIntensityMax
+        );
+      }
+      // Envelope itself must sit inside the global floors.
+      expect(envelope.radiusScale.min).toBeGreaterThanOrEqual(
+        EXPRESSIVE_A11Y_FLOORS.radiusScale.min
+      );
+      expect(envelope.radiusScale.max).toBeLessThanOrEqual(
+        EXPRESSIVE_A11Y_FLOORS.radiusScale.max
+      );
+      expect(envelope.typeScale.min).toBeGreaterThanOrEqual(
+        EXPRESSIVE_A11Y_FLOORS.typeScaleMin
+      );
+      expect(envelope.edgeWidthMaxPx).toBeLessThanOrEqual(
+        EXPRESSIVE_A11Y_FLOORS.edgeWidthMaxPx
+      );
+    }
+    // The expansion's edge rows respect every profile's edge cap and the
+    // absolute floor cap — no posture can paint decoration-grade borders.
+    for (const edge of EXPRESSIVE_EDGE_PROFILES) {
+      const variables = expandExpressiveProfiles({ edge }).variables;
+      for (const [channel, value] of Object.entries(variables)) {
+        if (!channel.includes('width')) continue;
+        const px = Number.parseFloat(value);
+        expect(px, `${edge} ${channel}`).toBeLessThanOrEqual(
+          EXPRESSIVE_A11Y_FLOORS.edgeWidthMaxPx
+        );
+      }
+    }
+  });
+
+  it('clamps dials into (profile envelope ∩ floors) without reordering precedence', () => {
+    // An explicit editorial-tenant override of radiusScale 0.75 bends toward
+    // sharp but cannot break the editorial posture floor of 1.0.
+    expect(
+      clampIntoExpressiveEnvelope('rottay/management-editorial@1', 'radiusScale', 0.75)
+    ).toBe(1.0);
+    // The technical posture caps pillowy radii at 1.0.
+    expect(
+      clampIntoExpressiveEnvelope('rottay/bithire-technical@1', 'radiusScale', 1.25)
+    ).toBe(1.0);
+    // No profile selected → only the global floors bound the dial.
+    expect(clampIntoExpressiveEnvelope(undefined, 'radiusScale', 0.5)).toBe(
+      EXPRESSIVE_A11Y_FLOORS.radiusScale.min
+    );
+    expect(
+      clampIntoExpressiveEnvelope('rottay/bithire-technical@1', 'motionIntensity', 0.9)
+    ).toBe(0.6);
+    // Density admission demotes to the nearest admitted posture.
+    expect(
+      clampDensityIntoExpressiveEnvelope('rottay/bithire-technical@1', 'spacious')
+    ).toBe('normal');
+    expect(
+      clampDensityIntoExpressiveEnvelope('rottay/management-editorial@1', 'spacious')
+    ).toBe('spacious');
+    expect(clampDensityIntoExpressiveEnvelope(undefined, 'compact')).toBe('compact');
   });
 
   it('resolves overrides above the experience composition, per axis', () => {

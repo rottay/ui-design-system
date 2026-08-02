@@ -47,10 +47,16 @@
 
 /* ---- root: card surface + radius (was containerStyle) ---- */
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] {
-  --ds-detail-panel-padding: clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px));
-  --ds-detail-panel-section-gap: var(--ds-spacing-5, 20px);
-  --ds-detail-panel-content-gap: var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px));
-  --ds-detail-panel-item-gap: var(--ds-workspace-card-gap, var(--ds-spacing-3, 12px));
+  /* RHYTHM: room channels are PRESET tiers, so the axis mounts once here.
+     `--ds-listing-grid-gap` is NOT re-multiplied: patterns.css declares it at
+     `:root` and already mounts rhythm there, so wrapping the read too would
+     square the scale -- only the never-reached fallback carries it, for the
+     case where that declaration is absent. `--ds-workspace-card-gap` is a
+     TENANT hook and likewise only multiplies its fallback. */
+  --ds-detail-panel-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));
+  --ds-detail-panel-section-gap: calc(var(--ds-spacing-5, 20px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-detail-panel-content-gap: var(--ds-listing-grid-gap, calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1)));
+  --ds-detail-panel-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
   overflow: hidden;
   background: var(--ds-surface-card);
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));

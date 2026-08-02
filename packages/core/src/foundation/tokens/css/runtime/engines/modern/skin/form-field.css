@@ -7,7 +7,7 @@
  *   first text line of the message, so shape + role="alert" + text carry the
  *   semantics even under forced colors and monochrome print.
  * - Horizontal labels optically center on the control instead of pinning to
- *   the grid start edge: `--_ds-proto-form-field-control-height` derives per size
+ *   the grid start edge: `--_ds-form-field-control-height` derives per size
  *   from the Input height channels (density-aware) and feeds the
  *   `--ds-form-field-label-offset-y` fallback.
  * - The label gains a governed focus-within tint channel; invalid/disabled
@@ -28,7 +28,11 @@
   display: grid;
   inline-size: 100%;
   min-inline-size: 0;
-  gap: var(--ds-form-field-gap, var(--ds-input-label-margin-bottom));
+  /* Kept on ONE line on purpose: a wrapped `var(` separates the function from
+     its channel name, which silently defeats every reader that greps for
+     `var(--ds-form-field-gap` -- the no-loss `hasConsumer` probe and the
+     real-engines contract test among them. */
+  gap: var(--ds-form-field-gap, calc(var(--ds-input-label-margin-bottom) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'][data-layout='horizontal'] [data-part='layout'] {
@@ -59,7 +63,7 @@
       0px,
       calc(
         (
-          var(--_ds-proto-form-field-control-height, var(--ds-input-md-height)) *
+          var(--_ds-form-field-control-height, var(--ds-input-md-height)) *
             var(--ds-density-effective-scale) -
           1em * var(--ds-input-label-line-height, var(--ds-line-height-snug))
         ) / 2
@@ -124,7 +128,7 @@
    muted) — the tint never hijacks a semantic state. */
 .ds-form-field.ds-form-field--modern[data-part='root']:focus-within:not([data-invalid='true']):not([data-disabled='true']) [data-part='label'] {
   color: var(
-    --_ds-proto-form-field-label-color-focus,
+    --_ds-form-field-label-color-focus,
     var(--ds-color-primary)
   );
 }
@@ -142,7 +146,7 @@
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='error-message'] {
   display: flex;
   align-items: flex-start;
-  gap: var(--_ds-proto-form-field-error-icon-gap, var(--ds-spacing-1));
+  gap: var(--_ds-form-field-error-icon-gap, var(--ds-spacing-1));
   color: var(--ds-input-error-message-color, var(--ds-input-error-color, var(--ds-color-error)));
   font-weight: var(--ds-input-error-message-font-weight, var(--ds-font-weight-medium));
   /* One compositor-safe beat on entry; the message text itself is already
@@ -166,16 +170,16 @@
    alone), optically centered on the first line box of the message. */
 .ds-form-field.ds-form-field--modern[data-part='root'] [data-part='error-icon'] {
   flex: none;
-  inline-size: var(--_ds-proto-form-field-error-icon-size, var(--ds-icon-size-status, 14px));
-  block-size: var(--_ds-proto-form-field-error-icon-size, var(--ds-icon-size-status, 14px));
+  inline-size: var(--ds-icon-size-status, 14px);
+  block-size: var(--ds-icon-size-status, 14px);
   margin-block-start: calc(
     (
       1em * var(--ds-input-helper-line-height, var(--ds-line-height-snug)) -
-        var(--_ds-proto-form-field-error-icon-size, var(--ds-icon-size-status, 14px))
+        var(--ds-icon-size-status, 14px)
     ) / 2
   );
   color: var(
-    --_ds-proto-form-field-error-icon-color,
+    --_ds-form-field-error-icon-color,
     var(--ds-input-error-message-color, var(--ds-color-error))
   );
 }
@@ -196,24 +200,28 @@
   --ds-input-label-font-size: var(--ds-form-field-sm-label-font-size, var(--ds-font-size-xs));
   --ds-input-helper-font-size: var(--ds-form-field-sm-helper-font-size, var(--ds-font-size-xs));
   /* Control geometry the horizontal label aligns to (Input sm height). */
-  --_ds-proto-form-field-control-height: var(--ds-input-sm-height);
+  /* DEC-05: twin of form.css's `--_ds-form-control-height`, deliberately kept
+     separate so a FormField nested in a Form aligns to its OWN data-size
+     instead of inheriting the outer Form's step. See form.css for the full
+     rationale; do not merge these two relays. */
+  --_ds-form-field-control-height: var(--ds-input-sm-height);
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'][data-size='md'] {
-  --_ds-proto-form-field-control-height: var(--ds-input-md-height);
+  --_ds-form-field-control-height: var(--ds-input-md-height);
 }
 
 .ds-form-field.ds-form-field--modern[data-part='root'][data-size='lg'] {
   --ds-input-label-font-size: var(--ds-form-field-lg-label-font-size, var(--ds-font-size-md));
   --ds-input-helper-font-size: var(--ds-form-field-lg-helper-font-size, var(--ds-font-size-sm));
   /* Control geometry the horizontal label aligns to (Input lg height). */
-  --_ds-proto-form-field-control-height: var(--ds-input-lg-height);
+  --_ds-form-field-control-height: var(--ds-input-lg-height);
 }
 
 @container (inline-size < 34rem) {
   .ds-form-field.ds-form-field--modern[data-part='root'][data-layout='horizontal'] [data-part='layout'] {
     grid-template-columns: minmax(0, 1fr);
-    row-gap: var(--ds-form-field-gap, var(--ds-input-label-margin-bottom));
+    row-gap: var(--ds-form-field-gap, calc(var(--ds-input-label-margin-bottom) * var(--ds-rhythm-effective-scale, 1)));
   }
 }
 

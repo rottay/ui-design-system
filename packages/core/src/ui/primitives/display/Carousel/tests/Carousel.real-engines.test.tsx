@@ -117,7 +117,7 @@ describe('Carousel modern real engine', () => {
         </ModernCarousel>,
       );
 
-      const slides = container.querySelectorAll('[data-part="slide"]');
+      const slides = container.querySelectorAll<HTMLElement>('[data-part="slide"]');
       expect(slides[0].getAttribute('data-selected')).toBe('true');
 
       fireEvent.click(screen.getByLabelText('Go to slide 3'));
@@ -137,7 +137,7 @@ describe('Carousel modern real engine', () => {
       const { container } = render(
         <ModernCarousel arrows infinite={false}>{THREE_SLIDES}</ModernCarousel>,
       );
-      const slides = container.querySelectorAll('[data-part="slide"]');
+      const slides = container.querySelectorAll<HTMLElement>('[data-part="slide"]');
 
       fireEvent.click(screen.getByLabelText('Previous slide'));
       expect(slides[0].getAttribute('data-selected')).toBe('true');
@@ -152,7 +152,7 @@ describe('Carousel modern real engine', () => {
       const { container } = render(
         <ModernCarousel ref={ref}>{THREE_SLIDES}</ModernCarousel>,
       );
-      const slides = container.querySelectorAll('[data-part="slide"]');
+      const slides = container.querySelectorAll<HTMLElement>('[data-part="slide"]');
 
       act(() => ref.current?.goTo(1));
       expect(slides[1].getAttribute('data-selected')).toBe('true');
@@ -168,7 +168,7 @@ describe('Carousel modern real engine', () => {
           {THREE_SLIDES}
         </ModernCarousel>,
       );
-      const slides = container.querySelectorAll('[data-part="slide"]');
+      const slides = container.querySelectorAll<HTMLElement>('[data-part="slide"]');
       const root = container.querySelector('[data-part="root"]') as HTMLElement;
 
       act(() => {
@@ -248,7 +248,7 @@ describe('Carousel modern real engine', () => {
         <ModernCarousel fade>{THREE_SLIDES}</ModernCarousel>,
       );
       const root = container.querySelector('[data-part="root"]') as HTMLElement;
-      const slides = container.querySelectorAll('[data-part="slide"]');
+      const slides = container.querySelectorAll<HTMLElement>('[data-part="slide"]');
 
       expect(root.getAttribute('data-fade')).toBe('true');
       expect(slides[0].style.opacity).toBe('1');

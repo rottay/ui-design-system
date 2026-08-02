@@ -487,11 +487,11 @@
 @media (hover: none) and (pointer: coarse) {
   .rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'],
   .rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'] {
-    min-block-size: var(--ds-timepicker-touch-target-min, 44px);
+    min-block-size: var(--ds-timepicker-touch-target-min, var(--ds-touch-target-min, 44px));
   }
   .rottay-timepicker__panel [data-part='time-option'],
   .rottay-timepicker__panel [data-part='now-button'] {
-    min-block-size: var(--ds-timepicker-touch-target-min, 44px);
+    min-block-size: var(--ds-timepicker-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

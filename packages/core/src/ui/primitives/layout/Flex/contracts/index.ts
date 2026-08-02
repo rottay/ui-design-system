@@ -66,7 +66,7 @@ export interface FlexProps
   extends BaseComponentProps,
     Omit<
       HTMLAttributes<HTMLDivElement>,
-      "style" | "className" | "children" | "role"
+      "style" | "className" | "children" | "role" | "dir"
     > {
   /** Flex direction. Accepts a responsive object for breakpoint-aware values. */
   direction?: ResponsiveValue<FlexDirection>;
@@ -154,6 +154,46 @@ export const FLEX_GAP_MAP: Record<FlexGapToken, string> = {
 export function resolveFlexGapValue(value: FlexGapValue): string {
   if (typeof value !== "number") return FLEX_GAP_MAP[value];
   return Number.isFinite(value) && value >= 0 ? `${value}px` : "0px";
+}
+
+/**
+ * The gap spellings that layout rhythm may scale.
+ *
+ * A preset names a RUNG on the shared spacing ramp, so the tenant
+ * `appearance.rhythm` axis is entitled to size the room it asks for. A number
+ * is exact geometry and is never scaled -- the same law Stack declares for its
+ * `custom` rung and Space for its raw sizes. `none` is deliberately absent: a
+ * caller who asks for zero room means zero, and 0 has nothing to scale.
+ *
+ * The CSS side keys on these exact strings (layout-primitives.css), so this
+ * array is the single source of the enumeration. Adding a rung here without
+ * adding its selector there leaves the new rung unscaled, which the census
+ * drill in the no-loss suite reports.
+ */
+export const FLEX_GAP_RHYTHM_PRESETS = [
+  "xs",
+  "sm",
+  "md",
+  "lg",
+  "xl",
+  "2xl",
+  "3xl",
+  "4xl",
+] as const satisfies readonly FlexGapToken[];
+
+/**
+ * The preset spelling a gap value carries, or undefined when it is a number
+ * (exact geometry) or `none`. Callers stamp the result on the DOM so CSS can
+ * tell a rung from a measurement -- the distinction the single
+ * `--ds-flex-gap` channel cannot express on its own.
+ */
+export function flexGapPresetSpelling(
+  value: FlexGapValue | undefined
+): FlexGapToken | undefined {
+  if (value === undefined || typeof value === "number") return undefined;
+  return (FLEX_GAP_RHYTHM_PRESETS as readonly string[]).includes(value)
+    ? value
+    : undefined;
 }
 
 /** Resolves the public `[column, row]` tuple into CSS `row column` order. */

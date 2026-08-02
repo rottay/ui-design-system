@@ -116,31 +116,37 @@ export const textStyles = {
     size: 'var(--ds-text-heading-1-size)',
     weight: 'var(--ds-text-heading-1-weight)',
     lineHeight: 'var(--ds-text-heading-1-line-height)',
+    letterSpacing: 'var(--ds-text-heading-1-letter-spacing)',
   },
   heading2: {
     size: 'var(--ds-text-heading-2-size)',
     weight: 'var(--ds-text-heading-2-weight)',
     lineHeight: 'var(--ds-text-heading-2-line-height)',
+    letterSpacing: 'var(--ds-text-heading-2-letter-spacing)',
   },
   heading3: {
     size: 'var(--ds-text-heading-3-size)',
     weight: 'var(--ds-text-heading-3-weight)',
     lineHeight: 'var(--ds-text-heading-3-line-height)',
+    letterSpacing: 'var(--ds-text-heading-3-letter-spacing)',
   },
   heading4: {
     size: 'var(--ds-text-heading-4-size)',
     weight: 'var(--ds-text-heading-4-weight)',
     lineHeight: 'var(--ds-text-heading-4-line-height)',
+    letterSpacing: 'var(--ds-text-heading-4-letter-spacing)',
   },
   heading5: {
     size: 'var(--ds-text-heading-5-size)',
     weight: 'var(--ds-text-heading-5-weight)',
     lineHeight: 'var(--ds-text-heading-5-line-height)',
+    letterSpacing: 'var(--ds-text-heading-5-letter-spacing)',
   },
   heading6: {
     size: 'var(--ds-text-heading-6-size)',
     weight: 'var(--ds-text-heading-6-weight)',
     lineHeight: 'var(--ds-text-heading-6-line-height)',
+    letterSpacing: 'var(--ds-text-heading-6-letter-spacing)',
   },
   bodyLg: {
     size: 'var(--ds-text-body-lg-size)',

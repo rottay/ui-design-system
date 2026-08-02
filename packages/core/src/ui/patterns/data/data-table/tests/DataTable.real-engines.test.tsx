@@ -64,7 +64,7 @@ const CARD_CSS = [
   readFileSync(tokens('runtime/engines/rustic/skin/card.css'), 'utf8'),
 ];
 const INTERACTION_CSS = readFileSync(tokens('presentation/components/skin/data-table-interactions.css'), 'utf8');
-const normalizedQuotes = (css: string) => css.replaceAll('"', "'");
+const normalizedQuotes = (css: string) => css.replace(/"/g, "'");
 const MODERN_CONTRACT_CSS = normalizedQuotes(SKINS.modern);
 const MOBILE_CONTRACT_CSS = normalizedQuotes(SKINS.mobile);
 const INTERACTION_CONTRACT_CSS = normalizedQuotes(INTERACTION_CSS);

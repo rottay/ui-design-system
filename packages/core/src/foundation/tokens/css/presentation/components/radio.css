@@ -36,10 +36,10 @@
   --ds-radio-xl-font-size: 1.125rem;    /* 18px */
   --ds-radio-xl-border-width: 2px;
 
-  /* Default size (can be overridden) */
-  --ds-radio-default-size: var(--ds-radio-md-size);
-  --ds-radio-default-font-size: var(--ds-radio-md-font-size);
-  --ds-radio-default-border-width: var(--ds-radio-md-border-width);
+  /* Size-agnostic default. The base component rule sizes an unqualified
+     radio, so it needs a rung to read; this DERIVES from md rather than
+     restating 18px, which would create a second scale to keep in sync. */
+  --ds-radio-size: var(--ds-radio-md-size);
 
   /* ========================================================================
      COLORS - Radio Color Variants

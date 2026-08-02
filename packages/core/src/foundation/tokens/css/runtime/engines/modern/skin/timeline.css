@@ -177,7 +177,7 @@
   border-radius: 9999px;
   background: var(--ds-timeline-color-primary, var(--ds-color-primary));
   outline: var(--ds-timeline-dot-border-width) solid
-    var(--_ds-proto-timeline-dot-ring-color, var(--ds-surface-canvas));
+    var(--_ds-timeline-dot-ring-color, var(--ds-surface-canvas));
 }
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='blue'] > [data-part='dot'] > [data-part='dot-marker'] {
   background: var(--ds-timeline-color-blue, var(--ds-color-primary));
@@ -211,7 +211,7 @@
         second channel, hue the first. The keyline follows the marker's
         border-radius; forced colors strips it and re-maps the fill below. ---- */
 .rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item']:is([data-tone='success'], [data-tone='warning'], [data-tone='error'], [data-tone='red'], [data-tone='green'], [data-tone='blue']) > [data-part='dot'] > [data-part='dot-marker'] {
-  box-shadow: inset 0 0 0 2px var(--_ds-proto-timeline-state-keyline, var(--ds-surface-canvas));
+  box-shadow: inset 0 0 0 2px var(--_ds-timeline-state-keyline, var(--ds-surface-canvas));
 }
 
 /* ---- joining-script guard: the label's tracked caps treatment breaks

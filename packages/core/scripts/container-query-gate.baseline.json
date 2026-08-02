@@ -6,9 +6,13 @@
     }
   },
   "viewportQueries": {
+    "src/foundation/tokens/css/presentation/components/patterns.css": {
+      "count": 1,
+      "reason": "RELOCATED 2026-08-02, not new debt: this is the same single query the patterns-paint.css entry below has always covered -- @media (max-width: 640px) { :is(.ds-command-home-console) { padding: 14px } } -- carried across when the orphaned paint half was migrated into patterns.css (see residual-adjudication.json itemZero). Shipped viewport-query debt is unchanged at 1, because patterns-paint.css is imported by no entrypoint and reaches no bundle; the duplicate below disappears when that tombstone is deleted. Still the pre-existing W6 \"single\" to audit individually in a later wave."
+    },
     "src/foundation/tokens/css/presentation/components/patterns-paint.css": {
       "count": 1,
-      "reason": "pre-existing viewport query outside the W6-A command-home migration scope (design doc W6 section 1.2 explicitly excludes this file as a \"single\" to audit individually in a later wave)"
+      "reason": "pre-existing viewport query outside the W6-A command-home migration scope (design doc W6 section 1.2 explicitly excludes this file as a \"single\" to audit individually in a later wave). Since 2026-08-02 this file is an unimported tombstone whose live twin is the patterns.css entry above; this entry retires with the file (whole-file RETIRE_PROPOSED)."
     },
     "src/foundation/tokens/css/presentation/components/skin/button-group.css": {
       "count": 1,

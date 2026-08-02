@@ -492,7 +492,7 @@ export default function RusticMenu(props: MenuProps): React.ReactElement {
           e.preventDefault();
           if (focusedKey) {
             const item = items.find((i) => i.key === focusedKey);
-            if (item?.children) {
+            if (item && item.type !== 'divider' && item.children) {
               handleSubmenuToggle(focusedKey);
             } else {
               handleItemClick(focusedKey, [focusedKey], e as unknown as React.MouseEvent<HTMLElement>);

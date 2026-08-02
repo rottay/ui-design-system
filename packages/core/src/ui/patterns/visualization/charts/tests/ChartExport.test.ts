@@ -20,7 +20,7 @@ function chartSvg(): SVGSVGElement {
 }
 
 function installDownloadStubs() {
-  const createObjectURL = vi.fn(() => 'blob:chart-export-test');
+  const createObjectURL = vi.fn((_blob: Blob) => 'blob:chart-export-test');
   vi.stubGlobal('URL', {
     createObjectURL,
     revokeObjectURL: vi.fn(),
@@ -64,7 +64,10 @@ function installRasterStubs() {
   vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(
     context as unknown as CanvasRenderingContext2D,
   );
-  vi.spyOn(HTMLCanvasElement.prototype, 'toBlob').mockImplementation(function (callback) {
+  vi.spyOn(HTMLCanvasElement.prototype, 'toBlob').mockImplementation(function (
+    this: HTMLCanvasElement,
+    callback: BlobCallback,
+  ) {
     rasterCanvas = this;
     callback(new Blob(['png'], { type: 'image/png' }));
   });

@@ -37,7 +37,6 @@
   --ds-tag-xl-height: 2.25rem;               /* 36px */
 
   /* Default size (can be overridden) */
-  --ds-tag-default-padding: var(--ds-tag-md-padding);
   --ds-tag-default-font-size: var(--ds-tag-md-font-size);
   --ds-tag-default-height: var(--ds-tag-md-height);
 
@@ -50,7 +49,9 @@
   --ds-tag-radius-sm: 0.125rem;              /* 2px */
   --ds-tag-radius-md: 0.25rem;               /* 4px */
   --ds-tag-radius-lg: 0.5rem;                /* 8px */
-  --ds-tag-radius-full: 9999px;
+  /* C2: pill shape rides the canon full-radius channel — a pill-accented or
+     sharp tenant geometry reaches Tag the same way it reaches Button. */
+  --ds-tag-radius-full: var(--ds-radius-full, 9999px);
 
   /* Default border radius */
   --ds-tag-default-radius: var(--ds-tag-radius-md);

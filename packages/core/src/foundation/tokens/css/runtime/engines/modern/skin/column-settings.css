@@ -224,3 +224,12 @@
     outline-offset: 2px;
   }
 }
+
+/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
+   below the canonical --ds-touch-target-min channel; fine pointers keep the
+   authored size untouched. */
+@media (hover: none), (pointer: coarse) {
+  .ds-column-settings.ds-column-settings--modern[data-part='root'] [data-part='grip'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}

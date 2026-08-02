@@ -95,7 +95,7 @@
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-sm);
   background: var(
-    --_ds-proto-codeblock-language-badge-bg,
+    --_ds-codeblock-language-badge-bg,
     color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
   );
   line-height: var(--ds-line-height-snug);
@@ -107,12 +107,12 @@
     linear-gradient(to top, var(--ds-surface-inset) 30%, transparent),
     radial-gradient(
       farthest-side at 50% 0,
-      var(--_ds-proto-codeblock-scroll-shadow, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent)),
+      var(--_ds-codeblock-scroll-shadow, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent)),
       transparent
     ),
     radial-gradient(
       farthest-side at 50% 100%,
-      var(--_ds-proto-codeblock-scroll-shadow, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent)),
+      var(--_ds-codeblock-scroll-shadow, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent)),
       transparent
     );
   background-position: 0 0, 0 100%, 0 0, 0 100%;

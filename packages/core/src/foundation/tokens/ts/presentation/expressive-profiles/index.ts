@@ -175,16 +175,158 @@ export const EXPERIENCE_PROFILES = [
       elevation: 'soft-depth',
       motif: 'contour',
       density: 'spacious',
-      // `ambient` is deliberately NOT composed: the ambient dial's only CSS
-      // consumer reads the keyword into a transition-duration slot
-      // (data-table.css:1031, pre-existing type mismatch), so a composition
-      // default would activate that defect for every selecting tenant. The
-      // expressive motion divergence rides intensity and duration-scale;
-      // ambient returns to compositions once the consumer read is fixed.
-      motion: { intensity: 0.7, durationScale: 1.1 },
+      // `ambient` returned to the composition in C2: the historic DataTable
+      // consumer that read the keyword as a transition-duration was fixed in
+      // the C1b acceptance remediation (it rides --ds-motion-slow now), so
+      // the dial is safe to default and the JS policy layer gates ambient
+      // choreography through it.
+      motion: { intensity: 0.7, durationScale: 1.1, ambient: 'subtle' },
     },
   },
 ] as const satisfies readonly ExperienceProfileDefinition[];
+
+/**
+ * Accessibility and resilience FLOORS (C2). Global and non-negotiable: no
+ * profile, vertical envelope, tenant dial or explicit override may cross
+ * them. Contrast stays owned by the APCA autocorrect pass and reduced motion
+ * by the universal token-zeroing kill switch — both pre-existing enforcement
+ * points this record names rather than duplicates.
+ */
+/**
+ * C2c edge-width channel classification — the evasion audit made LAW.
+ * EXPRESSIVE channels are decoration a tenant can reach (directly through
+ * the edge grammar, or through the default.css component floors that derive
+ * from it); every one of them respects `EXPRESSIVE_A11Y_FLOORS.edgeWidthMaxPx`
+ * at expansion AND at compile. STRUCTURAL channels are layout dimensions
+ * (sidebar tracks, card grid minima) that legitimately exceed the cap and
+ * must never be blocked by it. Compiler-audit note: the appearance channels
+ * whose names end in `-border` carry COLOR values, and the tenant raw
+ * allowlist is color-only — the edge grammar is the single tenant-reachable
+ * expressive width door.
+ */
+export const EXPRESSIVE_EDGE_WIDTH_CHANNELS = Object.freeze([
+  '--ds-edge-hairline-width',
+  '--ds-edge-standard-width',
+  '--ds-edge-emphasis-width',
+  '--ds-surface-border-width',
+  '--ds-table-border-width',
+  '--ds-table-header-rule-width',
+  '--ds-menu-border-width',
+  '--ds-page-shell-border-width',
+] as const);
+
+export const STRUCTURAL_WIDTH_CHANNELS = Object.freeze([
+  '--ds-sidebar-width',
+  '--ds-sidebar-collapsed-width',
+  '--ds-listing-grid-min-card-width',
+  '--ds-global-search-results-width',
+  '--ds-button-group-mobile-width',
+] as const);
+
+export const EXPRESSIVE_A11Y_FLOORS = Object.freeze({
+  /** Coarse-pointer targets never shrink below this, any density. */
+  touchTargetMinPx: 44,
+  /** Absolute type-scale floor — legibility beats identity. */
+  typeScaleMin: 0.9,
+  /** Absolute cap for any expressive edge width (beyond is decoration). */
+  edgeWidthMaxPx: 4,
+  /** Radius dial absolute range (mirrors the global schema bounds). */
+  radiusScale: Object.freeze({ min: 0.75, max: 1.25 }),
+  /** Motion intensity ceiling; reduced-motion always jumps to final state. */
+  motionIntensityMax: 1,
+} as const);
+
+/**
+ * Per-PROFILE envelopes (C2): a selected experience narrows what dials may
+ * do ON TOP of it, so an explicit override can bend a posture but never
+ * break it. Envelopes CLAMP — they never reorder precedence: explicit DB >
+ * authored static > profile composition > canon default still holds, with
+ * every layer clamped into (profile envelope ∩ vertical envelope ∩ global
+ * bounds ∩ a11y floors).
+ */
+export interface ExpressiveProfileEnvelope {
+  readonly radiusScale: { readonly min: number; readonly max: number };
+  readonly typeScale: { readonly min: number; readonly max: number };
+  readonly densityModes: readonly ('compact' | 'normal' | 'spacious')[];
+  readonly edgeWidthMaxPx: number;
+  readonly motionIntensityMax: number;
+}
+
+export const EXPERIENCE_PROFILE_ENVELOPES: Readonly<
+  Record<ExperienceProfileId, ExpressiveProfileEnvelope>
+> = Object.freeze({
+  'rottay/bithire-technical@1': Object.freeze({
+    radiusScale: Object.freeze({ min: 0.75, max: 1.0 }),
+    typeScale: Object.freeze({ min: 0.92, max: 1.08 }),
+    densityModes: Object.freeze(['compact', 'normal'] as const),
+    edgeWidthMaxPx: 2,
+    motionIntensityMax: 0.6,
+  }),
+  'rottay/management-editorial@1': Object.freeze({
+    radiusScale: Object.freeze({ min: 1.0, max: 1.25 }),
+    typeScale: Object.freeze({ min: 0.95, max: 1.1 }),
+    densityModes: Object.freeze(['normal', 'spacious'] as const),
+    edgeWidthMaxPx: 3,
+    motionIntensityMax: 0.8,
+  }),
+});
+
+/**
+ * Clamp a numeric dial into the selected profile's envelope and the global
+ * a11y floors. Pure; absent profile → only the global floors apply. The
+ * compilers call this AFTER precedence resolution, so it bounds whoever won.
+ */
+export function clampIntoExpressiveEnvelope(
+  profileId: string | undefined,
+  dial: 'radiusScale' | 'typeScale' | 'motionIntensity',
+  value: number
+): number {
+  const envelope =
+    profileId !== undefined
+      ? EXPERIENCE_PROFILE_ENVELOPES[profileId as ExperienceProfileId]
+      : undefined;
+  let min: number;
+  let max: number;
+  if (dial === 'radiusScale') {
+    min = Math.max(
+      EXPRESSIVE_A11Y_FLOORS.radiusScale.min,
+      envelope?.radiusScale.min ?? EXPRESSIVE_A11Y_FLOORS.radiusScale.min
+    );
+    max = Math.min(
+      EXPRESSIVE_A11Y_FLOORS.radiusScale.max,
+      envelope?.radiusScale.max ?? EXPRESSIVE_A11Y_FLOORS.radiusScale.max
+    );
+  } else if (dial === 'typeScale') {
+    min = Math.max(
+      EXPRESSIVE_A11Y_FLOORS.typeScaleMin,
+      envelope?.typeScale.min ?? EXPRESSIVE_A11Y_FLOORS.typeScaleMin
+    );
+    max = envelope?.typeScale.max ?? Number.POSITIVE_INFINITY;
+  } else {
+    min = 0;
+    max = Math.min(
+      EXPRESSIVE_A11Y_FLOORS.motionIntensityMax,
+      envelope?.motionIntensityMax ?? EXPRESSIVE_A11Y_FLOORS.motionIntensityMax
+    );
+  }
+  return Math.min(max, Math.max(min, value));
+}
+
+/** Density mode admission under a selected profile (unset stays unset). */
+export function clampDensityIntoExpressiveEnvelope(
+  profileId: string | undefined,
+  density: 'compact' | 'normal' | 'spacious' | undefined
+): 'compact' | 'normal' | 'spacious' | undefined {
+  if (density === undefined || profileId === undefined) return density;
+  const envelope =
+    EXPERIENCE_PROFILE_ENVELOPES[profileId as ExperienceProfileId];
+  if (!envelope || envelope.densityModes.includes(density)) return density;
+  // Nearest admitted posture, deterministic: prefer the envelope's closest
+  // neighbor toward 'normal'.
+  return envelope.densityModes.includes('normal')
+    ? 'normal'
+    : envelope.densityModes[0];
+}
 
 const EXPERIENCE_PROFILE_INDEX: ReadonlyMap<string, ExperienceProfileDefinition> =
   new Map(EXPERIENCE_PROFILES.map((profile) => [profile.id, profile]));

@@ -87,9 +87,12 @@ describe('OKLCH <-> sRGB round trip', () => {
 
   it('pure sRGB red lands near the commonly published OKLCH reference (L~0.628, C~0.258, H~29.2deg)', () => {
     const { l, c, h } = hexToOklch('#FF0000');
-    expect(l).toBeGreaterThan(0.6).and.toBeLessThan(0.66);
-    expect(c).toBeGreaterThan(0.2).and.toBeLessThan(0.3);
-    expect(h).toBeGreaterThan(20).and.toBeLessThan(40);
+    expect(l).toBeGreaterThan(0.6);
+    expect(l).toBeLessThan(0.66);
+    expect(c).toBeGreaterThan(0.2);
+    expect(c).toBeLessThan(0.3);
+    expect(h).toBeGreaterThan(20);
+    expect(h).toBeLessThan(40);
   });
 
   it('oklabToOklch and oklchToOklab are inverses', () => {

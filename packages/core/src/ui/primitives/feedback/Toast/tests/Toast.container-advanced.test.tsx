@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { Toast, ToastProvider, useToast } from '..';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 
-function SeededToasts(): React.ReactElement {
+function SeededToasts(): React.ReactElement | null {
   const api = useToast();
 
   useEffect(() => {

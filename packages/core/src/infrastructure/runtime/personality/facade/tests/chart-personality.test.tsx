@@ -84,7 +84,7 @@ describe('resolveChartPersonality', () => {
           tooltipStyle: 'minimal',
         },
       },
-    };
+    } as const;
 
     const legacy = resolveChartPersonality({
       tenantConfig: {},

@@ -12,7 +12,7 @@
  * `@media (hover: hover)` with the unguarded `:active` press as the coarse
  * equivalent; the scroll rail reserves inline `scroll-padding` so keyboard
  * scroll-into-view never parks a tab under the edge fades
- * (`--_ds-proto-tabs-scroll-pad`); the pills tray drops its tenant blur under
+ * (`--_ds-tabs-scroll-pad`); the pills tray drops its tenant blur under
  * `prefers-reduced-transparency`; forced-colors gets a real disabled signal.
  *
  * Pass P2 (Phase B segunda pasada): the loading live region moves to the
@@ -70,7 +70,7 @@
   scroll-snap-type: inline proximity;
   /* Keyboard/scroll-into-view clearance: keeps a focused tab from parking
      flush under the rail edge fades. */
-  scroll-padding-inline: var(--_ds-proto-tabs-scroll-pad, var(--ds-spacing-2));
+  scroll-padding-inline: var(--_ds-tabs-scroll-pad, var(--ds-spacing-2));
   scrollbar-gutter: stable;
   -webkit-overflow-scrolling: touch;
 }
@@ -952,5 +952,14 @@ html[data-ds-motion='reduced'] .rottay-tabs--modern[data-part='root'] [data-part
   .rottay-tabs--modern[data-part='root'] [data-part='loading-indicator'] {
     border-color: ButtonText;
     border-block-start-color: Highlight;
+  }
+}
+
+/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
+   below the canonical --ds-touch-target-min channel; fine pointers keep the
+   authored size untouched. */
+@media (hover: none), (pointer: coarse) {
+  .rottay-tabs--modern[data-part='root'] [data-part='tab-button'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

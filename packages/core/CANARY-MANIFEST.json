@@ -1,0 +1,220 @@
+{
+  "id": "fase5-canary-manifest",
+  "version": 1,
+  "purpose": "Three-source canary on one React tree: BitHire static artifact, The Management DB full-appearance document, and a genuinely seeds-only DB document. Full-appearance proves broad runtime divergence; seeds-only proves bounded causal derivation. A probe passes only at a real consumer in computed style.",
+  "controlledVariables": {
+    "family": "modern",
+    "viewport": "1440x900",
+    "locale": "en-US",
+    "ground": "light",
+    "note": "All four must be held identical across the two sides. A divergence produced by changing viewport or ground is not evidence about the capability."
+  },
+  "sides": {
+    "left": {
+      "id": "bithire",
+      "kind": "registered vertical",
+      "source": "packages/core/styles/bithire.css (shipped artifact)",
+      "resolvedBy": "no-loss resolver over the shipped bundle",
+      "measured": {
+        "--ds-color-primary": "#3A6FB0",
+        "--ds-button-primary-bg": "#3A6FB0",
+        "--ds-font-family-base": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif",
+        "--ds-radius-button": "9px",
+        "--ds-sidebar-bg": "#ffffff",
+        "--ds-surface-canvas": "#f8fbff",
+        "--ds-density-mode-factor": "1"
+      }
+    },
+    "right": {
+      "id": "themanagementmiami",
+      "kind": "DB full-appearance fixture, never registered, NO shipped bundle and NO brandTheme field",
+      "source": "packages/showroom/src/components/brand-locale-evidence/index.tsx#THE_MANAGEMENT_DB_APPEARANCE",
+      "resolvedBy": "DesignSystemProvider consumes TenantConfig.appearance through the DB/runtime path",
+      "authoredDomains": [
+        "palette",
+        "typography",
+        "shape",
+        "density",
+        "motion",
+        "surfaces",
+        "navigation",
+        "advanced.chrome",
+        "advanced.tokenOverrides"
+      ],
+      "law": "This source proves the rich DB appearance path and broad multi-axis divergence. It MUST NOT be described as seeds-only; bounded seed causality belongs exclusively to sides.seedsOnly."
+    },
+    "seedsOnly": {
+      "id": "themanagement-seeds",
+      "source": "?source=themanagement-seeds",
+      "kind": "TenantThemeDocument appearance built from literal keys \u2014 ZERO BrandTheme projection",
+      "allowlist": {
+        "": "[\"general\"]",
+        "general": "[\"palette\"]",
+        "general.palette": "[\"primary\",\"secondary\",\"accent\",\"background\"]"
+      },
+      "allowlistProvenance": "capability registry row palette.seeds (documentPath appearance.palette.{primary,secondary,accent,background}), expressed in the shape the provider consumes (appearance.general.palette). status-seeds is REJECTED today and dark-mode is tier internal, so neither is a seed.",
+      "authoredSeeds": {
+        "primary": "#0F766E",
+        "secondary": "#8C6D46",
+        "accent": "#B44F3C",
+        "background": "#FBF6EC"
+      },
+      "mutationParams": {
+        "darkPrimaryMovesChromeRampAndChart": "&seedPrimary=%23AA0000",
+        "lightPrimaryFlipsContrastInk": "&seedPrimary=%23FFFF00"
+      }
+    }
+  },
+  "paths": {
+    "A_static": {
+      "name": "BrandTheme static path",
+      "route": "showroom (docs) routes under the vertical's shipped artifact",
+      "mutationPoint": "brandThemePath of the capability row in TENANT_CAPABILITY_REGISTRY"
+    },
+    "B_db": {
+      "name": "TenantThemeDocument / DB path",
+      "route": "/probe/whitelabel-divergence?fixture={sober|editorial}&route={dashboard|list|detail}&ground={light|dark}",
+      "mutationPoint": "documentPath of the capability row",
+      "note": "This chrome-free route compiles the document through compileTenantThemeConfig under the code-owned bithire envelope at load time \u2014 the same validated path a DB-driven customer tenant takes, with no build artifact. It is the sanctioned B-path canary; do not invent a new route."
+    }
+  },
+  "probes": [
+    {
+      "tier": "primitive",
+      "component": "Button",
+      "route": "/probe/wl-canary?source={bithire-static|themanagement-db}",
+      "capability": "palette.seeds",
+      "control": "palette.primary",
+      "brandThemePath": "palette.primaryColor",
+      "documentPath": "appearance.palette.primary",
+      "channel": "--ds-button-primary-bg",
+      "consumerSelector": "[data-testid='wc-header'] .rottay-button.rottay-button--modern[data-variant='primary']",
+      "consumerFile": "src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+      "computedProperty": "background-color",
+      "expected": {
+        "bithire": "#3A6FB0",
+        "themanagementmiami": "compile from palette.primaryColor #0F766E"
+      },
+      "evidenceSource": "registry row palette.seeds, evidence.symbol 'var(--ds-button-primary-bg'",
+      "verified": "selector read from the shipped skin + the probe source, not assumed",
+      "block": "A \u00b7 DB full-appearance path"
+    },
+    {
+      "tier": "pattern",
+      "component": "PatternDataTable",
+      "route": "/probe/wl-canary?source={bithire-static|themanagement-db}",
+      "capability": "chrome.families",
+      "control": "chrome.table",
+      "brandThemePath": "chrome.table.*",
+      "documentPath": "appearance.advanced.chrome.table.*",
+      "channel": "--ds-table-header-bg",
+      "consumerSelector": "[data-testid='wc-table'] [data-part='header-cell']",
+      "consumerFile": "src/foundation/tokens/css/runtime/engines/modern/skin/table.css",
+      "computedProperty": "background-color",
+      "expected": {
+        "bithire": "resolve from the shipped artifact at probe time",
+        "themanagementmiami": "resolve from the DB full-appearance chrome map at probe time"
+      },
+      "evidenceSource": "registry row chrome.families (tier pro), consumer skin/table.css",
+      "verified": "selector read from the shipped skin + the probe source, not assumed",
+      "finding": "RETRACTED an earlier claim that data-table.css's [data-part='header-cell'] rule was dead: the part IS stamped. It was absent only because the table had auto-switched to the mobile-card renderer (autoMobileCards defaults true and the table measures its own container). The probe now pins autoMobileCards={false} so the real header consumer exists deterministically.",
+      "block": "A \u00b7 DB full-appearance path"
+    },
+    {
+      "tier": "structure",
+      "component": "CollectionHeader",
+      "route": "/probe/wl-canary?source={bithire-static|themanagement-db}",
+      "capability": "typography.families",
+      "control": "typography.fontFamilyBase",
+      "brandThemePath": "typography.fontFamilyBase",
+      "documentPath": "appearance.typography.families.base",
+      "channel": "--ds-font-family-base",
+      "consumerSelector": "[data-testid='wc-header'] [data-part='title']",
+      "consumerFile": "src/foundation/tokens/css/foundation/themes/default.css",
+      "computedProperty": "font-family",
+      "expected": {
+        "bithire": "'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif, \"Noto Sans Arabic\", sans-serif",
+        "themanagementmiami": "Optima, Candara, 'Noto Sans', sans-serif"
+      },
+      "evidenceSource": "registry row typography.families",
+      "verified": "selector read from the shipped skin + the probe source, not assumed",
+      "block": "A \u00b7 DB full-appearance path"
+    },
+    {
+      "tier": "surface",
+      "component": "DashboardSurface",
+      "route": "/probe/wl-canary?source={bithire-static|themanagement-db}",
+      "capability": "navigation.sidebar-tone",
+      "control": "navigation.sidebarTone",
+      "brandThemePath": "chrome.sidebar.*",
+      "documentPath": "appearance.navigation.sidebarTone",
+      "channel": "--ds-sidebar-bg",
+      "consumerSelector": "[data-testid='wc-sidebar'] .rottay-menu",
+      "consumerFile": "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
+      "computedProperty": "background-color",
+      "expected": {
+        "bithire": "#ffffff",
+        "themanagementmiami": "resolve from the DB full-appearance navigation map at probe time"
+      },
+      "evidenceSource": "registry row navigation.sidebar-tone, consumer skin/menu.css",
+      "verified": "selector read from the shipped skin + the probe source, not assumed",
+      "block": "A \u00b7 DB full-appearance path"
+    }
+  ],
+  "passCriteria": [
+    "The mutated input produces a DIFFERENT artifact in the named channel.",
+    "The named channel reaches the named consumer file (wrap-immune boundary match, comments stripped).",
+    "The computed value at consumerSelector DIFFERS between the two sides.",
+    "A difference visible only in the artifact, or a consumer that does not render, is NOT a pass.",
+    "Text-matching a token name anywhere is NOT a pass."
+  ],
+  "knownLimits": [
+    "TMM has no shipped bundle by design, so its side can never be read from styles/*.css; it must be compiled per probe.",
+    "chrome.anatomy, profiles.icon and responsive.posture declare NO css channel \u2014 they are proven through derivedRootAttributes, not computed style, and are out of scope for a colour/typography canary.",
+    "The four probes cover one capability each. They are a canary, not the propagation matrix; the matrix is the separate table-driven suite."
+  ],
+  "executableRoute": {
+    "path": "/probe/wl-canary",
+    "params": "?source=bithire-static|themanagement-db &locale=en|es|ar &density=compact|comfortable|spacious &theme=light|dark &modal=1 &sheet=1",
+    "suite": "packages/showroom/e2e/whitelabel/canary-contracts.spec.ts",
+    "law": "ONE React tree, source-selected. An unmountable source renders [data-testid=wc-source-failure] and NO tenant tree \u2014 never another vertical. Ordinary docs routes are NOT canary routes: they do not accept a DB-mounted tenant and can substitute a vertical silently."
+  },
+  "contractMarkers": {
+    "root": "[data-testid='wc-root']",
+    "source": "data-canary-source",
+    "tenant": "data-canary-tenant",
+    "engine": "data-canary-engine",
+    "locale": "data-canary-locale",
+    "note": "markers report the identity that ACTUALLY mounted, so comparing them against the query string makes substitution detectable from the DOM alone"
+  },
+  "correction_2026_08_02": {
+    "what": "The claim \"the TMM fixture authors seeds only\" was FALSE and is withdrawn.",
+    "why": "showroom/src/components/brand-locale-evidence/index.tsx builds its appearance with brandThemeToTenantAppearance(themanagementmiamiBrandTheme), which projects typography, shape, density, motion, surfaces AND advanced.chrome/tokenOverrides. The test behind that name only asserted --ds-color-primary was non-empty: a strong claim on a weak check.",
+    "fix": "Split by property. A = the DB FULL-APPEARANCE canary (same 12 contracts, honest name). B = a genuinely seeds-only canary with a structural pre-compiler assertion. The words \"seeds only\" now appear only where an exact-key assertion backs them."
+  },
+  "probesB_seedsOnly": [
+    {
+      "contract": "authored key set == allowlist, recursive exact keys, pre-compiler",
+      "asserts": "presence AND absence at every level; explicit negative controls for advanced/chrome/tokenOverrides/typography/density/motion/surfaces/shape"
+    },
+    {
+      "contract": "four seeds derive a whole painted system",
+      "channels": [
+        "--ds-color-primary",
+        "--ds-button-primary-bg",
+        "--ds-color-text-on-primary",
+        "--ds-chart-series-1",
+        "--ds-color-primary-500"
+      ],
+      "plus": "button consumer background-color"
+    },
+    {
+      "contract": "DRILL mutations move every claimed derived channel; restore byte-identical",
+      "method": "#AA0000 must move primary/button/ramp/chart; #FFFF00 must cross the contrast threshold and move text-on-primary; then unset restores the complete map"
+    },
+    {
+      "contract": "colour seeds do NOT move typography",
+      "asserts": "heading font-family unchanged under a mutated colour seed, so a type divergence can never be credited to the palette control"
+    }
+  ]
+}

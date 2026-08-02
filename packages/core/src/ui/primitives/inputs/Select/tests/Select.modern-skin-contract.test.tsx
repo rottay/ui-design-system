@@ -123,7 +123,12 @@ describe('Select modern — i18n English floor (Pass 1)', () => {
 
 describe('Select modern — Quiet Premium grammar (Pass 2)', () => {
   it('paints the trigger flat: one surface, one hairline, focus ring by shadow', () => {
-    expect(SKIN).toContain('background: var(--ds-select-bg, var(--ds-surface-control));');
+    // C2b law: the material role is a documented MIDDLE fallback — leave it
+    // unset and the chain lands byte-identically on the surface alias it was
+    // inserted above. Pinned as the chain so the role cannot be dropped silently.
+    expect(SKIN).toMatch(
+      /background:\s*var\(\s*--ds-select-bg\s*,\s*var\(\s*--ds-material-control-background\s*,\s*var\(\s*--ds-surface-control\s*\)\s*\)\s*\)/
+    );
     expect(SKIN).toContain('box-shadow: var(--ds-select-shadow-focus, var(--ds-focus-ring));');
     // No glass gradients or inset top-highlights on the trigger.
     const triggerRules = SKIN.match(/\[data-part='trigger'\][^{]*\{[^}]*\}/g) ?? [];

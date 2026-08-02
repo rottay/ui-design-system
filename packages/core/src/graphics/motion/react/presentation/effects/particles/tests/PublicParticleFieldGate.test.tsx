@@ -9,8 +9,8 @@ const gate = vi.hoisted(() => ({
   policy: {
     allowAmbientMotion: true,
     maxContinuousLoops: 1 as 0 | 1,
-    pointer: 'fine' as const,
-    power: 'normal' as const,
+    pointer: 'fine' as 'fine' | 'coarse',
+    power: 'normal' as 'normal' | 'constrained',
     reduce: false,
     visible: true,
   },

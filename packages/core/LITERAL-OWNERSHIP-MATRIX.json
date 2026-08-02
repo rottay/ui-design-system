@@ -1,0 +1,2875 @@
+{
+  "generatedAt": "2026-08-02T17:20:14.430Z",
+  "title": "FASE 1 — literal ownership matrix, consolidated",
+  "vocabulary": "CODEX (replaces A-F): TENANT_DERIVED · FOUNDATION_DEFAULT · STRUCTURAL_LITERAL · ACCESSIBILITY_FLOOR · ALGORITHMIC_CONSTANT · COMPONENT_PRIVATE_CANONICAL · LEGACY_BLOCKER · RETIRE_WITH_PROOF",
+  "scope": {
+    "STATES_ITS_OWN_LIMITS": true,
+    "swept": [
+      "Modern engine skin CSS + Modern engine component files (slice 1: font-size / hex / rgba, scope-proven against engine-token-audit)",
+      "foundation/themes/default.css tenant-identity colours (slice 2: all 42 pinned inventory entries, origin attributed per BrandTheme)",
+      "provider emergency block (slice 3: all 18 channels, minimality tested)"
+    ],
+    "notSwept": "see remainingLayers — named as debt, not implied as done",
+    "claim": "This matrix covers Codex blocker 4A (\"los colores/literales pendientes en default.css y skins Modern\") in full. It does NOT claim the 12-layer sweep of the integral directive; that scope is named below with owner and ready-to-run machinery."
+  },
+  "totals": {
+    "rows": 116,
+    "byCodexClass": {
+      "OUT_OF_TAXONOMY_NOT_A_LITERAL": 2,
+      "LEGACY_BLOCKER": 41,
+      "ACCESSIBILITY_FLOOR": 1,
+      "ALGORITHMIC_CONSTANT": 9,
+      "FOUNDATION_DEFAULT": 19,
+      "OUT_OF_TAXONOMY_CONTENT": 2,
+      "TENANT_DERIVED": 42
+    },
+    "byDecision": {
+      "NO_ACTION": 2,
+      "OWNER_FILE_DERIVATION": 40,
+      "OWNER_SCALE_EXTENSION": 1,
+      "DERIVE": 1,
+      "KEEP": 30,
+      "MOVE_TO_TENANT": 42
+    }
+  },
+  "outOfTaxonomyRuling": {
+    "ruling": "LEAD RULING ACCEPTED: these stay OUTSIDE the eight classes, flagged. Forcing them in would be the disguise the hard rule forbids.",
+    "count": 4,
+    "rows": [
+      {
+        "file": "src/foundation/tokens/css/runtime/engines/modern/skin/time-picker.css",
+        "line": 80,
+        "value": "16px",
+        "codexClass": "OUT_OF_TAXONOMY_NOT_A_LITERAL",
+        "why": "Prose inside a comment that MENTIONS a font-size, not a declaration. Proven by re-extracting with comments blanked: this site disappears. The gate counts it, so the counter reads higher than the number of declarations that can paint."
+      },
+      {
+        "file": "src/foundation/tokens/css/runtime/engines/modern/skin/time-picker.css",
+        "line": 199,
+        "value": "the governed close icon sizes itself (the drained `16px/1`\n     pair only existed for the retired '×' text glyph). */\n  position: absolute",
+        "codexClass": "OUT_OF_TAXONOMY_NOT_A_LITERAL",
+        "why": "Prose inside a comment that MENTIONS a font-size, not a declaration. Proven by re-extracting with comments blanked: this site disappears. The gate counts it, so the counter reads higher than the number of declarations that can paint."
+      },
+      {
+        "file": "src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx",
+        "line": 366,
+        "value": "#1677ff",
+        "codexClass": "OUT_OF_TAXONOMY_CONTENT",
+        "why": "A hex inside a translated help string shown to the user as an example. Content, never paint."
+      },
+      {
+        "file": "src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx",
+        "line": 85,
+        "value": "return `rgb(${r}, ${g}, ${b})`;",
+        "codexClass": "OUT_OF_TAXONOMY_CONTENT",
+        "why": "Not a colour literal: a CONSTRUCTOR serialising the user's own picked channels. The counter matches the token `rgb(` textually, so it cannot reach 0 while ColorPicker exists."
+      }
+    ]
+  },
+  "slices": {
+    "slice1": {
+      "scopeProof": {
+        "gateParity": {
+          "font": 43,
+          "hex": 13,
+          "rgba": 1
+        },
+        "trueDeclarations": {
+          "font": 41,
+          "note": "the gate counts 43 font-size literals; 2 are comment prose, so 41 declarations can actually paint"
+        }
+      },
+      "distribution": {
+        "class": {
+          "PARSE_ARTIFACT": 2,
+          "FILE_UNIT_REFUSAL": 40,
+          "OWNER_SCALE_EXTENSION": 1,
+          "D_ACCESSIBILITY_FLOOR": 1,
+          "E_IMMUTABLE_GEOMETRY": 9,
+          "C_EMERGENCY_FALLBACK": 1,
+          "CONTENT_NOT_PAINT": 2
+        },
+        "decision": {
+          "NO_ACTION": 2,
+          "OWNER_FILE_DERIVATION": 40,
+          "OWNER_SCALE_EXTENSION": 1,
+          "DERIVE": 1,
+          "KEEP": 12
+        },
+        "codexClass": {
+          "OUT_OF_TAXONOMY_NOT_A_LITERAL": 2,
+          "LEGACY_BLOCKER": 41,
+          "ACCESSIBILITY_FLOOR": 1,
+          "ALGORITHMIC_CONSTANT": 9,
+          "FOUNDATION_DEFAULT": 1,
+          "OUT_OF_TAXONOMY_CONTENT": 2
+        }
+      },
+      "rows": [
+        {
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/time-picker.css",
+          "line": 80,
+          "selector": "(top level)",
+          "property": "font-size",
+          "value": "16px",
+          "family": "typography",
+          "isDefect": false,
+          "owner": "src/foundation/tokens/css/runtime/engines/modern/skin/time-picker.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "NO_ACTION",
+          "rationale": "Prose inside a comment that MENTIONS a font-size, not a declaration. Proven by re-extracting with comments blanked: this site disappears. The gate counts it, so the counter reads higher than the number of declarations that can paint.",
+          "priorClass": "PARSE_ARTIFACT",
+          "codexClass": "OUT_OF_TAXONOMY_NOT_A_LITERAL",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/runtime/engines/modern/skin/time-picker.css:80",
+          "consumerEvidence": "engine-token-audit counts this site; selector (top level)"
+        },
+        {
+          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/time-picker.css",
+          "line": 199,
+          "selector": "/* ---- clear-button / clock-icon: `TimePickerBase` only -- `TimeRangePicker` renders neither. ---- */ .rottay-timepicker.rottay-timepicker--modern [d",
+          "property": "font-size",
+          "value": "the governed close icon sizes itself (the drained `16px/1`\n     pair only existed for the retired '×' text glyph). */\n  position: absolute",
+          "family": "typography",
+          "isDefect": false,
+          "owner": "src/foundation/tokens/css/runtime/engines/modern/skin/time-picker.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "NO_ACTION",
+          "rationale": "Prose inside a comment that MENTIONS a font-size, not a declaration. Proven by re-extracting with comments blanked: this site disappears. The gate counts it, so the counter reads higher than the number of declarations that can paint.",
+          "priorClass": "PARSE_ARTIFACT",
+          "codexClass": "OUT_OF_TAXONOMY_NOT_A_LITERAL",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/runtime/engines/modern/skin/time-picker.css:199",
+          "consumerEvidence": "engine-token-audit counts this site; selector /* ---- clear-button / clock-icon: `TimePickerBase` only -- `TimeRange"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 113,
+          "selector": ".rottay-transition-watermark",
+          "property": "font-size",
+          "value": "clamp(120px, 18vw, 260px)",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:113",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-watermark"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 258,
+          "selector": ".rottay-transition-mark",
+          "property": "font-size",
+          "value": "22px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:258",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-mark"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 272,
+          "selector": ".rottay-transition-brand-copy strong, .rottay-transition-provider-copy strong",
+          "property": "font-size",
+          "value": "14px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": "--ds-font-size-sm",
+          "rungProvenPerVertical": "bithire = platform = evnto (21 rung names, identical tables, verified from the shipped bundles)",
+          "canonicalChannel": "--ds-font-size-sm",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "NONE at scale=1 (exact rung); the delta is that the declaration STARTS obeying typography.scale",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:272",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-brand-copy strong, .rottay-transition-provider-copy"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 279,
+          "selector": ".rottay-transition-brand-copy span, .rottay-transition-provider-copy span, .rottay-transition-powered",
+          "property": "font-size",
+          "value": "11px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": "--ds-font-size-2xs",
+          "rungProvenPerVertical": "bithire = platform = evnto (21 rung names, identical tables, verified from the shipped bundles)",
+          "canonicalChannel": "--ds-font-size-2xs",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "NONE at scale=1 (exact rung); the delta is that the declaration STARTS obeying typography.scale",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:279",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-brand-copy span, .rottay-transition-provider-copy s"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 357,
+          "selector": ".rottay-transition-kicker",
+          "property": "font-size",
+          "value": "12px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": "--ds-font-size-xs",
+          "rungProvenPerVertical": "bithire = platform = evnto (21 rung names, identical tables, verified from the shipped bundles)",
+          "canonicalChannel": "--ds-font-size-xs",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "NONE at scale=1 (exact rung); the delta is that the declaration STARTS obeying typography.scale",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:357",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-kicker"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 365,
+          "selector": ".rottay-transition-title",
+          "property": "font-size",
+          "value": "clamp(44px, 6vw, 88px)",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:365",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-title"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 373,
+          "selector": ".rottay-transition-root[data-compact=\"true\"] .rottay-transition-title",
+          "property": "font-size",
+          "value": "clamp(22px, 3.4vw, 34px)",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:373",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-root[data-compact=\"true\"] .rottay-transition-title"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 380,
+          "selector": ".rottay-transition-subtitle",
+          "property": "font-size",
+          "value": "15px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": "--ds-font-size-base",
+          "rungProvenPerVertical": "bithire = platform = evnto (21 rung names, identical tables, verified from the shipped bundles)",
+          "canonicalChannel": "--ds-font-size-base",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "NONE at scale=1 (exact rung); the delta is that the declaration STARTS obeying typography.scale",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:380",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-subtitle"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 386,
+          "selector": ".rottay-transition-root[data-compact=\"true\"] .rottay-transition-subtitle",
+          "property": "font-size",
+          "value": "12px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": "--ds-font-size-xs",
+          "rungProvenPerVertical": "bithire = platform = evnto (21 rung names, identical tables, verified from the shipped bundles)",
+          "canonicalChannel": "--ds-font-size-xs",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "NONE at scale=1 (exact rung); the delta is that the declaration STARTS obeying typography.scale",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:386",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-root[data-compact=\"true\"] .rottay-transition-subtit"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 449,
+          "selector": ".rottay-transition-phase-moment-icon",
+          "property": "font-size",
+          "value": "22px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:449",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-phase-moment-icon"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 476,
+          "selector": ".rottay-transition-phase-moment-copy em, .rottay-transition-phase-moment-copy span",
+          "property": "font-size",
+          "value": "10px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:476",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-phase-moment-copy em, .rottay-transition-phase-mome"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 483,
+          "selector": ".rottay-transition-phase-moment-copy strong",
+          "property": "font-size",
+          "value": "14px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": "--ds-font-size-sm",
+          "rungProvenPerVertical": "bithire = platform = evnto (21 rung names, identical tables, verified from the shipped bundles)",
+          "canonicalChannel": "--ds-font-size-sm",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "NONE at scale=1 (exact rung); the delta is that the declaration STARTS obeying typography.scale",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:483",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-phase-moment-copy strong"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 535,
+          "selector": ".rottay-transition-root[data-compact=\"true\"] .rottay-transition-phase-moment-icon",
+          "property": "font-size",
+          "value": "19px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:535",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-root[data-compact=\"true\"] .rottay-transition-phase-"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 539,
+          "selector": ".rottay-transition-root[data-compact=\"true\"] .rottay-transition-phase-moment-copy strong",
+          "property": "font-size",
+          "value": "12px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": "--ds-font-size-xs",
+          "rungProvenPerVertical": "bithire = platform = evnto (21 rung names, identical tables, verified from the shipped bundles)",
+          "canonicalChannel": "--ds-font-size-xs",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "NONE at scale=1 (exact rung); the delta is that the declaration STARTS obeying typography.scale",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:539",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-root[data-compact=\"true\"] .rottay-transition-phase-"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 557,
+          "selector": ".rottay-transition-flow-node, .rottay-transition-flow-tag",
+          "property": "font-size",
+          "value": "10px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:557",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-flow-node, .rottay-transition-flow-tag"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 605,
+          "selector": ".rottay-transition-root[data-compact=\"true\"] .rottay-transition-flow-node, .rottay-transition-root[data-compact=\"true\"] .rottay-transition-flow-tag",
+          "property": "font-size",
+          "value": "9px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:605",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-root[data-compact=\"true\"] .rottay-transition-flow-n"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 648,
+          "selector": ".rottay-transition-step-index",
+          "property": "font-size",
+          "value": "10px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:648",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-step-index"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 673,
+          "selector": ".rottay-transition-step-copy",
+          "property": "font-size",
+          "value": "11px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": "--ds-font-size-2xs",
+          "rungProvenPerVertical": "bithire = platform = evnto (21 rung names, identical tables, verified from the shipped bundles)",
+          "canonicalChannel": "--ds-font-size-2xs",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "NONE at scale=1 (exact rung); the delta is that the declaration STARTS obeying typography.scale",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:673",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-step-copy"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 722,
+          "selector": ".rottay-progress-glyph--destination",
+          "property": "font-size",
+          "value": "17px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:722",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-progress-glyph--destination"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 835,
+          "selector": ".rottay-progress-quiet-copy span, .rottay-progress-watch-copy span, .rottay-progress-signal-copy span, .rottay-progress-halo-copy span",
+          "property": "font-size",
+          "value": "10px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:835",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-progress-quiet-copy span, .rottay-progress-watch-copy span, .r"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 845,
+          "selector": ".rottay-progress-quiet-copy strong, .rottay-progress-watch-copy strong, .rottay-progress-signal-copy strong, .rottay-progress-halo-copy strong",
+          "property": "font-size",
+          "value": "13px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:845",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-progress-quiet-copy strong, .rottay-progress-watch-copy strong"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1117,
+          "selector": ".rottay-transition-status-copy",
+          "property": "font-size",
+          "value": "11px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": "--ds-font-size-2xs",
+          "rungProvenPerVertical": "bithire = platform = evnto (21 rung names, identical tables, verified from the shipped bundles)",
+          "canonicalChannel": "--ds-font-size-2xs",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "NONE at scale=1 (exact rung); the delta is that the declaration STARTS obeying typography.scale",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1117",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-status-copy"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1164,
+          "selector": ".rottay-transition-signature-copy strong",
+          "property": "font-size",
+          "value": "12px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": "--ds-font-size-xs",
+          "rungProvenPerVertical": "bithire = platform = evnto (21 rung names, identical tables, verified from the shipped bundles)",
+          "canonicalChannel": "--ds-font-size-xs",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "NONE at scale=1 (exact rung); the delta is that the declaration STARTS obeying typography.scale",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1164",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-signature-copy strong"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1170,
+          "selector": ".rottay-transition-signature-copy span",
+          "property": "font-size",
+          "value": "13px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1170",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-signature-copy span"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1180,
+          "selector": ".rottay-transition-root[data-compact=\"true\"] .rottay-transition-signature-copy strong",
+          "property": "font-size",
+          "value": "11px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": "--ds-font-size-2xs",
+          "rungProvenPerVertical": "bithire = platform = evnto (21 rung names, identical tables, verified from the shipped bundles)",
+          "canonicalChannel": "--ds-font-size-2xs",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "NONE at scale=1 (exact rung); the delta is that the declaration STARTS obeying typography.scale",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1180",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-root[data-compact=\"true\"] .rottay-transition-signat"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1283,
+          "selector": ".rottay-transition-quiet-node-mark",
+          "property": "font-size",
+          "value": "30px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1283",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-quiet-node-mark"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1291,
+          "selector": ".rottay-transition-quiet-node-label, .rottay-transition-signal-node-label, .rottay-transition-stack-node-label",
+          "property": "font-size",
+          "value": "10px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1291",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-quiet-node-label, .rottay-transition-signal-node-la"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1477,
+          "selector": ".rottay-transition-watch-provider",
+          "property": "font-size",
+          "value": "10px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1477",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-watch-provider"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1500,
+          "selector": ".rottay-transition-watch-target-mark",
+          "property": "font-size",
+          "value": "34px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1500",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-watch-target-mark"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1522,
+          "selector": ".rottay-transition-watch-target-copy strong",
+          "property": "font-size",
+          "value": "13px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1522",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-watch-target-copy strong"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1526,
+          "selector": ".rottay-transition-watch-target-copy span",
+          "property": "font-size",
+          "value": "10px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1526",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-watch-target-copy span"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1568,
+          "selector": ".rottay-transition-signal-node-mark",
+          "property": "font-size",
+          "value": "28px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1568",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-signal-node-mark"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1645,
+          "selector": ".rottay-transition-signal-caption",
+          "property": "font-size",
+          "value": "10px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1645",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-signal-caption"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1702,
+          "selector": ".rottay-transition-root[data-compact=\"true\"] .rottay-transition-watch-target-copy strong",
+          "property": "font-size",
+          "value": "11px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": "--ds-font-size-2xs",
+          "rungProvenPerVertical": "bithire = platform = evnto (21 rung names, identical tables, verified from the shipped bundles)",
+          "canonicalChannel": "--ds-font-size-2xs",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "NONE at scale=1 (exact rung); the delta is that the declaration STARTS obeying typography.scale",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1702",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-root[data-compact=\"true\"] .rottay-transition-watch-"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1707,
+          "selector": ".rottay-transition-root[data-compact=\"true\"] .rottay-transition-watch-target-copy span, .rottay-transition-root[data-compact=\"true\"] .rottay-transitio",
+          "property": "font-size",
+          "value": "9px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1707",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-root[data-compact=\"true\"] .rottay-transition-watch-"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1768,
+          "selector": ".rottay-transition-root[data-compact=\"true\"] .rottay-transition-signal-caption",
+          "property": "font-size",
+          "value": "8px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1768",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-root[data-compact=\"true\"] .rottay-transition-signal"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 1933,
+          "selector": ".rottay-transition-stack-node-mark",
+          "property": "font-size",
+          "value": "30px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1933",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-stack-node-mark"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 2133,
+          "selector": ".rottay-transition-title",
+          "property": "font-size",
+          "value": "clamp(24px, 13vw, 52px)",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2133",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-title"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 2138,
+          "selector": ".rottay-transition-subtitle",
+          "property": "font-size",
+          "value": "13px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2138",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-subtitle"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "line": 2162,
+          "selector": ".rottay-transition-watermark",
+          "property": "font-size",
+          "value": "96px",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "proposedRung": "--ds-font-size-8xl",
+          "rungProvenPerVertical": "bithire = platform = evnto (21 rung names, identical tables, verified from the shipped bundles)",
+          "canonicalChannel": "--ds-font-size-8xl",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "NONE at scale=1 (exact rung); the delta is that the declaration STARTS obeying typography.scale",
+          "decision": "OWNER_FILE_DERIVATION",
+          "rationale": "Governance is a property of the FILE: 0/40 font-size declarations here are governed. Tokenizing only the rung-exact ones would leave the file partly scaled, and at typography.scale != 1 its own hierarchy would break unevenly — worse than uniformly ungoverned. This file needs full derivation (including minted rungs for its off-scale sizes) or an explicit decision to stay ungoverned, as ONE unit.",
+          "priorClass": "FILE_UNIT_REFUSAL",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2162",
+          "consumerEvidence": "engine-token-audit counts this site; selector .rottay-transition-watermark"
+        },
+        {
+          "file": "src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "line": 226,
+          "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card']",
+          "property": "font-size",
+          "value": "1.75rem",
+          "family": "typography",
+          "isDefect": true,
+          "owner": "src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "proposedRung": null,
+          "rungProvenPerVertical": null,
+          "canonicalChannel": "(no exact rung — see decision)",
+          "overrideRoute": "typography.scale (Standard) → --ds-type-scale",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "parity — --ds-type-scale is emitted on both the static and DB paths",
+          "visualDeltaIfChanged": "would change rendered size — that is why it is not a DERIVE",
+          "decision": "OWNER_SCALE_EXTENSION",
+          "rationale": "28px has NO exact rung. Deriving would APPROXIMATE the value to make it tokenizable, which is exactly the forbidden move — it changes rendered size to buy governance. Extending the scale is the owner/FASE-4 call.",
+          "priorClass": "OWNER_SCALE_EXTENSION",
+          "codexClass": "LEGACY_BLOCKER",
+          "blockedControl": "typography.scale (Standard) — the literal does not multiply by var(--ds-type-scale)",
+          "writerEvidence": "declared/authored at src/foundation/tokens/css/presentation/components/skin/stats-header.css:226",
+          "consumerEvidence": "engine-token-audit counts this site; selector .ds-stats-header[data-part='root'] [data-part='stat-card']"
+        },
+        {
+          "file": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "line": 88,
+          "selector": "function getContrastColor(hex: string): string",
+          "property": "return (ternary)",
+          "value": "#171717 / #ffffff",
+          "family": "color",
+          "isDefect": true,
+          "owner": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "proposedRung": null,
+          "canonicalChannel": "--ds-color-{tone}-ink (the tonal ink authority established this wave)",
+          "overrideRoute": "tenant palette → ink authority",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "n/a — computed in the component",
+          "visualDeltaIfChanged": "changes the contrast decision on tenant-preview swatches — SIGHTED",
+          "decision": "DERIVE",
+          "consolidatedFrom": [
+            "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:88 #171717",
+            "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:88 #ffffff"
+          ],
+          "rationale": "ONE decision, not two: both hexes are the two arms of a single ternary on one line (`luminance > 186 ? #171717 : #ffffff`). It is a hardcoded contrast decision duplicating the ink authority — class D because it really is a legibility floor, defect because a second authority now decides ink.",
+          "priorClass": "D_ACCESSIBILITY_FLOOR",
+          "codexClass": "ACCESSIBILITY_FLOOR",
+          "defectClass": "LEGACY_BLOCKER",
+          "algorithmicConstantPart": "the luminance threshold 186 is an ALGORITHMIC_CONSTANT and is KEPT — it is the concept of a contrast decision, not a duplicated value",
+          "legacyBlockerPart": "the two ink VALUES (#171717/#ffffff) duplicate --ds-color-{tone}-ink, so a tenant ink authority cannot reach this decision — that is the part to derive",
+          "blockedControl": "tenant palette -> --ds-color-{tone}-ink",
+          "writerEvidence": "declared/authored at src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:88",
+          "consumerEvidence": "engine-token-audit counts this site; selector function getContrastColor(hex: string): string"
+        },
+        {
+          "file": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "line": 70,
+          "selector": "return [",
+          "property": "(unknown)",
+          "value": "#ffffff",
+          "family": "color",
+          "isDefect": false,
+          "owner": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "proposedRung": null,
+          "canonicalChannel": "n/a",
+          "overrideRoute": "none — not tenant identity",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "n/a",
+          "visualDeltaIfChanged": "none",
+          "decision": "KEEP",
+          "rationale": "Pure white/black endpoints of a MIX over the tenant's own base. Achromatic anchors are not identity, and the ramp derives FROM the tenant. Under the Codex vocabulary this is ALGORITHMIC_CONSTANT: a mix endpoint is a constant OF THE ALGORITHM, not a paint decision.",
+          "priorClass": "E_IMMUTABLE_GEOMETRY",
+          "codexClass": "ALGORITHMIC_CONSTANT",
+          "writerEvidence": "declared/authored at src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:70",
+          "consumerEvidence": "engine-token-audit counts this site; selector return ["
+        },
+        {
+          "file": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "line": 71,
+          "selector": ",",
+          "property": "(unknown)",
+          "value": "#ffffff",
+          "family": "color",
+          "isDefect": false,
+          "owner": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "proposedRung": null,
+          "canonicalChannel": "n/a",
+          "overrideRoute": "none — not tenant identity",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "n/a",
+          "visualDeltaIfChanged": "none",
+          "decision": "KEEP",
+          "rationale": "Pure white/black endpoints of a MIX over the tenant's own base. Achromatic anchors are not identity, and the ramp derives FROM the tenant. Under the Codex vocabulary this is ALGORITHMIC_CONSTANT: a mix endpoint is a constant OF THE ALGORITHM, not a paint decision.",
+          "priorClass": "E_IMMUTABLE_GEOMETRY",
+          "codexClass": "ALGORITHMIC_CONSTANT",
+          "writerEvidence": "declared/authored at src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:71",
+          "consumerEvidence": "engine-token-audit counts this site; selector ,"
+        },
+        {
+          "file": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "line": 72,
+          "selector": ",",
+          "property": "(unknown)",
+          "value": "#ffffff",
+          "family": "color",
+          "isDefect": false,
+          "owner": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "proposedRung": null,
+          "canonicalChannel": "n/a",
+          "overrideRoute": "none — not tenant identity",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "n/a",
+          "visualDeltaIfChanged": "none",
+          "decision": "KEEP",
+          "rationale": "Pure white/black endpoints of a MIX over the tenant's own base. Achromatic anchors are not identity, and the ramp derives FROM the tenant. Under the Codex vocabulary this is ALGORITHMIC_CONSTANT: a mix endpoint is a constant OF THE ALGORITHM, not a paint decision.",
+          "priorClass": "E_IMMUTABLE_GEOMETRY",
+          "codexClass": "ALGORITHMIC_CONSTANT",
+          "writerEvidence": "declared/authored at src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:72",
+          "consumerEvidence": "engine-token-audit counts this site; selector ,"
+        },
+        {
+          "file": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "line": 73,
+          "selector": ",",
+          "property": "(unknown)",
+          "value": "#ffffff",
+          "family": "color",
+          "isDefect": false,
+          "owner": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "proposedRung": null,
+          "canonicalChannel": "n/a",
+          "overrideRoute": "none — not tenant identity",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "n/a",
+          "visualDeltaIfChanged": "none",
+          "decision": "KEEP",
+          "rationale": "Pure white/black endpoints of a MIX over the tenant's own base. Achromatic anchors are not identity, and the ramp derives FROM the tenant. Under the Codex vocabulary this is ALGORITHMIC_CONSTANT: a mix endpoint is a constant OF THE ALGORITHM, not a paint decision.",
+          "priorClass": "E_IMMUTABLE_GEOMETRY",
+          "codexClass": "ALGORITHMIC_CONSTANT",
+          "writerEvidence": "declared/authored at src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:73",
+          "consumerEvidence": "engine-token-audit counts this site; selector ,"
+        },
+        {
+          "file": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "line": 74,
+          "selector": ",",
+          "property": "(unknown)",
+          "value": "#ffffff",
+          "family": "color",
+          "isDefect": false,
+          "owner": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "proposedRung": null,
+          "canonicalChannel": "n/a",
+          "overrideRoute": "none — not tenant identity",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "n/a",
+          "visualDeltaIfChanged": "none",
+          "decision": "KEEP",
+          "rationale": "Pure white/black endpoints of a MIX over the tenant's own base. Achromatic anchors are not identity, and the ramp derives FROM the tenant. Under the Codex vocabulary this is ALGORITHMIC_CONSTANT: a mix endpoint is a constant OF THE ALGORITHM, not a paint decision.",
+          "priorClass": "E_IMMUTABLE_GEOMETRY",
+          "codexClass": "ALGORITHMIC_CONSTANT",
+          "writerEvidence": "declared/authored at src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:74",
+          "consumerEvidence": "engine-token-audit counts this site; selector ,"
+        },
+        {
+          "file": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "line": 76,
+          "selector": ",",
+          "property": "(unknown)",
+          "value": "#000000",
+          "family": "color",
+          "isDefect": false,
+          "owner": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "proposedRung": null,
+          "canonicalChannel": "n/a",
+          "overrideRoute": "none — not tenant identity",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "n/a",
+          "visualDeltaIfChanged": "none",
+          "decision": "KEEP",
+          "rationale": "Pure white/black endpoints of a MIX over the tenant's own base. Achromatic anchors are not identity, and the ramp derives FROM the tenant. Under the Codex vocabulary this is ALGORITHMIC_CONSTANT: a mix endpoint is a constant OF THE ALGORITHM, not a paint decision.",
+          "priorClass": "E_IMMUTABLE_GEOMETRY",
+          "codexClass": "ALGORITHMIC_CONSTANT",
+          "writerEvidence": "declared/authored at src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:76",
+          "consumerEvidence": "engine-token-audit counts this site; selector ,"
+        },
+        {
+          "file": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "line": 77,
+          "selector": ",",
+          "property": "(unknown)",
+          "value": "#000000",
+          "family": "color",
+          "isDefect": false,
+          "owner": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "proposedRung": null,
+          "canonicalChannel": "n/a",
+          "overrideRoute": "none — not tenant identity",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "n/a",
+          "visualDeltaIfChanged": "none",
+          "decision": "KEEP",
+          "rationale": "Pure white/black endpoints of a MIX over the tenant's own base. Achromatic anchors are not identity, and the ramp derives FROM the tenant. Under the Codex vocabulary this is ALGORITHMIC_CONSTANT: a mix endpoint is a constant OF THE ALGORITHM, not a paint decision.",
+          "priorClass": "E_IMMUTABLE_GEOMETRY",
+          "codexClass": "ALGORITHMIC_CONSTANT",
+          "writerEvidence": "declared/authored at src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:77",
+          "consumerEvidence": "engine-token-audit counts this site; selector ,"
+        },
+        {
+          "file": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "line": 78,
+          "selector": ",",
+          "property": "(unknown)",
+          "value": "#000000",
+          "family": "color",
+          "isDefect": false,
+          "owner": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "proposedRung": null,
+          "canonicalChannel": "n/a",
+          "overrideRoute": "none — not tenant identity",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "n/a",
+          "visualDeltaIfChanged": "none",
+          "decision": "KEEP",
+          "rationale": "Pure white/black endpoints of a MIX over the tenant's own base. Achromatic anchors are not identity, and the ramp derives FROM the tenant. Under the Codex vocabulary this is ALGORITHMIC_CONSTANT: a mix endpoint is a constant OF THE ALGORITHM, not a paint decision.",
+          "priorClass": "E_IMMUTABLE_GEOMETRY",
+          "codexClass": "ALGORITHMIC_CONSTANT",
+          "writerEvidence": "declared/authored at src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:78",
+          "consumerEvidence": "engine-token-audit counts this site; selector ,"
+        },
+        {
+          "file": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "line": 79,
+          "selector": ",",
+          "property": "(unknown)",
+          "value": "#000000",
+          "family": "color",
+          "isDefect": false,
+          "owner": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "proposedRung": null,
+          "canonicalChannel": "n/a",
+          "overrideRoute": "none — not tenant identity",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "n/a",
+          "visualDeltaIfChanged": "none",
+          "decision": "KEEP",
+          "rationale": "Pure white/black endpoints of a MIX over the tenant's own base. Achromatic anchors are not identity, and the ramp derives FROM the tenant. Under the Codex vocabulary this is ALGORITHMIC_CONSTANT: a mix endpoint is a constant OF THE ALGORITHM, not a paint decision.",
+          "priorClass": "E_IMMUTABLE_GEOMETRY",
+          "codexClass": "ALGORITHMIC_CONSTANT",
+          "writerEvidence": "declared/authored at src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:79",
+          "consumerEvidence": "engine-token-audit counts this site; selector ,"
+        },
+        {
+          "file": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "line": 86,
+          "selector": "function getContrastColor(hex: string): string",
+          "property": "(unknown)",
+          "value": "#000000",
+          "family": "color",
+          "isDefect": false,
+          "owner": "src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+          "proposedRung": null,
+          "canonicalChannel": "n/a",
+          "overrideRoute": "none — not tenant identity",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "n/a",
+          "visualDeltaIfChanged": "none",
+          "decision": "KEEP",
+          "rationale": "Reached only when parsing the caller's color fails — emergency fallback by construction.",
+          "priorClass": "C_EMERGENCY_FALLBACK",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "precedenceLaw": "emergency-block FOUNDATION_DEFAULT: reached only when every resolution above it fails.",
+          "writerEvidence": "declared/authored at src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:86",
+          "consumerEvidence": "engine-token-audit counts this site; selector function getContrastColor(hex: string): string"
+        },
+        {
+          "file": "src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx",
+          "line": 366,
+          "selector": "hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft) && ( <span data-part=\"hex-error\" role=\"alert\">",
+          "property": "(unknown)",
+          "value": "#1677ff",
+          "family": "color",
+          "isDefect": false,
+          "owner": "src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx",
+          "proposedRung": null,
+          "canonicalChannel": "n/a",
+          "overrideRoute": "none — not tenant identity",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "n/a",
+          "visualDeltaIfChanged": "none",
+          "decision": "KEEP",
+          "rationale": "A hex inside a translated help string shown to the user as an example. Content, never paint.",
+          "priorClass": "CONTENT_NOT_PAINT",
+          "codexClass": "OUT_OF_TAXONOMY_CONTENT",
+          "writerEvidence": "declared/authored at src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:366",
+          "consumerEvidence": "engine-token-audit counts this site; selector hexDraft !== null && !HEX_DRAFT_RE.test(hexDraft) && ( <span data-part"
+        },
+        {
+          "file": "src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx",
+          "line": 85,
+          "selector": "toHexString: () => hex, toRgbString: () =>",
+          "property": "(unknown)",
+          "value": "return `rgb(${r}, ${g}, ${b})`;",
+          "family": "color",
+          "isDefect": false,
+          "owner": "src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx",
+          "proposedRung": null,
+          "canonicalChannel": "n/a",
+          "overrideRoute": "n/a",
+          "reachesBitHire": true,
+          "reachesTMM": true,
+          "staticDbParity": "n/a",
+          "visualDeltaIfChanged": "none",
+          "decision": "KEEP",
+          "rationale": "Not a colour literal: a CONSTRUCTOR serialising the user's own picked channels. The counter matches the token `rgb(` textually, so it cannot reach 0 while ColorPicker exists.",
+          "priorClass": "CONTENT_NOT_PAINT",
+          "codexClass": "OUT_OF_TAXONOMY_CONTENT",
+          "writerEvidence": "declared/authored at src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:85",
+          "consumerEvidence": "engine-token-audit counts this site; selector toHexString: () => hex, toRgbString: () =>"
+        }
+      ]
+    },
+    "slice2": {
+      "hardRule": "zero vertical values disguised as neutral-global: every row is TENANT_DERIVED with its origin vertical named",
+      "distribution": {
+        "origin": {
+          "rottay": 37,
+          "evnto+rottay": 2,
+          "evnto": 2,
+          "bithire": 1
+        },
+        "decision": {
+          "MOVE_TO_TENANT": 42
+        }
+      },
+      "rows": [
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":220 --ds-color-text-on-primary (root)"
+          ],
+          "value": "#0c0c0e",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "50 @ platform/index.ts",
+              "darkBackgroundColor @ platform/index.ts",
+              "onPrimaryColor @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #0c0c0e\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "154 productive read(s) across 1 channel(s): --ds-color-text-on-primary=154",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 50 @ platform/index.ts, darkBackgroundColor @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. ",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":201 --ds-color-bg-subtle (root)"
+          ],
+          "value": "#0d0d10",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "bg @ platform/index.ts",
+              "footerBg @ platform/index.ts",
+              "siderBg @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #0d0d10\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "10 productive read(s) across 1 channel(s): --ds-color-bg-subtle=10",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: bg @ platform/index.ts, footerBg @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. ",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":194 --ds-color-bg-secondary (root)",
+            ":205 --ds-color-bg-input (root)"
+          ],
+          "value": "#0f0f12",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "backgroundSecondaryColor @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #0f0f12\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "335 productive read(s) across 2 channel(s): --ds-color-bg-secondary=315, --ds-color-bg-input=20",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: backgroundSecondaryColor @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. ",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":195 --ds-color-bg-tertiary (root)"
+          ],
+          "value": "#141417",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "backgroundTertiaryColor @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #141417\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "68 productive read(s) across 1 channel(s): --ds-color-bg-tertiary=68",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: backgroundTertiaryColor @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. ",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":76 --ds-color-success-900 (root)"
+          ],
+          "value": "#14532d",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "900 @ platform/index.ts",
+              "800 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #14532d\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "2 productive read(s) across 1 channel(s): --ds-color-success-900=2",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 900 @ platform/index.ts, 800 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":74 --ds-color-success-700 (root)",
+            ":1174 --ds-tag-success-color (root)"
+          ],
+          "value": "#15803d",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "evnto",
+            "rottay"
+          ],
+          "originPaths": {
+            "evnto": [
+              "successColor @ evnto/index.ts"
+            ],
+            "rottay": [
+              "700 @ platform/index.ts",
+              "600 @ platform/index.ts",
+              "buttonSuccess @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #15803d\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "22 productive read(s) across 2 channel(s): --ds-color-success-700=19, --ds-tag-success-color=3",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by evnto + rottay (evnto: successColor @ evnto/index.ts | rottay: 700 @ platform/index.ts, 600 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":75 --ds-color-success-800 (root)",
+            ":1207 --ds-alert-success-color (root)"
+          ],
+          "value": "#166534",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "800 @ platform/index.ts",
+              "700 @ platform/index.ts",
+              "buttonSuccess @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #166534\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "8 productive read(s) across 2 channel(s): --ds-color-success-800=5, --ds-alert-success-color=3",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 800 @ platform/index.ts, 700 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":73 --ds-color-success-600 (root)"
+          ],
+          "value": "#16a34a",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "600 @ platform/index.ts",
+              "successColor @ platform/index.ts",
+              "500 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #16a34a\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "15 productive read(s) across 1 channel(s): --ds-color-success-600=15",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 600 @ platform/index.ts, successColor @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":202 --ds-color-bg-hover (root)",
+            ":204 --ds-color-bg-elevated (root)"
+          ],
+          "value": "#18181c",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "backgroundElevatedColor @ platform/index.ts",
+              "border @ platform/index.ts",
+              "siderBorder @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #18181c\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "574 productive read(s) across 2 channel(s): --ds-color-bg-hover=22, --ds-color-bg-elevated=552",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: backgroundElevatedColor @ platform/index.ts, border @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. ",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":116 --ds-color-info-700 (root)"
+          ],
+          "value": "#1d4ed8",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "700 @ platform/index.ts",
+              "bgHover @ platform/index.ts",
+              "buttonInfo @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #1d4ed8\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "10 productive read(s) across 1 channel(s): --ds-color-info-700=10",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 700 @ platform/index.ts, bgHover @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":118 --ds-color-info-900 (root)"
+          ],
+          "value": "#1e3a8a",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "900 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #1e3a8a\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "2 productive read(s) across 1 channel(s): --ds-color-info-900=2",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 900 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":117 --ds-color-info-800 (root)",
+            ":1202 --ds-alert-info-color (root)"
+          ],
+          "value": "#1e40af",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "800 @ platform/index.ts",
+              "bgActive @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #1e40af\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "8 productive read(s) across 2 channel(s): --ds-color-info-800=5, --ds-alert-info-color=3",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 800 @ platform/index.ts, bgActive @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":72 --ds-color-success-500 (root)",
+            ":1112 --ds-avatar-status-online (root)",
+            ":1208 --ds-alert-success-icon (root)",
+            ":1247 --ds-tooltip-success-bg (root)",
+            ":1397 --ds-select-success-border (root)",
+            ":1506 --ds-textarea-success-border (root)",
+            ":1580 --ds-form-success-color (root)",
+            ":1721 --ds-progress-fill-success (root)",
+            ":1895 --ds-result-icon-success (root)"
+          ],
+          "value": "#22c55e",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "500 @ platform/index.ts",
+              "400 @ platform/index.ts",
+              "successColor @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #22c55e\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "76 productive read(s) across 9 channel(s): --ds-color-success-500=60, --ds-avatar-status-online=2, --ds-alert-success-icon=2, --ds-tooltip-success-bg=4, --ds-select-success-border=2, --ds-textarea-success-border=2, --ds-form-success-color=2, --ds-progress-fill-success=2, --ds-result-icon-success=0",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 500 @ platform/index.ts, 400 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":115 --ds-color-info-600 (root)"
+          ],
+          "value": "#2563eb",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "600 @ platform/index.ts",
+              "infoColor @ platform/index.ts",
+              "bg @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #2563eb\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "4 productive read(s) across 1 channel(s): --ds-color-info-600=4",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 600 @ platform/index.ts, infoColor @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":114 --ds-color-info-500 (root)",
+            ":1203 --ds-alert-info-icon (root)"
+          ],
+          "value": "#3b82f6",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "500 @ platform/index.ts",
+              "infoColor @ platform/index.ts",
+              "buttonInfo @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #3b82f6\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "13 productive read(s) across 2 channel(s): --ds-color-info-500=11, --ds-alert-info-icon=2",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 500 @ platform/index.ts, infoColor @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":2079 --ds-color-neutral-400 (dark)"
+          ],
+          "value": "#475569",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "evnto"
+          ],
+          "originPaths": {
+            "evnto": [
+              "infoColor @ evnto/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #475569\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "52 productive read(s) across 1 channel(s): --ds-color-neutral-400=52",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by evnto (evnto: infoColor @ evnto/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. ",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":71 --ds-color-success-400 (root)"
+          ],
+          "value": "#4ade80",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "400 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #4ade80\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "2 productive read(s) across 1 channel(s): --ds-color-success-400=2",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 400 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":113 --ds-color-info-400 (root)"
+          ],
+          "value": "#60a5fa",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "400 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #60a5fa\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "4 productive read(s) across 1 channel(s): --ds-color-info-400=4",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 400 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":1524 --ds-textarea-count-color (root)"
+          ],
+          "value": "#6b6b72",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "400 @ platform/index.ts",
+              "textMuted @ platform/index.ts",
+              "groupColor @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #6b6b72\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "2 productive read(s) across 1 channel(s): --ds-textarea-count-color=2",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 400 @ platform/index.ts, textMuted @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. ",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":90 --ds-color-warning-900 (root)"
+          ],
+          "value": "#78350f",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "900 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #78350f\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "6 productive read(s) across 1 channel(s): --ds-color-warning-900=6",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 900 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":46 --ds-color-secondary-700 (root)"
+          ],
+          "value": "#7a6a5a",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "evnto"
+          ],
+          "originPaths": {
+            "evnto": [
+              "secondaryColor @ evnto/index.ts",
+              "accentColor @ evnto/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #7a6a5a\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "7 productive read(s) across 1 channel(s): --ds-color-secondary-700=7",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by evnto (evnto: secondaryColor @ evnto/index.ts, accentColor @ evnto/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. ",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":104 --ds-color-error-900 (root)"
+          ],
+          "value": "#7f1d1d",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "900 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #7f1d1d\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "2 productive read(s) across 1 channel(s): --ds-color-error-900=2",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 900 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":70 --ds-color-success-300 (root)"
+          ],
+          "value": "#86efac",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "300 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #86efac\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "1 productive read(s) across 1 channel(s): --ds-color-success-300=1",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 300 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":89 --ds-color-warning-800 (root)",
+            ":1212 --ds-alert-warning-color (root)"
+          ],
+          "value": "#92400e",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "800 @ platform/index.ts",
+              "buttonWarning @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #92400e\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "8 productive read(s) across 2 channel(s): --ds-color-warning-800=5, --ds-alert-warning-color=3",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 800 @ platform/index.ts, buttonWarning @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":112 --ds-color-info-300 (root)"
+          ],
+          "value": "#93c5fd",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "300 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #93c5fd\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "1 productive read(s) across 1 channel(s): --ds-color-info-300=1",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 300 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":103 --ds-color-error-800 (root)",
+            ":1217 --ds-alert-error-color (root)"
+          ],
+          "value": "#991b1b",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "800 @ platform/index.ts",
+              "bgActive @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #991b1b\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "8 productive read(s) across 2 channel(s): --ds-color-error-800=5, --ds-alert-error-color=3",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 800 @ platform/index.ts, bgActive @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":213 --ds-color-text-secondary (root)"
+          ],
+          "value": "#a0a0a5",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "500 @ platform/index.ts",
+              "secondaryColor @ platform/index.ts",
+              "accentColor @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #a0a0a5\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "922 productive read(s) across 1 channel(s): --ds-color-text-secondary=922",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 500 @ platform/index.ts, secondaryColor @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. ",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":88 --ds-color-warning-700 (root)",
+            ":1178 --ds-tag-warning-color (root)"
+          ],
+          "value": "#b45309",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "700 @ platform/index.ts",
+              "buttonWarning @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #b45309\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "22 productive read(s) across 2 channel(s): --ds-color-warning-700=19, --ds-tag-warning-color=3",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 700 @ platform/index.ts, buttonWarning @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":102 --ds-color-error-700 (root)",
+            ":1182 --ds-tag-error-color (root)"
+          ],
+          "value": "#b91c1c",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "evnto",
+            "rottay"
+          ],
+          "originPaths": {
+            "evnto": [
+              "errorColor @ evnto/index.ts"
+            ],
+            "rottay": [
+              "700 @ platform/index.ts",
+              "bgHover @ platform/index.ts",
+              "buttonError @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #b91c1c\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "23 productive read(s) across 2 channel(s): --ds-color-error-700=20, --ds-tag-error-color=3",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by evnto + rottay (evnto: errorColor @ evnto/index.ts | rottay: 700 @ platform/index.ts, bgHover @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":69 --ds-color-success-200 (root)",
+            ":1175 --ds-tag-success-border (root)",
+            ":1206 --ds-alert-success-border (root)"
+          ],
+          "value": "#bbf7d0",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "200 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #bbf7d0\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "25 productive read(s) across 3 channel(s): --ds-color-success-200=19, --ds-tag-success-border=3, --ds-alert-success-border=3",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 200 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":111 --ds-color-info-200 (root)",
+            ":1201 --ds-alert-info-border (root)"
+          ],
+          "value": "#bfdbfe",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "200 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #bfdbfe\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "15 productive read(s) across 2 channel(s): --ds-color-info-200=12, --ds-alert-info-border=3",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 200 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":87 --ds-color-warning-600 (root)"
+          ],
+          "value": "#d97706",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "600 @ platform/index.ts",
+              "warningColor @ platform/index.ts",
+              "buttonWarning @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #d97706\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "6 productive read(s) across 1 channel(s): --ds-color-warning-600=6",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 600 @ platform/index.ts, warningColor @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":101 --ds-color-error-600 (root)"
+          ],
+          "value": "#dc2626",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "600 @ platform/index.ts",
+              "errorColor @ platform/index.ts",
+              "errorBorder @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #dc2626\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "19 productive read(s) across 1 channel(s): --ds-color-error-600=19",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 600 @ platform/index.ts, errorColor @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":100 --ds-color-error-500 (root)",
+            ":1115 --ds-avatar-status-busy (root)",
+            ":1218 --ds-alert-error-icon (root)",
+            ":1253 --ds-tooltip-error-bg (root)",
+            ":1282 --ds-checkbox-error-color (root)",
+            ":1309 --ds-radio-error-color (root)",
+            ":1395 --ds-select-error-border (root)",
+            ":1429 --ds-datepicker-error-border (root)",
+            ":1462 --ds-inputnumber-error-border (root)",
+            ":1504 --ds-textarea-error-border (root)",
+            ":1542 --ds-timepicker-error-border (root)",
+            ":1573 --ds-form-required-color (root)",
+            ":1578 --ds-form-error-color (root)",
+            ":1631 --ds-autocomplete-error-border (root)",
+            ":1667 --ds-toggle-error-color (root)",
+            ":1723 --ds-progress-fill-error (root)"
+          ],
+          "value": "#ef4444",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "500 @ platform/index.ts",
+              "errorColor @ platform/index.ts",
+              "buttonError @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #ef4444\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "109 productive read(s) across 16 channel(s): --ds-color-error-500=75, --ds-avatar-status-busy=2, --ds-alert-error-icon=2, --ds-tooltip-error-bg=4, --ds-checkbox-error-color=1, --ds-radio-error-color=1, --ds-select-error-border=2, --ds-datepicker-error-border=2, --ds-inputnumber-error-border=1, --ds-textarea-error-border=2, --ds-timepicker-error-border=1, --ds-form-required-color=3, --ds-form-error-color=6, --ds-autocomplete-error-border=3, --ds-toggle-error-color=2, --ds-progress-fill-error=2",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 500 @ platform/index.ts, errorColor @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":86 --ds-color-warning-500 (root)",
+            ":1114 --ds-avatar-status-away (root)",
+            ":1213 --ds-alert-warning-icon (root)",
+            ":1250 --ds-tooltip-warning-bg (root)",
+            ":1396 --ds-select-warning-border (root)",
+            ":1430 --ds-datepicker-warning-border (root)",
+            ":1463 --ds-inputnumber-warning-border (root)",
+            ":1505 --ds-textarea-warning-border (root)",
+            ":1543 --ds-timepicker-warning-border (root)",
+            ":1579 --ds-form-warning-color (root)",
+            ":1632 --ds-autocomplete-warning-border (root)",
+            ":1722 --ds-progress-fill-warning (root)",
+            ":1896 --ds-result-icon-warning (root)"
+          ],
+          "value": "#f59e0b",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "500 @ platform/index.ts",
+              "warningColor @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #f59e0b\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "81 productive read(s) across 13 channel(s): --ds-color-warning-500=59, --ds-avatar-status-away=2, --ds-alert-warning-icon=2, --ds-tooltip-warning-bg=4, --ds-select-warning-border=2, --ds-datepicker-warning-border=2, --ds-inputnumber-warning-border=1, --ds-textarea-warning-border=2, --ds-timepicker-warning-border=1, --ds-form-warning-color=2, --ds-autocomplete-warning-border=3, --ds-progress-fill-warning=1, --ds-result-icon-warning=0",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 500 @ platform/index.ts, warningColor @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":99 --ds-color-error-400 (root)"
+          ],
+          "value": "#f87171",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "400 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #f87171\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "7 productive read(s) across 1 channel(s): --ds-color-error-400=7",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 400 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":2084 --ds-color-neutral-900 (dark)"
+          ],
+          "value": "#f8fafc",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "bithire"
+          ],
+          "originPaths": {
+            "bithire": [
+              "bg @ bithire/index.ts",
+              "readOnly @ bithire/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #f8fafc\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "92 productive read(s) across 1 channel(s): --ds-color-neutral-900=92",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by bithire (bithire: bg @ bithire/index.ts, readOnly @ bithire/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. ",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":85 --ds-color-warning-400 (root)",
+            ":1923 --ds-rate-color-active (root)"
+          ],
+          "value": "#fbbf24",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "400 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #fbbf24\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "5 productive read(s) across 2 channel(s): --ds-color-warning-400=4, --ds-rate-color-active=1",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 400 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":98 --ds-color-error-300 (root)"
+          ],
+          "value": "#fca5a5",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "300 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #fca5a5\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "8 productive read(s) across 1 channel(s): --ds-color-error-300=8",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 300 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":84 --ds-color-warning-300 (root)",
+            ":1924 --ds-rate-color-hover (root)"
+          ],
+          "value": "#fcd34d",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "300 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #fcd34d\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "2 productive read(s) across 2 channel(s): --ds-color-warning-300=1, --ds-rate-color-hover=1",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 300 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":83 --ds-color-warning-200 (root)",
+            ":1179 --ds-tag-warning-border (root)",
+            ":1211 --ds-alert-warning-border (root)"
+          ],
+          "value": "#fde68a",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "200 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #fde68a\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "20 productive read(s) across 3 channel(s): --ds-color-warning-200=14, --ds-tag-warning-border=3, --ds-alert-warning-border=3",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 200 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        },
+        {
+          "file": "src/foundation/tokens/css/foundation/themes/default.css",
+          "sites": [
+            ":97 --ds-color-error-200 (root)",
+            ":1183 --ds-tag-error-border (root)",
+            ":1216 --ds-alert-error-border (root)"
+          ],
+          "value": "#fecaca",
+          "codexClass": "TENANT_DERIVED",
+          "originVertical": [
+            "rottay"
+          ],
+          "originPaths": {
+            "rottay": [
+              "200 @ platform/index.ts"
+            ]
+          },
+          "writerEvidence": "pinned in the decrease-only inventory (modern-tenant-value-free.test.ts) as \"default.css :: #fecaca\"; the writer is default.css itself, declaring it as the system-wide default",
+          "consumerEvidence": "22 productive read(s) across 3 channel(s): --ds-color-error-200=16, --ds-tag-error-border=3, --ds-alert-error-border=3",
+          "decision": "MOVE_TO_TENANT",
+          "rationale": "Authored by rottay (rottay: 200 @ platform/index.ts). Declaring it in default.css makes ONE vertical's identity everyone's ground: a tenant that moves this in its own theme still finds this value underneath. Shared provenance across themes does not make it shared property — a semantic ramp step is still authored identity.",
+          "codexClassNotFoundationDefault": "Explicitly NOT FOUNDATION_DEFAULT: the hard rule forbids a vertical value wearing a neutral-global costume, and the inventory is the evidence that this one is a vertical value."
+        }
+      ]
+    },
+    "slice3": {
+      "question": "Is every channel in the emergency block necessary for the total-failure state, or is there surplus?",
+      "answer": "VERIFIED MINIMAL — 0 surplus of 18 channels. Every channel has productive readers (range 4–1698), so the block's own \"minimal subset\" claim is now evidence, not assertion.",
+      "surplusChannels": [],
+      "flagsRaised": [
+        {
+          "channel": "--ds-color-secondary",
+          "kind": "TENANT_VALUE_IN_FOUNDATION_DEFAULT"
+        },
+        {
+          "channel": "--ds-color-secondary-500",
+          "kind": "TENANT_VALUE_IN_FOUNDATION_DEFAULT"
+        },
+        {
+          "channel": "--ds-color-bg-primary",
+          "kind": "TENANT_VALUE_IN_FOUNDATION_DEFAULT"
+        },
+        {
+          "channel": "--ds-color-text-secondary",
+          "kind": "TENANT_VALUE_IN_FOUNDATION_DEFAULT"
+        },
+        {
+          "channel": "--ds-text-primary",
+          "kind": "DECLARES_AN_ADJUDICATED_LEGACY_ALIAS"
+        },
+        {
+          "channel": "--ds-text-secondary",
+          "kind": "DECLARES_AN_ADJUDICATED_LEGACY_ALIAS"
+        }
+      ],
+      "rows": [
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 454,
+          "channel": "--ds-color-primary",
+          "value": "#FFFFFF",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:454 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "1698 productive read(s) of --ds-color-primary across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": []
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 455,
+          "channel": "--ds-color-primary-500",
+          "value": "#FFFFFF",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:455 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "275 productive read(s) of --ds-color-primary-500 across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": []
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 456,
+          "channel": "--ds-color-secondary",
+          "value": "#A0A0A5",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:456 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "59 productive read(s) of --ds-color-secondary across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": [
+            {
+              "kind": "TENANT_VALUE_IN_FOUNDATION_DEFAULT",
+              "note": "The CHANNEL is a legitimate FOUNDATION_DEFAULT by precedence, but its VALUE #A0A0A5 is in the rottay tenant-identity inventory (slice 2). Same disguise pattern as default.css, one layer lower: the last-resort paint is a specific vertical's. Naming it, not executing — a last-resort block genuinely needs SOME literal."
+            }
+          ]
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 457,
+          "channel": "--ds-color-secondary-500",
+          "value": "#A0A0A5",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:457 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "25 productive read(s) of --ds-color-secondary-500 across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": [
+            {
+              "kind": "TENANT_VALUE_IN_FOUNDATION_DEFAULT",
+              "note": "The CHANNEL is a legitimate FOUNDATION_DEFAULT by precedence, but its VALUE #A0A0A5 is in the rottay tenant-identity inventory (slice 2). Same disguise pattern as default.css, one layer lower: the last-resort paint is a specific vertical's. Naming it, not executing — a last-resort block genuinely needs SOME literal."
+            }
+          ]
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 458,
+          "channel": "--ds-color-bg-primary",
+          "value": "#0C0C0E",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:458 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "436 productive read(s) of --ds-color-bg-primary across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": [
+            {
+              "kind": "TENANT_VALUE_IN_FOUNDATION_DEFAULT",
+              "note": "The CHANNEL is a legitimate FOUNDATION_DEFAULT by precedence, but its VALUE #0C0C0E is in the rottay tenant-identity inventory (slice 2). Same disguise pattern as default.css, one layer lower: the last-resort paint is a specific vertical's. Naming it, not executing — a last-resort block genuinely needs SOME literal."
+            }
+          ]
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 459,
+          "channel": "--ds-color-bg-secondary",
+          "value": "#131316",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:459 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "315 productive read(s) of --ds-color-bg-secondary across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": []
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 460,
+          "channel": "--ds-color-border",
+          "value": "#2A2A2F",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:460 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "704 productive read(s) of --ds-color-border across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": []
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 461,
+          "channel": "--ds-color-text-primary",
+          "value": "#ECECEC",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:461 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "977 productive read(s) of --ds-color-text-primary across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": []
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 462,
+          "channel": "--ds-color-text-secondary",
+          "value": "#A0A0A5",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:462 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "922 productive read(s) of --ds-color-text-secondary across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": [
+            {
+              "kind": "TENANT_VALUE_IN_FOUNDATION_DEFAULT",
+              "note": "The CHANNEL is a legitimate FOUNDATION_DEFAULT by precedence, but its VALUE #A0A0A5 is in the rottay tenant-identity inventory (slice 2). Same disguise pattern as default.css, one layer lower: the last-resort paint is a specific vertical's. Naming it, not executing — a last-resort block genuinely needs SOME literal."
+            }
+          ]
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 463,
+          "channel": "--ds-text-primary",
+          "value": "var(--ds-color-text-primary)",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:463 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "12 productive read(s) of --ds-text-primary across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": [
+            {
+              "kind": "DECLARES_AN_ADJUDICATED_LEGACY_ALIAS",
+              "note": "--ds-text-primary belongs to the --ds-text-* → --ds-type-* D1a retirement batch. When D1a lands this line goes dead unless migrated with it — a coupling between the emergency block and the alias drain that nothing currently records."
+            }
+          ]
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 464,
+          "channel": "--ds-text-secondary",
+          "value": "var(--ds-color-text-secondary)",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:464 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "4 productive read(s) of --ds-text-secondary across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": [
+            {
+              "kind": "DECLARES_AN_ADJUDICATED_LEGACY_ALIAS",
+              "note": "--ds-text-secondary belongs to the --ds-text-* → --ds-type-* D1a retirement batch. When D1a lands this line goes dead unless migrated with it — a coupling between the emergency block and the alias drain that nothing currently records."
+            }
+          ]
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 465,
+          "channel": "--ds-spacing-xs",
+          "value": "4px",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:465 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "14 productive read(s) of --ds-spacing-xs across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": []
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 466,
+          "channel": "--ds-spacing-sm",
+          "value": "8px",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:466 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "28 productive read(s) of --ds-spacing-sm across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": []
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 467,
+          "channel": "--ds-spacing-md",
+          "value": "16px",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:467 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "28 productive read(s) of --ds-spacing-md across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": []
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 468,
+          "channel": "--ds-spacing-lg",
+          "value": "24px",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:468 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "16 productive read(s) of --ds-spacing-lg across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": []
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 469,
+          "channel": "--ds-radius-sm",
+          "value": "4px",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:469 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "206 productive read(s) of --ds-radius-sm across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": []
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 470,
+          "channel": "--ds-radius-md",
+          "value": "8px",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:470 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "378 productive read(s) of --ds-radius-md across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": []
+        },
+        {
+          "file": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx",
+          "line": 471,
+          "channel": "--ds-font-family-base",
+          "value": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+          "codexClass": "FOUNDATION_DEFAULT",
+          "subLayer": "emergency block (absolute last resort)",
+          "precedenceLaw": "requested tenant CSS → vertical default tenant CSS → DEFAULT_TENANT CSS → THIS. Reached only when every prior resolution has failed, so it can never outrank a tenant.",
+          "writerEvidence": "src/infrastructure/runtime/theming/composition/react/provider/index.tsx:471 inside ROTTAY_EMERGENCY_TOKENS, injected as an inline <style> only after the load chain fails",
+          "consumerEvidence": "190 productive read(s) of --ds-font-family-base across the corpus (FASE K channel index)",
+          "necessary": true,
+          "decision": "KEEP",
+          "flags": []
+        }
+      ]
+    }
+  },
+  "remainingLayers": [
+    {
+      "layer": "BrandThemes TS (first-party brand sources)",
+      "owner": "next-wave",
+      "status": "NOT SWEPT",
+      "machinery": "M1-slice2.mjs already parses all three themes + their value-imports and attributes colours by property key — point it at the theme files as SUBJECT instead of as origin oracle."
+    },
+    {
+      "layer": "artifacts/_source extension.css",
+      "owner": "next-wave",
+      "status": "NOT SWEPT",
+      "machinery": "same colour extractor; the brand-authored rows already surfaced in FASE K slice work give the expected shape."
+    },
+    {
+      "layer": "compiler static path",
+      "owner": "next-wave",
+      "status": "NOT SWEPT",
+      "machinery": "M1-extract.mjs pattern (import the gate collectors, self-test, refuse on divergence) transfers directly."
+    },
+    {
+      "layer": "compiler DB/appearance path",
+      "owner": "next-wave",
+      "status": "NOT SWEPT",
+      "machinery": "same; parity against the static path is the interesting axis."
+    },
+    {
+      "layer": "provider/runtime beyond the emergency block",
+      "owner": "next-wave",
+      "status": "PARTIAL — only the emergency block swept",
+      "machinery": "slice 3 rows are the template."
+    },
+    {
+      "layer": "Modern primitives TSX",
+      "owner": "next-wave",
+      "status": "PARTIAL — colour literals swept (slice 1), non-colour literals not",
+      "machinery": "engine-corpus collectors already wired."
+    },
+    {
+      "layer": "patterns TSX",
+      "owner": "next-wave",
+      "status": "NOT SWEPT",
+      "machinery": "engine-corpus + AST stripper."
+    },
+    {
+      "layer": "structures TSX",
+      "owner": "next-wave",
+      "status": "NOT SWEPT",
+      "machinery": "engine-corpus + AST stripper."
+    },
+    {
+      "layer": "surfaces TSX",
+      "owner": "next-wave",
+      "status": "NOT SWEPT",
+      "machinery": "engine-corpus + AST stripper."
+    },
+    {
+      "layer": "app public hooks",
+      "owner": "next-wave",
+      "status": "NOT SWEPT",
+      "machinery": "FASE K reads-adjudication already owns the hook fence; the literal question is separate."
+    }
+  ],
+  "machineryReadyToRun": {
+    "extractor": "/private/tmp/claude-502/-Users-daniel-Developer-Rottay/12583be0-5202-4824-a1a0-b35805a15cc2/scratchpad/M1-extract.mjs",
+    "property": "Self-tests against the live gate counters and REFUSES to emit on divergence; --accept-divergence records the delta in the data instead of hiding it. Reads counters live rather than freezing them, because peers execute against the same tree.",
+    "provenReliability": "The refusal fired three times during FASE 1 and every one was a real divergence: wrong scan roots, a regex assumed from its name, and a stale snapshot after a peer executed a row."
+  }
+}

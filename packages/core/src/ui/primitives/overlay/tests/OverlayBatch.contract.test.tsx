@@ -472,7 +472,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
             items={[
               { key: 'edit', label: 'Edit' },
               { key: 'group', label: 'Actions', type: 'group' },
-              { key: 'divider', label: '', type: 'divider' },
+              { key: 'divider', type: 'divider' },
               { key: 'delete', label: 'Delete', danger: true },
               { key: 'disabled-item', label: 'Unavailable', disabled: true },
             ]}
@@ -573,7 +573,7 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
               items: [
                 { key: 'profile', label: 'Profile' },
                 { key: 'group', label: 'Actions', type: 'group' },
-                { key: 'divider', label: '', type: 'divider' },
+                { key: 'divider', type: 'divider' },
                 { key: 'delete', label: 'Delete', danger: true },
                 { key: 'disabled-item', label: 'Unavailable', disabled: true },
               ],

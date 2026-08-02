@@ -1,9 +1,9 @@
 {
   "capturedBefore": "canonicalization extraction to foundation/kernel/serialization",
-  "reanchored": "C1b (2026-08-01): both schema digests moved exactly once because the document schema gained the governed expressive selection — general.experienceProfile (closed enum over EXPERIENCE_PROFILES) and advanced.profiles (closed per-axis enums, icon deliberately absent/frontier). Every artifact digest is byte-identical: profile-less documents compile to the same output. Previous move: C1 (--ds-color-bg-overlay allowlist row).",
+  "reanchored": "E2 (2026-08-02): both schema digests moved exactly ONCE from the E1 values because `advanced` gained the RESPONSIVE POSTURE axis (closed enum `compact` | `balanced` | `expansive` over RESPONSIVE_POSTURE_PROFILES — the adaptive ladder: container thresholds plus the solver span bias). Data-only: no CSS channel is emitted, so the move is confined to these two schema sentinels. Every artifact digest below is UNCHANGED and was verified so in the same run — no existing fixture or first-party document authors `responsivePosture`, and its absent value resolves to `balanced`, whose thresholds and `preferred` bias ARE the pre-capability constants, so compiled artifacts stay byte-identical. Previous moves: E1 (general gained the rhythm axis), C2 (advanced.profiles gained the icon axis), C1b (expressive selection fields), C1 (--ds-color-bg-overlay allowlist row).",
   "compilerVersion": "tenant-theme-compiler@4",
-  "documentSchemaDigest": "sha256-599caa0cfd0bbbaaaf4f61674671c404c115022bff4e1996e62b8af285ba04da",
-  "configSchemaDigest": "sha256-7ccd67b2372eb0a2c3935ebd9a8670a94ed71b80ba6ab11a3369a06eb09a0ff5",
+  "documentSchemaDigest": "sha256-0dbbdeef9bd740dcd1f256a53db9086bedb72725cc36a084019cdafd515b3069",
+  "configSchemaDigest": "sha256-6e7515d9136c47137a6c24ad08f06541ca907e0e70cb872dc2d5881633d6c7fa",
   "nullOverrideDigest": "sha256-f594475c5aba01a40f2fe9f4b3f08d6343a4e2df3640ecd4d2abd9acaece8a6c",
   "nullOverrideEnvelopeDigest": "sha256-65da54f9b7e5bb192b79f73ae996855a43a9ce15ab8c6a419c69dca2a18d783f",
   "populatedSimpleDigest": "sha256-03f7df98105cfe11a51a994f8e9277f4d3fb96cf016f211e23ce16b7f288dd8f",

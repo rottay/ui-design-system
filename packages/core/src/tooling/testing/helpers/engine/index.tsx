@@ -9,9 +9,15 @@ import { DesignSystemProvider } from '../../../../infrastructure/runtime/bootstr
 import type { EngineName, TenantConfig } from '../../../../foundation/contracts';
 
 /**
- * Stable engines for testing (excludes experimental 'custom')
+ * Stable engines for testing (excludes experimental 'custom').
+ *
+ * `as const satisfies` rather than a `readonly EngineName[]` annotation: the
+ * annotation widened the value back to the full `EngineName` union, so
+ * `StableEngineName` below silently included `'custom'` — the very engine this
+ * list exists to exclude — and every consumer that indexed the tuple lost its
+ * literal type. `satisfies` still checks membership without widening.
  */
-export const STABLE_ENGINES: readonly EngineName[] = ['classic', 'modern', 'rustic'] as const;
+export const STABLE_ENGINES = ['classic', 'modern', 'rustic'] as const satisfies readonly EngineName[];
 export type StableEngineName = (typeof STABLE_ENGINES)[number];
 
 const TEST_TENANT_CONFIG: TenantConfig = {

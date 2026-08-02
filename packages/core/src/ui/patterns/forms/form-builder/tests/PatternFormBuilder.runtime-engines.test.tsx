@@ -257,6 +257,7 @@ describe('PatternFormBuilder runtime engines', () => {
         <Component
           layout="steps"
           stepLabels={['Basics', 'Preferences']}
+          onSubmit={vi.fn()}
           onChange={onChange}
           onStepChange={onStepChange}
           fields={[

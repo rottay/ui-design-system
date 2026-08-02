@@ -26,6 +26,23 @@ const modernSkin = readFileSync(
   'utf8'
 );
 
+/**
+ * A removable badge rendered WITHOUT `removeLabel`.
+ *
+ * `BadgeRemovalProps` makes `removeLabel` required under `removable: true`, so
+ * a TypeScript caller must always name the close control. The catalogue chain
+ * below it (`common.remove`, then the English floor) is the fail-safe for the
+ * callers that escape that type -- JS consumers and the deprecated `closable`
+ * path -- and naming the prop here would render that floor unreachable. The
+ * two tests that use this alias assert the floor, so the ABSENT prop is the
+ * shape under test: the cast is the assertion, not a way around the contract.
+ */
+const ModernBadgeUnnamedRemoval = ModernBadge as unknown as React.ComponentType<
+  Omit<React.ComponentProps<typeof ModernBadge>, 'removable' | 'removeLabel'> & {
+    removable?: boolean;
+  }
+>;
+
 describe('Badge modern i18n (R2+R3)', () => {
   afterEach(async () => {
     // W4 idiom: locale observers re-fire on dir/lang removal; keep the
@@ -39,9 +56,9 @@ describe('Badge modern i18n (R2+R3)', () => {
 
   it('names the close control from the English floor without a provider or prop', () => {
     render(
-      <ModernBadge kind="chip" removable onClose={vi.fn()}>
+      <ModernBadgeUnnamedRemoval kind="chip" removable onClose={vi.fn()}>
         Remote only
-      </ModernBadge>
+      </ModernBadgeUnnamedRemoval>
     );
 
     expect(screen.getByRole('button', { name: 'Remove' })).toBeInTheDocument();
@@ -50,9 +67,9 @@ describe('Badge modern i18n (R2+R3)', () => {
   it('resolves the close label from the active locale through the provider', () => {
     render(
       <I18nProvider locale="es" fallbackLocale="es">
-        <ModernBadge kind="chip" removable onClose={vi.fn()}>
+        <ModernBadgeUnnamedRemoval kind="chip" removable onClose={vi.fn()}>
           Remoto
-        </ModernBadge>
+        </ModernBadgeUnnamedRemoval>
       </I18nProvider>
     );
 

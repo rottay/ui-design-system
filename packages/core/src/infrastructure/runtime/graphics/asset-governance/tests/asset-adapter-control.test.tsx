@@ -138,7 +138,7 @@ describe('graphic asset adapter controls', () => {
   it('keeps unrelated class fallbacks alive while another adapter is disabled', () => {
     vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     install({ disabledClasses: ['semantic-icon'] });
-    const UnsafeBrandMark = BrandMark as React.ComponentType<Record<string, unknown>>;
+    const UnsafeBrandMark = BrandMark as unknown as React.ComponentType<Record<string, unknown>>;
     render(
       <>
         <Icon name="action.add" decorative data-testid="semantic-icon" />
@@ -176,9 +176,9 @@ describe('graphic asset adapter controls', () => {
       onTelemetry: (event) => events.push(event),
     });
 
-    const UnsafeIcon = Icon as React.ComponentType<Record<string, unknown>>;
-    const UnsafePictogram = FeaturePictogram as React.ComponentType<Record<string, unknown>>;
-    const UnsafeCloud = CloudServiceMark as React.ComponentType<Record<string, unknown>>;
+    const UnsafeIcon = Icon as unknown as React.ComponentType<Record<string, unknown>>;
+    const UnsafePictogram = FeaturePictogram as unknown as React.ComponentType<Record<string, unknown>>;
+    const UnsafeCloud = CloudServiceMark as unknown as React.ComponentType<Record<string, unknown>>;
     render(
       <>
         <BrandMark name="google" decorative />

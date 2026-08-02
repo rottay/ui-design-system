@@ -286,11 +286,12 @@ describe('activity-log -- data-part contract (CK-F)', () => {
     expect(q(container, '[data-part="timestamp"]')).toHaveLength(3);
     expect(q(container, '[data-part="user"]')).toHaveLength(3);
 
-    // rustic's native <select> filters are stamped; modern delegates to the
-    // Select primitive (no raw <select> paint site, so nothing to stamp).
-    if (engine === 'rustic') {
-      expect(q(container, '[data-part="filter"]')).toHaveLength(2);
-    }
+    // No `[data-part="filter"]` assertion here: modern delegates its filters to
+    // the Select primitive, so there is no raw <select> paint site to stamp.
+    // The rustic branch that once lived here was unreachable -- `ENGINES` is
+    // ['modern'] because rustic does not implement the CK-F data-parts this
+    // checkpoint grades (recorded as an owner row). Scoping is declared at
+    // `ENGINES`, not re-tested per case.
   });
 
   it.each(ENGINES)('stamps the loading branch as its own root (%s)', async (engine) => {

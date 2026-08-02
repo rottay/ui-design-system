@@ -166,9 +166,14 @@ const key = (finding: Finding) => `${finding.file} :: ${finding.value}`;
  * point: the Modern engine tree is already at zero, so the entire debt is one
  * file asserting tenant color as the system-wide default. Two shapes live here.
  *
- * Vertical identity — rottay's own canvas and neutrals, shipped as everyone's
- * default ground:
- *   #0c0c0e #0d0d10 #18181c #6b6b72 #a0a0a5 #475569 #7a6a5a #f8fafc
+ * Vertical identity — mostly rottay's own canvas and neutrals, shipped as
+ * everyone's default ground. Per-color attribution (measured against the
+ * authoring BrandThemes, 2026-08-02 — the prose that documents the debt must
+ * not itself misattribute it):
+ *   rottay: #0c0c0e #0d0d10 #18181c #6b6b72 #a0a0a5 #475569
+ *   evnto:  #7a6a5a (secondaryColor/accentColor; absent from platform's theme)
+ *   bithire: #f8fafc (bg/readOnly — a BitHire LIGHT value declared on
+ *            --ds-color-neutral-900 in the DARK scope)
  *
  * Semantic ramps — the green/amber/red/blue steps the BrandThemes also author.
  * A shared provenance does not make them shared property: a tenant that moves
@@ -226,9 +231,6 @@ const KNOWN_TENANT_LITERALS: readonly string[] = [
   'foundation/tokens/css/foundation/themes/default.css :: #fcd34d',
   'foundation/tokens/css/foundation/themes/default.css :: #fde68a',
   'foundation/tokens/css/foundation/themes/default.css :: #fecaca',
-  'foundation/tokens/css/foundation/themes/default.css :: rgba(239,68,68,0.08)',
-  'foundation/tokens/css/foundation/themes/default.css :: rgba(245,158,11,0.08)',
-  'foundation/tokens/css/foundation/themes/default.css :: rgba(34,197,94,0.08)',
 ];
 
 describe('MODERN-TENANT-VALUE-FREE · the engine declares no tenant color', () => {

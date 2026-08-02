@@ -1,0 +1,43 @@
+/**
+ * Boundary fixture for `hasConsumer`.
+ *
+ * Every channel here is DECLARED; what differs is HOW it is read, or whether
+ * it is read at all. The `-base` / `-num-5` channels exist to prove a
+ * superstring is not a read of its base, and the wrapped/commented channels
+ * to prove whitespace is tolerated while comments are not counted.
+ */
+:root {
+  /* Read only through a SUPERSTRING: the base must not score as consumed. */
+  --ds-fx-base: 1px;
+  --ds-fx-base-extra: 2px;
+  --ds-fx-reader-a: var(--ds-fx-base-extra);
+
+  /* Numeric shadowing, the nastiest form: `-5` inside `-50`. */
+  --ds-fx-num-5: 8px;
+  --ds-fx-num-50: 9px;
+  --ds-fx-reader-g: var(--ds-fx-num-50);
+
+  /* Exact read terminated by `)`. */
+  --ds-fx-closed: 3px;
+  --ds-fx-reader-b: var(--ds-fx-closed);
+
+  /* Exact read continued by `,` because a fallback follows. */
+  --ds-fx-comma: 4px;
+  --ds-fx-reader-c: var(--ds-fx-comma, 9px);
+
+  /* Padded inside the parens. */
+  --ds-fx-padded: 5px;
+  --ds-fx-reader-d: var( --ds-fx-padded );
+
+  /* Wrapped across lines -- the form the emitted bundles really use, and the
+     one the retired includes-style predicate could not see at all. */
+  --ds-fx-wrapped: 6px;
+  --ds-fx-reader-e: var(
+    --ds-fx-wrapped,
+    9px
+  );
+
+  /* Referenced ONLY from inside a comment: not a consumer. */
+  --ds-fx-commented: 7px;
+  /* --ds-fx-reader-f: var(--ds-fx-commented); */
+}

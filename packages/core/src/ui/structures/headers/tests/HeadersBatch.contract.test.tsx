@@ -249,7 +249,7 @@ describe('Headers-family (structures) data-part contract (WO-SKIN-06 checkpoint 
           backHref="/x"
           colorVariant="primary"
           breadcrumb={[{ label: 'Entities', href: '/entities' }, { label: 'Current' }]}
-          actions={[{ label: 'Extra', kind: 'default', onClick: vi.fn() }]}
+          actions={[{ label: 'Extra', kind: 'open', onClick: vi.fn() }]}
           status={{ label: 'Draft', color: 'warning' }}
           archetype="technical"
           eyebrow="Entity"

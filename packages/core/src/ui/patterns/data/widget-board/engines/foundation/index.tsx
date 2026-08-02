@@ -35,6 +35,8 @@ import type {
   WidgetBoardProps,
   WidgetBoardSize,
 } from "../../contracts";
+import { useAdaptiveBoardLayout } from "../../runtime/solver/react";
+
 
 const SIZE_RAMP: readonly WidgetBoardSize[] = ["sm", "md", "lg", "wide"];
 const SIZE_SPAN: Record<WidgetBoardSize, number> = {
@@ -143,20 +145,7 @@ export function WidgetBoardEngine({
   const [overIndex, setOverIndex] = useState<number | null>(null);
   const [resizeSession, setResizeSession] =
     useState<WidgetResizeSession | null>(null);
-  const [rowSpans, setRowSpans] = useState<Record<string, number>>({});
   const [catalogQuery, setCatalogQuery] = useState("");
-  /*
-   * The skin's container queries (839px: sm/md→span 6, lg/wide→full;
-   * 639px: single column) cannot override this engine's INLINE gridColumn
-   * placement without `!important` (forbidden). The engine mirrors the same
-   * tiers from the measured section width and simply STOPS stamping
-   * gridColumn when a collapse tier applies, so the skin's rules govern
-   * cleanly. Row spans stay inline (no CSS rule contests them). `full` is
-   * also the no-ResizeObserver posture, which is today's desktop behavior.
-   */
-  const [collapseTier, setCollapseTier] = useState<"full" | "mid" | "single">(
-    "full"
-  );
   const resizeSessionRef = useRef<WidgetResizeSession | null>(null);
   const dragSessionRef = useRef<WidgetDragSession | null>(null);
   const layoutRef = useRef(items);
@@ -221,183 +210,39 @@ export function WidgetBoardEngine({
   );
 
   /*
-   * CSS Grid owns width while this observer gives every widget an honest
-   * vertical footprint. A one-dimensional row grid cannot pack a short card
-   * below another short card beside a tall queue; measured row spans can.
-   * The DOM order remains the interaction order and the gap is token-driven.
+   * C2b: measurement, tier/posture, epoch invalidation and solving live in
+   * the ONE shared adaptive runtime (`../../runtime/solver/react`) —
+   * a single ResizeObserver per board container, a real layoutEpoch over
+   * direction/locale/density/type-scale/font-readiness, bounded ≤3-pass
+   * convergence with hysteresis, and the pure deterministic solver. The
+   * legacy inline packing (compactPlacementOrder/placementById) is RETIRED:
+   * visual order now always equals DOM/focus order, row residue is
+   * redistributed instead of stranding columns, and a collapsed tier
+   * resolves its own real capacity.
    */
-  useEffect(() => {
-    if (narrow || typeof ResizeObserver === "undefined") {
-      setRowSpans({});
-      return;
-    }
-    const grid = gridRef.current;
-    if (!grid) return;
-
-    const update = (node: HTMLElement): void => {
-      const id = node.dataset.widgetId;
-      if (!id) return;
-      const gridStyle = getComputedStyle(grid);
-      const rowHeight = Math.max(
-        1,
-        Number.parseFloat(gridStyle.gridAutoRows) || 8
-      );
-      const rowGap = Math.max(0, Number.parseFloat(gridStyle.rowGap) || 0);
-      const renderedHeight = node.getBoundingClientRect().height;
-      const height =
-        node.dataset.height === "fixed"
-          ? renderedHeight
-          : Math.max(node.scrollHeight, renderedHeight);
-      const span = Math.max(
-        1,
-        Math.ceil((height + rowGap) / (rowHeight + rowGap))
-      );
-      setRowSpans((current) =>
-        current[id] === span ? current : { ...current, [id]: span }
-      );
-    };
-
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) update(entry.target as HTMLElement);
-    });
-    for (const node of cellRefs.current.values()) {
-      update(node);
-      observer.observe(node);
-    }
-    return () => observer.disconnect();
-  }, [editing, narrow, visibleIds]);
-
-  /*
-   * Breakpoint mirror for the skin's container queries (see `collapseTier`
-   * above): the grid spans the root container's full inline size, so its
-   * measured width is the query's width. The thresholds are the skin's own
-   * 839px/639px steps; without ResizeObserver the tier stays `full`, which
-   * is exactly today's desktop behavior (and the jsdom test posture).
-   */
-  useLayoutEffect(() => {
-    const grid = gridRef.current;
-    if (!grid || typeof ResizeObserver === "undefined") return;
-    const applyWidth = (width: number): void => {
-      // Hidden panels, hydration and DOM test harnesses can report zero
-      // before layout exists. Zero is not a container breakpoint: keep the
-      // last honest posture until the board has a measurable inline size.
-      if (!Number.isFinite(width) || width <= 0) return;
-      const next = width <= 639 ? "single" : width <= 839 ? "mid" : "full";
-      setCollapseTier((current) => (current === next ? current : next));
-    };
-    applyWidth(grid.getBoundingClientRect().width);
-    const observer = new ResizeObserver((entries) => {
-      for (const entry of entries) applyWidth(entry.contentRect.width);
-    });
-    observer.observe(grid);
-    return () => observer.disconnect();
-  }, [visibleIds]);
-
-  const compactPlacementOrder = useMemo(() => {
-    if (narrow) return visible;
-    const remaining = visible.slice();
-    const ordered: WidgetBoardItem[] = [];
-
-    while (remaining.length > 0) {
-      const first = remaining.shift();
-      if (!first) break;
-      ordered.push(first);
-      const firstSize =
-        resizeSession?.id === first.id ? resizeSession.previewSize : first.size;
-      let usedColumns = SIZE_SPAN[firstSize] % 12;
-
-      while (usedColumns > 0) {
-        const openColumns = 12 - usedColumns;
-        const fittingIndex = remaining.findIndex((candidate) => {
-          const candidateSize =
-            resizeSession?.id === candidate.id
-              ? resizeSession.previewSize
-              : candidate.size;
-          return SIZE_SPAN[candidateSize] <= openColumns;
-        });
-        if (fittingIndex < 0) break;
-        const [fitting] = remaining.splice(fittingIndex, 1);
-        if (!fitting) break;
-        ordered.push(fitting);
-        const fittingSize =
-          resizeSession?.id === fitting.id
-            ? resizeSession.previewSize
-            : fitting.size;
-        usedColumns = (usedColumns + SIZE_SPAN[fittingSize]) % 12;
-      }
-    }
-
-    return ordered;
-  }, [narrow, resizeSession, visible]);
-
-  /*
-   * CSS Grid's `dense` mode cannot backfill every masonry hole once cards
-   * carry explicit measured row spans. Build the same first-fit occupancy map
-   * ourselves so a later half-width widget can fill the open half beside an
-   * earlier card, even when a full-width widget appears between them in DOM
-   * order. DOM order remains unchanged for keyboard and assistive technology.
-   */
-  const placementById = useMemo(() => {
-    if (narrow) return new Map<string, WidgetGridPlacement>();
-
-    const occupied = new Set<string>();
-    const placements = new Map<string, WidgetGridPlacement>();
-
-    for (const item of compactPlacementOrder) {
-      const effectiveSize =
-        resizeSession?.id === item.id ? resizeSession.previewSize : item.size;
-      const columnSpan = SIZE_SPAN[effectiveSize];
-      const rowSpan = Math.max(1, rowSpans[item.id] ?? 10);
-      let rowStart = 1;
-      let columnStart = 0;
-      let found = false;
-
-      while (!found) {
-        for (
-          let candidateColumn = 0;
-          candidateColumn <= 12 - columnSpan;
-          candidateColumn += 1
-        ) {
-          let available = true;
-          for (
-            let row = rowStart;
-            row < rowStart + rowSpan && available;
-            row += 1
-          ) {
-            for (
-              let column = candidateColumn;
-              column < candidateColumn + columnSpan;
-              column += 1
-            ) {
-              if (occupied.has(`${row}:${column}`)) {
-                available = false;
-                break;
-              }
-            }
+  const previewItems = useMemo(() => {
+    if (!resizeSession) return visible;
+    return visible.map((item) =>
+      item.id === resizeSession.id
+        ? {
+            ...item,
+            size: resizeSession.previewSize,
+            ...(resizeSession.previewHeight !== undefined
+              ? { height: resizeSession.previewHeight }
+              : {}),
           }
-          if (available) {
-            columnStart = candidateColumn;
-            found = true;
-            break;
-          }
-        }
-        if (!found) rowStart += 1;
-      }
-
-      placements.set(item.id, { columnStart: columnStart + 1, rowStart });
-      for (let row = rowStart; row < rowStart + rowSpan; row += 1) {
-        for (
-          let column = columnStart;
-          column < columnStart + columnSpan;
-          column += 1
-        ) {
-          occupied.add(`${row}:${column}`);
-        }
-      }
-    }
-
-    return placements;
-  }, [compactPlacementOrder, narrow, resizeSession, rowSpans]);
+        : item
+    );
+  }, [visible, resizeSession]);
+  const adaptive = useAdaptiveBoardLayout({
+    items: previewItems,
+    gridRef,
+    cellRefs,
+    narrow,
+  });
+  const collapseTier = adaptive.tier;
+  const rowSpans = adaptive.rowSpans;
+  const adaptiveCellStyles = adaptive.placements;
 
   /*
    * CSS Grid resolves the final geometry; FLIP supplies the missing spatial
@@ -470,7 +315,7 @@ export function WidgetBoardEngine({
     }
 
     previousCellRectsRef.current = nextRects;
-  }, [layout, narrow, placementById, resizeSession, rowSpans]);
+  }, [layout, narrow, adaptiveCellStyles, resizeSession, rowSpans]);
 
   useEffect(
     () => () => {
@@ -1160,30 +1005,21 @@ export function WidgetBoardEngine({
               resizeSession?.id === item.id
                 ? resizeSession.previewHeight
                 : item.height;
-            const placement = placementById.get(item.id);
-            const cellStyle: CSSProperties | undefined = narrow
-              ? undefined
-              : {
-                  /*
-                   * Below the skin's 839px/639px container-query steps the
-                   * skin owns column placement (span 6 / full width); the
-                   * engine stops stamping gridColumn so the plain skin rules
-                   * govern without `!important`. Row spans stay inline: no
-                   * skin rule contests them.
-                   */
-                  gridColumn:
-                    collapseTier === "full"
-                      ? `${placement?.columnStart ?? 1} / span ${
-                          SIZE_SPAN[effectiveSize]
-                        }`
+            const adaptiveStyle = adaptiveCellStyles[item.id];
+            // Both grid lines come from the shared runtime's solver for the
+            // REAL tier capacity, stamped inline on every tier so the skin's
+            // container-query column rules never contest them. Visual order
+            // equals DOM/focus order by construction.
+            const cellStyle: CSSProperties | undefined =
+              narrow || !adaptiveStyle
+                ? undefined
+                : {
+                    gridColumn: adaptiveStyle.gridColumn,
+                    gridRow: adaptiveStyle.gridRow,
+                    height: effectiveHeight
+                      ? `${Math.round(effectiveHeight)}px`
                       : undefined,
-                  gridRow: `${placement?.rowStart ?? 1} / span ${
-                    rowSpans[item.id] ?? 10
-                  }`,
-                  height: effectiveHeight
-                    ? `${Math.round(effectiveHeight)}px`
-                    : undefined,
-                };
+                  };
             return (
               <article
                 key={item.id}

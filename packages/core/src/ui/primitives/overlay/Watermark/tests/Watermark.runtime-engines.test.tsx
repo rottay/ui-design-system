@@ -28,7 +28,9 @@ function installCanvasRecorder() {
   const allocations: Array<{ width: number; height: number }> = [];
   const contexts: RecordedContext[] = [];
 
-  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(function () {
+  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(function (
+    this: HTMLCanvasElement,
+  ) {
     const context: RecordedContext = {
       fillStyle: '',
       font: '',

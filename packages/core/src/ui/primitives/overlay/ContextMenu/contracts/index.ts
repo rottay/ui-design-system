@@ -14,7 +14,15 @@ import type { EngineAwareProps } from '../../../../../foundation/contracts';
 /**
  * A single item in the context menu.
  */
-export interface ContextMenuItem {
+/** A separator rule: renders as a bare divider and carries no content. */
+export interface ContextMenuDivider {
+  /** Unique key for the divider */
+  key: string;
+  type: 'divider';
+}
+
+/** A selectable entry or a titled group — both render content, both label. */
+export interface ContextMenuEntry {
   /** Unique key for the item */
   key: string;
   /** Display label */
@@ -25,8 +33,8 @@ export interface ContextMenuItem {
   disabled?: boolean;
   /** Whether to style as a destructive action */
   danger?: boolean;
-  /** Item type: normal item, divider, or group header */
-  type?: 'item' | 'divider' | 'group';
+  /** Item type: normal item or group header; defaults to 'item' */
+  type?: 'item' | 'group';
   /** Keyboard shortcut hint */
   shortcut?: string;
   /** Nested children for sub-menus */
@@ -34,6 +42,12 @@ export interface ContextMenuItem {
   /** Click handler for this item */
   onClick?: () => void;
 }
+
+/**
+ * A context-menu entry, discriminated on `type`. Same shape as
+ * `DropdownMenuItem`: a divider renders no content, so it takes no label.
+ */
+export type ContextMenuItem = ContextMenuEntry | ContextMenuDivider;
 
 /**
  * Props for the ContextMenu component.

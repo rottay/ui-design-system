@@ -8,11 +8,12 @@ import type {
   FlexAlign,
   FlexDirection,
   FlexGap,
+  FlexGapToken,
   FlexJustify,
   FlexProps,
   FlexWrap,
 } from "../../contracts";
-import { resolveFlexGapValue } from "../../contracts";
+import { flexGapPresetSpelling, resolveFlexGapValue } from "../../contracts";
 
 type FlexGapMode = "uniform" | "split";
 
@@ -23,6 +24,16 @@ export interface FlexPresentationAttributes {
   "data-align"?: FlexAlign;
   "data-inline"?: "true";
   "data-gap"?: FlexGapMode;
+  /**
+   * The preset spelling behind the gap, per axis. Present ONLY when the caller
+   * named a rung; a numeric gap stamps nothing, which is what keeps exact
+   * geometry out of reach of the rhythm rules in layout-primitives.css. The
+   * split axes are stamped separately because `[column, row]` may mix a rung
+   * with a measurement.
+   */
+  "data-gap-preset"?: FlexGapToken;
+  "data-column-gap-preset"?: FlexGapToken;
+  "data-row-gap-preset"?: FlexGapToken;
   "data-layout-motion"?: "rearrange";
 }
 
@@ -59,7 +70,15 @@ export function resolveFlexAttributes(
   }
 
   if (props.gap !== undefined && !isResponsiveValue(props.gap)) {
-    attributes["data-gap"] = Array.isArray(props.gap) ? "split" : "uniform";
+    const scalarGap = props.gap as FlexGap;
+    if (Array.isArray(scalarGap)) {
+      attributes["data-gap"] = "split";
+      attributes["data-column-gap-preset"] = flexGapPresetSpelling(scalarGap[0]);
+      attributes["data-row-gap-preset"] = flexGapPresetSpelling(scalarGap[1]);
+    } else {
+      attributes["data-gap"] = "uniform";
+      attributes["data-gap-preset"] = flexGapPresetSpelling(scalarGap);
+    }
   }
   if (props.motion === "rearrange") {
     attributes["data-layout-motion"] = "rearrange";
@@ -72,6 +91,9 @@ export function resolveFlexAttributes(
     "data-align": attributes["data-align"],
     "data-inline": attributes["data-inline"],
     "data-gap": attributes["data-gap"],
+    "data-gap-preset": attributes["data-gap-preset"],
+    "data-column-gap-preset": attributes["data-column-gap-preset"],
+    "data-row-gap-preset": attributes["data-row-gap-preset"],
     "data-layout-motion": attributes["data-layout-motion"],
   };
 }

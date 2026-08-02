@@ -731,6 +731,8 @@
   --ds-segmented-sm-padding-x: 9px;
   --ds-segmented-sm-radius: 6px;
   --ds-select-group-text-transform: uppercase;
+  --ds-shadow-ambient-strength: 0.6;
+  --ds-shadow-key-strength: 0.7;
   --ds-shadow-lg: 0 22px 52px -24px rgba(20, 40, 59, 0.34), 0 6px 18px rgba(20, 40, 59, 0.09);
   --ds-shadow-md: 0 10px 28px -18px rgba(20, 40, 59, 0.28), 0 2px 7px rgba(20, 40, 59, 0.08);
   --ds-shadow-sm: 0 1px 2px rgba(20, 40, 59, 0.08), 0 0 0 1px rgba(20, 40, 59, 0.025);

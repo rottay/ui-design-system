@@ -124,6 +124,16 @@
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
+    "packages/core/src/ui/patterns/data/saved-views/engines/classic/index.tsx": {
+      "blob": "a98d11919391e670f2c4ee8ab271315c45f66dd3d0f3ae6b1b7d697f7abfcdb3",
+      "reason": "Codex blocker 1: visibility law enforcement — actions without handlers are OMITTED per the contract's own declared law; behavioral by design, mandated 2026-08-02",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/patterns/data/saved-views/engines/rustic/index.tsx": {
+      "blob": "6ad33ac30ca8c2db7282cd92715991c58705e49f252a56712f856ef6741ee810",
+      "reason": "Codex blocker 1: visibility law enforcement — actions without handlers are OMITTED per the contract's own declared law; behavioral by design, mandated 2026-08-02",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
     "packages/core/src/ui/patterns/data/widget-board/engines/classic/index.tsx": {
       "blob": "4391729958cbefa985cba3dcb4b5f15e043a7b70d23b1a81463052fd4093e9c1",
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
@@ -197,6 +207,11 @@
     "packages/core/src/ui/primitives/feedback/Progress/engines/rustic/index.tsx": {
       "blob": "62997f563ec81bcb6fd1ba147f4f43646282a6092e2e28b49f4dcf7f82ba8583",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/primitives/inputs/TreeSelect/engines/rustic/index.tsx": {
+      "blob": "e801e777021ed4ae08a85e0d1c66a35d5aadf669e8e7000d4c5053337c1b2e21",
+      "reason": "Shared-contract compile fix (439-lane): TreeSelectDataProps pairs treeData+fieldNames as one discriminated decision; the engine signature follows the shared contract types (readonly node union + TreeSelectFieldNames). normalizeNodes remap logic unchanged — type-only alignment, no render change.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/ui/primitives/layout/AspectRatio/engines/classic/index.tsx": {
@@ -292,6 +307,11 @@
     "packages/core/src/ui/primitives/navigation/Link/engines/rustic/index.tsx": {
       "blob": "17655753c695547c3afff31405fbfab536c97df09012a353a26ebcddd02d5a3b",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/primitives/navigation/Menu/engines/rustic/index.tsx": {
+      "blob": "04efe1ba5cdcb6aa4342378ac190b407e20ea588d598752cd343321077205c43",
+      "reason": "Shared-contract compile fix (439-lane): MenuItem became a discriminated union (MenuEntry | MenuDivider) because a divider with required label was unrepresentable. One narrowing guard added (item.type !== 'divider' before reading children); dividers have no children, so behavior is identical for every previously-typeable input. Divider render path untouched.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/ui/primitives/navigation/Tabs/engines/classic/index.tsx": {

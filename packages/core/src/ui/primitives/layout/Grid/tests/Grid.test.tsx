@@ -36,7 +36,7 @@ vi.mock(
         },
         ref
       ) => {
-        const Tag = Component as keyof JSX.IntrinsicElements;
+        const Tag = Component as keyof React.JSX.IntrinsicElements;
         return React.createElement(
           Tag,
           {
@@ -100,7 +100,7 @@ vi.mock(
             },
             ref
           ) => {
-            const Tag = Component as keyof JSX.IntrinsicElements;
+            const Tag = Component as keyof React.JSX.IntrinsicElements;
             return React.createElement(
               Tag,
               {
@@ -231,7 +231,7 @@ describe("Grid", () => {
     });
 
     it("applies responsive columns object", () => {
-      const responsive = { xs: 1, sm: 2, md: 3, lg: 4 };
+      const responsive = { xs: 1, sm: 2, md: 3, lg: 4 } as const;
       render(<Grid columns={responsive}>Test</Grid>);
       expect(screen.getByTestId("grid")).toHaveAttribute(
         "data-columns",

@@ -134,6 +134,10 @@ import {
   sanitizeExpressiveOverrides,
 } from '@/foundation/tokens/ts/presentation/expressive-profiles';
 import { expandExpressiveProfiles } from '@/foundation/tokens/ts/presentation/expressive-profiles/expansion';
+import {
+  IconExpressiveProfileContext,
+  resolveActiveIconExpressiveProfile,
+} from '@/infrastructure/runtime/foundation/icons/active-profile';
 
 export interface DesignSystemProviderProps {
   children: ReactNode;
@@ -623,6 +627,22 @@ export function DesignSystemProvider({
     normalizedConfig?.appearance?.recipeProfile,
     normalizedConfig?.brandTheme?.recipes,
   ]);
+  // C2b: governed icon posture — dual-source precedence (explicit DB Pro
+  // axis or DB experience composition win over the static BrandTheme
+  // selection). Delivered through the RSC-safe seam: assigned to the CLIENT
+  // context below (client/SSR worlds); Server Component trees receive the
+  // same value through the per-request box the application fills via
+  // `provideServerIconExpressiveProfile` — both integration points share
+  // this one pure resolver.
+  const iconExpressiveProfile = useMemo(
+    () => resolveActiveIconExpressiveProfile(normalizedConfig),
+    [
+      normalizedConfig?.appearance?.advanced,
+      normalizedConfig?.appearance?.general?.experienceProfile,
+      normalizedConfig?.brandTheme?.expressive,
+    ]
+  );
+
   const motionProfile = resolvedVertical?.motionProfile ?? 'calm';
   const tenantMotionDial = useMemo(
     () => resolveTenantMotionDial(normalizedConfig, motionProfile),
@@ -701,7 +721,17 @@ export function DesignSystemProvider({
       resolveStaticExpressiveDefaults(normalizedConfig)?.density,
   );
 
+  // The provider is a client component, so the context object always exists
+  // in this world; the null branch is the react-server flavor, where this
+  // component never executes.
+  const IconProfileCarrier = IconExpressiveProfileContext;
+  if (!IconProfileCarrier) {
+    throw new Error(
+      'DesignSystemProvider rendered in a React world without createContext'
+    );
+  }
   return (
+    <IconProfileCarrier.Provider value={iconExpressiveProfile}>
     <TenantProvider config={normalizedConfig} vertical={resolvedVertical}>
       <RecipeProfileProvider
         profileId={recipeProfileSelection?.profileId}
@@ -764,5 +794,6 @@ export function DesignSystemProvider({
       </RootDensityProvider>
       </RecipeProfileProvider>
     </TenantProvider>
+    </IconProfileCarrier.Provider>
   );
 }

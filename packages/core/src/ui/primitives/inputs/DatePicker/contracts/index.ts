@@ -36,6 +36,7 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { EngineAwareProps } from '@/foundation/contracts/runtime/engine';
 import type { LegacySizeAlias, Size, StatusType } from '../../../../../foundation/contracts/kernel/common';
 
 /**
@@ -121,7 +122,7 @@ export type DatePickerMode =
  * />
  * ```
  */
-export interface DatePickerProps {
+export interface DatePickerProps extends EngineAwareProps {
   /** Current value (Date object, string, or dayjs) */
   value?: Date | string | null;
   /** Default value */

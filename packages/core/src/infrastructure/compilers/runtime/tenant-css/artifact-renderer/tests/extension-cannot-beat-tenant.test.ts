@@ -51,8 +51,11 @@ const THEME_BY_SLUG: Record<string, BrandTheme> = {
   rottay: rottayBrandTheme,
 };
 
+/** One tenant-override conflict, tagged with the vertical it was observed on. */
+type Conflict = { slug: string; channel: string };
+
 /** Conflicts for one vertical, tagged with the slug for the pinned inventory. */
-function conflicts(slug: string, artifactCss: string): { slug: string; channel: string }[] {
+function conflicts(slug: string, artifactCss: string): Conflict[] {
   return tenantOverrideConflicts(artifactCss).map((channel) => ({ slug, channel }));
 }
 

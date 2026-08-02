@@ -171,7 +171,7 @@
 /* ---- coarse pointer: rows reach the 44px floor ---- */
 @media (hover: none) and (pointer: coarse) {
   .ds-pattern-map-view.ds-engine-modern [data-part='marker-row'] {
-    min-block-size: var(--ds-map-view-touch-target-min, 44px);
+    min-block-size: var(--ds-map-view-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

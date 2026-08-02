@@ -777,3 +777,11 @@
     box-shadow: none;
   }
 }
+
+/* ---- C2b a11y floor: coarse pointers never get a sub-44px button, whatever
+       the density/profile dials say (mirrors the menu skin's idiom). ---- */
+@media (hover: none), (pointer: coarse) {
+  .rottay-btn.rottay-btn--modern[data-part='root'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}

@@ -37,6 +37,9 @@
   /* Split/divider between items */
   --ds-list-split-color: var(--ds-color-neutral-200, #e5e7eb);
   --ds-list-split-width: 1px;
+  /* Closed domain: 0 | var(--ds-spacing-N) | 100%, mapped from the List
+     `dividerInset` prop (none | inset | full). Logical, so it flips in RTL. */
+  --ds-list-split-inset-inline: 0;
 
   /* ========================================================================
      COLORS - List background and text colors

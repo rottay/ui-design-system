@@ -40,18 +40,18 @@
 
 .ds-icon-frame {
   /* geometry axis: outer frame size, per-size values from the spacing scale */
-  --_ds-proto-icon-frame-size: var(--ds-spacing-10);
+  --_ds-icon-frame-size: var(--ds-spacing-10);
   /* material axis: subtle wash strength inside color-mix */
-  --_ds-proto-icon-frame-subtle-strength: 12%;
+  --_ds-icon-frame-subtle-strength: 12%;
   /* material axis: glass wash (tenant alpha channel) */
-  --_ds-proto-icon-frame-glass-bg: var(--ds-color-alpha-white-10);
+  --_ds-icon-frame-glass-bg: var(--ds-color-alpha-white-10);
 
   position: relative;
   display: inline-grid;
   place-items: center;
   flex: none;
-  inline-size: var(--_ds-proto-icon-frame-size);
-  block-size: var(--_ds-proto-icon-frame-size);
+  inline-size: var(--_ds-icon-frame-size);
+  block-size: var(--_ds-icon-frame-size);
   padding: 0;
   margin: 0;
   border: 1px solid transparent;
@@ -68,19 +68,19 @@
 /* ---- size (geometry × density-effective spacing scale) ---- */
 
 .ds-icon-frame[data-size='xs'] {
-  --_ds-proto-icon-frame-size: var(--ds-spacing-6);
+  --_ds-icon-frame-size: var(--ds-spacing-6);
 }
 .ds-icon-frame[data-size='sm'] {
-  --_ds-proto-icon-frame-size: var(--ds-spacing-8);
+  --_ds-icon-frame-size: var(--ds-spacing-8);
 }
 .ds-icon-frame[data-size='md'] {
-  --_ds-proto-icon-frame-size: var(--ds-spacing-10);
+  --_ds-icon-frame-size: var(--ds-spacing-10);
 }
 .ds-icon-frame[data-size='lg'] {
-  --_ds-proto-icon-frame-size: var(--ds-spacing-12);
+  --_ds-icon-frame-size: var(--ds-spacing-12);
 }
 .ds-icon-frame[data-size='xl'] {
-  --_ds-proto-icon-frame-size: var(--ds-spacing-16);
+  --_ds-icon-frame-size: var(--ds-spacing-16);
 }
 
 /* ---- shape (tenant radius scale; square is the deliberate sharp pole) ---- */
@@ -129,7 +129,7 @@
 .ds-icon-frame[data-variant='subtle'] {
   background: color-mix(
     in srgb,
-    var(--_icon-frame-ink) var(--_ds-proto-icon-frame-subtle-strength),
+    var(--_icon-frame-ink) var(--_ds-icon-frame-subtle-strength),
     transparent
   );
   color: var(--_icon-frame-ink);
@@ -147,7 +147,7 @@
 }
 
 .ds-icon-frame[data-variant='glass'] {
-  background: var(--_ds-proto-icon-frame-glass-bg);
+  background: var(--_ds-icon-frame-glass-bg);
   border-color: var(--ds-color-alpha-white-20);
   color: var(--_icon-frame-ink);
   backdrop-filter: blur(calc(var(--ds-glass-blur-sm) * var(--ds-effect-intensity, 1)))

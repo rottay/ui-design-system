@@ -203,7 +203,7 @@
      re-mapped to the system pair and the checked fill reads again -- a filled
      system-ink box with a Canvas keyline against the unchecked hollow box. */
   .ds-markdown-view[data-part='root'] [data-part='task-checkbox'][data-checked='true'] {
-    --_ds-proto-markdown-task-fill: CanvasText;
-    --_ds-proto-markdown-task-fill-ring: Canvas;
+    --_ds-markdown-task-fill: CanvasText;
+    --_ds-markdown-task-fill-ring: Canvas;
   }
 }

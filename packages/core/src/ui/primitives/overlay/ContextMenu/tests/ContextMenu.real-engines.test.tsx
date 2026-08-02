@@ -18,7 +18,7 @@ describe('ContextMenu real engines', () => {
         onSelect={handleSelect}
         items={[
           { key: 'group', label: 'Workspace', type: 'group' },
-          { key: 'divider-1', label: 'divider', type: 'divider' },
+          { key: 'divider-1', type: 'divider' },
           { key: 'open', label: 'Open dashboard', shortcut: 'O', onClick: handleItemClick },
           { key: 'disabled', label: 'Disabled item', disabled: true },
           { key: 'danger', label: 'Delete workspace', danger: true },

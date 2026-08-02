@@ -32,10 +32,11 @@
  * SECOND PASS (Phase B): row states (gated hover wash / :active / :focus-within
  * / aria-selected tint+keyline / aria-disabled), size-driven row insets, the
  * vertical itemLayout, empty-slot nested-radius grammar, grid overflow guard
- * and long-copy wrapping were added; the split divider gained ONE bounded
- * prototype axis, `--_ds-proto-list-split-inset-inline` (length, default 0 =
- * full-bleed, logical/RTL-safe; disposition: recipe axis or bounded tenant
- * dial). No new `--ds-*` is defined anywhere in this file.
+ * and long-copy wrapping were added; the split divider reads ONE bounded
+ * axis, `--ds-list-split-inset-inline` (length, default 0 = full-bleed,
+ * logical/RTL-safe), declared with its siblings in
+ * `presentation/components/list.css`. No new `--ds-*` is defined anywhere in
+ * this file.
  */
 
 /* ============================ List (container) ============================ */
@@ -165,12 +166,12 @@
   min-inline-size: 0;
 }
 
-/* split divider between items: full-bleed by default; the inset proto pulls
+/* split divider between items: full-bleed by default; the inset channel pulls
    both LOGICAL ends in by one bounded length (aligns the rule with the text
    column instead of the well edge when a tenant wants a quieter rhythm).
    RTL-safe: margin-inline flips with direction. */
 .rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'] > [data-part='divider'] {
-  margin-inline: var(--_ds-proto-list-split-inset-inline, 0);
+  margin-inline: var(--ds-list-split-inset-inline, 0);
   border-bottom: var(--ds-list-split-width) solid var(--ds-list-split-color, var(--ds-color-border));
 }
 

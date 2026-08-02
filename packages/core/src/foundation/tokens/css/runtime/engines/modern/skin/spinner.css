@@ -107,7 +107,7 @@
   line-height: var(--ds-type-caption-line-height);
   letter-spacing: var(--ds-type-caption-letter-spacing);
   text-align: center;
-  max-inline-size: var(--_ds-proto-spinner-label-measure, 28ch);
+  max-inline-size: var(--_ds-spinner-label-measure, 28ch);
   overflow-wrap: break-word;
 }
 

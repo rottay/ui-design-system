@@ -25,7 +25,7 @@
  * B9 ADDENDUM (pass 2):
  * - CURRENT LOCATION: consumers pass `aria-current` through the anchor rest
  *   props (contract untouched). The current link reads active WITHOUT color
- *   alone: typographic weight (`--_ds-proto-link-current-font-weight`) plus
+ *   alone: typographic weight (`--ds-font-weight-medium`) plus
  *   the hover-grade underline thickness — the same non-color affordance
  *   ramp, extended to forced-colors with system values.
  * - KEYBOARD PARITY: standalone links (`underline=false`) already revealed
@@ -85,7 +85,7 @@
         + the hover-grade underline thickness carry it (the ink itself is
         unchanged so the tone ramp stays coherent). ---- */
 .rottay-link-shell.rottay-link-shell--modern[data-part='root'][aria-current]:not([aria-current='false']) {
-  font-weight: var(--_ds-proto-link-current-font-weight, var(--ds-font-weight-medium, 500));
+  font-weight: var(--ds-font-weight-medium, 500);
   text-decoration-thickness: var(--ds-link-underline-thickness-hover, 1.5px);
 }
 

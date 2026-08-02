@@ -56,12 +56,6 @@
   --ds-input-xl-icon-size: 1.75rem;        /* 28px */
   --ds-input-xl-border-radius: var(--ds-radius-lg);
 
-  /* Default size */
-  --ds-input-default-height: var(--ds-input-md-height);
-  --ds-input-default-padding-x: var(--ds-input-md-padding-x);
-  --ds-input-default-padding-y: var(--ds-input-md-padding-y);
-  --ds-input-default-font-size: var(--ds-input-md-font-size);
-
   /* Textarea specific */
   --ds-textarea-min-height: 6rem;       /* 96px */
   --ds-textarea-max-height: 24rem;      /* 384px */
@@ -188,7 +182,7 @@
   --ds-input-action-size: var(--ds-input-md-icon-size);
   --ds-input-action-radius: var(--ds-input-clear-radius);
   --ds-input-action-active-transform: scale(0.94);
-  --ds-input-touch-target-min: 2.75rem;
+  --ds-input-touch-target-min: var(--ds-touch-target-min, 2.75rem);
 
   /* Loading */
   --ds-input-loading-size: var(--ds-input-md-icon-size);
@@ -197,22 +191,12 @@
   --ds-input-loading-duration: 720ms;
 
   /* ========================================================================
-     PASSWORD TOGGLE
-     Settings for password visibility toggle
-     ======================================================================== */
-  --ds-input-password-toggle-size: 1.25rem;
-  --ds-input-password-toggle-color: var(--ds-color-neutral-500);
-  --ds-input-password-toggle-color-hover: var(--ds-color-neutral-700);
-
-  /* ========================================================================
      CHARACTER COUNT
      Settings for character counter
      ======================================================================== */
   --ds-input-count-color: var(--ds-color-neutral-500);
   --ds-input-count-color-warning: var(--ds-color-warning-600);
   --ds-input-count-color-error: var(--ds-color-error-600);
-  --ds-input-count-font-size: var(--ds-font-size-sm);
-  --ds-input-count-margin-top: 0.25rem;
 
   /* ========================================================================
      LABEL
@@ -270,25 +254,6 @@
      ======================================================================== */
   --ds-input-search-icon-color: var(--ds-color-neutral-500);
   --ds-input-search-clear-color: var(--ds-color-neutral-400);
-
-  /* ========================================================================
-     NUMBER INPUT
-     Specific settings for number inputs
-     ======================================================================== */
-  --ds-input-number-controls-width: 1.5rem;
-  --ds-input-number-controls-bg: var(--ds-color-neutral-50);
-  --ds-input-number-controls-bg-hover: var(--ds-color-neutral-100);
-  --ds-input-number-controls-color: var(--ds-color-neutral-600);
-  --ds-input-number-controls-border-color: var(--ds-color-neutral-300);
-
-  /* ========================================================================
-     FILE INPUT
-     Specific settings for file inputs
-     ======================================================================== */
-  --ds-input-file-button-bg: var(--ds-color-neutral-100);
-  --ds-input-file-button-bg-hover: var(--ds-color-neutral-200);
-  --ds-input-file-button-color: var(--ds-color-neutral-700);
-  --ds-input-file-button-padding: 0.5rem 1rem;
 
   /* ========================================================================
      TRANSITIONS

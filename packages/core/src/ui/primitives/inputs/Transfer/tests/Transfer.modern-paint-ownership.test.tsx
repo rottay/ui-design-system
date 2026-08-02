@@ -201,11 +201,19 @@ describe('Transfer modern -- geometry lives in the skin, hooks in the DOM', () =
     const coarse = SKIN_NC.match(/@media \(pointer: coarse\)\s*\{\n([\s\S]*?)\n\}/);
     expect(coarse, 'coarse media block present').not.toBeNull();
     const body = coarse![1];
-    expect(/\[data-part='panel-search'\]\s*\{[^}]*min-block-size:\s*var\(--ds-input-touch-target-min,\s*44px\)/.test(body)).toBe(true);
-    expect(/\[data-part='move-button'\]\s*\{[^}]*min-inline-size:\s*var\(--ds-input-touch-target-min,\s*44px\)/.test(body)).toBe(true);
-    expect(/\[data-part='move-button'\]\s*\{[^}]*min-block-size:\s*var\(--ds-input-touch-target-min,\s*44px\)/.test(body)).toBe(true);
-    expect(/\[data-part='pagination-button'\]\s*\{[^}]*min-inline-size:\s*var\(--ds-input-touch-target-min,\s*44px\)/.test(body)).toBe(true);
-    expect(/\[data-part='pagination-button'\]\s*\{[^}]*min-block-size:\s*var\(--ds-input-touch-target-min,\s*44px\)/.test(body)).toBe(true);
+    // C2c law: the family touch channel chains to the single canonical
+    // --ds-touch-target-min, so 44px is that channel's fallback and no longer
+    // sits beside the family name. Pinned per part as a chain, not a literal.
+    const floorPin = (part: string, property: string) =>
+      new RegExp(
+        `\\[data-part='${part}'\\]\\s*\\{[^}]*${property}:\\s*` +
+          `var\\(\\s*--ds-input-touch-target-min\\s*,\\s*var\\(\\s*--ds-touch-target-min\\s*,\\s*44px\\s*\\)\\s*\\)`
+      );
+    expect(floorPin('panel-search', 'min-block-size').test(body)).toBe(true);
+    expect(floorPin('move-button', 'min-inline-size').test(body)).toBe(true);
+    expect(floorPin('move-button', 'min-block-size').test(body)).toBe(true);
+    expect(floorPin('pagination-button', 'min-inline-size').test(body)).toBe(true);
+    expect(floorPin('pagination-button', 'min-block-size').test(body)).toBe(true);
   });
 
   it('skin pins: move + pagination buttons repaint on hover with the certified ghost grammar (flagship interactive-states regression)', () => {

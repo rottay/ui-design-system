@@ -27,7 +27,7 @@ const defaultItems = [
   { key: 'copy', label: 'Copy', shortcut: 'Ctrl+C' },
   { key: 'paste', label: 'Paste', shortcut: 'Ctrl+V' },
   { key: 'cut', label: 'Cut', shortcut: 'Ctrl+X' },
-  { key: 'd1', label: '', type: 'divider' as const },
+  { key: 'd1', type: 'divider' as const },
   { key: 'delete', label: 'Delete', danger: true },
 ];
 
@@ -59,7 +59,7 @@ export const WithIcons: Story = {
     items: [
       { key: 'edit', label: 'Edit', icon: <span>-</span> },
       { key: 'duplicate', label: 'Duplicate', icon: <span>+</span> },
-      { key: 'd1', label: '', type: 'divider' as const },
+      { key: 'd1', type: 'divider' as const },
       { key: 'archive', label: 'Archive' },
     ],
     trigger: (

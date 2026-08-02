@@ -25,8 +25,8 @@ import { getVerticalPreset } from '@/foundation/presets/verticals';
 import type { TenantAppearance, TenantConfig } from '@/foundation/contracts';
 import { brandThemeToTenantAppearance } from '@/ui/patterns/customization/brand-studio/runtime/file-export';
 
-const bithire = compileBrandTheme({ brandTheme: bithireBrandTheme });
-const themanagement = compileBrandTheme({ brandTheme: themanagementmiamiBrandTheme });
+const bithire = compileBrandTheme({ brandTheme: bithireBrandTheme, tenantSlug: 'bithire' });
+const themanagement = compileBrandTheme({ brandTheme: themanagementmiamiBrandTheme, tenantSlug: 'themanagementmiami' });
 const themanagementProjectedAppearance = brandThemeToTenantAppearance(
   themanagementmiamiBrandTheme
 );
@@ -139,9 +139,9 @@ describe('two tenants of the bithire vertical diverge on every bounded channel',
   });
 
   it('personality diverges on elevation, border treatment and motion', () => {
-    expect(themanagement.personality.card.defaultElevation).not.toBe(bithire.personality.card.defaultElevation);
-    expect(themanagement.personality.card.showBorder).not.toBe(bithire.personality.card.showBorder);
-    expect(themanagement.personality.animation.entrance).not.toBe(bithire.personality.animation.entrance);
+    expect(themanagement.personality.card!.defaultElevation).not.toBe(bithire.personality.card!.defaultElevation);
+    expect(themanagement.personality.card!.showBorder).not.toBe(bithire.personality.card!.showBorder);
+    expect(themanagement.personality.animation!.entrance).not.toBe(bithire.personality.animation!.entrance);
   });
 
   it('a large majority of the compiled surface actually moves', () => {

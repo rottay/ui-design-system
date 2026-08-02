@@ -65,7 +65,16 @@ export type DropdownPlacement =
  * };
  * ```
  */
-export interface DropdownMenuItem {
+/** A separator rule. It renders as a bare `role="separator"` and carries no
+ *  content, so it takes no `label`, `icon` or handler. */
+export interface DropdownMenuDivider {
+  /** Unique identifier for the divider */
+  key: string;
+  type: 'divider';
+}
+
+/** A selectable entry or a titled group. Both render content, so both label. */
+export interface DropdownMenuEntry {
   /** Unique identifier for the menu item */
   key: string;
   /** Display content for the menu item */
@@ -78,11 +87,20 @@ export interface DropdownMenuItem {
   danger?: boolean;
   /** Nested menu items for sub-menus */
   children?: DropdownMenuItem[];
-  /** Type of menu item ('item', 'divider', or 'group') */
-  type?: 'item' | 'divider' | 'group';
+  /** Type of menu item ('item' or 'group'); defaults to 'item' */
+  type?: 'item' | 'group';
   /** Click handler for the menu item */
   onClick?: () => void;
 }
+
+/**
+ * A dropdown entry, discriminated on `type`.
+ *
+ * A divider has no content — the engines return `<li role="separator" />` and
+ * never read `label` — so requiring one made the separator shape in this
+ * module's own usage example impossible to express.
+ */
+export type DropdownMenuItem = DropdownMenuEntry | DropdownMenuDivider;
 
 /**
  * Configuration for the dropdown menu.

@@ -457,7 +457,7 @@
   .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="option"],
   .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="tree-node-toggle"],
   .ds-tree-select.ds-tree-select--modern[data-part="root"] [data-part="clear-button"] {
-    min-block-size: var(--ds-tree-select-touch-target-min, 44px);
+    min-block-size: var(--ds-tree-select-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

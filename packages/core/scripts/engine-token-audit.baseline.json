@@ -8,7 +8,7 @@
   "depth.darkPureBlackElevations": 0,
   "scale.radiusScaleDeclarations": 1,
   "scale.fallbackParityViolations": 0,
-  "scale.fontSizeLiterals": 46,
+  "scale.fontSizeLiterals": 41,
   "state.darkFocusRingDefects": 0,
   "state.inlineStateLiterals": 0,
   "effects.gradientConsumers": 3,
@@ -16,7 +16,7 @@
   "effects.glowConsumers": 1,
   "daisy.classConsumers": 0,
   "color.modernHexLiterals": 13,
-  "color.modernRgbaLiterals": 1,
+  "color.modernRgbaLiterals": 0,
   "color.handAuthoredRampSteps": 0,
   "themeCss.unreferencedSelectors": 0,
   "themeCss.lineCount": 1345,
@@ -3288,5 +3288,14 @@
   "embeddedCssPaint.primitives/foundation/loading-indicator/contracts/index.ts": 0,
   "embeddedCssPaint.primitives/runtime/collection/combobox/index.ts": 0,
   "embeddedCssPaint.primitives/runtime/collection/roving-focus/index.ts": 0,
-  "embeddedCssPaint.primitives/runtime/collection/typeahead/index.ts": 0
+  "embeddedCssPaint.primitives/runtime/collection/typeahead/index.ts": 0,
+  "fleet.inlinePaint.patterns/data/widget-board/runtime/solver/policy/index.ts": 0,
+  "fleet.inlinePaint.patterns/data/widget-board/runtime/solver/index.ts": 0,
+  "runtimeSvgPaint.patterns/data/widget-board/runtime/solver/policy/index.ts": 0,
+  "runtimeSvgPaint.patterns/data/widget-board/runtime/solver/index.ts": 0,
+  "embeddedCssPaint.patterns/data/widget-board/runtime/solver/policy/index.ts": 0,
+  "embeddedCssPaint.patterns/data/widget-board/runtime/solver/index.ts": 0,
+  "fleet.inlinePaint.patterns/data/widget-board/runtime/solver/react/index.ts": 0,
+  "runtimeSvgPaint.patterns/data/widget-board/runtime/solver/react/index.ts": 0,
+  "embeddedCssPaint.patterns/data/widget-board/runtime/solver/react/index.ts": 0
 }

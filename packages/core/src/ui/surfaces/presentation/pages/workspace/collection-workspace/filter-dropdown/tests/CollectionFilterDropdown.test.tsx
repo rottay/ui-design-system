@@ -122,7 +122,7 @@ function PortalHarness() {
 }
 
 function anchorWithRect(rect: DOMRect | (() => DOMRect)): HTMLButtonElement {
-  const anchor = screen.getByRole('button', { name: 'Filters' });
+  const anchor = screen.getByRole<HTMLButtonElement>('button', { name: 'Filters' });
   anchor.getBoundingClientRect = vi.fn(() => (
     typeof rect === 'function' ? rect() : rect
   ));

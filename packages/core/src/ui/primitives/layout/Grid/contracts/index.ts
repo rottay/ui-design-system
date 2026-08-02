@@ -78,14 +78,32 @@ export type GridColumnsValue =
   | "none";
 
 /**
- * Grid columns prop type - can be a number, 'auto', or responsive object
+ * An explicit CSS track list (`"2fr 1fr"`, `"auto auto"`, `"repeat(3, 1fr)"`).
+ *
+ * All three engines already ship this branch — each `resolveColumns` ends in
+ * `if (typeof columns === "string") return columns;` — so the passthrough is
+ * shipped behavior that the type simply failed to describe. `string & {}` keeps
+ * the named `GridColumnsValue` literals visible to autocomplete instead of
+ * letting a bare `string` swallow the union.
  */
-export type GridColumns = GridColumnsValue | ResponsiveValue<GridColumnsValue>;
+export type GridTrackTemplate = string & {};
+
+/**
+ * Grid columns prop type - a count, a keyword, an explicit track list, or a
+ * responsive object of any of those.
+ */
+export type GridColumns =
+  | GridColumnsValue
+  | GridTrackTemplate
+  | ResponsiveValue<GridColumnsValue | GridTrackTemplate>;
 
 /**
  * Grid rows prop type
  */
-export type GridRows = GridColumnsValue | ResponsiveValue<GridColumnsValue>;
+export type GridRows =
+  | GridColumnsValue
+  | GridTrackTemplate
+  | ResponsiveValue<GridColumnsValue | GridTrackTemplate>;
 
 /**
  * Gap/spacing preset values
@@ -373,7 +391,7 @@ export interface GridProps
   lang?: string;
 
   /** Writing direction; logical tracks and safe sizing remain RTL-aware. */
-  dir?: React.HTMLAttributes<HTMLElement>["dir"];
+  dir?: BaseComponentProps["dir"];
 }
 
 /**
@@ -486,7 +504,7 @@ export interface GridItemProps extends WithChildrenProps, BaseComponentProps {
   lang?: string;
 
   /** Writing direction for item content. */
-  dir?: React.HTMLAttributes<HTMLElement>["dir"];
+  dir?: BaseComponentProps["dir"];
 }
 
 /**

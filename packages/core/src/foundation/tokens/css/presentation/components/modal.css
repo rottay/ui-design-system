@@ -37,9 +37,6 @@
   --ds-modal-max-height: calc(100vh - 4rem); /* Max height with margins */
   --ds-modal-full-height: calc(100vh - 2rem);
 
-  /* Default size */
-  --ds-modal-default-width: var(--ds-modal-md-width);
-
   /* ========================================================================
      OVERLAY/BACKDROP
      Background overlay behind the modal

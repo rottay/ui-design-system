@@ -55,7 +55,7 @@ export function collectStackResponsiveEntries(
     // horizontal rule to select on. Reverse only flips order, never the axis.
     if (props.divider) {
       entries.push({
-        cssProperty: "--_ds-proto-stack-divider-gap-block",
+        cssProperty: "--_ds-stack-divider-gap-block",
         value: props.direction,
         resolve: (value: StackDirection) =>
           value === "horizontal"
@@ -63,7 +63,7 @@ export function collectStackResponsiveEntries(
             : "calc(var(--_ds-stack-gap-current, 0px) / -2)",
       });
       entries.push({
-        cssProperty: "--_ds-proto-stack-divider-gap-inline",
+        cssProperty: "--_ds-stack-divider-gap-inline",
         value: props.direction,
         resolve: (value: StackDirection) =>
           value === "horizontal"

@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -196,5 +202,80 @@ test("reduced-motion authority exists in both OS and runtime policy seams", () =
   for (const token of tokens) {
     assert.match(transitions, new RegExp(`${token}: 0s !important;`));
     assert.match(personality, new RegExp(`${token}: 0s !important;`));
+  }
+});
+
+test("both-halves-ship: the real tree has no undeclared orphan", async () => {
+  const { auditGovernedFilesAreReachable } = await import(
+    "./css-layer-paint-gate.mjs"
+  );
+  assert.deepEqual(auditGovernedFilesAreReachable(), []);
+});
+
+test("both-halves-ship: an orphaned governed file FAILS the gate", async () => {
+  const { auditGovernedFilesAreReachable } = await import(
+    "./css-layer-paint-gate.mjs"
+  );
+  const root = mkdtempSync(join(tmpdir(), "css-reachability-"));
+  try {
+    mkdirSync(join(root, "facade/entrypoints"), { recursive: true });
+    mkdirSync(join(root, "presentation/components"), { recursive: true });
+    writeFileSync(
+      join(root, "facade/entrypoints/base.css"),
+      '@import "../../presentation/components/live.css" layer(rottay-components);'
+    );
+    writeFileSync(join(root, "presentation/components/live.css"), ".a{color:red}");
+    // The exact shape of the 2026-07-25 defect: a split half nothing imports.
+    writeFileSync(
+      join(root, "presentation/components/live-paint.css"),
+      ".a{background:red}"
+    );
+
+    const failures = auditGovernedFilesAreReachable({
+      cssRoot: root,
+      allowlist: new Map(),
+    });
+    assert.equal(failures.length, 1, failures.join("\n"));
+    assert.match(failures[0], /live-paint\.css is imported by no entrypoint/);
+
+    // Declaring it silences the gate; that is the intended escape hatch.
+    assert.deepEqual(
+      auditGovernedFilesAreReachable({
+        cssRoot: root,
+        allowlist: new Map([
+          ["presentation/components/live-paint.css", "tombstone"],
+        ]),
+      }),
+      []
+    );
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("both-halves-ship: a stale unreachable-by-design entry FAILS", async () => {
+  const { auditGovernedFilesAreReachable } = await import(
+    "./css-layer-paint-gate.mjs"
+  );
+  const root = mkdtempSync(join(tmpdir(), "css-reachability-stale-"));
+  try {
+    mkdirSync(join(root, "facade/entrypoints"), { recursive: true });
+    mkdirSync(join(root, "presentation/components"), { recursive: true });
+    writeFileSync(
+      join(root, "facade/entrypoints/base.css"),
+      '@import "../../presentation/components/live.css" layer(rottay-components);'
+    );
+    writeFileSync(join(root, "presentation/components/live.css"), ".a{color:red}");
+
+    const failures = auditGovernedFilesAreReachable({
+      cssRoot: root,
+      allowlist: new Map([
+        ["presentation/components/live.css", "claims to be unreachable"],
+      ]),
+    });
+    assert.equal(failures.length, 1, failures.join("\n"));
+    assert.match(failures[0], /stale unreachable-by-design entry/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
   }
 });

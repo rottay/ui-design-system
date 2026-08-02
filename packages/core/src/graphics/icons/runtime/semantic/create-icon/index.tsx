@@ -16,6 +16,7 @@ import {
 import { ICON_SIZE_TOKENS } from '../../../foundation';
 import type { IconRole, IconState, IconTone } from '../../../foundation/contracts';
 import { resolveIconWeight } from '../../../foundation/contracts/registry/policy';
+import { useActiveIconExpressiveProfile } from '../../../../../infrastructure/runtime/foundation/icons/active-profile';
 import type { IconProps } from '../../../foundation/contracts/registry/semantic';
 
 type DistributiveOmit<T, Key extends PropertyKey> = T extends unknown ? Omit<T, Key> : never;
@@ -153,6 +154,13 @@ export function createSemanticIcon(
       'data-part': dataPart,
     } = props;
 
+    // C2c: the tenant's governed icon posture. In client/SSR worlds this is
+    // a context read (a real hook — it MUST run before any early return so
+    // the hook order is invariant); in the RSC world it is a plain
+    // per-request box read filled by the application's `/server` seam.
+    // State weights remain supreme inside the resolver.
+    const activeIconProfile = useActiveIconExpressiveProfile();
+
     const normalizedLabel = typeof label === 'string' ? label.trim() : '';
     const isLabeled = normalizedLabel.length > 0;
     const isDecorative = decorative === true;
@@ -176,7 +184,11 @@ export function createSemanticIcon(
     const resolvedState = VALID_STATES.has(state as IconState) ? state as IconState : 'idle';
     const resolvedTone = resolveTone(defaultTone, resolvedState, tone);
     const resolvedMirroring = normalizeMirroring(mirrored, autoMirror);
-    const weight = resolveIconWeight(resolvedRole, resolvedState);
+    const weight = resolveIconWeight(
+      resolvedRole,
+      resolvedState,
+      activeIconProfile,
+    );
     const mirrorMarker = resolvedMirroring === 'auto'
       ? 'auto'
       : resolvedMirroring

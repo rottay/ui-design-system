@@ -165,3 +165,12 @@
     outline-offset: -2px;
   }
 }
+
+/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
+   below the canonical --ds-touch-target-min channel; fine pointers keep the
+   authored size untouched. */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}

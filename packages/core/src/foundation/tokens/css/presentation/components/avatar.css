@@ -53,12 +53,6 @@
   --ds-avatar-3xl-status-size: 1.25rem;  /* 20px */
   --ds-avatar-3xl-border-width: 4px;
 
-  /* Default size (can be overridden) */
-  --ds-avatar-default-size: var(--ds-avatar-md-size);
-  --ds-avatar-default-font-size: var(--ds-avatar-md-font-size);
-  --ds-avatar-default-status-size: var(--ds-avatar-md-status-size);
-  --ds-avatar-default-border-width: var(--ds-avatar-md-border-width);
-
   /* ========================================================================
      SHAPES - Avatar Border Radius
      Three shape variants: circle, square, rounded
@@ -66,9 +60,6 @@
   --ds-avatar-circle-radius: 50%;                          /* Fully rounded */
   --ds-avatar-square-radius: 0;                            /* No rounding */
   --ds-avatar-rounded-radius: var(--ds-radius-md, 0.5rem);    /* 8px rounded corners */
-
-  /* Default shape */
-  --ds-avatar-default-shape: var(--ds-avatar-circle-radius);
 
   /* ========================================================================
      VARIANTS - Avatar Color Variants

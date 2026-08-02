@@ -156,7 +156,7 @@ describe('resolveSpatialPolicy', () => {
     [{ quality: 'low' }, 'requested low quality'],
     [{ adaptiveLow: true }, 'adaptive downgrade'],
     [{ tablet: true, quality: 'high' }, 'tablet high request'],
-  ])('selects live-low for %s (%s)', (overrides) => {
+  ])('selects live-low for %s (%s)', (overrides, _reason) => {
     expect(resolveSpatialPolicy({ ...LIVE_INPUT, ...overrides })).toEqual({
       mode: 'live-low',
       backend: 'webgl2',

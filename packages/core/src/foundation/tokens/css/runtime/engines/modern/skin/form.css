@@ -15,7 +15,7 @@
  *   stack (previously `align-items: center` drifted the label whenever a
  *   message appeared): the item cross-aligns to start and the label row is
  *   stretched to the density-aware control height
- *   (`--_ds-proto-form-control-height`, derived per size from the Input
+ *   (`--_ds-form-control-height`, derived per size from the Input
  *   height channels -- the same grammar FormField uses).
  * - The horizontal label column consumes the existing tenant channel
  *   `--ds-form-label-width` (default.css) instead of a 25% literal.
@@ -60,15 +60,24 @@
 }
 
 /* Control geometry the horizontal label aligns to (Input height channels,
-   density-aware -- FormField grammar). Falls back to the md step. */
+   density-aware -- FormField grammar). Falls back to the md step.
+
+   DEC-05 RESOLVED: this relay and `--_ds-form-field-control-height` in
+   form-field.css are EXACT structural twins, and they stay two deliberately
+   SEPARATE private relays rather than collapsing into one shared channel. The
+   reason is inheritance: a FormField nested inside a Form must align to its OWN
+   data-size, not silently inherit the Form's step. One shared name would make
+   the outer Form's size cascade into every nested field, which is precisely the
+   bug the separation prevents. Duplication here is the correct answer, so the
+   name is settled private canon rather than an open adjudication. */
 .ds-form.ds-form--modern[data-part='root'][data-size='sm'] {
-  --_ds-proto-form-control-height: var(--ds-input-sm-height);
+  --_ds-form-control-height: var(--ds-input-sm-height);
 }
 .ds-form.ds-form--modern[data-part='root'][data-size='md'] {
-  --_ds-proto-form-control-height: var(--ds-input-md-height);
+  --_ds-form-control-height: var(--ds-input-md-height);
 }
 .ds-form.ds-form--modern[data-part='root'][data-size='lg'] {
-  --_ds-proto-form-control-height: var(--ds-input-lg-height);
+  --_ds-form-control-height: var(--ds-input-lg-height);
 }
 
 /* Item: rhythm only, NO card chrome (product law: labels and controls share
@@ -97,7 +106,7 @@
   /* Label text centers against the control's own box (density-aware floor);
      multi-line labels grow past it without drifting the control. */
   min-block-size: calc(
-    var(--_ds-proto-form-control-height, var(--ds-input-md-height)) *
+    var(--_ds-form-control-height, var(--ds-input-md-height)) *
     var(--ds-density-effective-scale)
   );
   /* The vertical-layout bottom gap would skew the optical centering. */
@@ -281,8 +290,8 @@
    idiom), optically centered on the message line box. */
 .ds-form-item.ds-form-item--modern [data-part='error-icon'] {
   flex: none;
-  inline-size: var(--_ds-proto-form-error-icon-size, var(--ds-icon-size-status, 14px));
-  block-size: var(--_ds-proto-form-error-icon-size, var(--ds-icon-size-status, 14px));
+  inline-size: var(--ds-icon-size-status, 14px);
+  block-size: var(--ds-icon-size-status, 14px);
   color: var(--ds-color-error);
 }
 

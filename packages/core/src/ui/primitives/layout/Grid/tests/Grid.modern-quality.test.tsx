@@ -48,7 +48,10 @@ describe("Modern Grid quality contract", () => {
     expect(grid.style.gridTemplateColumns).toBe(
       "repeat(auto-fit, minmax(min(100%, 18rem), 1fr))"
     );
-    expect(grid.style.gap).toContain("--ds-spacing-6");
+    // A preset rung rides --ds-grid-gap so the stylesheet can size the room
+    // with the tenant rhythm axis; only a numeric gap stays an inline `gap`.
+    expect(grid.getAttribute("style")).toContain("--ds-spacing-6");
+    expect(grid).toHaveAttribute("data-gap-preset", "lg");
   });
 
   it("keeps responsive tracks scoped and zero-minimum at every breakpoint", () => {

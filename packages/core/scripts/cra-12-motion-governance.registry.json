@@ -214,7 +214,7 @@
     },
     "raw-motion-timing": {
       "owner": "design-system",
-      "reason": "Exact reviewed CRA12 raw-timing inventory, reconciled after canonical source relocation and the net-decreasing BitHire AdaptiveOverlay migration; additions and body drift are forbidden.",
+      "reason": "Exact reviewed CRA12 raw-timing inventory, reconciled after canonical source relocation and the net-decreasing BitHire AdaptiveOverlay migration; additions and body drift are forbidden. | 2026-08-02 re-pin: F1 socket moved a tracked body (transition literal became the FALLBACK arm of governed --ds-metric-card-transition/hover-transform \u2014 same literal, now tenant-overridable; counts unchanged/decreased)",
       "expires": "2026-12-31",
       "files": [
         {
@@ -278,7 +278,7 @@
           "scope": "ds-internal",
           "maxCount": 432,
           "maxFiles": 170,
-          "digest": "aa3a9660e7000586c344d60b4511dc8a7e92fce4c30baed280366660c54df653"
+          "digest": "3b03d620b516b1aa1974957365f89617961e979bdaff6c65a28c13723bf2be0d"
         },
         {
           "repo": "ui-design-system",
@@ -330,7 +330,7 @@
     },
     "transition-all": {
       "owner": "design-system",
-      "reason": "Exact reviewed CRA12 transition-all inventory, reconciled after canonical source relocation; additions and body drift are forbidden.",
+      "reason": "Exact reviewed CRA12 transition-all inventory, reconciled after canonical source relocation; additions and body drift are forbidden. | 2026-08-02 re-pin: F1 socket moved a tracked body (transition literal became the FALLBACK arm of governed --ds-metric-card-transition/hover-transform \u2014 same literal, now tenant-overridable; counts unchanged/decreased)",
       "expires": "2026-12-31",
       "files": [
         {
@@ -373,7 +373,7 @@
           "scope": "ds-internal",
           "maxCount": 47,
           "maxFiles": 26,
-          "digest": "5ea4f1a6e4600bf90c693099fc627ebd676df5e4a52cd0194ea0c816c821a538"
+          "digest": "e8d531248880f6b7d8fc4ba6d5a4718ab6fd2999f7edbcd26db11fd93b42c0d9"
         },
         {
           "repo": "ui-design-system",

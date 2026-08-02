@@ -89,6 +89,82 @@
   row-gap: var(--ds-flex-row-gap);
 }
 
+/* Rhythm-aware preset gaps. `--ds-flex-gap` carries BOTH a rung
+   (`var(--ds-spacing-4, 1rem)`) and a caller's measurement (`16px`), so the
+   channel alone cannot say which it is holding. The contract now stamps the
+   preset SPELLING per axis (`data-gap-preset`, `data-column-gap-preset`,
+   `data-row-gap-preset`) and only for rungs -- a numeric gap stamps nothing and
+   never matches below, which is how exact geometry stays exact. Keyed on the
+   enumerated spellings only, exactly the law Space declares for `data-size` and
+   Stack for its `custom` rung. `none` is absent on purpose: zero has no room to
+   scale. `:where()` holds these at the base rules' specificity so source order
+   -- not escalation -- decides, and the split axes are separate rules because
+   `[column, row]` may mix a rung with a measurement. */
+.rottay-flex[data-gap="uniform"]:where(
+  [data-gap-preset="xs"],
+  [data-gap-preset="sm"],
+  [data-gap-preset="md"],
+  [data-gap-preset="lg"],
+  [data-gap-preset="xl"],
+  [data-gap-preset="2xl"],
+  [data-gap-preset="3xl"],
+  [data-gap-preset="4xl"]
+) {
+  gap: calc(var(--ds-flex-gap) * var(--ds-rhythm-effective-scale, 1));
+}
+
+.rottay-flex[data-gap="split"]:where(
+  [data-column-gap-preset="xs"],
+  [data-column-gap-preset="sm"],
+  [data-column-gap-preset="md"],
+  [data-column-gap-preset="lg"],
+  [data-column-gap-preset="xl"],
+  [data-column-gap-preset="2xl"],
+  [data-column-gap-preset="3xl"],
+  [data-column-gap-preset="4xl"]
+) {
+  column-gap: calc(var(--ds-flex-column-gap) * var(--ds-rhythm-effective-scale, 1));
+}
+
+.rottay-flex[data-gap="split"]:where(
+  [data-row-gap-preset="xs"],
+  [data-row-gap-preset="sm"],
+  [data-row-gap-preset="md"],
+  [data-row-gap-preset="lg"],
+  [data-row-gap-preset="xl"],
+  [data-row-gap-preset="2xl"],
+  [data-row-gap-preset="3xl"],
+  [data-row-gap-preset="4xl"]
+) {
+  row-gap: calc(var(--ds-flex-row-gap) * var(--ds-rhythm-effective-scale, 1));
+}
+
+/* Grid presets ride the same contract. The modern Grid engine used to write an
+   inline `gap`, which no stylesheet can reach; it now routes a RUNG through
+   `--ds-grid-gap` + `data-gap-preset` and keeps writing inline `gap` for a
+   numeric value, so a measurement is still sovereign by the strongest means CSS
+   has (an inline declaration) and never appears in the channel at all. */
+.rottay-grid[data-gap-preset] {
+  gap: var(--ds-grid-gap);
+}
+
+/* Anchored on the engine class, NOT on a second `[data-gap-preset]`: repeating
+   the attribute to climb specificity is forbidden, and `:where()` contributes
+   nothing, so matching the base rule's (0,2,0) and sorting later is what makes
+   this win. */
+.rottay-grid.rottay-grid--modern:where(
+  [data-gap-preset="xs"],
+  [data-gap-preset="sm"],
+  [data-gap-preset="md"],
+  [data-gap-preset="lg"],
+  [data-gap-preset="xl"],
+  [data-gap-preset="2xl"],
+  [data-gap-preset="3xl"],
+  [data-gap-preset="4xl"]
+) {
+  gap: calc(var(--ds-grid-gap) * var(--ds-rhythm-effective-scale, 1));
+}
+
 /* Stack defaults. Preset spacing stays connected to the tenant spacing ramp,
    whose channels are ALREADY density-scaled at the token layer
    (foundation/base/spacing.css: --ds-spacing-N = rung *
@@ -100,23 +176,32 @@
    flags (proto, private) live on the root so the responsive runtime can
    re-project them per breakpoint -- a responsive direction stamps no
    data-direction attribute for the horizontal rule below to select on, and
-   custom properties inherit to the generated divider. */
+   custom properties inherit to the generated divider.
+
+   Layout rhythm rides the PRESETS, not the consume site. Each preset rung is
+   multiplied by --ds-rhythm-effective-scale where it is assigned, so every
+   rung, the `gap` and the divider centering that reads the same private
+   channel all stay in agreement. `none` (0) and `custom` are deliberately
+   untouched: a consumer's numeric gap is exact geometry under rhythm for the
+   same reason it is under density. This is NOT double-scaling against the
+   density factor already inside --ds-spacing-N -- density sized the control,
+   rhythm sizes the room between controls. */
 .rottay-stack {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: stretch;
   justify-content: flex-start;
-  --_ds-stack-gap-current: var(--ds-spacing-4);
+  --_ds-stack-gap-current: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1));
   gap: var(--_ds-stack-gap-current);
-  --_ds-proto-stack-divider-gap-block: calc(var(--_ds-stack-gap-current, 0px) / -2);
-  --_ds-proto-stack-divider-gap-inline: var(--ds-stack-divider-inset, 0px);
+  --_ds-stack-divider-gap-block: calc(var(--_ds-stack-gap-current, 0px) / -2);
+  --_ds-stack-divider-gap-inline: var(--ds-stack-divider-inset, 0px);
 }
 
 .rottay-stack[data-direction="horizontal"] {
   flex-direction: row;
-  --_ds-proto-stack-divider-gap-block: var(--ds-stack-divider-inset, 0px);
-  --_ds-proto-stack-divider-gap-inline: calc(var(--_ds-stack-gap-current, 0px) / -2);
+  --_ds-stack-divider-gap-block: var(--ds-stack-divider-inset, 0px);
+  --_ds-stack-divider-gap-inline: calc(var(--_ds-stack-gap-current, 0px) / -2);
 }
 
 .rottay-stack[data-reverse="true"] {
@@ -172,35 +257,35 @@
 }
 
 .rottay-stack[data-spacing="xs"] {
-  --_ds-stack-gap-current: var(--ds-spacing-1);
+  --_ds-stack-gap-current: calc(var(--ds-spacing-1) * var(--ds-rhythm-effective-scale, 1));
 }
 
 .rottay-stack[data-spacing="sm"] {
-  --_ds-stack-gap-current: var(--ds-spacing-2);
+  --_ds-stack-gap-current: calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1));
 }
 
 .rottay-stack[data-spacing="md"] {
-  --_ds-stack-gap-current: var(--ds-spacing-4);
+  --_ds-stack-gap-current: calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1));
 }
 
 .rottay-stack[data-spacing="lg"] {
-  --_ds-stack-gap-current: var(--ds-spacing-6);
+  --_ds-stack-gap-current: calc(var(--ds-spacing-6) * var(--ds-rhythm-effective-scale, 1));
 }
 
 .rottay-stack[data-spacing="xl"] {
-  --_ds-stack-gap-current: var(--ds-spacing-8);
+  --_ds-stack-gap-current: calc(var(--ds-spacing-8) * var(--ds-rhythm-effective-scale, 1));
 }
 
 .rottay-stack[data-spacing="2xl"] {
-  --_ds-stack-gap-current: var(--ds-spacing-10);
+  --_ds-stack-gap-current: calc(var(--ds-spacing-10) * var(--ds-rhythm-effective-scale, 1));
 }
 
 .rottay-stack[data-spacing="3xl"] {
-  --_ds-stack-gap-current: var(--ds-spacing-12);
+  --_ds-stack-gap-current: calc(var(--ds-spacing-12) * var(--ds-rhythm-effective-scale, 1));
 }
 
 .rottay-stack[data-spacing="4xl"] {
-  --_ds-stack-gap-current: var(--ds-spacing-16);
+  --_ds-stack-gap-current: calc(var(--ds-spacing-16) * var(--ds-rhythm-effective-scale, 1));
 }
 
 /* A consumer's numeric gap is exact geometry: honored as-is, never
@@ -232,11 +317,11 @@
   min-inline-size: 0;
   min-block-size: 0;
   margin-block: var(
-    --_ds-proto-stack-divider-gap-block,
+    --_ds-stack-divider-gap-block,
     calc(var(--_ds-stack-gap-current, 0px) / -2)
   );
   margin-inline: var(
-    --_ds-proto-stack-divider-gap-inline,
+    --_ds-stack-divider-gap-inline,
     var(--ds-stack-divider-inset, 0px)
   );
   background: var(
@@ -381,10 +466,9 @@
   /* Ramp-first fallback: `--ds-space-small-size` stays as the compat alias a
      tenant may already set, but the terminal value is the DS spacing ramp so
      a spacing refinement moves Space together with Stack (pre-flag 9). */
-  gap: var(
-    --ds-space-instance-gap,
-    var(--ds-space-small-size, var(--ds-spacing-2))
-  );
+  /* One line, like its density+rhythm twin below: a wrapped `var(` hides the
+     channel from every grep-shaped reader, `hasConsumer` included. */
+  gap: var(--ds-space-instance-gap, var(--ds-space-small-size, var(--ds-spacing-2)));
   transition: gap
       var(--ds-space-motion-duration, var(--ds-motion-fast))
       var(--ds-space-motion-easing, var(--ds-motion-ease-out)),
@@ -409,13 +493,7 @@
   [data-size="md"],
   [data-size="lg"]
 ) {
-  gap: calc(
-    var(
-        --ds-space-instance-gap,
-        var(--ds-space-small-size, var(--ds-spacing-2))
-      ) *
-      var(--ds-density-effective-scale)
-  );
+  gap: calc(var(--ds-space-instance-gap, var(--ds-space-small-size, var(--ds-spacing-2))) * var(--ds-density-effective-scale) * var(--ds-rhythm-effective-scale, 1));
 }
 
 .rottay-space.rottay-space--modern[data-direction="vertical"] {

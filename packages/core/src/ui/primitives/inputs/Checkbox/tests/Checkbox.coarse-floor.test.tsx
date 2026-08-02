@@ -21,14 +21,23 @@ const SKIN = readFileSync(
  * unconditional on the labeled root row and re-asserted under
  * `@media (pointer: coarse)` including the standalone indicator geometry.
  */
+/**
+ * C2c law: the family touch channel now chains to the single canonical
+ * `--ds-touch-target-min`, so the physical 44px is that channel's fallback
+ * rather than the family's. Pinned as a chain, whitespace-tolerant, so
+ * reformatting cannot break it and a reverted reroute cannot pass it.
+ */
+const FLOOR_CHAIN =
+  /var\(\s*--ds-checkbox-touch-target-min\s*,\s*var\(\s*--ds-touch-target-min\s*,\s*44px\s*\)\s*\)/;
+
 describe('Checkbox modern skin: 44px touch floor (R0/states spec)', () => {
   it('carries an unconditional physical-pixel floor on the labeled root row', () => {
     const rootRule = SKIN.match(
       /\.ds-checkbox\.ds-checkbox--modern\[data-part='root'\] \{[^}]*\}/
     );
     expect(rootRule).not.toBeNull();
-    expect(rootRule![0]).toContain(
-      'min-block-size: var(--ds-checkbox-touch-target-min, 44px);'
+    expect(rootRule![0]).toMatch(
+      new RegExp(`min-block-size:\\s*${FLOOR_CHAIN.source}`)
     );
     // The labeled single keeps the floor: only the standalone (indicator-only)
     // root is allowed to collapse, and only outside coarse pointers.
@@ -45,14 +54,14 @@ describe('Checkbox modern skin: 44px touch floor (R0/states spec)', () => {
     expect(coarse![0]).toContain(
       ".ds-checkbox.ds-checkbox--modern[data-part='root'] {"
     );
-    expect(coarse![0]).toContain(
-      'min-block-size: var(--ds-checkbox-touch-target-min, 44px);'
+    expect(coarse![0]).toMatch(
+      new RegExp(`min-block-size:\\s*${FLOOR_CHAIN.source}`)
     );
     expect(coarse![0]).toContain(
       ".ds-checkbox.ds-checkbox--modern[data-part='root'][data-standalone='true'] {"
     );
-    expect(coarse![0]).toContain(
-      'min-inline-size: var(--ds-checkbox-touch-target-min, 44px);'
+    expect(coarse![0]).toMatch(
+      new RegExp(`min-inline-size:\\s*${FLOOR_CHAIN.source}`)
     );
   });
 
@@ -61,6 +70,10 @@ describe('Checkbox modern skin: 44px touch floor (R0/states spec)', () => {
     // narrow widths (measured: 41.25px on the live bundle), so any rem floor
     // silently breaks the law. The fallback must stay a physical 44px.
     expect(SKIN).not.toContain('--ds-checkbox-touch-target-min, 2.75rem');
-    expect(SKIN).toContain('--ds-checkbox-touch-target-min, 44px');
+    expect(SKIN).toMatch(FLOOR_CHAIN);
+    // The reroute moved the terminal fallback one link down, so the rem must
+    // be barred at the CANONICAL channel too -- otherwise the law could be
+    // broken at the very place it is now enforced.
+    expect(SKIN).not.toMatch(/var\(\s*--ds-touch-target-min\s*,\s*[\d.]+rem\s*\)/);
   });
 });

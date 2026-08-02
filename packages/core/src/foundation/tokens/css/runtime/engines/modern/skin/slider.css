@@ -55,7 +55,7 @@
  * visibility is sibling-driven (`input:hover/:focus-visible/:active` on the
  * single input, `+ handle + tooltip` in range mode) or forced with
  * `data-open='true'`. Surface/ink consume the global material overlay
- * channels; the thumb gap rides the `--_ds-proto-slider-tooltip-gap` proto.
+ * channels; the thumb gap rides the `--_ds-slider-tooltip-gap` proto.
  * `data-part='dot'` step markers center on the rail (pointer-transparent) and
  * `data-active` marks/dots gain weight + ink inside the filled span (never
  * color-only: position and weight carry the state).
@@ -362,22 +362,22 @@
    narrow widths -- measured on the live bundle, Axe R0). */
 @media (pointer: coarse) {
   .ds-slider.ds-slider--modern[data-orientation='horizontal'] {
-    min-block-size: var(--ds-slider-touch-target-min, 44px);
+    min-block-size: var(--ds-slider-touch-target-min, var(--ds-touch-target-min, 44px));
   }
   .ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay']) {
-    block-size: var(--ds-slider-touch-target-min, 44px);
+    block-size: var(--ds-slider-touch-target-min, var(--ds-touch-target-min, 44px));
   }
   /* The range overlay's invisible thumb pseudo is the hit region: it grows to
      the floor while the visible handle keeps its authored size. */
   .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']::-webkit-slider-thumb,
   .ds-slider.ds-slider--modern [data-part='native-input'][data-variant='overlay']::-moz-range-thumb {
-    inline-size: var(--ds-slider-touch-target-min, 44px);
-    block-size: var(--ds-slider-touch-target-min, 44px);
+    inline-size: var(--ds-slider-touch-target-min, var(--ds-touch-target-min, 44px));
+    block-size: var(--ds-slider-touch-target-min, var(--ds-touch-target-min, 44px));
   }
   /* Vertical overlays: the grown pseudo re-centers over the visible handle. */
   .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='native-input'][data-variant='overlay']::-webkit-slider-thumb,
   .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='native-input'][data-variant='overlay']::-moz-range-thumb {
-    margin-inline-start: calc((var(--ds-slider-thumb-size, 16px) - var(--ds-slider-touch-target-min, 44px)) / 2);
+    margin-inline-start: calc((var(--ds-slider-thumb-size, 16px) - var(--ds-slider-touch-target-min, var(--ds-touch-target-min, 44px))) / 2);
   }
 }
 
@@ -486,7 +486,7 @@
         horizontal); the transforms below place the bubble relative to that
         anchor. Surface/ink ride the global material overlay channels (same
         grammar as the Tooltip family recipe), the thumb gap is the
-        `--_ds-proto-slider-tooltip-gap` proto. aria-hidden in the engine --
+        `--_ds-slider-tooltip-gap` proto. aria-hidden in the engine --
         visibility here is purely visual. */
 .ds-slider.ds-slider--modern [data-part='tooltip'] {
   position: absolute;
@@ -512,26 +512,26 @@
    inline offset). The Y shift composes the bubble's own half, half the thumb
    and the proto gap; X centers, mirrored under :dir(rtl). */
 .ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='tooltip'][data-placement='top'] {
-  transform: translate(-50%, calc(-50% - (var(--ds-slider-thumb-size, 16px) / 2) - var(--_ds-proto-slider-tooltip-gap, 6px)));
+  transform: translate(-50%, calc(-50% - (var(--ds-slider-thumb-size, 16px) / 2) - var(--_ds-slider-tooltip-gap, 6px)));
 }
 .ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='tooltip'][data-placement='bottom'] {
-  transform: translate(-50%, calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-proto-slider-tooltip-gap, 6px)));
+  transform: translate(-50%, calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-slider-tooltip-gap, 6px)));
 }
 /* RTL centering mirror (the mark-label idiom): the logical inline anchor
    flips side under dir=rtl, so the X centering flips sign per placement. */
 .ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='tooltip'][data-placement='top']:dir(rtl) {
-  transform: translate(50%, calc(-50% - (var(--ds-slider-thumb-size, 16px) / 2) - var(--_ds-proto-slider-tooltip-gap, 6px)));
+  transform: translate(50%, calc(-50% - (var(--ds-slider-thumb-size, 16px) / 2) - var(--_ds-slider-tooltip-gap, 6px)));
 }
 .ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='tooltip'][data-placement='bottom']:dir(rtl) {
-  transform: translate(50%, calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-proto-slider-tooltip-gap, 6px)));
+  transform: translate(50%, calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-slider-tooltip-gap, 6px)));
 }
 /* Vertical placements: the anchor is the thumb center (left: 50% + bottom).
    Placements are physical (antd contract), so no direction mirror applies. */
 .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='right'] {
-  transform: translate(calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-proto-slider-tooltip-gap, 6px)), 50%);
+  transform: translate(calc(50% + (var(--ds-slider-thumb-size, 16px) / 2) + var(--_ds-slider-tooltip-gap, 6px)), 50%);
 }
 .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='tooltip'][data-placement='left'] {
-  transform: translate(calc(-50% - (var(--ds-slider-thumb-size, 16px) / 2) - var(--_ds-proto-slider-tooltip-gap, 6px)), 50%);
+  transform: translate(calc(-50% - (var(--ds-slider-thumb-size, 16px) / 2) - var(--_ds-slider-tooltip-gap, 6px)), 50%);
 }
 
 /* Visibility: focus/press on the driving input (single: adjacent sibling;
@@ -592,10 +592,10 @@
    native input widens to it; the overlay thumb floor already applied above. */
 @media (pointer: coarse) {
   .ds-slider.ds-slider--modern[data-orientation='vertical'] {
-    min-inline-size: var(--ds-slider-touch-target-min, 44px);
+    min-inline-size: var(--ds-slider-touch-target-min, var(--ds-touch-target-min, 44px));
   }
   .ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='native-input']:not([data-variant='overlay']) {
-    inline-size: var(--ds-slider-touch-target-min, 44px);
+    inline-size: var(--ds-slider-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

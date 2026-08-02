@@ -1,23 +1,23 @@
 /**
  * Pattern Chrome Paint - Rottay Design System
  *
- * The preflight-killable paint channels (padding, margin, border, background,
- * box-shadow) of the pattern styling contract. The token contract itself
- * (every `--ds-*` custom property), the keyframes, and the `!important`
- * declarations stay in presentation/components/patterns.css inside
- * `rottay-components`; selectors here are byte-identical to their layered
- * originals and keep their source order.
+ * Deprecated compatibility source retained temporarily for downstream source
+ * maps. It is not imported by either public entrypoint, and
+ * css-layer-paint-gate.mjs rejects any entrypoint that tries: a `*-paint.css`
+ * import fails as an `obsolete paint bridge import`. Pattern paint now lives
+ * with the token contract in presentation/components/patterns.css inside
+ * `rottay-components`, after Tailwind's `base` layer.
  *
- * DELIBERATELY UNLAYERED. Tailwind v4 hosts declare their unnamed `base`
- * layer after every `rottay-*` layer, so preflight's universal
- * margin/padding/border reset outranks ANY specificity inside those layers
- * (measured; see P-47/P-76). These declarations only paint in a Tailwind
- * host from outside the layer statement, and they still yield to a
- * consumer's inline `style` prop.
+ * Migrated 2026-08-02: 109 rules / 246 declarations moved to patterns.css.
+ * Two rules were NOT migrated because their channels already ship from a
+ * layered skin -- :is(.ds-command-home-next-move):hover and
+ * :is(.ds-command-home-search-lane):hover, both { border-color, box-shadow }.
  *
- * Cascade position: both entrypoints import this file BEFORE every skin
- * import, so any skin contesting one of these channels keeps winning the
- * tie exactly as it did while this paint lived inside `rottay-components`.
+ * Whole-file RETIRE_PROPOSED: every rule below is now duplicated by its
+ * migrated twin or deliberately superseded, nothing imports this file, and
+ * the gate forbids importing it. Death-proof and the rule-by-rule table are
+ * in src/foundation/tokens/residual-adjudication.json (`itemZero`). Deletion
+ * is blocked only on whether the source maps this header cites still matter.
  */
 
 :where(.ds-workspace-frame) {

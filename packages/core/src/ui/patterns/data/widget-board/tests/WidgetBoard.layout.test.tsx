@@ -108,10 +108,14 @@ describe("WidgetBoard product layout", () => {
     const cells = Array.from(
       container.querySelectorAll<HTMLElement>('[data-part="cell"]')
     );
+    // C2b deliberate re-pin: the retired inline packer wrapped the sm to a
+    // new row, stranding columns 11-12 forever (defect d). The shared solver
+    // bends the trailing widget INSIDE its declared min/max range
+    // (shrink-to-min policy, reason-coded) so the row completes.
     expect(cells.map((cell) => cell.style.gridColumn)).toEqual([
       "1 / span 6",
       "7 / span 4",
-      "1 / span 3",
+      "11 / span 2",
     ]);
   });
 
@@ -139,7 +143,7 @@ describe("WidgetBoard product layout", () => {
     ]);
   });
 
-  it("backfills an earlier half-width opening instead of leaving dead space", () => {
+  it("completes rows in DOM order instead of backfilling a later widget above its predecessors", () => {
     const { container } = render(
       <WidgetBoardEngine
         labels={labels}
@@ -154,15 +158,20 @@ describe("WidgetBoard product layout", () => {
     const cells = Array.from(
       container.querySelectorAll<HTMLElement>('[data-part="cell"]')
     );
+    // C2b deliberate re-pin (reviewed, not silent): the legacy packer
+    // floated `queue` ABOVE `pipeline` visually (visual ≠ DOM/focus order —
+    // defect c). The solver keeps strict reading order: `pipeline` (wide,
+    // min 6) shrinks within its range to complete row 1 beside `priority`,
+    // and `queue` grows alone on row 2 — zero dead space, zero reorder.
     expect(cells.map((cell) => cell.style.gridColumn)).toEqual([
       "1 / span 6",
-      "1 / span 12",
       "7 / span 6",
+      "1 / span 8",
     ]);
     expect(cells.map((cell) => cell.style.gridRow)).toEqual([
       "1 / span 1",
-      "2 / span 1",
       "1 / span 1",
+      "2 / span 1",
     ]);
   });
 

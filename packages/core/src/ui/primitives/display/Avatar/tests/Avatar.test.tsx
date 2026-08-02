@@ -55,7 +55,12 @@ describe('Avatar', () => {
     expect(screen.getByTestId('avatar')).toHaveAttribute('data-shape', shape);
   });
 
-  it.each(['default', 'primary', 'secondary', 'success', 'warning', 'danger'] as const)(
+  // `error`, not `danger`: `danger` is the canonical Tone spelling, while the
+  // deprecated `variant` prop is typed `AvatarVariant = Variant`, whose
+  // unthemed-negative member has always been `error` (TONE_TO_VARIANT renames
+  // exactly this one key). The stamp is the value passed, so the spelling here
+  // is the spelling rendered.
+  it.each(['default', 'primary', 'secondary', 'success', 'warning', 'error'] as const)(
     'renders variant %s',
     (variant) => {
       render(<Avatar variant={variant}>Test</Avatar>);

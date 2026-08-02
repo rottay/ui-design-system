@@ -21,7 +21,7 @@ import { Portal } from '../../../runtime/overlay/portal';
 
 /** ModernModal calls useTranslation(), which requires an I18nProvider. */
 const withI18n = (ui: ReactNode): React.ReactElement => (
-  <I18nProvider>{ui}</I18nProvider>
+  <I18nProvider locale="en">{ui}</I18nProvider>
 );
 
 // happy-dom does not implement the native dialog top layer. `showModal()` is
@@ -48,7 +48,7 @@ afterEach(() => {
 describe('Modal modern -- top-layer nesting', () => {
   it('publishes a top-layer host inside its own dialog when open', () => {
     render(withI18n(
-      <ModernModal open onClose={vi.fn()} ariaLabel="m">
+      <ModernModal open onClose={vi.fn()} aria-label="m">
         <p>body</p>
       </ModernModal>,
     ));
@@ -65,7 +65,7 @@ describe('Modal modern -- top-layer nesting', () => {
 
   it('keeps a descendant Portal INSIDE the dialog, not beside it', () => {
     render(withI18n(
-      <ModernModal open onClose={vi.fn()} ariaLabel="m">
+      <ModernModal open onClose={vi.fn()} aria-label="m">
         <Portal>
           <div data-testid="nested-overlay" />
         </Portal>
@@ -91,7 +91,7 @@ describe('Modal modern -- top-layer nesting', () => {
 
   it('withdraws the host when the modal closes so portals fall back', () => {
     const { rerender } = render(withI18n(
-      <ModernModal open onClose={vi.fn()} ariaLabel="m">
+      <ModernModal open onClose={vi.fn()} aria-label="m">
         <p>body</p>
       </ModernModal>,
     ));
@@ -101,7 +101,7 @@ describe('Modal modern -- top-layer nesting', () => {
     expect((document.querySelector('dialog') as HTMLDialogElement).open).toBe(true);
 
     rerender(withI18n(
-      <ModernModal open={false} onClose={vi.fn()} ariaLabel="m">
+      <ModernModal open={false} onClose={vi.fn()} aria-label="m">
         <p>body</p>
       </ModernModal>,
     ));
@@ -117,7 +117,7 @@ describe('Modal modern -- top-layer nesting', () => {
 
   it('does not resolve the dialog itself into its own host (no circularity)', () => {
     render(withI18n(
-      <ModernModal open onClose={vi.fn()} ariaLabel="m">
+      <ModernModal open onClose={vi.fn()} aria-label="m">
         <p>body</p>
       </ModernModal>,
     ));

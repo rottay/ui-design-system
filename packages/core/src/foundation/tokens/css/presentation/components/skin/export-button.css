@@ -39,8 +39,8 @@
   padding-block: 4px;
   padding-inline: 10px;
   border-radius: 6px;
-  background: var(--ds-color-bg-success);
-  color: var(--ds-color-text-on-success);
+  background: var(--ds-color-success-bg);
+  color: var(--ds-color-success-ink);
   font-size: var(--ds-font-size-xs);
   font-weight: 600;
   white-space: nowrap;

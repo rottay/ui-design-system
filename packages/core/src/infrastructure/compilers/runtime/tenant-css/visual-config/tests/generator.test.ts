@@ -337,7 +337,7 @@ describe('tenant css generator', () => {
           hoverElevation: 'lift-one',
           showBorder: true,
           hoverTint: true,
-          paddingDensity: 'comfortable',
+          paddingDensity: 'normal',
         },
       },
     });

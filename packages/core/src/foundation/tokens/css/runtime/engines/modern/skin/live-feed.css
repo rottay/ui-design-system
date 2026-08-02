@@ -178,7 +178,7 @@
   .ds-pattern-live-feed.ds-engine-modern [data-part='refresh'],
   .ds-pattern-live-feed.ds-engine-modern [data-part='banner'],
   .ds-pattern-live-feed.ds-engine-modern [data-part='load-more'] {
-    min-block-size: var(--ds-live-feed-touch-target-min, 44px);
+    min-block-size: var(--ds-live-feed-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

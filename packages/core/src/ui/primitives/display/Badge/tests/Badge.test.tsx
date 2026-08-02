@@ -147,13 +147,20 @@ describe('Badge', () => {
   });
 
   describe('Variants', () => {
-    it.each(['default', 'primary', 'secondary', 'success', 'warning', 'error', 'info'] as const)(
+    it.each(['default', 'primary', 'secondary', 'success', 'warning', 'error'] as const)(
       'renders variant %s',
       (variant) => {
         render(<Badge count={5} variant={variant} />);
         expect(screen.getByTestId('badge')).toHaveAttribute('data-variant', variant);
       }
     );
+
+    // `info` is absent above because it is a Tone, never a Variant:
+    // `BadgeVariant = Variant` has no `info` member, and the only path to the
+    // `info` color-token key is `TONE_TO_BADGE_VARIANT`
+    // (`Record<Tone, BadgeVariant | 'info'>`), which the engine stub in this
+    // file does not model. That resolution is covered against the real engines
+    // in Badge.labelled-chrome.test.tsx.
   });
 
   describe('Badge Styles', () => {

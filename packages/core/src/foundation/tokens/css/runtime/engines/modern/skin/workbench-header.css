@@ -45,10 +45,16 @@
 
 /* ---- root: card surface + bottom border (both loading and main roots) ---- */
 .ds-pattern-workbench-header.ds-engine-modern[data-part='root'] {
-  --ds-workbench-header-padding: clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px));
-  --ds-workbench-header-section-gap: var(--ds-spacing-4, 16px);
-  --ds-workbench-header-item-gap: var(--ds-workspace-card-gap, var(--ds-spacing-3, 12px));
-  --ds-workbench-header-action-gap: var(--ds-spacing-2, 8px);
+  /* RHYTHM: these room channels are PRESET tiers, so the tenant
+     `appearance.rhythm` axis mounts once at the declaration and every consume
+     site below stays a plain channel read. `--ds-workspace-card-gap` is a
+     TENANT hook (the BitHire artifact sets it), so only its FALLBACK is
+     multiplied -- a tenant that names the gap has stated exact geometry and
+     keeps it. */
+  --ds-workbench-header-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));
+  --ds-workbench-header-section-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-workbench-header-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));
+  --ds-workbench-header-action-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   overflow: hidden;
   background: var(
     --ds-workbench-header-bg,
@@ -487,5 +493,14 @@
   .ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'] {
     animation: none;
     transition: none;
+  }
+}
+
+/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
+   below the canonical --ds-touch-target-min channel; fine pointers keep the
+   authored size untouched. */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='tab'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

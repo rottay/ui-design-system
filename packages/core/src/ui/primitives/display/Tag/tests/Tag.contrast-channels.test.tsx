@@ -144,9 +144,10 @@ describe('Tag modern skin: solid-content contrast channels (R0/Axe)', () => {
     );
     expect(solidDefault).not.toBeNull();
     // Outlined frames stay raw hue (decorative, not axe-tested); the INK is a
-    // darkened mix because on transparent fills the hue IS the text.
+    // darkened mix because on transparent fills the hue IS the text. The frame
+    // width is governed by the edge-hairline authority, not a raw 1px literal.
     const outlinedWarning = SKIN.match(
-      /\[data-variant='warning'\]\[data-outlined='true'\] \{\s*border: 1px solid var\(--ds-color-warning\);\s*color: var\(--ds-tag-warning-outlined-ink, color-mix\(in srgb, var\(--ds-color-warning\) 55%, var\(--ds-color-neutral-900\) 45%\)\);\s*\}/
+      /\[data-variant='warning'\]\[data-outlined='true'\] \{\s*border: var\(--ds-tag-border-width, var\(--ds-edge-hairline-width, 1px\)\) solid\s+var\(--ds-color-warning\);\s*color: var\(--ds-tag-warning-outlined-ink, color-mix\(in srgb, var\(--ds-color-warning\) 55%, var\(--ds-color-neutral-900\) 45%\)\);\s*\}/
     );
     expect(outlinedWarning).not.toBeNull();
   });

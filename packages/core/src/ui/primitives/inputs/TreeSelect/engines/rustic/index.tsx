@@ -18,7 +18,13 @@
 
 import React, { useState, useRef, useEffect, useCallback, useMemo, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import type { TreeSelectProps, TreeSelectNode, TreeSelectValue } from '../../contracts';
+import type {
+  TreeSelectProps,
+  TreeSelectNode,
+  TreeSelectValue,
+  TreeSelectFieldNames,
+  TreeSelectMappedNode,
+} from '../../contracts';
 import { TREESELECT_DEFAULTS } from '../../contracts';
 import { useTranslation } from '@/infrastructure/runtime/i18n';
 import { toLegacySize } from '../../../../../../foundation/contracts/kernel/common';
@@ -46,24 +52,25 @@ function resolveField<T>(node: Record<string, unknown>, field: string, fallback:
 // standard property names (title/value/children) regardless of the consumer's
 // data shape. This runs once per treeData change (memoized in the component).
 function normalizeNodes(
-  nodes: TreeSelectNode[],
-  fieldNames?: { title?: string; value?: string; children?: string }
+  nodes: readonly (TreeSelectNode | TreeSelectMappedNode)[],
+  fieldNames?: TreeSelectFieldNames
 ): TreeSelectNode[] {
-  if (!fieldNames) return nodes;
+  // `TreeSelectDataProps` pairs the two fields: an absent mapping is only
+  // representable alongside nodes that are already canonical.
+  if (!fieldNames) return nodes as TreeSelectNode[];
   const titleKey = fieldNames.title ?? 'title';
   const valueKey = fieldNames.value ?? 'value';
   const childrenKey = fieldNames.children ?? 'children';
 
-  return nodes.map((raw) => {
+  return nodes.map((node) => {
+    const raw = node as Record<string, unknown>;
+    const rawChildren = raw[childrenKey];
     const mapped: TreeSelectNode = {
-      ...raw,
-      title: resolveField<ReactNode>(raw as Record<string, unknown>, titleKey, 'title'),
-      value: resolveField<string | number>(raw as Record<string, unknown>, valueKey, 'value'),
-      children: raw[childrenKey as keyof TreeSelectNode]
-        ? normalizeNodes(
-            raw[childrenKey as keyof TreeSelectNode] as TreeSelectNode[],
-            fieldNames
-          )
+      ...(node as TreeSelectNode),
+      title: resolveField<ReactNode>(raw, titleKey, 'title'),
+      value: resolveField<string | number>(raw, valueKey, 'value'),
+      children: rawChildren
+        ? normalizeNodes(rawChildren as TreeSelectMappedNode[], fieldNames)
         : undefined,
     };
     return mapped;

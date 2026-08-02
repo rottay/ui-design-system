@@ -127,9 +127,7 @@ export type TreeSelectValue = string | number | (string | number)[];
  * />
  * ```
  */
-export interface TreeSelectProps {
-  /** Tree data */
-  treeData: TreeSelectNode[];
+export interface TreeSelectBaseProps {
   /** Selected value(s) */
   value?: TreeSelectValue;
   /** Default value */
@@ -185,23 +183,6 @@ export interface TreeSelectProps {
   open?: boolean;
   /** Callback when dropdown visibility changes */
   onDropdownVisibleChange?: (open: boolean) => void;
-  /**
-   * Custom field name mapping for tree data.
-   * Allows using data with non-standard property names without transformation.
-   *
-   * @example
-   * ```tsx
-   * <TreeSelect
-   *   treeData={[{ name: 'Dept', id: '1', subItems: [] }]}
-   *   fieldNames={{ title: 'name', value: 'id', children: 'subItems' }}
-   * />
-   * ```
-   */
-  fieldNames?: {
-    title?: string;
-    value?: string;
-    children?: string;
-  };
   /** Show tree line connector between nodes */
   treeLine?: boolean;
   /**
@@ -227,6 +208,66 @@ export interface TreeSelectProps {
   /** Rendering engine override */
   engine?: 'classic' | 'modern' | 'rustic';
 }
+
+/**
+ * Property names to read each canonical node field from.
+ *
+ * @example
+ * ```tsx
+ * fieldNames={{ title: 'name', value: 'id', children: 'subItems' }}
+ * ```
+ */
+export interface TreeSelectFieldNames {
+  title?: string;
+  value?: string;
+  children?: string;
+}
+
+/**
+ * A node whose field names are the consumer's own, not the canonical ones.
+ *
+ * Only legal alongside `fieldNames`, which names the properties to read
+ * `title`, `value`, and `children` from.
+ */
+export type TreeSelectMappedNode = Record<string, unknown>;
+
+/**
+ * `treeData` and the mapping that reads it, which are one decision.
+ *
+ * Every engine normalizes the incoming nodes through `fieldNames` before any
+ * other code touches them, so foreign-shaped data is genuinely supported --
+ * but ONLY when the mapping that decodes it is supplied. Typing `treeData` as
+ * `TreeSelectNode[]` unconditionally made the documented `fieldNames` example
+ * unrepresentable and pushed every mapped caller through a cast; typing it as
+ * a bare record would drop the `title`/`value` guarantee for the canonical
+ * callers who have no mapping to decode with. Pairing the two fields keeps
+ * both halves true.
+ */
+export type TreeSelectDataProps =
+  | {
+      /** Tree data in canonical `title` / `value` / `children` shape. */
+      treeData: TreeSelectNode[];
+      fieldNames?: undefined;
+    }
+  | {
+      /** Tree data in the consumer's own shape, decoded by `fieldNames`. */
+      treeData: TreeSelectMappedNode[];
+      /**
+       * Custom field name mapping for tree data.
+       * Allows using data with non-standard property names without transformation.
+       *
+       * @example
+       * ```tsx
+       * <TreeSelect
+       *   treeData={[{ name: 'Dept', id: '1', subItems: [] }]}
+       *   fieldNames={{ title: 'name', value: 'id', children: 'subItems' }}
+       * />
+       * ```
+       */
+      fieldNames: TreeSelectFieldNames;
+    };
+
+export type TreeSelectProps = TreeSelectBaseProps & TreeSelectDataProps;
 
 /**
  * Default values for TreeSelect props.

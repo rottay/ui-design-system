@@ -484,14 +484,6 @@
      LOADING STATE
      Skeleton/loading appearance
      ======================================================================== */
-  --ds-card-loading-bg: var(--ds-color-neutral-100);
-  --ds-card-loading-shimmer: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.5) 50%,
-    transparent 100%
-  );
-  --ds-card-loading-animation: ds-foundation-shimmer 2s infinite;
   --ds-card-loading-overlay-bg: color-mix(
     in srgb,
     var(--ds-surface-card) 62%,
@@ -524,8 +516,6 @@
   --ds-card-meta-font-size: var(--ds-font-size-sm);
   --ds-card-meta-color: var(--ds-color-neutral-500);
   --ds-card-meta-gap: 0.5rem;
-
-  --ds-card-badge-margin-top: 0.5rem;
 
   /* ========================================================================
      GRID/LAYOUT

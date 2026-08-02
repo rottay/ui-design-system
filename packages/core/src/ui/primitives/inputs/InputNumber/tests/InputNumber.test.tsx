@@ -129,7 +129,10 @@ describe('InputNumber', () => {
     expect(screen.getByTestId('input-number')).toHaveAttribute('data-size', size);
   });
 
-  it.each(['default', 'error', 'warning'] as const)('renders status %s', (status) => {
+  // `StatusType` is `'' | 'error' | 'warning'` -- the neutral case is the empty
+  // string, not `'default'`. The engine stub above stamps `data-status={status}`
+  // verbatim, so each value is asserted as the attribute it renders.
+  it.each(['', 'error', 'warning'] as const)('renders status %s', (status) => {
     render(<InputNumber status={status} />);
     expect(screen.getByTestId('input-number')).toHaveAttribute('data-status', status);
   });

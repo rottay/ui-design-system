@@ -14,7 +14,11 @@ import {
   isCanonicalJsonObject as isPlainObject,
 } from "@/foundation/kernel/serialization";
 import { validateRecipeProfileSelection } from "@/foundation/tokens/ts/presentation/recipe-profiles";
+import { validateResponsivePostureSelection } from "@/foundation/tokens/ts/presentation/responsive-postures";
 import {
+  EXPRESSIVE_A11Y_FLOORS,
+  EXPRESSIVE_EDGE_WIDTH_CHANNELS,
+  STRUCTURAL_WIDTH_CHANNELS,
   resolveExpressiveAxes,
   sanitizeExpressiveOverrides,
   validateExperienceProfileSelection,
@@ -1384,6 +1388,38 @@ function renderArtifactCss(
 }
 
 /** Validate and deterministically compile a DB theme into one SSR/hydration artifact. */
+/**
+ * C2b executable floor: no compiled artifact may carry an expressive edge
+ * width beyond the universal a11y cap. The expansion clamps at emission;
+ * this guard is the independent re-assertion on whatever actually reaches
+ * the artifact — a second writer or future table typo fails CLOSED here.
+ */
+export function assertExpressiveEdgeWidthInvariant(
+  key: string,
+  value: string
+): TenantThemeValidationIssue | null {
+  // C2c: classification-first (the evasion audit made law). Structural
+  // width channels are layout dimensions and sit explicitly outside the
+  // cap's jurisdiction; the expressive list covers the edge grammar AND the
+  // component floors derived from it; the regex stays as the family
+  // catch-all for future edge-role channels.
+  if ((STRUCTURAL_WIDTH_CHANNELS as readonly string[]).includes(key)) {
+    return null;
+  }
+  const isExpressive =
+    (EXPRESSIVE_EDGE_WIDTH_CHANNELS as readonly string[]).includes(key) ||
+    /^--ds-edge-[a-z-]*width$/.test(key);
+  if (!isExpressive) return null;
+  const parsed = Number.parseFloat(value);
+  if (!Number.isFinite(parsed)) return null;
+  if (parsed <= EXPRESSIVE_A11Y_FLOORS.edgeWidthMaxPx) return null;
+  return {
+    code: "unsafe_value",
+    path: `$.variables[${JSON.stringify(key)}]`,
+    message: `Expressive edge width ${value} exceeds the universal a11y cap (${EXPRESSIVE_A11Y_FLOORS.edgeWidthMaxPx}px)`,
+  };
+}
+
 export function compileTenantThemeConfig(
   input: unknown,
   options: CompileTenantThemeConfigOptions = {}
@@ -1487,6 +1523,30 @@ export function compileTenantThemeConfig(
     contrastedVariables["--ds-recipe-profile"] =
       `"${recipeProfileValidation.profile.id}"`;
   }
+  // E2: the responsive posture is DATA, not a channel — it needs no emission,
+  // only a fail-closed gate. The schema already closes the enum; revalidating
+  // the raw value here keeps a row written before a ladder retirement from
+  // reaching the runtime, and keeps a typo from resolving silently to the
+  // baseline. The validated id itself rides to the artifact inside
+  // `normalizedAppearance.advanced`, which is a verbatim clone of the authored
+  // advanced tier.
+  const requestedResponsivePosture =
+    rawNormalizedAppearance.advanced?.responsivePosture;
+  const responsivePostureValidation = validateResponsivePostureSelection(
+    requestedResponsivePosture
+  );
+  if (
+    requestedResponsivePosture !== undefined &&
+    !responsivePostureValidation.ok
+  ) {
+    throw new TenantThemeValidationError([
+      {
+        code: "invalid_value",
+        path: "$.visualFoundation.advanced.responsivePosture",
+        message: `Responsive posture rejected: ${responsivePostureValidation.reason}`,
+      },
+    ]);
+  }
   if (experienceProfileValidation.profile) {
     contrastedVariables["--ds-experience-profile"] =
       `"${experienceProfileValidation.profile.id}"`;
@@ -1526,6 +1586,8 @@ export function compileTenantThemeConfig(
       key === "--ds-experience-profile" &&
       experienceProfileValidation.profile !== undefined &&
       value === `"${experienceProfileValidation.profile.id}"`;
+    const edgeIssue = assertExpressiveEdgeWidthInvariant(key, value);
+    if (edgeIssue) throw new TenantThemeValidationError([edgeIssue]);
     if (
       !key.startsWith("--ds-") ||
       (!isValidatedRecipeProfileChannel &&

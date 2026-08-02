@@ -366,10 +366,10 @@ function renderBlocks(
                     // paint does not) -- the CodeBlock line-highlight
                     // precedent. Checked state is DATA, not decoration.
                     background: item.checked
-                      ? 'var(--_ds-proto-markdown-task-fill, var(--ds-color-primary))'
+                      ? 'var(--_ds-markdown-task-fill, var(--ds-color-primary))'
                       : 'transparent',
                     boxShadow: item.checked
-                      ? 'inset 0 0 0 0.12em var(--_ds-proto-markdown-task-fill-ring, var(--ds-surface-canvas))'
+                      ? 'inset 0 0 0 0.12em var(--_ds-markdown-task-fill-ring, var(--ds-surface-canvas))'
                       : undefined,
                   }}
                 />

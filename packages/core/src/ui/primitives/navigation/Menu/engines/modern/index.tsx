@@ -60,7 +60,7 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import type { CSSProperties } from 'react';
-import type { MenuProps, MenuItem as MenuItemInterface, MenuSelectInfo, MenuClickInfo } from '../../contracts';
+import type { MenuProps, MenuItem as MenuItemInterface, MenuEntry as MenuEntryInterface, MenuSelectInfo, MenuClickInfo } from '../../contracts';
 import { MENU_DEFAULTS } from '../../contracts';
 import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 import {
@@ -167,7 +167,7 @@ function MenuItemRow({
   parentKey,
   context,
 }: {
-  item: MenuItemInterface;
+  item: MenuEntryInterface;
   isSelected: boolean;
   level: number;
   parentKey?: string;
@@ -247,7 +247,7 @@ function SubmenuRow({
   parentKey,
   context,
 }: {
-  item: MenuItemInterface;
+  item: MenuEntryInterface;
   level: number;
   isOpen: boolean;
   parentKey?: string;
@@ -263,7 +263,8 @@ function SubmenuRow({
         return true;
       }
 
-      return child.children?.some(hasSelected) ?? false;
+      // Dividers carry no children; only the entry arm nests.
+      return child.type === 'divider' ? false : child.children?.some(hasSelected) ?? false;
     }) ?? false;
 
   useEffect(() => {

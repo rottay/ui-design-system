@@ -143,31 +143,11 @@
   /* Pre-composed per-component transitions, re-expressed on the canon primitives.
      These are the ONLY thing modern components reference for multi-property
      transitions (no inline literals). */
-  --ds-transition-button: background-color var(--ds-motion-feedback)
-      var(--ds-motion-ease-out),
-    color var(--ds-motion-feedback) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),
-    transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
-  --ds-transition-input: border-color var(--ds-motion-feedback)
-      var(--ds-motion-ease-out),
-    box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out),
-    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out);
   --ds-transition-card: transform var(--ds-motion-feedback)
       var(--ds-motion-ease-out),
     box-shadow var(--ds-motion-feedback) var(--ds-motion-ease-out);
-  --ds-transition-surface: background-color var(--ds-motion-reveal)
-      var(--ds-motion-ease-out),
-    color var(--ds-motion-reveal) var(--ds-motion-ease-out);
-  --ds-transition-overlay: opacity var(--ds-motion-reveal)
-      var(--ds-motion-ease-out),
-    transform var(--ds-motion-reveal) var(--ds-motion-ease-out);
   --ds-transition-fade: opacity var(--ds-motion-reveal)
     var(--ds-motion-ease-out);
-  --ds-transition-color: color var(--ds-motion-feedback)
-      var(--ds-motion-ease-out),
-    background-color var(--ds-motion-feedback) var(--ds-motion-ease-out),
-    border-color var(--ds-motion-feedback) var(--ds-motion-ease-out);
   --ds-transition-rearrange: transform var(--ds-motion-rearrange)
       var(--ds-motion-ease-move),
     inline-size var(--ds-motion-rearrange) var(--ds-motion-ease-move),
@@ -176,14 +156,6 @@
       var(--ds-motion-ease-move),
     block-size var(--ds-motion-resize) var(--ds-motion-ease-move),
     transform var(--ds-motion-resize) var(--ds-motion-ease-move);
-  --ds-transition-disclosure: grid-template-rows var(--ds-motion-disclosure)
-      var(--ds-motion-ease-move),
-    opacity var(--ds-motion-disclosure) var(--ds-motion-ease-enter),
-    transform var(--ds-motion-disclosure) var(--ds-motion-ease-enter);
-  --ds-transition-ai-feedback: opacity var(--ds-motion-feedback)
-      var(--ds-motion-ease-enter),
-    transform var(--ds-motion-feedback) var(--ds-motion-ease-enter),
-    filter var(--ds-motion-feedback) var(--ds-motion-ease-enter);
 
   /* ========================================================================
      PROPERTY-SPECIFIC TRANSITIONS
@@ -398,9 +370,6 @@
   /* Easing aliases */
   --ds-ease-out: var(--ds-ease-premium, cubic-bezier(0.16, 1, 0.3, 1));
   --ds-ease-in-out: var(--easing-standard, cubic-bezier(0.4, 0, 0.2, 1));
-
-  /* Reduced motion override */
-  --ds-motion-reduce: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -410,7 +379,6 @@
     --ds-duration-normal: 0s;
     --ds-duration-slow: 0s;
     --ds-duration-gentle: 0s;
-    --ds-motion-reduce: 1;
 
     /* Defense-in-depth: the --ds-motion-* canon (declared above on :root) is
        also neutralized to 0s here, so this foundation file self-zeros the

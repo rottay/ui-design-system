@@ -446,7 +446,7 @@
   .ds-cascader.ds-cascader--modern[data-part="root"] [data-part="option"],
   .ds-cascader.ds-cascader--modern[data-part="root"]
     [data-part="clear-button"] {
-    min-block-size: var(--ds-cascader-touch-target-min, 44px);
+    min-block-size: var(--ds-cascader-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

@@ -115,7 +115,7 @@ describe('List', () => {
     render(
       <List
         dataSource={data}
-        renderItem={(item) => <List.Item>{item}</List.Item>}
+        renderItem={(item) => <List.Item>{item as string}</List.Item>}
       />
     );
     expect(screen.getByText('Item A')).toBeInTheDocument();

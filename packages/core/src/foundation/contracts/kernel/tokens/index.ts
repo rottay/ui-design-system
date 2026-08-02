@@ -15,6 +15,7 @@
  */
 
 export type {
+  PartialPersonalityTokens,
   PersonalityTokens,
   AnimationPersonalityTokens,
   ChartPersonalityTokens,

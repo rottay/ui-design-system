@@ -53,7 +53,7 @@ describe('ActivitySurface', () => {
         activities: [
           { id: 'a1', user: { name: 'Alice' }, action: 'Created', timestamp: '2026-03-15' },
         ],
-        pagination: { current: 1, total: 50, pageSize: 10 },
+        pagination: { current: 1, total: 50, pageSize: 10, onChange: vi.fn() },
       },
     });
 

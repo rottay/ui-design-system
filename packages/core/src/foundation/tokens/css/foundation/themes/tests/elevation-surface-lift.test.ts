@@ -80,13 +80,19 @@ describe("additive law: the shadow ramp is untouched", () => {
     (step) => {
       const value = rootScope.get(`--ds-elevation-${step}`);
       expect(value, `--ds-elevation-${step}`).toBeDefined();
-      // The neutral ramp must never become a color-mix/surface overlay, and must
-      // never borrow the brand accent (that would be glow on neutral depth).
-      expect(value).not.toContain("color-mix");
+      // C2 re-pin: the ramp is now PARAMETRIC over the shadow authorities
+      // (--ds-shadow-tint / *-strength) so profiles and materials can move
+      // dials. The original law survives in spirit: with the floors
+      // (#000 / 1 / 1) every layer computes to the exact former rgba black,
+      // and the ramp still must never become a surface overlay or borrow the
+      // brand accent (that would be glow on neutral depth).
+      expect(value).toContain("var(--ds-shadow-tint)");
       expect(value).not.toContain("elevation-surface");
       expect(value).not.toContain("color-primary");
       expect(value).not.toContain("shadow-primary");
-      expect(value).toMatch(/\brgba?\(/);
+      expect(rootScope.get("--ds-shadow-tint")).toBe("#000");
+      expect(rootScope.get("--ds-shadow-key-strength")).toBe("1");
+      expect(rootScope.get("--ds-shadow-ambient-strength")).toBe("1");
     },
   );
 });
@@ -127,7 +133,10 @@ describe("modern skins honor the surface layer they declare", () => {
       /background-image:\s*linear-gradient\(var\(--ds-elevation-surface-4\), var\(--ds-elevation-surface-4\)\)/,
     );
     expect(MODAL_CSS).toContain(
-      "background-color: var(--ds-modal-bg, var(--ds-surface-card))",
+      // C2b re-pin: the material role is the documented middle fallback —
+      // chrome.material.card now reaches Modal, and the floor aliases the
+      // same surface token so an unset material stays byte-identical.
+      "background-color: var(--ds-modal-bg, var(--ds-material-card-background, var(--ds-surface-card)))",
     );
   });
 

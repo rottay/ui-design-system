@@ -72,7 +72,7 @@ describe('normalizeSurfaceError', () => {
       { get: forbidden }
     );
     const column = Object.defineProperty(
-      { key: 'secret', title: 'Secret' },
+      { key: 'secret', label: 'Secret', content: null },
       'fieldId',
       { get: forbidden }
     );
@@ -82,7 +82,12 @@ describe('normalizeSurfaceError', () => {
       { get: forbidden }
     );
     const tab = Object.defineProperty(
-      { key: 'audit', label: 'Audit', render: () => null },
+      { key: 'audit', label: 'Audit', content: null },
+      'visible',
+      { get: forbidden }
+    );
+    const detailTab = Object.defineProperty(
+      { key: 'audit', label: 'Audit', content: () => null },
       'visible',
       { get: forbidden }
     );
@@ -92,7 +97,7 @@ describe('normalizeSurfaceError', () => {
     expect(filterSurfaceRowActions([action], access, { id: 1 }, 0)).toEqual([action]);
     expect(filterSurfaceFields([field as never], access)).toEqual([field]);
     expect(filterSurfaceTabbedViews([tab], access)).toEqual([tab]);
-    expect(filterDetailSurfaceTabs([tab], access, { id: 1 })).toEqual([tab]);
+    expect(filterDetailSurfaceTabs([detailTab], access, { id: 1 })).toEqual([detailTab]);
     expect(resolveSurfaceAction(action, access)).toBe(action);
     expect(resolveFieldAccessForRow('secret', access, { id: 1 }, 0)).toBe('visible');
     expect(resolveSurfacePermission(access, { kind: 'route', id: '/admin' })).toBe(true);
@@ -117,8 +122,8 @@ describe('normalizeSurfaceError', () => {
     expect(
       filterSurfaceColumns(
         [
-          { key: 'name', fieldId: 'name', title: 'Name' },
-          { key: 'cost', fieldId: 'cost', title: 'Cost' },
+          { key: 'name', fieldId: 'name', header: 'Name' },
+          { key: 'cost', fieldId: 'cost', header: 'Cost' },
         ],
         access
       ).map((column) => column.fieldId)
@@ -131,8 +136,8 @@ describe('normalizeSurfaceError', () => {
     ).toEqual([{ ...edit, disabled: true }]);
     expect(resolveFieldAccessForRow('salary', access, { id: 1 }, 0)).toBe('readonly');
     expect(resolveFieldAccessForRow('missing', access, { id: 1 }, 0)).toBe('hidden');
-    expect(filterSurfaceTabbedViews([{ key: 'audit', label: 'Audit' }], access)).toEqual([
-      { key: 'audit', label: 'Audit', disabled: true },
+    expect(filterSurfaceTabbedViews([{ key: 'audit', label: 'Audit', content: null }], access)).toEqual([
+      { key: 'audit', label: 'Audit', content: null, disabled: true },
     ]);
     expect(resolveSurfacePermission(access, { kind: 'route', id: '/admin' })).toBe(true);
     expect(resolveSurfacePermission(access, { kind: 'route', id: '/missing' })).toBe(false);
@@ -156,6 +161,7 @@ describe('normalizeSurfaceError', () => {
     const tab = {
       key: 'audit',
       label: 'Audit',
+      content: null,
       capabilityId: 'workspace.audit',
       permissionId: 'legacy.audit',
     };
@@ -175,8 +181,8 @@ describe('normalizeSurfaceError', () => {
     };
 
     expect(filterSurfaceColumns([
-      { key: 'name', fieldId: 'name', title: 'Name' },
-      { key: 'cost', fieldId: 'cost', title: 'Cost' },
+      { key: 'name', fieldId: 'name', header: 'Name' },
+      { key: 'cost', fieldId: 'cost', header: 'Cost' },
     ], access).map((column) => column.fieldId)).toEqual(['name']);
     expect(filterSurfaceActions([
       { id: 'edit', label: 'Edit' },
@@ -187,12 +193,12 @@ describe('normalizeSurfaceError', () => {
       { id: 'archive', label: 'Archive' },
     ], access, { id: 'row-1' }, 0).map((action) => action.id)).toEqual(['edit']);
     expect(filterSurfaceFields([
-      { name: 'name', fieldId: 'name', label: 'Name' },
-      { name: 'cost', fieldId: 'cost', label: 'Cost' },
+      { name: 'name', fieldId: 'name', label: 'Name', type: 'text' as const },
+      { name: 'cost', fieldId: 'cost', label: 'Cost', type: 'text' as const },
     ], access).map((field) => field.name)).toEqual(['name']);
     expect(filterSurfaceTabbedViews([
-      { key: 'insights', label: 'Insights' },
-      { key: 'audit', label: 'Audit' },
+      { key: 'insights', label: 'Insights', content: null },
+      { key: 'audit', label: 'Audit', content: null },
     ], access).map((tab) => tab.key)).toEqual(['insights']);
     expect(resolveSurfaceAction({ id: 'archive', label: 'Archive' }, access)).toBeUndefined();
     expect(resolveSurfacePermission(access, { kind: 'route', id: '/missing' })).toBe(false);

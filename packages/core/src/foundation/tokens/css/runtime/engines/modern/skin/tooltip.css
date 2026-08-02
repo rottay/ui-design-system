@@ -738,10 +738,7 @@ html[data-ds-motion="reduced"]
      owned by `--ds-overlay-scrim` / `--ds-color-bg-overlay` and never enters
      this chain. */
   .rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part="bubble"][data-part="bubble"][data-tone="default"]:not([data-recipe="inverse"]) {
-    --ds-tooltip-surface: var(
-      --_ds-proto-tooltip-opaque-surface,
-      var(--ds-material-overlay-opaque, var(--ds-surface-card))
-    );
+    --ds-tooltip-surface: var(--ds-material-overlay-opaque, var(--ds-surface-card));
   }
 }
 

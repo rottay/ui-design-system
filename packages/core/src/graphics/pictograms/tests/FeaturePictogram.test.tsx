@@ -126,7 +126,7 @@ describe("FeaturePictogram", () => {
     const consoleSpy = vi
       .spyOn(console, "warn")
       .mockImplementation(() => undefined);
-    const Unsafe = FeaturePictogram as React.ComponentType<
+    const Unsafe = FeaturePictogram as unknown as React.ComponentType<
       Record<string, unknown>
     >;
     const { container, rerender } = render(

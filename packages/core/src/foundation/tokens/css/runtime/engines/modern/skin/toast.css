@@ -106,7 +106,7 @@
   padding-block: 0.125rem;
 }
 .rottay-toast--modern[data-part='root'] [data-part='title'] {
-  font-family: var(--ds-font-family-heading, var(--ds-font-family-sans));
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-font-size-sm);
   font-weight: var(--ds-font-weight-semibold);
   line-height: var(--ds-line-height-snug);
@@ -284,5 +284,15 @@
     outline: 2px solid Highlight;
     outline-offset: 2px;
     box-shadow: none;
+  }
+}
+
+/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
+   below the canonical --ds-touch-target-min channel; fine pointers keep the
+   authored size untouched. */
+@media (hover: none), (pointer: coarse) {
+  .rottay-toast--modern[data-part='root'] [data-part='action'],
+  .rottay-toast--modern[data-part='root'] [data-part='close-button'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

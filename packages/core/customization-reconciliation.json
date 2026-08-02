@@ -1,0 +1,139 @@
+{
+  "schemaVersion": 1,
+  "generatedBy": "wave C2c+D0 remediation; RE-DERIVED 2026-08-02 post FASE-B/H registry execution (183 rows) — same mechanical recompute law, dispositions unchanged",
+  "basedOnReportDigest": "e7095df04a1ae39ccb2a64d89748961787dc3562e7ba07c22f234f400d25fa73",
+  "normative": {
+    "writers": 4807,
+    "deadWriters": 315,
+    "definition": "customization-surface-census.mjs header — writer = manifest sets ∪ authored-CSS decls ∪ AST TS write-sites ∪ artifact emissions; productive read = PostCSS var() ∪ AST-classified TS read; metadata never counts"
+  },
+  "figures": {
+    "censusDeadFinal": 506,
+    "tenantChannelGate": {
+      "live": 232,
+      "baseline": 236,
+      "relation": "strict subset of census dead (agent-verified name-level); narrower denominator (1620 tenant-drivable channels); remains the CI ratchet"
+    },
+    "historical492": {
+      "status": "SUPERSEDED",
+      "reasons": {
+        "interpolatedEmissionsMissed": 164,
+        "multilineVarReadsMissed": 67,
+        "fabricatedTruncatedNames": 7,
+        "testsArtifactsCountedAsWriters": 65
+      }
+    },
+    "priorSnapshots": {
+      "465": "pre contextual-classifier (49 writers falsely alive via metadata literals)",
+      "518": "pre element-access writes + alias/precedence fixes",
+      "final": 506
+    },
+    "drainSnapshots": {
+      "321": "post FASE-B+lote-2 execution (183 registry rows: 174 decls + 3 emitters + 10 fence-opened) + census v4 adjudication-as-authority + JS-consumer helpers — 2026-08-02",
+      "498": "C2c+D0 remediation final (v1 of this projection)"
+    }
+  },
+  "familyAdjudication": [
+    {
+      "family": "--ds-tall-card-*",
+      "disposition": "RECONNECT_OR_PROMOTE",
+      "count": 43,
+      "amendedBy": "binding preservation correction 2026-08-01: Kimi/premium provenance — RETIRE forbidden; reconnect to canon or promote",
+      "previousCount": 43
+    },
+    {
+      "family": "--ds-workspace-card-*",
+      "disposition": "RECONNECT_OR_PROMOTE",
+      "count": 32,
+      "amendedBy": "binding preservation correction 2026-08-01: Kimi/premium provenance — RETIRE forbidden; reconnect to canon or promote",
+      "previousCount": 32
+    },
+    {
+      "family": "--ds-compact-card-*",
+      "disposition": "COMPONENT-PRIVATE",
+      "count": 37,
+      "previousCount": 37
+    },
+    {
+      "family": "--ds-collection-card-*",
+      "disposition": "COMPONENT-PRIVATE",
+      "count": 35,
+      "previousCount": 35
+    },
+    {
+      "family": "--ds-signal-card-*",
+      "disposition": "COMPONENT-PRIVATE",
+      "count": 34,
+      "previousCount": 34
+    },
+    {
+      "family": "--ds-metric-card-*",
+      "disposition": "COMPONENT-PRIVATE",
+      "count": 22,
+      "previousCount": 22
+    },
+    {
+      "family": "--ds-listing-grid-*",
+      "disposition": "COMPONENT-PRIVATE",
+      "count": 8,
+      "previousCount": 8
+    },
+    {
+      "family": "--ds-premium-card-*",
+      "disposition": "COMPONENT-PRIVATE",
+      "count": 4,
+      "previousCount": 4
+    },
+    {
+      "family": "--ds-input-*",
+      "disposition": "COMPONENT-PRIVATE",
+      "count": 4,
+      "previousCount": 4
+    },
+    {
+      "family": "--ds-button-*",
+      "disposition": "COMPONENT-PRIVATE",
+      "count": 1,
+      "previousCount": 1
+    },
+    {
+      "family": "--ds-color-dark-*",
+      "disposition": "DERIVE",
+      "count": 3,
+      "previousCount": 3
+    },
+    {
+      "family": "--ds-commercial-*",
+      "disposition": "KEEP-INTERNAL",
+      "count": 5,
+      "previousCount": 5
+    },
+    {
+      "family": "--ds-action-dock-reserved-*",
+      "disposition": "FRONTIER",
+      "count": 2,
+      "previousCount": 2
+    },
+    {
+      "family": "--ds-bottom-tab-bar-reserved-*",
+      "disposition": "FRONTIER",
+      "count": 1,
+      "previousCount": 1
+    },
+    {
+      "family": "legacy-component-mirror (Ant-era per-component foundation)",
+      "disposition": "MIGRATE_USEFUL_THEN_RETIRE_MIRROR",
+      "count": 2,
+      "amendedBy": "binding preservation correction: migrate any useful capability to Modern canon FIRST; only the legacy mirror retires",
+      "previousCount": 2
+    },
+    {
+      "family": "remainder (per-name adjudication in D1)",
+      "disposition": "KEEP-INTERNAL",
+      "count": 82,
+      "previousCount": 82
+    }
+  ],
+  "note": "Family counts recompute MECHANICALLY from the final deadWriters set; dispositions are the adjudication SEED — owner sign-off required for RETIRE, nothing auto-approved. Name-level set algebra: scratchpad evidence superseded by this versioned projection.",
+  "preservationManifest": "KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json (same report digest; its laws override any RETIRE here)"
+}

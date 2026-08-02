@@ -27,18 +27,23 @@ describe('List advanced engine coverage', () => {
         itemLayout="vertical"
         grid={{ column: 2, gutter: 24 }}
         dataSource={team}
-        renderItem={(user) => (
-          <ModernItem
-            extra={<button type="button">View</button>}
-            actions={[<button key="mute" type="button">Mute</button>]}
-          >
-            <ModernMeta
-              avatar={<span>•</span>}
-              title={user.name}
-              description={user.email}
-            />
-          </ModernItem>
-        )}
+        renderItem={(user) => {
+          // `ListProps<T = unknown>` reaches the engine with T already fixed,
+          // so `renderItem` receives `unknown` however `dataSource` is typed.
+          const member = user as (typeof team)[number];
+          return (
+            <ModernItem
+              extra={<button type="button">View</button>}
+              actions={[<button key="mute" type="button">Mute</button>]}
+            >
+              <ModernMeta
+                avatar={<span>•</span>}
+                title={member.name}
+                description={member.email}
+              />
+            </ModernItem>
+          );
+        }}
       />
     );
 

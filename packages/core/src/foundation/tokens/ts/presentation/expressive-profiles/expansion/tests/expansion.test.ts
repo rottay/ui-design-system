@@ -27,7 +27,7 @@ const FULL_AXES: ExpressiveAxes = {
  * affordances.
  */
 const ALLOWED_KEY_PATTERN =
-  /^--ds-(type-[a-z-]+|letter-spacing-heading|table-header-(letter-spacing|text-transform)|(select|menu)-group-text-transform|page-header-(eyebrow-text-transform|bg)|edge-(hairline|standard|emphasis)-width|material-(canvas|card|panel|overlay|raised)-(texture|highlight)|elevation-lift-strength)$/;
+  /^--ds-(type-[a-z-]+|letter-spacing-heading|table-header-(letter-spacing|text-transform)|(select|menu)-group-text-transform|page-header-(eyebrow-text-transform|bg)|edge-(hairline|standard|emphasis)-width|edge-standard-style|material-(canvas|card|panel|overlay|raised)-(texture|highlight)|elevation-lift-strength|shadow-(tint|key-strength|ambient-strength)|divider-(width|style))$/;
 
 describe('expandExpressiveProfiles', () => {
   it('is deterministic with stable key order', () => {

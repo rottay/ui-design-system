@@ -464,8 +464,6 @@ const ROTTAY_EMERGENCY_TOKENS = `
     --ds-color-text-secondary: #A0A0A5;
     --ds-text-primary: var(--ds-color-text-primary);
     --ds-text-secondary: var(--ds-color-text-secondary);
-    --ds-bg-primary: var(--ds-color-bg-primary);
-    --ds-bg-secondary: var(--ds-color-bg-secondary);
     --ds-spacing-xs: 4px;
     --ds-spacing-sm: 8px;
     --ds-spacing-md: 16px;

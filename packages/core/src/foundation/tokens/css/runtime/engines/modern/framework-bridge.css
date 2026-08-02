@@ -38,7 +38,7 @@
 }
 
 [data-tenant] .input:disabled {
-  background-color: var(--ds-input-disabled-bg);
+  background-color: var(--ds-input-bg-disabled);
   color: var(--ds-text-tertiary);
   cursor: not-allowed;
 }

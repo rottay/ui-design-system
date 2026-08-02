@@ -63,6 +63,16 @@ export interface TenantCapabilityDeclaration {
    * entry must state one; "additive, unset-to-rollback" is the norm.
    */
   readonly compat: string;
+  /**
+   * D0 productive-consumer proof: a PRODUCTION file (never a test) that
+   * consumes this capability's output, plus a literal the census gate
+   * verifies inside it. Required for every `active` row — a capability
+   * without a productive consumer is frontier by definition.
+   */
+  readonly evidence?: {
+    readonly consumer: string;
+    readonly symbol: string;
+  };
 }
 
 export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
@@ -72,12 +82,16 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'standard',
       status: 'active',
+      evidence: {
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/button.css',
+        symbol: 'var(--ds-button-primary-bg',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Brand palette seeds',
       valueType: 'color-set',
       defaultBehavior: 'vertical baseline palette',
-      documentPath: 'appearance.palette.{primary,secondary,accent,background}',
+      documentPath: 'appearance.general.palette.{primary,secondary,accent,background}',
       brandThemePath: 'palette.{primaryColor,secondaryColor,accentColor,backgroundColor}',
       derivedChannels: [
         '--ds-color-primary',
@@ -93,6 +107,10 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'internal',
       status: 'active',
+      evidence: {
+        consumer: 'src/foundation/tokens/css/foundation/themes/default.css',
+        symbol: 'data-theme=\'dark\'',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Mode compatibility',
@@ -100,7 +118,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       enumValues: ['light', 'dark', 'auto'],
       defaultBehavior:
         'the tenant palette remains authoritative; optional mode data stays an internal compatibility surface',
-      documentPath: 'appearance.palette.{backgroundMode,dark.*}',
+      documentPath: 'appearance.general.palette.{backgroundMode,dark.*}',
       brandThemePath: 'modes.dark.palette.*',
       derivedChannels: ['--ds-color-scheme', '--ds-color-primary-500'],
       compat:
@@ -111,13 +129,17 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'standard',
       status: 'active',
+      evidence: {
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/typography.css',
+        symbol: 'var(--ds-font-family',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Type pairing personality',
       valueType: 'enum',
       enumValues: ['sober', 'editorial', 'geometric', 'technical'],
       defaultBehavior: 'vertical baseline families',
-      documentPath: 'appearance.typography.typePairing',
+      documentPath: 'appearance.general.typography.typePairing',
       brandThemePath: 'typography.{fontFamilyBase,fontFamilyHeading}',
       derivedChannels: ['--ds-font-family-base', '--ds-font-family-heading'],
       compat: 'additive, unset-to-rollback',
@@ -127,12 +149,16 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'standard',
       status: 'active',
+      evidence: {
+        consumer: 'src/foundation/tokens/css/foundation/themes/default.css',
+        symbol: '--ds-font-family-mono',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Explicit font stacks',
       valueType: 'font-stack',
       defaultBehavior: 'pairing (or vertical baseline) decides',
-      documentPath: 'appearance.typography.{fontFamilyBase,fontFamilyHeading}',
+      documentPath: 'appearance.general.typography.{fontFamilyBase,fontFamilyHeading}',
       brandThemePath: 'typography.{fontFamilyBase,fontFamilyHeading,fontFamilyMono,fontFamilyDisplay}',
       derivedChannels: ['--ds-font-family-base', '--ds-font-family-heading'],
       compat: 'additive; Arabic-safe tail is a compiler invariant either way',
@@ -142,13 +168,17 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'standard',
       status: 'active',
+      evidence: {
+        consumer: 'src/ui/patterns/data/widget-board/runtime/solver/react/index.ts',
+        symbol: '--ds-type-scale',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Type scale dial',
       valueType: 'scale',
       bounds: { min: 0.9, max: 1.1 },
       defaultBehavior: '1 (vertical envelope may clamp tighter)',
-      documentPath: 'appearance.typography.scale',
+      documentPath: 'appearance.general.typography.scale',
       brandThemePath: 'typography (ramp channels)',
       derivedChannels: ['--ds-type-scale'],
       compat: 'additive, unset-to-rollback',
@@ -158,13 +188,17 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'standard',
       status: 'active',
+      evidence: {
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/card.css',
+        symbol: 'var(--ds-radius',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Radius scale dial',
       valueType: 'scale',
       bounds: { min: 0.75, max: 1.25 },
       defaultBehavior: '1 (vertical envelope may clamp tighter)',
-      documentPath: 'appearance.shape.radiusScale',
+      documentPath: 'appearance.general.shape.radiusScale',
       brandThemePath: 'surfaces.borderRadius.*',
       derivedChannels: ['--ds-radius-scale', '--ds-radius-md'],
       compat: 'additive, unset-to-rollback',
@@ -174,13 +208,17 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'standard',
       status: 'active',
+      evidence: {
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/button.css',
+        symbol: 'var(--ds-button-md-radius',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Button silhouette',
       valueType: 'enum',
       enumValues: ['sharp', 'soft', 'pill'],
       defaultBehavior: 'vertical baseline silhouette',
-      documentPath: 'appearance.shape.buttonStyle',
+      documentPath: 'appearance.general.shape.buttonStyle',
       brandThemePath: 'chrome.controls.button* (radius channels)',
       derivedChannels: ['--ds-radius-button'],
       compat: 'additive, unset-to-rollback',
@@ -190,29 +228,62 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'standard',
       status: 'active',
+      evidence: {
+        consumer: 'src/ui/patterns/data/widget-board/runtime/solver/react/index.ts',
+        symbol: 'useDensity',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Density posture',
       valueType: 'enum',
       enumValues: ['compact', 'normal', 'spacious'],
       defaultBehavior: 'normal (structural density scale is a separate channel)',
-      documentPath: 'appearance.density',
+      documentPath: 'appearance.general.density',
       brandThemePath: 'surfaces.density / surfaces.densityScale',
       derivedChannels: ['--ds-density-mode-factor', '--ds-density-scale'],
       compat:
         'additive; the three density vocabularies (contracts/tokens/schema) are recorded debt — unification is a breaking alignment owned by a future wave',
     },
     {
+      id: 'spacing.rhythm',
+      version: 1,
+      tier: 'standard',
+      status: 'active',
+      evidence: {
+        consumer:
+          'src/foundation/tokens/css/presentation/components/skin/layout-primitives.css',
+        symbol: 'var(--ds-rhythm-effective-scale',
+      },
+      scope: 'tenant',
+      owner: 'design-system',
+      title: 'Layout rhythm',
+      valueType: 'enum',
+      enumValues: ['tight', 'normal', 'airy'],
+      bounds: { min: 0.8, max: 1.25 },
+      defaultBehavior:
+        'normal (factor 1) — byte-identical to the pre-rhythm cascade in every vertical, because the DS floor already resolves --ds-rhythm-effective-scale to 1',
+      documentPath: 'appearance.general.rhythm',
+      brandThemePath: 'surfaces.rhythm',
+      derivedChannels: ['--ds-rhythm-scale', '--ds-rhythm-effective-scale'],
+      dependsOn: [],
+      compat:
+        'additive, unset-to-rollback. ORTHOGONAL to density.mode by construction and never a second spelling of it: density scales control SIZES through --ds-density-effective-scale, rhythm scales the LAYOUT RELATIONSHIPS between controls (gap, layout padding) through --ds-rhythm-effective-scale. A chain carrying both factors is correct rather than double-scaled — the control keeps its density size while the room around it breathes. Rhythm is applied at the PRESET rungs, never at a consume site, so a consumer numeric gap stays exact geometry exactly as it does under density; and it never reaches a control height, touch target or icon box, which is what keeps the coarse-pointer touch floors intact by construction rather than by clamping. The 0.8-1.25 envelope is enforced in the derived channel, so it binds the compiler artifact, the BrandTheme lowering and a raw tokenOverride alike.',
+    },
+    {
       id: 'motion.dial',
       version: 1,
       tier: 'standard',
       status: 'active',
+      evidence: {
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/button.css',
+        symbol: 'var(--ds-motion',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Motion intensity and duration',
       valueType: 'scale',
       defaultBehavior: 'engine cadence unchanged',
-      documentPath: 'appearance.motion.{intensity,durationScale,ambient}',
+      documentPath: 'appearance.general.motion.{intensity,durationScale,ambient}',
       brandThemePath: 'motion.*',
       derivedChannels: ['--ds-motion-intensity', '--ds-motion-duration-scale'],
       compat: 'additive, unset-to-rollback; never authors keyframes',
@@ -222,13 +293,17 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'standard',
       status: 'active',
+      evidence: {
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/card.css',
+        symbol: 'var(--ds-elevation',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Elevation posture',
       valueType: 'enum',
       enumValues: ['flat', 'soft', 'elevated'],
       defaultBehavior: 'soft (DS shadow ramp untouched)',
-      documentPath: 'appearance.surfaces.elevation',
+      documentPath: 'appearance.general.surfaces.elevation',
       brandThemePath: 'surfaces.shadows.*',
       derivedChannels: ['--ds-elevation-1', '--ds-elevation-2', '--ds-elevation-3'],
       compat: 'additive, unset-to-rollback',
@@ -238,13 +313,17 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'standard',
       status: 'active',
+      evidence: {
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css',
+        symbol: 'var(--ds-glass',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Decoration intensity',
       valueType: 'scale',
       bounds: { min: 0, max: 1 },
       defaultBehavior: '1 for the DS default; verticals author their own floor',
-      documentPath: 'appearance.surfaces.effectIntensity',
+      documentPath: 'appearance.general.surfaces.effectIntensity',
       brandThemePath: 'surfaces.effectIntensity',
       derivedChannels: ['--ds-effect-intensity'],
       compat: 'additive; 0 removes decoration, never hierarchy',
@@ -254,13 +333,17 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'standard',
       status: 'active',
+      evidence: {
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/menu.css',
+        symbol: 'var(--ds-sidebar',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Sidebar tone',
       valueType: 'enum',
       enumValues: ['subtle', 'strong', 'inverse'],
       defaultBehavior: 'subtle',
-      documentPath: 'appearance.navigation.sidebarTone',
+      documentPath: 'appearance.general.navigation.sidebarTone',
       brandThemePath: 'chrome.sidebar.*',
       derivedChannels: ['--ds-sidebar-bg', '--ds-sidebar-item-color'],
       compat: 'additive, unset-to-rollback',
@@ -270,13 +353,17 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'standard',
       status: 'active',
+      evidence: {
+        consumer: 'src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx',
+        symbol: 'resolveExpressiveAxes',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Experience profile',
       valueType: 'profile-id',
       defaultBehavior:
         'baseline identity; a selection composes closed per-axis postures whose expansion always loses to any authored field or channel',
-      documentPath: 'appearance.experienceProfile',
+      documentPath: 'appearance.general.experienceProfile',
       brandThemePath: 'expressive.experienceProfile',
       derivedChannels: [
         '--ds-experience-profile',
@@ -294,6 +381,10 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'pro',
       status: 'active',
+      evidence: {
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/table.css',
+        symbol: 'var(--ds-table-header',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Per-family chrome',
@@ -310,6 +401,10 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'pro',
       status: 'active',
+      evidence: {
+        consumer: 'src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css',
+        symbol: 'var(--ds-page-shell',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Anatomy variants',
@@ -332,6 +427,10 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'pro',
       status: 'active',
+      evidence: {
+        consumer: 'src/infrastructure/compilers/composition/tenant-theme/index.ts',
+        symbol: 'tokenOverrides',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Bounded raw channel overrides',
@@ -348,6 +447,10 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'pro',
       status: 'active',
+      evidence: {
+        consumer: 'src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx',
+        symbol: 'RecipeProfileProvider',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Family recipe profile',
@@ -364,6 +467,10 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       version: 1,
       tier: 'pro',
       status: 'active',
+      evidence: {
+        consumer: 'src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx',
+        symbol: 'sanitizeExpressiveOverrides',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Explicit expressive axes',
@@ -383,7 +490,13 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       compat:
         'closed per-axis vocabularies; both compilers sanitize fail-closed; unset-to-rollback per axis',
     },
-    // ── FRONTIER: declared boundaries the schema still rejects ─────────────
+    // ── LATER WAVES: rows declared as frontier, opened in place ────────────
+    // Rows below were authored as frontier boundaries and are opened by the
+    // wave that lands their runtime, keeping each id at its original index
+    // rather than migrating it up into the tier blocks. Read `status`, never
+    // the position: `profiles.icon` (C2) and `responsive.posture` (E2) are
+    // ACTIVE here; `palette.status-seeds` is still a boundary the schema
+    // rejects.
     {
       id: 'palette.status-seeds',
       version: 1,
@@ -395,7 +508,7 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       valueType: 'color-set',
       defaultBehavior:
         'DB General cannot author status tones today; Advanced tokenOverrides is the only DB route, while BrandTheme authors them directly — the recorded static/DB asymmetry this frontier closes',
-      documentPath: 'appearance.palette.{success,warning,error,info} (REJECTED today)',
+      documentPath: 'appearance.general.palette.{success,warning,error,info} (REJECTED today)',
       brandThemePath: 'palette.{successColor,warningColor,errorColor,infoColor}',
       derivedChannels: [
         '--ds-color-success',
@@ -408,34 +521,47 @@ export const TENANT_CAPABILITY_REGISTRY = Object.freeze([
       id: 'profiles.icon',
       version: 1,
       tier: 'pro',
-      status: 'frontier',
+      status: 'active',
+      evidence: {
+        consumer: 'src/graphics/icons/runtime/semantic/create-icon/index.tsx',
+        symbol: 'useActiveIconExpressiveProfile',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Icon posture profile',
       valueType: 'enum',
       enumValues: ['linear', 'strong-outline', 'duotone', 'solid-active'],
       defaultBehavior:
-        'the schema REJECTS the axis today (unknown_key drill). The pipeline is proven ready — every generated glyph bundles all supplier weights and resolveIconWeight accepts a posture table — but no provider stamps a profile into the icon runtime yet, and opening the document field is its own reviewed digest move. Literal two-hue duotone stays out: the pinned supplier is single-hue/two-opacity by design.',
-      documentPath: 'visualFoundation.advanced.profiles.icon (REJECTED today)',
-      brandThemePath: 'expressive.profiles.icon (accepted, inert: no expansion rows)',
+        'baseline role/state weight tables. A posture only selects among the governed PROFILE_ROLE_WEIGHT tables in the icon policy — never a supplier, glyph or local SVG; state weights stay supreme (feedback over decoration). Literal two-hue duotone stays out: the pinned supplier is single-hue/two-opacity by design.',
+      documentPath: 'visualFoundation.advanced.profiles.icon',
+      brandThemePath: 'expressive.profiles.icon',
       derivedChannels: [],
-      compat: 'opening it is additive: schema field + provider context wiring',
+      dependsOn: ['profiles.expressive'],
+      compat:
+        'additive, unset-to-rollback; the posture travels as DATA (document → schema → artifact normalizedAppearance) and selects governed weight tables. RENDER application is LIVE (C2c): generated icons call useActiveIconExpressiveProfile() unconditionally — a real context hook in the client/SSR worlds, a plain per-request React.cache box read under RSC; the world is picked by capability detection (react-server exports no createContext). Servers provide the profile via provideServerIconExpressiveProfile at the same seam that mounts the compiled CSS (app-bithire: src/app/layout.tsx). Absent profile → the pre-profile role/state weight tables apply unchanged.',
     },
     {
       id: 'responsive.posture',
       version: 1,
       tier: 'pro',
-      status: 'frontier',
+      status: 'active',
+      evidence: {
+        consumer:
+          'src/ui/patterns/data/widget-board/runtime/solver/react/index.ts',
+        symbol: 'resolveActiveResponsivePosture',
+      },
       scope: 'tenant',
       owner: 'design-system',
       title: 'Responsive posture profile',
       valueType: 'profile-id',
+      enumValues: ['compact', 'balanced', 'expansive'],
       defaultBehavior:
-        'no tenant-reachable responsive axis exists today (verified ABSENT); the adaptive runtime wave (C2) owns the contract',
-      documentPath: 'visualFoundation.advanced.responsivePosture (REJECTED today)',
-      brandThemePath: 'responsivePosture (not in contract yet)',
+        'the balanced ladder, whose container thresholds (compact ≤639px, standard ≤839px) and `preferred` span resolution ARE the constants the adaptive runtime and pure solver used before this axis opened — so an absent selection is byte-for-byte the pre-capability layout, and "unset it" is a true rollback rather than an approximate one',
+      documentPath: 'visualFoundation.advanced.responsivePosture',
+      brandThemePath: 'responsive.posture',
       derivedChannels: [],
-      compat: 'contract-first: lands only with the deterministic layout runtime',
+      compat:
+        'additive, unset-to-rollback; the ladder travels as DATA (document → schema → artifact normalizedAppearance) and selects a published threshold pair plus a span bias — never authored thresholds, never a viewport read, never a CSS channel. It reaches geometry ONLY through solver door 2 (`AdaptiveLayoutEnv.spanBias`) and through container-posture bucketing, both bounded by each item\'s own min/max contract and by the tier capacity, so no selection can overflow, reorder DOM/focus, or open an avoidable hole — drilled by the property sweep under all three profiles. WidgetBoard\'s collapse TIER is deliberately NOT tenant-driven: widget-board.css mirrors 639/839 as container queries that repoint the grid tracks, so the tier is CSS-co-authored and a JS-only move would manufacture implicit columns. A live swap invalidates measurements and saved layouts for free, because the environment epoch already folds artifactRevision.',
     },
   ] as const satisfies readonly TenantCapabilityDeclaration[]);
 
@@ -449,7 +575,7 @@ export type ActiveTenantCapabilityId = Extract<
 /** Foundation derivation authorities: NOT tenant dials by design. */
 export interface FoundationAuthorityDeclaration {
   readonly id: string;
-  readonly sinceWave: 'C1';
+  readonly sinceWave: 'C1' | 'P1';
   readonly channels: readonly string[];
   readonly derivation: string;
   readonly consumers: readonly string[];
@@ -472,15 +598,22 @@ export const FOUNDATION_AUTHORITIES: readonly FoundationAuthorityDeclaration[] =
       consumers: ['icon-frame.css filled', 'meter.css threshold stripes'],
     },
     {
+      id: 'tinted-well-tone-ink',
+      sinceWave: 'P1',
+      channels: [
+        '--ds-color-info-ink',
+        '--ds-color-warning-ink',
+        '--ds-color-error-ink',
+        '--ds-color-success-ink',
+      ],
+      derivation:
+        "AA-measured ink over a tone-TINTED WELL, the sibling of on-tone-ink rather than a duplicate of it: that axis is ink on a SOLID fill and stays a flat dark neutral in both themes, while this one sits on a well that flips, so each tinted value mixes toward --ds-color-neutral-900 and inherits the dark flip by construction (info keeps the raw hue, which already clears the contrast floor). Absorbed the two AUT-1 prototokens in P1",
+      consumers: ['callout.css tone icon ink', 'tag-input.css rejection frame'],
+    },
+    {
       id: 'interaction-wash',
       sinceWave: 'C1',
-      channels: [
-        '--ds-wash-hover',
-        '--ds-wash-active',
-        '--ds-wash-selected',
-        '--ds-wash-band',
-        '--ds-wash-band-preview',
-      ],
+      channels: ['--ds-wash-band', '--ds-wash-band-preview'],
       derivation: 'color-mix ramp over --ds-color-primary; feedback, so not effect-gated',
       consumers: ['date-picker.css range band/preview'],
     },

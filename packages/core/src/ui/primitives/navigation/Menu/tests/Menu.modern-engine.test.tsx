@@ -184,7 +184,7 @@ describe('Modern Menu public anatomy', () => {
       <ModernMenu
         items={[
           { key: 'g', type: 'group', label: 'Account', title: 'Account', children: [{ key: 'profile', label: 'Profile' }] },
-          { key: 'd', type: 'divider', label: '' },
+          { key: 'd', type: 'divider' },
           { key: 'logout', label: 'Log out', danger: true },
         ]}
       />
@@ -256,6 +256,11 @@ describe('Modern Menu public anatomy', () => {
 
     // The coarse-pointer 44px floor is skin-owned (the bridge clamp that
     // used to satisfy it by accident is cleared above).
-    expect(MENU_SKIN).toContain('--ds-menu-touch-target-min, 44px');
+    // C2c law: a per-component touch channel chains to the single canonical
+    // --ds-touch-target-min, so 44px survives only as that channel's own
+    // fallback. Pinned as a chain, not a literal, so reformatting cannot lie.
+    expect(MENU_SKIN).toMatch(
+      /var\(\s*--ds-menu-touch-target-min\s*,\s*var\(\s*--ds-touch-target-min\s*,\s*44px\s*\)\s*\)/
+    );
   });
 });

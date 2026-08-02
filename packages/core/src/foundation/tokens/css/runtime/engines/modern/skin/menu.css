@@ -78,7 +78,7 @@
 }
 
 .rottay-menu.rottay-menu--modern[data-part='root'][data-part='root'] {
-  border: 1px solid var(--ds-menu-border, var(--ds-color-border-subtle));
+  border: var(--ds-menu-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-menu-border, var(--ds-color-border-subtle));
 }
 
 .rottay-menu--modern.rottay-menu--light[data-part='root'] {
@@ -162,7 +162,7 @@
 @media (hover: none), (pointer: coarse) {
   .rottay-menu--modern[data-part='root'] [data-part='item'],
   .rottay-menu--modern[data-part='root'] [data-part='trigger'] {
-    min-block-size: var(--ds-menu-touch-target-min, 44px);
+    min-block-size: var(--ds-menu-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 
@@ -390,7 +390,7 @@
 .rottay-menu--modern[data-part='root'][data-mode='horizontal'] [data-part='trigger'][data-level='top'] {
   inline-size: auto;
   flex-shrink: 0;
-  block-size: var(--_ds-proto-menu-horizontal-block-size, var(--ds-spacing-11, 44px));
+  block-size: var(--ds-spacing-11, 44px);
 }
 
 .rottay-menu--modern[data-part='root'][data-mode='horizontal']::-webkit-scrollbar {

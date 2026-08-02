@@ -429,7 +429,7 @@ describe('CK-I admin/data thin-tail anatomy (I-4)', () => {
                 resource: 'Record', severity: 'info', details: 'Audit details',
               }],
               filters: [],
-              pagination: { current: 1, total: 1, pageSize: 10 },
+              pagination: { current: 1, total: 1, pageSize: 10, onChange: vi.fn() },
             },
           }}
         />
@@ -573,6 +573,7 @@ describe('CK-I admin/data thin-tail anatomy (I-4)', () => {
               query: 'ana',
               results: [{ id: 'r1', title: 'Ana', description: 'Result description', meta: <span>Result meta</span> }],
               filters: [],
+              onQueryChange: vi.fn(),
             },
           }}
         />
@@ -580,7 +581,7 @@ describe('CK-I admin/data thin-tail anatomy (I-4)', () => {
           config={{
             visual: { layout: 'stack', minQueryLength: 1 },
             presentation: { chrome: { title: 'Empty search' }, placeholder: 'Empty search' },
-            behavior: { query: 'missing', results: [], filters: [] },
+            behavior: { query: 'missing', results: [], filters: [], onQueryChange: vi.fn() },
           }}
         />
         <VisualizationSurface
@@ -760,7 +761,7 @@ describe('CK-I experience/operations thin-tail anatomy (I-5)', () => {
             presentation: { chrome: { title: 'Activity' } },
             behavior: {
               activities: [{ id: 'a1', user: { name: 'Daniel' }, action: 'Updated', timestamp: 'today' }],
-              pagination: { current: 1, total: 10, pageSize: 5 },
+              pagination: { current: 1, total: 10, pageSize: 5, onChange: vi.fn() },
             },
           }}
         />

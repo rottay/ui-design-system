@@ -409,11 +409,11 @@
    6x2 gutters = the 264px content box of the 288px panel). */
 .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='weekday-row'],
 .rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] [data-part='grid'] {
-  gap: var(--_ds-proto-datepicker-grid-gap, 2px);
+  gap: var(--_ds-datepicker-grid-gap, 2px);
 }
 .rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] [data-part='grid'] [data-part='cell'] {
   inline-size: 100%;
-  block-size: var(--_ds-proto-datepicker-cell-size, calc(36px * var(--ds-density-effective-scale)));
+  block-size: var(--_ds-datepicker-cell-size, calc(36px * var(--ds-density-effective-scale)));
 }
 /* Range panel: no column gutter -> the in-range band reads as ONE continuous
    surface; cells fill their tracks so weekday headers and day columns stay
@@ -487,18 +487,12 @@
 .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-in-range='true']:not([data-selected='true']) {
   border-radius: 0;
   background: var(--ds-color-bg-hover);
-  background: var(
-    --_ds-proto-datepicker-range-band-bg,
-    var(--ds-wash-band, color-mix(in srgb, var(--ds-color-primary) 12%, transparent))
-  );
+  background: var(--ds-wash-band, color-mix(in srgb, var(--ds-color-primary) 12%, transparent));
 }
 .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-range-preview='true']:not([data-selected='true']) {
   border-radius: 0;
   background: var(--ds-color-bg-hover);
-  background: var(
-    --_ds-proto-datepicker-range-preview-bg,
-    var(--ds-wash-band-preview, color-mix(in srgb, var(--ds-color-primary) 6%, transparent))
-  );
+  background: var(--ds-wash-band-preview, color-mix(in srgb, var(--ds-color-primary) 6%, transparent));
 }
 /* Endpoints keep the primary fill but open their inner corners toward the
    band (logical radii: the grammar mirrors itself under RTL). A same-day
@@ -531,10 +525,10 @@
   inset-block-end: 3px;
   inset-inline-start: 50%;
   transform: translateX(-50%);
-  inline-size: var(--_ds-proto-datepicker-today-marker-size, 4px);
-  block-size: var(--_ds-proto-datepicker-today-marker-size, 4px);
+  inline-size: var(--_ds-datepicker-today-marker-size, 4px);
+  block-size: var(--_ds-datepicker-today-marker-size, 4px);
   border-radius: 50%;
-  background: var(--_ds-proto-datepicker-today-marker-bg, var(--ds-color-primary));
+  background: var(--_ds-datepicker-today-marker-bg, var(--ds-color-primary));
   pointer-events: none;
 }
 .rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] [data-part='cell'][data-today='true'][data-selected='true']::after {
@@ -665,7 +659,7 @@
 @media (hover: none) and (pointer: coarse) {
   .rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'],
   .rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'] {
-    min-block-size: var(--ds-datepicker-touch-target-min, 44px);
+    min-block-size: var(--ds-datepicker-touch-target-min, var(--ds-touch-target-min, 44px));
   }
   .rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] {
     inline-size: max-content;
@@ -673,11 +667,11 @@
   }
   .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='nav-button'],
   .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'] {
-    min-inline-size: var(--ds-datepicker-touch-target-min, 44px);
-    min-block-size: var(--ds-datepicker-touch-target-min, 44px);
+    min-inline-size: var(--ds-datepicker-touch-target-min, var(--ds-touch-target-min, 44px));
+    min-block-size: var(--ds-datepicker-touch-target-min, var(--ds-touch-target-min, 44px));
   }
   .rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='today-button'] {
-    min-block-size: var(--ds-datepicker-touch-target-min, 44px);
+    min-block-size: var(--ds-datepicker-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

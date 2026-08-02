@@ -72,10 +72,6 @@
   --ds-button-xl-radius: var(--ds-button-xl-border-radius);
 
   /* Default size */
-  --ds-button-default-height: var(--ds-button-md-height);
-  --ds-button-default-padding-x: var(--ds-button-md-padding-x);
-  --ds-button-default-padding-y: var(--ds-button-md-padding-y);
-  --ds-button-default-font-size: var(--ds-button-md-font-size);
   --ds-button-gap: var(--ds-button-md-gap);
 
   /* ========================================================================
@@ -111,7 +107,6 @@
   --ds-button-secondary-shadow: var(--ds-shadow-button-rest);
   --ds-button-secondary-shadow-hover: var(--ds-shadow-button-hover);
   --ds-button-secondary-shadow-active: var(--ds-shadow-button-rest);
-  --ds-button-secondary-border-color: var(--ds-button-secondary-border);
 
   /* DEFAULT - Neutral actions */
   --ds-button-default-bg: var(--ds-color-white);
@@ -126,7 +121,6 @@
   --ds-button-default-shadow: var(--ds-shadow-button-rest);
   --ds-button-default-shadow-hover: var(--ds-shadow-button-hover);
   --ds-button-default-shadow-active: var(--ds-shadow-button-rest);
-  --ds-button-default-border-color: var(--ds-button-default-border);
 
   /* GHOST - Minimal appearance */
   --ds-button-ghost-bg: transparent;
@@ -141,7 +135,6 @@
   --ds-button-ghost-shadow: none;
   --ds-button-ghost-shadow-hover: var(--ds-button-ghost-shadow);
   --ds-button-ghost-shadow-active: var(--ds-button-ghost-shadow);
-  --ds-button-ghost-border-color: var(--ds-button-ghost-border);
 
   /* DASHED - Outlined with dashed border */
   --ds-button-dashed-bg: transparent;
@@ -157,7 +150,6 @@
   --ds-button-dashed-shadow: none;
   --ds-button-dashed-shadow-hover: var(--ds-button-dashed-shadow);
   --ds-button-dashed-shadow-active: var(--ds-button-dashed-shadow);
-  --ds-button-dashed-border-color: var(--ds-button-dashed-border);
 
   /* TEXT - Text-only button */
   --ds-button-text-bg: transparent;
@@ -172,7 +164,6 @@
   --ds-button-text-shadow: none;
   --ds-button-text-shadow-hover: var(--ds-button-text-shadow);
   --ds-button-text-shadow-active: var(--ds-button-text-shadow);
-  --ds-button-text-border-color: var(--ds-button-text-border);
 
   /* LINK - Link-styled button */
   --ds-button-link-bg: transparent;
@@ -190,7 +181,6 @@
   --ds-button-link-shadow: none;
   --ds-button-link-shadow-hover: var(--ds-button-link-shadow);
   --ds-button-link-shadow-active: var(--ds-button-link-shadow);
-  --ds-button-link-border-color: var(--ds-button-link-border);
 
   /* ========================================================================
      SEMANTIC VARIANTS - Status Colors
@@ -210,7 +200,6 @@
   --ds-button-success-shadow: var(--ds-shadow-success-sm);
   --ds-button-success-shadow-hover: var(--ds-button-success-shadow);
   --ds-button-success-shadow-active: var(--ds-button-success-shadow);
-  --ds-button-success-border-color: var(--ds-button-success-border);
 
   /* WARNING */
   --ds-button-warning-bg: var(--ds-color-warning-500);
@@ -225,7 +214,6 @@
   --ds-button-warning-shadow: var(--ds-shadow-warning-sm);
   --ds-button-warning-shadow-hover: var(--ds-button-warning-shadow);
   --ds-button-warning-shadow-active: var(--ds-button-warning-shadow);
-  --ds-button-warning-border-color: var(--ds-button-warning-border);
 
   /* ERROR/DANGER */
   --ds-button-error-bg: var(--ds-color-error-500);
@@ -240,7 +228,6 @@
   --ds-button-error-shadow: var(--ds-shadow-error-sm);
   --ds-button-error-shadow-hover: var(--ds-shadow-error-sm);
   --ds-button-error-shadow-active: var(--ds-shadow-error-sm);
-  --ds-button-error-border-color: var(--ds-button-error-border);
 
   /* INFO */
   --ds-button-info-bg: var(--ds-color-info-500);
@@ -269,7 +256,7 @@
   --ds-button-ai-shadow: var(--ds-shadow-button-rest);
   --ds-button-ai-shadow-hover: var(--ds-shadow-button-hover);
   --ds-button-ai-shadow-active: var(--ds-shadow-button-rest);
-  --ds-button-ai-texture: var(--ds-material-control-texture);
+  --ds-button-ai-texture: var(--ds-material-control-texture, none);
 
   /* ========================================================================
      STATES - Interactive States

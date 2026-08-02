@@ -165,7 +165,12 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  padding-inline: var(--ds-layout-header-padding-inline, var(--ds-spacing-4));
+  /* RHYTHM: the frame's four room paddings (header inline, content, footer
+     inline/block) all mount the axis on their FALLBACK tier, never on the
+     `--ds-layout-*` hook -- a caller that names one has stated exact geometry.
+     They move together on purpose: header, content and footer share one inline
+     edge, and scaling only some of them would break that alignment. */
+  padding-inline: var(--ds-layout-header-padding-inline, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* ---- sider: no shrink, own scroll, token-motion collapse transition. The
@@ -290,15 +295,15 @@
 .rottay-layout-content.rottay-layout-content--modern[data-part='content'] {
   flex: 1 1 0%;
   min-inline-size: 0;
-  padding: var(--ds-layout-content-padding, var(--ds-spacing-4));
+  padding: var(--ds-layout-content-padding, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)));
   overflow: auto;
 }
 
 /* ---- footer: no shrink, spacing rhythm. ---- */
 .rottay-layout-footer.rottay-layout-footer--modern[data-part='footer'] {
   flex-shrink: 0;
-  padding-inline: var(--ds-layout-footer-padding-inline, var(--ds-spacing-4));
-  padding-block: var(--ds-layout-footer-padding-block, var(--ds-spacing-2));
+  padding-inline: var(--ds-layout-footer-padding-inline, calc(var(--ds-spacing-4) * var(--ds-rhythm-effective-scale, 1)));
+  padding-block: var(--ds-layout-footer-padding-block, calc(var(--ds-spacing-2) * var(--ds-rhythm-effective-scale, 1)));
 }
 
 /* ---- Box: token radius/shadow selected by engine-stamped attributes. ---- */
@@ -399,4 +404,13 @@
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-2);
   margin: var(--ds-spacing-2);
+}
+
+/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
+   below the canonical --ds-touch-target-min channel; fine pointers keep the
+   authored size untouched. */
+@media (hover: none), (pointer: coarse) {
+  .rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
 }

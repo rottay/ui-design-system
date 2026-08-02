@@ -78,9 +78,13 @@ describe('Modern Breadcrumb overflow collapse', () => {
 
   it('navigates (full page load) for a hidden href-only item', async () => {
     const originalLocation = window.location;
+    // `window.location` is declared `string & Location` so that assigning a URL
+    // string navigates; the stub below is an object, so it is installed through
+    // a view that keeps only the `Location` half.
+    const navigable = window as unknown as { location: Location };
     // @ts-expect-error -- narrow jsdom navigation stub, restored below
     delete window.location;
-    window.location = { href: '' } as unknown as Location;
+    navigable.location = { href: '' } as unknown as Location;
 
     try {
       renderWithEngine(
@@ -94,7 +98,7 @@ describe('Modern Breadcrumb overflow collapse', () => {
 
       expect(window.location.href).toBe('/b');
     } finally {
-      window.location = originalLocation;
+      navigable.location = originalLocation;
     }
   });
 

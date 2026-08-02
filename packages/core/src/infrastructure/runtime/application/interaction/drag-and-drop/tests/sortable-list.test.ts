@@ -4,6 +4,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
+import type { DragEvent, KeyboardEvent } from 'react';
 import { useSortableList } from '../index';
 
 // ============================================================================

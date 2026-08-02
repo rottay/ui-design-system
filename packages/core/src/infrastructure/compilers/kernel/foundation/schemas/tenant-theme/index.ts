@@ -19,12 +19,14 @@ import {
   TENANT_THEME_TYPE_SCALE_BOUNDS,
 } from "@/foundation/contracts/composition/tenants/themes/tenant-theme";
 import { RECIPE_PROFILES } from "@/foundation/tokens/ts/presentation/recipe-profiles";
+import { RESPONSIVE_POSTURE_PROFILES } from "@/foundation/tokens/ts/presentation/responsive-postures";
 import {
   EXPERIENCE_PROFILES,
   EXPRESSIVE_EDGE_PROFILES,
   EXPRESSIVE_ELEVATION_PROFILES,
   EXPRESSIVE_GEOMETRY_PROFILES,
   EXPRESSIVE_MATERIAL_PROFILES,
+  EXPRESSIVE_ICON_PROFILES,
   EXPRESSIVE_MOTIF_PROFILES,
   EXPRESSIVE_TYPE_PROFILES,
 } from "@/foundation/tokens/ts/presentation/expressive-profiles";
@@ -101,10 +103,10 @@ const experienceProfile = enumeration(
 );
 
 /**
- * Pro explicit per-axis expressive overrides (C1b). Each axis is a closed
- * vocabulary enum. The `icon` axis is deliberately ABSENT: it is a frontier
- * capability and the closed object model rejects it as `unknown_key` — the
- * reachability drill proves that rejection stays executable.
+ * Pro explicit per-axis expressive overrides (C1b; `icon` opened in C2).
+ * Each axis is a closed vocabulary enum — out-of-vocabulary values are
+ * rejected, and the governed weight tables in the icon policy are the only
+ * thing an icon posture can select (never a supplier, glyph or SVG).
  */
 const expressiveProfiles = object({
   type: enumeration(...EXPRESSIVE_TYPE_PROFILES),
@@ -113,6 +115,7 @@ const expressiveProfiles = object({
   material: enumeration(...EXPRESSIVE_MATERIAL_PROFILES),
   elevation: enumeration(...EXPRESSIVE_ELEVATION_PROFILES),
   motif: enumeration(...EXPRESSIVE_MOTIF_PROFILES),
+  icon: enumeration(...EXPRESSIVE_ICON_PROFILES),
 });
 
 const COLOR = string("color");
@@ -172,6 +175,10 @@ const general = object({
     }),
   }),
   density: enumeration("compact", "normal", "spacious"),
+  // Layout rhythm is a SEPARATE axis from density: density sizes controls,
+  // rhythm sizes the space between them. A closed domain, so an unknown
+  // posture is rejected rather than silently ignored.
+  rhythm: enumeration("tight", "normal", "airy"),
   motion: object({
     intensity: number({
       min: MOTION_DIAL_BOUNDS.intensity.min,
@@ -1376,10 +1383,21 @@ const tokenValueRules: Readonly<Record<string, TenantThemeSchemaNode>> =
     })
   );
 
+/**
+ * Governed responsive-posture selection (E2): closed enum over the published
+ * first-party registry (`compact` | `balanced` | `expansive`) — a customer
+ * document can only SELECT a ladder, never author thresholds or span biases.
+ * Absent means `balanced`, whose values ARE the pre-capability constants.
+ */
+const responsivePosture = enumeration(
+  ...RESPONSIVE_POSTURE_PROFILES.map((profile) => profile.id)
+);
+
 const advanced = object({
   chrome,
   tokenOverrides: object(tokenValueRules),
   profiles: expressiveProfiles,
+  responsivePosture,
 });
 
 const documentFields: Readonly<Record<string, TenantThemeSchemaNode>> = {

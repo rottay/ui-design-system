@@ -125,7 +125,10 @@ describe('DatePicker', () => {
     expect(screen.getByTestId('date-picker')).toHaveAttribute('data-size', size);
   });
 
-  it.each(['default', 'error', 'warning'] as const)('renders status %s', (status) => {
+  // `StatusType` is `'' | 'error' | 'warning'` -- the neutral case is the empty
+  // string, not `'default'`. The engine stub above stamps `data-status={status}`
+  // verbatim, so each value is asserted as the attribute it renders.
+  it.each(['', 'error', 'warning'] as const)('renders status %s', (status) => {
     render(<DatePicker status={status} />);
     expect(screen.getByTestId('date-picker')).toHaveAttribute('data-status', status);
   });
@@ -194,7 +197,7 @@ describe('DatePicker.RangePicker', () => {
     expect(screen.getByTestId('range-picker')).toHaveAttribute('data-size', size);
   });
 
-  it.each(['default', 'error', 'warning'] as const)('renders status %s', (status) => {
+  it.each(['', 'error', 'warning'] as const)('renders status %s', (status) => {
     render(<DatePicker.RangePicker status={status} />);
     expect(screen.getByTestId('range-picker')).toHaveAttribute('data-status', status);
   });

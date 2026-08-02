@@ -114,7 +114,7 @@ export interface StackProps
   extends EngineAwareProps,
     WithChildrenProps,
     BaseComponentProps,
-    Omit<HTMLAttributes<HTMLElement>, "style" | "className"> {
+    Omit<HTMLAttributes<HTMLElement>, "style" | "className" | "dir"> {
   /**
    * The HTML element or React component to render as
    * @default 'div'

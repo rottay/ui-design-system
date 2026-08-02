@@ -15,7 +15,10 @@ const ENGINE_COMPONENTS = {
 } as const;
 
 function renderMaximalBox(
-  Component: React.ComponentType<BoxProps>,
+  // Every Box engine is a `forwardRef` component and this helper passes a ref,
+  // so `ComponentType<BoxProps>` under-declared what is handed in -- it drops
+  // the `ref` the engines genuinely forward onto their DOM element.
+  Component: React.ForwardRefExoticComponent<BoxProps & React.RefAttributes<HTMLElement>>,
   testId: string
 ) {
   const ref = createRef<HTMLElement>();

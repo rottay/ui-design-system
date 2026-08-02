@@ -1,6 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
+import type { FieldDef } from '../../../../foundation/contracts/runtime/components/patterns/core';
 import { useDataTable } from '../../data/data-table/runtime/state';
 import { useFormBuilder } from '../forms/builder-state';
 import { useKanban } from '../kanban/board-state';
@@ -14,8 +15,8 @@ describe('composition hooks', () => {
     ];
 
     const columns = [
-      { key: 'name', label: 'Name', accessorKey: 'name' as const },
-      { key: 'score', label: 'Score', accessorKey: 'score' as const },
+      { key: 'name', header: 'Name', accessorKey: 'name' as const },
+      { key: 'score', header: 'Score', accessorKey: 'score' as const },
     ];
 
     it('sorts, paginates, and resolves selections on the client', () => {
@@ -44,7 +45,7 @@ describe('composition hooks', () => {
 
       // Page changes should propagate through the public pagination contract.
       act(() => {
-        if (result.current.tableProps.pagination && result.current.tableProps.pagination !== false) {
+        if (result.current.tableProps.pagination) {
           result.current.tableProps.pagination.onChange?.(2, 2);
         }
       });
@@ -118,7 +119,7 @@ describe('composition hooks', () => {
       expect(result.current.processedData.map((row) => row.id)).toEqual(['1']);
 
       act(() => {
-        if (result.current.tableProps.pagination && result.current.tableProps.pagination !== false) {
+        if (result.current.tableProps.pagination) {
           result.current.tableProps.pagination.onChange?.(3, 1);
         }
       });
@@ -127,7 +128,7 @@ describe('composition hooks', () => {
       expect(result.current.page).toBe(3);
 
       act(() => {
-        if (result.current.tableProps.pagination && result.current.tableProps.pagination !== false) {
+        if (result.current.tableProps.pagination) {
           result.current.tableProps.pagination.onChange?.(2, 2);
         }
       });
@@ -176,16 +177,17 @@ describe('composition hooks', () => {
   });
 
   describe('useFormBuilder', () => {
-    const fields = [
-      { name: 'email', label: 'Email', required: true },
-      { name: 'attendees', label: 'Attendees', validation: { min: 1 } },
+    const fields: FieldDef[] = [
+      { name: 'email', type: 'email', label: 'Email', required: true },
+      { name: 'attendees', type: 'number', label: 'Attendees', validation: { min: 1 } },
       {
         name: 'secret',
+        type: 'text',
         label: 'Secret',
         required: true,
         hidden: (values: Record<string, unknown>) => values.showSecret !== true,
       },
-      { name: 'showSecret', label: 'Show secret', defaultValue: false },
+      { name: 'showSecret', type: 'checkbox', label: 'Show secret', defaultValue: false },
     ];
 
     it('tracks dirty state, validates hidden fields correctly, and submits resolved values', async () => {

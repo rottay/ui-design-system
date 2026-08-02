@@ -5,8 +5,17 @@ import { recordTransitionName, startDsViewTransition, useViewTransition } from '
 import { useReducedMotion } from '../../foundation/reduced-motion';
 import { mockMatchMedia } from '@/tooling/testing/helpers/browser/match-media';
 
-/** `document` widened so tests can install/remove the optional API method. */
-type MutableViewTransitionDocument = Document & {
+/**
+ * `document` widened so tests can install/remove the optional API method.
+ *
+ * `Omit`, not an intersection: the DOM lib now declares
+ * `Document.startViewTransition` as a REQUIRED method returning
+ * `ViewTransition`, and intersecting cannot loosen it -- the stub could not be
+ * installed and the teardown `delete` was rejected. Replacing the member is
+ * what makes the optional-API shape (which is what happy-dom actually gives
+ * this suite) expressible.
+ */
+type MutableViewTransitionDocument = Omit<Document, 'startViewTransition'> & {
   startViewTransition?: (update: () => void | Promise<void>) => unknown;
 };
 

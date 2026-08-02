@@ -79,7 +79,7 @@ export default function ClassicSavedViewsBar(props: SavedViewsBarProps) {
   /** Commits the new view name and resets the creation input. */
   const handleCreate = useCallback(() => {
     if (!newViewName.trim()) return;
-    onViewCreate({
+    onViewCreate?.({
       name: newViewName.trim(),
       config: {},
     });
@@ -89,16 +89,18 @@ export default function ClassicSavedViewsBar(props: SavedViewsBarProps) {
 
   const handleRenameStart = useCallback(
     (view: SavedView) => {
-      if (!allowRename) return;
+      // Same visibility law as the menu item that reaches here: without a
+      // handler the action is not available, so editing must not start either.
+      if (!allowRename || !onViewRename) return;
       setEditingViewId(view.id);
       setEditingName(view.name);
     },
-    [allowRename]
+    [allowRename, onViewRename]
   );
 
   const handleRenameConfirm = useCallback(() => {
     if (editingViewId && editingName.trim()) {
-      onViewRename(editingViewId, editingName.trim());
+      onViewRename?.(editingViewId, editingName.trim());
     }
     setEditingViewId(null);
     setEditingName('');
@@ -158,7 +160,7 @@ export default function ClassicSavedViewsBar(props: SavedViewsBarProps) {
       const customActions = getMenuActions?.(view) ?? [];
       const items: any[] = [];
 
-      if (allowRename) {
+      if (allowRename && onViewRename) {
         items.push({
           key: 'rename',
           icon: <EditOutlined />,
@@ -194,7 +196,7 @@ export default function ClassicSavedViewsBar(props: SavedViewsBarProps) {
 
       // Default views cannot be deleted to prevent users from accidentally
       // removing the system-provided baseline configuration.
-      if (allowDelete && !view.isDefault) {
+      if (allowDelete && onViewDelete && !view.isDefault) {
         if (items.length > 0) {
           items.push({ type: 'divider' as const });
         }
@@ -203,13 +205,21 @@ export default function ClassicSavedViewsBar(props: SavedViewsBarProps) {
           icon: <DeleteOutlined />,
           label: 'Delete',
           danger: true,
-          onClick: () => onViewDelete(view.id),
+          onClick: () => onViewDelete?.(view.id),
         });
       }
 
       return items;
     },
-    [allowRename, allowDelete, onViewDuplicate, onViewDelete, getMenuActions, handleRenameStart]
+    [
+      allowRename,
+      allowDelete,
+      onViewDuplicate,
+      onViewRename,
+      onViewDelete,
+      getMenuActions,
+      handleRenameStart,
+    ]
   );
 
   if (loading) {
@@ -229,9 +239,17 @@ export default function ClassicSavedViewsBar(props: SavedViewsBarProps) {
     );
   }
 
-  // Disable creation when maxViews is reached to enforce plan-based limits
-  // (e.g. free tier = 3 saved views).
-  const canCreate = allowCreate && (!maxViews || views.length < maxViews);
+  /**
+   * VISIBILITY LAW (contracts/index.ts:80-82): an absent mutation handler means
+   * the action is NOT AVAILABLE and the bar renders WITHOUT it. An `allow*` flag
+   * is a permission, not a capability; rendering on the flag alone is what
+   * produced visible inert actions. Absence is omission, never `disabled`.
+   *
+   * maxViews still gates creation on top of that, for plan-based limits
+   * (e.g. free tier = 3 saved views).
+   */
+  const canCreate =
+    allowCreate && Boolean(onViewCreate) && (!maxViews || views.length < maxViews);
 
   return (
     <div
@@ -326,7 +344,10 @@ export default function ClassicSavedViewsBar(props: SavedViewsBarProps) {
                 }}
               />
             )}
-            {(allowRename || allowDelete || onViewDuplicate || getMenuActions) && (
+            {/* Gated on the ACTUAL items, not the flags: a default view whose
+                only permitted action is delete yields zero items, and an empty
+                trigger is itself an inert affordance. */}
+            {buildMenuItems(view).length > 0 && (
               <Dropdown
                 menu={{ items: buildMenuItems(view) }}
                 trigger={['click']}

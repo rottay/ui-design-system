@@ -61,7 +61,7 @@ const SMOKE_CASES: SmokeCase[] = [
   {
     name: 'Tooltip',
     render: () => (
-      <DS.Tooltip title="Helpful" open>
+      <DS.Tooltip content="Helpful" visible>
         <button type="button">Hover</button>
       </DS.Tooltip>
     ),
@@ -81,7 +81,7 @@ const SMOKE_CASES: SmokeCase[] = [
   },
   { name: 'Progress', render: () => <DS.Progress percent={72} /> },
   { name: 'Rate', render: () => <DS.Rate defaultValue={3} /> },
-  { name: 'Spinner', render: () => <DS.Spinner spinning /> },
+  { name: 'Spinner', render: () => <DS.Spinner label="Loading" /> },
   { name: 'AutoComplete', render: () => <DS.AutoComplete options={[{ value: 'Option A' }]} /> },
   {
     name: 'Cascader',
@@ -145,7 +145,13 @@ const SMOKE_CASES: SmokeCase[] = [
   },
   {
     name: 'Collapse',
-    render: () => <DS.Collapse items={[{ key: '1', label: 'Panel', children: 'Body' }]} />,
+    render: () => (
+      <DS.Collapse>
+        <DS.Collapse.Panel panelKey="1" header="Panel">
+          Body
+        </DS.Collapse.Panel>
+      </DS.Collapse>
+    ),
   },
   { name: 'Container', render: () => <DS.Container>Container body</DS.Container> },
   { name: 'Divider', render: () => <DS.Divider>Section</DS.Divider> },
@@ -170,12 +176,16 @@ const SMOKE_CASES: SmokeCase[] = [
   },
   {
     name: 'Anchor',
-    render: () => <DS.Anchor items={[{ key: 'overview', href: '#overview', title: 'Overview' }]} />,
+    render: () => (
+      <DS.Anchor>
+        <DS.Anchor.Link href="#overview" title="Overview" />
+      </DS.Anchor>
+    ),
   },
   { name: 'BackTop', render: () => <DS.BackTop visibilityHeight={0} /> },
   {
     name: 'Breadcrumb',
-    render: () => <DS.Breadcrumb items={[{ key: 'home', title: 'Home' }, { key: 'settings', title: 'Settings' }]} />,
+    render: () => <DS.Breadcrumb items={[{ key: 'home', label: 'Home' }, { key: 'settings', label: 'Settings' }]} />,
   },
   { name: 'Link', render: () => <DS.Link href="/settings">Settings</DS.Link> },
   {

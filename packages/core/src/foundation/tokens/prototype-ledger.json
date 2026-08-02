@@ -20,18 +20,14 @@
       "purpose": "Keyline under an affixed element.",
       "cssType": "<color>",
       "fallback": "color-mix(in srgb, var(--ds-color-border-secondary) calc(55% * var(--ds-effect-intensity)), transparent)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css",
-          "line": 88,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Exemplar: a declared dial multiplied by --ds-effect-intensity."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-affix-affixed-keyline",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-border-secondary, --ds-effect-intensity Renamed out of the temporary proto namespace into the family private canon --_ds-affix-affixed-keyline (axis: edge); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Exemplar: a declared dial multiplied by --ds-effect-intensity."
     },
     {
       "name": "--_ds-proto-autocomplete-dropdown-max-width",
@@ -40,17 +36,14 @@
       "purpose": "Maximum dropdown width.",
       "cssType": "<length>",
       "fallback": "28rem",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
-          "line": 268,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-autocomplete-dropdown-max-width",
+      "notes": "PRIVATE_FIXED: 28rem overlay cap; no --ds-* overlay max-width authority exists (Select ships only --ds-select-dropdown-max-height, 16rem). Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-autocomplete-dropdown-max-width (axis: overlay-geometry); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-autocomplete-option-height",
@@ -59,18 +52,13 @@
       "purpose": "Minimum option height, scaled by density.",
       "cssType": "<length>",
       "fallback": "2.25rem",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
-          "line": 281,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "DERIVE_FROM_EXISTING",
       "owner": "design-system",
-      "status": "active",
-      "notes": "MIGRATION PENDING: autocomplete.css is owned by another lane this wave. Target: --ds-input-md-height."
+      "status": "retired",
+      "retiredBy": "D-PROTO",
+      "notes": "EXECUTED. successor: --ds-select-option-height (:root, 2.25rem = 36px), the same channel select.css already multiplies by --ds-density-effective-scale for its own option rows, so Autocomplete now shares the Select option grammar it documents at the token level too. skin/autocomplete.css:281. Computed default preserved byte-identically. NOTE: the row's former target --ds-input-md-height was WRONG -- it is 2.5rem (40px), which would have been a silent +4px delta; --ds-spacing-9 is 2.25rem but already density-scaled and would have double-scaled at this site."
     },
     {
       "name": "--_ds-proto-breadcrumb-link-underline-color",
@@ -79,18 +67,14 @@
       "purpose": "Underline tint of a breadcrumb link.",
       "cssType": "<color>",
       "fallback": "color-mix(in srgb, currentColor 32%, transparent)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/breadcrumb.css",
-          "line": 114,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "The one color with no channel, legitimately: it derives from currentColor, so it follows the text it belongs to."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-breadcrumb-link-underline-color",
+      "notes": "PRIVATE_CANONICAL conectado a currentColor — the underline must follow the text it belongs to, so the inherited colour IS the correct authority; a --ds-* channel here would break that coupling. Renamed out of the temporary proto namespace into the family private canon --_ds-breadcrumb-link-underline-color (axis: edge); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: The one color with no channel, legitimately: it derives from currentColor, so it follows the text it belongs to."
     },
     {
       "name": "--_ds-proto-callout-tone-ink",
@@ -129,8 +113,10 @@
       "scope": "private",
       "category": "FOUNDATION_AUTHORITY",
       "owner": "design-system",
-      "status": "active",
-      "notes": "AUT-1 seed: its AA-measured mixes are the values --ds-color-on-{tone} was derived from. Definition stays local until the authority absorbs it."
+      "status": "retired",
+      "notes": "AUT-1 ABSORBED (P1). The successor authority --ds-color-{info,warning,error,success}-ink was MINTED in themes/default.css section 1b with this row's exact AA-measured mixes (info raw hue; warning 55/45, error 78/22, success 60/40 over neutral-900), so the light default is byte-identical per shipped bundle. The migration was blocked because the proposed successor --ds-color-on-{tone} is the ink-on-a-SOLID-FILL axis: flat #171717 with no dark override. The minted authority is the distinct ink-over-NEUTRAL-WELL axis and carries the dark flip BY CONSTRUCTION, because each mix references var(--ds-color-neutral-900), which the dark block re-declares on the same element (#171717 -> #f8fafc); a custom property computes with its var() references already substituted. callout.css now reads var(--ds-color-<tone>-ink, <original mix>) into the surviving private relay --_ds-callout-tone-ink, which stays because the icon consumer reads ONE name across all tones. Both legs pinned by tone-ink-authority.test.ts. The dark flip was additionally CONFIRMED BY RESOLUTION, not left as a construction argument: real Chromium (system Chrome via puppeteer, getComputedStyle on a mounted callout against each SHIPPED bundle) shows neutral-900 #171717->#f8fafc on the DS base with the warning icon moving srgb(0.569 0.381 0.064)->srgb(0.966 0.782 0.468), #191919->#c0cdd8 on light-authored bithire and #171717->#ECECEC on dark-authored platform; the identical probe against the pre-P1 bundles from git returned every value byte-identically, which is the no-loss proof for the absorption.",
+      "retiredBy": "D-PROTO (P1)",
+      "successor": "--ds-color-{tone}-ink"
     },
     {
       "name": "--_ds-proto-codeblock-language-badge-bg",
@@ -139,18 +125,14 @@
       "purpose": "Chip tint behind the bare language tag in the header.",
       "cssType": "<color>",
       "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/presentation/components/skin/code-block.css",
-          "line": 98,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Now consumed from code-block.css instead of a branch inside a TSX style object; the badge is a MODE of the title part, keyed on data-language-badge. Values preserved byte-for-byte."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-codeblock-language-badge-bg",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-text-primary Renamed out of the temporary proto namespace into the family private canon --_ds-codeblock-language-badge-bg (axis: wash); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Now consumed from code-block.css instead of a branch inside a TSX style object; the badge is a MODE of the title part, keyed on data-language-badge. Values preserved byte-for-byte."
     },
     {
       "name": "--_ds-proto-codeblock-scroll-shadow",
@@ -159,22 +141,14 @@
       "purpose": "Gradient scroll-edge affordance of the code region.",
       "cssType": "<color>",
       "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/presentation/components/skin/code-block.css",
-          "line": 110,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/skin/code-block.css",
-          "line": 115,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-codeblock-scroll-shadow",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-text-primary Renamed out of the temporary proto namespace into the family private canon --_ds-codeblock-scroll-shadow (axis: elevation); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-confirm-dialog-icon-size",
@@ -183,23 +157,13 @@
       "purpose": "Medallion track of the dialog feature icon.",
       "cssType": "<length>",
       "fallback": "var(--ds-icon-size-feature, 2.5rem)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css",
-          "line": 169,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css",
-          "line": 170,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "DERIVE_FROM_EXISTING",
       "owner": "design-system",
-      "status": "active",
-      "notes": "derived-to: --ds-icon-size-feature (C1, 2.5rem). Zero pixel change."
+      "status": "retired",
+      "retiredBy": "D-PROTO",
+      "notes": "EXECUTED. successor: --ds-icon-size-feature, which the derive step had already inserted into this site's fallback chain; the proto layer above it was flattened away at skin/confirm-dialog.css:169-170. It had ZERO declaration sites anywhere in src, so it never resolved and the chain always computed the successor -- Computed default preserved byte-identically. PRIOR: derived-to: --ds-icon-size-feature (C1, 2.5rem). Zero pixel change."
     },
     {
       "name": "--_ds-proto-context-menu-icon-well",
@@ -208,23 +172,13 @@
       "purpose": "Square well that optically aligns row glyphs.",
       "cssType": "<length>",
       "fallback": "var(--ds-icon-size-well, 1.25rem)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu.css",
-          "line": 301,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/context-menu.css",
-          "line": 302,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "DERIVE_FROM_EXISTING",
       "owner": "design-system",
-      "status": "active",
-      "notes": "derived-to: --ds-icon-size-well (C1, 1.25rem). Zero pixel change."
+      "status": "retired",
+      "retiredBy": "D-PROTO",
+      "notes": "EXECUTED. successor: --ds-icon-size-well, which the derive step had already inserted into this site's fallback chain; the proto layer above it was flattened away at skin/context-menu.css:301-302. It had ZERO declaration sites anywhere in src, so it never resolved and the chain always computed the successor -- Computed default preserved byte-identically. PRIOR: derived-to: --ds-icon-size-well (C1, 1.25rem). Zero pixel change."
     },
     {
       "name": "--_ds-proto-datepicker-cell-size",
@@ -233,17 +187,14 @@
       "purpose": "Calendar cell box, scaled by density.",
       "cssType": "<length>",
       "fallback": "calc(36px * var(--ds-density-effective-scale))",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/date-picker.css",
-          "line": 416,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-datepicker-cell-size",
+      "notes": "PRIVATE_FIXED: 36px calendar cell. Its only --ds-* reference is --ds-density-effective-scale, which is the density MULTIPLIER, not an axis authority — and because the site already multiplies by it, chaining to the density-scaled --ds-spacing-9 (2.25rem = 36px) would double-scale. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-datepicker-cell-size (axis: control-height); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-datepicker-grid-gap",
@@ -252,17 +203,14 @@
       "purpose": "Gap between calendar cells.",
       "cssType": "<length>",
       "fallback": "2px",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/date-picker.css",
-          "line": 412,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-datepicker-grid-gap",
+      "notes": "PRIVATE_FIXED: 2px; the spacing scale has no 2px step (spacing-1 is 4px). Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-datepicker-grid-gap (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-datepicker-range-band-bg",
@@ -271,18 +219,13 @@
       "purpose": "Band fill behind every cell inside a committed range.",
       "cssType": "<color>",
       "fallback": "var(--ds-wash-band, color-mix(in srgb, var(--ds-color-primary) 12%, transparent))",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/date-picker.css",
-          "line": 491,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "DERIVE_FROM_EXISTING",
       "owner": "design-system",
-      "status": "active",
-      "notes": "derived-to: --ds-wash-band (C1). Fallback preserved as the parse floor; zero pixel change."
+      "status": "retired",
+      "retiredBy": "D-PROTO",
+      "notes": "EXECUTED. successor: --ds-wash-band, which the derive step had already inserted into this site's fallback chain; the proto layer above it was flattened away at skin/date-picker.css:491. It had ZERO declaration sites anywhere in src, so it never resolved and the chain always computed the successor -- Computed default preserved byte-identically. PRIOR: derived-to: --ds-wash-band (C1). Fallback preserved as the parse floor; zero pixel change."
     },
     {
       "name": "--_ds-proto-datepicker-range-preview-bg",
@@ -291,18 +234,13 @@
       "purpose": "Band fill behind cells in the hover-preview range.",
       "cssType": "<color>",
       "fallback": "var(--ds-wash-band-preview, color-mix(in srgb, var(--ds-color-primary) 6%, transparent))",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/date-picker.css",
-          "line": 499,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "DERIVE_FROM_EXISTING",
       "owner": "design-system",
-      "status": "active",
-      "notes": "derived-to: --ds-wash-band-preview (C1). Fallback preserved as the parse floor; zero pixel change."
+      "status": "retired",
+      "retiredBy": "D-PROTO",
+      "notes": "EXECUTED. successor: --ds-wash-band-preview, which the derive step had already inserted into this site's fallback chain; the proto layer above it was flattened away at skin/date-picker.css:499. It had ZERO declaration sites anywhere in src, so it never resolved and the chain always computed the successor -- Computed default preserved byte-identically. PRIOR: derived-to: --ds-wash-band-preview (C1). Fallback preserved as the parse floor; zero pixel change."
     },
     {
       "name": "--_ds-proto-datepicker-today-marker-bg",
@@ -311,17 +249,14 @@
       "purpose": "Fill of the today dot in the calendar grid.",
       "cssType": "<color>",
       "fallback": "var(--ds-color-primary)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/date-picker.css",
-          "line": 537,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-datepicker-today-marker-bg",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-primary Renamed out of the temporary proto namespace into the family private canon --_ds-datepicker-today-marker-bg (axis: ink); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-datepicker-today-marker-size",
@@ -330,22 +265,14 @@
       "purpose": "Diameter of the today dot.",
       "cssType": "<length>",
       "fallback": "4px",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/date-picker.css",
-          "line": 534,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/date-picker.css",
-          "line": 535,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-datepicker-today-marker-size",
+      "notes": "PRIVATE_FIXED: 4px shape marker, not an icon; --ds-icon-size-* is the wrong role. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-datepicker-today-marker-size (axis: icon-size); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-dropdown-arrow-anchor-offset",
@@ -354,18 +281,14 @@
       "purpose": "Arrow offset tracked from the anchor.",
       "cssType": "<length>",
       "fallback": null,
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 491,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Coupled to the TSX through [data-arrow-tracked] under the SAME condition on both sides: fragile but correct, and documented as such."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-dropdown-arrow-anchor-offset",
+      "notes": "PRIVATE_RUNTIME_BRIDGE: the value is stamped per instance by the owner TSX (Dropdown/engines/modern/index.tsx:563) from the measured arrow anchor, so it has no upstream authority by construction — the same species as the retired meter-ring-value bridge. It does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-dropdown-arrow-anchor-offset (axis: overlay-geometry); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Coupled to the TSX through [data-arrow-tracked] under the SAME condition on both sides: fragile but correct, and documented as such."
     },
     {
       "name": "--_ds-proto-dropdown-item-height-current",
@@ -374,33 +297,14 @@
       "purpose": "Resolved item height for the current density.",
       "cssType": "<length>",
       "fallback": null,
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 127,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 166,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 172,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 208,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Exemplar of the \"-current\" resolved-axis idiom."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-dropdown-item-height-current",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-dropdown-item-height Renamed out of the temporary proto namespace into the family private canon --_ds-dropdown-item-height-current (axis: control-height); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Exemplar of the \"-current\" resolved-axis idiom."
     },
     {
       "name": "--_ds-proto-dropdown-item-padding-block-current",
@@ -409,32 +313,14 @@
       "purpose": "Resolved item block padding for the current density.",
       "cssType": "<length>",
       "fallback": null,
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 128,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 167,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 173,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 209,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-dropdown-item-padding-block-current",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-dropdown-item-padding-y, --ds-spacing-1 Renamed out of the temporary proto namespace into the family private canon --_ds-dropdown-item-padding-block-current (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-dropdown-item-padding-inline-current",
@@ -443,32 +329,14 @@
       "purpose": "Resolved item inline padding for the current density.",
       "cssType": "<length>",
       "fallback": null,
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 129,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 168,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 174,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 209,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-dropdown-item-padding-inline-current",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-dropdown-item-padding-x, --ds-spacing-sm, --ds-spacing-md Renamed out of the temporary proto namespace into the family private canon --_ds-dropdown-item-padding-inline-current (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-dropdown-menu-max-block-size",
@@ -477,23 +345,14 @@
       "purpose": "Maximum menu height before it scrolls.",
       "cssType": "<length>",
       "fallback": "min(21rem, calc(100vh - 2rem))",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 190,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
-          "line": 191,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Consumed twice with DIFFERENT fallbacks (vh then dvh) as a progressive-enhancement pair."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-dropdown-menu-max-block-size",
+      "notes": "PRIVATE_FIXED: min(21rem, 100vh-2rem); no overlay-height authority at 21rem (Select ships 16rem), and the vh/dvh pair is a progressive-enhancement idiom. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-dropdown-menu-max-block-size (axis: overlay-geometry); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Consumed twice with DIFFERENT fallbacks (vh then dvh) as a progressive-enhancement pair."
     },
     {
       "name": "--_ds-proto-float-button-panel-closed-offset",
@@ -502,17 +361,14 @@
       "purpose": "Translation of the action panel while closed.",
       "cssType": "<length>",
       "fallback": "1rem",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
-          "line": 254,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-float-button-panel-closed-offset",
+      "notes": "PRIVATE_FIXED: 1rem closed-state transform offset; the motion authority --ds-motion-offset-in is -2px, a different magnitude and sign. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-float-button-panel-closed-offset (axis: overlay-geometry); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-form-control-height",
@@ -546,8 +402,10 @@
       "scope": "private",
       "category": "MERGE_RENAME",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Exact twin of form-field-control-height. Unification is blocked on the Form/FormField family adjudication (DEC-05), not on this ledger."
+      "status": "retired",
+      "notes": "DEC-05 RESOLVED (P1): the Form/FormField per-size relays stay TWO deliberately separate private channels; they are not merged. Rationale, now written at both sites: a FormField nested inside a Form must align to its OWN data-size, and a single shared channel would cascade the outer Form's step into every nested field. The duplication is the correct answer, so the name leaves the proto namespace as settled private canon --_ds-form-control-height, matching its already-renamed twin --_ds-form-field-control-height (retired FASE-C). A prototoken exists iff an adjudication is OPEN; this one is closed.",
+      "retiredBy": "D-PROTO (P1)",
+      "successor": "--_ds-form-control-height"
     },
     {
       "name": "--_ds-proto-form-error-icon-size",
@@ -556,23 +414,13 @@
       "purpose": "Square track of the error glyph beside a Form item message.",
       "cssType": "<length>",
       "fallback": "var(--ds-icon-size-status, 14px)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form.css",
-          "line": 284,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form.css",
-          "line": 285,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "MERGE_RENAME",
       "owner": "design-system",
-      "status": "active",
-      "notes": "MERGED into the status role with form-field: the 13px vs 14px split for the SAME glyph was the bug. derived-to: --ds-icon-size-status. REGISTERED DELTA: 13px -> 14px."
+      "status": "retired",
+      "retiredBy": "D-PROTO",
+      "notes": "EXECUTED. successor: --ds-icon-size-status, which the derive step had already inserted into this site's fallback chain; the proto layer above it was flattened away at skin/form.css:284-285. It had ZERO declaration sites anywhere in src, so it never resolved and the chain always computed the successor -- Computed default preserved byte-identically. PRIOR: MERGED into the status role with form-field: the 13px vs 14px split for the SAME glyph was the bug. derived-to: --ds-icon-size-status. REGISTERED DELTA: 13px -> 14px."
     },
     {
       "name": "--_ds-proto-form-field-control-height",
@@ -581,32 +429,14 @@
       "purpose": "Resolved control height for the current data-size.",
       "cssType": "<length>",
       "fallback": "var(--ds-input-md-height)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "line": 62,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "line": 199,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "line": 203,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "line": 210,
-          "kind": "def"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-form-field-control-height",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-input-md-height, --ds-input-sm-height, --ds-input-lg-height Renamed out of the temporary proto namespace into the family private canon --_ds-form-field-control-height (axis: control-height); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-form-field-error-icon-color",
@@ -615,17 +445,14 @@
       "purpose": "Ink of the error glyph beside a field message.",
       "cssType": "<color>",
       "fallback": "var(--ds-input-error-message-color, var(--ds-color-error))",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "line": 178,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-form-field-error-icon-color",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-input-error-message-color, --ds-color-error Renamed out of the temporary proto namespace into the family private canon --_ds-form-field-error-icon-color (axis: ink); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-form-field-error-icon-gap",
@@ -634,17 +461,14 @@
       "purpose": "Gap between the error glyph and its message.",
       "cssType": "<length>",
       "fallback": "var(--ds-spacing-1)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "line": 145,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-form-field-error-icon-gap",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-spacing-1 Renamed out of the temporary proto namespace into the family private canon --_ds-form-field-error-icon-gap (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-form-field-error-icon-size",
@@ -653,28 +477,13 @@
       "purpose": "Square track of the error glyph beside a field message.",
       "cssType": "<length>",
       "fallback": "var(--ds-icon-size-status, 14px)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "line": 169,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "line": 170,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "line": 174,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "DERIVE_FROM_EXISTING",
       "owner": "design-system",
-      "status": "active",
-      "notes": "derived-to: --ds-icon-size-status (C1, 0.875rem = 14px). Zero pixel change."
+      "status": "retired",
+      "retiredBy": "D-PROTO",
+      "notes": "EXECUTED. successor: --ds-icon-size-status, which the derive step had already inserted into this site's fallback chain; the proto layer above it was flattened away at skin/form-field.css:169-170,174. It had ZERO declaration sites anywhere in src, so it never resolved and the chain always computed the successor -- Computed default preserved byte-identically. PRIOR: derived-to: --ds-icon-size-status (C1, 0.875rem = 14px). Zero pixel change."
     },
     {
       "name": "--_ds-proto-form-field-label-color-focus",
@@ -683,18 +492,14 @@
       "purpose": "Label ink while the field is focus-within.",
       "cssType": "<color>",
       "fallback": "var(--ds-color-primary)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "line": 127,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Already chains to a declared channel; nothing to derive."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-form-field-label-color-focus",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-primary Renamed out of the temporary proto namespace into the family private canon --_ds-form-field-label-color-focus (axis: ink); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Already chains to a declared channel; nothing to derive."
     },
     {
       "name": "--_ds-proto-icon-frame-glass-bg",
@@ -703,23 +508,14 @@
       "purpose": "Frost fill of the glass variant.",
       "cssType": "<color>",
       "fallback": null,
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/presentation/components/icon-frame.css",
-          "line": 47,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/icon-frame.css",
-          "line": 150,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Chains the governed alpha-white channel; a governed glass recipe, not a loose literal."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-icon-frame-glass-bg",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-alpha-white-10 Renamed out of the temporary proto namespace into the family private canon --_ds-icon-frame-glass-bg (axis: material); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Chains the governed alpha-white channel; a governed glass recipe, not a loose literal."
     },
     {
       "name": "--_ds-proto-icon-frame-size",
@@ -728,52 +524,14 @@
       "purpose": "Frame box for the current data-size.",
       "cssType": "<length>",
       "fallback": null,
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/presentation/components/icon-frame.css",
-          "line": 43,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/icon-frame.css",
-          "line": 53,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/icon-frame.css",
-          "line": 54,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/icon-frame.css",
-          "line": 71,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/icon-frame.css",
-          "line": 74,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/icon-frame.css",
-          "line": 77,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/icon-frame.css",
-          "line": 80,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/icon-frame.css",
-          "line": 83,
-          "kind": "def"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-icon-frame-size",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-spacing-10, --ds-spacing-6, --ds-spacing-8, --ds-spacing-12, --ds-spacing-16 Renamed out of the temporary proto namespace into the family private canon --_ds-icon-frame-size (axis: control-height); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-icon-frame-subtle-strength",
@@ -782,23 +540,14 @@
       "purpose": "Mix strength of the subtle variant tone wash.",
       "cssType": "<percentage>",
       "fallback": null,
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/presentation/components/icon-frame.css",
-          "line": 45,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/icon-frame.css",
-          "line": 132,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Rides the wash ramp once AUT-2 covers strength as well as color."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-icon-frame-subtle-strength",
+      "notes": "PRIVATE_FIXED: 12% wash STRENGTH; AUT-2 covers wash colour but not strength, so no authority exists yet. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-icon-frame-subtle-strength (axis: wash); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Rides the wash ramp once AUT-2 covers strength as well as color."
     },
     {
       "name": "--_ds-proto-kbd-pressed-shadow",
@@ -807,18 +556,14 @@
       "purpose": "Inset highlight of a pressed key cap.",
       "cssType": "<shadow>",
       "fallback": "inset 0 1px 0 color-mix(in srgb, var(--ds-color-white) 40%, transparent)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
-          "line": 104,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Assumes a light source; folds into the future elevation grammar (EE-02)."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-kbd-pressed-shadow",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-white Renamed out of the temporary proto namespace into the family private canon --_ds-kbd-pressed-shadow (axis: elevation); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Assumes a light source; folds into the future elevation grammar (EE-02)."
     },
     {
       "name": "--_ds-proto-link-current-font-weight",
@@ -827,18 +572,13 @@
       "purpose": "Weight carrying the aria-current reading of a link.",
       "cssType": "<font-weight>",
       "fallback": "var(--ds-font-weight-medium, 500)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/link.css",
-          "line": 88,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "DERIVE_FROM_EXISTING",
       "owner": "design-system",
-      "status": "active",
-      "notes": "derived-to: --ds-font-weight-medium (500). Zero pixel change."
+      "status": "retired",
+      "retiredBy": "D-PROTO",
+      "notes": "EXECUTED. successor: --ds-font-weight-medium, which the derive step had already inserted into this site's fallback chain; the proto layer above it was flattened away at skin/link.css:88. It had ZERO declaration sites anywhere in src, so it never resolved and the chain always computed the successor -- Computed default preserved byte-identically. PRIOR: derived-to: --ds-font-weight-medium (500). Zero pixel change."
     },
     {
       "name": "--_ds-proto-list-split-inset-inline",
@@ -847,18 +587,13 @@
       "purpose": "Inline inset of the divider between split list rows.",
       "cssType": "<length>",
       "fallback": "0",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/list.css",
-          "line": 173,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "RECIPE_AXIS",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Belongs to a List prop (dividerInset: none | inset | full), not to a tenant token."
+      "status": "retired",
+      "retiredBy": "D-PROTO",
+      "notes": "EXECUTED as a closed-domain component channel: --ds-list-split-inset-inline, declared beside --ds-list-split-color / --ds-list-split-width in presentation/components/list.css (the skin defines no --ds-*, per its own docblock law). Domain: {0 | var(--ds-spacing-N) | 100%} mapped from a future List dividerInset prop (none | inset | full) -- the channel is the recipe seam. skin/list.css:173. Computed default preserved byte-identically. Named for the existing --ds-list-split-* family rather than \"divider\" so the token family stays one vocabulary."
     },
     {
       "name": "--_ds-proto-markdown-task-fill",
@@ -867,23 +602,14 @@
       "purpose": "Checked task-list checkbox fill; defined only under forced-colors.",
       "cssType": "<color>",
       "fallback": "var(--ds-color-primary)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
-          "line": 206,
-          "kind": "def"
-        },
-        {
-          "file": "src/ui/primitives/display/MarkdownView/index.tsx",
-          "line": 369,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Exemplar: a proto defined solely inside a media guard, consumed from the TSX."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-markdown-task-fill",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-primary Renamed out of the temporary proto namespace into the family private canon --_ds-markdown-task-fill (axis: ink); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Exemplar: a proto defined solely inside a media guard, consumed from the TSX."
     },
     {
       "name": "--_ds-proto-markdown-task-fill-ring",
@@ -892,22 +618,14 @@
       "purpose": "Ring around the checked task marker; defined only under forced-colors.",
       "cssType": "<color>",
       "fallback": "var(--ds-surface-canvas)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
-          "line": 207,
-          "kind": "def"
-        },
-        {
-          "file": "src/ui/primitives/display/MarkdownView/index.tsx",
-          "line": 372,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-markdown-task-fill-ring",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-surface-canvas Renamed out of the temporary proto namespace into the family private canon --_ds-markdown-task-fill-ring (axis: ink); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-mentions-option-active-border",
@@ -916,18 +634,14 @@
       "purpose": "Edge of the active option in the mentions list.",
       "cssType": "<color>",
       "fallback": "color-mix(in srgb, var(--ds-color-primary) 28%, transparent)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
-          "line": 250,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Owner exception to the matrix DERIVE: 28% primary over transparent is an edge tint, not the selection wash."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-mentions-option-active-border",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-primary Renamed out of the temporary proto namespace into the family private canon --_ds-mentions-option-active-border (axis: wash); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Owner exception to the matrix DERIVE: 28% primary over transparent is an edge tint, not the selection wash."
     },
     {
       "name": "--_ds-proto-mentions-trigger-accent",
@@ -936,18 +650,14 @@
       "purpose": "Accent edge of the mentions trigger.",
       "cssType": "<color>",
       "fallback": "color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-color-border-subtle))",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
-          "line": 209,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Owner exception to the matrix DERIVE: mixes primary INTO --ds-color-border-subtle, so it is not a pure wash over transparent."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-mentions-trigger-accent",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-primary, --ds-color-border-subtle Renamed out of the temporary proto namespace into the family private canon --_ds-mentions-trigger-accent (axis: wash); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Owner exception to the matrix DERIVE: mixes primary INTO --ds-color-border-subtle, so it is not a pure wash over transparent."
     },
     {
       "name": "--_ds-proto-menu-horizontal-block-size",
@@ -956,18 +666,13 @@
       "purpose": "Row height of a horizontal menubar top-level item.",
       "cssType": "<length>",
       "fallback": "var(--ds-spacing-11, 44px)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
-          "line": 391,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "DERIVE_FROM_EXISTING",
       "owner": "design-system",
-      "status": "active",
-      "notes": "derived-to: --ds-spacing-11 (2.75rem = 44px at density 1). Zero pixel change at default density; the row now tracks --ds-density-effective-scale like every sibling axis in this file, which the 44px literal did not."
+      "status": "retired",
+      "retiredBy": "D-PROTO",
+      "notes": "EXECUTED. successor: --ds-spacing-11, which the derive step had already inserted into this site's fallback chain; the proto layer above it was flattened away at skin/menu.css:393. It had ZERO declaration sites anywhere in src, so it never resolved and the chain always computed the successor -- Computed default preserved byte-identically. PRIOR: derived-to: --ds-spacing-11 (2.75rem = 44px at density 1). Zero pixel change at default density; the row now tracks --ds-density-effective-scale like every sibling axis in this file, which the 44px literal did not."
     },
     {
       "name": "--_ds-proto-meter-ring-size",
@@ -976,38 +681,14 @@
       "purpose": "Ring diameter for the current data-size.",
       "cssType": "<length>",
       "fallback": null,
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/presentation/components/meter.css",
-          "line": 50,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/meter.css",
-          "line": 66,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/meter.css",
-          "line": 70,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/meter.css",
-          "line": 74,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/meter.css",
-          "line": 190,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Feeds the shared arc substrate via --_ds-arc-size."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-meter-ring-size",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-spacing-16, --ds-spacing-10, --ds-spacing-24 Renamed out of the temporary proto namespace into the family private canon --_ds-meter-ring-size (axis: control-height); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Feeds the shared arc substrate via --_ds-arc-size."
     },
     {
       "name": "--_ds-proto-meter-track-bg",
@@ -1016,28 +697,14 @@
       "purpose": "Unfilled track fill of a meter.",
       "cssType": "<color>",
       "fallback": null,
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/presentation/components/meter.css",
-          "line": 46,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/meter.css",
-          "line": 122,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/meter.css",
-          "line": 192,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Its documented \"envy\" of --ds-progress-bg is the symptom of the missing arc substrate, not of a missing token."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-meter-track-bg",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-border-secondary Renamed out of the temporary proto namespace into the family private canon --_ds-meter-track-bg (axis: wash); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Its documented \"envy\" of --ds-progress-bg is the symptom of the missing arc substrate, not of a missing token."
     },
     {
       "name": "--_ds-proto-meter-track-size",
@@ -1046,37 +713,14 @@
       "purpose": "Track thickness for the current data-size.",
       "cssType": "<length>",
       "fallback": null,
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/presentation/components/meter.css",
-          "line": 48,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/meter.css",
-          "line": 65,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/meter.css",
-          "line": 69,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/meter.css",
-          "line": 73,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/meter.css",
-          "line": 120,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-meter-track-size",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-spacing-2, --ds-spacing-1, --ds-spacing-3 Renamed out of the temporary proto namespace into the family private canon --_ds-meter-track-size (axis: control-height); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-modal-density-compact-section-padding-block",
@@ -1085,18 +729,14 @@
       "purpose": "Section block padding under the compact density.",
       "cssType": "<length>",
       "fallback": "var(--ds-spacing-3)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 201,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Density travels through the existing densityProfile and spacing x density; four public knobs per family is the sprawl the material law forbids."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-modal-density-compact-section-padding-block",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-spacing-3 Renamed out of the temporary proto namespace into the family private canon --_ds-modal-density-compact-section-padding-block (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Density travels through the existing densityProfile and spacing x density; four public knobs per family is the sprawl the material law forbids."
     },
     {
       "name": "--_ds-proto-modal-density-compact-section-padding-inline",
@@ -1105,17 +745,14 @@
       "purpose": "Section inline padding under the compact density.",
       "cssType": "<length>",
       "fallback": "var(--ds-spacing-4)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 205,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-modal-density-compact-section-padding-inline",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-spacing-4 Renamed out of the temporary proto namespace into the family private canon --_ds-modal-density-compact-section-padding-inline (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-modal-density-spacious-section-padding-block",
@@ -1124,17 +761,14 @@
       "purpose": "Section block padding under the spacious density.",
       "cssType": "<length>",
       "fallback": "var(--ds-spacing-5)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 211,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-modal-density-spacious-section-padding-block",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-spacing-5 Renamed out of the temporary proto namespace into the family private canon --_ds-modal-density-spacious-section-padding-block (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-modal-density-spacious-section-padding-inline",
@@ -1143,17 +777,14 @@
       "purpose": "Section inline padding under the spacious density.",
       "cssType": "<length>",
       "fallback": "var(--ds-spacing-8)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
-          "line": 215,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-modal-density-spacious-section-padding-inline",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-spacing-8 Renamed out of the temporary proto namespace into the family private canon --_ds-modal-density-spacious-section-padding-inline (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-otp-filled-keyline",
@@ -1162,17 +793,14 @@
       "purpose": "Underline of a filled OTP slot.",
       "cssType": "<color>",
       "fallback": "var(--ds-color-border-hover)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
-          "line": 148,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-otp-filled-keyline",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-border-hover Renamed out of the temporary proto namespace into the family private canon --_ds-otp-filled-keyline (axis: edge); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-pagination-jumper-width",
@@ -1181,18 +809,14 @@
       "purpose": "Width of the quick-jumper input.",
       "cssType": "<length>",
       "fallback": "56px",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pagination.css",
-          "line": 237,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Arrived mid-wave from a concurrent lane; carries no row in the phase-C matrix. Classified PRIVATE as local control geometry with no existing width channel."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-pagination-jumper-width",
+      "notes": "PRIVATE_FIXED: 56px local control geometry; no --ds-* control-width channel exists in any family. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-pagination-jumper-width (axis: control-width); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Arrived mid-wave from a concurrent lane; carries no row in the phase-C matrix. Classified PRIVATE as local control geometry with no existing width channel."
     },
     {
       "name": "--_ds-proto-pagination-size-arrow-clearance",
@@ -1211,8 +835,10 @@
       "scope": "private",
       "category": "MERGE_RENAME",
       "owner": "design-system",
-      "status": "active",
-      "notes": "DELIBERATELY NOT MIGRATED this wave. debt: select-native-arrow substrate. Its fallback borrows --ds-select-native-arrow-clearance ACROSS families; the fix is a shared native-arrow substrate, not a rewire of this one site."
+      "status": "retired",
+      "notes": "HOLD RELEASED (P1). The blocker was a shared native-select-arrow substrate: VERIFIED still nonexistent — --ds-select-native-arrow-clearance is never declared anywhere in src, it is only borrowed as a fallback name by this site and select.css:129, both falling through to the same literal 2rem. A prototoken means an open adjudication, and waiting on a substrate nobody has planned is not one, so this settles as private pagination canon. The borrowed name is deliberately kept in the var() chain, so if that substrate is ever minted (D3 opportunity) both families pick it up with no further edit.",
+      "retiredBy": "D-PROTO (P1)",
+      "successor": "--_ds-pagination-size-arrow-clearance"
     },
     {
       "name": "--_ds-proto-pagination-size-arrow-inset",
@@ -1221,17 +847,14 @@
       "purpose": "Inline inset of the size-select arrow.",
       "cssType": "<length>",
       "fallback": "var(--ds-spacing-2)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/pagination.css",
-          "line": 361,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-pagination-size-arrow-inset",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-spacing-2 Renamed out of the temporary proto namespace into the family private canon --_ds-pagination-size-arrow-inset (axis: overlay-geometry); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-password-strength-gap",
@@ -1240,17 +863,14 @@
       "purpose": "Gap between strength-meter segments.",
       "cssType": "<length>",
       "fallback": "2px",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
-          "line": 299,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-password-strength-gap",
+      "notes": "PRIVATE_FIXED: 2px segment gap; the spacing scale has no 2px step. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-password-strength-gap (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-password-strength-label-color",
@@ -1259,17 +879,14 @@
       "purpose": "Ink of the strength-meter caption.",
       "cssType": "<color>",
       "fallback": "var(--ds-color-text-secondary)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
-          "line": 341,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-password-strength-label-color",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-text-secondary Renamed out of the temporary proto namespace into the family private canon --_ds-password-strength-label-color (axis: ink); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-popover-opaque-surface",
@@ -1278,18 +895,13 @@
       "purpose": "Opaque panel fill substituted under prefers-reduced-transparency.",
       "cssType": "<color>",
       "fallback": "var(--ds-popover-bg, var(--ds-material-overlay-opaque, var(--ds-surface-card)))",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
-          "line": 769,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "FOUNDATION_AUTHORITY",
       "owner": "design-system",
-      "status": "active",
-      "notes": "AUT-3. derived-to: --ds-material-overlay-opaque, inserted BELOW --ds-popover-bg: the family channel is a declared solid a tenant owns, so the authority replaces only the ad-hoc surface pick that used to close the chain."
+      "status": "retired",
+      "retiredBy": "D-PROTO",
+      "notes": "EXECUTED. successor: --ds-popover-bg then --ds-material-overlay-opaque, which the derive step had already inserted into this site's fallback chain; the proto layer above it was flattened away at skin/popover.css:769. It had ZERO declaration sites anywhere in src, so it never resolved and the chain always computed the successor -- Computed default preserved byte-identically. PRIOR: AUT-3. derived-to: --ds-material-overlay-opaque, inserted BELOW --ds-popover-bg: the family channel is a declared solid a tenant owns, so the authority replaces only the ad-hoc surface pick that used to close the chain."
     },
     {
       "name": "--_ds-proto-select-success-bg",
@@ -1298,18 +910,13 @@
       "purpose": "Field fill in the success validation state.",
       "cssType": "<color>",
       "fallback": "var(--ds-select-bg, var(--ds-surface-control))",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
-          "line": 220,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "DERIVE_FROM_EXISTING",
       "owner": "design-system",
-      "status": "active",
-      "notes": "MIGRATION PENDING: select.css is owned by another lane this wave. Debt: the error/warning peers have no rows at all."
+      "status": "retired",
+      "retiredBy": "D-PROTO",
+      "notes": "EXECUTED. successor: --ds-select-success-bg, the exact structural peer of --ds-select-error-bg / --ds-select-warning-bg two rules above (all three are undeclared consumption hooks, so the fallback chain governs). skin/select.css:220. Computed default preserved byte-identically. The naming-law debt the old comment recorded is now uniform across all three status bg hooks instead of one proto plus two legacy names -- one rename closes it."
     },
     {
       "name": "--_ds-proto-semanticsurface-nest-inset",
@@ -1318,18 +925,13 @@
       "purpose": "Amount subtracted from the parent radius for a nested surface.",
       "cssType": "<length>",
       "fallback": "var(--ds-radius-nest-inset, 4px)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/presentation/components/semantic-surface.css",
-          "line": 265,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "FOUNDATION_AUTHORITY",
       "owner": "design-system",
-      "status": "active",
-      "notes": "AUT-5. derived-to: --ds-radius-nest-inset (C1, 4px). Zero pixel change. The formula stays local; only the inset is the authority."
+      "status": "retired",
+      "retiredBy": "D-PROTO",
+      "notes": "EXECUTED. successor: --ds-radius-nest-inset, which the derive step had already inserted into this site's fallback chain; the proto layer above it was flattened away at presentation/components/semantic-surface.css:265. It had ZERO declaration sites anywhere in src, so it never resolved and the chain always computed the successor -- Computed default preserved byte-identically. PRIOR: AUT-5. derived-to: --ds-radius-nest-inset (C1, 4px). Zero pixel change. The formula stays local; only the inset is the authority."
     },
     {
       "name": "--_ds-proto-slider-tooltip-gap",
@@ -1338,43 +940,14 @@
       "purpose": "Gap between the thumb and its value tooltip.",
       "cssType": "<length>",
       "fallback": "6px",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
-          "line": 515,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
-          "line": 518,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
-          "line": 523,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
-          "line": 526,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
-          "line": 531,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
-          "line": 534,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Repeated across six placement rules; should be defined once at the family root."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-slider-tooltip-gap",
+      "notes": "PRIVATE_FIXED: 6px thumb clearance; the spacing scale has no 6px step (spacing-1 is 4px, spacing-2 is 8px). Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-slider-tooltip-gap (axis: overlay-geometry); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Repeated across six placement rules; should be defined once at the family root."
     },
     {
       "name": "--_ds-proto-spinner-label-measure",
@@ -1383,17 +956,14 @@
       "purpose": "Maximum line measure of the spinner caption.",
       "cssType": "<length>",
       "fallback": "28ch",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
-          "line": 110,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-spinner-label-measure",
+      "notes": "PRIVATE_FIXED: 28ch line measure; no --ds-measure-* authority exists. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-spinner-label-measure (axis: measure); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-stack-divider-gap-block",
@@ -1402,28 +972,14 @@
       "purpose": "Block bleed of a Stack divider.",
       "cssType": "<length>",
       "fallback": "calc(var(--_ds-stack-gap-current, 0px) / -2)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
-          "line": 112,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
-          "line": 118,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
-          "line": 235,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "The only fallback chaining to another PRIVATE name (--_ds-stack-gap-current); correct, both are plumbing."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-stack-divider-gap-block",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-stack-divider-inset Renamed out of the temporary proto namespace into the family private canon --_ds-stack-divider-gap-block (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: The only fallback chaining to another PRIVATE name (--_ds-stack-gap-current); correct, both are plumbing."
     },
     {
       "name": "--_ds-proto-stack-divider-gap-inline",
@@ -1432,27 +988,14 @@
       "purpose": "Inline bleed of a Stack divider.",
       "cssType": "<length>",
       "fallback": "var(--ds-stack-divider-inset, 0px)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
-          "line": 113,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
-          "line": 119,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
-          "line": 239,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-stack-divider-gap-inline",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-stack-divider-inset Renamed out of the temporary proto namespace into the family private canon --_ds-stack-divider-gap-inline (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-stepper-connector-clearance",
@@ -1461,48 +1004,14 @@
       "purpose": "Gap between a step marker and its connector.",
       "cssType": "<length>",
       "fallback": "4px",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper.css",
-          "line": 113,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper.css",
-          "line": 114,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper.css",
-          "line": 424,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper.css",
-          "line": 459,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper.css",
-          "line": 460,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper.css",
-          "line": 504,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/stepper.css",
-          "line": 516,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Byte-identical to the steps peer modulo three substitutions; family debt tracked under DEC-05."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-stepper-connector-clearance",
+      "notes": "PRIVATE_FIXED: 4px. --ds-spacing-1 is 4px at density 1 but is density-MULTIPLIED, and the verticals ship different densities (bithire --ds-density-scale 0.9, evnto 1.125), so connecting would compute 3.6px in bithire and 4.5px in evnto. Rejected precisely because the default theme alone would have looked identical. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-stepper-connector-clearance (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Byte-identical to the steps peer modulo three substitutions; family debt tracked under DEC-05."
     },
     {
       "name": "--_ds-proto-steps-connector-clearance",
@@ -1511,48 +1020,14 @@
       "purpose": "Gap between a step marker and its connector.",
       "cssType": "<length>",
       "fallback": "4px",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/steps.css",
-          "line": 96,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/steps.css",
-          "line": 97,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/steps.css",
-          "line": 397,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/steps.css",
-          "line": 437,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/steps.css",
-          "line": 438,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/steps.css",
-          "line": 482,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/steps.css",
-          "line": 494,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Byte-identical to the stepper peer modulo three substitutions; family debt tracked under DEC-05."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-steps-connector-clearance",
+      "notes": "PRIVATE_FIXED: 4px. Same density trap as its stepper twin (3.6px bithire / 4.5px evnto). Both twins stay fixed together so the documented DEC-05 parity is not broken by connecting only one. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-steps-connector-clearance (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Byte-identical to the stepper peer modulo three substitutions; family debt tracked under DEC-05."
     },
     {
       "name": "--_ds-proto-table-utility-column-width",
@@ -1561,33 +1036,14 @@
       "purpose": "Width of selection/action utility columns, scaled by density.",
       "cssType": "<length>",
       "fallback": "48px",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/table.css",
-          "line": 155,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/table.css",
-          "line": 254,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/table.css",
-          "line": 483,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/table.css",
-          "line": 487,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Recipe candidate only if Table asks for it."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-table-utility-column-width",
+      "notes": "PRIVATE_FIXED: 48px, and the site ALREADY multiplies by --ds-density-effective-scale, so a density-scaled authority would double-scale. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-table-utility-column-width (axis: control-width); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Recipe candidate only if Table asks for it."
     },
     {
       "name": "--_ds-proto-tabs-scroll-pad",
@@ -1596,17 +1052,14 @@
       "purpose": "Scroll padding of the tab track.",
       "cssType": "<length>",
       "fallback": "var(--ds-spacing-2)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tabs.css",
-          "line": 73,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-tabs-scroll-pad",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-spacing-2 Renamed out of the temporary proto namespace into the family private canon --_ds-tabs-scroll-pad (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-tag-input-rejected-color",
@@ -1625,8 +1078,10 @@
       "scope": "private",
       "category": "DERIVE_FROM_EXISTING",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Fallback is byte-identical to the callout warning ink. MIGRATION PENDING: target --ds-color-warning-ink is not emitted yet (C1 shipped --ds-color-on-warning, the ink-over-surface channel is a later authority)."
+      "status": "retired",
+      "notes": "AUT-1 ABSORBED (P1), in the SAME step as its twin --_ds-proto-callout-tone-ink exactly as this row required. tag-input.css now reads var(--ds-color-warning-ink, <original 55/45 mix>) directly into its existing private --_ds-tag-input-rejected-ink, so no new name was created here. The recorded blocker stands confirmed and is why the successor is the new -ink authority rather than --ds-color-on-warning: that channel is a flat neutral with no dark override and would have repainted this ink.",
+      "retiredBy": "D-PROTO (P1)",
+      "successor": "--ds-color-warning-ink"
     },
     {
       "name": "--_ds-proto-tag-root-height",
@@ -1635,48 +1090,14 @@
       "purpose": "Resolved tag height for the current data-size.",
       "cssType": "<length>",
       "fallback": "var(--ds-tag-md-height, 1.75rem)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tag.css",
-          "line": 68,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tag.css",
-          "line": 74,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tag.css",
-          "line": 80,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tag.css",
-          "line": 86,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tag.css",
-          "line": 92,
-          "kind": "def"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tag.css",
-          "line": 252,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tag.css",
-          "line": 256,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "DERIVE_FROM_EXISTING",
       "owner": "design-system",
-      "status": "active",
-      "notes": "derived-to: --ds-tag-md-height at the CONSUMPTION site (the close-well cap). The per-size definitions already chain to their own channels. Zero pixel change."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-tag-root-height",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-tag-{xs,sm,md,lg,xl}-height. Its adjudication was already COMPLETE, which is why it left the proto namespace with the 59: the consumption site had derived to --ds-tag-md-height and all five per-size declarations already chain to their own family channels, so nothing about this axis was still a candidate — it is a settled per-size cascade relay (root declares per data-size, close-well cap consumes), i.e. an implementation detail, not a candidate public axis. Unlike the four remaining prototokens it carried NO pending adjudication (no missing authority, no open DEC). Renamed to the family private canon --_ds-tag-root-height (axis: control-height) across all 7 sites in one pass. Computed default preserved byte-identically. PRIOR: derived-to: --ds-tag-md-height at the CONSUMPTION site (the close-well cap). The per-size definitions already chain to their own channels. Zero pixel change."
     },
     {
       "name": "--_ds-proto-textarea-resize-grip-ink",
@@ -1685,18 +1106,14 @@
       "purpose": "Ink of the resize-grip glyph at rest.",
       "cssType": "<color>",
       "fallback": "color-mix(in srgb, var(--ds-color-text-muted) 62%, transparent)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 299,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "NO ROW in the phase-C matrix: the census counted 79 names but the tables enumerate 76. Classified PRIVATE as local affordance paint."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-textarea-resize-grip-ink",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-text-muted Renamed out of the temporary proto namespace into the family private canon --_ds-textarea-resize-grip-ink (axis: ink); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: NO ROW in the phase-C matrix: the census counted 79 names but the tables enumerate 76. Classified PRIVATE as local affordance paint."
     },
     {
       "name": "--_ds-proto-textarea-resize-grip-ink-hover",
@@ -1705,18 +1122,14 @@
       "purpose": "Ink of the resize-grip glyph on hover.",
       "cssType": "<color>",
       "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 50%, transparent)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 311,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "NO ROW in the phase-C matrix (see the rest-state peer)."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-textarea-resize-grip-ink-hover",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-color-text-primary Renamed out of the temporary proto namespace into the family private canon --_ds-textarea-resize-grip-ink-hover (axis: ink); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: NO ROW in the phase-C matrix (see the rest-state peer)."
     },
     {
       "name": "--_ds-proto-textarea-resize-grip-size",
@@ -1725,23 +1138,14 @@
       "purpose": "Tile size of the resize-grip pattern.",
       "cssType": "<length>",
       "fallback": "0.625rem",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 302,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/textarea.css",
-          "line": 302,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "NO ROW in the phase-C matrix (see the ink peers)."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-textarea-resize-grip-size",
+      "notes": "PRIVATE_FIXED: 0.625rem (10px) grip motif; no --ds-icon-size-* role is 10px (well 1.25rem, status 0.875rem, feature 2.5rem). Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-textarea-resize-grip-size (axis: icon-size); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: NO ROW in the phase-C matrix (see the ink peers)."
     },
     {
       "name": "--_ds-proto-timeline-dot-ring-color",
@@ -1750,18 +1154,14 @@
       "purpose": "Halo separating a timeline dot from the rail behind it.",
       "cssType": "<color>",
       "fallback": "var(--ds-surface-canvas)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/timeline.css",
-          "line": 180,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Rides the canvas channel: correct by construction, the halo must match whatever sits behind."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-timeline-dot-ring-color",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-surface-canvas Renamed out of the temporary proto namespace into the family private canon --_ds-timeline-dot-ring-color (axis: ink); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Rides the canvas channel: correct by construction, the halo must match whatever sits behind."
     },
     {
       "name": "--_ds-proto-timeline-state-keyline",
@@ -1770,17 +1170,14 @@
       "purpose": "Inset keyline around a state-carrying timeline dot.",
       "cssType": "<color>",
       "fallback": "var(--ds-surface-canvas)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/timeline.css",
-          "line": 214,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-timeline-state-keyline",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-surface-canvas Renamed out of the temporary proto namespace into the family private canon --_ds-timeline-state-keyline (axis: edge); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-toggle-state-icon-size",
@@ -1789,23 +1186,14 @@
       "purpose": "State glyph inside the toggle thumb.",
       "cssType": "<length>",
       "fallback": "calc(var(--ds-toggle-resolved-thumb) * 0.62)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/toggle.css",
-          "line": 227,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/toggle.css",
-          "line": 228,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Legitimate geometric ratio of the thumb, not a role: it must track the thumb, not the icon scale."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-toggle-state-icon-size",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-toggle-resolved-thumb Renamed out of the temporary proto namespace into the family private canon --_ds-toggle-state-icon-size (axis: icon-size); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Legitimate geometric ratio of the thumb, not a role: it must track the thumb, not the icon scale."
     },
     {
       "name": "--_ds-proto-tooltip-opaque-surface",
@@ -1814,18 +1202,13 @@
       "purpose": "Opaque bubble fill substituted under prefers-reduced-transparency.",
       "cssType": "<color>",
       "fallback": "var(--ds-material-overlay-opaque, var(--ds-surface-card))",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-          "line": 741,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "FOUNDATION_AUTHORITY",
       "owner": "design-system",
-      "status": "active",
-      "notes": "AUT-3. derived-to: --ds-material-overlay-opaque, REPLACING --ds-surface-overlay. That channel is the scrim and a vertical may bind it translucent (bithire: rgba(20,40,59,0.42)), which defeated the guard. Registered delta: SC-7 closed."
+      "status": "retired",
+      "retiredBy": "D-PROTO",
+      "notes": "EXECUTED. successor: --ds-material-overlay-opaque, which the derive step had already inserted into this site's fallback chain; the proto layer above it was flattened away at skin/tooltip.css:742. It had ZERO declaration sites anywhere in src, so it never resolved and the chain always computed the successor -- Computed default preserved byte-identically. PRIOR: AUT-3. derived-to: --ds-material-overlay-opaque, REPLACING --ds-surface-overlay. That channel is the scrim and a vertical may bind it translucent (bithire: rgba(20,40,59,0.42)), which defeated the guard. Registered delta: SC-7 closed."
     },
     {
       "name": "--_ds-proto-transfer-search-icon-inset",
@@ -1834,18 +1217,14 @@
       "purpose": "Inline inset reserving room for the search glyph.",
       "cssType": "<length>",
       "fallback": "1.75rem",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/transfer.css",
-          "line": 192,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Not a recipe axis: this is the future affix substrate for inputs."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-transfer-search-icon-inset",
+      "notes": "PRIVATE_FIXED: 1.75rem icon CLEARANCE, not rhythm: it equals --ds-spacing-7 numerically, but the value derives from the search-icon box, so the match is a coincidence. Its real successor is the input affix substrate, which does not exist. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-transfer-search-icon-inset (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Not a recipe axis: this is the future affix substrate for inputs."
     },
     {
       "name": "--_ds-proto-tree-dragging-opacity",
@@ -1854,17 +1233,14 @@
       "purpose": "Opacity of a row while it is being dragged.",
       "cssType": "<number>",
       "fallback": "0.55",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "line": 191,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active"
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-tree-dragging-opacity",
+      "notes": "PRIVATE_FIXED: 0.55 drag affordance; no --ds-opacity-* authority is 0.55 (--ds-opacity-disabled is 0.54). Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-tree-dragging-opacity (axis: opacity); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically."
     },
     {
       "name": "--_ds-proto-tree-row-bg-active",
@@ -1873,18 +1249,14 @@
       "purpose": "Fill of the active tree row.",
       "cssType": "<color>",
       "fallback": "color-mix(in srgb, var(--ds-surface-inset) 75%, transparent)",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "line": 179,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Owner exception to the matrix DERIVE: the formula mixes --ds-surface-inset at 75%, not a primary wash, so --ds-wash-active is the wrong authority for it."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-tree-row-bg-active",
+      "notes": "PRIVATE_CANONICAL conectado a --ds-surface-inset Renamed out of the temporary proto namespace into the family private canon --_ds-tree-row-bg-active (axis: wash); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Owner exception to the matrix DERIVE: the formula mixes --ds-surface-inset at 75%, not a primary wash, so --ds-wash-active is the wrong authority for it."
     },
     {
       "name": "--_ds-proto-tree-row-padding-block",
@@ -1893,18 +1265,14 @@
       "purpose": "Row block padding, scaled by density.",
       "cssType": "<length>",
       "fallback": "4px",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "line": 128,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "INERT until the legacy shorthand above it is unpinned."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-tree-row-padding-block",
+      "notes": "PRIVATE_FIXED: 4px, and the site ALREADY multiplies by --ds-density-effective-scale, so a density-scaled authority would double-scale. Also inert until the legacy shorthand above it is unpinned. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-tree-row-padding-block (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: INERT until the legacy shorthand above it is unpinned."
     },
     {
       "name": "--_ds-proto-tree-row-padding-inline",
@@ -1913,18 +1281,14 @@
       "purpose": "Row inline padding, scaled by density.",
       "cssType": "<length>",
       "fallback": "8px",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "line": 129,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "INERT until the legacy shorthand above it is unpinned."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-tree-row-padding-inline",
+      "notes": "PRIVATE_FIXED: 8px, same pre-multiplied density site as its block peer. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-tree-row-padding-inline (axis: spacing); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: INERT until the legacy shorthand above it is unpinned."
     },
     {
       "name": "--_ds-proto-voice-input-error-dot-size",
@@ -1933,23 +1297,14 @@
       "purpose": "Error status dot on the mic button.",
       "cssType": "<length>",
       "fallback": "8px",
-      "consumers": [
-        {
-          "file": "src/foundation/tokens/css/presentation/components/skin/voice-input-button.css",
-          "line": 127,
-          "kind": "use"
-        },
-        {
-          "file": "src/foundation/tokens/css/presentation/components/skin/voice-input-button.css",
-          "line": 128,
-          "kind": "use"
-        }
-      ],
+      "consumers": [],
       "scope": "private",
       "category": "PRIVATE",
       "owner": "design-system",
-      "status": "active",
-      "notes": "Shape marker, not an icon."
+      "status": "retired",
+      "retiredBy": "FASE-C",
+      "successor": "--_ds-voice-input-error-dot-size",
+      "notes": "PRIVATE_FIXED: 8px shape marker, not an icon; --ds-icon-size-* is the wrong role. Deliberately fixed optical detail — it does NOT derive. Renamed out of the temporary proto namespace into the family private canon --_ds-voice-input-error-dot-size (axis: icon-size); declaration and every consumer moved in one pass, zero occurrences of the old name outside this row. Computed default preserved byte-identically. PRIOR: Shape marker, not an icon."
     },
     {
       "name": "--_ds-proto-meter-ring-value",
@@ -1964,7 +1319,7 @@
       "owner": "design-system",
       "status": "retired",
       "retiredBy": "C0",
-      "notes": "Retired into the shared arc substrate: the value now travels as --_ds-arc-value, registered exactly once via @property in presentation/components/arc.css and stamped by Meter/index.tsx and progress.css. A per-instance value is a runtime bridge, never a tenant token."
+      "notes": "Retired into the shared arc substrate: the value now travels as --_ds-arc-value, registered exactly once via @property in presentation/components/arc.css and stamped by Meter/index.tsx and progress.css. A per-instance value is a runtime bridge, never a tenant token. RE-VERIFIED D-PROTO: zero occurrences in src/ outside this row, and zero in the regenerated styles/ bundles."
     },
     {
       "name": "--_ds-proto-input-autofill-freeze-duration",
@@ -1979,7 +1334,7 @@
       "owner": "design-system",
       "status": "retired",
       "retiredBy": "C0",
-      "notes": "Retired with the idiom itself: the 9999s animation-freeze hack is gone from the tree entirely (zero occurrences). The autofilled posture is now painted directly from the public --ds-input-autofill-{bg,color,caret} channels, consumed by input.css, textarea.css and autocomplete.css. No successor proto exists, which is why this is DELETE and not MERGE_RENAME."
+      "notes": "Retired with the idiom itself: the 9999s animation-freeze hack is gone from the tree entirely (zero occurrences). The autofilled posture is now painted directly from the public --ds-input-autofill-{bg,color,caret} channels, consumed by input.css, textarea.css and autocomplete.css. No successor proto exists, which is why this is DELETE and not MERGE_RENAME. RE-VERIFIED D-PROTO: zero occurrences in src/ outside this row, and zero in the regenerated styles/ bundles."
     }
   ]
 }

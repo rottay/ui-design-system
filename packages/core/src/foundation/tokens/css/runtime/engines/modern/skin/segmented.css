@@ -267,7 +267,7 @@
 /* ---- coarse pointers: physical 44px floor, never a rem floor. ---- */
 @media (hover: none), (pointer: coarse) {
   .rottay-segmented--modern[data-part='root'] [data-part='option'] {
-    min-block-size: var(--ds-segmented-touch-target-min, 44px);
+    min-block-size: var(--ds-segmented-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

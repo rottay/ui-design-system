@@ -142,7 +142,7 @@ describe("CountUp duration and cancellation", () => {
     flushNextFrame(1000);
     flushNextFrame(1100);
     const halfway = Number(
-      screen.getByText(/\d+/).textContent?.replaceAll(",", "")
+      screen.getByText(/\d+/).textContent?.split(",").join("")
     );
     expect(halfway).toBeGreaterThan(50);
     expect(halfway).toBeLessThan(100);
@@ -203,14 +203,14 @@ describe("CountUp duration and cancellation", () => {
     flushNextFrame(1000);
     flushNextFrame(1100);
     const beforeRetarget = Number(
-      screen.getByText(/\d+/).textContent?.replaceAll(",", "")
+      screen.getByText(/\d+/).textContent?.split(",").join("")
     );
     expect(beforeRetarget).toBeGreaterThan(0);
     expect(beforeRetarget).toBeLessThan(100);
 
     rerender(<CountUp from={0} to={200} durationMs={200} />);
     const afterRetarget = Number(
-      screen.getByText(/\d+/).textContent?.replaceAll(",", "")
+      screen.getByText(/\d+/).textContent?.split(",").join("")
     );
     expect(afterRetarget).toBe(beforeRetarget);
     expect(afterRetarget).not.toBe(0);
@@ -218,7 +218,7 @@ describe("CountUp duration and cancellation", () => {
     flushNextFrame(1200);
     flushNextFrame(1300);
     const retargetedProgress = Number(
-      screen.getByText(/\d+/).textContent?.replaceAll(",", "")
+      screen.getByText(/\d+/).textContent?.split(",").join("")
     );
     expect(retargetedProgress).toBeGreaterThan(afterRetarget);
     expect(retargetedProgress).toBeLessThan(200);

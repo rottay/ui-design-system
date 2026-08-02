@@ -60,7 +60,7 @@
  *   ArrowLeft/Right stay index-based in the engine, which is correct under
  *   the forced-LTR row.
  * - Filled slots gain a SHAPE signal beyond the border hue step: an inset
- *   block-end keyline (`--_ds-proto-otp-filled-keyline`, painted as a
+ *   block-end keyline (`--_ds-otp-filled-keyline`, painted as a
  *   background gradient so it never fights the focus halo's box-shadow).
  *   Under forced-colors the gradient is stripped and the typed digit itself
  *   is the filled signal (content, not paint).
@@ -145,7 +145,7 @@
   border-color: var(--ds-otp-slot-border-filled, var(--ds-color-border-hover));
   background-image: linear-gradient(
     to top,
-    var(--_ds-proto-otp-filled-keyline, var(--ds-color-border-hover)) 2px,
+    var(--_ds-otp-filled-keyline, var(--ds-color-border-hover)) 2px,
     transparent 2px
   );
 }

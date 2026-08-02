@@ -583,7 +583,7 @@
   min-height: var(--ds-toolbar-min-height, 3.75rem);
   min-inline-size: 0;
   flex-wrap: nowrap;
-  gap: var(--ds-toolbar-gap, 0.625rem);
+  gap: var(--ds-toolbar-gap, calc(0.625rem * var(--ds-rhythm-effective-scale, 1)));
   padding: var(--ds-toolbar-padding, 0.625rem 1rem);
 }
 
@@ -1168,5 +1168,17 @@
     .ds-list-toolbar__filter-chips-strip[data-part="filter-chips-strip"][data-part="filter-chips-strip"] {
     background: Canvas;
     color: CanvasText;
+  }
+}
+
+/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
+   below the canonical --ds-touch-target-min channel; fine pointers keep the
+   authored size untouched. */
+@media (hover: none), (pointer: coarse) {
+  .ds-list-toolbar__icon-button,
+  .ds-list-toolbar__filter-trigger,
+  .ds-list-toolbar__density-option,
+  .ds-list-toolbar__filter-dropdown-item {
+    min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

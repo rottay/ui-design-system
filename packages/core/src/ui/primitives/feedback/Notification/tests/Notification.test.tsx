@@ -181,7 +181,7 @@ describe('Notification', () => {
       async (engine) => {
         let notificationApi: any;
         renderWithEngine(
-          <NotificationProvider engine={engine}>
+          <NotificationProvider>
             <NotificationTester onMount={(api) => (notificationApi = api)} />
           </NotificationProvider>,
           engine
@@ -217,7 +217,7 @@ describe('Notification', () => {
       async (engine) => {
         let notificationApi: any;
         renderWithEngine(
-          <NotificationProvider engine={engine} maxCount={1}>
+          <NotificationProvider maxCount={1}>
             <NotificationTester onMount={(api) => (notificationApi = api)} />
           </NotificationProvider>,
           engine
@@ -317,7 +317,7 @@ describe('Notification', () => {
       async (engine) => {
         let notificationApi: any;
         render(
-          <NotificationProvider engine={engine}>
+          <NotificationProvider>
             <NotificationTester onMount={(api) => (notificationApi = api)} />
           </NotificationProvider>
         );

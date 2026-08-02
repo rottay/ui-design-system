@@ -33,6 +33,7 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { EngineAwareProps } from '@/foundation/contracts/runtime/engine';
 
 /**
  * Display type for the upload file list.
@@ -162,7 +163,7 @@ export interface UploadRequestOption<T = unknown> {
  * </Upload>
  * ```
  */
-export interface UploadProps<T = unknown> {
+export interface UploadProps<T = unknown> extends EngineAwareProps {
   /** Upload API endpoint (string or function returning URL) */
   action?: string | ((file: File) => string | Promise<string>);
   /** Accepted file types (e.g., 'image/*', '.pdf,.doc') */

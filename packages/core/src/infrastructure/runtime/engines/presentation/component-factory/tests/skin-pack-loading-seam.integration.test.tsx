@@ -39,7 +39,10 @@ function BespokeWidget() {
 // createEngineComponent (classic/modern/rustic loaders; no explicit
 // `custom` loader, so it falls back to `loaders.rustic` exactly like most
 // production components do today).
-const TestWidget = createEngineComponent<Record<string, never>>('TestWidget', {
+// `Record<never, never>`, not `Record<string, never>`: the latter carries an
+// index signature that types EVERY key as `never`, which erases the
+// `engine?: EngineName` override the factory itself adds and rejects `key`.
+const TestWidget = createEngineComponent<Record<never, never>>('TestWidget', {
   classic: async () => ({ default: FallbackWidget }),
   modern: async () => ({ default: FallbackWidget }),
   rustic: async () => ({ default: FallbackWidget }),

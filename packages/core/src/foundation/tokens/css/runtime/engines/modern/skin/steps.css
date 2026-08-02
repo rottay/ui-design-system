@@ -35,7 +35,7 @@
  *   auto-placement would otherwise split them into sibling columns.
  * - Hover lifts are gated to `@media (hover: hover)` (the `:active` dip is
  *   the touch equivalent) and reduced-motion drops them (stepper.css parity).
- * - Connector ends consume the `--_ds-proto-steps-connector-clearance` axis.
+ * - Connector ends consume the `--_ds-steps-connector-clearance` axis.
  *
  * SPECIFICITY (P-48): the circle's `border` shorthand carries a real color and
  * must clear the tenant's unlayered `* { border-color }` floor at (0,3,1), so
@@ -93,8 +93,8 @@
   content: '';
   position: absolute;
   inset-block-start: calc(var(--ds-steps-current-item-size) / 2 - 1px);
-  inset-inline-start: calc(-50% + var(--ds-steps-current-item-size) / 2 + var(--_ds-proto-steps-connector-clearance, 4px));
-  inset-inline-end: calc(50% + var(--ds-steps-current-item-size) / 2 + var(--_ds-proto-steps-connector-clearance, 4px));
+  inset-inline-start: calc(-50% + var(--ds-steps-current-item-size) / 2 + var(--_ds-steps-connector-clearance, 4px));
+  inset-inline-end: calc(50% + var(--ds-steps-current-item-size) / 2 + var(--_ds-steps-connector-clearance, 4px));
   block-size: var(--ds-steps-connector-width, 1px);
   border-radius: var(--ds-radius-full);
   background: var(--ds-steps-connector-color, var(--ds-color-border-secondary));
@@ -394,7 +394,7 @@
 }
 
 .rottay-steps--modern[data-part='root'][data-direction='vertical'] [data-part='item']::before {
-  inset-block-start: calc(var(--ds-steps-current-item-size) + var(--_ds-proto-steps-connector-clearance, 4px));
+  inset-block-start: calc(var(--ds-steps-current-item-size) + var(--_ds-steps-connector-clearance, 4px));
   inset-block-end: 2px;
   inset-inline-start: calc(var(--ds-steps-current-item-size) / 2 - 1px);
   inset-inline-end: auto;
@@ -434,8 +434,8 @@
 }
 
 .rottay-steps--modern[data-part='root'][data-direction='horizontal'][data-label-placement='horizontal'] [data-part='item']::before {
-  inset-inline-start: calc(-100% + var(--ds-steps-current-item-size) + var(--_ds-proto-steps-connector-clearance, 4px));
-  inset-inline-end: calc(100% + var(--_ds-proto-steps-connector-clearance, 4px));
+  inset-inline-start: calc(-100% + var(--ds-steps-current-item-size) + var(--_ds-steps-connector-clearance, 4px));
+  inset-inline-end: calc(100% + var(--_ds-steps-connector-clearance, 4px));
 }
 
 .rottay-steps--modern[data-part='root'][data-direction='horizontal'][data-label-placement='horizontal'] [data-part='content'],
@@ -479,7 +479,7 @@
   }
 
   .rottay-steps--modern[data-part='root'][data-direction='horizontal'] [data-part='item']::before {
-    inset-block-start: calc(var(--ds-steps-current-item-size) + var(--_ds-proto-steps-connector-clearance, 4px));
+    inset-block-start: calc(var(--ds-steps-current-item-size) + var(--_ds-steps-connector-clearance, 4px));
     inset-block-end: 2px;
     inset-inline-start: calc(var(--ds-steps-current-item-size) / 2 - 1px);
     inset-inline-end: auto;
@@ -491,7 +491,7 @@
      this same-specificity, later-source override a collapsed horizontal
      label-placement row would keep the horizontal span. */
   .rottay-steps--modern[data-part='root'][data-direction='horizontal'][data-label-placement='horizontal'] [data-part='item']::before {
-    inset-block-start: calc(var(--ds-steps-current-item-size) + var(--_ds-proto-steps-connector-clearance, 4px));
+    inset-block-start: calc(var(--ds-steps-current-item-size) + var(--_ds-steps-connector-clearance, 4px));
     inset-block-end: 2px;
     inset-inline-start: calc(var(--ds-steps-current-item-size) / 2 - 1px);
     inset-inline-end: auto;
@@ -542,7 +542,7 @@
 /* ---- coarse pointers: the trigger meets the physical 44px floor. ---- */
 @media (hover: none), (pointer: coarse) {
   .rottay-steps--modern[data-part='root'] [data-part='trigger'] {
-    min-block-size: var(--ds-steps-touch-target-min, 44px);
+    min-block-size: var(--ds-steps-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

@@ -41,7 +41,7 @@ vi.mock(
           },
           ref
         ) => {
-          const Tag = Component as keyof JSX.IntrinsicElements;
+          const Tag = Component as keyof React.JSX.IntrinsicElements;
           return React.createElement(
             Tag,
             {
@@ -471,8 +471,8 @@ describe("Box", () => {
 
 describe("Box Types", () => {
   it("exports BoxProps type", async () => {
-    const { BoxProps } = await import("../contracts");
-    expect(BoxProps).toBeUndefined(); // Types are compile-time only
+    const contracts: Record<string, unknown> = await import("../contracts");
+    expect(contracts.BoxProps).toBeUndefined(); // Types are compile-time only
   });
 
   it("exports BOX_DEFAULTS constant", async () => {

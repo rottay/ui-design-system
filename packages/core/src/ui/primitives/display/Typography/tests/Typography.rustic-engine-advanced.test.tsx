@@ -42,7 +42,7 @@ describe('Typography rustic advanced engine coverage', () => {
 
         <ApolloParagraph
           size="lg"
-          weight="light"
+          weight="normal"
           color="muted"
           align="justify"
           truncate

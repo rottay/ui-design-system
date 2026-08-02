@@ -398,11 +398,14 @@ describe('Engine-Specific CSS Variables', () => {
       expect(ENGINE_CLASS_PREFIXES.rustic).toBe('ds-');
     });
 
-    it('all engines have defined class prefixes', () => {
+    // Not "all engines": `ENGINE_CLASS_PREFIXES` is typed
+    // `Record<Exclude<EngineName, 'custom'>, string>`, so `custom` has no prefix
+    // BY CONTRACT -- a registered pack brings its own class vocabulary. The
+    // `custom` guard this case used to carry could never fire, because
+    // `STABLE_ENGINES` is exactly the three non-custom engines.
+    it('every stable engine has a defined class prefix', () => {
       STABLE_ENGINES.forEach((engine) => {
-        if (engine !== 'custom') {
-          expect(ENGINE_CLASS_PREFIXES[engine as keyof typeof ENGINE_CLASS_PREFIXES]).toBeDefined();
-        }
+        expect(ENGINE_CLASS_PREFIXES[engine]).toBeDefined();
       });
     });
   });

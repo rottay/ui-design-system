@@ -59,6 +59,54 @@ export const CI_GATES = Object.freeze([
   { id: 'prototype-ledger-drill', run: ['node', '--test', 'scripts/prototype-ledger-gate.test.mjs'], blocking: true },
   { id: 'prototype-ledger', run: ['node', 'scripts/prototype-ledger-gate.mjs', '--check'], blocking: true },
 
+  // --- D0 customization-surface truth (drill first: a census computed by a
+  // broken scanner reports zero findings and looks identical to a clean
+  // tree). The report is DERIVED from the existing authorities (hooks
+  // manifest, capability registry, raw allowlist, expressive lists) plus a
+  // PostCSS/TS-AST consumption scan; these gates keep it fresh, fully
+  // classified, evidence-backed and decrease-only on dead writers.
+  { id: 'customization-surface-drill', run: ['node', '--test', 'scripts/customization-surface-gate.test.mjs', 'scripts/customization-census-classifier.test.mjs'], blocking: true },
+  { id: 'customization-surface-freshness', run: ['node', 'scripts/customization-surface-census.mjs', '--check=freshness'], blocking: true },
+  { id: 'customization-surface-classification', run: ['node', 'scripts/customization-surface-census.mjs', '--check=classification'], blocking: true },
+  { id: 'customization-capability-consumers', run: ['node', 'scripts/customization-surface-census.mjs', '--check=capabilities'], blocking: true },
+  { id: 'customization-dead-writers', run: ['node', 'scripts/customization-surface-census.mjs', '--check=dead'], blocking: true },
+  // Official tokens documentation is a deterministic projection; stale docs,
+  // derivation cycles, undocumented public hooks, unknown capability
+  // channels and unadjudicated dual authorities all block here.
+  { id: 'tokens-catalog-drill', run: ['node', '--test', 'scripts/tokens-catalog-gate.test.mjs'], blocking: true },
+  { id: 'tokens-catalog', run: ['node', 'scripts/tokens-catalog.mjs', '--check'], blocking: true },
+  // Binding preservation correction: premium depth is preserved, never
+  // cleaned away — 80/80 protos decided, dead writers classified by
+  // provenance, Kimi-premium RETIRE unrepresentable.
+  { id: 'kimi-preservation-drill', run: ['node', '--test', 'scripts/kimi-preservation-gate.test.mjs'], blocking: true },
+  { id: 'kimi-preservation', run: ['node', 'scripts/kimi-preservation-manifest.mjs', '--check'], blocking: true },
+
+  // FASE K (Codex 2026-08-02): every read the hook contract fences as
+  // unadjudicated carries exactly one ownership row — 0 reads without owner.
+  { id: 'reads-adjudication', run: ['node', 'scripts/reads-adjudication-gate.mjs', '--check'], blocking: true },
+
+  // Codex blocker 2: the binding worklist may never point Kimi at CSS that
+  // does not ship — owners shipping-reachable, renderProof is a node (path
+  // shape enforced), zero tombstone references in rows.
+  // Codex final remediation blocker 4: the drill SUITES run in CI, grouped,
+  // with named-cause assertions and a no-op meta-drill — a gate whose drills
+  // only fire by hand certifies nothing.
+  { id: 'kimi-worklist-drill', run: ['node', '--test', 'scripts/kimi-worklist-gate.test.mjs'], blocking: true },
+  { id: 'kimi-worklist', run: ['node', 'scripts/kimi-worklist-gate.mjs', '--check'], blocking: true },
+
+  // Codex blocker 4B: every counted Modern font-size literal carries an
+  // adjudicated ownership row — a sold typography.scale control may not fail
+  // silently behind an unowned literal.
+  { id: 'literal-ownership-drill', run: ['node', '--test', 'scripts/literal-ownership-gate.test.mjs'], blocking: true },
+  { id: 'literal-ownership', run: ['node', 'scripts/literal-ownership-gate.mjs', '--check'], blocking: true },
+
+  // FASE 4 (normalización integral 2026-08-02): la tabla de controles Standard/Pro/Expert
+  // es API de producto generada de los contratos reales — fresca y completa o roja.
+  // Codex blocker 5: the drills must run IN CI, grouped — a gate whose drills
+  // only fire by hand certifies nothing.
+  { id: 'controls-catalog-drill', run: ['node', '--test', 'scripts/controls-catalog-gate.test.mjs'], blocking: true },
+  { id: 'controls-catalog', run: ['node', 'scripts/controls-catalog.mjs', '--check'], blocking: true },
+
   // --- white-label channel + theme parity ---
   { id: 'theme-channel-parity', run: ['node', 'scripts/theme-channel-parity-gate.mjs', '--check', '--quiet'], blocking: true },
   { id: 'tenant-channel-consumer', run: ['node', 'scripts/tenant-channel-consumer-gate.mjs', '--check'], blocking: true },

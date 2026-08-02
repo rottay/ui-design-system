@@ -216,7 +216,7 @@ const DROPDOWN_ITEMS = [
   { key: "group", type: "group" as const, label: "Actions" },
   { key: "edit", label: "Edit" },
   { key: "share", label: "Share", children: [{ key: "copy-link", label: "Copy link" }] },
-  { key: "divider", type: "divider" as const, label: "" },
+  { key: "divider", type: "divider" as const },
   { key: "disabled", label: "Disabled", disabled: true },
   { key: "delete", label: "Delete", danger: true },
 ];
@@ -332,7 +332,7 @@ function SpecimenTree({
           items={[
             { key: "group", type: "group", label: "Actions" },
             { key: "open", label: "Open", shortcut: "O" },
-            { key: "divider", type: "divider", label: "" },
+            { key: "divider", type: "divider" },
             { key: "disabled", label: "Disabled", disabled: true },
             { key: "delete", label: "Delete", danger: true },
           ]}

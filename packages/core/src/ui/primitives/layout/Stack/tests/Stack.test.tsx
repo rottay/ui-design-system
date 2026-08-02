@@ -35,7 +35,7 @@ vi.mock(
           },
           ref
         ) => {
-          const Tag = Component as keyof JSX.IntrinsicElements;
+          const Tag = Component as keyof React.JSX.IntrinsicElements;
 
           // Handle divider rendering for tests
           let renderedChildren = children;
@@ -614,45 +614,6 @@ describe("Stack Types and Constants", () => {
     expect(resolveSpacing(16)).toBe("16px");
     expect(resolveSpacing("none")).toBe("0");
     expect(resolveSpacing(undefined)).toBe("0");
-  });
-});
-
-// NOTE: Base utility tests skipped - base file needs to be implemented
-// These functions are referenced in engines but not yet exported from types
-describe.skip("Stack Base Utilities", () => {
-  it("exports buildStackStyles function", async () => {
-    const { buildStackStyles } = await import("../contracts");
-    expect(buildStackStyles).toBeDefined();
-
-    const styles = buildStackStyles({
-      direction: "horizontal",
-      spacing: "lg",
-      align: "center",
-      justify: "space-between",
-    });
-
-    expect(styles.display).toBe("flex");
-    expect(styles.flexDirection).toBe("row");
-    expect(styles.alignItems).toBe("center");
-    expect(styles.justifyContent).toBe("space-between");
-    expect(styles.gap).toBe("1.5rem");
-  });
-
-  it("exports filterStackProps function", async () => {
-    const { filterStackProps } = await import("../contracts");
-    expect(filterStackProps).toBeDefined();
-
-    const filtered = filterStackProps({
-      direction: "horizontal",
-      spacing: "lg",
-      "aria-label": "Test Stack",
-      id: "my-stack",
-    } as any);
-
-    expect(filtered["aria-label"]).toBe("Test Stack");
-    expect(filtered.id).toBe("my-stack");
-    expect(filtered.direction).toBeUndefined();
-    expect(filtered.spacing).toBeUndefined();
   });
 });
 

@@ -333,7 +333,7 @@
   .ds-pattern-form-builder.ds-engine-modern [data-part='section-header'],
   .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-prev-button'],
   .ds-pattern-form-builder.ds-engine-modern [data-part='wizard-next-button'] {
-    min-block-size: var(--ds-form-builder-touch-target-min, 44px);
+    min-block-size: var(--ds-form-builder-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

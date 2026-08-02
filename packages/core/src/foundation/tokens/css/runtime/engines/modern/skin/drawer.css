@@ -190,7 +190,7 @@
 
 .rottay-drawer--modern > [data-part='header'] [data-part='title'] {
   color: var(--ds-color-text-primary);
-  font-family: var(--ds-font-family-heading, var(--ds-font-family-sans));
+  font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
   font-size: var(--ds-font-size-lg);
   font-weight: var(--ds-font-weight-semibold);
   line-height: var(--ds-line-height-tight);
@@ -398,5 +398,14 @@
   }
   to {
     transform: translateY(100%);
+  }
+}
+
+/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
+   below the canonical --ds-touch-target-min channel; fine pointers keep the
+   authored size untouched. */
+@media (hover: none), (pointer: coarse) {
+  .rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

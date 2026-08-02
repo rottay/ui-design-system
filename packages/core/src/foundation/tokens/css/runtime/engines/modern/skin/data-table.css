@@ -937,7 +937,7 @@
 .ds-pattern-data-table.ds-engine-modern
   [data-part="skeleton-row"][data-divider="true"] {
   border-bottom: 1px solid
-    var(--ds-table-row-border, var(--ds-color-border-subtle));
+    var(--ds-modern-table-divider);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="skeleton-cell"] {
   border-radius: var(--ds-radius-sm, 6px);
@@ -1181,7 +1181,7 @@
 .ds-pattern-data-table.ds-engine-modern
   [data-part="body-row"][data-last="false"] {
   border-bottom: 1px solid
-    var(--ds-table-row-border, var(--ds-color-border-subtle));
+    var(--ds-modern-table-divider);
 }
 
 /* ---- expand toggle column ---- */
@@ -1207,7 +1207,7 @@
   border-inline-start: 1px solid
     color-mix(
       in srgb,
-      var(--ds-table-row-border, var(--ds-color-border-subtle)) 56%,
+      var(--ds-modern-table-divider) 56%,
       transparent
     );
 }
@@ -1220,7 +1220,7 @@
 .ds-pattern-data-table.ds-engine-modern
   [data-part="expanded-row"][data-last="false"] {
   border-bottom: 1px solid
-    var(--ds-table-row-border, var(--ds-color-border-subtle));
+    var(--ds-modern-table-divider);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="expanded-row-content"] {
   background: var(--ds-table-row-bg-expanded, var(--ds-surface-inset));
@@ -1241,7 +1241,7 @@
 .ds-pattern-data-table.ds-engine-modern
   [data-part="group-header-row"][data-part="group-header-row"] {
   border-bottom: 1px solid
-    var(--ds-table-row-border, var(--ds-color-border-subtle));
+    var(--ds-modern-table-divider);
 }
 .ds-pattern-data-table.ds-engine-modern [data-part="group-header-cell"] {
   color: var(--ds-color-text-primary);
@@ -1620,7 +1620,7 @@
 .ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
   [data-part="body-row"][data-last="false"] {
   border-bottom: 1px solid
-    var(--ds-table-row-border, var(--ds-color-border-subtle));
+    var(--ds-modern-table-divider);
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
@@ -1628,7 +1628,7 @@
 .ds-pattern-data-table.ds-engine-modern[data-recipe="grid"]
   [data-part="actions-cell"][data-part="actions-cell"]:not(:first-child) {
   border-inline-start: 1px solid
-    var(--ds-table-row-border, var(--ds-color-border-subtle));
+    var(--ds-modern-table-divider);
 }
 
 .ds-pattern-data-table.ds-engine-modern[data-recipe="zebra"]
@@ -1707,7 +1707,7 @@
   .ds-pattern-data-table.ds-engine-modern
   [data-part="body-row"][data-last="false"] {
   border-bottom: 1px solid
-    var(--ds-table-row-border, var(--ds-color-border-subtle));
+    var(--ds-modern-table-divider);
 }
 
 /* zebra: alternating stripe on even rows (independent of the striped prop), no
@@ -1916,5 +1916,17 @@
     border-color: Highlight;
     background: Highlight;
     box-shadow: none;
+  }
+}
+
+/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
+   below the canonical --ds-touch-target-min channel; fine pointers keep the
+   authored size untouched. */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-data-table.ds-engine-modern [data-part="header-cell"][data-sortable="true"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="hide-column-button"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"] {
+    min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

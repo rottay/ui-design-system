@@ -481,7 +481,14 @@ describe('TENANT-COLOR PROPAGATION · a frozen channel is a detected override', 
   const servedValue = (css: string, channel: string): string | undefined => {
     let value: string | undefined;
     postcss.parse(css).walkRules((rule) => {
-      for (let parent = rule.parent; parent; parent = parent.parent) {
+      // postcss narrows `.parent` per node kind, so walking the chain with the
+      // inferred type re-narrows on every hop; the walk only reads `type`.
+      type CssAncestor = { type: string; parent?: CssAncestor };
+      for (
+        let parent = rule.parent as CssAncestor | undefined;
+        parent;
+        parent = parent.parent
+      ) {
         if (parent.type === 'atrule') return;
       }
       if (!ruleRootStates(rule).has('default')) return;

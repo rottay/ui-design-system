@@ -581,6 +581,23 @@ export interface DashboardSurfaceVisualConfig {
   /** Stack sections into a single column on mobile. Defaults to `true`. */
   stackSectionsOnMobile?: boolean;
 
+  /**
+   * C2c: this flag no longer selects between two layout engines — every
+   * sections area with NUMERIC spans lowers into the ONE shared adaptive
+   * solver (`patterns/data/widget-board/runtime/solver`). `true` grants the
+   * solver freedom on a 12-column tier: spans become honest ranges (shrink
+   * toward the mobile span, grow into row residue), so combinations like
+   * 5+5 or 6+4 no longer strand dead columns. `false`/absent PINS each
+   * authored span (min = preferred = max), which the solver reproduces
+   * exactly (row-major, no backfill) — authored geometry is an intent the
+   * solver honors, not a second engine. Visual order always equals
+   * DOM/focus order. CSS `auto`/responsive templates are a different layout
+   * model (CSS-owned tracks, no numeric spans to pin) and keep their
+   * authored template by design — a documented model boundary, not a
+   * solver bypass.
+   */
+  adaptivePacking?: boolean;
+
   /** Highest-precedence visual defaults for this surface instance. */
   profileOverrides?: SurfaceVisualOverrides;
 }
@@ -2430,10 +2447,14 @@ export interface ImportExportSurfaceBehaviorConfig {
     acceptedFormats: string[];
     /** URL to download a template file for correct formatting. */
     templateUrl?: string;
-    /** Async upload handler. Returns parsed results for preview/confirmation. */
-    onUpload: (file: File) => Promise<ImportResult>;
-    /** Async confirm handler. Called after the user reviews and approves mappings. */
-    onConfirm: (mappings: FieldMapping[]) => Promise<void>;
+    /** Async upload handler. Returns parsed results for preview/confirmation.
+     *  Optional: the surface guards with `if (!importConfig?.onUpload) return`,
+     *  so a config that declares only `acceptedFormats` renders a read-only
+     *  panel rather than failing. The component wins over the type. */
+    onUpload?: (file: File) => Promise<ImportResult>;
+    /** Async confirm handler. Called after the user reviews and approves
+     *  mappings. Optional for the same reason as `onUpload`. */
+    onConfirm?: (mappings: FieldMapping[]) => Promise<void>;
   };
   /** Export configuration. Required when mode is 'export' or 'both'. */
   exportConfig?: {
@@ -2441,8 +2462,9 @@ export interface ImportExportSurfaceBehaviorConfig {
     formats: string[];
     /** Selectable fields for the export. */
     fields: ExportField[];
-    /** Async export handler. Returns a download URL for the generated file. */
-    onExport: (format: string, fields: string[]) => Promise<string>;
+    /** Async export handler. Returns a download URL for the generated file.
+     *  Optional: the surface guards with `if (!exportConfig?.onExport) return`. */
+    onExport?: (format: string, fields: string[]) => Promise<string>;
   };
   /** Historical import/export operations for the history panel. */
   history?: ImportExportHistoryEntry[];

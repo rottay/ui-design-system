@@ -17,8 +17,8 @@ import { bithireBrandTheme, rottayBrandTheme } from '@/foundation/tokens/ts/pres
 
 describe('the clear-mode ground is a BrandTheme channel', () => {
   it('a declared backgroundColor reaches --ds-color-bg-primary', () => {
-    const { cssVariables } = compileBrandTheme({ brandTheme: tortureLightBrandTheme });
-    expect(tortureLightBrandTheme.palette.backgroundColor).toBe('#FDFDFF');
+    const { cssVariables } = compileBrandTheme({ brandTheme: tortureLightBrandTheme, tenantSlug: 'canvas-probe' });
+    expect(tortureLightBrandTheme.palette!.backgroundColor).toBe('#FDFDFF');
     expect(cssVariables['--ds-color-bg-primary']).toBe('#FDFDFF');
     // The aliases the rest of the system reads must move with it, or a surface
     // that reads --ds-color-bg keeps the old ground.
@@ -27,10 +27,10 @@ describe('the clear-mode ground is a BrandTheme channel', () => {
   });
 
   it('global reading ink and neutral borders are first-class BrandTheme channels', () => {
-    const { cssVariables } = compileBrandTheme({ brandTheme: {
+    const { cssVariables } = compileBrandTheme({ tenantSlug: 'canvas-probe', brandTheme: {
       ...tortureLightBrandTheme,
       palette: {
-        ...tortureLightBrandTheme.palette,
+        ...tortureLightBrandTheme.palette!,
         textPrimaryColor: '#211D18',
         textSecondaryColor: '#51483D',
         textMutedColor: '#716658',
@@ -53,16 +53,17 @@ describe('the clear-mode ground is a BrandTheme channel', () => {
     // a product decision that may change, and an assertion coupled to it would
     // fail for a reason that has nothing to do with the behaviour under test.
     const { palette, ...rest } = rottayBrandTheme;
-    const { backgroundColor: _omitted, ...paletteWithoutGround } = palette;
+    const { backgroundColor: _omitted, ...paletteWithoutGround } = palette!;
     const { cssVariables } = compileBrandTheme({
+      tenantSlug: 'canvas-probe',
       brandTheme: { ...rest, palette: paletteWithoutGround },
     });
     expect(cssVariables['--ds-color-bg-primary']).toBeUndefined();
   });
 
   it('the dark ground stays on its own channel and does not leak into clear mode', () => {
-    const { cssVariables } = compileBrandTheme({ brandTheme: tortureDarkBrandTheme });
-    expect(tortureDarkBrandTheme.palette.darkBackgroundColor).toBe('#050307');
+    const { cssVariables } = compileBrandTheme({ brandTheme: tortureDarkBrandTheme, tenantSlug: 'canvas-probe' });
+    expect(tortureDarkBrandTheme.palette!.darkBackgroundColor).toBe('#050307');
     // The dark block is the generator's job: a `[data-theme='dark']` selector
     // exists nowhere else. What must NOT happen is the dark ground landing in
     // the clear-mode variable.
@@ -75,11 +76,11 @@ describe('the ground field is no longer overloaded', () => {
     // `darkBackgroundColor: '#F8FBFF'` was a near-white: the field was being
     // used as "the ground" regardless of mode. Wiring that value into the dark
     // block would have painted bithire's dark mode white.
-    expect(bithireBrandTheme.palette.backgroundColor).toBe('#F4F8FB');
-    expect(bithireBrandTheme.palette.darkBackgroundColor).toBeUndefined();
+    expect(bithireBrandTheme.palette!.backgroundColor).toBe('#F4F8FB');
+    expect(bithireBrandTheme.palette!.darkBackgroundColor).toBeUndefined();
   });
 
   it('a genuinely dark product keeps its dark ground', () => {
-    expect(rottayBrandTheme.palette.darkBackgroundColor).toBe('#0C0C0E');
+    expect(rottayBrandTheme.palette!.darkBackgroundColor).toBe('#0C0C0E');
   });
 });

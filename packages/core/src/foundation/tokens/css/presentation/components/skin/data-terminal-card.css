@@ -166,7 +166,7 @@
 
 /* header icon-box (Box) — HUD/Circuit/Matrix, subtle background + 1px border. */
 .ds-data-terminal-card[data-part='root'] [data-part='header-icon-box'] {
-  background: var(--ds-color-background-subtle);
+  background: var(--ds-color-bg-subtle);
 }
 .ds-data-terminal-card[data-part='root'][data-variant] [data-part='header-icon-box'] {
   border: 1px solid var(--ds-color-border);
@@ -238,11 +238,11 @@
 }
 @media (hover: hover) {
   .ds-data-terminal-card[data-part='root'] [data-part='quick-action']:hover {
-    background: var(--ds-color-background-subtle);
+    background: var(--ds-color-bg-subtle);
   }
 }
 .ds-data-terminal-card[data-part='root'] [data-part='quick-action']:active {
-  background: var(--ds-color-background-subtle);
+  background: var(--ds-color-bg-subtle);
 }
 .ds-data-terminal-card[data-part='root'] [data-part='quick-action-icon'] {
   color: var(--ds-color-text-muted);
@@ -301,7 +301,7 @@
  * ==========================================================================*/
 
 .ds-data-terminal-card[data-variant='1'] [data-part='terminal-bar'] {
-  background: var(--ds-color-background-subtle);
+  background: var(--ds-color-bg-subtle);
 }
 .ds-data-terminal-card[data-part='root'][data-variant='1'] [data-part='terminal-bar'] {
   border-bottom: 1px solid var(--ds-color-border);
@@ -370,7 +370,7 @@
 
 /* actions-footer — subtle background + top border. */
 .ds-data-terminal-card[data-part='root'][data-variant] [data-part='actions-footer'] {
-  background: var(--ds-color-background-subtle);
+  background: var(--ds-color-bg-subtle);
   border-top: 1px solid var(--ds-color-border);
 }
 
@@ -428,7 +428,7 @@
 
 /* status-badge — subtle background + band-coloured border. */
 .ds-data-terminal-card[data-part='root'] [data-part='status-badge'] {
-  background: var(--ds-color-background-subtle);
+  background: var(--ds-color-bg-subtle);
 }
 .ds-data-terminal-card[data-part='root'][data-band='high'] [data-part='status-badge'] {
   border: 1px solid var(--ds-color-success);
@@ -470,7 +470,7 @@
 
 /* trend-badge — subtle background + trend-coloured border. */
 .ds-data-terminal-card[data-part='root'] [data-part='trend-badge'] {
-  background: var(--ds-color-background-subtle);
+  background: var(--ds-color-bg-subtle);
 }
 .ds-data-terminal-card[data-part='root'][data-trend='up'] [data-part='trend-badge'] {
   border: 1px solid var(--ds-color-success);
@@ -481,7 +481,7 @@
 
 /* stats-panel — subtle background + 1px border. */
 .ds-data-terminal-card[data-part='root'] [data-part='stats-panel'] {
-  background: var(--ds-color-background-subtle);
+  background: var(--ds-color-bg-subtle);
 }
 .ds-data-terminal-card[data-part='root'][data-variant] [data-part='stats-panel'] {
   border: 1px solid var(--ds-color-border);
@@ -535,7 +535,7 @@
  * pulse cadence owned here, per-node stagger reuses the cadence channels. */
 .ds-data-terminal-card[data-part='root'] [data-part='node-dot'] {
   border-radius: 50%;
-  background: var(--ds-color-background-subtle);
+  background: var(--ds-color-bg-subtle);
   animation: dtc-pulse
     var(--ds-dtc-duration-pulse, calc(var(--ds-motion-glacial, 500ms) * 4))
     var(--ds-motion-ease-in-out, ease-in-out) infinite;

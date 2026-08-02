@@ -330,7 +330,9 @@
     "cra12:check:local": "node scripts/cra-12-motion-governance.mjs --repositories ui-design-system",
     "cra12:check": "node scripts/cra-12-motion-governance.mjs",
     "appboundary:check": "node scripts/app-ds-boundary-gate.mjs --check",
-    "wiring:check": "node scripts/workflow-script-wiring-gate.mjs"
+    "wiring:check": "node scripts/workflow-script-wiring-gate.mjs",
+    "tokens:catalog:write": "node scripts/tokens-catalog.mjs --write",
+    "tokens:catalog:check": "node scripts/tokens-catalog.mjs --check"
   },
   "releaseSync": {
     "sourceEntrypoints": {

@@ -21,9 +21,8 @@
  *     `effectIntensity: 0` tenants keep full canvas → panel → raised
  *     hierarchy through border, fill and shadow channels alone.
  *   - Nested-radius grammar: a surface nested inside another derives its
- *     corner from the parent radius minus a bounded inset (proto axis
- *     `--_ds-proto-semanticsurface-nest-inset`) — never two unrelated
- *     rounded rectangles.
+ *     corner from the parent radius minus a bounded inset
+ *     (`--ds-radius-nest-inset`) — never two unrelated rounded rectangles.
  *   - Bounded glass: callers may opt a `raised` or `overlay` surface into a
  *     frosted finish through the passthrough hook `data-finish="glass"`. The
  *     blur scales with `--ds-effect-intensity`, and both
@@ -255,14 +254,13 @@
 /* Nested-radius grammar: an inner surface derives its corner from the parent
    radius minus a bounded inset, so nested regions read as one concentric
    family instead of two unrelated rounded rectangles. `--ds-radius-nest-inset`
-   is the ONE inset authority for this law; the proto stays a private local
-   override hook, never a public dial. */
+   is the ONE inset authority for this law; the formula stays local. */
 .ds-semantic-surface .ds-semantic-surface {
   border-radius: max(
     0px,
     calc(
       var(--ds-surface-radius-md, var(--ds-radius-md)) -
-        var(--_ds-proto-semanticsurface-nest-inset, var(--ds-radius-nest-inset, 4px))
+        var(--ds-radius-nest-inset, 4px)
     )
   );
 }

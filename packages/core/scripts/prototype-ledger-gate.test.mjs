@@ -249,10 +249,64 @@ test('the shipped ledger governs the real tree with zero findings', () => {
   assert.deepEqual(problems, [], problems.join('\n'));
 });
 
-test('the real tree is scanned non-trivially (a blind gate cannot be green)', () => {
+test('the namespace is CLOSED: zero prototokens survive in the real tree', () => {
+  // THE LAW: a prototoken exists if and only if an adjudication is OPEN.
+  // P1 closed the last four — the AUT-1 twins absorbed into the minted
+  // --ds-color-{tone}-ink authority, DEC-05 resolved as two deliberately
+  // separate private relays, and the pagination hold released because the
+  // substrate it waited on was never planned. So today the correct census is
+  // EMPTY, and this drill inverts accordingly: it used to name the survivors,
+  // and now it asserts there are none.
+  //
+  // An empty census cannot prove the scanner works, so non-triviality moved to
+  // the drill below: a blind scanner must fail THAT one, not this one.
   const { census } = scanSources(CORE_ROOT);
-  assert.ok(census.size > 50, `expected the real prototoken corpus, saw ${census.size}`);
+  assert.deepEqual(
+    [...census.keys()].sort(),
+    [],
+    `prototokens must be adjudicated, not accumulated: ${[...census.keys()].join(', ')}`
+  );
   assert.deepEqual(scanArtifacts(CORE_ROOT), []);
+});
+
+test('the scanner is not blind (proven on a synthetic corpus, since the tree is empty)', () => {
+  // With zero real prototokens, "the gate is green" and "the gate is broken"
+  // look identical against the tree. The scanner is therefore exercised on a
+  // corpus the gate owns: every shape it must recognise — a plain declaration,
+  // a single-line var() read, a wrapped multi-line var(), and a JS/TS object
+  // key — plus one near-miss it must NOT claim.
+  const corpus = [
+    '.declaration {',
+    '  --_ds-proto-alpha: 4px;',
+    '}',
+    '.single-line-use {',
+    '  padding: var(--_ds-proto-beta, 8px);',
+    '}',
+    '.wrapped-use {',
+    '  padding-inline-end: var(',
+    '    --_ds-proto-gamma,',
+    '    2rem',
+    '  );',
+    '}',
+    'const styles = { "--_ds-proto-delta": "1px" };',
+    '.not-a-proto { --ds-color-primary: red; }',
+  ].join('\n');
+
+  const found = findProtoSites(corpus);
+  assert.deepEqual(
+    [...new Set(found.map((site) => site.name))].sort(),
+    [
+      '--_ds-proto-alpha',
+      '--_ds-proto-beta',
+      '--_ds-proto-delta',
+      '--_ds-proto-gamma',
+    ]
+  );
+  // Declarations and consumptions stay distinguishable — the ledger's
+  // `consumers[].kind` depends on it.
+  assert.equal(found.find((site) => site.name === '--_ds-proto-alpha').kind, 'def');
+  assert.equal(found.find((site) => site.name === '--_ds-proto-beta').kind, 'use');
+  assert.equal(found.find((site) => site.name === '--_ds-proto-gamma').kind, 'use');
 });
 
 test('the disposition vocabulary is closed and complete', () => {

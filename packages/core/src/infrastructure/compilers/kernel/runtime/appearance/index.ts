@@ -21,6 +21,8 @@ import type {
 } from '@/foundation/contracts/composition/tenants/themes';
 import {
   TENANT_THEME_EFFECT_INTENSITY_BOUNDS,
+  TENANT_THEME_RHYTHM_FACTORS,
+  TENANT_THEME_RHYTHM_SCALE_BOUNDS,
   TENANT_THEME_TYPE_SCALE_BOUNDS,
 } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import {
@@ -40,6 +42,8 @@ import {
   onToneChannel,
 } from '@/infrastructure/compilers/kernel/foundation/css/color-math/readable-ink';
 import {
+  clampDensityIntoExpressiveEnvelope,
+  clampIntoExpressiveEnvelope,
   resolveExpressiveAxes,
   sanitizeExpressiveOverrides,
 } from '@/foundation/tokens/ts/presentation/expressive-profiles';
@@ -457,14 +461,41 @@ export function appearanceGeneralToVariables(
   }
 
   // Bounded semantic postures have one lowering shared with BrandTheme.
+  // C2: whoever WON precedence is additionally clamped into the selected
+  // experience profile's envelope (∩ a11y floors) — an explicit override may
+  // bend a posture, never break it, and precedence itself is untouched.
+  const envelopeProfileId = general.experienceProfile;
   Object.assign(
     vars,
     appearancePostureToVariables({
       typePairing: general.typography?.typePairing,
       buttonStyle: general.shape?.buttonStyle,
-      radiusScale: general.shape?.radiusScale,
-      density: general.density,
-      motion: general.motion,
+      radiusScale:
+        typeof general.shape?.radiusScale === 'number' &&
+        Number.isFinite(general.shape.radiusScale)
+          ? clampIntoExpressiveEnvelope(
+              envelopeProfileId,
+              'radiusScale',
+              general.shape.radiusScale
+            )
+          : general.shape?.radiusScale,
+      density: clampDensityIntoExpressiveEnvelope(
+        envelopeProfileId,
+        general.density
+      ),
+      motion:
+        general.motion &&
+        typeof general.motion.intensity === 'number' &&
+        Number.isFinite(general.motion.intensity)
+          ? {
+              ...general.motion,
+              intensity: clampIntoExpressiveEnvelope(
+                envelopeProfileId,
+                'motionIntensity',
+                general.motion.intensity
+              ),
+            }
+          : general.motion,
       elevation: general.surfaces?.elevation,
     }),
   );
@@ -483,7 +514,7 @@ export function appearanceGeneralToVariables(
         vars,
         '--ds-type-scale',
         clampValue(
-          t.scale,
+          clampIntoExpressiveEnvelope(envelopeProfileId, 'typeScale', t.scale),
           TENANT_THEME_TYPE_SCALE_BOUNDS.min,
           TENANT_THEME_TYPE_SCALE_BOUNDS.max,
         ),
@@ -536,6 +567,27 @@ export function appearanceGeneralToVariables(
         TENANT_THEME_EFFECT_INTENSITY_BOUNDS.max,
       ),
     );
+  }
+
+  // Layout rhythm. A SEPARATE axis from density: density scales control
+  // sizes, rhythm scales the space between them, so both may legitimately
+  // appear in one chain. `normal` still emits, because an explicit posture is
+  // an authored decision and the floor already resolves to the same 1 —
+  // emitting keeps precedence honest (DB > authored > profile > canon)
+  // without changing a single resolved value.
+  if (general.rhythm != null) {
+    const factor = TENANT_THEME_RHYTHM_FACTORS[general.rhythm];
+    if (factor != null) {
+      setVar(
+        vars,
+        '--ds-rhythm-scale',
+        clampValue(
+          factor,
+          TENANT_THEME_RHYTHM_SCALE_BOUNDS.min,
+          TENANT_THEME_RHYTHM_SCALE_BOUNDS.max,
+        ),
+      );
+    }
   }
 
   // media (logo/logoMark/favicon) removed from contract — no CSS reader exists.

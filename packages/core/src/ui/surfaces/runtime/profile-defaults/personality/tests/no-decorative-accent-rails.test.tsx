@@ -26,6 +26,13 @@ const SURFACE_DEFAULTS: ResolvedSurfaceProfileDefaults = {
   staggerDelay: 0,
   countUpEnabled: false,
   pulseSpeed: 'none',
+  // Deliberately the LOUDEST rail this contract can describe: the prohibition
+  // under test is that no rail paints for ANY accent configuration, so a
+  // 'none'/0 fixture would pass vacuously. These mirror the `left`/`gradient`
+  // row of the case table below.
+  accentPosition: 'left',
+  accentBarThickness: 24,
+  accentBarStyle: 'gradient',
 };
 
 const ACCENT_BAR_SKIN = readFileSync(

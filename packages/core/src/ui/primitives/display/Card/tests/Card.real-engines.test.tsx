@@ -90,8 +90,11 @@ describe('Card real engine coverage', () => {
       'utf-8'
     );
 
-    expect(skin).toContain(
-      "border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, var(--ds-edge-standard-width, 1px))) solid var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))))"
+    // C2 law: the edge grammar owns the border STYLE of containers, so the
+    // bare `solid` keyword became a channel whose fallback preserves solid.
+    // Pinned as a chain, tolerant of reformatting.
+    expect(skin).toMatch(
+      /border:\s*var\(\s*--ds-card-bordered-border-width\s*,\s*var\(\s*--ds-card-border-width\s*,\s*var\(\s*--ds-edge-standard-width\s*,\s*1px\s*\)\s*\)\s*\)\s+var\(\s*--ds-edge-standard-style\s*,\s*solid\s*\)\s+var\(\s*--ds-card-bordered-border-color\s*,\s*var\(\s*--ds-card-border\s*,\s*var\(\s*--ds-card-border-color\s*,\s*var\(\s*--ds-color-border-subtle\s*\)\s*\)\s*\)\s*\)/
     );
     expect(skin).toContain(
       'border: 0 solid var(--ds-card-border, var(--ds-card-ghost-border-color))'

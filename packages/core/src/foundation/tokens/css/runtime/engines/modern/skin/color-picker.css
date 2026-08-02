@@ -436,11 +436,11 @@
    sizes (min-* wins over the fixed swatch sizes only when larger). */
 @media (pointer: coarse) {
   .rottay-colorpicker.rottay-colorpicker--modern [data-part='trigger'] {
-    min-block-size: var(--ds-input-touch-target-min);
+    min-block-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
   }
   .rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][type='button'] {
-    min-inline-size: var(--ds-input-touch-target-min);
-    min-block-size: var(--ds-input-touch-target-min);
+    min-inline-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
+    min-block-size: var(--ds-input-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

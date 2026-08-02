@@ -113,7 +113,7 @@ describe('VisualizationSurface', () => {
           },
         ],
         stats: [
-          { id: 'revenue', label: 'Revenue', value: '$24k' },
+          { key: 'revenue', label: 'Revenue', value: '$24k' },
         ],
         onViewChange: vi.fn(),
       },

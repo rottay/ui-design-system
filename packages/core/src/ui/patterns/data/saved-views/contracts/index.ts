@@ -76,13 +76,20 @@ export interface SavedViewsBarProps extends PatternBaseProps {
   /** Called when a view tab is selected */
   onViewSelect: (viewId: string) => void;
   /** Called when a view is saved (updated) */
-  onViewSave: (view: SavedView) => void;
+  /**
+   * Mutation handlers. Each is OPTIONAL, and an absent handler means that
+   * action is NOT AVAILABLE — the bar renders without it, exactly as the
+   * sibling `allowCreate`/`allowDelete`/`allowRename` flags already describe.
+   * Requiring them made the read-only bar this contract advertises impossible
+   * to express, which was a contradiction between two halves of one interface.
+   */
+  onViewSave?: (view: SavedView) => void;
   /** Called when a view is deleted */
-  onViewDelete: (viewId: string) => void;
+  onViewDelete?: (viewId: string) => void;
   /** Called when a view is renamed */
-  onViewRename: (viewId: string, name: string) => void;
+  onViewRename?: (viewId: string, name: string) => void;
   /** Called when a new view is created */
-  onViewCreate: (view: Omit<SavedView, 'id'>) => void;
+  onViewCreate?: (view: Omit<SavedView, 'id'>) => void;
   /** Called when views are reordered (receives new ordered array of IDs) */
   onViewReorder?: (viewIds: string[]) => void;
   /** Called when a view is duplicated */

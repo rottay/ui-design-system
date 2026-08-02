@@ -44,8 +44,7 @@ describe('Select real engine coverage', () => {
         clearable
         onChange={handleChange}
         onClear={handleClear}
-      />,
-      'modern'
+      />
     );
 
     fireEvent.click(container.querySelector('.rottay-select__trigger') as HTMLDivElement);

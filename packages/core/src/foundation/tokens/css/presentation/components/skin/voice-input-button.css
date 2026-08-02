@@ -124,8 +124,8 @@
   position: absolute;
   inset-block-start: -2px;
   inset-inline-end: -2px;
-  inline-size: var(--_ds-proto-voice-input-error-dot-size, 8px);
-  block-size: var(--_ds-proto-voice-input-error-dot-size, 8px);
+  inline-size: var(--_ds-voice-input-error-dot-size, 8px);
+  block-size: var(--_ds-voice-input-error-dot-size, 8px);
   border-radius: 999px;
   background: var(--ds-color-error);
   border: 1px solid var(--ds-surface-card);

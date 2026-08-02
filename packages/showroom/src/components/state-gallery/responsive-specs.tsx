@@ -45,7 +45,7 @@ function statusBadgeVariant(status: string): BadgeTone {
 const DROPDOWN_MENU_ITEMS: DropdownMenuItem[] = [
   { key: 'edit', label: 'Edit' },
   { key: 'duplicate', label: 'Duplicate' },
-  { key: 'divider-1', label: null, type: 'divider' },
+  { key: 'divider-1', type: 'divider' },
   { key: 'delete', label: 'Delete', danger: true },
 ];
 

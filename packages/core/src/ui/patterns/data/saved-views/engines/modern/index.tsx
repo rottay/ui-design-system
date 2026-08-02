@@ -118,7 +118,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
 
   const handleCreate = useCallback(() => {
     if (!newViewName.trim()) return;
-    onViewCreate({
+    onViewCreate?.({
       name: newViewName.trim(),
       config: {},
     });
@@ -128,17 +128,19 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
 
   const handleRenameStart = useCallback(
     (view: SavedView) => {
-      if (!allowRename) return;
+      // Same visibility law as the menu item that reaches here: without a
+      // handler the action is not available, so editing must not start either.
+      if (!allowRename || !onViewRename) return;
       setEditingViewId(view.id);
       setEditingName(view.name);
       setOpenMenuId(null);
     },
-    [allowRename],
+    [allowRename, onViewRename],
   );
 
   const handleRenameConfirm = useCallback(() => {
     if (editingViewId && editingName.trim()) {
-      onViewRename(editingViewId, editingName.trim());
+      onViewRename?.(editingViewId, editingName.trim());
     }
     setEditingViewId(null);
     setEditingName('');
@@ -204,7 +206,18 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
     );
   }
 
-  const canCreate = allowCreate && (!maxViews || views.length < maxViews);
+  /**
+   * VISIBILITY LAW (contracts/index.ts:80-82): an absent mutation handler means
+   * the action is NOT AVAILABLE and the bar renders WITHOUT it. An `allow*` flag
+   * alone is a permission, not a capability — rendering on the flag while the
+   * handler is missing is what produced visible inert actions. Both are required.
+   *
+   * Absence is never expressed as `disabled`: the contract says omit.
+   */
+  const canRename = allowRename && Boolean(onViewRename);
+  const canDelete = allowDelete && Boolean(onViewDelete);
+  const canCreate =
+    allowCreate && Boolean(onViewCreate) && (!maxViews || views.length < maxViews);
 
   return (
     <div
@@ -220,13 +233,11 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
         const isDropTarget = dropTargetId === view.id;
         const isMenuOpen = openMenuId === view.id;
         const customActions = getMenuActions?.(view) ?? [];
-        const hasMenu =
-          allowRename || allowDelete || onViewDuplicate || customActions.length > 0;
 
         /* The management menu as Dropdown items; per-item onClick fires
            before the primitive closes the surface (controlled open). */
         const menuItems: DropdownMenuItem[] = [];
-        if (allowRename) {
+        if (canRename) {
           menuItems.push({
             key: 'rename',
             label: renameLabel,
@@ -252,16 +263,21 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             onClick: action.onClick,
           });
         }
-        if (allowDelete && !view.isDefault) {
-          menuItems.push({ key: 'delete-divider', type: 'divider', label: '' });
+        if (canDelete && !view.isDefault) {
+          menuItems.push({ key: 'delete-divider', type: 'divider' });
           menuItems.push({
             key: 'delete',
             label: deleteLabel,
             icon: <ActionDeleteIcon decorative size={14} />,
             danger: true,
-            onClick: () => onViewDelete(view.id),
+            onClick: () => onViewDelete?.(view.id),
           });
         }
+
+        /* Derived from the ACTUAL items, not from the flags: a default view
+           whose only permitted action is delete produces zero items, and an
+           empty trigger is itself an inert affordance. */
+        const hasMenu = menuItems.length > 0;
 
         return (
           <div

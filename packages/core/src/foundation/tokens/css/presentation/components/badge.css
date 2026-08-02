@@ -41,11 +41,6 @@
   --ds-badge-xl-font-size: 1rem;           /* 16px */
   --ds-badge-xl-padding-x: 0.875rem;
 
-  /* Default size (can be overridden) */
-  --ds-badge-default-min-width: var(--ds-badge-md-min-width);
-  --ds-badge-default-height: var(--ds-badge-md-height);
-  --ds-badge-default-font-size: var(--ds-badge-md-font-size);
-
   /* ========================================================================
      DOT SIZES - Badge Dot Indicator Dimensions
      Diameter of dot badges for each size variant
@@ -57,9 +52,6 @@
   --ds-badge-dot-lg-size: 0.625rem;        /* 10px */
   --ds-badge-dot-xl-size: 0.75rem;         /* 12px */
 
-  /* Default dot size */
-  --ds-badge-dot-default-size: var(--ds-badge-dot-md-size);
-
   /* ========================================================================
      VARIANTS - Badge Color Variants
      Different visual styles for badges
@@ -68,37 +60,30 @@
   /* Default variant (neutral) */
   --ds-badge-default-bg: #d9d9d9;
   --ds-badge-default-color: var(--ds-color-white, #ffffff);
-  --ds-badge-default-border: var(--ds-badge-border-color);
 
   /* Primary variant */
   --ds-badge-primary-bg: #1890ff;
   --ds-badge-primary-color: var(--ds-color-white, #ffffff);
-  --ds-badge-primary-border: var(--ds-badge-primary-bg);
 
   /* Secondary variant */
   --ds-badge-secondary-bg: #722ed1;
   --ds-badge-secondary-color: var(--ds-color-white, #ffffff);
-  --ds-badge-secondary-border: var(--ds-badge-secondary-bg);
 
   /* Success variant */
   --ds-badge-success-bg: #52c41a;
   --ds-badge-success-color: var(--ds-color-white, #ffffff);
-  --ds-badge-success-border: var(--ds-badge-success-bg);
 
   /* Warning variant */
   --ds-badge-warning-bg: #faad14;
   --ds-badge-warning-color: var(--ds-color-white, #ffffff);
-  --ds-badge-warning-border: var(--ds-badge-warning-bg);
 
   /* Error variant */
   --ds-badge-error-bg: #ff4d4f;
   --ds-badge-error-color: var(--ds-color-white, #ffffff);
-  --ds-badge-error-border: var(--ds-badge-error-bg);
 
   /* Info variant */
   --ds-badge-info-bg: #1890ff;
   --ds-badge-info-color: var(--ds-color-white, #ffffff);
-  --ds-badge-info-border: var(--ds-badge-info-bg);
 
   /* ========================================================================
      STATUS INDICATORS
@@ -120,10 +105,8 @@
   --ds-badge-radius-sm: 0.125rem;          /* 2px */
   --ds-badge-radius-md: 0.25rem;           /* 4px */
   --ds-badge-radius-lg: 0.5rem;            /* 8px */
-  --ds-badge-radius-full: 9999px;
-
-  /* Default border radius */
-  --ds-badge-default-radius: var(--ds-badge-radius-full);
+  /* C2: pill shape rides the canon full-radius channel (Tag parity). */
+  --ds-badge-radius-full: var(--ds-radius-full, 9999px);
 
   /* ========================================================================
      SPACING
@@ -159,7 +142,6 @@
 
   --ds-badge-pulse-duration: 1.5s;
   --ds-badge-pulse-timing: ease-in-out;
-  --ds-badge-pulse-opacity: 0.6;
   --ds-badge-pulse-scale: 1.05;
 
   /* ========================================================================
@@ -193,7 +175,7 @@
   --ds-badge-loading-opacity: 0.76;
   --ds-badge-motion-duration: var(--ds-motion-fast);
   --ds-badge-motion-easing: var(--ds-motion-ease-out, ease-out);
-  --ds-badge-touch-target: 2.75rem;
+  --ds-badge-touch-target: var(--ds-touch-target-min, 2.75rem);
 
   /* ========================================================================
      Z-INDEX

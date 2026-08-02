@@ -1627,7 +1627,7 @@ export const COMPONENT_MAP: Record<string, ReactNode> = {
         items={[
           { key: 'edit', label: 'Edit draft' },
           { key: 'duplicate', label: 'Duplicate workflow' },
-          { key: 'divider', type: 'divider', label: '' },
+          { key: 'divider', type: 'divider' },
           { key: 'delete', label: 'Delete', danger: true },
         ]}
         trigger={

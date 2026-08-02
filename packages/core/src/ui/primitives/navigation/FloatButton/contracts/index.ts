@@ -32,6 +32,7 @@
  */
 
 import type { ReactNode, CSSProperties } from 'react';
+import type { EngineAwareProps } from '@/foundation/contracts/runtime/engine';
 
 // ============================================================================
 // FloatButton Props
@@ -56,7 +57,7 @@ import type { ReactNode, CSSProperties } from 'react';
  * };
  * ```
  */
-export interface FloatButtonProps {
+export interface FloatButtonProps extends EngineAwareProps {
   /** Button icon - typically an icon component */
   icon?: ReactNode;
 
@@ -123,7 +124,7 @@ export interface FloatButtonProps {
  * };
  * ```
  */
-export interface FloatButtonGroupProps {
+export interface FloatButtonGroupProps extends EngineAwareProps {
   /** Trigger mode for expanding/collapsing the group
    * @default 'click'
    */
@@ -187,7 +188,7 @@ export interface FloatButtonGroupProps {
  * };
  * ```
  */
-export interface FloatButtonBackTopProps {
+export interface FloatButtonBackTopProps extends EngineAwareProps {
   /** Visibility threshold - button appears when scroll exceeds this value
    * @default 400
    */

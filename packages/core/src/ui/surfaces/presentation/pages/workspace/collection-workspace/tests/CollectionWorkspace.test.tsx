@@ -34,8 +34,8 @@ const TEST_DATA: TestRow[] = [
 ];
 
 const TEST_COLUMNS: ColumnDef<TestRow>[] = [
-  { key: 'name', title: 'Name', dataIndex: 'name' },
-  { key: 'status', title: 'Status', dataIndex: 'status' },
+  { key: 'name', header: 'Name', accessorKey: 'name' },
+  { key: 'status', header: 'Status', accessorKey: 'status' },
 ];
 
 const PHONE_RESPONSIVE_CONTEXT: ResponsiveContextValue = {
@@ -131,7 +131,7 @@ describe('useCollectionWorkspace', () => {
 
   it('manages search state internally when uncontrolled', () => {
     const onChange = vi.fn();
-    const config: CollectionWorkspaceConfig<{ id: string }> = {
+    const config: CollectionWorkspaceConfig<{ id: string; name: string }> = {
       ...baseConfig,
       controls: {
         search: { enabled: true, onChange },
@@ -150,7 +150,7 @@ describe('useCollectionWorkspace', () => {
   });
 
   it('uses controlled search value when provided', () => {
-    const config: CollectionWorkspaceConfig<{ id: string }> = {
+    const config: CollectionWorkspaceConfig<{ id: string; name: string }> = {
       ...baseConfig,
       controls: {
         search: { enabled: true, value: 'external' },
@@ -242,7 +242,7 @@ describe('useCollectionWorkspace', () => {
   });
 
   it('respects presentation.responsive.mobileBreakpoint', () => {
-    const config: CollectionWorkspaceConfig<{ id: string }> = {
+    const config: CollectionWorkspaceConfig<{ id: string; name: string }> = {
       ...baseConfig,
       presentation: {
         responsive: { mobileBreakpoint: 1024 },
@@ -260,7 +260,7 @@ describe('useCollectionWorkspace', () => {
 
   it('updates view mode', () => {
     const onChange = vi.fn();
-    const config: CollectionWorkspaceConfig<{ id: string }> = {
+    const config: CollectionWorkspaceConfig<{ id: string; name: string }> = {
       ...baseConfig,
       controls: {
         viewMode: { enabled: true, modes: ['table', 'cards'], onChange },
@@ -279,7 +279,7 @@ describe('useCollectionWorkspace', () => {
 
   it('applies and resets filters', () => {
     const onFilterChange = vi.fn();
-    const config: CollectionWorkspaceConfig<{ id: string }> = {
+    const config: CollectionWorkspaceConfig<{ id: string; name: string }> = {
       ...baseConfig,
       controls: {
         filters: [
@@ -303,7 +303,7 @@ describe('useCollectionWorkspace', () => {
   });
 
   it('keeps coherently empty applied values out of the canonical count while preserving zero', () => {
-    const config: CollectionWorkspaceConfig<{ id: string }> = {
+    const config: CollectionWorkspaceConfig<{ id: string; name: string }> = {
       ...baseConfig,
       controls: {
         filters: [
@@ -366,7 +366,7 @@ describe('useCollectionWorkspace', () => {
 
   it('activates saved views', () => {
     const onViewSelect = vi.fn();
-    const config: CollectionWorkspaceConfig<{ id: string }> = {
+    const config: CollectionWorkspaceConfig<{ id: string; name: string }> = {
       ...baseConfig,
       controls: {
         savedViews: {
@@ -430,6 +430,7 @@ describe('CollectionWorkspaceSurface', () => {
           header: {
             eyebrow: 'Records',
             title: 'Test Collection',
+            subtitle: 'Test subtitle',
           },
           actions: () => <button type="button">Open</button>,
           behavior: {
@@ -525,6 +526,7 @@ describe('CollectionWorkspaceSurface', () => {
             header: {
               eyebrow: 'People',
               title: 'Test Collection',
+              subtitle: 'Test subtitle',
             },
             activeFilters: {
               filters: [
@@ -615,6 +617,7 @@ describe('CollectionWorkspaceSurface', () => {
             header: {
               eyebrow: 'People',
               title: 'Test Collection',
+              subtitle: 'Test subtitle',
             },
             adaptive: {
               desktop: { filters: 'inline' },
@@ -658,6 +661,7 @@ describe('CollectionWorkspaceSurface', () => {
             header: {
               eyebrow: 'People',
               title: 'Test Collection',
+              subtitle: 'Test subtitle',
             },
             adaptive: {
               desktop: { filters: 'inline' },
@@ -773,7 +777,7 @@ describe('CollectionWorkspaceSurface', () => {
           <ResponsiveContext.Provider value={responsive}>
             <CollectionWorkspaceSurface
               {...buildProps({
-                header: { eyebrow: 'People', title: 'Test Collection' },
+                header: { eyebrow: 'People', title: 'Test Collection', subtitle: 'Test subtitle' },
                 adaptive: {
                   desktop: { filters: 'inline' },
                   tablet: { filters: 'dropdown' },
@@ -856,6 +860,7 @@ describe('CollectionWorkspaceSurface', () => {
             header: {
               eyebrow: 'People',
               title: 'Test Collection',
+              subtitle: 'Test subtitle',
             },
             activeFilters: {
               filters: [{ key: 'search', label: 'Search', value: 'alice' }],

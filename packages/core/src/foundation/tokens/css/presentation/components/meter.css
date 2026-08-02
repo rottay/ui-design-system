@@ -43,11 +43,11 @@
 
 .ds-meter {
   /* material axis: track substrate */
-  --_ds-proto-meter-track-bg: var(--ds-color-border-secondary);
+  --_ds-meter-track-bg: var(--ds-color-border-secondary);
   /* geometry axis: bar/compact track thickness */
-  --_ds-proto-meter-track-size: var(--ds-spacing-2);
+  --_ds-meter-track-size: var(--ds-spacing-2);
   /* geometry axis: ring diameter */
-  --_ds-proto-meter-ring-size: var(--ds-spacing-16);
+  --_ds-meter-ring-size: var(--ds-spacing-16);
 
   /* internal composition hatch: resolved fill color (threshold < tone) */
   --_meter-fill: var(--ds-color-primary);
@@ -62,16 +62,16 @@
 /* ---- size (geometry × density-effective spacing scale) ---- */
 
 .ds-meter[data-size='sm'] {
-  --_ds-proto-meter-track-size: var(--ds-spacing-1);
-  --_ds-proto-meter-ring-size: var(--ds-spacing-10);
+  --_ds-meter-track-size: var(--ds-spacing-1);
+  --_ds-meter-ring-size: var(--ds-spacing-10);
 }
 .ds-meter[data-size='md'] {
-  --_ds-proto-meter-track-size: var(--ds-spacing-2);
-  --_ds-proto-meter-ring-size: var(--ds-spacing-16);
+  --_ds-meter-track-size: var(--ds-spacing-2);
+  --_ds-meter-ring-size: var(--ds-spacing-16);
 }
 .ds-meter[data-size='lg'] {
-  --_ds-proto-meter-track-size: var(--ds-spacing-3);
-  --_ds-proto-meter-ring-size: var(--ds-spacing-24);
+  --_ds-meter-track-size: var(--ds-spacing-3);
+  --_ds-meter-ring-size: var(--ds-spacing-24);
 }
 
 /* ---- header / label / value / description ---- */
@@ -117,9 +117,9 @@
   display: block;
   flex: none;
   inline-size: 100%;
-  block-size: var(--_ds-proto-meter-track-size);
+  block-size: var(--_ds-meter-track-size);
   border-radius: var(--ds-radius-full);
-  background: var(--_ds-proto-meter-track-bg);
+  background: var(--_ds-meter-track-bg);
 }
 
 .ds-meter [data-part='fill'] {
@@ -187,9 +187,9 @@
 }
 
 .ds-meter [data-part='ring'] {
-  --_ds-arc-size: var(--_ds-proto-meter-ring-size);
+  --_ds-arc-size: var(--_ds-meter-ring-size);
   --_ds-arc-fill: var(--_meter-fill);
-  --_ds-arc-track: var(--_ds-proto-meter-track-bg);
+  --_ds-arc-track: var(--_ds-meter-track-bg);
 
   flex: none;
 }

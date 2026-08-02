@@ -99,17 +99,21 @@ describe('resolveMotionRecipe', () => {
   });
 
   it('resolves canonical cadence, distance and phone caps', () => {
+    // C2 re-pin: the precise profile's distance cap now DERIVES from its own
+    // envelope (maxOffsetPx 2) — the historic hand-typed 16px let "precise"
+    // travel farthest, the exact inversion C2 removes.
     expect(resolveMotionRecipe('overlay.sheet', buildPolicy())).toMatchObject({
       state: 'animated',
       durations: { enterMs: 320, exitMs: 250, settleMs: 320, cycleMs: 0 },
-      distances: { xPx: 0, yPx: 16, scaleFrom: 1 },
+      distances: { xPx: 0, yPx: 2, scaleFrom: 1 },
     });
+    // The profile cap binds before the coarse-pointer 12px cap now.
     expect(
       resolveMotionRecipe(
         'navigation.shared-record',
         buildPolicy({ pointer: 'coarse', allowHoverEffects: false, allowContinuousMotion: false, maxContinuousLoops: 0 }),
       ).distances.xPx,
-    ).toBe(12);
+    ).toBe(2);
   });
 
   it('applies bounded tenant intensity and duration scaling deterministically', () => {
@@ -124,7 +128,9 @@ describe('resolveMotionRecipe', () => {
       settleMs: 480,
       cycleMs: 0,
     });
-    expect(recipe.distances).toEqual({ xPx: 0, yPx: 4, scaleFrom: 0.99 });
+    // C2 re-pin: precise's envelope-derived 2px cap binds (was 4 under the
+    // inverted 16px table).
+    expect(recipe.distances).toEqual({ xPx: 0, yPx: 2, scaleFrom: 0.99 });
   });
 
   it.each([
@@ -220,9 +226,13 @@ describe('resolveMotionRecipe', () => {
       resolveMotionPolicy({ ...input, profile: 'expressive' }),
     );
 
-    expect(precise).toMatchObject({ curve: 'spring-gentle', distances: { xPx: 16 } });
+    expect(precise).toMatchObject({ curve: 'spring-gentle', distances: { xPx: 2 } });
     expect(calm).toMatchObject({ curve: 'ease-out', distances: { xPx: 2 } });
     expect(expressive).toMatchObject({ curve: 'spring-tactile', distances: { xPx: 6 } });
+    // Anti-inversion LAW (C2): the expressive posture must always be allowed
+    // to travel at least as far as precise — a regression of the historic
+    // precise=16 table turns this red.
+    expect(precise.distances.xPx).toBeLessThanOrEqual(expressive.distances.xPx);
   });
 
   it('never exceeds the finite 500ms emphasis budget', () => {

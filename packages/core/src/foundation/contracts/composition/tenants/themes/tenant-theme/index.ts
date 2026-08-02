@@ -394,10 +394,17 @@ export interface TenantThemeAdvancedAppearance {
   /**
    * Pro explicit per-axis expressive overrides (C1b), layered over the
    * Standard `experienceProfile` selection. The document schema closes each
-   * axis to its published vocabulary; the `icon` axis is frontier and stays
-   * schema-rejected in v1.
+   * axis to its published vocabulary, including the `icon` axis opened in C2.
    */
   profiles?: BrandExpressiveAxisOverrides;
+  /**
+   * Governed responsive-posture selection (E2): the id of the container-width
+   * ladder the adaptive runtime resolves postures on. Closed to the published
+   * registry by the schema and revalidated fail-closed by the compiler. Data
+   * only — no channel is emitted for it; the value travels in the artifact's
+   * normalized appearance and is read at render.
+   */
+  responsivePosture?: string;
 }
 
 /**
@@ -418,6 +425,38 @@ export const TENANT_THEME_EFFECT_INTENSITY_BOUNDS = {
   min: 0,
   max: 1,
 } as const;
+/**
+ * Global safety bounds for the layout rhythm multiplier. Wider than the
+ * canonical postures below so a vertical envelope can bend the axis without
+ * escaping it; a value outside this range is clamped, never honoured.
+ */
+export const TENANT_THEME_RHYTHM_SCALE_BOUNDS = {
+  min: 0.8,
+  max: 1.25,
+} as const;
+/**
+ * Canonical rhythm posture → multiplier. The SINGLE source of the numbers:
+ * the appearance compiler and the BrandTheme lowering both read this table,
+ * so a second multiplier literal anywhere is a cascade-integrity defect. The
+ * posture VOCABULARY is additionally spelled in the schema enumeration and in
+ * `BrandThemeSurfaces.rhythm`, exactly as `density` already is.
+ *
+ * Rhythm is ORTHOGONAL to density by construction and the two must never be
+ * collapsed. Density scales CONTROL SIZES through
+ * `--ds-density-effective-scale`; rhythm scales the LAYOUT RELATIONSHIPS
+ * between controls — gaps and layout padding — through `--ds-rhythm-scale`.
+ * A chain may legitimately carry both factors: the control keeps its density
+ * size while the space around it breathes differently. Rhythm must never
+ * reach a control height, a touch target or an icon box, which is what keeps
+ * the coarse-pointer touch floors intact by design rather than by clamping.
+ */
+export const TENANT_THEME_RHYTHM_FACTORS = {
+  tight: 0.85,
+  normal: 1,
+  airy: 1.2,
+} as const;
+
+export type TenantThemeRhythmPosture = keyof typeof TENANT_THEME_RHYTHM_FACTORS;
 
 export type TenantThemeChromeFamily = keyof TenantThemeChrome;
 

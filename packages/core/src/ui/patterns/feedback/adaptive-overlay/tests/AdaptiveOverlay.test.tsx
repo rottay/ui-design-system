@@ -17,7 +17,7 @@ const mockResponsive = {
   isPhone: false,
   isTablet: false,
   isDesktop: true,
-  pointer: 'fine' as const,
+  pointer: 'fine' as 'fine' | 'coarse',
   orientation: 'landscape' as const,
   prefersReducedMotion: false,
   isPhoneOrTablet: false,

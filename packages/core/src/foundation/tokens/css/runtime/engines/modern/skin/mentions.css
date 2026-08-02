@@ -206,7 +206,7 @@
    a quiet primary accent, so the trigger keystroke reads as "listening"
    even before the first filtered match lands. */
 .ds-mentions.ds-mentions--modern[data-part='root'][data-mention-active='true'] [data-part='dropdown'] {
-  border-color: var(--_ds-proto-mentions-trigger-accent, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-color-border-subtle)));
+  border-color: var(--_ds-mentions-trigger-accent, color-mix(in srgb, var(--ds-color-primary) 30%, var(--ds-color-border-subtle)));
 }
 
 /* Option rows (K4-D Pass 2): the migrated markup carried only the external
@@ -247,7 +247,7 @@
    a hue-only signal. */
 .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'][data-active='true'] {
   background: var(--ds-mentions-option-bg-hover, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)));
-  border-color: var(--_ds-proto-mentions-option-active-border, color-mix(in srgb, var(--ds-color-primary) 28%, transparent));
+  border-color: var(--_ds-mentions-option-active-border, color-mix(in srgb, var(--ds-color-primary) 28%, transparent));
 }
 /* Pointer-focused rows (real click targets) keep a visible ring inside the
    popup's overflow clip (inset outline, splitter idiom). */
@@ -299,7 +299,7 @@
 /* Coarse pointers: option rows meet the physical 44px touch floor. */
 @media (pointer: coarse) {
   .ds-mentions.ds-mentions--modern[data-part='root'] [data-part='option'] {
-    min-block-size: var(--ds-mentions-option-touch-target-min, 44px);
+    min-block-size: var(--ds-mentions-option-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

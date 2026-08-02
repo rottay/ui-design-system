@@ -176,7 +176,7 @@ describe('semantic Icon accessibility and rendering', () => {
 
   it('fails closed for hostile JavaScript that omits or contradicts accessibility intent', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-    const UnsafeIcon = Icon as React.ComponentType<Record<string, unknown>>;
+    const UnsafeIcon = Icon as unknown as React.ComponentType<Record<string, unknown>>;
     const { container, rerender } = render(<UnsafeIcon name="action.edit" />);
 
     expect(container.querySelector('svg')).toBeNull();
@@ -187,7 +187,7 @@ describe('semantic Icon accessibility and rendering', () => {
 
   it('fails closed and warns in development for an unknown name', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-    const UnsafeIcon = Icon as React.ComponentType<Record<string, unknown>>;
+    const UnsafeIcon = Icon as unknown as React.ComponentType<Record<string, unknown>>;
     const { container } = render(<UnsafeIcon name="hostile.remote-glyph" decorative />);
 
     expect(container.querySelector('svg')).toBeNull();

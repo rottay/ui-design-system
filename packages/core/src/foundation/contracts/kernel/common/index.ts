@@ -191,6 +191,19 @@ export interface BaseComponentProps {
   style?: CSSProperties;
   /** Element ID */
   id?: string;
+  /**
+   * Reading direction for this subtree; `auto` is safest for user-authored
+   * mixed-script text.
+   *
+   * Every engine that spreads its rest props already forwards `dir` to the
+   * DOM, and logical anatomy (`start`/`end` cover positions, inline padding,
+   * mirrored affordances) resolves against it. Declaring it here is what lets
+   * a caller scope direction to one component instead of the document, which
+   * a mirrored-layout assertion cannot do otherwise. `Typography` has carried
+   * this exact union since its locale props were introduced; this promotes it
+   * to the shared base rather than widening it.
+   */
+  dir?: 'ltr' | 'rtl' | 'auto';
   /** Data attribute for testing */
   'data-testid'?: string;
   /** Skin anatomy hook: identifies a component part for tenant CSS selectors */

@@ -102,7 +102,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--ds-empty-footer-gap, var(--ds-spacing-sm));
-  min-block-size: var(--ds-control-height-md);
+  min-block-size: var(--ds-button-md-height);
   margin-block-start: var(--ds-spacing-xs);
 }
 

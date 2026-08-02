@@ -369,7 +369,7 @@
     .ds-saved-views__pill[data-part='pill'],
   .ds-pattern-saved-views.ds-engine-modern
     .ds-saved-views__create-button[data-part='create-button'] {
-    min-block-size: var(--ds-saved-views-touch-target-min, 44px);
+    min-block-size: var(--ds-saved-views-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 
   .ds-pattern-saved-views.ds-engine-modern
@@ -383,7 +383,7 @@
     .ds-saved-views__menu-trigger[data-part='menu-trigger']::after {
     content: '';
     position: absolute;
-    inset: calc((var(--ds-saved-views-menu-trigger-size, 20px) - var(--ds-saved-views-touch-target-min, 44px)) / 2);
+    inset: calc((var(--ds-saved-views-menu-trigger-size, 20px) - var(--ds-saved-views-touch-target-min, var(--ds-touch-target-min, 44px))) / 2);
   }
 }
 

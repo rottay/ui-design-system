@@ -161,14 +161,23 @@ const buildStaticMirror = (compiled: typeof dbCompiled): BrandTheme => {
   const seeds = compiled.normalizedAppearance.general?.palette ?? {};
   const chrome = compiled.normalizedAppearance.advanced?.chrome ?? {};
   const variable = (name: string) => compiled.variables[name];
+  // The DB palette's seeds are optional on the normalized shape but present in
+  // every fixture this mirror is built from; a missing one would silently emit
+  // a blank channel and grade as a naming pass, so it fails loudly instead.
+  const seed = (value: string | undefined, channel: string): string => {
+    if (!value) {
+      throw new Error(`static mirror fixture is missing its ${channel} seed`);
+    }
+    return value;
+  };
 
   return {
     id: 'static-mirror',
     name: 'Static Mirror',
     palette: {
-      primaryColor: seeds.primary,
-      secondaryColor: seeds.secondary,
-      accentColor: seeds.accent,
+      primaryColor: seed(seeds.primary, 'primary'),
+      secondaryColor: seed(seeds.secondary, 'secondary'),
+      accentColor: seed(seeds.accent, 'accent'),
       onPrimaryColor: variable('--ds-color-text-on-primary'),
       backgroundColor: variable('--ds-color-bg-primary'),
       successColor: variable('--ds-color-success'),

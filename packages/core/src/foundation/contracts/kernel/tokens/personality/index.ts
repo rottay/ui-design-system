@@ -127,3 +127,20 @@ export interface PersonalityTokens {
   accent: AccentPersonalityTokens;
   card: CardPersonalityTokens;
 }
+
+/**
+ * A personality DELTA: every dimension optional, and every field inside a
+ * present dimension independently optional.
+ *
+ * This is the shape the merge chain (DEFAULT -> vertical -> profile -> tenant)
+ * has always actually consumed — `mergePartialPersonality` spreads each
+ * dimension field-by-field, and `resolvePartialPersonalityCssVariables` emits
+ * only the variables whose source fields were declared. `Partial<
+ * PersonalityTokens>` describes something different and stricter: it demands a
+ * COMPLETE dimension the moment a caller declares one field of it. Naming the
+ * real shape once here keeps the contract and the compiler from drifting apart
+ * again.
+ */
+export type PartialPersonalityTokens = {
+  [K in keyof PersonalityTokens]?: Partial<PersonalityTokens[K]>;
+};

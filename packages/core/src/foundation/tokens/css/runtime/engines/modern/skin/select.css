@@ -93,7 +93,7 @@
     var(--ds-select-trigger-line-height, 20px)
   );
   border-radius: var(--ds-select-radius, var(--ds-radius-input, var(--ds-radius-md)));
-  background: var(--ds-select-bg, var(--ds-surface-control));
+  background: var(--ds-select-bg, var(--ds-material-control-background, var(--ds-surface-control)));
   box-shadow: var(--ds-select-shadow, none);
   cursor: pointer;
   outline: none;
@@ -214,12 +214,7 @@
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-status='success'] {
   border-color: var(--ds-select-success-border, var(--ds-color-success));
-  /* Surface parity with error/warning (P2): their bg hooks predate the
-     naming law, so the new axis rides a prototoken instead. */
-  background: var(
-    --_ds-proto-select-success-bg,
-    var(--ds-select-bg, var(--ds-surface-control))
-  );
+  background: var(--ds-select-success-bg, var(--ds-select-bg, var(--ds-surface-control)));
 }
 
 .ds-select-shell.ds-select-shell--modern[data-part='root'][data-disabled='true'] [data-part='trigger'],
@@ -883,5 +878,14 @@
   .ds-select-shell__dropdown[data-part='dropdown'] [data-part='empty'],
   .ds-select-shell__dropdown[data-part='dropdown'] [data-part='loading-state'] {
     border-color: ButtonText;
+  }
+}
+
+/* ---- C2b a11y floor: coarse-pointer select triggers and options keep the
+       44px target. ---- */
+@media (hover: none), (pointer: coarse) {
+  .ds-select-shell--modern [data-part='trigger'],
+  .ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

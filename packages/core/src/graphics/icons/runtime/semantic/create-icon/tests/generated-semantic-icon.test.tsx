@@ -14,6 +14,19 @@ import { IdentityIcon } from '@/graphics/icons/presentation/semantic/generated/p
 import { IntelligenceIcon } from '@/graphics/icons/presentation/semantic/generated/packs/intelligence';
 import { OperationsIcon } from '@/graphics/icons/presentation/semantic/generated/packs/operations';
 
+/**
+ * A generated icon reached through hostile runtime input.
+ *
+ * `SemanticIconProps` is discriminated so exactly one of `label` /
+ * `decorative` is required, and each generated pack narrows `name` to its own
+ * corpus. The cases below deliberately supply shapes the contract forbids --
+ * neither a11y mode, both modes, a name from another pack -- because the
+ * assertion IS that the icon fails closed for the JavaScript callers who can
+ * still produce them. The cast is the assertion, not a way around the contract.
+ */
+const unsafeIcon = (Component: unknown) =>
+  Component as React.ComponentType<Record<string, unknown>>;
+
 describe('generated semantic icon runtime', () => {
   it('server-renders named and decorative roles through the same explicit a11y contract', () => {
     const named = renderToStaticMarkup(<ActionAddIcon label=" Add item " />);
@@ -33,8 +46,8 @@ describe('generated semantic icon runtime', () => {
   it('fails closed when hostile runtime input supplies neither or both a11y modes', () => {
     const warning = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
 
-    expect(renderToStaticMarkup(React.createElement(ActionEditIcon, {}))).toBe('');
-    expect(renderToStaticMarkup(React.createElement(ActionEditIcon, {
+    expect(renderToStaticMarkup(React.createElement(unsafeIcon(ActionEditIcon), {}))).toBe('');
+    expect(renderToStaticMarkup(React.createElement(unsafeIcon(ActionEditIcon), {
       label: 'Edit',
       decorative: true,
     }))).toBe('');
@@ -105,7 +118,10 @@ describe('generated semantic icon runtime', () => {
       <OperationsIcon name="workflow.branch" label="Workflow branch" />,
     );
     const unknown = renderToStaticMarkup(
-      React.createElement(FoundationIcon, { name: 'bithire.candidate', decorative: true }),
+      React.createElement(unsafeIcon(FoundationIcon), {
+        name: 'bithire.candidate',
+        decorative: true,
+      }),
     );
 
     expect(foundation).toContain('data-icon-name="action.add"');

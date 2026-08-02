@@ -15,6 +15,7 @@ import type {
   ChartPersonalityTokens,
   CardPersonalityTokens,
   AccentPersonalityTokens,
+  PartialPersonalityTokens,
   PersonalityTokens,
   SemanticSurfaceRoleMap,
   SemanticTypographyTokens,
@@ -72,6 +73,23 @@ export interface BrandRecipeSelection {
   schemaVersion: number;
   /** Namespaced versioned id, e.g. `rottay/technical-sharp@1`. */
   profile: string;
+}
+
+/**
+ * Governed responsive-posture selection (E2) — the static counterpart of the
+ * document's `visualFoundation.advanced.responsivePosture`, so a vertical can
+ * author the ladder its product actually needs without a DB row. The id must
+ * exist in the closed registry
+ * (`foundation/tokens/ts/presentation/responsive-postures`); the runtime
+ * resolves fail-closed to the baseline ladder. `string` here for the same
+ * reason as `BrandRecipeSelection.profile`: foundation contracts cannot depend
+ * on the registry module.
+ */
+export interface BrandResponsiveSelection {
+  /** Selection-contract version; see RESPONSIVE_POSTURE_SCHEMA_VERSION. */
+  schemaVersion: number;
+  /** Namespaced versioned id, e.g. `rottay/dense-posture@1`. */
+  posture: string;
 }
 
 /**
@@ -179,6 +197,8 @@ export interface BrandTheme {
   recipes?: BrandRecipeSelection;
   /** Governed expressive-profile selection (C1b). */
   expressive?: BrandExpressiveSelection;
+  /** Governed responsive-posture (container-ladder) selection (E2). */
+  responsive?: BrandResponsiveSelection;
   /** Card and accent visual chrome */
   chrome?: BrandChrome;
   /** DaisyUI variables, engine-specific values */
@@ -384,6 +404,26 @@ export interface BrandSurfaces {
    * tenant overrides remain bounded by their compiled policy. Defaults to `1`.
    */
   effectIntensity?: number;
+  /**
+   * Layout rhythm posture: the BrandTheme equivalent of `appearance.rhythm`,
+   * resolved through the same `TENANT_THEME_RHYTHM_FACTORS` table and emitted
+   * on the same `--ds-rhythm-scale` channel.
+   *
+   * ORTHOGONAL to `density`/`densityScale` and never a restatement of them.
+   * Density owns how big a control is; rhythm owns how much room sits between
+   * controls. `airy` on a compact vertical is a coherent, deliberate posture:
+   * small controls with generous breathing room. Rhythm reaches only gap and
+   * layout-padding chains, never a control height or touch target, so the
+   * coarse-pointer floors are untouched by construction.
+   *
+   * Absent → `normal` (factor 1), which is byte-identical to today.
+   *
+   * The posture vocabulary is spelled out here rather than imported because
+   * `tenant-theme` already imports this module; the union mirrors `density`
+   * above. The MULTIPLIERS have exactly one source,
+   * `TENANT_THEME_RHYTHM_FACTORS`.
+   */
+  rhythm?: "tight" | "normal" | "airy";
 }
 
 /**
@@ -1748,6 +1788,18 @@ export interface TenantAppearanceGeneral {
   /** Semantic spacing mode shared by CSS and numeric useTokens consumers. */
   density?: "compact" | "normal" | "spacious";
   /**
+   * Layout rhythm posture, emitted as `--ds-rhythm-scale`.
+   *
+   * A SECOND, orthogonal spacing axis, not a restatement of `density`:
+   * density scales control SIZES, rhythm scales the space BETWEEN them. Both
+   * factors can appear in one chain without double-counting, because they
+   * multiply different things. Rhythm never reaches a control height or a
+   * touch target, so the coarse-pointer floors hold by construction.
+   *
+   * Absent → `normal` (factor 1), byte-identical to today.
+   */
+  rhythm?: "tight" | "normal" | "airy";
+  /**
    * Tenant-owned motion preference. Values are clamped by the runtime policy;
    * tenants cannot inject choreography, loops, keyframes or spring physics.
    */
@@ -1839,6 +1891,12 @@ export interface TenantAppearanceAdvanced {
    * the same selection the artifact was compiled from.
    */
   profiles?: BrandExpressiveAxisOverrides;
+  /**
+   * Governed responsive-posture selection (E2), mirrored from the document
+   * write-contract for the same reason as `profiles`: the adaptive runtime
+   * reads the ladder id off this shape, so it must survive normalization.
+   */
+  responsivePosture?: string;
 }
 
 /** Combined tenant appearance (General + Advanced). */
@@ -1883,8 +1941,11 @@ export interface CompiledBrand {
   cssVariables: Record<string, string>;
   /** Full CSS string with tenant selectors for light, dark, and system-dark */
   cssString: string;
-  /** Resolved personality tokens (vertical baseline merged with BrandTheme) */
-  personality: Partial<PersonalityTokens>;
+  /** Resolved personality tokens (vertical baseline merged with BrandTheme).
+   *  A merge RESULT, so it carries the same deep-partial shape the merge
+   *  consumes: a dimension may be absent, and a present dimension may be
+   *  sparse. */
+  personality: PartialPersonalityTokens;
   /** Resolved structural token overrides (vertical baseline merged with BrandTheme) */
   tokenOverrides: Partial<TenantTokenOverrides>;
   /** Resolved engine-specific values (DaisyUI vars, Ant Design overrides, etc.) */

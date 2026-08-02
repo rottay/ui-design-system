@@ -18,7 +18,7 @@ describe('DecisionInboxSurface', () => {
       <DecisionInboxSurface
         queueName="Approval Queue"
         workspace={{ data: [{ id: '1', name: 'Request A' }] }}
-        columns={[{ key: 'name', title: 'Name', dataIndex: 'name' }]}
+        columns={[{ key: 'name', header: 'Name', accessorKey: 'name' as const }]}
         rowKey="id"
         decisions={decisions}
         onDecision={vi.fn()}
@@ -37,7 +37,7 @@ describe('DecisionInboxSurface', () => {
           data: [{ id: '1', name: 'A' }, { id: '2', name: 'B' }],
           behavior: { selection: { enabled: true, selectedKeys: ['1', '2'] } },
         }}
-        columns={[{ key: 'name', title: 'Name', dataIndex: 'name' }]}
+        columns={[{ key: 'name', header: 'Name', accessorKey: 'name' as const }]}
         rowKey="id"
         decisions={decisions}
         onDecision={vi.fn()}
@@ -54,7 +54,7 @@ describe('DecisionInboxSurface', () => {
       <DecisionInboxSurface
         queueName="Queue"
         workspace={{ data: [{ id: '1', name: 'A' }] }}
-        columns={[{ key: 'name', title: 'Name', dataIndex: 'name' }]}
+        columns={[{ key: 'name', header: 'Name', accessorKey: 'name' as const }]}
         rowKey="id"
         decisions={decisions}
         onDecision={onDecision}

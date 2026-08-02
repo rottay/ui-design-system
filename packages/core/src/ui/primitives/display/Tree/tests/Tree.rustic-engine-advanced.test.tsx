@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { createEvent, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 
 import RusticTree from '../engines/rustic';
+import type { TreeDataNode } from '../contracts';
 
 const TREE_DATA = [
   {
@@ -87,7 +88,13 @@ describe('Tree rustic advanced engine coverage', () => {
   });
 
   it('covers async loading, strict keyboard checking, drag-drop positions, and selectable=false guards', async () => {
-    const loadData = vi.fn(async () => undefined);
+    // Resolves with nothing on purpose: this case asserts the loader is CALLED
+    // with the right node, and a loader that returns no children is the branch
+    // being exercised. The annotation keeps that resolution while matching the
+    // declared `loadData` shape.
+    const loadData = vi.fn(
+      async () => undefined as unknown as TreeDataNode[]
+    );
     const handleExpand = vi.fn();
     const handleCheck = vi.fn();
     const handleSelect = vi.fn();
@@ -137,7 +144,9 @@ describe('Tree rustic advanced engine coverage', () => {
     fireEvent.click(screen.getByText('Locked'));
     expect(handleSelect).toHaveBeenCalledTimes(1);
 
-    const lazyItem = screen.getByText('Lazy').closest('[role="treeitem"]');
+    const lazyItem = screen
+      .getByText('Lazy')
+      .closest<HTMLElement>('[role="treeitem"]');
     if (!lazyItem) {
       throw new Error('Expected lazy tree item');
     }

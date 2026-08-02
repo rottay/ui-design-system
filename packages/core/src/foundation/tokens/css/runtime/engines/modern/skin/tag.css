@@ -65,31 +65,31 @@
 }
 
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-size='xs'] {
-  --_ds-proto-tag-root-height: var(--ds-tag-xs-height);
+  --_ds-tag-root-height: var(--ds-tag-xs-height);
   block-size: var(--ds-tag-xs-height);
   padding-inline: calc(var(--ds-tag-xs-padding-inline, 0.375rem) * var(--ds-density-effective-scale));
   font-size: var(--ds-tag-xs-font-size);
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-size='sm'] {
-  --_ds-proto-tag-root-height: var(--ds-tag-sm-height);
+  --_ds-tag-root-height: var(--ds-tag-sm-height);
   block-size: var(--ds-tag-sm-height);
   padding-inline: calc(var(--ds-tag-sm-padding-inline, 0.5rem) * var(--ds-density-effective-scale));
   font-size: var(--ds-tag-sm-font-size);
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-size='md'] {
-  --_ds-proto-tag-root-height: var(--ds-tag-md-height, var(--ds-tag-default-height));
+  --_ds-tag-root-height: var(--ds-tag-md-height, var(--ds-tag-default-height));
   block-size: var(--ds-tag-md-height, var(--ds-tag-default-height));
   padding-inline: calc(var(--ds-tag-md-padding-inline, 0.625rem) * var(--ds-density-effective-scale));
   font-size: var(--ds-tag-md-font-size, var(--ds-tag-default-font-size));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-size='lg'] {
-  --_ds-proto-tag-root-height: var(--ds-tag-lg-height);
+  --_ds-tag-root-height: var(--ds-tag-lg-height);
   block-size: var(--ds-tag-lg-height);
   padding-inline: calc(var(--ds-tag-lg-padding-inline, 0.75rem) * var(--ds-density-effective-scale));
   font-size: var(--ds-tag-lg-font-size);
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-size='xl'] {
-  --_ds-proto-tag-root-height: var(--ds-tag-xl-height);
+  --_ds-tag-root-height: var(--ds-tag-xl-height);
   block-size: var(--ds-tag-xl-height);
   padding-inline: calc(var(--ds-tag-xl-padding-inline, 1rem) * var(--ds-density-effective-scale));
   font-size: var(--ds-tag-xl-font-size);
@@ -153,7 +153,7 @@
 }
 
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root']:not([data-outlined]) {
-  border: 1px solid
+  border: var(--ds-tag-border-width, var(--ds-edge-hairline-width, 1px)) solid
     var(
       --ds-tag-border,
       color-mix(in srgb, currentColor 16%, transparent)
@@ -177,29 +177,29 @@
         clear AA on every governed source (worst 4.78:1). ---- */
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-outlined='true'] {
   background: var(--ds-tag-custom-bg, transparent);
-  border: 1px solid var(--ds-color-alpha-black-100);
+  border: var(--ds-tag-border-width, var(--ds-edge-hairline-width, 1px)) solid var(--ds-color-alpha-black-100);
   /* The old near-transparent alpha-black-100 ink is replaced by the adaptive
      primary text ink: the outlined default hosts body-size text. */
   color: var(--ds-tag-outlined-ink, var(--ds-color-text-primary));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='primary'][data-outlined='true'] {
-  border: 1px solid var(--ds-color-primary);
+  border: var(--ds-tag-border-width, var(--ds-edge-hairline-width, 1px)) solid var(--ds-color-primary);
   color: var(--ds-tag-primary-outlined-ink, var(--ds-color-primary));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='secondary'][data-outlined='true'] {
-  border: 1px solid var(--ds-color-secondary);
+  border: var(--ds-tag-border-width, var(--ds-edge-hairline-width, 1px)) solid var(--ds-color-secondary);
   color: var(--ds-tag-secondary-outlined-ink, var(--ds-color-secondary));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='success'][data-outlined='true'] {
-  border: 1px solid var(--ds-color-success);
+  border: var(--ds-tag-border-width, var(--ds-edge-hairline-width, 1px)) solid var(--ds-color-success);
   color: var(--ds-tag-success-outlined-ink, color-mix(in srgb, var(--ds-color-success) 60%, var(--ds-color-neutral-900) 40%));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='warning'][data-outlined='true'] {
-  border: 1px solid var(--ds-color-warning);
+  border: var(--ds-tag-border-width, var(--ds-edge-hairline-width, 1px)) solid var(--ds-color-warning);
   color: var(--ds-tag-warning-outlined-ink, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%));
 }
 .rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='error'][data-outlined='true'] {
-  border: 1px solid var(--ds-color-error);
+  border: var(--ds-tag-border-width, var(--ds-edge-hairline-width, 1px)) solid var(--ds-color-error);
   color: var(--ds-tag-error-outlined-ink, color-mix(in srgb, var(--ds-color-error) 78%, var(--ds-color-neutral-900) 22%));
 }
 
@@ -249,11 +249,11 @@
      resolved root height minus one optical inset (Badge remove precedent). */
   inline-size: min(
     var(--ds-tag-close-size, 1rem),
-    calc(var(--_ds-proto-tag-root-height, var(--ds-tag-md-height, 1.75rem)) - 0.125rem)
+    calc(var(--_ds-tag-root-height, var(--ds-tag-md-height, 1.75rem)) - 0.125rem)
   );
   block-size: min(
     var(--ds-tag-close-size, 1rem),
-    calc(var(--_ds-proto-tag-root-height, var(--ds-tag-md-height, 1.75rem)) - 0.125rem)
+    calc(var(--_ds-tag-root-height, var(--ds-tag-md-height, 1.75rem)) - 0.125rem)
   );
   margin-inline-start: var(--ds-tag-close-gap);
   padding: 0;

@@ -57,7 +57,7 @@
   background: var(--ds-color-bg-elevated);
   border: 1px solid var(--ds-color-border);
   color: var(--ds-color-text-primary);
-  font-size: 12px;
+  font-size: var(--ds-font-size-xs);
   max-width: 280px;
 }
 
@@ -748,8 +748,8 @@
   [data-part='scatter-point-mark'],
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
   [data-part='pie-slice-mark'] {
-  transition: opacity var(--ds-motion-duration-fast) ease,
-    filter var(--ds-motion-duration-fast) ease;
+  transition: opacity var(--ds-motion-fast) ease,
+    filter var(--ds-motion-fast) ease;
 }
 
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer'][data-interaction]:not([data-interaction='static'])
@@ -780,7 +780,7 @@
   opacity: 0;
   pointer-events: none;
   vector-effect: non-scaling-stroke;
-  transition: opacity var(--ds-motion-duration-fast) ease;
+  transition: opacity var(--ds-motion-fast) ease;
 }
 
 .ds-chart-renderer.ds-chart-renderer[data-part='chart-renderer']

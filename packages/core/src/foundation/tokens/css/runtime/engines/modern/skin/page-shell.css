@@ -52,11 +52,25 @@
         against it. Declared on the bare data-part='root' match so it holds across
         both the loading and main roots; never on a scroll container. ---- */
 .ds-pattern-page-shell.ds-engine-modern[data-part='root'] {
-  --ds-page-shell-header-padding: clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) clamp(var(--ds-spacing-4, 16px), 2.4vw, var(--ds-spacing-6, 24px));
-  --ds-page-shell-content-padding: var(--ds-spacing-4, 16px) clamp(var(--ds-spacing-4, 16px), 2.4vw, var(--ds-spacing-6, 24px)) clamp(var(--ds-spacing-4, 16px), 2.4vw, var(--ds-spacing-6, 24px));
-  --ds-page-shell-section-gap: var(--ds-spacing-4, 16px);
-  --ds-page-shell-item-gap: var(--ds-spacing-3, 12px);
-  --ds-page-shell-action-gap: var(--ds-spacing-2, 8px);
+  /* RHYTHM: the shell's room channels are PRESET tiers -- declared once here,
+     read as plain channels everywhere below -- so the tenant `appearance.rhythm`
+     axis mounts at the declaration and no consume site has to know about it.
+     Nothing sovereign is scaled: no consumer hook sits in these chains (no
+     artifact or compiler writes a `--ds-page-shell-*` room channel), and a
+     caller's own inline `style` still outranks the whole block. Each padding
+     shorthand multiplies PER COMPONENT because a scale cannot apply to a
+     multi-value shorthand; the viewport clamps keep their own bounds because
+     rhythm scales the resolved room, not the breakpoint law. */
+  --ds-page-shell-header-padding:
+    calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1))
+    calc(clamp(var(--ds-spacing-4, 16px), 2.4vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));
+  --ds-page-shell-content-padding:
+    calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1))
+    calc(clamp(var(--ds-spacing-4, 16px), 2.4vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1))
+    calc(clamp(var(--ds-spacing-4, 16px), 2.4vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));
+  --ds-page-shell-section-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-page-shell-item-gap: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
+  --ds-page-shell-action-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   container-type: inline-size;
   container-name: ds-page;
 }
@@ -76,7 +90,7 @@
   isolation: isolate;
   overflow: hidden;
   padding: var(--ds-page-shell-header-padding);
-  border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
+  border: var(--ds-page-shell-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-toolbar-border, var(--ds-color-border-primary));
   border-radius: var(--ds-page-header-radius, var(--ds-radius-xl));
   background: var(
     --ds-page-header-bg,
@@ -152,7 +166,7 @@
   width: var(--ds-page-header-icon-size, 40px);
   height: var(--ds-page-header-icon-size, 40px);
   place-items: center;
-  border: 1px solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
+  border: var(--ds-page-shell-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));
   border-radius: var(--ds-page-header-icon-radius, var(--ds-radius-lg));
   background: var(--ds-workspace-card-icon-bg, var(--ds-surface-card));
   color: var(--ds-workspace-card-icon-color, var(--ds-color-primary));
@@ -189,7 +203,7 @@
 .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='actions'] {
   min-height: calc(var(--ds-control-height-sm, 32px) + 8px);
   padding: 3px;
-  border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
+  border: var(--ds-page-shell-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-toolbar-border, var(--ds-color-border-primary));
   border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
   background: color-mix(
     in srgb,
@@ -207,7 +221,7 @@
 
 .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='header-content'] {
   padding-top: var(--ds-page-shell-section-gap);
-  border-top: 1px solid var(--ds-toolbar-divider, var(--ds-color-border-subtle));
+  border-top: var(--ds-edge-hairline-width, 1px) solid var(--ds-toolbar-divider, var(--ds-color-border-subtle));
 }
 
 /* ---- shell-grid background: non-loading root only (main root had it, the loading
@@ -225,13 +239,18 @@
 .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='breadcrumb'] {
   display: flex;
   align-items: center;
+  /* The crumb gap stays exact: it is chrome INSIDE the framed pill (fixed
+     inline padding + overflow-x), so it rides density's control axis, not
+     rhythm. The pill's separation from the header content below IS room, and
+     it is the one separation in this shell that does not already ride
+     --ds-page-shell-section-gap, so it mounts rhythm here instead. */
   gap: var(--ds-spacing-2, 8px);
-  margin-block-end: var(--ds-spacing-3, 12px);
+  margin-block-end: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
   width: fit-content;
   max-width: 100%;
   padding: 4px 9px;
   overflow-x: auto;
-  border: 1px solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
+  border: var(--ds-page-shell-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-breadcrumb-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-radius-full, 9999px);
   background: var(
     --ds-breadcrumb-bg,
@@ -379,7 +398,7 @@
   margin-top: var(--ds-page-shell-section-gap);
   padding: var(--ds-tabs-list-padding, 3px);
   background: var(--ds-tabs-list-bg, var(--ds-surface-inset));
-  border: 1px solid var(--ds-tabs-list-border, var(--ds-color-border-subtle));
+  border: var(--ds-page-shell-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-tabs-list-border, var(--ds-color-border-subtle));
   border-radius: var(--ds-tabs-list-radius, var(--ds-radius-lg));
   overflow-x: auto;
   box-shadow:
@@ -389,7 +408,7 @@
 }
 .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='rule'] {
   margin-top: var(--ds-page-shell-section-gap);
-  border-bottom: 1px solid var(--ds-color-border-subtle);
+  border-bottom: var(--ds-edge-hairline-width, 1px) solid var(--ds-color-border-subtle);
 }
 
 /* ---- header layout anatomy (drained from the engine's inline styles) ---- */

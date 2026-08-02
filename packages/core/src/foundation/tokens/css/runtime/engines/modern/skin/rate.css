@@ -226,8 +226,8 @@
    rem (the fluid 15px root erodes rem floors at narrow widths). */
 @media (pointer: coarse) {
   .ds-rate.ds-rate--modern [data-part='star'] {
-    min-inline-size: var(--ds-rate-touch-target-min, 44px);
-    min-block-size: var(--ds-rate-touch-target-min, 44px);
+    min-inline-size: var(--ds-rate-touch-target-min, var(--ds-touch-target-min, 44px));
+    min-block-size: var(--ds-rate-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

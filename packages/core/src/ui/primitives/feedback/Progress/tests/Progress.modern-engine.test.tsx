@@ -97,7 +97,7 @@ describe('Progress modern engine (post Daisy drain)', () => {
       'modern',
     );
 
-    const root = container.querySelector('[data-part="root"]');
+    const root = container.querySelector('[data-part="root"]') as HTMLElement;
     expect(root).toHaveAttribute('role', 'progressbar');
     expect(root).not.toHaveAttribute('aria-valuenow');
     expect(root).toHaveAttribute('data-indeterminate', 'true');

@@ -115,7 +115,7 @@
 .ds-table.ds-table--modern [data-part='table'][data-bordered='true'] {
   /* Width rides the edge grammar (C1b): tenant table chrome wins, then the
      expressive standard role, then the historic literal. */
-  border: var(--ds-table-border-width, var(--ds-edge-standard-width, 1px)) solid var(--ds-table-border, var(--ds-color-border));
+  border: var(--ds-table-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-table-border, var(--ds-color-border));
 }
 
 /* ---- header cells ---- */
@@ -141,7 +141,7 @@
 .ds-table.ds-table--modern [data-part='header-cell'][data-hairline='true'] {
   /* The header rule is the edge grammar's emphasis role (a `ruled` profile
      thickens exactly this line); floors keep it at the historic 1px. */
-  border-bottom: var(--ds-table-header-rule-width, var(--ds-edge-emphasis-width, 1px)) solid var(--ds-table-border, var(--ds-color-border));
+  border-bottom: var(--ds-table-header-rule-width, var(--ds-edge-emphasis-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-table-border, var(--ds-color-border));
 }
 /* Sticky + hairline: in the collapsed-borders model the cell's bottom border
    belongs to the table grid and can stay behind (or vanish) while the cell
@@ -156,7 +156,7 @@
    column width is keyed on the explicit `data-cell-kind` */
 .ds-table.ds-table--modern [data-part='header-cell'][data-cell-kind='expand'],
 .ds-table.ds-table--modern [data-part='header-cell'][data-cell-kind='selection'] {
-  width: calc(var(--_ds-proto-table-utility-column-width, 48px) * var(--ds-density-effective-scale));
+  width: calc(var(--_ds-table-utility-column-width, 48px) * var(--ds-density-effective-scale));
 }
 
 /* ---- sortable header: affordance + keyboard focus ring. Hover paints only
@@ -255,7 +255,7 @@
   transition: background-color var(--ds-motion-normal);
 }
 .ds-table.ds-table--modern [data-part='filter-spacer'] {
-  width: calc(var(--_ds-proto-table-utility-column-width, 48px) * var(--ds-density-effective-scale));
+  width: calc(var(--_ds-table-utility-column-width, 48px) * var(--ds-density-effective-scale));
 }
 .ds-table.ds-table--modern [data-part='filter-cell'] {
   padding: 4px;
@@ -484,11 +484,11 @@
 
 /* ---- expand column ---- */
 .ds-table.ds-table--modern [data-part='expand-cell'] {
-  width: calc(var(--_ds-proto-table-utility-column-width, 48px) * var(--ds-density-effective-scale));
+  width: calc(var(--_ds-table-utility-column-width, 48px) * var(--ds-density-effective-scale));
   text-align: center;
 }
 .ds-table.ds-table--modern [data-part='selection-cell'] {
-  width: calc(var(--_ds-proto-table-utility-column-width, 48px) * var(--ds-density-effective-scale));
+  width: calc(var(--_ds-table-utility-column-width, 48px) * var(--ds-density-effective-scale));
 }
 .ds-table.ds-table--modern [data-part='expand-button'] {
   height: 24px;
@@ -683,11 +683,11 @@
 @media (hover: none), (pointer: coarse) {
   .ds-table.ds-table--modern [data-part='pagination-button'],
   .ds-table.ds-table--modern [data-part='expand-button'] {
-    min-block-size: var(--ds-table-touch-target-min, 44px);
+    min-block-size: var(--ds-table-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 
   .ds-table.ds-table--modern [data-part='expand-button'] {
-    min-inline-size: var(--ds-table-touch-target-min, 44px);
+    min-inline-size: var(--ds-table-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 
   .ds-table.ds-table--modern [data-part='selection-control'] {

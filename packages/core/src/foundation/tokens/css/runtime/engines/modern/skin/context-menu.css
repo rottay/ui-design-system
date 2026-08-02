@@ -34,9 +34,8 @@
  * and a fly-out would be clipped by its own surface. The submenu indicator
  * rotates (direction-neutral) instead of nudging physically, so it needs no
  * `:dir(rtl)` branch; the chevron itself mirrors via the icon facade's
- * autoMirror. The icon well is the family's only new axis and ships as the
- * private `--_ds-proto-context-menu-icon-well` (no `--ds-icon-*` channel
- * exists to consume; Dropdown's well is a family channel of its own). The
+ * autoMirror. The icon well reads the shared `--ds-icon-size-well` channel
+ * (Dropdown's well is a family channel of its own). The
  * shortcut's old `opacity: 0.5` fake-muted is replaced by the semantic
  * `--ds-color-text-muted` channel.
  *
@@ -278,7 +277,7 @@
 /* coarse pointers: physical 44px floor, never a rem floor (tabs.css idiom). */
 @media (pointer: coarse) {
   .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'] {
-    min-block-size: max(44px, var(--ds-context-menu-touch-target-min, 2rem));
+    min-block-size: max(var(--ds-touch-target-min, 44px), var(--ds-context-menu-touch-target-min, 2rem));
   }
 }
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='item'][data-disabled='true'] {
@@ -298,8 +297,8 @@
   display: inline-grid;
   place-items: center;
   flex: none;
-  inline-size: var(--_ds-proto-context-menu-icon-well, var(--ds-icon-size-well, 1.25rem));
-  block-size: var(--_ds-proto-context-menu-icon-well, var(--ds-icon-size-well, 1.25rem));
+  inline-size: var(--ds-icon-size-well, 1.25rem);
+  block-size: var(--ds-icon-size-well, 1.25rem);
 }
 .rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] [data-part='label'] {
   flex: 1 1 auto;

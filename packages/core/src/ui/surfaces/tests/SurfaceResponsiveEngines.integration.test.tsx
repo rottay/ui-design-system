@@ -51,7 +51,10 @@ const detailAdapter: EntityAdapter<WorkspaceView, WorkspaceView> = {
 function buildMarketingConfig(): MarketingSurfaceConfig {
   return {
     visual: {
-      layout: 'split',
+      // `MarketingSurfaceVisualConfig` has no `layout`: hero placement moved to
+      // `heroPosition` and the stacking half is `stackOnMobile`. The dropped key
+      // was never read by the surface, and nothing here asserted it, so it is
+      // removed rather than translated into a `heroPosition` this case never had.
       stackOnMobile: true,
     },
     presentation: {

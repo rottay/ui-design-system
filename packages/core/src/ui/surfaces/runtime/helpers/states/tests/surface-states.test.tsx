@@ -77,7 +77,7 @@ describe('Surface lifecycle states — R2+R3 ownership contract', () => {
       <SurfaceCapabilityAnatomy
         capabilities={[
           { kind: 'action', id: 'export', label: 'Export' },
-          { kind: 'view', id: 'kanban', disabled: true },
+          { kind: 'tab', id: 'kanban', disabled: true },
         ]}
       />,
       { engine: 'modern' },

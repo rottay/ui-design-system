@@ -17,6 +17,19 @@ import {
   renderWithEngine,
 } from '..';
 
+/**
+ * `vitest/globals` declares `describe`/`it` as ambient `const` bindings, and a
+ * `const` never becomes a property of `typeof globalThis` — only `var` does.
+ * These suites legitimately read them off the global object to swap the
+ * registrar, so the property view is spelled out here rather than in the
+ * ambient .d.ts (where it cannot work: the names are already bound).
+ */
+const testGlobals = globalThis as typeof globalThis & {
+  describe: typeof describe;
+  it: typeof it;
+};
+
+
 describe('engine-test-utils', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -50,7 +63,7 @@ describe('engine-test-utils', () => {
   it('registers describe.each for every stable engine', () => {
     const eachRegistrar = vi.fn();
     const describeEachSpy = vi.fn(() => eachRegistrar);
-    const originalDescribe = globalThis.describe;
+    const originalDescribe = testGlobals.describe;
 
     Object.defineProperty(globalThis, 'describe', {
       configurable: true,
@@ -72,7 +85,7 @@ describe('engine-test-utils', () => {
   it('registers it.each for every stable engine', () => {
     const eachRegistrar = vi.fn();
     const itEachSpy = vi.fn(() => eachRegistrar);
-    const originalIt = globalThis.it;
+    const originalIt = testGlobals.it;
 
     Object.defineProperty(globalThis, 'it', {
       configurable: true,

@@ -332,11 +332,11 @@
 /* coarse pointers: physical 44px floor, never a rem floor (tabs.css idiom). */
 @media (pointer: coarse) {
   .rottay-tour--modern[data-part='root'] [data-part='action'] {
-    min-block-size: max(44px, var(--ds-tour-touch-target-min, 2rem));
+    min-block-size: max(var(--ds-touch-target-min, 44px), var(--ds-tour-touch-target-min, 2rem));
   }
   .rottay-tour--modern[data-part='root'] [data-part='close-button'] {
-    inline-size: max(44px, var(--ds-tour-touch-target-min, 1.75rem));
-    block-size: max(44px, var(--ds-tour-touch-target-min, 1.75rem));
+    inline-size: max(var(--ds-touch-target-min, 44px), var(--ds-tour-touch-target-min, 1.75rem));
+    block-size: max(var(--ds-touch-target-min, 44px), var(--ds-tour-touch-target-min, 1.75rem));
     inset-block-start: var(--ds-spacing-1);
     inset-inline-end: var(--ds-spacing-1);
   }

@@ -420,7 +420,14 @@ describe('useSurfaceQuery', () => {
 
   describe('Stale Response Handling', () => {
     it('ignores stale responses from earlier fetches', async () => {
-      let resolveFirst: ((value: SurfaceQueryResult<{ id: number }>) => void) | null = null;
+      // Held on an object rather than in a `let`: the only assignment happens
+      // inside the promise executor below, so flow analysis still sees the
+      // initializer at the call site and narrowed the `let` to `null` -- and
+      // then to `never` through the truthiness guard. A property keeps its
+      // declared type across that boundary.
+      const first: {
+        resolve: ((value: SurfaceQueryResult<{ id: number }>) => void) | null;
+      } = { resolve: null };
       let callCount = 0;
 
       const queryFn = vi.fn(async (params: SurfaceQueryParams) => {
@@ -428,7 +435,7 @@ describe('useSurfaceQuery', () => {
         if (callCount === 1) {
           // First call: wait for manual resolve
           return new Promise<SurfaceQueryResult<{ id: number }>>((resolve) => {
-            resolveFirst = resolve;
+            first.resolve = resolve;
           });
         }
         // Second call: resolve immediately
@@ -460,8 +467,8 @@ describe('useSurfaceQuery', () => {
       });
 
       // Now resolve the first (stale) call
-      if (resolveFirst) {
-        resolveFirst({
+      if (first.resolve) {
+        first.resolve({
           data: [{ id: 1 }, { id: 2 }],
           total: 2,
           page: 1,

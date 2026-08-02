@@ -9,8 +9,8 @@
  * final authored authority for the channels in their coverage declaration;
  * putting them in a named layer would make unlayered application paint win.
  */
-import { existsSync, readFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import postcss from "postcss";
 
@@ -188,6 +188,98 @@ export function auditCascadeEntrypoint(path) {
   return failures;
 }
 
+/**
+ * Files under the CSS root that no entrypoint imports, each with the reason
+ * it is allowed to sit outside the cascade. Anything unreachable and NOT
+ * listed here is a defect: the gate can otherwise certify a layered/unlayered
+ * split forever while one half silently reaches no bundle, which is exactly
+ * how patterns-paint.css lost 246 declarations between 2026-07-25 and
+ * 2026-08-02 without a single gate complaining.
+ */
+export const UNREACHABLE_BY_DESIGN = new Map([
+  ["facade/artifacts/bithire/_source/extension.css", "declared build input to the bithire artifact generator"],
+  ["facade/artifacts/evnto/_source/extension.css", "declared build input to the evnto artifact generator"],
+  ["facade/artifacts/rottay/_source/extension.css", "declared build input to the rottay artifact generator"],
+  ["foundation/typography/font-packs/editorial-display/index.css", "font pack no vertical currently selects"],
+  ["foundation/typography/font-packs/editorial-text/index.css", "font pack no vertical currently selects"],
+  ["foundation/typography/font-packs/geometric-display/index.css", "font pack no vertical currently selects"],
+  ["presentation/components/index.css", "alternative component aggregator, not on the shipped entrypoint path"],
+  ["presentation/components/patterns-paint.css", "tombstone: migrated into patterns.css 2026-08-02, whole-file RETIRE_PROPOSED"],
+  ["runtime/bridges/collapse-paint.css", "tombstone: migrated into collapse.css, retained for downstream source maps"],
+  ["runtime/engines/modern/compiled.css", "build product of build:modern-css"],
+]);
+
+const CSS_ROOT = resolve(packageRoot, "src/foundation/tokens/css");
+
+export function collectReachable(entry, root, seen = new Set()) {
+  const full = resolve(entry);
+  if (seen.has(full) || !existsSync(full)) return seen;
+  seen.add(full);
+  for (const match of readFileSync(full, "utf8").matchAll(IMPORT_RE)) {
+    if (!match[2].startsWith(".")) continue;
+    collectReachable(resolve(dirname(full), match[2]), root, seen);
+  }
+  return seen;
+}
+
+function collectCss(dir, out = []) {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (entry.isDirectory()) {
+      if (entry.name !== "tests" && entry.name !== "__tests__") {
+        collectCss(resolve(dir, entry.name), out);
+      }
+    } else if (entry.name.endsWith(".css")) {
+      out.push(resolve(dir, entry.name));
+    }
+  }
+  return out;
+}
+
+/**
+ * Both halves of every split must ship. A file this gate governs is only
+ * allowed to be unreachable from every entrypoint if it says why.
+ */
+export function auditGovernedFilesAreReachable({
+  cssRoot = CSS_ROOT,
+  entrypoints: entries,
+  allowlist = UNREACHABLE_BY_DESIGN,
+} = {}) {
+  const failures = [];
+  if (!existsSync(cssRoot)) return [`css root does not exist: ${cssRoot}`];
+
+  const entryDir = resolve(cssRoot, "facade/entrypoints");
+  const roots =
+    entries ??
+    (existsSync(entryDir)
+      ? readdirSync(entryDir)
+          .filter((name) => name.endsWith(".css"))
+          .map((name) => resolve(entryDir, name))
+      : []);
+  if (roots.length === 0) return [`no entrypoints found under ${entryDir}`];
+
+  const reachable = new Set();
+  for (const root of roots) collectReachable(root, cssRoot, reachable);
+
+  for (const file of collectCss(cssRoot)) {
+    const key = relative(cssRoot, file).replaceAll("\\", "/");
+    const declared = allowlist.has(key);
+    if (reachable.has(file)) {
+      if (declared) {
+        failures.push(
+          `stale unreachable-by-design entry: ${key} IS imported; remove it from UNREACHABLE_BY_DESIGN`
+        );
+      }
+      continue;
+    }
+    if (!declared) {
+      failures.push(
+        `governed file reaches no bundle: ${key} is imported by no entrypoint. Either import it from an entrypoint under its cascade owner, or declare it in UNREACHABLE_BY_DESIGN with the reason.`
+      );
+    }
+  }
+  return failures;
+}
+
 export function auditModernThemeOwnership({
   projectionPath = modernFrameworkProjection,
   paintPath = modernThemePaint,
@@ -283,16 +375,34 @@ export function auditModernThemeOwnership({
   return failures;
 }
 
-const failures = entrypoints.flatMap((entry) =>
-  auditCascadeEntrypoint(entry).map((failure) => `${entry}: ${failure}`)
-);
-failures.push(
-  ...auditModernThemeOwnership().map(
-    (failure) => `modern-theme-ownership: ${failure}`
-  )
-);
+// Importable: the audits above are exported for drills, so the CLI body only
+// runs when this file IS the process entry.
+const isCli =
+  process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
-if (failures.length > 0) {
+const failures = !isCli
+  ? []
+  : entrypoints.flatMap((entry) =>
+      auditCascadeEntrypoint(entry).map((failure) => `${entry}: ${failure}`)
+    );
+if (isCli) {
+  failures.push(
+    ...auditModernThemeOwnership().map(
+      (failure) => `modern-theme-ownership: ${failure}`
+    )
+  );
+  // Reachability is a property of the real tree, so it is skipped when the
+  // caller pointed --entry at a synthetic fixture.
+  if (entryArgs.length === 0) {
+    failures.push(
+      ...auditGovernedFilesAreReachable().map(
+        (failure) => `both-halves-ship: ${failure}`
+      )
+    );
+  }
+}
+
+if (isCli && failures.length > 0) {
   console.error(
     `css-layer-paint-gate: FAIL\n${failures
       .map((failure) => `- ${failure}`)
@@ -301,8 +411,10 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log(
-  `css-layer-paint-gate: PASS (${entrypoints.length} entrypoint${
-    entrypoints.length === 1 ? "" : "s"
-  })`
-);
+if (isCli) {
+  console.log(
+    `css-layer-paint-gate: PASS (${entrypoints.length} entrypoint${
+      entrypoints.length === 1 ? "" : "s"
+    })`
+  );
+}

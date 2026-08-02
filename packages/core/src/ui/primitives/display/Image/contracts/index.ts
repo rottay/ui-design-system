@@ -73,7 +73,7 @@ export type ImageFit = 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
 /**
  * Image component props.
  */
-export interface ImageProps extends BaseComponentProps, EngineAwareProps, Omit<ImgHTMLAttributes<HTMLImageElement>, 'alt'> {
+export interface ImageProps extends BaseComponentProps, EngineAwareProps, Omit<ImgHTMLAttributes<HTMLImageElement>, 'alt' | 'dir'> {
   /**
    * Image URL.
    */

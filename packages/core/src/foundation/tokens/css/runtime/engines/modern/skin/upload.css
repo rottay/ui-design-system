@@ -712,11 +712,11 @@
   .ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-action'],
   .ds-upload.ds-upload--modern [data-part='preview-close-button'],
   .ds-upload-dragger.ds-upload-dragger--modern [data-part='preview-close-button'] {
-    min-inline-size: var(--ds-upload-touch-target-min, 44px);
-    min-block-size: var(--ds-upload-touch-target-min, 44px);
+    min-inline-size: var(--ds-upload-touch-target-min, var(--ds-touch-target-min, 44px));
+    min-block-size: var(--ds-upload-touch-target-min, var(--ds-touch-target-min, 44px));
   }
   .ds-upload.ds-upload--modern[data-part='root'] [data-part='trigger'] button {
-    min-block-size: var(--ds-upload-touch-target-min, 44px);
+    min-block-size: var(--ds-upload-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

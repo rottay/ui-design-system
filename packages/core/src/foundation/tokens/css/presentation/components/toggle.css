@@ -46,11 +46,6 @@
   --ds-toggle-xl-dot-offset: 0.125rem;      /* 2px */
   --ds-toggle-xl-label-font-size: 1.125rem; /* 18px */
 
-  /* Default size */
-  --ds-toggle-default-width: var(--ds-toggle-md-width);
-  --ds-toggle-default-height: var(--ds-toggle-md-height);
-  --ds-toggle-default-dot: var(--ds-toggle-md-dot);
-
   /* ========================================================================
      COLOR VARIANTS - Semantic Colors
      Different color schemes for toggle states

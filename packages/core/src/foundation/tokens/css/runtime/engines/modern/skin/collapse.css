@@ -102,13 +102,13 @@
         transition block; this rule's (0,5,0) outranks it). ---- */
 @media (hover: none), (pointer: coarse) {
   .rottay-collapse[data-part='root'] [data-part='header'][role='button'] {
-    min-block-size: var(--ds-collapse-touch-target-min, 44px);
+    min-block-size: var(--ds-collapse-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 
   .rottay-collapse[data-part='root'] [data-part='arrow'][role='button'] {
     display: inline-flex;
-    min-block-size: var(--ds-collapse-touch-target-min, 44px);
-    min-inline-size: var(--ds-collapse-touch-target-min, 44px);
+    min-block-size: var(--ds-collapse-touch-target-min, var(--ds-touch-target-min, 44px));
+    min-inline-size: var(--ds-collapse-touch-target-min, var(--ds-touch-target-min, 44px));
     align-items: center;
     justify-content: center;
   }

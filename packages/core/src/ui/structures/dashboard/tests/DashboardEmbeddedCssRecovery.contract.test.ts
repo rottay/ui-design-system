@@ -537,7 +537,8 @@ const CRITICAL_RULE_SEMANTICS = [
     declarations: {
       'border-color':
         'var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)))',
-      transform: 'translateY(-6px) scale(1.02)',
+      transform:
+        'var(--ds-metric-card-hover-transform, translateY(-6px) scale(1.02))',
       'box-shadow':
         'var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)))',
     },
@@ -721,7 +722,9 @@ describe('dashboard embedded CSS recovery contract', () => {
   it('accounts for 28 live keyframes and preserves the three known dead DTC definitions explicitly', () => {
     const definitionNames = new Set<string>();
     for (const contract of CSS_CONTRACTS) {
-      parseRelativeCss(contract.path).walkAtRules('keyframes', (rule) => definitionNames.add(rule.params));
+      parseRelativeCss(contract.path).walkAtRules('keyframes', (rule) => {
+        definitionNames.add(rule.params);
+      });
     }
 
     expect(LIVE_ANIMATION_CONSUMERS).toHaveLength(28);
@@ -791,7 +794,9 @@ describe('dashboard embedded CSS recovery contract', () => {
       const css = readRelative(contract.path);
       const root = postcss.parse(css, { from: contract.path });
 
-      root.walkAtRules('keyframes', (rule) => keyframes.push(rule.params));
+      root.walkAtRules('keyframes', (rule) => {
+        keyframes.push(rule.params);
+      });
 
       for (const node of root.nodes) {
         if (node.type !== 'rule') continue;

@@ -10,6 +10,9 @@
 
 /// <reference types="vitest/globals" />
 /// <reference types="@testing-library/jest-dom" />
+// `import.meta.glob` is Vite's, not Node's — the entrypoint contract tests
+// enumerate engine modules with it.
+/// <reference types="vite/client" />
 
 declare module '*.css?raw' {
   const content: string;

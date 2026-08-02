@@ -68,7 +68,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
 
   const handleCreate = useCallback(() => {
     if (!newViewName.trim()) return;
-    onViewCreate({
+    onViewCreate?.({
       name: newViewName.trim(),
       config: {},
     });
@@ -78,17 +78,19 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
 
   const handleRenameStart = useCallback(
     (view: SavedView) => {
-      if (!allowRename) return;
+      // Same visibility law as the menu item that reaches here: without a
+      // handler the action is not available, so editing must not start either.
+      if (!allowRename || !onViewRename) return;
       setEditingViewId(view.id);
       setEditingName(view.name);
       setOpenMenuId(null);
     },
-    [allowRename]
+    [allowRename, onViewRename]
   );
 
   const handleRenameConfirm = useCallback(() => {
     if (editingViewId && editingName.trim()) {
-      onViewRename(editingViewId, editingName.trim());
+      onViewRename?.(editingViewId, editingName.trim());
     }
     setEditingViewId(null);
     setEditingName('');
@@ -161,8 +163,18 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
     );
   }
 
-  // Disable creation when maxViews cap is reached (e.g. plan-based limits).
-  const canCreate = allowCreate && (!maxViews || views.length < maxViews);
+  /**
+   * VISIBILITY LAW (contracts/index.ts:80-82): an absent mutation handler means
+   * the action is NOT AVAILABLE and the bar renders WITHOUT it. An `allow*` flag
+   * is a permission, not a capability; rendering on the flag alone is what
+   * produced visible inert actions. Absence is omission, never `disabled`.
+   *
+   * maxViews still caps creation on top of that (e.g. plan-based limits).
+   */
+  const canRename = allowRename && Boolean(onViewRename);
+  const canDelete = allowDelete && Boolean(onViewDelete);
+  const canCreate =
+    allowCreate && Boolean(onViewCreate) && (!maxViews || views.length < maxViews);
 
   return (
     <div
@@ -186,7 +198,14 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
         const isDropTarget = dropTargetId === view.id;
         const isMenuOpen = openMenuId === view.id;
         const customActions = getMenuActions?.(view) ?? [];
-        const hasMenu = allowRename || allowDelete || onViewDuplicate || customActions.length > 0;
+        /* Includes the isDefault carve-out: a default view whose only permitted
+           action is delete has nothing to show, and an empty trigger is itself
+           an inert affordance. */
+        const hasMenu =
+          canRename ||
+          (canDelete && !view.isDefault) ||
+          Boolean(onViewDuplicate) ||
+          customActions.length > 0;
 
         return (
           <div
@@ -316,7 +335,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                       padding: 4,
                     }}
                   >
-                    {allowRename && (
+                    {canRename && (
                       <button
                         data-part="menu-item"
                         className="ds-saved-views__menu-item"
@@ -384,7 +403,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                     ))}
                     {/* Default views are protected from deletion to prevent
                         accidental removal of the system-provided baseline. */}
-                    {allowDelete && !view.isDefault && (
+                    {canDelete && !view.isDefault && (
                       <>
                         <div
                           data-part="divider"
@@ -400,7 +419,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                           data-danger={true}
                           onClick={(e) => {
                             e.stopPropagation();
-                            onViewDelete(view.id);
+                            onViewDelete?.(view.id);
                             setOpenMenuId(null);
                           }}
                           style={{

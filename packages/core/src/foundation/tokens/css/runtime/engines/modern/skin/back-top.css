@@ -43,7 +43,7 @@
   position: fixed;
   inset-block-end: calc(var(--ds-backtop-inset-block-end, 2rem) + env(safe-area-inset-bottom, 0px));
   inset-inline-end: var(--ds-backtop-inset-inline-end, 2rem);
-  z-index: var(--ds-backtop-z-index, var(--ds-z-index-fixed));
+  z-index: var(--ds-backtop-z-index, var(--ds-z-fixed));
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -141,5 +141,14 @@
     animation: none;
     transition: none;
     transform: none;
+  }
+}
+
+/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
+   below the canonical --ds-touch-target-min channel; fine pointers keep the
+   authored size untouched. */
+@media (hover: none), (pointer: coarse) {
+  .rottay-backtop.rottay-backtop--modern[data-part='trigger'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

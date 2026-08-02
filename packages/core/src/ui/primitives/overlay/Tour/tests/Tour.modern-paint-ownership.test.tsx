@@ -256,7 +256,12 @@ describe('Tour modern engine — the skin owns the drained chrome', () => {
     expect(SKIN).toContain('outline: 2px solid var(--ds-tour-focus-ring,');
     expect(SKIN).toContain('@media (forced-colors: active)');
     expect(SKIN).toContain('@media (pointer: coarse)');
-    expect(SKIN).toContain('min-block-size: max(44px, var(--ds-tour-touch-target-min, 2rem));');
+    // C2c law: the coarse floor maxes the single canonical touch channel
+    // against the family's own, so 44px is now that channel's fallback rather
+    // than a bare literal. Pinned as a chain, tolerant of reformatting.
+    expect(SKIN).toMatch(
+      /min-block-size:\s*max\(\s*var\(\s*--ds-touch-target-min\s*,\s*44px\s*\)\s*,\s*var\(\s*--ds-tour-touch-target-min\s*,\s*2rem\s*\)\s*\)/
+    );
     expect(SKIN).toContain('@media (prefers-reduced-motion: reduce)');
   });
 });

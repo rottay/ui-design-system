@@ -82,7 +82,7 @@ describe('ErrorHandler', () => {
 
     const snapshot = handler.getErrorLog();
     expect(() => {
-      (snapshot as Array<{ code: string }>).push({ code: 'mutate' });
+      (snapshot as unknown as Array<{ code: string }>).push({ code: 'mutate' });
     }).toThrow();
 
     handler.clearLog();

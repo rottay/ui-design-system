@@ -17,6 +17,7 @@
  *   this expansion never duplicates their CSS channels.
  */
 
+import { EXPRESSIVE_A11Y_FLOORS } from '..';
 import type { ExpressiveAxes } from '..';
 
 /**
@@ -228,8 +229,15 @@ const EDGE_PROFILE_VARIABLES: Record<
   },
   'inset-double': {
     '--ds-edge-hairline-width': '1px',
-    '--ds-edge-standard-width': '1px',
+    // A genuine double keyline: the style channel switches every container
+    // consumer to `double`, and 3px is the minimum width where CSS renders
+    // both strokes. Dividers follow the same posture through the existing
+    // divider channels (floors keep them 1px solid everywhere else).
+    '--ds-edge-standard-width': '3px',
+    '--ds-edge-standard-style': 'double',
     '--ds-edge-emphasis-width': '3px',
+    '--ds-divider-width': '3px',
+    '--ds-divider-style': 'double',
   },
 };
 
@@ -256,11 +264,31 @@ const ELEVATION_PROFILE_VARIABLES: Record<
   NonNullable<ExpressiveAxes['elevation']>,
   Readonly<Record<string, string>>
 > = {
+  // C2: postures now also move the key/ambient strength dials the parametric
+  // --ds-elevation-1..6 ramp composes (default.css §5). One ramp, two dials,
+  // zero per-component shadows. hairline-lift deliberately softens both
+  // (keylines carry its depth); dramatic/luminous push them past neutral.
   flat: { '--ds-elevation-lift-strength': '0' },
-  'hairline-lift': { '--ds-elevation-lift-strength': '0' },
-  'soft-depth': { '--ds-elevation-lift-strength': '2' },
-  dramatic: { '--ds-elevation-lift-strength': '3' },
-  'luminous-glow': { '--ds-elevation-lift-strength': '2' },
+  'hairline-lift': {
+    '--ds-elevation-lift-strength': '0',
+    '--ds-shadow-key-strength': '0.7',
+    '--ds-shadow-ambient-strength': '0.6',
+  },
+  'soft-depth': {
+    '--ds-elevation-lift-strength': '2',
+    '--ds-shadow-key-strength': '1',
+    '--ds-shadow-ambient-strength': '1.15',
+  },
+  dramatic: {
+    '--ds-elevation-lift-strength': '3',
+    '--ds-shadow-key-strength': '1.35',
+    '--ds-shadow-ambient-strength': '1.25',
+  },
+  'luminous-glow': {
+    '--ds-elevation-lift-strength': '2',
+    '--ds-shadow-key-strength': '1.1',
+    '--ds-shadow-ambient-strength': '1.35',
+  },
 };
 
 /**
@@ -288,10 +316,14 @@ const MATERIAL_PROFILE_VARIABLES: Partial<
       'linear-gradient(color-mix(in srgb, var(--ds-color-text-primary) calc(2% * var(--ds-effect-intensity, 1)), transparent), color-mix(in srgb, var(--ds-color-text-primary) calc(2% * var(--ds-effect-intensity, 1)), transparent))',
     '--ds-material-card-highlight':
       'color-mix(in srgb, var(--ds-color-primary) calc(4% * var(--ds-effect-intensity, 1)), transparent)',
+    // C2: warm materials tint their shadows through the elevation ramp's
+    // color authority — a paper product never casts a cold gray shadow.
+    '--ds-shadow-tint': 'color-mix(in srgb, var(--ds-color-primary) 25%, #000)',
   },
   'soft-depth': {
     '--ds-material-card-highlight':
       'color-mix(in srgb, var(--ds-color-primary) calc(6% * var(--ds-effect-intensity, 1)), transparent)',
+    '--ds-shadow-tint': 'color-mix(in srgb, var(--ds-color-primary) 18%, #000)',
   },
   frosted: {
     '--ds-material-overlay-texture':
@@ -302,6 +334,7 @@ const MATERIAL_PROFILE_VARIABLES: Partial<
       'color-mix(in srgb, var(--ds-color-primary) calc(10% * var(--ds-effect-intensity, 1)), transparent)',
     '--ds-material-raised-highlight':
       'color-mix(in srgb, var(--ds-color-primary) calc(12% * var(--ds-effect-intensity, 1)), transparent)',
+    '--ds-shadow-tint': 'color-mix(in srgb, var(--ds-color-primary) 32%, #000)',
   },
 };
 
@@ -335,11 +368,29 @@ const MOTIF_PROFILE_VARIABLES: Partial<
   },
 };
 
+/**
+ * A11y floor as an EXECUTABLE invariant, not a constant: every edge-width
+ * value the expansion emits is clamped to the universal cap. A future table
+ * row cannot ship decoration-grade borders even by typo; the compiler's
+ * artifact guard re-asserts the same invariant downstream.
+ */
+export function clampExpressiveEdgeWidth(value: string): string {
+  const parsed = Number.parseFloat(value);
+  if (!Number.isFinite(parsed)) return value;
+  return parsed > EXPRESSIVE_A11Y_FLOORS.edgeWidthMaxPx
+    ? `${EXPRESSIVE_A11Y_FLOORS.edgeWidthMaxPx}px`
+    : value;
+}
+
 function sortedRecord(
   record: Record<string, string>
 ): Readonly<Record<string, string>> {
   return Object.fromEntries(
-    Object.entries(record).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+    Object.entries(record)
+      .map(([key, value]): [string, string] =>
+        key.includes('width') ? [key, clampExpressiveEdgeWidth(value)] : [key, value]
+      )
+      .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
   );
 }
 

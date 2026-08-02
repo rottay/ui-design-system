@@ -64,7 +64,7 @@ describe("Evnto canonical visual axes", () => {
 
   it("shares one exact immutable source across brand, profile, and vertical registries", () => {
     expect(evntoBrandTheme.surfaces).toBe(EVNTO_CANONICAL_SURFACES);
-    expect(productProfile?.personality.animation).toBe(EVNTO_CANONICAL_MOTION);
+    expect(productProfile?.personality?.animation).toBe(EVNTO_CANONICAL_MOTION);
     expect(vertical?.personality.animation).toBe(EVNTO_CANONICAL_MOTION);
     expect(productProfile?.tokenOverrides?.borderRadius).toBe(
       EVNTO_CANONICAL_SURFACES.borderRadius
@@ -99,7 +99,7 @@ describe("Evnto canonical visual axes", () => {
     expect(evntoBrandTheme.surfaces?.borderRadius?.md).toBe("14px");
     expect(productProfile?.tokenOverrides?.borderRadius?.md).toBe("14px");
     expect(vertical?.tokenOverrides?.borderRadius?.md).toBe("14px");
-    expect(productProfile?.personality.animation?.entranceDuration).toBe(350);
+    expect(productProfile?.personality?.animation?.entranceDuration).toBe(350);
     expect(vertical?.personality.animation?.entranceDuration).toBe(350);
   });
 });

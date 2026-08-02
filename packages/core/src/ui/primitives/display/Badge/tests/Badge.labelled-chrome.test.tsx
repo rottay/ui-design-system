@@ -45,7 +45,9 @@ describe('Badge labelled children paint chrome on every engine (WO-ENG-13)', () 
   });
 
   it.each(STABLE_ENGINES)('%s engine clips a long label with the ENG-09 guard', async (engine) => {
-    const { findByText } = renderWithEngine(<Badge variant="info">{LONG_LABEL}</Badge>, engine);
+    // `tone="info"` renders the identical `data-variant="info"` chrome this
+    // clipping case has always measured; `info` is a Tone, not a Variant.
+    const { findByText } = renderWithEngine(<Badge tone="info">{LONG_LABEL}</Badge>, engine);
     const label = await findByText(LONG_LABEL);
     const el = paintedBadge(label, engine);
 

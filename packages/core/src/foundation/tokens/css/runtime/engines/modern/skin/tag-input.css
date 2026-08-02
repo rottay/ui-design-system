@@ -122,7 +122,11 @@
    so the flash wins the tie during the beat, then transitions back out on
    the governed channels (reduced motion lands in each state directly). */
 .ds-tag-input.ds-tag-input--modern[data-part='root'][data-rejected] {
-  --_ds-tag-input-rejected-ink: var(--_ds-proto-tag-input-rejected-color, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%));
+  /* AUT-1 absorbed: the same warning-over-neutral-well ink the callout uses,
+     now read from the foundation authority instead of a local twin. The
+     fallback is the pre-authority mix verbatim. NOT --ds-color-on-warning:
+     that is ink on a SOLID fill and would flatten this to a neutral. */
+  --_ds-tag-input-rejected-ink: var(--ds-color-warning-ink, color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%));
   border-color: var(--_ds-tag-input-rejected-ink);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--_ds-tag-input-rejected-ink) 24%, transparent);
 }

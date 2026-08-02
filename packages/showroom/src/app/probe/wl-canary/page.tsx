@@ -11,6 +11,7 @@ import {
   DesignSystemProvider,
   Empty,
   Input,
+  Menu,
   Modal,
   Pagination,
   PatternDataTable,
@@ -39,7 +40,10 @@ import {
 } from "@rottay/design-system";
 import { Icon } from "@rottay/design-system/icons";
 
-import { tenantConfigFor as brandLocaleTenantConfigFor } from "@/components/brand-locale-evidence";
+import {
+  tenantConfigFor as brandLocaleTenantConfigFor,
+  seedsOnlyTenantConfig,
+} from "@/components/brand-locale-evidence";
 
 /**
  * R2 white-label canary (2026-07-27).
@@ -67,13 +71,24 @@ import { tenantConfigFor as brandLocaleTenantConfigFor } from "@/components/bran
  * borders and shadows come from the components. No Daisy classes, no new CSS.
  */
 
-type Source = "bithire-static" | "themanagement-db";
+type Source = "bithire-static" | "themanagement-db" | "themanagement-seeds";
 type Locale = "en" | "es" | "ar";
 type Density = "compact" | "comfortable" | "spacious";
 type Theme = "light" | "dark";
 
-function tenantConfig(source: Source, locale: Locale, density: Density, theme: Theme) {
+function tenantConfig(
+  source: Source,
+  locale: Locale,
+  density: Density,
+  theme: Theme,
+  seedPrimary?: string,
+) {
   const appearanceDensity = density === "comfortable" ? ("normal" as const) : density;
+  if (source === "themanagement-seeds") {
+    // Deliberately NOT spread with density/theme: authoring anything beyond the
+    // four seeds would break the very property this source exists to prove.
+    return seedsOnlyTenantConfig(locale, seedPrimary);
+  }
   if (source === "themanagement-db") {
     // Same wiring as the daisy-regression probe: DB fixture tenant, dark via Appearance.
     const base = brandLocaleTenantConfigFor("themanagementmiami", locale);
@@ -583,6 +598,13 @@ function TableSection({ copy }: { copy: CanaryCopy }) {
           rowKey="id"
           columns={columns}
           striped
+          // The canary's declared pattern consumer is the REAL table header.
+          // `autoMobileCards` defaults to true and the table measures its own
+          // container (this column is `flex: 1 1 560px`), so it switched to the
+          // mobile-card renderer at every viewport and no header row existed to
+          // probe. Pinning it keeps the header consumer deterministic; mobile
+          // posture is still covered by the viewport axis on the other parts.
+          autoMobileCards={false}
         />
         <Box style={{ display: "flex", justifyContent: "flex-end" }}>
           <Pagination current={page} total={248} pageSize={5} onChange={setPage} />
@@ -600,6 +622,20 @@ function SideSection({ copy }: { copy: CanaryCopy }) {
   const [stage, setStage] = useState<string | undefined>(undefined);
   return (
     <Box data-testid="wc-side">
+      {/* navigation.sidebar-tone consumer. The capability's declared evidence
+          file is the modern Menu skin, so the canary must render a real Menu:
+          a Card standing in for a sidebar would prove nothing about it. */}
+      <Box data-testid="wc-sidebar" style={{ marginBlockEnd: 24 }}>
+        <Menu
+          mode="vertical"
+          defaultSelectedKeys={["pipeline"]}
+          items={[
+            { key: "pipeline", label: copy.tabOverview, icon: <Icon name="navigation.home" decorative /> },
+            { key: "matching", label: copy.tabMatching, icon: <Icon name="action.search" decorative /> },
+            { key: "settings", label: copy.settings, icon: <Icon name="navigation.settings" decorative /> },
+          ]}
+        />
+      </Box>
       <Card variant="elevated">
         <Card.Header
           title={copy.cardTitle}
@@ -809,9 +845,39 @@ function StatesSection({ copy }: { copy: CanaryCopy }) {
 // Page
 // ---------------------------------------------------------------------------
 
+/** The only two mountable sources. Anything else is a hard failure. */
+const SOURCES: readonly Source[] = ["bithire-static", "themanagement-db", "themanagement-seeds"];
+
+/**
+ * A requested source that cannot mount must FAIL VISIBLY. The previous form
+ * coerced any unrecognised `?source` to `bithire-static`, so a typo — or a
+ * tenant that stopped resolving — rendered a different vertical under the
+ * requested name. That silent substitution is the defect this probe exists to
+ * catch, so it cannot be allowed to live in the probe's own plumbing.
+ */
+function ProbeFailure({ requested }: { requested: string }) {
+  return (
+    <main
+      data-testid="wc-source-failure"
+      data-canary-source-requested={requested}
+      style={{ minHeight: "100vh", padding: 32, fontFamily: "system-ui, sans-serif", background: "#2b0b0b", color: "#ffd9d9" }}
+    >
+      <h1 style={{ margin: 0, fontSize: "1.5rem" }}>canary source did not mount</h1>
+      <p style={{ maxWidth: 720, lineHeight: 1.6 }}>
+        Requested source <code>{requested || "(empty)"}</code> is not one of{" "}
+        <code>{SOURCES.join(" | ")}</code>. Nothing is rendered on purpose: falling back to
+        another tenant would make this probe certify the wrong vertical under the requested name.
+      </p>
+    </main>
+  );
+}
+
 function ProbeContent() {
   const searchParams = useSearchParams();
-  const source: Source = searchParams.get("source") === "themanagement-db" ? "themanagement-db" : "bithire-static";
+  const requestedSource = searchParams.get("source");
+  // Absent is the documented default; PRESENT-BUT-UNKNOWN is an error.
+  const sourceIsValid = requestedSource === null || (SOURCES as readonly string[]).includes(requestedSource);
+  const source: Source = (requestedSource ?? "bithire-static") as Source;
   const locale: Locale = searchParams.get("locale") === "es" || searchParams.get("locale") === "ar" ? (searchParams.get("locale") as Locale) : "en";
   const density: Density = searchParams.get("density") === "compact" || searchParams.get("density") === "spacious" ? (searchParams.get("density") as Density) : "comfortable";
   const theme: Theme = searchParams.get("theme") === "dark" ? "dark" : "light";
@@ -820,12 +886,25 @@ function ProbeContent() {
   const modalInitiallyOpen = searchParams.get("modal") === "1";
   const sheetInitiallyOpen = searchParams.get("sheet") === "1";
 
+  const seedPrimary = searchParams.get("seedPrimary") ?? undefined;
   const config = useMemo(
-    () => tenantConfig(source, locale, density, theme),
-    [source, locale, density, theme],
+    () => tenantConfig(source, locale, density, theme, seedPrimary),
+    [source, locale, density, theme, seedPrimary],
   );
   const copy = COPY[locale];
   const appearanceDensity: DensityKey = density;
+
+  if (!sourceIsValid) return <ProbeFailure requested={requestedSource ?? ""} />;
+
+  // The mounted identity must also MATCH what was asked for: a resolver that
+  // quietly returns another tenant is the same defect wearing a valid name.
+  const expectedSlug =
+    source === "themanagement-db"
+      ? "themanagementmiami"
+      : source === "themanagement-seeds"
+        ? "themanagementseeds"
+        : "bithire";
+  if (config.slug !== expectedSlug) return <ProbeFailure requested={`${source} -> resolved '${config.slug}'`} />;
 
   return (
     <DesignSystemProvider
@@ -838,6 +917,13 @@ function ProbeContent() {
       <Box
         data-testid="wc-root"
         data-ds-root=""
+        // Contract markers: the suite reads the identity that ACTUALLY mounted,
+        // never the query string it asked for. Comparing the two is what makes
+        // a silent tenant substitution detectable from the DOM alone.
+        data-canary-source={source}
+        data-canary-tenant={config.slug}
+        data-canary-engine="modern"
+        data-canary-locale={locale}
         dir={locale === "ar" ? "rtl" : "ltr"}
         style={{
           background: "var(--ds-color-background)",

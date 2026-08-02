@@ -51,12 +51,6 @@
   --ds-select-xl-icon-size: 1.5rem;         /* 24px */
   --ds-select-xl-border-radius: var(--ds-radius-lg);
 
-  /* Default size */
-  --ds-select-default-height: var(--ds-select-md-height);
-  --ds-select-default-font-size: var(--ds-select-md-font-size);
-  --ds-select-default-padding: var(--ds-select-md-padding);
-  --ds-select-default-padding-x: var(--ds-select-md-padding-x);
-
   /* ========================================================================
      DEFAULT STATE - Base Appearance
      Default select styling

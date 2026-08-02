@@ -24,7 +24,7 @@ import ModernModal from '../engines/modern';
 
 /** ModernModal calls useTranslation(), which requires an I18nProvider. */
 const withI18n = (ui: ReactNode): React.ReactElement => (
-  <I18nProvider>{ui}</I18nProvider>
+  <I18nProvider locale="en">{ui}</I18nProvider>
 );
 
 // happy-dom does not implement the native dialog top layer. `showModal()` is
@@ -75,7 +75,7 @@ describe('Modal modern -- top-layer promotion', () => {
     const { calls } = trackPromotions();
 
     render(withI18n(
-      <ModernModal open onClose={vi.fn()} ariaLabel="m">
+      <ModernModal open onClose={vi.fn()} aria-label="m">
         <p>body</p>
       </ModernModal>,
     ));
@@ -90,7 +90,7 @@ describe('Modal modern -- top-layer promotion', () => {
     const { calls } = trackPromotions();
 
     const { rerender } = render(withI18n(
-      <ModernModal open={false} onClose={vi.fn()} ariaLabel="m">
+      <ModernModal open={false} onClose={vi.fn()} aria-label="m">
         <p>body</p>
       </ModernModal>,
     ));
@@ -98,7 +98,7 @@ describe('Modal modern -- top-layer promotion', () => {
     expect(calls).toHaveLength(0);
 
     rerender(withI18n(
-      <ModernModal open onClose={vi.fn()} ariaLabel="m">
+      <ModernModal open onClose={vi.fn()} aria-label="m">
         <p>body</p>
       </ModernModal>,
     ));
@@ -115,19 +115,19 @@ describe('Modal modern -- top-layer promotion', () => {
     const { calls } = trackPromotions();
 
     const { rerender } = render(withI18n(
-      <ModernModal open onClose={vi.fn()} ariaLabel="m" title="a">
+      <ModernModal open onClose={vi.fn()} aria-label="m" title="a">
         <p>body</p>
       </ModernModal>,
     ));
     expect(calls).toHaveLength(1);
 
     rerender(withI18n(
-      <ModernModal open onClose={vi.fn()} ariaLabel="m" title="b">
+      <ModernModal open onClose={vi.fn()} aria-label="m" title="b">
         <p>body</p>
       </ModernModal>,
     ));
     rerender(withI18n(
-      <ModernModal open onClose={vi.fn()} ariaLabel="m" title="c">
+      <ModernModal open onClose={vi.fn()} aria-label="m" title="c">
         <p>body</p>
       </ModernModal>,
     ));
@@ -139,7 +139,7 @@ describe('Modal modern -- top-layer promotion', () => {
   it('survives a rapid open -> closed -> open cycle with one promotion per open', async () => {
     const { calls } = trackPromotions();
     const modal = (open: boolean) => withI18n(
-      <ModernModal open={open} onClose={vi.fn()} ariaLabel="m">
+      <ModernModal open={open} onClose={vi.fn()} aria-label="m">
         <p>body</p>
       </ModernModal>,
     );
@@ -167,7 +167,7 @@ describe('Modal modern -- top-layer promotion', () => {
     render(
       <StrictMode>
         {withI18n(
-          <ModernModal open onClose={vi.fn()} ariaLabel="m">
+          <ModernModal open onClose={vi.fn()} aria-label="m">
             <p>body</p>
           </ModernModal>,
         )}
@@ -183,7 +183,7 @@ describe('Modal modern -- top-layer promotion', () => {
   it('withdraws the host AND leaves no open dialog behind on close', async () => {
     const { calls } = trackPromotions();
     const modal = (open: boolean) => withI18n(
-      <ModernModal open={open} onClose={vi.fn()} ariaLabel="m">
+      <ModernModal open={open} onClose={vi.fn()} aria-label="m">
         <p>body</p>
       </ModernModal>,
     );
@@ -212,7 +212,7 @@ describe('Modal modern -- top-layer promotion', () => {
     trackPromotions();
 
     render(withI18n(
-      <ModernModal open onClose={vi.fn()} ariaLabel="m">
+      <ModernModal open onClose={vi.fn()} aria-label="m">
         <p>body</p>
       </ModernModal>,
     ));

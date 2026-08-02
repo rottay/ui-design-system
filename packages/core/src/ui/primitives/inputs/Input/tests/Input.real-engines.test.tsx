@@ -672,9 +672,11 @@ describe("Input CSS-first skin (WO-ARC-07)", () => {
   it("the Input skin consumes visibly divergent values from both real brands", () => {
     const bithire = compileBrandTheme({
       brandTheme: bithireBrandTheme,
+      tenantSlug: 'bithire',
     }).cssVariables;
     const management = compileBrandTheme({
       brandTheme: themanagementmiamiBrandTheme,
+      tenantSlug: 'themanagementmiami',
     }).cssVariables;
     const skin = readFileSync(
       join(

@@ -67,12 +67,12 @@
 
 :where(.ds-metrics-cards) .metric-card-v3 {
   animation: ds-metrics-cards-card-enter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: var(--ds-metric-card-transition, all 0.4s cubic-bezier(0.4, 0, 0.2, 1));
 }
 
 :where(.ds-metrics-cards) .metric-card-v3:hover {
   border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
-  transform: translateY(-6px) scale(1.02);
+  transform: var(--ds-metric-card-hover-transform, translateY(-6px) scale(1.02));
   box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
 }
 

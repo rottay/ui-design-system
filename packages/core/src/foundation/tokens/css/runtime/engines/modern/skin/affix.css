@@ -28,7 +28,7 @@
  * `data-affix-edge='top'|'bottom'` in BOTH modes; a governed pseudo-element
  * keyline (pointer-events:none, logically positioned) paints the
  * content-facing edge per direction, and the forced-colors cut follows the
- * same stamp. The keyline rides `--_ds-proto-affix-affixed-keyline` with an
+ * same stamp. The keyline rides `--_ds-affix-affixed-keyline` with an
  * intensity-scaled default (`effectIntensity: 0` dissolves it while the
  * elevation keeps the hierarchy). A pseudo-element — not a composed
  * box-shadow layer — so a tenant setting `--ds-affix-affixed-shadow: none`
@@ -85,7 +85,7 @@
   pointer-events: none;
   border-radius: inherit;
   background: var(
-    --_ds-proto-affix-affixed-keyline,
+    --_ds-affix-affixed-keyline,
     color-mix(in srgb, var(--ds-color-border-secondary) calc(55% * var(--ds-effect-intensity)), transparent)
   );
 }

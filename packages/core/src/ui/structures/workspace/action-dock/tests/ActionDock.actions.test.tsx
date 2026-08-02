@@ -385,7 +385,7 @@ describe('ActionDock guarded i18n channel (K4 idiom)', () => {
 
   function renderDockWithI18n(
     ui: React.ReactElement,
-    i18nProps: { locale: string; fallbackLocale?: string; customTranslations?: object }
+    i18nProps: Omit<React.ComponentProps<typeof I18nProvider>, 'children'>
   ) {
     // I18nProvider mounts closest to the dock so it wins over any ambient
     // provider, mirroring the Calendar/Pagination label pins.

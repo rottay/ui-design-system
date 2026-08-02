@@ -245,7 +245,10 @@
    not opacity alone. */
 .ds-input-number.ds-input-number--modern[data-part='root'][data-disabled='true'] {
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
-  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled));
+  /* Optional foundation surface: terminate the chain so an unset
+     --ds-surface-disabled cannot make this declaration invalid at
+     computed-value time (same terminal Select authors for this state). */
+  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
   border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
   opacity: var(--ds-disabled-opacity, 0.58);
   cursor: var(--ds-input-disabled-cursor);
@@ -325,7 +328,10 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
 [data-part='addon-before']:has(+ [data-part='field'] > .ds-input-number.ds-input-number--modern[data-part='root'][data-disabled='true']),
 [data-part='field']:has(> .ds-input-number.ds-input-number--modern[data-part='root'][data-disabled='true']) + [data-part='addon-after'] {
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
-  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled));
+  /* Optional foundation surface: terminate the chain so an unset
+     --ds-surface-disabled cannot make this declaration invalid at
+     computed-value time (same terminal Select authors for this state). */
+  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
   border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
 }
 
@@ -401,7 +407,7 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
    rem floors at narrow widths -- measured on the live bundle, Axe R0). */
 @media (pointer: coarse) {
   .ds-input-number.ds-input-number--modern[data-part='root'] {
-    min-block-size: var(--ds-input-number-touch-target-min, 44px);
+    min-block-size: var(--ds-input-number-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 
   /* 44px hit targets for BOTH steppers: the stacked 22px column violated the
@@ -423,8 +429,8 @@ div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-pa
     flex-direction: row;
   }
   .ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button'] {
-    min-inline-size: var(--ds-input-number-touch-target-min, 44px);
-    min-block-size: var(--ds-input-number-touch-target-min, 44px);
+    min-inline-size: var(--ds-input-number-touch-target-min, var(--ds-touch-target-min, 44px));
+    min-block-size: var(--ds-input-number-touch-target-min, var(--ds-touch-target-min, 44px));
   }
   .ds-input-number.ds-input-number--modern[data-part='root'] ~ [data-part='trailing']
     [data-part='stepper-button'] + [data-part='stepper-button'] {

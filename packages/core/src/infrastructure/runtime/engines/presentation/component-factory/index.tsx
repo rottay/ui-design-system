@@ -96,7 +96,9 @@ export function createEngineComponent<P extends object>(
   displayName: string,
   loaders: EngineLoaders<P>,
   options: CreateEngineComponentOptions = {}
-): ForwardRefExoticComponent<PropsWithoutRef<P> & RefAttributes<any>> {
+): ForwardRefExoticComponent<
+  PropsWithoutRef<P> & { engine?: EngineName } & RefAttributes<any>
+> {
   const { fallback = null, customEnabled = true, fallbackEngine, onError } = options;
 
   // Default custom loader (no pack) for backward compatibility

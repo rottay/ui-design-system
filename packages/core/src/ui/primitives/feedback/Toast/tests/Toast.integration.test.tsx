@@ -198,7 +198,10 @@ describe('Toast integration', () => {
 
     const warningCall = warningSpy.mock.calls.at(-1)?.[0];
     expect(warningCall?.message).toBe('Needs manual review');
-    warningCall?.btn?.props?.onClick?.();
+    const actionButton = warningCall?.btn as
+      | React.ReactElement<{ onClick?: () => void }>
+      | undefined;
+    actionButton?.props?.onClick?.();
     expect(actionSpy).toHaveBeenCalledTimes(1);
     expect(destroySpy).toHaveBeenCalled();
 

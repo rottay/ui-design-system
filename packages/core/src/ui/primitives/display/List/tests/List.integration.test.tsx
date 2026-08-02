@@ -19,11 +19,17 @@ describe('List integration', () => {
         header="Team"
         footer="2 members"
         dataSource={users}
-        renderItem={(user) => (
-          <List.Item>
-            <List.Item.Meta title={user.name} description={user.email} />
-          </List.Item>
-        )}
+        renderItem={(user) => {
+          // `createEngineComponent<ListProps>` pins `ListProps<T = unknown>`,
+          // so the composed List hands `renderItem` an `unknown` item however
+          // `dataSource` is typed.
+          const member = user as (typeof users)[number];
+          return (
+            <List.Item>
+              <List.Item.Meta title={member.name} description={member.email} />
+            </List.Item>
+          );
+        }}
       />,
       engine
     );

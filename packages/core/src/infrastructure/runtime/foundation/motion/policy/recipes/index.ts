@@ -7,6 +7,8 @@ import type {
   ResolvedMotionRecipe,
 } from '@/foundation/contracts/runtime/motion';
 
+import { MOTION_PROFILE_ENVELOPES } from '..';
+
 const COMPOSITOR_PROPERTIES = Object.freeze([
   'opacity',
   'transform',
@@ -121,10 +123,28 @@ const MAX_TOTAL_STAGGER_MS = 320;
 const PHONE_DISTANCE_CAP_PX = 12;
 const MAX_FINITE_DURATION_MS = 500;
 
+/**
+ * C2: one profile modulates curve, distance, duration and easing COHERENTLY.
+ * The distance cap is DERIVED from the same governed envelope the
+ * personality hook consumes (`MOTION_PROFILE_ENVELOPES[profile].maxOffsetPx`)
+ * instead of a second hand-typed number — the historic table carried
+ * precise=16px against its own envelope's 2px, an inversion where the
+ * "precise" posture travelled the farthest. Deriving kills the class, not
+ * just the instance.
+ */
 const PROFILE_RECIPE_STYLE = Object.freeze({
-  precise: Object.freeze({ curve: 'spring-gentle' as const, maxDistancePx: 16 }),
-  calm: Object.freeze({ curve: 'ease-out' as const, maxDistancePx: 2 }),
-  expressive: Object.freeze({ curve: 'spring-tactile' as const, maxDistancePx: 6 }),
+  precise: Object.freeze({
+    curve: 'spring-gentle' as const,
+    maxDistancePx: MOTION_PROFILE_ENVELOPES.precise.maxOffsetPx,
+  }),
+  calm: Object.freeze({
+    curve: 'ease-out' as const,
+    maxDistancePx: MOTION_PROFILE_ENVELOPES.calm.maxOffsetPx,
+  }),
+  expressive: Object.freeze({
+    curve: 'spring-tactile' as const,
+    maxDistancePx: MOTION_PROFILE_ENVELOPES.expressive.maxOffsetPx,
+  }),
 } satisfies Record<MotionPolicy['profile'], { curve: MotionCurve; maxDistancePx: number }>);
 
 function scaledMs(value: number, durationScale: number): number {

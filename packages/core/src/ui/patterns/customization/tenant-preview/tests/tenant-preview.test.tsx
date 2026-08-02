@@ -24,7 +24,7 @@ const rusticSkin = readFileSync(
   join(__dirname, '../../../../../foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css'),
   'utf8'
 );
-const normalizedRusticSkin = rusticSkin.replaceAll('"', "'");
+const normalizedRusticSkin = rusticSkin.replace(/"/g, "'");
 
 describe('TenantPreview', () => {
   const sampleConfig: TenantCreationConfig = {

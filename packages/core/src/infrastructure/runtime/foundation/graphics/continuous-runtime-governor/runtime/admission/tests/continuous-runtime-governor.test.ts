@@ -8,7 +8,10 @@ import {
   releaseContinuousGraphicsRuntimeLease,
   resetContinuousGraphicsRuntimeGovernorForTests,
 } from '..';
-import { DEFAULT_CONTINUOUS_GRAPHICS_RUNTIME_BUDGET } from '../../../foundation/contracts';
+import {
+  DEFAULT_CONTINUOUS_GRAPHICS_RUNTIME_BUDGET,
+  type ContinuousGraphicsRuntimeTelemetryEvent,
+} from '../../../foundation/contracts';
 
 afterEach(() => {
   resetContinuousGraphicsRuntimeGovernorForTests();
@@ -239,7 +242,11 @@ describe('continuous graphics runtime governor', () => {
   });
 
   it('emits immutable bounded lifecycle telemetry and isolates broken sinks', () => {
-    const observed: Array<Readonly<Record<string, unknown>>> = [];
+    // The declared telemetry type, not `Record<string, unknown>`: the event is an
+    // interface with no index signature, so the loose shape could never receive
+    // it -- and the assertions below read `code` and the exact key set, which the
+    // real type is what pins.
+    const observed: ContinuousGraphicsRuntimeTelemetryEvent[] = [];
     const brokenDisposer = installContinuousGraphicsRuntimeTelemetry(() => {
       throw new Error('broken telemetry sink');
     });

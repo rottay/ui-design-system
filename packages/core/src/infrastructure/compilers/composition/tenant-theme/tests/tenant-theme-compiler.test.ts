@@ -206,6 +206,7 @@ describe("DS-S001 DB recipe-profile channel", () => {
 
     const validation = validateTenantThemeDocument(document);
     expect(validation.success).toBe(false);
+    if (validation.success) throw new Error('expected a rejected document');
     expect(validation.issues).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -226,17 +227,24 @@ describe("TenantThemeConfig v1 server contract", () => {
   });
 
   it("publishes immutable schema/document drift sentinels", () => {
-    // C1b re-anchor: both digests moved exactly once because the document
-    // schema gained the governed expressive selection — the Standard
-    // general.experienceProfile enum and the Pro advanced.profiles per-axis
-    // enums (icon deliberately absent: frontier, unknown_key rejection).
-    // Artifact digests did not move: profile-less documents compile
-    // byte-identical. Previous move: C1 (--ds-color-bg-overlay allowlist).
+    // E2 re-anchor: both digests moved exactly once because `advanced` gained
+    // the RESPONSIVE POSTURE axis (closed enum over the published ladder
+    // registry — the container-width thresholds the adaptive runtime resolves
+    // postures on). The axis is data-only: no CSS channel is emitted, so the
+    // move is confined to these two sentinels and the PINNED artifact digests
+    // below did not move — no existing document authors `responsivePosture`,
+    // and absent resolves to the baseline ladder whose thresholds ARE the
+    // pre-capability 639/839 constants. Previous moves: E1 (general gained the
+    // rhythm axis + E2 responsivePosture landed in CONCURRENT agent trees;
+    // this integration re-anchor captures their SUM — the final schema's
+    // only additions vs pre-wave are exactly those two fields, verified by
+    // git diff at integration), C2 (advanced.profiles gained the icon axis), C1b
+    // (expressive selection fields), C1 (--ds-color-bg-overlay allowlist row).
     expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
-      "sha256-599caa0cfd0bbbaaaf4f61674671c404c115022bff4e1996e62b8af285ba04da"
+      "sha256-0dbbdeef9bd740dcd1f256a53db9086bedb72725cc36a084019cdafd515b3069"
     );
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
-      "sha256-7ccd67b2372eb0a2c3935ebd9a8670a94ed71b80ba6ab11a3369a06eb09a0ff5"
+      "sha256-6e7515d9136c47137a6c24ad08f06541ca907e0e70cb872dc2d5881633d6c7fa"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(
@@ -736,7 +744,7 @@ describe("closed schema and hostile input rejection", () => {
       "url(https://evil.invalid/x)",
     ]) {
       const document = {
-        schemaVersion: 1,
+        schemaVersion: 1 as const,
         mode: "advanced" as const,
         visualFoundation: { advanced: { chrome: { sidebar: { bg: value } } } },
       };
@@ -890,7 +898,7 @@ describe("closed schema and hostile input rejection", () => {
     "preserves valid v1 functional color seed %s and derives a safe ramp",
     (primary) => {
       const document = {
-        schemaVersion: 1,
+        schemaVersion: 1 as const,
         mode: "simple" as const,
         appearance: { palette: { primary } },
       };
@@ -920,7 +928,7 @@ describe("closed schema and hostile input rejection", () => {
       palette.map((color, index) => [`--ds-chart-category-${index + 1}`, color])
     );
     const document = {
-      schemaVersion: 1,
+      schemaVersion: 1 as const,
       mode: "advanced" as const,
       visualFoundation: { advanced: { tokenOverrides: categories } },
     };
@@ -1063,7 +1071,7 @@ describe("closed schema and hostile input rejection", () => {
       "--ds-color-border-secondary": "#33302B",
     };
     const document = {
-      schemaVersion: 1,
+      schemaVersion: 1 as const,
       mode: "advanced" as const,
       visualFoundation: {
         // The tenant owns the dark canvas, but the compiler still checks every

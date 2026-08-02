@@ -1,0 +1,1013 @@
+{
+  "note": "The SINGLE touch-target adjudication table (FASE F). The per-file census and its TOUCH_TARGET_EXEMPTIONS are retired; every row here is keyed to one physical box. CSS keys are `file :: rootScope :: finalPart`; TSX keys are `file :: element :: discriminator`. Both are matched against mechanical discovery — a key whose target disappears fails as stale, and a discovered target with neither a formal floor proof (equal / after-idiom / structural) nor a row here fails. `ancestor` is NOT a proof relation: a floored container never establishes a child hitbox. Debt rows carry an owner and drain decrease-only (D1-floors).",
+  "rows": [
+    {
+      "key": "activity-log.css :: .ds-pattern-activity-log.ds-engine-modern :: [data-part='item-body']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "avatar.css :: .rottay-avatar.rottay-avatar--modern :: .rottay-avatar.rottay-avatar--modern[data-interactive='true']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "avatar.css :: .rottay-avatar.rottay-avatar--modern :: [data-part='mask']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "breadcrumb.css :: .rottay-breadcrumb-shell--modern :: [data-part='label']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: ex-ANCESTOR target — only the enclosing crumb is floored, and a floored container never proves a child hitbox; floor the label or drop its own pointer affordance (decrease-only)"
+    },
+    {
+      "key": "calendar.css :: .rottay-calendar.rottay-calendar--modern :: [data-part='mode-toggle']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "card.css :: .ds-card.ds-card--modern :: [data-part='root']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "cascader.css :: .ds-cascader.ds-cascader--modern :: [data-part=\"search-input\"]",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "checkbox.css :: .ds-checkbox.ds-checkbox--modern :: [data-part='box']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "checkbox.css :: .ds-checkbox.ds-checkbox--modern :: input",
+      "kind": "exempt",
+      "reason": "visually-hidden native control: the input is clipped to 1px (sr-only) and carries semantics only; the tap target is the painted sibling part, adjudicated on its own row"
+    },
+    {
+      "key": "color-picker.css :: .rottay-colorpicker.rottay-colorpicker--modern :: [data-part='clear-button']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "color-picker.css :: .rottay-colorpicker.rottay-colorpicker--modern :: [data-part='format-select']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "color-picker.css :: .rottay-colorpicker.rottay-colorpicker--modern :: [data-part='native-color-input']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "context-menu.css :: .rottay-context-menu--modern :: [data-part='trigger']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "data-table.css :: .ds-pattern-data-table.ds-engine-modern :: [data-part=\"body-row\"]",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "data-table.css :: .ds-pattern-data-table.ds-engine-modern :: [data-part=\"editor-checkbox\"]",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "data-table.css :: .ds-pattern-data-table.ds-engine-modern :: [data-part=\"expand-button\"]",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "data-table.css :: .ds-pattern-data-table.ds-engine-modern :: [data-part=\"group-header-row\"]",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "data-table.css :: .ds-pattern-data-table.ds-engine-modern :: [data-part=\"pagination-nav-button\"]",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "data-table.css :: .ds-pattern-data-table.ds-engine-modern :: [data-part=\"pagination-page-button\"]",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "data-table.css :: .ds-pattern-data-table.ds-engine-modern :: [data-part=\"sort-icon\"]",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: ex-ANCESTOR target — only the enclosing header-cell is floored, and a floored container never proves a child hitbox; floor the sort icon or drop its own pointer affordance (decrease-only)"
+    },
+    {
+      "key": "date-picker.css :: .rottay-datepicker-range.rottay-datepicker-range--modern :: [data-part='clear-button']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "date-picker.css :: .rottay-datepicker.rottay-datepicker--modern :: [data-part='clear-button']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "detail-panel.css :: .ds-pattern-detail-panel.ds-engine-modern :: [data-part='breadcrumb-current']",
+      "kind": "exempt",
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
+    },
+    {
+      "key": "detail-panel.css :: .ds-pattern-detail-panel.ds-engine-modern :: [data-part='breadcrumb-link']",
+      "kind": "exempt",
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
+    },
+    {
+      "key": "detail-panel.css :: .ds-pattern-detail-panel.ds-engine-modern :: [data-part='tab-button']",
+      "kind": "exempt",
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
+    },
+    {
+      "key": "file-manager.css :: .ds-pattern-file-manager.ds-engine-modern :: [data-part='folder-link']",
+      "kind": "exempt",
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
+    },
+    {
+      "key": "file-manager.css :: .ds-pattern-file-manager.ds-engine-modern :: [data-part='grid-card']",
+      "kind": "exempt",
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
+    },
+    {
+      "key": "form-builder.css :: .ds-pattern-form-builder.ds-engine-modern :: [data-part='upload-trigger']",
+      "kind": "exempt",
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
+    },
+    {
+      "key": "image.css :: .rottay-image.rottay-image--modern :: [data-part='root']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "input-number.css :: [data-part='addon-before'] :: [data-part='addon-before']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "input-number.css :: [data-part='field'] :: [data-part='addon-after']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "link.css :: .rottay-link-shell.rottay-link-shell--modern :: [data-part='root']",
+      "kind": "exempt",
+      "reason": "inline: dense inline text/metadata control under the WCAG 2.5.8 inline exception; enlarging breaks flow (per-file adjudication inherited at selector level)"
+    },
+    {
+      "key": "locale-switcher.css :: .ds-pattern-locale-switcher.ds-engine-modern :: [data-part='option']",
+      "kind": "exempt",
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
+    },
+    {
+      "key": "notification-center.css :: .ds-pattern-notification-center.ds-engine-modern :: [data-part='row']",
+      "kind": "exempt",
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
+    },
+    {
+      "key": "notification.css :: .rottay-notification--modern :: [data-part='close-button']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "notification.css :: .rottay-notification--modern :: [data-part='root']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "page-shell.css :: .ds-pattern-page-shell.ds-engine-modern :: [data-part='crumb']",
+      "kind": "exempt",
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
+    },
+    {
+      "key": "page-shell.css :: .ds-pattern-page-shell.ds-engine-modern :: [data-part='tab']",
+      "kind": "exempt",
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
+    },
+    {
+      "key": "pagination.css :: .rottay-pagination--modern :: [data-part='ellipsis']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "pattern-calendar-view.css :: .ds-pattern-calendar-view.ds-engine-modern :: [data-part='event']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "pattern-kanban-board.css :: .ds-pattern-kanban-board.ds-engine-modern :: [data-part='card']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "pattern-timeline.css :: .ds-pattern-timeline.ds-engine-modern :: [data-part='item-card']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "popover.css :: .rottay-popover--modern :: [data-part=\"surface\"]",
+      "kind": "exempt",
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
+    },
+    {
+      "key": "pricing-table.css :: .ds-pattern-pricing-table.ds-engine-modern :: .ds-pricing-table__feature-label",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "radio.css :: .ds-radio.ds-radio--modern :: [data-part='circle']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "radio.css :: .ds-radio.ds-radio--modern :: input",
+      "kind": "exempt",
+      "reason": "visually-hidden native control: the input is clipped to 1px (sr-only) and carries semantics only; the tap target is the painted sibling part, adjudicated on its own row"
+    },
+    {
+      "key": "saved-views.css :: .ds-pattern-saved-views.ds-engine-modern :: [data-part='pill-select']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "scroll-area.css :: .rottay-scroll-area.rottay-scroll-area--modern :: [data-part='root']",
+      "kind": "exempt",
+      "reason": "continuous: full-axis manipulation surface (track/gutter/scrollbar); inflating the visible control destroys the component (WCAG target-size exception)"
+    },
+    {
+      "key": "select.css :: .ds-select-shell.ds-select-shell--modern :: [data-part='tag-remove']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "slider.css :: .ds-slider.ds-slider--modern :: [data-part='handle']",
+      "kind": "exempt",
+      "reason": "continuous: full-axis manipulation surface (track/gutter/scrollbar); inflating the visible control destroys the component (WCAG target-size exception)"
+    },
+    {
+      "key": "slider.css :: .ds-slider.ds-slider--modern :: [data-part='rail']",
+      "kind": "exempt",
+      "reason": "continuous: full-axis manipulation surface (track/gutter/scrollbar); inflating the visible control destroys the component (WCAG target-size exception)"
+    },
+    {
+      "key": "slider.css :: .ds-slider.ds-slider--modern :: [data-part='tooltip']",
+      "kind": "exempt",
+      "reason": "continuous: full-axis manipulation surface (track/gutter/scrollbar); inflating the visible control destroys the component (WCAG target-size exception)"
+    },
+    {
+      "key": "slider.css :: .ds-slider.ds-slider--modern :: [data-part='track']",
+      "kind": "exempt",
+      "reason": "continuous: full-axis manipulation surface (track/gutter/scrollbar); inflating the visible control destroys the component (WCAG target-size exception)"
+    },
+    {
+      "key": "splitter.css :: .rottay-splitter.rottay-splitter--modern :: [data-part='gutter']",
+      "kind": "exempt",
+      "reason": "continuous: full-axis manipulation surface (track/gutter/scrollbar); inflating the visible control destroys the component (WCAG target-size exception)"
+    },
+    {
+      "key": "src/ui/patterns/communication/activity-log/engines/modern/index.tsx :: div :: [data-part='item-body']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction (same box as the CSS row activity-log.css :: .ds-pattern-activity-log.ds-engine-modern :: [data-part='item-body'])"
+    },
+    {
+      "key": "src/ui/patterns/communication/notification-center/engines/modern/index.tsx :: div :: [data-part='row']",
+      "kind": "exempt",
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor) (same box as the CSS row notification-center.css :: .ds-pattern-notification-center.ds-engine-modern :: [data-part='row'])"
+    },
+    {
+      "key": "src/ui/patterns/data/data-table/engines/modern/cell-editor/index.tsx :: div :: [data-part='editor-shell']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/data/data-table/engines/modern/cell-editor/index.tsx :: input :: [data-part='editor-input']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/data/data-table/engines/modern/index.tsx :: span :: [data-part='resize-handle']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/data/data-table/engines/modern/index.tsx :: td :: [data-part='actions-cell']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/data/data-table/engines/modern/index.tsx :: td :: [data-part='selection-cell']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/data/data-table/engines/modern/index.tsx :: tr :: [data-part='body-row']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/data/data-table/engines/modern/index.tsx :: tr :: [data-part='group-header-row']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/data/detail-panel/engines/modern/index.tsx :: div :: [data-part='tab-list']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/data/detail-panel/engines/modern/index.tsx :: span :: [data-part='breadcrumb-current']",
+      "kind": "exempt",
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor) (same box as the CSS row detail-panel.css :: .ds-pattern-detail-panel.ds-engine-modern :: [data-part='breadcrumb-current'])"
+    },
+    {
+      "key": "src/ui/patterns/data/file-manager/engines/modern/index.tsx :: input :: [data-part='file-input']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/data/list-toolbar/engines/modern/index.tsx :: Button :: [data-part='filter-dropdown-item']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive element promoted to a control by its ARIA role — one the shared base floor deliberately leaves component-owned rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/data/stats-grid/engines/modern/index.tsx :: div :: [data-part='card']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx :: div :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/navigation/command-palette/engines/modern/index.tsx :: div :: [data-part='backdrop']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/navigation/command-palette/engines/modern/index.tsx :: div :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx :: div :: [data-part='toggle']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx :: div :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx :: div :: [data-part='backdrop']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/navigation/shortcuts-overlay/engines/modern/index.tsx :: div :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/navigation/workspace-switcher/engines/modern/index.tsx :: div :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/shell/page-shell/engines/modern/index.tsx :: div :: [data-part='tabs']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx :: div :: [data-part='card']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction (same box as the CSS row pattern-kanban-board.css :: .ds-pattern-kanban-board.ds-engine-modern :: [data-part='card'])"
+    },
+    {
+      "key": "src/ui/primitives/display/Avatar/engines/modern/index.tsx :: div :: dynamic",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its rendered class is computed, so no CSS floor can be matched to it mechanically; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/display/Calendar/engines/modern/index.tsx :: div :: [data-part='grid']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/display/Card/engines/modern/index.tsx :: div :: dynamic",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its rendered class is computed, so no CSS floor can be matched to it mechanically; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/display/Carousel/engines/modern/index.tsx :: div :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/display/Carousel/engines/modern/index.tsx :: div :: [data-part='track']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/display/Image/engines/modern/index.tsx :: div :: dynamic",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its rendered class is computed, so no CSS floor can be matched to it mechanically; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/display/Table/engines/modern/index.tsx :: div :: dynamic",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its rendered class is computed, so no CSS floor can be matched to it mechanically; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/display/Table/engines/modern/index.tsx :: input :: [data-part='field']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/display/Table/engines/modern/index.tsx :: td :: [data-part='cell']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/display/Table/engines/modern/index.tsx :: th :: [data-part='header-cell']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/display/Tree/engines/modern/index.tsx :: div :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/feedback/Drawer/engines/modern/index.tsx :: div :: [data-part='backdrop']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/feedback/Modal/engines/modern/index.tsx :: dialog :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/feedback/Modal/engines/modern/index.tsx :: div :: [data-part='surface']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/feedback/Notification/engines/modern/index.tsx :: div :: [data-part='root']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction (same box as the CSS row notification.css :: .rottay-notification--modern :: [data-part='root'])"
+    },
+    {
+      "key": "src/ui/primitives/feedback/Rate/engines/modern/index.tsx :: input :: dynamic",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its rendered class is computed, so no CSS floor can be matched to it mechanically; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/feedback/Rate/engines/modern/index.tsx :: span :: [data-part='star-half-hit']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/feedback/Toast/engines/modern/index.tsx :: div :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx :: li :: [data-part='empty']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive element promoted to a control by its ARIA role — one the shared base floor deliberately leaves component-owned rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx :: li :: [data-part='loading-state']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive element promoted to a control by its ARIA role — one the shared base floor deliberately leaves component-owned rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Cascader/engines/modern/index.tsx :: div :: [data-part='dropdown']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Cascader/engines/modern/index.tsx :: input :: [data-part='search-input']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Cascader/engines/modern/index.tsx :: li :: [data-part='empty']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive element promoted to a control by its ARIA role — one the shared base floor deliberately leaves component-owned rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx :: div :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx :: input :: [data-part='hex-input']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx :: input :: [data-part='native-color-input']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/DatePicker/engines/modern/index.tsx :: div :: [data-part='grid']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Input/engines/modern/index.tsx :: div :: dynamic",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its rendered class is computed, so no CSS floor can be matched to it mechanically; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Input/engines/modern/index.tsx :: input :: dynamic",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its rendered class is computed, so no CSS floor can be matched to it mechanically; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Mentions/engines/modern/index.tsx :: li :: [data-part='empty']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive element promoted to a control by its ARIA role — one the shared base floor deliberately leaves component-owned rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Mentions/engines/modern/index.tsx :: li :: [data-part='loading']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive element promoted to a control by its ARIA role — one the shared base floor deliberately leaves component-owned rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Mentions/engines/modern/index.tsx :: li :: dynamic",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive element promoted to a control by its ARIA role — one the shared base floor deliberately leaves component-owned rendered in TSX with no proven floor — its rendered class is computed, so no CSS floor can be matched to it mechanically; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Mentions/engines/modern/index.tsx :: textarea :: [data-part='textarea']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx :: input :: [data-part='control']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Select/engines/modern/index.tsx :: div :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Select/engines/modern/index.tsx :: input :: [data-part='search-input']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Select/engines/modern/index.tsx :: input :: dynamic",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its rendered class is computed, so no CSS floor can be matched to it mechanically; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Slider/engines/modern/index.tsx :: div :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/TagInput/engines/modern/index.tsx :: input :: [data-part='input']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/TimePicker/engines/modern/index.tsx :: div :: [data-part='time-column']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/TreeSelect/engines/modern/index.tsx :: div :: [data-part='dropdown']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/TreeSelect/engines/modern/index.tsx :: input :: [data-part='search-input']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Upload/engines/modern/index.tsx :: div :: [data-part='preview-content']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Upload/engines/modern/index.tsx :: div :: [data-part='preview-modal']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Upload/engines/modern/index.tsx :: img :: [data-part='file-thumb']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction (same box as the CSS row upload.css :: .ds-upload.ds-upload--modern.ds-upload--picture :: [data-part='file-thumb'])"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Upload/engines/modern/index.tsx :: input :: [data-part='file-input']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive native control outside the shared base floor rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/inputs/Upload/engines/modern/index.tsx :: span :: [data-part='trigger']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction (same box as the CSS row upload.css :: .ds-upload.ds-upload--modern :: [data-part='trigger'])"
+    },
+    {
+      "key": "src/ui/primitives/navigation/Anchor/engines/modern/index.tsx :: div :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx :: div :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/navigation/Menu/engines/modern/index.tsx :: ul :: dynamic",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its rendered class is computed, so no CSS floor can be matched to it mechanically; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/AlertDialog/engines/modern/index.tsx :: dialog :: [data-part='root']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx :: dialog :: [data-part='backdrop']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/ContextMenu/engines/modern/index.tsx :: div :: [data-part='trigger']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/ContextMenu/engines/modern/index.tsx :: ul :: [data-part='submenu']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/ContextMenu/engines/modern/index.tsx :: ul :: [data-part='surface']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/Dropdown/engines/modern/index.tsx :: div :: [data-part='surface']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/Dropdown/engines/modern/index.tsx :: div :: [data-part='trigger']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/Dropdown/engines/modern/index.tsx :: ul :: [data-part='menu']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/Dropdown/engines/modern/index.tsx :: ul :: [data-part='submenu']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/HoverCard/engines/modern/index.tsx :: div :: [data-part='trigger']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx :: div :: [data-part='trigger-content']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/Popover/engines/modern/index.tsx :: div :: [data-part='trigger']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/Sheet/engines/modern/index.tsx :: div :: [data-part='backdrop']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/Tour/engines/modern/index.tsx :: div :: [data-part='backdrop']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/primitives/overlay/Tour/engines/modern/index.tsx :: div :: [data-part='surface']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction (same box as the CSS row tour.css :: .rottay-tour--modern :: [data-part='surface'])"
+    },
+    {
+      "key": "src/ui/structures/headers/detail/index.tsx :: Box :: [data-part='tab']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive element promoted to a control by its ARIA role — one the shared base floor deliberately leaves component-owned rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/structures/workspace/column-menu/index.tsx :: span :: [data-part='width-input']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — no modern skin owns this file, so the element is painted by ad-hoc or inherited rules; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/structures/workspace/export-button/index.tsx :: Button :: [data-part='menu-item']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive element promoted to a control by its ARIA role — one the shared base floor deliberately leaves component-owned rendered in TSX with no proven floor — no modern skin owns this file, so the element is painted by ad-hoc or inherited rules; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "src/ui/surfaces/presentation/pages/workspace/record-workbench/index.tsx :: Button :: .ds-record-workbench__tab",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: interactive element promoted to a control by its ARIA role — one the shared base floor deliberately leaves component-owned rendered in TSX with no proven floor — no modern skin owns this file, so the element is painted by ad-hoc or inherited rules; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "stats-grid.css :: .ds-pattern-stats-grid.ds-engine-modern :: .ds-stats-grid__card[data-interactive=\"true\"]",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "switch.css :: .ds-switch.ds-switch--modern :: [data-part='track']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "switch.css :: .ds-switch.ds-switch--modern :: input",
+      "kind": "exempt",
+      "reason": "visually-hidden native control: the input is clipped to 1px (sr-only) and carries semantics only; the tap target is the painted sibling part, adjudicated on its own row"
+    },
+    {
+      "key": "table.css :: .ds-table.ds-table--modern :: [data-part='cell']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "table.css :: .ds-table.ds-table--modern :: [data-part='field']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "table.css :: .ds-table.ds-table--modern :: [data-part='header-cell']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "table.css :: .ds-table.ds-table--modern :: [data-part='selection-control']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "tabs.css :: .rottay-tabs--modern :: [data-part^='overflow-']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "tabs.css :: .rottay-tabs--modern :: [data-part='tab-panel']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "time-picker.css :: .rottay-timepicker-range.rottay-timepicker-range--modern :: [data-part='clear-button']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "time-picker.css :: .rottay-timepicker.rottay-timepicker--modern :: [data-part='clear-button']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "toggle.css :: .ds-toggle.ds-toggle--modern :: [data-part='track']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "toggle.css :: .ds-toggle.ds-toggle--modern :: input",
+      "kind": "exempt",
+      "reason": "visually-hidden native control: the input is clipped to 1px (sr-only) and carries semantics only; the tap target is the painted sibling part, adjudicated on its own row"
+    },
+    {
+      "key": "tour.css :: .rottay-tour--modern :: [data-part='surface']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "transfer.css :: .rottay-transfer.rottay-transfer--modern :: [data-part='panel-item']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "tree-select.css :: .ds-tree-select.ds-tree-select--modern :: [data-part=\"option-icon\"]",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "tree-select.css :: .ds-tree-select.ds-tree-select--modern :: [data-part=\"search-input\"]",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: real unfloored tap target discovered mechanically; floor it with its own coarse rule or cull the interactivity (decrease-only)"
+    },
+    {
+      "key": "tree.css :: .rottay-tree.rottay-tree--modern :: [data-part='checkbox']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: ex-ANCESTOR target — only the enclosing node row is floored, and a floored container never proves a child hitbox; floor the node checkbox or cull its interactivity (decrease-only)"
+    },
+    {
+      "key": "tree.css :: .rottay-tree.rottay-tree--modern :: [data-part='tree-node-toggle']",
+      "kind": "debt",
+      "owner": "design-system/D1-floors",
+      "reason": "DEBT: ex-ANCESTOR target — only the enclosing node row is floored, and a floored container never proves a child hitbox; floor the expand toggle or cull its interactivity (decrease-only)"
+    },
+    {
+      "key": "typography.css :: .rottay-typography.rottay-typography--modern :: .rottay-typography.rottay-typography--modern",
+      "kind": "exempt",
+      "reason": "inline: dense inline text/metadata control under the WCAG 2.5.8 inline exception; enlarging breaks flow (per-file adjudication inherited at selector level)"
+    },
+    {
+      "key": "upload.css :: .ds-upload-dragger.ds-upload-dragger--modern :: [data-part='dropzone']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "upload.css :: .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture :: [data-part='file-thumb']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "upload.css :: .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card :: [data-part='file-item-action']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "upload.css :: .ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle :: [data-part='file-item-action']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "upload.css :: .ds-upload.ds-upload--modern :: [data-part='add-button']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "upload.css :: .ds-upload.ds-upload--modern :: [data-part='trigger']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "upload.css :: .ds-upload.ds-upload--modern.ds-upload--picture :: [data-part='file-thumb']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "upload.css :: .ds-upload.ds-upload--modern.ds-upload--picture-card :: [data-part='file-item-action']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "upload.css :: .ds-upload.ds-upload--modern.ds-upload--picture-circle :: [data-part='file-item-action']",
+      "kind": "exempt",
+      "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
+    },
+    {
+      "key": "workspace-switcher.css :: .ds-pattern-workspace-switcher.ds-engine-modern :: [data-part='settings']",
+      "kind": "exempt",
+      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
+    }
+  ]
+}

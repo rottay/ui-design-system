@@ -202,7 +202,7 @@ describe('useCommandPaletteItems -- command sources', () => {
       { id: 'doc-1', label: 'Quarterly report', action: vi.fn() },
       { id: 'doc-2', label: 'Budget sheet', action: vi.fn() },
     ];
-    const search = vi.fn(async () => rows);
+    const search = vi.fn(async (_query: string) => rows);
     const source: CommandSource = { id: 'documents', label: 'Documents', debounceMs: 100, search };
 
     const { result } = renderHook(() => useSourcedHook(source), { wrapper: Wrapper });

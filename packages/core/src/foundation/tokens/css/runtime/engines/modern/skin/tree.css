@@ -59,7 +59,7 @@
  * `grabbing` cursor semantics and a dragging-row emphasis channel keyed on
  * the engine's new `data-draggable`/`data-dragging` hooks.
  * (4) Density: the row padding fallback rides the
- * `--_ds-proto-tree-row-padding-*` axes scaled by the governed
+ * `--_ds-tree-row-padding-*` axes scaled by the governed
  * `--ds-density-effective-scale` authority; the per-level indent step scales
  * in the engine (logical offsets, connectors track the same step). The
  * legacy layered presentation bridge still declares `--ds-tree-node-padding`,
@@ -125,8 +125,8 @@
      exact tenant intent and skips the scale. */
   padding: var(
     --ds-tree-node-padding,
-    calc(var(--_ds-proto-tree-row-padding-block, 4px) * var(--ds-density-effective-scale))
-      calc(var(--_ds-proto-tree-row-padding-inline, 8px) * var(--ds-density-effective-scale))
+    calc(var(--_ds-tree-row-padding-block, 4px) * var(--ds-density-effective-scale))
+      calc(var(--_ds-tree-row-padding-inline, 8px) * var(--ds-density-effective-scale))
   );
   border-radius: var(--ds-tree-node-radius, var(--ds-radius-md));
   background: var(--ds-tree-node-bg);
@@ -176,7 +176,7 @@
    touch gets the equivalent :active feedback the hover rule withholds. The
    selected row and disabled rows keep their own state paint. */
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:active:not([data-selected='true']):not([data-disabled]) {
-  background: var(--_ds-proto-tree-row-bg-active, color-mix(in srgb, var(--ds-surface-inset) 75%, transparent));
+  background: var(--_ds-tree-row-bg-active, color-mix(in srgb, var(--ds-surface-inset) 75%, transparent));
 }
 
 /* B4-04: drag affordance -- the WHOLE row is the drag target (the engine
@@ -188,7 +188,7 @@
 }
 .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-dragging] {
   cursor: grabbing;
-  opacity: var(--_ds-proto-tree-dragging-opacity, 0.55);
+  opacity: var(--_ds-tree-dragging-opacity, 0.55);
 }
 
 /* The engine's focusedKey state ring (roving focus after the first arrow
@@ -327,7 +327,7 @@
         density contract forbids inflating the glyph). ---- */
 @media (hover: none), (pointer: coarse) {
   .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] {
-    min-block-size: var(--ds-tree-touch-target-min, 44px);
+    min-block-size: var(--ds-tree-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 
   .rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle'] {
@@ -339,8 +339,8 @@
     position: absolute;
     /* 44px block, ~38px inline: the inline-end expansion is capped so the
        hit area never swallows the adjacent checkbox's target. */
-    inset-block: calc((var(--ds-tree-switcher-size) - var(--ds-tree-touch-target-min, 44px)) / 2);
-    inset-inline-start: calc((var(--ds-tree-switcher-size) - var(--ds-tree-touch-target-min, 44px)) / 2);
+    inset-block: calc((var(--ds-tree-switcher-size) - var(--ds-tree-touch-target-min, var(--ds-touch-target-min, 44px))) / 2);
+    inset-inline-start: calc((var(--ds-tree-switcher-size) - var(--ds-tree-touch-target-min, var(--ds-touch-target-min, 44px))) / 2);
     inset-inline-end: -4px;
   }
 }

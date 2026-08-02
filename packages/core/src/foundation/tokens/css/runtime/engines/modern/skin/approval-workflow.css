@@ -369,7 +369,7 @@
 
 @media (hover: none), (pointer: coarse) {
   .ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'] {
-    min-block-size: var(--ds-approval-touch-target-min, 44px);
+    min-block-size: var(--ds-approval-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

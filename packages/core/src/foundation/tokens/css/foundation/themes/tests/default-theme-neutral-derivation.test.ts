@@ -72,7 +72,6 @@ const NO_EXACT_STEP_LITERALS: Record<string, Record<string, string>> = {
     "--ds-color-bg-primary": "#0A0A0C",
     "--ds-color-bg-secondary": "#0F0F12",
     "--ds-color-bg-tertiary": "#141417",
-    "--ds-color-bg-subtle": "#0D0D10",
     "--ds-color-bg-hover": "#18181C",
     "--ds-color-bg-canvas": "#0A0A0C",
     "--ds-color-bg-elevated": "#18181C",
@@ -105,6 +104,29 @@ const NO_EXACT_STEP_LITERALS: Record<string, Record<string, string>> = {
   },
 };
 
+/**
+ * Semantic neutrals that are DERIVED rather than literal, each with the exact
+ * derivation it must carry and the literal it was rescued from.
+ *
+ * `--ds-color-bg-subtle` left the byte-identical ledger above deliberately. It
+ * was the only member of the bg-* family that bithire and evnto never
+ * override, so a literal here resolved near-black (#0D0D10) on both LIGHT
+ * verticals while every sibling resolved light — measured over the shipped
+ * bundles: bithire bg-primary #F4F8FB / bg-secondary #f3f2ef, evnto #FFFFFF /
+ * #fafafa, subtle #0D0D10 in both. Following bg-secondary keeps ONE definition
+ * and lets each vertical's own canvas carry its subtle; verticals that author a
+ * literal still win by scope and order, and the fallback preserves the
+ * pre-change value for any tree with no secondary canvas.
+ */
+const ROOT_DERIVED = {
+  "--ds-color-bg-subtle": {
+    derivation: "var(--ds-color-bg-secondary, #0D0D10)",
+    retiredLiteral: "#0D0D10",
+    /** bg-secondary is pinned byte-identical above, so this chain is anchored. */
+    resolvesTo: "#0F0F12",
+  },
+} as const;
+
 describe("default theme semantic neutral derivation (TOK-01)", () => {
   it("resolves every re-pointed dark semantic neutral to its pre-change literal", () => {
     for (const [token, before] of Object.entries(DARK_REPOINTED_BEFORE)) {
@@ -132,6 +154,24 @@ describe("default theme semantic neutral derivation (TOK-01)", () => {
       for (const [token, literal] of Object.entries(expected)) {
         expect(scope.get(token), `${scopeName} ${token}`).toBe(literal);
       }
+    }
+  });
+
+  it("keeps derived semantic neutrals on their derivation, never back on the retired literal", () => {
+    for (const [token, pin] of Object.entries(ROOT_DERIVED)) {
+      const declared = rootScope.get(token);
+      expect(declared, `root ${token}`).toBe(pin.derivation);
+      // The leg that makes this pin non-vacuous: re-flattening the channel to
+      // the literal it was rescued from must go red, not pass quietly.
+      expect(
+        declared,
+        `root ${token} regressed to the retired literal ${pin.retiredLiteral} — that value resolves near-black on the light verticals`
+      ).not.toBe(pin.retiredLiteral);
+      // And the chain must still terminate in the canvas rung, so the
+      // derivation is real rather than a var() that points nowhere.
+      expect(resolveVarGraph(token, rootScope), `root ${token} chain`).toBe(
+        pin.resolvesTo
+      );
     }
   });
 

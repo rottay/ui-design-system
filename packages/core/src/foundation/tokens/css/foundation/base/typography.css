@@ -165,7 +165,6 @@
   /* Contextual line heights */
   --ds-line-height-body: 1.6; /* Relaxed for readability */
   --ds-line-height-heading: 1.2; /* Tight for premium headings */
-  --ds-line-height-label: 1.4; /* Balanced for labels/metadata */
   --ds-line-height-display: var(--ds-line-height-none); /* 1 */
 
   /* ========================================================================

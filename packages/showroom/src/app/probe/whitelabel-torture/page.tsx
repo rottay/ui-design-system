@@ -1745,7 +1745,7 @@ function OverlayStates() {
             items={[
               { key: 'edit', label: 'Edit', shortcut: 'Ctrl+E' },
               { key: 'group', label: 'Actions', type: 'group' },
-              { key: 'divider', label: '', type: 'divider' },
+              { key: 'divider', type: 'divider' },
               { key: 'delete', label: 'Delete', danger: true },
             ]}
             onSelect={() => undefined}
@@ -1786,7 +1786,7 @@ function OverlayStates() {
               items: [
                 { key: 'profile', label: 'Profile' },
                 { key: 'group', label: 'Actions', type: 'group' },
-                { key: 'divider', label: '', type: 'divider' },
+                { key: 'divider', type: 'divider' },
                 { key: 'delete', label: 'Delete', danger: true },
               ],
               onClick: () => undefined,
@@ -1850,7 +1850,7 @@ const NAV_MENU_ITEMS = [
       { key: 'submenu-child-2', label: 'Child 2' },
     ],
   },
-  { key: 'divider-1', label: '', type: 'divider' as const },
+  { key: 'divider-1', type: 'divider' as const },
   {
     key: 'group-1',
     type: 'group' as const,

@@ -36,7 +36,7 @@
  * RADIUS_MAP enum folded with the fullscreen '0' override), which CSS cannot
  * enumerate. `data-density` arrives re-stamped on the root by the engine's
  * portal-scope snapshot and retunes section padding through the
- * `--_ds-proto-modal-density-*` dials (the explicit
+ * `--_ds-modal-density-*` dials (the explicit
  * `--ds-modal-section-padding-*` channels still win). `data-loading` on the
  * generated ok action paints the confirm ring; `data-open` selects the
  * enter/exit keyframe pair (the adaptive-fullscreen posture swaps them for
@@ -116,7 +116,7 @@
 .rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'] {
   max-inline-size: var(--ds-modal-max-inline-size, 90vw);
   max-block-size: var(--ds-modal-max-block-size, 85vh);
-  background-color: var(--ds-modal-bg, var(--ds-surface-card));
+  background-color: var(--ds-modal-bg, var(--ds-material-card-background, var(--ds-surface-card)));
   background-image:
     linear-gradient(var(--ds-elevation-surface-4), var(--ds-elevation-surface-4)),
     var(--ds-gradient-surface);
@@ -183,7 +183,7 @@
 /* a colored border SHORTHAND, held to the (0,4,0) floor by the repeated part */
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-part='surface'][data-fullscreen='false'] {
-  border: var(--ds-modal-border-width, var(--ds-edge-standard-width, 1px)) solid var(--ds-color-border-subtle);
+  border: var(--ds-modal-border-width, var(--ds-edge-standard-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-color-border-subtle);
 }
 .rottay-overlay-modal-shell--modern[data-part='root']
   > [data-part='surface'][data-part='surface'][data-fullscreen='true'] {
@@ -198,21 +198,21 @@
         authored default — it declares nothing. ---- */
 .rottay-overlay-modal-shell--modern[data-part='root'][data-density='compact'] {
   --_ds-modal-section-pad-block: var(
-    --_ds-proto-modal-density-compact-section-padding-block,
+    --_ds-modal-density-compact-section-padding-block,
     var(--ds-spacing-3)
   );
   --_ds-modal-section-pad-inline: var(
-    --_ds-proto-modal-density-compact-section-padding-inline,
+    --_ds-modal-density-compact-section-padding-inline,
     var(--ds-spacing-4)
   );
 }
 .rottay-overlay-modal-shell--modern[data-part='root'][data-density='spacious'] {
   --_ds-modal-section-pad-block: var(
-    --_ds-proto-modal-density-spacious-section-padding-block,
+    --_ds-modal-density-spacious-section-padding-block,
     var(--ds-spacing-5)
   );
   --_ds-modal-section-pad-inline: var(
-    --_ds-proto-modal-density-spacious-section-padding-inline,
+    --_ds-modal-density-spacious-section-padding-inline,
     var(--ds-spacing-8)
   );
 }
@@ -318,7 +318,7 @@
   > [data-part='footer']
   > [data-part='action'] {
   position: relative;
-  min-block-size: var(--ds-control-height-md);
+  min-block-size: var(--ds-button-md-height);
   padding-block: var(--ds-modal-action-padding-block, var(--ds-spacing-2));
   padding-inline: var(--ds-modal-action-padding-inline, var(--ds-spacing-4));
   cursor: pointer;
@@ -558,5 +558,14 @@
     > [data-part='action'] [data-part='spinner'] {
     border-color: ButtonText;
     border-top-color: transparent;
+  }
+}
+
+/* C2c a11y floor (census-derived): coarse-pointer tap targets never render
+   below the canonical --ds-touch-target-min channel; fine pointers keep the
+   authored size untouched. */
+@media (hover: none), (pointer: coarse) {
+  .rottay-overlay-modal-shell--modern[data-part='root'] [data-part='close-button'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

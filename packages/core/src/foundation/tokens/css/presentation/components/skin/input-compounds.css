@@ -136,7 +136,10 @@
 .rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']):has(+ .rottay-input-field:has([data-disabled='true'])),
 .rottay-input-group[data-part='group'][data-compact='true'] > .rottay-input-field:has([data-disabled='true']) + .rottay-input-addon.ds-input-addon[data-part='root']:not([data-variant='transparent']) {
   color: var(--ds-input-color-disabled, var(--ds-color-text-disabled));
-  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled));
+  /* Optional foundation surface: terminate the chain so an unset
+     --ds-surface-disabled cannot make this declaration invalid at
+     computed-value time (same terminal Select authors for this state). */
+  background: var(--ds-input-bg-disabled, var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas))));
   border-color: var(--ds-input-border-disabled, var(--ds-color-border-disabled));
 }
 

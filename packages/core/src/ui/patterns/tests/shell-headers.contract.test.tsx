@@ -5,6 +5,7 @@ import { act, waitFor } from '@testing-library/react';
 import { PatternCockpitHeader } from '../shell/cockpit-header';
 import type { CockpitStatus } from '../shell/cockpit-header';
 import { PatternPageShell } from '../shell/page-shell';
+import type { PageShellProps } from '../shell/page-shell';
 import { PatternWorkbenchHeader } from '../shell/workbench-header';
 import type { WorkbenchQuickAction } from '../shell/workbench-header';
 import { renderWithEngine } from '../../../tooling/testing/helpers/engine';
@@ -54,6 +55,20 @@ import { renderWithEngine } from '../../../tooling/testing/helpers/engine';
 //      preserved, not a defect to fix, and it is photographed (twice, at rest
 //      and on hover) in headers-patterns-batch.spec.ts.
 // ---------------------------------------------------------------------------
+
+/**
+ * PageShell under its children-less branches.
+ *
+ * `PageShellProps.children` is required, but both engines return before they
+ * read it: the `loading` branch renders a skeleton and exits, and the tabbed
+ * branch renders `tabs[].content` as the body. The renders below assert the
+ * chrome those two branches stamp, so the ABSENT body is the shape under test
+ * -- widening the production contract to `children?` would delete the very
+ * requirement every real consumer relies on. The cast is the assertion.
+ */
+const PageShellChromeOnly = PatternPageShell as unknown as React.ComponentType<
+  Omit<PageShellProps, 'children'> & { engine?: 'classic' | 'modern' | 'rustic' }
+>;
 
 /** Every `data-part` an engine file in this checkpoint stamps on its own DOM. */
 async function partsOf(container: HTMLElement): Promise<Set<string>> {
@@ -195,7 +210,7 @@ describe('patterns/shell header family -- data-part contract (WO-SKIN-06 CK-B/P)
   describe('PageShell (modern)', () => {
     function renderFull(props: Record<string, unknown> = {}) {
       return renderWithEngine(
-        <PatternPageShell
+        <PageShellChromeOnly
           title="Users"
           subtitle="Manage platform users"
           breadcrumbs={CRUMBS}
@@ -267,7 +282,7 @@ describe('patterns/shell header family -- data-part contract (WO-SKIN-06 CK-B/P)
     });
 
     it('stamps the loading skeleton branch (five blocks)', async () => {
-      const { container } = renderWithEngine(<PatternPageShell title="Users" loading />, 'modern');
+      const { container } = renderWithEngine(<PageShellChromeOnly title="Users" loading />, 'modern');
       await partsOf(container);
 
       const root = container.querySelector('[data-part="root"]') as HTMLElement;
@@ -281,7 +296,7 @@ describe('patterns/shell header family -- data-part contract (WO-SKIN-06 CK-B/P)
   describe('PageShell (rustic)', () => {
     function renderFull(props: Record<string, unknown> = {}) {
       return renderWithEngine(
-        <PatternPageShell
+        <PageShellChromeOnly
           title="Users"
           subtitle="Manage platform users"
           breadcrumbs={CRUMBS}
@@ -349,7 +364,7 @@ describe('patterns/shell header family -- data-part contract (WO-SKIN-06 CK-B/P)
     });
 
     it('stamps its loading branch, which is a text line and NOT a skeleton', async () => {
-      const { container } = renderWithEngine(<PatternPageShell title="Users" loading />, 'rustic');
+      const { container } = renderWithEngine(<PageShellChromeOnly title="Users" loading />, 'rustic');
       await partsOf(container);
 
       const root = container.querySelector('[data-part="root"]') as HTMLElement;

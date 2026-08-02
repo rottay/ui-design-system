@@ -110,8 +110,80 @@ export type {
   ExpressiveMaterialProfile,
   ExpressiveMotifProfile,
   ExpressiveProfileOverrides,
+  ExpressiveProfileEnvelope,
   ExpressiveTypeProfile,
 } from './foundation/tokens/ts/presentation/expressive-profiles';
+export {
+  clampDensityIntoExpressiveEnvelope,
+  clampIntoExpressiveEnvelope,
+  EXPERIENCE_PROFILE_ENVELOPES,
+  EXPRESSIVE_A11Y_FLOORS,
+} from './foundation/tokens/ts/presentation/expressive-profiles';
+
+// ============================================
+// RESPONSIVE POSTURES (E2 governed container-ladder registry)
+// ============================================
+export {
+  DEFAULT_RESPONSIVE_POSTURE,
+  DEFAULT_RESPONSIVE_POSTURE_ID,
+  RESPONSIVE_POSTURE_PROFILES,
+  RESPONSIVE_POSTURE_SCHEMA_VERSION,
+  resolveResponsivePosture,
+  validateResponsivePostureSelection,
+} from './foundation/tokens/ts/presentation/responsive-postures';
+export type {
+  ResponsivePostureDefinition,
+  ResponsivePostureId,
+  ResponsivePostureValidation,
+} from './foundation/tokens/ts/presentation/responsive-postures';
+
+// ============================================
+// FAMILY EMPHASIS (C2 app-tier "family + intensity" API)
+// ============================================
+export {
+  EMPHASIS_FAMILIES,
+  quantizeEmphasis,
+  resolveFamilyEmphasis,
+} from './foundation/tokens/ts/presentation/expressive-profiles/emphasis';
+export type {
+  EmphasisFamily,
+  EmphasisStep,
+} from './foundation/tokens/ts/presentation/expressive-profiles/emphasis';
+export { useExpressiveEmphasis } from './infrastructure/runtime/foundation/recipes/emphasis';
+export type { ExpressiveEmphasisResult } from './infrastructure/runtime/foundation/recipes/emphasis';
+
+// ============================================
+// ADAPTIVE SOLVER (C2 — the ONE layout engine)
+// ============================================
+export {
+  LEGACY_SIZE_SPANS,
+  resolveAdaptiveLayout,
+  resolveContainerPosture,
+} from './ui/patterns/data/widget-board/runtime/solver';
+export {
+  heightPxToRows,
+  placementsToGridStyles,
+  widgetItemsToAdaptiveInputs,
+} from './ui/patterns/data/widget-board/runtime/solver/policy';
+export {
+  normalizeLayoutRevision,
+  resolveActiveResponsivePosture,
+  useActiveResponsivePosture,
+} from './ui/patterns/data/widget-board/runtime/solver/react';
+export type {
+  AdaptiveContentMode,
+  AdaptiveItemContract,
+  AdaptiveLayoutEnv,
+  AdaptiveLayoutResult,
+  ContainerPosture,
+  GridSpan,
+  LayoutIntent,
+  LayoutProfileRevision,
+  PlacementReason,
+  ResizePolicy,
+  ResolvedPlacement,
+  ResponsivePostureProfile,
+} from './ui/patterns/data/widget-board/runtime/solver';
 
 // ============================================
 // DENSITY (public scoped visual-density contract)

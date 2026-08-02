@@ -60,6 +60,84 @@ const THE_MANAGEMENT_PROJECTED_APPEARANCE = brandThemeToTenantAppearance(
  * to the public bounded exporter; the provider below receives `appearance`
  * and never receives that fixture through the file-first `brandTheme` field.
  */
+/**
+ * The canonical SEEDS allowlist, transcribed from the capability registry row
+ * `palette.seeds` (`documentPath: appearance.palette.{primary,secondary,accent,
+ * background}`), expressed in the shape the provider actually consumes:
+ * `appearance.general.palette`. Note the two are NOT the same shape — the
+ * registry path is the DB authoring document, and conflating them is how a
+ * "seeds-only" claim gets written against a payload that is nothing of the
+ * kind.
+ *
+ * `palette.status-seeds` is REJECTED today and `palette.dark-mode` is tier
+ * `internal`, so neither belongs here; `foreground`/`border` are authorable in
+ * this shape but are not seeds.
+ */
+export const SEEDS_ONLY_ALLOWLIST: Readonly<Record<string, readonly string[]>> =
+  Object.freeze({
+    "": Object.freeze(["general"]),
+    general: Object.freeze(["palette"]),
+    "general.palette": Object.freeze([
+      "primary",
+      "secondary",
+      "accent",
+      "background",
+    ]),
+  });
+
+/** The Management's authored seeds, read from its BrandTheme fixture. */
+export const THE_MANAGEMENT_SEEDS = Object.freeze({
+  primary: "#0F766E",
+  secondary: "#8C6D46",
+  accent: "#B44F3C",
+  background: "#FBF6EC",
+});
+
+/**
+ * A genuinely seeds-only appearance: built from literal keys, with ZERO spread
+ * of any BrandTheme projection. `brandThemeToTenantAppearance` — which the
+ * full-appearance fixture below uses — emits typography, shape, density,
+ * motion, surfaces and `advanced.chrome`/`tokenOverrides`, so anything derived
+ * from it can never support a seeds-only claim.
+ *
+ * Everything a tenant sees under this config beyond the four colours is
+ * therefore DERIVED by the compiler, which is the property the seeds contract
+ * exists to prove.
+ */
+export function seedsOnlyAppearance(
+  primary: string = THE_MANAGEMENT_SEEDS.primary
+): NonNullable<TenantConfig["appearance"]> {
+  return {
+    general: {
+      palette: {
+        primary,
+        secondary: THE_MANAGEMENT_SEEDS.secondary,
+        accent: THE_MANAGEMENT_SEEDS.accent,
+        background: THE_MANAGEMENT_SEEDS.background,
+      },
+    },
+  };
+}
+
+/** Seeds-only tenant: same vertical and engine, only the configuration differs. */
+export function seedsOnlyTenantConfig(
+  locale: BrandLocaleEvidenceLocale,
+  primary?: string
+): TenantConfig {
+  return {
+    slug: "themanagementseeds",
+    name: "The Management (seeds only)",
+    vertical: "bithire",
+    engine: "modern",
+    theme: "light",
+    plan: "enterprise",
+    features: ["*"],
+    branding: { companyName: "The Management (seeds only)" },
+    appearance: seedsOnlyAppearance(primary),
+    customTranslations: THE_MANAGEMENT_DB_COPY[locale],
+  };
+}
+
 const THE_MANAGEMENT_DB_APPEARANCE: NonNullable<TenantConfig["appearance"]> = {
   general: {
     ...THE_MANAGEMENT_PROJECTED_APPEARANCE.general,

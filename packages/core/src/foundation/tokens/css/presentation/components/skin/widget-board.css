@@ -20,8 +20,13 @@
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  /* The toolbar's separation from the board below is board-level room and takes
+     rhythm. Its own gap and padding deliberately do NOT: the bar wraps inside a
+     fixed `min-height` with `overflow: hidden`, so a scaled inline gap can push
+     a control to a second row that then gets clipped. That needs a sighted
+     check before it moves. */
   gap: var(--ds-spacing-3, 12px);
-  margin-bottom: var(--ds-spacing-3, 12px);
+  margin-bottom: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
   min-height: 72px;
   padding: var(--ds-spacing-3, 12px) var(--ds-spacing-4, 16px);
   overflow: hidden;
@@ -330,15 +335,24 @@
   grid-auto-rows: 8px;
   grid-auto-flow: dense;
   align-items: start;
-  column-gap: var(--ds-spacing-4, 16px);
-  row-gap: var(--ds-spacing-2, 8px);
+  /* RHYTHM: the board seams are the room between widgets, so both gaps are
+     PRESET rungs and take the tenant `appearance.rhythm` axis. Scaling row-gap
+     is safe BY CONSTRUCTION even though the row engine does span arithmetic
+     with it: the solver never assumes the authored value -- it measures
+     `getComputedStyle(grid).gridAutoRows` and `.rowGap` on every resize
+     (patterns/data/widget-board/runtime/solver/react) and derives spans from
+     the measured pair, so a scaled seam simply produces the spans that seam
+     deserves. `grid-auto-rows` stays exact: it is the row QUANTUM the spans are
+     counted in (a size, density's axis), not room between widgets. */
+  column-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));
+  row-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));
   width: 100%;
   min-width: 0;
 }
 
 .ds-pattern-widget-board .ds-widget-board__grid[data-narrow="true"] {
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--ds-spacing-3, 12px);
+  gap: calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1));
 }
 
 .ds-pattern-widget-board

@@ -47,7 +47,7 @@ describe('Form integration', () => {
     );
 
     const content = await screen.findByText('Form content');
-    const form = content.closest('form');
+    const form = content.closest('form') as HTMLFormElement;
 
     expect(form).toBeTruthy();
     expect(form).toHaveClass('integration-form');
@@ -174,7 +174,7 @@ describe('Form compound components', () => {
       'classic'
     );
 
-    const form = document.querySelector('form');
+    const form = document.querySelector('form') as HTMLFormElement;
     expect(form).toBeInTheDocument();
     expect(form.querySelector('.custom-error-list')).toBeTruthy();
   });

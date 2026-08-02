@@ -14,10 +14,15 @@
  * claim: the browser demonstration of a real Management row stays an open
  * residual owned by the canary wave.
  */
-import { describe, expect, it } from 'vitest';
+import React from 'react';
+import { cleanup, render, waitFor } from '@testing-library/react';
+import { afterEach, describe, expect, it } from 'vitest';
 
+import type { TenantConfig } from '@/foundation/contracts/composition/tenants';
 import { bithireBrandTheme } from '@/foundation/tokens/ts/presentation/brand-themes/bithire';
+import { NavigationSettingsIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-settings';
 import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
+import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
 import type { BrandTheme } from '@/foundation/contracts/composition/tenants/themes';
 import type {
   TenantThemeConfigIdentity,
@@ -56,6 +61,11 @@ const MANAGEMENT_DOCUMENT: TenantThemeDocument = {
       },
       experienceProfile: 'rottay/management-editorial@1',
     },
+    advanced: {
+      // C2: the opened icon axis — an editorial document product carries the
+      // duotone posture as Pro data, no CSS and no supplier name.
+      profiles: { icon: 'duotone' },
+    },
   },
 };
 
@@ -75,10 +85,69 @@ function compileBithireStatic(): Record<string, string> {
   }).cssVariables;
 }
 
+function tenantConfig(overrides: Partial<TenantConfig>): TenantConfig {
+  return {
+    slug: 'acid-tenant',
+    name: 'Acid tenant',
+    theme: 'base',
+    plan: 'enterprise',
+    features: [],
+    branding: { companyName: 'Acid tenant' },
+    ...overrides,
+  };
+}
+
+afterEach(cleanup);
+
 describe('C1b expressive envelope — two-system acid test', () => {
+  it('renders the SAME public icon with different weights under the two real artifacts', async () => {
+    // The Management: the compiled DB artifact's OWN normalized appearance
+    // feeds the production provider — document → validator → compiler →
+    // artifact → provider → RSC-safe seam → rendered component. No manual
+    // resolver call anywhere.
+    const managementArtifact = compileManagementArtifact();
+    const tmm = render(
+      <DesignSystemProvider
+        tenantConfig={tenantConfig({
+          slug: 'the-management',
+          appearance: managementArtifact.normalizedAppearance as TenantConfig['appearance'],
+        })}
+        skipCssLoading
+      >
+        <NavigationSettingsIcon decorative data-testid="acid-icon" />
+      </DesignSystemProvider>
+    );
+    await waitFor(() => {
+      expect(
+        tmm.getByTestId('acid-icon').getAttribute('data-icon-weight')
+      ).toBe('duotone');
+    });
+    tmm.unmount();
+
+    // BitHire static: same tree, same component, only the tenant config
+    // changes — the icon must come back to the baseline navigation weight.
+    const bithire = render(
+      <DesignSystemProvider
+        tenantConfig={tenantConfig({
+          slug: 'bithire',
+          brandTheme: bithireBrandTheme,
+        })}
+        skipCssLoading
+      >
+        <NavigationSettingsIcon decorative data-testid="acid-icon" />
+      </DesignSystemProvider>
+    );
+    await waitFor(() => {
+      expect(
+        bithire.getByTestId('acid-icon').getAttribute('data-icon-weight')
+      ).toBe('regular');
+    });
+  });
+
   it('diverges computably on at least 7 of the 9 axes with governed config only', () => {
     const bithire = compileBithireStatic();
-    const management = compileManagementArtifact().variables;
+    const managementArtifact = compileManagementArtifact();
+    const management = managementArtifact.variables;
 
     // Missing-vs-present is not a valid white-label success. Both artifacts
     // must materially emit the measured channel and its values must differ.
@@ -132,7 +201,15 @@ describe('C1b expressive envelope — two-system acid test', () => {
         bithire['--ds-motion-intensity'],
         management['--ds-motion-intensity']
       ),
-      // icon: frontier — excluded from measurement by design.
+      // icon (C2b): measured END-TO-END in the dedicated rendered-icon case
+      // below — the same PUBLIC icon component mounts under both real
+      // artifacts and must produce different markup. Here the axis records
+      // that the Management artifact actually carries the posture data the
+      // rendered case consumes.
+      icon:
+        (managementArtifact.normalizedAppearance.advanced?.profiles as {
+          icon?: string;
+        })?.icon === 'duotone',
     };
 
     const divergentCount = Object.values(axes).filter(Boolean).length;
@@ -140,6 +217,7 @@ describe('C1b expressive envelope — two-system acid test', () => {
       Object.fromEntries(Object.keys(axes).map((axis) => [axis, true]))
     );
     expect(divergentCount).toBeGreaterThanOrEqual(7);
+    expect(Object.keys(axes)).toHaveLength(9);
 
     // Concrete anchors so the divergence is legible, not just counted.
     expect(bithire['--ds-experience-profile']).toBe(
@@ -211,6 +289,9 @@ describe('C1b expressive envelope — two-system acid test', () => {
     expect(artifact.normalizedAppearance.general?.motion).toEqual({
       intensity: 0.7,
       durationScale: 1.1,
+      // C2: ambient rejoined the composition once the C1b remediation moved
+      // the DataTable shimmer off the keyword-as-duration read.
+      ambient: 'subtle',
     });
     expect(artifact.normalizedAppearance.general?.typography?.typePairing).toBe(
       'editorial'
@@ -241,7 +322,7 @@ describe('C1b expressive envelope — two-system acid test', () => {
 
   it('rolls back to baseline identity when the selection is unset (DB path)', () => {
     const stripped = structuredClone(MANAGEMENT_DOCUMENT);
-    delete stripped.visualFoundation.general.experienceProfile;
+    delete stripped.visualFoundation.general?.experienceProfile;
 
     const validation = validateTenantThemeDocument(stripped);
     expect(validation.success).toBe(true);

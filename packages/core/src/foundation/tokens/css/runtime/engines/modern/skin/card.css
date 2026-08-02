@@ -124,9 +124,9 @@
 
 /* variant, at rest */
 .ds-card.ds-card--modern[data-part='root'][data-variant='elevated'] {
-  background-color: var(--ds-card-elevated-bg, var(--ds-card-bg, var(--ds-surface-card)));
+  background-color: var(--ds-card-elevated-bg, var(--ds-card-bg, var(--ds-material-card-background, var(--ds-surface-card))));
   background-image: linear-gradient(var(--ds-card-elevation-surface), var(--ds-card-elevation-surface)), var(--ds-card-surface-gradient, var(--ds-gradient-surface));
-  border: var(--ds-card-elevated-border-width, var(--ds-edge-hairline-width, 1px)) solid var(--ds-card-border);
+  border: var(--ds-card-elevated-border-width, var(--ds-edge-hairline-width, 1px)) var(--ds-edge-standard-style, solid) var(--ds-card-border);
   /* material layer 4 (optical edge): an intensity-scaled inset top keyline
      composed with the tenant elevation. At --ds-effect-intensity: 0 the
      keyline dissolves while the shadow channel keeps the hierarchy. The
@@ -137,9 +137,9 @@
     var(--ds-card-elevated-shadow, var(--ds-card-shadow));
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='outlined'] {
-  background-color: var(--ds-card-bordered-bg, var(--ds-card-bg, var(--ds-surface-card)));
+  background-color: var(--ds-card-bordered-bg, var(--ds-card-bg, var(--ds-material-card-background, var(--ds-surface-card))));
   background-image: var(--ds-card-surface-gradient, var(--ds-gradient-surface));
-  border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, var(--ds-edge-standard-width, 1px))) solid var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))));
+  border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, var(--ds-edge-standard-width, 1px))) var(--ds-edge-standard-style, solid) var(--ds-card-bordered-border-color, var(--ds-card-border, var(--ds-card-border-color, var(--ds-color-border-subtle))));
   box-shadow: var(--ds-card-bordered-shadow);
 }
 .ds-card.ds-card--modern[data-part='root'][data-variant='filled'] {
@@ -346,16 +346,16 @@
 
 /* ---- body ---- */
 .ds-card.ds-card--modern[data-part='root'] {
-  --ds-card-padding-current: var(--ds-card-padding-md, var(--ds-card-md-padding));
+  --ds-card-padding-current: calc(var(--ds-card-padding-md, var(--ds-card-md-padding)) * var(--ds-rhythm-effective-scale, 1));
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='none'] {
   --ds-card-padding-current: 0;
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='sm'] {
-  --ds-card-padding-current: var(--ds-card-padding-sm, var(--ds-card-sm-padding));
+  --ds-card-padding-current: calc(var(--ds-card-padding-sm, var(--ds-card-sm-padding)) * var(--ds-rhythm-effective-scale, 1));
 }
 .ds-card.ds-card--modern[data-part='root'][data-padding='lg'] {
-  --ds-card-padding-current: var(--ds-card-padding-lg, var(--ds-card-lg-padding));
+  --ds-card-padding-current: calc(var(--ds-card-padding-lg, var(--ds-card-lg-padding)) * var(--ds-rhythm-effective-scale, 1));
 }
 
 /* size axis: density scaling of the header copy and body text. `md`/`lg` keep

@@ -384,7 +384,7 @@
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'],
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'],
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'] {
-    min-block-size: var(--ds-workspace-switcher-touch-target-min, 44px);
+    min-block-size: var(--ds-workspace-switcher-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'] {

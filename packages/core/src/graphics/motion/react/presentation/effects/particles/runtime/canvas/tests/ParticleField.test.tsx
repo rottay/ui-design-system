@@ -214,8 +214,13 @@ describe('ParticleField governed runtime', () => {
     ['hidden', { visible: false }],
     ['ambient opt-out', { allowAmbientMotion: false }],
   ])('schedules zero RAF when %s', async (_name, condition) => {
-    intersectionVisible = condition.inView ?? true;
-    motion.policy = { ...eligiblePolicy(), ...condition };
+    // `inView` drives the intersection stub, every other key is a policy
+    // field; splitting them keeps the policy spread free of a foreign key.
+    const { inView, ...policyOverride } = condition as {
+      inView?: boolean;
+    } & Partial<ReturnType<typeof eligiblePolicy>>;
+    intersectionVisible = inView ?? true;
+    motion.policy = { ...eligiblePolicy(), ...policyOverride };
 
     const { container } = render(<ParticleField />);
 

@@ -17,7 +17,7 @@
  * State never reads through track color alone (Phase B law): the thumb
  * travels AND a governed state glyph (`action.confirm` / `action.close` from
  * the icon facade, `decorative`, skin-sized via the
- * `--_ds-proto-toggle-state-icon-size` proto) docks on the side opposite the
+ * `--_ds-toggle-state-icon-size` proto) docks on the side opposite the
  * thumb. The busy state is the governed border-spinner idiom
  * (`ds-foundation-spin`, skin-painted) docked inside the thumb -- the raw
  * inline SVG is gone. The contract's switch semantics (`role="switch"`,

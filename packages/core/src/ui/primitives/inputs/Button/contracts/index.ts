@@ -98,7 +98,7 @@ export type ButtonHtmlType = 'button' | 'submit' | 'reset';
 /**
  * Button component props.
  */
-export interface ButtonProps extends BaseComponentProps, EngineAwareProps, LoadableProps, DisableableProps, Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'onClick' | 'prefix'> {
+export interface ButtonProps extends BaseComponentProps, EngineAwareProps, LoadableProps, DisableableProps, Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'onClick' | 'prefix' | 'dir'> {
   /**
    * Button size. Accepts a plain value or a responsive breakpoint object.
    * @default 'md'

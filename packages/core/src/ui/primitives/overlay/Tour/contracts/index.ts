@@ -83,8 +83,16 @@ export type TourType = 'default' | 'primary';
  * ```
  */
 export interface TourStepProps {
-  /** Target element ref or selector */
-  target?: RefObject<HTMLElement> | (() => HTMLElement | null) | string;
+  /**
+   * Target element ref or selector.
+   *
+   * The ref may hold `null`: `useRef<HTMLElement>(null)` produces
+   * `RefObject<HTMLElement | null>` under React 19, and a step can be
+   * configured before its target has mounted. Every engine already resolves
+   * the ref through a null check before measuring, so the nullable ref is the
+   * shape callers actually hold.
+   */
+  target?: RefObject<HTMLElement | null> | (() => HTMLElement | null) | string;
   /** Title of the step */
   title: ReactNode;
   /** Description of the step */

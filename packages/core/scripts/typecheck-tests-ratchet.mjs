@@ -44,6 +44,12 @@ const require = createRequire(resolve(cwd, 'package.json'));
 let tscBin;
 try {
   tscBin = require.resolve('typescript/bin/tsc');
+  // The gate number is only meaningful WITH its compiler: `npx tsc` can
+  // resolve a different TypeScript than the workspace pin (6.x vs 5.9.x
+  // measured 440 vs 403 on the same tree), and a number quoted without its
+  // compiler once cost this program a phantom "regression".
+  const tsVersion = require(require.resolve('typescript/package.json')).version;
+  console.log(`typecheck-tests: ${label}: compiler typescript@${tsVersion} (${tscBin})`);
 } catch {
   console.error('typecheck-tests: cannot resolve the typescript compiler from', cwd);
   process.exit(1);

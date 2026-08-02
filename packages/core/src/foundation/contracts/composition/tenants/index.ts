@@ -16,7 +16,7 @@
 
 import type { EngineName } from '../../runtime/engine';
 import type { ProductProfileKey } from '../../kernel/product-profile-identity';
-import type { PersonalityTokens } from '../../kernel/tokens/personality';
+import type { PartialPersonalityTokens, PersonalityTokens } from '../../kernel/tokens/personality';
 import type { SurfaceTokens, MotionTokens } from '../../kernel/tokens';
 import type { MotionProfile, VerticalKey } from '../../kernel/verticals';
 
@@ -164,8 +164,17 @@ export interface TenantConfig {
   branding: TenantBranding;
 
   /** @deprecated Use `brandTheme.motion` / `brandTheme.chrome` instead.
-   *  Kept for backward compatibility with existing tenant configs. */
-  personality?: Partial<PersonalityTokens>;
+   *  Kept for backward compatibility with existing tenant configs.
+   *
+   *  DEEP-partial: a dimension is optional AND every field inside a present
+   *  dimension is independently optional. This mirrors the shape production
+   *  already consumes — `resolvePartialPersonalityCssVariables` takes
+   *  `PartialPersonalityInput`, which is exactly this, and the compiler
+   *  deep-merges through `mergePartialPersonality`. The former
+   *  `Partial<PersonalityTokens>` demanded a COMPLETE dimension the moment a
+   *  tenant declared one field of it, which no consumer requires and no tenant
+   *  config ever satisfied; the type was the broken part, not the data. */
+  personality?: PartialPersonalityTokens;
   /** @deprecated Use `brandTheme.surfaces` / `brandTheme.chrome.controls` instead.
    *  Kept for backward compatibility with existing tenant configs. */
   tokenOverrides?: TenantTokenOverrides;

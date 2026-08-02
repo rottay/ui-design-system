@@ -101,7 +101,7 @@ export interface BoxProps
   extends EngineAwareProps,
     WithChildrenProps,
     BaseComponentProps,
-    Omit<HTMLAttributes<HTMLElement>, "style" | "className" | "color"> {
+    Omit<HTMLAttributes<HTMLElement>, "style" | "className" | "color" | "dir"> {
   /**
    * The HTML element or React component to render as
    * @default 'div'
@@ -118,15 +118,59 @@ export interface BoxProps
   htmlFor?: string;
 
   /**
-   * Button behavior type. Meaningful only when `as="button"`.
+   * The `type` attribute of whichever element `as` renders — button behavior
+   * for `as="button"`, control kind for `as="input"`.
    *
    * Same polymorphic-`as` limitation as {@link BoxProps.htmlFor}: the generic
-   * `HTMLAttributes<HTMLElement>` union has no button-specific attributes, so
-   * the explicit behavior type is surfaced here. Defaults to the UA behavior
-   * (`submit` inside forms) when omitted — pass `type="button"` for controls
-   * that must never submit.
+   * `HTMLAttributes<HTMLElement>` union has no element-specific attributes, so
+   * the explicit type is surfaced here. For a button it defaults to the UA
+   * behavior (`submit` inside forms) when omitted — pass `type="button"` for
+   * controls that must never submit. The input kinds are here because
+   * `as="input" type="hidden"` is how a form carries a server-action value
+   * that has no visible control; restricting this to the button behaviors made
+   * that shape unrepresentable and forced raw HTML back into forms.
    */
-  type?: 'button' | 'submit' | 'reset';
+  type?:
+    | 'button'
+    | 'submit'
+    | 'reset'
+    | 'checkbox'
+    | 'color'
+    | 'date'
+    | 'datetime-local'
+    | 'email'
+    | 'file'
+    | 'hidden'
+    | 'image'
+    | 'month'
+    | 'number'
+    | 'password'
+    | 'radio'
+    | 'range'
+    | 'search'
+    | 'tel'
+    | 'text'
+    | 'time'
+    | 'url'
+    | 'week';
+
+  /**
+   * Form control name. Meaningful only when `as="input"`.
+   *
+   * Same polymorphic-`as` limitation as {@link BoxProps.type}. A hidden input
+   * without a `name` submits nothing, so omitting this from the contract would
+   * make the `as="input" type="hidden"` shape useless even once its `type` is
+   * representable.
+   */
+  name?: string;
+
+  /**
+   * Form control value. Meaningful only when `as="input"`.
+   *
+   * Pairs with {@link BoxProps.name}: together they are what a hidden input
+   * contributes to the submitted `FormData`.
+   */
+  value?: string | number | readonly string[];
 
   /**
    * Padding on all sides. Accepts a responsive object for breakpoint-aware values.

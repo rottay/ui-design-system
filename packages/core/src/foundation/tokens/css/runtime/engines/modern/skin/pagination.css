@@ -234,7 +234,7 @@
 
 .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
   display: inline-flex;
-  inline-size: var(--_ds-proto-pagination-jumper-width, 56px);
+  inline-size: var(--_ds-pagination-jumper-width, 56px);
   block-size: var(--ds-pagination-current-height);
   padding-inline: var(--ds-pagination-current-padding-x);
   border-radius: var(--ds-pagination-radius, var(--ds-radius-md));
@@ -279,8 +279,9 @@
 /* ---- page-size changer (contract `showSizeChanger`): a native select in
         the select.css native-trigger idiom — same height scale, hairline,
         radius and typography as the joined controls, with the governed
-        chevron docked at the inline end. The two `--_ds-proto-*` axes are
-        private experiments (batch-28 ledger); both fall back to existing DS
+        chevron docked at the inline end. The clearance axis is still a
+        governed prototoken pending the shared native-arrow substrate; the
+        inset is settled private geometry. Both fall back to existing DS
         channels. `tabular-nums` here is a plain value, not the
         `--ds-pagination-numeric` channel expression: the modern-engine test
         pins that channel to exactly two declaration sites. ---- */
@@ -302,8 +303,17 @@
   align-items: center;
   padding-block: 0;
   padding-inline-start: var(--ds-pagination-current-padding-x);
+  /* Private pagination canon. The hold was a shared native-select-arrow
+     substrate that does not exist and that nobody has planned: today both this
+     site and select.css merely borrow the undeclared
+     `--ds-select-native-arrow-clearance` name and fall through to the same
+     2rem. A prototoken means an adjudication is OPEN, and waiting on an
+     unplanned substrate is not one — so this settles as private canon.
+     Unifying the two families behind a real substrate stays a D3 opportunity IF
+     that substrate is ever minted; the borrowed name is kept in the chain so
+     that the day it lands, both sites pick it up unchanged. */
   padding-inline-end: var(
-    --_ds-proto-pagination-size-arrow-clearance,
+    --_ds-pagination-size-arrow-clearance,
     var(--ds-select-native-arrow-clearance, 2rem)
   );
   border-radius: var(--ds-pagination-radius, var(--ds-radius-md));
@@ -358,7 +368,7 @@
 .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-icon'] {
   position: absolute;
   inset-block-start: 50%;
-  inset-inline-end: var(--_ds-proto-pagination-size-arrow-inset, var(--ds-spacing-2));
+  inset-inline-end: var(--_ds-pagination-size-arrow-inset, var(--ds-spacing-2));
   translate: 0 -50%;
   pointer-events: none;
   color: var(--ds-color-text-muted);
@@ -384,7 +394,7 @@
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
   .rottay-pagination--modern[data-part='root'] [data-part='pagination-size-select'],
   .rottay-pagination--modern[data-part='root'] [data-part='quick-jumper'] {
-    min-block-size: var(--ds-pagination-touch-target-min, 44px);
+    min-block-size: var(--ds-pagination-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

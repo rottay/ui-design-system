@@ -316,8 +316,8 @@
     position: absolute;
     inset-block-start: 50%;
     inset-inline-start: 50%;
-    inline-size: max(100%, var(--ds-avatar-touch-target-min));
-    block-size: max(100%, var(--ds-avatar-touch-target-min));
+    inline-size: max(100%, var(--ds-avatar-touch-target-min, var(--ds-touch-target-min, 44px)));
+    block-size: max(100%, var(--ds-avatar-touch-target-min, var(--ds-touch-target-min, 44px)));
     transform: translate(-50%, -50%);
   }
 }

@@ -20,7 +20,13 @@ describe('normalizeTenantMotionDial', () => {
       expressive: { intensity: 0.8, durationScale: 0.95, ambient: 'subtle' },
     });
 
-    expect(new Set(Object.values(MOTION_PROFILE_DEFAULTS).map(JSON.stringify)).size).toBe(3);
+    // `.map(JSON.stringify)` passed the array INDEX as `JSON.stringify`'s
+    // `replacer` argument, so each profile was serialized under a different
+    // (nonsense) replacer -- the set size was incidental, not a distinctness
+    // proof. The arrow serializes each dial on its own.
+    expect(
+      new Set(Object.values(MOTION_PROFILE_DEFAULTS).map((dial) => JSON.stringify(dial))).size,
+    ).toBe(3);
   });
 
   it('publishes and enforces the bounded tenant surface', () => {

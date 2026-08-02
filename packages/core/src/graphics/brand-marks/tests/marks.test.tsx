@@ -135,7 +135,7 @@ describe('mark accessibility and hostile runtime input', () => {
 
   it('fails closed for absent, blank, or contradictory accessibility intent', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-    const UnsafeBrandMark = BrandMark as React.ComponentType<Record<string, unknown>>;
+    const UnsafeBrandMark = BrandMark as unknown as React.ComponentType<Record<string, unknown>>;
     const { container, rerender } = render(<UnsafeBrandMark name="github" />);
 
     expect(container.querySelector('svg')).toBeNull();
@@ -148,8 +148,8 @@ describe('mark accessibility and hostile runtime input', () => {
 
   it('fails closed for unknown brand, provider, and service values', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-    const UnsafeBrandMark = BrandMark as React.ComponentType<Record<string, unknown>>;
-    const UnsafeCloudMark = CloudServiceMark as React.ComponentType<Record<string, unknown>>;
+    const UnsafeBrandMark = BrandMark as unknown as React.ComponentType<Record<string, unknown>>;
+    const UnsafeCloudMark = CloudServiceMark as unknown as React.ComponentType<Record<string, unknown>>;
     const { container, rerender } = render(<UnsafeBrandMark name="cdn-logo" decorative />);
 
     expect(container.querySelector('svg')).toBeNull();
@@ -223,7 +223,7 @@ describe('brand variant and cloud optical resolution', () => {
 
   it('falls back safely for a hostile public variant', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-    const UnsafeBrandMark = BrandMark as React.ComponentType<Record<string, unknown>>;
+    const UnsafeBrandMark = BrandMark as unknown as React.ComponentType<Record<string, unknown>>;
     render(<UnsafeBrandMark name="anthropic" variant="remote" decorative data-testid="mark" />);
 
     expect(screen.getByTestId('mark')).toHaveAttribute('data-mark-variant', 'color');
