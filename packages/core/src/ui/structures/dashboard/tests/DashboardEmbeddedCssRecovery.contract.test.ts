@@ -33,12 +33,12 @@ const CSS_CONTRACTS = [
   {
     name: 'dashboard activity interactions',
     path: ACTIVITY_CSS_PATH,
-    expectedPaintDeclarations: 43,
+    expectedPaintDeclarations: 51,
   },
   {
     name: 'dashboard metrics interactions',
     path: METRICS_CSS_PATH,
-    expectedPaintDeclarations: 44,
+    expectedPaintDeclarations: 47,
   },
   {
     name: 'DataTerminalCard keyframes',
@@ -678,7 +678,7 @@ describe('dashboard embedded CSS recovery contract', () => {
     }
   });
 
-  it('reconciles all 110 recovered paint declarations by stylesheet', () => {
+  it('reconciles all 121 recovered and direction-aware paint declarations by stylesheet', () => {
     const counts = CSS_CONTRACTS.map((contract) => ({
       name: contract.name,
       actual: countPaintDeclarations(contract.path),
@@ -689,8 +689,11 @@ describe('dashboard embedded CSS recovery contract', () => {
       expect(count.actual, count.name).toBe(count.expected);
     }
 
-    expect(counts.reduce((total, count) => total + count.actual, 0)).toBe(110);
-    expect(counts.map(({ actual }) => actual)).toEqual([43, 44, 20, 3]);
+    // The 11 additions are not new visual authorities: they are the explicit
+    // RTL mirrors of directional transforms/shadows added when the physical
+    // interaction vocabulary became logical and hover-capability-gated.
+    expect(counts.reduce((total, count) => total + count.actual, 0)).toBe(121);
+    expect(counts.map(({ actual }) => actual)).toEqual([51, 47, 20, 3]);
   });
 
   it('keeps every recovered interaction scope wired to its component and live class hooks', () => {
@@ -702,10 +705,12 @@ describe('dashboard embedded CSS recovery contract', () => {
       const cssClasses = new Set<string>();
 
       parseRelativeCss(component.cssPath).walkRules((rule) => {
-        if (!rule.selector.startsWith(`:where(.${component.scope})`)) return;
-        scopedRules.push(rule.selector);
-        for (const match of rule.selector.matchAll(/\.([A-Za-z_-][\w-]*)/g)) {
-          cssClasses.add(match[1]!);
+        for (const selector of rule.selectors) {
+          if (!selector.includes(`:where(.${component.scope})`)) continue;
+          scopedRules.push(selector);
+          for (const match of selector.matchAll(/\.([A-Za-z_-][\w-]*)/g)) {
+            if (match[1] !== component.scope) cssClasses.add(match[1]!);
+          }
         }
       });
 
@@ -800,7 +805,9 @@ describe('dashboard embedded CSS recovery contract', () => {
 
       for (const node of root.nodes) {
         if (node.type !== 'rule') continue;
-        expect(node.selector, `${contract.name}: ${node.selector}`).toMatch(/^:where\(\.ds-/);
+        expect(node.selector, `${contract.name}: ${node.selector}`).toMatch(
+          /^(?:\[dir=['"]rtl['"]\]\s+)?:where\(\.ds-/
+        );
       }
 
       expect(css, contract.name).not.toMatch(/\brottay\b|#[\da-f]{3,8}|rgba?\(|hsla?\(/i);

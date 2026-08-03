@@ -26,6 +26,7 @@ import { Box } from '../../../../../primitives/layout/Box';
 import { Stack } from '../../../../../primitives/layout/Stack';
 import { Flex } from '../../../../../primitives/layout/Flex';
 import { Text } from '../../../../../primitives/display/Typography';
+import { Heading } from '../../../../../primitives/display/Typography';
 import { Button } from '../../../../../primitives/inputs/Button';
 import { Skeleton } from '../../../../../primitives/feedback/Skeleton';
 import { ContentDocumentIcon } from '@/graphics/icons/presentation/semantic/generated/roles/content-document';
@@ -283,7 +284,10 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
             {avatar && <Box className="ds-record-workbench__avatar">{avatar}</Box>}
             <Box className="ds-record-workbench__identity">
               <Flex align="center" gap={2} wrap="wrap">
-                <Text className="ds-record-workbench__title" data-part="title" size="xl" weight="semibold">{title}</Text>
+                {/* Record name is the page's h1 (document outline); the
+                    Heading engine applies the same xl/semibold ramp the Text
+                    rendered, so the swap is landmark-only. */}
+                <Heading className="ds-record-workbench__title" data-part="title" level="h1" size="xl" weight="semibold">{title}</Heading>
                 {status && (
                   <span
                     className="ds-record-workbench__status-badge"
@@ -301,7 +305,7 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
 
         {/* Action buttons */}
         {actions && actions.length > 0 && (
-          <Flex className="ds-record-workbench__actions" gap={2} wrap="wrap">
+          <Flex className="ds-record-workbench__actions" data-part="actions" gap={2} wrap="wrap">
             {actions.map((action) => (
               <Button
                 className="ds-record-workbench__action"
@@ -438,20 +442,32 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
                   </Stack>
                 ) : (
                   <>
-                    <Text
+                    <Heading
                       id={sidebarTitleId}
                       className="ds-record-workbench__sidebar-title"
                       data-part="sidebar-title"
+                      level="h2"
                       size="sm"
                       weight="medium"
                     >
                       {tSurfaceOr('record_workbench.details_title', 'Details')}
-                    </Text>
-                    <Stack spacing="sm">
+                    </Heading>
+                    {/* Metadata is a definition list (label = dt, value = dd);
+                        the skin neutralizes the UA dl/dd margins. */}
+                    <Stack
+                      as="dl"
+                      spacing="sm"
+                      className="ds-record-workbench__metadata-list"
+                      data-part="metadata-list"
+                    >
                       {(metadata ?? []).map((field) => (
                         <Box className="ds-record-workbench__field" key={field.key}>
-                          <Text className="ds-record-workbench__muted-text" size="xs" color="muted">{field.label}</Text>
-                          <Box className="ds-record-workbench__field-value">
+                          <Box as="dt">
+                            <Text className="ds-record-workbench__muted-text" size="xs" color="muted">
+                              {field.label}
+                            </Text>
+                          </Box>
+                          <Box as="dd" className="ds-record-workbench__field-value">
                             {typeof field.value === 'string' ? (
                               <Text size="sm">{field.value}</Text>
                             ) : (

@@ -70,6 +70,12 @@
   color: var(--ds-cell-renderers-mono-color);
 }
 
+/* The `--` placeholder is the absence of data, not a value: it reads in the
+   disabled ink, same convention as the date renderer's empty stamp. */
+.ds-pattern-cell-renderers[data-part='mono'][data-empty='true'] {
+  color: var(--ds-color-text-disabled);
+}
+
 .ds-pattern-cell-renderers .ds-cell-renderers__icon[data-part='icon'] {
   color: var(--ds-color-text-muted);
 }
@@ -77,6 +83,11 @@
 .ds-pattern-cell-renderers[data-part='icon-text'][data-empty='false'] > [data-part='value'],
 .ds-pattern-cell-renderers[data-part='count-with-icon'] > [data-part='value'] {
   color: var(--ds-color-text-primary);
+}
+
+/* The count is a pure figure: tabular numerals keep it aligned row-to-row. */
+.ds-pattern-cell-renderers[data-part='count-with-icon'] > [data-part='value'] {
+  font-variant-numeric: tabular-nums;
 }
 
 .ds-pattern-cell-renderers[data-part='icon-text'][data-empty='true'] > [data-part='value'] {
@@ -108,7 +119,8 @@
 
 .ds-pattern-cell-renderers[data-part='score'] [data-part='score-bar'] {
   border-radius: var(--ds-cell-renderers-score-radius);
-  transition: width 300ms ease-out;
+  transition: width var(--ds-motion-normal)
+    var(--ds-motion-ease-move, ease-out);
 }
 
 .ds-pattern-cell-renderers[data-part='score'] [data-part='score-bar'][data-band='low'] {
@@ -127,12 +139,44 @@
   color: var(--ds-color-error);
 }
 
+/* Score figures read as data: tabular numerals keep the value column aligned
+   row-to-row and stop width jitter while the bar animates. */
+.ds-pattern-cell-renderers[data-part='score'] > [data-part='score-value'] {
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-cell-renderers[data-part='score'] [data-part='score-bar'] {
+    transition: none;
+  }
+}
+
 .ds-pattern-cell-renderers[data-part='score'] > [data-part='score-value'][data-band='mid'] {
   color: var(--ds-color-warning);
 }
 
 .ds-pattern-cell-renderers[data-part='score'] > [data-part='score-value'][data-band='high'] {
   color: var(--ds-color-success);
+}
+
+/* Forced colors: the band palette and track fill are stripped, so the meter
+   re-expresses as a system-color frame + Highlight bar (outline, not border:
+   zero geometry shift and exempt from the border floor). role='meter' already
+   carries min/max/now to AT. */
+@media (forced-colors: active) {
+  .ds-pattern-cell-renderers[data-part='score'] > [data-part='score-track'] {
+    outline: 1px solid CanvasText;
+    background: Canvas;
+  }
+
+  .ds-pattern-cell-renderers[data-part='score'] [data-part='score-bar'] {
+    background: Highlight;
+  }
+
+  .ds-pattern-cell-renderers[data-part='score'] > [data-part='score-value'] {
+    color: CanvasText;
+  }
 }
 
 .ds-pattern-cell-renderers[data-part='boolean'][data-value='true'] {

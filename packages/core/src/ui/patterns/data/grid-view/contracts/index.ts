@@ -76,8 +76,11 @@ export interface GridViewProps<T> {
 
   /**
    * Gap between grid cards. Accepts a number (pixels) or a CSS string
-   * (e.g. a DS spacing variable).
-   * @default 'var(--ds-spacing-4, 16px)'
+   * (e.g. a DS spacing variable). Where a bundle declares the
+   * `--ds-collection-card-gap` premium channel (BitHire: 10px, an authorized
+   * deliberate delta), the channel tiers over the resolved gap; everywhere
+   * else the fallback below governs unchanged.
+   * @default 'var(--ds-collection-card-gap, var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px)))'
    */
   gap?: number | string;
 

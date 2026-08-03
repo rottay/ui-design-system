@@ -204,10 +204,14 @@
   width: 100%;
 }
 
+/* The skeleton tracks the SAME density-aware cell padding the real header and
+   body rows paint (`--ds-modern-table-cell-padding` resolves per data-density
+   on the root), so the loading posture keeps the table's exact footprint and
+   nothing jumps when rows swap in. */
 .ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header"] {
   display: flex;
-  gap: 16px;
-  padding: 14px 16px;
+  gap: var(--ds-spacing-4, 16px);
+  padding: var(--ds-modern-table-cell-padding);
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="skeleton-header-col"] {
@@ -225,8 +229,8 @@
 
 .ds-pattern-data-table.ds-engine-modern [data-part="skeleton-row"] {
   display: flex;
-  gap: 16px;
-  padding: 16px;
+  gap: var(--ds-spacing-4, 16px);
+  padding: var(--ds-modern-table-cell-padding);
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="skeleton-cell"] {
@@ -514,8 +518,12 @@
     var(--ds-motion-ease-move, ease-out);
 }
 
-.ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"]:hover,
-.ds-pattern-data-table.ds-engine-modern [data-part="hide-column-button"]:hover,
+@media (hover: hover) {
+  .ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"]:hover,
+  .ds-pattern-data-table.ds-engine-modern [data-part="hide-column-button"]:hover {
+    opacity: 1;
+  }
+}
 .ds-pattern-data-table.ds-engine-modern [data-part="pin-toggle"]:focus-visible,
 .ds-pattern-data-table.ds-engine-modern
   [data-part="hide-column-button"]:focus-visible {
@@ -747,6 +755,8 @@
     calc(var(--ds-font-size-xs) * 0.9167)
   );
   font-weight: 500;
+  /* The pill is a pure count: tabular figures keep group headers aligned. */
+  font-variant-numeric: tabular-nums;
 }
 
 .ds-pattern-data-table.ds-engine-modern [data-part="group-header-aggregate"] {
@@ -996,9 +1006,18 @@
   color: var(--ds-color-text-muted);
 }
 
-/* ---- thead sticky shadow (position/top/z-index stay inline; only the shadow
-        the `stickyHeader` branch painted moves here) ---- */
+/* ---- thead sticky shadow, governed by scroll: the engine stamps
+        data-scrolled on the scroll region once rows actually move beneath the
+        sticky header, so the elevation cue appears only when content slides
+        under it — at rest the header-row hairline alone carries the split. ---- */
 .ds-pattern-data-table.ds-engine-modern
+  [data-part="table-head"][data-sticky="true"] {
+  box-shadow: none;
+  transition: box-shadow var(--ds-motion-normal)
+    var(--ds-motion-ease-move, ease-out);
+}
+.ds-pattern-data-table.ds-engine-modern
+  [data-part="scroll"][data-scrolled="true"]
   [data-part="table-head"][data-sticky="true"] {
   box-shadow: var(--ds-elevation-1);
 }
@@ -1036,13 +1055,15 @@
     background-color var(--ds-motion-feedback, var(--ds-motion-fast))
       var(--ds-motion-ease-move, ease-out);
 }
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="header-row"]:hover {
-  background: var(
-    --ds-table-header-bg-hover,
-    var(--ds-table-header-bg, var(--ds-surface-inset))
-  );
-  background-position: 100% 50%;
+@media (hover: hover) {
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="header-row"]:hover {
+    background: var(
+      --ds-table-header-bg-hover,
+      var(--ds-table-header-bg, var(--ds-surface-inset))
+    );
+    background-position: 100% 50%;
+  }
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="header-row"][data-part="header-row"] {
@@ -1099,7 +1120,14 @@
       color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent)
     );
 }
-.ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:hover,
+@media (hover: hover) {
+  .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:hover {
+    border-color: var(--ds-table-resize-bg-hover, var(--ds-color-primary));
+    background: var(--ds-table-reorder-bg, var(--ds-surface-inset));
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+}
 .ds-pattern-data-table.ds-engine-modern [data-part="drag-grip"]:focus-visible {
   border-color: var(--ds-table-resize-bg-hover, var(--ds-color-primary));
   background: var(--ds-table-reorder-bg, var(--ds-surface-inset));
@@ -1164,19 +1192,21 @@
       color-mix(in srgb, var(--ds-color-primary) 52%, transparent)
   );
 }
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"][data-hoverable="true"]:not(
+@media (hover: hover) {
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="body-row"][data-hoverable="true"]:not(
     [data-selected="true"]
   ):hover {
-  background-color: var(
-    --ds-table-row-bg-hover,
-    color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
-  );
-  box-shadow: var(
-    --ds-table-row-hover-shadow,
-    inset 0 0 0 1px
-      color-mix(in srgb, var(--ds-color-primary) 10%, transparent)
-  );
+    background-color: var(
+      --ds-table-row-bg-hover,
+      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+    );
+    box-shadow: var(
+      --ds-table-row-hover-shadow,
+      inset 0 0 0 1px
+        color-mix(in srgb, var(--ds-color-primary) 10%, transparent)
+    );
+  }
 }
 .ds-pattern-data-table.ds-engine-modern
   [data-part="body-row"][data-last="false"] {
@@ -1191,7 +1221,12 @@
   background: transparent;
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:hover,
+@media (hover: hover) {
+  .ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:hover {
+    background: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+    transform: scale(1.03);
+  }
+}
 .ds-pattern-data-table.ds-engine-modern [data-part="expand-button"]:focus-within {
   background: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
   transform: scale(1.03);
@@ -1315,8 +1350,12 @@
   background: transparent;
   color: var(--ds-color-text-secondary);
 }
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="pagination-page-button"]:hover,
+@media (hover: hover) {
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="pagination-page-button"]:hover {
+    box-shadow: var(--ds-table-page-button-hover-shadow, none);
+  }
+}
 .ds-pattern-data-table.ds-engine-modern
   [data-part="pagination-page-button"]:focus-within {
   box-shadow: var(--ds-table-page-button-hover-shadow, none);
@@ -1444,9 +1483,23 @@
   border: 1px solid var(--ds-table-sort-border, transparent);
 }
 
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="header-cell"][data-sortable="true"]:hover
-  [data-part="sort-icon"],
+@media (hover: hover) {
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="header-cell"][data-sortable="true"]:hover
+    [data-part="sort-icon"] {
+    border-color: var(
+      --ds-table-sort-border-hover,
+      color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+    );
+    background: var(
+      --ds-table-sort-bg-hover,
+      color-mix(in srgb, var(--ds-color-primary) 7%, transparent)
+    );
+    color: var(--ds-table-sort-color-hover, var(--ds-color-text-secondary));
+    opacity: 1;
+  }
+}
+
 .ds-pattern-data-table.ds-engine-modern
   [data-part="header-cell"][data-sortable="true"]:focus-visible
   [data-part="sort-icon"] {
@@ -1556,16 +1609,18 @@
   );
 }
 
-.ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):hover
-  :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
-  background: var(
-    --ds-table-pinned-cell-bg-hover,
-    var(
-      --ds-table-row-bg-hover,
-      color-mix(in srgb, var(--ds-color-text-primary) 4%, var(--ds-surface-card))
-    )
-  );
+@media (hover: hover) {
+  .ds-pattern-data-table.ds-engine-modern
+    [data-part="body-row"][data-hoverable="true"]:not([data-selected="true"]):hover
+    :is([data-part="data-cell"][data-pinned="true"], [data-part="actions-cell"]) {
+    background: var(
+      --ds-table-pinned-cell-bg-hover,
+      var(
+        --ds-table-row-bg-hover,
+        color-mix(in srgb, var(--ds-color-text-primary) 4%, var(--ds-surface-card))
+      )
+    );
+  }
 }
 
 .ds-pattern-data-table.ds-engine-modern
@@ -1676,12 +1731,14 @@
   font-family: var(--ds-typography-supporting-family, inherit);
 }
 
-.ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
-  [data-part="body-row"][data-hoverable="true"]:not(
+@media (hover: hover) {
+  .ds-pattern-data-table.ds-engine-modern[data-recipe="editorial"]
+    [data-part="body-row"][data-hoverable="true"]:not(
     [data-selected="true"]
   ):hover {
-  transform: translateY(-1px);
-  box-shadow: var(--ds-table-editorial-row-shadow, var(--ds-elevation-1));
+    transform: translateY(-1px);
+    box-shadow: var(--ds-table-editorial-row-shadow, var(--ds-elevation-1));
+  }
 }
 
 /* ===========================================================================
@@ -1725,15 +1782,17 @@
   [data-part="body-row"][data-last="false"] {
   border-bottom: 0;
 }
-[data-anatomy-table="zebra"]
-  .ds-pattern-data-table.ds-engine-modern
-  [data-part="body-row"][data-hoverable="true"]:not(
+@media (hover: hover) {
+  [data-anatomy-table="zebra"]
+    .ds-pattern-data-table.ds-engine-modern
+    [data-part="body-row"][data-hoverable="true"]:not(
     [data-selected="true"]
   ):hover {
-  background-color: var(
-    --ds-table-row-bg-hover,
-    color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)
-  );
+    background-color: var(
+      --ds-table-row-bg-hover,
+      color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)
+    );
+  }
 }
 
 /* open: no row hairlines or stripes, header rule only, roomier vertical rhythm. */
@@ -1860,6 +1919,7 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-data-table.ds-engine-modern[data-part="root"],
   .ds-pattern-data-table.ds-engine-modern [data-part="card"],
+  .ds-pattern-data-table.ds-engine-modern [data-part="table-head"],
   .ds-pattern-data-table.ds-engine-modern [data-part="header-row"],
   .ds-pattern-data-table.ds-engine-modern [data-part="header-cell"],
   .ds-pattern-data-table.ds-engine-modern [data-part="body-row"],

@@ -1,80 +1,234 @@
 /**
- * GalleryView skin (WO-SKIN-06 CK-I).
+ * GalleryView skin (WO-SKIN-06 CK-I; visual pass 2026-08).
  * Deliberately unlayered. The hover, checkbox-reveal and focus mechanisms are
  * the exact former injected stylesheet, now anchored to the gallery scope.
+ *
+ * OWNERSHIP: every static geometry/paint declaration the engine once carried
+ * inline lives here. The only inline styles left in the engine are runtime
+ * instance values owned by props (grid template, gap, aspectRatio) — never
+ * paint.
+ *
+ * P-79 NOTE: the Text primitive stamps its own `data-part="root"` and drops
+ * the caller's part, so the caption-text rules key on the pattern's BEM class
+ * (repeated for the same specificity the dead attribute chain had). The
+ * caption colour rule now actually matches.
+ *
+ * RTL: the checkbox overlay anchors with logical insets — it mirrors to the
+ * inline-start corner under `dir="rtl"` with zero overrides.
  */
 
-.ds-pattern-gallery-view [data-part='image-placeholder'] {
-  background: var(--ds-color-bg-tertiary, #e8e8e8);
-  color: var(--ds-color-text-disabled, #bbb);
+/* ---- media frame: the image and its placeholder share one geometry. ---- */
+
+.ds-pattern-gallery-view [data-part='image-frame'] {
+  inline-size: 100%;
+  overflow: hidden;
 }
 
 .ds-pattern-gallery-view .ds-gallery-card [data-part='image'] {
-  transition: transform 0.25s ease;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  transition: transform var(--ds-motion-normal) var(--ds-motion-ease-out);
 }
+
+.ds-pattern-gallery-view [data-part='image-placeholder'] {
+  inline-size: 100%;
+  background: var(--ds-color-bg-tertiary);
+  color: var(--ds-color-text-disabled);
+}
+
+.ds-pattern-gallery-view [data-part='image-placeholder-icon'] {
+  inline-size: var(--ds-icon-xl-size);
+  block-size: var(--ds-icon-xl-size);
+  opacity: 0.5;
+}
+
+/* ---- caption: quiet strip below the media, single-line with ellipsis. ---- */
 
 .ds-pattern-gallery-view .ds-gallery-card [data-part='caption'] {
-  background: var(--ds-color-bg-primary, #fff);
+  padding-block: var(--ds-spacing-2);
+  padding-inline: 10px;
+  background: var(--ds-color-bg-primary);
 }
 
-.ds-pattern-gallery-view .ds-gallery-card [data-part='caption-text'][data-part='caption-text'][data-part='caption-text'] {
+.ds-pattern-gallery-view
+  .ds-gallery-card
+  .ds-gallery-view__caption-text.ds-gallery-view__caption-text.ds-gallery-view__caption-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--ds-color-text-primary);
 }
 
+/* ---- card shell: relative host for the overlay; selection is announced by
+        border ink + a 1px ring (was a 1px→2px border swap that shifted every
+        card's content box on select — the ring keeps the same emphasis with
+        zero reflow). ---- */
+
 .ds-pattern-gallery-view .ds-gallery-card[data-part='card'] {
-  border-radius: var(--ds-radius-md, 8px);
-  background: var(--ds-color-bg-primary, #fff);
-  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-primary);
+  transition: box-shadow var(--ds-motion-normal) var(--ds-motion-ease-out),
+    transform var(--ds-motion-normal) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-normal) var(--ds-motion-ease-out);
+}
+
+.ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-clickable='true'] {
+  cursor: pointer;
 }
 
 .ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true'] {
-  border: 2px solid var(--ds-color-primary, #1677ff);
+  border: var(--ds-border-width-thin) solid var(--ds-color-primary);
+  box-shadow: 0 0 0 var(--ds-border-width-thin) var(--ds-color-primary);
 }
 
 .ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='false'] {
-  border: 1px solid var(--ds-color-border, #e0e0e0);
+  border: var(--ds-border-width-thin) solid var(--ds-color-border);
 }
 
-.ds-pattern-gallery-view .ds-gallery-card:hover {
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--ds-color-text-primary, #000) 10%, transparent);
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .ds-pattern-gallery-view .ds-gallery-card:hover {
+    box-shadow: 0 4px 12px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
+    transform: translateY(-2px);
+  }
+
+  .ds-pattern-gallery-view .ds-gallery-card:hover [data-part='image'] {
+    transform: scale(1.04);
+  }
+
+  .ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true']:hover {
+    box-shadow:
+      0 0 0 var(--ds-border-width-thin) var(--ds-color-primary),
+      0 4px 12px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
+  }
 }
 
-.ds-pattern-gallery-view .ds-gallery-card:hover img {
-  transform: scale(1.04);
-}
+/* ---- selection overlay: revealed on hover / when checked; always visible
+        on coarse pointers, where no hover exists to reveal it. ---- */
 
 .ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox {
+  position: absolute;
+  inset-block-start: var(--ds-spacing-2);
+  inset-inline-start: var(--ds-spacing-2);
+  z-index: 2;
+  padding: 2px;
+  line-height: 0;
   opacity: 0;
-  background: color-mix(in srgb, var(--ds-color-bg-primary, #fff) 85%, transparent);
-  border-radius: var(--ds-radius-sm, 6px);
-  box-shadow: var(--ds-elevation-1, 0 1px 3px rgba(0,0,0,0.12));
-  transition: background 0.15s ease, opacity 0.15s ease;
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 85%, transparent);
+  border-radius: var(--ds-radius-sm);
+  box-shadow: var(--ds-elevation-1);
+  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
   backdrop-filter: blur(4px);
 }
 
-.ds-pattern-gallery-view .ds-gallery-card:hover .ds-gallery-checkbox,
+@media (hover: hover) {
+  .ds-pattern-gallery-view .ds-gallery-card:hover .ds-gallery-checkbox {
+    opacity: 1;
+  }
+}
+
+/* State feedback is pointer-agnostic: a checked checkbox is always visible. */
 .ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox:has(input:checked) {
   opacity: 1;
 }
 
-.ds-pattern-gallery-view .ds-gallery-card:focus-visible {
-  outline: 2px solid var(--ds-color-primary, #1677ff);
-  outline-offset: 2px;
+@media (hover: none) {
+  .ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox {
+    opacity: 1;
+  }
 }
+
+.ds-pattern-gallery-view .ds-gallery-card:focus-visible {
+  outline: var(--ds-focus-ring-width) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset);
+}
+
+/* ---- skeleton: same footprint as the loaded card (image ratio + caption). ---- */
 
 .ds-pattern-gallery-view [data-part='skeleton-card'][data-part='skeleton-card'][data-part='skeleton-card'] {
-  border-radius: var(--ds-radius-md, 8px);
-  border: 1px solid var(--ds-color-border, #e0e0e0);
-  background: var(--ds-color-bg-primary, #fff);
+  overflow: hidden;
+  border-radius: var(--ds-radius-md);
+  border: var(--ds-border-width-thin) solid var(--ds-color-border);
+  background: var(--ds-color-bg-primary);
 }
 
+.ds-pattern-gallery-view .ds-gallery-view__skeleton-image {
+  display: block;
+  inline-size: 100%;
+}
+
+.ds-pattern-gallery-view [data-part='skeleton-caption'] {
+  padding-block: var(--ds-spacing-2);
+  padding-inline: 10px;
+}
+
+.ds-pattern-gallery-view .ds-gallery-view__skeleton-caption {
+  display: block;
+  inline-size: 70%;
+  block-size: var(--ds-font-size-sm);
+}
+
+/* ---- empty state ---- */
+
 .ds-pattern-gallery-view[data-part='root'][data-part='root'][data-empty='true'] {
-  border-radius: var(--ds-radius-lg, 12px);
-  border: 1px dashed var(--ds-color-border, #d9d9d9);
-  background: var(--ds-color-bg-secondary, #fafafa);
+  padding: var(--ds-spacing-8) var(--ds-spacing-5);
+  text-align: center;
+  border-radius: var(--ds-radius-lg);
+  border: var(--ds-border-width-thin) dashed var(--ds-color-border);
+  background: var(--ds-color-bg-secondary);
 }
 
 .ds-pattern-gallery-view [data-part='empty-state'][data-part='empty-state'][data-part='empty-state'][data-part='empty-state'] {
   color: var(--ds-color-text-muted);
+}
+
+/* ---- reduced motion: state and selection read without travel or zoom. ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-gallery-view .ds-gallery-card[data-part='card'],
+  .ds-pattern-gallery-view .ds-gallery-card [data-part='image'],
+  .ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox {
+    transition: none;
+  }
+
+  .ds-pattern-gallery-view .ds-gallery-card:hover {
+    transform: none;
+  }
+
+  .ds-pattern-gallery-view .ds-gallery-card:hover [data-part='image'] {
+    transform: none;
+  }
+}
+
+/* ---- forced colors: tints, shadows and the backdrop blur are stripped, so
+        the selected card re-expresses through the system highlight pair and
+        the overlay keeps a solid canvas behind the real checkbox. ---- */
+
+@media (forced-colors: active) {
+  .ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true'] {
+    border-color: Highlight;
+    box-shadow: none;
+    outline: var(--ds-border-width-thin) solid Highlight;
+  }
+
+  .ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='false'] {
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-gallery-view .ds-gallery-card:focus-visible {
+    outline: var(--ds-focus-ring-width) solid Highlight;
+    outline-offset: var(--ds-focus-ring-offset);
+  }
+
+  .ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: Canvas;
+    box-shadow: none;
+  }
 }

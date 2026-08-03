@@ -83,7 +83,7 @@ export function PatternVirtualList<T>(props: PatternVirtualListProps<T>): React.
     return (
       <div
         data-part="empty"
-        className={className}
+        className={['ds-pattern-virtual-list', className].filter(Boolean).join(' ')}
         style={{ height, ...style }}
         id={id}
         data-testid={dataTestId}
@@ -103,7 +103,11 @@ export function PatternVirtualList<T>(props: PatternVirtualListProps<T>): React.
       id={id}
       data-testid={dataTestId}
       data-part="root"
-      className={className}
+      className={['ds-pattern-virtual-list', className].filter(Boolean).join(' ')}
+      /* Scrollable-region law (timeline precedent): the windowed region is
+         keyboard-focusable so the list can be scrolled without a pointer and
+         AT lands on the list context before its items. */
+      tabIndex={0}
       style={{
         height,
         overflowY: 'auto',

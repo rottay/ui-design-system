@@ -22,6 +22,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 interface TokenInfo {
   name: string;
@@ -42,6 +43,11 @@ interface InspectorState {
  * Toggle with Ctrl+Shift+T. Hover elements to see their --ds-* tokens.
  */
 export function TokenInspector(): React.ReactElement | null {
+  // Optional channel with an English floor: the overlay renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
+  const t = (key: string, floor: string): string => i18n?.tOr(key, floor) ?? floor;
+
   const [state, setState] = useState<InspectorState>({
     active: false,
     tokens: [],
@@ -51,12 +57,21 @@ export function TokenInspector(): React.ReactElement | null {
   });
   const panelRef = useRef<HTMLDivElement>(null);
 
-  // Toggle on Ctrl+Shift+T
+  // Toggle on Ctrl+Shift+T; Escape walks back one level (unpin, then close)
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.shiftKey && e.key === 'T') {
         e.preventDefault();
         setState(s => ({ ...s, active: !s.active, pinned: false, tokens: [] }));
+        return;
+      }
+      if (e.key === 'Escape') {
+        setState(s => {
+          if (!s.active) return s;
+          return s.pinned
+            ? { ...s, pinned: false }
+            : { ...s, active: false, tokens: [] };
+        });
       }
     };
     window.addEventListener('keydown', handler);
@@ -111,7 +126,12 @@ export function TokenInspector(): React.ReactElement | null {
     setState(s => ({
       ...s,
       tokens: tokens.slice(0, 20),
-      position: { x: Math.min(e.clientX + 16, window.innerWidth - 380), y: Math.min(e.clientY + 16, window.innerHeight - 400) },
+      position: {
+        // clamped both ways: a viewport narrower than the panel offset must
+        // never push the panel offscreen (negative coordinates)
+        x: Math.max(8, Math.min(e.clientX + 16, window.innerWidth - 380)),
+        y: Math.max(8, Math.min(e.clientY + 16, window.innerHeight - 400)),
+      },
       element: `${tagName}${className} | tenant:${tenant} engine:${engine} theme:${theme}`,
     }));
   }, [state.pinned]);
@@ -136,18 +156,13 @@ export function TokenInspector(): React.ReactElement | null {
 
   if (!state.active) return null;
 
+  // Runtime-only inline: the panel anchors to the pointer (physical
+  // coordinates -- pointer space is physical, not writing-direction) and the
+  // interactivity flip. Frame, code typography and every static value are
+  // skin-owned.
   const panelStyle: React.CSSProperties = {
-    position: 'fixed',
     top: state.position.y,
     left: state.position.x,
-    zIndex: 99999,
-    width: 360,
-    maxHeight: 400,
-    overflow: 'auto',
-    fontFamily: "'JetBrains Mono', 'SF Mono', monospace",
-    fontSize: 11,
-    lineHeight: 1.5,
-    padding: 0,
     pointerEvents: state.pinned ? 'auto' : 'none',
   };
 
@@ -156,67 +171,59 @@ export function TokenInspector(): React.ReactElement | null {
     className: 'ds-pattern-token-inspector',
     'data-part': 'panel',
     'data-pinned': state.pinned,
+    role: 'region',
+    'aria-label': t('tokenInspector.title', 'Token Inspector'),
     style: panelStyle,
   },
     // Header
     React.createElement('div', {
       'data-part': 'header',
-      style: {
-        padding: '8px 12px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-      },
     },
-      React.createElement('span', { 'data-part': 'title', style: { fontWeight: 600 } }, 'Token Inspector'),
+      React.createElement('span', { 'data-part': 'title' }, t('tokenInspector.title', 'Token Inspector')),
       React.createElement('span', {
         'data-part': 'pinned-badge',
         'data-pinned': state.pinned,
-        style: {
-          padding: '1px 6px',
-          fontSize: 9,
-        },
-      }, state.pinned ? 'PINNED' : 'HOVER'),
+      }, state.pinned ? t('tokenInspector.pinned', 'PINNED') : t('tokenInspector.hover', 'HOVER')),
     ),
     // Element info
     React.createElement('div', {
       'data-part': 'element-info',
-      style: { padding: '6px 12px', fontSize: 10 },
     }, state.element),
     // Tokens
     state.tokens.length === 0
       ? React.createElement('div', {
           'data-part': 'empty',
-          style: { padding: '16px 12px', textAlign: 'center' as const },
-        }, 'Hover an element to inspect its tokens')
+        }, t('tokenInspector.empty', 'Hover an element to inspect its tokens'))
       : state.tokens.map((t, i) =>
           React.createElement('div', {
             key: i,
             'data-part': 'token-row',
-            style: {
-              padding: '4px 12px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              gap: 8,
-            },
           },
-            React.createElement('span', { 'data-part': 'token-name', style: { flexShrink: 0 } }, t.name),
+            React.createElement('span', { 'data-part': 'token-name' }, t.name),
             React.createElement('span', {
               'data-part': 'token-value',
               'data-value-kind': t.value.startsWith('#') || t.value.startsWith('rgb') ? 'color' : 'text',
-              style: {
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                textAlign: 'right' as const,
-              },
-            }, t.value),
+              // Truncation strategy: the value ellipsizes and the full string
+              // stays reachable on `title` (never eaten silently).
+              title: t.value,
+            },
+              // Color values get a live swatch of the INSPECTED value (runtime
+              // data -- the debugger shows what the element actually computed;
+              // geometry is skin-owned).
+              t.value.startsWith('#') || t.value.startsWith('rgb')
+                ? React.createElement('span', {
+                    'data-part': 'token-swatch',
+                    'aria-hidden': true,
+                    style: { '--ds-token-inspector-swatch': t.value } as React.CSSProperties,
+                  })
+                : null,
+              t.value,
+            ),
           ),
     ),
     // Footer
     React.createElement('div', {
       'data-part': 'footer',
-      style: { padding: '6px 12px', fontSize: 9, textAlign: 'center' as const },
-    }, 'Ctrl+Shift+T to close | Click to pin'),
+    }, t('tokenInspector.hint', 'Ctrl+Shift+T or Esc to close | Click to pin')),
   );
 }

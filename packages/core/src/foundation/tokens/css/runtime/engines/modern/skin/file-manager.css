@@ -22,9 +22,10 @@
  * Its local defaults follow the caller's style spread and intentionally win;
  * moving them to CSS would reverse that public precedence contract.
  *
- * The list row's DaisyUI `active` class remains the sole owner of its
- * class-driven behavior. SVG fill and stroke presentation attributes also
- * remain on their original elements.
+ * List-row selection paint keys on `data-selected` (the retired DaisyUI
+ * `active` class is gone); the per-row composed Checkbox announces the same
+ * state, so the fill + keyline reinforces and never encodes alone. SVG fill
+ * and stroke presentation attributes remain on their original elements.
  *
  * RESPONSIVE: the root is the named container `ds-file-manager`; the grid
  * column cuts are container queries (the composition defines the cut, not
@@ -94,13 +95,29 @@
   white-space: nowrap;
 }
 
-/* ---- folder anchor: the retired `link link-hover` affordance, owned here.
-        The anchor carries no `href`, so the resting colour must be declared --
-        preflight leaves a hrefless <a> at `inherit`. The colour resolves
-        through `--ds-color-link`, the same token the bridge's
-        `--ds-link-color` fed from, so tenant white-labelling is unchanged. ---- */
-.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'] {
+/* ---- folder entry: the composed Button primitive (link variant), painted
+        as the pattern's folder link (the retired `link link-hover` anchor
+        carried no href, so it never reached the keyboard). The caller
+        data-part wins the root anatomy part (P-79), so the primitive's own
+        chrome stays off this paint; the residual resets below keep the exact
+        historical rendering and the colour resolves through
+        `--ds-color-link`, the same token the bridge's `--ds-link-color` fed
+        from, so tenant white-labelling is unchanged. The repeated engine
+        class keeps these resets above the primitive's link/pressed state
+        rules without depending on bundle order. ---- */
+.ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'] {
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: start;
   cursor: pointer;
+  /* The composed Button's press scale/saturate never applies: the pattern's
+     own hover underline + focus ring stay the only feedback, exactly as the
+     raw button behaved. */
+  transform: none;
+  filter: none;
   color: var(--ds-file-manager-link-color, var(--ds-color-link, var(--ds-color-primary)));
   text-decoration-line: none;
   text-decoration-thickness: var(--ds-link-underline-thickness, 1px);
@@ -124,6 +141,26 @@
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link']:focus-visible {
   outline: none;
   box-shadow: var(--ds-shadow-focus-ring);
+}
+
+/* The pattern intentionally flattens Button's visual padding above; restore
+   the physical hit-area guarantee on coarse input without inflating the
+   compact link treatment for mouse/trackpad users. Both selector shapes are
+   named because the reset's repeated engine class is deliberate specificity. */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'],
+  .ds-pattern-file-manager.ds-engine-modern.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}
+
+/* The composed Button wraps the caption in its own label part; inside the
+   folder link that wrapper renders as plain inline text — no optical offset
+   and no truncation, exactly as the raw button's anonymous text rendered. */
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'] [data-part='label'] {
+  overflow: visible;
+  text-overflow: clip;
+  translate: none;
 }
 
 /* ---- item-action tones: the composed ghost Buttons keep their chrome; the
@@ -188,6 +225,8 @@
 /* ---- list view ---- */
 .ds-pattern-file-manager.ds-engine-modern [data-part='list-scroll'] {
   overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: var(--ds-color-border-secondary) transparent;
 }
 .ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] {
   inline-size: 100%;
@@ -197,6 +236,7 @@
 .ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] th {
   padding-block: var(--ds-spacing-2);
   padding-inline: var(--ds-spacing-2);
+  border-block-end: 1px solid var(--ds-color-border-subtle);
   color: var(--ds-color-text-secondary);
   font-weight: var(--ds-font-weight-semibold);
   text-align: start;
@@ -204,6 +244,40 @@
 .ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] td {
   padding-block: var(--ds-spacing-2);
   padding-inline: var(--ds-spacing-2);
+  /* Hairline row separator: in a data-dense list the eye tracks a row across
+     name → size → date → actions; the header hairline alone forced scanning
+     on whitespace alone. */
+  border-block-end: 1px solid var(--ds-color-border-subtle);
+}
+/* Quantitative cells read as data: tabular numerals, nowrap, quiet ink; the
+   size column aligns to the numeric edge (logical `end`, so RTL mirrors it)
+   and its header follows. */
+.ds-pattern-file-manager.ds-engine-modern [data-part='size-cell'],
+.ds-pattern-file-manager.ds-engine-modern [data-part='date-cell'] {
+  color: var(--ds-color-text-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='size-cell'],
+.ds-pattern-file-manager.ds-engine-modern [data-part='column-size'] {
+  text-align: end;
+}
+
+/* ---- list rows: selection keys on data-selected (the retired DaisyUI
+        `active` class is gone — the per-row Checkbox already announces the
+        same state, so the fill+keyline is reinforcement, never the cue) ---- */
+.ds-pattern-file-manager.ds-engine-modern [data-part='row'] {
+  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+.ds-pattern-file-manager.ds-engine-modern [data-part='row'][data-selected='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+}
+@media (hover: hover) {
+  .ds-pattern-file-manager.ds-engine-modern [data-part='row']:not([data-selected='true']):hover {
+    background: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  }
 }
 .ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] [data-part='column-select'] {
   inline-size: 2.5rem;
@@ -275,7 +349,11 @@
   background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
 }
 .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][role='button'][data-selected='true'] {
-  border: 2px solid var(--ds-color-primary);
+  /* Same 2px read with ZERO geometry shift: the border stays at the
+     unselected 1px and the second pixel is an inset ring, so toggling
+     selection never reflows the grid. */
+  border: 1px solid var(--ds-color-primary);
+  box-shadow: inset 0 0 0 1px var(--ds-color-primary);
 }
 .ds-pattern-file-manager.ds-engine-modern [data-part='grid-card-body'] {
   display: flex;
@@ -311,6 +389,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-file-manager.ds-engine-modern [data-part='content'],
+  .ds-pattern-file-manager.ds-engine-modern [data-part='row'],
   .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-link[data-part='folder-link'],
   .ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'] {
     transition: none;
@@ -351,8 +430,19 @@
     outline-offset: -2px;
     background: Canvas;
   }
+  .ds-pattern-file-manager.ds-engine-modern [data-part='row'] {
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-pattern-file-manager.ds-engine-modern [data-part='row'][data-selected='true'] {
+    background: Highlight;
+    color: HighlightText;
+  }
   .ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] thead th {
     border-bottom: 1px solid ButtonText;
+  }
+  .ds-pattern-file-manager.ds-engine-modern [data-part='list-table'] td {
+    border-block-end-color: ButtonText;
   }
 }
 

@@ -206,6 +206,11 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
   const { tSurfaceOr } = useSurfaceTranslations();
   const responsiveLayout = useSurfaceResponsiveLayout(config.visual);
   const isMobile = responsiveLayout.isMobile;
+  // Stamped state attributes follow the resolved viewport so SSR/first-paint
+  // markup never claims a mobile posture the media query has not confirmed
+  // (the provider's pre-resolution default is phone; form/scheduler family
+  // idiom). Structural decisions keep reading `isMobile` directly.
+  const resolvedMobile = responsiveLayout.hasResolvedViewport && isMobile;
   // Visual defaults cascade: explicit surface config -> product profile ->
   // DS defaults (spacing scale, card material, motion intensity).
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
@@ -355,8 +360,9 @@ export function OperationalSurface<TFeed extends FeedItem = FeedItem>({
     <Stack
       className="ds-surface ds-operational"
       data-part="root"
-      data-mobile={isMobile ? 'true' : 'false'}
+      data-mobile={resolvedMobile ? 'true' : 'false'}
       data-loading={loading ? 'true' : 'false'}
+      aria-busy={loading || undefined}
       spacing={sectionSpacing}
     >
       {loading ? (

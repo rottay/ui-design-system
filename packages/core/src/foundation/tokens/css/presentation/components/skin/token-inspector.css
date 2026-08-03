@@ -2,7 +2,20 @@
  * TokenInspector skin — engine-agnostic and deliberately unlayered (P-47).
  * Layered rules sort before Tailwind's base layer and cannot reliably paint
  * these elements. The inspector deliberately uses literal colors so it stays
- * legible while inspecting a broken or incomplete token theme.
+ * legible while inspecting a broken or incomplete token theme — and every
+ * literal pair now MEASURES to WCAG AA on its ground (the dim ramps were
+ * regraded: #6b6b72/#555 failed at these sizes; the pinned badge fill was
+ * darkened to reach 5:1 on white ink).
+ *
+ * CODE ROLE: the panel reads the `--ds-font-family-mono` channel with
+ * tabular figures (rubric: tabular-nums), so numeric values align and a
+ * tenant's code face carries into the inspector -- only the PAINT stays
+ * literal (a broken theme cannot break the debugger), never the type.
+ *
+ * GEOMETRY: drained from the engine's former inline styles onto canonical
+ * steps; the engine keeps only the pointer-anchored top/left and the
+ * pinned interactivity flip inline (runtime data). Alignment is logical
+ * (`text-align: end` -- the retired physical `right` mirrored nothing).
  *
  * The root has one scope class. Border-color rules repeat the target part
  * three times to reach (0,4,0) and clear the tenant border floor at (0,3,1).
@@ -11,67 +24,118 @@
  */
 
 .ds-pattern-token-inspector[data-part='panel'][data-part='panel'][data-part='panel'] {
+  position: fixed;
+  /* above every overlay the tool inspects, inside the governed z scale
+     (the retired raw 99999 respected nothing) */
+  z-index: var(--ds-z-tooltip);
+  inline-size: 22.5rem;
+  max-block-size: 25rem;
+  overflow: auto;
+  padding: 0;
+  font-family: var(--ds-font-family-mono);
+  font-size: var(--ds-font-size-2xs);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.5;
   background: #1a1a1e;
   color: #e4e4e8;
   border: 1px solid #2a2a2f;
-  border-radius: 8px;
+  border-radius: var(--ds-radius-md);
   box-shadow: 0 16px 48px rgba(0,0,0,0.5);
 }
 
 .ds-pattern-token-inspector > [data-part='header'][data-part='header'][data-part='header'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--ds-spacing-2);
+  padding-inline: var(--ds-spacing-3);
   border-bottom: 1px solid #2a2a2f;
   background: #131316;
-  border-radius: 8px 8px 0 0;
+  border-start-start-radius: var(--ds-radius-md);
+  border-start-end-radius: var(--ds-radius-md);
 }
 
 .ds-pattern-token-inspector
   > [data-part='header']
   > [data-part='title'][data-part='title'] {
+  font-weight: var(--ds-font-weight-semibold);
   color: #a0a0a5;
 }
 
 .ds-pattern-token-inspector
   > [data-part='header']
   > [data-part='pinned-badge'][data-part='pinned-badge'] {
-  border-radius: 4px;
+  padding-block: 1px;
+  padding-inline: 6px;
+  font-size: var(--ds-font-size-2xs);
+  border-radius: var(--ds-radius-xs);
 }
 
 .ds-pattern-token-inspector
   > [data-part='header']
   > [data-part='pinned-badge'][data-pinned='false'] {
   background: #2a2a2f;
-  color: #6b6b72;
+  /* AA: 5.4:1 on the badge fill (the retired #6b6b72 failed at 2.7:1) */
+  color: #9d9da6;
 }
 
 .ds-pattern-token-inspector
   > [data-part='header']
   > [data-part='pinned-badge'][data-pinned='true'] {
-  background: #3b82f6;
+  /* AA: 5.1:1 with white ink (the retired #3b82f6 fill failed at 3.7:1) */
+  background: #2563eb;
   color: #fff;
 }
 
 .ds-pattern-token-inspector > [data-part='element-info'][data-part='element-info'][data-part='element-info'] {
+  padding-block: calc(var(--ds-spacing-1) * 1.5);
+  padding-inline: var(--ds-spacing-3);
+  font-size: var(--ds-font-size-2xs);
+  overflow-wrap: anywhere;
   border-bottom: 1px solid #222226;
-  color: #6b6b72;
+  /* AA: 6.4:1 on the panel ground (the retired #6b6b72 failed at 3.3:1) */
+  color: #9d9da6;
 }
 
 .ds-pattern-token-inspector > [data-part='empty'][data-part='empty'] {
-  color: #555;
+  padding-block: var(--ds-spacing-4);
+  padding-inline: var(--ds-spacing-3);
+  text-align: center;
+  /* AA: 5.0:1 on the panel ground (the retired #555 failed at 2.3:1) */
+  color: #8a8a94;
 }
 
 .ds-pattern-token-inspector > [data-part='token-row'][data-part='token-row'][data-part='token-row'] {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2);
+  padding-block: var(--ds-spacing-1);
+  padding-inline: var(--ds-spacing-3);
   border-bottom: 1px solid #1e1e22;
 }
 
 .ds-pattern-token-inspector
   > [data-part='token-row']
   > [data-part='token-name'][data-part='token-name'] {
+  flex-shrink: 0;
   color: #a0a0a5;
 }
 
 .ds-pattern-token-inspector
   > [data-part='token-row']
+  > [data-part='token-value'] {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* logical end: the retired physical `right` mirrored nothing under RTL */
+  text-align: end;
+}
+
+.ds-pattern-token-inspector
+  > [data-part='token-row']
   > [data-part='token-value'][data-value-kind='color'] {
+  /* AA: 6:1 on the panel ground */
   color: #60a5fa;
 }
 
@@ -81,7 +145,45 @@
   color: #e4e4e8;
 }
 
+/* Live swatch of the inspected color value. Runtime data crosses through a
+   private hatch; the skin owns the paint sink. The frame is literal so a
+   broken theme cannot break the debugger. */
+.ds-pattern-token-inspector
+  > [data-part='token-row']
+  > [data-part='token-value']
+  > [data-part='token-swatch'][data-part='token-swatch'] {
+  display: inline-block;
+  inline-size: var(--ds-spacing-2);
+  block-size: var(--ds-spacing-2);
+  margin-inline-end: var(--ds-spacing-1);
+  background: var(--ds-token-inspector-swatch, transparent);
+  border: 1px solid #2a2a2f;
+  border-radius: var(--ds-radius-xs);
+}
+
 .ds-pattern-token-inspector > [data-part='footer'][data-part='footer'][data-part='footer'] {
+  padding-block: calc(var(--ds-spacing-1) * 1.5);
+  padding-inline: var(--ds-spacing-3);
+  font-size: var(--ds-font-size-2xs);
+  text-align: center;
   border-top: 1px solid #2a2a2f;
-  color: #555;
+  /* AA: 5.0:1 on the panel ground (the retired #555 failed at 2.3:1) */
+  color: #8a8a94;
+}
+
+/* forced-colors: hairlines re-assert in system ink so the panel keeps its
+   structure; the inspected swatch keeps its computed fill (it is DATA about
+   the element under the pointer -- forcing it would make the debugger lie). */
+@media (forced-colors: active) {
+  .ds-pattern-token-inspector[data-part='panel'][data-part='panel'][data-part='panel'],
+  .ds-pattern-token-inspector > [data-part='header'][data-part='header'][data-part='header'],
+  .ds-pattern-token-inspector > [data-part='element-info'][data-part='element-info'][data-part='element-info'],
+  .ds-pattern-token-inspector > [data-part='token-row'][data-part='token-row'][data-part='token-row'],
+  .ds-pattern-token-inspector > [data-part='footer'][data-part='footer'][data-part='footer'] {
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-token-inspector [data-part='token-swatch'] {
+    forced-color-adjust: none;
+  }
 }

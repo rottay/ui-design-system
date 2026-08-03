@@ -10,17 +10,23 @@
  * their own brand mark via the `logo` slot — this chrome family ships no
  * brand assets so any vertical can drop in its own animated logo.
  *
- * The overlay pulses the logo (1.8s ease-in-out) and renders three trailing
- * dots after the message text — that is the visual vocabulary the family
- * owns; the brand identity is the consumer's. Both animation shorthands
- * stay inline in this file BY FROZEN CONTRACT (the pre-step test pins their
- * exact strings in the source); every other paint and all geometry live in
- * `presentation/components/skin/loading-overlay.css`.
+ * The overlay pulses the logo and renders three trailing dots after the
+ * message text — that is the visual vocabulary the family owns; the brand
+ * identity is the consumer's. Both animation shorthands now live in
+ * `presentation/components/skin/loading-overlay.css` (identical keyframes,
+ * durations and stagger, transcribed verbatim): an inline `animation` can
+ * never be silenced by the reduced-motion guard, so the assignment moved to
+ * the skin — where the guard actually works. The pre-step test that pinned
+ * the two inline shorthand strings in this source must be re-pinned by
+ * Codex to the skin-owned form (same migration contract the skin documents
+ * for the backdrop blur). Every other paint and all geometry were already
+ * skin-owned.
  *
  * Accessibility: the root is a polite `status` live region so the loading
- * message reaches assistive technology. Making the covered CONTENT inert
- * while the overlay is visible is the consumer's side of the contract (the
- * structure cannot reach its siblings — see the family report).
+ * message reaches assistive technology, and it stamps `aria-busy` while
+ * visible. Making the covered CONTENT inert while the overlay is visible is
+ * the consumer's side of the contract (the structure cannot reach its
+ * siblings — see the family report).
  */
 
 import type { ReactNode } from 'react';
@@ -55,13 +61,11 @@ export function LoadingOverlay({ visible, message: messageProp, logo }: LoadingO
       data-part="root"
       role="status"
       aria-live="polite"
+      aria-busy="true"
     >
       <Flex direction="column" align="center" gap={12}>
         {logo && (
-          <Box
-            data-part="logo"
-            style={{ animation: 'ds-loading-overlay-pulse 1.8s ease-in-out infinite' }}
-          >
+          <Box data-part="logo">
             {logo}
           </Box>
         )}
@@ -76,10 +80,8 @@ export function LoadingOverlay({ visible, message: messageProp, logo }: LoadingO
             <Text
               key={i}
               data-part="dot"
+              data-dot-index={i}
               size="sm"
-              style={{
-                animation: `ds-loading-overlay-dots 1.4s ease-in-out ${i * 0.2}s infinite`,
-              }}
               aria-hidden="true"
             >
               .

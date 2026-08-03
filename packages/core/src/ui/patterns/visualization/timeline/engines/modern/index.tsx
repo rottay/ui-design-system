@@ -10,6 +10,13 @@
  * left, right, and alternate layout modes by flipping `data-side` per item;
  * the skin reads that attribute instead of the engine swapping class names.
  *
+ * COMPOSITION LAW: loading composes the public Spinner primitive (the
+ * hand-rolled border spinner + its skin rules are retired — merge note in
+ * the skin), and the default marker is the governed `StatusSuccessIcon`
+ * semantic role (the local inline checkmark SVG is retired) inheriting the
+ * skin's per-type `currentColor`. Timestamps are real `<time>` elements with
+ * a machine-readable `dateTime` and locale-formatted text.
+ *
  * @example
  * <ModernTimeline
  *   items={[{ key: '1', title: 'PR Merged', timestamp: '2026-03-15', type: 'success' }]}
@@ -21,6 +28,8 @@
 import React, { useMemo } from 'react';
 import type { TimelinePatternProps, TimelineItem } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
 
 const ROOT_CLASS_NAME = 'ds-pattern-timeline ds-engine-modern';
 
@@ -28,6 +37,13 @@ const ROOT_CLASS_NAME = 'ds-pattern-timeline ds-engine-modern';
 function formatTimestamp(ts: string | Date, locale: string): string {
   const date = typeof ts === 'string' ? new Date(ts) : ts;
   return date.toLocaleString(locale);
+}
+
+/** Machine-readable ISO value for `<time dateTime>`; undefined when the
+    timestamp does not parse (the visible text still renders). */
+function toIsoTimestamp(ts: string | Date): string | undefined {
+  const date = typeof ts === 'string' ? new Date(ts) : ts;
+  return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
 }
 
 /** Extracts a locale-formatted date string used as a grouping key. */
@@ -110,22 +126,23 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
         {showTimestamp && (
           <div data-part="timestamp-slot" data-side={isRight ? 'right' : 'left'} className="ds-timeline-modern__timestamp-slot">
             {!isRight && (
-              <time data-part="timestamp" className="ds-timeline-modern__timestamp">
+              <time data-part="timestamp" dateTime={toIsoTimestamp(item.timestamp)} className="ds-timeline-modern__timestamp">
                 {formatTimestamp(item.timestamp, locale)}
               </time>
             )}
           </div>
         )}
         <div data-part="marker" className="ds-timeline-modern__marker">
-          {/* Render custom icon if provided; otherwise fall back to a
-              checkmark circle SVG colored by the item's semantic type. The
-              marker is decorative: the item's title carries the meaning. */}
+          {/* Custom icon if provided; otherwise the governed status.success
+              semantic role (the retired local checkmark SVG), decorative and
+              inheriting the skin's per-type currentColor — the item's title
+              carries the meaning. */}
           {item.icon ? (
             <span data-part="marker-icon" data-type={item.type ?? 'default'} className="ds-timeline-modern__marker-icon">{item.icon}</span>
           ) : (
-            <svg data-part="marker-icon" data-type={item.type ?? 'default'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false" className="ds-timeline-modern__marker-icon">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
-            </svg>
+            <span data-part="marker-icon" data-type={item.type ?? 'default'} className="ds-timeline-modern__marker-icon">
+              <StatusSuccessIcon decorative size="md" />
+            </span>
           )}
         </div>
         <div
@@ -148,7 +165,7 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
           </div>
           <div data-part="item-title" className="ds-timeline-modern__item-title">{item.title}</div>
           {isRight && showTimestamp && (
-            <time data-part="timestamp" className="ds-timeline-modern__timestamp">
+            <time data-part="timestamp" dateTime={toIsoTimestamp(item.timestamp)} className="ds-timeline-modern__timestamp">
               {formatTimestamp(item.timestamp, locale)}
             </time>
           )}
@@ -173,12 +190,13 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
     </ul>
   );
 
-  // Early-return loading state. The spinner's geometry and motion live in the
-  // skin (ds-foundation-spin with a reduced-motion guard).
+  // Early-return loading state: the composed Spinner primitive owns ring,
+  // cadence and the polite status role (the hand-rolled border spinner and
+  // its skin rules are retired — merge note in the skin).
   if (loading) {
     return (
       <div data-part="root" data-loading="true" data-empty="false" data-mode={mode} className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
-        <span data-part="spinner" className="ds-timeline-modern__spinner" />
+        <ModernSpinner size="md" data-part="spinner" />
       </div>
     );
   }

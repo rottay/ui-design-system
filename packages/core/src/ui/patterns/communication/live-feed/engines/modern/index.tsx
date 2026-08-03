@@ -130,7 +130,7 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
         {/* Header */}
         {(header || onRefresh) && (
           <div data-part="header-row">
-            <div>{header}</div>
+            <div data-part="header-content">{header}</div>
             {onRefresh && (
               <Button
                 engine="modern"

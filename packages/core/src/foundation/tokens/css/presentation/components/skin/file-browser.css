@@ -1,9 +1,10 @@
 /**
  * FileBrowserSurface skin (wave KIMI Modern Surfaces 2026-07-30).
  *
- * LAYER: NEW FILE — pending registration by the wave coordinator in
- * `facade/entrypoints/base.css` and `facade/entrypoints/styles.css`
- * (`layer(rottay-components)`), alongside the other surface skins.
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)`,
+ * alongside the other surface skins (the wave note that called this file
+ * "pending registration" predates the wiring).
  *
  * SCOPE: the surface composes PageShellSurface (page chrome), the
  * PatternFileManager pattern (toolbar, breadcrumb, list/grid views, upload

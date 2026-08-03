@@ -1,0 +1,389 @@
+/**
+ * Modern ApprovalInbox skin (premium workflow wave).
+ *
+ * LAYER: wired into `layer(rottay-engines)` through the facade entrypoints
+ * (base.css / styles.css). The facade import lines are owner-gated — this
+ * file ships alongside the engine and the wiring delta rides the batch
+ * fragment (p615-workflow).
+ *
+ * BORDER-COLOR FLOOR (P-48): border paint reaches (0,4,0) through the
+ * always-stamped root `data-part` ancestor (or `data-loading` on the root
+ * itself) — repeating an attribute on one element is forbidden.
+ * `border: none` resets are exempt.
+ *
+ * `data-part` is a shared VOCABULARY — every rule is anchored to this
+ * component's own two scope classes, and the engine class keeps the
+ * classic/rustic trees out.
+ *
+ * VERTICAL ACCENT LAW: no side rails anywhere. Risk and SLA read through
+ * the Badge recipe (governed icon + text label + tone), never through a
+ * coloured strip.
+ *
+ * ADAPTIVE LAW: the item row is a four-track grid (select | main | figures |
+ * actions) that collapses to a stacked layout under the named
+ * `ds-approval-inbox` inline-size container; the batch-toolbar offset remains
+ * private to this composition.
+ */
+
+/* --- Root + named container ------------------------------------------------- */
+.ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] {
+  container: ds-approval-inbox / inline-size;
+}
+
+/* --- Groups stack ------------------------------------------------------------ */
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='groups'] {
+  display: grid;
+  gap: var(--ds-spacing-4, 16px);
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='group'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-1);
+  overflow: hidden;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='group'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+/* --- Group header ------------------------------------------------------------ */
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='group-header'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  padding-block: var(--ds-spacing-3, 12px);
+  padding-inline: var(--ds-spacing-5, 20px);
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='group-header'] {
+  border-block-end: 1px solid var(--ds-color-border-subtle);
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='group-title'] {
+  font-size: var(--ds-type-label-font-size, var(--ds-font-size-sm, 14px));
+  font-weight: var(--ds-font-weight-semibold, 600);
+  color: var(--ds-color-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='group-count'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- Item rows --------------------------------------------------------------- */
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='group-items'] {
+  display: grid;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item'] {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--ds-spacing-3, 12px);
+  padding-block: var(--ds-spacing-3, 12px);
+  padding-inline: var(--ds-spacing-5, 20px);
+}
+
+/* When there is no checkbox the leading auto track collapses harmlessly. */
+.ds-pattern-approval-inbox.ds-engine-modern[data-part='root']
+  [data-part='item']:not(:last-child) {
+  border-block-end: 1px solid var(--ds-color-border-subtle);
+}
+
+@media (hover: hover) {
+  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item']:hover {
+    background: var(--ds-surface-highlight);
+  }
+}
+
+/* --- Item main column --------------------------------------------------------- */
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-main'] {
+  display: grid;
+  gap: var(--ds-spacing-1, 4px);
+  min-inline-size: 0;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-title-row'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  min-inline-size: 0;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-title'] {
+  font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 13px));
+  font-weight: var(--ds-font-weight-semibold, 600);
+  color: var(--ds-color-text-primary);
+  overflow-wrap: anywhere;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-meta'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-spacing-3, 12px);
+  font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-subtitle'] {
+  overflow-wrap: anywhere;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-submitted'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-1, 4px);
+  font-variant-numeric: var(--ds-numeric-tabular, tabular-nums);
+  white-space: nowrap;
+}
+
+/* --- Figures: amount (tabular) + SLA (icon + label + tone) --------------------- */
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-figures'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-4, 16px);
+  justify-content: end;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-amount'] {
+  font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 14px));
+  font-weight: var(--ds-font-weight-semibold, 600);
+  color: var(--ds-color-text-primary);
+  font-variant-numeric: var(--ds-numeric-tabular, tabular-nums);
+  white-space: nowrap;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-sla'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-1, 4px);
+  font-size: var(--ds-type-caption-font-size, 11px);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  font-variant-numeric: var(--ds-numeric-tabular, tabular-nums);
+  white-space: nowrap;
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-sla'][data-urgency='warning'] {
+  color: var(--ds-color-warning);
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-sla'][data-urgency='critical'] {
+  color: var(--ds-color-error);
+}
+
+/* --- Item actions -------------------------------------------------------------- */
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-actions'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+}
+
+/* The public Button primitive carries the pattern's caller part (P-79), so
+   button.css does not paint these: this file is their single paint owner. */
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'] {
+  border-radius: var(--ds-radius-md);
+  transition:
+    background var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='approve'] {
+  background: var(--ds-color-success);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='reject'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='approve']:active:not(:disabled) {
+  background: var(--ds-color-success-600);
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='reject']:active:not(:disabled) {
+  background: var(--ds-color-error-600);
+}
+
+@media (hover: hover) {
+  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='approve']:hover:not(:disabled) {
+    background: var(--ds-color-success-600);
+  }
+  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'][data-action='reject']:hover:not(:disabled) {
+    background: var(--ds-color-error-600);
+  }
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button']:focus-visible,
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='batch-approve-button']:focus-visible,
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='batch-clear-button']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* --- Batch toolbar ------------------------------------------------------------- */
+/* The family-private offset keeps the batch toolbar pinned to the block-start
+   of its nearest scroll ancestor while a selection is active. It is plumbing
+   for this composition, not a tenant-level sticky-offset authority. */
+.ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='batch-toolbar'] {
+  position: sticky;
+  inset-block-start: var(--_ds-approval-inbox-batch-sticky-offset, 0px);
+  /* Sticky layer rides the canonical relative stacking channel (value 1). */
+  z-index: var(--ds-z-index-relative-above, 1);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-spacing-3, 12px);
+  margin-block-end: var(--ds-spacing-3, 12px);
+  padding-block: var(--ds-spacing-2, 10px);
+  padding-inline: var(--ds-spacing-5, 20px);
+  background: var(--ds-color-primary-subtle);
+  border: 1px solid var(--ds-color-border-primary);
+  border-radius: var(--ds-radius-lg);
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='batch-count'] {
+  font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 13px));
+  font-weight: var(--ds-font-weight-semibold, 600);
+  color: var(--ds-color-primary);
+  font-variant-numeric: var(--ds-numeric-tabular, tabular-nums);
+}
+
+/* --- Empty --------------------------------------------------------------------- */
+.ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='empty'] {
+  padding-block: var(--ds-spacing-10, 40px);
+  padding-inline: var(--ds-spacing-6, 24px);
+  background: var(--ds-surface-card);
+  border: 1px solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-lg);
+}
+
+/* --- Narrow collapse --------------------------------------------------------------
+   The four-track row grid stacks below 34rem of inline size: main keeps its
+   column, figures reflow to a start-aligned row and actions to an end-aligned
+   row (custom properties cannot parameterize a container threshold, so the
+   step is fixed here and documented; see the batch fragment). */
+@container ds-approval-inbox (max-width: 34rem) {
+  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item'] {
+    grid-template-columns: auto minmax(0, 1fr);
+    row-gap: var(--ds-spacing-2, 8px);
+  }
+
+  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-main'] {
+    grid-column: 2;
+  }
+
+  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-figures'] {
+    grid-column: 1 / -1;
+    justify-content: start;
+  }
+
+  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-actions'] {
+    grid-column: 1 / -1;
+    justify-content: end;
+  }
+}
+
+/* --- Skeleton (group footprint) --------------------------------------------------- */
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='skeleton'] {
+  display: grid;
+  gap: var(--ds-spacing-4, 16px);
+  animation: ds-approval-inbox-skeleton-pulse var(--ds-motion-deliberate)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
+}
+
+@keyframes ds-approval-inbox-skeleton-pulse {
+  from { opacity: 1; }
+  to { opacity: 0.45; }
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='skeleton-group'] {
+  background: var(--ds-surface-card);
+  border: 1px solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-lg);
+  overflow: hidden;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='skeleton-header'] {
+  block-size: var(--ds-spacing-11, 44px);
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='skeleton-row'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-3, 12px);
+  padding-block: var(--ds-spacing-3, 12px);
+  padding-inline: var(--ds-spacing-5, 20px);
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='skeleton-row-lines'] {
+  display: grid;
+  gap: var(--ds-spacing-2, 8px);
+  flex: 1 1 auto;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='skeleton-line'] {
+  block-size: var(--ds-spacing-3, 12px);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='skeleton-line'][data-width='half'] {
+  inline-size: 50%;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='skeleton-line'][data-width='third'] {
+  inline-size: 33.333%;
+}
+
+.ds-pattern-approval-inbox.ds-engine-modern [data-part='skeleton-line'][data-width='action'] {
+  inline-size: var(--ds-spacing-20, 80px);
+}
+
+/* --- Touch target floor ------------------------------------------------------------ */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'],
+  .ds-pattern-approval-inbox.ds-engine-modern [data-part='batch-approve-button'],
+  .ds-pattern-approval-inbox.ds-engine-modern [data-part='batch-clear-button'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}
+
+/* --- Forced colors ------------------------------------------------------------------ */
+@media (forced-colors: active) {
+  .ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='group'],
+  .ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='group-header'],
+  .ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='item']:not(:last-child),
+  .ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='batch-toolbar'],
+  .ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='empty'],
+  .ds-pattern-approval-inbox.ds-engine-modern[data-part='root'] [data-part='skeleton-group'] {
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-sla'][data-urgency='critical'] {
+    outline: 1px solid Highlight;
+    outline-offset: 1px;
+  }
+}
+
+/* --- Reduced motion ------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-approval-inbox.ds-engine-modern [data-part='skeleton'] {
+    animation: none;
+  }
+
+  .ds-pattern-approval-inbox.ds-engine-modern [data-part='item-action-button'] {
+    transition: none;
+  }
+}

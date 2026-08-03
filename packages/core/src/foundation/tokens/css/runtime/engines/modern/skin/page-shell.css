@@ -45,6 +45,13 @@
  * Values were transcribed verbatim from `engines/modern.tsx`; the wave R2+R3
  * pass moved the remaining inline typography (title, subtitle, crumbs, tabs,
  * separators) here as well, so the engine emits only structure and state.
+ *
+ * WAVE p612b: crumb links gain the governed `:focus-visible` ring; crumbs,
+ * tabs and the back button gain the coarse-pointer 44px floor (the crumb is
+ * a bare inline `<a>`, so the floor mounts on an inline-flex box); the
+ * engine wires the APG tab/tabpanel pairing (id + aria-controls +
+ * aria-labelledby on `content`) and announces the terminal crumb with
+ * aria-current="page".
  */
 
 /* ---- named container (W6-A): the shell root owns the width every descendant
@@ -269,7 +276,14 @@
   color: var(--ds-color-text-muted);
   cursor: pointer;
   text-decoration: none;
+  border-radius: var(--ds-radius-sm);
   transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+/* Keyboard users get the governed ring on crumb links (the UA default was
+   the only indicator before); hover/active keep their color-only cue. */
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 @media (hover: hover) {
   .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
@@ -526,6 +540,28 @@
 
   .ds-pattern-page-shell.ds-engine-modern [data-part='header-icon'] {
     --ds-page-header-icon-size: 36px;
+  }
+}
+
+/* C2c a11y floor (census-derived, cockpit-header idiom): coarse-pointer tap
+   targets never render below the canonical --ds-touch-target-min channel;
+   fine pointers keep the authored size untouched. The crumb link is a bare
+   inline <a>, so the floor only holds once it is an inline-flex box. The tab
+   rule needs the root ancestor to reach the base geometry rule's (0,4,0). */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+
+  .ds-pattern-page-shell.ds-engine-modern[data-part='root'] [data-part='tab'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+
+  .ds-pattern-page-shell.ds-engine-modern [data-part='back'] > .rottay-button {
+    min-block-size: var(--ds-touch-target-min, 44px);
+    min-inline-size: var(--ds-touch-target-min, 44px);
   }
 }
 

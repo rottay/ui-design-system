@@ -48,11 +48,14 @@
 }
 
 /* skeleton: the pulse cadence replaces Tailwind's `animate-pulse`; the bar
-   geometry was per-bar inline styles. */
+   geometry was per-bar inline styles. Duration/easing ride the motion canon
+   (`--ds-motion-slow` == the retired per-tenant `deliberate` alias, 320ms;
+   both canon tokens are foundation-declared, so they ride BARE per
+   fallback-parity). */
 .ds-pattern-live-feed.ds-engine-modern [data-part='skeleton-list'] {
   animation: ds-live-feed-skeleton-pulse
-    var(--ds-live-feed-skeleton-duration, var(--ds-motion-deliberate, 320ms))
-    var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
+    var(--ds-live-feed-skeleton-duration, var(--ds-motion-slow))
+    var(--ds-motion-ease-in-out) infinite alternate;
 }
 
 .ds-pattern-live-feed.ds-engine-modern [data-part='skeleton'] {
@@ -85,7 +88,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--ds-spacing-2);
   margin-block-end: var(--ds-live-feed-header-margin-block-end, 12px);
+}
+
+/* the caller header slot shrinks instead of pushing the refresh control
+   off-card (long titles truncate inside the caller's own node) */
+.ds-pattern-live-feed.ds-engine-modern [data-part='header-content'] {
+  min-inline-size: 0;
+  overflow: hidden;
 }
 
 /* refresh button (geometry was inline; P-79: the caller part makes this file
@@ -102,10 +113,12 @@
 }
 
 /* new-items banner: solid info surface with shape + text + count — the
-   former glow shadow is removed (no-glow law). Geometry was inline. */
+   former glow shadow is removed (no-glow law). Geometry was inline. The
+   authored height is a FLOOR (min-block-size): a long localized label
+   ("{count} new items") may grow the banner instead of clipping. */
 .ds-pattern-live-feed.ds-engine-modern [data-part='banner'] {
   inline-size: 100%;
-  block-size: var(--ds-live-feed-banner-height, 32px);
+  min-block-size: var(--ds-live-feed-banner-height, 32px);
   gap: var(--ds-live-feed-banner-gap, 8px);
   padding-block: 0;
   padding-inline: var(--ds-live-feed-banner-padding-inline, 12px);
@@ -118,18 +131,20 @@
 }
 
 /* banner count badge: pill geometry transcribed from pillBadgeSmStyle,
-   tabular count so the number never jitters the banner */
+   tabular count so the number never jitters the banner (logical padding --
+   the pill mirrors cleanly under RTL) */
 .ds-pattern-live-feed.ds-engine-modern [data-part='badge'] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 1px 6px;
+  padding-block: 1px;
+  padding-inline: 6px;
   border-radius: 9999px;
   background: var(--ds-surface-panel);
   color: var(--ds-color-text-primary);
   font-size: var(--ds-font-size-2xs);
   font-variant-numeric: tabular-nums;
-  font-weight: 500;
+  font-weight: var(--ds-font-weight-medium, 500);
   line-height: 16px;
 }
 
@@ -173,12 +188,19 @@
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
-/* coarse pointers: the three controls meet the physical 44px floor */
+/* coarse pointers: the three controls meet the physical 44px floor on BOTH
+   axes — the icon-only refresh button is authored 32x32, so its inline axis
+   needs the floor as much as its block axis (the full-width banner already
+   clears the inline floor by construction) */
 @media (hover: none), (pointer: coarse) {
   .ds-pattern-live-feed.ds-engine-modern [data-part='refresh'],
   .ds-pattern-live-feed.ds-engine-modern [data-part='banner'],
   .ds-pattern-live-feed.ds-engine-modern [data-part='load-more'] {
     min-block-size: var(--ds-live-feed-touch-target-min, var(--ds-touch-target-min, 44px));
+  }
+  .ds-pattern-live-feed.ds-engine-modern [data-part='refresh'],
+  .ds-pattern-live-feed.ds-engine-modern [data-part='load-more'] {
+    min-inline-size: var(--ds-live-feed-touch-target-min, var(--ds-touch-target-min, 44px));
   }
 }
 

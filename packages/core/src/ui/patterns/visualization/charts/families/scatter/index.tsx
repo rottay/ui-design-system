@@ -191,41 +191,17 @@ export const ScatterChart = memo(function ScatterChart({
   }), [bubble, finiteData, title]);
 
   const legendNode = legend ? (
-    <div
-      data-part="legend"
-      data-variant={variant}
-      style={{
-        display: 'flex',
-        gap: 'var(--ds-chart-legend-gap, 16px)',
-        flexWrap: 'wrap',
-        marginTop: 'var(--ds-chart-legend-margin-top, 8px)',
-        justifyContent: 'center',
-      }}
-    >
+    <div data-part="legend" data-variant={variant}>
       {finiteData
         .map((point, index) => ({ point, index }))
         .filter(({ point }) => point.label)
         .slice(0, 10)
         .map(({ point, index }) => (
-          <div
-            key={point.label ?? index}
-            data-part="legend-item"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--ds-chart-legend-item-gap, 6px)',
-              fontSize: 'var(--ds-chart-legend-font-size, 12px)',
-            }}
-          >
+          <div key={point.label ?? index} data-part="legend-item">
             <span
               data-part="legend-swatch"
               data-series-index={index % 10}
-              style={{
-                width: 10,
-                height: 10,
-                backgroundColor: palette[index % palette.length] ?? 'var(--ds-color-primary)',
-                display: 'inline-block',
-              }}
+              style={{ backgroundColor: palette[index % palette.length] ?? 'var(--ds-color-primary)' }}
             />
             <span data-part="legend-label">{point.label}</span>
           </div>
@@ -272,6 +248,7 @@ export const ScatterChart = memo(function ScatterChart({
       style={style}
       {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
+      skeleton
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Scatter chart'}

@@ -66,6 +66,11 @@
 .ds-pattern-tenant-preview.ds-engine-modern[data-part="root"]
   [data-part="tenant-name"] {
   margin: 0;
+  /* long tenant names yield with ellipsis instead of breaking the header
+     (the engine mirrors the full name on `title`) */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-base);
   font-size: var(--ds-font-size-lg);
@@ -86,7 +91,8 @@
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-xs, 0.75rem);
   font-weight: var(--ds-font-weight-semibold);
-  letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
+  /* bare declared channel (fallback-parity) */
+  letter-spacing: var(--ds-letter-spacing-wide);
   text-transform: uppercase;
 }
 .ds-pattern-tenant-preview.ds-engine-modern [data-part="sub-label"] {
@@ -224,6 +230,8 @@
 .ds-pattern-tenant-preview.ds-engine-modern [data-part="personality-tile-value"] {
   font-size: var(--ds-font-size-xs, 0.75rem);
   font-weight: var(--ds-font-weight-medium);
+  /* numeric token values (0.5, 2px) never jitter the grid */
+  font-variant-numeric: tabular-nums;
 }
 
 /* ---- narrow cut: the header wraps first (logo + long tenant name); every

@@ -28,6 +28,25 @@
  * `data-type`. `data-active` selects the active pagination dot. The unread-badge
  * count text is a literal `white` in source and is transcribed verbatim.
  *
+ * MOTION LAW (premium wave): the nav arrows and pagination dots are real
+ * `<button type="button">` controls now (the engine's former `Box onClick`
+ * had no keyboard semantics); their wells, resets, cursor and focus rings
+ * live here. Auto-rotation pauses on hover/focus-within (the engine stamps
+ * `data-paused` on ticker-body and this file freezes the progress fill) and
+ * never runs under reduced motion (the progress bar is not even rendered).
+ * The slide-out transforms mirror under RTL in the interactions skin; the
+ * nav chevrons mirror here.
+ *
+ * GEOMETRY DRAIN (premium wave): the engine's static inline geometry (panel
+ * frame, header rule, bell well, badge position, live dot, view-all pill,
+ * ticker body, presenter rhythm, icon well, content alignment, controls
+ * rhythm, nav/dot wells, progress track) moved here on LOGICAL properties —
+ * the former physical `left`/`right` offsets were LTR-only. The panel block
+ * size rides a private dashboard seam whose fallback follows the governed
+ * rhythm dial from the shipped 415px measure.
+ * The dot WIDTH stays inline as runtime state geometry. This file also adds
+ * the reduced-motion and forced-colors contracts.
+ *
  * The `<style>` block co-located in the TSX is left intact (entrance/keyframe
  * animation, scroll chrome, and `:hover` transform/box-shadow that was never
  * suppressed by an inline paint). Its `:hover` background/border-color rules sit
@@ -37,11 +56,25 @@
 
 /* root + header ------------------------------------------------------------- */
 
+/* Root frame drained from the engine (the former inline height/padding/flex
+   frame). The 415px fallback is the shipped dashboard measure, byte-exact. */
 .ds-activity-ticker.ds-activity-ticker[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
   background: var(--ds-color-bg-secondary);
 }
 .ds-activity-ticker.ds-activity-ticker[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-color-border-secondary);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='header'] {
+  /* Header geometry drained from the engine. */
+  padding-block-end: 12px;
+  margin-block-end: 12px;
+  position: relative;
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='header'][data-part='header'] {
   border-bottom: 1px solid var(--ds-color-border-secondary);
@@ -50,6 +83,13 @@
 /* bell box + badge ---------------------------------------------------------- */
 
 .ds-activity-ticker.ds-activity-ticker [data-part='bell-box'] {
+  /* 32px well drained from the engine. */
+  inline-size: 32px;
+  block-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
   background: linear-gradient(135deg, var(--ds-color-primary-100), var(--ds-color-secondary-100));
   color: var(--ds-color-primary);
 }
@@ -57,6 +97,16 @@
   border: 1px solid var(--ds-color-primary-200);
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='badge'] {
+  /* Absolute frame drained from the engine on logical offsets (the former
+     physical `right: -4` was LTR-only). */
+  position: absolute;
+  inset-block-start: -4px;
+  inset-inline-end: -4px;
+  inline-size: 14px;
+  block-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   background: var(--ds-color-error);
 }
@@ -73,18 +123,38 @@
   color: var(--ds-color-text-primary);
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='live-dot'] {
+  /* Dot geometry drained from the engine. */
+  inline-size: 6px;
+  block-size: 6px;
   border-radius: 50%;
   background: var(--ds-color-success);
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='live-label'][data-part='live-label'][data-part='live-label'] {
   color: var(--ds-color-success);
+  font-family: var(--ds-font-family-mono, monospace);
+  font-size: calc(var(--ds-font-size-2xs) * 0.818182);
 }
 
 /* view-all pill ------------------------------------------------------------- */
 
+/* Anchor reset + focus ring (the engine's former inline textDecoration). */
+.ds-activity-ticker.ds-activity-ticker .view-all-anchor {
+  text-decoration: none;
+  border-radius: var(--ds-radius-md, 8px);
+}
+.ds-activity-ticker.ds-activity-ticker .view-all-anchor:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
 .ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'] {
+  /* Pill padding + cadence drained from the engine. */
+  padding: 6px 10px;
   background: var(--ds-color-primary-100);
   color: var(--ds-color-primary);
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease);
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'][data-part='view-all-link'] {
   border: 1px solid var(--ds-color-primary-200);
@@ -93,16 +163,52 @@
   color: var(--ds-color-primary);
 }
 
-/* ticker body --------------------------------------------------------------- */
+/* ticker body (geometry drained from the engine) ---------------------------- */
 
 .ds-activity-ticker.ds-activity-ticker [data-part='ticker-body'] {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
   background: linear-gradient(180deg, var(--ds-color-bg-primary) 0%, var(--ds-color-neutral-50) 100%);
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='ticker-body'][data-part='ticker-body'] {
   border: 1px solid var(--ds-color-border-secondary);
 }
 
-/* current-item icon box — background + border + icon colour keyed on type ---- */
+/* Motion law: while the reader pauses the rotation (hover/focus-within), the
+   progress fill freezes with it instead of lying about the schedule. */
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-body'][data-paused='true'] .ticker-progress {
+  animation-play-state: paused;
+}
+
+/* current-item presenter + content (rhythm/alignment drained) --------------- */
+
+.ds-activity-ticker.ds-activity-ticker [data-part='item-presenter'] {
+  margin-block-end: 16px;
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-content'] {
+  text-align: center;
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='item-text'] {
+  margin-block-end: 10px;
+  font-size: calc(var(--ds-font-size-base) * 0.9375);
+  line-height: 1.6;
+}
+
+/* current-item icon box — background + border + icon colour keyed on type;
+   the 52px well is drained from the engine ---------------------------------- */
+
+.ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'] {
+  inline-size: 52px;
+  block-size: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-type='success'] { background: var(--ds-color-success-100); color: var(--ds-color-success); }
 .ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-type='primary'] { background: var(--ds-color-primary-100); color: var(--ds-color-primary); }
@@ -120,9 +226,12 @@
   color: var(--ds-color-text-primary);
 }
 
-/* current-item type dot — background keyed on type -------------------------- */
+/* current-item type dot — geometry drained from the engine, background keyed
+   on type ------------------------------------------------------------------- */
 
 .ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'] {
+  inline-size: 6px;
+  block-size: 6px;
   border-radius: 50%;
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='success'] { background: var(--ds-color-success); }
@@ -131,25 +240,77 @@
 .ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='warning'] { background: var(--ds-color-warning); }
 .ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'][data-type='error']   { background: var(--ds-color-error); }
 
+/* `<time>` micro typography (drained from the engine's former Text inline;
+   the mono channel replaces a raw `monospace` literal) ----------------------- */
+
 .ds-activity-ticker.ds-activity-ticker [data-part='item-time'][data-part='item-time'][data-part='item-time'] {
   color: var(--ds-color-text-muted);
+  font-family: var(--ds-font-family-mono, monospace);
+  font-size: var(--ds-font-size-2xs);
 }
 
-/* nav buttons — background + chevron colour; border at (0,4,0) --------------- */
+/* controls row — rhythm drained from the engine ------------------------------ */
+
+.ds-activity-ticker.ds-activity-ticker [data-part='controls'] {
+  margin-block-start: 24px;
+}
+
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-counter'][data-part='ticker-counter'][data-part='ticker-counter'] {
+  font-family: var(--ds-font-family-mono, monospace);
+  font-size: calc(var(--ds-font-size-2xs) * 0.909091);
+}
+
+/* nav buttons — real `<button>` controls now: the 32px well, the native-reset
+   and the focus ring live here; background + chevron colour; border at (0,4,0) */
 
 .ds-activity-ticker.ds-activity-ticker [data-part='nav-button'] {
+  inline-size: 32px;
+  block-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
   background: var(--ds-color-bg-secondary);
   color: var(--ds-color-text-muted);
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='nav-button'][data-part='nav-button'] {
   border: 1px solid var(--ds-color-border-secondary);
 }
+.ds-activity-ticker.ds-activity-ticker [data-part='nav-button']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+/* The prev/next chevrons point at the logical direction: they mirror under
+   RTL so "previous" keeps facing inline-start. */
+[dir='rtl'] .ds-activity-ticker.ds-activity-ticker [data-part='nav-button'] svg {
+  transform: scaleX(-1);
+}
 .ds-activity-ticker.ds-activity-ticker [data-part='ticker-counter'][data-part='ticker-counter'][data-part='ticker-counter'] {
   color: var(--ds-color-text-muted);
 }
 
-/* pagination dots — active gets the type gradient, inactive a flat neutral --- */
+/* pagination dots — real `<button>` controls (native reset + focus ring here;
+   the WIDTH stays inline as runtime state geometry); active gets the type
+   gradient, inactive a flat neutral ------------------------------------------ */
 
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'] {
+  block-size: 10px;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  /* Color-free frame reset, exempt from the tenant border-color floor (P-48). */
+  border: none;
+  border-radius: 999px;
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
 .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='false'] {
   background: var(--ds-color-neutral-200);
 }
@@ -159,13 +320,94 @@
 .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'][data-type='warning'] { background: linear-gradient(135deg, var(--ds-color-warning), var(--ds-color-warning-200)); }
 .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'][data-type='error']   { background: linear-gradient(135deg, var(--ds-color-error), var(--ds-color-error-200)); }
 
-/* progress track + fill (fill gradient keyed on current type) --------------- */
+/* progress track + fill (track frame drained on logical insets — the former
+   physical `left: 0; right: 0` pair is `inset-inline` now; fill gradient keyed
+   on current type) ------------------------------------------------------------ */
 
 .ds-activity-ticker.ds-activity-ticker [data-part='progress-track'] {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: 3px;
+  overflow: hidden;
   background: var(--ds-color-bg-tertiary);
+}
+.ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'] {
+  block-size: 100%;
 }
 .ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='success'] { background: linear-gradient(135deg, var(--ds-color-success), var(--ds-color-success-200)); }
 .ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='primary'] { background: linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-primary-200)); }
 .ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='info']    { background: linear-gradient(135deg, var(--ds-color-info), var(--ds-color-info-200)); }
 .ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='warning'] { background: linear-gradient(135deg, var(--ds-color-warning), var(--ds-color-warning-200)); }
 .ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'][data-type='error']   { background: linear-gradient(135deg, var(--ds-color-error), var(--ds-color-error-200)); }
+
+/* reduced motion: the view-all cadence goes quiet; the slide, live-glow and
+   progress loops are silenced in the interactions skin (and the rotation
+   itself never runs — the engine gates it on `useReducedMotion`). */
+@media (prefers-reduced-motion: reduce) {
+  .ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'] {
+    transition: none;
+  }
+}
+
+/* Touch law: coarse pointers get the 44px floor on every interactive control
+   (sizing only — paint stays). The dots keep their painted size and grow a
+   transparent hit slug instead (adjacent slugs may kiss; the active dot keeps
+   the widest zone). */
+@media (pointer: coarse) {
+  .ds-activity-ticker.ds-activity-ticker .view-all-anchor {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+  .ds-activity-ticker.ds-activity-ticker [data-part='nav-button'] {
+    min-inline-size: var(--ds-touch-target-min, 44px);
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+  .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot']::before {
+    content: '';
+    position: absolute;
+    inset: -17px -10px;
+  }
+}
+
+/* forced-colors: the panel, body, wells, pills and controls keep system
+   frames; dots and the progress fill read in system ink; item type survives
+   through the icon glyph and text, never the hue. */
+@media (forced-colors: active) {
+  .ds-activity-ticker.ds-activity-ticker[data-part='root'][data-part='root'],
+  .ds-activity-ticker.ds-activity-ticker [data-part='header'][data-part='header'],
+  .ds-activity-ticker.ds-activity-ticker [data-part='bell-box'][data-part='bell-box'],
+  .ds-activity-ticker.ds-activity-ticker [data-part='ticker-body'][data-part='ticker-body'],
+  .ds-activity-ticker.ds-activity-ticker [data-part='item-icon-box'][data-part='item-icon-box'],
+  .ds-activity-ticker.ds-activity-ticker [data-part='nav-button'][data-part='nav-button'],
+  .ds-activity-ticker.ds-activity-ticker [data-part='view-all-link'][data-part='view-all-link'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-activity-ticker.ds-activity-ticker [data-part='badge'] {
+    background: Canvas;
+    outline: 1px solid ButtonText;
+  }
+  .ds-activity-ticker.ds-activity-ticker [data-part='badge-count'][data-part='badge-count'][data-part='badge-count'] {
+    color: ButtonText;
+  }
+  .ds-activity-ticker.ds-activity-ticker [data-part='live-dot'],
+  .ds-activity-ticker.ds-activity-ticker [data-part='item-type-dot'] {
+    background: ButtonText;
+  }
+  .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'] {
+    outline: 1px solid ButtonText;
+  }
+  .ds-activity-ticker.ds-activity-ticker [data-part='ticker-dot'][data-active='true'] {
+    background: Highlight;
+  }
+  .ds-activity-ticker.ds-activity-ticker [data-part='progress-track'] {
+    background: Canvas;
+    outline: 1px solid ButtonText;
+  }
+  .ds-activity-ticker.ds-activity-ticker [data-part='progress-fill'] {
+    background: Highlight;
+  }
+}

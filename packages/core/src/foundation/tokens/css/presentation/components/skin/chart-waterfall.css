@@ -4,8 +4,41 @@
   border-radius: 2px;
 }
 
+/* Shape-coded status markers: the legend stays legible without color because
+ * each bar status gets a distinct swatch silhouette (rising / falling / framed
+ * total), mirroring the on-plot bar treatments below. */
+.ds-chart-waterfall [data-part='legend-swatch'][data-status='increase'] {
+  border-radius: 2px 2px 0 0;
+}
+
+.ds-chart-waterfall [data-part='legend-swatch'][data-status='decrease'] {
+  border-radius: 0 0 2px 2px;
+  box-shadow: inset 0 -1.5px 0 0 var(--ds-color-text-primary);
+}
+
+.ds-chart-waterfall [data-part='legend-swatch'][data-status='total'] {
+  border-radius: 0;
+  box-shadow: inset 0 0 0 1.5px var(--ds-color-text-primary);
+}
+
 .ds-chart-waterfall [data-part='legend-label'] {
   color: var(--ds-color-text-secondary);
+}
+
+/* Bar status texture without color and independent of custom tone overrides:
+ * increases stay bare (their rising geometry already speaks), decreases carry
+ * a dashed neutral frame, and totals carry a solid neutral frame. The strokes
+ * deliberately avoid the status hues so caller-authored increase/decrease
+ * colors never clash with the pattern paint. */
+.ds-chart-waterfall [data-part='bar'][data-status='decrease'] {
+  stroke: var(--ds-color-text-primary);
+  stroke-width: 1;
+  stroke-dasharray: 3 2;
+}
+
+.ds-chart-waterfall [data-part='bar'][data-status='total'] {
+  stroke: var(--ds-color-text-primary);
+  stroke-width: 1.5;
 }
 
 .ds-chart-waterfall [data-part='axis-tick-label'] {

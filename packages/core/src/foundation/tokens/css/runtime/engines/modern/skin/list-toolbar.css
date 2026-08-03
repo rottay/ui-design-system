@@ -10,8 +10,8 @@
  * only tune their composition through pattern classes and semantic data state.
  *
  * P-79 NOTE (Pass-2 falsification, 2026-07): Text primitives stamp their own
- * `data-part="root"` and DROP the caller's data-part — production-verified:
- * `[data-part="title"]` matched 0 nodes on :7001 and the title computed to
+ * `data-part='root'` and DROP the caller's data-part — production-verified:
+ * `[data-part='title']` matched 0 nodes on :7001 and the title computed to
  * font-weight 400 / letter-spacing normal / no ellipsis instead of this
  * skin's treatment. Icon components DO forward the caller's data-part. Every
  * Text-part rule below is therefore keyed on the pattern's repeated BEM class
@@ -21,7 +21,7 @@
  * caller data-part and keep their part-keyed rules.
  *
  * W10 NOTE (second visual pass, 2026-07): the Codex verdict flagged the
- * toolbar as "too many nested boxes, inconsistent radii and heights". The
+ * toolbar as 'too many nested boxes, inconsistent radii and heights'. The
  * shell is the ONLY framed surface now: the controls cluster, the saved-views
  * strip, the mobile actions group and the mobile filter rail lost their
  * borders/backgrounds/blur (their --ds-toolbar-* channels remain and restore
@@ -34,7 +34,7 @@
 
 /* Root shell -------------------------------------------------------------- */
 
-.ds-pattern-list-toolbar.ds-engine-modern[data-part="root"][data-part="root"] {
+.ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-part='root'] {
   container-type: inline-size;
   position: relative;
   isolation: isolate;
@@ -112,7 +112,7 @@
   animation: var(--ds-toolbar-entry-animation, none);
 }
 
-.ds-pattern-list-toolbar.ds-engine-modern[data-part="root"][data-part="root"]:focus-within {
+.ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-part='root']:focus-within {
   border-color: var(
     --ds-toolbar-focus-border,
     var(--ds-material-panel-border-hover, var(--ds-color-primary))
@@ -126,8 +126,8 @@
   );
 }
 
-.ds-pattern-list-toolbar.ds-engine-modern[data-part="root"]::before {
-  content: "";
+.ds-pattern-list-toolbar.ds-engine-modern[data-part='root']::before {
+  content: '';
   position: absolute;
   z-index: 0;
   inset: 0;
@@ -149,11 +149,11 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  > [data-part="main-row"],
+  > [data-part='main-row'],
 .ds-pattern-list-toolbar.ds-engine-modern
-  > [data-part="mobile-layout"],
+  > [data-part='mobile-layout'],
 .ds-pattern-list-toolbar.ds-engine-modern
-  > [data-part="filter-chips-strip"] {
+  > [data-part='filter-chips-strip'] {
   position: relative;
   z-index: 1;
 }
@@ -161,7 +161,7 @@
 /* Shared controls --------------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button.rottay-button[data-part="trigger"] {
+  .ds-list-toolbar__icon-button.rottay-button[data-part='trigger'] {
   flex: 0 0 auto;
   min-inline-size: var(--ds-button-sm-height, 2rem);
   min-block-size: var(--ds-button-sm-height, 2rem);
@@ -190,27 +190,29 @@
       var(--ds-motion-ease-enter, ease-out);
 }
 
-.ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button.rottay-button[data-part="trigger"]:hover {
-  background: var(
-    --ds-filter-pill-hover-bg,
-    var(
-      --ds-surface-highlight,
-      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
-    )
-  );
-  color: var(--ds-toolbar-color, var(--ds-color-text-primary));
-  border-color: var(
-    --ds-filter-pill-hover-border,
-    var(--ds-toolbar-control-border, var(--ds-color-border))
-  );
+@media (hover: hover) {
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__icon-button.rottay-button[data-part='trigger']:hover {
+    background: var(
+      --ds-filter-pill-hover-bg,
+      var(
+        --ds-surface-highlight,
+        color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+      )
+    );
+    color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+    border-color: var(
+      --ds-filter-pill-hover-border,
+      var(--ds-toolbar-control-border, var(--ds-color-border))
+    );
+  }
 }
 
 /* An open popover keeps its trigger visibly engaged: the Popover clones
-   aria-expanded onto the IconButton, and the trigger reads as "pressed" for
+   aria-expanded onto the IconButton, and the trigger reads as 'pressed' for
    as long as its panel lives. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__icon-button.rottay-button[data-part="trigger"][aria-expanded="true"] {
+  .ds-list-toolbar__icon-button.rottay-button[data-part='trigger'][aria-expanded='true'] {
   background: var(
     --ds-filter-pill-hover-bg,
     var(
@@ -235,7 +237,7 @@
     .ds-list-toolbar__clear-all,
     .ds-list-toolbar__primary-action,
     .ds-list-toolbar__primary-action-mobile
-  ).rottay-button[data-part="trigger"]:focus-visible {
+  ).rottay-button[data-part='trigger']:focus-visible {
   outline: none;
   box-shadow: var(
     --ds-toolbar-control-focus-ring,
@@ -256,7 +258,7 @@
     .ds-list-toolbar__clear-all,
     .ds-list-toolbar__primary-action,
     .ds-list-toolbar__primary-action-mobile
-  ).rottay-button[data-part="trigger"]:active:not(:disabled) {
+  ).rottay-button[data-part='trigger']:active:not(:disabled) {
   transform: scale(var(--ds-toolbar-control-pressed-scale, 0.975));
 }
 
@@ -266,7 +268,7 @@
 
 .ds-pattern-list-toolbar.ds-engine-modern
   .ds-list-toolbar__segmented-control
-  > [data-part="option"] {
+  > [data-part='option'] {
   width: var(--ds-button-sm-height);
   padding-inline: 0;
   transition:
@@ -281,7 +283,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__divider[data-part="divider"] {
+  .ds-list-toolbar__divider[data-part='divider'] {
   inline-size: 1px;
   block-size: 1.25rem;
   flex: 0 0 auto;
@@ -294,14 +296,14 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__divider--horizontal[data-part="divider"] {
+  .ds-list-toolbar__divider--horizontal[data-part='divider'] {
   inline-size: auto;
   block-size: 1px;
   margin: 0 var(--ds-spacing-3, 0.75rem);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__divider--compact[data-part="divider"] {
+  .ds-list-toolbar__divider--compact[data-part='divider'] {
   block-size: 0.875rem;
   margin-inline: 0;
   opacity: 0.48;
@@ -309,7 +311,7 @@
 
 /* Filter controls --------------------------------------------------------- */
 
-.ds-list-toolbar__filter-menu[data-part="filter-menu"] {
+.ds-list-toolbar__filter-menu[data-part='filter-menu'] {
   min-inline-size: min(13rem, calc(100vw - 2rem));
   max-inline-size: min(20rem, calc(100vw - 2rem));
   max-block-size: min(22rem, calc(100vh - 6rem));
@@ -321,7 +323,7 @@
   );
 }
 
-.ds-list-toolbar__settings-panel[data-part="settings-panel"] {
+.ds-list-toolbar__settings-panel[data-part='settings-panel'] {
   inline-size: min(20rem, calc(100vw - 2rem));
   max-block-size: min(28rem, calc(100vh - 6rem));
   overflow: auto;
@@ -341,7 +343,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part="trigger"] {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'] {
   flex: 0 0 auto;
   white-space: nowrap;
   border-radius: var(
@@ -367,7 +369,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part="trigger"][data-active="true"] {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-active='true'] {
   border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
   background: var(
     --ds-filter-pill-active-bg,
@@ -381,7 +383,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part="trigger"][data-open="true"] {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-open='true'] {
   border-color: var(
     --ds-filter-pill-active-border,
     var(--ds-material-control-border-hover, var(--ds-color-primary))
@@ -392,26 +394,28 @@
   );
 }
 
-.ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part="trigger"]:hover:not(
-    [data-active="true"]
+@media (hover: hover) {
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger']:hover:not(
+    [data-active='true']
   ) {
-  border-color: var(
-    --ds-filter-pill-hover-border,
-    var(--ds-toolbar-control-border, var(--ds-color-border))
-  );
-  background: var(
-    --ds-filter-pill-hover-bg,
-    var(
-      --ds-surface-highlight,
-      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
-    )
-  );
-  color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+    border-color: var(
+      --ds-filter-pill-hover-border,
+      var(--ds-toolbar-control-border, var(--ds-color-border))
+    );
+    background: var(
+      --ds-filter-pill-hover-bg,
+      var(
+        --ds-surface-highlight,
+        color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+      )
+    );
+    color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+  }
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-trigger.rottay-button[data-part="trigger"]:focus-visible {
+  .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger']:focus-visible {
   box-shadow: var(
     --ds-filter-pill-focus-ring,
     0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent)
@@ -440,7 +444,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part="trigger"] {
+  .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part='trigger'] {
   justify-content: flex-start;
   text-align: start;
   border: none;
@@ -455,7 +459,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part="trigger"][data-selected="true"] {
+  .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part='trigger'][data-selected='true'] {
   background: var(
     --ds-filter-pill-active-bg,
     color-mix(in srgb, var(--ds-color-primary) 8%, transparent)
@@ -465,22 +469,24 @@
 
 /* Selected-option checkmark: layout only; the icon inherits the item color. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  [data-part="filter-checkmark"] {
+  [data-part='filter-checkmark'] {
   display: inline-flex;
   align-items: center;
 }
 
-.ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part="trigger"]:hover:not(
-    [data-selected="true"]
+@media (hover: hover) {
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part='trigger']:hover:not(
+    [data-selected='true']
   ) {
-  background: var(
-    --ds-filter-pill-hover-bg,
-    var(
-      --ds-surface-highlight,
-      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
-    )
-  );
+    background: var(
+      --ds-filter-pill-hover-bg,
+      var(
+        --ds-surface-highlight,
+        color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+      )
+    );
+  }
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -489,7 +495,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__density-option.rottay-button[data-part="trigger"] {
+  .ds-list-toolbar__density-option.rottay-button[data-part='trigger'] {
   justify-content: flex-start;
   text-align: start;
   border-radius: var(
@@ -503,7 +509,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__density-option.rottay-button[data-part="trigger"][data-active="true"] {
+  .ds-list-toolbar__density-option.rottay-button[data-part='trigger'][data-active='true'] {
   border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
   background: var(
     --ds-filter-pill-active-bg,
@@ -512,26 +518,28 @@
   color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
 }
 
-.ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__density-option.rottay-button[data-part="trigger"]:hover:not(
-    [data-active="true"]
+@media (hover: hover) {
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__density-option.rottay-button[data-part='trigger']:hover:not(
+    [data-active='true']
   ) {
-  border-color: var(
-    --ds-filter-pill-hover-border,
-    var(--ds-toolbar-control-border, var(--ds-color-border))
-  );
-  background: var(
-    --ds-filter-pill-hover-bg,
-    var(
-      --ds-surface-highlight,
-      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
-    )
-  );
+    border-color: var(
+      --ds-filter-pill-hover-border,
+      var(--ds-toolbar-control-border, var(--ds-color-border))
+    );
+    background: var(
+      --ds-filter-pill-hover-bg,
+      var(
+        --ds-surface-highlight,
+        color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+      )
+    );
+  }
 }
 
 /* Mobile overflow --------------------------------------------------------- */
 
-.ds-list-toolbar__mobile-overflow-panel[data-part="mobile-overflow-panel"] {
+.ds-list-toolbar__mobile-overflow-panel[data-part='mobile-overflow-panel'] {
   min-inline-size: min(15rem, calc(100vw - 2rem));
   max-inline-size: min(22rem, calc(100vw - 2rem));
   padding-block: var(--ds-spacing-2, 0.5rem);
@@ -555,7 +563,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__mobile-overflow-item.rottay-button[data-part="trigger"] {
+  .ds-list-toolbar__mobile-overflow-item.rottay-button[data-part='trigger'] {
   justify-content: flex-start;
   text-align: start;
   border: none;
@@ -564,22 +572,24 @@
   outline: none;
 }
 
-.ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__mobile-overflow-item.rottay-button[data-part="trigger"]:hover {
-  background: var(
-    --ds-filter-pill-hover-bg,
-    var(
-      --ds-surface-highlight,
-      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
-    )
-  );
-  color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+@media (hover: hover) {
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__mobile-overflow-item.rottay-button[data-part='trigger']:hover {
+    background: var(
+      --ds-filter-pill-hover-bg,
+      var(
+        --ds-surface-highlight,
+        color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+      )
+    );
+    color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+  }
 }
 
 /* Title and search -------------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__main-row[data-part="main-row"] {
+  .ds-list-toolbar__main-row[data-part='main-row'] {
   min-height: var(--ds-toolbar-min-height, 3.75rem);
   min-inline-size: 0;
   flex-wrap: nowrap;
@@ -587,14 +597,14 @@
   padding: var(--ds-toolbar-padding, 0.625rem 1rem);
 }
 
-.ds-pattern-list-toolbar.ds-engine-modern[data-has-active-filters="true"]
-  > .ds-list-toolbar__main-row[data-part="main-row"] {
+.ds-pattern-list-toolbar.ds-engine-modern[data-has-active-filters='true']
+  > .ds-list-toolbar__main-row[data-part='main-row'] {
   border-bottom: 1px solid
     var(--ds-toolbar-border-bottom, var(--ds-toolbar-border, var(--ds-color-border)));
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__title-section[data-part="title-section"] {
+  .ds-list-toolbar__title-section[data-part='title-section'] {
   min-width: 0;
   flex: 0 1 auto;
   gap: var(--ds-toolbar-title-gap, var(--ds-spacing-2, 0.5rem));
@@ -602,7 +612,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__title-icon[data-part="title-icon"][data-part="title-icon"] {
+  .ds-list-toolbar__title-icon[data-part='title-icon'][data-part='title-icon'] {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
@@ -645,7 +655,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__search-section[data-part="search-section"] {
+  .ds-list-toolbar__search-section[data-part='search-section'] {
   position: relative;
   flex: 1 1 15rem;
   min-inline-size: var(--ds-toolbar-search-min-width, 11.25rem);
@@ -653,8 +663,8 @@
   min-width: 0;
 }
 
-.ds-pattern-list-toolbar.ds-engine-modern[data-has-title="false"]
-  .ds-list-toolbar__search-section[data-part="search-section"] {
+.ds-pattern-list-toolbar.ds-engine-modern[data-has-title='false']
+  .ds-list-toolbar__search-section[data-part='search-section'] {
   flex-grow: 2;
   max-inline-size: var(--ds-toolbar-search-wide-max-width, 30rem);
 }
@@ -664,8 +674,8 @@
    finding: the accidental empty band between the search field and the filter
    rail at 390px). The mobile search keeps natural height and full width. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__mobile-layout[data-part="mobile-layout"]
-  .ds-list-toolbar__search-section[data-part="search-section"] {
+  .ds-list-toolbar__mobile-layout[data-part='mobile-layout']
+  .ds-list-toolbar__search-section[data-part='search-section'] {
   flex: 0 0 auto;
   max-inline-size: none;
 }
@@ -675,7 +685,7 @@
    read as a box inside a box. The --ds-toolbar-controls-* channels remain:
    a tenant that declares them restores the framed treatment. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__controls[data-part="controls"][data-part="controls"] {
+  .ds-list-toolbar__controls[data-part='controls'][data-part='controls'] {
   flex: 0 0 auto;
   gap: var(
     --ds-toolbar-controls-gap,
@@ -693,9 +703,9 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__primary-action.rottay-button[data-part="trigger"],
+  .ds-list-toolbar__primary-action.rottay-button[data-part='trigger'],
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__primary-action-mobile.rottay-button[data-part="trigger"] {
+  .ds-list-toolbar__primary-action-mobile.rottay-button[data-part='trigger'] {
   flex: 0 0 auto;
   min-block-size: var(--ds-button-sm-height, 2rem);
   max-inline-size: var(--ds-toolbar-primary-action-max-width, 18rem);
@@ -705,7 +715,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-rail[data-part="filter-rail"] {
+  .ds-list-toolbar__filter-rail[data-part='filter-rail'] {
   flex: 0 1 auto;
   min-inline-size: 0;
   overflow-x: auto;
@@ -737,7 +747,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__saved-views[data-part="saved-views"][data-part="saved-views"] {
+  .ds-list-toolbar__saved-views[data-part='saved-views'][data-part='saved-views'] {
   flex: 1 1 auto;
   min-inline-size: 0;
   overflow-x: auto;
@@ -765,14 +775,14 @@
    redundant route-level primary action to its labelled icon. */
 @container (max-width: 480px) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__primary-action-mobile[data-part="primary-action-mobile"][data-part="primary-action-mobile"] {
+    .ds-list-toolbar__primary-action-mobile[data-part='primary-action-mobile'][data-part='primary-action-mobile'] {
     inline-size: var(--ds-control-size-sm, 32px);
     min-inline-size: var(--ds-control-size-sm, 32px);
     padding-inline: 0;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__primary-action-mobile-label[data-part="primary-action-mobile-label"] {
+    .ds-list-toolbar__primary-action-mobile-label[data-part='primary-action-mobile-label'] {
     display: none;
   }
 }
@@ -789,7 +799,7 @@
    the W10 geometry law: same height and type size as every other toolbar
    control, while input.css's coarse-pointer floor still raises it for touch. */
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__search-section[data-part="search-section"] {
+  .ds-list-toolbar__search-section[data-part='search-section'] {
   --ds-input-bg: var(--ds-search-input-bg, var(--ds-search-bg, var(--ds-surface-control, var(--ds-color-bg-input))));
   --ds-input-border: var(--ds-search-input-border, var(--ds-search-border, var(--ds-color-border)));
   --ds-input-color: var(--ds-search-input-color, var(--ds-search-color, var(--ds-color-text-primary)));
@@ -800,16 +810,16 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__search-section[data-part="search-section"]
-  .rottay-input-field[data-part="field"] {
+  .ds-list-toolbar__search-section[data-part='search-section']
+  .rottay-input-field[data-part='field'] {
   background: var(--ds-search-bg, transparent);
   border-radius: var(--ds-search-radius, var(--ds-toolbar-radius, var(--ds-radius-sm, 6px)));
   box-shadow: var(--ds-search-shadow, none);
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__search-section[data-part="search-section"]
-  .rottay-input.rottay-input--modern[data-part="root"] {
+  .ds-list-toolbar__search-section[data-part='search-section']
+  .rottay-input.rottay-input--modern[data-part='root'] {
   block-size: var(--ds-toolbar-search-height, var(--ds-button-sm-height, 2rem));
   font-size: var(--ds-toolbar-search-font-size, var(--ds-button-sm-font-size, 0.8125rem));
 }
@@ -817,7 +827,7 @@
 /* Active-filter strip ----------------------------------------------------- */
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chips-strip[data-part="filter-chips-strip"][data-part="filter-chips-strip"] {
+  .ds-list-toolbar__filter-chips-strip[data-part='filter-chips-strip'][data-part='filter-chips-strip'] {
   gap: var(--ds-spacing-2, 0.5rem);
   padding: var(--ds-toolbar-filter-strip-padding, 0.5rem 1rem);
   border-top: 1px solid
@@ -865,7 +875,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part="filter-chip"][data-part="filter-chip"] {
+  .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'] {
   border: 1px solid
     var(--ds-filter-chip-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
   border-radius: var(
@@ -882,16 +892,18 @@
       var(--ds-motion-ease-enter, ease-out);
 }
 
-.ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__filter-chip[data-part="filter-chip"]:hover {
-  transform: translateY(-1px);
-  border-color: var(
-    --ds-filter-pill-hover-border,
-    color-mix(in srgb, var(--ds-color-primary) 25%, var(--ds-color-border))
-  );
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 84%, transparent),
-    0 5px 12px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+@media (hover: hover) {
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__filter-chip[data-part='filter-chip']:hover {
+    transform: translateY(-1px);
+    border-color: var(
+      --ds-filter-pill-hover-border,
+      color-mix(in srgb, var(--ds-color-primary) 25%, var(--ds-color-border))
+    );
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 84%, transparent),
+      0 5px 12px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+  }
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -904,7 +916,7 @@
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__clear-all.rottay-button[data-part="trigger"] {
+  .ds-list-toolbar__clear-all.rottay-button[data-part='trigger'] {
   border: 1px solid
     var(--ds-toolbar-control-border, var(--ds-toolbar-border, var(--ds-color-border)));
   border-radius: var(
@@ -927,20 +939,22 @@
       var(--ds-motion-ease-enter, ease-out);
 }
 
-.ds-pattern-list-toolbar.ds-engine-modern
-  .ds-list-toolbar__clear-all.rottay-button[data-part="trigger"]:hover {
-  background: var(
-    --ds-filter-pill-hover-bg,
-    var(
-      --ds-surface-highlight,
-      color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
-    )
-  );
-  color: var(--ds-toolbar-color, var(--ds-color-text-primary));
-  border-color: var(
-    --ds-filter-pill-hover-border,
-    var(--ds-toolbar-control-border, var(--ds-color-border))
-  );
+@media (hover: hover) {
+  .ds-pattern-list-toolbar.ds-engine-modern
+    .ds-list-toolbar__clear-all.rottay-button[data-part='trigger']:hover {
+    background: var(
+      --ds-filter-pill-hover-bg,
+      var(
+        --ds-surface-highlight,
+        color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)
+      )
+    );
+    color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+    border-color: var(
+      --ds-filter-pill-hover-border,
+      var(--ds-toolbar-control-border, var(--ds-color-border))
+    );
+  }
 }
 
 .ds-pattern-list-toolbar.ds-engine-modern
@@ -959,13 +973,13 @@
 
 @container (max-width: 1080px) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-layout[data-part="mobile-layout"] {
+    .ds-list-toolbar__mobile-layout[data-part='mobile-layout'] {
     gap: var(--ds-spacing-3, 0.75rem);
     padding: var(--ds-toolbar-compact-padding, 0.75rem 1rem);
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-header[data-part="mobile-header"][data-part="mobile-header"] {
+    .ds-list-toolbar__mobile-header[data-part='mobile-header'][data-part='mobile-header'] {
     gap: var(--ds-spacing-2, 0.5rem);
     padding-bottom: var(--ds-spacing-2, 0.5rem);
     border-bottom: 1px solid
@@ -974,13 +988,13 @@
 
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__mobile-header
-    .ds-list-toolbar__title-section[data-part="title-section"] {
+    .ds-list-toolbar__title-section[data-part='title-section'] {
     flex: 1 1 auto;
     overflow: hidden;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-actions[data-part="mobile-actions"] {
+    .ds-list-toolbar__mobile-actions[data-part='mobile-actions'] {
     flex: 0 0 auto;
     gap: var(--ds-toolbar-control-gap, var(--ds-spacing-1, 0.25rem));
   }
@@ -988,7 +1002,7 @@
   /* W10: the compact actions group and the filter rail are flat like their
      desktop counterparts — no second framed panel inside the shell. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-actions[data-part="mobile-actions"][data-part="mobile-actions"] {
+    .ds-list-toolbar__mobile-actions[data-part='mobile-actions'][data-part='mobile-actions'] {
     padding: var(--ds-toolbar-mobile-actions-padding, 0);
     border: 1px solid var(--ds-toolbar-mobile-actions-border, transparent);
     border-radius: var(
@@ -999,7 +1013,7 @@
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-rail[data-part="filter-rail"][data-part="filter-rail"] {
+    .ds-list-toolbar__filter-rail[data-part='filter-rail'][data-part='filter-rail'] {
     margin-inline: 0;
     padding: var(--ds-toolbar-mobile-rail-padding, 0);
     border: 1px solid var(--ds-toolbar-mobile-rail-border, transparent);
@@ -1013,7 +1027,7 @@
 
 @container (max-width: 480px) {
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__mobile-layout[data-part="mobile-layout"] {
+    .ds-list-toolbar__mobile-layout[data-part='mobile-layout'] {
     padding: var(--ds-toolbar-phone-padding, 0.625rem 0.75rem);
   }
 
@@ -1023,7 +1037,7 @@
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chips-strip[data-part="filter-chips-strip"] {
+    .ds-list-toolbar__filter-chips-strip[data-part='filter-chips-strip'] {
     align-items: flex-start;
     padding: var(--ds-toolbar-phone-filter-strip-padding, 0.625rem 0.75rem);
   }
@@ -1046,10 +1060,10 @@
       .ds-list-toolbar__clear-all,
       .ds-list-toolbar__primary-action,
       .ds-list-toolbar__primary-action-mobile
-    ).rottay-button[data-part="trigger"],
+    ).rottay-button[data-part='trigger'],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__segmented-control
-    > [data-part="option"] {
+    > [data-part='option'] {
     min-inline-size: var(--ds-toolbar-touch-target, 2.75rem);
     min-block-size: var(--ds-toolbar-touch-target, 2.75rem);
   }
@@ -1059,13 +1073,13 @@
      to this toolbar; the Input primitive keeps its default density elsewhere. */
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__search-section
-    .rottay-input-field[data-part="field"] {
+    .rottay-input-field[data-part='field'] {
     min-block-size: var(--ds-toolbar-touch-target, 2.75rem);
   }
 }
 
-[dir="rtl"]
-  .ds-pattern-list-toolbar.ds-engine-modern[data-part="root"]::before {
+[dir='rtl']
+  .ds-pattern-list-toolbar.ds-engine-modern[data-part='root']::before {
   transform: translateX(120%);
   animation-direction: reverse;
 }
@@ -1110,17 +1124,17 @@
   /* Selectors here must match the specificity of the rules they neutralize
      (the base strip rule repeats its part twice to reach (0,5,0)); equal
      weight plus later source order is what lets `none` actually win. */
-  .ds-pattern-list-toolbar.ds-engine-modern[data-part="root"][data-part="root"],
-  .ds-pattern-list-toolbar.ds-engine-modern[data-part="root"]::before,
+  .ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-part='root'],
+  .ds-pattern-list-toolbar.ds-engine-modern[data-part='root']::before,
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chips-strip[data-part="filter-chips-strip"][data-part="filter-chips-strip"],
+    .ds-list-toolbar__filter-chips-strip[data-part='filter-chips-strip'][data-part='filter-chips-strip'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__title-icon[data-part="title-icon"][data-part="title-icon"],
+    .ds-list-toolbar__title-icon[data-part='title-icon'][data-part='title-icon'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part="filter-chip"][data-part="filter-chip"],
+    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'],
   .ds-pattern-list-toolbar.ds-engine-modern
     .ds-list-toolbar__segmented-control
-    > [data-part="option"],
+    > [data-part='option'],
   .ds-pattern-list-toolbar.ds-engine-modern
     :is(
       .ds-list-toolbar__icon-button,
@@ -1131,7 +1145,7 @@
       .ds-list-toolbar__clear-all,
       .ds-list-toolbar__primary-action,
       .ds-list-toolbar__primary-action-mobile
-    ).rottay-button[data-part="trigger"] {
+    ).rottay-button[data-part='trigger'] {
     animation: none;
     transition: none;
   }
@@ -1142,30 +1156,30 @@
      the dropdown selection rely on primary-tinted fills, so remap them to the
      system highlight pair and let every control keep a visible border. */
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.rottay-button[data-part="trigger"],
+    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chip[data-part="filter-chip"][data-part="filter-chip"],
+    .ds-list-toolbar__filter-chip[data-part='filter-chip'][data-part='filter-chip'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__icon-button.rottay-button[data-part="trigger"],
+    .ds-list-toolbar__icon-button.rottay-button[data-part='trigger'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__clear-all.rottay-button[data-part="trigger"] {
+    .ds-list-toolbar__clear-all.rottay-button[data-part='trigger'] {
     forced-color-adjust: auto;
     border-color: ButtonText;
     box-shadow: none;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-trigger.rottay-button[data-part="trigger"][data-active="true"],
+    .ds-list-toolbar__filter-trigger.rottay-button[data-part='trigger'][data-active='true'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part="trigger"][data-selected="true"],
+    .ds-list-toolbar__filter-dropdown-item.rottay-button[data-part='trigger'][data-selected='true'],
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__density-option.rottay-button[data-part="trigger"][data-active="true"] {
+    .ds-list-toolbar__density-option.rottay-button[data-part='trigger'][data-active='true'] {
     background: Highlight;
     color: HighlightText;
   }
 
   .ds-pattern-list-toolbar.ds-engine-modern
-    .ds-list-toolbar__filter-chips-strip[data-part="filter-chips-strip"][data-part="filter-chips-strip"] {
+    .ds-list-toolbar__filter-chips-strip[data-part='filter-chips-strip'][data-part='filter-chips-strip'] {
     background: Canvas;
     color: CanvasText;
   }

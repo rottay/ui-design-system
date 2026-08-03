@@ -11,6 +11,33 @@
  * riding the `--ds-kanban-column-accent` channel (a horizontal strip under
  * the header surface -- side rails are forbidden).
  *
+ * KEYBOARD MOVE (a11y): cards are real tab stops (`role="listitem"` inside
+ * `role="list"`, `aria-roledescription` "Movable card"). Arrow keys move the
+ * focused card — Up/Down reorders inside the column, Left/Right moves it to
+ * the adjacent column (inline arrows mirror under RTL via the house
+ * `isRtlContext` idiom) — through the same controlled `onItemMove` contract
+ * as drag-and-drop; Enter/Space fires `onItemClick`. Every move (and every
+ * blocked edge) is announced through a visually-hidden `aria-live="polite"`
+ * region (`data-part="move-announcer"`); focus follows the card to its new
+ * position once the parent re-renders. Column positions/headers speak, so
+ * the interaction never depends on seeing the drag ghost.
+ *
+ * DROP GEOMETRY: beyond the column ring, the exact insertion point reads by
+ * SHAPE — a primary insertion bar on the card the item would land before
+ * (`data-drop-before`), or inside the column body's block-end edge when the
+ * drop appends (`data-drop-at-end`).
+ *
+ * SCROLL AFFORDANCE: the board reports its overflow posture
+ * (`data-scrollable-start` / `data-scrollable-end`, kept current by a
+ * ResizeObserver + scroll listener) and the skin fades the clipped edges —
+ * an intentional horizontal-scroll cue instead of silently cut columns.
+ *
+ * LOADING: the loading state is a SKELETON BOARD with the real footprint
+ * (ghost columns, headers and cards pulsing on the canonical
+ * `ds-foundation-pulse` cadence); the composed Spinner stays mounted
+ * visually-hidden as the polite status announcer (its `rottay-spinner--
+ * modern` class is a public test pin).
+ *
  * Card moves use FLIP layout motion (useFlipLayout): a card re-parenting
  * across columns gets a coordinated transition instead of teleporting.
  * Geometry and paint live in the modern pattern-kanban-board skin; layout
@@ -28,7 +55,7 @@
  * />
  */
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { KanbanBoardProps } from '../../contracts';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
@@ -37,12 +64,21 @@ import ModernEmpty from '../../../../../primitives/display/Empty/engines/modern'
 import { ActionAddIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-add';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { useFlipLayout } from '@/graphics/motion/react/runtime';
+import { interpolateTranslation } from '@/foundation/i18n/runtime/resolution/translation';
 
 const ROOT_CLASS_NAME = 'ds-pattern-kanban-board ds-engine-modern';
 
 /** Normalizes a consumer number|string layout value to a CSS length. */
 function toCssLength(value: number | string): string {
   return typeof value === 'number' ? `${value}px` : value;
+}
+
+/** Reading-direction probe (Tree primitive idiom): the nearest explicit
+    `dir` wins; otherwise the document direction applies. */
+function isRtlContext(el: HTMLElement): boolean {
+  const scoped = el.closest('[dir]');
+  if (scoped) return scoped.getAttribute('dir') === 'rtl';
+  return document.documentElement.dir === 'rtl';
 }
 
 /**
@@ -56,7 +92,8 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   // Optional channel with an English floor: the board renders standalone
   // (no I18nProvider) without crashing, and never echoes a raw key.
   const i18n = useOptionalTranslation('components');
-  const tOr = (key: string, floor: string): string => i18n?.tOr(key, floor) ?? floor;
+  const tOr = (key: string, floor: string, params?: Record<string, string | number>): string =>
+    i18n?.tOr(key, floor, params) ?? interpolateTranslation(floor, params);
 
   const {
     columns,
@@ -78,6 +115,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
 
   const addItemLabel = addItemLabelProp ?? tOr('kanbanBoard.add_item', 'Add item');
   const emptyBoardLabel = tOr('kanbanBoard.empty_board', 'No columns');
+  const cardRoleLabel = tOr('kanbanBoard.card_role', 'Movable card');
 
   // Two pieces of drag state: `dragData` mirrors what we put in dataTransfer
   // (needed because the browser API restricts reading dataTransfer during
@@ -91,6 +129,17 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     columnId: string;
     position: number;
   } | null>(null);
+
+  /* Keyboard-move announcements: the polite live region renders the last
+     instruction result; `pendingFocusId` asks the post-render effect to
+     return focus to the card that just re-parented. */
+  const [announcement, setAnnouncement] = useState('');
+  const [pendingFocusId, setPendingFocusId] = useState<string | null>(null);
+  const cardRefs = useRef(new Map<string, HTMLElement>());
+
+  /* Horizontal-scroll posture for the skin's edge-fade affordance. */
+  const boardRef = useRef<HTMLDivElement | null>(null);
+  const [scrollEdges, setScrollEdges] = useState({ start: false, end: false });
 
   // FLIP layout motion for card moves: a card moving to a different column
   // re-parents in the DOM (React unmounts it from the old column's subtree
@@ -145,7 +194,103 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     setDropTarget(null);
   }, []);
 
+  /* Keyboard move protocol (see the module docblock). Reuses the controlled
+     onItemMove contract — the parent stays the source of truth — and the
+     FLIP measure, so a keyboard move animates exactly like a drag move. */
+  const handleCardKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLElement>, item: T, columnIndex: number, index: number) => {
+      const column = columns[columnIndex];
+      const id = itemKey(item);
+
+      if ((e.key === 'Enter' || e.key === ' ') && onItemClick) {
+        e.preventDefault();
+        onItemClick(item, column.id);
+        return;
+      }
+
+      const rtl = isRtlContext(e.currentTarget);
+      let toColumnIndex = columnIndex;
+      let toPosition = index;
+      if (e.key === 'ArrowUp') toPosition = index - 1;
+      else if (e.key === 'ArrowDown') toPosition = index + 1;
+      else if (e.key === 'ArrowLeft') toColumnIndex = columnIndex + (rtl ? 1 : -1);
+      else if (e.key === 'ArrowRight') toColumnIndex = columnIndex + (rtl ? -1 : 1);
+      else return;
+      e.preventDefault();
+
+      const crossesColumn = toColumnIndex !== columnIndex;
+      const blocked =
+        toColumnIndex < 0 ||
+        toColumnIndex >= columns.length ||
+        (!crossesColumn && (toPosition < 0 || toPosition >= column.items.length)) ||
+        (crossesColumn && columns[toColumnIndex].collapsed);
+      if (blocked) {
+        setAnnouncement(
+          tOr('kanbanBoard.move_edge', 'Cannot move further in that direction')
+        );
+        return;
+      }
+
+      const target = columns[toColumnIndex];
+      const position = crossesColumn ? target.items.length : toPosition;
+      measure(); // same FLIP snapshot as a drag drop
+      onItemMove(id, column.id, target.id, position);
+      setPendingFocusId(id);
+      setAnnouncement(
+        crossesColumn
+          ? tOr('kanbanBoard.move_column', 'Moved to {column}, position {position}', {
+              column: target.title,
+              position: position + 1,
+            })
+          : tOr('kanbanBoard.move_reorder', 'Moved to position {position} in {column}', {
+              column: target.title,
+              position: position + 1,
+            })
+      );
+    },
+    [columns, itemKey, onItemClick, onItemMove, measure, tOr]
+  );
+
+  /* Return focus to a keyboard-moved card once the parent's reorder has
+     re-rendered the board (the card re-parents, so focus would otherwise
+     fall back to the document body). */
+  useEffect(() => {
+    if (!pendingFocusId) return;
+    const el = cardRefs.current.get(pendingFocusId);
+    if (el) {
+      el.focus();
+      setPendingFocusId(null);
+    }
+  }, [columns, pendingFocusId]);
+
+  /* Keep the board's scroll-edge posture current: scroll listener for
+     position, ResizeObserver for content/container size changes. */
+  useEffect(() => {
+    const el = boardRef.current;
+    if (!el) return;
+    const update = () => {
+      // Math.abs keeps the math honest in RTL (negative scrollLeft engines).
+      const left = Math.abs(el.scrollLeft);
+      setScrollEdges({
+        start: left > 1,
+        end: left + el.clientWidth < el.scrollWidth - 1,
+      });
+    };
+    update();
+    el.addEventListener('scroll', update, { passive: true });
+    const observer =
+      typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null;
+    observer?.observe(el);
+    return () => {
+      el.removeEventListener('scroll', update);
+      observer?.disconnect();
+    };
+  }, [loading, columns.length]);
+
   if (loading) {
+    /* Skeleton board with the real footprint (ghost columns + cards); the
+       composed Spinner stays mounted visually-hidden as the polite status
+       announcer (public test pin: the `rottay-spinner--modern` class). */
     return (
       <div
         data-part="root"
@@ -153,7 +298,19 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
         className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
         style={style}
       >
-        <ModernSpinner size="lg" data-part="spinner" />
+        <div data-part="board" data-skeleton="true" aria-hidden="true">
+          {[0, 1, 2].map((column) => (
+            <div data-part="skeleton-column" key={column}>
+              <div data-part="skeleton-header" />
+              {[0, 1, 2].map((card) => (
+                <div data-part="skeleton-card" key={card} />
+              ))}
+            </div>
+          ))}
+        </div>
+        <span data-part="loading-status">
+          <ModernSpinner size="lg" data-part="spinner" />
+        </span>
       </div>
     );
   }
@@ -178,8 +335,13 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
           <ModernEmpty description={emptyBoardLabel} />
         </div>
       ) : (
-      <div data-part="board">
-        {columns.map((column) => {
+      <div
+        data-part="board"
+        data-scrollable-start={scrollEdges.start}
+        data-scrollable-end={scrollEdges.end}
+        ref={boardRef}
+      >
+        {columns.map((column, columnIndex) => {
           // WIP limit signals the team's WIP policy through the composed
           // Badge's danger tone (shape + number, never colour alone: the
           // count/limit text carries the state).
@@ -241,6 +403,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                   data-part="column-body"
                   data-dropping={isDropping}
                   data-empty={column.items.length === 0}
+                  data-drop-at-end={isDropping && dropTarget?.position === column.items.length}
                   onDragOver={(e) =>
                     handleDragOver(e, column.id, column.items.length)
                   }
@@ -251,17 +414,26 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                       {emptyColumn}
                     </div>
                   ) : (
-                    <div data-part="card-list">
+                    <div data-part="card-list" role="list">
                       {/* Each card is both a drag source (draggable) and a
                           drop target (onDragOver/onDrop) to allow reordering
-                          within the same column or moving across columns. */}
+                          within the same column or moving across columns —
+                          and a keyboard move target (see handleCardKeyDown). */}
                       {column.items.map((item, index) => (
                         <div
                           data-part="card"
                           data-dragging={dragData?.itemId === itemKey(item)}
                           data-clickable={Boolean(onItemClick)}
+                          data-drop-before={isDropping && dropTarget?.position === index}
                           key={itemKey(item)}
-                          ref={register(itemKey(item))}
+                          ref={(el: HTMLElement | null) => {
+                            register(itemKey(item))(el);
+                            if (el) cardRefs.current.set(itemKey(item), el);
+                            else cardRefs.current.delete(itemKey(item));
+                          }}
+                          role="listitem"
+                          aria-roledescription={cardRoleLabel}
+                          tabIndex={0}
                           draggable
                           onDragStart={(e) =>
                             handleDragStart(e, item, column.id)
@@ -272,6 +444,9 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                           onDrop={(e) => handleDrop(e, column.id, index)}
                           onDragEnd={handleDragEnd}
                           onClick={() => onItemClick?.(item, column.id)}
+                          onKeyDown={(e) =>
+                            handleCardKeyDown(e, item, columnIndex, index)
+                          }
                         >
                           <div data-part="card-content">
                             {renderCard(item, column.id)}
@@ -299,6 +474,11 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
         })}
       </div>
       )}
+      {/* Keyboard-move announcer: visually hidden, always mounted so the
+          live region exists before the first announcement. */}
+      <div data-part="move-announcer" aria-live="polite" role="status">
+        {announcement}
+      </div>
     </div>
   );
 }

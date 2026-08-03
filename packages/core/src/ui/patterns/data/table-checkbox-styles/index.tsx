@@ -15,6 +15,23 @@
  * The pattern is intentionally engine-free: it only emits CSS that targets
  * generic `table` markup and DS tokens. Consumers can append additional CSS
  * via the `customStyles` prop without forking the component.
+ *
+ * @deprecated MERGE/RETIRE CANDIDATE (registered for Codex adjudication,
+ * 2026-08 wave; do NOT delete during the wave — law 11). Findings:
+ * - Zero consumers outside this directory: the only references are the
+ *   barrel re-export (`patterns/data/index.ts`) and its own contract test.
+ * - The three keyframes have zero `animation:` consumers anywhere in the DS.
+ * - The capabilities it ships are already owned by governed surfaces:
+ *   row hover/selected paint by `runtime/engines/modern/skin/table.css`
+ *   (primitive Table) and `.../skin/data-table.css` (PatternDataTable), and
+ *   checkbox paint by the certified Checkbox primitive — which is what both
+ *   modern table families actually compose.
+ * - The embedded CSS violates current laws (`!important` ×2, raw `0.15s
+ *   ease` timings, global `table` reach, `.clickable-row`/`.link-text`/
+ *   `.action-btn` ad-hoc classes); those declarations are identity-bound by
+ *   `TableCheckboxStyles.embedded-css-contract.test.tsx` (7 pinned paint
+ *   declarations + mount/unmount lifecycle), so the emitted CSS stays
+ *   byte-stable until Codex retires or re-pins the contract.
  */
 
 const CHECKBOX_ANIMATION_CSS = `

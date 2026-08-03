@@ -1,22 +1,135 @@
 /** RadarChart skin (WO-SKIN-06 CK-E), deliberately unlayered. */
 
+/* Legend -------------------------------------------------------------------
+ * Diamond marker echoes the polygonal plot geometry so the legend reads as
+ * radar, not as a generic swatch; the rotation is a private family detail
+ * rather than a tenant-facing theme channel. */
+
 .ds-chart-radar [data-part='legend-swatch'] {
-  border-radius: 2px;
+  border-radius: 1px;
+  transform: rotate(var(--_ds-radar-marker-rotation, 45deg)) scale(0.85);
 }
 
 .ds-chart-radar [data-part='legend-label'] {
   color: var(--ds-color-text-secondary);
 }
 
-.ds-chart-radar [data-part='grid-level'],
-.ds-chart-radar [data-part='axis-line'] {
-  stroke: var(--ds-color-border-secondary);
+/* Series cadence -----------------------------------------------------------
+ * The renderer stamps the raw `data-series-index` on each series group;
+ * indexes 1..4 receive a governed dash on the polygon outline so overlapping
+ * series separate by stroke rhythm as well as paint. Each cadence remains a
+ * private implementation detail of this family. */
+
+.ds-chart-radar [data-part='series'][data-series-index='1'] [data-part='series-area'] {
+  stroke-dasharray: var(--_ds-radar-series-dash-2, 6 4);
+}
+
+.ds-chart-radar [data-part='series'][data-series-index='2'] [data-part='series-area'] {
+  stroke-dasharray: var(--_ds-radar-series-dash-3, 2 3);
+}
+
+.ds-chart-radar [data-part='series'][data-series-index='3'] [data-part='series-area'] {
+  stroke-dasharray: var(--_ds-radar-series-dash-4, 8 3 2 3);
+}
+
+.ds-chart-radar [data-part='series'][data-series-index='4'] [data-part='series-area'] {
+  stroke-dasharray: var(--_ds-radar-series-dash-5, 12 4);
+}
+
+/* Polar chrome ---------------------------------------------------------------
+ * This family root carries no engine foundation paint, so the skin owns the
+ * web: grid rings stay a whisper, spokes and the zero baseline carry the
+ * axis role, all through the shared chart channels. */
+
+.ds-chart-radar [data-part='grid-level'] {
+  stroke: var(--ds-chart-grid-color, var(--ds-color-border-subtle));
+}
+
+.ds-chart-radar [data-part='axis-line'],
+.ds-chart-radar [data-part='zero-baseline'] {
+  stroke: var(--ds-chart-axis-color, var(--ds-color-border-secondary));
 }
 
 .ds-chart-radar [data-part='axis-label'] {
-  fill: var(--ds-color-text-secondary);
+  fill: var(--ds-chart-label-color, var(--ds-color-text-secondary));
 }
 
 .ds-chart-radar [data-part='series-point'] {
-  stroke: var(--ds-color-bg-primary);
+  stroke: var(--ds-chart-plot-bg, var(--ds-color-bg-primary));
+}
+
+/* Invalid-data fallback ------------------------------------------------------
+ * The family-computed fallback overlay owns no inline paint; keep its copy on
+ * the metadata role so it reads as feedback, not data. */
+
+.ds-chart-radar [data-part='data-fallback'] {
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm);
+}
+
+/* Entrance reveal ---------------------------------------------------------- */
+
+@keyframes ds-chart-radar-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ds-chart-radar [data-part='chart-svg'] {
+  animation: ds-chart-radar-reveal var(--ds-motion-reveal, var(--ds-motion-calm))
+    var(--ds-motion-ease-enter, ease-out) both;
+}
+
+/* Loading skeleton -----------------------------------------------------------
+ * The bar placeholders bow out for a pentagon web outline that keeps the
+ * radar footprint. The scaffold container keeps its inline flex posture, so
+ * the web centers itself as a flex item with auto margins. */
+
+@keyframes ds-chart-radar-skeleton-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.55;
+  }
+}
+
+.ds-chart-radar [data-part='skeleton-bar'] {
+  display: none;
+}
+
+.ds-chart-radar [data-part='skeleton']::before {
+  content: '';
+  margin: auto;
+  inline-size: min(52%, 12rem);
+  aspect-ratio: 1;
+  clip-path: polygon(50% 0%, 98% 35%, 79% 91%, 21% 91%, 2% 35%);
+  background: color-mix(
+    in srgb,
+    var(--ds-chart-mark-color, var(--ds-color-primary)) 16%,
+    var(--ds-color-bg-secondary)
+  );
+  animation: ds-chart-radar-skeleton-pulse
+    var(--ds-motion-glacial, var(--ds-motion-calm))
+    var(--ds-motion-ease-move, ease-in-out) infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-chart-radar [data-part='chart-svg'],
+  .ds-chart-radar [data-part='skeleton']::before {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-chart-radar [data-part='skeleton']::before {
+    forced-color-adjust: none;
+    background: Canvas;
+    outline: 1px solid GrayText;
+  }
 }

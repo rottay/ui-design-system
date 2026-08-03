@@ -12,13 +12,26 @@
  * tiles are then DATA, like the marker color dot today).
  *
  * Composition law: the pattern composes the public Spinner primitive for the
- * loading state and Button for marker selection, and recreates nothing --
+ * loading state, Button for marker selection and Empty for the no-markers
+ * hint, and recreates nothing --
  * geometry and paint live in the
  * modern `pattern-map-view.css` skin (the old Tailwind utility chain and the
  * hand-rolled CSS spinner are retired). Own copy resolves through the
  * optional `components` i18n channel with an English floor pinned byte-
  * identical to the pre-i18n contract. Marker rows compose Button so selection
  * stays keyboard-operable (focus + Enter/Space) without a local control.
+ *
+ * SELECTION SEMANTICS: marker rows are toggle buttons (`aria-pressed`) —
+ * selection is a persistent state, not a one-shot action — and a row that
+ * can disclose its popup carries `aria-expanded`. The marker list IS the
+ * map's textual alternative (every marker reads as a labelled row), so the
+ * placeholder region is a named group (`role="group"`, localized label),
+ * never a second interactive surface.
+ *
+ * DEBT (contract-level): real zoom/center controls need controlled
+ * `onZoomChange` / `onCenterChange` props that the read-only contract does
+ * not offer — blocked on the MapViewProps owner, documented in
+ * audit/kimi-visual-wave/batches/p613-visualization.md.
  *
  * @example
  * <ModernMapView
@@ -32,6 +45,7 @@ import React from 'react';
 import type { MapViewProps, MapMarker } from '../../contracts';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
+import ModernEmpty from '../../../../../primitives/display/Empty/engines/modern';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { interpolateTranslation } from '@/foundation/i18n/runtime/resolution/translation';
 
@@ -105,8 +119,15 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
           <>
             {/* Placeholder map area -- displays center/zoom/marker metadata.
                 Replace this div's children with a real map library (Leaflet,
-                Mapbox GL, etc.); tiles are then DATA. */}
-            <div data-part="map-placeholder" style={{ height }}>
+                Mapbox GL, etc.); tiles are then DATA. Named group: the marker
+                list below is the textual alternative, so this region only
+                needs a label, never a second interactive surface. */}
+            <div
+              data-part="map-placeholder"
+              role="group"
+              aria-label={tOr('map_view.viewport', 'Map viewport')}
+              style={{ height }}
+            >
               <div data-part="placeholder-content">
                 <div data-part="placeholder-label" data-detail="title">
                   {tOr('map_view.placeholder', 'Map placeholder')}
@@ -121,16 +142,23 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
               </div>
             </div>
 
-            {/* Marker list -- the interactive surface until a provider lands. */}
+            {/* Marker list -- the interactive surface until a provider lands,
+                and the map's textual alternative at all times. */}
             {markers.length === 0 ? (
-              <div data-part="empty">{tOr('map_view.empty', 'No markers')}</div>
+              /* The composed Empty primitive owns the quiet hint (the
+                 pre-composition bare text line is retired). */
+              <div data-part="empty">
+                <ModernEmpty description={tOr('map_view.empty', 'No markers')} />
+              </div>
             ) : (
               <div data-part="marker-list">
                 {markers.map((marker, i) => {
                   const isSelected = marker.id === selectedMarkerId;
                   return (
                     /* Public Button: keyboard selection (focus + Enter/Space)
-                        and focus semantics come from the primitive. */
+                        and focus semantics come from the primitive. Selection
+                        is a persistent toggle state (aria-pressed); a row
+                        with popup content discloses it (aria-expanded). */
                     <ModernButton
                       variant="ghost"
                       size="sm"
@@ -138,6 +166,8 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
                       data-selected={isSelected}
                       data-last={i === markers.length - 1}
                       key={marker.id}
+                      aria-pressed={isSelected}
+                      aria-expanded={renderPopup ? isSelected : undefined}
                       onClick={() => onMarkerClick?.(marker)}
                     >
                       {/* Custom renderer takes priority; default shows icon,

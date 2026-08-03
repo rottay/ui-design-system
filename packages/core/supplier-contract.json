@@ -1155,6 +1155,11 @@
         "BottomTabBar": [
           "antd"
         ],
+        "BrandingPreviewSandbox": [
+          "@phosphor-icons/react",
+          "antd",
+          "motion"
+        ],
         "Breadcrumb": [
           "@phosphor-icons/react",
           "antd",
@@ -2017,6 +2022,7 @@
           "@phosphor-icons/react"
         ],
         "PatternTimeline": [
+          "@phosphor-icons/react",
           "antd"
         ],
         "PatternTreeView": [
@@ -2742,7 +2748,6 @@
         "BOTTOM_TAB_BAR_DEFAULTS",
         "BOX_DEFAULTS",
         "Box",
-        "BrandingPreviewSandbox",
         "CALLOUT_COLORS",
         "CALLOUT_DEFAULTS",
         "CASCADER_DEFAULTS",

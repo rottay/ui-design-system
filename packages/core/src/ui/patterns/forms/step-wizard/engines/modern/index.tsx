@@ -24,7 +24,9 @@ import React, { useState } from 'react';
 import { StickyWizardActions } from '../../runtime/sticky-actions';
 import type { StepWizardProps } from '../../contracts';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
+import ModernProgress from '../../../../../primitives/feedback/Progress/engines/modern';
 import ModernSteps from '../../../../../primitives/navigation/Steps/engines/modern';
+import { VisuallyHidden } from '../../../../../primitives/foundation/VisuallyHidden';
 import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
@@ -170,7 +172,14 @@ export default function ModernStepWizard(props: StepWizardProps) {
         data-loading="true"
         className={[ROOT_CLASS_NAME, 'ds-step-wizard-skeleton', className].filter(Boolean).join(' ')}
         style={style}
+        role="status"
+        aria-busy="true"
       >
+        {/* The shimmer is paint-only; the live region needs real text to
+            announce (EmptyState's loading-label precedent). */}
+        <VisuallyHidden>
+          {tOr('step_wizard.loading', 'Loading wizard…')}
+        </VisuallyHidden>
         <div data-part="body">
           {/* Shimmer bar for step indicators -- animation and geometry are
               skin-owned so reduced-motion and density govern (inline would
@@ -201,7 +210,9 @@ export default function ModernStepWizard(props: StepWizardProps) {
   /* -- Error display ------------------------------------------------------ */
 
   const errorDisplay = validationMessage ? (
-    <div data-part="error-panel">
+    /* role=alert: the message appears on a failed advance, so the assertive
+       announcement fires exactly when the user needs it. */
+    <div data-part="error-panel" role="alert">
       <StatusErrorIcon decorative size={14} />
       <span>{validationMessage}</span>
     </div>
@@ -300,16 +311,15 @@ export default function ModernStepWizard(props: StepWizardProps) {
           </div>
         )}
 
-        {/* Progress bar (subtle, at the very top) */}
+        {/* Progress bar (subtle, at the very top): compose the canonical
+            meter primitive instead of recreating progressbar semantics. */}
         {showProgress && progressPosture === 'rail' && (
-          <div data-part="progress-track">
-            {/* `width` stays inline: it is computed from the step index
-                (runtime value); the fill's transition is skin-owned. */}
-            <div
-              data-part="progress-fill"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
+          <ModernProgress
+            percent={progress}
+            showInfo={false}
+            className="ds-step-wizard__progress"
+            aria-label={progressLabel}
+          />
         )}
 
         {/* Step rail: the public Steps primitive (display-only -- wizard

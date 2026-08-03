@@ -1,26 +1,81 @@
 /** BarChart skin (WO-SKIN-06 CK-E), deliberately unlayered. */
 
+/* Cartesian chrome (grid, baseline, tick and value labels) is governed by the
+ * shared chart foundation skin through the `--ds-chart-grid-color`,
+ * `--ds-chart-axis-color` and `--ds-chart-label-color` channels on the
+ * engine's renderer surface; this family skin owns only what the foundation
+ * cannot see: legend markers, the loading skeleton, and the mount reveal. */
+
+/* Legend -------------------------------------------------------------------
+ * Square marker reads as a bar; the radius is a private family detail rather
+ * than a tenant-facing theme channel. */
+
 .ds-chart-bar [data-part='legend-swatch'] {
-  border-radius: 2px;
+  border-radius: var(--_ds-bar-marker-radius, 2px);
 }
 
 .ds-chart-bar [data-part='legend-label'] {
   color: var(--ds-color-text-secondary);
 }
 
-.ds-chart-bar [data-part='axis-tick-label'],
-.ds-chart-bar [data-part='axis-label'] {
-  fill: var(--ds-color-text-secondary);
+/* Entrance reveal ------------------------------------------------------------
+ * Discreet mount reveal on the data surface; compositor-friendly
+ * (opacity/transform only) and motion-channel governed. Reduced-motion users
+ * land on the final state immediately. */
+
+@keyframes ds-chart-bar-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.ds-chart-bar [data-part='grid-line'] {
-  stroke: var(--ds-color-border-secondary);
+.ds-chart-bar [data-part='chart-svg'] {
+  animation: ds-chart-bar-reveal var(--ds-motion-reveal, var(--ds-motion-calm))
+    var(--ds-motion-ease-enter, ease-out) both;
 }
 
-.ds-chart-bar [data-part='value-label'] {
-  fill: var(--ds-color-text-primary);
+/* Loading skeleton -----------------------------------------------------------
+ * Structural placeholder bars echo the chart footprint: bottom-anchored,
+ * round-capped at the top, tinted through the mark channel. The pulse is a
+ * governed by the shared motion authority. */
+
+@keyframes ds-chart-bar-skeleton-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.55;
+  }
 }
 
-.ds-chart-bar [data-part='grid-line'] {
-  stroke: var(--ds-color-border-primary);
+.ds-chart-bar [data-part='skeleton-bar'] {
+  border-radius: 2px 2px 0 0;
+  background: color-mix(
+    in srgb,
+    var(--ds-chart-mark-color, var(--ds-color-primary)) 16%,
+    var(--ds-color-bg-secondary)
+  );
+  animation: ds-chart-bar-skeleton-pulse
+    var(--ds-motion-glacial, var(--ds-motion-calm))
+    var(--ds-motion-ease-move, ease-in-out) infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-chart-bar [data-part='chart-svg'],
+  .ds-chart-bar [data-part='skeleton-bar'] {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-chart-bar [data-part='skeleton-bar'] {
+    forced-color-adjust: none;
+    background: Canvas;
+    outline: 1px solid GrayText;
+  }
 }

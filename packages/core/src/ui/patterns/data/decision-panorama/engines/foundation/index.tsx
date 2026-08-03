@@ -29,6 +29,7 @@ export function DecisionPanoramaEngine({
       data-part="root"
       data-loading={loading ? 'true' : 'false'}
       aria-label={ariaLabel}
+      aria-busy={loading || undefined}
       style={style}
     >
       <div className="ds-decision-panorama__grid" data-part="grid">

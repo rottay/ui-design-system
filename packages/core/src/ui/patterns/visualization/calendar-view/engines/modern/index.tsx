@@ -19,6 +19,17 @@
  * An empty events array still renders the full grid, so no Empty state is
  * composed.
  *
+ * APG GRID: the month grid is a real ARIA grid — `role="grid"` labelled by
+ * the month title (aria-live, so month changes are announced), one
+ * `role="row"` per week plus the `role="columnheader"` weekday row (the
+ * wrappers are layout-transparent: the skin gives them `display: contents`,
+ * so the seven-column geometry is untouched). Day cells are `role="gridcell"`
+ * with `aria-selected` tracking the controlled `currentDate`, a full-date
+ * localized `aria-label`, and a roving tabindex: arrow keys move by day /
+ * week (inline arrows mirror under RTL via the house `isRtlContext` idiom),
+ * Enter/Space fires `onDateClick`. Focus never leaves the displayed month —
+ * month navigation stays parent-owned through the toolbar.
+ *
  * DEBT: the contract offers month/week/day views; this engine renders the
  * month grid for every mode — the Select surface stays per contract and
  * the week/day time-slot engines are documented follow-up, not half-built.
@@ -31,7 +42,7 @@
  * />
  */
 
-import React, { useMemo } from 'react';
+import React, { useId, useMemo, useRef, useState } from 'react';
 import type { CalendarViewProps, CalendarEvent } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
@@ -90,6 +101,14 @@ function getMonthGrid(date: Date, weekStart: number) {
 function toDateKey(d: Date | string): string {
   const date = typeof d === 'string' ? new Date(d) : d;
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+/** Reading-direction probe (Tree primitive idiom): the nearest explicit
+    `dir` wins; otherwise the document direction applies. */
+function isRtlContext(el: HTMLElement): boolean {
+  const scoped = el.closest('[dir]');
+  if (scoped) return scoped.getAttribute('dir') === 'rtl';
+  return document.documentElement.dir === 'rtl';
 }
 
 /**
@@ -159,6 +178,65 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
   };
 
   const today = toDateKey(new Date());
+  const currentKey = toDateKey(currentDate);
+
+  /* APG grid state: the grid's accessible name comes from the month title
+     (aria-labelledby); the title itself is aria-live so month changes are
+     announced. Weeks chunk the flat cell array into role="row" wrappers that
+     the skin renders as `display: contents` (layout-transparent). */
+  const titleId = useId();
+  const weeks = useMemo(() => {
+    const chunked: (Date | null)[][] = [];
+    for (let i = 0; i < cells.length; i += 7) chunked.push(cells.slice(i, i + 7));
+    return chunked;
+  }, [cells]);
+
+  /* Roving tabindex: the grid has ONE tab stop. The default stop is today
+     when it falls inside the displayed month, otherwise the month's first
+     day cell; keyboard moves retarget it within the month (the parent owns
+     month navigation, so arrows at the edges are a no-op by design). */
+  const cellRefs = useRef(new Map<string, HTMLDivElement>());
+  const [focusKey, setFocusKey] = useState<string | null>(null);
+  const cellKeySet = useMemo(() => {
+    const set = new Set<string>();
+    for (const c of cells) if (c) set.add(toDateKey(c));
+    return set;
+  }, [cells]);
+  const defaultFocusKey = useMemo(() => {
+    if (cellKeySet.has(today)) return today;
+    const first = cells.find((c): c is Date => c !== null);
+    return first ? toDateKey(first) : null;
+  }, [cells, cellKeySet, today]);
+  const activeFocusKey = focusKey && cellKeySet.has(focusKey) ? focusKey : defaultFocusKey;
+
+  const moveFocus = (cell: Date, delta: number) => {
+    const target = new Date(cell);
+    target.setDate(target.getDate() + delta);
+    const key = toDateKey(target);
+    if (!cellKeySet.has(key)) return; // month edges: the toolbar owns navigation
+    setFocusKey(key);
+    cellRefs.current.get(key)?.focus();
+  };
+
+  const handleCellKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, cell: Date) => {
+    // Inline arrows mirror under RTL: ArrowLeft always moves visually left,
+    // which is the NEXT day in an RTL grid (Tree primitive idiom).
+    const rtl = isRtlContext(e.currentTarget);
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onDateClick?.(cell);
+      return;
+    }
+    const delta =
+      e.key === 'ArrowLeft' ? (rtl ? 1 : -1)
+      : e.key === 'ArrowRight' ? (rtl ? -1 : 1)
+      : e.key === 'ArrowUp' ? -7
+      : e.key === 'ArrowDown' ? 7
+      : 0;
+    if (delta === 0) return;
+    e.preventDefault();
+    moveFocus(cell, delta);
+  };
 
   return (
     <div
@@ -184,7 +262,9 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
             >
               {'<'}
             </ModernButton>
-            <h3 data-part="month-title">
+            {/* The title doubles as the grid's accessible name and a polite
+                live region: navigating months announces the new range. */}
+            <h3 data-part="month-title" id={titleId} aria-live="polite">
               {currentDate.toLocaleString(locale, { month: 'long', year: 'numeric' })}
             </h3>
             <ModernButton
@@ -233,70 +313,105 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
           <ModernSpinner size="md" data-part="spinner" />
         </div>
       ) : (
-        /* Grid geometry and frame are skin-owned through the public anatomy. */
-        <div data-part="grid">
-          {dayNames.map((d) => (
-            <div data-part="weekday" key={d}>
-              {d}
+        /* Grid geometry and frame are skin-owned through the public anatomy.
+           APG: role=grid labelled by the month title; week rows are
+           layout-transparent wrappers (the skin sets display: contents). */
+        <div data-part="grid" role="grid" aria-labelledby={titleId}>
+          <div data-part="weekday-row" role="row">
+            {dayNames.map((d) => (
+              <div data-part="weekday" role="columnheader" key={d}>
+                {d}
+              </div>
+            ))}
+          </div>
+          {/* Render each week row, then each date cell inside it. Null cells
+              (padding before the 1st and after the last day) are presentational
+              and carry no click handler. */}
+          {weeks.map((week, weekIndex) => (
+            <div data-part="week-row" role="row" key={weekIndex}>
+              {week.map((cell, dayIndex) => {
+                const cellKey = cell ? toDateKey(cell) : `empty-${weekIndex}-${dayIndex}`;
+                const dayEvents = cell ? eventsByDate.get(cellKey) ?? [] : [];
+                const isToday = cell && cellKey === today;
+                const isSelected = cell && cellKey === currentKey;
+                return (
+                  <div
+                    data-part="day-cell"
+                    data-empty={cell === null}
+                    data-today={Boolean(isToday)}
+                    data-selected={Boolean(isSelected)}
+                    data-last-column={dayIndex === 6}
+                    key={cellKey}
+                    /* APG gridcell: real day cells are keyboard targets with a
+                       roving tabindex; padding cells are presentational. */
+                    role={cell ? 'gridcell' : 'presentation'}
+                    aria-selected={cell ? Boolean(isSelected) : undefined}
+                    aria-label={
+                      cell
+                        ? cell.toLocaleDateString(locale, {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                          })
+                        : undefined
+                    }
+                    tabIndex={cell ? (cellKey === activeFocusKey ? 0 : -1) : undefined}
+                    ref={
+                      cell
+                        ? (el: HTMLDivElement | null) => {
+                            if (el) cellRefs.current.set(cellKey, el);
+                            else cellRefs.current.delete(cellKey);
+                          }
+                        : undefined
+                    }
+                    onClick={() => cell && onDateClick?.(cell)}
+                    onFocus={cell ? () => setFocusKey(cellKey) : undefined}
+                    onKeyDown={cell ? (e) => handleCellKeyDown(e, cell) : undefined}
+                  >
+                    {cell && (
+                      <>
+                        <div data-part="date-label" data-today={Boolean(isToday)} aria-hidden="true">
+                          {cell.getDate()}
+                        </div>
+                        {/* Show at most 3 event chips per cell to keep the grid compact;
+                            overflow is shown as "+N more" below. */}
+                        {dayEvents.slice(0, 3).map((ev) => (
+                          <div
+                            data-part="event"
+                            key={ev.id}
+                            /* Event chips are the primary interactive content, so
+                               they are real keyboard targets (Enter/Space fire the
+                               same callback as click). */
+                            role="button"
+                            tabIndex={0}
+                            onClick={(e) => { e.stopPropagation(); onEventClick?.(ev); }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                onEventClick?.(ev);
+                              }
+                            }}
+                            /* Per-event color is consumer config data: it rides the
+                               accent hatch (quoted key) and the skin owns the fill. */
+                            style={{ '--ds-calendar-event-accent': ev.color } as React.CSSProperties}
+                          >
+                            {renderEvent ? renderEvent(ev) : ev.title}
+                          </div>
+                        ))}
+                        {dayEvents.length > 3 && (
+                          <div data-part="overflow-count">
+                            {tOr('calendarView.overflowMore', '+{count} more', { count: dayEvents.length - 3 })}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           ))}
-          {/* Render each date cell. Null cells (padding before the 1st and
-              after the last day) use a faded background and no click handler. */}
-          {cells.map((cell, i) => {
-            const key = cell ? toDateKey(cell) : `empty-${i}`;
-            const dayEvents = cell ? eventsByDate.get(toDateKey(cell)) ?? [] : [];
-            const isToday = cell && toDateKey(cell) === today;
-            return (
-              <div
-                data-part="day-cell"
-                data-empty={cell === null}
-                data-today={Boolean(isToday)}
-                data-last-column={(i + 1) % 7 === 0}
-                key={key}
-                onClick={() => cell && onDateClick?.(cell)}
-              >
-                {cell && (
-                  <>
-                    <div data-part="date-label" data-today={Boolean(isToday)}>
-                      {cell.getDate()}
-                    </div>
-                    {/* Show at most 3 event chips per cell to keep the grid compact;
-                        overflow is shown as "+N more" below. */}
-                    {dayEvents.slice(0, 3).map((ev) => (
-                      <div
-                        data-part="event"
-                        key={ev.id}
-                        /* Event chips are the primary interactive content, so
-                           they are real keyboard targets (Enter/Space fire the
-                           same callback as click). Full APG grid navigation
-                           across day cells is documented debt, not half-built. */
-                        role="button"
-                        tabIndex={0}
-                        onClick={(e) => { e.stopPropagation(); onEventClick?.(ev); }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            onEventClick?.(ev);
-                          }
-                        }}
-                        /* Per-event color is consumer config data: it rides the
-                           accent hatch (quoted key) and the skin owns the fill. */
-                        style={{ '--ds-calendar-event-accent': ev.color } as React.CSSProperties}
-                      >
-                        {renderEvent ? renderEvent(ev) : ev.title}
-                      </div>
-                    ))}
-                    {dayEvents.length > 3 && (
-                      <div data-part="overflow-count">
-                        {tOr('calendarView.overflowMore', '+{count} more', { count: dayEvents.length - 3 })}
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-            );
-          })}
         </div>
       )}
     </div>

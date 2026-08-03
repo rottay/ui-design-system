@@ -9,6 +9,31 @@ import "./Typewriter.css";
 
 const DECODE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*+=-_?/\\|~";
 
+/**
+ * Fallback for the typing cadence (milliseconds per character) — the contract's documented
+ * default. The effective cadence resolves as: explicit `speed` prop, else the family-private
+ * channel `--_ds-typewriter-cadence` (a `<time>` read from the reveal root at animation
+ * start), else this constant.
+ */
+const DEFAULT_SPEED_MS = 28;
+const CADENCE_AXIS = "--_ds-typewriter-cadence";
+
+/**
+ * Reads a family-private `<time>` channel from the resolved style of `node`, falling back to
+ * `fallbackMs` when the channel is undeclared or unparseable. Called only inside effects, once
+ * per reveal run. (Local copy of the kit's cadence reader — merge candidate.)
+ */
+function readCadenceTimeMs(node: HTMLElement | null, axis: string, fallbackMs: number): number {
+  if (node === null || typeof getComputedStyle !== "function") return fallbackMs;
+  const raw = getComputedStyle(node).getPropertyValue(axis).trim();
+  const parsed = raw.endsWith("ms")
+    ? Number.parseFloat(raw)
+    : raw.endsWith("s")
+      ? Number.parseFloat(raw) * 1000
+      : Number.NaN;
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallbackMs;
+}
+
 function randomDecodeChar(): string {
   return DECODE_CHARS[Math.floor(Math.random() * DECODE_CHARS.length)];
 }
@@ -35,7 +60,7 @@ function scrambledSuffix(source: string, from: number): string {
 export function Typewriter({
   text,
   mode = "type",
-  speed = 28,
+  speed,
   as: As = "span",
   className,
 }: TypewriterProps): React.JSX.Element {
@@ -54,6 +79,9 @@ export function Typewriter({
 
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
+    // An explicit `speed` prop always wins; otherwise the governed cadence axis, with the
+    // contract default as the final fallback (never a bare constant).
+    const stepMs = Math.max(1, speed ?? readCadenceTimeMs(ref.current, CADENCE_AXIS, DEFAULT_SPEED_MS));
 
     function step(count: number): void {
       if (cancelled) return;
@@ -62,7 +90,7 @@ export function Typewriter({
         mode === "decode" && count < text.length ? settled + scrambledSuffix(text, count) : settled;
       setDisplay(next);
       if (count < text.length) {
-        timer = setTimeout(() => step(count + 1), Math.max(1, speed));
+        timer = setTimeout(() => step(count + 1), stepMs);
       }
     }
 
@@ -77,9 +105,9 @@ export function Typewriter({
   const classes = ["rt-typewriter", className].filter(Boolean).join(" ");
 
   return (
-    <As ref={ref} className={classes} data-mode={mode}>
+    <As ref={ref} className={classes} data-part="root" data-mode={mode}>
       <span className="rt-typewriter__visually-hidden">{text}</span>
-      <span className="rt-typewriter__visual" aria-hidden="true">
+      <span className="rt-typewriter__visual" data-part="visual" aria-hidden="true">
         {display}
       </span>
     </As>

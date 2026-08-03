@@ -83,9 +83,32 @@
 }
 
 /* Custom result renderer: the surface owns click-to-select around app
-   content, so it also owns the cursor affordance. */
+   content, so it also owns the cursor affordance and the keyboard focus
+   ring — keyed on the canonical focus channels, with the same forced-colors
+   re-key the actionable Card uses. */
 .ds-surface.ds-search [data-part="result-custom"] {
   cursor: pointer;
+}
+
+.ds-surface.ds-search [data-part="result-custom"]:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: 2px;
+}
+
+/* Custom renderers become a whole-row button. Keep fine-pointer density
+   intact while guaranteeing the row remains a usable coarse-pointer target. */
+@media (hover: none), (pointer: coarse) {
+  .ds-surface.ds-search [data-part="result-custom"] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-surface.ds-search [data-part="result-custom"]:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
 }
 
 /* Empty-state landing hook (query/results): wrapper chrome behind the

@@ -141,7 +141,10 @@ export function ConnectedCommandPalette({
         e.key.toLowerCase() === mainKey &&
         e.metaKey === wantsMeta &&
         e.ctrlKey === wantsCtrl &&
-        !e.altKey
+        !e.altKey &&
+        // Held-key auto-repeat must not flap the palette open/closed on
+        // every OS repeat tick — the toggle fires once per physical press.
+        !e.repeat
       ) {
         e.preventDefault();
         setOpen((prev) => !prev);

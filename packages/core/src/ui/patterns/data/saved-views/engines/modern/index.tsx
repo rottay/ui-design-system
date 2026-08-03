@@ -13,11 +13,16 @@
  *   (`variant="unstyled"` — behavior from the primitive, geometry and paint
  *   from the pattern skin);
  * - the per-pill management menu is the Dropdown primitive (portal surface,
- *   roving keyboard contract, outside-click/Escape close, RTL-aware
- *   placement following the Tabs engine's precedent) — the hand-rolled
- *   absolute panel, its outside-click listener and the `menu-panel` /
- *   `menu-item` / `menu-divider` parts are retired in favor of the
- *   Dropdown's own anatomy and `dropdown.css` paint.
+ *   roving keyboard contract, outside-click/Escape close, and K4-A logical
+ *   placement: the primitive itself mirrors `bottomRight` under `dir="rtl"`
+ *   from the trigger's context, so the bar declares ONE placement and no
+ *   longer probes direction by hand) — the hand-rolled absolute panel, its
+ *   outside-click listener and the `menu-panel` / `menu-item` / `menu-divider`
+ *   parts are retired in favor of the Dropdown's own anatomy and
+ *   `dropdown.css` paint.
+ * - the default-view marker is the governed `StatusFeaturedIcon` semantic
+ *   role (status.featured), not an ad-hoc inline SVG: its weight follows the
+ *   tenant's icon profile for the status role like every other status glyph.
  *
  * The pill shell stays a plain layout element (drag source + testid hook);
  * the select action moved INTO a real Button inside it, so no interactive
@@ -42,7 +47,7 @@
  * />
  */
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import type { SavedViewsBarProps, SavedView } from '../../contracts';
 import type { DropdownMenuItem } from '../../../../../primitives/overlay/Dropdown/contracts';
 import Dropdown from '../../../../../primitives/overlay/Dropdown/engines/modern';
@@ -55,6 +60,7 @@ import { ActionDeleteIcon } from '@/graphics/icons/presentation/semantic/generat
 import { ActionAddIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-add';
 import { ActionReorderIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-reorder';
 import { NavigationMoreIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-more';
+import { StatusFeaturedIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-featured';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 /**
@@ -105,16 +111,9 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
   const [dragViewId, setDragViewId] = useState<string | null>(null);
   const [dropTargetId, setDropTargetId] = useState<string | null>(null);
 
-  /* RTL probe for the Dropdown placement mirror (Tabs engine precedent):
-     the nearest explicit `dir` wins; otherwise the document direction. */
-  const rootRef = useRef<HTMLDivElement>(null);
-  const [isRtl, setIsRtl] = useState(false);
-  useEffect(() => {
-    const el = rootRef.current;
-    if (!el) return;
-    const scoped = el.closest('[dir]');
-    setIsRtl(scoped ? scoped.getAttribute('dir') === 'rtl' : document.documentElement.dir === 'rtl');
-  }, []);
+  /* RTL: nothing to probe here. The Dropdown primitive (K4-A) resolves the
+     trigger's reading direction itself and mirrors `bottomRight` under
+     `dir="rtl"` — the bar declares one logical placement. */
 
   const handleCreate = useCallback(() => {
     if (!newViewName.trim()) return;
@@ -195,7 +194,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
   if (loading) {
     return (
       <div
-        ref={rootRef}
         data-part="root"
         className={`ds-pattern-saved-views ds-engine-modern ${className ?? ''}`}
         data-loading="true"
@@ -221,7 +219,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
 
   return (
     <div
-      ref={rootRef}
       data-part="root"
       className={`ds-pattern-saved-views ds-engine-modern ${className ?? ''}`}
       style={style}
@@ -349,30 +346,26 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
               />
             )}
 
-            {/* Default star (decorative; no semantic role exists for it yet) */}
+            {/* Default-view marker: the governed status.featured role (its
+                weight follows the tenant's icon profile). The active ink is
+                keyed on the pill's state in the skin — the icon contract
+                forwards data-part/className, not pattern state attributes. */}
             {view.isDefault && (
-              <svg
+              <StatusFeaturedIcon
+                decorative
+                size={12}
                 data-part="default-star"
                 className="ds-saved-views__default-star"
-                data-default={true}
-                data-active={isActive}
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-              </svg>
+              />
             )}
 
             {/* Management menu: the Dropdown primitive owns the surface, the
-                keyboard contract and dismissal; the trigger is a Button. */}
+                keyboard contract, dismissal and the RTL placement mirror; the
+                trigger is a Button. */}
             {hasMenu && (
               <Dropdown
                 trigger={['click']}
-                placement={isRtl ? 'bottomLeft' : 'bottomRight'}
+                placement="bottomRight"
                 open={isMenuOpen}
                 onOpenChange={(open) => setOpenMenuId(open ? view.id : null)}
                 menu={{ items: menuItems }}

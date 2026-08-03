@@ -2,25 +2,51 @@
  * ActivityCards skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
  * Home: foundation/tokens/css/presentation/components/skin/activity-cards.css — single DOM tree under
  * every engine. Scope root carries the single class `ds-activity-cards`,
- * repeated to buy the "two root classes" budget.
+ * repeated to buy the kit's "two root classes" budget.
  *
- * SPECIFICITY (P-48): border-COLOR reaches (0,4,0) over the tenant floor (0,3,1);
- * non-border paint wins at (0,3,0); `Text` colour buys (0,5,0).
+ * SPECIFICITY (P-48): border-COLOR reaches (0,4,0) over the tenant floor
+ * (0,3,1); non-border paint wins at (0,3,0); `Text` colour buys (0,5,0).
  *
- * ICON COLOUR via stamped-ancestor currentColor; the chevron is the only
- * direct-child svg of `item-row`, reached by `[data-part='item-row'] > svg`.
- * HOVER was React `isHovered` (deleted from the TSX), transcribed to
- * `[data-part='item']:hover …`; the item's own `<style>` hover treatment stays
- * suppressed by the rest rules below. Badge count text is a literal `white`.
+ * ICON COLOUR via stamped-ancestor currentColor; the per-item chevron carries
+ * `data-part='item-chevron'` and mirrors under RTL (slide included). HOVER was
+ * React `isHovered` (deleted from the TSX), transcribed to
+ * `[data-part='item']:hover …` and gated to hover-capable pointers; the item's
+ * own hover treatment lives in the interactions skin. Badge count text is a
+ * literal `white`.
+ *
+ * GEOMETRY DRAIN (premium wave): the engine's static inline geometry (panel
+ * frame, header rule, bell well, badge position, view-all pill, item padding,
+ * icon well, time dot, scroll region) moved here; the panel block size rides
+ * the private dashboard seam `--_ds-dashboard-panel-block-size`; its fallback
+ * follows the governed rhythm dial from the shipped 415px measure. The transition literals drained onto
+ * `--ds-motion-*` channels with the exact replaced values as fallbacks. The
+ * timestamp is a real `<time>` element now (its micro typography lives here).
+ * The inert item's misleading `cursor: pointer` was dropped — no click
+ * handler exists on this anatomy. This file also adds the reduced-motion and
+ * forced-colors contracts.
  */
 
 /* root + header ------------------------------------------------------------- */
 
+/* Root frame drained from the engine (the former inline height/padding/flex
+   frame). The 415px fallback is the shipped dashboard measure, byte-exact. */
 .ds-activity-cards.ds-activity-cards[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
   background: var(--ds-color-bg-secondary);
 }
 .ds-activity-cards.ds-activity-cards[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-color-border-secondary);
+}
+.ds-activity-cards.ds-activity-cards [data-part='header'] {
+  /* Header geometry drained from the engine. */
+  padding-block-end: 12px;
+  margin-block-end: 12px;
+  position: relative;
 }
 .ds-activity-cards.ds-activity-cards [data-part='header'][data-part='header'] {
   border-bottom: 1px solid var(--ds-color-border-secondary);
@@ -29,6 +55,13 @@
 /* bell box + badge ---------------------------------------------------------- */
 
 .ds-activity-cards.ds-activity-cards [data-part='bell-box'] {
+  /* 28px well drained from the engine. */
+  inline-size: 28px;
+  block-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
   background: var(--ds-color-primary-100);
   color: var(--ds-color-primary);
 }
@@ -36,6 +69,16 @@
   border: 1px solid var(--ds-color-primary-200);
 }
 .ds-activity-cards.ds-activity-cards [data-part='badge'] {
+  /* Absolute frame drained from the engine on logical offsets (the former
+     physical `right: -3` was LTR-only). */
+  position: absolute;
+  inset-block-start: -3px;
+  inset-inline-end: -3px;
+  inline-size: 12px;
+  block-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   background: var(--ds-color-error);
 }
@@ -54,9 +97,24 @@
 
 /* view-all pill ------------------------------------------------------------- */
 
+/* Anchor reset + focus ring (the engine's former inline textDecoration). */
+.ds-activity-cards.ds-activity-cards .view-all-anchor {
+  text-decoration: none;
+  border-radius: var(--ds-radius-md, 8px);
+}
+.ds-activity-cards.ds-activity-cards .view-all-anchor:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
 .ds-activity-cards.ds-activity-cards [data-part='view-all-link'] {
+  /* Pill padding + cadence drained from the engine. */
+  padding: 4px 8px;
   background: var(--ds-color-primary-100);
   color: var(--ds-color-primary);
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease);
 }
 .ds-activity-cards.ds-activity-cards [data-part='view-all-link'][data-part='view-all-link'] {
   border: 1px solid var(--ds-color-primary-200);
@@ -65,22 +123,33 @@
   color: var(--ds-color-primary);
 }
 
-/* per-item shell ------------------------------------------------------------ */
+/* per-item shell (padding drained from the engine) --------------------------- */
 
 .ds-activity-cards.ds-activity-cards [data-part='item'] {
+  padding: 8px 12px;
   background: var(--ds-color-bg-primary);
 }
 .ds-activity-cards.ds-activity-cards [data-part='item'][data-part='item'] {
   border: 1px solid var(--ds-color-border-secondary);
 }
 
-/* per-item icon box — bg + type-200 border + icon colour; hover scale -------- */
+/* per-item icon box — bg + type-200 border + icon colour; the 24px well and
+   the cadence are drained from the engine; hover scale, hover-capable only --- */
 
 .ds-activity-cards.ds-activity-cards [data-part='item-icon-box'] {
+  inline-size: 24px;
+  block-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   transform: scale(1);
+  transition: transform var(--ds-motion-normal) var(--ds-motion-ease-out, ease);
 }
-.ds-activity-cards.ds-activity-cards [data-part='item']:hover [data-part='item-icon-box'] {
-  transform: scale(1.1);
+@media (hover: hover) {
+  .ds-activity-cards.ds-activity-cards [data-part='item']:hover [data-part='item-icon-box'] {
+    transform: scale(1.1);
+  }
 }
 .ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-type='success'] { background: var(--ds-color-success-100); color: var(--ds-color-success); }
 .ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-type='primary'] { background: var(--ds-color-primary-100); color: var(--ds-color-primary); }
@@ -98,9 +167,12 @@
   color: var(--ds-color-text-primary);
 }
 
-/* per-item time dot — background keyed on type ------------------------------ */
+/* per-item time dot — geometry drained from the engine, background keyed on
+   type ---------------------------------------------------------------------- */
 
 .ds-activity-cards.ds-activity-cards [data-part='item-dot'] {
+  inline-size: 4px;
+  block-size: 4px;
   border-radius: 50%;
 }
 .ds-activity-cards.ds-activity-cards [data-part='item-dot'][data-type='success'] { background: var(--ds-color-success); }
@@ -109,23 +181,100 @@
 .ds-activity-cards.ds-activity-cards [data-part='item-dot'][data-type='warning'] { background: var(--ds-color-warning); }
 .ds-activity-cards.ds-activity-cards [data-part='item-dot'][data-type='error']   { background: var(--ds-color-error); }
 
+/* `<time>` micro typography (drained from the engine's former Text inline;
+   the mono channel replaces a raw `monospace` literal) ----------------------- */
+
 .ds-activity-cards.ds-activity-cards [data-part='item-time'][data-part='item-time'][data-part='item-time'] {
   color: var(--ds-color-text-muted);
+  font-family: var(--ds-font-family-mono, monospace);
+  font-size: calc(var(--ds-font-size-2xs) * 0.818182);
 }
 
-/* chevron — direct-child svg of item-row: type colour + hover slide-in ------- */
+/* chevron — `data-part='item-chevron'`: type colour + hover slide-in, gated
+   to hover-capable pointers and mirrored under RTL (slide included). -------- */
 
-.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='success'] [data-part='item-row'] > svg { color: var(--ds-color-success); }
-.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='primary'] [data-part='item-row'] > svg { color: var(--ds-color-primary); }
-.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='info']    [data-part='item-row'] > svg { color: var(--ds-color-info); }
-.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='warning'] [data-part='item-row'] > svg { color: var(--ds-color-warning); }
-.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='error']   [data-part='item-row'] > svg { color: var(--ds-color-error); }
+.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='success'] [data-part='item-chevron'] { color: var(--ds-color-success); }
+.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='primary'] [data-part='item-chevron'] { color: var(--ds-color-primary); }
+.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='info']    [data-part='item-chevron'] { color: var(--ds-color-info); }
+.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='warning'] [data-part='item-chevron'] { color: var(--ds-color-warning); }
+.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='error']   [data-part='item-chevron'] { color: var(--ds-color-error); }
 
-.ds-activity-cards.ds-activity-cards [data-part='item-row'] > svg {
+.ds-activity-cards.ds-activity-cards [data-part='item-chevron'] {
   opacity: 0;
   transform: translateX(-6px);
+  transition:
+    opacity var(--ds-motion-normal) var(--ds-motion-ease-out, ease),
+    transform var(--ds-motion-normal) var(--ds-motion-ease-out, ease);
 }
-.ds-activity-cards.ds-activity-cards [data-part='item']:hover [data-part='item-row'] > svg {
-  opacity: 1;
-  transform: translateX(0);
+@media (hover: hover) {
+  .ds-activity-cards.ds-activity-cards [data-part='item']:hover [data-part='item-chevron'] {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+[dir='rtl'] .ds-activity-cards.ds-activity-cards [data-part='item-chevron'] {
+  transform: translateX(6px) scaleX(-1);
+}
+@media (hover: hover) {
+  [dir='rtl'] .ds-activity-cards.ds-activity-cards [data-part='item']:hover [data-part='item-chevron'] {
+    transform: scaleX(-1);
+  }
+}
+
+/* scroll region — geometry drained from the engine ---------------------------- */
+
+.ds-activity-cards.ds-activity-cards [data-part='scroll-area'] {
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+}
+
+/* reduced motion: every cadence goes quiet; the slide-in and dot-pulse loops
+   are silenced in the interactions skin. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-activity-cards.ds-activity-cards [data-part='item-icon-box'],
+  .ds-activity-cards.ds-activity-cards [data-part='item-chevron'],
+  .ds-activity-cards.ds-activity-cards [data-part='view-all-link'] {
+    transition: none;
+  }
+}
+
+/* Touch law: coarse pointers get the 44px floor on the view-all anchor
+   (sizing only — paint stays). */
+@media (pointer: coarse) {
+  .ds-activity-cards.ds-activity-cards .view-all-anchor {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}
+
+/* forced-colors: the panel, items, wells and pills keep system frames; the
+   dots and chevron read in system ink; the badge keeps a real frame; item
+   type survives through the icon glyph and text, never the hue. */
+@media (forced-colors: active) {
+  .ds-activity-cards.ds-activity-cards[data-part='root'][data-part='root'],
+  .ds-activity-cards.ds-activity-cards [data-part='header'][data-part='header'],
+  .ds-activity-cards.ds-activity-cards [data-part='bell-box'][data-part='bell-box'],
+  .ds-activity-cards.ds-activity-cards [data-part='item'][data-part='item'],
+  .ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-part='item-icon-box'],
+  .ds-activity-cards.ds-activity-cards [data-part='view-all-link'][data-part='view-all-link'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-activity-cards.ds-activity-cards [data-part='badge'] {
+    background: Canvas;
+    outline: 1px solid ButtonText;
+  }
+  .ds-activity-cards.ds-activity-cards [data-part='badge-count'][data-part='badge-count'][data-part='badge-count'] {
+    color: ButtonText;
+  }
+  .ds-activity-cards.ds-activity-cards [data-part='item-dot'] {
+    background: ButtonText;
+  }
+  .ds-activity-cards.ds-activity-cards [data-part='item-chevron'] {
+    opacity: 1;
+    transform: none;
+  }
 }

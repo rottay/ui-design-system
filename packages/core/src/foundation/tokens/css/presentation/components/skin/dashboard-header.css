@@ -9,10 +9,13 @@
  * SPECIFICITY (P-48): the tenant `html[data-tenant]…*` border-color floor sits
  * at (0,3,1); border paint reaches (0,4,0) through the always-stamped root
  * `data-part` ancestor (the rule ON the root uses `data-compact`, always
- * stamped 'true'|'false'). A `color` on a composed Text must exceed the
- * typography skin's (0,4,0) `[data-color]` rule, so it adds the always-
- * stamped `data-size` (or the contract `data-direction` / `data-state`) for
- * (0,5,0). Repeating a class or attribute is forbidden.
+ * stamped 'true'|'false'). A `color` on a composed Text can never win — the
+ * typography skin lives in the LATER `rottay-engines` layer — so Text ink
+ * rides the Text `color` prop; the `[data-size]` / `data-direction` /
+ * `data-state` qualifiers below remain for the rules that do NOT compete with
+ * the engine layer (numeric variants, chip chrome). Repeating a class or
+ * attribute is forbidden. The `Box as="h1"` title is NOT typography: its
+ * display type is fully skin-owned.
  *
  * GLASS: `backdrop-filter` is opt-in through the
  * `--ds-dashboard-header-actions-backdrop` channel (default `none`) — a
@@ -112,11 +115,24 @@
   transform: translateY(-1px) scale(1.025);
 }
 
-.ds-structure.ds-dashboard-header[data-part='root'] [data-part='title'][data-size] {
+/* The title is a Box as="h1" (one per page) — NOT typography — so its display
+   type lives here and no engine-layer rule can outrank it. Sizes mirror the
+   retired Text inline resolutions exactly (xl full / base compact). */
+.ds-structure.ds-dashboard-header[data-part='root'] [data-part='title'] {
+  margin: 0;
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-heading, var(--ds-font-family-base));
+  font-size: var(--ds-font-size-xl);
+  font-weight: var(--ds-font-weight-semibold, 600);
   letter-spacing: var(--ds-dashboard-header-title-tracking, -0.025em);
   text-wrap: balance;
+}
+
+.ds-structure.ds-dashboard-header[data-part='root'][data-compact='true'] [data-part='title'] {
+  font-size: var(--ds-font-size-base);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='subtitle'][data-size] {
@@ -144,6 +160,21 @@
 
 .ds-structure.ds-dashboard-header [data-part='metrics-row'][data-compact='false'] {
   padding-top: var(--ds-spacing-3, 12px);
+}
+
+/* Compact metrics: a snap-scrolling rail — each chip lands aligned instead of
+   resting half-clipped, and the scrollbar stays out of the mobile chrome. */
+.ds-structure.ds-dashboard-header [data-part='metrics-row'][data-compact='true'] {
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.ds-structure.ds-dashboard-header [data-part='metrics-row'][data-compact='true']::-webkit-scrollbar {
+  display: none;
+}
+
+.ds-structure.ds-dashboard-header [data-part='metrics-row'][data-compact='true'] [data-part='metric-chip'] {
+  scroll-snap-align: start;
 }
 
 .ds-structure.ds-dashboard-header[data-part='root'] [data-part='metrics-row'][data-compact='false'] {

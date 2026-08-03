@@ -36,3 +36,16 @@
 .ds-surface.ds-list .ds-list__card-value[data-part="root"][data-size] {
   color: var(--ds-list-card-value-color, var(--ds-color-text-primary));
 }
+
+/* ---- plain filter-panel chrome: the breathing room drained from the old
+        inline `0 4px / 0 2px` padding. Logical (RTL-safe) and density-scaled
+        through the canonical spacing channel — the half step keeps the exact
+        authored geometry (2px at scale 1) while following tenant density. ---- */
+.ds-surface.ds-list .ds-list__filters-plain[data-part="filters-plain"] {
+  padding-inline: calc(var(--ds-spacing-1, 4px) / 2);
+}
+
+.ds-surface.ds-list
+  .ds-list__filters-plain[data-part="filters-plain"][data-mobile="true"] {
+  padding-inline: var(--ds-spacing-1, 4px);
+}

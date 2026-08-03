@@ -362,6 +362,18 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
     >
       {headerSlot}
 
+      {/* Visually-hidden live label beside aria-busy (sr-only idiom, same as
+          the decision-inbox / record-workbench siblings; skin owns geometry). */}
+      {loading && (
+        <Text
+          as="span"
+          className="ds-command-center__loading-label"
+          data-part="loading-label"
+        >
+          {tSurfaceOr('command_center.loading_label', 'Loading…')}
+        </Text>
+      )}
+
       {/* Header with greeting */}
       <Box className="ds-command-center__header" data-part="header">
         {loading ? (
@@ -399,7 +411,12 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
         </Stack>
       )}
       {insights && insights.length > 0 && (
-        <Stack as="section" spacing="sm" data-part="insights">
+        <Stack
+          as="section"
+          spacing="sm"
+          data-part="insights"
+          aria-label={tSurfaceOr('command_center.insights_aria', 'Insights')}
+        >
           {insights.map((insight) => (
             <InsightCard key={insight.id} insight={insight} />
           ))}
@@ -420,7 +437,7 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
       {loading && (!quickActions || quickActions.length === 0) && (
         <Box>
           <Skeleton className="ds-command-center__skeleton-heading" variant="text" width="20%" height={14} />
-          <Box className="ds-command-center__quick-actions-grid">
+          <Box className="ds-command-center__quick-actions-grid" data-part="quick-actions-grid">
             <QuickActionSkeleton />
             <QuickActionSkeleton />
             <QuickActionSkeleton />
@@ -442,6 +459,7 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
                 ? `ds-command-center__quick-actions-grid ${stagger.containerClassName}`
                 : 'ds-command-center__quick-actions-grid'
             }
+            data-part="quick-actions-grid"
             style={
               stagger.animated
                 ? ({
@@ -516,14 +534,14 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
 
       {/* Body sections */}
       {loading && (!sections || sections.length === 0) && (
-        <Box className="ds-command-center__sections-grid">
+        <Box className="ds-command-center__sections-grid" data-part="sections-grid">
           <SectionSkeleton />
           <SectionSkeleton />
           <SectionSkeleton />
         </Box>
       )}
       {sections && sections.length > 0 && (
-        <Box className="ds-command-center__sections-grid">
+        <Box className="ds-command-center__sections-grid" data-part="sections-grid">
           {sections.map((section) => (
             <Card
               key={section.key}

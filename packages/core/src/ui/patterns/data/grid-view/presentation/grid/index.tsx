@@ -26,6 +26,7 @@ import {
 import type { GridViewProps } from '../../contracts';
 import { resolveGridRowKey } from '../../runtime/item-identity';
 import { useCollectionStagger } from '../../../../foundation/motion';
+import { useOptionalTranslation } from '../../../../../../infrastructure/runtime/i18n';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -49,7 +50,7 @@ function buildGridTemplateColumns(
   minColumnWidth: number,
 ): string {
   if (columns === 'auto') {
-    return `repeat(auto-fill, minmax(${minColumnWidth}px, 1fr))`;
+    return `repeat(auto-fill, minmax(var(--ds-listing-grid-min-compact-width, ${minColumnWidth}px), 1fr))`;
   }
   const clamped = Math.max(1, Math.min(columns, MAX_FIXED_COLUMNS));
   return `repeat(${clamped}, 1fr)`;
@@ -88,6 +89,14 @@ function SelectableCard<T>({
   renderCard: (item: T, index: number) => React.ReactNode;
   staggered: boolean;
 }): React.ReactElement {
+  /* Localized chrome (components catalog, English floor): the checkbox
+     accessible name. The control previously rendered with NO aria-label —
+     the count of unnamed checkboxes in a selectable grid was an a11y bug. */
+  const translation = useOptionalTranslation('components');
+  const selectItemLabel =
+    translation?.tOr('gridView.selectItem', 'Select item {item}', { item: itemKey })
+    ?? `Select item ${itemKey}`;
+
   return (
     <Box
       data-part="card-shell"
@@ -95,28 +104,21 @@ function SelectableCard<T>({
       data-ds-stagger-item={staggered ? '' : undefined}
       style={
         staggered
-          ? ({ position: 'relative', '--ds-stagger-index': index } as React.CSSProperties)
-          : { position: 'relative' }
+          ? ({ '--ds-stagger-index': index } as React.CSSProperties)
+          : undefined
       }
     >
-      {/* Checkbox overlay */}
+      {/* Checkbox overlay: geometry and paint live in the skin, anchored to
+          this part (logical insets — mirrors under RTL for free). */}
       <Box
         data-part="checkbox-overlay"
-        style={{
-          position: 'absolute',
-          top: 8,
-          left: 8,
-          zIndex: 2,
-        }}
       >
         <Checkbox
           className="ds-grid-view__checkbox-control"
           checked={selected}
           onChange={() => onToggle(itemKey)}
           size="sm"
-          style={{
-            padding: 2,
-          }}
+          aria-label={selectItemLabel}
         />
       </Box>
       {renderCard(item, index)}
@@ -194,6 +196,10 @@ export function PatternGridView<T>(
   const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>([]);
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
 
+  /* Localized chrome (components catalog, English floor). */
+  const translation = useOptionalTranslation('components');
+  const emptyLabel = translation?.tOr('gridView.empty', 'No data') ?? 'No data';
+
   const handleSelectionChange = useCallback(
     (keys: string[], items: T[]) => {
       if (controlledSelectedKeys === undefined) {
@@ -235,12 +241,18 @@ export function PatternGridView<T>(
 
   const normalizedGap = useMemo(() => normalizeGap(gap), [gap]);
 
+  // Premium channel socket (visual worklist schemaVersion 3, row B -- authorized
+  // deliberate delta): --ds-collection-card-gap tiers over the resolved gap.
+  // Bundles that do not declare it keep the fallback, which is exactly today's
+  // resolution; BitHire declares 10px and paints it.
+  const gridGap = `var(--ds-collection-card-gap, ${normalizedGap})`;
+
   const gridStyle: React.CSSProperties = useMemo(
     () =>
       ({
         display: 'grid',
         gridTemplateColumns: buildGridTemplateColumns(columns, minColumnWidth),
-        gap: normalizedGap,
+        gap: gridGap,
         padding: '1px 1px var(--ds-listing-grid-bottom-bleed, 8px)',
         overflow: 'visible',
         boxSizing: 'border-box',
@@ -251,7 +263,7 @@ export function PatternGridView<T>(
         '--ds-stagger-step': stagger.animated ? stagger.stepCss : undefined,
         '--ds-stagger-max': stagger.animated ? stagger.maxCss : undefined,
       }) as React.CSSProperties,
-    [columns, minColumnWidth, normalizedGap, style, stagger.animated, stagger.stepCss, stagger.maxCss],
+    [columns, minColumnWidth, gridGap, style, stagger.animated, stagger.stepCss, stagger.maxCss],
   );
 
   // -------------------------------------------------------------------------
@@ -263,7 +275,7 @@ export function PatternGridView<T>(
       <GridSkeleton
         columns={columns}
         minColumnWidth={minColumnWidth}
-        gap={normalizedGap}
+        gap={gridGap}
         className={className}
         style={style}
       />
@@ -281,13 +293,9 @@ export function PatternGridView<T>(
         data-part="root"
         data-loading="false"
         data-empty="true"
-        style={{
-          padding: 'var(--ds-spacing-8, 32px) var(--ds-spacing-5, 20px)',
-          textAlign: 'center',
-        }}
       >
         {emptyState ?? (
-          <Text data-part="empty-state">No data</Text>
+          <Text data-part="empty-state">{emptyLabel}</Text>
         )}
       </Box>
     );

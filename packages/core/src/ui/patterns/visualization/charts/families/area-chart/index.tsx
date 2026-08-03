@@ -180,10 +180,10 @@ export const AreaChart = memo(function AreaChart({
     yAxisLabel ? `Y axis: ${yAxisLabel}.` : null,
   ].filter(Boolean).join(' '));
   const legendNode = legend ? (
-    <div data-part="legend" style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
+    <div data-part="legend">
       {finiteSeries.map((currentSeries, seriesIndex) => (
-        <div key={`${currentSeries.name}-${seriesIndex}`} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: currentSeries.color ?? areaColor(palette, seriesIndex), opacity: resolvedOpacity, display: 'inline-block' }} />
+        <div key={`${currentSeries.name}-${seriesIndex}`} data-part="legend-item">
+          <span data-part="legend-swatch" data-series-index={seriesIndex % 5} style={{ backgroundColor: currentSeries.color ?? areaColor(palette, seriesIndex), opacity: resolvedOpacity }} />
           <span data-part="legend-label">{currentSeries.name}</span>
         </div>
       ))}
@@ -229,6 +229,7 @@ export const AreaChart = memo(function AreaChart({
       style={style}
       {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
+      skeleton
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Area chart'}

@@ -185,10 +185,10 @@ export const LineChart = memo(function LineChart({
   };
 
   const legendNode = legend ? (
-    <div data-part="legend" style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
+    <div data-part="legend">
       {finiteSeries.map((s, i) => (
-        <div key={`${s.name}-${i}`} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 3, backgroundColor: s.color ?? lineColor(palette, i), display: 'inline-block' }} />
+        <div key={`${s.name}-${i}`} data-part="legend-item">
+          <span data-part="legend-swatch" data-series-index={i % 5} style={{ backgroundColor: s.color ?? lineColor(palette, i) }} />
           <span data-part="legend-label">{s.name}</span>
         </div>
       ))}
@@ -239,6 +239,7 @@ export const LineChart = memo(function LineChart({
       style={style}
       {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
+      skeleton
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Line chart'}

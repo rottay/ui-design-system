@@ -181,6 +181,11 @@
 .ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='items-header-row'] [data-part='items-header-cell'] {
   border-block-end: 1px solid var(--ds-color-border);
 }
+/* Row hairlines: amounts scan down long item lists; the subtle channel keeps
+   them quieter than the header rule above. (0,6,0) clears the P-48 floor. */
+.ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='items-table'] [data-part='items-row'] [data-part='items-cell'] {
+  border-block-end: 1px solid var(--ds-color-border-subtle);
+}
 .ds-pattern-invoice-template.ds-engine-modern [data-part='items-header-cell'][data-col='index'] {
   inline-size: 2.5rem;
 }
@@ -273,6 +278,9 @@
     color: CanvasText;
   }
   .ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='items-header-row'] [data-part='items-header-cell'] {
+    border-block-end-color: ButtonText;
+  }
+  .ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='items-table'] [data-part='items-row'] [data-part='items-cell'] {
     border-block-end-color: ButtonText;
   }
   .ds-pattern-invoice-template.ds-engine-modern[data-part='root'] [data-part='totals-divider'] {

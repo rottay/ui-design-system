@@ -21,6 +21,7 @@ import { Box } from '../../../../../primitives/layout/Box';
 import { Stack } from '../../../../../primitives/layout/Stack';
 import { Flex } from '../../../../../primitives/layout/Flex';
 import { Text } from '../../../../../primitives/display/Typography';
+import { Heading } from '../../../../../primitives/display/Typography';
 import { Card } from '../../../../../primitives/display/Card';
 import { Badge } from '../../../../../primitives/display/Badge';
 import { Button } from '../../../../../primitives/inputs/Button';
@@ -243,6 +244,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
   const { tSurfaceOr } = useSurfaceTranslations();
   const batchReasonId = useId();
   const reviewReasonId = useId();
+  const reviewRailTitleId = useId();
 
   const workspace = useCollectionWorkspace({
     config: workspaceConfig,
@@ -400,7 +402,10 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
       {/* Header */}
       <Flex align="center" justify="between">
         <Box>
-          <Text className="ds-decision-inbox__title" data-part="title" size="xl" weight="semibold">{queueName}</Text>
+          {/* Queue name is the page's h1 (document outline); the Heading
+              engine applies the same xl/semibold ramp the Text rendered, so
+              the swap is landmark-only. */}
+          <Heading className="ds-decision-inbox__title" data-part="title" level="h1" size="xl" weight="semibold">{queueName}</Heading>
           {subtitle && (
             <Text
               className="ds-decision-inbox__muted-text ds-decision-inbox__subtitle"
@@ -532,11 +537,13 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
             />
           </Box>
 
-          {/* Review rail */}
+          {/* Review rail (complementary landmark labelled by its heading) */}
           {showReviewRail && (
             <Box
+              as="aside"
               className="ds-decision-inbox__review-rail"
               data-part="review-rail"
+              aria-labelledby={reviewRailTitleId}
               style={
                 reviewRail.width
                   ? ({ '--_ds-instance-decision-inbox-rail-width': reviewRail.width } as React.CSSProperties)
@@ -551,9 +558,16 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
                   <Stack spacing="md">
                     {/* Rail header */}
                     <Flex align="center" justify="between">
-                      <Text size="sm" weight="semibold">
+                      <Heading
+                        level="h2"
+                        size="sm"
+                        weight="semibold"
+                        id={reviewRailTitleId}
+                        className="ds-decision-inbox__review-title"
+                        data-part="review-title"
+                      >
                         {tSurfaceOr('decision_inbox.review_details', 'Review Details')}
-                      </Text>
+                      </Heading>
                       <Button
                         size="xs"
                         variant="secondary"

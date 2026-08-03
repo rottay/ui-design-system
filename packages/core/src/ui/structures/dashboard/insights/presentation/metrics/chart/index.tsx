@@ -7,51 +7,40 @@ import {
   TrendingUpIcon as TrendingUp,
 } from '../../../../../../../graphics/icons';
 import { useSmoothCounter } from '@/graphics/motion/react/runtime';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { MetricsProps, KeyMetric } from '../../../foundation/contracts';
 import {
-  METRIC_CARD_BG,
-  METRIC_CARD_BORDER,
-  METRIC_CARD_ICON_BG,
-  METRIC_CARD_ICON_COLOR,
-  METRIC_CARD_LABEL_COLOR,
-  METRIC_CARD_METER_HEIGHT,
-  METRIC_CARD_METER_FILL_ERROR,
-  METRIC_CARD_METER_FILL_SUCCESS,
-  METRIC_CARD_METER_TRACK,
-  METRIC_CARD_METER_TRACK_BORDER,
   METRIC_CARD_NUMBER_FONT_VARIANT,
   METRIC_CARD_NUMBER_MIN_WIDTH,
   METRIC_CARD_PADDING,
-  METRIC_CARD_RADIUS,
-  METRIC_CARD_SHADOW,
-  METRIC_CARD_TREND_COLOR,
-  METRIC_CARD_TREND_ERROR_COLOR,
-  METRIC_CARD_TREND_WARNING_COLOR,
-  METRIC_CARD_VALUE_COLOR,
   METRIC_MONO_FONT,
-  METRIC_PANEL_BADGE_BG,
-  METRIC_PANEL_BADGE_BORDER,
-  METRIC_PANEL_BG,
-  METRIC_PANEL_BORDER,
-  METRIC_PANEL_ICON_BG,
-  METRIC_PANEL_ICON_BORDER,
-  METRIC_PANEL_RADIUS,
-  METRIC_PANEL_SHADOW,
-  METRIC_PANEL_TITLE_COLOR,
+  parseMetricValue,
 } from '../../../foundation/tokens';
+
+/** Hook-local `tOr`: catalogue value with an English floor, never a raw key. */
+function useMetricsTranslation() {
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, floor: string): string => i18n?.tOr(key, floor) ?? floor;
+  return { tOr };
+}
 
 function ChartRow({
   metric,
   index,
   maxValue,
+  progressLabel,
 }: {
   metric: MetricsProps['metrics'][0];
   index: number;
   maxValue: number;
+  progressLabel: string;
 }) {
-  const numericValue = parseInt(metric.value.replace(/[^0-9.-]/g, '')) || 0;
-  const suffix = metric.value.replace(/[0-9.-]/g, '');
-  const animatedValue = Math.floor(useSmoothCounter(0, numericValue, 1000, index * 100));
+  // Decimal-safe split (shared family helper): the previous parseInt +
+  // Math.floor path truncated decimal metrics permanently — "4.8" rendered
+  // as "4".
+  const { numericValue, decimals, suffix } = parseMetricValue(metric.value);
+  const rawValue = useSmoothCounter(0, numericValue, 1000, index * 100);
+  const animatedValue = decimals > 0 ? rawValue.toFixed(decimals) : Math.floor(rawValue);
   const percentage = Math.min((numericValue / maxValue) * 100, 100);
 
   return (
@@ -70,11 +59,6 @@ function ChartRow({
           <Box
             data-part="metric-icon-box"
             style={{
-              width: 28,
-              height: 28,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
               position: 'relative',
             }}
           >
@@ -106,7 +90,6 @@ function ChartRow({
             minWidth: METRIC_CARD_NUMBER_MIN_WIDTH,
             textAlign: 'right',
             fontVariantNumeric: METRIC_CARD_NUMBER_FONT_VARIANT,
-            transition: 'color 0.2s ease',
           }}
         >
           {animatedValue}
@@ -116,28 +99,21 @@ function ChartRow({
 
       <Box
         data-part="meter-track"
-        style={{
-          height: METRIC_CARD_METER_HEIGHT,
-          position: 'relative',
-          overflow: 'hidden',
-        }}
       >
         <Box
           data-part="meter-fill"
           style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            height: '100%',
+            // Runtime datum (share of the family max): the width is
+            // data-driven geometry, so it stays inline by design. Its frame
+            // and logical start anchor live in the skin.
             width: percentage + '%',
-            transition: 'background 0.3s ease',
           }}
         />
       </Box>
 
-      <Flex justify="between" align="center" style={{ marginTop: 4 }}>
+      <Flex justify="between" align="center" data-part="progress-row">
         <Text size="xs" data-part="progress-label" style={{ fontFamily: METRIC_MONO_FONT, fontSize: 9 }}>
-          Progress
+          {progressLabel}
         </Text>
         <Text
           size="xs"
@@ -153,56 +129,47 @@ function ChartRow({
 }
 
 export function MetricsChart({ metrics }: MetricsProps) {
-  const maxValue = Math.max(...metrics.map((m: KeyMetric) => parseInt(m.value.replace(/[^0-9.-]/g, '')) || 0), 1);
+  const { tOr } = useMetricsTranslation();
+  const maxValue = Math.max(...metrics.map((m: KeyMetric) => parseMetricValue(m.value).numericValue), 1);
 
   return (
     <Box
       className="ds-metrics-chart"
       data-part="root"
-      style={{
-        height: 415,
-        padding: '16px',
-        position: 'relative',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
     >
       <Flex
         align="center"
         justify="between"
         data-part="header"
-        style={{ paddingBottom: 12, marginBottom: 12, position: 'relative' }}
       >
         <Flex align="center" gap={8}>
           <Box
             data-part="panel-icon-box"
-            style={{
-              width: 28,
-              height: 28,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
           >
             <Activity data-part="panel-icon" style={{ width: 14, height: 14 }} />
           </Box>
           <Text weight="bold" size="sm" data-part="title">
-            Performance
+            {tOr('metrics.chartTitle', 'Performance')}
           </Text>
         </Flex>
-        <Flex align="center" gap={4} data-part="live-badge" style={{ padding: '4px 8px' }}>
-          <Box className="live-dot-chart" data-part="live-dot" style={{ width: 6, height: 6 }} />
+        <Flex align="center" gap={4} data-part="live-badge">
+          <Box className="live-dot-chart" data-part="live-dot" />
           <Text size="xs" weight="bold" data-part="live-label" style={{ fontFamily: METRIC_MONO_FONT, fontSize: 9 }}>
-            LIVE
+            {tOr('metrics.live', 'LIVE')}
           </Text>
         </Flex>
       </Flex>
 
-      <Box data-part="scroll-area" style={{ flex: 1, overflowY: 'auto', minHeight: 0 }} className="metrics-scroll">
+      <Box data-part="scroll-area" className="metrics-scroll">
         <Stack spacing="sm">
           {metrics.map((metric: KeyMetric, i: number) => (
-            <ChartRow key={metric.label} metric={metric} index={i} maxValue={maxValue} />
+            <ChartRow
+              key={metric.label}
+              metric={metric}
+              index={i}
+              maxValue={maxValue}
+              progressLabel={tOr('metrics.progressLabel', 'Progress')}
+            />
           ))}
         </Stack>
       </Box>

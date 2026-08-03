@@ -119,7 +119,7 @@ export function TableToolbar({
         {/* Left: Search + leftContent */}
         <Flex align="center" gap={8} className="ds-table-toolbar__left">
           {onSearchChange && (
-            <Box className="ds-table-toolbar__search-field">
+            <Box className="ds-table-toolbar__search-field" role="search">
               <Search
                 data-part="search-icon"
                 className="ds-table-toolbar__search-icon"

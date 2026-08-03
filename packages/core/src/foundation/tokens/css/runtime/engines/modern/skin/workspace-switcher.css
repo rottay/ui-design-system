@@ -23,6 +23,16 @@
  * row's selection cue is the skin's inset frame (LOTE 2: the `border-l-[3px]`
  * left-accent utility was drained — side rails are forbidden by product law).
  *
+ * WAVE p612b:
+ * - The panel header's shared inline `menuSectionTitleStyle` object is drained
+ *   to the `[data-part='header-title']` rule below (zero inline paint law);
+ *   the doubled padding it produced (header 6/12 + span 6/12) collapses to
+ *   the header's own 6/12, re-aligning the header text with the row grid.
+ * - The trigger/create/settings buttons gain guarded hover + unguarded
+ *   `:active` states (they had none); the chevron rotates on `data-open`.
+ * - The panel gets a governed entry animation and a viewport-bounded width;
+ *   `PatternBaseProps.loading` gains a trigger-footprint skeleton.
+ *
  * Values transcribed verbatim from engines/modern.tsx.
  */
 
@@ -31,12 +41,39 @@
   color: var(--ds-color-text-primary);
   border: none;
   border-radius: var(--ds-radius-md);
+  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+/* Trigger/create/settings had NO hover or press state (the pattern skin is
+   their single paint owner, P-79). Hover rides the (hover: hover) guard with
+   an unguarded :active twin (house hover law). */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:active,
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:active,
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:active {
+  background: var(--ds-surface-inset);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='chevron'] {
+  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'][data-open='true'] [data-part='chevron'] {
+  transform: rotate(180deg);
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel'] {
   background: var(--ds-surface-card);
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-3);
+  /* Governed dropdown entry: short rise+fade on the family's own keyframes,
+     stilled under prefers-reduced-motion below. */
+  animation: ds-workspace-switcher-panel-in var(--ds-motion-normal)
+    var(--ds-motion-ease-out, ease-out) both;
+}
+
+@keyframes ds-workspace-switcher-panel-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='panel'] {
@@ -192,11 +229,28 @@
   padding-block: var(--ds-spacing-4, 16px);
 }
 
-/* ---- panel + positioning (logical: sidebar opens inline-end, topbar below) ---- */
+/* Panel header typography, drained from the shared inline
+   `menuSectionTitleStyle` object (values verbatim). The engine now stamps a
+   plain span; the header frame keeps its own 6/12 padding — the drained
+   object's second 6/12 on the span was a doubling defect, not a contract. */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='header-title'] {
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-xs, 12px);
+  font-weight: var(--ds-font-weight-medium, 500);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ---- panel + positioning (logical: sidebar opens inline-end, topbar below).
+        The width is viewport-bounded so the panel never overflows a narrow
+        screen; the channel keeps the authored 18rem wherever it fits. ---- */
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel'] {
   position: absolute;
   z-index: 50;
-  inline-size: var(--ds-workspace-switcher-panel-width, 18rem);
+  inline-size: min(
+    var(--ds-workspace-switcher-panel-width, 18rem),
+    calc(100vw - 2 * var(--ds-spacing-4, 16px))
+  );
   overflow: hidden;
 }
 
@@ -244,6 +298,15 @@
 
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item']:hover [data-part='settings'] {
     opacity: 1;
+  }
+
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger']:hover,
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create']:hover {
+    background: var(--ds-surface-highlight);
+  }
+
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings']:hover {
+    background: var(--ds-surface-inset);
   }
 }
 
@@ -314,7 +377,9 @@
   font-size: var(--ds-font-size-xs);
   cursor: pointer;
   opacity: 0;
-  transition: opacity var(--ds-motion-fast) var(--ds-motion-ease-out);
+  transition:
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
 /* Keyboard reveals (virtual focus + own focus ring) -- never hover-gated. */
@@ -337,6 +402,24 @@
   padding-inline: 12px;
   font-size: var(--ds-font-size-sm);
   cursor: pointer;
+  transition: background var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+/* ---- loading skeleton: the trigger's exact footprint (height + per-position
+        width + radius), so the swap never shifts the surrounding chrome. ---- */
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='skeleton'] {
+  block-size: var(--ds-workspace-switcher-trigger-height, 40px);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-neutral-100);
+  animation: ds-foundation-pulse var(--ds-motion-attention) var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'][data-position='sidebar'] [data-part='skeleton'] {
+  inline-size: 100%;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern[data-part='root']:not([data-position='sidebar']) [data-part='skeleton'] {
+  inline-size: 12rem;
 }
 
 .ds-pattern-workspace-switcher.ds-engine-modern [data-part='current-user'] {
@@ -401,8 +484,16 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'],
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'],
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'],
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='chevron'],
   .ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'] {
     transition: none;
+  }
+
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel'],
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='skeleton'] {
+    animation: none;
   }
 }
 
@@ -448,5 +539,12 @@
   }
   .ds-pattern-workspace-switcher.ds-engine-modern[data-part='root'] [data-part='create'] {
     border-color: ButtonText;
+  }
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel'] {
+    animation: none;
+  }
+  .ds-pattern-workspace-switcher.ds-engine-modern [data-part='skeleton'] {
+    background: GrayText;
+    animation: none;
   }
 }

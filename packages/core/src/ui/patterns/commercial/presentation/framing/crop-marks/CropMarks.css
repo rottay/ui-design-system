@@ -7,6 +7,10 @@
  * `::after` (not a text glyph) so they stay crisp, resolution-independent hairlines at any
  * size. The ticks sit outside the wrapper's box and never affect its layout size — `children`
  * remain the only thing that determines the box.
+ *
+ * Tick geometry consumes the shared `--ds-spacing-*` role WITH a literal fallback (the kit's
+ * self-contained idiom), so tenant density scales the tick reach; every offset is a logical
+ * property, so RTL mirrors the marks for free.
  */
 
 .rt-crop-marks {
@@ -16,8 +20,8 @@
 
 .rt-crop-marks__tick {
   position: absolute;
-  width: 0;
-  height: 0;
+  inline-size: 0;
+  block-size: 0;
   pointer-events: none;
   user-select: none;
 }
@@ -31,40 +35,49 @@
 
 /* Horizontal hairline of the tick, centered on the corner point. */
 .rt-crop-marks__tick::before {
-  top: 0;
-  left: -0.375rem;
-  width: 0.75rem;
-  height: 1px;
+  inset-block-start: 0;
+  inset-inline-start: calc(var(--ds-spacing-3, 0.75rem) / -2);
+  inline-size: var(--ds-spacing-3, 0.75rem);
+  block-size: 1px;
 }
 
 /* Vertical hairline of the tick, centered on the corner point. */
 .rt-crop-marks__tick::after {
-  top: -0.375rem;
-  left: 0;
-  width: 1px;
-  height: 0.75rem;
+  inset-block-start: calc(var(--ds-spacing-3, 0.75rem) / -2);
+  inset-inline-start: 0;
+  inline-size: 1px;
+  block-size: var(--ds-spacing-3, 0.75rem);
 }
 
 .rt-crop-marks__tick--tl {
-  top: -0.75rem;
-  left: -0.75rem;
+  inset-block-start: calc(var(--ds-spacing-3, 0.75rem) * -1);
+  inset-inline-start: calc(var(--ds-spacing-3, 0.75rem) * -1);
 }
 
 .rt-crop-marks__tick--tr {
-  top: -0.75rem;
-  right: -0.75rem;
+  inset-block-start: calc(var(--ds-spacing-3, 0.75rem) * -1);
+  inset-inline-end: calc(var(--ds-spacing-3, 0.75rem) * -1);
 }
 
 .rt-crop-marks__tick--bl {
-  bottom: -0.75rem;
-  left: -0.75rem;
+  inset-block-end: calc(var(--ds-spacing-3, 0.75rem) * -1);
+  inset-inline-start: calc(var(--ds-spacing-3, 0.75rem) * -1);
 }
 
 .rt-crop-marks__tick--br {
-  bottom: -0.75rem;
-  right: -0.75rem;
+  inset-block-end: calc(var(--ds-spacing-3, 0.75rem) * -1);
+  inset-inline-end: calc(var(--ds-spacing-3, 0.75rem) * -1);
 }
 
 .rt-crop-marks__body {
   position: relative;
+  min-inline-size: 0;
+}
+
+/* Forced colors: the ticks re-key to system ink so the marks never vanish. */
+@media (forced-colors: active) {
+  .rt-crop-marks__tick::before,
+  .rt-crop-marks__tick::after {
+    background: CanvasText;
+  }
 }

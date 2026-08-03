@@ -16,17 +16,15 @@ export type {
 } from './contracts';
 
 /**
- * @engine classic-only
  * @category domain-kit (review/ops)
- * This pattern is domain-specific and ships only with the classic engine.
- * Modern engine parity is not planned. Consider moving to components/kits/
- * when the kit infrastructure is established.
+ * Ships a real modern engine (token-driven, composed primitives); classic and
+ * rustic continue to resolve to the shared classic implementation.
  */
 export const PatternModerationGallery = createEngineComponent<ModerationGalleryProps>(
   'PatternModerationGallery',
   {
     classic: () => import('./engines/classic'),
-    modern: () => import('./engines/classic'),
+    modern: () => import('./engines/modern'),
     rustic: () => import('./engines/classic'),
   }
 );

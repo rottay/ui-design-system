@@ -1,0 +1,232 @@
+/**
+ * Modern OperationalLedger skin (premium workflow wave).
+ *
+ * LAYER: wired into `layer(rottay-engines)` through the facade entrypoints
+ * (base.css / styles.css). The facade import lines are owner-gated — this
+ * file ships alongside the engine and the wiring delta rides the batch
+ * fragment (p615-workflow).
+ *
+ * BORDER-COLOR FLOOR (P-48): border paint reaches (0,4,0) through the
+ * always-stamped root `data-part` ancestor (or `data-loading` on the root
+ * itself) — repeating an attribute on one element is forbidden.
+ *
+ * `data-part` is a shared VOCABULARY — every rule is anchored to this
+ * component's own two scope classes, and the engine class keeps the
+ * classic/rustic trees out.
+ *
+ * SCAN LAW: the ledger reads as data — tabular figures everywhere, zebra rows
+ * on surface tokens, quantity direction carried by the ± sign (tone only
+ * reinforces), low-priority columns collapse under the named
+ * `ds-operational-ledger` container, and the header sticks when the region
+ * scrolls.
+ */
+
+/* --- Root + named container ------------------------------------------------- */
+.ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] {
+  container: ds-operational-ledger / inline-size;
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-1);
+  overflow: hidden;
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern[data-part='root'][data-loading] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+/* --- Filter bar ---------------------------------------------------------------- */
+.ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='filter-bar'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-spacing-3, 12px);
+  padding-block: var(--ds-spacing-3, 12px);
+  padding-inline: var(--ds-spacing-5, 20px);
+  border-block-end: 1px solid var(--ds-color-border-subtle);
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='filter-count'] {
+  font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
+  color: var(--ds-color-text-muted);
+  font-variant-numeric: var(--ds-numeric-tabular, tabular-nums);
+}
+
+/* --- Table region (own scroll; header sticks) ---------------------------------------
+   The optional cap is family-private composition plumbing. The default `none`
+   preserves page flow; consumers of this pattern may scope it locally. */
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='table-region'] {
+  overflow: auto;
+  max-block-size: var(--_ds-operational-ledger-region-max-block, none);
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='table'] {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 13px));
+}
+
+/* --- Header ------------------------------------------------------------------------- */
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='header-cell'] {
+  position: sticky;
+  inset-block-start: 0;
+  /* Sticky header rides the canonical relative stacking channel (value 1:
+     one layer above the flat rows it scrolls over). */
+  z-index: var(--ds-z-index-relative-above, 1);
+  padding-block: var(--ds-spacing-2, 10px);
+  padding-inline: var(--ds-spacing-3, 12px);
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-type-caption-font-size, 11px);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: start;
+  white-space: nowrap;
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='header-cell'] {
+  border-block-end: 1px solid var(--ds-color-border);
+}
+
+/* --- Cells ----------------------------------------------------------------------------- */
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='cell'] {
+  padding-block: var(--ds-spacing-2, 10px);
+  padding-inline: var(--ds-spacing-3, 12px);
+  vertical-align: middle;
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern[data-part='root']
+  [data-part='table-body'] [data-part='entry']:not(:last-child) [data-part='cell'] {
+  border-block-end: 1px solid var(--ds-color-border-subtle);
+}
+
+/* Zebra on surface tokens (never a hardcoded mix). */
+.ds-pattern-operational-ledger.ds-engine-modern
+  [data-part='table-body'] [data-part='entry']:nth-child(even) {
+  background: var(--ds-surface-panel);
+}
+
+@media (hover: hover) {
+  .ds-pattern-operational-ledger.ds-engine-modern
+    [data-part='table-body'] [data-part='entry']:hover {
+    background: var(--ds-surface-highlight);
+  }
+}
+
+/* --- Cell content ------------------------------------------------------------------------- */
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-timestamp'] {
+  font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
+  color: var(--ds-color-text-muted);
+  font-variant-numeric: var(--ds-numeric-tabular, tabular-nums);
+  white-space: nowrap;
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-description'] {
+  font-weight: var(--ds-font-weight-medium, 500);
+  color: var(--ds-color-text-primary);
+  overflow-wrap: anywhere;
+}
+
+/* Quantity: end-aligned tabular column; ± sign carries direction, tone reinforces. */
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='header-cell'][data-column='quantity'],
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='cell'][data-column='quantity'] {
+  text-align: end;
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-quantity'] {
+  font-weight: var(--ds-font-weight-semibold, 600);
+  font-variant-numeric: var(--ds-numeric-tabular, tabular-nums);
+  white-space: nowrap;
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-quantity'][data-type='credit'] {
+  color: var(--ds-color-success);
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-quantity'][data-type='debit'] {
+  color: var(--ds-color-error);
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-actor'] {
+  font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
+  color: var(--ds-color-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-reason'] {
+  font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='cell-reference'] {
+  font-family: var(--ds-font-family-mono, monospace);
+  font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
+  color: var(--ds-color-text-muted);
+  white-space: nowrap;
+}
+
+/* --- Narrow collapse: low-priority columns hide under 40rem of inline size ------------------ */
+@container ds-operational-ledger (max-width: 40rem) {
+  .ds-pattern-operational-ledger.ds-engine-modern [data-priority='low'] {
+    display: none;
+  }
+}
+
+/* --- Empty ------------------------------------------------------------------------------------- */
+.ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='empty'] {
+  padding-block: var(--ds-spacing-10, 40px);
+  padding-inline: var(--ds-spacing-6, 24px);
+}
+
+/* --- Skeleton (table footprint) ------------------------------------------------------------------ */
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton'] {
+  animation: ds-operational-ledger-skeleton-pulse var(--ds-motion-deliberate)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
+}
+
+@keyframes ds-operational-ledger-skeleton-pulse {
+  from { opacity: 1; }
+  to { opacity: 0.45; }
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton-header'] {
+  block-size: var(--ds-spacing-9, 36px);
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='skeleton-header'] {
+  border-block-end: 1px solid var(--ds-color-border-subtle);
+}
+
+.ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton-row'] {
+  block-size: var(--ds-spacing-10, 40px);
+  margin-block: var(--ds-spacing-1, 4px);
+  margin-inline: var(--ds-spacing-3, 12px);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-panel);
+}
+
+/* --- Forced colors ---------------------------------------------------------------------------------- */
+@media (forced-colors: active) {
+  .ds-pattern-operational-ledger.ds-engine-modern[data-part='root'][data-loading],
+  .ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='filter-bar'],
+  .ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='header-cell'],
+  .ds-pattern-operational-ledger.ds-engine-modern[data-part='root']
+    [data-part='table-body'] [data-part='entry']:not(:last-child) [data-part='cell'],
+  .ds-pattern-operational-ledger.ds-engine-modern[data-part='root'] [data-part='skeleton-header'] {
+    border-color: ButtonText;
+  }
+
+  /* Zebra/hover colour disappears: separate rows with a hairline instead. */
+  .ds-pattern-operational-ledger.ds-engine-modern[data-part='root']
+    [data-part='table-body'] [data-part='entry'] [data-part='cell'] {
+    border-block-end: 1px solid ButtonText;
+  }
+}
+
+/* --- Reduced motion ------------------------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-operational-ledger.ds-engine-modern [data-part='skeleton'] {
+    animation: none;
+  }
+}

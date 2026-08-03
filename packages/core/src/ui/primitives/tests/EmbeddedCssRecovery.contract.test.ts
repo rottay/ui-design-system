@@ -23,7 +23,7 @@ const readEngineSkin = (name: string) =>
   readSource(`foundation/tokens/css/runtime/engines/modern/skin/${name}`);
 
 const SKIN_HASHES = {
-  'data-table-interactions.css': '607ed897c5f551cee44ade05cfed795e7fcf5966b2f7a2484409088942c4d615',
+  'data-table-interactions.css': '9953c5f5f05eba406f82eb6ffbbcb5298417d704913f9d6465fa9b0ee86980aa',
   'form-placeholders.css': 'c26b0d68812a0b668f5992cfa868ce8ee1c9b9047c7e7cbfe91b110d82ab2a8f',
   'navigation-static.css': 'a35d19035d60d802a89771759fe3a584deea6e982ac4fba08bfd6a52f5884d12',
   'primitive-motion.css': '6b88cc713c2552a668c6c056bbf8ba1dae05d44a827078a0e942b74a7d847e7a',
@@ -103,6 +103,27 @@ function ruleContract(css: string, selector: string, rootOnly = true): Record<st
   return matches[0];
 }
 
+function ruleContractInMedia(
+  css: string,
+  selector: string,
+  mediaQuery: string,
+): Record<string, string> {
+  const matches: Array<Record<string, string>> = [];
+  const normalizedSelector = selector.replace(/\s+/g, ' ').trim();
+  postcss.parse(css).walkRules((rule) => {
+    const parent = rule.parent;
+    if (
+      parent?.type !== 'atrule' ||
+      parent.name !== 'media' ||
+      parent.params !== mediaQuery ||
+      !rule.selectors.some((candidate) => candidate.replace(/\s+/g, ' ').trim() === normalizedSelector)
+    ) return;
+    matches.push(declarationMap(rule.nodes.filter((node) => node.type === 'decl')));
+  });
+  expect(matches, `selector ${selector} inside @media ${mediaQuery}`).toHaveLength(1);
+  return matches[0];
+}
+
 function keyframeContract(css: string, name: string): Record<string, Record<string, string>> {
   const matches: Array<Record<string, Record<string, string>>> = [];
   postcss.parse(css).walkAtRules('keyframes', (atRule) => {
@@ -154,8 +175,9 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
   });
 
   it('accounts for every classified declaration across the audited and relocated owners', () => {
-    // The audited six. `dataTable` grew when its paint was tokenized (one
-    // literal became a token plus its fallback); `scrollArea` and `navigation`
+    // The audited six. `dataTable` grew when hover-only paint moved behind an
+    // input-capability query: the pointer and keyboard branches now repeat two
+    // declarations instead of sharing one rule. `scrollArea` and `navigation`
     // shrank by exactly the modern rules that moved to the engine-scoped
     // owners asserted below. Nothing was dropped.
     expect({
@@ -166,7 +188,7 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       navigation: paintCount(SKINS.navigation),
       formPlaceholders: paintCount(SKINS.formPlaceholders),
     }).toEqual({
-      dataTable: 32,
+      dataTable: 34,
       primitiveMotion: 8,
       toast: 20,
       scrollArea: 18,
@@ -208,9 +230,10 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
     ).toBe(true);
 
     expect(
-      ruleContract(
+      ruleContractInMedia(
         SKINS.dataTable,
-        '.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:hover .ds-resize-handle__bar'
+        '.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:hover .ds-resize-handle__bar',
+        '(hover: hover)',
       )
     ).toEqual({
       width: 'var(--ds-table-resize-bar-width-active, 0.1875rem)',
@@ -226,7 +249,11 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       'border-radius': 'var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem))',
     });
     expect(
-      ruleContract(SKINS.dataTable, '.ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key]:hover')
+      ruleContractInMedia(
+        SKINS.dataTable,
+        '.ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key]:hover',
+        '(hover: hover)',
+      )
     ).toEqual({
       'background-color':
         'var(--ds-table-header-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent))',
@@ -263,7 +290,11 @@ describe('WO-SKIN-06 embedded CSS recovery — exact static payload', () => {
       )
     ).toHaveLength(0);
     expect(
-      ruleContract(SKINS.dataTable, '.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]:hover')
+      ruleContractInMedia(
+        SKINS.dataTable,
+        '.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]:hover',
+        '(hover: hover)',
+      )
     ).toEqual({
       background: 'color-mix(in srgb, var(--ds-color-primary) 4%, transparent)',
       'box-shadow': 'inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 16%, transparent)',

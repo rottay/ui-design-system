@@ -16,9 +16,9 @@
  * paint, so it stays outside the governed `--ds-chart-series-N` channel.
  */
 
-import { memo, useMemo, useRef } from 'react';
+import { memo, useMemo, useRef, type CSSProperties } from 'react';
 
-import type { ChartBaseProps, ChartMarginProps, ChartStateProps } from '../../contracts';
+import type { ChartBaseProps, ChartLegendProps, ChartMarginProps, ChartStateProps } from '../../contracts';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality } from '../../runtime';
 import type { SvgHeatMapDatum } from '../../runtime/chart-engine/foundation/renderers/geometry';
@@ -31,7 +31,7 @@ const DEFAULT_HEATMAP_COLOR_RANGE: [string, string] = [
 const DEFAULT_HEATMAP_MARGIN = { top: 20, right: 20, bottom: 60, left: 80 };
 
 /** Own props for the {@link HeatMap} component (state copy is composed below). */
-interface HeatMapOwnProps extends ChartBaseProps, ChartMarginProps {
+interface HeatMapOwnProps extends ChartBaseProps, ChartMarginProps, ChartLegendProps {
   data: { x: string; y: string; value: number }[];
   xLabels?: string[];
   yLabels?: string[];
@@ -57,6 +57,7 @@ export const HeatMap = memo(function HeatMap({
   yLabels,
   colorRange = DEFAULT_HEATMAP_COLOR_RANGE,
   cellRadius = 2,
+  legend = false,
   width,
   height = 400,
   className,
@@ -110,6 +111,40 @@ export const HeatMap = memo(function HeatMap({
     dataCount: finiteData.length,
     emptyLabel,
   });
+
+  // Threshold-labelled ramp legend (opt-in `legend` prop). The ramp bridges
+  // the same governed color range the renderer quantizes for its cells, via
+  // private runtime stops; the numeric extent labels keep the scale
+  // readable without color. Visible copy is numbers only, so no new catalog
+  // keys are required.
+  const valueExtent = useMemo<readonly [number, number] | null>(() => {
+    if (finiteData.length === 0) return null;
+    let minimum = Number.POSITIVE_INFINITY;
+    let maximum = Number.NEGATIVE_INFINITY;
+    for (const item of finiteData) {
+      if (item.value < minimum) minimum = item.value;
+      if (item.value > maximum) maximum = item.value;
+    }
+    return [minimum, maximum];
+  }, [finiteData]);
+
+  const legendNode = legend && valueExtent ? (
+    <div
+      data-part="legend"
+      style={{
+        // Private family bridge: the stops are runtime caller paint, the
+        // skin owns the ramp structure. This is intentionally not a public
+        // tenant-theme channel.
+        ['--_ds-heatmap-ramp-low' as never]: colorRange[0],
+        ['--_ds-heatmap-ramp-high' as never]: colorRange[1],
+      } as CSSProperties}
+    >
+      <span data-part="legend-threshold" data-bound="min">{valueExtent[0]}</span>
+      <span data-part="legend-ramp" aria-hidden="true" />
+      <span data-part="legend-threshold" data-bound="max">{valueExtent[1]}</span>
+    </div>
+  ) : null;
+
   // Rebuild the discriminated state contract from the resolved state so the
   // typed-required copy correlates with the active arm.
   const stateProps: ChartStateProps = resolvedState === 'error'
@@ -148,6 +183,7 @@ export const HeatMap = memo(function HeatMap({
       ariaLabel={title ?? 'Heatmap'}
       ariaDescription={describeChart('Heatmap', finiteData.length, subtitle)}
       summary={summary}
+      legend={legendNode}
       plot={({ descriptionId }) => (
         <SvgHeatMapRenderer
           data={rendererData}

@@ -212,6 +212,20 @@
 
 .ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-label'] {
   color: var(--ds-color-text-secondary);
+  transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+/* Focus cue: while any control inside the field holds focus, its label steps
+   up to primary ink so the active field reads at a glance down a long form.
+   `data-requirement` is always stamped, so the chain buys its floor from it. */
+.ds-structure.ds-edit-fields[data-part='field'][data-requirement]:focus-within > [data-part='field-label-row'] [data-part='field-label'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* Error cue: the invalid field's label takes the error ink (the message and
+   `aria-invalid` already carry the state to AT). */
+.ds-structure.ds-edit-fields[data-part='field'][data-error='true'] > [data-part='field-label-row'] [data-part='field-label'] {
+  color: var(--ds-color-error);
 }
 
 .ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement-dot'] {
@@ -269,6 +283,16 @@
   justify-content: flex-end;
 }
 
+/* Sticky dock: while expanded + sticky the engine docks the control inline
+   (`position: sticky`), so the skin gives it a real surface — content that
+   scrolls under the dock must not bleed through. The canonical canvas surface
+   owns that paint; this structure does not introduce a second theme channel. */
+.ds-structure.ds-edit-fields[data-part='toggle'][data-sticky='true'][data-expanded='true'] {
+  padding-block: 8px;
+  background: var(--ds-surface-canvas, var(--ds-color-bg-primary));
+  border-block-start: 1px solid var(--ds-color-border-secondary);
+}
+
 /* --- InlineEditFooter ------------------------------------------------------ */
 
 .ds-structure.ds-edit-fields[data-part='footer'][data-saving] {
@@ -299,6 +323,15 @@
   color: var(--ds-color-error);
 }
 
+/* reduced motion: the label's focus-cue fade and the footer's border fade go
+   quiet (state still reads through the static ink). */
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-label'],
+  .ds-structure.ds-edit-fields[data-part='footer'][data-saving] {
+    transition: none;
+  }
+}
+
 /* forced-colors: tints and hairlines are forced away. The editor icon well and
    the requirement dots keep system-colour marks (the requirement state reads
    through the pill COPY, never the dot's colour -- and the copy now reaches
@@ -307,6 +340,10 @@
    carry the state to AT even when its ink auto-maps. Composed primitives
    (Button, Tooltip) own their own forced-colors contracts. */
 @media (forced-colors: active) {
+  .ds-structure.ds-edit-fields[data-part='toggle'][data-sticky='true'][data-expanded='true'] {
+    background: Canvas;
+    border-block-start-color: ButtonText;
+  }
   .ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-icon'] {
     border-color: ButtonText;
     background: Canvas;

@@ -41,13 +41,18 @@
   cursor: progress;
 }
 
-/* ---- trigger ---- */
+/* ---- trigger: min-block-size (not fixed block-size) + flex-wrap so a long
+        autoglottonym or a flag+label pair wraps onto a second line instead
+        of clipping in narrow toolbars; the chevron rotates on open and its
+        motion rides the fast channel ---- */
 .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding-block: 0;
+  flex-wrap: wrap;
+  gap: var(--ds-spacing-2, 8px);
+  row-gap: var(--ds-spacing-1, 4px);
+  padding-block: var(--ds-spacing-1, 4px);
   padding-inline: var(--ds-spacing-2, 8px);
   border-radius: var(--ds-radius-md);
   background: transparent;
@@ -55,14 +60,14 @@
   font-family: inherit;
   font-size: var(--ds-font-size-sm, 14px);
   line-height: 1;
-  block-size: 32px;
+  min-block-size: 32px;
   cursor: pointer;
   transition: border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
     background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'][data-size='sm'] {
   padding-inline: var(--ds-spacing-2, 8px);
-  block-size: 28px;
+  min-block-size: 28px;
   font-size: var(--ds-font-size-sm);
 }
 .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='trigger'] {
@@ -86,6 +91,17 @@
 .ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] > svg {
   opacity: 0.5;
   flex-shrink: 0;
+  transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'][aria-expanded='true'] > svg {
+  transform: rotate(180deg);
+}
+
+/* ---- trigger label (autoglottonym): wraps with the trigger, never
+        truncates a language name ---- */
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger-label'] {
+  overflow-wrap: anywhere;
+  line-height: 1.2;
 }
 
 /* ---- flag glyph (emoji; geometry only) ---- */
@@ -99,13 +115,16 @@
 }
 
 /* ---- panel (the old inline popup object, re-anchored logically so it
-        opens from the inline-start edge under RTL) ---- */
+        opens from the inline-start edge under RTL). max-inline-size keeps a
+        long autoglottonym list inside the viewport; the entrance rides the
+        canonical keyframes on the fast motion channel ---- */
 .ds-pattern-locale-switcher.ds-engine-modern[data-part='root'] [data-part='panel'] {
   position: absolute;
   inset-block-start: 100%;
   inset-inline-start: 0;
   z-index: var(--ds-z-index-dropdown, 1000);
   min-inline-size: 180px;
+  max-inline-size: min(16rem, calc(100vw - 2rem));
   max-block-size: 280px;
   margin-block-start: var(--ds-spacing-1, 4px);
   padding: var(--ds-spacing-1, 4px);
@@ -114,6 +133,7 @@
   border-radius: var(--ds-radius-lg);
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-2);
+  animation: ds-foundation-fade-in-down var(--ds-motion-fast) var(--ds-motion-ease-enter, ease-out);
 }
 
 /* ---- options ---- */
@@ -134,6 +154,9 @@
 }
 .ds-pattern-locale-switcher.ds-engine-modern [data-part='option-label'] {
   flex: 1;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.3;
 }
 .ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-active='true'] {
   background: var(--ds-surface-inset);

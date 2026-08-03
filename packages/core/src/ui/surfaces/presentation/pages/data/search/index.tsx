@@ -283,12 +283,23 @@ export function SearchSurface({
     if (customResult != null) {
       // Custom renderer escape hatch: the app owns the inner content while
       // the surface keeps the click-to-select wiring so the preview contract
-      // still holds. The cursor affordance lives in the skin.
+      // still holds. Selection is keyboard-complete (tab stop + Enter/Space,
+      // aria-pressed) so it is never mouse-only; the cursor affordance and
+      // the focus ring live in the skin.
       return (
         <Box
           key={result.id}
           data-part="result-custom"
+          role="button"
+          tabIndex={0}
+          aria-pressed={selected}
           onClick={() => setSelectedResult(result)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              setSelectedResult(result);
+            }
+          }}
           data-ds-stagger-item={applyStagger ? '' : undefined}
           style={
             applyStagger

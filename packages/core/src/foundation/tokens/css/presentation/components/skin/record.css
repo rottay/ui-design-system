@@ -27,10 +27,15 @@
  *
  * INLINE BOUNDARY: static geometry migrated here from the engine (strip
  * rhythm + per-variant grid, field padding, label typography, bar/panel
- * padding). The only inline styles left in the engine are runtime values:
- * the field-grid `gridTemplateColumns` prop and the field's `grid-column:
- * span N` — so narrow-field-grid reflow is caller-owned (recommend
- * `repeat(auto-fit, minmax(N, 1fr))` in the `columns` prop).
+ * padding, the linked-value cluster's fit-content measure and the link
+ * arrow's 13px icon frame). The only inline styles left in the engine are
+ * runtime values: the field-grid `gridTemplateColumns` prop and the
+ * field's `grid-column: span N`. The prop's DEFAULT is intrinsic
+ * (`auto-fit` over a 16rem minimum measure), so a narrow container
+ * re-flows without a caller override; an explicit `columns` value still
+ * wins and remains caller-owned. Action-bar icons are NOT sized here:
+ * they ride the Button's own governed icon channel
+ * (`--ds-button-sm-icon-size`).
  *
  * `RecordSummaryStrip`'s five variants and `form-sections`' four tones share two
  * byte-identical border formulas. They are NOT unified here: each file resolves
@@ -126,6 +131,9 @@
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-item-value'] {
   font-size: var(--ds-record-heading-font-size, var(--ds-font-size-lg));
+  /* The metrics strip reads as a stat row: tabular figures keep aligned
+     values from jittering when the data refreshes. */
+  font-variant-numeric: tabular-nums;
 }
 
 .ds-structure.ds-record[data-part='summary-strip'][data-variant] [data-part='summary-item-helper'] {
@@ -160,6 +168,30 @@
 .ds-structure.ds-record[data-part='field'][data-mono='true'] {
   border: 1px solid var(--ds-color-border);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 18%, var(--ds-color-bg-secondary) 82%);
+}
+
+/* Field interaction: the card is a read surface, so the affordance stays a
+   quiet border shift (hover-capable only), and a focus-within ring keeps the
+   keyboard path into the copy button / link visible against the card's own
+   border. `data-mono` is always stamped, so these buy their floor from it. */
+.ds-structure.ds-record[data-part='field'][data-mono] {
+  transition:
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+@media (hover: hover) {
+  .ds-structure.ds-record[data-part='field'][data-mono='false']:hover {
+    border-color: var(--ds-color-border);
+  }
+
+  .ds-structure.ds-record[data-part='field'][data-mono='true']:hover {
+    border-color: color-mix(in srgb, var(--ds-color-border) 72%, var(--ds-color-text-muted) 28%);
+  }
+}
+
+.ds-structure.ds-record[data-part='field'][data-mono]:focus-within {
+  border-color: var(--ds-focus-ring-color, var(--ds-color-primary));
 }
 
 .ds-structure.ds-record[data-part='field'][data-empty] > * > [data-part='field-label'] {
@@ -207,8 +239,18 @@
   flex-shrink: 0;
 }
 
+/* The linked-value cluster hugs its content so the hover/focus affordance
+   does not span the field's full measure (drained inline width: fit-content). */
+.ds-structure.ds-record[data-part='field'] [data-part='field-link-body'] {
+  inline-size: fit-content;
+}
+
 .ds-structure.ds-record[data-part='field'] [data-part='field-link-icon'] {
   color: var(--ds-color-text-muted);
+  /* Icon frame drained from the engine's inline width/height: a CSS rule
+     outranks the svg's presentational width/height attributes. */
+  inline-size: 13px;
+  block-size: 13px;
 }
 
 /* The external-link arrow is directional: it mirrors under RTL. */
@@ -234,6 +276,14 @@
 
 .ds-structure.ds-record[data-part='field'] .ds-record__field-link:active {
   color: var(--ds-color-primary);
+}
+
+/* Keyboard path into the linked value: the anchor carries no data-part (the
+   consumer's Link adapter owns its DOM), so the ring keys on the class. */
+.ds-structure.ds-record[data-part='field'] .ds-record__field-link:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+  border-radius: var(--ds-radius-sm, 4px);
 }
 
 /* --- RecordActionBar ------------------------------------------------------- */
@@ -291,6 +341,14 @@
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
 }
 
+/* --- reduced motion: field/link affordance transitions go quiet ------------ */
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-record[data-part='field'][data-mono],
+  .ds-structure.ds-record[data-part='field'] .ds-record__field-link {
+    transition: none;
+  }
+}
+
 /* --- forced colors: system colors only. Frames re-express as ButtonText,
    the empty-value tint flattens to GrayText, and the copy/link affordances
    keep their icon shapes. -------------------------------------------------- */
@@ -324,5 +382,9 @@
   .ds-structure.ds-record[data-part='field'] .ds-record__field-link:focus-visible {
     outline: 2px solid Highlight;
     outline-offset: 2px;
+  }
+
+  .ds-structure.ds-record[data-part='field'][data-mono]:focus-within {
+    border-color: Highlight;
   }
 }

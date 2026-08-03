@@ -4,6 +4,30 @@
   fill: var(--ds-color-text-secondary);
 }
 
+.ds-chart-gantt [data-part='axis-tick-label'][data-axis='x'] {
+  font-size: var(--ds-font-size-2xs);
+}
+
+.ds-chart-gantt [data-part='axis-tick-label'][data-axis='y'] {
+  font-size: var(--ds-font-size-xs);
+}
+
+/* Duration ghosts carry a dashed neutral frame so the planned span reads as
+ * "container" while the solid progress overlay reads as "actual" — structure
+ * distinguishable without relying on the task hue. Milestones are diamonds by
+ * geometry; the skin only guarantees a background halo for contrast. */
+.ds-chart-gantt [data-part='task-duration'] {
+  stroke: var(--ds-color-border-primary);
+  stroke-width: 1;
+  stroke-dasharray: 4 2;
+}
+
+.ds-chart-gantt [data-part='task-milestone'] {
+  fill: var(--_ds-gantt-milestone-fill, var(--ds-color-primary));
+  stroke: var(--ds-color-bg-primary);
+  stroke-width: 1.5;
+}
+
 .ds-chart-gantt [data-part='grid-line'] {
   stroke: var(--ds-color-border-secondary);
 }
@@ -14,6 +38,7 @@
 
 .ds-chart-gantt [data-part='today-label'] {
   fill: var(--ds-color-error-500);
+  font-size: var(--ds-font-size-2xs);
 }
 
 .ds-chart-gantt [data-part='grid-line'] {

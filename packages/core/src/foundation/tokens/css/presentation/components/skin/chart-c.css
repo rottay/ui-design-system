@@ -31,35 +31,99 @@
   fill: var(--ds-color-text-primary);
 }
 
+/* Cumulative overlay points read as hollow markers against the bars beneath,
+ * the same point treatment the line renderer foundation owns. */
+.ds-chart-histogram [data-part='cumulative-point'] {
+  stroke: var(--ds-color-bg-primary);
+  stroke-width: 1.5;
+}
+
 .ds-chart-histogram [data-part='grid-line'] {
   stroke: var(--ds-color-border-primary);
 }
 
-/* Scatter ------------------------------------------------------------------ */
+/* Scatter ------------------------------------------------------------------
+ * Cartesian chrome (grid, baseline, tick and value labels, trend line) is
+ * governed by the shared chart foundation skin through the `--ds-chart-*`
+ * channels on the engine's renderer surface; this family skin owns only what
+ * the foundation cannot see: legend markers, the loading skeleton, and the
+ * mount reveal. */
 
 .ds-chart-scatter [data-part='legend-swatch'] {
-  border-radius: 50%;
+  border-radius: var(--_ds-scatter-marker-radius, 50%);
 }
 
 .ds-chart-scatter [data-part='legend-label'] {
   color: var(--ds-color-text-secondary);
 }
 
-.ds-chart-scatter [data-part='axis-tick-label'],
-.ds-chart-scatter [data-part='axis-label'] {
-  fill: var(--ds-color-text-secondary);
+/* Entrance reveal ---------------------------------------------------------- */
+
+@keyframes ds-chart-scatter-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.ds-chart-scatter [data-part='grid-line'] {
-  stroke: var(--ds-color-border-secondary);
+.ds-chart-scatter [data-part='chart-svg'] {
+  animation: ds-chart-scatter-reveal var(--ds-motion-reveal, var(--ds-motion-calm))
+    var(--ds-motion-ease-enter, ease-out) both;
 }
 
-.ds-chart-scatter [data-part='trend-line'] {
-  stroke: var(--ds-color-text-secondary);
+/* Loading skeleton: the bar placeholders bow out for a dotted cloud that
+ * keeps the scatter footprint. The scaffold container keeps its inline flex
+ * posture, so the cloud centers itself as a flex item with auto margins. */
+
+@keyframes ds-chart-scatter-skeleton-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.55;
+  }
 }
 
-.ds-chart-scatter [data-part='grid-line'] {
-  stroke: var(--ds-color-border-primary);
+.ds-chart-scatter [data-part='skeleton-bar'] {
+  display: none;
+}
+
+.ds-chart-scatter [data-part='skeleton']::before {
+  content: '';
+  margin: auto;
+  inline-size: min(64%, 16rem);
+  block-size: 56%;
+  background:
+    radial-gradient(circle at 22% 68%, color-mix(in srgb, var(--ds-chart-mark-color, var(--ds-color-primary)) 26%, var(--ds-color-bg-secondary)) 0 0.45rem, transparent 0.5rem),
+    radial-gradient(circle at 44% 40%, color-mix(in srgb, var(--ds-chart-mark-color, var(--ds-color-primary)) 22%, var(--ds-color-bg-secondary)) 0 0.55rem, transparent 0.6rem),
+    radial-gradient(circle at 63% 58%, color-mix(in srgb, var(--ds-chart-mark-color, var(--ds-color-primary)) 26%, var(--ds-color-bg-secondary)) 0 0.4rem, transparent 0.45rem),
+    radial-gradient(circle at 80% 26%, color-mix(in srgb, var(--ds-chart-mark-color, var(--ds-color-primary)) 22%, var(--ds-color-bg-secondary)) 0 0.5rem, transparent 0.55rem);
+  animation: ds-chart-scatter-skeleton-pulse
+    var(--ds-motion-glacial, var(--ds-motion-calm))
+    var(--ds-motion-ease-move, ease-in-out) infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-chart-scatter [data-part='chart-svg'],
+  .ds-chart-scatter [data-part='skeleton']::before {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-chart-scatter [data-part='skeleton']::before {
+    forced-color-adjust: none;
+    background:
+      radial-gradient(circle at 22% 68%, Canvas 0 0.45rem, transparent 0.5rem),
+      radial-gradient(circle at 44% 40%, Canvas 0 0.55rem, transparent 0.6rem),
+      radial-gradient(circle at 63% 58%, Canvas 0 0.4rem, transparent 0.45rem),
+      radial-gradient(circle at 80% 26%, Canvas 0 0.5rem, transparent 0.55rem);
+    outline: 1px solid GrayText;
+  }
 }
 
 /* Gauge -------------------------------------------------------------------- */
@@ -68,8 +132,23 @@
   border-radius: 2px;
 }
 
+/* Shape-coded zone markers: each default threshold tone gets a distinct swatch
+ * silhouette so the legend stays legible without color. */
+.ds-chart-gauge [data-part='legend-swatch'][data-tone='error'] {
+  border-radius: 50%;
+}
+
+.ds-chart-gauge [data-part='legend-swatch'][data-tone='success'] {
+  border-radius: 0;
+}
+
 .ds-chart-gauge [data-part='legend-label'] {
   color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-gauge [data-part='legend-item'][data-state='active'] [data-part='legend-label'] {
+  color: var(--ds-color-text-primary);
+  font-weight: var(--ds-font-weight-semibold, 600);
 }
 
 .ds-chart-gauge [data-part='track'] {
@@ -86,6 +165,34 @@
 
 :where(.ds-chart-gauge [data-part='segment'][data-color-source='default'][data-tone='success']) {
   fill: var(--ds-color-success);
+}
+
+/* Zone texture without color: default-tone zones carry a per-tone outline
+ * pattern (dotted / dashed / solid frame) so the threshold bands stay
+ * distinguishable for dichromats and in forced-colors-adjacent print. Custom
+ * segments keep their authored flat paint. */
+:where(.ds-chart-gauge [data-part='segment'][data-color-source='default'][data-tone='error']) {
+  stroke: var(--ds-color-error);
+  stroke-width: 1;
+  stroke-dasharray: 1.5 2.5;
+}
+
+:where(.ds-chart-gauge [data-part='segment'][data-color-source='default'][data-tone='warning']) {
+  stroke: var(--ds-color-warning);
+  stroke-width: 1;
+  stroke-dasharray: 5 2.5;
+}
+
+:where(.ds-chart-gauge [data-part='segment'][data-color-source='default'][data-tone='success']) {
+  stroke: var(--ds-color-success);
+  stroke-width: 1;
+}
+
+/* The renderer dims inactive zones through the opacity presentation attribute;
+ * the skin only owns how that state change moves. Reduced motion zeroes the
+ * duration through the foundation --ds-motion-fast override. */
+.ds-chart-gauge [data-part='segment'] {
+  transition: opacity var(--ds-motion-fast) ease;
 }
 
 .ds-chart-gauge [data-part='value-label'] {
@@ -111,8 +218,18 @@
   fill: var(--ds-color-text-secondary);
 }
 
+.ds-chart-sankey [data-part='link-label'],
+.ds-chart-sankey [data-part='node-value'] {
+  font-size: var(--ds-font-size-2xs);
+  font-variant-numeric: var(--ds-numeric-tabular);
+  pointer-events: none;
+}
+
 .ds-chart-sankey [data-part='node-label'] {
   fill: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-xs);
+  font-weight: var(--ds-font-weight-medium, 500);
+  pointer-events: none;
 }
 
 :where(.ds-chart-sankey [data-part='node'][data-state='hovered'] [data-part='node-mark']) {
@@ -120,7 +237,36 @@
   stroke-width: 1.5;
 }
 
+/* Keyboard parity for the imperative plot: focus-visible mirrors the hovered
+ * node frame and lifts the focused link above its hover opacity. The link
+ * stroke-opacity attribute is a presentation attribute, so these rules win
+ * without !important. */
+.ds-chart-sankey [data-part='node']:focus-visible {
+  outline: none;
+}
+
+.ds-chart-sankey [data-part='node']:focus-visible [data-part='node-mark'] {
+  stroke: var(--ds-color-focus, var(--ds-color-primary));
+  stroke-width: 2;
+}
+
+.ds-chart-sankey [data-part='link']:focus-visible {
+  outline: none;
+  stroke-opacity: 0.85;
+}
+
+.ds-chart-sankey [data-part='node-mark'],
+.ds-chart-sankey [data-part='link'] {
+  transition: stroke-opacity var(--ds-motion-fast) ease;
+}
+
 /* Sparkline ---------------------------------------------------------------- */
+
+.ds-chart-sparkline {
+  display: inline-block;
+  overflow: visible;
+  vertical-align: middle;
+}
 
 .ds-chart-sparkline [data-part='end-dot'] {
   stroke: var(--ds-color-bg-primary);
@@ -136,6 +282,39 @@
   stroke: var(--ds-color-bg-primary);
 }
 
+/* Non-ready inline placeholders keep the ready footprint. Loading is a
+ * neutral track (static until the shared skeleton shimmer canon exists, per
+ * chart-foundation.css); empty and error are midlines distinguished by dash
+ * pattern first and status paint second, so the state reads without color. */
+.ds-chart-sparkline[data-state='loading'] [data-part='state-track'] {
+  fill: var(--ds-color-bg-secondary);
+}
+
+.ds-chart-sparkline[data-state='empty'] [data-part='state-baseline'] {
+  stroke: var(--ds-color-border-subtle);
+  stroke-dasharray: 3 3;
+}
+
+.ds-chart-sparkline[data-state='error'] [data-part='state-baseline'] {
+  stroke: var(--ds-color-error, var(--ds-color-text-secondary));
+  stroke-dasharray: 1 3;
+  stroke-linecap: round;
+}
+
+@media (forced-colors: active) {
+  .ds-chart-sparkline[data-state='loading'] [data-part='state-track'] {
+    fill: Canvas;
+    stroke: CanvasText;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-sparkline[data-state='empty'] [data-part='state-baseline'],
+  .ds-chart-sparkline[data-state='error'] [data-part='state-baseline'] {
+    stroke: CanvasText;
+    forced-color-adjust: auto;
+  }
+}
+
 /* Funnel ------------------------------------------------------------------- */
 
 .ds-chart-funnel [data-part='legend-swatch'] {
@@ -146,22 +325,84 @@
   color: var(--ds-color-text-secondary);
 }
 
+.ds-chart-funnel [data-part='data-fallback'] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-spacing-6, 24px);
+  text-align: center;
+  pointer-events: none;
+}
+
+/* Stage hover/focus feedback for the explore interaction. The foundation's
+ * generic mark list does not cover taper polygons, so the family owns the same
+ * 0.82 emphasis + fast motion recipe here. */
+.ds-chart-funnel [data-part='funnel-segment-mark'] {
+  transition: opacity var(--ds-motion-fast) ease;
+}
+
+.ds-chart-funnel [data-part='funnel-segment-mark'][data-hovered='true'] [data-part='segment'],
+.ds-chart-funnel [data-part='funnel-segment-mark'][data-active='true'] [data-part='segment'] {
+  opacity: 0.82;
+}
+
 .ds-chart-funnel [data-part='segment-label'] {
   fill: var(--ds-color-text-on-primary);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  pointer-events: none;
+}
+
+.ds-chart-funnel [data-part='plot-area'][data-orientation='vertical'] [data-part='segment-label'] {
+  font-size: var(--ds-font-size-sm);
+}
+
+.ds-chart-funnel [data-part='plot-area'][data-orientation='horizontal'] [data-part='segment-label'] {
+  font-size: var(--ds-font-size-xs);
 }
 
 .ds-chart-funnel [data-part='segment-value'] {
   fill: color-mix(in srgb, var(--ds-color-text-on-primary) 80%, transparent);
+  font-size: var(--ds-font-size-2xs);
+  pointer-events: none;
 }
 
 .ds-chart-funnel [data-part='conversion-label'] {
   fill: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-2xs);
 }
 
 /* Network graph ------------------------------------------------------------ */
 
 .ds-chart-network-graph [data-part='legend-swatch'] {
   border-radius: 50%;
+}
+
+.ds-chart-network-graph [data-part='node-label'] {
+  font-size: var(--ds-font-size-xs);
+  pointer-events: none;
+}
+
+.ds-chart-scatter [data-part='legend-swatch'] {
+  inline-size: 10px;
+  block-size: 10px;
+}
+
+/* Legend swatches repeat the plot's redundant shape encoding, so a swatch
+ * decodes exactly like its group mark (circle keeps the base radius above). */
+.ds-chart-network-graph [data-part='legend-swatch'][data-shape='square'] {
+  border-radius: 2px;
+}
+
+.ds-chart-network-graph [data-part='legend-swatch'][data-shape='diamond'] {
+  border-radius: 2px;
+  transform: rotate(45deg) scale(0.8);
+}
+
+.ds-chart-network-graph [data-part='legend-swatch'][data-shape='triangle'] {
+  border-radius: 0;
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
 }
 
 .ds-chart-network-graph [data-part='legend-label'] {
@@ -182,4 +423,40 @@
 
 .ds-chart-network-graph [data-part='node-label'] {
   fill: var(--ds-color-text-secondary);
+}
+
+/* Nodes are keyboard-focusable; the ring lands on the mark, never on the
+ * free-positioned group, and respects the DS focus channel. */
+.ds-chart-network-graph [data-part='node'] {
+  outline: none;
+}
+
+.ds-chart-network-graph [data-part='node']:focus-visible [data-part='node-mark'] {
+  stroke: var(--ds-color-focus, var(--ds-color-primary));
+}
+
+/* Forced colors erase group fills; the per-group mark shapes carry grouping
+ * on their own, so marks flatten to neutral canvas paint by shape. */
+@media (forced-colors: active) {
+  .ds-chart-network-graph [data-part='node-mark'] {
+    fill: CanvasText;
+    stroke: Canvas;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-network-graph [data-part='edge'],
+  .ds-chart-network-graph [data-part='edge-marker-path'] {
+    stroke: CanvasText;
+    fill: CanvasText;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-network-graph [data-part='node-label'] {
+    fill: CanvasText;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-network-graph [data-part='node']:focus-visible [data-part='node-mark'] {
+    stroke: Highlight;
+  }
 }

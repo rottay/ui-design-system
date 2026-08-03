@@ -1,0 +1,378 @@
+/**
+ * Modern ShiftMatrix skin (premium workflow wave).
+ *
+ * LAYER: wired into `layer(rottay-engines)` through the facade entrypoints
+ * (base.css / styles.css). The facade import lines are owner-gated — this
+ * file ships alongside the engine and the wiring delta rides the batch
+ * fragment (p615-workflow).
+ *
+ * BORDER-COLOR FLOOR (P-48): border paint reaches (0,4,0) through the
+ * always-stamped root `data-part` ancestor (or `data-loading` on the root
+ * itself) — repeating an attribute on one element is forbidden.
+ * `border: none` resets are exempt.
+ *
+ * `data-part` is a shared VOCABULARY — every rule is anchored to this
+ * component's own two scope classes, and the engine class keeps the
+ * classic/rustic trees out.
+ *
+ * COVERAGE LAW: cell state reads through the shared recipe (governed icon +
+ * sr label + semantic bg/border/ink triplet) — never through a bare colour
+ * wash, and never through a vertical accent (house law).
+ *
+ * SCROLL LAW: the matrix owns its scroll region; the header row, the role
+ * column and the corner stick with logical offsets (RTL-safe). The optional
+ * region cap and local stacking ladder remain family-private plumbing.
+ */
+
+/* --- Root ------------------------------------------------------------------ */
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-1);
+  overflow: hidden;
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'][data-loading] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+/* --- Scroll region ----------------------------------------------------------------
+   The family-private cap lets tall matrices scroll inside the card while the
+   sticky axes remain visible. Its default preserves historical page flow. */
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='table-region'] {
+  overflow: auto;
+  max-block-size: var(--_ds-shift-matrix-region-max-block, none);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='table'] {
+  border-collapse: separate;
+  border-spacing: 0;
+  min-inline-size: 100%;
+  font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 13px));
+}
+
+/* --- Sticky axes (logical offsets — RTL mirrors for free) ---------------------
+   The family-private 1/2/3 ladder keeps the corner above the header row and
+   the header row above the role column. It is an intra-component stacking
+   context, not a global z-index authority. */
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='corner-cell'],
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='slot-header'] {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--_ds-shift-matrix-header-z, 2);
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='corner-cell'],
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='role-header'] {
+  position: sticky;
+  inset-inline-start: 0;
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='corner-cell'] {
+  z-index: var(--_ds-shift-matrix-corner-z, 3);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='role-header'] {
+  z-index: var(--_ds-shift-matrix-role-z, 1);
+}
+
+/* --- Header cells ------------------------------------------------------------------------- */
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='corner-cell'] {
+  padding-block: var(--ds-spacing-3, 12px);
+  padding-inline: var(--ds-spacing-4, 16px);
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-type-caption-font-size, 11px);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: start;
+  /* Role column floor is single-family geometry: inline, not a custom property. */
+  min-inline-size: 160px;
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='slot-header'] {
+  padding-block: var(--ds-spacing-3, 12px);
+  padding-inline: var(--ds-spacing-4, 16px);
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
+  font-weight: var(--ds-font-weight-semibold, 600);
+  text-align: center;
+  white-space: nowrap;
+  /* Slot column floor is single-family geometry: inline, not a custom property. */
+  min-inline-size: 120px;
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='corner-cell'],
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='slot-header'] {
+  border-block-end: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='slot-header'] {
+  border-inline-start: 1px solid var(--ds-color-border-subtle);
+}
+
+/* --- Role header ------------------------------------------------------------------------------ */
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='role-header'] {
+  padding-block: var(--ds-spacing-3, 14px);
+  padding-inline: var(--ds-spacing-4, 16px);
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 13px));
+  font-weight: var(--ds-font-weight-semibold, 600);
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root']
+  [data-part='role-row']:not(:last-child) [data-part='role-header'],
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root']
+  [data-part='role-row']:not(:last-child) [data-part='cell'] {
+  border-block-end: 1px solid var(--ds-color-border-subtle);
+}
+
+/* --- Coverage cells: semantic bg/border/ink triplet per state ------------------------------------ */
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell'] {
+  border-inline-start: 1px solid var(--ds-color-border-subtle);
+  text-align: center;
+  vertical-align: middle;
+  padding: 0;
+}
+
+/* Cell content shell — shared by the static div and the composed Button.
+   Anchored to the root part so these declarations outrank the Button skin's
+   own size rules (P-79: the caller part makes this file the paint owner).
+   The 56px floor is single-family geometry: inline, not a custom property. */
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-static'],
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-1, 4px);
+  inline-size: 100%;
+  min-block-size: 56px;
+  padding-block: var(--ds-spacing-2, 10px);
+  padding-inline: var(--ds-spacing-3, 12px);
+}
+
+/* The cell composes the canonical Button primitive (ghost); this family owns
+   the part's paint (P-79), so the primitive's recipe chrome stays pinned off:
+   variant bg/border/ink and the hover/press transforms and filters (through
+   Button's own public channels) never override the coverage triplet. */
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'] {
+  appearance: none;
+  background: none;
+  border: none;
+  box-shadow: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  --ds-button-hover-transform: none;
+  --ds-button-active-transform: none;
+  --ds-button-hover-filter: none;
+  --ds-button-active-filter: none;
+  transition:
+    background var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+/* Ghost state paint (bg/color/border on hovered/pressed) stays off too: the
+   coverage triplet owns every state. */
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'][data-state~='hovered'],
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'][data-state~='pressed'] {
+  background: none;
+  border: none;
+  color: inherit;
+}
+
+/* Button wraps children in content/label spans: keep them out of the box
+   tree so the cell recipe stacks exactly like the static cell. */
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button'] [data-part='content'],
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button'] [data-part='label'] {
+  display: contents;
+}
+
+/* Single inset outline ring: the primitive's own box-shadow focus ring is
+   suppressed so the family keeps exactly one focus affordance. */
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:focus-visible,
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button'][data-state~='focus-visible'] {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));
+  box-shadow: none;
+}
+
+/* State paint: bg + ink from the semantic triplets (border rides the cell). */
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='full'] {
+  background: var(--ds-color-success-bg);
+  box-shadow: inset 0 0 0 1px var(--ds-color-success-border);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='full'] [data-part='cell-ratio'] {
+  color: var(--ds-color-success-ink);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='gap'] {
+  background: var(--ds-color-warning-bg);
+  box-shadow: inset 0 0 0 1px var(--ds-color-warning-border);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='gap'] [data-part='cell-ratio'] {
+  color: var(--ds-color-warning-ink);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='critical'] {
+  background: var(--ds-color-error-bg);
+  box-shadow: inset 0 0 0 1px var(--ds-color-error-border);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell'][data-coverage='critical'] [data-part='cell-ratio'] {
+  color: var(--ds-color-error-ink);
+}
+
+@media (hover: hover) {
+  /* Anchored so the family's inset ring outranks the ghost recipe's hovered
+     box-shadow channel whatever the facade's source order is. */
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button']:hover {
+    box-shadow: inset 0 0 0 2px var(--ds-color-border-focus, var(--ds-color-primary));
+  }
+}
+
+/* --- Cell content ----------------------------------------------------------------------------------- */
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-ratio'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-1, 4px);
+  font-size: var(--ds-font-size-base, 16px);
+  font-weight: var(--ds-font-weight-bold, 700);
+  line-height: 1;
+  font-variant-numeric: var(--ds-numeric-tabular, tabular-nums);
+  white-space: nowrap;
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-staff'] {
+  font-size: var(--ds-type-caption-font-size, 10px);
+  color: var(--ds-color-text-muted);
+  max-inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-empty'] {
+  color: var(--ds-color-text-muted);
+  font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
+}
+
+/* --- Legend -------------------------------------------------------------------------------------------- */
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='legend'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-spacing-4, 16px);
+  padding-block: var(--ds-spacing-2, 10px);
+  padding-inline: var(--ds-spacing-4, 16px);
+  border-block-start: 1px solid var(--ds-color-border-subtle);
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='legend-item'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-1, 6px);
+  font-size: var(--ds-type-caption-font-size, 11px);
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='legend-item'][data-coverage='full'] {
+  color: var(--ds-color-success-ink);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='legend-item'][data-coverage='gap'] {
+  color: var(--ds-color-warning-ink);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='legend-item'][data-coverage='critical'] {
+  color: var(--ds-color-error-ink);
+}
+
+/* --- Empty ------------------------------------------------------------------------------------------------ */
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='empty'] {
+  padding-block: var(--ds-spacing-10, 40px);
+  padding-inline: var(--ds-spacing-6, 24px);
+}
+
+/* --- Skeleton (matrix footprint) ----------------------------------------------------------------------------- */
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton'] {
+  animation: ds-shift-matrix-skeleton-pulse var(--ds-motion-deliberate)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
+}
+
+@keyframes ds-shift-matrix-skeleton-pulse {
+  from { opacity: 1; }
+  to { opacity: 0.45; }
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton-header'] {
+  block-size: var(--ds-spacing-11, 44px);
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='skeleton-header'] {
+  border-block-end: 1px solid var(--ds-color-border-subtle);
+}
+
+.ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton-row'] {
+  block-size: 56px;
+  margin-block: var(--ds-spacing-1, 4px);
+  margin-inline: var(--ds-spacing-3, 12px);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-panel);
+}
+
+/* --- Touch target floor (anchored: keeps its historical last-word win over
+       the 56px cell floor, so coarse pointers still land on 44px) ------------ */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}
+
+/* --- Forced colors ------------------------------------------------------------------------------------------------ */
+@media (forced-colors: active) {
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'][data-loading],
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='corner-cell'],
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='slot-header'],
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='legend'],
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='skeleton-header'],
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root']
+    [data-part='role-row']:not(:last-child) [data-part='role-header'],
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root']
+    [data-part='role-row']:not(:last-child) [data-part='cell'] {
+    border-color: ButtonText;
+  }
+
+  /* Coverage backgrounds disappear: the icon + sr label keep the state, and
+     assignable cells read as ButtonText with a visible boundary. */
+  .ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button'] {
+    outline: 1px solid ButtonText;
+    outline-offset: -1px;
+  }
+
+  .ds-pattern-shift-matrix.ds-engine-modern [data-part='cell-button']:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}
+
+/* --- Reduced motion --------------------------------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-shift-matrix.ds-engine-modern [data-part='skeleton'] {
+    animation: none;
+  }
+
+  /* Anchored to outrank the composed-Button reset rule's transition. */
+  .ds-pattern-shift-matrix.ds-engine-modern[data-part='root'] [data-part='cell-button'] {
+    transition: none;
+  }
+}

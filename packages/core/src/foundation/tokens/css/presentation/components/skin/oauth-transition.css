@@ -48,6 +48,18 @@
   text-decoration: none;
 }
 
+/* The powered-by anchor is the surface's only interactive element: it
+   needs a visible focus indicator of its own (the surface composes no
+   primitive that would provide one). The ring rides the variant's own
+   accent channel, which resolves dark-on-light and light-on-dark across
+   the shipped palettes; under forced colors the outline re-keys to the
+   system focus color. */
+.rottay-transition-link:focus-visible {
+  outline: 2px solid var(--rh-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
 .rottay-transition-background,
 .rottay-transition-grid,
 .rottay-transition-sweep,
@@ -311,7 +323,7 @@
 
 .rottay-transition-root[data-compact="true"] .rottay-transition-provider {
   max-width: 100%;
-  padding-right: 8px;
+  padding-inline-end: 8px;
 }
 
 .rottay-transition-stage-shell {
@@ -2110,7 +2122,7 @@
 
   .rottay-transition-provider {
     justify-content: flex-start;
-    padding-right: 12px;
+    padding-inline-end: 12px;
   }
 
   .rottay-transition-provider-copy span,
@@ -2216,6 +2228,16 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  /* Nuclear reduced-motion guard. The root itself is included so the
+     `data-transition='exiting'` opacity/blur/scale exit transition (set
+     directly on `.rottay-transition-root`) also snaps instead of
+     animating; the pre-existing selector list only covered descendants.
+     The `!important` flags are deliberate and registered: animation and
+     transition shorthands here are set by selectors of widely varying
+     specificity (variant-, phase- and state-keyed rules up to (0,3,1)),
+     so a plain zeroing rule could not win them all; the guard is an
+     accessibility override, not a specificity tool. */
+  .rottay-transition-root,
   .rottay-transition-root *,
   .rottay-transition-root *::before,
   .rottay-transition-root *::after {

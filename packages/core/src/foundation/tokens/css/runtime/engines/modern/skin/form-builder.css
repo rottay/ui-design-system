@@ -254,15 +254,23 @@
   line-height: var(--ds-line-height-snug, 1.375);
 }
 
-/* ---- collapse chevron: the rotation is STATE-SELECTED off `data-collapsed`. ---- */
+/* ---- collapse chevron: the rotation is STATE-SELECTED off the wrapping
+        section header's `data-collapsed` (the governed semantic icon stamps
+        no state attribute of its own). ---- */
 .ds-pattern-form-builder.ds-engine-modern [data-part='section-chevron'] {
   flex-shrink: 0;
   color: var(--ds-color-text-muted);
   transform: rotate(0deg);
   transition: transform var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
 }
-.ds-pattern-form-builder.ds-engine-modern [data-part='section-chevron'][data-collapsed='true'] {
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-header'][data-collapsed='true'] [data-part='section-chevron'] {
   transform: rotate(-90deg);
+}
+/* RTL: the collapsed chevron must point at the INLINE-START edge (left under
+   RTL), so the quarter-turn mirrors — `:dir()` follows the nearest authored
+   direction, no explicit dir ancestor required (collapse.css's idiom). */
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-header'][data-collapsed='true'] [data-part='section-chevron']:dir(rtl) {
+  transform: rotate(90deg);
 }
 
 /* ---- section content collapse: runtime max-height/opacity stay inline;

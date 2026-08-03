@@ -16,10 +16,9 @@
  * @package @rottay/design-system
  */
 
-import type { CSSProperties } from 'react';
-
 import type { TenantThemeValidationIssue } from '@/foundation/contracts/composition/tenants/themes/tenant-theme';
 import { Badge, Box, Flex, Stack, Text } from '@/ui/primitives';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // Sourced from the owner barrel rather than the sibling leaf modules so the
 // report stays a downstream consumer of its own owner, not a peer of them.
@@ -27,6 +26,17 @@ import type {
   TenantThemeContrastAdjustment,
   TenantThemePackWarning,
 } from '../index';
+
+/**
+ * Floor-resolving translator for the report's own chrome copy (same optional
+ * `components` channel as the owner module; never echoes a raw key).
+ */
+type TenantReportTranslator = (key: string, floor: string, params?: Record<string, string | number>) => string;
+
+function useTenantReportCopy(): TenantReportTranslator {
+  const i18n = useOptionalTranslation('components');
+  return (key, floor, params) => i18n?.tOr(key, floor, params) ?? floor;
+}
 
 export interface TenantThemePreviewReportProps {
   /** Structured validation issues; a non-empty list renders the invalid-document panel. */
@@ -59,52 +69,62 @@ function adjustmentLabel(token: string): string {
   return ADJUSTMENT_LABELS[token] ?? token;
 }
 
-const SECTION_STYLE: CSSProperties = { marginTop: 12, padding: 12 };
-const ROW_STYLE: CSSProperties = { padding: '8px 10px' };
-const BLOCK: CSSProperties = { display: 'block' };
-const EYEBROW: CSSProperties = {
-  display: 'block',
-  textTransform: 'uppercase',
-  letterSpacing: '0.08em',
-};
+/* All geometry/paint is skin-owned (`presentation/components/skin/
+   brand-studio.css`): the former runtime inline styles were drained onto the
+   report's stable data-parts. */
 
 function IssuesView({
   issues,
 }: {
   issues: readonly TenantThemeValidationIssue[];
 }): React.ReactElement {
+  const t = useTenantReportCopy();
   return (
     <Box
       className="ds-pattern-brand-studio__preview-issues"
       data-part="preview-issues"
       data-state="invalid"
-      style={SECTION_STYLE}
     >
-      <Flex align="center" justify="between" gap={8} style={{ flexWrap: 'wrap' }}>
-        <Text size="xs" weight="semibold" style={EYEBROW}>
-          Document not valid
+      <Flex align="center" justify="between" gap={8} wrap="wrap">
+        <Text
+          className="ds-pattern-brand-studio__preview-report-title"
+          data-part="preview-report-title"
+          size="xs"
+          weight="semibold"
+        >
+          {t('brandStudio.tenantReport.documentInvalid', 'Document not valid')}
         </Text>
         <Badge variant="error" data-state="invalid">
-          {issues.length} {issues.length === 1 ? 'issue' : 'issues'}
+          {issues.length}{' '}
+          {issues.length === 1
+            ? t('brandStudio.tenantReport.issueOne', 'issue')
+            : t('brandStudio.tenantReport.issueOther', 'issues')}
         </Badge>
       </Flex>
-      <Stack spacing="xs" style={{ marginTop: 8 }}>
+      <Stack
+        className="ds-pattern-brand-studio__preview-report-list"
+        data-part="preview-report-list"
+        spacing="xs"
+      >
         {issues.map((issue) => (
           <Box
             key={`${issue.path}:${issue.code}:${issue.message}`}
             className="ds-pattern-brand-studio__preview-issue"
             data-part="preview-issue"
             data-code={issue.code}
-            style={ROW_STYLE}
           >
-            <Text size="xs" weight="semibold" style={BLOCK}>
+            <Text
+              className="ds-pattern-brand-studio__preview-report-lead"
+              data-part="preview-report-lead"
+              size="xs"
+              weight="semibold"
+            >
               {issue.path}
             </Text>
             <Text
               className="ds-pattern-brand-studio__preview-issue-message"
               data-part="preview-issue-message"
               size="xs"
-              style={{ ...BLOCK, marginTop: 4 }}
             >
               {issue.message}
             </Text>
@@ -120,40 +140,62 @@ function AdjustmentsView({
 }: {
   adjustments: readonly TenantThemeContrastAdjustment[];
 }): React.ReactElement {
+  const t = useTenantReportCopy();
   return (
     <Box
       className="ds-pattern-brand-studio__preview-adjustments"
       data-part="preview-adjustments"
       data-state="adjusted"
-      style={SECTION_STYLE}
     >
-      <Flex align="center" justify="between" gap={8} style={{ flexWrap: 'wrap' }}>
-        <Text size="xs" weight="semibold" style={EYEBROW}>
-          Contrast autocorrections
+      <Flex align="center" justify="between" gap={8} wrap="wrap">
+        <Text
+          className="ds-pattern-brand-studio__preview-report-title"
+          data-part="preview-report-title"
+          size="xs"
+          weight="semibold"
+        >
+          {t('brandStudio.tenantReport.contrastAutocorrections', 'Contrast autocorrections')}
         </Text>
         <Badge variant="secondary">
-          {adjustments.length} {adjustments.length === 1 ? 'change' : 'changes'}
+          {adjustments.length}{' '}
+          {adjustments.length === 1
+            ? t('brandStudio.tenantReport.changeOne', 'change')
+            : t('brandStudio.tenantReport.changeOther', 'changes')}
         </Badge>
       </Flex>
-      <Stack spacing="xs" style={{ marginTop: 8 }}>
+      <Stack
+        className="ds-pattern-brand-studio__preview-report-list"
+        data-part="preview-report-list"
+        spacing="xs"
+      >
         {adjustments.map((adjustment) => (
           <Box
             key={`${adjustment.token}:${adjustment.pairedWith}`}
             className="ds-pattern-brand-studio__preview-adjustment"
             data-part="preview-adjustment"
-            style={ROW_STYLE}
           >
-            <Text size="xs" weight="semibold" style={BLOCK}>
-              {adjustmentLabel(adjustment.token)} adjusted {adjustment.from} &rarr;{' '}
-              {adjustment.to} to reach Lc {Math.round(adjustment.lcAfter)}
+            <Text
+              className="ds-pattern-brand-studio__preview-report-lead"
+              data-part="preview-report-lead"
+              size="xs"
+              weight="semibold"
+            >
+              {t('brandStudio.tenantReport.adjustment', '{label} adjusted {from} → {to} to reach Lc {lc}', {
+                label: adjustmentLabel(adjustment.token),
+                from: adjustment.from,
+                to: adjustment.to,
+                lc: Math.round(adjustment.lcAfter),
+              })}
             </Text>
             <Text
               className="ds-pattern-brand-studio__preview-adjustment-detail"
               data-part="preview-adjustment-detail"
               size="xs"
-              style={{ ...BLOCK, marginTop: 4 }}
             >
-              on {adjustment.pairedWith} &middot; was Lc {Math.round(adjustment.lcBefore)}
+              {t('brandStudio.tenantReport.adjustmentDetail', 'on {pairedWith} · was Lc {lc}', {
+                pairedWith: adjustment.pairedWith,
+                lc: Math.round(adjustment.lcBefore),
+              })}
             </Text>
           </Box>
         ))}
@@ -167,39 +209,60 @@ function PackWarningsView({
 }: {
   packWarnings: readonly TenantThemePackWarning[];
 }): React.ReactElement {
+  const t = useTenantReportCopy();
   return (
     <Box
       className="ds-pattern-brand-studio__preview-pack-warnings"
       data-part="preview-pack-warnings"
       data-state="warning"
-      style={SECTION_STYLE}
     >
-      <Flex align="center" justify="between" gap={8} style={{ flexWrap: 'wrap' }}>
-        <Text size="xs" weight="semibold" style={EYEBROW}>
-          Font packs not loaded
+      <Flex align="center" justify="between" gap={8} wrap="wrap">
+        <Text
+          className="ds-pattern-brand-studio__preview-report-title"
+          data-part="preview-report-title"
+          size="xs"
+          weight="semibold"
+        >
+          {t('brandStudio.tenantReport.fontPacksNotLoaded', 'Font packs not loaded')}
         </Text>
         <Badge variant="warning" data-state="warning">
-          {packWarnings.length} {packWarnings.length === 1 ? 'pack' : 'packs'}
+          {packWarnings.length}{' '}
+          {packWarnings.length === 1
+            ? t('brandStudio.tenantReport.packOne', 'pack')
+            : t('brandStudio.tenantReport.packOther', 'packs')}
         </Badge>
       </Flex>
-      <Stack spacing="xs" style={{ marginTop: 8 }}>
+      <Stack
+        className="ds-pattern-brand-studio__preview-report-list"
+        data-part="preview-report-list"
+        spacing="xs"
+      >
         {packWarnings.map((warning) => (
           <Box
             key={`${warning.referencedBy}:${warning.variable}`}
             className="ds-pattern-brand-studio__preview-pack-warning"
             data-part="preview-pack-warning"
-            style={ROW_STYLE}
           >
-            <Text size="xs" weight="semibold" style={BLOCK}>
-              {warning.variable} is referenced but not loaded
+            <Text
+              className="ds-pattern-brand-studio__preview-report-lead"
+              data-part="preview-report-lead"
+              size="xs"
+              weight="semibold"
+            >
+              {t('brandStudio.tenantReport.packMissing', '{variable} is referenced but not loaded', {
+                variable: warning.variable,
+              })}
             </Text>
             <Text
               className="ds-pattern-brand-studio__preview-pack-warning-detail"
               data-part="preview-pack-warning-detail"
               size="xs"
-              style={{ ...BLOCK, marginTop: 4 }}
             >
-              {warning.referencedBy} falls through to its authored fallback fonts
+              {t(
+                'brandStudio.tenantReport.packMissingDetail',
+                '{referencedBy} falls through to its authored fallback fonts',
+                { referencedBy: warning.referencedBy }
+              )}
             </Text>
           </Box>
         ))}

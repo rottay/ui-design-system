@@ -13,6 +13,7 @@ import type {
   CompareSurfaceConfig,
   CompareSurfaceRow,
 } from "../../../../foundation/contracts";
+import { useOptionalDirection } from "@/infrastructure/runtime/i18n";
 import { useSurfaceTranslations } from "../../../../runtime/helpers/states/i18n";
 import { PageShellSurface } from "../../../../composition/layout/page-shell";
 import { useSurfaceProfileDefaultsWithOverrides } from "../../../../runtime/profile-defaults/overrides";
@@ -25,6 +26,27 @@ export interface CompareSurfaceProps {
   loading?: boolean;
 }
 
+/** Loading placeholder that mirrors the comparison's geometry: every section
+ *  keeps its heading band and table frame, so the swap to real content is a
+ *  pure paint change, never a layout shift. Geometry hooks are `data-part`s;
+ *  the pulse and the block chrome live in the CompareSurface skin. */
+function CompareSkeleton({
+  sectionCount,
+}: {
+  sectionCount: number;
+}): React.ReactElement {
+  return (
+    <Stack spacing="lg" data-part="compare-skeleton">
+      {Array.from({ length: sectionCount }, (_, index) => (
+        <Stack key={index} spacing="md">
+          <Box data-part="compare-skeleton-block" data-size="section-title" />
+          <Box data-part="compare-skeleton-block" data-size="table" />
+        </Stack>
+      ))}
+    </Stack>
+  );
+}
+
 export function CompareSurface({
   config,
   loading = false,
@@ -34,6 +56,11 @@ export function CompareSurface({
   );
   const { tSurface } = useSurfaceTranslations();
   const responsive = useSurfaceResponsiveLayout({ stackOnMobile: true });
+  // Direction-aware pinning: the criteria column is the FIRST column, which
+  // sits at inline-start -- physical left in LTR, physical right in RTL. The
+  // Table's `fixed` contract is explicitly physical, so the surface resolves
+  // the side from the active locale's direction instead of hardcoding 'left'.
+  const direction = useOptionalDirection();
   // Empty state requires both subjects AND at least one populated section.
   // Having subjects but zero rows (e.g. no features loaded yet) should still
   // trigger empty state rather than rendering an empty table.
@@ -52,6 +79,10 @@ export function CompareSurface({
       // to leave room for multiple subjects; on mobile it auto-sizes.
       title: tSurface("compare.criteria"),
       width: responsive.shouldStack ? undefined : "24%",
+      // Pin the criteria column through horizontal scroll so wide subject
+      // sets never scroll the row labels out of view. Composed through the
+      // Table primitive's own (physical) fixed contract, keyed on direction.
+      fixed: (direction === "rtl" ? "right" : "left") as "right" | "left",
       render: (_: unknown, record: unknown) => {
         // The Table component erases generics, so we cast back to the
         // surface's row type for type-safe access.
@@ -92,6 +123,10 @@ export function CompareSurface({
   ];
 
   return (
+    /* The page chrome (title + actions) stays live through the load: the
+       surface owns the mirror skeleton, so the shell's loading early-return
+       is intentionally not engaged (fleet pattern shared with the other
+       data surfaces). */
     <PageShellSurface
       chrome={{
         ...config.presentation.chrome,
@@ -103,16 +138,9 @@ export function CompareSurface({
           access={config.access}
         />
       }
-      loading={loading}
+      loading={false}
     >
-      {!hasData ? (
-        config.presentation.emptyState ?? (
-          <SurfaceEmptyState
-            title={tSurface("compare.empty_title")}
-            description={tSurface("compare.empty_description")}
-          />
-        )
-      ) : (
+      {loading || hasData ? (
         <Stack
           className="ds-surface ds-compare"
           data-part="root"
@@ -122,7 +150,14 @@ export function CompareSurface({
         >
           {config.presentation.intro}
 
-          {config.behavior.sections.map((section) => (
+          {loading ? (
+            /* Mirror skeleton: section chrome and intro/footer stay live so
+               the swap to real content is paint-only. */
+            <CompareSkeleton
+              sectionCount={Math.max(config.behavior.sections.length, 1)}
+            />
+          ) : (
+            config.behavior.sections.map((section) => (
             <Stack key={section.key} spacing="md">
               {(section.title || section.description) && (
                 <Box className="ds-compare__section-heading">
@@ -210,10 +245,18 @@ export function CompareSurface({
                 </Box>
               )}
             </Stack>
-          ))}
+            ))
+          )}
 
           {config.presentation.footer}
         </Stack>
+      ) : (
+        config.presentation.emptyState ?? (
+          <SurfaceEmptyState
+            title={tSurface("compare.empty_title")}
+            description={tSurface("compare.empty_description")}
+          />
+        )
       )}
     </PageShellSurface>
   );

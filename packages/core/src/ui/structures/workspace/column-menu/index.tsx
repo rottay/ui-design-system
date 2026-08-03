@@ -824,6 +824,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                         "to left"
                                       )}`
                                 }
+                                pressed={isPinnedLeft}
                                 onClick={() =>
                                   handleTogglePin(column.key, "left")
                                 }
@@ -851,6 +852,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                         "to right"
                                       )}`
                                 }
+                                pressed={isPinnedRight}
                                 onClick={() =>
                                   handleTogglePin(column.key, "right")
                                 }
@@ -1083,11 +1085,14 @@ function IconButton({
   children,
   label,
   disabled,
+  pressed,
   onClick,
 }: {
   children: React.ReactNode;
   label: string;
   disabled?: boolean;
+  /** Toggle semantics for stateful icon buttons (pin side toggles). */
+  pressed?: boolean;
   onClick: () => void;
 }) {
   return (
@@ -1097,6 +1102,7 @@ function IconButton({
       data-part="icon-button"
       data-disabled={!!disabled}
       aria-label={label}
+      aria-pressed={pressed}
       disabled={disabled}
       onClick={onClick}
       icon={children}

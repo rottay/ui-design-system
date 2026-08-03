@@ -23,6 +23,21 @@
  * `data-open` / `data-collapsible` — the engine no longer carries inline
  * transitions, so the reduced-motion guard reaches everything.
  *
+ * GEOMETRY DRAIN (premium wave): the per-appearance shell overflow, header
+ * and content paddings, the section-index/toggle wells, the summary badge
+ * box, the lead/trailing flex hooks, the chip padding, the facts-card
+ * body/items/row geometry, the copy stacks' flex survival hooks, and the
+ * facts rows' value measure/alignment moved here from the engine's inline
+ * styles. TYPE DRAIN (record wave): line-heights (private to this family where no
+ * canonical role matches the rendered value), tracking, letter-case and the
+ * mono treatments moved here too. Only font-size stays with the node:
+ * Typography stamps it inline by architecture, so the section title takes
+ * the engine's default `md` role (the same 16px the retired literal
+ * painted) and the facts-card title's editorial 17px rides the private
+ * `--_ds-form-sections-facts-title-size` channel with its exact fallback.
+ * The drain also FIXED a fused selector (`.ds-form-sectionsdiv[...]`) that
+ * had left fact rows without their divider since it shipped.
+ *
  * ==========================================================================
  * THE COLLAPSIBLE HEADER HAS NO BOTTOM BORDER, AND THAT IS NOT A BUG (P-78).
  * ==========================================================================
@@ -117,8 +132,16 @@
 
 /* --- Section shell --------------------------------------------------------- */
 
+/* Shell geometry drained from the engine's former `getSectionShellStyles`:
+   card/soft clip to their radius; divided lets its content breathe. */
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] {
+  inline-size: 100%;
+  overflow: hidden;
   color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] {
+  overflow: visible;
 }
 
 /* card (default): the open section lifts -- brighter surface, firmer border, and
@@ -165,6 +188,9 @@
 /* --- Section header -------------------------------------------------------- */
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] {
+  /* Geometry drained from the engine (the former `headerShellStyle`). */
+  inline-size: 100%;
+  padding: 18px 18px 16px;
   color: var(--ds-color-text-primary);
   background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 62%, transparent);
   background-image:
@@ -194,6 +220,7 @@
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] {
+  padding: 16px 10px 14px;
   background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 52%, transparent);
 }
 
@@ -208,11 +235,39 @@
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > button[data-part='section-header'] {
   border: none;
   text-align: start;
+  cursor: pointer;
+}
+
+/* The header's two engine-owned layout regions (drained inline flex hooks). */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-lead'] {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* The copy stack (title row + description) fills the lead and survives
+   truncation — drained inline `flex: 1; min-width: 0`. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-copy'] {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-trailing'] {
+  flex-shrink: 0;
 }
 
 /* --- Section index --------------------------------------------------------- */
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-index'] {
+  /* Geometry + mono numeral drained from the engine (a Box, so skin-owned). */
+  inline-size: 28px;
+  block-size: 28px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ds-font-family-mono, monospace);
+  font-size: var(--ds-font-size-2xs);
+  font-weight: 700;
   border-radius: 9px;
   border: 1px solid var(--ds-form-sections-border);
   background: transparent;
@@ -231,17 +286,35 @@
 
 /* --- Section title / description ------------------------------------------- */
 
+/* Title rhythm: no canonical line-height role renders 1.15 (heading=1.2,
+   tight=1.25), so the cadence stays private to this family with the exact
+   fallback. Size/weight stay with the node (default `md` role + the
+   `bold` weight class). */
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-title'] {
   color: var(--ds-color-text-primary);
+  line-height: var(--_ds-form-sections-title-line-height, 1.15);
 }
 
+/* Description rhythm + measure drained from the engine: 1.55 sits between
+   the `normal` (1.5) and `body` (1.6) roles, so it stays private to this
+   family; the 720px measure is local geometry. */
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-description'] {
   color: var(--ds-color-text-secondary);
+  line-height: var(--_ds-form-sections-description-line-height, 1.55);
+  max-inline-size: 720px;
 }
 
 /* --- Section summary badge -------------------------------------------------- */
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-summary'] {
+  /* Geometry drained from the engine; overflow clips rather than breaking
+     the header's trailing cluster when the summary runs long. */
+  max-inline-size: 360px;
+  padding: 5px 10px;
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
   border-radius: 999px;
   border: 1px solid var(--ds-form-sections-badge-border);
   background: var(--ds-form-sections-badge-bg);
@@ -256,6 +329,7 @@
 /* The chip's own two-value vocabulary is independent of the section's four-value
    tone: a required chip reads the same in every tone. */
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'] {
+  padding: 4px 8px;
   border-radius: 999px;
 }
 
@@ -277,9 +351,24 @@
   color: var(--ds-color-text-secondary);
 }
 
+/* Chip label type drained from the engine: unit line-height resolves through
+   the canonical `none` role; tracking + case are local literals (the family's
+   existing eyebrow vocabulary). */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'] > [data-part='section-chip-label'] {
+  line-height: var(--ds-line-height-none, 1);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 /* --- Toggle ----------------------------------------------------------------- */
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'] {
+  /* Geometry drained from the engine (the 28px chevron well). */
+  inline-size: 28px;
+  block-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 9px;
   border: 1px solid var(--ds-form-sections-border);
   background: transparent;
@@ -307,8 +396,15 @@
 /* --- Section content --------------------------------------------------------- */
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'] {
+  /* Card/soft content padding drained from the engine (the divided cut is
+     overridden below). */
+  padding: 18px 18px 20px;
   color: var(--ds-color-text-primary);
   transform: translateY(-10px);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > * > * > [data-part='section-content'] {
+  padding: 20px 10px 6px;
 }
 
 .ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'][data-open='true'] {
@@ -319,7 +415,14 @@
         engine stamps data-open / data-collapsible only) ----------------------- */
 
 .ds-structure.ds-form-sections [data-part='section-grid'] {
+  display: grid;
   grid-template-rows: 0fr;
+}
+
+/* The clip wrapper (drained inline `overflow: hidden`) keeps the collapsing
+   region from painting outside its own row while the cadence runs. */
+.ds-structure.ds-form-sections [data-part='section-grid'] > [data-part='section-clip'] {
+  overflow: hidden;
 }
 .ds-structure.ds-form-sections [data-part='section-grid'][data-open='true'] {
   grid-template-rows: 1fr;
@@ -398,10 +501,25 @@
    surface, border and divider as literals rather than reading the tone tokens
    above (which are declared on `[data-part='section']`, not on this root). */
 div.ds-structure.ds-form-sections[data-part='facts-card'] {
+  inline-size: 100%;
   border-radius: 16px;
   border: 1px solid var(--ds-color-border-secondary);
   background: var(--ds-surface-card, var(--ds-color-bg-elevated));
   color: var(--ds-color-text-primary);
+}
+
+/* Body + list geometry drained from the engine (the former inline padding on
+   the body Box, the items stack's margin, and each row's block padding). */
+div.ds-structure.ds-form-sections[data-part='facts-card'] > [data-part='facts-card-body'] {
+  padding: 20px;
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-items'] {
+  margin-block-start: 18px;
+}
+
+div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item'] {
+  padding-block: 10px;
 }
 
 .ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-eyebrow'][data-size],
@@ -419,6 +537,45 @@ div.ds-structure.ds-form-sections[data-part='facts-card'] {
   color: var(--ds-color-text-secondary);
 }
 
-.ds-structure.ds-form-sectionsdiv[data-part='facts-card'] [data-part='facts-card-item'] {
+/* Facts-card type drain (record wave): tracking/case/mono treatments, the
+   description rhythm (family-private, exact 1.55 fallback), the
+   copy stack's flex survival hook, and the value column's measure,
+   end-alignment and break strategy — all formerly inline in the engine. */
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-eyebrow'] {
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-family: var(--ds-font-family-mono, monospace);
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-description'] {
+  line-height: var(--_ds-form-sections-description-line-height, 1.55);
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-copy'] {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-label'] {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: var(--ds-font-family-mono, monospace);
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-value'] {
+  max-inline-size: 180px;
+  text-align: end;
+  word-break: break-word;
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-value'][data-mono='true'] {
+  font-family: var(--ds-font-family-mono, monospace);
+}
+
+/* BUG FIX (was `.ds-structure.ds-form-sectionsdiv[data-part='facts-card']` —
+   a fused selector that matched nothing, so fact rows shipped with no
+   divider). The divider reads BETWEEN facts: the last row carries none, so
+   the card's bottom padding does not double as a hanging rule. */
+div.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item']:not(:last-child) {
   border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent);
 }

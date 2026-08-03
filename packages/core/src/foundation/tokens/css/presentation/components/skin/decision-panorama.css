@@ -156,12 +156,15 @@
 }
 
 .ds-pattern-decision-panorama .ds-decision-panorama__fact strong {
-  overflow: hidden;
+  min-width: 0;
   color: var(--ds-color-text-primary);
   font-size: var(--ds-font-size-sm, 14px);
   font-weight: var(--ds-font-weight-semibold, 600);
   line-height: 1.35;
-  text-overflow: ellipsis;
+  /* Unbroken strings (ids, URLs) wrap instead of clipping invisibly — the
+     former `overflow: hidden` + `text-overflow: ellipsis` pair was inert
+     without `white-space: nowrap`, and a silent clip is worse than a wrap. */
+  overflow-wrap: anywhere;
 }
 
 .ds-pattern-decision-panorama .ds-decision-panorama__fact small {
@@ -236,6 +239,7 @@
   font-weight: var(--ds-font-weight-bold, 700);
   letter-spacing: -0.045em;
   line-height: 1.08;
+  text-wrap: balance;
 }
 
 .ds-pattern-decision-panorama .ds-decision-panorama__subtitle {
@@ -269,6 +273,7 @@
   font-weight: var(--ds-font-weight-bold, 700);
   letter-spacing: -0.025em;
   line-height: 1.2;
+  text-wrap: balance;
 }
 
 .ds-pattern-decision-panorama .ds-decision-panorama__score {
@@ -278,6 +283,17 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.06em;
   line-height: 1;
+}
+
+/* Joining-script guard (Typography lane precedent): tracked caps and tight
+   display tracking break contextual joining in Arabic-script copy, so every
+   textual tracking above collapses to `normal` under a joining-script lang.
+   The score keeps its tracking: it sets numerals, not joining script. */
+.ds-pattern-decision-panorama .ds-decision-panorama__eyebrow:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
+.ds-pattern-decision-panorama .ds-decision-panorama__identity-eyebrow:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
+.ds-pattern-decision-panorama .ds-decision-panorama__title:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
+.ds-pattern-decision-panorama .ds-decision-panorama__decision-title:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks) {
+  letter-spacing: normal;
 }
 
 .ds-pattern-decision-panorama .ds-decision-panorama__decision-summary {

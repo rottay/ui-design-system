@@ -78,12 +78,13 @@ describe('chart catalog advanced coverage', () => {
       />
     );
 
-    expect(screen.getByRole('img', { name: 'Vertical funnel' })).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Vertical funnel' })).toBeInTheDocument();
 
-    expect(vertical.container.querySelectorAll('polygon').length).toBe(3);
-    // The renderer owns one SVG-level accessible title; these are the three
-    // legacy-native stage titles enabled by the tooltip compatibility flag.
-    expect(vertical.container.querySelectorAll('[data-part="funnel-segment-mark"] > title')).toHaveLength(3);
+    expect(vertical.container.querySelectorAll('polygon[data-part="segment"]')).toHaveLength(3);
+    // Interactive stages own their accessible names and roving focus. Native
+    // <title> nodes are intentionally absent to avoid duplicate announcements.
+    expect(vertical.container.querySelectorAll('[data-part="funnel-segment-mark"][role="img"]')).toHaveLength(3);
+    expect(vertical.container.querySelectorAll('[data-part="funnel-segment-mark"] > title')).toHaveLength(0);
     expect(screen.getAllByText('62.0%').length).toBeGreaterThan(0);
     expect(screen.getAllByText('29.0%').length).toBeGreaterThan(0);
     expect(screen.getAllByText('1000').length).toBeGreaterThan(0);
@@ -114,7 +115,7 @@ describe('chart catalog advanced coverage', () => {
     expect(screen.getAllByText('Demo').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Win').length).toBeGreaterThan(0);
 
-    expect(horizontal.container.querySelectorAll('polygon').length).toBe(3);
+    expect(horizontal.container.querySelectorAll('polygon[data-part="segment"]')).toHaveLength(3);
     expect(horizontal.container.querySelectorAll('[data-part="funnel-segment-mark"] > title')).toHaveLength(0);
   });
 
@@ -328,15 +329,21 @@ describe('chart catalog advanced coverage', () => {
     expect(screen.getAllByText('Core').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Go-to-market').length).toBeGreaterThan(0);
 
-    expect(container.querySelectorAll('circle').length).toBe(3);
+    const nodeMarks = container.querySelectorAll('[data-part="node-mark"]');
+    expect(nodeMarks).toHaveLength(3);
+    expect([...nodeMarks].map((mark) => mark.getAttribute('data-shape'))).toEqual([
+      'circle',
+      'square',
+      'circle',
+    ]);
     expect(container.querySelectorAll('line').length).toBe(2);
     const edgeMarker = container.querySelector('marker[data-part="edge-marker"]');
     expect(edgeMarker?.id).toMatch(/^network-arrow-/);
     expect([...container.querySelectorAll('line')].every(
       (edge) => edge.getAttribute('marker-end') === `url(#${edgeMarker!.id})`,
     )).toBe(true);
-    // Three node titles plus the surface-owned svg-level a11y <title>.
+    // Three node tooltips + two edge tooltips + the surface-owned SVG title.
     expect(container.querySelectorAll('svg > title').length).toBe(1);
-    expect(container.querySelectorAll('title').length).toBe(4);
+    expect(container.querySelectorAll('title').length).toBe(6);
   });
 });

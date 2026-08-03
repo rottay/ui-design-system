@@ -12,6 +12,15 @@ import {
 } from '..';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 
+/** Interactive charts expose the SVG as a named group whose datum marks are
+ * individually reachable; static charts retain the single-image contract. */
+function getChartSurface(title: string): HTMLElement {
+  return (
+    screen.queryByRole('group', { name: title }) ??
+    screen.getByRole('img', { name: title })
+  ) as HTMLElement;
+}
+
 function ClearingFamily({
   renderChart,
 }: {
@@ -130,7 +139,7 @@ describe('remaining chart-family correctness floor', () => {
     'filters invalid input and erases stale marks for $title',
     async ({ title, selector, expectedMarks, renderChart }) => {
       const { container } = renderSurface(<ClearingFamily renderChart={renderChart} />);
-      const chart = screen.getByRole('img', { name: title });
+      const chart = getChartSurface(title);
 
       await waitFor(() => {
         const count = chart.querySelectorAll(selector).length;
@@ -191,7 +200,7 @@ describe('remaining chart-family correctness floor', () => {
       />,
     );
 
-    const gauge = screen.getByRole('img', { name: 'Correct gauge' });
+    const gauge = getChartSurface('Correct gauge');
     await waitFor(() => {
       expect(gauge.querySelectorAll('[data-part="segment"]')).toHaveLength(1);
       expect(gauge.querySelector('[data-part="needle"]')).toBeTruthy();
@@ -217,7 +226,7 @@ describe('remaining chart-family correctness floor', () => {
       />,
     );
 
-    const gauge = screen.getByRole('img', { name: 'Degenerate gauge' });
+    const gauge = getChartSurface('Degenerate gauge');
     expect(gauge.querySelectorAll('[data-part="segment"]')).toHaveLength(1);
     expect(gauge.innerHTML).not.toMatch(/NaN|Infinity/);
   });
@@ -238,7 +247,7 @@ describe('remaining chart-family correctness floor', () => {
       />,
     );
 
-    const gauge = screen.getByRole('img', { name: 'Full circle gauge' });
+    const gauge = getChartSurface('Full circle gauge');
     const plot = gauge.querySelector('[data-part="plot-area"]');
     expect(Number(plot?.getAttribute('data-end-angle')) - Number(plot?.getAttribute('data-start-angle'))).toBe(360);
     expect(gauge.querySelectorAll('[data-part="segment"]')).toHaveLength(3);
@@ -260,7 +269,7 @@ describe('remaining chart-family correctness floor', () => {
       />,
     );
 
-    const chart = screen.getByRole('img', { name: 'Density cumulative' });
+    const chart = getChartSurface('Density cumulative');
     const points = [...chart.querySelectorAll<SVGCircleElement>('[data-part="cumulative-point"]')];
     expect(points).toHaveLength(3);
     // Absolute-viewBox canon: the renderer emits absolute coordinates (the
@@ -310,7 +319,7 @@ describe('remaining chart-family correctness floor', () => {
       />,
     );
 
-    const chart = screen.getByRole('img', { name: 'Duplicate waterfall labels' });
+    const chart = getChartSurface('Duplicate waterfall labels');
     const bars = [...chart.querySelectorAll<SVGRectElement>('rect[data-part="bar"]')];
     expect(bars).toHaveLength(2);
     expect(bars[0].getAttribute('x')).not.toBe(bars[1].getAttribute('x'));

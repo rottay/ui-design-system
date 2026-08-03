@@ -18,4 +18,38 @@
 
 .ds-chart-treemap [data-part='tile-value'] {
   fill: color-mix(in srgb, var(--ds-color-text-on-primary, var(--ds-color-white)) 70%, transparent);
+  font-variant-numeric: var(--ds-numeric-tabular);
+}
+
+/* Forced colors erase the categorical tile fills, so tiles switch to a
+ * neutral surface and fall back on the renderer's data-mark-index cycle for
+ * stroke-pattern differentiation; labels keep full contrast. */
+@media (forced-colors: active) {
+  .ds-chart-treemap [data-part='tile-surface'] {
+    fill: Canvas;
+    stroke: CanvasText;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-treemap [data-part='tile'][data-mark-index='1'] [data-part='tile-surface'] {
+    stroke-dasharray: 6 3;
+  }
+
+  .ds-chart-treemap [data-part='tile'][data-mark-index='2'] [data-part='tile-surface'] {
+    stroke-dasharray: 2 3;
+  }
+
+  .ds-chart-treemap [data-part='tile'][data-mark-index='3'] [data-part='tile-surface'] {
+    stroke-dasharray: 8 3 2 3;
+  }
+
+  .ds-chart-treemap [data-part='tile'][data-mark-index='4'] [data-part='tile-surface'] {
+    stroke-dasharray: 1 3;
+  }
+
+  .ds-chart-treemap [data-part='tile-label'],
+  .ds-chart-treemap [data-part='tile-value'] {
+    fill: CanvasText;
+    forced-color-adjust: auto;
+  }
 }

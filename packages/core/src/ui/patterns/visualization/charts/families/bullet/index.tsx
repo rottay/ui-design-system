@@ -60,6 +60,11 @@ interface BulletChartOwnProps
   formatValue?: (value: number) => string;
   /** Range colors [poor, satisfactory, good]. Default: decreasing opacity of --ds-color-primary */
   rangeColors?: [string, string, string];
+  /**
+   * Qualitative range labels [poor, satisfactory, good] used by the legend and
+   * ready for locale override. Default: ['Poor', 'Satisfactory', 'Good'].
+   */
+  rangeLabels?: [string, string, string];
   /** Value bar color. Default: var(--ds-color-text-primary) */
   valueColor?: string;
   /** Target marker color. Default: var(--ds-color-error) */
@@ -85,6 +90,7 @@ export const BulletChart = memo(function BulletChart({
   showLabels = true,
   formatValue,
   rangeColors,
+  rangeLabels,
   valueColor = 'var(--ds-color-text-primary)',
   targetColor = 'var(--ds-color-error)',
   width,
@@ -186,22 +192,18 @@ export const BulletChart = memo(function BulletChart({
     }),
   }), [title, items, formatVal]);
 
+  const resolvedRangeLabels = rangeLabels ?? ['Poor', 'Satisfactory', 'Good'];
   const legendNode = legend && canRender ? (
-    <div data-part="legend" style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
+    <div data-part="legend">
       {[
-        { label: 'Poor', color: resolvedRangeColors[0] },
-        { label: 'Satisfactory', color: resolvedRangeColors[1] },
-        { label: 'Good', color: resolvedRangeColors[2] },
-        { label: 'Actual', color: valueColor },
-        { label: 'Target', color: targetColor },
+        { label: resolvedRangeLabels[0], color: resolvedRangeColors[0], variant: 'range' },
+        { label: resolvedRangeLabels[1], color: resolvedRangeColors[1], variant: 'range' },
+        { label: resolvedRangeLabels[2], color: resolvedRangeColors[2], variant: 'range' },
+        { label: 'Actual', color: valueColor, variant: 'value' },
+        { label: 'Target', color: targetColor, variant: 'target' },
       ].map((item) => (
-        <div key={item.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
-          <span data-part="legend-swatch" data-variant={item.label === 'Target' ? 'target' : 'range'} style={{
-            width: item.label === 'Target' ? 2 : 12,
-            height: 12,
-            backgroundColor: item.color,
-            display: 'inline-block',
-          }} />
+        <div key={item.label} data-part="legend-item">
+          <span data-part="legend-swatch" data-variant={item.variant} style={{ backgroundColor: item.color }} />
           <span data-part="legend-label">{item.label}</span>
         </div>
       ))}

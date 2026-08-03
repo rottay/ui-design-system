@@ -139,16 +139,6 @@
       "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
     },
     {
-      "key": "detail-panel.css :: .ds-pattern-detail-panel.ds-engine-modern :: [data-part='tab-button']",
-      "kind": "exempt",
-      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
-    },
-    {
-      "key": "file-manager.css :: .ds-pattern-file-manager.ds-engine-modern :: [data-part='folder-link']",
-      "kind": "exempt",
-      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
-    },
-    {
       "key": "file-manager.css :: .ds-pattern-file-manager.ds-engine-modern :: [data-part='grid-card']",
       "kind": "exempt",
       "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
@@ -199,16 +189,6 @@
       "key": "notification.css :: .rottay-notification--modern :: [data-part='root']",
       "kind": "exempt",
       "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction"
-    },
-    {
-      "key": "page-shell.css :: .ds-pattern-page-shell.ds-engine-modern :: [data-part='crumb']",
-      "kind": "exempt",
-      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
-    },
-    {
-      "key": "page-shell.css :: .ds-pattern-page-shell.ds-engine-modern :: [data-part='tab']",
-      "kind": "exempt",
-      "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor)"
     },
     {
       "key": "pagination.css :: .rottay-pagination--modern :: [data-part='ellipsis']",
@@ -358,6 +338,11 @@
       "reason": "composed: interactivity is delivered by an already-floored DS primitive rendered inside this chrome (Button/Input/Menu skins carry the floor) (same box as the CSS row detail-panel.css :: .ds-pattern-detail-panel.ds-engine-modern :: [data-part='breadcrumb-current'])"
     },
     {
+      "key": "src/ui/patterns/forms/filter-builder/engines/modern/index.tsx :: div :: [data-part='add-filter-dropdown']",
+      "kind": "exempt",
+      "reason": "composite: the listbox container only coordinates keyboard navigation; its selectable children are native Modern Button options with their own coarse-pointer floor"
+    },
+    {
       "key": "src/ui/patterns/data/file-manager/engines/modern/index.tsx :: input :: [data-part='file-input']",
       "kind": "debt",
       "owner": "design-system/D1-floors",
@@ -371,12 +356,6 @@
     },
     {
       "key": "src/ui/patterns/data/stats-grid/engines/modern/index.tsx :: div :: [data-part='card']",
-      "kind": "debt",
-      "owner": "design-system/D1-floors",
-      "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
-    },
-    {
-      "key": "src/ui/patterns/identity/profile/user-profile-card/engines/modern/index.tsx :: div :: [data-part='root']",
       "kind": "debt",
       "owner": "design-system/D1-floors",
       "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
@@ -430,9 +409,19 @@
       "reason": "DEBT: interactive non-native element given interaction by a pointer/key handler rendered in TSX with no proven floor — its owning skin carries no valid coarse floor for this part; floor it, give it a matchable data-part, or cull the interactivity (decrease-only)"
     },
     {
+      "key": "src/ui/patterns/shell/workbench-header/engines/modern/index.tsx :: div :: [data-part='tabs']",
+      "kind": "exempt",
+      "reason": "composite: the tablist container only implements roving keyboard navigation; every child tab is the actual hit target and has its own canonical coarse-pointer floor"
+    },
+    {
       "key": "src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx :: div :: [data-part='card']",
       "kind": "exempt",
       "reason": "intrinsic: the interactive surface is the whole card/row/tile, far above the 44px floor by construction (same box as the CSS row pattern-kanban-board.css :: .ds-pattern-kanban-board.ds-engine-modern :: [data-part='card'])"
+    },
+    {
+      "key": "src/ui/surfaces/presentation/pages/data/search/index.tsx :: Box :: [data-part='result-custom']",
+      "kind": "exempt",
+      "reason": "proven outside the flat engine-skin corpus: the canonical Box is floored on its own result-custom part by presentation/components/skin/search.css under the coarse-pointer media contract"
     },
     {
       "key": "src/ui/primitives/display/Avatar/engines/modern/index.tsx :: div :: dynamic",

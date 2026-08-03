@@ -9,6 +9,7 @@
  * pairing, reassigned locally so an `InvertSection` is a self-contained inversion boundary
  * wherever it is dropped, with no dependency on an ancestor carrying the shared class. A top
  * hairline marks every crossing explicitly, so no boundary is left to read as accidental.
+ * Logical properties throughout: the boundary reads identically in RTL.
  */
 
 .rt-invert-section {
@@ -17,13 +18,21 @@
 
   position: relative;
   display: block;
-  width: 100%;
+  inline-size: 100%;
   color: var(--ds-commercial-fg);
   background: var(--ds-commercial-bg);
-  border-top: 1px solid var(--ds-commercial-hairline);
+  border-block-start: 1px solid var(--ds-commercial-hairline);
 }
 
 .rt-invert-section[data-surface="paper"] {
   --ds-commercial-fg: var(--ds-commercial-gray-0);
   --ds-commercial-bg: var(--ds-commercial-paper);
+}
+
+/* Forced colors: the UA re-keys the surface pairing itself, but the crossing hairline is
+   pinned to system ink so the section boundary never reads as accidental. */
+@media (forced-colors: active) {
+  .rt-invert-section {
+    border-block-start-color: CanvasText;
+  }
 }

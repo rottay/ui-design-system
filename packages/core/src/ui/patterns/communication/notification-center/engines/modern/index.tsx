@@ -31,6 +31,7 @@ import ModernBadge from '../../../../../primitives/display/Badge/engines/modern'
 import ModernEmpty from '../../../../../primitives/display/Empty/engines/modern';
 import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
 import ModernScrollArea from '../../../../../primitives/layout/ScrollArea/engines/modern';
+import { VisuallyHidden } from '../../../../../primitives/foundation';
 import type { NotificationCenterProps, Notification } from '../../contracts';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { CommunicationNotificationIcon } from '@/graphics/icons/presentation/semantic/generated/roles/communication-notification';
@@ -55,7 +56,30 @@ type Copy = {
   clearAll: string;
   empty: string;
   dismiss: string;
+  unread: string;
+  groupToday: string;
+  groupEarlier: string;
 };
+
+/** Day-bucket key for the list grouping (today vs earlier, calendar-day
+    precision in the runtime locale's own timezone). */
+type DayBucket = 'today' | 'earlier';
+
+/** Buckets notifications into Today / Earlier preserving the caller's order
+    within each bucket -- grouping never re-sorts, it only sections. */
+function groupByDay(items: Notification[]): { bucket: DayBucket; items: Notification[] }[] {
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const today: Notification[] = [];
+  const earlier: Notification[] = [];
+  for (const item of items) {
+    (new Date(item.timestamp).getTime() >= startOfToday ? today : earlier).push(item);
+  }
+  const groups: { bucket: DayBucket; items: Notification[] }[] = [];
+  if (today.length > 0) groups.push({ bucket: 'today', items: today });
+  if (earlier.length > 0) groups.push({ bucket: 'earlier', items: earlier });
+  return groups;
+}
 
 /**
  * Progressive degradation from relative ("3m ago") to calendar ("Mar 5").
@@ -82,8 +106,8 @@ function formatTimestamp(ts: string, tOr: (key: string, floor: string, params?: 
  * Uses a dropdown shell with manual click-outside detection to support
  * both controlled and uncontrolled open states. The default trigger is a
  * semantic bell icon with a composed Badge for the unread count; the
- * trigger's inline 40x40 icon geometry is pinned by the public test
- * contract and deliberately stays inline.
+ * trigger's 40x40 icon-button geometry lives in the modern skin (drained
+ * from the former inline style, values verbatim).
  *
  * @param props - {@link NotificationCenterProps}
  * @returns A dropdown notification center composed of DS primitives.
@@ -119,6 +143,9 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
     clearAll: tOr('notificationCenter.clearAll', 'Clear all'),
     empty: tOr('notificationCenter.empty', 'No notifications'),
     dismiss: tOr('notificationCenter.dismiss', 'Dismiss'),
+    unread: tOr('notificationCenter.unread', 'Unread'),
+    groupToday: tOr('notificationCenter.groupToday', 'Today'),
+    groupEarlier: tOr('notificationCenter.groupEarlier', 'Earlier'),
   };
   const emptyMessage = emptyMessageProp ?? copy.empty;
 
@@ -189,17 +216,21 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
     >
       {/* Trigger: semantic bell icon with a composed unread-count Badge.
           A custom trigger replaces the entire button contents when provided.
-          The inline 40x40 icon geometry is pinned by the public test contract. */}
+          The 40x40 icon-button geometry is skin-owned (drained from the
+          former inline style with the values the public test contract
+          renders, verbatim); the coarse-pointer floor lifts it to the
+          canonical touch target. The popover contract: aria-expanded, and
+          aria-haspopup="dialog" -- the panel is a labelled region with
+          actions, not a menu. */}
       <Button
         ref={triggerRef}
         variant="ghost"
         htmlType="button"
         data-part="trigger"
-        style={{ height: 40, width: 40, padding: 0, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
         onClick={() => handleOpenChange(!isOpen)}
         data-testid="notification-trigger"
         aria-label={copy.title}
-        aria-haspopup="true"
+        aria-haspopup="dialog"
         aria-expanded={isOpen}
       >
         {trigger || (
@@ -217,9 +248,11 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
         )}
       </Button>
 
-      {/* Dropdown panel (position and chrome are skin-owned) */}
+      {/* Dropdown panel (position and chrome are skin-owned). Labelled
+          region: matches the trigger's aria-haspopup="dialog" and gives the
+          popover an accessible name without stealing focus on open. */}
       {isOpen && (
-        <div data-part="panel">
+        <div data-part="panel" role="region" aria-label={copy.title}>
           {/* Header */}
           <div data-part="header">
             <span data-part="title">{copy.title}</span>
@@ -261,8 +294,16 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                 <ModernEmpty description={emptyMessage} />
               </div>
             ) : (
-              <ul data-part="rows">
-                {visibleNotifications.map(item => (
+              /* Day grouping (Today / Earlier): sections carry an editorial
+                 label row; order inside each bucket is the caller's own --
+                 grouping sections, it never re-sorts. */
+              groupByDay(visibleNotifications).map((group) => (
+                <div data-part="group" data-bucket={group.bucket} key={group.bucket}>
+                  <div data-part="group-label">
+                    {group.bucket === 'today' ? copy.groupToday : copy.groupEarlier}
+                  </div>
+                  <ul data-part="rows">
+                    {group.items.map(item => (
                   <li key={item.id}>
                     <div
                       data-part="row"
@@ -274,12 +315,20 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                       </div>
                       <div data-part="row-body">
                         <div data-part="row-heading">
+                          {/* Unread reaches AT as TEXT (never tint/weight/dot
+                              alone); the visual dot below stays decorative. */}
+                          {!item.read && <VisuallyHidden>{copy.unread}</VisuallyHidden>}
                           <span data-part="row-title" data-unread={!item.read}>{item.title}</span>
-                          {!item.read && <div data-part="unread-dot" data-unread={true} />}
+                          {!item.read && <div data-part="unread-dot" data-unread={true} aria-hidden="true" />}
                         </div>
                         <p data-part="row-message">{item.message}</p>
                         <div data-part="row-footer">
-                          <span data-part="row-timestamp">{formatTimestamp(item.timestamp, tOr)}</span>
+                          <span
+                            data-part="row-timestamp"
+                            title={new Date(item.timestamp).toLocaleString(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                          >
+                            {formatTimestamp(item.timestamp, tOr)}
+                          </span>
                           {/* stopPropagation prevents the action click from also
                               firing the row-level onRead handler */}
                           {item.action && (
@@ -323,8 +372,10 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                       )}
                     </div>
                   </li>
-                ))}
-              </ul>
+                    ))}
+                  </ul>
+                </div>
+              ))
             )}
           </ModernScrollArea>
         </div>

@@ -95,6 +95,8 @@ function BreadcrumbItem({
       data-part="crumb"
       data-interactive="false"
       data-last={isLast ? 'true' : 'false'}
+      /* The terminal crumb is the current page: announce it (APG breadcrumb). */
+      aria-current={isLast ? 'page' : undefined}
     >
       {label}
     </span>
@@ -112,15 +114,23 @@ function TabButton({
   label,
   isActive,
   onClick,
+  id,
+  controls,
 }: {
   label: string;
   isActive: boolean;
   onClick: () => void;
+  /** APG wiring: the tab's own id (the tabpanel's aria-labelledby target). */
+  id: string;
+  /** APG wiring: the tabpanel id this tab controls. */
+  controls: string;
 }) {
   return (
     <button
       type="button"
       role="tab"
+      id={id}
+      aria-controls={controls}
       aria-selected={isActive}
       tabIndex={isActive ? 0 : -1}
       onClick={onClick}
@@ -219,6 +229,12 @@ export default function ModernPageShell(props: PageShellProps) {
   const pageTabsLabel =
     i18nComponents?.tOr('pageShell.tabs.label', 'Page tabs') ?? 'Page tabs';
 
+  /* APG tab/tabpanel pairing: stable per-instance ids (useId), so concurrent
+     shells never collide. The shell renders ONE tabpanel whose labelledby
+     follows the active tab (automatic activation). Hook order law: this hook
+     sits above the loading early-return. */
+  const shellId = React.useId();
+
   /* ---- Loading skeleton: geometry lives in the skin keyed on data-block
           (cockpit-header idiom); the pulse cadence rides the skin's motion
           channel. The two action blocks keep their divergent radius on the
@@ -266,6 +282,10 @@ export default function ModernPageShell(props: PageShellProps) {
 
   /* Default to the first tab when no activeTab is explicitly set */
   const activeTabKey = activeTab ?? tabs?.[0]?.key;
+
+  const hasTabs = Boolean(tabs && tabs.length > 0);
+  const tabDomId = (key: string) => `${shellId}-tab-${key}`;
+  const panelDomId = `${shellId}-panel`;
 
   /* ---- APG tabs keyboard contract: roving focus with automatic activation.
           Arrow keys are logical (RTL mirrors Left/Right); Home/End jump. ---- */
@@ -374,8 +394,12 @@ export default function ModernPageShell(props: PageShellProps) {
                 <div data-part="eyebrow">{eyebrow}</div>
               ) : null}
               <div data-part="title-row">
+                {/* String titles also advertise their full text on hover: the
+                    32ch measure + balanced wrap can still clip long names in
+                    narrow containers (cockpit-header idiom). */}
                 <h1
                   data-part="title"
+                  title={typeof title === 'string' ? title : undefined}
                 >
                   {title}
                 </h1>
@@ -420,6 +444,8 @@ export default function ModernPageShell(props: PageShellProps) {
                 label={tab.label}
                 isActive={activeTabKey === tab.key}
                 onClick={() => onTabChange?.(tab.key)}
+                id={tabDomId(tab.key)}
+                controls={panelDomId}
               />
             ))}
           </div>
@@ -430,8 +456,13 @@ export default function ModernPageShell(props: PageShellProps) {
         </div>
       )}
 
-      {/* ---- Content area ---- */}
-      <div data-part="content">
+      {/* ---- Content area: the single APG tabpanel when tabs drive it ---- */}
+      <div
+        data-part="content"
+        role={hasTabs ? 'tabpanel' : undefined}
+        id={hasTabs ? panelDomId : undefined}
+        aria-labelledby={hasTabs && activeTabKey ? tabDomId(activeTabKey) : undefined}
+      >
         {tabs && tabs.length > 0
           ? tabs.find((t) => t.key === activeTabKey)?.content
           : children}

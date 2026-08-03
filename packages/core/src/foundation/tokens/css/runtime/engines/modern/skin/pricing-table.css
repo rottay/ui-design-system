@@ -14,8 +14,9 @@
  * badge), Tooltip (feature descriptions), Empty (no plans). Those primitives
  * own their paint; this file paints ONLY the pattern chrome: grid geometry,
  * card frames, price hierarchy, feature-cell states, category headers, the
- * loading spinner and the sticky first column. The pre-composition rules that
- * repainted badge/CTA backgrounds were removed with the raw elements.
+ * loading skeleton mirror and the sticky first column. The pre-composition
+ * rules that repainted badge/CTA backgrounds were removed with the raw
+ * elements.
  *
  * HIGHLIGHT LAW: the recommended plan reads as frame + badge (shape + text),
  * never a vertical accent rail and never a glow — a 2px primary frame with a
@@ -37,27 +38,65 @@
   container-type: inline-size;
 }
 
-/* ---- loading: shaped placeholder (status role is stamped by the engine) ---- */
-.ds-pattern-pricing-table.ds-engine-modern[data-part='root'][data-loading='true'] {
-  display: grid;
-  place-items: center;
-  padding-block: var(--ds-spacing-12, 3rem);
-}
+/* ---- loading: shaped skeleton mirror that conserves the loaded footprint
+        (toggle pill, one card per plan, one line per feature row). The pulse
+        rides the canonical `ds-foundation-pulse` keyframes on the
+        `--ds-motion-attention` channel and goes quiet under reduced motion;
+        geometry literals are INTERNAL mirror values (pricing-surface
+        precedent). The `spinner` part remains as the accessible status
+        announcement -- visually hidden while the skeleton carries the
+        loading cue. MERGE CANDIDATE (Codex): the old visual spinner paint
+        and its `ds-pricing-table-spin` keyframes are retained below but
+        unused, pending merge/retire adjudication. ---- */
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__spinner {
-  display: block;
-  inline-size: 24px;
-  block-size: 24px;
-  border: 2px solid var(--ds-pricing-table-hairline, var(--ds-color-border));
-  border-block-start-color: var(--ds-color-primary);
-  border-radius: 999px;
-  animation: ds-pricing-table-spin
-    var(--ds-pricing-table-spinner-duration, calc(var(--ds-motion-glacial, 500ms) * 2))
-    linear infinite;
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 @keyframes ds-pricing-table-spin {
   to {
     transform: rotate(360deg);
   }
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__skeleton-toggle,
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__skeleton-plan,
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__skeleton-row {
+  background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
+  animation: ds-foundation-pulse
+    var(--ds-motion-attention, 1.5s)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__skeleton-toggle {
+  inline-size: 180px;
+  min-block-size: 32px;
+  margin-inline: auto;
+  margin-block-end: var(--ds-spacing-8, 2rem);
+  border-radius: var(--ds-radius-full, 9999px);
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__skeleton-plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: var(--ds-spacing-4, 16px);
+  margin-block-end: var(--ds-spacing-4, 16px);
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__skeleton-plan {
+  min-block-size: 240px;
+  border-radius: var(--ds-radius-lg, 12px);
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__skeleton-rows {
+  display: grid;
+  gap: var(--ds-spacing-2, 8px);
+}
+.ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__skeleton-row {
+  min-block-size: 44px;
+  border-radius: var(--ds-radius-md, 8px);
 }
 
 /* ---- empty (composed Empty primitive) ---- */
@@ -142,11 +181,15 @@
   color: var(--ds-color-text-primary);
   font-size: var(--ds-font-size-lg);
   font-weight: var(--ds-font-weight-bold);
+  line-height: var(--ds-line-height-heading, 1.2);
+  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 
 /* ---- price hierarchy: currency / amount (tabular) / period ---- */
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__price {
   unicode-bidi: isolate;
+  overflow-wrap: anywhere;
   color: var(--ds-color-text-primary);
 }
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__price-currency {
@@ -158,14 +201,15 @@
   font-size: var(--ds-pricing-table-price-amount-size, var(--ds-font-size-fluid-3xl));
   font-weight: var(--ds-font-weight-extrabold, var(--ds-font-weight-bold));
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  letter-spacing: var(--ds-letter-spacing-tight, -0.025em);
+  line-height: var(--ds-line-height-heading, 1.2);
 }
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__price-period,
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__plan-description {
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-xs);
-  line-height: 1.45;
+  line-height: var(--ds-line-height-normal, 1.5);
+  overflow-wrap: anywhere;
 }
 
 /* ---- CTA (composed Button, block); only rhythm is owned here ---- */
@@ -196,6 +240,7 @@
   border-block-end: 1px solid
     color-mix(in srgb, var(--ds-pricing-table-hairline, var(--ds-color-border)) 60%, transparent);
   font-size: var(--ds-font-size-sm);
+  overflow-wrap: anywhere;
 }
 .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-cell {
   color: var(--ds-color-text-primary);
@@ -274,9 +319,11 @@
   }
 }
 
-/* ---- reduced motion: spinner and label transitions go instant. ---- */
+/* ---- reduced motion: skeleton pulse and label transitions go instant. ---- */
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__spinner {
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__skeleton-toggle,
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__skeleton-plan,
+  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__skeleton-row {
     animation: none;
   }
   .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__toggle-label,
@@ -287,8 +334,9 @@
 
 /* ---- forced colors: frames, hairlines and ink re-express in system colors;
         the recommended plan reads as a Highlight frame, feature states read
-        by icon shape, and the spinner keeps its motion cue in system ink.
-        No data-viz here, so no forced-color-adjust opt-out anywhere. ---- */
+        by icon shape, and the neutral skeleton fills are re-keyed by the UA
+        (no opt-out needed). No data-viz here, so no forced-color-adjust
+        opt-out anywhere. ---- */
 @media (forced-colors: active) {
   .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__plan-card {
     border-color: ButtonText;
@@ -325,9 +373,5 @@
   }
   .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__feature-label:focus-visible {
     outline-color: Highlight;
-  }
-  .ds-pattern-pricing-table.ds-engine-modern[data-part='root'] .ds-pricing-table__spinner {
-    border-color: ButtonText;
-    border-block-start-color: Highlight;
   }
 }

@@ -238,11 +238,6 @@ export function SvgFunnelRenderer({
                   x={segment.labelX}
                   y={segment.labelY}
                   textAnchor="middle"
-                  style={{
-                    fontSize: geometry.orientation === 'vertical' ? '13px' : '12px',
-                    fontWeight: 600,
-                    pointerEvents: 'none',
-                  }}
                   aria-hidden="true"
                 >
                   {segment.label}
@@ -253,7 +248,6 @@ export function SvgFunnelRenderer({
                     x={segment.valueX}
                     y={segment.valueY}
                     textAnchor="middle"
-                    style={{ fontSize: '11px', pointerEvents: 'none' }}
                     aria-hidden="true"
                   >
                     {valueText}
@@ -265,7 +259,6 @@ export function SvgFunnelRenderer({
                     x={segment.conversionX}
                     y={segment.conversionY}
                     dominantBaseline="middle"
-                    style={{ fontSize: '10px' }}
                     aria-hidden="true"
                   >
                     {segment.conversionLabel}

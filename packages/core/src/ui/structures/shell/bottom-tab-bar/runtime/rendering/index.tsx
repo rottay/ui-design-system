@@ -10,8 +10,12 @@
  *
  * A11y contract (APG navigation, R2+R3): the bar is a `<nav>` landmark with a
  * translated accessible name; the active item carries `aria-current="page"`.
- * The previous `tablist`/`tab`/`aria-selected` semantics were dropped — a tab
- * role without an owned `tabpanel` is a broken APG tabs pattern.
+ * A badged tab announces its count inside the accessible name (`{label},
+ * {count}` floor; `bottomTabBar.itemWithBadge` catalogue key) and the visual
+ * pill is `aria-hidden`, so the count is heard exactly once — the real count,
+ * never the "99+" cap. The previous `tablist`/`tab`/`aria-selected` semantics
+ * were dropped — a tab role without an owned `tabpanel` is a broken APG tabs
+ * pattern.
  *
  * Ownership: the engine stamps anatomy (`data-part`) and state
  * (`data-selected`, `data-wide`); the skin
@@ -67,6 +71,7 @@ interface TabItemRendererProps {
 }
 
 function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
+  const i18n = useOptionalTranslation('components');
   const handleClick = () => {
     item.onClick?.();
     onSelect();
@@ -75,6 +80,20 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
   // Use Box as="button" for non-link items, Box as="a" for links
   const Element = item.href ? 'a' : 'button';
 
+  // The badge count is part of the accessible name — sighted readers see the
+  // pill, assistive tech must hear the count too. The visual pill is then
+  // aria-hidden so it is never announced twice. The real count is announced
+  // (not the "99+" cap). Floor mirrors the pre-i18n name byte-exactly when
+  // no badge is present.
+  const badge = item.badge ?? 0;
+  const hasBadge = badge > 0;
+  const accessibleName = hasBadge
+    ? i18n?.tOr('bottomTabBar.itemWithBadge', `${item.label}, ${badge}`, {
+        label: item.label,
+        count: badge,
+      }) ?? `${item.label}, ${badge}`
+    : item.label;
+
   return (
     <Box
       as={Element}
@@ -82,7 +101,7 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
       className="rottay-bottom-tab-bar__tab"
       onClick={handleClick}
       aria-current={isActive ? 'page' : undefined}
-      aria-label={item.label}
+      aria-label={accessibleName}
       data-testid={`tab-item-${item.key}`}
       data-part="tab-button"
       data-selected={isActive}
@@ -94,15 +113,16 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
         </Box>
 
         {/* Badge indicator */}
-        {item.badge != null && item.badge > 0 && (
+        {hasBadge && (
           <Box
             data-part="badge"
             className="rottay-bottom-tab-bar__badge"
-            data-wide={item.badge > 99 || undefined}
+            data-wide={badge > 99 || undefined}
             data-testid={`tab-badge-${item.key}`}
+            aria-hidden="true"
           >
             <Box as="span" data-part="badge-text" className="rottay-bottom-tab-bar__badge-text">
-              {item.badge > 99 ? '99+' : String(item.badge)}
+              {badge > 99 ? '99+' : String(badge)}
             </Box>
           </Box>
         )}

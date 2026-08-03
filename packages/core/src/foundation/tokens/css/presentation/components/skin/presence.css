@@ -12,14 +12,11 @@
  *
  * RUNTIME STAYS INLINE under exact executable floors: PresenceBar's avatar ring
  * `border` and avatar-initials `color` (both `ringColor = user.color ||
- * DEFAULT_COLOR`), and LiveCursor's `cursor-badge` `background` (same shape
- * via `cursorColor`) are genuine per-user caller data and are not represented
- * here at all -- they remain exactly as written in index.tsx. LiveCursor's
- * SVG `fill={cursorColor}` (per-user, a JSX presentation attribute, not a
- * style key) remains runtime-authored. The outline stroke is static and is
- * owned by the scoped skin rule below. The three inline identity sites carry
- * `floor: 3`; the intrinsic SVG fill carries an independent
- * `runtimeSvgFloor: 1`.
+ * DEFAULT_COLOR`), the size-variant pixel geometry (inline-size/block-size,
+ * initials font-size), the negative overlap offset and the stacking order;
+ * LiveCursor's `cursor-badge` `background` (caller per-user color), coordinate
+ * custom-property hatches and visibility `opacity`. The skin consumes those
+ * hatches into the transform; everything else is static and owned HERE.
  *
  * RUNTIME HATCH: `--ds-presence-badge-ring` carries the overflow badge's ring
  * WIDTH, which tracks the `size` prop (`sm`: 2px, `md`: 2.5px) and has no
@@ -27,29 +24,25 @@
  * quoted custom-property key) and consumed here alongside the static
  * style/color that make up the rest of the border-color site.
  *
+ * MOTION: transitions ride the `--ds-motion-*` canon; the typing-dot loop
+ * period rides the private `--_ds-presence-dot-duration` channel with the
+ * easing on the canon and an nth-child stagger
+ * expressed as fractions of the SAME channel. LiveCursor moves on
+ * `transform` only (compositor-only; the retired left/top pair forced
+ * layout). `prefers-reduced-motion` cuts the loop and the lift; the
+ * role=status label keeps comprehension without motion.
+ *
  * SPECIFICITY (P-48), single scope class per export (0,1,0):
  *   - NON-BORDER paint on a Box (background, border-radius) reaches (0,3,0)
  *     with the class + the descendant `data-part` repeated once (class(1) +
- *     part(2) = 3). The avatar's `<img>` fallback has no `data-part` of its
- *     own (a single, unconditional child needs none); its border-radius rule
- *     buys the same three units from the class + the parent `[data-part=
- *     'avatar']` repeated, plus the `img` element selector (which adds to the
- *     c-column only, not required for the floor but free).
+ *     part(2) = 3).
  *   - `color` on a composed `Text` (`overflow-badge-count`, `label`) must
  *     EXCEED the Typography engine skins' own `[data-color='default']` rule,
- *     which both modern and rustic ship at (0,4,0). Both Texts here render
- *     with an unset `color` prop, so they always carry `data-color='default'`
- *     and always compete. Reaching (0,5,0) needs class + part repeated to
- *     four (class(1) + part(4) = 5).
+ *     which both modern and rustic ship at (0,4,0). Reaching (0,5,0) needs
+ *     class + part repeated to four (class(1) + part(4) = 5).
  *   - A BORDER COLOR must reach (0,4,0): class + part repeated to three
  *     (class(1) + part(3) = 4). The overflow badge's ring is the one
  *     border-color site in this file.
- *
- * Two pre-existing "no hardcoded colors" defects, preserved byte-exact per
- * team flag (not fixed by this migration): LiveCursor's `cursor-badge`
- * `color: #fff` and `box-shadow: 0 1px 3px rgba(0,0,0,0.15)` are literal
- * values, not `--ds-*` tokens, sitting beside the properly-tokenized
- * `cursorColor`/`DEFAULT_COLOR` in the same component.
  */
 
 @keyframes ds-presence-dot {
@@ -64,51 +57,177 @@
 }
 
 /* ============================================================================
- * PresenceBar -- avatar (ring stays inline, RUNTIME), fallback initials
- * (RUNTIME, no rule here), overflow badge.
+ * PresenceBar -- root, avatar (ring stays inline, RUNTIME), fallback initials
+ * (ink stays inline, RUNTIME), overflow badge.
  * ==========================================================================*/
 
+.ds-presence-bar[data-part='root'] {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
 .ds-presence-bar [data-part='avatar'][data-part='avatar'] {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  cursor: default;
   border-radius: 50%;
-  background: var(--ds-color-surface, #fff);
+  background: var(--ds-color-surface);
+  transition: transform var(--ds-motion-feedback) var(--ds-motion-ease-out);
+}
+/* The lift is REAL only where hovering is an input mode (hover law); the
+   travel rides the canon's entrance offset so a tenant's motion profile
+   tunes it. */
+@media (hover: hover) {
+  .ds-presence-bar [data-part='avatar'][data-part='avatar']:hover {
+    transform: translateY(var(--ds-motion-offset-in));
+  }
 }
 .ds-presence-bar [data-part='avatar'][data-part='avatar'] img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
   border-radius: 50%;
+}
+
+.ds-presence-bar [data-part='avatar-initials'][data-part='avatar-initials'][data-part='avatar-initials'][data-part='avatar-initials'] {
+  line-height: 1;
+  user-select: none;
 }
 
 .ds-presence-bar [data-part='overflow-badge'][data-part='overflow-badge'] {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  cursor: default;
   border-radius: 50%;
-  background: var(--ds-color-surface-secondary, var(--ds-color-bg-secondary, #f5f5f5));
+  background: var(--ds-color-surface-secondary, var(--ds-color-bg-secondary));
 }
 .ds-presence-bar [data-part='overflow-badge'][data-part='overflow-badge'][data-part='overflow-badge'] {
-  border: var(--ds-presence-badge-ring) solid var(--ds-color-border, #d9d9d9);
+  border: var(--ds-presence-badge-ring) solid var(--ds-color-border);
 }
 .ds-presence-bar [data-part='overflow-badge-count'][data-part='overflow-badge-count'][data-part='overflow-badge-count'][data-part='overflow-badge-count'] {
-  color: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+  line-height: 1;
+  user-select: none;
+  color: var(--ds-color-text-secondary);
 }
 
 /* ============================================================================
  * PresenceTypingIndicator -- three bouncing dots (Box) + label (Text).
  * ==========================================================================*/
 
+.ds-presence-typing-indicator[data-part='root'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
+.ds-presence-typing-indicator [data-part='dots'] {
+  display: inline-flex;
+  gap: calc(var(--ds-spacing-1) * 0.75);
+}
 .ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot'] {
+  inline-size: calc(var(--ds-spacing-1) * 1.25);
+  block-size: calc(var(--ds-spacing-1) * 1.25);
   border-radius: 50%;
-  background: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+  background: var(--ds-color-text-secondary);
+  animation: ds-presence-dot var(--_ds-presence-dot-duration, calc(var(--ds-motion-glacial) * 2.4))
+    var(--ds-motion-ease-in-out) infinite;
+}
+.ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(2) {
+  animation-delay: calc(var(--_ds-presence-dot-duration, calc(var(--ds-motion-glacial) * 2.4)) * 0.125);
+}
+.ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(3) {
+  animation-delay: calc(var(--_ds-presence-dot-duration, calc(var(--ds-motion-glacial) * 2.4)) * 0.25);
 }
 .ds-presence-typing-indicator [data-part='label'][data-part='label'][data-part='label'][data-part='label'] {
-  color: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+  font-size: var(--ds-font-size-sm);
+  color: var(--ds-color-text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-presence-bar [data-part='avatar'][data-part='avatar'] {
+    transition: none;
+  }
+  .ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot'] {
+    animation: none;
+  }
 }
 
 /* ============================================================================
- * LiveCursor -- name badge (background stays inline, RUNTIME).
+ * LiveCursor -- root (moves on transform, compositor-only), arrow glyph,
+ * name badge (background stays inline, RUNTIME).
  * ==========================================================================*/
 
+.ds-presence-live-cursor[data-part='root'] {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  pointer-events: none;
+  /* above overlays but inside the governed z scale (was a raw 9999) */
+  z-index: var(--ds-z-tooltip);
+  transform: translate(
+    var(--ds-presence-cursor-x, 0),
+    var(--ds-presence-cursor-y, 0)
+  );
+  transition: transform var(--ds-motion-fast) linear,
+    opacity var(--ds-motion-normal) var(--ds-motion-ease-out);
+  will-change: transform;
+}
+.ds-presence-live-cursor[data-part='root'] svg {
+  display: block;
+}
+
 .ds-presence-live-cursor [data-part='cursor-badge'][data-part='cursor-badge'] {
-  color: #fff;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  position: absolute;
+  inset-inline-start: 12px;
+  inset-block-start: 16px;
+  padding-block: 3px;
+  padding-inline: 6px;
+  /* the badge ink sits on the caller's arbitrary per-user color; the
+     on-accent semantic role replaces the retired #fff literal (contrast
+     against a caller-chosen fill stays the caller's contract). */
+  color: var(--ds-color-text-on-primary);
+  font-size: var(--ds-font-size-2xs);
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: 1;
+  white-space: nowrap;
+  user-select: none;
+  border-radius: var(--ds-radius-sm);
+  /* governed elevation replaces the retired rgba literal */
+  box-shadow: var(--ds-elevation-1);
 }
 
 .ds-presence-live-cursor [data-part='cursor-outline'] {
-  stroke: var(--ds-color-surface, #fff);
+  stroke: var(--ds-color-surface);
+}
+
+/* ============================================================================
+ * forced-colors: caller-color fills/rings are forced away. The dots and the
+ * overflow badge re-assert in system ink so liveness/count keep a visible
+ * shape; the cursor badge re-frames in system colors (its ink would
+ * otherwise collide with the forced background).
+ * ==========================================================================*/
+
+@media (forced-colors: active) {
+  .ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot'],
+  .ds-presence-bar [data-part='overflow-badge'][data-part='overflow-badge'] {
+    background: ButtonText;
+  }
+  .ds-presence-bar [data-part='overflow-badge-count'][data-part='overflow-badge-count'][data-part='overflow-badge-count'][data-part='overflow-badge-count'] {
+    color: Canvas;
+  }
+  .ds-presence-live-cursor [data-part='cursor-badge'][data-part='cursor-badge'] {
+    color: ButtonText;
+    box-shadow: none;
+  }
 }

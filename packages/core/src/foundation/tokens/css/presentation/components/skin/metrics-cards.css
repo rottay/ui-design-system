@@ -14,11 +14,36 @@
  * no React hover state here; the card's own `<style>` `:hover` (border-color,
  * box-shadow, and `.metric-value-v3` colour) stays suppressed by the (0,3,0)/
  * (0,4,0)/(0,5,0) rest rules exactly as the former inline paint suppressed it.
+ *
+ * PREMIUM SOCKETS (2026-08-02 worklist, KIMI rows 53-68): every slot rides the
+ * sanctioned `var(--ds-metric-card-<slot>, <what it paints today>)` mechanic —
+ * zero-delta by construction while the channel stays unauthored (undeclared in
+ * every shipped bundle), live the moment a brand authors it. Anatomy the slots
+ * demanded and the card did not have: `data-part='body'` (the content stack —
+ * hosts `--ds-metric-card-gap`) and `data-part='footer'` (the change + meter
+ * region — hosts footer-*; its rhythm reproduces the previous stack gap +
+ * 4px meter margin byte-exactly). Motif layers (`grid-*`, `overlay`) ride the
+ * shell's ::before/::after so the DOM stays untouched; unset they paint
+ * transparent/none. `footer-border` is an OUTLINE (no layout geometry) so the
+ * unset state stays byte-identical; `body-color` falls back to `inherit`.
+ * `action-*` stays unlit: the KPI anatomy has no action element and minting an
+ * empty one is dishonest — BLOCKED(owner: Codex) in the roadmap.
  */
 
 /* panel chrome -------------------------------------------------------------- */
 
+/* Root frame drained from the engine (premium wave): the former inline
+   height/padding/flex frame. The panel block size rides a private dashboard
+   seam whose fallback follows the governed rhythm dial from the shipped 415px
+   measure; the runtime
+   density channels stay inline on the root (the density suite pins them). */
 .ds-metrics-cards.ds-metrics-cards[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
   background: var(--ds-signal-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-secondary)));
   border-radius: var(--ds-signal-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)));
   box-shadow: var(--ds-signal-card-shadow, var(--ds-premium-card-shadow, none));
@@ -26,10 +51,22 @@
 .ds-metrics-cards.ds-metrics-cards[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
+.ds-metrics-cards.ds-metrics-cards [data-part='header'] {
+  /* Header geometry drained from the engine. */
+  padding-block-end: 12px;
+  margin-block-end: 12px;
+  position: relative;
+}
 .ds-metrics-cards.ds-metrics-cards [data-part='header'][data-part='header'] {
   border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='panel-icon-box'] {
+  /* 32px icon well drained from the engine. */
+  inline-size: 32px;
+  block-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--ds-signal-card-icon-bg, var(--ds-metric-card-icon-bg, var(--ds-color-primary-100)));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='panel-icon-box'][data-part='panel-icon-box'] {
@@ -42,12 +79,17 @@
   color: var(--ds-signal-card-title-color, var(--ds-color-text-primary));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='live-badge'] {
+  /* Badge padding drained from the engine. */
+  padding: 6px 12px;
   background: var(--ds-signal-card-badge-bg, var(--ds-color-success-100));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='live-badge'][data-part='live-badge'] {
   border: 1px solid var(--ds-signal-card-badge-border, var(--ds-color-success-200));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='live-dot'] {
+  /* Dot geometry drained from the engine. */
+  inline-size: 8px;
+  block-size: 8px;
   border-radius: 50%;
   background: var(--ds-signal-card-badge-color, var(--ds-color-success));
 }
@@ -58,17 +100,74 @@
 /* per-card shell ------------------------------------------------------------ */
 
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'] {
-  background: var(--ds-metric-card-bg, var(--ds-compact-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-primary))));
+  background: var(--ds-metric-card-glass-bg, var(--ds-metric-card-bg, var(--ds-compact-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-primary)))));
   border-radius: var(--ds-metric-card-radius, var(--ds-compact-card-radius, var(--ds-radius-md, 8px)));
   box-shadow: var(--ds-metric-card-shadow, var(--ds-compact-card-shadow, none));
+  color: var(--ds-metric-card-body-color, inherit);
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-part='metric-card'] {
   border: 1px solid var(--ds-metric-card-border, var(--ds-compact-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary))));
 }
 
-/* card icon box — 2px border, static colour -------------------------------- */
+/* grid motif layer (shell ::before; invisible while grid-line/grid-bg unset) */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: var(
+    --ds-metric-card-grid-bg,
+    linear-gradient(var(--ds-metric-card-grid-line, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ds-metric-card-grid-line, transparent) 1px, transparent 1px)
+  );
+  background-size: var(--ds-metric-card-grid-size, var(--ds-surface-card-grid-size, 22px))
+    var(--ds-metric-card-grid-size, var(--ds-surface-card-grid-size, 22px));
+}
+
+/* overlay wash layer (shell ::after, above content; invisible while unset) */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-card']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: var(--ds-metric-card-overlay, none);
+}
+
+/* body stack — hosts the internal rhythm socket ----------------------------- */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='body'][data-part='body'] {
+  position: relative;
+  gap: var(--ds-metric-card-gap, var(--ds-spacing-2, 0.5rem));
+}
+
+/* footer region (change badge + meter) — zero-geometry outline border ------- */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='footer'] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: stretch;
+  gap: var(--ds-spacing-2, 0.5rem);
+  background: var(--ds-metric-card-footer-bg, transparent);
+  color: var(--ds-metric-card-footer-color, inherit);
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='footer'][data-part='footer'] {
+  outline: 1px solid var(--ds-metric-card-footer-border, transparent);
+}
+
+/* card icon box — 2px border, static colour; the 32px well is drained from
+   the engine --------------------------------- */
 
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-icon-box'] {
+  inline-size: 32px;
+  block-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--ds-metric-card-icon-bg, var(--ds-signal-card-icon-bg, var(--ds-color-primary-100)));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-icon-box'][data-part='metric-icon-box'] {
@@ -87,39 +186,54 @@
   color: var(--ds-metric-card-label-color, var(--ds-color-text-muted));
 }
 
-/* change badge — background AND border switch on trend --------------------- */
+/* change badge — background AND border switch on trend (status-* tier wins) - */
 
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='true'] [data-part='change-badge'] {
-  background: var(--ds-signal-card-badge-bg, var(--ds-color-success-100));
+  background: var(--ds-metric-card-status-bg, var(--ds-signal-card-badge-bg, var(--ds-color-success-100)));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='false'] [data-part='change-badge'] {
-  background: var(--ds-metric-card-trend-error-bg, color-mix(in srgb, var(--ds-metric-card-trend-color-error, var(--ds-color-error)) 12%, var(--ds-signal-card-section-bg, var(--ds-color-bg-primary))));
+  background: var(--ds-metric-card-status-bg, var(--ds-metric-card-trend-error-bg, color-mix(in srgb, var(--ds-metric-card-trend-color-error, var(--ds-color-error)) 12%, var(--ds-signal-card-section-bg, var(--ds-color-bg-primary)))));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='true'] [data-part='change-badge'][data-part='change-badge'] {
-  border: 1px solid var(--ds-signal-card-badge-border, var(--ds-color-success-200));
+  border: 1px solid var(--ds-metric-card-status-border, var(--ds-signal-card-badge-border, var(--ds-color-success-200)));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='false'] [data-part='change-badge'][data-part='change-badge'] {
-  border: 1px solid var(--ds-metric-card-trend-error-border, color-mix(in srgb, var(--ds-metric-card-trend-color-error, var(--ds-color-error)) 24%, var(--ds-signal-card-border, var(--ds-color-border-secondary))));
+  border: 1px solid var(--ds-metric-card-status-border, var(--ds-metric-card-trend-error-border, color-mix(in srgb, var(--ds-metric-card-trend-color-error, var(--ds-color-error)) 24%, var(--ds-signal-card-border, var(--ds-color-border-secondary)))));
+}
+
+.ds-metrics-cards.ds-metrics-cards [data-part='change-badge'] {
+  padding: 4px 8px;
 }
 
 /* trend icon + change text — 2-tone ---------------------------------------- */
 
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='true'] [data-part='trend-icon'] {
-  color: var(--ds-metric-card-trend-color, var(--ds-color-success));
+  color: var(--ds-metric-card-status-color, var(--ds-metric-card-trend-color, var(--ds-color-success)));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='false'] [data-part='trend-icon'] {
-  color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
+  color: var(--ds-metric-card-status-color, var(--ds-metric-card-trend-color-error, var(--ds-color-error)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='trend-icon'] {
+  inline-size: 10px;
+  block-size: 10px;
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='true'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
-  color: var(--ds-metric-card-trend-color, var(--ds-color-success));
+  color: var(--ds-metric-card-status-color, var(--ds-metric-card-trend-color, var(--ds-color-success)));
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='false'] [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
-  color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
+  color: var(--ds-metric-card-status-color, var(--ds-metric-card-trend-color-error, var(--ds-color-error)));
+}
+.ds-metrics-cards.ds-metrics-cards [data-part='metric-change'][data-part='metric-change'][data-part='metric-change'] {
+  font-family: var(--ds-font-family-mono, monospace);
 }
 
 /* meter track + fill -------------------------------------------------------- */
 
 .ds-metrics-cards.ds-metrics-cards [data-part='meter-track'] {
+  inline-size: 100%;
+  block-size: var(--ds-metric-card-meter-height, 6px);
+  margin-block-start: 4px;
+  overflow: hidden;
   background: var(--ds-metric-card-meter-track, var(--ds-color-bg-tertiary));
   border-radius: 999px;
 }
@@ -127,6 +241,7 @@
   border: 1px solid var(--ds-metric-card-meter-track-border, transparent);
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='meter-fill'] {
+  block-size: 100%;
   border-radius: 999px;
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='true'] [data-part='meter-fill'] {
@@ -134,4 +249,52 @@
 }
 .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive='false'] [data-part='meter-fill'] {
   background: var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)));
+}
+
+/* scroll region — geometry drained from the engine ---------------------------- */
+
+.ds-metrics-cards.ds-metrics-cards [data-part='scroll-area'] {
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+}
+
+.ds-metrics-cards.ds-metrics-cards [data-part='cards-grid'] {
+  position: relative;
+}
+
+/* forced-colors: the panel, cards, wells and badge keep system frames; the
+   meter reads by WIDTH on a system track (never by hue); trend direction
+   survives through the trend icon shape and the signed change text. */
+@media (forced-colors: active) {
+  .ds-metrics-cards.ds-metrics-cards[data-part='root'][data-part='root'],
+  .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-part='metric-card'],
+  .ds-metrics-cards.ds-metrics-cards [data-part='panel-icon-box'][data-part='panel-icon-box'],
+  .ds-metrics-cards.ds-metrics-cards [data-part='metric-icon-box'][data-part='metric-icon-box'],
+  .ds-metrics-cards.ds-metrics-cards [data-part='live-badge'][data-part='live-badge'],
+  .ds-metrics-cards.ds-metrics-cards [data-part='change-badge'][data-part='change-badge'],
+  .ds-metrics-cards.ds-metrics-cards [data-part='header'][data-part='header'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  /* §13.1 motif/overlay layers and the zero-geometry footer outline go quiet
+     so the forced palette stays authoritative. */
+  .ds-metrics-cards.ds-metrics-cards [data-part='metric-card']::before,
+  .ds-metrics-cards.ds-metrics-cards [data-part='metric-card']::after {
+    content: none;
+  }
+  .ds-metrics-cards.ds-metrics-cards [data-part='footer'][data-part='footer'] {
+    outline-color: ButtonText;
+  }
+  .ds-metrics-cards.ds-metrics-cards [data-part='live-dot'] {
+    background: ButtonText;
+  }
+  .ds-metrics-cards.ds-metrics-cards [data-part='meter-track'][data-part='meter-track'] {
+    background: Canvas;
+    border: 1px solid ButtonText;
+  }
+  .ds-metrics-cards.ds-metrics-cards [data-part='metric-card'][data-positive] [data-part='meter-fill'] {
+    background: Highlight;
+  }
 }

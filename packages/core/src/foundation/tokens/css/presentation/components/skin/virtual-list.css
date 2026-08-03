@@ -1,0 +1,49 @@
+/**
+ * VirtualList skin (p610 visual wave).
+ *
+ * REGISTRATION: wired — imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` (coordinator closed the gap this file's
+ * header used to flag). The engine keeps its functional geometry inline
+ * (height, measured offsets, the scrollport's overflowY/position), exactly
+ * like the data-table scroll region; this skin owns only the pattern's
+ * CHROME: the focus ring of the keyboard-focusable scroll region
+ * (scrollable-region law), its overscroll containment, its scrollbar ink and
+ * the empty-state frame.
+ *
+ * SCOPE: the engine stamps `data-part='root'` on the scrollport; consumers
+ * may add their own class. No engine scope class exists (the presentation
+ * component is engine-free), so rules key on the part pair alone and paint
+ * no border colors (the P-48 floor never applies).
+ */
+
+.ds-pattern-virtual-list[data-part='root'] {
+  overscroll-behavior-block: contain;
+  scrollbar-color: var(--ds-color-border-secondary) transparent;
+  /* The gutter is reserved up-front: rows appearing on scroll (or on
+     load-more) never shift the measured column sideways. */
+  scrollbar-gutter: stable;
+}
+
+/* The empty branch renders `data-part='empty'` on the same root box (inline
+   height travels with it): the caller's empty composition stays centered in
+   the viewport the populated list would have occupied. */
+.ds-pattern-virtual-list[data-part='empty'] {
+  display: grid;
+  place-items: center;
+  min-block-size: 8rem;
+}
+
+/* The region is tabbable (engine, scrollable-region law): keyboard focus
+   must read on the region itself before its items take over. */
+.ds-pattern-virtual-list[data-part='root']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(var(--ds-focus-ring-offset, 2px) * -1);
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+@media (forced-colors: active) {
+  .ds-pattern-virtual-list[data-part='root']:focus-visible {
+    outline: 2px solid Highlight;
+  }
+}

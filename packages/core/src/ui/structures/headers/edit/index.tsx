@@ -60,7 +60,7 @@
 
 import { type CSSProperties, type ReactNode } from 'react';
 
-import { ArrowLeftIcon } from '@/graphics/icons/presentation/catalog/navigation';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import {
   SaveIcon as Save,
   XIcon as X,
@@ -236,7 +236,7 @@ export function EditHeader({
       data-loading={false}
     >
       <Box data-part="top-bar">
-        <Flex justify="between" align="center">
+        <Flex justify="between" align="center" wrap="wrap" gap={12}>
           <Flex align="center" gap={20}>
             {renderHrefAnchor(
               backHref,
@@ -245,8 +245,12 @@ export function EditHeader({
                 align="center"
                 gap={8}
               >
-                <ArrowLeftIcon data-part="back-icon" style={{ width: 14, height: 14 }} />
-                <Text data-part="back-label" size="xs" weight="medium">
+                {/* Governed semantic role (autoMirror: the arrow flips in
+                    RTL); the retired catalog ArrowLeftIcon carried no
+                    mirroring contract. The chip's visible label makes the
+                    glyph decorative. */}
+                <NavigationBackIcon data-part="back-icon" decorative size={14} />
+                <Text data-part="back-label" size="xs" weight="medium" color="secondary">
                   {resolvedBackLabel}
                 </Text>
               </Flex>,
@@ -259,17 +263,17 @@ export function EditHeader({
                   {breadcrumb.map((item, index) => (
                     <Flex key={index} align="center" gap={8}>
                       {index > 0 && (
-                        <Text data-part="breadcrumb-separator" size="xs">/</Text>
+                        <Text data-part="breadcrumb-separator" size="xs" color="subtle">/</Text>
                       )}
                       {item.href ? (
                         renderHrefAnchor(
                           item.href,
-                          <Text data-part="breadcrumb-link" size="xs">
+                          <Text data-part="breadcrumb-link" size="xs" color="secondary">
                             {item.label}
                           </Text>,
                         )
                       ) : (
-                        <Text data-part="breadcrumb-item" size="xs">
+                        <Text data-part="breadcrumb-item" size="xs" color="secondary">
                           {item.label}
                         </Text>
                       )}
@@ -285,8 +289,10 @@ export function EditHeader({
               <Text
                 data-part="entity-id"
                 size="xs"
+                color="secondary"
+                title={entityId.length > 8 ? entityId : undefined}
               >
-                {entityIdLabel}: {entityId.slice(0, 8)}
+                {entityIdLabel}: {entityId.slice(0, 8)}{entityId.length > 8 ? '…' : ''}
               </Text>
             )}
           </Flex>
@@ -314,14 +320,18 @@ export function EditHeader({
                   data-part="eyebrow"
                   size="xs"
                   weight="bold"
+                  color="subtle"
                 >
                   {eyebrow}
                 </Text>
               ) : null}
               <Flex align="center" gap={12} wrap="wrap">
-                <Text data-part="title">
+                {/* Box as="h1" (the DetailHeader precedent): a composed Text
+                    resolves its size inline, which left the skin's display
+                    type dead — the h1 is fully skin-owned now. */}
+                <Box data-part="title" as="h1">
                   {title}
-                </Text>
+                </Box>
                 {status && (
                   <Box
                     data-part="status-pill"
@@ -346,7 +356,7 @@ export function EditHeader({
                 )}
               </Flex>
               {subtitle && (
-                <Text data-part="subtitle" size="sm">{subtitle}</Text>
+                <Text data-part="subtitle" size="sm" color="secondary">{subtitle}</Text>
               )}
             </Stack>
           </Flex>

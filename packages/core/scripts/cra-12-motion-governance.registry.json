@@ -214,7 +214,7 @@
     },
     "raw-motion-timing": {
       "owner": "design-system",
-      "reason": "Exact reviewed CRA12 raw-timing inventory, reconciled after canonical source relocation and the net-decreasing BitHire AdaptiveOverlay migration; additions and body drift are forbidden. | 2026-08-02 re-pin: F1 socket moved a tracked body (transition literal became the FALLBACK arm of governed --ds-metric-card-transition/hover-transform \u2014 same literal, now tenant-overridable; counts unchanged/decreased)",
+      "reason": "Exact reviewed CRA12 raw-timing inventory; additions and body drift are forbidden. The 2026-08-02 Modern reconciliation replaced literal and fallback timings with governed motion channels and is proven removal-only against becf692f.",
       "expires": "2026-12-31",
       "files": [
         {
@@ -276,9 +276,9 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 432,
-          "maxFiles": 170,
-          "digest": "3b03d620b516b1aa1974957365f89617961e979bdaff6c65a28c13723bf2be0d"
+          "maxCount": 380,
+          "maxFiles": 155,
+          "digest": "b14a57a6d5458d7c53f87648158d5da47be55028987ca178b0ce8b4321c15923"
         },
         {
           "repo": "ui-design-system",
@@ -326,11 +326,20 @@
             "doNotRepeat": "This is a one-off reconciliation for the R2/R3 wave's intentional change, not the routine way to update a baseline; routine changes must land below the current ceilings without touching this registry."
           }
         ]
+      },
+      "latestDrain": {
+        "kind": "removal-only-drain",
+        "comparisonSha": "becf692f923779df87f69ae2babce521ad46a9c0",
+        "snapshotDate": "2026-08-02",
+        "owner": "codex/modern-reconciliation",
+        "verifiedBy": "Current CRA12 scanner over a clean git archive of becf692f versus the final working tree; the exact finding multiset has 52 removals and zero additions for raw-motion-timing.",
+        "reason": "Removed raw fallback timings or derived private decorative durations from canonical motion rungs, preserving default cadence while making the tree a strict subset of the accepted snapshot.",
+        "notAnImprovement": "380 raw-motion findings remain inherited debt. The lower row is a permanent ratchet, not a quality-complete claim or permission to add timing literals."
       }
     },
     "transition-all": {
       "owner": "design-system",
-      "reason": "Exact reviewed CRA12 transition-all inventory, reconciled after canonical source relocation; additions and body drift are forbidden. | 2026-08-02 re-pin: F1 socket moved a tracked body (transition literal became the FALLBACK arm of governed --ds-metric-card-transition/hover-transform \u2014 same literal, now tenant-overridable; counts unchanged/decreased)",
+      "reason": "Exact reviewed CRA12 transition-all inventory; additions and body drift are forbidden. The 2026-08-02 Modern reconciliation narrowed broad transitions and is proven removal-only against becf692f.",
       "expires": "2026-12-31",
       "files": [
         {
@@ -371,9 +380,9 @@
         {
           "repo": "ui-design-system",
           "scope": "ds-internal",
-          "maxCount": 47,
-          "maxFiles": 26,
-          "digest": "e8d531248880f6b7d8fc4ba6d5a4718ab6fd2999f7edbcd26db11fd93b42c0d9"
+          "maxCount": 28,
+          "maxFiles": 20,
+          "digest": "dfdc097b49c413c4f953f46fd5c7d3b7ed0ce18bab76868f434f5e7801021bf6"
         },
         {
           "repo": "ui-design-system",
@@ -411,6 +420,15 @@
             "doNotRepeat": "This was a one-off reconciliation for the R2/R3 wave, not the routine way to update a baseline."
           }
         ]
+      },
+      "latestDrain": {
+        "kind": "removal-only-drain",
+        "comparisonSha": "becf692f923779df87f69ae2babce521ad46a9c0",
+        "snapshotDate": "2026-08-02",
+        "owner": "codex/modern-reconciliation",
+        "verifiedBy": "Current CRA12 scanner over a clean git archive of becf692f versus the final working tree; the exact finding multiset has 19 removals and zero additions for transition-all.",
+        "reason": "Broad all-property transitions were replaced by explicit properties in the Modern dashboard and structure work without introducing a new transition-all identity.",
+        "notAnImprovement": "28 transition-all findings remain inherited debt. The lower row is a permanent ratchet, not a claim that motion governance is complete."
       }
     }
   }

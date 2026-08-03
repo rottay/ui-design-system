@@ -43,6 +43,7 @@ import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generate
 import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
 import { WorkflowTemplateIcon } from '@/graphics/icons/presentation/semantic/generated/roles/workflow-template';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useResponsive } from '@/infrastructure/runtime/responsive';
 import { useTokens } from '@/infrastructure/runtime/theming/composition/react/tokens';
 import { useAdaptivePosture } from '../../../../runtime/adaptive-posture';
 import { useSurfaceProfileDefaults } from '../../../../runtime/profile-defaults';
@@ -591,6 +592,13 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
   const { tSurfaceOr } = useSurfaceTranslations();
   const profileDefaults = useSurfaceProfileDefaults();
   const { isMobile, isTablet, prefersReducedMotion } = useBreakpoints();
+  // The stamped `data-mobile` hook follows the resolved viewport so
+  // SSR/first-paint markup never claims a mobile posture the media query has
+  // not confirmed (the provider's pre-resolution default is phone; the
+  // form-family surfaces gate the same way). Structure keeps reading the
+  // breakpoint flags directly.
+  const { hasResolvedViewport } = useResponsive();
+  const resolvedMobile = hasResolvedViewport && isMobile;
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const headingWeight = resolveHeadingFontWeight(profileDefaults.headerWeight);
 
@@ -954,7 +962,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
       className="ds-surface ds-guided-draft-form"
       data-part="root"
       data-mode={mode}
-      data-mobile={isMobile ? 'true' : 'false'}
+      data-mobile={resolvedMobile ? 'true' : 'false'}
       data-loading={loading ? 'true' : 'false'}
       aria-busy={loading || undefined}
       spacing={sectionSpacing}

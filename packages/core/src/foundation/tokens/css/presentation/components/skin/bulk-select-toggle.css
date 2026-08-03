@@ -9,20 +9,33 @@
 @keyframes ds-bulk-select-toggle-enter {
   from {
     opacity: 0;
-    transform: translateX(-8px) scale(0.9);
+    transform: translateY(-4px) scale(0.92);
   }
   to {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: translateY(0) scale(1);
   }
 }
 
 .ds-pattern-bulk-select-toggle .ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger {
+  gap: var(--ds-spacing-2, 6px);
   transition:
-    background-color var(--ds-duration-normal) ease,
-    border-color var(--ds-duration-normal) ease,
-    box-shadow var(--ds-duration-normal) ease,
-    color var(--ds-duration-normal) ease;
+    background-color var(--ds-motion-normal) var(--ds-motion-ease-move, ease),
+    border-color var(--ds-motion-normal) var(--ds-motion-ease-move, ease),
+    box-shadow var(--ds-motion-normal) var(--ds-motion-ease-move, ease),
+    color var(--ds-motion-normal) var(--ds-motion-ease-move, ease);
+}
+
+/* The count reads as data: tabular numerals keep the badge width stable as the
+   figure changes (no layout jitter on select-all), sized on the caption rung. */
+.ds-pattern-bulk-select-toggle .ds-bulk-select-toggle__count.ds-bulk-select-toggle__count {
+  font-size: var(--ds-font-size-xs, 12px);
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-pattern-bulk-select-toggle [data-part='icon'] {
+  inline-size: 14px;
+  block-size: 14px;
 }
 
 .ds-pattern-bulk-select-toggle[data-active='true'] .ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger {
@@ -30,9 +43,22 @@
 }
 
 .ds-pattern-bulk-select-toggle[data-active='true'] [data-part='icon'] {
-  animation: ds-bulk-select-toggle-enter var(--ds-duration-normal) ease-out;
+  animation: ds-bulk-select-toggle-enter var(--ds-motion-normal)
+    var(--ds-motion-ease-enter, ease-out);
 }
 
 .ds-pattern-bulk-select-toggle[data-has-selection='true'] .ds-bulk-select-toggle__count.ds-bulk-select-toggle__count {
-  animation: ds-bulk-select-toggle-enter var(--ds-duration-normal) ease-out;
+  animation: ds-bulk-select-toggle-enter var(--ds-motion-normal)
+    var(--ds-motion-ease-enter, ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-bulk-select-toggle .ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger {
+    transition: none;
+  }
+
+  .ds-pattern-bulk-select-toggle[data-active='true'] [data-part='icon'],
+  .ds-pattern-bulk-select-toggle[data-has-selection='true'] .ds-bulk-select-toggle__count.ds-bulk-select-toggle__count {
+    animation: none;
+  }
 }

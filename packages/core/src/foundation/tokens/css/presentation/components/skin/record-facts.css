@@ -3,6 +3,15 @@
  *
  * One section boundary, then internal segmentation. There are deliberately no
  * accent rails and no card-per-value treatment.
+ *
+ * DIVISION OF RESPONSIBILITY (two skins, do NOT unify — the wiring imports
+ * both): THIS shared presentation skin (layer rottay-components) owns the
+ * baseline anatomy paint every engine renders — the three engines share one
+ * foundation engine. The modern-only remediation layer lives in
+ * `runtime/engines/modern/skin/record-facts.css` (layer rottay-engines,
+ * sorted after this one): modern word-wrap/tabular-nums refinements and the
+ * forced-colors re-expression, scoped on the `.ds-engine-modern` stamp so
+ * classic/rustic paint stays untouched.
  */
 
 .ds-pattern-record-facts[data-part="root"][data-part="root"] {
@@ -267,6 +276,16 @@
   line-height: 1.35;
 }
 
+/* Joining-script guard (Typography lane precedent): the tracked uppercase
+   mono label and the tight display tracking break contextual joining in
+   Arabic-script copy, so textual tracking collapses to `normal` under a
+   joining-script lang. */
+.ds-pattern-record-facts .ds-record-facts__label:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
+.ds-pattern-record-facts .ds-record-facts__title:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
+.ds-pattern-record-facts .ds-record-facts__value:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks) {
+  letter-spacing: normal;
+}
+
 .ds-pattern-record-facts .ds-record-facts__skeleton {
   display: grid;
   grid-column: span 4;
@@ -311,12 +330,29 @@
     transparent
   );
   transform: translateX(-100%);
-  animation: ds-record-facts-shimmer 1.4s ease-in-out infinite;
+  /* The sweep cadence derives from the slowest motion rung (glacial × 2.8 ≈
+     1.4s) so tenant motion scaling governs it; no raw durations. */
+  animation: ds-record-facts-shimmer
+    calc(var(--ds-motion-glacial, 500ms) * 2.8)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
 }
 
 @keyframes ds-record-facts-shimmer {
   to {
     transform: translateX(100%);
+  }
+}
+
+/* RTL: the shimmer sweeps WITH the reading direction — it starts off the
+   inline-end edge and travels towards the inline-start one. */
+.ds-pattern-record-facts:dir(rtl) .ds-record-facts__skeleton-line::after {
+  transform: translateX(100%);
+  animation-name: ds-record-facts-shimmer-rtl;
+}
+
+@keyframes ds-record-facts-shimmer-rtl {
+  to {
+    transform: translateX(-100%);
   }
 }
 

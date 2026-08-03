@@ -41,7 +41,23 @@
  * with the identical value -- exactly one of the two ever renders per instance,
  * so there is no shadowing risk the TWO ROOTS law above warns about; a `ds-rail`
  * container-query descendant works unconditionally regardless of which branch
- * is live.
+ * is live. The narrow-rail block at the end of this file uses it to tighten
+ * card/row paddings below 340px.
+ *
+ * WAVE S617B (geometry drain + landmark): both roots render as `aside` with an
+ * aria-label (the rail is a complementary landmark), and the rail's own static
+ * geometry moved here from the engines' inline styles: root paddings (keyed per
+ * branch, logical conversion keeps the extra 2px on the OUTER edge under RTL),
+ * the `sticky` part (position + token offset; the default branch adds its
+ * column flex + gap), the card bodies (`identity-card-body`, `custom-content`),
+ * `match-reason-panel` offset/padding, `snapshot-header`/`snapshot-body`/
+ * `snapshot-row`/`snapshot-empty-frame` paddings, and the two close-button
+ * 34px squares (`[data-part='close']` on the default branch — additive stable
+ * anatomy; `.ds-selection-preview-rail__close` on the custom branch, per the
+ * CLOSE-BUTTON RULE above). Exact spacing rungs are used where the historical
+ * value lands on one (16px/12px); the rest stay literal. The composed Button
+ * primitive keeps its coarse-pointer `--ds-touch-target-min` floor: the 34px
+ * inline `min-width` that used to veto it is gone.
  */
 
 /* roots — two mutually-exclusive trees, keyed on data-preview ---------------- */
@@ -51,6 +67,10 @@
   background: transparent;
   container-type: inline-size;
   container-name: ds-rail;
+  /* drained from the engine's inline '14px 16px 14px 14px' (logical: the
+     extra 2px stays on the outer edge under RTL) */
+  padding-block: 14px;
+  padding-inline: 14px 16px;
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default'] {
@@ -58,6 +78,20 @@
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-elevated) 6%), var(--ds-surface-card));
   container-type: inline-size;
   container-name: ds-rail;
+  /* drained from the engine's inline '18px 18px 18px 16px' */
+  padding-block: 18px;
+  padding-inline: 16px 18px;
+}
+
+/* sticky waypoint (new stable part; offset rides the 16px spacing rung) --- */
+.ds-structure.ds-selection-preview-rail [data-part='sticky'] {
+  position: sticky;
+  top: var(--ds-spacing-4, 16px);
+}
+.ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default'] [data-part='sticky'] {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 /* customPreview branch ------------------------------------------------------- */
@@ -73,12 +107,21 @@
 }
 
 /* The ghost close button: b6 through the real ancestor chain (contract test
-   requires b>=6 + both channels declared); the blur is opt-in (default none). */
+   requires b>=6 + both channels declared); the blur is opt-in (default none).
+   The 34px square is drained from the retired inline style — as a min-*
+   constraint it now yields to the primitive's coarse-pointer touch floor. */
 .ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom']
   [data-part='custom-sticky-card']
   .ds-selection-preview-rail__close {
+  inline-size: 34px;
+  min-inline-size: 34px;
   background: color-mix(in srgb, var(--ds-surface-card) 80%, transparent);
   backdrop-filter: var(--ds-selection-preview-rail-close-backdrop, none);
+}
+
+/* the consumer render's own padded frame (new stable part) */
+.ds-structure.ds-selection-preview-rail [data-part='custom-content'] {
+  padding: var(--ds-spacing-4, 16px);
 }
 
 /* default branch — identity card --------------------------------------------- */
@@ -93,6 +136,19 @@
   border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
 }
 
+/* card body padding drained from inline ('18px 18px 16px'); the default
+   branch's own close affordance (new stable part) mirrors the custom
+   branch's 34px square */
+.ds-structure.ds-selection-preview-rail [data-part='identity-card-body'] {
+  padding-block: 18px 16px;
+  padding-inline: 18px;
+}
+.ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='close'] {
+  inline-size: 34px;
+  min-inline-size: 34px;
+  padding: 0;
+}
+
 /* The identity card's top rule is a SOFT surface tint, never a solid accent
    bar (the house bans structural color accents; the sanctioned idiom is the
    7–8% card-header tint — widget-board toolbar, cockpit root). */
@@ -105,6 +161,10 @@
 .ds-structure.ds-selection-preview-rail [data-part='match-reason-panel'] {
   border-radius: var(--ds-radius-lg, 12px);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 4%, transparent));
+  /* offset + padding drained from inline ('marginTop: 16; 14px 14px 14px 16px') */
+  margin-block-start: var(--ds-spacing-4, 16px);
+  padding-block: 14px;
+  padding-inline: var(--ds-spacing-4, 16px) 14px;
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-panel'] {
@@ -130,10 +190,29 @@
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header'] {
   border-bottom: 1px solid var(--ds-color-border-subtle);
+  /* drained from inline ('14px 18px') */
+  padding-block: 14px;
+  padding-inline: 18px;
+}
+
+/* rows wrapper (new stable part; padding drained from inline '6px 0') */
+.ds-structure.ds-selection-preview-rail [data-part='snapshot-body'] {
+  padding-block: 6px;
+  padding-inline: 0;
 }
 
 .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row'] {
   border-top: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 60%, transparent);
+  /* drained from inline ('12px 18px'; the block rung is exact) */
+  padding-block: var(--ds-spacing-3, 12px);
+  padding-inline: 18px;
+  /* an unbroken value (an ID, a URL) wraps instead of blowing the rail out */
+  overflow-wrap: anywhere;
+}
+
+/* empty snapshot frame (new stable part; padding drained from inline '18px') */
+.ds-structure.ds-selection-preview-rail [data-part='snapshot-empty-frame'] {
+  padding: 18px;
 }
 
 /* ---------------------------------------------------------------------------
@@ -170,6 +249,24 @@
 }
 .ds-structure.ds-selection-preview-rail [data-part='root'] [data-part='fallback-string'][data-size] {
   line-height: 1.45;
+}
+
+/* ---- narrow rail (W6-A container): below 340px the cards and rows tighten
+        their drained paddings instead of crushing the text column; the
+        selectors mirror the base rules' specificity so source order decides. ---- */
+@container ds-rail (max-width: 340px) {
+  .ds-structure.ds-selection-preview-rail [data-part='identity-card-body'] {
+    padding-block: 14px 12px;
+    padding-inline: 14px;
+  }
+  .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header'] {
+    padding-block: 12px;
+    padding-inline: 14px;
+  }
+  .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row'] {
+    padding-block: 10px;
+    padding-inline: 14px;
+  }
 }
 
 /* ---- forced colors: every structure-owned frame reads as ButtonText (the

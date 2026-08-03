@@ -78,8 +78,14 @@ export function HeaderSurface({
         spacing={mobileCompact ? 'sm' : 'lg'}
       >
         {config.presentation.description && (
+          // Muted ink and the compact size ride the Typography channels
+          // (`color`/`size` props): typography.css sorts in `rottay-engines`
+          // (and size resolves inline), so the retired skin paint could never
+          // win — the class stays as a pure anatomy landing hook.
           <Text
             className="ds-header__muted-text"
+            color="muted"
+            size={mobileCompact ? 'sm' : undefined}
           >
             {config.presentation.description}
           </Text>
@@ -100,6 +106,8 @@ export function HeaderSurface({
                   {tab.description && (
                     <Text
                       className="ds-header__muted-text"
+                      color="muted"
+                      size={mobileCompact ? 'sm' : undefined}
                     >{tab.description}</Text>
                   )}
                   <Box>{tab.content}</Box>

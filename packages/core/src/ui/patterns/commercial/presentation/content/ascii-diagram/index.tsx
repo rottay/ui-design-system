@@ -22,8 +22,32 @@ const H_GAP = 6;
 const V_GAP = 2;
 const MIN_INNER_WIDTH = 8;
 
-/** Milliseconds each grid line stays revealed for before the next one appears ("type" reveal). */
+/**
+ * Fallback for the "type" reveal cadence (milliseconds each grid line stays revealed for
+ * before the next one appears). The effective cadence is private to this reveal grammar and
+ * read from `--_ds-ascii-diagram-line-cadence`; this constant applies only when that local
+ * channel is undeclared or unparseable.
+ */
 const LINE_STEP_MS = 90;
+
+/** Family-private channel governing the "type" reveal cadence (see `LINE_STEP_MS`). */
+const LINE_CADENCE_AXIS = "--_ds-ascii-diagram-line-cadence";
+
+/**
+ * Reads a private `<time>` channel from the resolved style of `node`, falling back to
+ * `fallbackMs` when it is undeclared or unparseable. Called only inside effects, once per
+ * animation run.
+ */
+function readCadenceTimeMs(node: HTMLElement | null, axis: string, fallbackMs: number): number {
+  if (node === null || typeof getComputedStyle !== "function") return fallbackMs;
+  const raw = getComputedStyle(node).getPropertyValue(axis).trim();
+  const parsed = raw.endsWith("ms")
+    ? Number.parseFloat(raw)
+    : raw.endsWith("s")
+      ? Number.parseFloat(raw) * 1000
+      : Number.NaN;
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallbackMs;
+}
 
 type CharGrid = string[][];
 
@@ -307,12 +331,13 @@ export function AsciiDiagram({
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
     const lines = fullText.split("\n");
+    const stepMs = readCadenceTimeMs(ref.current, LINE_CADENCE_AXIS, LINE_STEP_MS);
 
     function step(count: number): void {
       if (cancelled) return;
       setDisplay(lines.slice(0, count).join("\n"));
       if (count < lines.length) {
-        timer = setTimeout(() => step(count + 1), LINE_STEP_MS);
+        timer = setTimeout(() => step(count + 1), stepMs);
       }
     }
 
@@ -331,11 +356,12 @@ export function AsciiDiagram({
     <div
       ref={ref}
       className={classes}
+      data-part="root"
       data-reveal={reveal}
       data-visible={revealed ? "true" : "false"}
     >
       <span className="rt-ascii-diagram__visually-hidden">{description}</span>
-      <pre className="rt-ascii-diagram__grid" aria-hidden="true">
+      <pre className="rt-ascii-diagram__grid" data-part="grid" aria-hidden="true">
         {typedText}
       </pre>
     </div>

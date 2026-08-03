@@ -181,6 +181,14 @@ export function DashboardHeader({
 
   // ---------- Compact mode (phone) ----------
   if (compact) {
+    // The two-slot action budget must never hide the primary action: a stable
+    // partition floats primary variants ahead of the rest while preserving
+    // the consumer's relative order inside each group.
+    const compactActions = actions
+      ? [...actions].sort(
+          (a, b) => Number(b.variant === 'primary') - Number(a.variant === 'primary'),
+        )
+      : [];
     return (
       <Box
         data-part="root"
@@ -196,19 +204,19 @@ export function DashboardHeader({
         <Flex justify="between" align="center" gap={3}>
           <Flex align="center" gap={2} style={{ flex: 1, minWidth: 0 }}>
             {icon && <Box data-part="icon" aria-hidden="true" style={{ flexShrink: 0 }}>{icon}</Box>}
-            <Text data-part="title" size="md" weight="semibold" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <Box data-part="title" as="h1">
               {title}
-            </Text>
+            </Box>
             {status && <StatusDot state={status.state} label={status.label} />}
           </Flex>
-          {actions && actions.length > 0 && (
+          {compactActions.length > 0 && (
             <Box
               data-part="actions"
               role="toolbar"
               aria-label={actionsLabel}
               style={{ display: 'flex', gap: 4 }}
             >
-              {actions.slice(0, 2).map((action) => (
+              {compactActions.slice(0, 2).map((action) => (
                 <Button
                   key={action.key}
                   variant={action.variant === 'primary' ? 'primary' : 'ghost'}
@@ -268,7 +276,7 @@ export function DashboardHeader({
             {icon && <Box data-part="icon" aria-hidden="true" style={{ flexShrink: 0 }}>{icon}</Box>}
             <Box data-part="copy">
               <Flex align="center" gap={2}>
-                <Text data-part="title" size="xl" weight="semibold">{title}</Text>
+                <Box data-part="title" as="h1">{title}</Box>
                 {status && <StatusDot state={status.state} label={status.label} />}
               </Flex>
               {subtitle && (

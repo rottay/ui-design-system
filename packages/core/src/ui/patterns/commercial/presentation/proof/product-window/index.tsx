@@ -21,18 +21,24 @@ export function ProductWindow({
   const classes = ["rt-product-window", className].filter(Boolean).join(" ");
 
   return (
-    <As className={classes}>
-      <div className="rt-product-window__frame">
-        <div className="rt-product-window__titlebar">
-          <span className="rt-product-window__affordance" aria-hidden="true">
+    <As className={classes} data-part="root">
+      <div className="rt-product-window__frame" data-part="frame">
+        <div className="rt-product-window__titlebar" data-part="titlebar">
+          <span className="rt-product-window__affordance" data-part="affordance" aria-hidden="true">
             •••
           </span>
-          <span className="rt-product-window__label">{label}</span>
+          <span className="rt-product-window__label" data-part="label">
+            {label}
+          </span>
         </div>
-        <div className="rt-product-window__content">{children}</div>
+        <div className="rt-product-window__content" data-part="content">
+          {children}
+        </div>
       </div>
       {caption != null && (
-        <figcaption className="rt-product-window__caption">{caption}</figcaption>
+        <figcaption className="rt-product-window__caption" data-part="caption">
+          {caption}
+        </figcaption>
       )}
     </As>
   );

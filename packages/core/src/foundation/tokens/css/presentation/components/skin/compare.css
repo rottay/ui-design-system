@@ -73,6 +73,41 @@
   scrollbar-gutter: stable;
 }
 
+/* ---- compare-mirror skeleton: each section keeps its heading band and
+        table frame through the load, so the swap to real content is a pure
+        paint change, never a layout shift. The pulse rides the canonical
+        `ds-foundation-pulse` keyframes on the `--ds-motion-attention`
+        channel and goes quiet under reduced motion. Fills are neutral
+        surface tokens, so forced colors needs no re-keying here (the
+        composed Cards/Table force their own frames). ---- */
+.ds-surface.ds-compare [data-part="compare-skeleton-block"] {
+  border-radius: var(--ds-skeleton-radius, var(--ds-radius-md, 8px));
+  background: var(
+    --ds-skeleton-bg,
+    var(--ds-surface-panel, var(--ds-color-bg-secondary))
+  );
+  animation: ds-foundation-pulse
+    var(--ds-skeleton-animation-duration, var(--ds-motion-attention, 1.5s))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+
+.ds-surface.ds-compare
+  [data-part="compare-skeleton-block"][data-size="section-title"] {
+  inline-size: 42%;
+  min-block-size: 20px;
+}
+
+.ds-surface.ds-compare
+  [data-part="compare-skeleton-block"][data-size="table"] {
+  min-block-size: 240px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-surface.ds-compare [data-part="compare-skeleton-block"] {
+    animation: none;
+  }
+}
+
 /* forced-colors: the section chrome re-asserts in system colors -- the
    heading keeps a framed boundary and the divider hairline degrades to
    ButtonText. The muted ink auto-maps; the label hierarchy survives through

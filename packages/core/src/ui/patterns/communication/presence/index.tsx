@@ -9,11 +9,22 @@
  * data (user lists, typing state, cursor positions). All components are
  * engine-agnostic -- they use DS primitives with runtime style props and CSS
  * variables, no engine switch needed.
+ *
+ * Inline `style` carries ONLY genuine runtime data (per-user ring color,
+ * size-variant pixel geometry, the overlap offset, the cursor coordinates);
+ * every static geometry/paint/motion decision lives in
+ * `presentation/components/skin/presence.css`. Motion rides the
+ * `--ds-motion-*` canon, and the typing-dot loop period rides the
+ * private `--_ds-presence-dot-duration` channel.
+ * Typing copy is ONE parametric catalog message per arity (never
+ * concatenated fragments) and the name list joins through Intl.ListFormat
+ * in the active locale.
  */
 
 import React from 'react';
 
 import { Box, Text } from '../../../primitives';
+import { formatList, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -119,6 +130,9 @@ export function PresenceBar({
   size = 'md',
   showNames = true,
 }: PresenceBarProps): React.ReactElement | null {
+  // Optional channel with an English floor: renders standalone (no provider)
+  // without crashing and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
   if (users.length === 0) return null;
 
   const dims = SIZE_MAP[size];
@@ -126,15 +140,16 @@ export function PresenceBar({
   const overflowCount = Math.max(0, users.length - maxVisible);
   const overlap = Math.round(dims.avatar * 0.3);
 
+  // The stack reads as a LIST to assistive tech: who is present is
+  // information, not decoration -- each avatar is a named listitem (the
+  // image alt or the visible initials name it) and the root carries the
+  // group's accessible name.
   return (
     <Box
       className="ds-presence-bar"
       data-part="root"
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        position: 'relative',
-      }}
+      role="list"
+      aria-label={i18n?.tOr('presence.barLabel', 'People present') ?? 'People present'}
     >
       {visibleUsers.map((user, index) => {
         const ringColor = user.color || DEFAULT_COLOR;
@@ -143,47 +158,35 @@ export function PresenceBar({
           <Box
             key={user.id}
             data-part="avatar"
+            role="listitem"
             title={showNames ? user.name : undefined}
             style={{
-              width: dims.avatar,
-              height: dims.avatar,
-              // Ring color is caller-supplied per-user data; the width still
-              // rides this declaration since it is bound to the same size
-              // variant, so the whole border stays inline.
+              // Runtime-only inline: size-variant pixel geometry, the
+              // caller-supplied ring color (bound to the same size variant),
+              // the overlap offset and the stacking order. Static geometry,
+              // the hover lift and its transition are skin-owned.
+              inlineSize: dims.avatar,
+              blockSize: dims.avatar,
               border: `${dims.ring}px solid ${ringColor}`,
-              overflow: 'hidden',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginLeft: index > 0 ? -overlap : 0,
-              position: 'relative',
+              marginInlineStart: index > 0 ? -overlap : 0,
               zIndex: users.length - index,
-              cursor: 'default',
-              flexShrink: 0,
-              boxSizing: 'border-box',
-              transition: 'transform 150ms ease',
             }}
           >
             {user.avatar ? (
               <img
                 src={user.avatar}
                 alt={user.name}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block',
-                }}
               />
             ) : (
               <Text
                 data-part="avatar-initials"
+                weight="semibold"
                 style={{
+                  // Runtime-only inline: size-variant font + the caller ring
+                  // color as the initials ink. Static line-height/user-select
+                  // are skin-owned.
                   fontSize: dims.font,
-                  fontWeight: 600,
-                  lineHeight: 1,
                   color: ringColor,
-                  userSelect: 'none',
                 }}
               >
                 {getInitials(user.name)}
@@ -196,35 +199,34 @@ export function PresenceBar({
       {overflowCount > 0 && (
         <Box
           data-part="overflow-badge"
-          title={users
-            .slice(maxVisible)
-            .map((u) => u.name)
-            .join(', ')}
+          role="listitem"
+          /* The overflow is named for AT as ONE parametric catalog message
+             ({count}); the hover tooltip lists the hidden names joined
+             through Intl.ListFormat in the active locale (never a raw
+             comma-join). */
+          aria-label={
+            i18n?.tOr('presence.overflowLabel', '{count} more people', { count: overflowCount })
+            ?? `${overflowCount} more people`
+          }
+          title={formatList(
+            users.slice(maxVisible).map((u) => u.name),
+            i18n?.locale ?? 'en',
+          )}
           style={{
-            width: dims.avatar,
-            height: dims.avatar,
-            // The ring is a fixed neutral border whose width still tracks the
-            // `size` variant, so only the width rides this uncounted custom
-            // property; the style + color are static and live in the skin.
+            // Runtime-only inline: size-variant geometry, the ring-width
+            // hatch (tracks `size`, consumed by the skin's static border) and
+            // the overlap offset. Statics live in the skin.
+            inlineSize: dims.avatar,
+            blockSize: dims.avatar,
             '--ds-presence-badge-ring': `${dims.ring}px`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginLeft: -overlap,
-            position: 'relative',
-            zIndex: 0,
-            cursor: 'default',
-            flexShrink: 0,
-            boxSizing: 'border-box',
+            marginInlineStart: -overlap,
           } as React.CSSProperties}
         >
           <Text
             data-part="overflow-badge-count"
+            weight="semibold"
             style={{
               fontSize: dims.font,
-              fontWeight: 600,
-              lineHeight: 1,
-              userSelect: 'none',
             }}
           >
             +{overflowCount}
@@ -267,9 +269,13 @@ export function PresenceTypingIndicator({
   users,
   maxNames = 2,
 }: PresenceTypingIndicatorProps): React.ReactElement | null {
+  // Optional channel with an English floor: renders standalone (no provider)
+  // without crashing and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
   if (users.length === 0) return null;
 
-  const label = buildTypingLabel(users, maxNames);
+  const label = buildTypingLabel(users, maxNames, (key, floor, params) =>
+    i18n?.tOr(key, floor, params) ?? floor, i18n?.locale);
 
   return (
     <Box
@@ -277,29 +283,17 @@ export function PresenceTypingIndicator({
       data-part="root"
       role="status"
       aria-live="polite"
-      style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
     >
-      <Box aria-hidden="true" style={{ display: 'inline-flex', gap: 3 }}>
+      {/* Geometry + motion are skin-owned: the dots bounce on the
+          private `--_ds-presence-dot-duration` channel with an
+          nth-child stagger and hold static under `prefers-reduced-motion`
+          (the role=status label keeps the state comprehensible). */}
+      <Box data-part="dots" aria-hidden="true">
         {[0, 1, 2].map((index) => (
-          <Box
-            key={index}
-            data-part="typing-dot"
-            style={{
-              width: 5,
-              height: 5,
-              animation: `ds-presence-dot 1.2s ease-in-out ${index * 0.15}s infinite`,
-            }}
-          />
+          <Box key={index} data-part="typing-dot" />
         ))}
       </Box>
-      <Text
-        data-part="label"
-        style={{
-          fontSize: 13,
-        }}
-      >
-        {label}
-      </Text>
+      <Text data-part="label">{label}</Text>
     </Box>
   );
 }
@@ -343,23 +337,25 @@ export function LiveCursor({
       data-part="root"
       aria-hidden="true"
       style={{
-        position: 'absolute',
-        left: position.x,
-        top: position.y,
-        pointerEvents: 'none',
-        zIndex: 9999,
+        // Runtime-only hatches: pointer coordinates are data, while the skin
+        // owns the compositor transform. Physical translate is CORRECT here:
+        // pointer coordinates live in physical space, not writing direction.
+        '--ds-presence-cursor-x': `${position.x}px`,
+        '--ds-presence-cursor-y': `${position.y}px`,
         opacity: visible ? 1 : 0,
-        transition: 'left 120ms linear, top 120ms linear, opacity 200ms ease',
-        willChange: 'left, top',
-      }}
+      } as React.CSSProperties}
     >
-      {/* Cursor arrow SVG */}
+      {/* Cursor arrow glyph. ICON GAP (registered, owner: graphics): the
+          generated semantic catalog ships 282 roles and none of them is a
+          collaboration cursor/pointer -- until a governed role lands, the
+          glyph stays pattern-owned, decorative (the root is aria-hidden) and
+          tinted by the caller's per-user color. Do NOT mirror it under RTL:
+          a pointer glyph lives in physical space, like the coordinates. */}
       <svg
         width="16"
         height="20"
         viewBox="0 0 16 20"
         fill="none"
-        style={{ display: 'block' }}
       >
         <path
           data-part="cursor-fill"
@@ -373,20 +369,12 @@ export function LiveCursor({
         />
       </svg>
 
-      {/* Name label badge */}
+      {/* Name label badge (background is the caller's per-user color --
+          runtime data; the ink, shape, shadow and offsets are skin-owned) */}
       <Box
         data-part="cursor-badge"
         style={{
-          position: 'absolute',
-          left: 12,
-          top: 16,
           background: cursorColor,
-          fontSize: 11,
-          fontWeight: 600,
-          lineHeight: 1,
-          padding: '3px 6px',
-          whiteSpace: 'nowrap',
-          userSelect: 'none',
         }}
       >
         {user.name}
@@ -409,20 +397,27 @@ function getInitials(name: string): string {
 /**
  * Builds a grammatically correct typing label from a list of users.
  * - 1 user: "Alice is typing..."
- * - 2 users (within maxNames): "Alice and Bob are typing..."
- * - 3+ users (beyond maxNames): "3 people are typing..."
+ * - within maxNames: "Alice and Bob are typing..."
+ * - beyond maxNames: "3 people are typing..."
+ *
+ * Each arity is ONE parametric catalog message (`{name}` / `{names}` /
+ * `{count}`) with an English floor -- translated fragments are never
+ * concatenated. Multi-name lists join through Intl.ListFormat in the active
+ * locale, so the conjunction itself localizes ("A, B y C" / Arabic "و").
  */
 function buildTypingLabel(
   users: Array<{ name: string }>,
   maxNames: number,
+  t: (key: string, floor: string, params: Record<string, string | number>) => string,
+  locale?: string,
 ): string {
   if (users.length === 1) {
-    return `${users[0].name} is typing...`;
+    return t('presence.typing.one', '{name} is typing...', { name: users[0].name });
   }
   if (users.length <= maxNames) {
     const names = users.map((u) => u.name);
-    const last = names.pop()!;
-    return `${names.join(', ')} and ${last} are typing...`;
+    const joined = formatList(names, locale ?? 'en');
+    return t('presence.typing.some', '{names} are typing...', { names: joined });
   }
-  return `${users.length} people are typing...`;
+  return t('presence.typing.many', '{count} people are typing...', { count: users.length });
 }

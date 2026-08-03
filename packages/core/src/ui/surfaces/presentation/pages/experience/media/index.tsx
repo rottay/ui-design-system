@@ -239,6 +239,16 @@ export function MediaSurface({
     config.visual.layout ??
     (config.presentation.renderDetails || config.presentation.renderPreview ? 'detail' : 'gallery');
   const showDetailsRail = !!selectedItem && resolvedLayout === 'detail';
+  // `detailsWidth` is contract-declared: when set, the split leaves the fixed
+  // 12-column 7/5 recipe and gives the details rail its own track; the gallery
+  // column stays fluid (`minmax(0, 1fr)`) so long content can never overflow
+  // it (chat `sidebarWidth` / editor `previewWidth` idiom).
+  const detailsTrack =
+    config.visual.detailsWidth === undefined || config.visual.detailsWidth === null
+      ? undefined
+      : typeof config.visual.detailsWidth === 'number'
+        ? `${config.visual.detailsWidth}px`
+        : config.visual.detailsWidth;
   // Gallery column count scales down responsively: desktop uses the configured
   // count, tablet caps at 2 to prevent cramped thumbnails, mobile always
   // collapses to a single column.
@@ -301,9 +311,12 @@ export function MediaSurface({
       aria-busy={loading ? 'true' : undefined}
       data-mobile-columns={resolvedMobile ? galleryColumns : undefined}
       columns={splitActive ? 12 : 1}
+      templateColumns={
+        splitActive && detailsTrack ? `minmax(0, 1fr) minmax(0, ${detailsTrack})` : undefined
+      }
       gap={sectionSpacing}
     >
-      <Grid.Item span={splitActive ? 7 : undefined}>
+      <Grid.Item span={splitActive && !detailsTrack ? 7 : undefined}>
         {loading ? (
           <MediaGallerySkeleton columns={galleryColumns} />
         ) : config.behavior.items.length === 0 ? (
@@ -380,7 +393,7 @@ export function MediaSurface({
       </Grid.Item>
 
       {railVisible && (
-        <Grid.Item span={!shouldStack ? 5 : undefined}>
+        <Grid.Item span={!shouldStack && !detailsTrack ? 5 : undefined}>
           {loading ? (
             <MediaRailSkeleton
               previewHeight={previewHeightPx}

@@ -75,6 +75,8 @@ function BreadcrumbLink({
       data-part="crumb"
       data-interactive="false"
       data-last={isLast ? 'true' : 'false'}
+      /* The terminal crumb is the current page: announce it (APG breadcrumb). */
+      aria-current={isLast ? 'page' : undefined}
     >
       {label}
     </span>

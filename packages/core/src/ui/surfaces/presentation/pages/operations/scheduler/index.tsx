@@ -234,6 +234,10 @@ export function SchedulerSurface({
                   <ul
                     className="ds-scheduler__agenda"
                     data-part="mobile-agenda"
+                    // The agenda replaces the calendar grid in list view, so
+                    // the list itself carries the accessible name the
+                    // calendar's own landmarks would otherwise provide.
+                    aria-label={tSurfaceOr('scheduler.agenda_aria', 'Scheduled events')}
                   >
                     {normalizedEvents.map(({ event, start }) => {
                         const eventContent = (

@@ -196,7 +196,12 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
           </span>
         )}
         {showLabel && (
-          <span>{activeLocale?.label ?? locale}</span>
+          /* Autoglottonym: never translated; dir=auto keeps a RTL locale name
+             (e.g. العربية) honest inside a LTR chrome, and lang lets screen
+             readers pronounce it in its own language. */
+          <span data-part="trigger-label" lang={activeLocale?.code ?? locale} dir="auto">
+            {activeLocale?.label ?? locale}
+          </span>
         )}
         <NavigationDownIcon size={12} decorative />
       </button>
@@ -235,7 +240,7 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
                     {loc.flag}
                   </span>
                 )}
-                <span data-part="option-label">{loc.label}</span>
+                <span data-part="option-label" lang={loc.code} dir="auto">{loc.label}</span>
                 {isActive && (
                   <span data-part="check">
                     <StatusVerifiedIcon size={14} decorative />

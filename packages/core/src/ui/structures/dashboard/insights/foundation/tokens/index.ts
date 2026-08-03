@@ -45,3 +45,20 @@ export const METRIC_CARD_METER_FILL_SUCCESS = 'var(--ds-metric-card-meter-fill-s
 export const METRIC_CARD_METER_FILL_WARNING = 'var(--ds-metric-card-meter-fill-warning, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)))';
 export const METRIC_CARD_METER_FILL_ERROR = 'var(--ds-metric-card-meter-fill-error, linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-error)))';
 export const METRIC_MONO_FONT = 'var(--ds-font-family-mono, monospace)';
+
+/**
+ * Splits a display value like "18d" / "4.8%" into a countable number, its
+ * decimal precision and its suffix. The counter animates the number; the
+ * decimals are preserved (the parseInt + Math.floor path truncated decimal
+ * metrics permanently — "4.8" rendered as "4"). Rows/minimal keep their own
+ * verbatim local copies from the earlier pass; this shared copy serves cards
+ * and chart. Unification candidate for Codex (one helper, four call sites).
+ */
+export function parseMetricValue(value: string): { numericValue: number; decimals: number; suffix: string } {
+  const numericText = value.replace(/[^0-9.-]/g, '');
+  return {
+    numericValue: parseFloat(numericText) || 0,
+    decimals: (numericText.split('.')[1] ?? '').length,
+    suffix: value.replace(/[0-9.-]/g, ''),
+  };
+}

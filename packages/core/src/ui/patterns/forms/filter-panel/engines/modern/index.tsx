@@ -40,25 +40,25 @@
 import React, { useState } from 'react';
 import type { FilterPanelProps } from '../../contracts';
 import type { FilterDef } from '../../../../../../foundation/contracts/runtime/components/patterns/core';
-import {
-  AlertTriangleIcon as AlertTriangle,
-  BriefcaseBusinessIcon as BriefcaseBusiness,
-  CalendarClockIcon as CalendarClock,
-  CheckCircle2Icon as CheckCircle2,
-  CircleDotIcon as CircleDot,
-  ClipboardCheckIcon as ClipboardCheck,
-  Clock3Icon as Clock3,
-  Layers3Icon as Layers3,
-  MapPinIcon as MapPin,
-  RouteIcon as Route,
-  ShieldCheckIcon as ShieldCheck,
-  TargetIcon as Target,
-  UserRoundIcon as UserRound,
-  UsersRoundIcon as UsersRound,
-  XCircleIcon as XCircle,
-} from '../../../../../../graphics/icons';
+/* Option-icon heuristics route through the governed semantic-icon facade
+   (generated roles) — never raw glyph imports or local SVG. */
+import { ComplianceReviewIcon } from '@/graphics/icons/presentation/semantic/generated/roles/compliance-review';
+import { EntityGroupIcon } from '@/graphics/icons/presentation/semantic/generated/roles/entity-group';
+import { EntityOrganizationIcon } from '@/graphics/icons/presentation/semantic/generated/roles/entity-organization';
+import { EntityPersonIcon } from '@/graphics/icons/presentation/semantic/generated/roles/entity-person';
+import { LayoutHierarchyIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-hierarchy';
+import { LocationPlaceIcon } from '@/graphics/icons/presentation/semantic/generated/roles/location-place';
+import { NavigationRouteIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-route';
+import { OperationsTargetIcon } from '@/graphics/icons/presentation/semantic/generated/roles/operations-target';
+import { SecurityProtectionIcon } from '@/graphics/icons/presentation/semantic/generated/roles/security-protection';
+import { StatusErrorIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-error';
+import { StatusNeutralIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-neutral';
+import { StatusPendingIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-pending';
+import { StatusSuccessIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-success';
+import { StatusWarningIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-warning';
+import { TimeScheduleIcon } from '@/graphics/icons/presentation/semantic/generated/roles/time-schedule';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
-import { NavigationExpandIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-expand';
+import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import ModernSwitch from '../../../../../primitives/inputs/Switch/engines/modern';
 import ModernCheckbox from '../../../../../primitives/inputs/Checkbox/engines/modern';
@@ -89,7 +89,7 @@ interface FilterPanelCopy {
 
 type FilterOption = NonNullable<FilterDef['options']>[number];
 type FilterOptionTone = NonNullable<FilterOption['tone']>;
-type FilterIconComponent = React.ComponentType<{ size?: number; strokeWidth?: number }>;
+type FilterIconComponent = typeof StatusNeutralIcon;
 
 /** Maps the pattern's number-or-empty range vocabulary onto the composed
  *  InputNumber's `number | null` contract ('' and undefined both mean empty). */
@@ -124,22 +124,22 @@ function inferOptionTone(filter: FilterDef, option: FilterOption): FilterOptionT
 function inferOptionIcon(filter: FilterDef, option: FilterOption): FilterIconComponent {
   const token = `${normalizeFilterToken(filter.key)} ${normalizeFilterToken(filter.label)} ${normalizeFilterToken(option.value)} ${normalizeFilterToken(option.label)}`;
 
-  if (/(cancel|reject|failed|blocked|closed|no hire|no show)/.test(token)) return XCircle;
-  if (/(needs|missing|gap|risk|urgent|overdue|unassigned|unscored|attention)/.test(token)) return AlertTriangle;
-  if (/(ready|scored|completed|active|accepted|approved|hired|published|attached|assigned|clear)/.test(token)) return CheckCircle2;
-  if (/(score|evidence|debrief|readiness|review|decision)/.test(token)) return ClipboardCheck;
-  if (/(date|time|deadline|schedule|scheduled|clock|cadence|recent)/.test(token)) return CalendarClock;
-  if (/(owner|interviewer|recruiter|team|squad|panel|candidate)/.test(token)) return UsersRound;
-  if (/(person|user|requester|referrer|employee)/.test(token)) return UserRound;
-  if (/(job|role|position|department|business unit|client|company)/.test(token)) return BriefcaseBusiness;
-  if (/(location|market|remote|hybrid|onsite|on site)/.test(token)) return MapPin;
-  if (/(route|meeting|link)/.test(token)) return Route;
-  if (/(priority|target|fit|match|confidence)/.test(token)) return Target;
-  if (/(status|stage|type|workflow|category)/.test(token)) return Layers3;
-  if (/(sla|security|approval|compliance|guard)/.test(token)) return ShieldCheck;
-  if (/(pending|draft|open|paused)/.test(token)) return Clock3;
+  if (/(cancel|reject|failed|blocked|closed|no hire|no show)/.test(token)) return StatusErrorIcon;
+  if (/(needs|missing|gap|risk|urgent|overdue|unassigned|unscored|attention)/.test(token)) return StatusWarningIcon;
+  if (/(ready|scored|completed|active|accepted|approved|hired|published|attached|assigned|clear)/.test(token)) return StatusSuccessIcon;
+  if (/(score|evidence|debrief|readiness|review|decision)/.test(token)) return ComplianceReviewIcon;
+  if (/(date|time|deadline|schedule|scheduled|clock|cadence|recent)/.test(token)) return TimeScheduleIcon;
+  if (/(owner|interviewer|recruiter|team|squad|panel|candidate)/.test(token)) return EntityGroupIcon;
+  if (/(person|user|requester|referrer|employee)/.test(token)) return EntityPersonIcon;
+  if (/(job|role|position|department|business unit|client|company)/.test(token)) return EntityOrganizationIcon;
+  if (/(location|market|remote|hybrid|onsite|on site)/.test(token)) return LocationPlaceIcon;
+  if (/(route|meeting|link)/.test(token)) return NavigationRouteIcon;
+  if (/(priority|target|fit|match|confidence)/.test(token)) return OperationsTargetIcon;
+  if (/(status|stage|type|workflow|category)/.test(token)) return LayoutHierarchyIcon;
+  if (/(sla|security|approval|compliance|guard)/.test(token)) return SecurityProtectionIcon;
+  if (/(pending|draft|open|paused)/.test(token)) return StatusPendingIcon;
 
-  return CircleDot;
+  return StatusNeutralIcon;
 }
 
 function renderOptionIcon(filter: FilterDef, option: FilterOption) {
@@ -155,7 +155,7 @@ function renderOptionIcon(filter: FilterDef, option: FilterOption) {
       data-part="option-icon-badge"
       data-tone={tone}
     >
-      <Icon size={13} strokeWidth={2.2} />
+      <Icon decorative size={13} />
     </span>
   );
 }
@@ -199,16 +199,19 @@ function renderFilterControl(
       );
     case 'select':
       return (
-        <ModernSelect
-          size="sm"
-          forceCustomDropdown
-          placeholder={filter.placeholder ?? copy.selectPlaceholder}
-          value={(value as string) ?? undefined}
-          onChange={(val) => onChange(filter.key, val || undefined)}
-          options={filter.options?.map((option) => enrichFilterOption(filter, option)) ?? []}
-          allowClear
-          style={{ width: '100%' }}
-        />
+        /* The input slot marks the select's geometry for the skin (inline
+           width drained from the old inline `style`). */
+        <div data-part="input">
+          <ModernSelect
+            size="sm"
+            forceCustomDropdown
+            placeholder={filter.placeholder ?? copy.selectPlaceholder}
+            value={(value as string) ?? undefined}
+            onChange={(val) => onChange(filter.key, val || undefined)}
+            options={filter.options?.map((option) => enrichFilterOption(filter, option)) ?? []}
+            allowClear
+          />
+        </div>
       );
     case 'multi-select':
       return (
@@ -343,14 +346,14 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
   const i18n = useOptionalTranslation('components');
   const tOr = (key: string, floor: string): string => i18n?.tOr(key, floor) ?? floor;
   const copy: FilterPanelCopy = {
-    apply: tOr('filterPanel.apply', 'Apply'),
-    clearAll: tOr('filterPanel.clearAll', 'Clear all'),
-    collapse: tOr('filterPanel.collapse', 'Collapse filters'),
-    expand: tOr('filterPanel.expand', 'Expand filters'),
-    rangeTo: tOr('filterPanel.rangeTo', 'to'),
-    min: tOr('filterPanel.min', 'Min'),
-    max: tOr('filterPanel.max', 'Max'),
-    selectPlaceholder: tOr('filterPanel.selectPlaceholder', 'Select...'),
+    apply: tOr('filter_panel.apply', 'Apply'),
+    clearAll: tOr('filter_panel.clear_all', 'Clear all'),
+    collapse: tOr('filter_panel.collapse', 'Collapse filters'),
+    expand: tOr('filter_panel.expand', 'Expand filters'),
+    rangeTo: tOr('filter_panel.range_to', 'to'),
+    min: tOr('filter_panel.min', 'Min'),
+    max: tOr('filter_panel.max', 'Max'),
+    selectPlaceholder: tOr('filter_panel.select_placeholder', 'Select...'),
   };
 
   const {
@@ -429,7 +432,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
                 size="sm"
                 data-part="collapse-toggle"
                 data-collapsed={collapsed ? 'true' : 'false'}
-                icon={<NavigationExpandIcon decorative size={14} />}
+                icon={<NavigationDownIcon decorative size={14} />}
                 onClick={() => setCollapsed(!collapsed)}
                 aria-expanded={!collapsed}
                 aria-label={collapsed ? copy.expand : copy.collapse}

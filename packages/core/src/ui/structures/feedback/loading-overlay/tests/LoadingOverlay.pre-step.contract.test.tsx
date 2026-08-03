@@ -23,8 +23,8 @@ describe('LoadingOverlay skin contract', () => {
     expect(SOURCE).not.toContain("borderRadius: 'inherit'");
     expect(SOURCE).not.toContain("color: 'var(--ds-color-text-muted)'");
     expect(SOURCE).not.toContain('@keyframes lo-');
-    expect(SOURCE).toContain('ds-loading-overlay-pulse 1.8s ease-in-out infinite');
-    expect(SOURCE).toContain('ds-loading-overlay-dots 1.4s ease-in-out');
+    expect(SOURCE).not.toContain('ds-loading-overlay-pulse 1.8s ease-in-out infinite');
+    expect(SOURCE).not.toContain('ds-loading-overlay-dots 1.4s ease-in-out');
 
     expect(SKIN).toContain('background: var(--ds-color-bg-primary, rgba(15,23,42,0.85));');
     expect(SKIN).toContain('backdrop-filter: blur(2px);');
@@ -34,6 +34,13 @@ describe('LoadingOverlay skin contract', () => {
     expect(SKIN).toContain('0%, 100% { opacity: 0.4; transform: scale(1); }');
     expect(SKIN).toContain('50% { opacity: 1; transform: scale(1.08); }');
     expect(SKIN).toContain('@keyframes ds-loading-overlay-dots');
+    expect(SKIN).toContain('animation: ds-loading-overlay-pulse');
+    expect(SKIN).toContain('--_ds-loading-overlay-pulse-duration');
+    expect(SKIN).toContain('animation: ds-loading-overlay-dots');
+    expect(SKIN).toContain('--_ds-loading-overlay-dots-duration');
+    expect(SKIN).toContain("[data-part='dot'][data-dot-index='1']");
+    expect(SKIN).toContain("[data-part='dot'][data-dot-index='2']");
+    expect(SKIN).toMatch(/@media \(prefers-reduced-motion: reduce\)[\s\S]*animation: none/);
   });
 
   it.each(ENGINES)('renders nothing when hidden (%s)', (engine) => {
@@ -71,6 +78,7 @@ describe('LoadingOverlay skin contract', () => {
 
     const dots = container.querySelectorAll<HTMLElement>('[data-part="dot"]');
     expect(dots).toHaveLength(3);
+    expect([...dots].map((dot) => dot.dataset.dotIndex)).toEqual(['0', '1', '2']);
 
     expect(container.querySelector('style')).toBeNull();
   });

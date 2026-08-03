@@ -22,23 +22,33 @@
  *
  * Keyboard shortcut: pressing `/` outside an input focuses the command
  * input (matches the original app-platform behavior).
+ *
+ * COMPOSITION LAW (premium wave): every interactive element is the Button
+ * primitive (engine resolved by the DesignSystemProvider; P-79 caller-part
+ * honesty), icons
+ * are the governed semantic roles (the local search glyph and the legacy
+ * lucide re-exports are retired), and ALL geometry lives in the skin —
+ * keyed on the stamped data hooks (`data-embedded`, `data-editorial-tech`,
+ * `data-has-top-rail`, `data-voice-status`, `data-voice-active`) and on
+ * structural `:has()` ladders for the voice-cluster overlay paddings. The
+ * chips/toggles keep their custom paint through the Button ghost channels
+ * (`--ds-button-ghost-*`), never through selector wars.
  */
 
 import { useEffect, useMemo, useState } from 'react';
 
-import {
-  AudioLinesIcon as AudioLines,
-  ExternalLinkIcon as ExternalLink,
-  LoaderCircleIcon as LoaderCircle,
-  MicIcon as Mic,
-  XIcon as X,
-} from '../../../../../graphics/icons';
+import { ActionSearchIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-search';
+import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
+import { ActionOpenExternalIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-open-external';
+import { CommunicationVoiceIcon } from '@/graphics/icons/presentation/semantic/generated/roles/communication-voice';
+import { DeviceMicrophoneIcon } from '@/graphics/icons/presentation/semantic/generated/roles/device-microphone';
+import { StatusLoadingIcon } from '@/graphics/icons/presentation/semantic/generated/roles/status-loading';
 
 import { useVoiceInput } from '@/infrastructure/runtime/application/automation/voice/composition/react/input';
 import { useRegisterCommands } from '@/infrastructure/runtime/application/commands';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ConnectedCommandPalette } from '..';
-import { Box, Flex, Input, Text } from '@ui/primitives';
+import { Box, Button, Flex, Input, Text } from '@ui/primitives';
 
 /** A single suggestion chip rendered in the "Smart refine" cluster. */
 export interface SearchCommandSuggestion {
@@ -92,41 +102,20 @@ export interface SearchCommandBarProps {
   showCommandPalette?: boolean;
 }
 
-// -- Inline SVG icons (private to the pattern) ---------------------------------
-
-function SearchIcon() {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ flexShrink: 0 }}
-    >
-      <path
-        d="M7.333 12.667A5.333 5.333 0 1 0 7.333 2a5.333 5.333 0 0 0 0 10.667ZM14 14l-2.9-2.9"
-        stroke="currentColor"
-        strokeWidth="1.33"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+// -- Voice status icon (governed roles; motion is skin-owned) ------------------
 
 function VoiceInputIcon({ status }: { status: 'idle' | 'listening' | 'transcribing' | 'error' | 'unsupported' }) {
   if (status === 'transcribing') {
     // The spin motion lives in the skin (reduced-motion guarded); the engine
     // only names the node.
-    return <LoaderCircle className="ds-search-command-bar__spinning-icon" style={{ width: 15, height: 15 }} />;
+    return <StatusLoadingIcon decorative size={15} className="ds-search-command-bar__spinning-icon" />;
   }
 
   if (status === 'listening') {
-    return <AudioLines style={{ width: 15, height: 15 }} />;
+    return <CommunicationVoiceIcon decorative size={15} />;
   }
 
-  return <Mic style={{ width: 15, height: 15 }} />;
+  return <DeviceMicrophoneIcon decorative size={15} />;
 }
 
 function CommandSuggestionChip({
@@ -137,21 +126,16 @@ function CommandSuggestionChip({
   onClick: () => void;
 }) {
   return (
-    <Box
-      as="button"
+    <Button
+      variant="ghost"
+      size="xs"
+      shape="round"
       data-part="suggestion-chip"
       className="ds-search-command-bar__suggestion-chip"
       onClick={onClick}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        minHeight: 30,
-        padding: '0 11px',
-        cursor: 'pointer',
-      }}
     >
       {label}
-    </Box>
+    </Button>
   );
 }
 
@@ -304,15 +288,6 @@ export function SearchCommandBar({
   const hideInlinePermissionBadge = needsVoicePermission && isCompactViewport;
   const showInlineVoiceBadge = showVoiceBadge && !hideInlinePermissionBadge;
   const hasClearButton = Boolean(command.value.trim()) && !isVoiceActive;
-  const inputRightPadding = voiceSupported
-    ? showInlineVoiceBadge
-      ? hasClearButton ? 278 : 244
-      : hasClearButton
-        ? 122
-        : 88
-    : hasClearButton
-      ? 52
-      : 14;
 
   const voiceBadgeLabel = voiceStatus === 'listening'
     ? tOr('searchCommandBar.badgeListening', 'Listening')
@@ -404,43 +379,17 @@ export function SearchCommandBar({
       data-part="root"
       data-embedded={embedded}
       data-editorial-tech={editorialTech}
+      data-has-top-rail={Boolean(topRailSlot)}
       className="ds-structure ds-search-command-bar"
-      style={{
-        position: 'relative',
-        overflow: 'visible',
-        zIndex: 30,
-        padding: embedded
-          ? editorialTech
-            ? topRailSlot
-              ? '0 20px 10px'
-              : '2px 20px 10px'
-            : '8px 16px 8px'
-          : '10px 16px 12px',
-      }}
     >
-      <Box style={{ position: 'relative', zIndex: 1 }}>
+      <Box data-part="frame">
         {topRailSlot && (
-          <Box
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-              minHeight: editorialTech ? 24 : 22,
-              marginBottom: editorialTech ? 8 : 6,
-            }}
-          >
+          <Box data-part="top-rail">
             {topRailSlot}
           </Box>
         )}
-        <Box
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 12,
-            alignItems: 'center',
-          }}
-        >
-          <Box style={{ minWidth: 0, flex: '1 1 720px' }}>
+        <Box data-part="bar-row">
+          <Box data-part="input-column">
             <Box
               data-part="search-shell"
               className="ds-search-command-bar__search-shell"
@@ -448,24 +397,12 @@ export function SearchCommandBar({
               data-voice-active={isVoiceActive}
               data-editorial-tech={editorialTech}
               data-embedded={embedded}
-              style={{
-                position: 'relative',
-                padding: editorialTech ? 5 : 6,
-              }}
             >
               <Box
                 data-part="search-icon"
                 className="ds-search-command-bar__search-icon"
-                style={{
-                  position: 'absolute',
-                  insetInlineStart: 24,
-                  top: '50%',
-                  pointerEvents: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
               >
-                <SearchIcon />
+                <ActionSearchIcon decorative size={16} />
               </Box>
               <Input
                 id="entity-workspace-command-input"
@@ -478,48 +415,25 @@ export function SearchCommandBar({
                 placeholder={command.placeholder}
                 value={displayValue}
                 onChange={handleInputChange}
-                style={{
-                  height: editorialTech ? 44 : 42,
-                  paddingInlineStart: 46,
-                  paddingInlineEnd: inputRightPadding,
-                }}
               />
 
               {voiceSupported && (
                 <Box
+                  data-part="voice-controls"
                   className="ds-search-command-bar__voice-controls"
-                  style={{
-                    position: 'absolute',
-                    insetInlineEnd: 18,
-                    top: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    maxWidth: 'min(48%, 304px)',
-                  }}
                 >
                   {hasClearButton && (
-                    <Box
-                      as="button"
+                    <Button
+                      variant="ghost"
+                      size="xs"
+                      shape="circle"
                       data-part="clear"
                       className="ds-search-command-bar__clear"
                       onClick={() => handleInputChange('')}
                       aria-label={tOr('searchCommandBar.clearSearch', 'Clear search')}
                       title={tOr('searchCommandBar.clearSearch', 'Clear search')}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        minHeight: 28,
-                        width: 28,
-                        minWidth: 28,
-                        padding: 0,
-                        cursor: 'pointer',
-                        flexShrink: 0,
-                      }}
-                    >
-                      <X style={{ width: 13, height: 13 }} />
-                    </Box>
+                      icon={<ActionCloseIcon decorative size={13} />}
+                    />
                   )}
 
                   {showInlineVoiceBadge && (
@@ -527,32 +441,22 @@ export function SearchCommandBar({
                       data-part="voice-badge"
                       className="ds-search-command-bar__voice-badge"
                       data-voice-status={voiceStatusForSkin}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: 6,
-                        minHeight: 24,
-                        padding: '0 8px',
-                        flexShrink: 1,
-                        minWidth: 0,
-                      }}
                     >
                       <VoiceInputIcon status={voiceStatus} />
                       <Text
                         data-part="voice-badge-label"
                         className="ds-search-command-bar__voice-badge-label"
                         size="xs"
-                        style={{
-                          whiteSpace: 'nowrap',
-                        }}
                       >
                         {voiceBadgeLabel}
                       </Text>
                     </Box>
                   )}
 
-                  <Box
-                    as="button"
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    shape="circle"
                     data-part="voice-toggle"
                     className="ds-search-command-bar__voice-toggle"
                     data-voice-status={voiceStatusForSkin}
@@ -572,19 +476,8 @@ export function SearchCommandBar({
                                 ? (isVoicePermissionBlocked ? tOr('searchCommandBar.enableMicrophone', 'Enable microphone') : tOr('searchCommandBar.titleRetryVoice', 'Retry voice input'))
                                 : tOr('searchCommandBar.titleSpeak', 'Speak')
                     }
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      minHeight: 32,
-                      width: 32,
-                      minWidth: 32,
-                      padding: 0,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <VoiceInputIcon status={voiceStatus} />
-                  </Box>
+                    icon={<VoiceInputIcon status={voiceStatus} />}
+                  />
                 </Box>
               )}
 
@@ -595,18 +488,10 @@ export function SearchCommandBar({
                   data-permission-blocked={isVoicePermissionBlocked}
                   role="dialog"
                   aria-label={tOr('searchCommandBar.enableMicrophone', 'Enable microphone')}
-                  style={{
-                    position: 'absolute',
-                    insetInlineEnd: 0,
-                    top: 'calc(100% + 12px)',
-                    width: 420,
-                    zIndex: 180,
-                    padding: 18,
-                  }}
                 >
                   <Flex align="start" justify="between" gap={10}>
-                    <Box style={{ minWidth: 0 }}>
-                      <Text data-part="voice-help-title" size="sm" weight="medium" style={{ display: 'block' }}>
+                    <Box data-part="voice-help-copy">
+                      <Text data-part="voice-help-title" size="sm" weight="medium">
                         {isVoicePermissionBlocked
                           ? tOr('searchCommandBar.enableMicrophone', 'Enable microphone')
                           : tOr('searchCommandBar.allowMicrophoneAccess', 'Allow microphone access')}
@@ -615,10 +500,6 @@ export function SearchCommandBar({
                         data-part="voice-help-description"
                         className="ds-search-command-bar__voice-help-description"
                         size="xs"
-                        style={{
-                          display: 'block',
-                          marginTop: 4,
-                        }}
                       >
                         {isVoicePermissionBlocked
                           ? tOr('searchCommandBar.voiceHelpBlockedDescription', 'Browser voice is available, but this site is blocked from using the mic.')
@@ -627,66 +508,51 @@ export function SearchCommandBar({
                             : tOr('searchCommandBar.voiceHelpIdleDescription', 'Press the button below and approve the browser prompt so dictation can start from this workspace.')}
                       </Text>
                     </Box>
-                    <Box
-                      as="button"
+                    <Button
+                      variant="ghost"
+                      size="xs"
+                      shape="circle"
                       data-part="close"
                       className="ds-search-command-bar__voice-help-close"
                       onClick={() => setShowVoiceHelp(false)}
                       aria-label={tOr('searchCommandBar.closeMicHelp', 'Close microphone help')}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: 28,
-                        height: 28,
-                        cursor: 'pointer',
-                        flexShrink: 0,
-                      }}
-                    >
-                      <X style={{ width: 14, height: 14 }} />
-                    </Box>
+                      icon={<ActionCloseIcon decorative size={14} />}
+                    />
                   </Flex>
 
                   <Box
                     as="ol"
                     data-part="voice-help-list"
                     className="ds-search-command-bar__voice-help-list"
-                    style={{
-                      margin: '12px 0 0',
-                      paddingInlineStart: 18,
-                    }}
                   >
                     {isVoicePermissionBlocked ? (
                       <>
-                        <Box as="li" style={{ marginBottom: 6 }}>
+                        <Box as="li" data-part="voice-help-step">
                           {tOr('searchCommandBar.voiceHelpStepClickSiteControls', 'Click the site controls icon next to the URL.')}
                         </Box>
-                        <Box as="li" style={{ marginBottom: 6 }}>
+                        <Box as="li" data-part="voice-help-step">
                           {tOr('searchCommandBar.voiceHelpStepSetPrefix', 'Set')} <strong>{tOr('searchCommandBar.microphone', 'Microphone')}</strong> {tOr('searchCommandBar.voiceHelpStepSetMiddle', 'to')} <strong>{tOr('searchCommandBar.voiceHelpAllow', 'Allow')}</strong>.
                         </Box>
-                        <Box as="li">{tOr('searchCommandBar.voiceHelpStepReturnPrefix', 'Return here and press')} <strong>{tOr('searchCommandBar.titleSpeak', 'Speak')}</strong> {tOr('searchCommandBar.voiceHelpStepReturnSuffix', 'again.')}</Box>
+                        <Box as="li" data-part="voice-help-step">{tOr('searchCommandBar.voiceHelpStepReturnPrefix', 'Return here and press')} <strong>{tOr('searchCommandBar.titleSpeak', 'Speak')}</strong> {tOr('searchCommandBar.voiceHelpStepReturnSuffix', 'again.')}</Box>
                       </>
                     ) : (
                       <>
-                        <Box as="li" style={{ marginBottom: 6 }}>
+                        <Box as="li" data-part="voice-help-step">
                           {tOr('searchCommandBar.voiceHelpStepPressPrefix', 'Press')} <strong>{tOr('searchCommandBar.enableMicrophone', 'Enable microphone')}</strong> {tOr('searchCommandBar.voiceHelpStepPressSuffix', 'below.')}
                         </Box>
-                        <Box as="li" style={{ marginBottom: 6 }}>
+                        <Box as="li" data-part="voice-help-step">
                           {tOr('searchCommandBar.voiceHelpStepApprove', 'Approve the browser permission prompt for this site.')}
                         </Box>
-                        <Box as="li">{tOr('searchCommandBar.voiceHelpStepAutoStart', 'We will start listening as soon as access is granted.')}</Box>
+                        <Box as="li" data-part="voice-help-step">{tOr('searchCommandBar.voiceHelpStepAutoStart', 'We will start listening as soon as access is granted.')}</Box>
                       </>
                     )}
                   </Box>
 
-                  <Flex align="center" justify="between" gap={12} style={{ marginTop: 16 }}>
+                  <Flex align="center" justify="between" gap={12} data-part="voice-help-footer">
                     <Text
                       data-part="voice-help-hint"
                       className="ds-search-command-bar__voice-help-hint"
                       size="xs"
-                      style={{
-                        flex: 1,
-                      }}
                     >
                       {isVoicePermissionBlocked
                         ? tOr('searchCommandBar.voiceHelpHintBlocked', 'If you already changed it, retry immediately.')
@@ -694,31 +560,23 @@ export function SearchCommandBar({
                           ? tOr('searchCommandBar.voiceHelpHintRequesting', 'If you do not see the prompt, check the browser site controls near the URL.')
                           : tOr('searchCommandBar.voiceHelpHintIdle', 'Grant access once and the mic button will switch to Speak.')}
                     </Text>
-                    <Flex align="center" gap={8} style={{ flexShrink: 0 }}>
-                      <Box
-                        as="button"
+                    <Flex align="center" gap={8} data-part="voice-help-actions">
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         data-part="voice-help-cancel"
                         className="ds-search-command-bar__voice-help-cancel"
                         onClick={() => {
                           setShowVoiceHelp(false);
                           resetVoiceFeedback();
                         }}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: 6,
-                          justifyContent: 'center',
-                          minHeight: 38,
-                          minWidth: 96,
-                          padding: '0 14px',
-                          cursor: 'pointer',
-                        }}
+                        icon={<ActionOpenExternalIcon decorative size={12} />}
                       >
-                        <ExternalLink style={{ width: 12, height: 12 }} />
                         {tOr('searchCommandBar.gotIt', 'Got it')}
-                      </Box>
-                      <Box
-                        as="button"
+                      </Button>
+                      <Button
+                        variant="primary"
+                        size="sm"
                         data-part="voice-help-confirm"
                         className="ds-search-command-bar__voice-help-confirm"
                         onClick={
@@ -730,23 +588,13 @@ export function SearchCommandBar({
                               }
                             : handleEnableMic
                         }
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: 6,
-                          justifyContent: 'center',
-                          minHeight: 38,
-                          minWidth: 156,
-                          padding: '0 16px',
-                          cursor: 'pointer',
-                        }}
                       >
                         {isVoicePermissionBlocked
                           ? tOr('searchCommandBar.retry', 'Retry')
                           : isRequestingMicPermission
                             ? tOr('searchCommandBar.waitingForPrompt', 'Waiting for prompt')
                             : tOr('searchCommandBar.enableMicrophone', 'Enable microphone')}
-                      </Box>
+                      </Button>
                     </Flex>
                   </Flex>
                 </Box>
@@ -759,7 +607,7 @@ export function SearchCommandBar({
                 justify="start"
                 gap={10}
                 wrap="wrap"
-                style={{ marginTop: 6 }}
+                data-part="status-row"
               >
                 <Text
                   data-part="status"
@@ -774,36 +622,15 @@ export function SearchCommandBar({
           </Box>
 
           {(commandSuggestions.length > 0 || actionsSlot) && (
-            <Box
-              style={{
-                display: 'inline-flex',
-                alignItems: 'stretch',
-                gap: 18,
-                flexWrap: 'wrap',
-                justifyContent: 'space-between',
-                flexShrink: 0,
-                paddingTop: 2,
-                rowGap: 8,
-                minWidth: 0,
-                flex: '0 1 auto',
-              }}
-            >
+            <Box data-part="side-cluster">
               {commandSuggestions.length > 0 && (
                 <Box
                   data-ds-search-shell-slot="true"
                   data-part="suggestions"
                   className="ds-search-command-bar__suggestions"
                   data-editorial-tech={editorialTech}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    flexWrap: 'wrap',
-                    justifyContent: 'flex-end',
-                    minHeight: 44,
-                    paddingBlock: 6,
-                    paddingInlineStart: editorialTech ? 16 : 18,
-                  }}
+                  role="group"
+                  aria-label={tOr('searchCommandBar.smartRefine', 'Smart refine')}
                 >
                   <Text
                     data-part="suggestions-label"
@@ -830,13 +657,6 @@ export function SearchCommandBar({
                   data-part="actions-slot"
                   className="ds-search-command-bar__actions-slot"
                   data-editorial-tech={editorialTech}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    minHeight: 44,
-                    paddingBlock: 6,
-                    paddingInlineStart: editorialTech ? 16 : 18,
-                  }}
                 >
                   {actionsSlot}
                 </Box>
@@ -849,10 +669,6 @@ export function SearchCommandBar({
         <Box
           data-part="divider"
           className="ds-search-command-bar__divider"
-          style={{
-            marginTop: 10,
-            height: 1,
-          }}
         />
       )}
     </Box>

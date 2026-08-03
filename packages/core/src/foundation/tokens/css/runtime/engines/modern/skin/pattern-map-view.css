@@ -18,10 +18,22 @@
  * always-stamped root `data-part` ancestor — repeating an attribute on one
  * element is forbidden.
  *
+ * SELECTION: marker rows are composed toggle Buttons (`aria-pressed`) with
+ * disclosure semantics (`aria-expanded` when a popup renderer exists); the
+ * selected row reads by tint + label weight + (in forced colors) a Highlight
+ * outline. The marker list is the map's textual alternative — the
+ * placeholder region is a named `role="group"`, never interactive.
+ *
+ * EMPTY: the no-markers hint is the composed Empty primitive (the bare text
+ * line is retired) — this file keeps only the frame's rhythm.
+ *
  * RESPONSIVE: the root is a named container (`ds-map-view`); the narrow cut
  * stacks the sidebar above the content so the list stays usable below 40rem.
  * RTL: all geometry is logical; the coordinates text is physical geographic
  * data by nature (documented, not mirrored).
+ *
+ * TOKEN OWNERSHIP: the optional marker-list cap is private composition
+ * plumbing, not a cross-family tenant density channel.
  */
 
 /* ---- root: sidebar + content row ---- */
@@ -73,12 +85,12 @@
   margin-block-start: var(--ds-spacing-1, 4px);
 }
 
-/* ---- empty state ---- */
+/* ---- empty state: the composed Empty owns its paint; the frame keeps the
+        rhythm (same idiom as the tree-view empty frame) ---- */
 .ds-pattern-map-view.ds-engine-modern [data-part='empty'] {
+  display: flex;
+  justify-content: center;
   padding-block: var(--ds-spacing-8, 32px);
-  color: var(--ds-color-text-secondary);
-  font-size: var(--ds-font-size-sm, 14px);
-  text-align: center;
 }
 
 /* ---- marker list: framed, divided rows (the retired divide-y bridge) ---- */
@@ -86,6 +98,12 @@
   overflow: hidden;
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-lg);
+}
+/* Long lists may scroll internally instead of stretching the page. The cap is
+   local composition plumbing; its default keeps the historical uncapped list. */
+.ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list'] {
+  max-block-size: var(--_ds-map-view-list-max-height, none);
+  overflow-y: auto;
 }
 .ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-row']:not([data-last='true']) {
   border-block-end: 1px solid var(--ds-color-border);

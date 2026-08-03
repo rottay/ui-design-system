@@ -1,11 +1,16 @@
 /** BulletChart skin (WO-SKIN-06 CK-E), deliberately unlayered. */
 
 .ds-chart-bullet [data-part='legend-swatch'][data-variant='target'] {
+  inline-size: 2px;
   border-radius: 0;
 }
 
 .ds-chart-bullet [data-part='legend-swatch'][data-variant='range'] {
   border-radius: 2px;
+}
+
+.ds-chart-bullet [data-part='legend-swatch'][data-variant='value'] {
+  border-radius: 1px;
 }
 
 .ds-chart-bullet [data-part='legend-label'] {
@@ -18,4 +23,47 @@
 
 .ds-chart-bullet [data-part='value-label'] {
   fill: var(--ds-color-text-secondary);
+  font-variant-numeric: var(--ds-numeric-tabular);
+}
+
+/* Forced colors erase the qualitative tint ramp, so tiers switch to a neutral
+ * surface with stroke-pattern differentiation (solid poor, dashed
+ * satisfactory, dotted good); the value bar and target marker stay
+ * high-contrast marks. */
+@media (forced-colors: active) {
+  .ds-chart-bullet [data-part='range-band'] {
+    fill: Canvas;
+    stroke: CanvasText;
+    stroke-width: 1;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-bullet [data-part='range-band'][data-tier='satisfactory'] {
+    stroke-dasharray: 6 3;
+  }
+
+  .ds-chart-bullet [data-part='range-band'][data-tier='good'] {
+    stroke-dasharray: 2 3;
+  }
+
+  .ds-chart-bullet [data-part='value-bar'] {
+    fill: CanvasText;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-bullet [data-part='target-marker'] {
+    fill: Highlight;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-bullet [data-part='zero-baseline'] {
+    stroke: CanvasText;
+    forced-color-adjust: auto;
+  }
+
+  .ds-chart-bullet [data-part='item-label'],
+  .ds-chart-bullet [data-part='value-label'] {
+    fill: CanvasText;
+    forced-color-adjust: auto;
+  }
 }

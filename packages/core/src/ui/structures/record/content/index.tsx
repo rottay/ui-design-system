@@ -31,7 +31,11 @@
  * values (the field-grid `gridTemplateColumns` prop, the field's
  * `grid-column: span N`, consumer `style` passthrough) and the copy
  * timer state. All static geometry lives in
- * `presentation/components/skin/record.css`.
+ * `presentation/components/skin/record.css` — including the linked-value
+ * cluster's fit-content measure and the link arrow's 13px frame (drained
+ * from inline icon sizing). Action-bar icons take the Button's governed
+ * icon channel (`--ds-button-sm-icon-size`) instead of an inline 14px
+ * override, so tenant icon sizing reaches the rail.
  *
  * Exports:
  *   - `RecordSummaryStrip` — horizontal/grid summary card with 5
@@ -168,7 +172,10 @@ export function RecordSummaryStrip({
 
 export function RecordFieldGrid({
   children,
-  columns = 'repeat(2, minmax(0, 1fr))',
+  /* The default is intrinsic: tracks auto-fit a 16rem minimum measure, so a
+     narrow container re-flows 2→1 columns and long labels/values never force
+     an overflow. A caller's explicit `columns` always wins (runtime prop). */
+  columns = 'repeat(auto-fit, minmax(min(100%, 16rem), 1fr))',
   style,
 }: {
   children: ReactNode;
@@ -291,9 +298,12 @@ export function RecordField({
   // prefetching at all RecordField call sites where the provider is
   // mounted.
   const linkInner = (
-    <Flex align="center" gap={8} wrap="wrap" style={{ width: 'fit-content' }}>
+    /* Geometry lives in the skin: the cluster hugs its content
+       (`inline-size: fit-content`) and the arrow takes its 13px frame from
+       the `field-link-icon` rule — no inline sizing. */
+    <Flex align="center" gap={8} wrap="wrap" data-part="field-link-body">
       {valueNode}
-      <ArrowUpRight data-part="field-link-icon" style={{ width: 13, height: 13 }} />
+      <ArrowUpRight data-part="field-link-icon" />
     </Flex>
   );
 
@@ -387,7 +397,9 @@ export function RecordActionBar({
                 variant={resolveSharedHeaderActionVariant(action)}
                 size="sm"
                 htmlType={action.htmlType}
-                icon={ActionIcon ? <ActionIcon style={{ width: 14, height: 14 }} /> : undefined}
+                /* Icon geometry rides the Button's governed icon channel
+                   (`--ds-button-sm-icon-size`), not an inline override. */
+                icon={ActionIcon ? <ActionIcon /> : undefined}
                 onClick={action.onClick}
                 href={action.href}
                 loading={action.loading}

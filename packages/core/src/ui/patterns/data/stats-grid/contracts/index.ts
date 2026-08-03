@@ -58,8 +58,11 @@ export interface StatsGridProps extends PatternBaseProps {
   columns?: number;
 
   /**
-   * Whether to render D3-powered sparkline mini-charts for stats
-   * that provide `sparklineData` in their {@link StatDef}.
+   * Whether to render inline sparkline mini-charts for stats that provide
+   * `sparklineData` in their {@link StatDef}. The Modern engine paints the
+   * line and its gradient through the per-stat `--ds-stats-grid-accent`
+   * channel (driven by {@link StatDef.color}, falling back to the primary
+   * ramp) -- never a local literal.
    */
   sparkline?: boolean;
 
@@ -74,7 +77,10 @@ export interface StatsGridProps extends PatternBaseProps {
    * - `'default'`: Standard card with subtle shadow.
    * - `'outlined'`: Bordered card without fill.
    * - `'filled'`: Solid background fill.
-   * - `'glass'`: Frosted glass / translucent effect.
+   * - `'glass'`: Frosted glass / translucent effect. The Modern spec reserves
+   *   glass for overlay backdrops, so page-level surfaces resolve their
+   *   profiles away from it (see `resolveStatsGridVariant` in the
+   *   dashboard/report/visualization/operational pages).
    */
   variant?: "default" | "outlined" | "filled" | "glass";
 
@@ -83,6 +89,15 @@ export interface StatsGridProps extends PatternBaseProps {
    * Provides a polished entrance effect for dashboard views.
    */
   animate?: boolean;
+
+  /**
+   * Shows a quiet error posture in place of the cards while preserving the
+   * root frame (same contract shape as PatternDataTable's `error`). The
+   * notice is announced politely (`role="status"`) and carries a governed
+   * status icon, so the state never rides color alone.
+   * @default false
+   */
+  error?: boolean;
 
   /**
    * Click handler fired when a stat card is clicked.

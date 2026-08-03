@@ -28,26 +28,141 @@
  * `--ds-mobile-header-sticky-backdrop` channel (default `none`) — a default-ON
  * blur taxes every scroll frame (PT29/PT32/S06/S07 fix, Sheet glass precedent).
  *
+ * STUCK: the runtime probes stickiness with a 1px sentinel + IntersectionObserver
+ * and stamps `data-stuck`; the governed elevation (`--ds-elevation-2`, public
+ * token surface frozen — no new family channel) fades in only while content is
+ * actually scrolled under the bar. The sentinel is OUT OF FLOW (absolute +
+ * visibility:hidden below) so it never lands as a spurious item in the
+ * consumer's grid/flex (R-5). The observer is rooted at the viewport because
+ * the contract exposes no scroll root: inside a nested scroller the sticky
+ * posture still sticks, but the probe fails closed (no shadow), never wrong.
+ *
+ * GEOMETRY (R-5): all paint geometry lives here — the 56px bar (kept literal
+ * and density-neutral, same precedent as the 17px title), the safe-area
+ * insets, the slot flex shares and the touch floors. The runtime stamps no
+ * geometry of its own; only `position: sticky` travels inline because the
+ * engine contract test pins `root.style.position`.
+ *
+ * TITLE: a Box as="h1" (one per page) — its optical 17px/600 type lives here;
+ * a composed Text would resolve its size inline, unreachable to any skin.
+ *
  * RTL: the back glyph is the governed `navigation.back` icon with autoMirror —
- * it flips itself; no manual scaleX rules live here.
+ * it flips itself; no manual scaleX rules live here. The safe-area mapping is
+ * direction-aware (`:dir(rtl)` on the bar below): env() insets are PHYSICAL,
+ * so each physical edge consumes its own inset instead of stranding
+ * inset-left on the inline-start side.
  */
 
 .rottay-mobile-header[data-part='root'] {
   background: var(--ds-color-bg-primary);
+  inline-size: 100%;
+  /* 56px mobile bar height: no governed rung adopted — kept literal and
+     density-neutral (see GEOMETRY above); byte-identical to the retired
+     inline height/minHeight. The block-start inset pads the bar under the
+     notch/status area. */
+  block-size: 56px;
+  min-block-size: 56px;
+  padding-block-start: env(safe-area-inset-top, 0px);
 }
 
 /* sticky posture: the bar floats over scrolling content; the frosted glass is
-   opt-in via the family channel (default none). */
+   opt-in via the family channel (default none). The stuck shadow rides the
+   governed elevation ramp and fades in through the motion token — it appears
+   only once content actually scrolls under the bar (data-stuck). The sticky
+   offset and stacking live here; `position: sticky` itself stays inline
+   (engine contract test pin — see GEOMETRY above). */
 .rottay-mobile-header[data-part='root'][data-sticky='true'] {
   background: color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent);
   backdrop-filter: var(--ds-mobile-header-sticky-backdrop, none);
+  inset-block-start: 0;
+  z-index: var(--ds-mobile-header-sticky-z, 40);
+  transition: box-shadow var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
+}
+
+/* The stuck shadow rides the governed elevation ramp directly (no new family
+   channel: the public --ds-* surface is frozen). */
+.rottay-mobile-header[data-part='root'][data-sticky='true'][data-stuck='true'] {
+  box-shadow: var(--ds-elevation-2);
 }
 
 .rottay-mobile-header[data-part='root'][data-sticky] {
   border-bottom: 1px solid var(--ds-color-border);
 }
 
+/* Out-of-flow stuck probe (R-5): absolute + visibility:hidden keep the
+   sentinel measurable for IntersectionObserver without participating in
+   layout — an in-flow sibling would steal an auto-placement slot in the
+   consumer's grid/flex (display:contents or display:none would dissolve the
+   box and kill IO, and visibility must stay because IO here is purely
+   geometric). The 1px box with margin-block-start:-1px puts its end edge
+   exactly on the bar's top edge — the same probe line the retired in-flow
+   sentinel had — so the observer still flips at the precise stick threshold.
+   For an abspos child of a grid/flex container the static position resolves
+   to the container's content-box start, which coincides with the bar while
+   the header is the consumer's first child (what a page header is). */
+.rottay-mobile-header__sticky-sentinel[data-part='sticky-sentinel'] {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  inline-size: 1px;
+  block-size: 1px;
+  margin-block-start: -1px;
+}
+
+/* Bar row. Safe-area mapping is direction-aware (R-5): env() insets are
+   PHYSICAL, so pinning inset-left to inline-start would strand the notch
+   padding on the wrong edge in RTL. LTR start=left/end=right; under :dir(rtl)
+   start=right/end=left (`:dir()` follows the nearest authored direction —
+   the corpus mirror idiom). The 4px rhythm floor matches the retired inline
+   value exactly. */
+.rottay-mobile-header__bar[data-part='bar'] {
+  block-size: 100%;
+  position: relative;
+  padding-inline-start: max(4px, env(safe-area-inset-left, 0px));
+  padding-inline-end: max(4px, env(safe-area-inset-right, 0px));
+}
+
+.rottay-mobile-header__bar[data-part='bar']:dir(rtl) {
+  padding-inline-start: max(4px, env(safe-area-inset-right, 0px));
+  padding-inline-end: max(4px, env(safe-area-inset-left, 0px));
+}
+
+/* Side slots share the leftover width equally (flex-basis 0 + equal grow), so
+   the center title sits on the bar's true centerline instead of drifting when
+   the action clusters differ. The min-inline floor keeps each side at its
+   touch minimum; a wider cluster keeps its natural width (shrink 0 + floor)
+   and the title yields + truncates first — actions are never clipped. */
+.rottay-mobile-header__left[data-part='left'],
+.rottay-mobile-header__right[data-part='right'] {
+  flex: 1 0 0;
+  min-inline-size: var(--ds-touch-target-min, 44px);
+  display: flex;
+  align-items: center;
+}
+
+.rottay-mobile-header__right[data-part='right'] {
+  justify-content: flex-end;
+}
+
+/* Center slot: yields and truncates first (see the side-slot note above).
+   The 8px inline gutter matches the retired inline padding exactly. */
+.rottay-mobile-header__center[data-part='center'] {
+  flex: 0 1 auto;
+  overflow: hidden;
+  text-align: center;
+  padding-inline: 8px;
+}
+
 .rottay-mobile-header__back[data-part='trigger'] {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* The 44px touch floor rides the governed a11y authority (fixed 44px, no
+     density/profile dial), byte-identical to the retired inline minimums. */
+  min-inline-size: var(--ds-touch-target-min, 44px);
+  min-block-size: var(--ds-touch-target-min, 44px);
+  padding: 0;
   background: none;
   border: none;
   border-radius: var(--ds-radius-md, 8px);
@@ -75,8 +190,20 @@
   }
 }
 
+/* Title is now a Box as="h1" (the composed Text resolved its size inline,
+   which no layered skin can ever outrank — the 17px optical size is drained
+   here, byte-identical to the retired inline values; 17px has no canonical
+   rung, so the literal stays with this note). The truncation mechanics moved
+   here with it (R-5 geometry drain). */
 .rottay-mobile-header__title[data-part='label'] {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: var(--ds-color-text-primary);
+  font-size: calc(var(--ds-font-size-lg) * 1.0625);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  line-height: 1.29;
   letter-spacing: -0.01em;
 }
 
@@ -93,6 +220,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .rottay-mobile-header[data-part='root'][data-sticky='true'],
   .rottay-mobile-header__back[data-part='trigger'] {
     transition: none;
   }

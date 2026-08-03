@@ -317,6 +317,10 @@ export function WizardSurface({ config, loading = false, error, onRetry }: Wizar
       className="ds-surface ds-wizard"
       data-part="root"
       data-mobile={resolvedMobile ? 'true' : 'false'}
+      // Split/stacked landing hook (form/detail-form family idiom): the skin
+      // keys the sticky aside posture on it, and it mirrors the actual grid
+      // decision (`columns` below) one-for-one.
+      data-stacked={shouldStack ? 'true' : 'false'}
       data-loading={loading ? 'true' : 'false'}
       aria-busy={loading || undefined}
       columns={asideNode && !shouldStack ? 12 : 1}

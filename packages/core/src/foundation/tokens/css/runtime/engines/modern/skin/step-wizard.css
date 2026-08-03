@@ -88,21 +88,13 @@
   background: var(--ds-surface-panel);
 }
 
-/* ---- progress bar (rail posture's thin track) ---- */
-.ds-pattern-step-wizard.ds-engine-modern [data-part='progress-track'] {
+/* ---- progress bar (rail posture's thin canonical Progress composition) ---- */
+.ds-pattern-step-wizard.ds-engine-modern .ds-step-wizard__progress[data-part='root'] {
   inline-size: 100%;
-  block-size: var(--ds-step-wizard-progress-height, 4px);
   margin-block-end: var(--ds-spacing-6, 24px);
-  overflow: hidden;
-  border-radius: var(--ds-radius-full);
-  background: var(--ds-surface-panel);
-}
-/* `width` stays inline: it is computed from the step index (runtime value). */
-.ds-pattern-step-wizard.ds-engine-modern [data-part='progress-fill'] {
-  block-size: 100%;
-  border-radius: var(--ds-radius-full);
-  background: var(--ds-color-primary);
-  transition: inline-size var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease-out);
+  --ds-progress-height: var(--ds-step-wizard-progress-height, 4px);
+  --ds-progress-radius: var(--ds-radius-full);
+  --ds-progress-bg: var(--ds-surface-panel);
 }
 
 /* ---- step rail wrapper (the Steps primitive renders inside) ---- */

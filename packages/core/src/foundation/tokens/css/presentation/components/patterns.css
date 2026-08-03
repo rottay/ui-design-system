@@ -1146,7 +1146,7 @@
     [role="button"],
     [data-interactive="true"]
   ):hover {
-  transform: translateY(-1px);
+  transform: var(--ds-premium-card-hover-transform, translateY(-1px));
   filter: saturate(1.01);
 }
 

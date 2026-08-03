@@ -90,20 +90,75 @@
 }
 
 /* ============================================================================
- * StreamingText -- caret.
+ * StreamingText -- caret. Geometry drained from the engine's inline styles
+ * (logical margin, never a physical `marginLeft`). The pre-wrap behavior
+ * lives on the root and inherits into the Text/ShimmerText child (the
+ * Typography skins declare no white-space, so nothing competes). The blink
+ * loop is skin-owned on the engine-stamped `data-motion` state (a controlled
+ * `reducedMotion` prop can force `static` regardless of the OS setting, so a
+ * media query alone cannot express the cut-off): the period rides the
+ * private `--_ds-assistant-caret-duration` channel
+ * with the exact 1s/steps(2, jump-none) loop the engine used to carry
+ * inline; `prefers-reduced-motion` cuts it as a second belt.
  * ==========================================================================*/
 
+.ds-assistant-streaming-text[data-part='root'] {
+  white-space: pre-wrap;
+}
+
 .ds-assistant-streaming-text [data-part='caret'][data-part='caret'][data-part='caret'][data-part='caret'] {
+  display: inline-block;
+  margin-inline-start: var(--ds-spacing-1);
   color: var(--ds-color-primary-500);
+}
+.ds-assistant-streaming-text [data-part='caret'][data-motion='live'] {
+  animation: ds-assistant-caret var(--_ds-assistant-caret-duration, calc(var(--ds-motion-glacial) * 2))
+    steps(2, jump-none) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ds-assistant-streaming-text [data-part='caret'][data-motion='live'] {
+    animation: none;
+  }
 }
 
 /* ============================================================================
  * TypingIndicator -- three bouncing dots (Box, no Typography competition).
+ * Geometry + motion drained from the engine's inline styles: the root is an
+ * inline-flex row on canonical spacing; the loop period rides the
+ * private `--_ds-assistant-dot-duration` channel
+ * with the easing on the motion canon; the per-dot stagger is an nth-child
+ * fraction of the SAME channel so a tenant tuning the period keeps the
+ * cascade coherent. Under `prefers-reduced-motion` the dots hold static --
+ * the role=status label keeps the state comprehensible without motion.
  * ==========================================================================*/
 
+.ds-assistant-typing-indicator[data-part='root'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
+.ds-assistant-typing-indicator [data-part='dots'] {
+  display: inline-flex;
+  gap: var(--ds-spacing-1);
+}
 .ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot'] {
+  inline-size: calc(var(--ds-spacing-1) * 1.5);
+  block-size: calc(var(--ds-spacing-1) * 1.5);
   border-radius: 50%;
   background: var(--ds-color-primary-500);
+  animation: ds-assistant-dot var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2))
+    var(--ds-motion-ease-in-out) infinite;
+}
+.ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(2) {
+  animation-delay: calc(var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2)) * 0.11);
+}
+.ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot']:nth-child(3) {
+  animation-delay: calc(var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2)) * 0.22);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot'] {
+    animation: none;
+  }
 }
 
 /* ============================================================================
@@ -133,11 +188,31 @@
  * AssistantStatusIndicator -- agent-activity dot (Box, no Typography
  * competition). `data-status` carries the raw prop value, all five members
  * of the AssistantAgentStatus union covered explicitly (no unqualified
- * fallback needed).
+ * fallback needed). Geometry + the live loop drained from the engine's
+ * inline styles: the engine stamps `data-motion='live'|'static'` (a live
+ * state AND motion allowed), the skin owns the loop on the
+ * private `--_ds-assistant-dot-duration` channel and never animates a static
+ * dot; `prefers-reduced-motion` cuts the loop as a second belt.
  * ==========================================================================*/
 
+.ds-assistant-status-indicator[data-part='root'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+}
 .ds-assistant-status-indicator [data-part='dot'][data-part='dot'] {
+  inline-size: var(--ds-spacing-2);
+  block-size: var(--ds-spacing-2);
   border-radius: 50%;
+}
+.ds-assistant-status-indicator [data-part='dot'][data-part='dot'][data-motion='live'] {
+  animation: ds-assistant-dot var(--_ds-assistant-dot-duration, calc(var(--ds-motion-glacial) * 2.2))
+    var(--ds-motion-ease-in-out) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ds-assistant-status-indicator [data-part='dot'][data-part='dot'][data-motion='live'] {
+    animation: none;
+  }
 }
 .ds-assistant-status-indicator [data-part='dot'][data-status='idle'] {
   background: var(--ds-color-text-muted);
@@ -164,18 +239,65 @@
 }
 
 /* ============================================================================
- * PreviewDiffCard -- row divider (border-color, needs (0,4,0)) and the
+ * PreviewDiffCard -- column geometry drained from the engine's inline styles
+ * (label 2 / before 3 / after 3 on a logical-min-width flex split, arrow
+ * gutter 1rem), the row divider (border-color, needs (0,4,0)) and the
  * before/after value cells (Text, needs (0,5,0), keyed on BOTH data-change
  * and data-diff-side since the same change maps to a different color per
- * side).
+ * side). The arrow gutter hosts the governed auto-mirroring
+ * NavigationForwardIcon (flips in RTL) -- the muted ink keeps the connector
+ * quiet next to the values.
  * ==========================================================================*/
 
+.ds-assistant-preview-diff-card [data-part='diff-spacer'] {
+  flex: 2;
+  min-inline-size: 0;
+}
+.ds-assistant-preview-diff-card [data-part='diff-head-cell'] {
+  flex: 3;
+  min-inline-size: 0;
+}
+.ds-assistant-preview-diff-card [data-part='diff-arrow'][data-part='diff-arrow'] {
+  inline-size: 1rem;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ds-color-text-muted);
+}
+.ds-assistant-preview-diff-card [data-part='diff-label'][data-part='diff-label'] {
+  flex: 2;
+  min-inline-size: 0;
+  /* long field labels (localized strings) wrap inside their column instead
+     of breaking the 2/3/3 split */
+  overflow-wrap: anywhere;
+}
+.ds-assistant-preview-diff-card [data-part='diff-cell-wrap'] {
+  flex: 3;
+  min-inline-size: 0;
+}
+/* long values wrap inside their cell (overflow-wrap is not inherited, so it
+   lands on the Text part itself, not the wrapper) */
+.ds-assistant-preview-diff-card [data-part='preview-cell'],
+.ds-assistant-preview-diff-card [data-part='diff-head-cell'] {
+  overflow-wrap: anywhere;
+}
+
 .ds-assistant-preview-diff-card [data-part='divider'][data-part='divider'][data-part='divider'] {
+  /* was an inline 6px paddingTop -- snapped to the canonical step */
+  padding-block-start: var(--ds-spacing-2);
   border-top: 1px solid var(--ds-color-border);
 }
 
 .ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'] {
   color: var(--ds-color-text-muted);
+}
+/* The strikethrough is the before-cell's superseded-value channel (survives
+   forced colors, never colour-alone); drained from the engine's inline
+   style and keyed on the same data-change states it used. */
+.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'][data-change='removed'],
+.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'][data-change='updated'] {
+  text-decoration: line-through;
 }
 .ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'][data-change='removed'] {
   color: var(--ds-color-error);
@@ -192,9 +314,71 @@
 }
 
 /* ============================================================================
- * MessageBubble -- footer timestamp.
+ * MessageBubble -- alignment + bubble geometry drained from the engine's
+ * inline styles: the root is a flex row whose justification follows
+ * `data-align` (logical start/end -- RTL mirrors the conversation for free);
+ * the composed Card carries a merged scope class (Card forces
+ * `data-part='root'` internally, so the class is the hook) for the max-inline
+ * measure and fit-content sizing. The measure rides the
+ * private `--_ds-assistant-bubble-measure` channel
+ * with the historical 80% as the exact fallback -- an editorial profile can
+ * narrow the conversation column (article-like measure) while an operational
+ * one fills the pane, same markup. The root is a named inline-size
+ * container: below the cut the bubble takes the full row (mobile is not a
+ * shrunken desktop -- the gutter stops eating the conversation). Long words
+ * wrap inside the card instead of breaking its measure. Footer timestamp
+ * color below.
  * ==========================================================================*/
+
+.ds-assistant-message-bubble[data-part='root'] {
+  display: flex;
+  justify-content: flex-start;
+  container: ds-assistant-bubble / inline-size;
+}
+.ds-assistant-message-bubble[data-part='root'][data-align='end'] {
+  justify-content: flex-end;
+}
+.ds-assistant-message-bubble .ds-assistant-message-bubble-card[data-part='root'] {
+  max-inline-size: var(--_ds-assistant-bubble-measure, 80%);
+  inline-size: fit-content;
+  overflow-wrap: break-word;
+}
+@container ds-assistant-bubble (inline-size < 30rem) {
+  .ds-assistant-message-bubble .ds-assistant-message-bubble-card[data-part='root'] {
+    max-inline-size: 100%;
+  }
+}
+
+/* author name: a long display name yields with ellipsis inside the header
+   row (the engine mirrors a string author on `title`); the delivery badge
+   never gets pushed off-card */
+.ds-assistant-message-bubble [data-part='author'][data-part='author'] {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .ds-assistant-message-bubble [data-part='timestamp'][data-part='timestamp'][data-part='timestamp'][data-part='timestamp'] {
   color: var(--ds-color-text-muted);
+}
+
+/* ============================================================================
+ * forced-colors: tint fills and the glow shadow are forced away. The status
+ * and typing dots re-assert as solid system-ink dots so the liveness SHAPE
+ * survives; the diff divider re-asserts in system ink. State comprehension
+ * never rides on the tint alone -- the role=status labels and the governed
+ * arrow icon keep carrying meaning.
+ * ==========================================================================*/
+
+@media (forced-colors: active) {
+  .ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot'],
+  .ds-assistant-status-indicator [data-part='dot'][data-part='dot'] {
+    background: ButtonText;
+    box-shadow: none;
+  }
+  .ds-assistant-preview-diff-card [data-part='divider'][data-part='divider'][data-part='divider'] {
+    border-top-color: ButtonText;
+  }
 }

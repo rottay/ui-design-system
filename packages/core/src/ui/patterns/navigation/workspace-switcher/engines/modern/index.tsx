@@ -35,7 +35,6 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { WorkspaceSwitcherProps } from '../../contracts';
-import { menuSectionTitleStyle } from '../../../../foundation/engine-styles/modern';
 import { Button } from '../../../../../primitives/inputs/Button';
 import { Badge } from '../../../../../primitives/display/Badge';
 import ModernAvatar from '../../../../../primitives/display/Avatar/engines/modern';
@@ -161,16 +160,36 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
     setFocusIndex(prev => Math.min(prev, visibleWorkspaces.length - 1));
   }, [visibleWorkspaces.length]);
 
+  /* ---- Loading skeleton (PatternBaseProps.loading): the trigger's exact
+          footprint, so the swap never shifts the surrounding chrome. ---- */
+  if (loading) {
+    return (
+      <div
+        className={`ds-pattern-workspace-switcher ds-engine-modern ${className ?? ''}`}
+        data-part="root"
+        data-position={position}
+        data-loading="true"
+        aria-busy="true"
+        style={style}
+      >
+        <div data-part="skeleton" aria-hidden="true" />
+      </div>
+    );
+  }
+
   return (
     <div
       ref={containerRef}
       className={`ds-pattern-workspace-switcher ds-engine-modern ${className ?? ''}`}
       data-part="root"
       data-position={position}
+      data-open={open ? 'true' : 'false'}
+      data-loading="false"
       style={style}
       onKeyDown={handleKeyDown}
     >
-      {/* Trigger */}
+      {/* Trigger: APG listbox-popup disclosure (locale-switcher precedent) --
+          aria-controls resolves once the panel mounts. */}
       <Button
         engine="modern"
         variant="ghost"
@@ -179,6 +198,8 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
         onClick={() => setOpen(!open)}
         data-testid="workspace-trigger"
         aria-label={switchLabel}
+        aria-haspopup="listbox"
+        aria-controls="workspace-switcher-panel"
         aria-expanded={open}
       >
         <span data-part="avatar-frame" data-frame="trigger">
@@ -203,6 +224,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
       {open && (
         <div
           data-part="panel"
+          id="workspace-switcher-panel"
           role="listbox"
           aria-label={panelLabel}
           aria-activedescendant={
@@ -211,9 +233,10 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
               : undefined
           }
         >
-          {/* Header */}
+          {/* Header -- typography lives in the skin (the shared inline
+              menuSectionTitleStyle object is drained, wave p612b). */}
           <div data-part="header">
-            <span style={menuSectionTitleStyle}>{panelLabel}</span>
+            <span data-part="header-title">{panelLabel}</span>
           </div>
 
           {/* Search: the composed Input filters client-side; arrows typed in
@@ -268,7 +291,9 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   {/* Workspace name + metadata row. */}
                   <span data-part="item-copy">
                     <span data-part="item-title-row">
-                      <span data-part="item-name" data-active={isActive}>{ws.name}</span>
+                      {/* The name truncates in the skin; the title attribute
+                          is the long-workspace-name affordance. */}
+                      <span data-part="item-name" data-active={isActive} title={ws.name}>{ws.name}</span>
                       {/* Checkmark confirms which workspace is currently active. */}
                       {isActive && (
                         <StatusVerifiedIcon decorative size={12} data-part="check" />
@@ -356,7 +381,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                 <span data-part="current-user-copy">
                   <span data-part="current-user-name">{currentUser.name}</span>
                   {currentUser.email && (
-                    <span data-part="current-user-email">{currentUser.email}</span>
+                    <span data-part="current-user-email" title={currentUser.email}>{currentUser.email}</span>
                   )}
                 </span>
               </div>

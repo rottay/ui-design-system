@@ -1,26 +1,124 @@
 /** LineChart skin (WO-SKIN-06 CK-E), deliberately unlayered. */
 
+/* Cartesian chrome (grid, baseline, tick labels, point strokes) is governed
+ * by the shared chart foundation skin through the `--ds-chart-*` channels on
+ * the engine's renderer surface; this family skin owns only what the
+ * foundation cannot see: legend markers, the per-series dash cadence, the
+ * loading skeleton, and the mount reveal. */
+
+/* Legend -------------------------------------------------------------------
+ * The marker reads as a line segment: a full-radius pill whose dash rhythm
+ * mirrors the per-series stroke cadence below, so a series stays
+ * distinguishable without relying on colour alone. The mask keeps the
+ * caller-governed inline series colour intact under any legend background. */
+
 .ds-chart-line [data-part='legend-swatch'] {
-  border-radius: 1px;
+  block-size: 3px;
+  border-radius: var(--_ds-line-marker-radius, 999px);
+}
+
+.ds-chart-line [data-part='legend-swatch'][data-series-index='1'] {
+  -webkit-mask: repeating-linear-gradient(90deg, CanvasText 0 5px, transparent 5px 9px);
+  mask: repeating-linear-gradient(90deg, CanvasText 0 5px, transparent 5px 9px);
+  mask-mode: alpha;
+}
+
+.ds-chart-line [data-part='legend-swatch'][data-series-index='2'] {
+  -webkit-mask: repeating-linear-gradient(90deg, CanvasText 0 2px, transparent 2px 5px);
+  mask: repeating-linear-gradient(90deg, CanvasText 0 2px, transparent 2px 5px);
+  mask-mode: alpha;
+}
+
+.ds-chart-line [data-part='legend-swatch'][data-series-index='3'] {
+  -webkit-mask: repeating-linear-gradient(90deg, CanvasText 0 6px, transparent 6px 8px, CanvasText 8px 9px, transparent 9px 12px);
+  mask: repeating-linear-gradient(90deg, CanvasText 0 6px, transparent 6px 8px, CanvasText 8px 9px, transparent 9px 12px);
+  mask-mode: alpha;
+}
+
+.ds-chart-line [data-part='legend-swatch'][data-series-index='4'] {
+  -webkit-mask: repeating-linear-gradient(90deg, CanvasText 0 9px, transparent 9px 13px);
+  mask: repeating-linear-gradient(90deg, CanvasText 0 9px, transparent 9px 13px);
+  mask-mode: alpha;
 }
 
 .ds-chart-line [data-part='legend-label'] {
   color: var(--ds-color-text-secondary);
 }
 
-.ds-chart-line [data-part='axis-tick-label'],
-.ds-chart-line [data-part='axis-label'] {
-  fill: var(--ds-color-text-secondary);
+/* Series cadence -----------------------------------------------------------
+ * The renderer cycles `data-series-index` 0..4; indexes 1..4 receive a
+ * governed dash so overlapping series separate by stroke rhythm as well as
+ * paint. Each cadence is a private implementation detail of this family. */
+
+.ds-chart-line [data-part='line-series'][data-series-index='1'] [data-part='line'] {
+  stroke-dasharray: var(--_ds-line-series-dash-2, 6 4);
 }
 
-.ds-chart-line [data-part='grid-line'] {
-  stroke: var(--ds-color-border-secondary);
+.ds-chart-line [data-part='line-series'][data-series-index='2'] [data-part='line'] {
+  stroke-dasharray: var(--_ds-line-series-dash-3, 2 3);
 }
 
-.ds-chart-line [data-part='series-point'] {
-  stroke: var(--ds-color-bg-primary);
+.ds-chart-line [data-part='line-series'][data-series-index='3'] [data-part='line'] {
+  stroke-dasharray: var(--_ds-line-series-dash-4, 8 3 2 3);
 }
 
-.ds-chart-line [data-part='grid-line'] {
-  stroke: var(--ds-color-border-primary);
+.ds-chart-line [data-part='line-series'][data-series-index='4'] [data-part='line'] {
+  stroke-dasharray: var(--_ds-line-series-dash-5, 12 4);
+}
+
+/* Entrance reveal ---------------------------------------------------------- */
+
+@keyframes ds-chart-line-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ds-chart-line [data-part='chart-svg'] {
+  animation: ds-chart-line-reveal var(--ds-motion-reveal, var(--ds-motion-calm))
+    var(--ds-motion-ease-enter, ease-out) both;
+}
+
+/* Loading skeleton -----------------------------------------------------------
+ * Ascending placeholder bars read as the trend silhouette of a line chart. */
+
+@keyframes ds-chart-line-skeleton-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.55;
+  }
+}
+
+.ds-chart-line [data-part='skeleton-bar'] {
+  border-radius: 999px 999px 0 0;
+  background: color-mix(
+    in srgb,
+    var(--ds-chart-mark-color, var(--ds-color-primary)) 14%,
+    var(--ds-color-bg-secondary)
+  );
+  animation: ds-chart-line-skeleton-pulse
+    var(--ds-motion-glacial, var(--ds-motion-calm))
+    var(--ds-motion-ease-move, ease-in-out) infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-chart-line [data-part='chart-svg'],
+  .ds-chart-line [data-part='skeleton-bar'] {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-chart-line [data-part='skeleton-bar'] {
+    forced-color-adjust: none;
+    background: Canvas;
+    outline: 1px solid GrayText;
+  }
 }

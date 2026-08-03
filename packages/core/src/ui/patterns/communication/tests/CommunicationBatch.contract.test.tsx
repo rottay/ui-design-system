@@ -156,10 +156,12 @@ describe('comment-thread -- data-part contract (CK-F)', () => {
     const root = await waitForPart(container, 'root');
     expect(root.className).toContain('ds-pattern-comment-thread');
     expect(root.className).toContain(`ds-engine-${engine}`);
-    // modern paints a spinner; rustic paints a "Loading..." text part --
-    // preserved asymmetry, not unified.
+    // Modern composes footprint-preserving Skeletons so content does not
+    // reflow when the thread arrives. Rustic stays frozen on its text part.
     if (engine === 'modern') {
-      expect(q(container, '[data-part="spinner"]')).toHaveLength(1);
+      expect(q(container, '[data-part="skeleton-list"][role="status"]')).toHaveLength(1);
+      expect(q(container, '[data-part="skeleton"]')).toHaveLength(3);
+      expect(q(container, '[data-part="spinner"]')).toHaveLength(0);
     } else {
       expect(q(container, '[data-part="loading"]')).toHaveLength(1);
     }

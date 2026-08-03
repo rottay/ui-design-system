@@ -1,122 +1,98 @@
 /**
- * BrandingPreviewSandbox skin (WO-SKIN-06 CK-H1).
+ * BrandingPreviewSandbox skin (WO-SKIN-06 CK-H1; premium primitive pass).
  *
  * DELIBERATELY UNLAYERED (P-47): named DS layers sort before Tailwind's
  * unnamed base layer. This engine-agnostic pattern has a single scope class,
  * so border-color selectors reach (0,4,0) through repeated target parts or a
- * finite-state attribute and clear the tenant floor at (0,3,1). Values
- * are transcribed verbatim from the component's former runtime style props;
- * instance-scoped appearance variables remain owned by appearanceToVariables().
+ * finite-state attribute and clear the tenant floor at (0,3,1).
+ *
+ * REAL-PRIMITIVE LAW: the gallery composes real DS primitives (Button,
+ * Input, Card, Badge, Heading/Text) -- THEY own their chrome and read the
+ * scoped appearance variables through their own skins, so the preview can
+ * never drift from the component it previews. The retired mock paint
+ * (hand-mirrored button/card/badge channel rules on native elements) is
+ * gone; this file owns exactly what the pattern still owns:
+ *   - the sandbox root frame + section rhythm + the eyebrow section labels;
+ *   - the preview card widths (Card drops a consumer data-part; the class is
+ *     the hook);
+ *   - the mini TABLE CHANNEL MIRROR (not a control): a light strip reading
+ *     the `--ds-table-*` appearance channels directly, logical alignment
+ *     only (text-align: end -- the retired physical `right` mirrored
+ *     nothing under RTL);
+ *   - the typography sample rhythm (Heading/Text own their paint; the code
+ *     sample reads the mono channel).
+ * Geometry values were transcribed from the component's former runtime
+ * style props onto canonical steps; instance-scoped appearance variables
+ * remain owned by appearanceToVariables().
  */
 
+/* ---- root frame + rhythm (padding/font drained from inline) ---- */
 .ds-pattern-branding-preview-sandbox[data-part='root'][data-part='root'][data-part='root'] {
-  background: var(--ds-color-bg-primary, var(--ds-layout-bg, #fff));
+  padding: var(--ds-spacing-6);
+  font-family: var(--ds-font-family-base);
+  background: var(--ds-color-bg-primary);
   color: var(--ds-color-text-primary);
-  border-radius: 12px;
+  border-radius: var(--ds-radius-lg);
   border: 1px solid var(--ds-color-border);
 }
 
+/* ---- eyebrow section labels (editorial hierarchy; geometry drained) ---- */
 .ds-pattern-branding-preview-sandbox [data-part='header'][data-part='header'] {
+  margin-block-end: var(--ds-spacing-2);
+  font-size: var(--ds-font-size-2xs);
+  font-weight: var(--ds-font-weight-semibold);
+  letter-spacing: var(--ds-letter-spacing-widest);
+  text-transform: uppercase;
   color: var(--ds-color-text-muted);
 }
 
-.ds-pattern-branding-preview-sandbox [data-part='button'][data-part='button'][data-part='button'] {
-  border-radius: var(--ds-radius-md, 8px);
-  border: 1px solid transparent;
+/* ---- section rows (was inline flex/16px rhythm) ---- */
+.ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='buttons'],
+.ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='inputs'],
+.ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='cards'],
+.ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='badges'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+  margin-block-end: var(--ds-spacing-4);
+}
+.ds-pattern-branding-preview-sandbox [data-part='surface'][data-state='typography'] {
+  margin-block-end: var(--ds-spacing-4);
 }
 
-.ds-pattern-branding-preview-sandbox [data-part='button'][data-variant='primary'] {
-  background: var(--ds-button-primary-bg, var(--ds-color-primary));
-  color: var(--ds-button-primary-color, #fff);
+/* ---- preview cards: the width channel (class hook; Card owns the chrome) ---- */
+.ds-pattern-branding-preview-sandbox .ds-branding-preview-sandbox__card {
+  inline-size: 16.25rem;
+  /* narrow containers clip nothing: the card yields before overflowing */
+  max-inline-size: 100%;
 }
-
-.ds-pattern-branding-preview-sandbox [data-part='button'][data-part='button'][data-variant='secondary'] {
-  background: var(--ds-button-secondary-bg, transparent);
-  color: var(--ds-button-secondary-color, var(--ds-color-text-primary));
-  border-color: var(--ds-button-secondary-border, var(--ds-color-border));
+.ds-pattern-branding-preview-sandbox[data-part='root'][data-state='compact'] .ds-branding-preview-sandbox__card {
+  inline-size: 12.5rem;
 }
-
-.ds-pattern-branding-preview-sandbox [data-part='button'][data-part='button'][data-variant='default'] {
-  background: var(--ds-button-default-bg, transparent);
-  color: var(--ds-button-default-color, var(--ds-color-text-primary));
-  border-color: var(--ds-button-default-border, var(--ds-color-border));
-}
-
-.ds-pattern-branding-preview-sandbox [data-part='button'][data-variant='ghost'] {
-  background: var(--ds-button-ghost-bg, transparent);
-  color: var(--ds-button-ghost-color, var(--ds-color-text-muted));
-}
-
-.ds-pattern-branding-preview-sandbox [data-part='input'][data-part='input'][data-part='input'] {
-  border-radius: var(--ds-radius-md, 8px);
-  border: 1px solid var(--ds-input-border, var(--ds-color-border));
-  background: var(--ds-input-bg, var(--ds-color-bg-primary));
-  color: var(--ds-input-color, var(--ds-color-text-primary));
-  outline: none;
-}
-
-.ds-pattern-branding-preview-sandbox [data-part='input'][data-part='input'][data-state='error'] {
-  border-color: var(--ds-input-error-border, var(--ds-color-error));
-}
-
-.ds-pattern-branding-preview-sandbox [data-part='card'][data-part='card'][data-part='card'] {
-  border-radius: var(--ds-radius-lg, 12px);
-  border: 1px solid var(--ds-card-border, var(--ds-color-border));
-  background: var(--ds-card-bg, var(--ds-color-bg-elevated, #fff));
-}
-
-.ds-pattern-branding-preview-sandbox [data-part='card'][data-state='elevated'] {
-  box-shadow: var(--ds-card-shadow-hover, 0 8px 24px rgba(0,0,0,0.1));
-}
-
 .ds-pattern-branding-preview-sandbox [data-part='preview-card-title'][data-part='preview-card-title'] {
+  display: block;
+  margin-block-end: var(--ds-spacing-1);
   color: var(--ds-card-title-color, var(--ds-color-text-primary));
 }
-
 .ds-pattern-branding-preview-sandbox [data-part='preview-card-body'][data-part='preview-card-body'] {
+  display: block;
   color: var(--ds-card-body-color, var(--ds-color-text-muted));
 }
 
-.ds-pattern-branding-preview-sandbox
-  [data-part='surface'][data-state='badges']
-  > [data-part='badge'] {
-  border-radius: var(--ds-radius-sm, 6px);
-}
-
-.ds-pattern-branding-preview-sandbox
-  [data-part='surface'][data-state='badges']
-  > [data-part='badge'][data-state='active'] {
-  background: var(--ds-color-success-bg, rgba(34,197,94,0.1));
-  color: var(--ds-color-success);
-}
-
-.ds-pattern-branding-preview-sandbox
-  [data-part='surface'][data-state='badges']
-  > [data-part='badge'][data-state='warning'] {
-  background: var(--ds-color-warning-bg, rgba(245,158,11,0.1));
-  color: var(--ds-color-warning);
-}
-
-.ds-pattern-branding-preview-sandbox
-  [data-part='surface'][data-state='badges']
-  > [data-part='badge'][data-state='error'] {
-  background: var(--ds-color-error-bg, rgba(239,68,68,0.1));
-  color: var(--ds-color-error);
-}
-
-.ds-pattern-branding-preview-sandbox
-  [data-part='surface'][data-state='badges']
-  > [data-part='badge'][data-state='info'] {
-  background: var(--ds-color-info-bg, rgba(59,130,246,0.1));
-  color: var(--ds-color-info);
-}
-
+/* ---- mini table channel mirror (geometry drained; logical alignment) ---- */
 .ds-pattern-branding-preview-sandbox [data-part='table'][data-part='table'][data-part='table'] {
-  border-radius: var(--ds-radius-md, 8px);
+  overflow: hidden;
+  margin-block-end: var(--ds-spacing-4);
+  border-radius: var(--ds-radius-md);
   border: 1px solid var(--ds-table-border, var(--ds-color-border));
 }
 
 .ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head'] {
+  display: flex;
+  padding: var(--ds-table-cell-padding, 10px 16px);
+  font-size: var(--ds-table-header-font-size, 13px);
+  font-weight: var(--ds-table-header-font-weight, 500);
   background: var(--ds-table-header-bg, var(--ds-color-bg-secondary));
   color: var(--ds-table-header-color, var(--ds-color-text-muted));
   border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
@@ -125,8 +101,17 @@
 .ds-pattern-branding-preview-sandbox
   [data-part='table']
   > [data-part='surface'][data-part='surface'] {
+  display: flex;
+  align-items: center;
+  padding: var(--ds-table-cell-padding, 10px 16px);
+  font-size: var(--ds-table-cell-font-size, 14px);
   color: var(--ds-table-cell-color, var(--ds-color-text-primary));
   border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border));
+}
+.ds-pattern-branding-preview-sandbox
+  [data-part='table']
+  > [data-part='surface'][data-part='surface']:last-child {
+  border-bottom: none;
 }
 
 .ds-pattern-branding-preview-sandbox
@@ -141,32 +126,64 @@
   background: var(--ds-table-row-bg-striped, transparent);
 }
 
-.ds-pattern-branding-preview-sandbox
-  [data-part='table']
-  [data-part='badge'][data-state='active'] {
-  border-radius: 4px;
-  background: var(--ds-color-success-bg, rgba(34,197,94,0.1));
-  color: var(--ds-color-success);
+.ds-pattern-branding-preview-sandbox [data-part='preview-table-cell'] {
+  flex: 1;
+  min-inline-size: 0;
 }
-
+.ds-pattern-branding-preview-sandbox [data-part='preview-table-cell'][data-span='wide'] {
+  flex: 2;
+}
+.ds-pattern-branding-preview-sandbox [data-part='preview-table-cell'][data-align='end'] {
+  /* logical end: the retired physical `right` mirrored nothing under RTL */
+  text-align: end;
+}
+.ds-pattern-branding-preview-sandbox [data-part='preview-table-cell'][data-variant='name'] {
+  font-weight: var(--ds-font-weight-medium, 500);
+}
 .ds-pattern-branding-preview-sandbox
   [data-part='table']
   [data-part='preview-table-cell'][data-variant='date'] {
+  font-family: var(--ds-font-family-mono);
+  font-size: var(--ds-font-size-xs);
   color: var(--ds-color-text-muted);
 }
 
+/* ---- typography sample rhythm (Heading/Text own their paint) ---- */
 .ds-pattern-branding-preview-sandbox [data-part='title'][data-part='title'] {
+  margin-block-end: var(--ds-spacing-1);
   color: var(--ds-color-text-primary);
 }
-
 .ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='body'] {
+  display: block;
+  margin-block-start: var(--ds-spacing-1);
+  line-height: var(--ds-line-height-body);
   color: var(--ds-color-text-secondary);
 }
-
 .ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='code'] {
+  display: block;
+  margin-block-start: var(--ds-spacing-1);
+  font-family: var(--ds-font-family-mono);
+  font-size: var(--ds-font-size-xs);
   color: var(--ds-color-text-muted);
 }
 
+/* ---- footer variable count ---- */
 .ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='variable-count'] {
+  margin-block-start: var(--ds-spacing-2);
+  font-size: var(--ds-font-size-2xs);
+  text-align: center;
   color: var(--ds-color-text-disabled);
+}
+
+/* forced-colors: the table mirror's borders re-assert in system ink (the
+   real primitives own their own forced-colors contracts). */
+@media (forced-colors: active) {
+  .ds-pattern-branding-preview-sandbox [data-part='root'][data-part='root'][data-part='root'],
+  .ds-pattern-branding-preview-sandbox [data-part='table'][data-part='table'][data-part='table'],
+  .ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head'],
+  .ds-pattern-branding-preview-sandbox
+    [data-part='table']
+    > [data-part='surface'][data-part='surface'] {
+    border-color: ButtonText;
+  }
 }

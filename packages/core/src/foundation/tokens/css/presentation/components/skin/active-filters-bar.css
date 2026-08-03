@@ -102,10 +102,15 @@
 
 /* ---- chip content typography INSIDE the composed Tag (the primitive owns
         the chip chrome; the label is the tracked mini-eyebrow, the value is
-        the readable payload -- never microscopic body text) ---- */
+        the readable payload -- never microscopic body text). Long values
+        ellipsize against a governed max-inline-size (RTL-safe logical
+        properties; the engine discloses the full string via `title`), and a
+        logical gap separates label from value without a painted separator. ---- */
 .ds-structure.ds-active-filters-bar[data-part="root"]
   [data-part="chip"]
   [data-part="chip-label"] {
+  display: inline-block;
+  vertical-align: bottom;
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
   font-weight: 700;
@@ -113,15 +118,26 @@
   line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
+  min-inline-size: 0;
+  max-inline-size: 24ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .ds-structure.ds-active-filters-bar[data-part="root"]
   [data-part="chip"]
   [data-part="chip-value"] {
+  display: inline-block;
+  vertical-align: bottom;
   color: var(--ds-color-text-primary);
   font-size: var(--ds-font-size-xs);
   font-weight: 600;
   line-height: 1;
   white-space: nowrap;
+  min-inline-size: 0;
+  max-inline-size: 40ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-inline-start: var(--ds-spacing-1, 0.25rem);
 }
 
 /* ---- entrance: one coordinated fade-rise, silenced under reduced-motion ---- */

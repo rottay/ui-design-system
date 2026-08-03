@@ -31,6 +31,7 @@ import { arrayValueAt } from '@/foundation/kernel/collections';
 import { Badge, Box, Button, Card, Flex, Heading, Input, Select, Stack, Text } from '../../../primitives';
 import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
 import { validateBrandingContrast, type BrandingColors } from '@/foundation/kernel/accessibility/branding-contrast';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type {
   BrandChrome,
   BrandControlsChrome,
@@ -366,12 +367,21 @@ export function normalizeBrandTheme(value: BrandTheme | Partial<BrandTheme>): Br
 
 // ---------------------------------------------------------------------------
 // Editor field controls
+//
+// Chrome copy resolves through the optional `components` i18n channel with an
+// English floor (the studio renders standalone without a provider and never
+// echoes a raw key). ALL geometry is skin-owned
+// (`presentation/components/skin/brand-studio.css`); inline `style` survives
+// only for genuine runtime data (the live swatch background).
 // ---------------------------------------------------------------------------
 
-const fieldLabelStyle: React.CSSProperties = {
-  display: 'block',
-  marginBottom: 4,
-};
+/** Floor-resolving translator for the studio's own chrome copy. */
+type BrandStudioTranslator = (key: string, floor: string, params?: Record<string, string | number>) => string;
+
+function useBrandStudioCopy(): BrandStudioTranslator {
+  const i18n = useOptionalTranslation('components');
+  return (key, floor, params) => i18n?.tOr(key, floor, params) ?? floor;
+}
 
 function FieldLabel({ children }: { children: React.ReactNode }): React.ReactElement {
   return (
@@ -380,7 +390,6 @@ function FieldLabel({ children }: { children: React.ReactNode }): React.ReactEle
       data-part="field-label"
       size="xs"
       weight="semibold"
-      style={fieldLabelStyle}
     >
       {children}
     </Text>
@@ -405,9 +414,8 @@ function ColorField({
           className="ds-pattern-brand-studio__color-swatch"
           data-part="color-swatch"
           style={{
-            width: 28,
-            height: 28,
-            flexShrink: 0,
+            // Runtime data: the live value preview (the whole point of the
+            // swatch). Geometry/frame are skin-owned.
             background: isHex(value) ? value : 'transparent',
           }}
         />
@@ -416,8 +424,10 @@ function ColorField({
           data-part="field-input"
           value={value ?? ''}
           placeholder="#000000"
+          /* the visible FieldLabel is not programmatically associated; the
+             control still needs an accessible name */
+          aria-label={label}
           onChange={(next) => onChange(next)}
-          style={{ width: '100%' }}
         />
       </Flex>
     </Box>
@@ -443,8 +453,8 @@ function TextField({
         data-part="field-input"
         value={value ?? ''}
         placeholder={placeholder}
+        aria-label={label}
         onChange={(next) => onChange(next)}
-        style={{ width: '100%' }}
       />
     </Box>
   );
@@ -469,6 +479,7 @@ function NumberField({
         data-part="field-input"
         value={value == null ? '' : String(value)}
         placeholder={placeholder}
+        aria-label={label}
         onChange={(next) => {
           const trimmed = next.trim();
           if (trimmed === '') {
@@ -478,7 +489,6 @@ function NumberField({
           const parsed = Number(trimmed);
           onChange(Number.isNaN(parsed) ? undefined : parsed);
         }}
-        style={{ width: '100%' }}
       />
     </Box>
   );
@@ -489,11 +499,13 @@ function SelectField<T extends string>({
   value,
   options,
   onChange,
+  inheritPlaceholder,
 }: {
   label: string;
   value: T | undefined;
   options: Array<{ value: T; label: string }>;
   onChange: (value: T) => void;
+  inheritPlaceholder: string;
 }): React.ReactElement {
   return (
     <Box className="ds-pattern-brand-studio__field" data-part="field">
@@ -503,34 +515,25 @@ function SelectField<T extends string>({
         data-part="field-input"
         value={value}
         options={options}
-        placeholder="Inherit"
+        placeholder={inheritPlaceholder}
+        aria-label={label}
         onChange={(next) => onChange(next as T)}
-        style={{ width: '100%' }}
       />
     </Box>
   );
 }
-
-const EDITOR_GRID: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-  gap: 12,
-};
 
 function EditorSection({ title, children }: { title: string; children: React.ReactNode }): React.ReactElement {
   return (
     <Box
       className="ds-pattern-brand-studio__section"
       data-part="section"
-      style={{
-        padding: 16,
-      }}
     >
       <Stack spacing="sm">
-        <Text size="sm" weight="semibold" style={{ display: 'block' }}>
+        <Text className="ds-pattern-brand-studio__section-title" data-part="section-title" size="sm" weight="semibold">
           {title}
         </Text>
-        <Box style={EDITOR_GRID}>{children}</Box>
+        <Box className="ds-pattern-brand-studio__editor-grid" data-part="editor-grid">{children}</Box>
       </Stack>
     </Box>
   );
@@ -541,16 +544,13 @@ function EditorSection({ title, children }: { title: string; children: React.Rea
 // ---------------------------------------------------------------------------
 
 function ContrastReportView({ report }: { report: BrandStudioContrastReport }): React.ReactElement {
+  const t = useBrandStudioCopy();
   return (
     <Box
       className="ds-pattern-brand-studio__contrast-summary"
       data-part="contrast-summary"
       data-ground={report.surface}
       data-state={report.valid ? 'pass' : 'fail'}
-      style={{
-        marginTop: 12,
-        padding: 12,
-      }}
     >
       <Flex
         className="ds-pattern-brand-studio__contrast-row"
@@ -558,27 +558,26 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
         align="center"
         justify="between"
         gap={8}
-        style={{ flexWrap: 'wrap' }}
+        wrap="wrap"
       >
         <Text
           className="ds-pattern-brand-studio__contrast-label"
           data-part="contrast-label"
           size="xs"
           weight="semibold"
-          style={{
-            display: 'block',
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
-          }}
         >
-          {report.surface === 'dark' ? 'Dark ground' : 'Light ground'} contrast
+          {report.surface === 'dark'
+            ? t('brandStudio.contrast.titleDark', 'Dark ground contrast')
+            : t('brandStudio.contrast.titleLight', 'Light ground contrast')}
         </Text>
         <Badge
           className="ds-pattern-brand-studio__contrast-state"
           data-state={report.valid ? 'pass' : 'fail'}
           variant={report.valid ? 'success' : 'error'}
         >
-          {report.valid ? 'WCAG AA clean' : `${report.violations.length} failing`}
+          {report.valid
+            ? t('brandStudio.contrast.pass', 'WCAG AA clean')
+            : t('brandStudio.contrast.failing', '{count} failing', { count: report.violations.length })}
         </Badge>
       </Flex>
       {report.violations.length === 0 ? (
@@ -586,15 +585,11 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
           className="ds-pattern-brand-studio__contrast-message"
           data-part="contrast-message"
           size="xs"
-          style={{
-            display: 'block',
-            marginTop: 8,
-          }}
         >
-          Every checkable color pair meets its required ratio.
+          {t('brandStudio.contrast.allPass', 'Every checkable color pair meets its required ratio.')}
         </Text>
       ) : (
-        <Stack spacing="xs" style={{ marginTop: 8 }}>
+        <Stack className="ds-pattern-brand-studio__violations" data-part="violations" spacing="xs">
           {report.violations.map((violation) => {
             const suggestion = report.suggestions.find((entry) => entry.pair === violation.pair);
             return (
@@ -603,9 +598,6 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
                 className="ds-pattern-brand-studio__violation"
                 data-part="violation"
                 data-severity="error"
-                style={{
-                  padding: '8px 10px',
-                }}
               >
                 <Flex
                   className="ds-pattern-brand-studio__contrast-row"
@@ -613,31 +605,39 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
                   align="center"
                   justify="between"
                   gap={8}
-                  style={{ flexWrap: 'wrap' }}
+                  wrap="wrap"
                 >
-                  <Text size="xs" weight="semibold" style={{ display: 'block' }}>
+                  <Text size="xs" weight="semibold" className="ds-pattern-brand-studio__violation-pair" data-part="violation-pair">
                     {violation.pair}
                   </Text>
                   <Text
                     className="ds-pattern-brand-studio__violation-ratio"
                     data-part="violation-ratio"
                     size="xs"
-                    style={{ display: 'block' }}
                   >
-                    {violation.ratio.toFixed(2)} : 1 &middot; needs {violation.required} : 1 ({violation.level})
+                    {t('brandStudio.violation.ratio', '{ratio} : 1 · needs {required} : 1 ({level})', {
+                      ratio: violation.ratio.toFixed(2),
+                      required: violation.required,
+                      level: violation.level,
+                    })}
                   </Text>
                 </Flex>
                 <Text
                   className="ds-pattern-brand-studio__violation-detail"
                   data-part="violation-detail"
                   size="xs"
-                  style={{
-                    display: 'block',
-                    marginTop: 4,
-                  }}
                 >
-                  {violation.foreground} on {violation.background}
-                  {suggestion ? ` → try ${suggestion.suggestedColor} (${suggestion.newRatio.toFixed(2)} : 1)` : ''}
+                  {suggestion
+                    ? t('brandStudio.violation.detailSuggestion', '{foreground} on {ground} — try {suggestion} ({ratio} : 1)', {
+                        foreground: violation.foreground,
+                        ground: violation.background,
+                        suggestion: suggestion.suggestedColor,
+                        ratio: suggestion.newRatio.toFixed(2),
+                      })
+                    : t('brandStudio.violation.detail', '{foreground} on {ground}', {
+                        foreground: violation.foreground,
+                        ground: violation.background,
+                      })}
                 </Text>
               </Box>
             );
@@ -665,6 +665,7 @@ function PreviewPanel({
   galleries: PatternBrandStudioProps['galleries'];
   report: BrandStudioContrastReport;
 }): React.ReactElement {
+  const t = useBrandStudioCopy();
   const scopeClass = `brand-studio-${surface.key}-${scopeSalt}`;
 
   const mergedVars = useMemo(() => buildSurfaceVariables(theme, surface).vars, [theme, surface]);
@@ -689,9 +690,9 @@ function PreviewPanel({
         align="center"
         justify="between"
         gap={8}
-        style={{ marginBottom: 8, flexWrap: 'wrap' }}
+        wrap="wrap"
       >
-        <Text size="sm" weight="semibold" style={{ display: 'block' }}>
+        <Text className="ds-pattern-brand-studio__preview-panel-title" data-part="preview-panel-title" size="sm" weight="semibold">
           {surface.label ?? surface.key}
         </Text>
         <Badge variant="secondary">{surface.baseTheme}</Badge>
@@ -702,10 +703,6 @@ function PreviewPanel({
         data-part="preview-content"
         data-surface={surface.key}
         data-ground={surface.baseTheme}
-        style={{
-          padding: 20,
-          fontFamily: 'var(--ds-font-family-base, inherit)',
-        }}
       >
         {galleries ? (
           galleries({
@@ -718,11 +715,8 @@ function PreviewPanel({
             className="ds-pattern-brand-studio__preview-fallback"
             data-part="preview-fallback"
             size="sm"
-            style={{
-              display: 'block',
-            }}
           >
-            Pass a galleries slot to render live component states here.
+            {t('brandStudio.preview.fallback', 'Pass a galleries slot to render live component states here.')}
           </Text>
         )}
       </Box>
@@ -733,55 +727,68 @@ function PreviewPanel({
 
 // ---------------------------------------------------------------------------
 // Editor
+//
+// Select option labels are visible chrome copy: they build through the copy
+// channel (English floors) instead of shipping as hardcoded module constants.
 // ---------------------------------------------------------------------------
 
-const HEADING_WEIGHT_OPTIONS: Array<{
+function buildHeadingWeightOptions(t: BrandStudioTranslator): Array<{
   value: 'lighter' | 'normal' | 'heavier';
   label: string;
-}> = [
-  { value: 'lighter', label: 'Lighter' },
-  { value: 'normal', label: 'Normal' },
-  { value: 'heavier', label: 'Heavier' },
-];
+}> {
+  return [
+    { value: 'lighter', label: t('brandStudio.option.lighter', 'Lighter') },
+    { value: 'normal', label: t('brandStudio.option.normal', 'Normal') },
+    { value: 'heavier', label: t('brandStudio.option.heavier', 'Heavier') },
+  ];
+}
 
-const LABEL_STYLE_OPTIONS: Array<{
+function buildLabelStyleOptions(t: BrandStudioTranslator): Array<{
   value: 'uppercase' | 'sentence' | 'capitalize';
   label: string;
-}> = [
-  { value: 'uppercase', label: 'Uppercase' },
-  { value: 'sentence', label: 'Sentence' },
-  { value: 'capitalize', label: 'Capitalize' },
-];
+}> {
+  return [
+    { value: 'uppercase', label: t('brandStudio.option.uppercase', 'Uppercase') },
+    { value: 'sentence', label: t('brandStudio.option.sentence', 'Sentence') },
+    { value: 'capitalize', label: t('brandStudio.option.capitalize', 'Capitalize') },
+  ];
+}
 
-const ENTRANCE_OPTIONS: Array<{
+function buildEntranceOptions(t: BrandStudioTranslator): Array<{
   value: 'none' | 'fade' | 'slideUp' | 'spring' | 'bounce';
   label: string;
-}> = [
-  { value: 'none', label: 'None' },
-  { value: 'fade', label: 'Fade' },
-  { value: 'slideUp', label: 'Slide up' },
-  { value: 'spring', label: 'Spring' },
-  { value: 'bounce', label: 'Bounce' },
-];
+}> {
+  return [
+    { value: 'none', label: t('brandStudio.option.none', 'None') },
+    { value: 'fade', label: t('brandStudio.option.fade', 'Fade') },
+    { value: 'slideUp', label: t('brandStudio.option.slideUp', 'Slide up') },
+    { value: 'spring', label: t('brandStudio.option.spring', 'Spring') },
+    { value: 'bounce', label: t('brandStudio.option.bounce', 'Bounce') },
+  ];
+}
 
-const PULSE_OPTIONS: Array<{
+function buildPulseOptions(t: BrandStudioTranslator): Array<{
   value: 'none' | 'slow' | 'normal' | 'fast';
   label: string;
-}> = [
-  { value: 'none', label: 'None' },
-  { value: 'slow', label: 'Slow' },
-  { value: 'normal', label: 'Normal' },
-  { value: 'fast', label: 'Fast' },
-];
+}> {
+  return [
+    { value: 'none', label: t('brandStudio.option.none', 'None') },
+    { value: 'slow', label: t('brandStudio.option.slow', 'Slow') },
+    { value: 'normal', label: t('brandStudio.option.normal', 'Normal') },
+    { value: 'fast', label: t('brandStudio.option.fast', 'Fast') },
+  ];
+}
 
-const SKELETON_OPTIONS: Array<{
+function buildSkeletonOptions(t: BrandStudioTranslator): Array<{
   value: 'pulse' | 'shimmer' | 'wave';
   label: string;
-}> = [
-  { value: 'pulse', label: 'Pulse' },
-  { value: 'shimmer', label: 'Shimmer' },
-  { value: 'wave', label: 'Wave' },
-];
+}> {
+  return [
+    { value: 'pulse', label: t('brandStudio.option.pulse', 'Pulse') },
+    { value: 'shimmer', label: t('brandStudio.option.shimmer', 'Shimmer') },
+    { value: 'wave', label: t('brandStudio.option.wave', 'Wave') },
+  ];
+}
 
 /** Ensure `draft.palette` exists and return it (typed, mutable). primaryColor is required by the contract. */
 function draftPalette(draft: BrandTheme): BrandPalette {
@@ -819,6 +826,8 @@ function BrandThemeEditor({
   theme: BrandTheme;
   emit: (mutate: (draft: BrandTheme) => void) => void;
 }): React.ReactElement {
+  const t = useBrandStudioCopy();
+  const inheritPlaceholder = t('brandStudio.inherit', 'Inherit');
   const palette: Partial<BrandPalette> = theme.palette ?? {};
   const typography = theme.typography ?? {};
   const surfaces = theme.surfaces ?? {};
@@ -834,9 +843,9 @@ function BrandThemeEditor({
 
   return (
     <Stack className="ds-pattern-brand-studio__editor" data-part="editor" spacing="md">
-      <EditorSection title="Palette">
+      <EditorSection title={t('brandStudio.section.palette', 'Palette')}>
         <ColorField
-          label="Primary"
+          label={t('brandStudio.field.primary', 'Primary')}
           value={palette.primaryColor}
           onChange={(v) =>
             emit((d) => {
@@ -845,7 +854,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Secondary"
+          label={t('brandStudio.field.secondary', 'Secondary')}
           value={palette.secondaryColor}
           onChange={(v) =>
             emit((d) => {
@@ -854,7 +863,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Accent"
+          label={t('brandStudio.field.accent', 'Accent')}
           value={palette.accentColor}
           onChange={(v) =>
             emit((d) => {
@@ -863,7 +872,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Success"
+          label={t('brandStudio.field.success', 'Success')}
           value={palette.successColor}
           onChange={(v) =>
             emit((d) => {
@@ -872,7 +881,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Warning"
+          label={t('brandStudio.field.warning', 'Warning')}
           value={palette.warningColor}
           onChange={(v) =>
             emit((d) => {
@@ -881,7 +890,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Error"
+          label={t('brandStudio.field.error', 'Error')}
           value={palette.errorColor}
           onChange={(v) =>
             emit((d) => {
@@ -890,7 +899,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Info"
+          label={t('brandStudio.field.info', 'Info')}
           value={palette.infoColor}
           onChange={(v) =>
             emit((d) => {
@@ -899,7 +908,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Dark primary (dark ground)"
+          label={t('brandStudio.field.darkPrimary', 'Dark primary (dark ground)')}
           value={palette.darkPrimaryColor}
           onChange={(v) =>
             emit((d) => {
@@ -908,7 +917,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Dark background (dark ground)"
+          label={t('brandStudio.field.darkBackground', 'Dark background (dark ground)')}
           value={palette.darkBackgroundColor}
           onChange={(v) =>
             emit((d) => {
@@ -918,9 +927,9 @@ function BrandThemeEditor({
         />
       </EditorSection>
 
-      <EditorSection title="Typography">
+      <EditorSection title={t('brandStudio.section.typography', 'Typography')}>
         <TextField
-          label="Base font"
+          label={t('brandStudio.field.baseFont', 'Base font')}
           value={typography.fontFamilyBase}
           placeholder="Inter, sans-serif"
           onChange={(v) =>
@@ -930,7 +939,7 @@ function BrandThemeEditor({
           }
         />
         <TextField
-          label="Heading font"
+          label={t('brandStudio.field.headingFont', 'Heading font')}
           value={typography.fontFamilyHeading}
           placeholder="Inter, sans-serif"
           onChange={(v) =>
@@ -940,7 +949,7 @@ function BrandThemeEditor({
           }
         />
         <TextField
-          label="Mono font"
+          label={t('brandStudio.field.monoFont', 'Mono font')}
           value={typography.fontFamilyMono}
           placeholder="monospace"
           onChange={(v) =>
@@ -950,7 +959,7 @@ function BrandThemeEditor({
           }
         />
         <TextField
-          label="Display font"
+          label={t('brandStudio.field.displayFont', 'Display font')}
           value={typography.fontFamilyDisplay}
           placeholder="Inter, sans-serif"
           onChange={(v) =>
@@ -960,9 +969,10 @@ function BrandThemeEditor({
           }
         />
         <SelectField
-          label="Heading weight"
+          label={t('brandStudio.field.headingWeight', 'Heading weight')}
           value={typography.headingWeightBias}
-          options={HEADING_WEIGHT_OPTIONS}
+          options={buildHeadingWeightOptions(t)}
+          inheritPlaceholder={inheritPlaceholder}
           onChange={(v) =>
             emit((d) => {
               d.typography = { ...(d.typography ?? {}), headingWeightBias: v };
@@ -970,9 +980,10 @@ function BrandThemeEditor({
           }
         />
         <SelectField
-          label="Label style"
+          label={t('brandStudio.field.labelStyle', 'Label style')}
           value={typography.labelStyle}
-          options={LABEL_STYLE_OPTIONS}
+          options={buildLabelStyleOptions(t)}
+          inheritPlaceholder={inheritPlaceholder}
           onChange={(v) =>
             emit((d) => {
               d.typography = { ...(d.typography ?? {}), labelStyle: v };
@@ -981,9 +992,9 @@ function BrandThemeEditor({
         />
       </EditorSection>
 
-      <EditorSection title="Surfaces">
+      <EditorSection title={t('brandStudio.section.surfaces', 'Surfaces')}>
         <TextField
-          label="Radius sm"
+          label={t('brandStudio.field.radiusSm', 'Radius sm')}
           value={radius.sm}
           placeholder="4px"
           onChange={(v) =>
@@ -994,7 +1005,7 @@ function BrandThemeEditor({
           }
         />
         <TextField
-          label="Radius md"
+          label={t('brandStudio.field.radiusMd', 'Radius md')}
           value={radius.md}
           placeholder="8px"
           onChange={(v) =>
@@ -1005,7 +1016,7 @@ function BrandThemeEditor({
           }
         />
         <TextField
-          label="Radius lg"
+          label={t('brandStudio.field.radiusLg', 'Radius lg')}
           value={radius.lg}
           placeholder="12px"
           onChange={(v) =>
@@ -1016,7 +1027,7 @@ function BrandThemeEditor({
           }
         />
         <TextField
-          label="Radius xl"
+          label={t('brandStudio.field.radiusXl', 'Radius xl')}
           value={radius.xl}
           placeholder="16px"
           onChange={(v) =>
@@ -1027,7 +1038,7 @@ function BrandThemeEditor({
           }
         />
         <NumberField
-          label="Effect intensity"
+          label={t('brandStudio.field.effectIntensity', 'Effect intensity')}
           value={surfaces.effectIntensity}
           placeholder="1"
           onChange={(v) =>
@@ -1037,7 +1048,7 @@ function BrandThemeEditor({
           }
         />
         <NumberField
-          label="Density scale"
+          label={t('brandStudio.field.densityScale', 'Density scale')}
           value={surfaces.densityScale}
           placeholder="1"
           onChange={(v) =>
@@ -1048,11 +1059,12 @@ function BrandThemeEditor({
         />
       </EditorSection>
 
-      <EditorSection title="Motion">
+      <EditorSection title={t('brandStudio.section.motion', 'Motion')}>
         <SelectField
-          label="Entrance"
+          label={t('brandStudio.field.entrance', 'Entrance')}
           value={motion.entrance}
-          options={ENTRANCE_OPTIONS}
+          options={buildEntranceOptions(t)}
+          inheritPlaceholder={inheritPlaceholder}
           onChange={(v) =>
             emit((d) => {
               d.motion = { ...(d.motion ?? {}), entrance: v };
@@ -1060,7 +1072,7 @@ function BrandThemeEditor({
           }
         />
         <NumberField
-          label="Entrance duration (ms)"
+          label={t('brandStudio.field.entranceDuration', 'Entrance duration (ms)')}
           value={motion.entranceDuration}
           placeholder="200"
           onChange={(v) =>
@@ -1070,7 +1082,7 @@ function BrandThemeEditor({
           }
         />
         <NumberField
-          label="Hover lift"
+          label={t('brandStudio.field.hoverLift', 'Hover lift')}
           value={motion.hoverLift}
           placeholder="0"
           onChange={(v) =>
@@ -1080,7 +1092,7 @@ function BrandThemeEditor({
           }
         />
         <NumberField
-          label="Hover scale"
+          label={t('brandStudio.field.hoverScale', 'Hover scale')}
           value={motion.hoverScale}
           placeholder="1"
           onChange={(v) =>
@@ -1090,9 +1102,10 @@ function BrandThemeEditor({
           }
         />
         <SelectField
-          label="Pulse speed"
+          label={t('brandStudio.field.pulseSpeed', 'Pulse speed')}
           value={motion.pulseSpeed}
-          options={PULSE_OPTIONS}
+          options={buildPulseOptions(t)}
+          inheritPlaceholder={inheritPlaceholder}
           onChange={(v) =>
             emit((d) => {
               d.motion = { ...(d.motion ?? {}), pulseSpeed: v };
@@ -1100,9 +1113,10 @@ function BrandThemeEditor({
           }
         />
         <SelectField
-          label="Skeleton"
+          label={t('brandStudio.field.skeleton', 'Skeleton')}
           value={motion.skeletonStyle}
-          options={SKELETON_OPTIONS}
+          options={buildSkeletonOptions(t)}
+          inheritPlaceholder={inheritPlaceholder}
           onChange={(v) =>
             emit((d) => {
               d.motion = { ...(d.motion ?? {}), skeletonStyle: v };
@@ -1111,9 +1125,9 @@ function BrandThemeEditor({
         />
       </EditorSection>
 
-      <EditorSection title="Chrome">
+      <EditorSection title={t('brandStudio.section.chrome', 'Chrome')}>
         <ColorField
-          label="Primary button bg"
+          label={t('brandStudio.field.primaryButtonBg', 'Primary button bg')}
           value={buttonPrimary.bg}
           onChange={(v) =>
             emit((d) => {
@@ -1123,7 +1137,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Primary button text"
+          label={t('brandStudio.field.primaryButtonText', 'Primary button text')}
           value={buttonPrimary.color}
           onChange={(v) =>
             emit((d) => {
@@ -1133,7 +1147,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Input bg"
+          label={t('brandStudio.field.inputBg', 'Input bg')}
           value={input.bg}
           onChange={(v) =>
             emit((d) => {
@@ -1143,7 +1157,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Input border"
+          label={t('brandStudio.field.inputBorder', 'Input border')}
           value={input.border}
           onChange={(v) =>
             emit((d) => {
@@ -1153,7 +1167,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Card bg"
+          label={t('brandStudio.field.cardBg', 'Card bg')}
           value={cardComponent.bg}
           onChange={(v) =>
             emit((d) => {
@@ -1163,7 +1177,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Card text"
+          label={t('brandStudio.field.cardText', 'Card text')}
           value={cardComponent.color}
           onChange={(v) =>
             emit((d) => {
@@ -1173,7 +1187,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Card muted text"
+          label={t('brandStudio.field.cardMutedText', 'Card muted text')}
           value={cardComponent.colorMuted}
           onChange={(v) =>
             emit((d) => {
@@ -1183,7 +1197,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Card border"
+          label={t('brandStudio.field.cardBorder', 'Card border')}
           value={cardComponent.border}
           onChange={(v) =>
             emit((d) => {
@@ -1193,7 +1207,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Table header bg"
+          label={t('brandStudio.field.tableHeaderBg', 'Table header bg')}
           value={table.headerBg}
           onChange={(v) =>
             emit((d) => {
@@ -1203,7 +1217,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Table row hover"
+          label={t('brandStudio.field.tableRowHover', 'Table row hover')}
           value={table.rowBgHover}
           onChange={(v) =>
             emit((d) => {
@@ -1213,7 +1227,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Modal bg"
+          label={t('brandStudio.field.modalBg', 'Modal bg')}
           value={modal.bg}
           onChange={(v) =>
             emit((d) => {
@@ -1223,7 +1237,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Modal overlay"
+          label={t('brandStudio.field.modalOverlay', 'Modal overlay')}
           value={modal.overlayBg}
           onChange={(v) =>
             emit((d) => {
@@ -1233,7 +1247,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Active tab color"
+          label={t('brandStudio.field.activeTabColor', 'Active tab color')}
           value={tabs.colorActive}
           onChange={(v) =>
             emit((d) => {
@@ -1243,7 +1257,7 @@ function BrandThemeEditor({
           }
         />
         <ColorField
-          label="Tabs border"
+          label={t('brandStudio.field.tabsBorder', 'Tabs border')}
           value={tabs.border}
           onChange={(v) =>
             emit((d) => {
@@ -1273,6 +1287,7 @@ function TenantThemePreviewSection({
 }: {
   config: BrandStudioTenantThemePreviewConfig;
 }): React.ReactElement {
+  const t = useBrandStudioCopy();
   const { document, identity, envelope, debounceMs, galleries, label } = config;
   const preview = useTenantThemePreview({ document, identity, envelope, debounceMs });
   const { artifact, issues, adjustments, packWarnings, previewRootAttributes } = preview;
@@ -1284,18 +1299,17 @@ function TenantThemePreviewSection({
       data-state={artifact ? 'valid' : 'invalid'}
       spacing="sm"
     >
-      <Flex align="center" gap={8} style={{ flexWrap: 'wrap' }}>
+      <Flex align="center" gap={8} wrap="wrap">
         <Text
           className="ds-pattern-brand-studio__tenant-preview-heading"
           data-part="tenant-preview-heading"
           size="sm"
           weight="semibold"
-          style={{ display: 'block' }}
         >
-          {label ?? 'Tenant theme live preview'}
+          {label ?? t('brandStudio.tenantPreview.heading', 'Tenant theme live preview')}
         </Text>
         <Badge variant={artifact ? 'secondary' : 'error'} data-state={artifact ? 'valid' : 'invalid'}>
-          {artifact ? identity.verticalKey : 'invalid document'}
+          {artifact ? identity.verticalKey : t('brandStudio.tenantPreview.invalidDocument', 'invalid document')}
         </Badge>
       </Flex>
 
@@ -1317,9 +1331,8 @@ function TenantThemePreviewSection({
                 className="ds-pattern-brand-studio__tenant-preview-fallback"
                 data-part="tenant-preview-fallback"
                 size="sm"
-                style={{ display: 'block' }}
               >
-                Pass a galleries slot to render live surfaces under this theme.
+                {t('brandStudio.tenantPreview.fallback', 'Pass a galleries slot to render live surfaces under this theme.')}
               </Text>
             )}
           </Box>
@@ -1345,10 +1358,12 @@ export function PatternBrandStudio({
   galleries,
   lightSurface,
   darkSurface,
-  title = 'Brand Studio',
+  title,
   description,
   tenantThemePreview,
 }: PatternBrandStudioProps): React.ReactElement {
+  const t = useBrandStudioCopy();
+  const resolvedTitle = title ?? t('brandStudio.title', 'Brand Studio');
   const scopeSalt = useId().replace(/:/g, '');
   const theme = useMemo(() => normalizeBrandTheme(value), [value]);
 
@@ -1386,9 +1401,9 @@ export function PatternBrandStudio({
       spacing="lg"
     >
       <Stack className="ds-pattern-brand-studio__preview-header" data-part="preview-header" spacing="xs">
-        <Flex align="center" gap={8} style={{ flexWrap: 'wrap' }}>
+        <Flex align="center" gap={8} wrap="wrap">
           <Heading level="h2" size="xl" weight="bold">
-            {title}
+            {resolvedTitle}
           </Heading>
           <Badge variant="secondary">{theme.name}</Badge>
         </Flex>
@@ -1399,14 +1414,13 @@ export function PatternBrandStudio({
         ) : null}
       </Stack>
 
+      {/* The two-column track + its narrow cut live in the SKIN
+          (`.brand-studio-layout` rule): a per-mount injected <style> with a
+          physical max-width container query was retired -- the skin owns the
+          layout with logical container units and no runtime injection. */}
       <Box
         className="brand-studio-layout ds-pattern-brand-studio__preview-grid"
         data-part="preview-grid"
-        style={{
-          display: 'grid',
-          gap: 24,
-          alignItems: 'start',
-        }}
       >
         <Stack className="ds-pattern-brand-studio__editor" data-part="editor" spacing="md">
           <Text
@@ -1414,11 +1428,8 @@ export function PatternBrandStudio({
             data-part="editor-heading"
             size="sm"
             weight="semibold"
-            style={{
-              display: 'block',
-            }}
           >
-            Bounded BrandTheme fields
+            {t('brandStudio.editorHeading', 'Bounded BrandTheme fields')}
           </Text>
           <BrandThemeEditor theme={theme} emit={emit} />
         </Stack>
@@ -1429,11 +1440,8 @@ export function PatternBrandStudio({
             data-part="preview-heading"
             size="sm"
             weight="semibold"
-            style={{
-              display: 'block',
-            }}
           >
-            Live preview on both grounds
+            {t('brandStudio.previewHeading', 'Live preview on both grounds')}
           </Text>
           {surfaces.map((surface, index) => {
             const report = arrayValueAt(reports, index);
@@ -1454,25 +1462,19 @@ export function PatternBrandStudio({
             className="ds-pattern-brand-studio__action-panel"
             data-part="action"
             data-state={hostileReports ? 'complete' : 'idle'}
-            style={{
-              padding: 16,
-            }}
           >
             <Stack spacing="sm">
-              <Flex align="center" justify="between" gap={8} style={{ flexWrap: 'wrap' }}>
+              <Flex align="center" justify="between" gap={8} wrap="wrap">
                 <Box>
-                  <Text size="sm" weight="semibold" style={{ display: 'block' }}>
-                    Hostile input check
+                  <Text className="ds-pattern-brand-studio__action-title" data-part="action-title" size="sm" weight="semibold">
+                    {t('brandStudio.hostile.title', 'Hostile input check')}
                   </Text>
                   <Text
                     className="ds-pattern-brand-studio__action-helper"
                     data-part="action-helper"
                     size="xs"
-                    style={{
-                      display: 'block',
-                    }}
                   >
-                    Applies deliberately extreme values and reports the failing color pairs per ground.
+                    {t('brandStudio.hostile.helper', 'Applies deliberately extreme values and reports the failing color pairs per ground.')}
                   </Text>
                 </Box>
                 <Button
@@ -1482,7 +1484,7 @@ export function PatternBrandStudio({
                   variant="primary"
                   onClick={runHostileCheck}
                 >
-                  Run check
+                  {t('brandStudio.hostile.run', 'Run check')}
                 </Button>
               </Flex>
               {hostileReports ? (
@@ -1500,19 +1502,6 @@ export function PatternBrandStudio({
       {tenantThemePreview ? (
         <TenantThemePreviewSection config={tenantThemePreview} />
       ) : null}
-
-      {/* The column track lives here rather than inline: a container query
-          cannot outrank an inline style without !important, and an escape
-          hatch that defeats a specificity the rule should simply own is not a
-          fix. Both declarations sit at the same specificity, so the narrow
-          rule wins by source order. */}
-      <style
-        dangerouslySetInnerHTML={{
-          __html:
-            `.brand-studio-layout { grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr); }` +
-            `@container (max-width: 900px) { .brand-studio-layout { grid-template-columns: 1fr; } }`,
-        }}
-      />
     </Stack>
   );
 }

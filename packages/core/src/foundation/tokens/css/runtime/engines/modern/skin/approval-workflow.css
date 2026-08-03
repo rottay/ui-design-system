@@ -186,6 +186,14 @@
    ============================================================================ */
 
 /* --- Step row + timeline track ---------------------------------------------- */
+/* The timeline is a real ordered list (AT position announcement); the list
+   chrome is reset here so only the dot/connector anatomy reads. */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='timeline'] {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .ds-pattern-approval-workflow.ds-engine-modern [data-part='step'] {
   display: flex;
   gap: var(--ds-approval-step-gap, 12px);

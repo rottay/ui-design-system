@@ -216,7 +216,9 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
             </div>
           )}
           <div>
-            <h2 data-part="tenant-name">
+            {/* title mirrors the full name: the skin truncates long tenant
+                names with ellipsis (truncation never eats content silently). */}
+            <h2 data-part="tenant-name" title={creationConfig.name}>
               {creationConfig.name}
             </h2>
             <p data-part="tenant-slug">
@@ -236,7 +238,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                 <div data-part="swatch-label" data-palette="primary">
                   {copy.primary}
                 </div>
-                <div data-part="palette" data-palette="primary">
+                <div data-part="palette" data-palette="primary" role="list">
                   {primaryPalette.map(({ step, color }) => (
                     <div
                       key={step}
@@ -244,6 +246,11 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                       data-part="swatch"
                       data-palette="primary"
                       data-step={step}
+                      /* the swatch IS the content (a palette step): expose it
+                         to AT the same way the tooltip exposes it to sighted
+                         users */
+                      role="listitem"
+                      aria-label={`${step}: ${color}`}
                       /* Palette fixtures are consumer config data: the computed
                          swatch color stays inline (the preview's purpose). */
                       style={{ backgroundColor: color }}
@@ -267,7 +274,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                   <div data-part="swatch-label" data-palette="secondary">
                     {copy.secondary}
                   </div>
-                  <div data-part="palette" data-palette="secondary">
+                  <div data-part="palette" data-palette="secondary" role="list">
                     {secondaryPalette.map(({ step, color }) => (
                       <div
                         key={step}
@@ -275,6 +282,8 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                         data-part="swatch"
                         data-palette="secondary"
                         data-step={step}
+                        role="listitem"
+                        aria-label={`${step}: ${color}`}
                         style={{ backgroundColor: color }}
                       />
                     ))}

@@ -1,0 +1,365 @@
+/**
+ * Modern ModerationGallery skin (premium workflow wave).
+ *
+ * LAYER: wired into `layer(rottay-engines)` through the facade entrypoints
+ * (base.css / styles.css). The facade import lines are owner-gated — this
+ * file ships alongside the engine and the wiring delta rides the batch
+ * fragment (p615-workflow).
+ *
+ * BORDER-COLOR FLOOR (P-48): border paint reaches (0,4,0) through the
+ * always-stamped root `data-part` ancestor (or `data-loading` on the root
+ * itself) — repeating an attribute on one element is forbidden.
+ * `border: none` resets are exempt.
+ *
+ * `data-part` is a shared VOCABULARY — every rule is anchored to this
+ * component's own two scope classes, and the engine class keeps the
+ * classic/rustic trees out.
+ *
+ * STATUS LAW: moderation status reads through the Badge recipe (governed
+ * icon + text label + tone) — the card border/elevation stay neutral and
+ * there is no vertical accent anywhere (house law).
+ *
+ * OVERLAY LAW: the actions overlay is always in the DOM. Coarse pointers and
+ * keyboard users see it unconditionally; fine-pointer hover hides it until
+ * `:hover` / `:focus-within`. The scrim consumes the canonical alpha ramp.
+ */
+
+/* --- Root ------------------------------------------------------------------ */
+.ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] {
+  min-inline-size: 0;
+}
+
+/* --- Intrinsic grid (auto-fill/minmax; no container query required) ---------
+   The card minimum is single-family geometry: it lives inline in the track,
+   not in a custom property. */
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='grid'],
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-grid'] {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--ds-spacing-4, 16px);
+}
+
+/* --- Card -------------------------------------------------------------------- */
+.ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card'] {
+  position: relative;
+  background: var(--ds-surface-card);
+  border: 1px solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--ds-elevation-1);
+  transition:
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card'][data-selected] {
+  border-color: var(--ds-color-primary);
+  box-shadow:
+    0 0 0 1px var(--ds-color-primary),
+    var(--ds-elevation-1);
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:focus-within {
+  box-shadow: var(--ds-elevation-2);
+}
+
+/* Hover lift is private to this media-card grammar: coupling it to the global
+   entrance offset would make an animation-direction choice move cards the
+   wrong way. */
+@media (hover: hover) {
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:hover {
+    box-shadow: var(--ds-elevation-2);
+    transform: translateY(calc(-1 * var(--_ds-moderation-gallery-card-lift, 2px)));
+  }
+}
+
+/* --- Media --------------------------------------------------------------------- */
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-media'] {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-thumbnail'] {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Media-type chip (video): governed icon + sr label over a token scrim. */
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-type'] {
+  position: absolute;
+  inset-block-end: var(--ds-spacing-2, 8px);
+  inset-inline-end: var(--ds-spacing-2, 8px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--ds-spacing-6, 24px);
+  block-size: var(--ds-spacing-6, 24px);
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-color-alpha-black-50);
+  color: var(--ds-color-text-inverse);
+}
+
+/* --- Status badge overlay ------------------------------------------------------- */
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-status'] {
+  position: absolute;
+  inset-block-start: var(--ds-spacing-2, 8px);
+  inset-inline-start: var(--ds-spacing-2, 8px);
+}
+
+/* --- Selection checkbox (contrast chip over arbitrary media) --------------------- */
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-select'] {
+  position: absolute;
+  inset-block-start: var(--ds-spacing-1, 4px);
+  inset-inline-end: var(--ds-spacing-1, 4px);
+  display: inline-flex;
+  padding: var(--ds-spacing-1, 4px);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-alpha-black-40);
+}
+
+/* --- Governed actions overlay ------------------------------------------------------
+   The classic engine hardcoded a 70% black gradient; the existing alpha ramp
+   is now the sole paint authority. */
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions'] {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-2, 8px);
+  padding-block: var(--ds-spacing-3, 12px);
+  padding-inline: var(--ds-spacing-3, 12px);
+  background: linear-gradient(
+    to top,
+    var(--ds-color-alpha-black-70),
+    transparent
+  );
+  transition:
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+/* Fine pointers: hidden until hover or keyboard focus lands inside the card. */
+@media (hover: hover) {
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions'] {
+    opacity: 0;
+    transform: translateY(var(--ds-spacing-1, 4px));
+  }
+
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:hover [data-part='card-actions'],
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:focus-within [data-part='card-actions'] {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Overlay action paint (the public Button carries the caller part — P-79). */
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'] {
+  border-radius: var(--ds-radius-md);
+  transition:
+    background var(--ds-motion-fast) var(--ds-motion-ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve'] {
+  background: var(--ds-color-success);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve']:active:not(:disabled) {
+  background: var(--ds-color-success-600);
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']:active:not(:disabled) {
+  background: var(--ds-color-error-600);
+}
+
+@media (hover: hover) {
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='approve']:hover:not(:disabled) {
+    background: var(--ds-color-success-600);
+  }
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'][data-action='reject']:hover:not(:disabled) {
+    background: var(--ds-color-error-600);
+  }
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button']:focus-visible,
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-approve-button']:focus-visible,
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-reject-button']:focus-visible,
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-clear-button']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* --- Card footer -------------------------------------------------------------------- */
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-footer'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-spacing-2, 8px);
+  padding-block: var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-spacing-3, 12px);
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-uploader'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  min-inline-size: 0;
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-uploader-name'] {
+  font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));
+  font-weight: var(--ds-font-weight-medium, 500);
+  color: var(--ds-color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-meta'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-3, 12px);
+  font-size: var(--ds-type-caption-font-size, 11px);
+  color: var(--ds-color-text-muted);
+  font-variant-numeric: var(--ds-numeric-tabular, tabular-nums);
+  white-space: nowrap;
+}
+
+/* --- Bulk toolbar ---------------------------------------------------------------------- */
+.ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='bulk-toolbar'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-spacing-3, 12px);
+  margin-block-end: var(--ds-spacing-3, 12px);
+  padding-block: var(--ds-spacing-2, 10px);
+  padding-inline: var(--ds-spacing-5, 20px);
+  background: var(--ds-color-primary-subtle);
+  border: 1px solid var(--ds-color-border-primary);
+  border-radius: var(--ds-radius-lg);
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-count'] {
+  font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 13px));
+  font-weight: var(--ds-font-weight-semibold, 600);
+  color: var(--ds-color-primary);
+  font-variant-numeric: var(--ds-numeric-tabular, tabular-nums);
+}
+
+/* --- Empty ------------------------------------------------------------------------------ */
+.ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='empty'] {
+  padding-block: var(--ds-spacing-10, 40px);
+  padding-inline: var(--ds-spacing-6, 24px);
+  background: var(--ds-surface-card);
+  border: 1px solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-lg);
+}
+
+/* --- Skeleton (grid footprint) ------------------------------------------------------------ */
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-grid'] {
+  animation: ds-moderation-gallery-skeleton-pulse var(--ds-motion-deliberate)
+    var(--ds-motion-ease-in-out, ease-in-out) infinite alternate;
+}
+
+@keyframes ds-moderation-gallery-skeleton-pulse {
+  from { opacity: 1; }
+  to { opacity: 0.45; }
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='skeleton-card'] {
+  background: var(--ds-surface-card);
+  border: 1px solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-lg);
+  overflow: hidden;
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-media'] {
+  aspect-ratio: 1 / 1;
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-footer'] {
+  padding-block: var(--ds-spacing-3, 12px);
+  padding-inline: var(--ds-spacing-3, 12px);
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-line'] {
+  block-size: var(--ds-spacing-3, 12px);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-line'][data-width='half'] {
+  inline-size: 50%;
+}
+
+/* --- Touch target floor --------------------------------------------------------------------- */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'],
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-approve-button'],
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-reject-button'],
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='bulk-clear-button'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}
+
+/* --- Forced colors: overlays can rely on neither opacity reveals nor colour scrims. ---------- */
+@media (forced-colors: active) {
+  .ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card'],
+  .ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='bulk-toolbar'],
+  .ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='empty'],
+  .ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='skeleton-card'] {
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card'][data-selected] {
+    border-color: Highlight;
+  }
+
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions'] {
+    opacity: 1;
+    transform: none;
+    background: Canvas;
+    border-block-start: 1px solid ButtonText;
+  }
+
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-type'],
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-select'] {
+    background: Canvas;
+  }
+}
+
+/* --- Reduced motion ---------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='skeleton-grid'] {
+    animation: none;
+  }
+
+  .ds-pattern-moderation-gallery.ds-engine-modern[data-part='root'] [data-part='card'],
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-actions'],
+  .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card-action-button'] {
+    transition: none;
+  }
+
+  @media (hover: hover) {
+    .ds-pattern-moderation-gallery.ds-engine-modern [data-part='card']:hover {
+      transform: none;
+    }
+  }
+}

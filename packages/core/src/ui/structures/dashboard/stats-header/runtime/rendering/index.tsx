@@ -52,7 +52,10 @@ function SparklineDots({ dots, accent }: { dots: number[]; accent: AccentColor }
             data-part="spark-dot"
             data-accent={accent}
             data-dot-index={i}
-            style={{ opacity }}
+            style={{
+              /* runtime instance channel — the skin owns the declaration */
+              '--_ds-stats-header-spark-dot-opacity': opacity,
+            } as CSSProperties}
           />
         );
       })}
@@ -134,6 +137,9 @@ function StatCard({ stat }: { stat: StatItem }) {
           corner icon. */}
       <div data-part="stat-top">
         <div data-part="statistic">
+          {/* The value's editorial scale is drained to the skin, which owns
+              the `--ds-stats-header-value-font-size/-font-weight` channels
+              (the compact container cut retunes the size channel). */}
           <Statistic
             title={stat.label}
             value={stat.value}
@@ -141,12 +147,6 @@ function StatCard({ stat }: { stat: StatItem }) {
             suffix={stat.suffix}
             animateValue
             countFrom={0}
-            valueStyle={{
-              fontSize: 'var(--ds-stats-header-value-font-size, 2.25rem)',
-              fontWeight: 'var(--ds-stats-header-value-font-weight, 800)',
-              lineHeight: 1,
-              fontVariantNumeric: 'tabular-nums',
-            }}
           />
         </div>
         {stat.change !== undefined && (
@@ -212,6 +212,7 @@ function StatsHeaderImpl({ stats, loading = false }: StatsHeaderProps) {
       className="ds-stats-header"
       data-part="root"
       data-loading={loading ? 'true' : 'false'}
+      aria-busy={loading || undefined}
       style={{
         '--ds-stats-header-columns': Math.max(Math.min(stats.length, 4), 1),
       } as CSSProperties}

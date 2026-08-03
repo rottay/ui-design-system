@@ -136,6 +136,9 @@ function avatarName(
   },
     React.createElement('div', {
       'data-part': 'avatar',
+      // The initials tile is decorative redundancy: the adjacent name carries
+      // the same information, so AT must not announce it twice.
+      'aria-hidden': 'true',
       style: {
         width: dim,
         height: dim,
@@ -160,6 +163,8 @@ function avatarName(
       }, name),
       subtitle ? React.createElement('div', {
         'data-part': 'subtitle',
+        // CSS-ellipsis truncation pairs with the native tooltip reveal.
+        title: subtitle,
         style: {
           fontSize: 'var(--ds-font-size-xs, 12px)',
           whiteSpace: 'nowrap',
@@ -258,8 +263,9 @@ function mono(
   options?: MonospaceOptions,
 ): React.ReactElement {
   const display = value == null ? '--' : String(value);
-  const truncated = options?.maxLength && display.length > options.maxLength
-    ? display.slice(0, options.maxLength) + '...'
+  const isTruncated = Boolean(options?.maxLength && display.length > options.maxLength);
+  const truncated = isTruncated
+    ? display.slice(0, options!.maxLength) + '…'
     : display;
 
   return React.createElement('span', {
@@ -267,6 +273,8 @@ function mono(
     'data-part': 'mono',
     'data-empty': value == null ? 'true' : 'false',
     'data-size': options?.size ?? 'sm',
+    // Truncation carries its reveal strategy: the full value is one hover away.
+    title: isTruncated ? display : undefined,
     style: {
       fontFamily: 'var(--ds-font-family-mono, monospace)',
       fontSize: `var(--ds-font-size-${options?.size ?? 'sm'}, 13px)`,
@@ -422,6 +430,9 @@ function tags(
       ? React.createElement('span', {
           'data-part': 'overflow',
           'data-count': overflow,
+          // The collapsed tags keep a reveal path: the hidden names are one
+          // hover away, same contract as the other truncating renderers.
+          title: items.slice(max).join(', '),
           style: { fontSize: 'var(--ds-font-size-xs, 12px)' },
         }, `+${overflow}`)
       : null,
@@ -445,11 +456,19 @@ function score(
   const width = options?.barWidth ?? 60;
   const height = options?.barHeight ?? 6;
 
+  const clamped = Math.min(100, Math.max(0, value));
+
   return React.createElement('div', {
     className: CELL_RENDERER_SCOPE_CLASS,
     'data-part': 'score',
     'data-band': band,
     'data-value': value,
+    // The band color is decorative redundancy; the quantitative reading is a
+    // native meter so assistive tech gets min/max/now without the palette.
+    role: 'meter',
+    'aria-valuemin': 0,
+    'aria-valuemax': 100,
+    'aria-valuenow': clamped,
     style: {
       display: 'flex',
       alignItems: 'center',
@@ -459,6 +478,7 @@ function score(
   },
     React.createElement('div', {
       'data-part': 'score-track',
+      'aria-hidden': 'true',
       style: {
         width,
         height,
@@ -469,7 +489,7 @@ function score(
         'data-part': 'score-bar',
         'data-band': band,
         style: {
-          width: `${Math.min(100, Math.max(0, value))}%`,
+          width: `${clamped}%`,
           height: '100%',
         },
       }),
@@ -521,6 +541,9 @@ function truncated(
     className: CELL_RENDERER_SCOPE_CLASS,
     'data-part': 'truncated',
     'data-empty': value == null ? 'true' : 'false',
+    // Ellipsis truncation is only honest with a reveal path: the full string
+    // stays available as the native tooltip.
+    title: value ?? undefined,
     style: {
       display: 'inline-block',
       maxWidth: maxWidth ?? 200,

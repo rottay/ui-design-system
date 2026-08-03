@@ -1,10 +1,19 @@
 /**
  * LoadingOverlay skin — engine-agnostic and deliberately unlayered.
- * The two animation vocabularies (logo pulse, trailing dots) keep their
- * shorthands inline in the component BY FROZEN CONTRACT (the pre-step test
- * pins their exact strings in the source); this file owns the keyframes,
- * the static paint, the geometry drained from the component's inline
- * styles, and the forced-colors contract.
+ * The two animation vocabularies (logo pulse, trailing dots) are owned HERE
+ * — keyframes, durations and stagger transcribed verbatim from the retired
+ * inline shorthands. The move fixes a real defect: an inline `animation`
+ * outranks the reduced-motion guard below, so the loops could never go
+ * still; skin-owned, they silence cleanly (no `!important` anywhere). The
+ * pre-step test that pinned the two inline shorthand strings in the TSX
+ * source must be re-pinned by Codex to this skin-owned form — the same
+ * minimal migration contract documented below for the backdrop blur.
+ * Durations ride private component channels derived from the glacial rung:
+ *   --_ds-loading-overlay-pulse-duration = ×3.6 (exact 1.8s)
+ *   --_ds-loading-overlay-dots-duration  = ×2.8 (exact 1.4s; the
+ *     per-dot stagger derives from it at ÷7 = the exact 0.2s steps)
+ * This file also owns the static paint, the geometry drained from the
+ * component's inline styles, and the forced-colors contract.
  *
  * FROZEN STRINGS (pre-step contract test, text-pinned byte-exactly — do not
  * reword): the `background` rgba fallback literal, the
@@ -39,7 +48,9 @@
   /* Geometry drained from the component's inline styles. */
   position: absolute;
   inset: 0;
-  z-index: var(--ds-loading-overlay-z, 10);
+  /* the family channel keeps its contract; the canonical overlay rung is
+     the default instead of the former magic 10 (final literal floor kept) */
+  z-index: var(--ds-loading-overlay-z, var(--ds-z-index-overlay, 1300));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,6 +60,26 @@
   background: var(--ds-color-bg-primary, rgba(15,23,42,0.85));
   backdrop-filter: blur(2px);
   border-radius: inherit;
+}
+
+/* Animation assignment drained from the component's inline styles — same
+   keyframes, durations, easing and stagger, verbatim (see the header for
+   the private channels and the test re-pin contract). */
+.ds-loading-overlay[data-part='root'] [data-part='logo'] {
+  animation: ds-loading-overlay-pulse
+    var(--_ds-loading-overlay-pulse-duration, calc(var(--ds-motion-glacial) * 3.6))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+.ds-loading-overlay[data-part='root'] [data-part='dot'] {
+  animation: ds-loading-overlay-dots
+    var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8))
+    var(--ds-motion-ease-in-out, ease-in-out) infinite;
+}
+.ds-loading-overlay[data-part='root'] [data-part='dot'][data-dot-index='1'] {
+  animation-delay: calc(var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8)) / 7);
+}
+.ds-loading-overlay[data-part='root'] [data-part='dot'][data-dot-index='2'] {
+  animation-delay: calc(var(--_ds-loading-overlay-dots-duration, calc(var(--ds-motion-glacial) * 2.8)) / 7 * 2);
 }
 
 .ds-loading-overlay[data-part='root'] [data-part='message'],

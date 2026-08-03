@@ -9,9 +9,9 @@
  * ownership (including provider-scoped color resolution) to the renderer.
  */
 
-import { memo, useMemo, useRef } from 'react';
+import { memo, useMemo, useRef, type CSSProperties } from 'react';
 
-import type { ChartBaseProps, ChartColorSchemeProps, ChartStateProps } from '../../contracts';
+import type { ChartBaseProps, ChartColorSchemeProps, ChartLegendProps, ChartStateProps } from '../../contracts';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
 import { useChartPersonality } from '../../runtime';
 import { SvgCalendarHeatMapRenderer } from '../../runtime/chart-engine/presentation/react/renderers/calendar-heat-map';
@@ -25,7 +25,7 @@ export interface CalendarHeatMapDataPoint {
 }
 
 /** Own props for the {@link CalendarHeatMap} component (state copy is composed below). */
-interface CalendarHeatMapOwnProps extends ChartBaseProps, ChartColorSchemeProps {
+interface CalendarHeatMapOwnProps extends ChartBaseProps, ChartColorSchemeProps, ChartLegendProps {
   data: CalendarHeatMapDataPoint[];
   /** Start date of the range. Default: 1 year ago from today */
   startDate?: Date | string;
@@ -92,6 +92,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
   showDayLabels = true,
   formatTooltip,
   onCellClick,
+  legend = false,
   width,
   height: heightProp = 180,
   className,
@@ -185,6 +186,40 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
     dataCount: values.size,
     emptyLabel,
   });
+
+  // Threshold-labelled ramp legend. The ramp is a governed color-mix bridge
+  // between the two caller/personality range stops (the renderer resolves the
+  // same stops for its quantize scale); the numeric extent labels are the
+  // color-independent reading of the scale. Visible copy is numbers only, so
+  // the legend stays locale-neutral without new catalog keys.
+  const valueExtent = useMemo<readonly [number, number] | null>(() => {
+    let minimum = Number.POSITIVE_INFINITY;
+    let maximum = Number.NEGATIVE_INFINITY;
+    for (const value of values.values()) {
+      if (!Number.isFinite(value)) continue;
+      if (value < minimum) minimum = value;
+      if (value > maximum) maximum = value;
+    }
+    return minimum <= maximum ? [minimum, maximum] : null;
+  }, [values]);
+
+  const legendNode = legend && valueExtent ? (
+    <div
+      data-part="legend"
+      style={{
+        // Private family bridge: the stops are runtime caller paint, the
+        // skin owns the ramp structure. This is intentionally not a public
+        // tenant-theme channel.
+        ['--_ds-calendar-heatmap-ramp-low' as never]: resolvedColorRange[0],
+        ['--_ds-calendar-heatmap-ramp-high' as never]: resolvedColorRange[1],
+      } as CSSProperties}
+    >
+      <span data-part="legend-threshold" data-bound="min">{valueExtent[0]}</span>
+      <span data-part="legend-ramp" aria-hidden="true" />
+      <span data-part="legend-threshold" data-bound="max">{valueExtent[1]}</span>
+    </div>
+  ) : null;
+
   // Rebuild the discriminated state contract from the resolved state so the
   // typed-required copy correlates with the active arm.
   const stateProps: ChartStateProps = resolvedState === 'error'
@@ -228,6 +263,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
         `Date range: ${startKey} to ${endKey}.`,
       )}
       summary={summary}
+      legend={legendNode}
       plot={({ descriptionId }) => (
         <SvgCalendarHeatMapRenderer
           startDate={startDate}

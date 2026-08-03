@@ -20,6 +20,9 @@ import type {
 } from '../../contracts';
 import { useChartCompact, useChartDimensions, useChartPersonality } from '../../runtime';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
+import { TooltipValue } from '../../presentation/tooltip';
+import type { ChartInteraction } from '../../runtime/chart-engine/foundation/interaction';
+import type { SvgGaugeSegment } from '../../runtime/chart-engine/foundation/renderers/geometry';
 import { SvgGaugeRenderer } from '../../runtime/chart-engine/presentation/react/renderers/gauge';
 
 /** A single threshold segment rendered as a colored arc band on the gauge. */
@@ -49,6 +52,8 @@ interface GaugeChartOwnProps
   segments?: GaugeSegment[];
   /** Show value text in center. Default: true. */
   showValue?: boolean;
+  /** Render the loading state as a structural placeholder instead of a centered label. */
+  skeleton?: boolean;
   /** Value format function. */
   formatValue?: (value: number) => string;
   /** Label below the value. */
@@ -130,6 +135,7 @@ export const GaugeChart = memo(function GaugeChart({
   innerRadius = 0.7,
   showNeedle = true,
   needleColor = 'var(--ds-color-text-primary)',
+  skeleton,
   width,
   height = 300,
   className,
@@ -195,6 +201,21 @@ export const GaugeChart = memo(function GaugeChart({
     )),
     [clampedValue, resolvedSegments],
   );
+  // The family declares the explore interaction only while the tooltip
+  // personality is active; the renderer's shared controller owns hover, focus,
+  // and keyboard cycling across threshold zones.
+  const interaction: ChartInteraction<SvgGaugeSegment> | undefined = chartPersonality.tooltip
+    ? {
+      mode: 'explore',
+      renderTooltip: (active) => (
+        <TooltipValue
+          label={active.datum.label ?? `${active.datum.from} - ${active.datum.to}`}
+          value={displayValue}
+          color={active.datum.color}
+        />
+      ),
+    }
+    : undefined;
   const summary = useMemo(() => ({
     caption: title ? `${title} data summary` : 'Gauge chart data summary',
     headers: ['Metric', 'Value'],
@@ -295,6 +316,7 @@ export const GaugeChart = memo(function GaugeChart({
       style={style}
       {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
+      skeleton={skeleton}
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? `Gauge chart showing ${displayValue}`}
@@ -337,6 +359,7 @@ export const GaugeChart = memo(function GaugeChart({
           trackCornerRadius={2}
           segmentCornerRadius={1}
           showSegmentTitles={chartPersonality.tooltip}
+          {...(interaction === undefined ? {} : { interaction })}
         />
       )}
     />

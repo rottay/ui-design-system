@@ -144,7 +144,6 @@ export function SvgGanttRenderer({
               x={tick.x}
               y={tick.y + 16}
               textAnchor="middle"
-              style={{ fontSize: '11px' }}
             >
               {tick.label}
             </text>
@@ -161,7 +160,6 @@ export function SvgGanttRenderer({
               y={bar.rowLabel.y}
               textAnchor="end"
               dominantBaseline="middle"
-              style={{ fontSize: '12px' }}
             >
               {bar.name}
             </text>
@@ -171,40 +169,68 @@ export function SvgGanttRenderer({
         <g data-part="gantt-motion" data-animate={shouldAnimate ? 'true' : 'false'}>
           {geometry.bars.map((bar) => {
             const task = taskById.get(bar.id);
+            // Zero-duration tasks (end === start) are milestones: the geometry
+            // gives them a sub-pixel bar, so they render as a diamond marker —
+            // a distinct shape that stays legible without color or width.
+            const isMilestone = bar.duration.width < 1;
+            const milestoneCenterY = bar.duration.y + bar.duration.height / 2;
+            const milestoneHalf = Math.max(4, bar.duration.height / 2);
+            const milestonePath = `M ${bar.duration.x} ${milestoneCenterY - milestoneHalf} L ${bar.duration.x + milestoneHalf} ${milestoneCenterY} L ${bar.duration.x} ${milestoneCenterY + milestoneHalf} L ${bar.duration.x - milestoneHalf} ${milestoneCenterY} Z`;
             return (
               <g
                 key={bar.id}
                 data-part="task"
                 data-datum-id={bar.id}
                 data-mark-index={bar.index % 5}
+                data-kind={isMilestone ? 'milestone' : 'task'}
                 role="img"
-                aria-label={`${bar.name}${bar.progressValue != null ? `: ${bar.progressValue}% complete` : ''}.`}
+                aria-label={`${bar.name}${isMilestone ? ' (milestone)' : ''}${bar.progressValue != null ? `: ${bar.progressValue}% complete` : ''}.`}
               >
                 {showTitles && task ? <title>{tooltipFor(task)}</title> : null}
-                <rect
-                  data-part="task-duration"
-                  data-color-source={bar.colorSource}
-                  x={bar.duration.x}
-                  y={bar.duration.y}
-                  width={bar.duration.width}
-                  height={bar.duration.height}
-                  rx={4}
-                  fill={bar.color}
-                  opacity={0.25}
-                  aria-hidden="true"
-                >
-                  {shouldAnimate ? (
-                    <animate
-                      attributeName="opacity"
-                      from="0"
-                      to="0.25"
-                      begin={`${Math.round(bar.index * 50)}ms`}
-                      dur={`${animationDuration}ms`}
-                      fill="freeze"
-                    />
-                  ) : null}
-                </rect>
-                {bar.progress ? (
+                {isMilestone ? (
+                  <path
+                    data-part="task-milestone"
+                    data-color-source={bar.colorSource}
+                    d={milestonePath}
+                    style={{ '--_ds-gantt-milestone-fill': bar.color } as CSSProperties}
+                    aria-hidden="true"
+                  >
+                    {shouldAnimate ? (
+                      <animate
+                        attributeName="opacity"
+                        from="0"
+                        to="1"
+                        begin={`${Math.round(bar.index * 50)}ms`}
+                        dur={`${animationDuration}ms`}
+                      />
+                    ) : null}
+                  </path>
+                ) : (
+                  <rect
+                    data-part="task-duration"
+                    data-color-source={bar.colorSource}
+                    x={bar.duration.x}
+                    y={bar.duration.y}
+                    width={bar.duration.width}
+                    height={bar.duration.height}
+                    rx={4}
+                    fill={bar.color}
+                    opacity={0.25}
+                    aria-hidden="true"
+                  >
+                    {shouldAnimate ? (
+                      <animate
+                        attributeName="opacity"
+                        from="0"
+                        to="0.25"
+                        begin={`${Math.round(bar.index * 50)}ms`}
+                        dur={`${animationDuration}ms`}
+                        fill="freeze"
+                      />
+                    ) : null}
+                  </rect>
+                )}
+                {!isMilestone && bar.progress ? (
                   <rect
                     data-part="task-progress"
                     data-color-source={bar.colorSource}
@@ -249,7 +275,6 @@ export function SvgGanttRenderer({
               x={geometry.today.labelX}
               y={geometry.today.labelY}
               textAnchor="middle"
-              style={{ fontSize: '10px' }}
             >
               {todayLabel}
             </text>

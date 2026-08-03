@@ -91,6 +91,7 @@
   background-image: linear-gradient(var(--ds-elevation-surface-3), var(--ds-elevation-surface-3));
   border-radius: var(--ds-radius-lg);
   box-shadow: var(--ds-elevation-3);
+  animation: ds-foundation-fade-in-down var(--ds-motion-fast) var(--ds-motion-ease-enter, ease-out);
 }
 .ds-pattern-environment-toggle.ds-engine-modern[data-part='root'] [data-part='panel'] {
   border: 1px solid var(--ds-color-border-subtle);
@@ -183,6 +184,7 @@
   color: var(--ds-envtoggle-accent);
   font-size: var(--ds-font-size-xs, 0.75rem);
   font-weight: var(--ds-font-weight-medium);
+  animation: ds-foundation-fade-in-down var(--ds-motion-fast) var(--ds-motion-ease-enter, ease-out);
 }
 .ds-pattern-environment-toggle.ds-engine-modern[data-part='root'] [data-part='banner'] {
   border-block-end: 2px solid var(--ds-envtoggle-accent);

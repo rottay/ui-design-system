@@ -11,9 +11,18 @@
  *
  * ASYMMETRY (preserved): the row LABEL is painted at VALUE_COLOR (bright), not
  * LABEL_COLOR — a real, visible difference from the other three variants.
- * The value's hover-colour swap lives entirely in the co-located `<style>`
- * (`.metric-row-v3:hover .metric-row-value`) and was always suppressed by the
- * inline value colour; the (0,5,0) rest rule below preserves that suppression.
+ * The value's hover-colour swap is owned by the interactions skin
+ * (`dashboard-metrics-interactions.css`, `:where()` zero-weight) and is
+ * suppressed at rest by the (0,5,0) rule below.
+ *
+ * GEOMETRY DRAIN (premium wave): the engine's static inline geometry (panel
+ * frame, header rule, icon wells, live badge/dot, shimmer frame, scroll
+ * region) moved here; the panel block size rides a private seam whose fallback
+ * follows the governed rhythm dial from the shipped 415px measure.
+ * `Text` typography and the counter's runtime value stay in the engine.
+ * The motion cadence (slide-in / dot-glow / shimmer) lives in the
+ * interactions skin; this file adds the reduced-motion and forced-colors
+ * contracts for its own parts.
  *
  * STATE: `data-positive` drives the 2-tone trend treatment while the
  * quantitative meter remains the sole bar-shaped data visualization.
@@ -21,7 +30,17 @@
 
 /* panel chrome -------------------------------------------------------------- */
 
+/* Root layout drained from the engine (the former inline height/padding/flex
+   frame). The panel block size rides the shared dashboard socket so embedded
+   contexts (beside-chat strips) can retune it; the 415px fallback is the
+   shipped dashboard measure, preserved byte-exact. */
 .ds-metrics-rows.ds-metrics-rows[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
   background: var(--ds-signal-card-bg, var(--ds-premium-card-bg, var(--ds-color-bg-secondary)));
   border-radius: var(--ds-signal-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)));
   box-shadow: var(--ds-signal-card-shadow, var(--ds-premium-card-shadow, none));
@@ -29,10 +48,22 @@
 .ds-metrics-rows.ds-metrics-rows[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
+.ds-metrics-rows.ds-metrics-rows [data-part='header'] {
+  /* Header geometry drained from the engine. */
+  padding-block-end: 12px;
+  margin-block-end: 12px;
+  position: relative;
+}
 .ds-metrics-rows.ds-metrics-rows [data-part='header'][data-part='header'] {
   border-bottom: 1px solid var(--ds-signal-card-border, var(--ds-premium-card-border, var(--ds-color-border-secondary)));
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='panel-icon-box'] {
+  /* 32px icon well drained from the engine. */
+  inline-size: 32px;
+  block-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--ds-signal-card-icon-bg, var(--ds-metric-card-icon-bg, var(--ds-color-primary-100)));
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='panel-icon-box'][data-part='panel-icon-box'] {
@@ -45,12 +76,15 @@
   color: var(--ds-signal-card-title-color, var(--ds-color-text-primary));
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='live-badge'] {
+  padding: 6px 12px;
   background: var(--ds-signal-card-badge-bg, var(--ds-color-success-100));
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='live-badge'][data-part='live-badge'] {
   border: 1px solid var(--ds-signal-card-badge-border, var(--ds-color-success-200));
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='live-dot'] {
+  inline-size: 8px;
+  block-size: 8px;
   border-radius: 50%;
   background: var(--ds-signal-card-badge-color, var(--ds-color-success));
 }
@@ -71,13 +105,30 @@
 
 /* shimmer sweep ------------------------------------------------------------- */
 
+/* Geometry drained from the engine. The sweep rides the PHYSICAL `left`
+   axis because its keyframe (`ds-metrics-rows-shimmer`, contract-pinned in
+   the interactions skin) animates `left` — a logical offset would tear the
+   sweep under RTL. */
 .ds-metrics-rows.ds-metrics-rows [data-part='shimmer'] {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
   background: var(--ds-metric-card-sheen, var(--ds-shell-shimmer-faint, linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent), transparent)));
 }
 
-/* row icon box — 2px border, static colour --------------------------------- */
+/* row icon box — 2px border, static colour; the 40px well is drained from
+   the engine --------------------------------- */
 
 .ds-metrics-rows.ds-metrics-rows [data-part='metric-icon-box'] {
+  inline-size: 40px;
+  block-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
   background: var(--ds-metric-card-icon-bg, var(--ds-signal-card-icon-bg, var(--ds-color-primary-100)));
 }
 .ds-metrics-rows.ds-metrics-rows [data-part='metric-icon-box'][data-part='metric-icon-box'] {
@@ -105,8 +156,48 @@
   color: var(--ds-metric-card-trend-color-error, var(--ds-color-error));
 }
 
-/* big value — rest colour; hover swap lives in the co-located <style> -------- */
+/* big value — rest colour; the hover swap is owned by the interactions skin
+   (`dashboard-metrics-interactions.css`), suppressed at rest by this (0,5,0) - */
 
 .ds-metrics-rows.ds-metrics-rows [data-part='metric-value'][data-part='metric-value'][data-part='metric-value'] {
   color: var(--ds-metric-card-value-color, var(--ds-color-text-primary));
+}
+
+/* scroll region — geometry drained from the engine ---------------------------- */
+
+.ds-metrics-rows.ds-metrics-rows [data-part='scroll-area'] {
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+}
+
+/* reduced motion: the row value's colour fade and every transition go quiet;
+   the entrance/glow/shimmer loops are silenced in the interactions skin. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-metrics-rows.ds-metrics-rows [data-part='metric-row'],
+  .ds-metrics-rows.ds-metrics-rows [data-part='metric-value'] {
+    transition: none;
+  }
+}
+
+/* forced-colors: the panel, rows and badge keep system frames; the live dot
+   reads in system ink; trend direction survives through the trend icon shape
+   and the signed change text, never the hue. */
+@media (forced-colors: active) {
+  .ds-metrics-rows.ds-metrics-rows[data-part='root'][data-part='root'],
+  .ds-metrics-rows.ds-metrics-rows [data-part='metric-row'][data-part='metric-row'],
+  .ds-metrics-rows.ds-metrics-rows [data-part='panel-icon-box'][data-part='panel-icon-box'],
+  .ds-metrics-rows.ds-metrics-rows [data-part='metric-icon-box'][data-part='metric-icon-box'],
+  .ds-metrics-rows.ds-metrics-rows [data-part='live-badge'][data-part='live-badge'],
+  .ds-metrics-rows.ds-metrics-rows [data-part='header'][data-part='header'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-metrics-rows.ds-metrics-rows [data-part='live-dot'] {
+    background: ButtonText;
+  }
+  .ds-metrics-rows.ds-metrics-rows [data-part='shimmer'] {
+    display: none;
+  }
 }

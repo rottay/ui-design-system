@@ -1,6 +1,8 @@
 import React from 'react';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 
 import type { StableEngineName } from '../../../../../tooling/testing/helpers/engine';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../../tooling/testing/helpers/engine';
@@ -8,6 +10,14 @@ import type { NotificationCenterProps } from '../contracts';
 import ClassicNotificationCenter from '../engines/classic';
 import ModernNotificationCenter from '../engines/modern';
 import RusticNotificationCenter from '../engines/rustic';
+
+const MODERN_SKIN = readFileSync(
+  resolve(
+    process.cwd(),
+    'src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css',
+  ),
+  'utf8',
+).replace(/\/\*[\s\S]*?\*\//g, '');
 
 const COMPONENTS: Record<StableEngineName, React.ComponentType<NotificationCenterProps>> = {
   classic: ClassicNotificationCenter,
@@ -106,7 +116,7 @@ describe('PatternNotificationCenter', () => {
       expect(trigger).toHaveAttribute('aria-label', 'Notifications');
     });
 
-    it('activates from the keyboard, which the div reconstruction could not', () => {
+    it('activates from the keyboard, which the div reconstruction could not', async () => {
       const onOpenChange = vi.fn();
       renderWithEngine(
         <ModernNotificationCenter {...createProps({ onOpenChange })} />,
@@ -115,18 +125,25 @@ describe('PatternNotificationCenter', () => {
 
       // A native button fires click for Enter/Space; the previous
       // div[role=button] had no key handler and was mouse-only.
-      screen.getByTestId('notification-trigger').focus();
-      fireEvent.click(screen.getByTestId('notification-trigger'));
+      await act(async () => {
+        screen.getByTestId('notification-trigger').focus();
+        fireEvent.click(screen.getByTestId('notification-trigger'));
+      });
       expect(onOpenChange).toHaveBeenCalledWith(true);
     });
 
-    it('preserves the 40x40 icon geometry the trigger authored inline', () => {
+    it('preserves the 40x40 icon geometry while delegating paint to the skin', () => {
       renderWithEngine(<ModernNotificationCenter {...createProps()} />, 'modern');
 
       const trigger = screen.getByTestId('notification-trigger');
-      expect(trigger.style.height).toBe('40px');
-      expect(trigger.style.width).toBe('40px');
-      expect(trigger.style.padding).toBe('0px');
+      expect(trigger).toHaveAttribute('data-part', 'trigger');
+      expect(trigger.getAttribute('style') ?? '').not.toMatch(/(?:height|width|padding)/);
+      const triggerRule = MODERN_SKIN.match(
+        /\[data-part=['"]trigger['"]\]\s*\{[^}]*\}/,
+      )?.[0] ?? '';
+      expect(triggerRule).toContain('block-size: 40px');
+      expect(triggerRule).toContain('inline-size: 40px');
+      expect(triggerRule).toContain('padding: 0');
     });
   });
 });

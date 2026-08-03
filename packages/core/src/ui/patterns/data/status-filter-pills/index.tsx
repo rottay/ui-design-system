@@ -16,7 +16,6 @@ import type { ComponentType } from 'react';
 type StatusFilterPillIcon = ComponentType<any>;
 
 import { Box, Flex, Text } from '../../../primitives';
-import { PATTERN_TRANSITION } from '../../foundation/motion';
 
 export interface StatusFilterPillOption {
   value: string;
@@ -53,13 +52,16 @@ export function StatusFilterPills({
   size = 'md',
 }: StatusFilterPillsProps) {
   const selectedValues = Array.isArray(value) ? value : [value];
-
-  const padding = size === 'sm' ? '4px 10px' : '6px 14px';
-  const fontSize = size === 'sm' ? 12 : 13;
   const gap = size === 'sm' ? 6 : 8;
 
   return (
-    <Flex data-part="root" className="ds-pattern-status-filter-pills" align="center" gap={gap} style={{ flexWrap: 'wrap' }}>
+    <Flex
+      data-part="root"
+      className="ds-pattern-status-filter-pills"
+      data-size={size}
+      align="center"
+      gap={gap}
+    >
       {options.map((option) => {
         const isSelected = selectedValues.includes(option.value);
         const Icon = option.icon;
@@ -68,28 +70,21 @@ export function StatusFilterPills({
           <Box
             key={option.value}
             as="button"
+            type="button"
             data-part="pill"
             className="ds-status-filter-pills__pill"
             data-selected={isSelected}
+            data-size={size}
+            /* Toggle semantics: the pressed state is announced, never painted
+               alone (border + ink + weight + checkmark-free ring carry it). */
+            aria-pressed={isSelected}
             onClick={() => onChange(option.value)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              padding,
-              cursor: 'pointer',
-              transition: `background ${PATTERN_TRANSITION}, border-color ${PATTERN_TRANSITION}, color ${PATTERN_TRANSITION}, box-shadow ${PATTERN_TRANSITION}`,
-            }}
           >
             {Icon && (
               <Icon
                 data-part="pill-icon"
                 className="ds-status-filter-pills__pill-icon"
                 data-selected={isSelected}
-                style={{
-                  width: size === 'sm' ? 12 : 14,
-                  height: size === 'sm' ? 12 : 14,
-                }}
               />
             )}
             <Text
@@ -97,10 +92,6 @@ export function StatusFilterPills({
               className="ds-status-filter-pills__pill-label"
               data-selected={isSelected}
               size="sm"
-              style={{
-                fontSize,
-                fontWeight: isSelected ? 500 : 400,
-              }}
             >
               {option.label}
             </Text>
@@ -109,24 +100,12 @@ export function StatusFilterPills({
                 data-part="count-badge"
                 className="ds-status-filter-pills__count-badge"
                 data-selected={isSelected}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  minWidth: size === 'sm' ? 18 : 20,
-                  height: size === 'sm' ? 18 : 20,
-                  padding: '0 6px',
-                }}
               >
                 <Text
                   data-part="count-badge-text"
                   className="ds-status-filter-pills__count-badge-text"
                   data-selected={isSelected}
                   size="sm"
-                  style={{
-                    fontSize: fontSize - 1,
-                    fontFamily: 'var(--ds-font-family-mono, monospace)',
-                  }}
                 >
                   {option.count}
                 </Text>

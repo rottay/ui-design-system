@@ -28,12 +28,15 @@
  */
 
 /* ---- root: surface + drained padding (was inline; the loading and loaded
-        branches now share one quiet frame) ---- */
+        branches now share one quiet frame). Named inline-size container: the
+        narrow cut below reflows the filter bar by COMPOSITION width, never by
+        viewport. ---- */
 .ds-pattern-activity-log.ds-engine-modern[data-part='root'] {
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-1);
   border-radius: var(--ds-radius-lg);
   padding: var(--ds-activity-log-padding, 20px 24px);
+  container: ds-activity-log / inline-size;
 }
 
 /* ---- filter bar: geometry drained from the engine's inline styles ---- */
@@ -42,6 +45,15 @@
   flex-wrap: wrap;
   gap: var(--ds-spacing-2);
   margin-block-end: var(--ds-spacing-5, 1.25rem);
+}
+
+/* ---- narrow composition cut: the composed Selects take the full row so
+        their triggers never crush below a legible measure inside a narrow
+        rail or side panel ---- */
+@container ds-activity-log (inline-size < 22rem) {
+  .ds-pattern-activity-log.ds-engine-modern [data-part='filters'] > * {
+    flex: 1 1 100%;
+  }
 }
 
 /* ---- item body: the interactive contract's state triad lives here ---- */
@@ -76,7 +88,11 @@
 
 /* ---- activity dot: the pattern-owned ring around the governed category
         icon (the icon shape carries the type; the tint is redundant).
-        Color-mix percentages preserved verbatim from the retired dot (15%). ---- */
+        The tint fill percentage rides the
+        private `--_ds-activity-log-dot-fill` channel with the retired dot's
+        15% as the exact fallback -- an
+        editorial profile can quiet the fill to 0% (bare ring) while an
+        operational one keeps the tinted chip, same markup. ---- */
 .ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'] {
   display: inline-flex;
   flex-shrink: 0;
@@ -87,38 +103,52 @@
   border-radius: 50%;
 }
 .ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='create'] {
-  background: color-mix(in srgb, var(--ds-color-success) 15%, transparent);
+  background: color-mix(in srgb, var(--ds-color-success) var(--_ds-activity-log-dot-fill, 15%), transparent);
   border: 2px solid var(--ds-color-success);
   color: var(--ds-color-success);
 }
 .ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='update'] {
-  background: color-mix(in srgb, var(--ds-color-info) 15%, transparent);
+  background: color-mix(in srgb, var(--ds-color-info) var(--_ds-activity-log-dot-fill, 15%), transparent);
   border: 2px solid var(--ds-color-info);
   color: var(--ds-color-info);
 }
 .ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='delete'] {
-  background: color-mix(in srgb, var(--ds-color-error) 15%, transparent);
+  background: color-mix(in srgb, var(--ds-color-error) var(--_ds-activity-log-dot-fill, 15%), transparent);
   border: 2px solid var(--ds-color-error);
   color: var(--ds-color-error);
 }
 .ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='view'] {
-  background: color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent);
+  background: color-mix(in srgb, var(--ds-color-text-muted) var(--_ds-activity-log-dot-fill, 15%), transparent);
   border: 2px solid var(--ds-color-text-muted);
   color: var(--ds-color-text-muted);
 }
 .ds-pattern-activity-log.ds-engine-modern [data-part='activity-dot'][data-action-category='system'] {
-  background: color-mix(in srgb, var(--ds-color-warning) 15%, transparent);
+  background: color-mix(in srgb, var(--ds-color-warning) var(--_ds-activity-log-dot-fill, 15%), transparent);
   border: 2px solid var(--ds-color-warning);
   color: var(--ds-color-warning);
 }
 
-/* ---- actor name / badge slot / entity / timestamp ---- */
+/* ---- actor name / badge slot / entity / timestamp ----
+   Truncation strategy: the header row wraps as a whole, but a single long
+   name or entity never pushes the badge/timestamp off-card -- user and
+   entity shrink with ellipsis and expose the full string via `title`
+   (stamped by the engine). The badge (Tag) never truncates: the action
+   verb is the type channel. */
 .ds-pattern-activity-log.ds-engine-modern [data-part='user'] {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--ds-color-text-primary);
   font-size: var(--ds-font-size-sm, 0.875rem);
   font-weight: var(--ds-font-weight-semibold, 600);
 }
 .ds-pattern-activity-log.ds-engine-modern [data-part='entity'] {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-xs, 0.75rem);
 }
@@ -126,6 +156,9 @@
   margin-block-start: var(--ds-spacing-1, 0.25rem);
   color: var(--ds-color-text-muted);
   font-size: var(--ds-font-size-xs, 0.75rem);
+  /* relative times scan as a column and never jitter: tabular figures */
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 /* ---- diff: geometry drained + paint preserved ---- */
@@ -148,12 +181,20 @@
   color: var(--ds-color-text-primary);
   font-weight: var(--ds-font-weight-semibold, 600);
 }
+/* long values (URLs, locales with long words) wrap inside their cell instead
+   of breaking the row geometry; the arrow never squishes */
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='from'],
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='to'] {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
 .ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='from'] {
   color: var(--ds-color-text-muted);
   text-decoration: line-through;
 }
 .ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='arrow'] {
   display: inline-flex;
+  flex-shrink: 0;
   color: var(--ds-color-text-muted);
 }
 .ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='to'] {

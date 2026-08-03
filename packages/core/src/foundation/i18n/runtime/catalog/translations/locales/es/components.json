@@ -281,7 +281,10 @@
     "pinLeft": "Fijar a la izquierda",
     "pinRight": "Fijar a la derecha",
     "unpin": "Desfijar",
-    "visibleSuffix": "visibles"
+    "visibleSuffix": "visibles",
+    "toggleVisibility": "Alternar visibilidad",
+    "pinSideLeft": "L",
+    "pinSideRight": "R"
   },
   "pricingTable": {
     "monthly": "Mensual",
@@ -446,7 +449,8 @@
     "region_label": "Lista de descripción"
   },
   "chart": {
-    "loading": "Cargando grafico..."
+    "loading": "Cargando grafico...",
+    "sankey_empty": "No hay datos de flujo para mostrar."
   },
   "surfaces": {
     "states": {
@@ -514,7 +518,8 @@
       "empty_description": "Carga eventos para renderizar el calendario.",
       "all_day": "Todo el día",
       "invalid_time": "Hora no disponible",
-      "invalid_events": "Eventos con hora de inicio inválida: {count}"
+      "invalid_events": "Eventos con hora de inicio inválida: {count}",
+      "agenda_aria": "Eventos programados"
     },
     "kanban": {
       "previous": "Anterior",
@@ -868,7 +873,8 @@
     "just_now": "ahora mismo",
     "minutes_ago": "hace {count} min",
     "hours_ago": "hace {count} h",
-    "days_ago": "hace {count} d"
+    "days_ago": "hace {count} d",
+    "loading": "Cargando"
   },
   "confirmDialog": {
     "confirm": "Confirmar",
@@ -892,7 +898,11 @@
   },
   "kanbanBoard": {
     "add_item": "Agregar item",
-    "empty_board": "No hay columnas"
+    "empty_board": "No hay columnas",
+    "card_role": "Tarjeta movible",
+    "move_column": "Movido a {column}, posición {position}",
+    "move_reorder": "Movido a la posición {position} en {column}",
+    "move_edge": "No se puede mover más en esa dirección"
   },
   "map_view": {
     "placeholder": "Marcador de posición del mapa",
@@ -901,7 +911,8 @@
     "zoom": "Zoom: {zoom}",
     "marker_count_one": "{count} marcador",
     "marker_count_other": "{count} marcadores",
-    "empty": "No hay marcadores"
+    "empty": "No hay marcadores",
+    "viewport": "Vista del mapa"
   },
   "fileManager": {
     "root": "Raíz",
@@ -916,7 +927,8 @@
     "columnName": "Nombre",
     "columnSize": "Tamaño",
     "columnModified": "Modificado",
-    "columnActions": "Acciones"
+    "columnActions": "Acciones",
+    "columnSelect": "Seleccionar"
   },
   "filterPanel": {
     "apply": "Aplicar",
@@ -954,7 +966,8 @@
     "previous": "Anterior",
     "next": "Siguiente",
     "step_counter": "Paso {current} de {total}",
-    "empty": "No hay campos para mostrar"
+    "empty": "No hay campos para mostrar",
+    "loading": "Cargando formulario…"
   },
   "invoice_template": {
     "print": "Imprimir",
@@ -1042,7 +1055,8 @@
     "skip": "Omitir",
     "progress": "Paso {current} de {total}: {title}",
     "validation_default": "Completá este paso antes de continuar.",
-    "actions": "Acciones del asistente"
+    "actions": "Acciones del asistente",
+    "loading": "Cargando asistente…"
   },
   "taginput": {
     "placeholder": "Escribe y presiona Enter",
@@ -1171,7 +1185,9 @@
     "active_count": "{count} activos",
     "remove_filter_named": "Quitar filtro {field}",
     "clearAll": "Limpiar todo",
-    "addFilter": "Agregar filtro"
+    "addFilter": "Agregar filtro",
+    "more_count": "+{count} más",
+    "show_less": "Mostrar menos"
   },
   "columnMenu": {
     "alwaysVisible": "Siempre visible en la tabla",
@@ -1253,7 +1269,8 @@
     "snapshotEmpty": "No hay campos de vista previa disponibles para este registro.",
     "snapshotTitle": "Resumen",
     "whyThisRow": "¿Por qué esta fila?",
-    "yes": "Sí"
+    "yes": "Sí",
+    "landmarkLabel": "Vista previa del registro"
   },
   "savedViewsMenu": {
     "columnsSuffix": "columnas",
@@ -1317,7 +1334,8 @@
   "statistic": {
     "trendPositive": "En aumento",
     "trendNegative": "En descenso",
-    "trendWarning": "Advertencia"
+    "trendWarning": "Advertencia",
+    "trendNeutral": "Sin cambios"
   },
   "passwordInput": {
     "strength_weak": "Débil",
@@ -1331,5 +1349,103 @@
       "suboptimal": "rango subóptimo",
       "critical": "rango crítico"
     }
+  },
+  "empty_state": {
+    "loading": "Cargando…"
+  },
+  "filter_panel": {
+    "apply": "Aplicar",
+    "clear_all": "Borrar todo",
+    "collapse": "Contraer filtros",
+    "expand": "Expandir filtros",
+    "range_to": "a",
+    "min": "Mín",
+    "max": "Máx",
+    "select_placeholder": "Seleccionar…"
+  },
+  "workbenchHeader": {
+    "exceptions": "{count} excepciones"
+  },
+  "command_center": {
+    "loading_label": "Cargando…",
+    "insights_aria": "Perspectivas"
+  },
+  "tableToolbar": {
+    "searchPlaceholder": "Buscar...",
+    "clearFilters": "Borrar filtros"
+  },
+  "brandStudio": {
+    "tenantReport": {
+      "documentInvalid": "Documento no válido",
+      "issueOne": "incidencia",
+      "issueOther": "incidencias",
+      "contrastAutocorrections": "Autocorrecciones de contraste",
+      "changeOne": "cambio",
+      "changeOther": "cambios",
+      "adjustment": "{label} ajustado {from} → {to} para alcanzar Lc {lc}",
+      "adjustmentDetail": "en {pairedWith} · era Lc {lc}",
+      "fontPacksNotLoaded": "Packs de fuentes no cargados",
+      "packOne": "pack",
+      "packOther": "packs",
+      "packMissing": "{variable} está referenciada pero no cargada",
+      "packMissingDetail": "{referencedBy} recurre a sus fuentes de fallback declaradas"
+    }
+  },
+  "brandingPreview": {
+    "table": {
+      "sampleNameA": "John Doe",
+      "sampleDateA": "Apr 17, 2026",
+      "sampleNameB": "Jane Smith",
+      "sampleDateB": "Apr 16, 2026"
+    }
+  },
+  "tokenInspector": {
+    "hint": "Ctrl+Shift+T o Esc para cerrar | Clic para fijar"
+  },
+  "presence": {
+    "barLabel": "Personas presentes",
+    "overflowLabel": "{count} personas más"
+  },
+  "bulkSelectToggle": {
+    "select": "Seleccionar",
+    "done": "Listo",
+    "selected": "seleccionados"
+  },
+  "galleryView": {
+    "empty": "Sin elementos",
+    "selectItem": "Seleccionar {item}"
+  },
+  "gridView": {
+    "empty": "Sin datos",
+    "selectItem": "Seleccionar {item}"
+  },
+  "statsGrid": {
+    "error": {
+      "description": "No se pudieron cargar los datos"
+    }
+  },
+  "metrics": {
+    "panelTitle": "Métricas clave",
+    "live": "EN VIVO",
+    "realtimeData": "DATOS EN TIEMPO REAL",
+    "chartTitle": "Rendimiento",
+    "progressLabel": "Progreso"
+  },
+  "activity": {
+    "timelineTitle": "Actividad",
+    "compactTitle": "Actividad reciente",
+    "cardsTitle": "Actividad",
+    "tickerTitle": "Actualizaciones en vivo",
+    "streaming": "TRANSMITIENDO",
+    "updatesCount": "{count} ACTUALIZACIONES",
+    "timeAgo": "hace {time}",
+    "viewAll": "Ver todo",
+    "tickerPrevious": "Actualización anterior",
+    "tickerNext": "Siguiente actualización",
+    "tickerGoTo": "Ir a la actualización {index}"
+  },
+  "bottomTabBar": {
+    "itemWithBadge": "{label}, {count}",
+    "navigation": "Navegación inferior"
   }
 }

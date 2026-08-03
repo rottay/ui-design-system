@@ -1,13 +1,23 @@
 'use client';
 
-import { useMemo, type CSSProperties } from 'react';
+import { useId, useMemo, type CSSProperties } from 'react';
 
 import { useChartDimensions } from '../../../../runtime/dimensions';
+import type { ChartInteraction } from '../../../../foundation/interaction';
+import { useChartInteraction } from '../../../../runtime/interaction/controller';
 import {
   buildSvgHistogramGeometry,
   type ChartGeometryInsets,
 } from '../../../../foundation/renderers/geometry';
 import { ChartRendererSurface } from '..';
+
+/** Tooltip/keyboard datum exposed to the family for each rendered bin. */
+export interface SvgHistogramBinDatum {
+  readonly x0: number;
+  readonly x1: number;
+  readonly count: number;
+  readonly densityValue: number;
+}
 
 export interface SvgHistogramRendererProps {
   readonly values: readonly number[];
@@ -33,6 +43,8 @@ export interface SvgHistogramRendererProps {
   readonly yLabel?: string;
   readonly insets?: ChartGeometryInsets;
   readonly maxTicks?: number;
+  /** Explore/select interaction contract wired by the owning family. */
+  readonly interaction?: ChartInteraction<SvgHistogramBinDatum>;
   readonly className?: string;
   readonly style?: CSSProperties;
 }
@@ -66,6 +78,7 @@ export function SvgHistogramRenderer({
   yLabel,
   insets,
   maxTicks,
+  interaction,
   className,
   style,
 }: SvgHistogramRendererProps): React.ReactElement {
@@ -86,6 +99,35 @@ export function SvgHistogramRenderer({
     [bins, cumulative, density, geometryWidth, height, insets, maxTicks, thresholds, values],
   );
   const formatBinLabel = (value: number): string => (formatValue ? formatValue(value) : String(value));
+  const interactionItems = useMemo(
+    () => geometry.bins.map((bin) => ({
+      key: bin.id,
+      label: `${formatBinLabel(bin.x0)} - ${formatBinLabel(bin.x1)}: ${density ? bin.densityValue : bin.count}`,
+      datum: {
+        x0: bin.x0,
+        x1: bin.x1,
+        count: bin.count,
+        densityValue: bin.densityValue,
+      },
+      x: bin.labelX,
+      y: bin.y,
+    })),
+    // formatBinLabel is a pure function of formatValue; listing formatValue keeps
+    // the memo honest without depending on the inline arrow identity.
+    [density, formatValue, geometry.bins],
+  );
+  const interactionState = useChartInteraction({
+    items: interactionItems,
+    interaction,
+    navigation: 'horizontal',
+  });
+  const tooltipId = useId();
+  const activeBin = interactionState.activeKey
+    ? geometry.bins.find((bin) => bin.id === interactionState.activeKey)
+    : undefined;
+  const tooltip = interactionState.activeDatum && interaction && interaction.mode !== 'static'
+    ? interaction.renderTooltip?.(interactionState.activeDatum)
+    : undefined;
 
   return (
     <ChartRendererSurface
@@ -100,6 +142,15 @@ export function SvgHistogramRenderer({
       className={['ds-chart-renderer-histogram', className].filter(Boolean).join(' ')}
       style={style}
       ownerRef={containerRef}
+      interactionMode={interactionState.mode}
+      interactionRootProps={interactionState.rootProps}
+      tooltip={tooltip}
+      tooltipId={tooltipId}
+      tooltipKey={interactionState.activeKey ?? undefined}
+      tooltipAnchor={activeBin ? {
+        x: activeBin.labelX,
+        y: activeBin.y,
+      } : undefined}
     >
       <g data-part="plot-area" data-variant={density ? 'density' : 'frequency'}>
         <g data-part="grid" aria-hidden="true">
@@ -148,14 +199,62 @@ export function SvgHistogramRenderer({
           {geometry.bins.map((bin) => {
             const rangeLabel = `${formatBinLabel(bin.x0)} - ${formatBinLabel(bin.x1)}`;
             const measured = density ? bin.densityValue : bin.count;
+            const accessibleLabel = `${rangeLabel}: ${density ? measured.toFixed(4) : measured}`;
+            const datumProps = interactionState.getDatumProps(bin.id);
+            const interactive = interactionState.mode !== 'static';
+            const actionable = interactionState.mode === 'select' || interactionState.mode === 'drill';
+            const markLabel = actionable && interaction && interaction.mode !== 'static'
+              ? `${accessibleLabel}. ${interaction.actionLabel}`
+              : accessibleLabel;
+            // Contiguous bins leave no gaps, so the hit rect mirrors the bar
+            // rect; the 24px floor keeps narrow bins keyboard/pointer reachable.
+            const hitWidth = Math.max(24, bin.width);
+            const hitHeight = Math.max(24, bin.height);
+            const hitX = bin.x - (hitWidth - bin.width) / 2;
+            const hitY = bin.y - (hitHeight - bin.height) / 2;
             return (
               <g
                 key={bin.id}
                 data-part="bar-mark"
                 data-datum-id={bin.id}
                 data-series="histogram"
-                aria-label={`${rangeLabel}: ${density ? measured.toFixed(4) : measured}`}
+                data-chart-datum-key={datumProps['data-chart-datum-key']}
+                data-active={datumProps['data-active']}
+                data-focused={datumProps['data-focused']}
+                data-hovered={datumProps['data-hovered']}
+                data-pinned={datumProps['data-pinned']}
+                tabIndex={datumProps.tabIndex}
+                role={interactive ? actionable ? 'button' : 'img' : undefined}
+                aria-label={interactive ? markLabel : accessibleLabel}
+                aria-describedby={
+                  datumProps['data-active'] && tooltip !== undefined && tooltip !== null && tooltip !== false
+                    ? tooltipId
+                    : undefined
+                }
               >
+                {!interactive ? <title>{accessibleLabel}</title> : null}
+                {interactive ? (
+                  <>
+                    <rect
+                      data-part="interaction-target"
+                      x={hitX}
+                      y={hitY}
+                      width={hitWidth}
+                      height={hitHeight}
+                      pointerEvents="all"
+                      aria-hidden="true"
+                    />
+                    <rect
+                      data-part="interaction-halo"
+                      x={hitX}
+                      y={hitY}
+                      width={hitWidth}
+                      height={hitHeight}
+                      rx={4}
+                      aria-hidden="true"
+                    />
+                  </>
+                ) : null}
                 <rect
                   data-part="bar"
                   data-series="histogram"
@@ -165,6 +264,7 @@ export function SvgHistogramRenderer({
                   height={bin.height}
                   fill={color}
                   fillOpacity={0.85}
+                  aria-hidden={interactive ? true : undefined}
                 />
                 {showLabels ? (
                   <text

@@ -289,7 +289,10 @@
     "pinLeft": "تثبيت إلى اليسار",
     "pinRight": "تثبيت إلى اليمين",
     "unpin": "إلغاء التثبيت",
-    "visibleSuffix": "مرئية"
+    "visibleSuffix": "مرئية",
+    "toggleVisibility": "تبديل الرؤية",
+    "pinSideLeft": "L",
+    "pinSideRight": "R"
   },
   "pricingTable": {
     "monthly": "شهري",
@@ -446,7 +449,8 @@
     "region_label": "قائمة الوصف"
   },
   "chart": {
-    "loading": "جارٍ تحميل الرسم البياني"
+    "loading": "جارٍ تحميل الرسم البياني",
+    "sankey_empty": "لا توجد بيانات تدفق لعرضها."
   },
   "surfaces": {
     "states": {
@@ -514,7 +518,8 @@
       "empty_description": "املأ الجدولة بالأحداث لعرض التقويم.",
       "all_day": "طوال اليوم",
       "invalid_time": "الوقت غير متاح",
-      "invalid_events": "أحداث بوقت بدء غير صالح: {count}"
+      "invalid_events": "أحداث بوقت بدء غير صالح: {count}",
+      "agenda_aria": "الأحداث المجدولة"
     },
     "kanban": {
       "previous": "السابق",
@@ -868,7 +873,8 @@
     "just_now": "الآن",
     "minutes_ago": "منذ {count} د",
     "hours_ago": "منذ {count} س",
-    "days_ago": "منذ {count} ي"
+    "days_ago": "منذ {count} ي",
+    "loading": "جارٍ التحميل"
   },
   "confirmDialog": {
     "confirm": "تأكيد",
@@ -892,7 +898,11 @@
   },
   "kanbanBoard": {
     "add_item": "إضافة عنصر",
-    "empty_board": "لا توجد أعمدة"
+    "empty_board": "لا توجد أعمدة",
+    "card_role": "بطاقة قابلة للنقل",
+    "move_column": "تم النقل إلى {column}، الموضع {position}",
+    "move_reorder": "تم النقل إلى الموضع {position} في {column}",
+    "move_edge": "لا يمكن النقل أكثر في هذا الاتجاه"
   },
   "map_view": {
     "placeholder": "عنصر نائب للخريطة",
@@ -901,7 +911,8 @@
     "zoom": "التكبير: {zoom}",
     "marker_count_one": "{count} علامة",
     "marker_count_other": "{count} علامات",
-    "empty": "لا توجد علامات"
+    "empty": "لا توجد علامات",
+    "viewport": "منفذ عرض الخريطة"
   },
   "fileManager": {
     "root": "الجذر",
@@ -916,7 +927,8 @@
     "columnName": "الاسم",
     "columnSize": "الحجم",
     "columnModified": "آخر تعديل",
-    "columnActions": "إجراءات"
+    "columnActions": "إجراءات",
+    "columnSelect": "تحديد"
   },
   "filterPanel": {
     "apply": "تطبيق",
@@ -954,7 +966,8 @@
     "previous": "السابق",
     "next": "التالي",
     "step_counter": "الخطوة {current} من {total}",
-    "empty": "لا توجد حقول للعرض"
+    "empty": "لا توجد حقول للعرض",
+    "loading": "جارٍ تحميل النموذج…"
   },
   "invoice_template": {
     "print": "طباعة",
@@ -1042,7 +1055,8 @@
     "skip": "تخطي",
     "progress": "الخطوة {current} من {total}: {title}",
     "validation_default": "أكمل هذه الخطوة قبل المتابعة.",
-    "actions": "إجراءات المعالج"
+    "actions": "إجراءات المعالج",
+    "loading": "جارٍ تحميل المعالج…"
   },
   "taginput": {
     "placeholder": "اكتب واضغط Enter",
@@ -1171,7 +1185,9 @@
     "active_count": "{count} نشط",
     "remove_filter_named": "إزالة المرشح {field}",
     "clearAll": "مسح الكل",
-    "addFilter": "إضافة مرشح"
+    "addFilter": "إضافة مرشح",
+    "more_count": "+{count} أخرى",
+    "show_less": "عرض أقل"
   },
   "columnMenu": {
     "alwaysVisible": "مرئية دائمًا في الجدول",
@@ -1253,7 +1269,8 @@
     "snapshotEmpty": "لا تتوفر حقول معاينة لهذا السجل.",
     "snapshotTitle": "لقطة",
     "whyThisRow": "لماذا هذا الصف؟",
-    "yes": "نعم"
+    "yes": "نعم",
+    "landmarkLabel": "معاينة السجل"
   },
   "savedViewsMenu": {
     "columnsSuffix": "أعمدة",
@@ -1317,7 +1334,8 @@
   "statistic": {
     "trendPositive": "في ارتفاع",
     "trendNegative": "في انخفاض",
-    "trendWarning": "تحذير"
+    "trendWarning": "تحذير",
+    "trendNeutral": "بدون تغيير"
   },
   "passwordInput": {
     "strength_weak": "ضعيفة",
@@ -1331,5 +1349,103 @@
       "suboptimal": "نطاق دون الأمثل",
       "critical": "النطاق الحرج"
     }
+  },
+  "empty_state": {
+    "loading": "جارٍ التحميل…"
+  },
+  "filter_panel": {
+    "apply": "تطبيق",
+    "clear_all": "مسح الكل",
+    "collapse": "طيّ عوامل التصفية",
+    "expand": "توسيع عوامل التصفية",
+    "range_to": "إلى",
+    "min": "الحد الأدنى",
+    "max": "الحد الأقصى",
+    "select_placeholder": "اختر…"
+  },
+  "workbenchHeader": {
+    "exceptions": "{count} استثناءات"
+  },
+  "command_center": {
+    "loading_label": "جارٍ التحميل…",
+    "insights_aria": "رؤى"
+  },
+  "tableToolbar": {
+    "searchPlaceholder": "بحث...",
+    "clearFilters": "مسح عوامل التصفية"
+  },
+  "brandStudio": {
+    "tenantReport": {
+      "documentInvalid": "المستند غير صالح",
+      "issueOne": "مشكلة",
+      "issueOther": "مشاكل",
+      "contrastAutocorrections": "تصحيحات التباين التلقائية",
+      "changeOne": "تغيير",
+      "changeOther": "تغييرات",
+      "adjustment": "{label} عُدّل {from} → {to} للوصول إلى Lc {lc}",
+      "adjustmentDetail": "على {pairedWith} · كان Lc {lc}",
+      "fontPacksNotLoaded": "حزم الخطوط غير محمّلة",
+      "packOne": "حزمة",
+      "packOther": "حزم",
+      "packMissing": "{variable} مُشار إليها لكنها غير محمّلة",
+      "packMissingDetail": "{referencedBy} يعود إلى خطوطه الاحتياطية المؤلَّفة"
+    }
+  },
+  "brandingPreview": {
+    "table": {
+      "sampleNameA": "John Doe",
+      "sampleDateA": "Apr 17, 2026",
+      "sampleNameB": "Jane Smith",
+      "sampleDateB": "Apr 16, 2026"
+    }
+  },
+  "tokenInspector": {
+    "hint": "Ctrl+Shift+T أو Esc للإغلاق | انقر للتثبيت"
+  },
+  "presence": {
+    "barLabel": "الأشخاص المتواجدون",
+    "overflowLabel": "{count} أشخاص إضافيون"
+  },
+  "bulkSelectToggle": {
+    "select": "تحديد",
+    "done": "تم",
+    "selected": "محدد"
+  },
+  "galleryView": {
+    "empty": "لا توجد عناصر",
+    "selectItem": "تحديد {item}"
+  },
+  "gridView": {
+    "empty": "لا توجد بيانات",
+    "selectItem": "تحديد {item}"
+  },
+  "statsGrid": {
+    "error": {
+      "description": "تعذر تحميل البيانات"
+    }
+  },
+  "metrics": {
+    "panelTitle": "المقاييس الرئيسية",
+    "live": "مباشر",
+    "realtimeData": "بيانات فورية",
+    "chartTitle": "الأداء",
+    "progressLabel": "التقدم"
+  },
+  "activity": {
+    "timelineTitle": "النشاط",
+    "compactTitle": "النشاط الأخير",
+    "cardsTitle": "النشاط",
+    "tickerTitle": "تحديثات مباشرة",
+    "streaming": "بث مباشر",
+    "updatesCount": "{count} تحديثات",
+    "timeAgo": "منذ {time}",
+    "viewAll": "عرض الكل",
+    "tickerPrevious": "التحديث السابق",
+    "tickerNext": "التحديث التالي",
+    "tickerGoTo": "انتقل إلى التحديث {index}"
+  },
+  "bottomTabBar": {
+    "itemWithBadge": "{label}, {count}",
+    "navigation": "التنقل السفلي"
   }
 }

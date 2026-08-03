@@ -11,9 +11,18 @@
  * with ShimmerText's global producer.
  */
 
-.ds-engine-modern:where(.ds-pattern-data-table)
-  .ds-resize-handle:hover
-  .ds-resize-handle__bar,
+@media (hover: hover) {
+  .ds-engine-modern:where(.ds-pattern-data-table)
+    .ds-resize-handle:hover
+    .ds-resize-handle__bar {
+    width: var(--ds-table-resize-bar-width-active, 0.1875rem);
+    height: var(--ds-table-resize-bar-height-active, 74%);
+    background: var(--ds-table-resize-bg-hover, var(--ds-color-primary));
+    box-shadow: 0 0 0 3px
+      color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
+  }
+}
+
 .ds-engine-modern:where(.ds-pattern-data-table)
   .ds-resize-handle:focus-visible
   .ds-resize-handle__bar {
@@ -31,11 +40,13 @@
   border-radius: var(--ds-table-control-radius, var(--ds-radius-md, 0.5rem));
 }
 
-.ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key]:hover {
-  background-color: var(
-    --ds-table-header-bg-hover,
-    color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)
-  );
+@media (hover: hover) {
+  .ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key]:hover {
+    background-color: var(
+      --ds-table-header-bg-hover,
+      color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)
+    );
+  }
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table)
@@ -66,10 +77,12 @@
       var(--ds-motion-ease-move, ease);
 }
 
-.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]:hover {
-  background: color-mix(in srgb, var(--ds-color-primary) 4%, transparent);
-  box-shadow: inset 0 0 0 1px
-    color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+@media (hover: hover) {
+  .ds-engine-modern:where(.ds-pattern-data-table) td[data-editable="true"]:hover {
+    background: color-mix(in srgb, var(--ds-color-primary) 4%, transparent);
+    box-shadow: inset 0 0 0 1px
+      color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+  }
 }
 
 .ds-engine-modern:where(.ds-pattern-data-table) td[data-editing="true"] {

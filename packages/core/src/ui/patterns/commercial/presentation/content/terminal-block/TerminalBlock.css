@@ -17,6 +17,9 @@
   color: var(--ds-commercial-gray-1000);
   background: var(--ds-commercial-ink);
   border: 1px solid var(--ds-commercial-hairline);
+  /* Corner radius is private to the terminal profile. The existing `overflow: hidden`
+     clips scanlines/body to any locally scoped value. */
+  border-radius: var(--_ds-terminal-block-radius, 0);
   font-family: var(--ds-commercial-font-mono);
 }
 
@@ -36,12 +39,17 @@
 
 .rt-terminal-block__title-bar {
   position: relative;
-  padding: 0.5rem 1rem;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  overflow: hidden;
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  /* Long mono captions truncate with ellipsis instead of wrapping a second title row. */
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--ds-commercial-gray-700);
-  border-bottom: 1px solid var(--ds-commercial-hairline);
+  border-block-end: 1px solid var(--ds-commercial-hairline);
 }
 
 .rt-terminal-block__body {
@@ -49,7 +57,8 @@
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
-  padding: 1rem 1.25rem;
+  /* Body padding is local composition geometry. Symmetric values remain RTL-safe. */
+  padding: var(--_ds-terminal-block-body-padding, 1rem 1.25rem);
   font-size: 0.875rem;
   line-height: 1.6;
 }
@@ -77,4 +86,12 @@
 
 .rt-terminal-block__prompt {
   color: var(--ds-commercial-gray-600);
+}
+
+/* Texture is a whisper-only accent: it drops out entirely when the user asks for more
+   contrast, so the scanline motif never fights legibility (degradable by design). */
+@media (prefers-contrast: more) {
+  .rt-terminal-block__scanlines {
+    display: none;
+  }
 }

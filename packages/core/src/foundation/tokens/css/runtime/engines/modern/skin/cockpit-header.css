@@ -268,7 +268,15 @@
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
   cursor: pointer;
   text-decoration: none;
+  border-radius: var(--ds-radius-sm);
   transition: color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+
+/* Keyboard users get the governed ring on crumb links (the UA default was
+   the only indicator before); hover/active keep their color-only cue. */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 
 .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-last='true'] {
@@ -527,9 +535,17 @@
 
 /* C2c a11y floor (census-derived): coarse-pointer tap targets never render
    below the canonical --ds-touch-target-min channel; fine pointers keep the
-   authored size untouched. */
+   authored size untouched. The crumb link is a bare inline <a>, so the floor
+   only holds once it is an inline-flex box. */
 @media (hover: none), (pointer: coarse) {
   .ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
+    display: inline-flex;
+    align-items: center;
     min-block-size: var(--ds-touch-target-min, 44px);
+  }
+
+  .ds-pattern-cockpit-header.ds-engine-modern [data-part='back'] > .rottay-button {
+    min-block-size: var(--ds-touch-target-min, 44px);
+    min-inline-size: var(--ds-touch-target-min, 44px);
   }
 }

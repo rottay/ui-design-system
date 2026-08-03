@@ -27,7 +27,7 @@
 /* ---- root: hairline-bottomed chrome row + named container ---- */
 .ds-structure.ds-table-toolbar[data-part='root'] {
   padding-block: 10px;
-  padding-inline: 16px;
+  padding-inline: var(--ds-spacing-4, 16px);
   container-type: inline-size;
 }
 .ds-structure.ds-table-toolbar[data-part='root'][data-structure='table-toolbar'] {
@@ -38,7 +38,7 @@
 .ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__left {
   flex-shrink: 0;
   min-inline-size: 0;
-  padding-inline-end: 12px;
+  padding-inline-end: var(--ds-spacing-3, 12px);
 }
 .ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__spacer {
   flex: 1;
@@ -48,10 +48,10 @@
   min-inline-size: 0;
 }
 .ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__filters {
-  padding-inline-end: 12px;
+  padding-inline-end: var(--ds-spacing-3, 12px);
 }
 .ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__actions {
-  padding-inline-start: 12px;
+  padding-inline-start: var(--ds-spacing-3, 12px);
 }
 
 /* ---- divider: soft vertical hairline with a paper highlight ---- */
@@ -122,15 +122,33 @@
   border: 1px solid var(--ds-color-border);
 }
 
-/* ---- narrow containers: the row wraps and search takes the full width ---- */
+/* ---- narrow containers: the row wraps and search takes the full width.
+        The collapse is intentional, not accidental: the right cluster claims
+        its own full row with its content justified to the end edge, so the
+        primary action stays visible and reachable at the same corner it
+        occupies on wide layouts; the now-meaningless vertical divider
+        between wrapped sections retires until the row is single-line again. ---- */
 @container (max-width: 40rem) {
   .ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__row {
     flex-wrap: wrap;
-    row-gap: 8px;
+    row-gap: var(--ds-spacing-2, 8px);
+  }
+  /* the left cluster also claims a full row and drops its separator padding
+     so the search field's end edge aligns with the actions below it */
+  .ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__left {
+    flex: 1 1 100%;
+    padding-inline-end: 0;
   }
   .ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__search-field {
     flex: 1 1 100%;
     max-inline-size: 100%;
+  }
+  .ds-structure.ds-table-toolbar [data-part='root'] .ds-table-toolbar__right {
+    flex: 1 1 100%;
+    justify-content: flex-end;
+  }
+  .ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'] {
+    display: none;
   }
 }
 

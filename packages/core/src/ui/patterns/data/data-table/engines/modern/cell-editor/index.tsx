@@ -23,6 +23,11 @@ export interface InlineCellEditorProps<T = unknown> {
   row: T;
   /** Column key for this cell. */
   columnKey: string;
+  /**
+   * Human column label used as the editor control's accessible name. The
+   * engines pass the resolved column header; the column key is the floor.
+   */
+  columnLabel?: string;
   /** Editable configuration (resolved from ColumnDef.editable). */
   config: EditableConfig<T>;
   /** Called when the user saves the edit. */
@@ -45,6 +50,7 @@ export function InlineCellEditor<T>({
   value,
   row,
   columnKey,
+  columnLabel,
   config,
   onSave,
   onCancel,
@@ -55,6 +61,9 @@ export function InlineCellEditor<T>({
   const [editValue, setEditValue] = useState<unknown>(value);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | HTMLSelectElement>(null);
+  // Every editor control is named after its column; without it a screen
+  // reader focus landing inside the cell announces an unlabeled field.
+  const accessibleName = columnLabel ?? columnKey;
 
   // Auto-focus on mount
   useEffect(() => {
@@ -164,6 +173,7 @@ export function InlineCellEditor<T>({
           ref={inputRef as React.RefObject<HTMLInputElement>}
           type="checkbox"
           data-part="editor-checkbox"
+          aria-label={accessibleName}
           checked={Boolean(editValue)}
           onChange={(e) => {
             setEditValue(e.target.checked);
@@ -185,6 +195,8 @@ export function InlineCellEditor<T>({
           value={String(editValue ?? '')}
           data-part="editor-input"
           data-invalid={error ? 'true' : 'false'}
+          aria-label={accessibleName}
+          aria-invalid={error ? true : undefined}
           onChange={(e) => {
             const selected = config.options?.find((o) => String(o.value) === e.target.value);
             setEditValue(selected ? selected.value : e.target.value);
@@ -198,7 +210,7 @@ export function InlineCellEditor<T>({
           ))}
         </select>
         {error && (
-          <span data-part="editor-error">
+          <span data-part="editor-error" role="alert">
             {error}
           </span>
         )}
@@ -218,6 +230,8 @@ export function InlineCellEditor<T>({
         max={config.max}
         data-part="editor-input"
         data-invalid={error ? 'true' : 'false'}
+        aria-label={accessibleName}
+        aria-invalid={error ? true : undefined}
         onChange={(e) => {
           const raw = e.target.value;
           if (editorType === 'number') {
@@ -230,7 +244,7 @@ export function InlineCellEditor<T>({
         onKeyDown={handleKeyDown}
       />
       {error && (
-        <span data-part="editor-error">
+        <span data-part="editor-error" role="alert">
           {error}
         </span>
       )}

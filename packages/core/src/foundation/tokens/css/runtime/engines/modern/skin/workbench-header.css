@@ -33,6 +33,12 @@
  * default-ON blur taxes every scroll frame and is not the sanctioned glass
  * contract (same fix as cockpit-header PT29; Sheet glass precedent).
  *
+ * WAVE p612b: the saved-views strip gains the full APG keyboard contract in
+ * the engine (roving tabindex, logical arrows with RTL mirroring, Home/End,
+ * automatic activation), so any tab's keyboard focus gets the governed
+ * `:focus-visible` ring here; quick-action buttons join the coarse-pointer
+ * 44px floor; the exception badge names itself parametrically for AT.
+ *
  * OWNERSHIP (R2+R3): the engine stamps anatomy + state only; this file owns
  * 100% of layout and paint — typography, tab geometry, skeleton geometry and
  * the pulse animation included. The skeleton blocks share one `data-part` but
@@ -224,6 +230,15 @@
   color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
   background: var(--ds-tab-bg-hover, var(--ds-color-neutral-50));
   border-color: color-mix(in srgb, var(--ds-tabs-list-border, var(--ds-color-border)) 72%, transparent);
+}
+
+/* The strip now carries the full APG keyboard contract (roving tabindex +
+   automatic activation), so keyboard focus gets the governed ring on ANY
+   tab -- ordered after the active rule so the ring wins the box-shadow tie
+   at equal specificity (page-shell idiom). */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus-visible {
+  outline: none;
+  box-shadow: var(--ds-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 18%, transparent));
 }
 
 /* ---- saved-views tab strip container (1px bottom border) ---- */
@@ -501,6 +516,10 @@
    authored size untouched. */
 @media (hover: none), (pointer: coarse) {
   .ds-pattern-workbench-header.ds-engine-modern [data-part='tab'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+
+  .ds-pattern-workbench-header.ds-engine-modern [data-part='action'] > .rottay-button {
     min-block-size: var(--ds-touch-target-min, 44px);
   }
 }

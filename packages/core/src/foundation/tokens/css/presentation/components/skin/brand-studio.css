@@ -9,7 +9,118 @@
  * engine skin (P-87). Card drops a consumer `data-part` in every engine, so
  * the action panel uses its surviving component class as the authoritative
  * hook. No `!important` is required.
+ *
+ * SHAPE DIVERGENCE: every radius rides the `--ds-radius-*` scale (a tenant's
+ * radius-scale reshapes the studio itself, never just its hue) — the retired
+ * px literals (6/12/10/8/14) mapped to their nearest canonical step.
+ *
+ * LAYOUT: the editor grid, the two-column preview track and its narrow cut
+ * live here (the per-mount injected <style> with a physical `max-width`
+ * container query was retired); the cut uses logical container units.
  */
+
+/* ---- layout: editor field grid + preview track (was inline/injected) ---- */
+.ds-pattern-brand-studio .ds-pattern-brand-studio__editor-grid[data-part='editor-grid'] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9.375rem, 1fr));
+  gap: var(--ds-spacing-3);
+}
+
+.ds-pattern-brand-studio .brand-studio-layout[data-part='preview-grid'] {
+  display: grid;
+  grid-template-columns: minmax(17.5rem, 0.9fr) minmax(20rem, 1.1fr);
+  gap: var(--ds-spacing-6);
+  align-items: start;
+}
+@container (inline-size < 56.25rem) {
+  .ds-pattern-brand-studio .brand-studio-layout[data-part='preview-grid'] {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- field chrome (was inline) ---- */
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__field-label[data-part='field-label'][data-part='field-label'][data-part='field-label'][data-part='field-label'] {
+  display: block;
+  margin-block-end: var(--ds-spacing-1);
+}
+.ds-pattern-brand-studio .ds-pattern-brand-studio__field-input[data-part='field-input'] {
+  inline-size: 100%;
+}
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__color-swatch[data-part='color-swatch'][data-part='color-swatch'] {
+  inline-size: var(--ds-spacing-7);
+  block-size: var(--ds-spacing-7);
+  flex-shrink: 0;
+}
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__section-title[data-part='section-title'][data-part='section-title'][data-part='section-title'][data-part='section-title'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__editor-heading[data-part='editor-heading'][data-part='editor-heading'][data-part='editor-heading'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-heading[data-part='preview-heading'][data-part='preview-heading'][data-part='preview-heading'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-panel-title[data-part='preview-panel-title'][data-part='preview-panel-title'][data-part='preview-panel-title'][data-part='preview-panel-title'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__action-title[data-part='action-title'][data-part='action-title'][data-part='action-title'][data-part='action-title'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__violation-pair[data-part='violation-pair'][data-part='violation-pair'][data-part='violation-pair'][data-part='violation-pair'] {
+  display: block;
+}
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__section[data-part='section'][data-part='section'] {
+  padding: var(--ds-spacing-4);
+}
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-header[data-part='preview-header'] {
+  margin-block-end: var(--ds-spacing-2);
+}
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-content[data-part='preview-content'][data-part='preview-content'] {
+  padding: var(--ds-spacing-5);
+  /* bare declared channel (fallback-parity): the scoped preview class
+     redeclares --ds-font-family-base with the in-flight theme's font */
+  font-family: var(--ds-font-family-base);
+}
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__contrast-summary[data-part='contrast-summary'][data-part='contrast-summary'] {
+  margin-block-start: var(--ds-spacing-3);
+  padding: var(--ds-spacing-3);
+}
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__contrast-label[data-part='contrast-label'][data-part='contrast-label'][data-part='contrast-label'] {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: var(--ds-letter-spacing-widest);
+}
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__contrast-message[data-part='contrast-message'][data-part='contrast-message'][data-part='contrast-message'] {
+  display: block;
+  margin-block-start: var(--ds-spacing-2);
+}
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__violations[data-part='violations'] {
+  margin-block-start: var(--ds-spacing-2);
+}
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__violation[data-part='violation'][data-part='violation'] {
+  padding-block: var(--ds-spacing-2);
+  padding-inline: var(--ds-spacing-3);
+}
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__violation-ratio[data-part='violation-ratio'][data-part='violation-ratio'][data-part='violation-ratio'] {
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__violation-detail[data-part='violation-detail'][data-part='violation-detail'][data-part='violation-detail'] {
+  display: block;
+  margin-block-start: var(--ds-spacing-1);
+}
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel {
+  padding: var(--ds-spacing-4);
+}
 
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__color-swatch[data-part='color-swatch'][data-part='color-swatch'],
@@ -29,31 +140,31 @@
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__color-swatch[data-part='color-swatch'][data-part='color-swatch'] {
   border-color: var(--ds-color-border);
-  border-radius: 6px;
+  border-radius: var(--ds-radius-sm);
 }
 
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__section[data-part='section'][data-part='section'] {
-  border-radius: 12px;
+  border-radius: var(--ds-radius-lg);
   background: var(--ds-color-bg-elevated, var(--ds-color-bg-secondary));
 }
 
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__contrast-summary[data-part='contrast-summary'][data-part='contrast-summary'] {
-  border-radius: 10px;
+  border-radius: var(--ds-radius-lg);
   background: var(--ds-color-bg-surface, var(--ds-color-bg-secondary));
 }
 
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__violation[data-part='violation'][data-part='violation'] {
-  border-radius: 8px;
+  border-radius: var(--ds-radius-md);
   background: var(--ds-color-bg-primary);
 }
 
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__preview-content[data-part='preview-content'][data-part='preview-content'] {
   border-color: var(--ds-color-border);
-  border-radius: 14px;
+  border-radius: var(--ds-radius-xl);
   background: var(--ds-color-bg-primary);
   color: var(--ds-color-text-primary, var(--ds-color-text));
 }
@@ -79,6 +190,8 @@
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__preview-fallback[data-part='preview-fallback'][data-part='preview-fallback'][data-part='preview-fallback'],
 .ds-pattern-brand-studio
+  .ds-pattern-brand-studio__tenant-preview-fallback[data-part='tenant-preview-fallback'][data-part='tenant-preview-fallback'][data-part='tenant-preview-fallback'],
+.ds-pattern-brand-studio
   .ds-pattern-brand-studio__description[data-part='description'][data-part='description'][data-part='description'],
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__editor-heading[data-part='editor-heading'][data-part='editor-heading'][data-part='editor-heading'],
@@ -90,4 +203,113 @@
 .ds-pattern-brand-studio
   .ds-pattern-brand-studio__violation-ratio[data-part='violation-ratio'][data-part='violation-ratio'][data-part='violation-ratio'] {
   color: var(--ds-color-error);
+}
+
+/* ---- tenant-theme live preview: the scope frame shows the tenant's own
+        canvas (the injected scope vars land on this same element), exactly
+        like the BrandTheme panels read their ground through preview-content ---- */
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__tenant-preview-scope[data-part='tenant-preview-scope'][data-part='tenant-preview-scope'] {
+  display: block;
+  padding: var(--ds-spacing-5);
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-xl);
+  background: var(--ds-color-bg-primary);
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+/* ---- tenant-theme preview report (geometry drained from the runtime's
+        former inline styles; rows/sections now ride the same recipe as the
+        contrast summary + violation rows) ---- */
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-issues[data-part='preview-issues'][data-part='preview-issues'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-adjustments[data-part='preview-adjustments'][data-part='preview-adjustments'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-pack-warnings[data-part='preview-pack-warnings'][data-part='preview-pack-warnings'] {
+  margin-block-start: var(--ds-spacing-3);
+  padding: var(--ds-spacing-3);
+  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border));
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-color-bg-surface, var(--ds-color-bg-secondary));
+}
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-issue[data-part='preview-issue'][data-part='preview-issue'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-adjustment[data-part='preview-adjustment'][data-part='preview-adjustment'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-pack-warning[data-part='preview-pack-warning'][data-part='preview-pack-warning'] {
+  padding-block: var(--ds-spacing-2);
+  padding-inline: var(--ds-spacing-3);
+  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border));
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-primary);
+}
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-report-title[data-part='preview-report-title'][data-part='preview-report-title'][data-part='preview-report-title'] {
+  display: block;
+  text-transform: uppercase;
+  /* canonical step (the retired literal 0.08em tracked nothing) */
+  letter-spacing: var(--ds-letter-spacing-widest);
+}
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-report-list[data-part='preview-report-list'] {
+  margin-block-start: var(--ds-spacing-2);
+}
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-report-lead[data-part='preview-report-lead'][data-part='preview-report-lead'][data-part='preview-report-lead'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-issue-message[data-part='preview-issue-message'][data-part='preview-issue-message'][data-part='preview-issue-message'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-adjustment-detail[data-part='preview-adjustment-detail'][data-part='preview-adjustment-detail'][data-part='preview-adjustment-detail'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-pack-warning-detail[data-part='preview-pack-warning-detail'][data-part='preview-pack-warning-detail'][data-part='preview-pack-warning-detail'] {
+  display: block;
+}
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-issue-message[data-part='preview-issue-message'][data-part='preview-issue-message'][data-part='preview-issue-message'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-adjustment-detail[data-part='preview-adjustment-detail'][data-part='preview-adjustment-detail'][data-part='preview-adjustment-detail'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-pack-warning-detail[data-part='preview-pack-warning-detail'][data-part='preview-pack-warning-detail'][data-part='preview-pack-warning-detail'] {
+  margin-block-start: var(--ds-spacing-1);
+  /* same muted detail role as violation-detail */
+  color: var(--ds-color-text-muted);
+}
+
+/* forced-colors: surface tints are forced away; the framed parts re-assert
+   in system colors so the studio's own chrome keeps its structure (the live
+   preview panels keep their injected vars -- they simulate a tenant ground
+   on purpose, and the tenant-theme scope does the same). */
+@media (forced-colors: active) {
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__color-swatch[data-part='color-swatch'][data-part='color-swatch'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__section[data-part='section'][data-part='section'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__contrast-summary[data-part='contrast-summary'][data-part='contrast-summary'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__violation[data-part='violation'][data-part='violation'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__preview-issues[data-part='preview-issues'][data-part='preview-issues'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__preview-adjustments[data-part='preview-adjustments'][data-part='preview-adjustments'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__preview-pack-warnings[data-part='preview-pack-warnings'][data-part='preview-pack-warnings'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__preview-issue[data-part='preview-issue'][data-part='preview-issue'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__preview-adjustment[data-part='preview-adjustment'][data-part='preview-adjustment'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__preview-pack-warning[data-part='preview-pack-warning'][data-part='preview-pack-warning'],
+  .ds-pattern-brand-studio
+    .ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel {
+    border-color: ButtonText;
+    background: Canvas;
+  }
 }

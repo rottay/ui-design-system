@@ -179,8 +179,10 @@ function DefaultCardView<TView>({
   }
 
   return (
+    /* Card grid: auto-fit tracks with a `min(100%, …)` floor so a track can
+       never overflow narrow viewports (report/search idiom). */
     <Grid
-      templateColumns={`repeat(auto-fit, minmax(${cardMinWidth}px, 1fr))`}
+      templateColumns={`repeat(auto-fit, minmax(min(100%, ${cardMinWidth}px), 1fr))`}
       gap="lg"
       className={applyStagger ? stagger.containerClassName : undefined}
       style={
@@ -491,10 +493,12 @@ export function ListSurface<TRaw, TView extends object>({
       {config.behavior.filters &&
         config.behavior.filters.length > 0 &&
         (config.visual.filterPanelChrome === "plain" ? (
+          /* Plain chrome: the breathing room is skin-owned (logical,
+             density-scaled); nothing inline. */
           <Box
-            style={{
-              padding: isMobile ? "0 4px" : "0 2px",
-            }}
+            className="ds-list__filters-plain"
+            data-part="filters-plain"
+            data-mobile={isMobile ? "true" : "false"}
           >
             <PatternFilterPanel
               filters={config.behavior.filters}

@@ -62,7 +62,12 @@ import { Rate } from '../../../../../primitives/feedback/Rate';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
 import ModernSteps from '../../../../../primitives/navigation/Steps/engines/modern';
 import { Empty } from '../../../../../primitives/display/Empty';
+import { VisuallyHidden } from '../../../../../primitives/foundation/VisuallyHidden';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+/* Disclosure chevron: the governed semantic-icon facade (no local SVG). The
+   collapsed rotation is state-selected in the skin off the wrapping section
+   header's `data-collapsed`; no inline transition (reduced-motion owns). */
+import { NavigationDownIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-down';
 
 /* ---------------------------------------------------------------------------
  * Read-only rendering geometry lives in the skin (`[data-part='readonly-
@@ -86,21 +91,6 @@ function useFormBuilderTranslation() {
   };
   return { tOr };
 }
-
-/* Chevron icon for collapsible sections -- the rotation is state-selected in
-   the skin off `data-collapsed`; no inline transition (reduced-motion owns). */
-const ChevronIcon = ({ collapsed }: { collapsed: boolean }) => (
-  <svg
-    data-part="section-chevron"
-    data-collapsed={collapsed}
-    width="16"
-    height="16"
-    viewBox="0 0 16 16"
-    fill="none"
-  >
-    <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
 
 /* ---------------------------------------------------------------------------
  * ModernFormBuilder
@@ -338,7 +328,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
         case 'rating':
           return (
             <span data-part="readonly-value" data-field-type={field.type}>
-              {'*'.repeat(val as number) + ` (${val}/5)`}
+              {'★'.repeat(val as number) + ` (${val}/5)`}
             </span>
           );
         case 'file':
@@ -623,7 +613,14 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
         data-loading="true"
         className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
         style={style}
+        role="status"
+        aria-busy="true"
       >
+        {/* The shimmer bars are paint-only; the live region needs real text
+            to announce (EmptyState's loading-label precedent). */}
+        <VisuallyHidden>
+          {tOr('form_builder.loading', 'Loading form…')}
+        </VisuallyHidden>
         {/* Bar geometry is skin-owned per data-variant; the shimmer animation
             is skin-owned too (reduced-motion governs it). */}
         <div data-part="skeleton-bar" data-variant="title" />
@@ -816,6 +813,11 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     <form
       data-part="root"
       onSubmit={handleSubmit}
+      /* The DS owns error presentation (FormField error slot + validation
+         summary through onValidationChange); native constraint bubbles would
+         short-circuit handleSubmit in real browsers because `required`
+         reaches the native input inside each composed primitive. */
+      noValidate
       className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
       style={style}
     >
@@ -895,7 +897,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                     </div>
                   )}
                 </div>
-                <ChevronIcon collapsed={isCollapsed} />
+                <NavigationDownIcon decorative size={16} data-part="section-chevron" />
               </ModernButton>
             )}
 

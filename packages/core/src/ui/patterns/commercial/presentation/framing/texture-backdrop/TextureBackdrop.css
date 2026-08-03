@@ -35,6 +35,20 @@
   color: var(--ds-commercial-texture-paper);
 }
 
+/* Degradation law: texture is decoration, never information. Under forced colors it would
+   re-key to a flat system-ink wash the user did not ask for, and in print it is pure ink
+   cost — so both contexts drop the layer entirely and the content stands alone. */
+@media (forced-colors: active) {
+  .rt-texture-backdrop__layer {
+    display: none;
+  }
+}
+@media print {
+  .rt-texture-backdrop__layer {
+    display: none;
+  }
+}
+
 /* dots — a radial-gradient dot grid. */
 .rt-texture-backdrop__layer[data-pattern="dots"] {
   background-image: radial-gradient(circle, currentColor 1px, transparent 1px);

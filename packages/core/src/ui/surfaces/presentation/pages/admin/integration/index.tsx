@@ -490,12 +490,22 @@ export function IntegrationSurface({
   // developer tooling any integration page needs. Connected Apps is
   // excluded from the tab bar when empty to avoid a confusing blank tab.
   // Tabs stamps its own root (`data-part="root"`) and does not forward
-  // arbitrary data-* attrs, so the state attributes live on the sections
-  // root only; the surface classes land on the Tabs root either way.
+  // arbitrary data-* attrs, so the surface root is a wrapper Stack that
+  // carries the state/density contract (data-loading, aria-busy, density
+  // scope) — tabs mode now matches the sections mode channel for channel.
   const content = useTabs ? (
-    <Tabs
+    <Stack
       className="ds-surface ds-integration ds-integration--tabs"
-      items={[
+      data-part="root"
+      data-view="tabs"
+      data-mobile={isMobile ? 'true' : 'false'}
+      {...densityScopeAttributes(profileDefaults.density)}
+      data-loading={loading ? 'true' : 'false'}
+      aria-busy={loading}
+      spacing={resolveStackSpacing(profileDefaults.sectionSpacing)}
+    >
+      <Tabs
+        items={[
         {
           key: 'api-keys',
           label: tSurfaceOr('integration.keys_title', 'API Keys'),
@@ -531,8 +541,9 @@ export function IntegrationSurface({
               },
             ]
           : []),
-      ]}
-    />
+        ]}
+      />
+    </Stack>
   ) : (
     <Stack
       className="ds-surface ds-integration ds-integration--sections"

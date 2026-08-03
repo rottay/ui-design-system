@@ -1,8 +1,10 @@
 'use client';
 
-import { useMemo, type CSSProperties } from 'react';
+import { useId, useMemo, type CSSProperties } from 'react';
 
 import { useChartDimensions } from '../../../../runtime/dimensions';
+import type { ChartInteraction } from '../../../../foundation/interaction';
+import { useChartInteraction } from '../../../../runtime/interaction/controller';
 import {
   buildSvgWaterfallGeometry,
   type ChartGeometryInsets,
@@ -10,6 +12,18 @@ import {
   type SvgWaterfallType,
 } from '../../../../foundation/renderers/geometry';
 import { ChartRendererSurface } from '..';
+
+/** Tooltip/keyboard datum exposed to the family for each rendered bar. */
+export interface SvgWaterfallBarDatum {
+  readonly label: string;
+  readonly value: number;
+  readonly type: SvgWaterfallType;
+  /** Running total before this bar. */
+  readonly start: number;
+  /** Running total after this bar. */
+  readonly end: number;
+  readonly paint: string;
+}
 
 export interface SvgWaterfallRendererProps {
   readonly data: readonly SvgWaterfallDatum[];
@@ -31,6 +45,8 @@ export interface SvgWaterfallRendererProps {
   readonly barRadius?: number;
   readonly insets?: ChartGeometryInsets;
   readonly maxTicks?: number;
+  /** Explore/select interaction contract wired by the owning family. */
+  readonly interaction?: ChartInteraction<SvgWaterfallBarDatum>;
   readonly className?: string;
   readonly style?: CSSProperties;
 }
@@ -64,6 +80,7 @@ export function SvgWaterfallRenderer({
   barRadius = 2,
   insets,
   maxTicks,
+  interaction,
   className,
   style,
 }: SvgWaterfallRendererProps): React.ReactElement {
@@ -87,6 +104,37 @@ export function SvgWaterfallRenderer({
     if (type === 'decrease') return decreaseColor;
     return totalColor;
   };
+  const interactionItems = useMemo(
+    () => geometry.bars.map((bar) => ({
+      key: bar.key,
+      label: `${bar.label}: ${bar.value} (${bar.type})`,
+      datum: {
+        label: bar.label,
+        value: bar.value,
+        type: bar.type,
+        start: bar.start,
+        end: bar.end,
+        paint: paintForType(bar.type),
+      },
+      x: orientation === 'vertical' ? bar.x + bar.width / 2 : bar.x + bar.width,
+      y: orientation === 'vertical' ? bar.y : bar.y + bar.height / 2,
+    })),
+    // paintForType is pure in the color props; listing them keeps the memo
+    // honest without depending on the inline arrow identity.
+    [decreaseColor, geometry.bars, increaseColor, orientation, totalColor],
+  );
+  const interactionState = useChartInteraction({
+    items: interactionItems,
+    interaction,
+    navigation: orientation === 'vertical' ? 'horizontal' : 'vertical',
+  });
+  const tooltipId = useId();
+  const activeBar = interactionState.activeKey
+    ? geometry.bars.find((bar) => bar.key === interactionState.activeKey)
+    : undefined;
+  const tooltip = interactionState.activeDatum && interaction && interaction.mode !== 'static'
+    ? interaction.renderTooltip?.(interactionState.activeDatum)
+    : undefined;
 
   return (
     <ChartRendererSurface
@@ -101,6 +149,15 @@ export function SvgWaterfallRenderer({
       className={['ds-chart-renderer-waterfall', 'ds-chart-renderer-bar', className].filter(Boolean).join(' ')}
       style={style}
       ownerRef={containerRef}
+      interactionMode={interactionState.mode}
+      interactionRootProps={interactionState.rootProps}
+      tooltip={tooltip}
+      tooltipId={tooltipId}
+      tooltipKey={interactionState.activeKey ?? undefined}
+      tooltipAnchor={activeBar ? {
+        x: orientation === 'vertical' ? activeBar.x + activeBar.width / 2 : activeBar.x + activeBar.width,
+        y: orientation === 'vertical' ? activeBar.y : activeBar.y + activeBar.height / 2,
+      } : undefined}
     >
       <g data-part="plot-area" data-orientation={orientation}>
       <g data-part="grid" aria-hidden="true">
@@ -169,14 +226,61 @@ export function SvgWaterfallRenderer({
       <g data-part="marks">
         {geometry.bars.map((bar) => {
           const accessibleLabel = `${bar.label}: ${formatVal(bar.value)} (${bar.type})`;
+          const datumProps = interactionState.getDatumProps(bar.key);
+          const interactive = interactionState.mode !== 'static';
+          const actionable = interactionState.mode === 'select' || interactionState.mode === 'drill';
+          const markLabel = actionable && interaction && interaction.mode !== 'static'
+            ? `${accessibleLabel}. ${interaction.actionLabel}`
+            : accessibleLabel;
+          // The 24px hit floor keeps zero-height deltas and thin totals
+          // keyboard/pointer reachable without distorting the painted bar.
+          const hitWidth = Math.max(24, bar.width);
+          const hitHeight = Math.max(24, bar.height);
+          const hitX = bar.x - (hitWidth - bar.width) / 2;
+          const hitY = bar.y - (hitHeight - bar.height) / 2;
           return (
             <g
               key={bar.key}
               data-part="bar-mark"
               data-datum-id={bar.key}
               data-status={bar.type}
-              aria-label={accessibleLabel}
+              data-chart-datum-key={datumProps['data-chart-datum-key']}
+              data-active={datumProps['data-active']}
+              data-focused={datumProps['data-focused']}
+              data-hovered={datumProps['data-hovered']}
+              data-pinned={datumProps['data-pinned']}
+              tabIndex={datumProps.tabIndex}
+              role={interactive ? actionable ? 'button' : 'img' : undefined}
+              aria-label={interactive ? markLabel : accessibleLabel}
+              aria-describedby={
+                datumProps['data-active'] && tooltip !== undefined && tooltip !== null && tooltip !== false
+                  ? tooltipId
+                  : undefined
+              }
             >
+              {!interactive ? <title>{accessibleLabel}</title> : null}
+              {interactive ? (
+                <>
+                  <rect
+                    data-part="interaction-target"
+                    x={hitX}
+                    y={hitY}
+                    width={hitWidth}
+                    height={hitHeight}
+                    pointerEvents="all"
+                    aria-hidden="true"
+                  />
+                  <rect
+                    data-part="interaction-halo"
+                    x={hitX}
+                    y={hitY}
+                    width={hitWidth}
+                    height={hitHeight}
+                    rx={Math.max(radius, 4)}
+                    aria-hidden="true"
+                  />
+                </>
+              ) : null}
               <rect
                 data-part="bar"
                 data-status={bar.type}
@@ -187,6 +291,7 @@ export function SvgWaterfallRenderer({
                 rx={radius}
                 ry={radius}
                 fill={paintForType(bar.type)}
+                aria-hidden={interactive ? true : undefined}
               />
               {showValues ? (
                 <text

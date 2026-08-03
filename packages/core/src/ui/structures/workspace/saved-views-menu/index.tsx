@@ -36,6 +36,7 @@ import {
   StarIcon as Star,
   Trash2Icon as Trash2,
 } from '../../../../graphics/icons';
+import { LayoutListIcon } from '@/graphics/icons/presentation/semantic/generated/roles/layout-list';
 
 import { Box, Flex, Text } from '../../../primitives';
 import { Portal } from '../../../primitives/runtime/overlay/portal';
@@ -92,14 +93,9 @@ export interface SavedViewsMenuProps {
 
 const DEFAULT_TOGGLE_EVENT = 'entity-table-workspace:toggle-views-menu';
 
-const triggerButtonStyle = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: 10,
-  minHeight: 40,
-  padding: '0 12px',
-  cursor: 'pointer',
-} as const;
+/** Panel geometry constants shared by the JS viewport clamp and the skin. */
+const PANEL_WIDTH = 420;
+const PANEL_VIEWPORT_GUTTER = 16;
 
 /**
  * Every user-visible string the menu renders, resolved through the i18n
@@ -147,19 +143,6 @@ interface SavedViewsMenuLabels {
   shareColumnsPrefix: string;
   shareSortPrefix: string;
   shareDensityPrefix: string;
-}
-
-function ViewsIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M2 4h12M2 8h12M2 12h12"
-        stroke="currentColor"
-        strokeWidth="1.33"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
 }
 
 function getViewKind(view: SavedViewsMenuEntry): SavedViewsMenuEntryKind {
@@ -241,6 +224,7 @@ export function SavedViewsMenu({
   const [panelPosition, setPanelPosition] = useState({ top: 0, left: 0, width: 420 });
   const [shareState, setShareState] = useState<'idle' | 'copied'>('idle');
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
   const shareTimerRef = useRef<number | null>(null);
   const i18n = useOptionalTranslation('components');
   /**
@@ -320,12 +304,21 @@ export function SavedViewsMenu({
     [activeViewKey, views],
   );
 
+  // APG dialog closure: every dismissal path (select, Escape, backdrop,
+  // save-current) funnels through one helper so focus always returns to the
+  // trigger — the portaled panel is not a DOM descendant, so the browser
+  // cannot restore focus on its own.
+  const closeMenu = useCallback(() => {
+    setIsOpen(false);
+    triggerRef.current?.focus();
+  }, []);
+
   const handleSelect = useCallback(
     (key: string) => {
       onViewSelect(key);
-      setIsOpen(false);
+      closeMenu();
     },
-    [onViewSelect],
+    [onViewSelect, closeMenu],
   );
 
   const handleDelete = useCallback(
@@ -379,11 +372,12 @@ export function SavedViewsMenu({
     if (!trigger || typeof window === 'undefined') return;
 
     const rect = trigger.getBoundingClientRect();
-    const width = 420;
-    const gutter = 16;
+    // Narrow viewports: clamp the panel width so it never overflows the
+    // gutter — a 360px phone gets 328px instead of a horizontal bleed.
+    const width = Math.min(PANEL_WIDTH, window.innerWidth - PANEL_VIEWPORT_GUTTER * 2);
     const left = Math.min(
-      Math.max(gutter, rect.right - width),
-      window.innerWidth - width - gutter,
+      Math.max(PANEL_VIEWPORT_GUTTER, rect.right - width),
+      window.innerWidth - width - PANEL_VIEWPORT_GUTTER,
     );
 
     setPanelPosition({
@@ -437,23 +431,31 @@ export function SavedViewsMenu({
     setShareState('idle');
   }, [activeViewKey]);
 
+  // Focus entry: when the dialog opens, focus lands on the panel itself
+  // (tabIndex=-1) so keyboard and screen-reader users start inside the
+  // portaled tree; closure paths hand focus back to the trigger.
+  useEffect(() => {
+    if (!isOpen) return;
+    panelRef.current?.focus({ preventScroll: true });
+  }, [isOpen]);
+
   // Close on Escape and hand focus back to the trigger (APG disclosure).
   useEffect(() => {
     if (!isOpen) return;
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setIsOpen(false);
-        triggerRef.current?.focus();
+        closeMenu();
       }
     };
     document.addEventListener('keydown', handleEscape);
     return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen]);
+  }, [isOpen, closeMenu]);
 
   return (
     <Box style={{ position: 'relative', zIndex: isOpen ? 60 : 1 }}>
       <Box
         as="button"
+        type="button"
         data-part="trigger"
         data-open={isOpen}
         className="ds-structure ds-saved-views-menu"
@@ -463,30 +465,15 @@ export function SavedViewsMenu({
         aria-label={activeView ? `${labels.views}: ${activeView.label}` : labels.views}
         aria-haspopup="dialog"
         aria-expanded={isOpen}
-        style={{
-          ...triggerButtonStyle,
-          width: 42,
-          minWidth: 42,
-          height: 42,
-          minHeight: 42,
-          padding: 0,
-          justifyContent: 'center',
-        }}
       >
         <Flex align="center" justify="center" style={{ minWidth: 0 }}>
           <Box
             data-part="trigger-icon"
             data-open={isOpen}
-            style={{
-              width: 28,
-              height: 28,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
           >
-            <ViewsIcon />
+            {/* Governed semantic role icon (layout.list) — the retired local
+                hand-drawn SVG violated the zero-local-SVG law. */}
+            <LayoutListIcon decorative size={16} />
           </Box>
         </Flex>
       </Box>
@@ -499,7 +486,11 @@ export function SavedViewsMenu({
       {isOpen && (
         <Portal>
           <PortalScope snapshot={portalScope}>
-          <Box data-part="backdrop" onClick={() => setIsOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 1990 }} />
+          <Box
+            className="ds-structure ds-saved-views-menu-backdrop"
+            data-part="backdrop"
+            onClick={closeMenu}
+          />
 
           <Box
             data-part="panel"
@@ -507,6 +498,8 @@ export function SavedViewsMenu({
             className="ds-structure ds-saved-views-menu-panel"
             role="dialog"
             aria-label={labels.panelLabel}
+            ref={panelRef}
+            tabIndex={-1}
             style={{
               position: 'fixed',
               top: panelPosition.top,
@@ -586,17 +579,10 @@ export function SavedViewsMenu({
                     {onViewSave && (
                       <Box
                         as="button"
+                        type="button"
                         data-part="action-button"
                         data-tone="neutral"
                         onClick={handleDuplicateActiveView}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: 6,
-                          minHeight: 32,
-                          padding: '0 12px',
-                          cursor: 'pointer',
-                        }}
                       >
                         <Copy style={{ width: 12, height: 12 }} />
                         {labels.duplicate}
@@ -606,17 +592,10 @@ export function SavedViewsMenu({
                     {activeView && (
                       <Box
                         as="button"
+                        type="button"
                         data-part="action-button"
                         data-tone="neutral"
                         onClick={handleShareActiveView}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: 6,
-                          minHeight: 32,
-                          padding: '0 12px',
-                          cursor: 'pointer',
-                        }}
                       >
                         <Share2 style={{ width: 12, height: 12 }} />
                         {shareState === 'copied' ? labels.copied : labels.share}
@@ -626,19 +605,12 @@ export function SavedViewsMenu({
                     {onSaveCurrentView && (
                       <Box
                         as="button"
+                        type="button"
                         data-part="action-button"
                         data-tone="primary"
                         onClick={() => {
                           onSaveCurrentView();
-                          setIsOpen(false);
-                        }}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: 6,
-                          minHeight: 32,
-                          padding: '0 12px',
-                          cursor: 'pointer',
+                          closeMenu();
                         }}
                       >
                         <BookmarkPlus style={{ width: 12, height: 12 }} />

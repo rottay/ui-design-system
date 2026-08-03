@@ -226,6 +226,23 @@
   opacity: 0.58;
 }
 
+/* Hover lift (fine pointers only — the (hover: hover) guard keeps touch
+ * rows free of sticky washes). Rows already in a stamped state (visible
+ * draft / drag target) keep their stronger grammar. */
+@media (hover: hover) {
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    [data-part="row"]:hover:not([data-visible="true"]):not([data-drag-target="true"]),
+  .ds-structure.ds-column-menu-panel[data-part="surface"]
+    [data-part="action-row"]:hover:not([data-visible="true"]) {
+    border-color: color-mix(in srgb, var(--ds-color-border-secondary) 68%, transparent);
+    background: color-mix(
+      in srgb,
+      var(--ds-surface-card) 88%,
+      var(--ds-color-bg-elevated) 12%
+    );
+  }
+}
+
 .ds-structure.ds-column-menu-panel[data-part="surface"] [data-part="row-copy"] {
   min-inline-size: 0;
   flex: 1 1 auto;

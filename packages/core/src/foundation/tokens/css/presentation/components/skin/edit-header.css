@@ -17,9 +17,14 @@
  *   - ROOT border color (0,4,0): the two classes + `data-part='root'` +
  *     `data-loading`.
  *   - Descendant border color (0,4,0): root scope (0,3,0) + the target part.
- *   - `color` on a composed `Text` (0,5,0): root scope + an intermediate
- *     part (`top-bar`/`hero-panel`, both always present with `data-archetype`
- *     on the latter) + the target part.
+ *   - `color` on a composed `Text` can never win from this layer — the
+ *     typography skin lives in the LATER `rottay-engines` layer — so Text ink
+ *     rides the Text `color` prop (`secondary`/`subtle`) and the color rules
+ *     below remain as the declared intent (they still paint wherever the
+ *     typography skin is absent). The title is a `Box as="h1"` (DetailHeader
+ *     precedent): NOT typography, so its display type is fully skin-owned
+ *     (until the swap, a composed Text resolved its size inline and the
+ *     `--ds-edit-header-title-font-size` rule below was dead paint).
  *
  * SHARED WITH FormHeader (contract §2 — proven byte-identical): `buildPatternStyle`
  * (the archetype hero-panel gradient) and `getVariantTone` (the icon-badge tone)
@@ -174,11 +179,10 @@
 .ds-structure.ds-form-header a:has(> [data-part='breadcrumb-link']) {
   text-decoration: none;
 }
-/* the back arrow is directional: it mirrors under RTL */
-[dir='rtl'] .ds-structure.ds-edit-header [data-part='back-icon'],
-[dir='rtl'] .ds-structure.ds-form-header [data-part='back-icon'] {
-  transform: scaleX(-1);
-}
+/* the back arrow is the governed `navigation.back` semantic icon with
+   autoMirror in BOTH families — it flips itself under RTL. The old manual
+   scaleX(-1) rule is retired: after FormHeader's migration it DOUBLE-flipped
+   the governed icon (pointing it forward under RTL). */
 
 /* ─── SHARED EDIT+FORM: enter motion (defined once, consumed by both roots) ─ */
 
@@ -283,6 +287,10 @@
   text-transform: uppercase;
 }
 .ds-structure.ds-edit-header [data-part='title'] {
+  /* the title is a Box as="h1" (not typography) — this display type finally
+     paints: a composed Text resolved its size inline and left this rule dead */
+  margin: 0;
+  color: var(--ds-color-text-primary);
   font-size: var(--ds-edit-header-title-font-size, var(--ds-font-size-3xl));
   font-weight: 700;
   letter-spacing: -0.03em;

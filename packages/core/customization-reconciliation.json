@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "generatedBy": "wave C2c+D0 remediation; RE-DERIVED 2026-08-02 post FASE-B/H registry execution (183 rows) — same mechanical recompute law, dispositions unchanged",
-  "basedOnReportDigest": "e7095df04a1ae39ccb2a64d89748961787dc3562e7ba07c22f234f400d25fa73",
+  "generatedBy": "Codex reconciliation after Kimi premium wave; re-derived 2026-08-02 from the current census, dispositions unchanged",
+  "basedOnReportDigest": "c74a2299981feebab729e08d43ea61d9eaf4e50857b528a087f09bef5633d45b",
   "normative": {
-    "writers": 4807,
-    "deadWriters": 315,
+    "writers": 4810,
+    "deadWriters": 275,
     "definition": "customization-surface-census.mjs header — writer = manifest sets ∪ authored-CSS decls ∪ AST TS write-sites ∪ artifact emissions; productive read = PostCSS var() ∪ AST-classified TS read; metadata never counts"
   },
   "figures": {
-    "censusDeadFinal": 506,
+    "censusDeadFinal": 275,
     "tenantChannelGate": {
       "live": 232,
       "baseline": 236,
@@ -30,7 +30,9 @@
     },
     "drainSnapshots": {
       "321": "post FASE-B+lote-2 execution (183 registry rows: 174 decls + 3 emitters + 10 fence-opened) + census v4 adjudication-as-authority + JS-consumer helpers — 2026-08-02",
-      "498": "C2c+D0 remediation final (v1 of this projection)"
+      "498": "C2c+D0 remediation final (v1 of this projection)",
+      "315": "post FASE-B/H registry execution before the Kimi premium wave",
+      "275": "post Kimi premium wave + Codex canon reconciliation"
     }
   },
   "familyAdjudication": [
@@ -44,7 +46,7 @@
     {
       "family": "--ds-workspace-card-*",
       "disposition": "RECONNECT_OR_PROMOTE",
-      "count": 32,
+      "count": 19,
       "amendedBy": "binding preservation correction 2026-08-01: Kimi/premium provenance — RETIRE forbidden; reconnect to canon or promote",
       "previousCount": 32
     },
@@ -57,7 +59,7 @@
     {
       "family": "--ds-collection-card-*",
       "disposition": "COMPONENT-PRIVATE",
-      "count": 35,
+      "count": 24,
       "previousCount": 35
     },
     {
@@ -69,19 +71,19 @@
     {
       "family": "--ds-metric-card-*",
       "disposition": "COMPONENT-PRIVATE",
-      "count": 22,
+      "count": 9,
       "previousCount": 22
     },
     {
       "family": "--ds-listing-grid-*",
       "disposition": "COMPONENT-PRIVATE",
-      "count": 8,
+      "count": 7,
       "previousCount": 8
     },
     {
       "family": "--ds-premium-card-*",
       "disposition": "COMPONENT-PRIVATE",
-      "count": 4,
+      "count": 3,
       "previousCount": 4
     },
     {
@@ -130,7 +132,7 @@
     {
       "family": "remainder (per-name adjudication in D1)",
       "disposition": "KEEP-INTERNAL",
-      "count": 82,
+      "count": 81,
       "previousCount": 82
     }
   ],

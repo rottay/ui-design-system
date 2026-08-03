@@ -113,36 +113,14 @@ export const RadarChart = memo(function RadarChart({
     [showLabels ? 'Axis labels are visible.' : null, fallbackMessage].filter(Boolean).join(' ') || undefined,
   );
   const legendNode = legend && canRender && model.series.length > 1 ? (
-    <div
-      data-part="legend"
-      style={{
-        display: 'flex',
-        gap: 'var(--ds-chart-legend-gap, 16px)',
-        flexWrap: 'wrap',
-        marginTop: 'var(--ds-chart-legend-margin-top, 8px)',
-        justifyContent: 'center',
-      }}
-    >
-      {model.series.map((currentSeries) => (
-        <div
-          key={currentSeries.id}
-          data-part="legend-item"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 'var(--ds-chart-legend-item-gap, 6px)',
-            fontSize: 'var(--ds-chart-legend-font-size, 12px)',
-          }}
-        >
+    <div data-part="legend">
+      {model.series.map((currentSeries, seriesIndex) => (
+        <div key={currentSeries.id} data-part="legend-item">
           <span
             data-part="legend-swatch"
             data-color-source={currentSeries.colorSource}
-            style={{
-              width: 12,
-              height: 12,
-              backgroundColor: currentSeries.color,
-              display: 'inline-block',
-            }}
+            data-series-index={seriesIndex}
+            style={{ backgroundColor: currentSeries.color }}
           />
           <span data-part="legend-label">{currentSeries.name}</span>
         </div>
@@ -189,6 +167,7 @@ export const RadarChart = memo(function RadarChart({
       style={style}
       {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
+      skeleton
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Radar chart'}

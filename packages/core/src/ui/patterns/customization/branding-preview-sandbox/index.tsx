@@ -1,12 +1,21 @@
 /**
  * @fileoverview Branding Preview Sandbox - Live preview of branding changes.
  *
- * Renders a gallery of representative DS components with a proposed
- * TenantAppearance applied in an isolated CSS scope. Used by tenant admins
- * to preview branding changes before saving.
+ * Renders a gallery of REAL DS primitives (Button, Input, Card, Badge,
+ * Typography) with a proposed TenantAppearance applied in an isolated CSS
+ * scope -- the preview shows the actual component chrome reading the
+ * injected variables, never a hand-painted mock of it (a mock drifts; the
+ * real primitive cannot). Used by tenant admins to preview branding changes
+ * before saving.
  *
- * Uses CSS scope isolation via data-tenant attribute to prevent style
- * collisions with the admin's own dashboard.
+ * Uses CSS scope isolation via a per-instance data attribute to prevent
+ * style collisions with the admin's own dashboard. The mini table strip
+ * stays a CHANNEL MIRROR on purpose: it is not a control, it reads the
+ * `--ds-table-*` appearance channels directly (mounting a full DataTable
+ * with sorting chrome would drown the swatch). All geometry lives in
+ * `presentation/components/skin/branding-preview-sandbox.css`; chrome copy
+ * resolves through the optional `components` i18n channel with English
+ * floors.
  *
  * @example
  * ```tsx
@@ -29,6 +38,8 @@
 
 import React, { useMemo, useId } from 'react';
 import type { TenantAppearance } from '../../../../foundation/contracts/composition/tenants/themes';
+import { Badge, Box, Button, Card, Heading, Input, Text } from '../../../primitives';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // Lazy import to avoid pulling appearance compiler into main bundle
 // when sandbox is not used (tree-shaken)
@@ -47,7 +58,7 @@ interface BrandingPreviewSandboxProps {
 
 /**
  * Live preview sandbox for tenant branding changes.
- * Renders representative DS components in an isolated CSS scope.
+ * Renders representative DS primitives in an isolated CSS scope.
  */
 export function BrandingPreviewSandbox({
   appearance,
@@ -55,6 +66,12 @@ export function BrandingPreviewSandbox({
   showLabels = true,
   compact = false,
 }: BrandingPreviewSandboxProps): React.ReactElement {
+  // Optional channel with an English floor: the sandbox renders standalone
+  // (no I18nProvider) without crashing, and never echoes a raw key.
+  const i18n = useOptionalTranslation('components');
+  const t = (key: string, floor: string, params?: Record<string, string | number>): string =>
+    i18n?.tOr(key, floor, params) ?? floor;
+
   const sandboxId = useId().replace(/:/g, '');
   const scopeAttr = `data-preview-${sandboxId}`;
 
@@ -73,443 +90,182 @@ export function BrandingPreviewSandbox({
     return `[${scopeAttr}] {\n${declarations}\n}`;
   }, [cssVars, scopeAttr]);
 
-  const sectionStyle: React.CSSProperties = {
-    marginBottom: 16,
-  };
+  return (
+    <>
+      {/* Inject scoped CSS */}
+      <style dangerouslySetInnerHTML={{ __html: scopedCss }} />
 
-  const labelStyle: React.CSSProperties = {
-    fontSize: 10,
-    fontWeight: 600,
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.08em',
-    marginBottom: 8,
-  };
+      {/* Sandbox container */}
+      <div
+        {...{ [scopeAttr]: '' }}
+        className="ds-pattern-branding-preview-sandbox"
+        data-part="root"
+        data-state={compact ? 'compact' : 'full'}
+      >
+        {/* Buttons section -- real Buttons reading the scoped chrome vars */}
+        {showLabels && (
+          <Box data-part="header" data-state="buttons">
+            {t('brandingPreview.section.buttons', 'Buttons')}
+          </Box>
+        )}
+        <Box data-part="surface" data-state="buttons">
+          <Button variant="primary">{t('brandingPreview.button.primary', 'Primary')}</Button>
+          <Button variant="secondary">{t('brandingPreview.button.secondary', 'Secondary')}</Button>
+          <Button variant="default">{t('brandingPreview.button.default', 'Default')}</Button>
+          <Button variant="ghost">{t('brandingPreview.button.ghost', 'Ghost')}</Button>
+        </Box>
 
-  const rowStyle: React.CSSProperties = {
-    display: 'flex',
-    flexWrap: 'wrap' as const,
-    gap: 8,
-    alignItems: 'center',
-  };
+        {/* Inputs section -- real Inputs (read-only: the preview is inert) */}
+        {showLabels && (
+          <Box data-part="header" data-state="inputs">
+            {t('brandingPreview.section.inputs', 'Inputs')}
+          </Box>
+        )}
+        <Box data-part="surface" data-state="inputs">
+          <Input
+            data-part="input"
+            placeholder={t('brandingPreview.input.placeholder', 'Text input...')}
+            readOnly
+          />
+          <Input
+            data-part="input"
+            status="error"
+            placeholder={t('brandingPreview.input.errorPlaceholder', 'Error state')}
+            readOnly
+          />
+        </Box>
 
-  const btnBase: React.CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '6px 16px',
-    fontSize: 13,
-    fontWeight: 500,
-    cursor: 'default',
-    fontFamily: 'var(--ds-font-family-base, inherit)',
-  };
+        {/* Cards section -- real Cards */}
+        {showLabels && (
+          <Box data-part="header" data-state="cards">
+            {t('brandingPreview.section.cards', 'Cards')}
+          </Box>
+        )}
+        <Box data-part="surface" data-state="cards">
+          {/* Card drops a consumer data-part in every engine (its root
+              carries Card's own forced part) -- the surviving component
+              class is the authoritative hook for the preview width. */}
+          <Card
+            className="ds-branding-preview-sandbox__card"
+            data-size={compact ? 'compact' : 'full'}
+            variant="outlined"
+          >
+            <Card.Body>
+              <Text data-part="preview-card-title" weight="semibold">
+                {t('brandingPreview.card.title', 'Card Title')}
+              </Text>
+              <Text data-part="preview-card-body" size="sm">
+                {t('brandingPreview.card.body', 'Card body text with secondary color.')}
+              </Text>
+            </Card.Body>
+          </Card>
+          {!compact && (
+            <Card className="ds-branding-preview-sandbox__card" data-state="elevated" variant="elevated">
+              <Card.Body>
+                <Text data-part="preview-card-title" weight="semibold">
+                  {t('brandingPreview.card.elevatedTitle', 'Elevated Card')}
+                </Text>
+                <Text data-part="preview-card-body" size="sm">
+                  {t('brandingPreview.card.elevatedBody', 'With hover shadow applied.')}
+                </Text>
+              </Card.Body>
+            </Card>
+          )}
+        </Box>
 
-  const inputBase: React.CSSProperties = {
-    padding: '8px 12px',
-    fontSize: 13,
-    fontFamily: 'var(--ds-font-family-base, inherit)',
-    width: 200,
-  };
+        {/* Badges section -- real Badges on the semantic tone axis */}
+        {showLabels && (
+          <Box data-part="header" data-state="badges">
+            {t('brandingPreview.section.badges', 'Badges')}
+          </Box>
+        )}
+        <Box data-part="surface" data-state="badges">
+          <Badge tone="success">{t('brandingPreview.badge.active', 'Active')}</Badge>
+          <Badge tone="warning">{t('brandingPreview.badge.warning', 'Warning')}</Badge>
+          <Badge tone="danger">{t('brandingPreview.badge.error', 'Error')}</Badge>
+          <Badge tone="info">{t('brandingPreview.badge.info', 'Info')}</Badge>
+        </Box>
 
-  const cardBase: React.CSSProperties = {
-    padding: 16,
-    width: compact ? 200 : 260,
-  };
-
-  return React.createElement(
-    React.Fragment,
-    null,
-    // Inject scoped CSS
-    React.createElement('style', {
-      dangerouslySetInnerHTML: { __html: scopedCss },
-    }),
-
-    // Sandbox container
-    React.createElement(
-      'div',
-      {
-        [scopeAttr]: '',
-        className: 'ds-pattern-branding-preview-sandbox',
-        'data-part': 'root',
-        'data-state': compact ? 'compact' : 'full',
-        style: {
-          fontFamily: 'var(--ds-font-family-base, inherit)',
-          padding: 24,
-        },
-      },
-      // Buttons section
-      showLabels &&
-        React.createElement('div', { 'data-part': 'header', 'data-state': 'buttons', style: labelStyle }, 'Buttons'),
-      React.createElement(
-        'div',
-        {
-          'data-part': 'surface',
-          'data-state': 'buttons',
-          style: { ...sectionStyle, ...rowStyle },
-        },
-        React.createElement(
-          'button',
-          {
-            'data-part': 'button',
-            'data-variant': 'primary',
-            style: { ...btnBase },
-          },
-          'Primary'
-        ),
-        React.createElement(
-          'button',
-          {
-            'data-part': 'button',
-            'data-variant': 'secondary',
-            style: { ...btnBase },
-          },
-          'Secondary'
-        ),
-        React.createElement(
-          'button',
-          {
-            'data-part': 'button',
-            'data-variant': 'default',
-            style: { ...btnBase },
-          },
-          'Default'
-        ),
-        React.createElement(
-          'button',
-          {
-            'data-part': 'button',
-            'data-variant': 'ghost',
-            style: { ...btnBase },
-          },
-          'Ghost'
-        )
-      ),
-
-      // Inputs section
-      showLabels &&
-        React.createElement('div', { 'data-part': 'header', 'data-state': 'inputs', style: labelStyle }, 'Inputs'),
-      React.createElement(
-        'div',
-        {
-          'data-part': 'surface',
-          'data-state': 'inputs',
-          style: { ...sectionStyle, ...rowStyle },
-        },
-        React.createElement('input', {
-          'data-part': 'input',
-          'data-state': 'default',
-          style: inputBase,
-          placeholder: 'Text input...',
-          readOnly: true,
-        }),
-        React.createElement('input', {
-          'data-part': 'input',
-          'data-state': 'error',
-          style: { ...inputBase },
-          placeholder: 'Error state',
-          readOnly: true,
-        })
-      ),
-
-      // Cards section
-      showLabels &&
-        React.createElement('div', { 'data-part': 'header', 'data-state': 'cards', style: labelStyle }, 'Cards'),
-      React.createElement(
-        'div',
-        {
-          'data-part': 'surface',
-          'data-state': 'cards',
-          style: { ...sectionStyle, ...rowStyle },
-        },
-        React.createElement(
-          'div',
-          { 'data-part': 'card', 'data-state': 'default', style: cardBase },
-          React.createElement(
-            'div',
-            {
-              'data-part': 'preview-card-title',
-              style: {
-                fontWeight: 600,
-                marginBottom: 4,
-              },
-            },
-            'Card Title'
-          ),
-          React.createElement(
-            'div',
-            {
-              'data-part': 'preview-card-body',
-              style: {
-                fontSize: 13,
-              },
-            },
-            'Card body text with secondary color.'
-          )
-        ),
-        !compact &&
-          React.createElement(
-            'div',
-            {
-              'data-part': 'card',
-              'data-state': 'elevated',
-              style: { ...cardBase },
-            },
-            React.createElement(
-              'div',
-              {
-                'data-part': 'preview-card-title',
-                style: {
-                  fontWeight: 600,
-                  marginBottom: 4,
-                },
-              },
-              'Elevated Card'
-            ),
-            React.createElement(
-              'div',
-              {
-                'data-part': 'preview-card-body',
-                style: {
-                  fontSize: 13,
-                },
-              },
-              'With hover shadow applied.'
-            )
-          )
-      ),
-
-      // Badges section
-      showLabels &&
-        React.createElement('div', { 'data-part': 'header', 'data-state': 'badges', style: labelStyle }, 'Badges'),
-      React.createElement(
-        'div',
-        {
-          'data-part': 'surface',
-          'data-state': 'badges',
-          style: { ...sectionStyle, ...rowStyle },
-        },
-        ...['Active', 'Warning', 'Error', 'Info'].map((label) =>
-          React.createElement(
-            'span',
-            {
-              key: label,
-              'data-part': 'badge',
-              'data-state': label.toLowerCase(),
-              style: {
-                padding: '2px 8px',
-                fontSize: 12,
-                fontWeight: 500,
-              },
-            },
-            label
-          )
-        )
-      ),
-
-      // Table preview (mini)
-      !compact &&
-        React.createElement(
-          React.Fragment,
-          null,
-          showLabels &&
-            React.createElement(
-              'div',
-              {
-                'data-part': 'header',
-                'data-state': 'table',
-                style: labelStyle,
-              },
-              'Table'
-            ),
-          React.createElement(
-            'div',
-            {
-              'data-part': 'table',
-              style: {
-                ...sectionStyle,
-                overflow: 'hidden',
-              },
-            },
-            // Header
-            React.createElement(
-              'div',
-              {
-                'data-part': 'table-head',
-                style: {
-                  display: 'flex',
-                  padding: 'var(--ds-table-cell-padding, 10px 16px)',
-                  fontSize: 'var(--ds-table-header-font-size, 13px)',
-                  fontWeight: 'var(--ds-table-header-font-weight, 500)' as unknown as number,
-                },
-              },
-              React.createElement(
-                'div',
+        {/* Table preview (mini) -- a CHANNEL MIRROR strip reading the
+            `--ds-table-*` appearance vars directly (not a control; a full
+            DataTable would drown the swatch). Logical alignment only. */}
+        {!compact && (
+          <>
+            {showLabels && (
+              <Box data-part="header" data-state="table">
+                {t('brandingPreview.section.table', 'Table')}
+              </Box>
+            )}
+            <Box data-part="table">
+              <Box data-part="table-head">
+                <Box data-part="preview-table-cell" data-variant="head" data-span="wide">
+                  {t('brandingPreview.table.name', 'Name')}
+                </Box>
+                <Box data-part="preview-table-cell" data-variant="head">
+                  {t('brandingPreview.table.status', 'Status')}
+                </Box>
+                <Box data-part="preview-table-cell" data-variant="head" data-align="end">
+                  {t('brandingPreview.table.date', 'Date')}
+                </Box>
+              </Box>
+              {/* Sample rows ride the same copy channel as the rest of the
+                  chrome (neutral fixture data, English floors). */}
+              {[
                 {
-                  'data-part': 'preview-table-cell',
-                  'data-variant': 'head',
-                  style: { flex: 2 },
+                  name: t('brandingPreview.table.sampleNameA', 'John Doe'),
+                  date: t('brandingPreview.table.sampleDateA', 'Apr 17, 2026'),
                 },
-                'Name'
-              ),
-              React.createElement(
-                'div',
                 {
-                  'data-part': 'preview-table-cell',
-                  'data-variant': 'head',
-                  style: { flex: 1 },
+                  name: t('brandingPreview.table.sampleNameB', 'Jane Smith'),
+                  date: t('brandingPreview.table.sampleDateB', 'Apr 16, 2026'),
                 },
-                'Status'
-              ),
-              React.createElement(
-                'div',
-                {
-                  'data-part': 'preview-table-cell',
-                  'data-variant': 'head',
-                  style: { flex: 1, textAlign: 'right' as const },
-                },
-                'Date'
-              )
-            ),
-            // Rows
-            ...['John Doe', 'Jane Smith'].map((name, i) =>
-              React.createElement(
-                'div',
-                {
-                  key: name,
-                  'data-part': 'surface',
-                  'data-state': i % 2 === 1 ? 'striped' : 'default',
-                  style: {
-                    display: 'flex',
-                    padding: 'var(--ds-table-cell-padding, 10px 16px)',
-                    fontSize: 'var(--ds-table-cell-font-size, 14px)',
-                  },
-                },
-                React.createElement(
-                  'div',
-                  {
-                    'data-part': 'preview-table-cell',
-                    'data-variant': 'name',
-                    style: { flex: 2, fontWeight: 500 },
-                  },
-                  name
-                ),
-                React.createElement(
-                  'div',
-                  {
-                    'data-part': 'preview-table-cell',
-                    'data-variant': 'status',
-                    style: { flex: 1 },
-                  },
-                  React.createElement(
-                    'span',
-                    {
-                      'data-part': 'badge',
-                      'data-state': 'active',
-                      style: {
-                        padding: '1px 6px',
-                        fontSize: 11,
-                      },
-                    },
-                    'Active'
-                  )
-                ),
-                React.createElement(
-                  'div',
-                  {
-                    'data-part': 'preview-table-cell',
-                    'data-variant': 'date',
-                    style: {
-                      flex: 1,
-                      textAlign: 'right' as const,
-                      fontFamily: 'var(--ds-font-family-mono, monospace)',
-                      fontSize: 12,
-                    },
-                  },
-                  'Apr 17, 2026'
-                )
-              )
-            )
-          )
-        ),
+              ].map((row, i) => (
+                <Box key={row.name} data-part="surface" data-state={i % 2 === 1 ? 'striped' : 'default'}>
+                  <Box data-part="preview-table-cell" data-variant="name" data-span="wide">
+                    {row.name}
+                  </Box>
+                  <Box data-part="preview-table-cell" data-variant="status">
+                    <Badge tone="success">{t('brandingPreview.badge.active', 'Active')}</Badge>
+                  </Box>
+                  <Box data-part="preview-table-cell" data-variant="date" data-align="end">
+                    {row.date}
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          </>
+        )}
 
-      // Typography preview
-      !compact &&
-        React.createElement(
-          React.Fragment,
-          null,
-          showLabels &&
-            React.createElement(
-              'div',
-              {
-                'data-part': 'header',
-                'data-state': 'typography',
-                style: labelStyle,
-              },
-              'Typography'
-            ),
-          React.createElement(
-            'div',
-            {
-              'data-part': 'surface',
-              'data-state': 'typography',
-              style: sectionStyle,
-            },
-            React.createElement(
-              'div',
-              {
-                'data-part': 'title',
-                style: {
-                  fontSize: 24,
-                  fontWeight: 700,
-                  fontFamily: 'var(--ds-font-family-heading, inherit)',
-                  letterSpacing: 'var(--ds-letter-spacing-heading, -0.02em)',
-                },
-              },
-              'Heading Text'
-            ),
-            React.createElement(
-              'div',
-              {
-                'data-part': 'subtitle',
-                'data-variant': 'body',
-                style: {
-                  fontSize: 14,
-                  fontFamily: 'var(--ds-font-family-base, inherit)',
-                  lineHeight: 'var(--ds-line-height-body, 1.6)',
-                  marginTop: 4,
-                },
-              },
-              'Body text in the base font family. This is how paragraph text will look with the selected fonts and colors.'
-            ),
-            React.createElement(
-              'div',
-              {
-                'data-part': 'subtitle',
-                'data-variant': 'code',
-                style: {
-                  fontSize: 12,
-                  fontFamily: 'var(--ds-font-family-mono, monospace)',
-                  marginTop: 4,
-                },
-              },
-              'const monospace = "code preview";'
-            )
-          )
-        ),
+        {/* Typography preview -- real Heading/Text reading the scoped fonts */}
+        {!compact && (
+          <>
+            {showLabels && (
+              <Box data-part="header" data-state="typography">
+                {t('brandingPreview.section.typography', 'Typography')}
+              </Box>
+            )}
+            <Box data-part="surface" data-state="typography">
+              <Heading level="h3" data-part="title">
+                {t('brandingPreview.typography.heading', 'Heading Text')}
+              </Heading>
+              <Text data-part="subtitle" data-variant="body">
+                {t(
+                  'brandingPreview.typography.body',
+                  'Body text in the base font family. This is how paragraph text will look with the selected fonts and colors.'
+                )}
+              </Text>
+              <Text data-part="subtitle" data-variant="code">
+                {'const monospace = "code preview";'}
+              </Text>
+            </Box>
+          </>
+        )}
 
-      // Footer: var count
-      React.createElement(
-        'div',
-        {
-          'data-part': 'subtitle',
-          'data-variant': 'variable-count',
-          style: {
-            fontSize: 10,
-            textAlign: 'center' as const,
-            marginTop: 8,
-          },
-        },
-        `${Object.keys(cssVars).length} CSS variables applied`
-      )
-    )
+        {/* Footer: var count */}
+        <Box data-part="subtitle" data-variant="variable-count">
+          {t('brandingPreview.varsApplied', '{count} CSS variables applied', { count: Object.keys(cssVars).length })}
+        </Box>
+      </div>
+    </>
   );
 }

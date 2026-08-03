@@ -71,6 +71,55 @@
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-2);
   color: var(--ds-color-text-primary);
+  animation: ds-foundation-fade-in-down var(--ds-motion-normal) var(--ds-motion-ease-enter, ease-out);
+}
+
+/* ---- loading footprint: skeleton rows mirror the real row anatomy (icon
+        well + label/hint bars) so the panel never reflows when async
+        results land; the wash rides the canonical shimmer keyframes ---- */
+.ds-pattern-command-palette.ds-engine-modern [data-part='loading-list'] {
+  padding-block: var(--ds-spacing-1, 4px);
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-row'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-2, 8px);
+  margin-inline: var(--ds-spacing-1, 4px);
+  padding-block: var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-spacing-3, 12px);
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-icon'],
+.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-line'] {
+  border-radius: var(--ds-radius-md);
+  background: linear-gradient(
+    100deg,
+    var(--ds-surface-inset) 40%,
+    var(--ds-surface-highlight, var(--ds-surface-panel)) 50%,
+    var(--ds-surface-inset) 60%
+  );
+  background-size: 200% 100%;
+  animation: ds-foundation-shimmer var(--_ds-command-palette-shimmer-duration, calc(var(--ds-motion-glacial) * 4)) linear infinite;
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-icon'] {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  flex-shrink: 0;
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-text'] {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--ds-spacing-1, 4px);
+  min-inline-size: 0;
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-line'] {
+  display: block;
+  inline-size: 55%;
+  block-size: 0.625rem;
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='skeleton-line'][data-width='short'] {
+  inline-size: 35%;
+  block-size: 0.5rem;
 }
 
 /* ---- search row: always a flex line so the argument chip can sit beside
@@ -124,16 +173,22 @@
 /* ---- option rows: keyboard-active and pointer-hover-while-not-active both
         resolve to the inset surface; hover is hover-capable-only and the
         `:not([data-active='true'])` guard keeps a hovered pointer off the
-        keyboard-selected row (a plain :hover would light two rows at once). ---- */
+        keyboard-selected row (a plain :hover would light two rows at once).
+        The active row also carries a SHAPE indicator (inline-start accent
+        bar), never color alone; the inline margin lets the active pill and
+        the bar float clear of the dialog edge. ---- */
 .ds-pattern-command-palette.ds-engine-modern [data-part='item'] {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--ds-spacing-2, 8px);
+  margin-inline: var(--ds-spacing-1, 4px);
   padding-block: var(--ds-spacing-2, 8px);
   padding-inline: var(--ds-spacing-3, 12px);
   border-radius: var(--ds-radius-lg);
   cursor: pointer;
+  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='recent'] [data-part='item'] {
   padding-inline: var(--ds-spacing-3, 12px);
@@ -144,6 +199,7 @@
 }
 .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] {
   background: var(--ds-surface-inset);
+  box-shadow: inset 0 0 0 1px var(--ds-color-border-focus, var(--ds-color-primary));
 }
 @media (hover: hover) {
   .ds-pattern-command-palette.ds-engine-modern [data-part='item']:hover:not([data-active='true']) {
@@ -256,6 +312,9 @@
   .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] {
     background: Highlight;
     color: HighlightText;
+  }
+  .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true']::before {
+    content: none;
   }
   .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] [data-part='label'],
   .ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'] [data-part='description'] {

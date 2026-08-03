@@ -373,8 +373,18 @@ describe('Forms-family data-part contract (WO-SKIN-06 checkpoint CK-D/F)', () =>
           expect(container.querySelectorAll('[data-part="step-connector"]').length).toBe(3);
           expect(container.querySelector('[data-part="step-connector"][data-completed="true"]')).not.toBeNull();
         }
-        expect(container.querySelector('[data-part="progress-track"]')).not.toBeNull();
-        expect(container.querySelector('[data-part="progress-fill"]')).not.toBeNull();
+        if (engine === 'modern') {
+          // Modern composes the canonical Progress primitive. Its native
+          // <progress> owns meter semantics; the legacy pattern-owned
+          // track/fill anatomy must not return.
+          expect(container.querySelector('[data-part="root"][data-type="line"]')).not.toBeNull();
+          expect(container.querySelector('progress[data-part="fill"]')).not.toBeNull();
+          expect(container.querySelector('[data-part="progress-track"]')).toBeNull();
+          expect(container.querySelector('[data-part="progress-fill"]')).toBeNull();
+        } else {
+          expect(container.querySelector('[data-part="progress-track"]')).not.toBeNull();
+          expect(container.querySelector('[data-part="progress-fill"]')).not.toBeNull();
+        }
         expect(container.querySelector('[data-part="prev-button"]')).not.toBeNull();
         expect(container.querySelector('[data-part="skip-button"]')).not.toBeNull();
         expect(container.querySelector('[data-part="next-button"]')).not.toBeNull();

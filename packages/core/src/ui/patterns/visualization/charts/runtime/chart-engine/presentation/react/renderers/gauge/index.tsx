@@ -277,7 +277,10 @@ export function SvgGaugeRenderer({
                   data-tone={segment.tone}
                   d={segment.path}
                   fill={segment.colorSource === 'custom' ? segment.color : undefined}
-                  opacity={0.85}
+                  // The zone under the needle reads at full strength while the
+                  // remaining zones recede, so the active threshold is legible
+                  // without relying on hue alone. The skin owns the transition.
+                  opacity={segment.active ? 0.95 : 0.45}
                   aria-hidden={interactive ? true : undefined}
                 />
               </g>

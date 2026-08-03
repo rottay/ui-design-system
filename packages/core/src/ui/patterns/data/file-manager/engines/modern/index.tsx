@@ -287,22 +287,32 @@ export default function ModernFileManager(props: FileManagerProps) {
             </div>
           ) : viewMode === 'list' ? (
             <div data-part="list-scroll">
-              <table data-part="list-table">
+              <table
+                data-part="list-table"
+                aria-label={tOr('fileManager.listLabel', 'Files and folders')}
+              >
                 <thead>
                   <tr>
-                    <th data-part="column-select" />
-                    <th>{copy.columnName}</th>
-                    <th>{copy.columnSize}</th>
-                    <th>{copy.columnModified}</th>
-                    <th>{copy.columnActions}</th>
+                    {/* Visually empty header cell still announces its purpose
+                        to AT (the per-row Checkboxes live under it). */}
+                    <th
+                      data-part="column-select"
+                      scope="col"
+                      aria-label={tOr('fileManager.columnSelect', 'Select')}
+                    />
+                    <th scope="col">{copy.columnName}</th>
+                    <th scope="col" data-part="column-size">{copy.columnSize}</th>
+                    <th scope="col">{copy.columnModified}</th>
+                    <th scope="col">{copy.columnActions}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* DaisyUI "active" class highlights the selected row background. */}
+                  {/* Selection paint keys on data-selected alone — no utility
+                      class dependency; the composed Checkbox carries the same
+                      state to AT, so the fill is never the only cue. */}
                   {items.map(item => (
                     <tr
                       key={item.id}
-                      className={selectedItems.includes(item.id) ? 'active' : ''}
                       data-part="row"
                       data-selected={selectedItems.includes(item.id)}
                       data-file-kind={fileKindOf(item)}
@@ -315,6 +325,7 @@ export default function ModernFileManager(props: FileManagerProps) {
                             size="sm"
                             checked={selectedItems.includes(item.id)}
                             onChange={() => handleSelect(item.id)}
+                            aria-label={tOr('fileManager.selectItem', 'Select {name}', { name: item.name })}
                           />
                         </span>
                       </td>
@@ -334,16 +345,33 @@ export default function ModernFileManager(props: FileManagerProps) {
                             </span>
                           )}
                           {item.type === 'folder' ? (
-                            <a data-part="folder-link" data-action="navigate-folder" className="ds-file-manager__folder-link" title={item.name} onClick={() => onNavigate?.(item.id)}>
+                            /* Composed Button primitive (link variant): the
+                               folder entry keeps its real-button semantics
+                               (type=button, Enter/Space, focus ring) while the
+                               skin owns the link affordance. The caller
+                               data-part wins the root anatomy part (P-79), so
+                               the primitive's own chrome stays out of this
+                               paint. */
+                            <ModernButton
+                              variant="link"
+                              size="sm"
+                              shape="default"
+                              htmlType="button"
+                              data-part="folder-link"
+                              data-action="navigate-folder"
+                              className="ds-file-manager__folder-link"
+                              title={item.name}
+                              onClick={() => onNavigate?.(item.id)}
+                            >
                               {item.name}
-                            </a>
+                            </ModernButton>
                           ) : (
                             <span data-part="file-name" title={item.name}>{item.name}</span>
                           )}
                         </div>
                       </td>
-                      <td>{item.type === 'file' ? formatSize((item as FileItem).size) : '--'}</td>
-                      <td>{formatDate(item.modifiedAt)}</td>
+                      <td data-part="size-cell">{item.type === 'file' ? formatSize((item as FileItem).size) : '--'}</td>
+                      <td data-part="date-cell">{formatDate(item.modifiedAt)}</td>
                       <td>
                         <div data-part="item-actions">
                           {onRename && (
@@ -391,6 +419,7 @@ export default function ModernFileManager(props: FileManagerProps) {
                   className="ds-file-manager__grid-card"
                   role="button"
                   tabIndex={0}
+                  aria-pressed={item.type === 'file' ? selectedItems.includes(item.id) : undefined}
                   onClick={() => item.type === 'folder' ? onNavigate?.(item.id) : handleSelect(item.id)}
                   onKeyDown={(event) => handleGridCardKeyDown(event, item)}
                 >

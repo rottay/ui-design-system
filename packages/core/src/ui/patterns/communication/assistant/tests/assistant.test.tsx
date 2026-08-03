@@ -199,7 +199,10 @@ describe('assistant patterns', () => {
     );
     expect(hasShimmer).toBe(true);
     const caret = document.querySelector('[data-part="caret"]');
-    expect(caret?.getAttribute('style')).toContain('ds-assistant-caret');
+    expect(caret).toHaveAttribute('data-motion', 'live');
+    // Motion is skin-owned; an inline animation would outrank tenant and
+    // reduced-motion policy.
+    expect(caret?.getAttribute('style') ?? '').not.toContain('animation');
   });
 
   it('renders the full text immediately with no shimmer or blinking caret under a reduced-motion preference', async () => {
@@ -219,7 +222,8 @@ describe('assistant patterns', () => {
     expect(hasShimmer).toBe(false);
     // The caret holds a static position instead of blinking.
     const caret = document.querySelector('[data-part="caret"]');
-    expect(caret?.getAttribute('style')).toContain('animation: none');
+    expect(caret).toHaveAttribute('data-motion', 'static');
+    expect(caret?.getAttribute('style') ?? '').not.toContain('animation');
   });
 
   it('honors the reducedMotion prop override even without an OS preference', async () => {

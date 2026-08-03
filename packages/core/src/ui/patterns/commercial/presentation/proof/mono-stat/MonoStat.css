@@ -14,8 +14,11 @@
 .rt-mono-stat__value {
   display: block;
   font-family: var(--ds-commercial-font-mono);
-  font-size: 3rem;
-  font-weight: 600;
+  /* Family-private value size. The fallback is intrinsically fluid — it computes to
+     the current fixed 3rem on viewports ≳620px and shrinks smoothly below that, so a wide
+     formatted value (prefix + grouped digits + suffix) never overflows a 360px measure. */
+  font-size: var(--_ds-mono-stat-value-size, clamp(2.25rem, 1.25rem + 4.5vw, 3rem));
+  font-weight: var(--ds-font-weight-semibold, 600);
   line-height: 1;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
@@ -24,13 +27,18 @@
 
 .rt-mono-stat__label {
   display: block;
-  margin-top: 0.5rem;
+  margin-block-start: 0.5rem;
   font-family: var(--ds-commercial-font-mono);
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ds-commercial-gray-500);
+  /* Surface-adaptive label ink: 62% of the surface FOREGROUND over the surface background,
+     so the label keeps AA contrast on ink AND on paper (the fixed gray-500 step above —
+     kept as the pre-color-mix fallback — drops to ~4.4:1 on paper, below AA for this size).
+     Invalid without the kit's surface tokens or color-mix support: the fallback holds. */
+  color: color-mix(in srgb, var(--ds-commercial-fg) 62%, var(--ds-commercial-bg));
 }
 
 /* Visually hidden but screenreader-accessible: carries the FINAL value at all times, so

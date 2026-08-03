@@ -5,12 +5,19 @@
  * glyphs at each corner for the ASCII signature. The corner glyphs are decorative and are
  * marked aria-hidden in the component; the frame reads as `┌─┐│└┘` at any size without the
  * character wrapping that a pure-text frame suffers.
+ *
+ * Rhythm and type consume the shared `--ds-spacing-*` / `--ds-font-size-*` roles WITH literal
+ * fallbacks (the kit's self-contained idiom, mirroring `--ds-commercial-font-mono`), so tenant
+ * density scale and type ramp reshape the frame without a markup change. Label tracking stays
+ * private to this ASCII grammar (fallback: the shipped 0.08em).
+ * All offsets are logical properties: RTL mirrors corners and the seated label for free.
  */
 
 .rt-ascii-frame {
   position: relative;
   display: block;
-  padding: 1rem 1.25rem;
+  padding-block: var(--ds-spacing-4, 1rem);
+  padding-inline: var(--ds-spacing-5, 1.25rem);
   color: var(--ds-commercial-fg);
   border: 1px solid var(--ds-commercial-hairline);
   background: transparent;
@@ -22,43 +29,50 @@
 }
 
 /* Box-drawing corner glyphs. Positioned over each corner; the hairline border draws the
-   edges between them. */
+   edges between them. Offsets are font-relative internal geometry. */
 .rt-ascii-frame__corner {
   position: absolute;
   font-family: var(--ds-commercial-font-mono);
-  font-size: 0.875rem;
+  font-size: var(--ds-font-size-sm, 0.875rem);
   line-height: 1;
   color: var(--ds-commercial-hairline-strong);
   pointer-events: none;
   user-select: none;
 }
 .rt-ascii-frame__corner--tl {
-  top: -0.5em;
-  left: -0.06em;
+  inset-block-start: -0.5em;
+  inset-inline-start: -0.06em;
 }
 .rt-ascii-frame__corner--tr {
-  top: -0.5em;
-  right: -0.06em;
+  inset-block-start: -0.5em;
+  inset-inline-end: -0.06em;
 }
 .rt-ascii-frame__corner--bl {
-  bottom: -0.5em;
-  left: -0.06em;
+  inset-block-end: -0.5em;
+  inset-inline-start: -0.06em;
 }
 .rt-ascii-frame__corner--br {
-  bottom: -0.5em;
-  right: -0.06em;
+  inset-block-end: -0.5em;
+  inset-inline-end: -0.06em;
 }
 
-/* A label seated in the top rule: a small mono caption on the frame background. */
+/* A label seated in the top rule: a small mono caption on the frame background. Long labels
+   truncate with an ellipsis inside the frame's inline measure instead of overflowing the
+   rule; the full string stays available to AT (no aria-hidden on real text). */
 .rt-ascii-frame__label {
   position: absolute;
-  top: 0;
-  left: 1rem;
+  inset-block-start: 0;
+  inset-inline-start: var(--ds-spacing-4, 1rem);
   transform: translateY(-50%);
-  padding: 0 0.5rem;
+  max-inline-size: calc(100% - var(--ds-spacing-8, 2rem));
+  padding-block: 0;
+  padding-inline: var(--ds-spacing-2, 0.5rem);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   font-family: var(--ds-commercial-font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  letter-spacing: var(--_ds-ascii-frame-label-tracking, 0.08em);
   text-transform: uppercase;
   color: var(--ds-commercial-fg);
   background: var(--ds-commercial-bg);
@@ -66,4 +80,23 @@
 
 .rt-ascii-frame__body {
   position: relative;
+  min-inline-size: 0;
+}
+
+/* Forced colors: box-shadows are dropped by the UA, so the `double` variant re-expresses its
+   emphasis as a thicker structural border; the frame and seated label re-key to system ink. */
+@media (forced-colors: active) {
+  .rt-ascii-frame {
+    border-color: CanvasText;
+  }
+  .rt-ascii-frame[data-variant="double"] {
+    border-width: 3px;
+  }
+  .rt-ascii-frame__corner {
+    color: CanvasText;
+  }
+  .rt-ascii-frame__label {
+    color: CanvasText;
+    background: Canvas;
+  }
 }

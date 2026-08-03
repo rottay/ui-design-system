@@ -197,7 +197,7 @@ export function FormHeader({
       className="ds-structure ds-form-header"
     >
       <Box data-part="top-bar">
-        <Flex justify="between" align="center">
+        <Flex justify="between" align="center" wrap="wrap" gap={12}>
           <Flex align="center" gap={16}>
             {renderHrefAnchor(
               backHref,
@@ -210,7 +210,7 @@ export function FormHeader({
                     RTL); the retired catalog ArrowLeftIcon carried no
                     mirroring contract. */}
                 <NavigationBackIcon data-part="back-icon" decorative size={14} />
-                <Text data-part="back-label" size="xs">
+                <Text data-part="back-label" size="xs" color="secondary">
                   {resolvedBackLabel}
                 </Text>
               </Flex>,
@@ -266,15 +266,19 @@ export function FormHeader({
                 data-part="eyebrow"
                 size="xs"
                 weight="bold"
+                color="subtle"
               >
                 {eyebrow}
               </Text>
             ) : null}
-            <Text data-part="title">
+            {/* Box as="h1" (the DetailHeader precedent): a composed Text
+                resolved its size inline, which left the skin's 28px display
+                type dead — the h1 is fully skin-owned now. */}
+            <Box data-part="title" as="h1">
               {title}
-            </Text>
+            </Box>
             {subtitle && (
-              <Text data-part="subtitle" size="sm">
+              <Text data-part="subtitle" size="sm" color="secondary">
                 {subtitle}
               </Text>
             )}

@@ -19,8 +19,11 @@
  *
  * Context variants (no-results / error / offline / permission), retry and
  * collapsible error detail are NOT in the contract — documented, not
- * invented. The pattern owns zero copy (title/description/labels are caller
- * props), so there is no i18n surface.
+ * invented. The pattern owns almost zero copy (title/description/labels are
+ * caller props); the single exception is the loading branch's screen-reader
+ * announcement, which resolves through the optional `components` i18n
+ * channel (`empty_state.loading`, English floor `Loading…`) so the
+ * `role="status"` region is never silent. The spinner stays paint-only.
  *
  * @module Patterns/EmptyState/Engines/Modern
  * @category Patterns
@@ -30,6 +33,8 @@
 import React from 'react';
 import type { EmptyStateProps } from '../../contracts';
 import { Button } from '../../../../../primitives/inputs/Button';
+import { VisuallyHidden } from '../../../../../primitives/foundation/VisuallyHidden';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { CommunicationInboxIcon } from '@/graphics/icons/presentation/semantic/generated/roles/communication-inbox';
 
 const iconSizes = {
@@ -52,6 +57,14 @@ export default function ModernEmptyState(props: EmptyStateProps) {
     style,
   } = props;
 
+  // Pattern-owned copy is limited to this loading announcement; it resolves
+  // through the optional `components` i18n channel with an English floor so
+  // the region is never silent for assistive technology. Every other string
+  // stays caller-owned (see the module doc).
+  const i18n = useOptionalTranslation('components');
+  const loadingLabel =
+    i18n?.tOr('empty_state.loading', 'Loading…') ?? 'Loading…';
+
   if (loading) {
     return (
       <div
@@ -64,7 +77,10 @@ export default function ModernEmptyState(props: EmptyStateProps) {
         role="status"
         aria-live="polite"
       >
-        <span className="ds-empty-state__spinner" data-part="spinner" />
+        <span className="ds-empty-state__spinner" data-part="spinner" aria-hidden="true" />
+        {/* The spinner is paint-only; the live region needs real text to
+            announce. */}
+        <VisuallyHidden>{loadingLabel}</VisuallyHidden>
       </div>
     );
   }

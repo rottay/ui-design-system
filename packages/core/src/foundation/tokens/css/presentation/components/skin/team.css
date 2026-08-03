@@ -48,7 +48,7 @@
 }
 
 .ds-surface.ds-team .ds-team__divider:not(:last-child) {
-  border-block-end: 1px solid var(--ds-color-border, #1c1c20);
+  border-block-end: 1px solid var(--ds-color-border, var(--ds-color-border-subtle));
 }
 
 .ds-surface.ds-team .ds-team__role-select {

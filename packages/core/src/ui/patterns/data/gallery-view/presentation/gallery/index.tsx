@@ -22,6 +22,7 @@ import { Box, Flex, Skeleton, Stack, Text } from '../../../../../primitives';
 import { Checkbox } from '../../../../../primitives/inputs/Checkbox';
 import { Pagination } from '../../../../../primitives/navigation/Pagination';
 import { ShortcutScope } from '../../../../../../infrastructure/runtime/application/interaction/shortcuts';
+import { useOptionalTranslation } from '../../../../../../infrastructure/runtime/i18n';
 import type { GalleryViewProps } from '../../contracts';
 import { resolveGalleryKey } from '../../runtime/item-identity';
 import { useGalleryKeyboardNav, GalleryCollectionShortcuts } from '../../runtime/keyboard-navigation';
@@ -81,11 +82,11 @@ function ImagePlaceholder({ aspectRatio }: { aspectRatio: string }) {
       align="center"
       justify="center"
       style={{
-        width: '100%',
+        /* Runtime instance geometry: the aspectRatio prop owns this value. */
         aspectRatio,
       }}
     >
-      <ImageIcon data-part="image-placeholder-icon" style={{ width: 32, height: 32, opacity: 0.5 }} />
+      <ImageIcon data-part="image-placeholder-icon" />
     </Flex>
   );
 }
@@ -122,21 +123,14 @@ function DefaultGalleryCard<T>({
         <Box
           data-part="image-frame"
           style={{
-            width: '100%',
+            /* Runtime instance geometry: the aspectRatio prop owns this value. */
             aspectRatio,
-            overflow: 'hidden',
           }}
         >
           <img
             data-part="image"
             src={imageUrl as string}
             alt={typeof caption === 'string' ? caption : ''}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              display: 'block',
-            }}
             loading="lazy"
           />
         </Box>
@@ -144,20 +138,11 @@ function DefaultGalleryCard<T>({
         <ImagePlaceholder aspectRatio={aspectRatio} />
       )}
       {caption != null && String(caption).length > 0 && (
-        <Box
-          data-part="caption"
-          style={{
-            padding: '8px 10px',
-          }}
-        >
+        <Box data-part="caption">
           <Text
             data-part="caption-text"
+            className="ds-gallery-view__caption-text"
             size="sm"
-            style={{
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
           >
             {String(caption)}
           </Text>
@@ -230,21 +215,23 @@ function GalleryCardWrapper<T>({
     onToggleSelection(itemKey);
   }, [itemKey, onToggleSelection]);
 
+  /* Localized chrome (components catalog, English floor). */
+  const translation = useOptionalTranslation('components');
+  const selectItemLabel =
+    translation?.tOr('galleryView.selectItem', 'Select item {item}', { item: itemKey })
+    ?? `Select item ${itemKey}`;
+
   return (
     <Box
       data-part="card"
       data-selected={selected ? 'true' : 'false'}
       data-selectable={selectable ? 'true' : 'false'}
+      data-clickable={onItemClick ? 'true' : 'false'}
       role={onItemClick ? 'button' : undefined}
       ref={focusable ? itemRef : undefined}
       tabIndex={focusable ? tabIndex : undefined}
       onFocus={focusable ? onFocusItem : undefined}
       onClick={handleClick}
-      style={{
-        position: 'relative',
-        overflow: 'hidden',
-        cursor: onItemClick ? 'pointer' : 'default',
-      }}
       className="ds-gallery-card"
     >
       {/* Content: custom renderCard or default image+caption */}
@@ -259,20 +246,14 @@ function GalleryCardWrapper<T>({
         />
       )}
 
-      {/* Selection checkbox overlay (hidden until hover or checked) */}
+      {/* Selection checkbox overlay (hidden until hover or checked; always
+          visible on coarse pointers — no hover exists there). Geometry and
+          paint live in the skin, anchored to this part. */}
       {selectable && (
         <Box
           data-gallery-checkbox=""
           data-part="checkbox"
           data-selected={selected ? 'true' : 'false'}
-          style={{
-            position: 'absolute',
-            top: 8,
-            left: 8,
-            zIndex: 2,
-            padding: 2,
-            lineHeight: 0,
-          }}
           className="ds-gallery-checkbox"
         >
           <Checkbox
@@ -280,7 +261,7 @@ function GalleryCardWrapper<T>({
             checked={selected}
             onChange={handleCheckboxChange}
             size="sm"
-            aria-label={`Select item ${itemKey}`}
+            aria-label={selectItemLabel}
           />
         </Box>
       )}
@@ -331,21 +312,17 @@ function GallerySkeletonGrid({
         <Box
           key={i}
           data-part="skeleton-card"
-          style={{
-            overflow: 'hidden',
-          }}
         >
           <Skeleton
             className="ds-gallery-view__skeleton-image"
             variant="rectangular"
             style={{
-              width: '100%',
+              /* Runtime instance geometry: mirrors the loaded card's ratio. */
               aspectRatio,
-              display: 'block',
             }}
           />
-          <Box data-part="skeleton-caption" style={{ padding: '8px 10px' }}>
-            <Skeleton className="ds-gallery-view__skeleton-caption" variant="text" style={{ width: '70%', height: 14 }} />
+          <Box data-part="skeleton-caption">
+            <Skeleton className="ds-gallery-view__skeleton-caption" variant="text" />
           </Box>
         </Box>
       ))}
@@ -424,6 +401,10 @@ export function PatternGalleryView<T extends object>(
 
   const [internalSelectedKeys, setInternalSelectedKeys] = useState<string[]>([]);
   const selectedKeys = controlledSelectedKeys ?? internalSelectedKeys;
+
+  /* Localized chrome (components catalog, English floor). */
+  const translation = useOptionalTranslation('components');
+  const emptyLabel = translation?.tOr('galleryView.empty', 'No items') ?? 'No items';
 
   const getItemKey = useCallback(
     (item: T, index: number) => resolveGalleryKey(item, rowKey, index),
@@ -547,14 +528,10 @@ export function PatternGalleryView<T extends object>(
         data-part="root"
         data-loading="false"
         data-empty="true"
-        style={{
-          padding: 'var(--ds-spacing-8, 32px) var(--ds-spacing-5, 20px)',
-          textAlign: 'center',
-          ...style,
-        }}
+        style={style}
       >
         {emptyState ?? (
-          <Text data-part="empty-state">No items</Text>
+          <Text data-part="empty-state">{emptyLabel}</Text>
         )}
       </Box>
     );

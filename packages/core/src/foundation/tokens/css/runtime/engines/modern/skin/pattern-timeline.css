@@ -49,6 +49,13 @@
  * (track 1) while its timestamp slot took `timeline-end` (track 3), and for a
  * left-side item the pair swapped. `data-side` carries the item's side; each
  * rule below resolves the track that side implied for that particular part.
+ *
+ * MERGE NOTE (p613 wave): the hand-rolled border spinner rules are RETIRED —
+ * loading composes the public Spinner primitive, which owns ring, cadence,
+ * reduced motion and forced colors; this file keeps only the loading frame's
+ * flex posture. The default marker icon is now the governed
+ * `status.success` semantic role inside the same `marker-icon` part span, so
+ * the per-type `color` rules below keep one paint owner (`currentColor`).
  */
 
 /* ---- rail: the retired `timeline timeline-vertical` pair ---- */
@@ -79,8 +86,8 @@
         needs; the rail's own thickness and colour follow. ---- */
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'] {
   border: none;
-  width: var(--ds-timeline-line-width, 1px);
-  height: 100%;
+  inline-size: var(--ds-timeline-line-width, 1px);
+  block-size: 100%;
   grid-column-start: 2;
   background: var(--ds-timeline-line-color, var(--ds-color-bg-tertiary));
 }
@@ -131,8 +138,8 @@
   border: var(--ds-border-width-1) solid var(--ds-color-bg-tertiary);
   border-radius: var(--ds-radius-lg);
   background: var(--ds-color-bg-primary);
-  padding-inline: 1rem;
-  padding-block: 0.5rem;
+  padding-inline: var(--ds-spacing-4, 1rem);
+  padding-block: var(--ds-spacing-2, 0.5rem);
   font-size: var(--ds-font-size-xs, 0.75rem);
   box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
 }
@@ -268,26 +275,14 @@
   text-align: center;
 }
 
-/* ---- loading posture + spinner: geometry AND motion are skin-owned. The
-        retired engine inline style referenced `ds-spin`, a keyframe this
-        engine's tree never loads; the foundation's ds-foundation-spin is the
-        canonical spin. ---- */
+/* ---- loading posture: the frame's flex centering is pattern-owned; the
+        spinner itself is the composed Spinner primitive (ring, cadence,
+        reduced motion, forced colors — the retired hand-rolled rules). ---- */
 .ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true'] {
   display: flex;
   align-items: center;
   justify-content: center;
   padding-block: var(--ds-timeline-loading-padding-block, 3rem);
-}
-
-.ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']
-  > .ds-timeline-modern__spinner[data-part='spinner'] {
-  display: inline-block;
-  inline-size: 1.5rem;
-  block-size: 1.5rem;
-  animation: ds-foundation-spin var(--ds-motion-glacial) linear infinite;
-  border: 3px solid var(--ds-color-border);
-  border-block-start-color: var(--ds-color-primary);
-  border-radius: 50%;
 }
 
 /* ---- narrow containers: the zigzag collapses to a single rail at the
@@ -313,23 +308,13 @@
   }
 }
 
-/* ---- reduced motion: the infinite spinner settles to a static ring ---- */
+/* ---- reduced motion: clickable cards stop transitioning (the composed
+        Spinner owns its own reduced-motion posture) ---- */
 @media (prefers-reduced-motion: reduce) {
-  .ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']
-    > .ds-timeline-modern__spinner[data-part='spinner'] {
-    animation: none;
-  }
-
   .ds-pattern-timeline.ds-engine-modern[data-part='root']
     .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true'] {
     transition: none;
   }
-}
-
-html[data-ds-motion='reduced']
-  .ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']
-  > .ds-timeline-modern__spinner[data-part='spinner'] {
-  animation: none;
 }
 
 .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'] {
@@ -337,7 +322,7 @@ html[data-ds-motion='reduced']
   align-items: center;
   padding-block: 1px;
   padding-inline: var(--ds-timeline-badge-padding-inline, 0.3125rem);
-  border-radius: 9999px;
+  border-radius: var(--ds-radius-full, 9999px);
   font-size: var(--ds-timeline-badge-font-size, 0.625rem);
   font-weight: var(--ds-font-weight-semibold, 600);
   line-height: 1.4;
@@ -407,11 +392,5 @@ html[data-ds-motion='reduced']
 
   .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:focus-visible {
     outline-color: Highlight;
-  }
-
-  .ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']
-    > .ds-timeline-modern__spinner[data-part='spinner'] {
-    border-color: ButtonText;
-    border-block-start-color: Highlight;
   }
 }

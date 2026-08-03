@@ -86,12 +86,20 @@
 
 /* ---- collapse toggle: a ghost Button primitive; the pattern only rotates
         the chevron (on the Button's own icon span, so the Button's press
-        transform on the element itself is never fought). ---- */
+        transform on the element itself is never fought). The glyph is the
+        governed NavigationDownIcon — a disclosure chevron, not the old
+        expand-arrows glyph that read as "fullscreen". ---- */
 .ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'] [data-part='icon'] {
   transition: transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 .ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'][data-collapsed='true'] [data-part='icon'] {
   transform: rotate(-90deg);
+}
+/* RTL: the collapsed chevron points at the inline-start edge (left under
+   RTL), so the quarter-turn mirrors — `:dir()` follows the nearest authored
+   direction (collapse.css's idiom). */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'][data-collapsed='true'] [data-part='icon']:dir(rtl) {
+  transform: rotate(90deg);
 }
 
 /* ---- reset (clear-all) ghost Button: the source-gated pointer treatment.
@@ -163,11 +171,15 @@
 /* ---- input slot: the pattern owns ONLY the slot geometry. The composed
         Input/InputNumber primitive inside owns its chrome, states and focus
         ring — the :focus-within selector is kept (and kept paint-free) so the
-        focus pass-through is explicit, not accidental. ---- */
+        focus pass-through is explicit, not accidental. The slot's child fills
+        it (the Select root needed this when its width lived inline). ---- */
 .ds-pattern-filter-panel.ds-engine-modern [data-part='input'],
 .ds-pattern-filter-panel.ds-engine-modern [data-part='input']:focus-within {
   inline-size: 100%;
   min-inline-size: 0;
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='input'] > * {
+  inline-size: 100%;
 }
 
 /* ---- range group (date-range / number-range) + separator ---- */

@@ -25,6 +25,11 @@
  * and divider are painted by `dropdown.css` — the retired
  * `menu-panel`/`menu-item`/`menu-divider` rules are gone from this file.
  *
+ * The default-view marker is the governed `status.featured` semantic icon
+ * (weight follows the tenant icon profile); this file owns only its ink,
+ * keyed on the pill's active state because the icon contract forwards
+ * data-part/className but not pattern state attributes.
+ *
  * The loading state renders the Spinner primitive's modern engine, so its ring
  * paint and spin cadence live in `skin/spinner.css` alone. This file owns no
  * spinner rule and no spin keyframe: one spinner contract, one place.
@@ -189,6 +194,9 @@
   background: var(--ds-color-primary-foreground);
 }
 
+/* ---- default-view marker (governed status.featured role). The icon contract
+        forwards data-part/className but not pattern state attributes, so the
+        active ink keys on the pill's own state. ---- */
 .ds-pattern-saved-views.ds-engine-modern
   .ds-saved-views__default-star[data-part='default-star'] {
   flex-shrink: 0;
@@ -196,7 +204,8 @@
 }
 
 .ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__default-star[data-part='default-star'][data-active='true'] {
+  .ds-saved-views__pill[data-active='true']
+  .ds-saved-views__default-star[data-part='default-star'] {
   color: var(--ds-color-primary-foreground);
 }
 
@@ -222,8 +231,12 @@
     background var(--ds-motion-fast) var(--ds-motion-ease-out);
 }
 
-.ds-pattern-saved-views.ds-engine-modern
-  .ds-saved-views__pill:hover .ds-saved-views__menu-trigger[data-part='menu-trigger'],
+@media (hover: hover) {
+  .ds-pattern-saved-views.ds-engine-modern
+    .ds-saved-views__pill:hover .ds-saved-views__menu-trigger[data-part='menu-trigger'] {
+    opacity: 1;
+  }
+}
 /* focus-within reveals the trigger as soon as ANY control inside the pill
    takes focus (the hidden-action law: keyboard users must see the affordance
    before reaching it, not only when they land on it). */

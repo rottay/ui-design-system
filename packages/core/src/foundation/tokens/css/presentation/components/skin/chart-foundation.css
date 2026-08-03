@@ -23,6 +23,31 @@
   border: 0;
 }
 
+/* Shared family legend anatomy. Families own only shape-specific overrides;
+ * caller/palette paint remains a runtime value on the swatch. `:where()` keeps
+ * this foundation deliberately weaker than every family skin. */
+:where(.ds-chart-scaffold[data-part='chart-scaffold']) > [data-part='legend'] {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--ds-chart-legend-gap, 16px);
+  margin-block-start: var(--ds-chart-legend-margin-top, 8px);
+}
+
+:where(.ds-chart-scaffold[data-part='chart-scaffold']) > [data-part='legend'] [data-part='legend-item'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-chart-legend-item-gap, 6px);
+  font-size: var(--ds-chart-legend-font-size, 12px);
+}
+
+:where(.ds-chart-scaffold[data-part='chart-scaffold']) > [data-part='legend'] [data-part='legend-swatch'] {
+  display: inline-block;
+  flex: 0 0 auto;
+  inline-size: 12px;
+  block-size: 12px;
+}
+
 .ds-chart-brush.ds-chart-brush[data-part='chart-brush'] > [data-part='brush-background'] {
   fill: var(--ds-color-bg-secondary, #f5f5f5);
   stroke: var(--ds-color-border-subtle);

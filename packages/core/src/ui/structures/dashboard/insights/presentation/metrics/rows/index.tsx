@@ -7,39 +7,41 @@ import {
   TrendingUpIcon as TrendingUp,
 } from '../../../../../../../graphics/icons';
 import { useSmoothCounter } from '@/graphics/motion/react/runtime';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import type { MetricsProps, KeyMetric } from '../../../foundation/contracts';
 import {
-  METRIC_CARD_BG,
-  METRIC_CARD_BORDER,
-  METRIC_CARD_ICON_BG,
-  METRIC_CARD_ICON_COLOR,
-  METRIC_CARD_METER_FILL_ERROR,
-  METRIC_CARD_METER_FILL_SUCCESS,
+  METRIC_CARD_PADDING,
   METRIC_CARD_NUMBER_FONT_VARIANT,
   METRIC_CARD_NUMBER_MIN_WIDTH,
-  METRIC_CARD_PADDING,
-  METRIC_CARD_RADIUS,
-  METRIC_CARD_SHADOW,
-  METRIC_CARD_SHEEN,
-  METRIC_CARD_TREND_COLOR,
-  METRIC_CARD_TREND_ERROR_COLOR,
-  METRIC_CARD_VALUE_COLOR,
   METRIC_MONO_FONT,
-  METRIC_PANEL_BADGE_BG,
-  METRIC_PANEL_BADGE_BORDER,
-  METRIC_PANEL_BG,
-  METRIC_PANEL_BORDER,
-  METRIC_PANEL_ICON_BG,
-  METRIC_PANEL_ICON_BORDER,
-  METRIC_PANEL_RADIUS,
-  METRIC_PANEL_SHADOW,
-  METRIC_PANEL_TITLE_COLOR,
 } from '../../../foundation/tokens';
 
+/** Hook-local `tOr`: catalogue value with an English floor, never a raw key. */
+function useMetricsTranslation() {
+  const i18n = useOptionalTranslation('components');
+  const tOr = (key: string, floor: string): string => i18n?.tOr(key, floor) ?? floor;
+  return { tOr };
+}
+
+/**
+ * Splits a display value like "18d" / "4.8%" into a countable number, its
+ * decimal precision and its suffix. The counter animates the number; the
+ * decimals are preserved (the previous parseInt + Math.floor path truncated
+ * decimal metrics permanently — "4.8" rendered as "4").
+ */
+function parseMetricValue(value: string): { numericValue: number; decimals: number; suffix: string } {
+  const numericText = value.replace(/[^0-9.-]/g, '');
+  return {
+    numericValue: parseFloat(numericText) || 0,
+    decimals: (numericText.split('.')[1] ?? '').length,
+    suffix: value.replace(/[0-9.-]/g, ''),
+  };
+}
+
 function MetricRow({ metric, index }: { metric: MetricsProps['metrics'][0]; index: number }) {
-  const numericValue = parseInt(metric.value.replace(/[^0-9.-]/g, '')) || 0;
-  const suffix = metric.value.replace(/[0-9.-]/g, '');
-  const animatedValue = Math.floor(useSmoothCounter(0, numericValue, 1000, index * 150));
+  const { numericValue, decimals, suffix } = parseMetricValue(metric.value);
+  const rawValue = useSmoothCounter(0, numericValue, 1000, index * 150);
+  const animatedValue = decimals > 0 ? rawValue.toFixed(decimals) : Math.floor(rawValue);
 
   return (
     <Box
@@ -55,14 +57,6 @@ function MetricRow({ metric, index }: { metric: MetricsProps['metrics'][0]; inde
       <Box
         className="row-shimmer"
         data-part="shimmer"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: '-100%',
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
-        }}
       />
 
       <Flex align="center" justify="between" style={{ position: 'relative' }}>
@@ -70,14 +64,6 @@ function MetricRow({ metric, index }: { metric: MetricsProps['metrics'][0]; inde
           <Box
             className="metric-row-icon"
             data-part="metric-icon-box"
-            style={{
-              width: 40,
-              height: 40,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative',
-            }}
           >
             <metric.icon
               data-part="metric-icon"
@@ -136,65 +122,40 @@ function MetricRow({ metric, index }: { metric: MetricsProps['metrics'][0]; inde
 }
 
 export function MetricsRows({ metrics }: MetricsProps) {
+  const { tOr } = useMetricsTranslation();
+
   return (
     <Box
       className="ds-metrics-rows"
       data-part="root"
-      style={{
-        height: 415,
-        padding: '16px',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
     >
       <Flex
         align="center"
         justify="between"
         data-part="header"
-        style={{
-          paddingBottom: 12,
-          marginBottom: 12,
-          position: 'relative',
-        }}
       >
         <Flex align="center" gap={10}>
           <Box
             className="header-icon"
             data-part="panel-icon-box"
-            style={{
-              width: 32,
-              height: 32,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
           >
             <Activity data-part="panel-icon" style={{ width: 16, height: 16 }} />
           </Box>
           <Text weight="bold" data-part="title">
-            Key Metrics
+            {tOr('metrics.panelTitle', 'Key Metrics')}
           </Text>
         </Flex>
         <Box
           className="live-badge-v3"
           data-part="live-badge"
-          style={{
-            padding: '6px 12px',
-          }}
         >
           <Flex align="center" gap={6}>
             <Box
               className="live-dot-v3"
               data-part="live-dot"
-              style={{
-                width: 8,
-                height: 8,
-              }}
             />
             <Text size="xs" weight="bold" data-part="live-label" style={{ fontFamily: METRIC_MONO_FONT }}>
-              LIVE
+              {tOr('metrics.live', 'LIVE')}
             </Text>
           </Flex>
         </Box>
@@ -202,11 +163,6 @@ export function MetricsRows({ metrics }: MetricsProps) {
 
       <Box
         data-part="scroll-area"
-        style={{
-          flex: 1,
-          overflowY: 'auto',
-          minHeight: 0,
-        }}
         className="metrics-scroll"
       >
         <Stack spacing="sm">

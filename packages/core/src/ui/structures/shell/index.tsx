@@ -35,7 +35,7 @@ import React, {
 import type { AppShellProps, ShellInset, ShellInsetByPosture, ShellPosture } from './contracts';
 import { SHELL_DEFAULTS } from './contracts';
 import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
-import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { useOptionalDirection, useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import { ActionCloseIcon } from '@/graphics/icons/presentation/semantic/generated/roles/action-close';
 import { NavigationMenuIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-menu';
 import { Sheet } from '../../primitives/overlay/Sheet';
@@ -180,6 +180,13 @@ export function AppShell({
   const skipToContentLabel =
     i18n?.tOr('appShell.skipToContent.label', 'Skip to main content') ?? 'Skip to main content';
 
+  // Text direction (provider-free environments stay LTR, matching the
+  // documented standalone contract). The compact drawer slides from the
+  // inline-start edge: physical left in LTR, physical right in RTL — Sheet
+  // sides are physical, so the shell resolves the side here.
+  const direction = useOptionalDirection();
+  const drawerSide = direction === 'rtl' ? 'right' : 'left';
+
   const sidebarInlineSize = `var(--ds-shell-sidebar-width, ${sidebarWidth}px)`;
   const sidebarCollapsedInlineSize = `var(--ds-shell-sidebar-collapsed-width, ${sidebarCollapsedWidth}px)`;
   const headerBlockSize = `var(--ds-shell-header-block-size, var(--ds-shell-topbar-height, ${headerHeight}px))`;
@@ -284,6 +291,12 @@ export function AppShell({
   );
 
   // -- Render ---------------------------------------------------------------
+  // `rootStyle` is FUNCTIONAL wiring, not paint: every custom property below
+  // is resolved at render time from runtime state (posture, collapse,
+  // consumer geometry numbers) or bridges the physical `env(safe-area-inset-*)`
+  // readings into named channels the skin consumes. None of it can move to
+  // the stylesheet, because the values depend on props/hooks; the skin owns
+  // every static declaration that consumes these channels.
   const rootStyle: ShellCustomProperties = {
     '--ds-shell-safe-area-top': 'env(safe-area-inset-top, 0px)',
     '--ds-shell-safe-area-right': 'env(safe-area-inset-right, 0px)',
@@ -340,7 +353,7 @@ export function AppShell({
           <Sheet
             open={navigationOpen}
             onOpenChange={setNavigationOpen}
-            side="left"
+            side={drawerSide}
             showHandle={false}
             showOverlay
             closeOnEscape

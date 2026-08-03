@@ -21,12 +21,33 @@
  * the public test contract pins `[style*=grid-template-columns],.grid-cols-7`.
  * The border, radius and overflow those classes also carried moved here.
  *
+ * APG ROWS: the engine wraps the weekday header and each week in
+ * `role="row"` containers (`weekday-row` / `week-row` parts). They are
+ * LAYOUT-TRANSPARENT (`display: contents`), so the seven-column geometry
+ * and every hairline below resolve exactly as they did against the flat
+ * grid — that is why the day-cell/weekday selectors key on DESCENDANCE from
+ * the grid, not direct childhood.
+ *
+ * KEYBOARD: day cells are roving-tabindex gridcells — a `:focus-visible`
+ * inset ring (borders are occupied by the grid hairlines, so the ring draws
+ * INSIDE the cell). The selected date (`aria-selected` / `data-selected`,
+ * tracking the controlled `currentDate`) reads by SHAPE: an inset frame on
+ * the primary axis, distinct from the today marker's label ring — never by
+ * hue alone.
+ *
  * EVENT ACCENT HATCH: `CalendarEvent.color` is consumer-supplied config data;
  * it rides the quoted `--ds-calendar-event-accent` custom property the engine
  * stamps per chip, and the single rule below owns the fill (one paint owner).
  * In forced colors the accent data deliberately DISAPPEARS (documented
  * decision): events read by their title text inside a system-ink frame —
  * there is no forced-color-adjust opt-out, the chip is not a color picker.
+ *
+ * NARROW COLLAPSE: under the 30rem container cut the week collapses to an
+ * agenda density — event chips become DOTS (shape change, not tone): the
+ * title text stays in the DOM (`color: transparent`, never `display: none`)
+ * so assistive tech still reads it, and the "+N more" count keeps carrying
+ * the overflow. Forced colors UNDO the dot collapse: chips re-expand to
+ * bordered text pills so nothing reads as an empty swatch.
  *
  * HOVER LAW: day cells and event chips are interactive, so their hover is
  * hover-capable-only (`@media (hover: hover)`) with a matching `:active`;
@@ -41,6 +62,10 @@
  * LOGICAL: cell borders are `border-inline-end`/`border-block-end` (the
  * retired `border-r` mirrored nothing under RTL) and the date label aligns
  * to `end`.
+ *
+ * TOKEN OWNERSHIP: selected-ring width reuses the canonical focus-ring width;
+ * the narrow event-dot diameter is private to this family because it is not a
+ * tenant-level density rung.
  */
 
 /* ---- loading frame (Spinner owns ring + cadence) ---- */
@@ -84,10 +109,16 @@
   overflow: hidden;
 }
 
+/* ---- APG rows: layout-transparent (see APG ROWS above) ---- */
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'] > [data-part='weekday-row'],
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'] > [data-part='week-row'] {
+  display: contents;
+}
+
 /* ---- weekday header row ---- */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='weekday'] {
+  [data-part='weekday'] {
   padding-block: var(--ds-spacing-2);
   background: var(--ds-surface-inset);
   color: var(--ds-color-text-secondary);
@@ -97,31 +128,31 @@
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='weekday'] {
+  [data-part='weekday'] {
   border-block-end: 1px solid var(--ds-color-border);
 }
 
 /* ---- day cells ---- */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell'] {
+  [data-part='day-cell'] {
   min-block-size: var(--ds-calendar-view-cell-min-height, 5rem);
   padding: var(--ds-spacing-1, 0.25rem);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell'] {
+  [data-part='day-cell'] {
   border-inline-end: 1px solid var(--ds-color-border);
   border-block-end: 1px solid var(--ds-color-border);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell'][data-last-column='true'] {
+  [data-part='day-cell'][data-last-column='true'] {
   border-inline-end: none;
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell'][data-empty='false'] {
+  [data-part='day-cell'][data-empty='false'] {
   background: var(--ds-surface-card);
   cursor: pointer;
   transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out);
@@ -129,33 +160,51 @@
 @media (hover: hover) {
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    > [data-part='day-cell'][data-empty='false']:hover {
+    [data-part='day-cell'][data-empty='false']:hover {
     background: var(--ds-surface-inset);
   }
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell'][data-empty='false']:active {
+  [data-part='day-cell'][data-empty='false']:active {
   background: var(--ds-surface-inset);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell'][data-empty='true'] {
+  [data-part='day-cell'][data-empty='true'] {
   background: var(--ds-surface-inset);
+}
+
+/* ---- gridcell keyboard ring: inset (the grid hairlines own the borders) ---- */
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  [data-part='day-cell'][data-empty='false']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));
+}
+
+/* ---- selected day: SHAPE frame on the primary axis (never hue alone) ---- */
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  [data-part='day-cell'][data-selected='true'] {
+  box-shadow: inset 0 0 0
+    var(--ds-focus-ring-width, 2px)
+    color-mix(in srgb, var(--ds-color-primary) 55%, transparent);
 }
 
 /* ---- date label (today = shape ring + primary ink + semibold) ---- */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell']
+  [data-part='day-cell']
   > [data-part='date-label'] {
   padding-inline: var(--ds-spacing-1, 0.25rem);
   font-size: var(--ds-font-size-xs, 0.75rem);
+  font-variant-numeric: tabular-nums;
   text-align: end;
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell']
+  [data-part='day-cell']
   > [data-part='date-label'][data-today='true'] {
   border-radius: var(--ds-radius-sm);
   box-shadow: inset 0 0 0 1px var(--ds-color-primary);
@@ -166,7 +215,7 @@
 /* ---- event chip (fill rides the per-event accent hatch) ---- */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell']
+  [data-part='day-cell']
   [data-part='event'] {
   margin-block-start: 0.125rem;
   padding-inline: var(--ds-spacing-1, 0.25rem);
@@ -183,42 +232,61 @@
 @media (hover: hover) {
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    > [data-part='day-cell']
+    [data-part='day-cell']
     [data-part='event']:hover {
     filter: brightness(1.06);
   }
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell']
+  [data-part='day-cell']
   [data-part='event']:active {
   filter: brightness(0.94);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell']
+  [data-part='day-cell']
   [data-part='event']:focus-visible {
   outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));
   outline-offset: var(--ds-focus-ring-offset, 2px);
 }
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
   > [data-part='grid']
-  > [data-part='day-cell']
+  [data-part='day-cell']
   [data-part='overflow-count'] {
   padding-inline: var(--ds-spacing-1, 0.25rem);
   color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-xs, 0.75rem);
+  font-variant-numeric: tabular-nums;
 }
 
-/* ---- narrow containers: the composition defines the cut — compact cells ---- */
+/* ---- narrow containers: the composition defines the cut — compact cells,
+        and the week collapses to agenda density: chips become DOTS (shape,
+        never tone) with the title text kept in the DOM for assistive tech
+        (`color: transparent`, not `display: none`); the "+N more" count
+        keeps carrying the overflow. ---- */
 .ds-pattern-calendar-view.ds-engine-modern[data-part='root'] {
   container: ds-calendar-view / inline-size;
 }
 @container ds-calendar-view (max-width: 30rem) {
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    > [data-part='day-cell'] {
+    [data-part='day-cell'] {
     min-block-size: var(--ds-calendar-view-cell-min-height-compact, 3.5rem);
+  }
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    [data-part='day-cell']
+    [data-part='event'] {
+    display: inline-flex;
+    inline-size: var(--_ds-calendar-view-dot-size, 0.375rem);
+    block-size: var(--_ds-calendar-view-dot-size, 0.375rem);
+    padding: 0;
+    margin-block-start: var(--ds-spacing-1, 0.25rem);
+    margin-inline-end: var(--ds-spacing-1, 0.25rem);
+    border-radius: var(--ds-radius-full, 9999px);
+    color: transparent;
+    vertical-align: top;
   }
 }
 
@@ -234,10 +302,10 @@
 @media (prefers-reduced-motion: reduce) {
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    > [data-part='day-cell'],
+    [data-part='day-cell'],
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    > [data-part='day-cell']
+    [data-part='day-cell']
     [data-part='event'] {
     transition: none;
   }
@@ -245,31 +313,33 @@
 
 /* ---- forced colors: system colors only. The event accent is consumer DATA
         and deliberately disappears (documented above): chips read by title
-        text inside a system-ink frame. The today marker keeps its shape via
-        a Highlight ring; grid hairlines re-express as ButtonText. ---- */
+        text inside a system-ink frame — and the narrow dot collapse is
+        UNDONE here so no chip reads as an empty swatch. The today marker
+        keeps its shape via a Highlight ring; the selected day re-asserts as
+        a Highlight inset frame; grid hairlines re-express as ButtonText. ---- */
 @media (forced-colors: active) {
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'],
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    > [data-part='weekday'],
+    [data-part='weekday'],
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    > [data-part='day-cell'] {
+    [data-part='day-cell'] {
     border-color: ButtonText;
   }
 
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    > [data-part='weekday'],
+    [data-part='weekday'],
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    > [data-part='day-cell'][data-empty='true'] {
+    [data-part='day-cell'][data-empty='true'] {
     background: Canvas;
   }
 
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    > [data-part='day-cell']
+    [data-part='day-cell']
     > [data-part='date-label'][data-today='true'] {
     box-shadow: inset 0 0 0 1px Highlight;
     color: CanvasText;
@@ -277,22 +347,40 @@
 
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    > [data-part='day-cell']
+    [data-part='day-cell'][data-selected='true'] {
+    box-shadow: inset 0 0 0 2px Highlight;
+  }
+
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    [data-part='day-cell'][data-empty='false']:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+    > [data-part='grid']
+    [data-part='day-cell']
     [data-part='event'] {
+    display: block;
+    inline-size: auto;
+    block-size: auto;
+    margin-inline-end: 0;
+    padding-inline: var(--ds-spacing-1, 0.25rem);
     border: 1px solid ButtonText;
+    border-radius: var(--ds-radius-sm);
     background: Canvas;
     color: CanvasText;
   }
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    > [data-part='day-cell']
+    [data-part='day-cell']
     [data-part='event']:focus-visible {
     outline-color: Highlight;
   }
 
   .ds-pattern-calendar-view.ds-engine-modern[data-part='root']
     > [data-part='grid']
-    > [data-part='day-cell']
+    [data-part='day-cell']
     [data-part='overflow-count'] {
     color: GrayText;
   }

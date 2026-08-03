@@ -36,8 +36,13 @@ import type {
 } from '../../contracts';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../../runtime';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
+import { TooltipValue } from '../../presentation/tooltip';
+import type { ChartInteraction } from '../../runtime/chart-engine/foundation/interaction';
 import { buildSvgWaterfallGeometry } from '../../runtime/chart-engine/foundation/renderers/geometry';
-import { SvgWaterfallRenderer } from '../../runtime/chart-engine/presentation/react/renderers/waterfall';
+import {
+  SvgWaterfallRenderer,
+  type SvgWaterfallBarDatum,
+} from '../../runtime/chart-engine/presentation/react/renderers/waterfall';
 
 /** A single data point in the waterfall series. */
 export interface WaterfallDataPoint {
@@ -70,6 +75,8 @@ interface WaterfallChartOwnProps
   formatValue?: (value: number) => string;
   /** Orientation. Default: 'vertical' */
   orientation?: 'vertical' | 'horizontal';
+  /** Render the loading state as a structural placeholder instead of a centered label. */
+  skeleton?: boolean;
 }
 
 /** Props for the {@link WaterfallChart} component. */
@@ -94,6 +101,7 @@ export const WaterfallChart = memo(function WaterfallChart({
   showValues = true,
   formatValue,
   orientation = 'vertical',
+  skeleton,
   width,
   height = 400,
   className,
@@ -185,6 +193,22 @@ export const WaterfallChart = memo(function WaterfallChart({
     showConnectors ? 'Connector lines shown between bars.' : null,
   ].filter(Boolean).join(' '));
 
+  // The family declares the explore interaction only while the tooltip
+  // personality is active; the renderer's shared controller owns hover, focus,
+  // and keyboard cycling across bars.
+  const interaction: ChartInteraction<SvgWaterfallBarDatum> | undefined = chartPersonality.tooltip
+    ? {
+      mode: 'explore',
+      renderTooltip: (active) => (
+        <TooltipValue
+          label={`${active.datum.label} (${active.datum.type})`}
+          value={`${formatVal(active.datum.value)} → ${formatVal(active.datum.end)}`}
+          color={active.datum.paint}
+        />
+      ),
+    }
+    : undefined;
+
   return (
     <ChartScaffold
       containerRef={scaffoldRef}
@@ -195,6 +219,7 @@ export const WaterfallChart = memo(function WaterfallChart({
       style={style}
       {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
+      skeleton={skeleton}
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Waterfall chart'}
@@ -218,6 +243,7 @@ export const WaterfallChart = memo(function WaterfallChart({
           showConnectors={showConnectors}
           showValues={showValues}
           formatValue={formatVal}
+          {...(interaction === undefined ? {} : { interaction })}
         />
       )}
     />

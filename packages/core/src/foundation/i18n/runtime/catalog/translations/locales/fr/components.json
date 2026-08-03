@@ -126,7 +126,8 @@
     "description": "Aucune donnée"
   },
   "chart": {
-    "loading": "Chargement du graphique..."
+    "loading": "Chargement du graphique...",
+    "sankey_empty": "Aucune donnée de flux à afficher."
   },
   "surfaces": {
     "states": {
@@ -190,7 +191,8 @@
       "empty_description": "Ajoutez des evenements pour afficher le calendrier.",
       "all_day": "Toute la journée",
       "invalid_time": "Heure indisponible",
-      "invalid_events": "Événements avec une heure de début invalide : {count}"
+      "invalid_events": "Événements avec une heure de début invalide : {count}",
+      "agenda_aria": "Événements planifiés"
     },
     "kanban": {
       "previous": "Précédent",
@@ -528,7 +530,10 @@
     "pinLeft": "Épingler à gauche",
     "pinRight": "Épingler à droite",
     "unpin": "Désépingler",
-    "visibleSuffix": "visible"
+    "visibleSuffix": "visible",
+    "toggleVisibility": "Basculer la visibilité",
+    "pinSideLeft": "L",
+    "pinSideRight": "R"
   },
   "checkbox": {
     "group": "Groupe de cases à cocher"
@@ -814,7 +819,8 @@
     "just_now": "à l’instant",
     "minutes_ago": "il y a {count} min",
     "hours_ago": "il y a {count} h",
-    "days_ago": "il y a {count} j"
+    "days_ago": "il y a {count} j",
+    "loading": "Chargement"
   },
   "selectionPreviewRail": {
     "closePreview": "Fermer l’aperçu",
@@ -830,7 +836,8 @@
     "snapshotEmpty": "Aucun champ d’aperçu n’est disponible pour cet enregistrement.",
     "snapshotTitle": "Aperçu",
     "whyThisRow": "Pourquoi cette ligne ?",
-    "yes": "Oui"
+    "yes": "Oui",
+    "landmarkLabel": "Aperçu de l'enregistrement"
   },
   "fileManager": {
     "root": "Racine",
@@ -845,7 +852,8 @@
     "columnName": "Nom",
     "columnSize": "Taille",
     "columnModified": "Modification",
-    "columnActions": "Actions"
+    "columnActions": "Actions",
+    "columnSelect": "Sélectionner"
   },
   "voiceInput": {
     "speak": "Parler",
@@ -1018,7 +1026,9 @@
     "active_count": "{count} actifs",
     "remove_filter_named": "Supprimer le filtre {field}",
     "clearAll": "Tout effacer",
-    "addFilter": "Ajouter un filtre"
+    "addFilter": "Ajouter un filtre",
+    "more_count": "+{count} autres",
+    "show_less": "Afficher moins"
   },
   "liveFeed": {
     "refresh": "Actualiser",
@@ -1034,7 +1044,8 @@
     "zoom": "Zoom : {zoom}",
     "marker_count_one": "{count} repère",
     "marker_count_other": "{count} repères",
-    "empty": "Aucun repère"
+    "empty": "Aucun repère",
+    "viewport": "Fenêtre de la carte"
   },
   "step_wizard": {
     "next": "Suivant",
@@ -1043,7 +1054,8 @@
     "skip": "Ignorer",
     "progress": "Étape {current} sur {total} : {title}",
     "validation_default": "Veuillez terminer cette étape avant de continuer.",
-    "actions": "Actions de l’assistant"
+    "actions": "Actions de l’assistant",
+    "loading": "Chargement de l'assistant…"
   },
   "qrcode": {
     "loading": "Chargement",
@@ -1097,7 +1109,8 @@
   "statistic": {
     "trendPositive": "En hausse",
     "trendNegative": "En baisse",
-    "trendWarning": "Avertissement"
+    "trendWarning": "Avertissement",
+    "trendNeutral": "Aucun changement"
   },
   "passwordInput": {
     "strength_weak": "Faible",
@@ -1121,5 +1134,116 @@
       "suboptimal": "plage sous-optimale",
       "critical": "plage critique"
     }
+  },
+  "empty_state": {
+    "loading": "Chargement…"
+  },
+  "form_builder": {
+    "loading": "Chargement du formulaire…"
+  },
+  "filter_panel": {
+    "apply": "Appliquer",
+    "clear_all": "Tout effacer",
+    "collapse": "Réduire les filtres",
+    "expand": "Développer les filtres",
+    "range_to": "à",
+    "min": "Min",
+    "max": "Max",
+    "select_placeholder": "Sélectionner…"
+  },
+  "workbenchHeader": {
+    "exceptions": "{count} exceptions"
+  },
+  "command_center": {
+    "loading_label": "Chargement…",
+    "insights_aria": "Aperçus"
+  },
+  "kanbanBoard": {
+    "card_role": "Carte déplaçable",
+    "move_column": "Déplacé vers {column}, position {position}",
+    "move_reorder": "Déplacé à la position {position} dans {column}",
+    "move_edge": "Impossible de déplacer plus loin dans cette direction"
+  },
+  "tableToolbar": {
+    "searchPlaceholder": "Rechercher...",
+    "clearFilters": "Effacer les filtres"
+  },
+  "viewModeSwitcher": {
+    "groupLabel": "Mode d'affichage",
+    "disabledWithReason": "{label} (indisponible : {reason})"
+  },
+  "brandStudio": {
+    "tenantReport": {
+      "documentInvalid": "Document non valide",
+      "issueOne": "problème",
+      "issueOther": "problèmes",
+      "contrastAutocorrections": "Autocorrections de contraste",
+      "changeOne": "modification",
+      "changeOther": "modifications",
+      "adjustment": "{label} ajusté {from} → {to} pour atteindre Lc {lc}",
+      "adjustmentDetail": "sur {pairedWith} · était Lc {lc}",
+      "fontPacksNotLoaded": "Packs de polices non chargés",
+      "packOne": "pack",
+      "packOther": "packs",
+      "packMissing": "{variable} est référencée mais non chargée",
+      "packMissingDetail": "{referencedBy} revient à ses polices de repli déclarées"
+    }
+  },
+  "brandingPreview": {
+    "table": {
+      "sampleNameA": "John Doe",
+      "sampleDateA": "Apr 17, 2026",
+      "sampleNameB": "Jane Smith",
+      "sampleDateB": "Apr 16, 2026"
+    }
+  },
+  "tokenInspector": {
+    "hint": "Ctrl+Shift+T ou Échap pour fermer | Cliquer pour épingler"
+  },
+  "presence": {
+    "barLabel": "Personnes présentes",
+    "overflowLabel": "{count} personnes de plus"
+  },
+  "bulkSelectToggle": {
+    "select": "Sélectionner",
+    "done": "Terminé",
+    "selected": "sélectionné(s)"
+  },
+  "galleryView": {
+    "empty": "Aucun élément",
+    "selectItem": "Sélectionner {item}"
+  },
+  "gridView": {
+    "empty": "Aucune donnée",
+    "selectItem": "Sélectionner {item}"
+  },
+  "statsGrid": {
+    "error": {
+      "description": "Impossible de charger les données"
+    }
+  },
+  "metrics": {
+    "panelTitle": "Métriques clés",
+    "live": "EN DIRECT",
+    "realtimeData": "DONNÉES EN TEMPS RÉEL",
+    "chartTitle": "Performance",
+    "progressLabel": "Progression"
+  },
+  "activity": {
+    "timelineTitle": "Activité",
+    "compactTitle": "Activité récente",
+    "cardsTitle": "Activité",
+    "tickerTitle": "Mises à jour en direct",
+    "streaming": "DIFFUSION",
+    "updatesCount": "{count} MISES À JOUR",
+    "timeAgo": "il y a {time}",
+    "viewAll": "Voir tout",
+    "tickerPrevious": "Mise à jour précédente",
+    "tickerNext": "Mise à jour suivante",
+    "tickerGoTo": "Aller à la mise à jour {index}"
+  },
+  "bottomTabBar": {
+    "itemWithBadge": "{label}, {count}",
+    "navigation": "Navigation inférieure"
   }
 }

@@ -34,6 +34,10 @@ interface GanttChartOwnProps extends ChartBaseProps, ChartColorsProps, ChartMarg
   tasks: GanttTask[];
   showProgress?: boolean;
   showToday?: boolean;
+  /** Localized label for the today marker. Renderer default: 'Today'. */
+  todayLabel?: string;
+  /** Render the loading state as a structural placeholder instead of a centered label. */
+  skeleton?: boolean;
 }
 
 /** Props for the {@link GanttChart} component. */
@@ -49,6 +53,8 @@ export const GanttChart = memo(function GanttChart({
   tasks,
   showProgress = true,
   showToday = true,
+  todayLabel,
+  skeleton,
   width,
   height = 400,
   className,
@@ -161,6 +167,7 @@ export const GanttChart = memo(function GanttChart({
       style={style}
       {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
+      skeleton={skeleton}
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Gantt chart'}
@@ -178,6 +185,7 @@ export const GanttChart = memo(function GanttChart({
           margin={margin}
           showProgress={showProgress}
           showToday={showToday}
+          {...(todayLabel === undefined ? {} : { todayLabel })}
           colors={palette}
           showTitles={chartPersonality.tooltip}
         />

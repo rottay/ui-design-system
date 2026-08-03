@@ -4,3 +4,46 @@
   fill: var(--ds-color-text-secondary);
 }
 
+/* Threshold-labelled ramp legend (opt-in `legend` prop). The ramp reads the
+ * private prototoken stops the family bridges from the governed color range;
+ * fallbacks mirror the family defaults so the hook never ships unstyled. The
+ * numeric threshold labels are the color-independent reading of the scale. */
+.ds-chart-heatmap [data-part='legend'] {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ds-spacing-2);
+  margin-block-start: var(--ds-spacing-2);
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs);
+  font-variant-numeric: var(--ds-numeric-tabular);
+}
+
+.ds-chart-heatmap [data-part='legend-ramp'] {
+  inline-size: 6rem;
+  block-size: 0.625rem;
+  border-radius: var(--ds-radius-full, var(--ds-radius-sm));
+  background: linear-gradient(
+    90deg,
+    var(--_ds-heatmap-ramp-low, var(--ds-color-info-bg, var(--ds-color-bg-secondary))),
+    var(--_ds-heatmap-ramp-high, var(--ds-color-primary-500, var(--ds-color-primary)))
+  );
+}
+
+/* The ramp is magnitude-ordered in reading direction; the matrix axes keep
+ * their data semantics (no mirroring), only the low-to-high reading flips. */
+:where([dir='rtl']) .ds-chart-heatmap [data-part='legend-ramp'] {
+  background: linear-gradient(
+    270deg,
+    var(--_ds-heatmap-ramp-low, var(--ds-color-info-bg, var(--ds-color-bg-secondary))),
+    var(--_ds-heatmap-ramp-high, var(--ds-color-primary-500, var(--ds-color-primary)))
+  );
+}
+
+@media (forced-colors: active) {
+  .ds-chart-heatmap [data-part='legend-ramp'] {
+    background: Canvas;
+    border: 1px solid CanvasText;
+    forced-color-adjust: auto;
+  }
+}

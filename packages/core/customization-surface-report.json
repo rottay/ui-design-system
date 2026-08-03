@@ -3,29 +3,29 @@
   "generatedBy": "scripts/customization-surface-census.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "40a589bcf6ca34de3aeb34a5fa678e019e231368dc47c5e8e0d3d5aab955eb80",
+    "inputsDigest": "b2132923cd2274e9d910571bac4fc0794ccabd2e5e1186ade3094f4cbabd8a65",
     "manifestSchemaVersion": 4,
     "corpus": {
-      "authoredCssFiles": 461,
-      "productionTsFiles": 1938,
+      "authoredCssFiles": 466,
+      "productionTsFiles": 1942,
       "testFiles": 1065,
       "artifactFiles": 6
     }
   },
   "counts": {
-    "universe": 7471,
-    "writers": 4807,
+    "universe": 7473,
+    "writers": 4810,
     "foundationTokens": 3367,
-    "componentTokens": 533,
+    "componentTokens": 545,
     "tenantChannels": 1542,
     "publicHooks": 93,
-    "unadjudicatedReads": 2697,
-    "deadWriters": 315,
+    "unadjudicatedReads": 2696,
+    "deadWriters": 275,
     "frontierReserved": 20,
-    "modernConsumedUnique": 3598,
-    "tsReadNames": 2642,
+    "modernConsumedUnique": 3621,
+    "tsReadNames": 2641,
     "tsWriteNames": 960,
-    "tsMetadataNames": 588,
+    "tsMetadataNames": 591,
     "unclassified": 0,
     "prototypeLedgerRows": 80
   },
@@ -37,9 +37,9 @@
     }
   ],
   "deadByClass": {
-    "foundation": 135,
+    "foundation": 132,
     "component": 0,
-    "tenantChannel": 231,
+    "tenantChannel": 193,
     "authoredCssLocal": 12
   },
   "controls": {
@@ -215,16 +215,9 @@
     "--ds-collection-card-action-color",
     "--ds-collection-card-bg-hover",
     "--ds-collection-card-body-color",
-    "--ds-collection-card-depth",
     "--ds-collection-card-footer-bg",
     "--ds-collection-card-footer-border",
     "--ds-collection-card-footer-color",
-    "--ds-collection-card-gap",
-    "--ds-collection-card-glass-bg",
-    "--ds-collection-card-grid-bg",
-    "--ds-collection-card-grid-line",
-    "--ds-collection-card-grid-size",
-    "--ds-collection-card-hover-transform",
     "--ds-collection-card-icon-bg",
     "--ds-collection-card-icon-border",
     "--ds-collection-card-icon-color",
@@ -232,17 +225,13 @@
     "--ds-collection-card-meter-fill",
     "--ds-collection-card-meter-track",
     "--ds-collection-card-meter-track-border",
-    "--ds-collection-card-min-height",
     "--ds-collection-card-number-font-variant",
     "--ds-collection-card-number-min-width",
-    "--ds-collection-card-overlay",
     "--ds-collection-card-padding",
-    "--ds-collection-card-sheen",
     "--ds-collection-card-status-bg",
     "--ds-collection-card-status-border",
     "--ds-collection-card-status-color",
     "--ds-collection-card-title-color",
-    "--ds-collection-card-transition",
     "--ds-collection-card-value-color",
     "--ds-collection-card-value-color-hover",
     "--ds-color-accent-live",
@@ -330,7 +319,6 @@
     "--ds-listing-grid-card-border",
     "--ds-listing-grid-card-gap",
     "--ds-listing-grid-card-shadow",
-    "--ds-listing-grid-min-compact-width",
     "--ds-listing-grid-min-tall-width",
     "--ds-listing-grid-selected-ring",
     "--ds-listing-grid-skeleton-bg",
@@ -339,29 +327,14 @@
     "--ds-metric-card-action-border",
     "--ds-metric-card-action-color",
     "--ds-metric-card-bg-hover",
-    "--ds-metric-card-body-color",
     "--ds-metric-card-depth",
-    "--ds-metric-card-footer-bg",
-    "--ds-metric-card-footer-border",
-    "--ds-metric-card-footer-color",
-    "--ds-metric-card-gap",
-    "--ds-metric-card-glass-bg",
-    "--ds-metric-card-grid-bg",
-    "--ds-metric-card-grid-line",
-    "--ds-metric-card-grid-size",
     "--ds-metric-card-meter-fill-neutral",
-    "--ds-metric-card-overlay",
     "--ds-metric-card-selected-border",
     "--ds-metric-card-selected-ring",
-    "--ds-metric-card-status-bg",
-    "--ds-metric-card-status-border",
-    "--ds-metric-card-status-color",
     "--ds-metric-card-title-color",
-    "--ds-motion-scale-in",
     "--ds-popover-title-gap-current",
     "--ds-premium-card-footer-color",
     "--ds-premium-card-glass-bg",
-    "--ds-premium-card-hover-transform",
     "--ds-premium-card-rim",
     "--ds-result-icon-success",
     "--ds-result-icon-warning",
@@ -475,36 +448,23 @@
     "--ds-typography-body-letter-spacing",
     "--ds-typography-display-letter-spacing",
     "--ds-workflow-gap",
-    "--ds-workspace-card-action-bg",
-    "--ds-workspace-card-action-border",
     "--ds-workspace-card-action-color",
-    "--ds-workspace-card-bg-hover",
     "--ds-workspace-card-body-color",
-    "--ds-workspace-card-depth",
     "--ds-workspace-card-footer-bg",
-    "--ds-workspace-card-footer-border",
     "--ds-workspace-card-footer-color",
-    "--ds-workspace-card-glass-bg",
     "--ds-workspace-card-grid-bg",
-    "--ds-workspace-card-grid-line",
-    "--ds-workspace-card-grid-size",
-    "--ds-workspace-card-hover-transform",
     "--ds-workspace-card-label-color",
     "--ds-workspace-card-meter-fill",
     "--ds-workspace-card-meter-track",
     "--ds-workspace-card-meter-track-border",
-    "--ds-workspace-card-min-height",
     "--ds-workspace-card-number-font-variant",
     "--ds-workspace-card-number-min-width",
-    "--ds-workspace-card-overlay",
     "--ds-workspace-card-selected-border",
     "--ds-workspace-card-selected-ring",
-    "--ds-workspace-card-sheen",
     "--ds-workspace-card-status-bg",
     "--ds-workspace-card-status-border",
     "--ds-workspace-card-status-color",
     "--ds-workspace-card-title-color",
-    "--ds-workspace-card-transition",
     "--ds-workspace-card-value-color",
     "--ds-workspace-card-value-color-hover"
   ],
@@ -9691,7 +9651,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 7,
         "ts": 1,
         "tests": false,
         "modern": false,
@@ -10666,7 +10626,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 6,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -10711,7 +10671,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 5,
         "ts": 3,
         "tests": false,
         "modern": true,
@@ -10771,7 +10731,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 6,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -11281,7 +11241,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 6,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -11371,7 +11331,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 5,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -12646,7 +12606,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 9,
+        "css": 8,
         "ts": 4,
         "tests": true,
         "modern": true,
@@ -12751,7 +12711,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 13,
+        "css": 12,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -12991,7 +12951,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 5,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -13036,7 +12996,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 5,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -13096,7 +13056,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 7,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -13322,7 +13282,7 @@
       "writer": true,
       "reads": {
         "css": 4,
-        "ts": 3,
+        "ts": 1,
         "tests": false,
         "modern": true,
         "artifact": true
@@ -15616,7 +15576,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 71,
+        "css": 70,
         "ts": 5,
         "tests": true,
         "modern": true,
@@ -15811,7 +15771,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 22,
+        "css": 21,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -18226,7 +18186,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 13,
+        "css": 12,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -20266,7 +20226,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -20656,7 +20616,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -20686,7 +20646,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -20701,8 +20661,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
-        "ts": 16,
+        "css": 1,
+        "ts": 7,
         "tests": true,
         "modern": false,
         "artifact": false
@@ -20716,8 +20676,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
-        "ts": 15,
+        "css": 1,
+        "ts": 6,
         "tests": true,
         "modern": false,
         "artifact": false
@@ -20731,8 +20691,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
-        "ts": 16,
+        "css": 1,
+        "ts": 7,
         "tests": true,
         "modern": false,
         "artifact": false
@@ -20746,8 +20706,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
-        "ts": 15,
+        "css": 1,
+        "ts": 6,
         "tests": true,
         "modern": false,
         "artifact": false
@@ -20761,7 +20721,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 16,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -21271,7 +21231,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 6,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -25603,10 +25563,10 @@
     "--ds-collection-card-depth": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -25663,11 +25623,11 @@
     "--ds-collection-card-gap": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 0,
-        "ts": 0,
+        "ts": 1,
         "tests": false,
         "modern": false,
         "artifact": true
@@ -25678,10 +25638,10 @@
     "--ds-collection-card-glass-bg": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -25693,10 +25653,10 @@
     "--ds-collection-card-grid-bg": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -25708,10 +25668,10 @@
     "--ds-collection-card-grid-line": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -25723,10 +25683,10 @@
     "--ds-collection-card-grid-size": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -25738,10 +25698,10 @@
     "--ds-collection-card-hover-transform": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -25858,10 +25818,10 @@
     "--ds-collection-card-min-height": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -25903,10 +25863,10 @@
     "--ds-collection-card-overlay": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -25996,7 +25956,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 5,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -26008,10 +25968,10 @@
     "--ds-collection-card-sheen": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -26083,10 +26043,10 @@
     "--ds-collection-card-transition": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -26641,7 +26601,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 5,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -26686,7 +26646,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 8,
         "ts": 2,
         "tests": false,
         "modern": true,
@@ -26731,10 +26691,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 1,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -27286,7 +27246,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 308,
+        "css": 309,
         "ts": 6,
         "tests": true,
         "modern": true,
@@ -27391,7 +27351,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 219,
+        "css": 220,
         "ts": 25,
         "tests": true,
         "modern": true,
@@ -27406,7 +27366,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 178,
+        "css": 195,
         "ts": 43,
         "tests": true,
         "modern": true,
@@ -27451,7 +27411,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 1,
         "tests": true,
         "modern": false,
@@ -27466,7 +27426,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 34,
+        "css": 36,
         "ts": 5,
         "tests": true,
         "modern": true,
@@ -27496,7 +27456,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 460,
+        "css": 459,
         "ts": 58,
         "tests": true,
         "modern": true,
@@ -27526,10 +27486,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 5,
         "ts": 2,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 3,
@@ -27556,7 +27516,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 190,
+        "css": 189,
         "ts": 9,
         "tests": true,
         "modern": true,
@@ -27571,7 +27531,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 225,
+        "css": 228,
         "ts": 25,
         "tests": true,
         "modern": true,
@@ -27586,7 +27546,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 234,
+        "css": 261,
         "ts": 14,
         "tests": true,
         "modern": true,
@@ -27691,7 +27651,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 333,
+        "css": 340,
         "ts": 46,
         "tests": true,
         "modern": true,
@@ -27796,7 +27756,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 16,
+        "css": 20,
         "ts": 2,
         "tests": false,
         "modern": true,
@@ -27859,7 +27819,7 @@
         "css": 6,
         "ts": 4,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -27871,7 +27831,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 6,
         "ts": 5,
         "tests": false,
         "modern": true,
@@ -27901,7 +27861,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -27916,7 +27876,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 2,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -27931,7 +27891,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 73,
+        "css": 72,
         "ts": 18,
         "tests": true,
         "modern": true,
@@ -28096,7 +28056,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 12,
+        "css": 13,
         "ts": 9,
         "tests": true,
         "modern": false,
@@ -28276,7 +28236,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 76,
+        "css": 77,
         "ts": 7,
         "tests": true,
         "modern": true,
@@ -28516,7 +28476,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1266,
+        "css": 1319,
         "ts": 114,
         "tests": true,
         "modern": true,
@@ -28546,7 +28506,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 48,
+        "css": 49,
         "ts": 14,
         "tests": true,
         "modern": true,
@@ -28621,8 +28581,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 108,
-        "ts": 43,
+        "css": 115,
+        "ts": 42,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -28771,10 +28731,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 1,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 1,
@@ -29026,7 +28986,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 238,
+        "css": 241,
         "ts": 38,
         "tests": true,
         "modern": true,
@@ -29131,7 +29091,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 11,
+        "css": 15,
         "ts": 4,
         "tests": false,
         "modern": true,
@@ -29191,10 +29151,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 7,
         "ts": 3,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -29206,7 +29166,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 6,
         "ts": 3,
         "tests": false,
         "modern": true,
@@ -29221,7 +29181,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 4,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -29311,7 +29271,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 55,
+        "css": 56,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -29326,7 +29286,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 46,
+        "css": 47,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -29341,7 +29301,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 36,
+        "css": 37,
         "ts": 4,
         "tests": true,
         "modern": true,
@@ -29356,7 +29316,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 419,
+        "css": 432,
         "ts": 52,
         "tests": true,
         "modern": true,
@@ -29401,7 +29361,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 137,
+        "css": 142,
         "ts": 14,
         "tests": true,
         "modern": true,
@@ -29431,7 +29391,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 746,
+        "css": 763,
         "ts": 86,
         "tests": true,
         "modern": true,
@@ -29446,7 +29406,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 463,
+        "css": 468,
         "ts": 67,
         "tests": true,
         "modern": true,
@@ -29491,7 +29451,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 183,
+        "css": 184,
         "ts": 34,
         "tests": true,
         "modern": true,
@@ -29659,7 +29619,7 @@
         "css": 6,
         "ts": 3,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -29671,7 +29631,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 6,
         "ts": 3,
         "tests": false,
         "modern": true,
@@ -29686,7 +29646,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 4,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -32041,7 +32001,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -32161,7 +32121,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 5,
         "ts": 1,
         "tests": false,
         "modern": false,
@@ -32176,7 +32136,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 13,
+        "css": 16,
         "ts": 1,
         "tests": false,
         "modern": false,
@@ -32416,7 +32376,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 7,
         "ts": 1,
         "tests": false,
         "modern": false,
@@ -32446,7 +32406,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 1,
         "tests": false,
         "modern": false,
@@ -32461,7 +32421,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 1,
         "tests": false,
         "modern": false,
@@ -35326,7 +35286,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -35341,7 +35301,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -35776,7 +35736,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 248,
+        "css": 252,
         "ts": 5,
         "tests": true,
         "modern": true,
@@ -39815,7 +39775,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 1,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -39950,7 +39910,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 10,
+        "css": 11,
         "ts": 10,
         "tests": true,
         "modern": true,
@@ -40145,7 +40105,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 64,
+        "css": 72,
         "ts": 12,
         "tests": true,
         "modern": true,
@@ -40160,7 +40120,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 51,
+        "css": 58,
         "ts": 10,
         "tests": true,
         "modern": true,
@@ -42590,7 +42550,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 9,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -43265,7 +43225,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 55,
+        "css": 56,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -43280,7 +43240,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 81,
+        "css": 98,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -43295,7 +43255,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 56,
+        "css": 72,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -43310,7 +43270,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 84,
+        "css": 104,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -43340,8 +43300,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 99,
-        "ts": 59,
+        "css": 101,
+        "ts": 54,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -43386,7 +43346,7 @@
       "writer": true,
       "reads": {
         "css": 47,
-        "ts": 11,
+        "ts": 10,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -43400,8 +43360,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 48,
-        "ts": 29,
+        "css": 88,
+        "ts": 22,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -43565,7 +43525,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 10,
+        "css": 11,
         "ts": 8,
         "tests": true,
         "modern": true,
@@ -43595,7 +43555,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 32,
+        "css": 68,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -43625,7 +43585,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 6,
         "ts": 7,
         "tests": true,
         "modern": true,
@@ -43715,7 +43675,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 5,
         "ts": 2,
         "tests": true,
         "modern": false,
@@ -43835,7 +43795,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 27,
+        "css": 32,
         "ts": 9,
         "tests": true,
         "modern": true,
@@ -43881,7 +43841,7 @@
       "writer": true,
       "reads": {
         "css": 2,
-        "ts": 3,
+        "ts": 4,
         "tests": false,
         "modern": true,
         "artifact": false
@@ -44075,7 +44035,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 31,
+        "css": 33,
         "ts": 9,
         "tests": true,
         "modern": true,
@@ -44135,7 +44095,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 187,
+        "css": 206,
         "ts": 117,
         "tests": true,
         "modern": true,
@@ -44165,7 +44125,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 12,
+        "css": 15,
         "ts": 9,
         "tests": true,
         "modern": true,
@@ -44195,8 +44155,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 237,
-        "ts": 71,
+        "css": 268,
+        "ts": 72,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -44255,7 +44215,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 42,
+        "css": 43,
         "ts": 3,
         "tests": false,
         "modern": true,
@@ -44345,7 +44305,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 66,
+        "css": 73,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -44390,7 +44350,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 137,
+        "css": 159,
         "ts": 4,
         "tests": true,
         "modern": true,
@@ -45650,7 +45610,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 18,
+        "css": 22,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -45830,7 +45790,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 12,
+        "css": 14,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -46460,7 +46420,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 6,
         "tests": true,
         "modern": false,
@@ -47345,7 +47305,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 56,
+        "css": 55,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -47405,7 +47365,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 20,
+        "css": 19,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -47705,7 +47665,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 22,
+        "css": 21,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -47870,7 +47830,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 13,
+        "css": 12,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -50870,7 +50830,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -50900,7 +50860,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -51305,7 +51265,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 4,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -51846,7 +51806,7 @@
       "writer": true,
       "reads": {
         "css": 19,
-        "ts": 5,
+        "ts": 4,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -51935,7 +51895,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 9,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -51965,7 +51925,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 9,
+        "css": 10,
         "ts": 2,
         "tests": false,
         "modern": true,
@@ -51980,7 +51940,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -51995,7 +51955,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 6,
         "ts": 2,
         "tests": false,
         "modern": false,
@@ -52025,8 +51985,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 17,
-        "ts": 7,
+        "css": 18,
+        "ts": 6,
         "tests": false,
         "modern": true,
         "artifact": true
@@ -52055,7 +52015,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 9,
         "ts": 2,
         "tests": false,
         "modern": true,
@@ -52085,7 +52045,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 2,
         "tests": false,
         "modern": false,
@@ -52100,7 +52060,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 23,
+        "css": 24,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -52145,7 +52105,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 63,
+        "css": 62,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -52160,7 +52120,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 17,
+        "css": 18,
         "ts": 3,
         "tests": false,
         "modern": true,
@@ -54152,11 +54112,11 @@
     "--ds-listing-grid-min-compact-width": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 0,
-        "ts": 0,
+        "ts": 1,
         "tests": false,
         "modern": false,
         "artifact": true
@@ -54650,7 +54610,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -59387,10 +59347,10 @@
     "--ds-metric-card-body-color": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -59447,10 +59407,10 @@
     "--ds-metric-card-footer-bg": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -59462,10 +59422,10 @@
     "--ds-metric-card-footer-border": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -59477,10 +59437,10 @@
     "--ds-metric-card-footer-color": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -59492,10 +59452,10 @@
     "--ds-metric-card-gap": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -59507,10 +59467,10 @@
     "--ds-metric-card-glass-bg": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -59522,10 +59482,10 @@
     "--ds-metric-card-grid-bg": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -59537,10 +59497,10 @@
     "--ds-metric-card-grid-line": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -59552,10 +59512,10 @@
     "--ds-metric-card-grid-size": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -59720,7 +59680,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 4,
         "ts": 1,
         "tests": false,
         "modern": false,
@@ -59807,10 +59767,10 @@
     "--ds-metric-card-overlay": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -59927,10 +59887,10 @@
     "--ds-metric-card-status-bg": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -59942,10 +59902,10 @@
     "--ds-metric-card-status-border": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -59957,10 +59917,10 @@
     "--ds-metric-card-status-color": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -60155,8 +60115,8 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 0,
-        "ts": 1,
+        "css": 1,
+        "ts": 0,
         "tests": false,
         "modern": false,
         "artifact": false
@@ -62945,7 +62905,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 5,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -63095,7 +63055,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 30,
+        "css": 35,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -63110,7 +63070,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 16,
+        "css": 28,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -63125,7 +63085,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 11,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -63140,7 +63100,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 5,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -63170,7 +63130,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 89,
+        "css": 103,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -63200,7 +63160,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 46,
+        "css": 60,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -63215,7 +63175,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 79,
+        "css": 93,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -63230,7 +63190,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 702,
+        "css": 783,
         "ts": 33,
         "tests": true,
         "modern": true,
@@ -63275,7 +63235,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 695,
+        "css": 743,
         "ts": 15,
         "tests": true,
         "modern": true,
@@ -63290,7 +63250,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 152,
+        "css": 153,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -63305,7 +63265,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 53,
+        "css": 71,
         "ts": 4,
         "tests": true,
         "modern": true,
@@ -63380,7 +63340,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 120,
+        "css": 165,
         "ts": 13,
         "tests": true,
         "modern": true,
@@ -63395,7 +63355,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 4,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -63455,7 +63415,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 15,
+        "css": 21,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -63467,10 +63427,10 @@
     "--ds-motion-scale-in": {
       "category": "canonical-authority",
       "tier": "internal",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -63485,7 +63445,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 33,
+        "css": 47,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -63500,7 +63460,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 1,
         "tests": true,
         "modern": false,
@@ -64115,10 +64075,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 22,
         "ts": 3,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -68582,10 +68542,10 @@
     "--ds-premium-card-hover-transform": {
       "category": "canonical-authority",
       "tier": "internal",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -68900,7 +68860,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 13,
+        "css": 14,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -69074,6 +69034,36 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 1
     },
+    "--ds-presence-cursor-x": {
+      "category": "component-channel",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "tests": false,
+        "modern": false,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 1
+    },
+    "--ds-presence-cursor-y": {
+      "category": "component-channel",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "tests": false,
+        "modern": false,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 1
+    },
     "--ds-preview-tooltip-max-width": {
       "category": "generated-artifact-only",
       "tier": "generated",
@@ -69140,7 +69130,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 4,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -69216,21 +69206,6 @@
       "writer": false,
       "reads": {
         "css": 2,
-        "ts": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-pricing-table-spinner-duration": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -71690,7 +71665,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 106,
+        "css": 122,
         "ts": 9,
         "tests": true,
         "modern": true,
@@ -71720,7 +71695,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 217,
+        "css": 241,
         "ts": 16,
         "tests": true,
         "modern": true,
@@ -71750,7 +71725,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 340,
+        "css": 356,
         "ts": 24,
         "tests": true,
         "modern": true,
@@ -71855,7 +71830,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 186,
+        "css": 197,
         "ts": 17,
         "tests": true,
         "modern": true,
@@ -71885,7 +71860,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 44,
+        "css": 48,
         "ts": 5,
         "tests": true,
         "modern": true,
@@ -71915,7 +71890,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 9,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -73235,7 +73210,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 67,
+        "css": 76,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -78605,7 +78580,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 50,
+        "css": 53,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -79925,7 +79900,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -79940,7 +79915,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -80390,7 +80365,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 2,
         "tests": true,
         "modern": false,
@@ -80405,7 +80380,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 1,
         "tests": false,
         "modern": false,
@@ -82040,7 +82015,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 11,
+        "css": 12,
         "ts": 9,
         "tests": true,
         "modern": true,
@@ -82130,7 +82105,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 16,
+        "css": 17,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -82265,7 +82240,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 9,
         "ts": 2,
         "tests": false,
         "modern": false,
@@ -83015,7 +82990,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 210,
+        "css": 261,
         "ts": 18,
         "tests": true,
         "modern": true,
@@ -83045,10 +83020,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 13,
         "ts": 5,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -83060,7 +83035,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 4,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -83075,7 +83050,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 28,
+        "css": 26,
         "ts": 5,
         "tests": false,
         "modern": true,
@@ -83120,7 +83095,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 399,
+        "css": 468,
         "ts": 33,
         "tests": true,
         "modern": true,
@@ -83150,10 +83125,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 6,
         "ts": 1,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -83225,7 +83200,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 252,
+        "css": 319,
         "ts": 20,
         "tests": true,
         "modern": true,
@@ -83285,8 +83260,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 215,
-        "ts": 23,
+        "css": 250,
+        "ts": 22,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -83360,8 +83335,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 54,
-        "ts": 14,
+        "css": 66,
+        "ts": 12,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -83420,7 +83395,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 68,
+        "css": 80,
         "ts": 11,
         "tests": true,
         "modern": true,
@@ -83465,7 +83440,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 5,
         "ts": 1,
         "tests": false,
         "modern": false,
@@ -83495,8 +83470,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 42,
-        "ts": 9,
+        "css": 46,
+        "ts": 7,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -83525,10 +83500,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 1,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -85145,7 +85120,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 5,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -85565,8 +85540,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
-        "ts": 1,
+        "css": 1,
+        "ts": 0,
         "tests": false,
         "modern": false,
         "artifact": false
@@ -85580,8 +85555,8 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 0,
-        "ts": 1,
+        "css": 1,
+        "ts": 0,
         "tests": false,
         "modern": false,
         "artifact": false
@@ -88160,7 +88135,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 22,
+        "css": 23,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -88175,7 +88150,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 333,
+        "css": 342,
         "ts": 10,
         "tests": true,
         "modern": true,
@@ -88325,10 +88300,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 14,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -88580,7 +88555,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 44,
+        "css": 49,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -88685,7 +88660,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 113,
+        "css": 121,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -88715,7 +88690,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 114,
+        "css": 135,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -89990,8 +89965,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
-        "ts": 3,
+        "css": 4,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": true
@@ -90035,8 +90010,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
-        "ts": 10,
+        "css": 8,
+        "ts": 8,
         "tests": false,
         "modern": true,
         "artifact": true
@@ -90755,8 +90730,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
-        "ts": 4,
+        "css": 5,
+        "ts": 3,
         "tests": false,
         "modern": true,
         "artifact": true
@@ -90770,8 +90745,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
-        "ts": 3,
+        "css": 5,
+        "ts": 2,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -90995,7 +90970,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -91220,7 +91195,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -91415,7 +91390,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -91445,7 +91420,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -91475,7 +91450,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -91505,7 +91480,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 4,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -91865,7 +91840,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -91910,7 +91885,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -91955,7 +91930,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -102895,6 +102870,21 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
+    "--ds-token-inspector-swatch": {
+      "category": "component-channel",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
+      "reads": {
+        "css": 1,
+        "ts": 0,
+        "tests": false,
+        "modern": false,
+        "artifact": false
+      },
+      "tsWriteSites": 0,
+      "tsMetadataMentions": 1
+    },
     "--ds-toolbar-bg": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
@@ -105886,7 +105876,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 117,
+        "css": 149,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -108391,7 +108381,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 9,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -108526,7 +108516,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 18,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -109081,7 +109071,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -111343,13 +111333,13 @@
     "--ds-workspace-card-action-bg": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -111358,13 +111348,13 @@
     "--ds-workspace-card-action-border": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -111391,7 +111381,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -111403,13 +111393,13 @@
     "--ds-workspace-card-bg-hover": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -111463,13 +111453,13 @@
     "--ds-workspace-card-depth": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -111493,13 +111483,13 @@
     "--ds-workspace-card-footer-border": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -111538,13 +111528,13 @@
     "--ds-workspace-card-glass-bg": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 4,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -111568,13 +111558,13 @@
     "--ds-workspace-card-grid-line": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -111583,13 +111573,13 @@
     "--ds-workspace-card-grid-size": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -111598,13 +111588,13 @@
     "--ds-workspace-card-hover-transform": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -111718,13 +111708,13 @@
     "--ds-workspace-card-min-height": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -111763,13 +111753,13 @@
     "--ds-workspace-card-overlay": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -111868,13 +111858,13 @@
     "--ds-workspace-card-sheen": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -111943,13 +111933,13 @@
     "--ds-workspace-card-transition": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -112381,7 +112371,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -112846,7 +112836,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 1,
         "tests": false,
         "modern": false,
@@ -112861,7 +112851,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 1,
         "tests": false,
         "modern": false,
@@ -112876,7 +112866,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 5,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -112891,7 +112881,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 10,
         "ts": 2,
         "tests": false,
         "modern": true,
@@ -113041,7 +113031,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -113161,7 +113151,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,

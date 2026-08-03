@@ -24,7 +24,18 @@
 /* trigger ----------------------------------------------------------------- */
 
 .ds-structure.ds-saved-views-menu[data-part='trigger'] {
-  border-radius: 12px;
+  /* geometry drained from the engine's retired inline styles (42px square);
+     the coarse-pointer floor below lifts it to the touch channel */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 42px;
+  block-size: 42px;
+  min-inline-size: 42px;
+  min-block-size: 42px;
+  padding: 0;
+  cursor: pointer;
+  border-radius: var(--ds-radius-lg, 12px);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-elevated) 8%), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%));
   color: var(--ds-color-text-primary);
   transition:
@@ -56,7 +67,14 @@
 }
 
 .ds-structure.ds-saved-views-menu [data-part='trigger-icon'] {
-  border-radius: 10px;
+  /* geometry drained from the engine's retired inline styles (28px chip) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 28px;
+  block-size: 28px;
+  flex-shrink: 0;
+  border-radius: var(--ds-radius-md, 10px);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 56%, transparent);
   color: var(--ds-color-text-secondary);
 }
@@ -68,10 +86,34 @@
 
 /* standalone portaled panel ---------------------------------------------- */
 
+.ds-structure.ds-saved-views-menu-backdrop[data-part='backdrop'] {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--ds-z-index-notification, 1800) + 190);
+}
+
+/* Panel entry: a short disclosure-cadence fade + 2px settle + 0.98 scale,
+   all on shared --ds-motion-* channels (never a local duration/easing). The
+   panel mounts on open, so a mount animation is the whole lifecycle. */
+@keyframes ds-saved-views-menu-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--ds-motion-offset-in, -2px)) scale(var(--ds-motion-scale-in, 0.98));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
-  border-radius: 18px;
+  border-radius: var(--ds-radius-xl, 18px);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 98%, var(--ds-color-bg-elevated) 2%), color-mix(in srgb, var(--ds-color-bg-primary) 28%, var(--ds-surface-card)));
   box-shadow: 0 24px 60px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+  animation: ds-saved-views-menu-panel-in var(--ds-motion-disclosure) var(--ds-motion-ease-enter, ease-out);
+  /* programmatic focus lands here on open (tabIndex=-1); the ring lives on
+     the interactive children, the container is a landmark waypoint */
+  outline: none;
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-open] {
@@ -91,7 +133,7 @@
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='count-pill'] {
-  border-radius: 999px;
+  border-radius: var(--ds-radius-full, 9999px);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 72%, transparent);
   color: var(--ds-color-text-secondary);
 }
@@ -99,7 +141,7 @@
 /* active card stays at 8%; StatusPill primary stays at 12% ---------------- */
 
 .ds-structure.ds-saved-views-menu-panel [data-part='active-card'] {
-  border-radius: 14px;
+  border-radius: var(--ds-radius-lg, 14px);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
 }
 
@@ -112,7 +154,7 @@
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='action-button'] {
-  border-radius: 999px;
+  border-radius: var(--ds-radius-full, 9999px);
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral'] {
@@ -140,7 +182,7 @@
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='view-item'] {
-  border-radius: 14px;
+  border-radius: var(--ds-radius-lg, 14px);
   background: color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%);
 }
 
@@ -181,7 +223,7 @@
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='delete'] {
-  border-radius: 10px;
+  border-radius: var(--ds-radius-md, 10px);
   background: transparent;
   color: var(--ds-color-text-muted);
 }
@@ -191,7 +233,7 @@
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='glyph'] {
-  border-radius: 10px;
+  border-radius: var(--ds-radius-md, 10px);
   background: color-mix(in srgb, var(--ds-color-bg-primary) 54%, transparent);
   color: var(--ds-color-text-secondary);
 }
@@ -202,7 +244,7 @@
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='status-pill'] {
-  border-radius: 999px;
+  border-radius: var(--ds-radius-full, 9999px);
 }
 
 .ds-structure.ds-saved-views-menu-panel [data-part='status-pill'][data-tone='neutral'] {
@@ -218,7 +260,7 @@
 /* empty states ------------------------------------------------------------ */
 
 .ds-structure.ds-saved-views-menu-panel [data-part='empty-state'] {
-  border-radius: 14px;
+  border-radius: var(--ds-radius-lg, 14px);
 }
 
 .ds-structure.ds-saved-views-menu-panel[data-part='panel'] [data-part='empty-state'] {
@@ -271,8 +313,16 @@
   font-weight: 600;
 }
 
-/* action buttons: type per tone + deliberate hover/focus/active */
+/* action buttons: geometry drained from the retired inline styles; type per
+   tone + deliberate hover/focus/active */
 .ds-structure.ds-saved-views-menu-panel [data-part='action-button'] {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-block-size: 32px;
+  padding-block: 0;
+  padding-inline: 12px;
+  cursor: pointer;
   font-size: var(--ds-font-size-xs);
   font-weight: 600;
   transition:
@@ -349,14 +399,33 @@
   box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-danger) 50%, transparent));
 }
 
+/* Coarse pointers: the trigger, the action buttons and the delete affordance
+   meet the canonical touch-target channel (the delete's inline 28px width
+   loses to this min-* constraint by cascade, so no engine change is needed). */
+@media (hover: none), (pointer: coarse) {
+  .ds-structure.ds-saved-views-menu[data-part='trigger'] {
+    min-inline-size: var(--ds-touch-target-min, 44px);
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+  .ds-structure.ds-saved-views-menu-panel [data-part='action-button'],
+  .ds-structure.ds-saved-views-menu-panel [data-part='delete'] {
+    min-inline-size: var(--ds-touch-target-min, 44px);
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}
+
 /* Reduced motion: every state change on the trigger and panel is a
- * cross-fade; all of them go silent together. */
+ * cross-fade; all of them go silent together, and the panel's entry
+ * animation collapses with them. */
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-saved-views-menu[data-part='trigger'],
   .ds-structure.ds-saved-views-menu-panel [data-part='action-button'],
   .ds-structure.ds-saved-views-menu-panel [data-part='view-item'],
   .ds-structure.ds-saved-views-menu-panel [data-part='delete'] {
     transition: none;
+  }
+  .ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
+    animation: none;
   }
 }
 

@@ -36,7 +36,7 @@ describe('ListToolbar modern — toolbar search is skin-owned', () => {
 
   it('the skin cascades the search --ds-input-* channels from the section', () => {
     const sectionRules = MODERN_SKIN.match(
-      /\[data-part="search-section"\][^{]*\{[^}]*\}/g
+      /\.ds-list-toolbar__search-section\[data-part=['"]search-section['"]\][^{]*\{[^}]*\}/g
     ) ?? [];
     const channels = sectionRules.join('\n');
     for (const channel of [
@@ -52,14 +52,14 @@ describe('ListToolbar modern — toolbar search is skin-owned', () => {
 
   it('the skin owns the W10 control geometry law for the toolbar search', () => {
     expect(MODERN_SKIN).toMatch(
-      /search-section"\]\s*\n?\s*\.rottay-input\.rottay-input--modern\[data-part="root"\]\s*\{[^}]*block-size: var\(--ds-toolbar-search-height/
+      /\.rottay-input\.rottay-input--modern\[data-part=['"]root['"]\]\s*\{[^}]*block-size:\s*var\(--ds-toolbar-search-height/
     );
     expect(MODERN_SKIN).toContain('--ds-toolbar-search-font-size');
   });
 
   it('the field wrapper surface channels are painted by the skin, not inline', () => {
     expect(MODERN_SKIN).toMatch(
-      /search-section"\]\s*\n?\s*\.rottay-input-field\[data-part="field"\]\s*\{[^}]*--ds-search-bg/
+      /\.rottay-input-field\[data-part=['"]field['"]\]\s*\{[^}]*--ds-search-bg/
     );
   });
 });

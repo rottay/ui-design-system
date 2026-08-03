@@ -11,14 +11,30 @@
 
 :where(.ds-metrics-minimal) .minimal-metric-row {
   animation: ds-metrics-minimal-slide-in 0.4s ease-out both;
-  transition: all 0.2s ease;
+  /* Cadence re-anchored to the motion rungs (the 200ms fallback is the exact
+     duration it replaces); only rows/minimal scopes were retuned in this
+     pass — cards/chart keep their pinned literals for their owner. */
+  transition:
+    background-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
 }
 
-:where(.ds-metrics-minimal) .minimal-metric-row:hover {
-  background: var(--ds-signal-card-section-alt-bg, var(--ds-color-bg-secondary));
-  border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
-  box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
-  transform: translateX(4px);
+/* Hover law: hover-capable pointers only. */
+@media (hover: hover) {
+  :where(.ds-metrics-minimal) .minimal-metric-row:hover {
+    background: var(--ds-signal-card-section-alt-bg, var(--ds-color-bg-secondary));
+    border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
+    box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
+    transform: translateX(4px);
+  }
+}
+/* The hover nudge walks toward inline-end: mirrored under RTL. */
+@media (hover: hover) {
+  [dir='rtl'] :where(.ds-metrics-minimal) .minimal-metric-row:hover {
+    transform: translateX(-4px);
+  }
 }
 
 :where(.ds-metrics-minimal) .live-dot {
@@ -70,14 +86,17 @@
   transition: var(--ds-metric-card-transition, all 0.4s cubic-bezier(0.4, 0, 0.2, 1));
 }
 
-:where(.ds-metrics-cards) .metric-card-v3:hover {
-  border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
-  transform: var(--ds-metric-card-hover-transform, translateY(-6px) scale(1.02));
-  box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
-}
+/* Hover law: hover-capable pointers only (touch never leaves a stuck lift). */
+@media (hover: hover) {
+  :where(.ds-metrics-cards) .metric-card-v3:hover {
+    border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
+    transform: var(--ds-metric-card-hover-transform, translateY(-6px) scale(1.02));
+    box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
+  }
 
-:where(.ds-metrics-cards) .metric-card-v3:hover .metric-value-v3 {
-  color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
+  :where(.ds-metrics-cards) .metric-card-v3:hover .metric-value-v3 {
+    color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
+  }
 }
 
 :where(.ds-metrics-cards) .live-dot-v3 {
@@ -126,14 +145,27 @@
 
 :where(.ds-metrics-chart) .metric-chart-row-v3 {
   animation: ds-metrics-chart-slide-in 0.4s ease-out both;
-  transition: all 0.2s ease;
+  transition:
+    background-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
 }
 
-:where(.ds-metrics-chart) .metric-chart-row-v3:hover {
-  background: var(--ds-signal-card-section-alt-bg, var(--ds-color-bg-secondary));
-  border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
-  box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
-  transform: translateX(4px);
+/* Hover law: hover-capable pointers only. */
+@media (hover: hover) {
+  :where(.ds-metrics-chart) .metric-chart-row-v3:hover {
+    background: var(--ds-signal-card-section-alt-bg, var(--ds-color-bg-secondary));
+    border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
+    box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
+    transform: translateX(4px);
+  }
+}
+/* The hover nudge walks toward inline-end: mirrored under RTL. */
+@media (hover: hover) {
+  [dir='rtl'] :where(.ds-metrics-chart) .metric-chart-row-v3:hover {
+    transform: translateX(-4px);
+  }
 }
 
 :where(.ds-metrics-chart) .live-dot-chart {
@@ -182,21 +214,33 @@
 
 :where(.ds-metrics-rows) .metric-row-v3 {
   animation: ds-metrics-rows-row-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    border-color var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out);
 }
 
-:where(.ds-metrics-rows) .metric-row-v3:hover {
-  border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
-  transform: translateX(6px);
-  box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
-}
+/* Hover law: hover-capable pointers only. */
+@media (hover: hover) {
+  :where(.ds-metrics-rows) .metric-row-v3:hover {
+    border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
+    transform: translateX(6px);
+    box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
+  }
 
-:where(.ds-metrics-rows) .metric-row-v3:hover .metric-row-value {
-  color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
-}
+  :where(.ds-metrics-rows) .metric-row-v3:hover .metric-row-value {
+    color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
+  }
 
-:where(.ds-metrics-rows) .metric-row-v3:hover .row-shimmer {
-  animation: ds-metrics-rows-shimmer 0.8s ease-in-out;
+  :where(.ds-metrics-rows) .metric-row-v3:hover .row-shimmer {
+    animation: ds-metrics-rows-shimmer 0.8s ease-in-out;
+  }
+}
+/* The hover nudge walks toward inline-end: mirrored under RTL. */
+@media (hover: hover) {
+  [dir='rtl'] :where(.ds-metrics-rows) .metric-row-v3:hover {
+    transform: translateX(-6px);
+  }
 }
 
 :where(.ds-metrics-rows) .live-dot-v3 {
@@ -248,4 +292,23 @@
 :where(.ds-metrics-rows) .metrics-scroll::-webkit-scrollbar-thumb {
   background: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
   border-radius: 2px;
+}
+
+/* Reduced motion: every keyframed loop (entrances, glows, shimmer) and every
+   shared transition goes quiet — the own skins already kill their part-level
+   transitions; this block owns the loops declared above. Placed last so it
+   wins on equal `:where()` weight. */
+@media (prefers-reduced-motion: reduce) {
+  :where(.ds-metrics-minimal) .minimal-metric-row,
+  :where(.ds-metrics-minimal) .live-dot,
+  :where(.ds-metrics-cards) .metric-card-v3,
+  :where(.ds-metrics-cards) .live-dot-v3,
+  :where(.ds-metrics-chart) .metric-chart-row-v3,
+  :where(.ds-metrics-chart) .live-dot-chart,
+  :where(.ds-metrics-rows) .metric-row-v3,
+  :where(.ds-metrics-rows) .live-dot-v3,
+  :where(.ds-metrics-rows) .metric-row-v3:hover .row-shimmer {
+    animation: none;
+    transition: none;
+  }
 }

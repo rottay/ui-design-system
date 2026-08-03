@@ -20,7 +20,7 @@
  *   - Fully keyboard-accessible (arrow keys, Enter, Escape).
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 
 import { Box, Button, Flex, Text } from '../../../primitives';
@@ -99,6 +99,7 @@ export function ExportButton<T = unknown>({
 }: ExportButtonProps<T>) {
   const [open, setOpen] = useState(false);
   const [copiedFeedback, setCopiedFeedback] = useState(false);
+  const panelId = useId();
   const i18n = useOptionalTranslation('components');
   /**
    * Catalog lookup with an honest English floor: when the provider is absent
@@ -208,6 +209,9 @@ export function ExportButton<T = unknown>({
       } finally {
         onExportComplete?.(format);
         setOpen(false);
+        // APG menu law: activating an item closes the menu AND returns focus
+        // to the trigger (the Escape path above restores it the same way).
+        triggerRef.current?.querySelector('button')?.focus();
       }
     },
     [data, columns, filename, onExportStart, onExportComplete],
@@ -233,6 +237,12 @@ export function ExportButton<T = unknown>({
         e.preventDefault();
         const prev = idx > 0 ? idx - 1 : items.length - 1;
         items.item(prev)?.focus();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        items.item(0)?.focus();
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        items.item(items.length - 1)?.focus();
       }
     },
     [],
@@ -272,6 +282,7 @@ export function ExportButton<T = unknown>({
           onClick={() => setOpen((prev) => !prev)}
           aria-haspopup="menu"
           aria-expanded={open}
+          aria-controls={open ? panelId : undefined}
           aria-label={tOr('exportButton.triggerLabel', 'Export data')}
           icon={<ActionDownloadIcon decorative size={15} />}
         />
@@ -306,6 +317,7 @@ export function ExportButton<T = unknown>({
           <Box
             data-part="panel"
             data-open={open}
+            id={panelId}
             className="ds-structure ds-export-button-panel"
             ref={dropdownRef}
             role="menu"

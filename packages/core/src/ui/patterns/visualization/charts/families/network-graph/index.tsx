@@ -113,6 +113,20 @@ type NetworkDataValidation =
 const STATIC_LAYOUT_TICKS = 120;
 const NETWORK_INVALID_DATA_MESSAGE = 'The network data contains invalid nodes or links.';
 
+/**
+ * Redundant shape encoding for node groups. Colour stays the primary group
+ * channel; the mark shape repeats it so grouping survives monochrome print,
+ * colour-vision deficiency, and forced-colors mode. The cycle order is shared
+ * by the plot marks and the legend swatches so both decode identically.
+ */
+type NetworkNodeShape = 'circle' | 'square' | 'diamond' | 'triangle';
+const NETWORK_GROUP_SHAPES: readonly NetworkNodeShape[] = ['circle', 'square', 'diamond', 'triangle'];
+
+function networkGroupShape(groups: readonly string[], group?: string): NetworkNodeShape {
+  const index = group ? Math.max(0, groups.indexOf(group)) : 0;
+  return NETWORK_GROUP_SHAPES[index % NETWORK_GROUP_SHAPES.length] ?? 'circle';
+}
+
 /** Reject malformed topology and geometry before D3 can mutate its simulation copies. */
 function validateNetworkData(
   nodes: NetworkNode[] | null | undefined,
@@ -316,6 +330,15 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
       linkElements.attr('marker-end', `url(#${markerId})`);
     }
 
+    // Edges carry their own native tooltip: the explicit link label when the
+    // caller supplied one, otherwise the resolved endpoint pair (forceLink has
+    // already swapped ids for node objects at this point).
+    if (showTooltip) {
+      linkElements
+        .append('title')
+        .text((d: any) => d.label ?? `${d.source?.id ?? d.source} → ${d.target?.id ?? d.target}`);
+    }
+
     // Drag behaviour: on start, fix the node in place and reheat the simulation
     // (alphaTarget > 0). On end, release the node (fx/fy = null) and cool down.
     const nodeElements = root
@@ -326,6 +349,11 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
       .attr('class', 'node')
       .attr('data-part', 'node')
       .attr('data-state', 'idle')
+      // Keyboard reachability: nodes are focusable with a skin-owned focus
+      // ring; keyboard-driven drag remains documented follow-up work.
+      .attr('tabindex', 0)
+      .attr('role', 'img')
+      .attr('aria-label', (d: any) => d.label ?? d.id)
       .call(
         drag<SVGGElement, any>()
           .on('start', (event, d) => {
@@ -344,12 +372,40 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
           }) as any,
       );
 
-    nodeElements
-      .append('circle')
-      .attr('data-part', 'node-mark')
-      .attr('r', (d) => Number.isFinite(d.size) && d.size! > 0 ? d.size! : 8)
-      .attr('fill', (d) => d.color ?? groupColor(d.group))
-      .attr('stroke-width', 2);
+    // One mark per node whose shape repeats the group channel (circle by
+    // default, then square/diamond/triangle per stable group index), so group
+    // membership reads without colour. The fill mapping is unchanged.
+    nodeElements.each(function appendGroupShape(d: any) {
+      const radius = Number.isFinite(d.size) && d.size! > 0 ? d.size! : 8;
+      const shape = networkGroupShape(groups, d.group);
+      const host = select(this);
+      let mark: any;
+      switch (shape) {
+        case 'square':
+          mark = host.append('rect')
+            .attr('x', -radius)
+            .attr('y', -radius)
+            .attr('width', radius * 2)
+            .attr('height', radius * 2)
+            .attr('rx', 1.5);
+          break;
+        case 'diamond':
+          mark = host.append('path')
+            .attr('d', `M0,${-radius}L${radius},0L0,${radius}L${-radius},0Z`);
+          break;
+        case 'triangle':
+          mark = host.append('path')
+            .attr('d', `M0,${-radius}L${radius * 0.866},${radius * 0.5}L${-radius * 0.866},${radius * 0.5}Z`);
+          break;
+        default:
+          mark = host.append('circle').attr('r', radius);
+      }
+      mark
+        .attr('data-part', 'node-mark')
+        .attr('data-shape', shape)
+        .attr('fill', d.color ?? groupColor(d.group))
+        .attr('stroke-width', 2);
+    });
 
     if (showTooltip) {
       nodeElements.append('title').text((d) => d.label ?? d.id);
@@ -361,8 +417,6 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
       .attr('data-part', 'node-label')
       .attr('dx', 12)
       .attr('dy', 4)
-      .style('font-size', '11px')
-      .style('pointer-events', 'none')
       .text((d) => d.label ?? d.id);
 
     const persistPositions = () => {
@@ -423,10 +477,10 @@ export const NetworkGraph = memo(function NetworkGraph(props: NetworkGraphProps)
 
   const groups = [...new Set(graphNodes.map((n) => n.group).filter(Boolean))] as string[];
   const legendNode = legend && groups.length > 0 ? (
-    <div data-part="legend" data-variant={directed ? 'directed' : 'undirected'} style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
+    <div data-part="legend" data-variant={directed ? 'directed' : 'undirected'}>
       {groups.map((group, i) => (
-        <div key={group} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-chart-legend-item-gap, 6px)', fontSize: 'var(--ds-chart-legend-font-size, 12px)' }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: palette[i % palette.length], display: 'inline-block' }} />
+        <div key={group} data-part="legend-item">
+          <span data-part="legend-swatch" data-shape={NETWORK_GROUP_SHAPES[i % NETWORK_GROUP_SHAPES.length] ?? 'circle'} style={{ backgroundColor: palette[i % palette.length] }} />
           <span data-part="legend-label">{group}</span>
         </div>
       ))}

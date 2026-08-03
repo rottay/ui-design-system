@@ -1,44 +1,22 @@
-/** Modern TreeView pattern skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+/**
+ * Modern TreeView pattern skin (WO-SKIN-06 CK-E), deliberately unlayered.
+ *
+ * MERGE / RETIRE NOTE (p613 wave): since the Lote-2 composition the tree
+ * itself is the DS Tree primitive's modern engine — every node row, toggle,
+ * checkbox and drag handle is painted by the primitive's own `tree.css`, and
+ * the pattern chrome (search row, skeleton, empty frame) lives in the
+ * sibling `runtime/engines/modern/skin/tree-view.css`. The rules retired
+ * here targeted parts the composed engine no longer stamps
+ * (`.ds-tree-view-modern__node-row` / `__toggle` / `__checkbox` /
+ * `__drag-handle` / `__search-input`) — dead paint, no capability lost:
+ * selection tint, toggle chrome, checkbox accent and drag-handle ink are
+ * all owned by `tree.css` today, and the search field is the composed Input
+ * primitive. The duplicate skeleton bar rule (same border-radius/background
+ * as `tree-view.css`) retired with them. What remains is the one LIVE rule
+ * this file ever owned: the root elevation over the shared `panelCardStyle`
+ * surface. The import in `facade/entrypoints/base.css` stays wired.
+ */
 
 .ds-pattern-tree-view.ds-engine-modern[data-part='root'] {
   box-shadow: var(--ds-elevation-1);
-}
-
-.ds-pattern-tree-view.ds-engine-modern[data-part='root']
-  .ds-tree-view-modern__node-row[data-part='node-row'][data-selected='true'] {
-  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
-  color: var(--ds-color-primary);
-}
-
-.ds-pattern-tree-view.ds-engine-modern[data-part='root']
-  .ds-tree-view-modern__toggle[data-part='toggle'] {
-  background: transparent;
-  color: var(--ds-color-text-primary);
-  border-radius: var(--ds-radius-md);
-  border: none;
-}
-
-.ds-pattern-tree-view.ds-engine-modern[data-part='root']
-  .ds-tree-view-modern__checkbox[data-part='checkbox'] {
-  accent-color: var(--ds-color-primary);
-}
-
-.ds-pattern-tree-view.ds-engine-modern[data-part='root']
-  .ds-tree-view-modern__drag-handle[data-part='drag-handle'] {
-  color: var(--ds-color-text-secondary);
-}
-
-.ds-pattern-tree-view.ds-engine-modern[data-part='root']
-  > [data-part='skeleton-list']
-  > .ds-tree-view-modern__skeleton[data-part='skeleton'] {
-  border-radius: var(--ds-radius-sm);
-  background: var(--ds-surface-panel);
-}
-
-.ds-pattern-tree-view.ds-engine-modern[data-part='root']
-  .ds-tree-view-modern__search-input[data-part='search-input'][data-part='search-input'] {
-  border-radius: var(--ds-radius-md);
-  border: 1px solid var(--ds-color-border);
-  background: transparent;
-  color: inherit;
 }

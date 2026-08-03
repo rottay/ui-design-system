@@ -21,7 +21,9 @@
  * minimal intact. Match highlighting is likewise NOT implemented on
  * purpose: the family tests pin exact label text (`findByText('Open
  * report')` under an active query), which any segmented match markup would
- * break — pin documented, tests untouched.
+ * break — pin documented, tests untouched. The contracted `loading` prop
+ * (previously destructured but dead) now stamps data-loading and swaps the
+ * result list for a skeleton footprint that mirrors the row anatomy.
  *
  * Copy runs through the guarded i18n channel with documented English floors
  * (the defaults double as test pins: 'Type a command...', 'No results
@@ -286,6 +288,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
       className="ds-pattern-command-palette ds-engine-modern"
       data-part="root"
       data-mode={mode}
+      data-loading={loading}
       style={style}
       role="dialog"
       aria-modal="true"
@@ -352,9 +355,25 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
            aria-controls and its viewport does not forward them. maxHeight
            stays inline (runtime prop, the ScrollArea precedent). */
         <div data-part="list" style={{ maxHeight }} role="listbox" id="command-palette-listbox">
+          {/* Loading footprint: skeleton rows mirror the real row anatomy
+              (icon well + two text bars) so the panel never reflows when
+              async results land. */}
+          {loading && (
+            <div data-part="loading-list" aria-hidden="true">
+              {[0, 1, 2].map((row) => (
+                <div data-part="skeleton-row" key={row}>
+                  <span data-part="skeleton-icon" />
+                  <span data-part="skeleton-text">
+                    <span data-part="skeleton-line" />
+                    <span data-part="skeleton-line" data-width="short" />
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
           {/* Show the "Recent" section only when there is no active query,
               giving users quick access to previously used commands. */}
-          {showRecent && (
+          {!loading && showRecent && (
             <div data-part="recent">
               <div data-part="section-label">{recentLabel}</div>
               {visibleRecent.map((item) => {
@@ -365,7 +384,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
           )}
           {/* Render grouped results. Groups with an empty-string key (items
               that had no `group` field) render without a section header. */}
-          {Object.entries(grouped).map(([group, groupItems]) => (
+          {!loading && Object.entries(grouped).map(([group, groupItems]) => (
             <div key={group}>
               {group && (
                 <div data-part="group-label">
@@ -392,7 +411,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
               })}
             </div>
           ))}
-          {filtered.length === 0 && (
+          {filtered.length === 0 && !loading && (
             <div data-part="empty">
               <Empty image="simple" description={emptyText} />
             </div>

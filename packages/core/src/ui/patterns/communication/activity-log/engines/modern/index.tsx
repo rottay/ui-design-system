@@ -304,14 +304,27 @@ export default function ModernActivityLog(props: ActivityLogProps) {
               children: (
                 /* The interactive content contract stays pattern-owned: the
                     whole item body is the action surface when onActivityClick
-                    is set (role=button + Enter, exactly as pinned). */
+                    is set (role=button). Enter fires exactly as pinned; Space
+                    completes the button activation pattern (preventDefault
+                    keeps the keypress from scrolling the page). */
                 <div
                   data-part="item-body"
                   data-interactive={onActivityClick ? 'true' : 'false'}
                   onClick={onActivityClick ? () => onActivityClick(activity) : undefined}
                   role={onActivityClick ? 'button' : undefined}
                   tabIndex={onActivityClick ? 0 : undefined}
-                  onKeyDown={onActivityClick ? (e) => e.key === 'Enter' && onActivityClick(activity) : undefined}
+                  onKeyDown={
+                    onActivityClick
+                      ? (e) => {
+                          if (e.key === 'Enter') {
+                            onActivityClick(activity);
+                          } else if (e.key === ' ') {
+                            e.preventDefault();
+                            onActivityClick(activity);
+                          }
+                        }
+                      : undefined
+                  }
                 >
                   {renderActivity ? (
                     renderActivity(activity)
@@ -320,7 +333,10 @@ export default function ModernActivityLog(props: ActivityLogProps) {
                       {/* Header: composed Avatar + name + composed Tag badge + entity */}
                       <div data-part="item-header">
                         <ModernAvatar data-part="avatar" name={activity.user.name} src={activity.user.avatar} size="sm" />
-                        <span data-part="user">
+                        {/* title mirrors the full string: the skin truncates
+                            long names/entities with ellipsis (truncation must
+                            never eat content silently). */}
+                        <span data-part="user" title={activity.user.name}>
                           {activity.user.name}
                         </span>
                         <span data-part="badge" data-action-category={category}>
@@ -329,7 +345,7 @@ export default function ModernActivityLog(props: ActivityLogProps) {
                           </ModernTag>
                         </span>
                         {activity.entityType && (
-                          <span data-part="entity">
+                          <span data-part="entity" title={activity.entityId ? `${activity.entityType} #${activity.entityId}` : activity.entityType}>
                             {activity.entityId
                               ? tOr('activityLog.onEntityWithId', 'on {entity} #{id}', {
                                   entity: activity.entityType,

@@ -82,7 +82,6 @@ function ActionButton({ action }: { action: DetailAction }) {
       data-part="action-button"
       data-variant={variant}
       data-loading={action.loading ? 'true' : 'false'}
-      style={{ display: 'contents' }}
     >
       <Button
         htmlType="button"
@@ -91,16 +90,14 @@ function ActionButton({ action }: { action: DetailAction }) {
         disabled={action.disabled || action.loading}
         aria-busy={action.loading ? 'true' : 'false'}
         onClick={action.onClick}
-        style={{ flexShrink: 0 }}
         icon={action.loading ? (
+          /* Loading ring: the skin owns geometry + border ring
+             ([data-part='action-spinner']); only the spin reference stays
+             inline (sanctioned residual, see detail-panel.css). */
           <span
             data-part="action-spinner"
             style={{
-              display: 'inline-block',
-              width: 'var(--ds-button-sm-icon-size)',
-              height: 'var(--ds-button-sm-icon-size)',
               animation: 'ds-foundation-spin var(--ds-motion-glacial) linear infinite',
-              flexShrink: 0,
             }}
           />
         ) : action.icon}
@@ -120,7 +117,7 @@ function ActionButton({ action }: { action: DetailAction }) {
  */
 function BackButton({ onClick, label }: { onClick: () => void; label: string }) {
   return (
-    <span data-part="back-button" style={{ display: 'contents' }}>
+    <span data-part="back-button">
       <Button
         htmlType="button"
         variant="ghost"
@@ -128,7 +125,6 @@ function BackButton({ onClick, label }: { onClick: () => void; label: string }) 
         shape="circle"
         onClick={onClick}
         aria-label={label}
-        style={{ flexShrink: 0 }}
         icon={(
           <NavigationBackIcon size={15} decorative />
         )}
@@ -493,10 +489,17 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                     const enabledTabs = tabs.filter((t) => !t.disabled);
                     if (enabledTabs.length === 0) return;
                     const currentIdx = enabledTabs.findIndex((t) => t.key === activeTab);
+                    // Direction-aware arrows (data-table/action-dock precedent):
+                    // in RTL the visual-forward key is ArrowLeft, so the same
+                    // physical cue always moves the selection the same way.
+                    const isRtl =
+                      getComputedStyle(e.currentTarget).direction === 'rtl';
+                    const forwardKey = isRtl ? 'ArrowLeft' : 'ArrowRight';
+                    const backwardKey = isRtl ? 'ArrowRight' : 'ArrowLeft';
                     let nextIdx = -1;
-                    if (e.key === 'ArrowRight') {
+                    if (e.key === forwardKey) {
                       nextIdx = currentIdx < enabledTabs.length - 1 ? currentIdx + 1 : 0;
-                    } else if (e.key === 'ArrowLeft') {
+                    } else if (e.key === backwardKey) {
                       nextIdx = currentIdx > 0 ? currentIdx - 1 : enabledTabs.length - 1;
                     } else if (e.key === 'Home') {
                       nextIdx = 0;
@@ -542,7 +545,15 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
           {sidebar && (
             <div
               data-part="sidebar-slot"
-              style={{ '--ds-detail-panel-sidebar-width': `${sidebarWidth}px` } as React.CSSProperties}
+              /* The contract accepts a number (px) OR a CSS string ('300px',
+                 '25%'): appending 'px' unconditionally produced invalid
+                 declarations like '25%px' for the string form. */
+              style={{
+                '--ds-detail-panel-sidebar-width':
+                  typeof sidebarWidth === 'number'
+                    ? `${sidebarWidth}px`
+                    : sidebarWidth,
+              } as React.CSSProperties}
             >
               <div
                 data-part="sidebar"

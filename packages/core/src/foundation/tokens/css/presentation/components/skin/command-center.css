@@ -13,7 +13,7 @@
  * What remains surface-owned and is painted here: header rhythm, the
  * quick-action icon tile geometry/tint, the two layout grids and section
  * spans, the recent-activity header row, the view-all touch target, the
- * skeleton mirror's spacing, and the forced-colors re-key of the one tinted
+ * skeleton mirror's spacing, the sr-only loading label geometry and the forced-colors re-key of the one tinted
  * part. No motion is declared in this file: entrance choreography arrives via
  * the `collection.insert` recipe (`.ds-collection-stagger`) and every other
  * transition belongs to the composed components.
@@ -139,6 +139,21 @@
 
 .ds-surface.ds-command-center .ds-command-center__skeleton-body {
   margin-block-start: var(--ds-spacing-3, 12px);
+}
+
+/* Visually-hidden loading announcement (aria-busy companion; same sr-only
+   idiom as decision-inbox.css / record-workbench.css). */
+.ds-surface.ds-command-center .ds-command-center__loading-label[data-part='loading-label'] {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Forced colors ------------------------------------------------------------------ */

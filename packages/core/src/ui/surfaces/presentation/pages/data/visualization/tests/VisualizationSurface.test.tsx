@@ -4,6 +4,7 @@ import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import visualizationSkinCss from '@/foundation/tokens/css/presentation/components/skin/visualization.css?raw';
+import chartFoundationCss from '@/foundation/tokens/css/presentation/components/skin/chart-foundation.css?raw';
 import { Histogram, LineChart } from '../../../../../../patterns/visualization/charts';
 import { VisualizationSurface } from '..';
 import type { VisualizationSurfaceConfig } from '../../../../../foundation/contracts';
@@ -234,17 +235,24 @@ describe('VisualizationSurface', () => {
       '--ds-chart-legend-font-size: var(--ds-font-size-xs);'
     );
 
-    for (const legend of [lineLegend, histogramLegend]) {
-      expect(legend.style.gap).toBe('var(--ds-chart-legend-gap, 16px)');
-      expect(getComputedStyle(legend).gap).toBe('var(--ds-chart-legend-gap, 16px)');
+    // LineChart now consumes the shared chart-foundation legend recipe instead
+    // of rebuilding it inline. Histogram has not migrated yet, so this test
+    // pins both truthful paths while proving that the surface retune reaches
+    // the same channel names.
+    expect(lineLegend.style.gap).toBe('');
+    expect(
+      lineLegend.querySelector<HTMLElement>('[data-part="legend-item"]')?.style.gap
+    ).toBe('');
+    expect(chartFoundationCss).toMatch(
+      /\[data-part='legend'\]\s*\{[\s\S]*?gap:\s*var\(--ds-chart-legend-gap, 16px\)/
+    );
+    expect(chartFoundationCss).toMatch(
+      /\[data-part='legend-item'\]\s*\{[\s\S]*?gap:\s*var\(--ds-chart-legend-item-gap, 6px\)/
+    );
 
-      const item = legend.querySelector<HTMLElement>('[data-part="legend-item"]');
-      expect(item).not.toBeNull();
-      if (!item) {
-        throw new Error('Expected compact legend item');
-      }
-      expect(item.style.gap).toBe('var(--ds-chart-legend-item-gap, 6px)');
-      expect(getComputedStyle(item).gap).toBe('var(--ds-chart-legend-item-gap, 6px)');
-    }
+    expect(histogramLegend.style.gap).toBe('var(--ds-chart-legend-gap, 16px)');
+    const histogramItem = histogramLegend.querySelector<HTMLElement>('[data-part="legend-item"]');
+    expect(histogramItem).not.toBeNull();
+    expect(histogramItem?.style.gap).toBe('var(--ds-chart-legend-item-gap, 6px)');
   });
 });

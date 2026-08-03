@@ -5,6 +5,29 @@
  * the caller-style landing per engine: wrapper in modern, shell in rustic;
  * the rustic selectors exceed the Input skin's maximum state specificity
  * because the old inline caller style won every state (P-88).
+ *
+ * COMPOSITION LAW (premium wave): every interactive element (suggestion
+ * chips, clear, voice toggle, the voice-help close/cancel/confirm) is the
+ * Button primitive (its engine resolved by the DesignSystemProvider, never
+ * pinned here). Their custom paint is
+ * delivered through the ghost channels (`--ds-button-ghost-*`) scoped on
+ * the pattern's class + DISTINCT data hooks — never through specificity
+ * wars — and their focus rings belong to the primitive (the one
+ * :focus-visible rule below tunes the ring through `--ds-button-focus-ring`,
+ * it does not repaint it). What this file owns outright: root/frame/shell
+ * geometry (drained from the retired inline styles, keyed on the stamped
+ * `data-embedded` / `data-editorial-tech` / `data-has-top-rail` hooks), the
+ * search-icon and voice-cluster overlay positioning, the input's
+ * padding-inline-end `:has()` ladder (the retired JS `inputRightPadding`
+ * magic numbers), the voice-badge pattern chrome, the voice-help drawer,
+ * the status/suggestions/actions-slot strips, and the motion vocabulary.
+ *
+ * GEOMETRY LADDER: the command input's end padding mirrors which overlay
+ * controls the voice cluster actually renders — base 14px, +toggle 88px,
+ * +clear 122px, +badge 244px, +both 278px — through `:has()` on the shell,
+ * so the padding can never disagree with the rendered controls (the old
+ * JS ladder padded for a clear button that never rendered when voice was
+ * unsupported — retired bug).
  */
 
 @keyframes ds-search-command-bar-pulse {
@@ -18,26 +41,75 @@
   to { transform: rotate(360deg); }
 }
 
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__suggestions[data-part='suggestions']
-  .ds-search-command-bar__suggestion-chip[data-part='suggestion-chip'][data-part='suggestion-chip'] {
-  border-radius: 999px;
-  border: 1px solid var(--ds-color-border-subtle);
-  background: var(--ds-surface-panel);
-  color: var(--ds-color-text-secondary);
+/* Voice-help drawer entrance: one governed fade-rise on the normal motion
+ * channel, silenced under prefers-reduced-motion. */
+@keyframes ds-search-command-bar-voice-help-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.ds-structure.ds-search-command-bar[data-part='root'][data-part='root'] {
+/* ---- root: strip frame + variant paddings (drained from inline; the
+        padding grammar keys on the always-stamped variant hooks) ---- */
+.ds-structure.ds-search-command-bar[data-part='root'][data-embedded] {
+  position: relative;
+  overflow: visible;
+  z-index: 30;
+  padding-block: 10px 12px;
+  padding-inline: 16px;
   border-bottom: 1px solid var(--ds-color-border-subtle);
   background: var(--ds-surface-card);
 }
-.ds-structure.ds-search-command-bar[data-part='root'][data-part='root'][data-embedded='true'] {
+.ds-structure.ds-search-command-bar[data-part='root'][data-embedded='true'] {
+  padding-block: 8px;
   border-bottom: none;
   background: transparent;
 }
+.ds-structure.ds-search-command-bar[data-part='root'][data-embedded='true'][data-editorial-tech='true'] {
+  padding-block: 2px 10px;
+  padding-inline: 20px;
+}
+.ds-structure.ds-search-command-bar[data-part='root'][data-embedded='true'][data-editorial-tech='true'][data-has-top-rail='true'] {
+  padding-block-start: 0;
+}
 
+/* ---- frame / top rail / bar row (layout drained from inline) ---- */
+.ds-structure.ds-search-command-bar [data-part='frame'] {
+  position: relative;
+  z-index: 1;
+}
+.ds-structure.ds-search-command-bar [data-part='top-rail'] {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-block-size: 22px;
+  margin-block-end: 6px;
+}
+.ds-structure.ds-search-command-bar[data-editorial-tech='true'] [data-part='top-rail'] {
+  min-block-size: 24px;
+  margin-block-end: 8px;
+}
+.ds-structure.ds-search-command-bar [data-part='bar-row'] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ds-spacing-3, 12px);
+}
+.ds-structure.ds-search-command-bar [data-part='input-column'] {
+  min-inline-size: 0;
+  flex: 1 1 720px;
+}
+
+/* ---- search shell: raised pill frame (padding drained from inline) ---- */
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__search-shell[data-part='search-shell'][data-part='search-shell'] {
+  .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status] {
+  position: relative;
+  padding: 6px;
   border-radius: 15px;
   border: 1px solid var(--ds-color-border-subtle);
   background: var(--ds-surface-panel);
@@ -45,6 +117,7 @@
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell'][data-editorial-tech='true'] {
+  padding: 5px;
   border-radius: 18px;
 }
 .ds-structure.ds-search-command-bar
@@ -53,27 +126,84 @@
   box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent);
 }
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__search-shell[data-part='search-shell'][data-part='search-shell'][data-embedded='true'][data-editorial-tech='true'] {
+  .ds-search-command-bar__search-shell[data-part='search-shell'][data-embedded='true'][data-editorial-tech='true'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
   background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 82%, transparent) 0%, color-mix(in srgb, var(--ds-surface-panel) 68%, transparent) 100%);
   box-shadow: 0 10px 28px color-mix(in srgb, var(--ds-color-primary) 12%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent);
 }
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__search-shell[data-part='search-shell'][data-part='search-shell'][data-part='search-shell'][data-voice-active='true'] {
+  .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status][data-voice-active='true'] {
   border: 1px solid var(--ds-color-primary);
 }
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__search-shell[data-part='search-shell'][data-part='search-shell'][data-part='search-shell'][data-voice-status='error'] {
+  .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status='error'] {
   border: 1px solid var(--ds-color-error);
 }
 
+/* ---- search icon: overlay anchor (geometry drained from inline; logical
+        inline-start so the anchor mirrors in RTL) ---- */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
   > .ds-search-command-bar__search-icon[data-part='search-icon'] {
+  position: absolute;
+  inset-inline-start: 24px;
+  inset-block-start: 50%;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
   transform: translateY(-50%);
   color: var(--ds-color-text-muted);
 }
 
+/* ---- command input: geometry ladder (drained from inline). The class
+        lands on the wrapper in modern and the input root in rustic — both
+        are direct children of the shell, so one rule serves either engine.
+        The end padding tracks the rendered overlay controls through :has()
+        on the shell (see GEOMETRY LADDER above). ---- */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__search-shell[data-part='search-shell']
+  > .ds-search-command-bar__input {
+  block-size: 42px;
+  padding-inline-start: 46px;
+  padding-inline-end: 14px;
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__search-shell[data-part='search-shell']
+  > .ds-search-command-bar__input[data-editorial-tech='true'] {
+  block-size: 44px;
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__search-shell[data-part='search-shell']:has(
+    > .ds-search-command-bar__voice-controls
+  )
+  > .ds-search-command-bar__input {
+  padding-inline-end: 88px;
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__search-shell[data-part='search-shell']:has(
+    > .ds-search-command-bar__voice-controls > .ds-search-command-bar__clear
+  )
+  > .ds-search-command-bar__input {
+  padding-inline-end: 122px;
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__search-shell[data-part='search-shell']:has(
+    > .ds-search-command-bar__voice-controls > .ds-search-command-bar__voice-badge
+  )
+  > .ds-search-command-bar__input {
+  padding-inline-end: 244px;
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__search-shell[data-part='search-shell']:has(
+    > .ds-search-command-bar__voice-controls > .ds-search-command-bar__clear
+  ):has(
+    > .ds-search-command-bar__voice-controls > .ds-search-command-bar__voice-badge
+  )
+  > .ds-search-command-bar__input {
+  padding-inline-end: 278px;
+}
+
+/* ---- input paint per engine (P-88 rustic specificity ladder, unchanged) ---- */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
@@ -123,46 +253,107 @@
   border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 58%, transparent);
 }
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__search-shell[data-part='search-shell'][data-part='search-shell'][data-part='search-shell'][data-voice-active='true']
+  .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status][data-voice-active='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
   + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='root']),
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__search-shell[data-part='search-shell'][data-part='search-shell'][data-part='search-shell'][data-voice-active='true']
+  .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status][data-voice-active='true']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
   + div
   > .ds-search-command-bar__input.rottay-input.rottay-input--rustic[data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-color-primary);
 }
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__search-shell[data-part='search-shell'][data-part='search-shell'][data-part='search-shell'][data-voice-status='error']
+  .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status='error']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
   + .ds-search-command-bar__input:has(> .rottay-input.rottay-input--modern[data-part='root']),
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__search-shell[data-part='search-shell'][data-part='search-shell'][data-part='search-shell'][data-voice-status='error']
+  .ds-search-command-bar__search-shell[data-part='search-shell'][data-voice-status='error']
   > .ds-search-command-bar__search-icon[data-part='search-icon']
   + div
   > .ds-search-command-bar__input.rottay-input.rottay-input--rustic[data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-color-error);
 }
 
+/* ---- voice cluster: overlay anchor (geometry drained from inline) ---- */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
-  > .ds-search-command-bar__voice-controls:has(> .ds-search-command-bar__voice-toggle[data-part='voice-toggle']) {
+  > .ds-search-command-bar__voice-controls[data-part='voice-controls'] {
+  position: absolute;
+  inset-inline-end: 18px;
+  inset-block-start: 50%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-inline-size: min(48%, 304px);
   transform: translateY(-50%);
 }
 
+/* ---- clear + voice toggle: composed Buttons painted through ghost
+        channels (the primitive owns geometry, transitions, hover timing
+        and the focus ring) ---- */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__clear[data-part='clear'][data-part='clear'] {
-  border-radius: 999px;
-  border: 1px solid var(--ds-color-border-subtle);
-  background: var(--ds-surface-panel);
-  color: var(--ds-color-text-secondary);
+  > .ds-search-command-bar__clear[data-part='clear'] {
+  --ds-button-ghost-bg: var(--ds-surface-panel);
+  --ds-button-ghost-border: var(--ds-color-border-subtle);
+  --ds-button-ghost-color: var(--ds-color-text-secondary);
+  --ds-button-ghost-bg-hover: color-mix(in srgb, var(--ds-color-bg-primary) 60%, transparent);
+  --ds-button-ghost-color-hover: var(--ds-color-text-primary);
 }
 
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-badge[data-part='voice-badge'][data-part='voice-badge'] {
+  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'] {
+  --ds-button-ghost-bg: var(--ds-surface-panel);
+  --ds-button-ghost-border: var(--ds-color-border-subtle);
+  --ds-button-ghost-color: var(--ds-color-text-secondary);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-controls
+  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle']:not([data-voice-active='true']) {
+  --ds-button-ghost-bg-hover: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-panel));
+  --ds-button-ghost-color-hover: var(--ds-color-primary);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-controls
+  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-active='true'] {
+  --ds-button-ghost-bg: color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card));
+  --ds-button-ghost-border: var(--ds-color-primary);
+  --ds-button-ghost-color: var(--ds-color-primary);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-controls
+  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-status='error'] {
+  --ds-button-ghost-bg: color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card));
+  --ds-button-ghost-border: var(--ds-color-error);
+  --ds-button-ghost-color: var(--ds-color-error);
+}
+
+/* the listening pulse: keyed on the stamped state, never inline */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-controls
+  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-status='listening'] {
+  animation: ds-search-command-bar-pulse 1.6s ease-out infinite;
+}
+
+/* the transcribing spin: the engine names the node, the skin owns the motion */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__spinning-icon {
+  animation: ds-search-command-bar-spin 1s linear infinite;
+}
+
+/* ---- voice badge: pattern chrome (status lozenge, not a Button) ---- */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-controls
+  > .ds-search-command-bar__voice-badge[data-part='voice-badge'][data-voice-status] {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-block-size: 24px;
+  padding-inline: 8px;
+  flex-shrink: 1;
+  min-inline-size: 0;
   border-radius: 999px;
   border: 1px solid var(--ds-color-border-subtle);
   background: var(--ds-surface-panel);
@@ -170,14 +361,14 @@
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-badge[data-part='voice-badge'][data-part='voice-badge'][data-voice-status='error'] {
+  > .ds-search-command-bar__voice-badge[data-part='voice-badge'][data-voice-status='error'] {
   border: 1px solid var(--ds-color-error);
   background: color-mix(in srgb, var(--ds-color-error) 8%, transparent);
   color: var(--ds-color-error);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-badge[data-part='voice-badge'][data-part='voice-badge'][data-voice-status='needs-permission'] {
+  > .ds-search-command-bar__voice-badge[data-part='voice-badge'][data-voice-status='needs-permission'] {
   border: 1px solid var(--ds-color-warning);
   background: color-mix(in srgb, var(--ds-color-warning) 8%, transparent);
   color: var(--ds-color-warning);
@@ -196,87 +387,124 @@
   .ds-search-command-bar__voice-badge
   > .ds-search-command-bar__voice-badge-label[data-part='voice-badge-label'][data-part='voice-badge-label'][data-part='voice-badge-label'] {
   color: inherit;
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 600;
+  white-space: nowrap;
 }
 
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-part='voice-toggle'] {
-  border-radius: 999px;
-  border: 1px solid var(--ds-color-border-subtle);
-  background: var(--ds-surface-panel);
-  color: var(--ds-color-text-secondary);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-part='voice-toggle'][data-voice-active='true'] {
-  border: 1px solid var(--ds-color-primary);
-  background: color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card));
-  color: var(--ds-color-primary);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-part='voice-toggle'][data-voice-status='error'] {
-  border: 1px solid var(--ds-color-error);
-  background: color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card));
-  color: var(--ds-color-error);
-}
-
+/* ---- voice-help drawer (geometry drained from inline; the inline size is
+        viewport-capped so the drawer never overflows a phone) ---- */
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
-  > .ds-search-command-bar__voice-help[data-part='voice-help'][data-part='voice-help'] {
+  > .ds-search-command-bar__voice-help[data-part='voice-help'][data-permission-blocked] {
+  position: absolute;
+  inset-inline-end: 0;
+  inset-block-start: calc(100% + 12px);
+  inline-size: min(
+    420px,
+    calc(100vw - 32px)
+  );
+  z-index: 180;
+  padding: 18px;
   border-radius: 18px;
   border: 1px solid var(--ds-color-warning);
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-2);
+  animation: ds-search-command-bar-voice-help-enter
+    var(--ds-motion-normal, 200ms)
+    var(--ds-motion-ease-out, ease-out) both;
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__search-shell[data-part='search-shell']
-  > .ds-search-command-bar__voice-help[data-part='voice-help'][data-part='voice-help'][data-permission-blocked='true'] {
+  > .ds-search-command-bar__voice-help[data-part='voice-help'][data-permission-blocked='true'] {
   border: 1px solid var(--ds-color-error);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help [data-part='voice-help-copy'] {
+  min-inline-size: 0;
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  [data-part='voice-help-title'][data-part='voice-help-title'][data-part='voice-help-title'] {
+  display: block;
+  font-size: var(--ds-font-size-sm);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help
   .ds-search-command-bar__voice-help-description[data-part='voice-help-description'][data-part='voice-help-description'][data-part='voice-help-description'] {
+  display: block;
+  margin-block-start: 4px;
   color: var(--ds-color-text-secondary);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-close[data-part='close'][data-part='close'] {
-  border-radius: 999px;
-  border: 1px solid var(--ds-color-border-subtle);
-  background: transparent;
-  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs);
+  line-height: 1.5;
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help
   .ds-search-command-bar__voice-help-list[data-part='voice-help-list'] {
+  margin-block: 12px 0;
+  margin-inline: 0;
+  padding-inline-start: 18px;
   color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-xs);
+  line-height: 1.55;
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help [data-part='voice-help-step'] {
+  margin-block-end: 6px;
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help [data-part='voice-help-step']:last-child {
+  margin-block-end: 0;
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help [data-part='voice-help-footer'] {
+  margin-block-start: 16px;
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__voice-help
   .ds-search-command-bar__voice-help-hint[data-part='voice-help-hint'][data-part='voice-help-hint'][data-part='voice-help-hint'] {
+  flex: 1 1 auto;
   color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  line-height: 1.45;
 }
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-cancel[data-part='voice-help-cancel'][data-part='voice-help-cancel'] {
-  border-radius: 999px;
-  border: 1px solid var(--ds-color-border-subtle);
-  background: transparent;
-  color: var(--ds-color-text-secondary);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-confirm[data-part='voice-help-confirm'][data-part='voice-help-confirm'] {
-  border-radius: 999px;
-  border: 1px solid var(--ds-color-primary);
-  background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
-  color: var(--ds-color-primary);
+  .ds-search-command-bar__voice-help [data-part='voice-help-actions'] {
+  flex-shrink: 0;
 }
 
+/* voice-help actions: composed Buttons. Cancel keeps its quiet ghost paint
+   through channels; confirm is the solid primary forward action (elevated
+   from the old primary-tint pill — the drawer CTA reads as the destination
+   action, the cancel as the escape). */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  .ds-search-command-bar__voice-help-close[data-part='close'] {
+  --ds-button-ghost-bg: transparent;
+  --ds-button-ghost-border: var(--ds-color-border-subtle);
+  --ds-button-ghost-color: var(--ds-color-text-secondary);
+  --ds-button-ghost-bg-hover: color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent);
+  --ds-button-ghost-color-hover: var(--ds-color-text-primary);
+}
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help
+  .ds-search-command-bar__voice-help-cancel[data-part='voice-help-cancel'] {
+  --ds-button-ghost-bg: transparent;
+  --ds-button-ghost-border: var(--ds-color-border-subtle);
+  --ds-button-ghost-color: var(--ds-color-text-secondary);
+  --ds-button-ghost-bg-hover: color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent);
+  --ds-button-ghost-color-hover: var(--ds-color-text-primary);
+}
+
+/* ---- status line (margin drained from inline) ---- */
+.ds-structure.ds-search-command-bar [data-part='status-row'] {
+  margin-block-start: 6px;
+}
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__status[data-part='status'][data-part='status'][data-part='status'] {
   color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  line-height: 1.45;
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__status[data-part='status'][data-part='status'][data-part='status'][data-voice-status='error'] {
@@ -291,36 +519,90 @@
   color: var(--ds-color-warning);
 }
 
+/* ---- side cluster: suggestions + actions slot (geometry drained from
+        inline; the slot separators stay logical for RTL) ---- */
+.ds-structure.ds-search-command-bar [data-part='side-cluster'] {
+  display: inline-flex;
+  align-items: stretch;
+  gap: 18px;
+  row-gap: 8px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  flex-shrink: 0;
+  min-inline-size: 0;
+  flex: 0 1 auto;
+  padding-block-start: 2px;
+}
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__suggestions[data-ds-search-shell-slot='true'][data-part='suggestions'][data-part='suggestions'],
+  .ds-search-command-bar__suggestions[data-ds-search-shell-slot='true'][data-part='suggestions'],
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__actions-slot[data-ds-search-shell-slot='true'][data-part='actions-slot'][data-part='actions-slot'] {
+  .ds-search-command-bar__actions-slot[data-ds-search-shell-slot='true'][data-part='actions-slot'] {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  padding-block: 6px;
+  padding-inline-start: 18px;
   border-inline-start: 1px solid var(--ds-color-border-subtle);
 }
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__suggestions[data-ds-search-shell-slot='true'][data-part='suggestions'][data-part='suggestions'][data-editorial-tech='true'],
+  .ds-search-command-bar__suggestions[data-ds-search-shell-slot='true'][data-part='suggestions'] {
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
 .ds-structure.ds-search-command-bar
-  .ds-search-command-bar__actions-slot[data-ds-search-shell-slot='true'][data-part='actions-slot'][data-part='actions-slot'][data-editorial-tech='true'] {
+  .ds-search-command-bar__suggestions[data-ds-search-shell-slot='true'][data-part='suggestions'][data-editorial-tech='true'],
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__actions-slot[data-ds-search-shell-slot='true'][data-part='actions-slot'][data-editorial-tech='true'] {
+  padding-inline-start: 16px;
   border-inline-start: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent);
 }
 .ds-structure.ds-search-command-bar
   .ds-search-command-bar__suggestions
   > .ds-search-command-bar__suggestions-label[data-part='suggestions-label'][data-part='suggestions-label'][data-part='suggestions-label'] {
   color: var(--ds-color-text-muted);
+  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 .ds-structure.ds-search-command-bar
   > .ds-search-command-bar__divider[data-part='divider'] {
+  margin-block-start: 10px;
+  block-size: 1px;
   background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 44%, transparent 100%);
 }
 
-/* ---------------------------------------------------------------------------
-   WAVE R2+R3 — typography + motion (skin-owned, never inline).
-   Quiet Premium: the command input reads at the body step with tightened
-   tracking, the Smart-refine label is the tracked uppercase eyebrow, and
-   every chip/button earns hover/focus/active on the --ds-motion-* channels.
-   The listening pulse and the transcribing spin moved here from inline
-   styles and are silenced under prefers-reduced-motion.
---------------------------------------------------------------------------- */
+/* ---- suggestion chips: composed Buttons painted through ghost channels ---- */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__suggestions[data-part='suggestions']
+  .ds-search-command-bar__suggestion-chip[data-part='suggestion-chip'] {
+  --ds-button-ghost-bg: var(--ds-surface-panel);
+  --ds-button-ghost-border: var(--ds-color-border-subtle);
+  --ds-button-ghost-color: var(--ds-color-text-secondary);
+  --ds-button-ghost-bg-hover: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-panel));
+  --ds-button-ghost-border-hover: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  --ds-button-ghost-color-hover: var(--ds-color-text-primary);
+  --ds-button-ghost-bg-active: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-panel));
+}
+
+/* Keyboard focus: every interactive element here is a composed primitive
+   that owns its ring; the pattern's one :focus-visible decision is the ring
+   recipe itself, delivered through the button focus-ring channel (never a
+   duplicated paint). */
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__suggestion-chip:focus-visible,
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__clear:focus-visible,
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-toggle:focus-visible,
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help-close:focus-visible,
+.ds-structure.ds-search-command-bar
+  .ds-search-command-bar__voice-help-cancel:focus-visible {
+  --ds-button-focus-ring: 0 0 0 var(--ds-focus-ring-width, 2px)
+    var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
+}
 
 /* command input typography — the exact per-engine paint node (P-79):
  * modern wraps the native input, rustic IS the input root. */
@@ -333,192 +615,7 @@
   letter-spacing: -0.01em;
 }
 
-/* suggestion chips: label type + deliberate hover/focus/active */
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__suggestions[data-part='suggestions']
-  .ds-search-command-bar__suggestion-chip[data-part='suggestion-chip'] {
-  font-size: var(--ds-font-size-xs);
-  font-weight: 600;
-  transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__suggestions[data-part='suggestions']
-  .ds-search-command-bar__suggestion-chip[data-part='suggestion-chip']:hover {
-  border-color: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
-  background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-panel));
-  color: var(--ds-color-text-primary);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__suggestions[data-part='suggestions']
-  .ds-search-command-bar__suggestion-chip[data-part='suggestion-chip']:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__suggestions[data-part='suggestions']
-  .ds-search-command-bar__suggestion-chip[data-part='suggestion-chip']:active {
-  background: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-panel));
-}
-
-/* Smart-refine eyebrow */
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__suggestions
-  > .ds-search-command-bar__suggestions-label[data-part='suggestions-label'][data-part='suggestions-label'][data-part='suggestions-label'] {
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-/* status line */
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__status[data-part='status'][data-part='status'][data-part='status'] {
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  line-height: 1.45;
-}
-
-/* voice badge label */
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-badge
-  > .ds-search-command-bar__voice-badge-label[data-part='voice-badge-label'][data-part='voice-badge-label'][data-part='voice-badge-label'] {
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  font-weight: 600;
-}
-
-/* voice controls: motion + hover/focus grammar on clear and toggle */
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__clear[data-part='clear'],
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'] {
-  transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__clear[data-part='clear']:hover {
-  background: color-mix(in srgb, var(--ds-color-bg-primary) 60%, transparent);
-  color: var(--ds-color-text-primary);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle']:hover:not([data-voice-active='true']) {
-  background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-panel));
-  color: var(--ds-color-primary);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__clear[data-part='clear']:focus-visible,
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle']:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
-}
-
-/* the listening pulse: keyed on the stamped state, never inline */
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-controls
-  > .ds-search-command-bar__voice-toggle[data-part='voice-toggle'][data-voice-status='listening'] {
-  animation: ds-search-command-bar-pulse 1.6s ease-out infinite;
-}
-
-/* the transcribing spin: the engine names the node, the skin owns the motion */
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__spinning-icon {
-  animation: ds-search-command-bar-spin 1s linear infinite;
-}
-
-/* voice-help drawer typography + button grammar */
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  [data-part='voice-help-title'][data-part='voice-help-title'][data-part='voice-help-title'] {
-  font-size: var(--ds-font-size-sm);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-description[data-part='voice-help-description'][data-part='voice-help-description'][data-part='voice-help-description'] {
-  font-size: var(--ds-font-size-xs);
-  line-height: 1.5;
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-list[data-part='voice-help-list'] {
-  font-size: var(--ds-font-size-xs);
-  line-height: 1.55;
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-hint[data-part='voice-help-hint'][data-part='voice-help-hint'][data-part='voice-help-hint'] {
-  font-size: var(--ds-font-size-2xs, var(--ds-font-size-xs));
-  line-height: 1.45;
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-cancel[data-part='voice-help-cancel'] {
-  font-size: var(--ds-font-size-xs);
-  font-weight: 600;
-  transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-confirm[data-part='voice-help-confirm'] {
-  font-size: var(--ds-font-size-xs);
-  font-weight: 700;
-  transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-close[data-part='close'] {
-  transition:
-    background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
-    color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-close[data-part='close']:hover {
-  background: color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent);
-  color: var(--ds-color-text-primary);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-cancel[data-part='voice-help-cancel']:hover {
-  background: color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent);
-  color: var(--ds-color-text-primary);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-confirm[data-part='voice-help-confirm']:hover {
-  background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
-}
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-close[data-part='close']:focus-visible,
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-cancel[data-part='voice-help-cancel']:focus-visible,
-.ds-structure.ds-search-command-bar
-  .ds-search-command-bar__voice-help
-  .ds-search-command-bar__voice-help-confirm[data-part='voice-help-confirm']:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color, color-mix(in srgb, var(--ds-color-primary) 55%, transparent));
-}
-
-/* Reduced motion: the pulse and spin stop outright, and every hover
- * cross-fade goes silent. */
+/* Reduced motion: the pulse, the spin and the drawer entrance stop outright. */
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-search-command-bar
     .ds-search-command-bar__voice-controls
@@ -530,17 +627,7 @@
     animation: none;
   }
   .ds-structure.ds-search-command-bar
-    .ds-search-command-bar__suggestion-chip,
-  .ds-structure.ds-search-command-bar
-    .ds-search-command-bar__clear,
-  .ds-structure.ds-search-command-bar
-    .ds-search-command-bar__voice-toggle,
-  .ds-structure.ds-search-command-bar
-    .ds-search-command-bar__voice-help-close,
-  .ds-structure.ds-search-command-bar
-    .ds-search-command-bar__voice-help-cancel,
-  .ds-structure.ds-search-command-bar
-    .ds-search-command-bar__voice-help-confirm {
-    transition: none;
+    .ds-search-command-bar__voice-help[data-part='voice-help'] {
+    animation: none;
   }
 }

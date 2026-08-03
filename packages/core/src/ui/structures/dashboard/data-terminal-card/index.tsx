@@ -26,15 +26,21 @@
  *  - ActivityIndicator "simulates data activity" — decorative, not data.
  *  - The variant falls back to a Math.random page seed when neither the
  *    prop nor the provider pins one (nondeterministic theming by design).
- *  - Residual inline geometry (static layout/flex/padding) still lives in
- *    the bodies; the paint tones and ALL animation/motion are skin-owned.
  *
- * MOTION LAW: every `animation`/`transition` declaration moved OUT of the
- * inline styles into `presentation/components/skin/data-terminal-card.css`
+ * PAINT + GEOMETRY LAW: every static declaration — paint tones, typography,
+ * layout geometry, spacing — is owned by the skin
+ * (foundation/tokens/css/presentation/components/skin/data-terminal-card.css),
+ * transcribed verbatim and expressed in logical properties. Only runtime
+ * channels stay inline: the `--ds-dtc-live` ring-colour hatch, the
+ * ProgressBar `height` prop + `--ds-dtc-radius` hatch, the progress fill
+ * width (data) and the activity-bar stagger delay.
+ *
+ * MOTION LAW: every `animation`/`transition` declaration lives in the skin
  * (channeled, reduced-motion-guarded durations derived from `--ds-motion-*`
- * rungs) — an inline animation cannot be silenced without `!important`.
- * Only runtime-computed values stay inline: the activity-bar stagger delay
- * and the progress fill width.
+ * rungs). No `!important` is needed anywhere in this family: because no
+ * animation stays inline, the skin's reduced-motion guard silences every
+ * loop directly — the former inline animations were unsilenceable without
+ * it, which is exactly why they were drained.
  *
  * COPY LAW: all owned chrome copy resolves through the optional
  * `components` i18n channel with an English floor; numbers format with the
@@ -86,18 +92,21 @@ function useDtcTranslation() {
  * NavigationLinkProvider context, falling back to a native `<a>` when no
  * provider is mounted. This keeps the DS pattern framework-agnostic
  * (mirrors the Wave 5.1 follow-up adapter pattern used by SurfaceReadField).
+ * The anchor carries the family's own link class so the skin can paint the
+ * keyboard focus ring (a consumer-supplied adapter owns its DOM, so the hook
+ * is a class, not a data-part).
  */
-function NavLinkAnchor({ href, style, children }: { href: string; style?: CSSProperties; children: ReactNode }) {
+function NavLinkAnchor({ href, children }: { href: string; children: ReactNode }) {
   const NavLink = useNavigationLink();
   if (NavLink) {
     return (
-      <NavLink href={href} style={style}>
+      <NavLink href={href} className="ds-data-terminal-card__link">
         {children}
       </NavLink>
     );
   }
   return (
-    <a href={href} style={style}>
+    <a href={href} className="ds-data-terminal-card__link">
       {children}
     </a>
   );
@@ -151,41 +160,17 @@ function getProgressColor(progress: number): string {
   return DS.error;
 }
 
-// Live indicator component (the pulse/ring animation is skin-owned)
+// Live indicator component (the pulse/ring animation and all geometry are
+// skin-owned; only the caller-passed ring colour rides an inline hatch)
 function LiveIndicator({ color = DS.success }: { color?: string }) {
   const { tOr } = useDtcTranslation();
   return (
     <Flex align="center" gap={6} style={{ '--ds-dtc-live': color } as CSSProperties}>
-      <Box
-        style={{
-          position: 'relative',
-          width: 6,
-          height: 6,
-        }}
-      >
-        <Box
-          data-part="live-pulse-ring"
-          style={{
-            position: 'absolute',
-            inset: 0,
-          }}
-        />
-        <Box
-          data-part="live-ring"
-          style={{
-            position: 'absolute',
-            inset: 0,
-          }}
-        />
+      <Box data-part="live-dot">
+        <Box data-part="live-pulse-ring" />
+        <Box data-part="live-ring" />
       </Box>
-      <Text
-        data-part="live-label"
-        style={{
-          fontSize: 9,
-          fontFamily: 'monospace',
-          letterSpacing: '0.05em',
-        }}
-      >
+      <Text data-part="live-label">
         {tOr('dataTerminalCard.live', 'LIVE')}
       </Text>
     </Flex>
@@ -193,9 +178,8 @@ function LiveIndicator({ color = DS.success }: { color?: string }) {
 }
 
 // Activity indicator - simulates data activity (DECORATIVE, see header debts)
-// Heights are stable across renders to avoid impure Math.random() during render
-const ACTIVITY_BAR_HEIGHTS = [12, 9, 15, 10, 14];
-
+// Per-bar heights are skin-owned (keyed on data-bar-index); heights are stable
+// across renders to avoid impure Math.random() during render.
 function ActivityIndicator() {
   return (
     <Flex align="center" gap={2}>
@@ -203,9 +187,8 @@ function ActivityIndicator() {
         <Box
           key={i}
           data-part="activity-bar"
+          data-bar-index={i}
           style={{
-            width: 2,
-            height: ACTIVITY_BAR_HEIGHTS[i],
             /* Only the runtime stagger stays inline; the cadence is skin-owned. */
             animationDelay: `${i * 0.15}s`,
           }}
@@ -225,30 +208,17 @@ function QuickAction({ icon: Icon, label }: { icon: DataTerminalIcon; label: str
         e.preventDefault();
         e.stopPropagation();
       }}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 4,
-        padding: '5px 10px',
-        cursor: 'pointer',
-      }}
     >
-      <Icon data-part="quick-action-icon" style={{ width: 11, height: 11 }} />
-      <Text
-        data-part="quick-action-label"
-        style={{
-          fontSize: 9,
-          fontFamily: 'monospace',
-          letterSpacing: '0.05em',
-        }}
-      >
+      <Icon data-part="quick-action-icon" />
+      <Text data-part="quick-action-label">
         {label}
       </Text>
     </Box>
   );
 }
 
-// Progress bar component (motion is skin-owned; width stays inline as data)
+// Progress bar component (motion + static geometry are skin-owned; the
+// `height` prop, the radius hatch and the fill width stay inline as data)
 function ProgressBar({ progress, height = 4 }: { progress: number; height?: number }) {
   // Radius is `height / 2` — computed from a runtime prop, so it rides a
   // custom-property hatch the track sets and both track + fill read.
@@ -258,7 +228,6 @@ function ProgressBar({ progress, height = 4 }: { progress: number; height?: numb
       style={
         {
           height,
-          overflow: 'hidden',
           '--ds-dtc-radius': `${height / 2}px`,
         } as CSSProperties
       }
@@ -267,20 +236,11 @@ function ProgressBar({ progress, height = 4 }: { progress: number; height?: numb
         data-part="progress-fill"
         data-band={progress >= 80 ? 'high' : progress >= 50 ? 'mid' : 'low'}
         style={{
-          height: '100%',
           width: `${progress}%`,
-          position: 'relative',
-          overflow: 'hidden',
         }}
       >
         {/* Shimmer effect (motion is skin-owned) */}
-        <Box
-          data-part="progress-shimmer"
-          style={{
-            position: 'absolute',
-            inset: 0,
-          }}
-        />
+        <Box data-part="progress-shimmer" />
       </Box>
     </Box>
   );
@@ -289,16 +249,8 @@ function ProgressBar({ progress, height = 4 }: { progress: number; height?: numb
 // Stats item component for consistent layout
 function StatItem({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <Box data-part="stat-item" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      <Text
-        data-part="stat-item-label"
-        style={{
-          fontSize: 9,
-          fontFamily: 'monospace',
-          letterSpacing: '0.08em',
-          display: 'block',
-        }}
-      >
+    <Box data-part="stat-item">
+      <Text data-part="stat-item-label">
         {label}
       </Text>
       <Box>{children}</Box>
@@ -323,163 +275,89 @@ function CommandCard({
   const isPositive = trend === 'up';
 
   return (
-    <NavLinkAnchor href={path} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+    <NavLinkAnchor href={path}>
       <Box
         className="ds-data-terminal-card"
         data-part="root"
         data-variant="1"
         data-trend={trend}
         data-band={progress >= 80 ? 'high' : progress >= 50 ? 'mid' : 'low'}
-        style={{
-          position: 'relative',
-          height: '100%',
-          minHeight: 240,
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-        }}
       >
         {/* Terminal header */}
-        <Box
-          data-part="terminal-bar"
-          style={{
-            padding: '8px 14px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
+        <Box data-part="terminal-bar">
           <Flex align="center" gap={10}>
             <Flex gap={5}>
-              <Box data-part="terminal-dot" style={{ width: 10, height: 10, opacity: 0.8 }} />
-              <Box data-part="terminal-dot" style={{ width: 10, height: 10, opacity: 0.8 }} />
-              <Box data-part="terminal-dot" style={{ width: 10, height: 10, opacity: 0.8 }} />
+              <Box data-part="terminal-dot" />
+              <Box data-part="terminal-dot" />
+              <Box data-part="terminal-dot" />
             </Flex>
-            <Text data-part="terminal-filename" style={{ fontSize: 11, fontFamily: 'monospace' }}>
+            <Text data-part="terminal-filename">
               {label.toLowerCase().replace(/\s+/g, '_')}.sys
             </Text>
           </Flex>
           <Flex align="center" gap={8}>
             <ActivityIndicator />
-            <Box
-              data-part="heartbeat-dot"
-              style={{
-                width: 8,
-                height: 8,
-              }}
-            />
+            <Box data-part="heartbeat-dot" />
           </Flex>
         </Box>
 
         {/* Content */}
-        <Box
-          style={{
-            flex: 1,
-            padding: 16,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
+        <Box data-part="content">
           {/* Command prompt header */}
-          <Box data-part="prompt-header" style={{ paddingBottom: 12, marginBottom: 16 }}>
+          <Box data-part="prompt-header">
             <Flex align="center" gap={8}>
-              <Text data-part="prompt-symbol" style={{ fontSize: 12, fontFamily: 'monospace' }}>
+              <Text data-part="prompt-symbol">
                 $
               </Text>
-              <Icon data-part="prompt-icon" style={{ width: 14, height: 14 }} />
-              <Text
-                data-part="prompt-label"
-                style={{
-                  fontSize: 12,
-                  fontFamily: 'monospace',
-                  letterSpacing: '0.05em',
-                }}
-              >
+              <Icon data-part="prompt-icon" />
+              <Text data-part="prompt-label">
                 {label.toUpperCase()}
               </Text>
-              <Box
-                data-part="cursor"
-                style={{
-                  width: 8,
-                  height: 2,
-                }}
-              />
+              <Box data-part="cursor" />
             </Flex>
           </Box>
 
           {/* Main value section */}
-          <Box style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-            <Text
-              data-part="value"
-              style={{
-                fontSize: 56,
-                fontWeight: 900,
-                fontFamily: 'monospace',
-                lineHeight: 1,
-                letterSpacing: '-0.02em',
-              }}
-            >
+          <Box data-part="value-section">
+            <Text data-part="value">
               {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
           </Box>
 
           {/* Stats grid - well segmented */}
-          <Box
-            data-part="stats-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr 1fr',
-              gap: 16,
-              padding: '14px 0',
-              marginTop: 12,
-            }}
-          >
+          <Box data-part="stats-grid">
             <StatItem label={tOr('dataTerminalCard.statChange', 'CHANGE')}>
               <Flex align="center" gap={4}>
                 {isPositive ? (
-                  <TrendingUp data-part="trend-icon" style={{ width: 14, height: 14 }} />
+                  <TrendingUp data-part="trend-icon" />
                 ) : (
-                  <TrendingDown data-part="trend-icon" style={{ width: 14, height: 14 }} />
+                  <TrendingDown data-part="trend-icon" />
                 )}
-                <Text
-                  data-part="change-value"
-                  style={{
-                    fontSize: 14,
-                    fontWeight: 700,
-                    fontFamily: 'monospace',
-                  }}
-                >
+                <Text data-part="change-value">
                   {change || '--'}
                 </Text>
               </Flex>
             </StatItem>
             <StatItem label={tOr('dataTerminalCard.statPeriod', 'PERIOD')}>
-              <Text data-part="period-value" style={{ fontSize: 12, fontFamily: 'monospace' }}>
+              <Text data-part="period-value">
                 {subtitle || tOr('dataTerminalCard.periodDefaultWeek', 'This week')}
               </Text>
             </StatItem>
             <StatItem label={tOr('dataTerminalCard.statTarget', 'TARGET')}>
-              <Text
-                data-part="target-value"
-                style={{
-                  fontSize: 14,
-                  fontWeight: 700,
-                  fontFamily: 'monospace',
-                }}
-              >
+              <Text data-part="target-value">
                 {progress}%
               </Text>
             </StatItem>
           </Box>
 
           {/* Progress bar section */}
-          <Box style={{ paddingTop: 12 }}>
+          <Box data-part="progress-section">
             <ProgressBar progress={progress} height={5} />
           </Box>
         </Box>
 
         {/* Actions footer (DEAD affordances — contract gap, see header) */}
-        <Box data-part="actions-footer" style={{ padding: '10px 14px' }}>
+        <Box data-part="actions-footer">
           <Flex gap={8}>
             <QuickAction icon={Eye} label={tOr('dataTerminalCard.actionView', 'VIEW')} />
             <QuickAction icon={Plus} label={tOr('dataTerminalCard.actionAdd', 'ADD')} />
@@ -514,158 +392,48 @@ function HUDCard({
         : tOr('dataTerminalCard.statusAttention', 'ATTENTION');
 
   return (
-    <NavLinkAnchor href={path} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+    <NavLinkAnchor href={path}>
       <Box
         className="ds-data-terminal-card"
         data-part="root"
         data-variant="2"
         data-trend={trend}
         data-band={progress >= 80 ? 'high' : progress >= 50 ? 'mid' : 'low'}
-        style={{
-          position: 'relative',
-          height: '100%',
-          minHeight: 240,
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-        }}
       >
         {/* Grid texture (motion is skin-owned) */}
-        <Box
-          data-part="grid-texture"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            opacity: 0.25,
-            pointerEvents: 'none',
-          }}
-        />
+        <Box data-part="grid-texture" />
 
         {/* Scan line (motion is skin-owned) */}
-        <Box
-          data-part="scan-line"
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            height: 50,
-            pointerEvents: 'none',
-          }}
-        />
+        <Box data-part="scan-line" />
 
         {/* Corner brackets (motion is skin-owned) */}
-        <Box
-          data-part="corner-bracket"
-          style={{
-            position: 'absolute',
-            top: 10,
-            left: 10,
-            width: 18,
-            height: 18,
-          }}
-        />
-        <Box
-          data-part="corner-bracket"
-          style={{
-            position: 'absolute',
-            top: 10,
-            right: 10,
-            width: 18,
-            height: 18,
-          }}
-        />
-        <Box
-          data-part="corner-bracket"
-          style={{
-            position: 'absolute',
-            bottom: 10,
-            left: 10,
-            width: 18,
-            height: 18,
-          }}
-        />
-        <Box
-          data-part="corner-bracket"
-          style={{
-            position: 'absolute',
-            bottom: 10,
-            right: 10,
-            width: 18,
-            height: 18,
-          }}
-        />
+        <Box data-part="corner-bracket" />
+        <Box data-part="corner-bracket" />
+        <Box data-part="corner-bracket" />
+        <Box data-part="corner-bracket" />
 
         {/* Content */}
-        <Box
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            flex: 1,
-            padding: 20,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
+        <Box data-part="content">
           {/* Header section */}
-          <Box data-part="section-divider" style={{ paddingBottom: 14 }}>
+          <Box data-part="section-divider">
             <Flex align="start" justify="between">
               <Flex align="center" gap={12}>
-                <Box
-                  data-part="header-icon-box"
-                  style={{
-                    width: 36,
-                    height: 36,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Icon data-part="header-icon" style={{ width: 18, height: 18 }} />
+                <Box data-part="header-icon-box">
+                  <Icon data-part="header-icon" />
                 </Box>
                 <Box>
-                  <Text
-                    data-part="tracking-label"
-                    style={{
-                      fontSize: 9,
-                      fontFamily: 'monospace',
-                      letterSpacing: '0.15em',
-                      marginBottom: 4,
-                      display: 'block',
-                    }}
-                  >
+                  <Text data-part="tracking-label">
                     {tOr('dataTerminalCard.tracking', 'TRACKING')}
                   </Text>
-                  <Text
-                    data-part="header-label"
-                    style={{
-                      fontSize: 13,
-                      fontFamily: 'monospace',
-                      fontWeight: 700,
-                      display: 'block',
-                    }}
-                  >
+                  <Text data-part="header-label">
                     {label.toUpperCase()}
                   </Text>
                 </Box>
               </Flex>
-              <Box data-part="status-badge" style={{ padding: '4px 10px' }}>
+              <Box data-part="status-badge">
                 <Flex align="center" gap={6}>
-                  <Box
-                    data-part="status-dot"
-                    style={{
-                      width: 6,
-                      height: 6,
-                    }}
-                  />
-                  <Text
-                    data-part="status-label"
-                    style={{
-                      fontSize: 9,
-                      fontFamily: 'monospace',
-                      fontWeight: 700,
-                      letterSpacing: '0.05em',
-                    }}
-                  >
+                  <Box data-part="status-dot" />
+                  <Text data-part="status-label">
                     {statusLabel}
                   </Text>
                 </Flex>
@@ -674,103 +442,49 @@ function HUDCard({
           </Box>
 
           {/* Main value section */}
-          <Box
-            style={{
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '20px 0',
-            }}
-          >
-            <Text
-              data-part="value"
-              style={{
-                fontSize: 64,
-                fontWeight: 900,
-                fontFamily: 'monospace',
-                lineHeight: 1,
-              }}
-            >
+          <Box data-part="value-section">
+            <Text data-part="value">
               {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
-            <Flex align="center" gap={12} style={{ marginTop: 16 }}>
-              <Box data-part="trend-badge" style={{ padding: '6px 12px' }}>
+            <Flex align="center" gap={12} data-part="trend-row">
+              <Box data-part="trend-badge">
                 <Flex align="center" gap={6}>
                   {isPositive ? (
-                    <TrendingUp data-part="trend-icon" style={{ width: 14, height: 14 }} />
+                    <TrendingUp data-part="trend-icon" />
                   ) : (
-                    <TrendingDown data-part="trend-icon" style={{ width: 14, height: 14 }} />
+                    <TrendingDown data-part="trend-icon" />
                   )}
-                  <Text
-                    data-part="change-value"
-                    style={{
-                      fontSize: 13,
-                      fontWeight: 700,
-                      fontFamily: 'monospace',
-                    }}
-                  >
+                  <Text data-part="change-value">
                     {change || '--'}
                   </Text>
                 </Flex>
               </Box>
-              <Text data-part="period-value" style={{ fontSize: 12, fontFamily: 'monospace' }}>
+              <Text data-part="period-value">
                 {subtitle || tOr('dataTerminalCard.periodDefaultPeriod', 'this period')}
               </Text>
             </Flex>
           </Box>
 
           {/* Bottom stats section */}
-          <Box data-part="stats-panel" style={{ padding: '14px 16px' }}>
+          <Box data-part="stats-panel">
             <Flex align="center" justify="between">
               <Box>
-                <Text
-                  data-part="completion-label"
-                  style={{
-                    fontSize: 9,
-                    fontFamily: 'monospace',
-                    letterSpacing: '0.1em',
-                    display: 'block',
-                    marginBottom: 6,
-                  }}
-                >
+                <Text data-part="completion-label">
                   {tOr('dataTerminalCard.completion', 'COMPLETION')}
                 </Text>
-                <Text
-                  data-part="completion-value"
-                  style={{
-                    fontSize: 18,
-                    fontFamily: 'monospace',
-                    fontWeight: 700,
-                    display: 'block',
-                  }}
-                >
+                <Text data-part="completion-value">
                   {progress}%
                 </Text>
               </Box>
-              <Box style={{ flex: 1, maxWidth: 120, margin: '0 20px' }}>
+              <Box data-part="progress-slot">
                 <ProgressBar progress={progress} height={6} />
               </Box>
               <Flex align="center" gap={8}>
-                <Activity
-                  data-part="details-icon"
-                  style={{
-                    width: 14,
-                    height: 14,
-                  }}
-                />
-                <Text
-                  data-part="details-label"
-                  style={{
-                    fontSize: 11,
-                    fontFamily: 'monospace',
-                    letterSpacing: '0.05em',
-                  }}
-                >
+                <Activity data-part="details-icon" />
+                <Text data-part="details-label">
                   {tOr('dataTerminalCard.details', 'DETAILS')}
                 </Text>
-                <ArrowRight data-part="details-arrow" style={{ width: 12, height: 12 }} />
+                <ArrowRight data-part="details-arrow" />
               </Flex>
             </Flex>
           </Box>
@@ -798,138 +512,40 @@ function CircuitCard({
   const progressColor = getProgressColor(progress);
 
   return (
-    <NavLinkAnchor href={path} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+    <NavLinkAnchor href={path}>
       <Box
         className="ds-data-terminal-card"
         data-part="root"
         data-variant="3"
         data-trend={trend}
         data-band={progress >= 80 ? 'high' : progress >= 50 ? 'mid' : 'low'}
-        style={{
-          position: 'relative',
-          height: '100%',
-          minHeight: 240,
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-        }}
       >
         {/* Circuit pattern */}
-        <Box
-          data-part="circuit-pattern"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            opacity: 0.12,
-            pointerEvents: 'none',
-          }}
-        />
+        <Box data-part="circuit-pattern" />
 
         {/* Data flow line (motion is skin-owned) */}
-        <Box
-          data-part="flow-line"
-          style={{
-            position: 'absolute',
-            top: '40%',
-            left: 0,
-            width: 60,
-            height: 2,
-            pointerEvents: 'none',
-          }}
-        />
+        <Box data-part="flow-line" />
 
         {/* Node indicators (motion is skin-owned) */}
-        <Box
-          data-part="node-dot"
-          style={{
-            position: 'absolute',
-            top: 12,
-            left: 12,
-            width: 10,
-            height: 10,
-          }}
-        />
-        <Box
-          data-part="node-dot-live"
-          style={{
-            position: 'absolute',
-            top: 12,
-            right: 12,
-            width: 10,
-            height: 10,
-          }}
-        />
-        <Box
-          data-part="node-dot"
-          style={{
-            position: 'absolute',
-            bottom: 12,
-            left: 12,
-            width: 10,
-            height: 10,
-          }}
-        />
-        <Box
-          data-part="node-dot"
-          style={{
-            position: 'absolute',
-            bottom: 12,
-            right: 12,
-            width: 10,
-            height: 10,
-          }}
-        />
+        <Box data-part="node-dot" />
+        <Box data-part="node-dot-live" />
+        <Box data-part="node-dot" />
+        <Box data-part="node-dot" />
 
         {/* Content */}
-        <Box
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            flex: 1,
-            padding: 16,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
+        <Box data-part="content">
           {/* Header section */}
-          <Box data-part="section-divider" style={{ paddingBottom: 12 }}>
+          <Box data-part="section-divider">
             <Flex align="center" justify="between">
               <Flex align="center" gap={10}>
-                <Box
-                  data-part="header-icon-box"
-                  style={{
-                    width: 28,
-                    height: 28,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Icon data-part="header-icon" style={{ width: 14, height: 14 }} />
+                <Box data-part="header-icon-box">
+                  <Icon data-part="header-icon" />
                 </Box>
                 <Box>
-                  <Text
-                    data-part="metric-label"
-                    style={{
-                      fontSize: 9,
-                      fontFamily: 'monospace',
-                      letterSpacing: '0.1em',
-                      display: 'block',
-                      marginBottom: 2,
-                    }}
-                  >
+                  <Text data-part="metric-label">
                     {tOr('dataTerminalCard.metric', 'METRIC')}
                   </Text>
-                  <Text
-                    data-part="header-label"
-                    style={{
-                      fontSize: 12,
-                      fontFamily: 'monospace',
-                      fontWeight: 600,
-                      letterSpacing: '0.05em',
-                      display: 'block',
-                    }}
-                  >
+                  <Text data-part="header-label">
                     {label.toUpperCase()}
                   </Text>
                 </Box>
@@ -942,77 +558,40 @@ function CircuitCard({
           </Box>
 
           {/* Main value section */}
-          <Box
-            style={{
-              flex: 1,
-              display: 'flex',
-              alignItems: 'center',
-              padding: '16px 0',
-            }}
-          >
-            <Text
-              data-part="value"
-              style={{
-                fontSize: 56,
-                fontWeight: 900,
-                fontFamily: 'monospace',
-                lineHeight: 1,
-              }}
-            >
+          <Box data-part="value-section">
+            <Text data-part="value">
               {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
           </Box>
 
           {/* Stats grid section */}
-          <Box
-            data-part="stats-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr 1fr',
-              gap: 12,
-              padding: '12px 0',
-            }}
-          >
+          <Box data-part="stats-grid">
             <StatItem label={tOr('dataTerminalCard.statChange', 'CHANGE')}>
               <Flex align="center" gap={4}>
                 {isPositive ? (
-                  <TrendingUp data-part="trend-icon" style={{ width: 14, height: 14 }} />
+                  <TrendingUp data-part="trend-icon" />
                 ) : (
-                  <TrendingDown data-part="trend-icon" style={{ width: 14, height: 14 }} />
+                  <TrendingDown data-part="trend-icon" />
                 )}
-                <Text
-                  data-part="change-value"
-                  style={{
-                    fontSize: 14,
-                    fontWeight: 700,
-                    fontFamily: 'monospace',
-                  }}
-                >
+                <Text data-part="change-value">
                   {change || '--'}
                 </Text>
               </Flex>
             </StatItem>
             <StatItem label={tOr('dataTerminalCard.statPeriod', 'PERIOD')}>
-              <Text data-part="period-value" style={{ fontSize: 12, fontFamily: 'monospace' }}>
+              <Text data-part="period-value">
                 {subtitle || tOr('dataTerminalCard.periodDefaultWeek', 'This week')}
               </Text>
             </StatItem>
             <StatItem label={tOr('dataTerminalCard.statTarget', 'TARGET')}>
-              <Text
-                data-part="target-value"
-                style={{
-                  fontSize: 14,
-                  fontWeight: 700,
-                  fontFamily: 'monospace',
-                }}
-              >
+              <Text data-part="target-value">
                 {progress}%
               </Text>
             </StatItem>
           </Box>
 
           {/* Progress section */}
-          <Box style={{ padding: '12px 0' }}>
+          <Box data-part="progress-section">
             <ProgressBar progress={progress} height={5} />
           </Box>
 
@@ -1044,83 +623,31 @@ function MatrixCard({
   const isPositive = trend === 'up';
 
   return (
-    <NavLinkAnchor href={path} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+    <NavLinkAnchor href={path}>
       <Box
         className="ds-data-terminal-card"
         data-part="root"
         data-variant="4"
         data-trend={trend}
         data-band={progress >= 80 ? 'high' : progress >= 50 ? 'mid' : 'low'}
-        style={{
-          position: 'relative',
-          height: '100%',
-          minHeight: 240,
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-        }}
       >
         {/* Dot matrix texture (motion is skin-owned) */}
-        <Box
-          data-part="matrix-texture"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            opacity: 0.35,
-            pointerEvents: 'none',
-          }}
-        />
+        <Box data-part="matrix-texture" />
 
         {/* Content */}
-        <Box
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            flex: 1,
-            padding: 16,
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
+        <Box data-part="content">
           {/* Header section */}
-          <Box data-part="section-divider" style={{ paddingBottom: 12 }}>
+          <Box data-part="section-divider">
             <Flex align="center" justify="between">
               <Flex align="center" gap={10}>
-                <Box
-                  data-part="header-icon-box"
-                  style={{
-                    width: 30,
-                    height: 30,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Icon data-part="header-icon" style={{ width: 14, height: 14 }} />
+                <Box data-part="header-icon-box">
+                  <Icon data-part="header-icon" />
                 </Box>
                 <Box>
-                  <Text
-                    data-part="datapoint-label"
-                    style={{
-                      fontSize: 9,
-                      fontFamily: 'monospace',
-                      letterSpacing: '0.1em',
-                      display: 'block',
-                      marginBottom: 2,
-                    }}
-                  >
+                  <Text data-part="datapoint-label">
                     {tOr('dataTerminalCard.dataPoint', 'DATA POINT')}
                   </Text>
-                  <Text
-                    data-part="header-label"
-                    style={{
-                      fontSize: 12,
-                      fontFamily: 'monospace',
-                      fontWeight: 600,
-                      letterSpacing: '0.05em',
-                      display: 'block',
-                    }}
-                  >
+                  <Text data-part="header-label">
                     {label.toUpperCase()}
                   </Text>
                 </Box>
@@ -1130,97 +657,51 @@ function MatrixCard({
           </Box>
 
           {/* Main value section */}
-          <Box
-            style={{
-              flex: 1,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '20px 0',
-            }}
-          >
-            <Text
-              data-part="value"
-              style={{
-                fontSize: 68,
-                fontWeight: 900,
-                fontFamily: 'monospace',
-                lineHeight: 1,
-                letterSpacing: '-0.03em',
-              }}
-            >
+          <Box data-part="value-section">
+            <Text data-part="value">
               {typeof value === 'number' ? value.toLocaleString(locale) : value}
             </Text>
           </Box>
 
           {/* Stats grid section */}
-          <Box
-            data-part="stats-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr 1fr',
-              gap: 12,
-              padding: '12px 0',
-            }}
-          >
+          <Box data-part="stats-grid">
             <StatItem label={tOr('dataTerminalCard.statChange', 'CHANGE')}>
               <Flex align="center" gap={4}>
                 {isPositive ? (
-                  <TrendingUp data-part="trend-icon" style={{ width: 12, height: 12 }} />
+                  <TrendingUp data-part="trend-icon" />
                 ) : (
-                  <TrendingDown data-part="trend-icon" style={{ width: 12, height: 12 }} />
+                  <TrendingDown data-part="trend-icon" />
                 )}
-                <Text
-                  data-part="change-value"
-                  style={{
-                    fontSize: 13,
-                    fontWeight: 700,
-                    fontFamily: 'monospace',
-                  }}
-                >
+                <Text data-part="change-value">
                   {change || '--'}
                 </Text>
               </Flex>
             </StatItem>
             <StatItem label={tOr('dataTerminalCard.statPeriod', 'PERIOD')}>
-              <Text data-part="period-value" style={{ fontSize: 11, fontFamily: 'monospace' }}>
+              <Text data-part="period-value">
                 {subtitle || tOr('dataTerminalCard.periodDefaultWeek', 'This week')}
               </Text>
             </StatItem>
             <StatItem label={tOr('dataTerminalCard.statTarget', 'TARGET')}>
-              <Text
-                data-part="target-value"
-                style={{
-                  fontSize: 13,
-                  fontWeight: 700,
-                  fontFamily: 'monospace',
-                }}
-              >
+              <Text data-part="target-value">
                 {progress}%
               </Text>
             </StatItem>
           </Box>
 
           {/* Progress section */}
-          <Box data-part="progress-section" style={{ padding: '12px 0' }}>
+          <Box data-part="progress-section">
             <ProgressBar progress={progress} height={4} />
           </Box>
 
           {/* Footer section */}
-          <Flex align="center" justify="between" style={{ paddingTop: 12 }}>
+          <Flex align="center" justify="between" data-part="footer">
             <ActivityIndicator />
             <Flex align="center" gap={6}>
-              <Text
-                data-part="details-label"
-                style={{
-                  fontSize: 10,
-                  fontFamily: 'monospace',
-                  letterSpacing: '0.05em',
-                }}
-              >
+              <Text data-part="details-label">
                 {tOr('dataTerminalCard.viewDetails', 'VIEW DETAILS')}
               </Text>
-              <ArrowRight data-part="details-arrow" style={{ width: 12, height: 12 }} />
+              <ArrowRight data-part="details-arrow" />
             </Flex>
           </Flex>
         </Box>
@@ -1291,62 +772,29 @@ export function DataTerminalStat({
       data-part="root"
       data-trend={trend}
       data-band={progress >= 80 ? 'high' : progress >= 50 ? 'mid' : 'low'}
-      style={{
-        position: 'relative',
-        padding: 14,
-        height: '100%',
-        minHeight: 120,
-        display: 'flex',
-        flexDirection: 'column',
-      }}
     >
-      <Box data-part="corner-bracket" style={{ position: 'absolute', top: 0, left: 0, width: 10, height: 10 }} />
-      <Box
-        data-part="corner-bracket"
-        style={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          width: 10,
-          height: 10,
-        }}
-      />
+      <Box data-part="corner-bracket" />
+      <Box data-part="corner-bracket" />
 
-      <Flex align="center" gap={6} style={{ marginBottom: 6 }}>
-        <Icon data-part="stat-icon" style={{ width: 12, height: 12 }} />
-        <Text
-          data-part="stat-label"
-          style={{
-            fontSize: 9,
-            fontWeight: 600,
-            fontFamily: 'monospace',
-            letterSpacing: '0.1em',
-          }}
-        >
+      <Flex align="center" gap={6} data-part="stat-header">
+        <Icon data-part="stat-icon" />
+        <Text data-part="stat-label">
           {label.toUpperCase()}
         </Text>
       </Flex>
 
-      <Box style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+      <Box data-part="value-section">
         <Flex align="baseline" gap={6}>
-          <Text
-            data-part="value"
-            style={{
-              fontSize: 28,
-              fontWeight: 800,
-              fontFamily: 'monospace',
-              lineHeight: 1,
-            }}
-          >
+          <Text data-part="value">
             {typeof value === 'number' ? value.toLocaleString(locale) : value}
           </Text>
           <Flex align="center" gap={3}>
             {isPositive ? (
-              <TrendingUp data-part="trend-icon" style={{ width: 10, height: 10 }} />
+              <TrendingUp data-part="trend-icon" />
             ) : (
-              <TrendingDown data-part="trend-icon" style={{ width: 10, height: 10 }} />
+              <TrendingDown data-part="trend-icon" />
             )}
-            <Text data-part="change-value" style={{ fontSize: 11, fontWeight: 700, fontFamily: 'monospace' }}>
+            <Text data-part="change-value">
               {change || '--'}
             </Text>
           </Flex>

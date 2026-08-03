@@ -5,19 +5,19 @@
  * density control, view mode toggle, and settings dropdown.
  */
 
-import type { ReactNode } from "react";
-import type { PatternBaseProps } from "../../../../../foundation/contracts/runtime/components/patterns/core";
+import type { ReactNode } from 'react';
+import type { PatternBaseProps } from '../../../../../foundation/contracts/runtime/components/patterns/core';
 import type {
   DensityKey,
   FilterPillConfig,
   ViewMode,
-} from "@/foundation/contracts/runtime/components/patterns/data";
+} from '@/foundation/contracts/runtime/components/patterns/data';
 
 export type {
   DensityKey,
   FilterPillConfig,
   ViewMode,
-} from "@/foundation/contracts/runtime/components/patterns/data";
+} from '@/foundation/contracts/runtime/components/patterns/data';
 
 /** Localizable copy owned by the toolbar chrome, rather than by its data. */
 export interface ListToolbarMessages {
@@ -73,7 +73,7 @@ export interface ListToolbarProps extends PatternBaseProps {
   /** Search value change handler */
   onSearchChange: (value: string) => void;
   /** Placeholder for the search input. Defaults to the i18n catalog value
-   * `components.listToolbar.searchPlaceholder` (English floor: "Search..."). */
+   * `components.listToolbar.searchPlaceholder` (English floor: 'Search...'). */
   searchPlaceholder?: string;
   /** Localized toolbar chrome. Defaults preserve the historical English copy.
    * In the modern engine each entry resolves through the i18n catalogs

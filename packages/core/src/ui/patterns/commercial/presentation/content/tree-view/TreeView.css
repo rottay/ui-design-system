@@ -21,7 +21,9 @@
   display: block;
   font-family: var(--ds-commercial-font-mono);
   font-size: 0.875rem;
-  line-height: 1.7;
+  /* Row rhythm is private to this ASCII tree grammar. Unitless, so it scales
+     with any type size inherited by the pattern. */
+  line-height: var(--_ds-tree-view-row-rhythm, 1.7);
   color: var(--ds-commercial-fg);
 }
 
@@ -43,21 +45,36 @@
 }
 
 .rt-tree-view__label {
+  min-inline-size: 0;
   color: var(--ds-commercial-fg);
+  /* Long labels (deep paths, long translations) wrap under the label column instead of
+     overflowing the tree; the flex row keeps continuation lines aligned past the connector. */
+  overflow-wrap: anywhere;
 }
 
 .rt-tree-view__link {
   color: inherit;
   text-decoration: none;
-  border-bottom: 1px solid var(--ds-commercial-hairline);
+  border-block-end: 1px solid var(--ds-commercial-hairline);
+  /* Hover micro-state per motion law (spec section 6): a 120ms luminance step on the Quiet
+     Premium canon, never a raw duration. */
+  transition: border-color var(--ds-commercial-motion-fast) var(--ds-commercial-motion-ease);
 }
 
-.rt-tree-view__link:hover {
-  border-bottom-color: var(--ds-commercial-fg);
+@media (hover: hover) {
+  .rt-tree-view__link:hover {
+    border-block-end-color: var(--ds-commercial-fg);
+  }
 }
 
 .rt-tree-view__link:focus-visible {
   outline: var(--ds-commercial-focus-ring-width) solid var(--ds-commercial-fg);
   outline-offset: 2px;
-  border-bottom-color: transparent;
+  border-block-end-color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rt-tree-view__link {
+    transition: none;
+  }
 }

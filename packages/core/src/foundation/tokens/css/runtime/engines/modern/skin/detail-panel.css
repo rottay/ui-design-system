@@ -43,6 +43,32 @@
  * drained: tab geometry, breadcrumbs, headings, header/footer layout and the
  * body/sidebar flex contract -- the last inline layout is the sidebar's
  * runtime width channel).
+ *
+ * PREMIUM SOCKETS (2026-08-02 worklist schemaVersion 3, workspace-card
+ * family): every slot rides the sanctioned `var(--ds-workspace-card-<slot>,
+ * <what the region paints today>)` mechanic -- zero-delta by construction
+ * while the channel stays unauthored (the A-row channels are undeclared in
+ * every shipped bundle), live the moment a brand authors it. The
+ * workspace-card regions of this pattern are `tab-panel` and `sidebar` (the
+ * parts that already read `--ds-workspace-card-bg/-border/-radius/-shadow`);
+ * they host min-height, glass-bg, sheen (transparent inset tier), depth
+ * (tier over the shadow chain), transition, the grid motif (`::before`,
+ * transparent lines + `--ds-surface-card-grid-size` chain while unset) and
+ * the overlay wash (`::after`, `none` while unset), plus the authorized
+ * B-row hover pair (bg-hover, hover-transform, BitHire-only channels, hover
+ * guard + reduced-motion twin). `position: relative` on both regions is the
+ * motif-layer anchor (page-shell idiom); it paints nothing by itself.
+ * `action-bg`/`action-border` tier over the pattern-owned `actions` toolbar
+ * (the only action chrome this pattern paints -- the buttons themselves are
+ * the certified Button primitive, off-limits by pattern law). `footer-border`
+ * (B-row, BitHire #E3EAF0) tiers over the footer's existing block-start
+ * border. `selected-*` stays unlit: no workspace-card region carries a
+ * selected state -- the only selection here is the tab-list's active tab,
+ * owned by the pinned `ds-tabs-*` anatomy. `meter-*`, `number-*` and
+ * `value-color-hover` stay unlit: the panel's content areas are opaque
+ * consumer ReactNodes, there is no meter/number/value region to host them
+ * and minting an empty one is dishonest (metrics-cards `action-*`
+ * precedent) -- BLOCKED(owner: Codex) in the roadmap.
  */
 
 /* ---- root: card surface + radius (was containerStyle) ---- */
@@ -166,10 +192,22 @@
   gap: var(--ds-detail-panel-item-gap);
   min-block-size: calc(var(--ds-control-height-sm, 32px) + 8px);
   padding: 3px;
-  border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));
+  border: 1px solid var(--ds-workspace-card-action-border, var(--ds-toolbar-border, var(--ds-color-border-primary)));
   border-radius: var(--ds-toolbar-radius, var(--ds-radius-lg));
-  background: color-mix(in srgb, var(--ds-toolbar-control-bg, var(--ds-surface-card)) 88%, transparent);
+  background: var(--ds-workspace-card-action-bg, color-mix(in srgb, var(--ds-toolbar-control-bg, var(--ds-surface-card)) 88%, transparent));
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);
+}
+
+/* ---- action-button / back-button wrappers: anatomy-only slots that must not
+        add a box (was the residual inline `display: contents` + `flexShrink`
+        pair, drained to keep all geometry in this skin). ---- */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'],
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='back-button'] {
+  display: contents;
+}
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='action-button'] > .rottay-button,
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='back-button'] > .rottay-button {
+  flex-shrink: 0;
 }
 
 /* ---- action-button: the pattern layers its OWN variant chrome ONLY where it
@@ -295,6 +333,25 @@
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:active:not([data-active='true']):not(:disabled) {
   color: var(--ds-tab-color-hover, var(--ds-color-text-primary));
   background: var(--ds-tab-bg-hover, color-mix(in srgb, var(--ds-color-bg-secondary) 82%, transparent));
+}
+
+/* Keyboard focus must read on EVERY tab, including the active one: roving
+   tabindex parks Tab on the active tab, which the :focus hover-mirror above
+   deliberately excludes — without this ring, focus on the only tabbable tab
+   was invisible in normal mode. */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button']:focus-visible {
+  box-shadow: var(
+    --ds-shadow-focus-ring,
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+  );
+}
+
+/* Coarse pointers: the pattern-owned tab chrome reaches the canonical touch
+   floor (C2c law; fine pointers keep the density-driven height). */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-button'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
 }
 
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-icon'] {
@@ -430,13 +487,22 @@
   box-shadow: inset 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
 }
 
+/* ---- tab-panel: a workspace-card region -- hosts the family's shell sockets
+        (min-height, glass-bg, sheen, depth, transition). `position: relative`
+        anchors the grid/overlay motif layers below; it paints nothing itself.
+        Every socket falls back to the exact value the region painted before. ---- */
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel'] {
+  position: relative;
   min-inline-size: 0;
+  min-block-size: var(--ds-workspace-card-min-height, 0px);
   padding: var(--ds-workspace-card-padding, var(--ds-spacing-4, 16px));
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
-  background: var(--ds-workspace-card-bg, var(--ds-surface-card));
-  box-shadow: var(--ds-workspace-card-shadow, var(--ds-elevation-1));
+  background: var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-card)));
+  box-shadow:
+    inset 0 1px 0 var(--ds-workspace-card-sheen, transparent),
+    var(--ds-workspace-card-depth, var(--ds-workspace-card-shadow, var(--ds-elevation-1)));
+  transition: var(--ds-workspace-card-transition, none);
 }
 
 /* ---- body / main / sidebar: the flex contract (was the inline layout the
@@ -463,13 +529,63 @@
   order: 1;
 }
 
-/* ---- sidebar panel ---- */
+/* ---- sidebar panel: the second workspace-card region -- same shell sockets
+        as tab-panel, with its own rest fallbacks (panel surface, no shadow). ---- */
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar'] {
+  position: relative;
+  min-block-size: var(--ds-workspace-card-min-height, 0px);
   padding: var(--ds-workspace-card-padding);
-  background: var(--ds-workspace-card-bg, var(--ds-surface-panel));
+  background: var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-panel)));
   border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border));
   border-radius: var(--ds-workspace-card-radius, var(--ds-radius-lg));
-  box-shadow: var(--ds-workspace-card-shadow, none);
+  box-shadow:
+    inset 0 1px 0 var(--ds-workspace-card-sheen, transparent),
+    var(--ds-workspace-card-depth, var(--ds-workspace-card-shadow, none));
+  transition: var(--ds-workspace-card-transition, none);
+}
+
+/* ---- workspace-card motif layers: grid rides ::before, the overlay wash
+        rides ::after (metrics-cards idiom). pointer-events: none; unset they
+        paint transparent lines / none, so the regions stay byte-identical
+        until a brand authors the channels. ---- */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel']::before,
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--ds-workspace-card-grid-line, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ds-workspace-card-grid-line, transparent) 1px, transparent 1px);
+  background-size: var(--ds-workspace-card-grid-size, var(--ds-surface-card-grid-size, 22px))
+    var(--ds-workspace-card-grid-size, var(--ds-surface-card-grid-size, 22px));
+}
+
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel']::after,
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: var(--ds-workspace-card-overlay, none);
+}
+
+/* ---- workspace-card hover pair (AUTHORIZED B rows): the bg-hover and
+        hover-transform channels are declared ONLY by the BitHire bundle, so
+        the hover paints a delta there and stays byte-identical (the fallback
+        arm is each region's own rest paint) in every other vertical. Hover
+        guard per house hover law; the reduced-motion twin lives below. ---- */
+@media (hover: hover) {
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel']:hover {
+    background: var(--ds-workspace-card-bg-hover, var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-card))));
+    transform: var(--ds-workspace-card-hover-transform, none);
+  }
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar']:hover {
+    background: var(--ds-workspace-card-bg-hover, var(--ds-workspace-card-glass-bg, var(--ds-workspace-card-bg, var(--ds-surface-panel))));
+    transform: var(--ds-workspace-card-hover-transform, none);
+  }
 }
 
 @container ds-detail (max-width: 720px) {
@@ -503,11 +619,13 @@
   }
 }
 
-/* ---- footer top border ---- */
+/* ---- footer top border: the footer-border channel (AUTHORIZED B row,
+        BitHire-only) tiers over the existing block-start border; unset it
+        resolves to exactly the color the footer painted before. ---- */
 .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='footer'] {
   margin-block-start: var(--ds-detail-panel-section-gap);
   padding-block-start: var(--ds-detail-panel-content-gap);
-  border-block-start: 1px solid var(--ds-color-border);
+  border-block-start: 1px solid var(--ds-workspace-card-footer-border, var(--ds-color-border));
 }
 
 /* ---- skeleton: the Skeleton PRIMITIVE owns shape, pulse and reduced-motion
@@ -570,6 +688,17 @@
   .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='header'] {
     animation: none;
     transition: none;
+  }
+
+  /* workspace-card regions: the transition socket and the hover-transform
+     twin stay neutralised here even when a brand authors the channels. */
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel'],
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar'] {
+    transition: none;
+  }
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='tab-panel']:hover,
+  .ds-pattern-detail-panel.ds-engine-modern[data-part='root'] [data-part='sidebar']:hover {
+    transform: none;
   }
 }
 

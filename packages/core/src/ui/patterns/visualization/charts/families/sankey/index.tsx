@@ -63,6 +63,7 @@ import type {
 } from '../../contracts';
 import { useChartPersonality } from '../../runtime';
 import { ChartScaffold, describeChart } from '../../presentation/scaffold';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 import {
   ChartImperativePlot,
   type ChartImperativePlotDraw,
@@ -510,6 +511,7 @@ function linkPath(
  * @returns A `ChartScaffold`-wrapped imperative plot with accessible summary table and optional legend.
  */
 export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
+  const i18n = useOptionalTranslation('components');
   const {
     nodes,
     links,
@@ -571,6 +573,10 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
   const safeLinks = validation.ok ? validation.links : [];
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const hasRenderableData = validation.ok && validation.nodes.length > 0;
+  const resolvedEmptyLabel =
+    emptyLabel ??
+    i18n?.tOr('chart.sankey_empty', 'No flow data to display.') ??
+    'No flow data to display.';
 
   // Accessibility summary table.
   const summary = {
@@ -644,19 +650,35 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
       .attr('stroke', (d) => d.color)
       .attr('stroke-opacity', linkOpacity)
       .attr('stroke-width', (d) => d.width)
+      // Links are keyboard-focusable flow regions: role/img with a composed
+      // label when passive, role/button when clickable.
+      .attr('tabindex', 0)
+      .attr('role', onLinkClick ? 'button' : 'img')
+      .attr('aria-label', (d) => `${d.sourceNode.label} -> ${d.targetNode.label}: ${fmt(d.value)}`)
       .style('cursor', onLinkClick ? 'pointer' : 'default');
 
-    // Hover interactions for links.
+    // Hover interactions for links; keyboard focus mirrors the same emphasis so
+    // the highlight is never pointer-only.
+    const emphasizeLink = function (this: SVGPathElement) {
+      select(this).attr('data-state', 'hovered').attr('stroke-opacity', linkHoverOpacity);
+    };
+    const resetLink = function (this: SVGPathElement) {
+      select(this).attr('data-state', 'idle').attr('stroke-opacity', linkOpacity);
+    };
     linkPaths
-      .on('mouseenter', function (_, d) {
-        select(this).attr('data-state', 'hovered').attr('stroke-opacity', linkHoverOpacity);
-      })
-      .on('mouseleave', function () {
-        select(this).attr('data-state', 'idle').attr('stroke-opacity', linkOpacity);
-      });
+      .on('mouseenter', emphasizeLink)
+      .on('mouseleave', resetLink)
+      .on('focus', emphasizeLink)
+      .on('blur', resetLink);
 
     if (onLinkClick) {
       linkPaths.on('click', (_, d) => onLinkClick(d.source));
+      linkPaths.on('keydown', (event: KeyboardEvent, d) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onLinkClick(d.source);
+        }
+      });
     }
 
     // Tooltip on links.
@@ -685,8 +707,6 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
         })
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'central')
-        .style('font-size', '10px')
-        .style('pointer-events', 'none')
         .text((d) => fmt(d.value));
     }
 
@@ -722,6 +742,11 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
       .attr('class', 'sankey-node')
       .attr('data-part', 'node')
       .attr('data-state', 'idle')
+      // Nodes are keyboard-focusable regions; connected-link highlighting
+      // mirrors on focus what the pointer gets on hover.
+      .attr('tabindex', 0)
+      .attr('role', onNodeClick ? 'button' : 'img')
+      .attr('aria-label', (d) => `${d.label}: ${fmt(d.value)}`)
       .style('cursor', onNodeClick ? 'pointer' : 'default');
 
     // Node rectangles.
@@ -736,24 +761,36 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
       .attr('rx', 2)
       .attr('ry', 2);
 
-    // Node hover: highlight connected links.
+    // Node hover/focus: highlight connected links. The same emphasis runs for
+    // pointer (mouseenter/mouseleave) and keyboard (focus/blur) so the
+    // connected-flow readout is never pointer-only.
+    const highlightNode = function (this: SVGGElement, _: unknown, d: LayoutNode) {
+      // Dim all links, then brighten connected ones.
+      linkPaths.attr('stroke-opacity', (ld) =>
+        ld.sourceNode.id === d.id || ld.targetNode.id === d.id
+          ? linkHoverOpacity
+          : linkOpacity * 0.3,
+      );
+      select(this).attr('data-state', 'hovered');
+    };
+    const resetNode = function (this: SVGGElement) {
+      linkPaths.attr('stroke-opacity', linkOpacity);
+      select(this).attr('data-state', 'idle');
+    };
     nodeElements
-      .on('mouseenter', function (_, d) {
-        // Dim all links, then brighten connected ones.
-        linkPaths.attr('stroke-opacity', (ld) =>
-          ld.sourceNode.id === d.id || ld.targetNode.id === d.id
-            ? linkHoverOpacity
-            : linkOpacity * 0.3,
-        );
-        select(this).attr('data-state', 'hovered');
-      })
-      .on('mouseleave', function () {
-        linkPaths.attr('stroke-opacity', linkOpacity);
-        select(this).attr('data-state', 'idle');
-      });
+      .on('mouseenter', highlightNode)
+      .on('mouseleave', resetNode)
+      .on('focus', highlightNode)
+      .on('blur', resetNode);
 
     if (onNodeClick) {
       nodeElements.on('click', (_, d) => onNodeClick(d.source));
+      nodeElements.on('keydown', (event: KeyboardEvent, d) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          onNodeClick(d.source);
+        }
+      });
     }
 
     // Node tooltips.
@@ -778,9 +815,6 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
           return d.depth === maxCol ? 'end' : 'start';
         })
         .attr('dominant-baseline', 'central')
-        .style('font-size', '12px')
-        .style('font-weight', '500')
-        .style('pointer-events', 'none')
         .text((d) => d.label);
 
       // Value beneath the label.
@@ -797,8 +831,6 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
           return d.depth === maxCol ? 'end' : 'start';
         })
         .attr('dominant-baseline', 'central')
-        .style('font-size', '10px')
-        .style('pointer-events', 'none')
         .text((d) => fmt(d.value));
     }
 
@@ -855,6 +887,9 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
     </div>
   ) : null;
 
+  // INVALID-DATA and inferred-empty semantics are visible, localized states.
+  // An empty imperative renderer without a companion message is a blank chart,
+  // not a usable state. Caller copy wins; the catalog supplies the floor.
   const fallbackNode = !validation.ok ? (
     <div
       role="status"
@@ -871,9 +906,8 @@ export const SankeyChart = memo(function SankeyChart(props: SankeyChartProps) {
       role="status"
       data-part="chart-fallback"
       data-state="empty"
-      style={{ padding: 16, textAlign: 'center' }}
     >
-      No flow data to display.
+      {resolvedEmptyLabel}
     </div>
   ) : null;
 

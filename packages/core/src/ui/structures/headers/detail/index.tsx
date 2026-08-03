@@ -44,7 +44,7 @@
 
 import { type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from 'react';
 
-import { ArrowLeftIcon } from '@/graphics/icons/presentation/catalog/navigation';
+import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import type { ComponentType } from 'react';
 type DetailHeaderIcon = ComponentType<any>;
 
@@ -171,8 +171,12 @@ export function DetailHeader({
             {renderHrefAnchor(
               backHref,
               <Flex data-part="back-button" align="center" gap={8}>
-                <ArrowLeftIcon data-part="back-icon" />
-                <Text data-part="back-label" size="xs">
+                {/* Governed semantic role (autoMirror: the arrow flips in
+                    RTL); the retired catalog ArrowLeftIcon carried no
+                    mirroring contract. The chip's visible label makes the
+                    glyph decorative. */}
+                <NavigationBackIcon data-part="back-icon" decorative size={14} />
+                <Text data-part="back-label" size="xs" color="secondary">
                   {resolvedBackLabel}
                 </Text>
               </Flex>,
@@ -219,7 +223,7 @@ export function DetailHeader({
 
             <Stack spacing="sm" style={{ minWidth: 0, flex: 1 }}>
               {eyebrow ? (
-                <Text data-part="eyebrow" size="xs" weight="bold">
+                <Text data-part="eyebrow" size="xs" weight="bold" color="subtle">
                   {eyebrow}
                 </Text>
               ) : null}
@@ -232,7 +236,7 @@ export function DetailHeader({
               </Flex>
 
               {subtitle ? (
-                <Text data-part="subtitle" size="sm">
+                <Text data-part="subtitle" size="sm" color="secondary">
                   {subtitle}
                 </Text>
               ) : null}
@@ -254,7 +258,7 @@ export function DetailHeader({
                     gap={8}
                   >
                     {item.icon ? <item.icon style={{ width: 14, height: 14 }} /> : null}
-                    <Text data-part="metadata-chip-label" size="xs" weight="bold">
+                    <Text data-part="metadata-chip-label" size="xs" weight="bold" color="subtle">
                       {item.label}
                     </Text>
                     <Text
@@ -339,12 +343,13 @@ export function DetailHeader({
                       data-active={isActive}
                       size="sm"
                       weight={isActive ? 'medium' : undefined}
+                      color={isActive ? undefined : 'secondary'}
                     >
                       {tab.label}
                     </Text>
                     {tab.count !== undefined ? (
                       <Box data-part="tab-count">
-                        <Text data-part="tab-count-text" data-active={isActive} size="xs" weight="medium">
+                        <Text data-part="tab-count-text" data-active={isActive} size="xs" weight="medium" color={isActive ? undefined : 'secondary'}>
                           {tab.count}
                         </Text>
                       </Box>

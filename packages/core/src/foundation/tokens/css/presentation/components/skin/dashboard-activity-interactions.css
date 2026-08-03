@@ -10,7 +10,9 @@
 /* ticker ------------------------------------------------------------------ */
 
 :where(.ds-activity-ticker) .ticker-content-v3 {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    opacity calc(var(--ds-motion-normal) * 2) var(--ds-motion-ease-out, ease-out),
+    transform calc(var(--ds-motion-normal) * 2) var(--ds-motion-ease-out, ease-out);
 }
 
 :where(.ds-activity-ticker) .ticker-in {
@@ -28,36 +30,60 @@
   transform: translateX(40px) scale(0.95);
 }
 
+/* The slide-out direction is LOGICAL ("next" exits toward inline-end):
+   mirrored under RTL so the cadence reads right in both directions. */
+[dir='rtl'] :where(.ds-activity-ticker) .ticker-out-left {
+  transform: translateX(40px) scale(0.95);
+}
+
+[dir='rtl'] :where(.ds-activity-ticker) .ticker-out-right {
+  transform: translateX(-40px) scale(0.95);
+}
+
 :where(.ds-activity-ticker) .live-indicator {
   animation: ds-activity-ticker-live-glow 1.5s ease-in-out infinite;
 }
 
 :where(.ds-activity-ticker) .nav-button {
-  transition: all 0.3s ease;
+  transition:
+    background-color var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out);
 }
 
-:where(.ds-activity-ticker) .nav-button:hover {
-  background: var(--ds-color-primary-100);
-  border-color: var(--ds-color-primary-200);
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px var(--ds-color-primary-100);
+/* Hover law: hover-capable pointers only. */
+@media (hover: hover) {
+  :where(.ds-activity-ticker) .nav-button:hover {
+    background: var(--ds-color-primary-100);
+    border-color: var(--ds-color-primary-200);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px var(--ds-color-primary-100);
+  }
+
+  :where(.ds-activity-ticker) .ticker-dot:hover {
+    transform: scale(1.2);
+  }
+
+  :where(.ds-activity-ticker) .view-all-link:hover {
+    background: var(--ds-color-primary-200);
+    transform: translateX(2px);
+  }
+}
+@media (hover: hover) {
+  [dir='rtl'] :where(.ds-activity-ticker) .view-all-link:hover {
+    transform: translateX(-2px);
+  }
 }
 
 :where(.ds-activity-ticker) .ticker-dot {
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-:where(.ds-activity-ticker) .ticker-dot:hover {
-  transform: scale(1.2);
+  transition:
+    background-color var(--ds-motion-slow) var(--ds-motion-spring),
+    transform var(--ds-motion-slow) var(--ds-motion-spring);
 }
 
 :where(.ds-activity-ticker) .ticker-progress {
   animation: ds-activity-ticker-progress-fill 5s linear;
-}
-
-:where(.ds-activity-ticker) .view-all-link:hover {
-  background: var(--ds-color-primary-200);
-  transform: translateX(2px);
 }
 
 @keyframes ds-activity-ticker-live-glow {
@@ -90,9 +116,17 @@
   animation: ds-activity-timeline-live-glow 1.5s ease-in-out infinite;
 }
 
-:where(.ds-activity-timeline) .view-all-link:hover {
-  background: var(--ds-color-primary-200);
-  transform: translateX(2px);
+/* Hover law: hover-capable pointers only. */
+@media (hover: hover) {
+  :where(.ds-activity-timeline) .view-all-link:hover {
+    background: var(--ds-color-primary-200);
+    transform: translateX(2px);
+  }
+}
+@media (hover: hover) {
+  [dir='rtl'] :where(.ds-activity-timeline) .view-all-link:hover {
+    transform: translateX(-2px);
+  }
 }
 
 @keyframes ds-activity-timeline-item-slide-in {
@@ -139,19 +173,36 @@
 
 :where(.ds-activity-compact) .activity-compact-item-v3 {
   animation: ds-activity-compact-slide-in-right 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    background-color var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-slow) var(--ds-motion-ease-out, ease-out);
 }
 
-:where(.ds-activity-compact) .activity-compact-item-v3:hover {
-  background: var(--ds-color-primary-50);
-  border-color: var(--ds-color-primary-200);
-  transform: translateX(6px);
-  box-shadow: -4px 0 16px var(--ds-color-primary-100);
-}
+/* Hover law: hover-capable pointers only. */
+@media (hover: hover) {
+  :where(.ds-activity-compact) .activity-compact-item-v3:hover {
+    background: var(--ds-color-primary-50);
+    border-color: var(--ds-color-primary-200);
+    transform: translateX(6px);
+    box-shadow: -4px 0 16px var(--ds-color-primary-100);
+  }
 
-:where(.ds-activity-compact) .view-all-link:hover {
-  background: var(--ds-color-primary-200);
-  transform: translateX(2px);
+  :where(.ds-activity-compact) .view-all-link:hover {
+    background: var(--ds-color-primary-200);
+    transform: translateX(2px);
+  }
+}
+/* The hover nudge and its shadow walk toward inline-end: mirrored under RTL. */
+@media (hover: hover) {
+  [dir='rtl'] :where(.ds-activity-compact) .activity-compact-item-v3:hover {
+    transform: translateX(-6px);
+    box-shadow: 4px 0 16px var(--ds-color-primary-100);
+  }
+  [dir='rtl'] :where(.ds-activity-compact) .view-all-link:hover {
+    transform: translateX(-2px);
+  }
 }
 
 @keyframes ds-activity-compact-slide-in-right {
@@ -187,21 +238,32 @@
 
 :where(.ds-activity-cards) .activity-card-item-v3 {
   animation: ds-activity-cards-card-slide-in 0.4s ease-out both;
-  transition: all 0.2s ease;
+  transition:
+    background-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
+    border-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out),
+    transform var(--ds-motion-normal) var(--ds-motion-ease-out, ease-out);
 }
 
-:where(.ds-activity-cards) .activity-card-item-v3:hover {
-  background: var(--ds-color-primary-50);
-  border-color: var(--ds-color-primary-200);
-  transform: translateX(4px);
+/* Hover law: hover-capable pointers only. */
+@media (hover: hover) {
+  :where(.ds-activity-cards) .activity-card-item-v3:hover {
+    background: var(--ds-color-primary-50);
+    border-color: var(--ds-color-primary-200);
+    transform: translateX(4px);
+  }
+
+  :where(.ds-activity-cards) .view-all-link:hover {
+    background: var(--ds-color-primary-200);
+  }
+}
+@media (hover: hover) {
+  [dir='rtl'] :where(.ds-activity-cards) .activity-card-item-v3:hover {
+    transform: translateX(-4px);
+  }
 }
 
 :where(.ds-activity-cards) .time-dot {
   animation: ds-activity-cards-dot-pulse 2s ease-in-out infinite;
-}
-
-:where(.ds-activity-cards) .view-all-link:hover {
-  background: var(--ds-color-primary-200);
 }
 
 @keyframes ds-activity-cards-card-slide-in {
@@ -242,4 +304,25 @@
 :where(.ds-activity-cards) .activity-scroll::-webkit-scrollbar-thumb {
   background: var(--ds-color-primary-200);
   border-radius: 2px;
+}
+
+/* Reduced motion: every keyframed loop (slides, glows, pulses, the ticker
+   progress) and every shared transition goes quiet — the own skins already
+   kill their part-level transitions; this block owns the loops declared
+   above. The ticker rotation itself is gated in JS on `useReducedMotion`.
+   Placed last so it wins on equal `:where()` weight. */
+@media (prefers-reduced-motion: reduce) {
+  :where(.ds-activity-ticker) .ticker-content-v3,
+  :where(.ds-activity-ticker) .live-indicator,
+  :where(.ds-activity-ticker) .nav-button,
+  :where(.ds-activity-ticker) .ticker-dot,
+  :where(.ds-activity-ticker) .ticker-progress,
+  :where(.ds-activity-timeline) .activity-item-v3,
+  :where(.ds-activity-timeline) .live-indicator,
+  :where(.ds-activity-compact) .activity-compact-item-v3,
+  :where(.ds-activity-cards) .activity-card-item-v3,
+  :where(.ds-activity-cards) .time-dot {
+    animation: none;
+    transition: none;
+  }
 }

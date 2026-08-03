@@ -20,6 +20,8 @@ import React from 'react';
 import { Box, Button, Card, Stack, Text, Tag } from '../../../primitives';
 import { ShimmerText, useReducedMotion } from '@/graphics/motion';
 import { MarkdownView } from '../../../primitives/display/MarkdownView';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
+import { NavigationForwardIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-forward';
 import type {
   AssistantAgentStatus,
   AssistantDeliveryStatus,
@@ -61,6 +63,16 @@ export type {
 
 // -- Internal mapping helpers --
 
+/** Floor-resolving translator shape (the optional `components` i18n channel
+    with an English floor; the kit renders standalone without a provider). */
+type FloorTranslator = (key: string, floor: string) => string;
+
+/** Returns the identity-bound translator for the calling component. */
+function useAssistantCopy(): FloorTranslator {
+  const i18n = useOptionalTranslation('components');
+  return (key, floor) => i18n?.tOr(key, floor) ?? floor;
+}
+
 // Maps assistant-specific tone names to the DS Tag's variant prop. "danger"
 // maps to "error" because the Tag component uses semantic color names while
 // the assistant domain uses UX-oriented tone labels.
@@ -98,17 +110,22 @@ function deliveryStatusToTone(
   }
 }
 
-/** Returns a human-readable label for the message role, or null for unknown roles. */
-function roleLabel(role: AssistantMessageRole | undefined): string | null {
+/** Returns a human-readable label for the message role, or null for unknown
+    roles. Visible copy resolves through the `components` catalog with an
+    English floor (never a hardcoded-only string). */
+function roleLabel(
+  role: AssistantMessageRole | undefined,
+  t: FloorTranslator
+): string | null {
   switch (role) {
     case 'assistant':
-      return 'Assistant';
+      return t('assistant.role.assistant', 'Assistant');
     case 'user':
-      return 'User';
+      return t('assistant.role.user', 'User');
     case 'system':
-      return 'System';
+      return t('assistant.role.system', 'System');
     case 'tool':
-      return 'Tool';
+      return t('assistant.role.tool', 'Tool');
     default:
       return null;
   }
@@ -134,23 +151,27 @@ function toolStatusToTone(
  * Resolves an agent activity status to its liveness and default label. Live
  * states (thinking/streaming/acting) animate; idle/error hold static. The
  * dot's per-status color is a skin rule keyed on the stamped `data-status`
- * (`components/skin/assistant.css`), not computed here.
+ * (`components/skin/assistant.css`), not computed here. Default labels
+ * resolve through the `components` catalog with an English floor.
  */
-function agentStatusVisual(status: AssistantAgentStatus): {
+function agentStatusVisual(
+  status: AssistantAgentStatus,
+  t: FloorTranslator
+): {
   live: boolean;
   defaultLabel: string;
 } {
   switch (status) {
     case 'thinking':
-      return { live: true, defaultLabel: 'Thinking' };
+      return { live: true, defaultLabel: t('assistant.status.thinking', 'Thinking') };
     case 'streaming':
-      return { live: true, defaultLabel: 'Streaming' };
+      return { live: true, defaultLabel: t('assistant.status.streaming', 'Streaming') };
     case 'acting':
-      return { live: true, defaultLabel: 'Acting' };
+      return { live: true, defaultLabel: t('assistant.status.acting', 'Acting') };
     case 'error':
-      return { live: false, defaultLabel: 'Error' };
+      return { live: false, defaultLabel: t('assistant.status.error', 'Error') };
     default:
-      return { live: false, defaultLabel: 'Idle' };
+      return { live: false, defaultLabel: t('assistant.status.idle', 'Idle') };
   }
 }
 
@@ -196,32 +217,38 @@ export function StreamingText({
   const prefersReducedMotion = useReducedMotion();
   // A controlled `reducedMotion` wins; otherwise defer to the OS preference.
   const reduceMotion = reducedMotion ?? prefersReducedMotion;
+  // Bare declared channel (fallback-parity): `--ds-font-family-mono` is a
+  // catalogued foundation token, so no literal/var fallback rides along.
+  // Kept inline (not the skin) because the Typography engine skins paint
+  // `font-family` directly on the Text root and would beat an inherited rule.
+  // The `white-space: pre-wrap` behavior is skin-owned (the Typography skins
+  // declare no white-space, so the root's rule inherits cleanly).
   const fontFamily =
-    as === 'markdown' ? 'var(--ds-font-family-mono, inherit)' : undefined;
+    as === 'markdown' ? 'var(--ds-font-family-mono)' : undefined;
 
   return (
     <Box className="ds-assistant-streaming-text" data-part="root">
       {streaming && !reduceMotion ? (
-        <ShimmerText text={text} style={{ whiteSpace: 'pre-wrap', fontFamily }} />
+        <ShimmerText text={text} style={fontFamily ? { fontFamily } : undefined} />
       ) : (
-        <Text style={{ whiteSpace: 'pre-wrap', fontFamily }}>{text}</Text>
+        <Text style={fontFamily ? { fontFamily } : undefined}>{text}</Text>
       )}
       {streaming ? (
-        // Under reduced motion the caret holds a static position instead of
-        // blinking.
-        <Text
+        // The blink runs only while motion is allowed: the engine stamps
+        // `data-motion` (the controlled `reducedMotion` prop wins over the OS
+        // preference, so a media query alone cannot express the cut-off) and
+        // the SKIN owns the loop on its private period channel
+        // (`--_ds-assistant-caret-duration`) -- same
+        // contract as AssistantStatusIndicator's dot; the keyframe itself
+        // stays skin-owned (`ds-assistant-caret`). The caret is aria-hidden:
+        // the streaming state is conveyed by the parent's delivery status.
+        <span
           data-part="caret"
+          data-motion={reduceMotion ? 'static' : 'live'}
           aria-hidden="true"
-          style={{
-            marginLeft: 4,
-            display: 'inline-block',
-            animation: reduceMotion
-              ? 'none'
-              : 'ds-assistant-caret 1s steps(2, jump-none) infinite',
-          }}
         >
           |
-        </Text>
+        </span>
       ) : null}
     </Box>
   );
@@ -238,30 +265,30 @@ export function StreamingText({
  * @returns An inline indicator with bouncing dots and a muted text label.
  */
 export function TypingIndicator({
-  label = 'Assistant is typing',
+  label,
 }: TypingIndicatorProps): React.ReactElement {
+  const t = useAssistantCopy();
+  // Default copy reuses the catalogued chat surface string (EN/ES/AR ship
+  // `surfaces.chat.typing`); a caller label always wins.
+  const resolvedLabel = label ?? t('surfaces.chat.typing', 'Assistant is typing');
   return (
     <Box
       className="ds-assistant-typing-indicator"
       data-part="root"
       role="status"
       aria-live="polite"
-      style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
     >
-      <Box aria-hidden="true" style={{ display: 'inline-flex', gap: 4 }}>
+      {/* Geometry + motion are skin-owned: the dots bounce on the private
+          `--_ds-assistant-dot-duration` channel with an nth-child stagger,
+          and hold static under
+          `prefers-reduced-motion` (the role=status label keeps the state
+          comprehensible without motion). */}
+      <Box data-part="dots" aria-hidden="true">
         {[0, 1, 2].map((index) => (
-          <Box
-            key={index}
-            data-part="typing-dot"
-            style={{
-              width: 6,
-              height: 6,
-              animation: `ds-assistant-dot 1.1s ease-in-out ${index * 0.12}s infinite`,
-            }}
-          />
+          <Box key={index} data-part="typing-dot" />
         ))}
       </Box>
-      <Text color="muted">{label}</Text>
+      <Text color="muted">{resolvedLabel}</Text>
     </Box>
   );
 }
@@ -288,6 +315,7 @@ export function ToolCallCard({
   duration,
   meta,
 }: ToolCallCardProps): React.ReactElement {
+  const t = useAssistantCopy();
   const tone = toolStatusToTone(status);
   // Completed and errored calls read as a compact receipt (outcome + elapsed
   // time), not the live input/output expansion.
@@ -298,7 +326,7 @@ export function ToolCallCard({
       <Card.Body>
         <Stack spacing="sm">
           <Stack direction="horizontal" justify="space-between" align="center">
-            <Text style={{ fontWeight: 700 }}>{name}</Text>
+            <Text weight="bold">{name}</Text>
             <AssistantStatusBadge label={status} tone={tone} />
           </Stack>
           {terminal ? (
@@ -329,7 +357,7 @@ export function ToolCallCard({
               {input ? (
                 <Box>
                   <Text size="sm" color="muted">
-                    Input
+                    {t('assistant.tool.input', 'Input')}
                   </Text>
                   <Box>{input}</Box>
                 </Box>
@@ -337,7 +365,7 @@ export function ToolCallCard({
               {output ? (
                 <Box>
                   <Text size="sm" color="muted">
-                    Output
+                    {t('assistant.tool.output', 'Output')}
                   </Text>
                   <Box>{output}</Box>
                 </Box>
@@ -365,10 +393,13 @@ export function AssistantStatusIndicator({
   label,
   reducedMotion,
 }: AssistantStatusIndicatorProps): React.ReactElement {
+  const t = useAssistantCopy();
   const prefersReducedMotion = useReducedMotion();
   const reduceMotion = reducedMotion ?? prefersReducedMotion;
-  const visual = agentStatusVisual(status);
-  // Animation runs only while the state is live and motion is allowed.
+  const visual = agentStatusVisual(status, t);
+  // Animation runs only while the state is live and motion is allowed; the
+  // dot stamps `data-motion` so the SKIN owns the loop (proto channel) and
+  // its reduced-motion cut-off -- the JS no longer carries raw durations.
   const animate = visual.live && !reduceMotion;
 
   return (
@@ -377,17 +408,12 @@ export function AssistantStatusIndicator({
       data-part="root"
       role="status"
       aria-live="polite"
-      style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
     >
       <Box
         data-part="dot"
         data-status={status}
+        data-motion={animate ? 'live' : 'static'}
         aria-hidden="true"
-        style={{
-          width: 8,
-          height: 8,
-          animation: animate ? 'ds-assistant-dot 1.1s ease-in-out infinite' : 'none',
-        }}
       />
       <Text size="sm" color="muted">
         {label ?? visual.defaultLabel}
@@ -408,23 +434,30 @@ export function AssistantStatusIndicator({
 export function PreviewDiffCard({
   title,
   rows,
-  beforeLabel = 'Before',
-  afterLabel = 'After',
+  beforeLabel,
+  afterLabel,
   meta,
 }: PreviewDiffCardProps): React.ReactElement {
+  const t = useAssistantCopy();
+  const resolvedBeforeLabel = beforeLabel ?? t('assistant.diff.before', 'Before');
+  const resolvedAfterLabel = afterLabel ?? t('assistant.diff.after', 'After');
   return (
     <Card className="ds-assistant-preview-diff-card" data-part="root" variant="outlined">
       <Card.Body>
         <Stack spacing="sm">
-          {title ? <Text style={{ fontWeight: 700 }}>{title}</Text> : null}
+          {title ? <Text weight="bold">{title}</Text> : null}
           <Stack direction="horizontal" spacing="sm" align="center">
-            <Box style={{ flex: 2, minWidth: 0 }} />
-            <Text size="xs" color="muted" style={{ flex: 3, minWidth: 0 }}>
-              {beforeLabel}
+            {/* Column geometry (2/3/3 split, arrow gutter) is skin-owned via
+                the stamped parts; the arrow cell is the governed
+                auto-mirroring forward icon (flips in RTL), never a Unicode
+                arrow glyph. */}
+            <Box data-part="diff-spacer" />
+            <Text data-part="diff-head-cell" data-diff-side="before" size="xs" color="muted">
+              {resolvedBeforeLabel}
             </Text>
-            <Box aria-hidden="true" style={{ width: 16 }} />
-            <Text size="xs" color="muted" style={{ flex: 3, minWidth: 0 }}>
-              {afterLabel}
+            <Box data-part="diff-arrow" aria-hidden="true" />
+            <Text data-part="diff-head-cell" data-diff-side="after" size="xs" color="muted">
+              {resolvedAfterLabel}
             </Text>
           </Stack>
           {rows.map((row, index) => {
@@ -436,47 +469,33 @@ export function PreviewDiffCard({
                 direction="horizontal"
                 spacing="sm"
                 align="center"
-                style={{ paddingTop: 6 }}
               >
-                <Text size="sm" style={{ flex: 2, minWidth: 0, fontWeight: 600 }}>
+                <Text data-part="diff-label" size="sm" weight="semibold">
                   {row.label}
                 </Text>
-                <Box style={{ flex: 3, minWidth: 0 }}>
+                <Box data-part="diff-cell-wrap" data-diff-side="before">
                   {row.before !== undefined ? (
                     <Text
                       data-part="preview-cell"
                       data-diff-side="before"
                       data-change={change}
                       size="sm"
-                      style={{
-                        textDecoration:
-                          change === 'removed' || change === 'updated'
-                            ? 'line-through'
-                            : undefined,
-                      }}
                     >
                       {row.before}
                     </Text>
                   ) : null}
                 </Box>
-                <Text
-                  aria-hidden="true"
-                  size="sm"
-                  color="muted"
-                  style={{ width: 16, textAlign: 'center' }}
-                >
-                  {'→'}
-                </Text>
-                <Box style={{ flex: 3, minWidth: 0 }}>
+                <Box data-part="diff-arrow" aria-hidden="true">
+                  <NavigationForwardIcon decorative size={12} />
+                </Box>
+                <Box data-part="diff-cell-wrap" data-diff-side="after">
                   {row.after !== undefined ? (
                     <Text
                       data-part="preview-cell"
                       data-diff-side="after"
                       data-change={change}
                       size="sm"
-                      style={{
-                        fontWeight: change === 'unchanged' ? undefined : 600,
-                      }}
+                      weight={change === 'unchanged' ? undefined : 'semibold'}
                     >
                       {row.after}
                     </Text>
@@ -505,8 +524,8 @@ export function ConfirmActionCard({
   title,
   summary,
   details,
-  confirmLabel = 'Confirm',
-  cancelLabel = 'Cancel',
+  confirmLabel,
+  cancelLabel,
   onConfirm,
   onCancel,
   confirmDisabled = false,
@@ -514,17 +533,23 @@ export function ConfirmActionCard({
   tone = 'default',
   actions,
 }: ConfirmActionCardProps): React.ReactElement {
+  const t = useAssistantCopy();
+  // Default control copy reuses the catalogued shared button strings
+  // (`button.confirm` / `button.cancel`, shipped EN/ES/AR); explicit labels
+  // always win.
+  const resolvedConfirmLabel = confirmLabel ?? t('button.confirm', 'Confirm');
+  const resolvedCancelLabel = cancelLabel ?? t('button.cancel', 'Cancel');
   return (
     <Card className="ds-assistant-confirm-action-card" data-part="root" variant="outlined">
       <Card.Body>
         <Stack spacing="sm">
-          {title ? <Text style={{ fontWeight: 700 }}>{title}</Text> : null}
+          {title ? <Text weight="bold">{title}</Text> : null}
           {summary ? <Box>{summary}</Box> : null}
           {details ? <Box>{details}</Box> : null}
           {actions ?? (
             <Stack direction="horizontal" justify="end" align="center" spacing="sm">
               <Button variant="secondary" onClick={onCancel} disabled={busy}>
-                {cancelLabel}
+                {resolvedCancelLabel}
               </Button>
               <Button
                 variant={tone === 'danger' ? 'danger' : 'primary'}
@@ -532,7 +557,7 @@ export function ConfirmActionCard({
                 loading={busy}
                 disabled={confirmDisabled || busy}
               >
-                {confirmLabel}
+                {resolvedConfirmLabel}
               </Button>
             </Stack>
           )}
@@ -588,7 +613,7 @@ function renderDefaultPart(part: AssistantMessagePart, index: number): React.Rea
         <Card key={`part-${index}`} variant="filled">
           <Card.Body>
             <Stack spacing="sm">
-              {part.title ? <Text style={{ fontWeight: 700 }}>{part.title}</Text> : null}
+              {part.title ? <Text weight="bold">{part.title}</Text> : null}
               <Box>{part.content}</Box>
               {part.meta ? <Box>{part.meta}</Box> : null}
             </Stack>
@@ -629,23 +654,22 @@ export function MessageBubble({
   deliveryStatus,
   renderPart,
 }: MessageBubbleProps): React.ReactElement {
-  // User messages align right, assistant/system messages align left.
-  // The filled vs outlined variant gives an additional visual cue.
+  const t = useAssistantCopy();
+  // User messages align to the end side, assistant/system to the start side.
+  // The filled vs outlined variant gives an additional visual cue (never
+  // alignment alone). Geometry lives in the skin, keyed on `data-align`.
   const alignEnd = align === 'end';
-  const roleText = roleLabel(role);
+  const roleText = roleLabel(role, t);
 
   return (
     <Box
       className="ds-assistant-message-bubble"
       data-part="root"
-      style={{
-        display: 'flex',
-        justifyContent: alignEnd ? 'flex-end' : 'flex-start',
-      }}
+      data-align={alignEnd ? 'end' : 'start'}
     >
       <Card
+        className="ds-assistant-message-bubble-card"
         variant={alignEnd ? 'filled' : 'outlined'}
-        style={{ maxWidth: '80%', width: 'fit-content' }}
       >
         <Card.Body>
           <Stack spacing="sm">
@@ -653,7 +677,16 @@ export function MessageBubble({
               <Stack direction="horizontal" spacing="sm" align="center">
                 {avatar ? <Box>{avatar}</Box> : null}
                 <Stack spacing="xs">
-                  <Text style={{ fontWeight: 700 }}>{author}</Text>
+                  {/* title mirrors a string author: the skin truncates long
+                      names with ellipsis (truncation never eats content
+                      silently); a node author carries its own reveal. */}
+                  <Text
+                    data-part="author"
+                    weight="bold"
+                    title={typeof author === 'string' ? author : undefined}
+                  >
+                    {author}
+                  </Text>
                   {roleText ? (
                     <Text size="sm" color="muted">
                       {roleText}
@@ -678,7 +711,7 @@ export function MessageBubble({
             {timestamp || status || meta ? (
               <Stack spacing="xs">
                 {timestamp ? (
-                  <Text data-part="timestamp" style={{ fontSize: 12 }}>
+                  <Text data-part="timestamp" size="xs">
                     {timestamp}
                   </Text>
                 ) : null}

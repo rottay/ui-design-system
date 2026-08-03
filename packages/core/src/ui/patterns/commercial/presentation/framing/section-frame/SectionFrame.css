@@ -4,35 +4,51 @@
  * Every major commercial section is explicitly framed: a numbered `[01]` mono label sits on
  * a top hairline rule, so no section floats unframed. The label is real text (a heading);
  * only the bracket/rule chrome is presentational.
+ *
+ * Rhythm and type consume the shared `--ds-spacing-*` / `--ds-font-size-*` roles WITH literal
+ * fallbacks (the kit's self-contained idiom), so tenant density scale reshapes the section
+ * rhythm without a markup change. Label tracking stays private to this editorial frame
+ * (fallback: the shipped 0.12em).
+ * All properties are logical: the `meta` annotation flips to the inline end under RTL (the
+ * old `margin-left: auto` pinned it to the physical left — an RTL bug). The label row wraps
+ * intentionally on narrow measures: long titles break onto their own line instead of
+ * overflowing, and `meta` never collides with the title.
  */
 
 .rt-section-frame {
   position: relative;
   display: block;
-  padding: 2.5rem 0;
+  padding-block: var(--ds-spacing-10, 2.5rem);
+  padding-inline: 0;
   color: var(--ds-commercial-fg);
-  border-top: 1px solid var(--ds-commercial-hairline);
+  border-block-start: 1px solid var(--ds-commercial-hairline);
 }
 
 .rt-section-frame__label {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.75rem;
-  margin: 0 0 1.5rem;
+  column-gap: var(--ds-spacing-3, 0.75rem);
+  row-gap: var(--ds-spacing-1, 0.25rem);
+  margin-block-end: var(--ds-spacing-6, 1.5rem);
+  margin-inline: 0;
   font-family: var(--ds-commercial-font-mono);
-  font-size: 0.75rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-size: var(--ds-font-size-xs, 0.75rem);
+  font-weight: var(--ds-font-weight-medium, 500);
+  letter-spacing: var(--_ds-section-frame-label-tracking, 0.12em);
   text-transform: uppercase;
 }
 
 .rt-section-frame__index {
   color: var(--ds-commercial-gray-500);
+  font-variant-numeric: tabular-nums;
 }
 
 .rt-section-frame__title {
   margin: 0;
   font: inherit;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
   color: var(--ds-commercial-fg);
 }
 
@@ -41,11 +57,24 @@
 }
 
 .rt-section-frame__meta {
-  margin-left: auto;
+  margin-inline-start: auto;
   color: var(--ds-commercial-gray-500);
   font-variant-numeric: tabular-nums;
 }
 
 .rt-section-frame__body {
   display: block;
+  min-inline-size: 0;
+}
+
+/* Forced colors: the framing rule re-keys to system ink so the section never floats. */
+@media (forced-colors: active) {
+  .rt-section-frame {
+    border-block-start-color: CanvasText;
+  }
+  .rt-section-frame__index,
+  .rt-section-frame__dash,
+  .rt-section-frame__meta {
+    color: GrayText;
+  }
 }

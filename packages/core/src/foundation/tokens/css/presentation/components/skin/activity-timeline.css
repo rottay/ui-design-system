@@ -10,27 +10,53 @@
  * typography skin (0,4,0).
  *
  * ICON COLOR: Bell / ExternalLink carry no data-part — painted on the stamped
- * ancestor Box (currentColor). The per-item chevron is an unstamped `svg` with
- * no data-part and no stampable direct parent; it is reached by
- * `[data-part='item-content'] svg` (the only svg inside item-content), which
- * takes its colour from item-content's own currentColor and its hover
- * transform/opacity from the item's `:hover` (upload.css / progress-compounds
- * precedent for svg leaves).
+ * ancestor Box (currentColor). The per-item chevron carries
+ * `data-part='item-chevron'`; it takes its colour from item-content's own
+ * currentColor and its hover transform/opacity from the item's `:hover`
+ * (upload.css / progress-compounds precedent for svg leaves).
  *
  * HOVER: the per-item hover was React `isHovered` state (deleted from the TSX);
- * it is transcribed to `[data-part='item']:hover …`. `data-type` selects the
- * bounded 5-value `ActivityItem["type"]` enum for both the `TYPE_CONFIG` gradient
- * and the `"var(--ds-color-" + type + …)"` string-concat sites. The badge count
- * text is a literal `white` in source, transcribed verbatim.
+ * it is transcribed to `[data-part='item']:hover …` and gated to hover-capable
+ * pointers. `data-type` selects the bounded 5-value `ActivityItem["type"]`
+ * enum for both the `TYPE_CONFIG` gradient and the `"var(--ds-color-" + type + …)"`
+ * string-concat sites. The badge count text is a literal `white` in source,
+ * transcribed verbatim.
+ *
+ * GEOMETRY DRAIN (premium wave): the engine's static inline geometry (panel
+ * frame, header rule, bell well, badge position, live dot, view-all pill,
+ * item rail padding, connector, icon well + anchor, item-content padding,
+ * time dot, scroll region) moved here on LOGICAL properties — the former
+ * physical `paddingLeft`/`left`/`right` offsets were LTR-only. The panel
+ * block size rides a private dashboard seam whose fallback follows the
+ * governed rhythm dial from the shipped 415px measure.
+ * The transition literals drained onto `--ds-motion-*` channels with the exact
+ * replaced values as fallbacks. The timestamp is a real `<time>` element now
+ * (its micro typography lives here); the chevron carries
+ * `data-part='item-chevron'` and mirrors under RTL, slide-in included.
+ * This file also adds the reduced-motion and forced-colors contracts.
  */
 
 /* root + header ------------------------------------------------------------- */
 
+/* Root frame drained from the engine (the former inline height/padding/flex
+   frame). The 415px fallback is the shipped dashboard measure, byte-exact. */
 .ds-activity-timeline.ds-activity-timeline[data-part='root'] {
+  display: flex;
+  flex-direction: column;
+  block-size: var(--_ds-dashboard-panel-block-size, calc(415px * var(--ds-rhythm-effective-scale, 1)));
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
   background: var(--ds-color-bg-secondary);
 }
 .ds-activity-timeline.ds-activity-timeline[data-part='root'][data-part='root'] {
   border: 1px solid var(--ds-color-border-secondary);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='header'] {
+  /* Header geometry drained from the engine. */
+  padding-block-end: 12px;
+  margin-block-end: 12px;
+  position: relative;
 }
 .ds-activity-timeline.ds-activity-timeline [data-part='header'][data-part='header'] {
   border-bottom: 1px solid var(--ds-color-border-secondary);
@@ -39,6 +65,13 @@
 /* bell box + badge ---------------------------------------------------------- */
 
 .ds-activity-timeline.ds-activity-timeline [data-part='bell-box'] {
+  /* 32px well drained from the engine. */
+  inline-size: 32px;
+  block-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
   background: var(--ds-color-primary-100);
   color: var(--ds-color-primary);
 }
@@ -46,6 +79,16 @@
   border: 1px solid var(--ds-color-primary-200);
 }
 .ds-activity-timeline.ds-activity-timeline [data-part='badge'] {
+  /* Absolute frame drained from the engine on logical offsets (the former
+     physical `right: -4` was LTR-only). */
+  position: absolute;
+  inset-block-start: -4px;
+  inset-inline-end: -4px;
+  inline-size: 14px;
+  block-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   background: var(--ds-color-error);
 }
@@ -62,18 +105,38 @@
   color: var(--ds-color-text-primary);
 }
 .ds-activity-timeline.ds-activity-timeline [data-part='live-dot'] {
+  /* Dot geometry drained from the engine. */
+  inline-size: 6px;
+  block-size: 6px;
   border-radius: 50%;
   background: var(--ds-color-success);
 }
 .ds-activity-timeline.ds-activity-timeline [data-part='live-label'][data-part='live-label'][data-part='live-label'] {
   color: var(--ds-color-success);
+  font-family: var(--ds-font-family-mono, monospace);
+  font-size: calc(var(--ds-font-size-2xs) * 0.818182);
 }
 
 /* view-all pill ------------------------------------------------------------- */
 
+/* Anchor reset + focus ring (the engine's former inline textDecoration). */
+.ds-activity-timeline.ds-activity-timeline .view-all-anchor {
+  text-decoration: none;
+  border-radius: var(--ds-radius-md, 8px);
+}
+.ds-activity-timeline.ds-activity-timeline .view-all-anchor:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid
+    var(--ds-focus-ring-color, var(--ds-color-primary));
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
 .ds-activity-timeline.ds-activity-timeline [data-part='view-all-link'] {
+  /* Pill padding + cadence drained from the engine. */
+  padding: 6px 10px;
   background: var(--ds-color-primary-100);
   color: var(--ds-color-primary);
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
+    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease);
 }
 .ds-activity-timeline.ds-activity-timeline [data-part='view-all-link'][data-part='view-all-link'] {
   border: 1px solid var(--ds-color-primary-200);
@@ -82,19 +145,39 @@
   color: var(--ds-color-primary);
 }
 
-/* per-item connector -------------------------------------------------------- */
+/* per-item rail + connector (logical: the rail sits at inline-start) -------- */
 
+.ds-activity-timeline.ds-activity-timeline [data-part='item'] {
+  padding-inline-start: 30px;
+}
 .ds-activity-timeline.ds-activity-timeline [data-part='connector'] {
+  position: absolute;
+  inset-inline-start: 9px;
+  inset-block-start: 22px;
+  inset-block-end: 0;
+  inline-size: 2px;
   background: var(--ds-color-border-secondary);
 }
 
-/* per-item icon box — background + icon colour keyed on type, hover scale ---- */
+/* per-item icon box — background + icon colour keyed on type, hover scale;
+   the absolute anchor and the cadence are drained from the engine ---------- */
 
 .ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'] {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 2px;
+  inline-size: 20px;
+  block-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transform: scale(1);
+  transition: transform var(--ds-motion-normal) var(--ds-motion-ease-out, ease);
 }
-.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-icon-box'] {
-  transform: scale(1.1);
+@media (hover: hover) {
+  .ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-icon-box'] {
+    transform: scale(1.1);
+  }
 }
 .ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-type='success'] { background: var(--ds-color-success-100); color: var(--ds-color-success); }
 .ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-type='primary'] { background: var(--ds-color-primary-100); color: var(--ds-color-primary); }
@@ -108,23 +191,35 @@
 .ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-part='item-icon-box'][data-type='warning'] { border: 1px solid var(--ds-color-warning); }
 .ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-part='item-icon-box'][data-type='error']   { border: 1px solid var(--ds-color-error); }
 
-/* per-item content — static bg, hover translate + type-tinted border-color --- */
+/* per-item content — padding + cadence drained from the engine; hover
+   translate + type-tinted border-color (hover-capable only, RTL-mirrored) --- */
 
 .ds-activity-timeline.ds-activity-timeline [data-part='item-content'] {
+  padding: 10px 14px;
+  position: relative;
+  overflow: hidden;
   background: var(--ds-color-bg-primary);
   transform: translateX(0);
-}
-.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'] {
-  transform: translateX(4px);
+  transition:
+    border-color var(--ds-motion-normal) var(--ds-motion-ease-out, ease),
+    transform var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease);
 }
 .ds-activity-timeline.ds-activity-timeline [data-part='item-content'][data-part='item-content'] {
   border: 1px solid var(--ds-color-border-secondary);
 }
-.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='success'] { border-color: var(--ds-color-success-200); }
-.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='primary'] { border-color: var(--ds-color-primary-200); }
-.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='info']    { border-color: var(--ds-color-info-200); }
-.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='warning'] { border-color: var(--ds-color-warning-200); }
-.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='error']   { border-color: var(--ds-color-error-200); }
+@media (hover: hover) {
+  .ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'] {
+    transform: translateX(4px);
+  }
+  [dir='rtl'] .ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'] {
+    transform: translateX(-4px);
+  }
+  .ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='success'] { border-color: var(--ds-color-success-200); }
+  .ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='primary'] { border-color: var(--ds-color-primary-200); }
+  .ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='info']    { border-color: var(--ds-color-info-200); }
+  .ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='warning'] { border-color: var(--ds-color-warning-200); }
+  .ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='error']   { border-color: var(--ds-color-error-200); }
+}
 
 /* item-content currentColor feeds the chevron; sibling Text carry own colour - */
 
@@ -138,9 +233,12 @@
   color: var(--ds-color-text-primary);
 }
 
-/* per-item time dot — background keyed on type ------------------------------ */
+/* per-item time dot — geometry drained from the engine, background keyed on
+   type ---------------------------------------------------------------------- */
 
 .ds-activity-timeline.ds-activity-timeline [data-part='item-dot'] {
+  inline-size: 4px;
+  block-size: 4px;
   border-radius: 50%;
 }
 .ds-activity-timeline.ds-activity-timeline [data-part='item-dot'][data-type='success'] { background: var(--ds-color-success); }
@@ -149,17 +247,100 @@
 .ds-activity-timeline.ds-activity-timeline [data-part='item-dot'][data-type='warning'] { background: var(--ds-color-warning); }
 .ds-activity-timeline.ds-activity-timeline [data-part='item-dot'][data-type='error']   { background: var(--ds-color-error); }
 
+/* `<time>` micro typography (drained from the engine's former Text inline;
+   the mono channel replaces a raw `monospace` literal) ----------------------- */
+
 .ds-activity-timeline.ds-activity-timeline [data-part='item-time'][data-part='item-time'][data-part='item-time'] {
   color: var(--ds-color-text-muted);
+  font-family: var(--ds-font-family-mono, monospace);
+  font-size: calc(var(--ds-font-size-2xs) * 0.818182);
 }
 
-/* chevron — unstamped svg inside item-content: hover slide-in (colour inherited) */
+/* chevron — `data-part='item-chevron'` inside item-content: hover slide-in
+   (colour inherited), gated to hover-capable pointers and mirrored under RTL
+   (the glyph points at inline-end, so it flips, slide included). ------------ */
 
-.ds-activity-timeline.ds-activity-timeline [data-part='item-content'] svg {
+.ds-activity-timeline.ds-activity-timeline [data-part='item-chevron'] {
+  inline-size: 12px;
+  block-size: 12px;
   opacity: 0;
   transform: translateX(-6px);
+  transition:
+    opacity var(--ds-motion-normal) var(--ds-motion-ease-out, ease),
+    transform var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out, ease);
 }
-.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'] svg {
-  opacity: 1;
-  transform: translateX(0);
+@media (hover: hover) {
+  .ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-chevron'] {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+[dir='rtl'] .ds-activity-timeline.ds-activity-timeline [data-part='item-chevron'] {
+  transform: translateX(6px) scaleX(-1);
+}
+@media (hover: hover) {
+  [dir='rtl'] .ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-chevron'] {
+    transform: scaleX(-1);
+  }
+}
+
+/* scroll region — geometry drained from the engine ---------------------------- */
+
+.ds-activity-timeline.ds-activity-timeline [data-part='scroll-area'] {
+  flex: 1;
+  min-block-size: 0;
+  overflow-y: auto;
+}
+
+/* reduced motion: every cadence goes quiet; the slide-in and live-glow loops
+   are silenced in the interactions skin. */
+@media (prefers-reduced-motion: reduce) {
+  .ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'],
+  .ds-activity-timeline.ds-activity-timeline [data-part='item-content'],
+  .ds-activity-timeline.ds-activity-timeline [data-part='item-chevron'],
+  .ds-activity-timeline.ds-activity-timeline [data-part='view-all-link'] {
+    transition: none;
+  }
+}
+
+/* Touch law: coarse pointers get the 44px floor on the view-all anchor
+   (sizing only — paint stays). */
+@media (pointer: coarse) {
+  .ds-activity-timeline.ds-activity-timeline .view-all-anchor {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}
+
+/* forced-colors: the panel, items, wells and pills keep system frames; the
+   connector, dots and chevron read in system ink; the badge keeps a real
+   frame; item type survives through the icon glyph and text, never the hue. */
+@media (forced-colors: active) {
+  .ds-activity-timeline.ds-activity-timeline[data-part='root'][data-part='root'],
+  .ds-activity-timeline.ds-activity-timeline [data-part='header'][data-part='header'],
+  .ds-activity-timeline.ds-activity-timeline [data-part='bell-box'][data-part='bell-box'],
+  .ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-part='item-icon-box'],
+  .ds-activity-timeline.ds-activity-timeline [data-part='item-content'][data-part='item-content'],
+  .ds-activity-timeline.ds-activity-timeline [data-part='view-all-link'][data-part='view-all-link'] {
+    border-color: ButtonText;
+    background: Canvas;
+    box-shadow: none;
+  }
+  .ds-activity-timeline.ds-activity-timeline [data-part='badge'] {
+    background: Canvas;
+    outline: 1px solid ButtonText;
+  }
+  .ds-activity-timeline.ds-activity-timeline [data-part='badge-count'][data-part='badge-count'][data-part='badge-count'] {
+    color: ButtonText;
+  }
+  .ds-activity-timeline.ds-activity-timeline [data-part='live-dot'],
+  .ds-activity-timeline.ds-activity-timeline [data-part='item-dot'],
+  .ds-activity-timeline.ds-activity-timeline [data-part='connector'] {
+    background: ButtonText;
+  }
+  .ds-activity-timeline.ds-activity-timeline [data-part='item-chevron'] {
+    opacity: 1;
+    transform: none;
+  }
 }

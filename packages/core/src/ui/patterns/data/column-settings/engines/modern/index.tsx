@@ -106,19 +106,24 @@ function ColumnRow({
 
   const pinTooltipLabel =
     pinSide === null ? labels.pinLeft : pinSide === 'left' ? labels.pinRight : labels.unpin;
+  const columnName =
+    typeof column.header === 'string' ? column.header : column.key;
 
   return (
     <div
       data-part="row"
       data-visible={isVisible ? 'true' : 'false'}
       data-pinned={pinSide ?? undefined}
+      role="listitem"
     >
-      {/* Visibility toggle (certified Checkbox primitive) */}
+      {/* Visibility toggle (certified Checkbox primitive) — named after the
+          column it governs so the row reads as one control to AT. */}
       <Checkbox
         checked={isVisible}
         disabled={isLocked}
         onChange={() => onToggleVisibility(column.key)}
         size="sm"
+        aria-label={`${labels.toggleVisibility}: ${columnName}`}
       />
 
       {/* Keyboard-sortable grip: composed from the public Button primitive,
@@ -128,33 +133,41 @@ function ColumnRow({
         size="sm"
         data-part="grip"
         disabled={reorderDisabled}
-        aria-label={`${labels.reorder} ${typeof column.header === 'string' ? column.header : column.key}`}
+        aria-label={`${labels.reorder} ${columnName}`}
         onKeyDown={handleGripKeyDown}
       >
         <GripVertical size={14} />
       </Button>
 
-      {/* Column name */}
-      <span data-part="label">
+      {/* Column name (ellipsis truncation keeps the native tooltip reveal) */}
+      <span
+        data-part="label"
+        title={typeof column.header === 'string' ? column.header : undefined}
+      >
         {column.header}
       </span>
 
-      {/* Pin toggle */}
+      {/* Pin toggle: a three-state cycle (none → left → right → none) on a
+          native Button; aria-pressed exposes "pinned vs not" to AT, the same
+          contract the DataTable header pin-toggle stamps. */}
       <Tooltip content={pinTooltipLabel}>
         <Button
           variant="ghost"
           size="sm"
+          data-part="pin-toggle"
+          aria-pressed={pinSide !== null}
           onClick={handlePinCycle}
-          aria-label={pinTooltipLabel}
+          aria-label={`${pinTooltipLabel}: ${columnName}`}
         >
           {pinSide ? <Pin size={13} /> : <PinOff size={13} />}
         </Button>
       </Tooltip>
 
-      {/* Pin side indicator (shape + ink, never hue alone) */}
+      {/* Pin side indicator (shape + ink, never hue alone; letters ride the
+          i18n channel so RTL/Arabic catalogs can localize the glyph) */}
       {pinSide && (
-        <span data-part="pin-side">
-          {pinSide === 'left' ? 'L' : 'R'}
+        <span data-part="pin-side" aria-hidden="true">
+          {pinSide === 'left' ? labels.pinSideLeft : labels.pinSideRight}
         </span>
       )}
     </div>
@@ -196,9 +209,12 @@ export default function ModernColumnSettingsDropdown({
     emptySearch: tOr('columnSettings.emptySearch', 'No columns match your search'),
     reset: tOr('columnSettings.reset', 'Reset Layout'),
     reorder: tOr('columnSettings.reorder', 'Reorder column'),
+    toggleVisibility: tOr('columnSettings.toggleVisibility', 'Toggle visibility'),
     pinLeft: tOr('columnSettings.pinLeft', 'Pin left'),
     pinRight: tOr('columnSettings.pinRight', 'Pin right'),
     unpin: tOr('columnSettings.unpin', 'Unpin'),
+    pinSideLeft: tOr('columnSettings.pinSideLeft', 'L'),
+    pinSideRight: tOr('columnSettings.pinSideRight', 'R'),
   };
 
   /** Columns sorted by the provided order and filtered by search. */

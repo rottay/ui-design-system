@@ -26,6 +26,9 @@
 
 .rt-typewriter__visual {
   white-space: pre-wrap;
+  /* Long unbroken strings (URLs, long translations) wrap instead of overflowing the
+     container; `pre-wrap` above still preserves the typed whitespace rhythm. */
+  overflow-wrap: break-word;
 }
 
 .rt-typewriter[data-mode="decode"] .rt-typewriter__visual {

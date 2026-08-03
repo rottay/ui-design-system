@@ -1,43 +1,251 @@
 /**
- * Modern UserProfileCard skin (WO-SKIN-06 CK-H2).
+ * Modern UserProfileCard skin (WO-SKIN-06 CK-H2, premium wave uplift).
  *
  * DELIBERATELY UNLAYERED (P-47): named DS layers sort before Tailwind's
  * unnamed base layer. The private BEM landing classes keep consumer-provided
  * slots from being painted when they happen to reuse a public data-part name.
  * Border-color rules reach at least (0,4,0) to clear the tenant border floor.
  *
- * `panelCardStyle`, `pillBadgeSmStyle`, and `spinnerStyle()` remain inline.
- * Their shared module does not define the local box-shadow, background, or
- * color overrides declared here, so extracting those overrides preserves
- * P-78 precedence. Values are transcribed verbatim from the modern engine.
+ * OWNERSHIP (premium wave): all geometry, the size ramp, typography color and
+ * every interactive state now live here, keyed on the root's
+ * data-variant/data-size/data-interactive contract. The Tailwind utility
+ * bundles and per-element inline literals were drained from the engine
+ * (values transcribed verbatim: avatar 2.5/3.5/5rem, title 14/16/20px,
+ * desc 12/14/16px, buttons 24/32/36px tall). Only the shared
+ * `panelCardStyle`/`pillBadgeSmStyle`/`spinnerStyle()` spreads remain inline
+ * in the engine (P-78: caller-overridable card chrome this module does not
+ * redefine). The certified Avatar primitive is NOT composed -- the
+ * cross-capability contract pins this family's own avatar-fallback +
+ * presence-dot anatomy (documented in the engine header).
+ *
+ * PRESENCE: the dot sits on the logical block-end/inline-end corner so RTL
+ * mirrors it; the online ring rides the canonical ds-foundation-pulse-ring
+ * keyframes on the motion channel (the global reduced-motion guard stills it).
  */
+
+/* ==========================================================================
+   ROOT — full card and compact row share the scope; interactive affordance
+   is keyed on data-interactive so static cards never advertise a hit area.
+   ========================================================================== */
 
 .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-loading='true'],
 .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-loading='false'][data-variant='full'] {
   box-shadow: var(--ds-elevation-1);
 }
 
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true'] {
+  cursor: pointer;
+  transition: box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+@media (hover: hover) {
+  .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'][data-interactive='true']:hover {
+    box-shadow: var(--ds-elevation-2);
+  }
+  .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'][data-interactive='true']:hover {
+    background: var(--ds-surface-inset);
+  }
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true']:focus-visible {
+  outline: none;
+  box-shadow: var(
+    --ds-shadow-focus-ring,
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+  );
+}
+
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-interactive='true'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}
+
+/* ---- compact row: horizontal layout (was `flex items-center gap-3 p-3
+        rounded-lg`); full variant keeps the shared panelCard chrome ---- */
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'] {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-3, 12px);
+  padding: var(--ds-spacing-3, 12px);
+  border-radius: var(--ds-radius-lg);
+}
+
+/* ---- full body: centered column (was inline padding:24 + flex column) ---- */
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='body'] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--ds-spacing-6, 24px);
+  text-align: center;
+}
+
+/* ---- loading body: same centered column, tighter rhythm (was inline
+        padding:20); the spinner part keeps its inline spinnerStyle paint ---- */
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='loading-body'] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--ds-spacing-5, 20px);
+  text-align: center;
+}
+
+/* ==========================================================================
+   AVATAR — frame, clip and the per-size ramp (was w-10/w-14/w-20 utilities)
+   ========================================================================== */
+
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='avatar-container'] {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='avatar'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  inline-size: 3.5rem;
+  block-size: 3.5rem;
+  background: var(--ds-surface-panel);
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='sm'] [data-part='avatar'] {
+  inline-size: 2.5rem;
+  block-size: 2.5rem;
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='lg'] [data-part='avatar'] {
+  inline-size: 5rem;
+  block-size: 5rem;
+}
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='avatar'] img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__avatar-fallback[data-part='avatar-fallback'] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 100%;
+  block-size: 100%;
   background: var(--ds-surface-panel);
   color: var(--ds-color-text-primary);
 }
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='avatar-initial'] {
+  font-size: var(--ds-font-size-lg, 18px);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  line-height: 1;
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'] [data-part='avatar-initial'] {
+  font-size: var(--ds-font-size-sm, 14px);
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='sm'] [data-part='avatar-initial'] {
+  font-size: var(--ds-font-size-xs, 12px);
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='lg'][data-variant='full'] [data-part='avatar-initial'] {
+  font-size: var(--ds-font-size-2xl, 24px);
+}
 
+/* ---- presence dot: logical corner placement (RTL mirrors), per-variant
+        size (10px compact / 12px full, transcribed); online ring rides the
+        canonical pulse keyframes on the motion channel ---- */
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'] {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  inline-size: 10px;
+  block-size: 10px;
   border-radius: 50%;
   border: 2px solid var(--ds-surface-card);
 }
-
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'] .ds-user-profile-card__presence-dot[data-part='presence-dot'] {
+  inline-size: 12px;
+  block-size: 12px;
+}
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='true'] {
   background: var(--ds-color-success);
 }
-
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='false'] {
   background: var(--ds-color-text-secondary);
+}
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='true']::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  border: 2px solid var(--ds-color-success);
+  animation: ds-foundation-pulse-ring var(--ds-motion-attention) ease-out infinite;
+}
+
+/* ==========================================================================
+   IDENTITY — hierarchy: name (semibold primary) > role (secondary) >
+   email (muted). Sizes ride the root data-size ramp (transcribed from the
+   retired text-sm/base/xl + text-xs/sm/base utilities); the opacity-50/40
+   wash is replaced by the real ink channels.
+   ========================================================================== */
+
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'] [data-part='identity'] {
+  margin-block-start: var(--ds-spacing-2, 8px);
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='compact'] [data-part='identity'] {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='name'] {
+  margin: 0;
+  overflow: hidden;
+  color: var(--ds-color-text-primary);
+  font-size: var(--ds-font-size-base, 16px);
+  font-weight: var(--ds-font-weight-semibold, 600);
+  line-height: var(--ds-line-height-tight, 1.25);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='sm'] [data-part='name'] {
+  font-size: var(--ds-font-size-sm, 14px);
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='lg'][data-variant='full'] [data-part='name'] {
+  font-size: var(--ds-font-size-xl, 20px);
+}
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='role'] {
+  margin: 0;
+  overflow: hidden;
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm, 14px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='sm'] [data-part='role'] {
+  font-size: var(--ds-font-size-xs, 12px);
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='lg'][data-variant='full'] [data-part='role'] {
+  font-size: var(--ds-font-size-base, 16px);
+}
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='email'] {
+  margin: 0;
+  margin-block-start: var(--ds-spacing-1, 4px);
+  color: var(--ds-color-text-muted, var(--ds-color-text-secondary));
+  font-size: var(--ds-font-size-xs, 12px);
+}
+
+/* ==========================================================================
+   BADGES — fills/inks per status (fill chrome comes from the inline shared
+   pillBadgeSmStyle spread; this file owns tint, ink and the eyebrow finish)
+   ========================================================================== */
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__department-badge[data-part='department-badge'],
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'] {
+  margin-block-start: var(--ds-spacing-1, 4px);
+  letter-spacing: var(--ds-letter-spacing-wide, 0.025em);
 }
 
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__department-badge[data-part='department-badge'] {
   background: color-mix(in srgb, var(--ds-color-info) 15%, transparent);
   color: var(--ds-color-info);
+}
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'] {
+  text-transform: uppercase;
 }
 
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='active'] {
@@ -60,9 +268,62 @@
   color: var(--ds-color-text-secondary);
 }
 
+/* ---- caller slot wrapper (was an anonymous mt-2 div) ---- */
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='header-extra'] {
+  margin-block-start: var(--ds-spacing-2, 8px);
+}
+
+/* ==========================================================================
+   ACTIONS — size ramp keyed on root[data-size] (transcribed from the retired
+   btnSizeStyles map), full state set on the motion channel, ghost hover on
+   the inset surface, 44px coarse floor.
+   ========================================================================== */
+
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='actions'] {
+  display: flex;
+  gap: var(--ds-spacing-2, 8px);
+  margin-block-start: var(--ds-spacing-3, 12px);
+}
+
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'] {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-spacing-1, 4px);
+  block-size: 32px;
+  padding-block: 0;
+  padding-inline: var(--ds-spacing-3, 12px);
   border-radius: var(--ds-radius-md);
   border: none;
+  font-size: calc(var(--ds-font-size-xs) * 1.083333);
+  cursor: pointer;
+  transition: background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='sm'] .ds-user-profile-card__action-button[data-part='action-button'] {
+  block-size: 24px;
+  padding-inline: var(--ds-spacing-2, 8px);
+  font-size: var(--ds-font-size-xs, 12px);
+}
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-size='lg'] .ds-user-profile-card__action-button[data-part='action-button'] {
+  block-size: 36px;
+  padding-inline: var(--ds-spacing-4, 16px);
+  font-size: var(--ds-font-size-sm, 14px);
+}
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button']:focus-visible {
+  outline: none;
+  box-shadow: var(
+    --ds-shadow-focus-ring,
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)
+  );
+}
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.ds-pattern-user-profile-card.ds-engine-modern [data-part='action-icon'] {
+  display: inline-flex;
+  flex-shrink: 0;
 }
 
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary'] {
@@ -78,4 +339,70 @@
 .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='default'] {
   background: transparent;
   color: var(--ds-color-text-primary);
+}
+
+@media (hover: hover) {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary']:not([data-disabled='true']):hover {
+    background: color-mix(in srgb, var(--ds-color-primary) 88%, var(--ds-color-text-primary));
+  }
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger']:not([data-disabled='true']):hover {
+    background: color-mix(in srgb, var(--ds-color-error) 88%, var(--ds-color-text-primary));
+  }
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='default']:not([data-disabled='true']):hover {
+    background: var(--ds-surface-inset);
+  }
+}
+
+/* ---- coarse pointers: action buttons meet the physical 44px floor ---- */
+@media (hover: none), (pointer: coarse) {
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'] {
+    min-block-size: var(--ds-touch-target-min, 44px);
+  }
+}
+
+/* ---- forced colors: system colors only. Presence reads by SHAPE (online =
+        filled + frame, offline = hollow frame), badges and buttons re-frame
+        in ButtonText, the pulse ring dies, the interactive card keeps a
+        visible frame so its hit area stays honest. ---- */
+@media (forced-colors: active) {
+  .ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-variant='full'] {
+    border: 1px solid ButtonText;
+  }
+
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'] {
+    border-color: Canvas;
+  }
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='true'] {
+    background: ButtonText;
+  }
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='true']::after {
+    animation: none;
+    border-color: ButtonText;
+  }
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='false'] {
+    background: Canvas;
+    border-color: ButtonText;
+  }
+
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__department-badge[data-part='department-badge'],
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'] {
+    background: Canvas;
+    color: CanvasText;
+    outline: 1px solid ButtonText;
+  }
+
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'] {
+    background: Canvas;
+    color: ButtonText;
+    outline: 1px solid ButtonText;
+  }
+  .ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-disabled='true'] {
+    color: GrayText;
+    outline-color: GrayText;
+  }
+
+  .ds-pattern-user-profile-card.ds-engine-modern [data-part='role'],
+  .ds-pattern-user-profile-card.ds-engine-modern [data-part='email'] {
+    color: CanvasText;
+  }
 }

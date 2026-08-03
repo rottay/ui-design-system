@@ -85,12 +85,14 @@ export function MonoStat({
   const classes = ["rt-mono-stat", className].filter(Boolean).join(" ");
 
   return (
-    <div ref={ref} className={classes}>
-      <span className="rt-mono-stat__value" aria-hidden="true">
+    <div ref={ref} className={classes} data-part="root">
+      <span className="rt-mono-stat__value" data-part="value" aria-hidden="true">
         {countingText}
       </span>
       <span className="rt-mono-stat__visually-hidden">{finalText}</span>
-      <span className="rt-mono-stat__label">{label}</span>
+      <span className="rt-mono-stat__label" data-part="label">
+        {label}
+      </span>
     </div>
   );
 }

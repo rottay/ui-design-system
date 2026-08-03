@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/kimi-preservation-manifest.mjs --write",
-  "basedOnReportDigest": "e7095df04a1ae39ccb2a64d89748961787dc3562e7ba07c22f234f400d25fa73",
+  "basedOnReportDigest": "c74a2299981feebab729e08d43ea61d9eaf4e50857b528a087f09bef5633d45b",
   "laws": [
     "preserve 100% of useful premium visual capability; connect it to the canon",
     "a census dead-writer verdict is never a deletion license",
@@ -2153,12 +2153,12 @@
     ]
   },
   "deadWriters": {
-    "total": 315,
+    "total": 275,
     "byProvenance": {
       "E-reserved-frontier": 3,
-      "B-modern-current": 72,
+      "B-modern-current": 71,
       "D-compiler-generated": 16,
-      "A-kimi-premium": 222,
+      "A-kimi-premium": 183,
       "C-legacy-mirror": 2
     },
     "entries": [
@@ -2324,13 +2324,6 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-collection-card-depth",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-collection-card-footer-bg",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
@@ -2346,48 +2339,6 @@
       },
       {
         "name": "--ds-collection-card-footer-color",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-collection-card-gap",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-collection-card-glass-bg",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-collection-card-grid-bg",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-collection-card-grid-line",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-collection-card-grid-size",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-collection-card-hover-transform",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "kimi+design-system/D1-premium",
@@ -2443,13 +2394,6 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-collection-card-min-height",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-collection-card-number-font-variant",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
@@ -2464,21 +2408,7 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-collection-card-overlay",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-collection-card-padding",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-collection-card-sheen",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "kimi+design-system/D1-premium",
@@ -2507,13 +2437,6 @@
       },
       {
         "name": "--ds-collection-card-title-color",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-collection-card-transition",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "kimi+design-system/D1-premium",
@@ -3129,13 +3052,6 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-listing-grid-min-compact-width",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-listing-grid-min-tall-width",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
@@ -3192,13 +3108,6 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-metric-card-body-color",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-metric-card-depth",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
@@ -3206,70 +3115,7 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-metric-card-footer-bg",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-metric-card-footer-border",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-metric-card-footer-color",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-metric-card-gap",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-metric-card-glass-bg",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-metric-card-grid-bg",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-metric-card-grid-line",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-metric-card-grid-size",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-metric-card-meter-fill-neutral",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-metric-card-overlay",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "kimi+design-system/D1-premium",
@@ -3290,38 +3136,10 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-metric-card-status-bg",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-metric-card-status-border",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-metric-card-status-color",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-metric-card-title-color",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-motion-scale-in",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
         "status": "dead-writer"
       },
       {
@@ -3340,13 +3158,6 @@
       },
       {
         "name": "--ds-premium-card-glass-bg",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-premium-card-hover-transform",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "kimi+design-system/D1-premium",
@@ -4144,28 +3955,7 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-workspace-card-action-bg",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-workspace-card-action-border",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-workspace-card-action-color",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-workspace-card-bg-hover",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "kimi+design-system/D1-premium",
@@ -4179,21 +3969,7 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-workspace-card-depth",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-workspace-card-footer-bg",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-workspace-card-footer-border",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "kimi+design-system/D1-premium",
@@ -4207,35 +3983,7 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-workspace-card-glass-bg",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-workspace-card-grid-bg",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-workspace-card-grid-line",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-workspace-card-grid-size",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-workspace-card-hover-transform",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "kimi+design-system/D1-premium",
@@ -4270,13 +4018,6 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-workspace-card-min-height",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-workspace-card-number-font-variant",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
@@ -4291,13 +4032,6 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-workspace-card-overlay",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-workspace-card-selected-border",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
@@ -4306,13 +4040,6 @@
       },
       {
         "name": "--ds-workspace-card-selected-ring",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-workspace-card-sheen",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "kimi+design-system/D1-premium",
@@ -4341,13 +4068,6 @@
       },
       {
         "name": "--ds-workspace-card-title-color",
-        "provenance": "A-kimi-premium",
-        "decision": "RECONNECT_OR_PROMOTE",
-        "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-workspace-card-transition",
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "kimi+design-system/D1-premium",

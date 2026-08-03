@@ -7,9 +7,33 @@ import { useReveal } from '../../../runtime/reveal';
 
 import "./TerminalBlock.css";
 
+/**
+ * Fallbacks for the streaming cadence. The effective timings are private channels read from
+ * the panel root at stream start: `--_ds-terminal-block-char-cadence` per typed character and
+ * `--_ds-terminal-block-line-gap` between lines. These constants apply only when a channel is
+ * undeclared or unparseable.
+ */
 const CHAR_INTERVAL_MS = 22;
 const LINE_GAP_MS = 220;
+const CHAR_CADENCE_AXIS = "--_ds-terminal-block-char-cadence";
+const LINE_GAP_AXIS = "--_ds-terminal-block-line-gap";
 const FIELD_SEPARATOR = String.fromCharCode(0);
+
+/**
+ * Reads a family-private `<time>` channel from the resolved style of `node`, falling back to
+ * `fallbackMs` when it is undeclared or unparseable. Called only inside effects, once per
+ * stream run. (Local copy of the kit's cadence reader — merge candidate.)
+ */
+function readCadenceTimeMs(node: HTMLElement | null, axis: string, fallbackMs: number): number {
+  if (node === null || typeof getComputedStyle !== "function") return fallbackMs;
+  const raw = getComputedStyle(node).getPropertyValue(axis).trim();
+  const parsed = raw.endsWith("ms")
+    ? Number.parseFloat(raw)
+    : raw.endsWith("s")
+      ? Number.parseFloat(raw) * 1000
+      : Number.NaN;
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallbackMs;
+}
 
 interface StreamState {
   activeIndex: number;
@@ -71,16 +95,18 @@ export function TerminalBlock({
 
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout> | undefined;
+    const charMs = readCadenceTimeMs(ref.current, CHAR_CADENCE_AXIS, CHAR_INTERVAL_MS);
+    const lineGapMs = readCadenceTimeMs(ref.current, LINE_GAP_AXIS, LINE_GAP_MS);
 
     function step(index: number, count: number): void {
       if (cancelled || index >= lines.length) return;
       const length = lines[index].text.length;
       if (count > length) {
-        timer = setTimeout(() => step(index + 1, 0), LINE_GAP_MS);
+        timer = setTimeout(() => step(index + 1, 0), lineGapMs);
         return;
       }
       setStream({ activeIndex: index, activeCount: count });
-      timer = setTimeout(() => step(index, count + 1), CHAR_INTERVAL_MS);
+      timer = setTimeout(() => step(index, count + 1), charMs);
     }
 
     setStream(IDLE_STATE);
@@ -98,10 +124,14 @@ export function TerminalBlock({
   const classes = ["rt-terminal-block", className].filter(Boolean).join(" ");
 
   return (
-    <div ref={ref} className={classes}>
-      <div className="rt-terminal-block__scanlines" aria-hidden="true" />
-      {title != null && <div className="rt-terminal-block__title-bar">{title}</div>}
-      <div className="rt-terminal-block__body">
+    <div ref={ref} className={classes} data-part="root">
+      <div className="rt-terminal-block__scanlines" data-part="scanlines" aria-hidden="true" />
+      {title != null && (
+        <div className="rt-terminal-block__title-bar" data-part="title-bar">
+          {title}
+        </div>
+      )}
+      <div className="rt-terminal-block__body" data-part="body">
         {lines.map((line, index) => {
           const started = index <= stream.activeIndex;
           const typedCount =
@@ -111,11 +141,15 @@ export function TerminalBlock({
                 ? stream.activeCount
                 : 0;
           return (
-            <div className="rt-terminal-block__line" key={index}>
+            <div className="rt-terminal-block__line" data-part="line" key={index}>
               <span className="rt-terminal-block__visually-hidden">{line.text}</span>
               {started && (
                 <span className="rt-terminal-block__visual" aria-hidden="true">
-                  {line.prompt && <span className="rt-terminal-block__prompt">{"$ "}</span>}
+                  {line.prompt && (
+                    <span className="rt-terminal-block__prompt" data-part="prompt">
+                      {"$ "}
+                    </span>
+                  )}
                   {line.text.slice(0, typedCount)}
                 </span>
               )}

@@ -119,6 +119,7 @@ export function CollectionHeader({
     <Text
       data-part="eyebrow"
       data-embedded={embedded}
+      color="subtle"
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -211,7 +212,7 @@ export function CollectionHeader({
             data-title-treatment={titleTreatment}
             data-compact-layout={compactLayout}
             data-editorial-tech={editorialTech}
-            as="h2"
+            as="h1"
             style={{
               fontFamily: useDisplayTitle
                 ? 'var(--ds-font-family-display, var(--ds-font-family-heading))'
@@ -226,7 +227,9 @@ export function CollectionHeader({
                       : editorialTech
                         ? 'clamp(40px, 5.2vw, 54px)'
                         : 'clamp(38px, 4.8vw, 52px)'
-                    : 'var(--ds-font-size-fluid-4xl)',
+                    : compactLayout
+                      ? 'var(--ds-font-size-fluid-3xl)'
+                      : 'var(--ds-font-size-fluid-4xl)',
               fontWeight: useDisplayTitle
                 ? ('var(--ds-font-weight-semibold, 600)' as any)
                 : useDottedTitle
@@ -285,6 +288,7 @@ export function CollectionHeader({
             >
               <Box
                 data-part="subtitle-divider"
+                aria-hidden="true"
                 style={{
                   flexShrink: 0,
                   width: 28,
@@ -297,6 +301,7 @@ export function CollectionHeader({
                 data-variant="editorial-tech"
                 data-title-treatment={titleTreatment}
                 data-subtitle-treatment={subtitleTreatment}
+                color="secondary"
                 style={{
                   display: 'block',
                   fontSize: useDisplayTitle
@@ -341,6 +346,7 @@ export function CollectionHeader({
                 data-title-treatment={titleTreatment}
                 data-subtitle-treatment={subtitleTreatment}
                 data-compact-layout={compactLayout}
+                color="secondary"
                 style={{
                   display: 'block',
                   fontSize: useDisplayTitle
@@ -349,7 +355,9 @@ export function CollectionHeader({
                       ? compactLayout
                         ? '11px'
                         : 'var(--ds-font-size-xs, 12px)'
-                      : 'var(--ds-font-size-sm, 14px)',
+                      : compactLayout
+                        ? 'var(--ds-font-size-xs, 12px)'
+                        : 'var(--ds-font-size-sm, 14px)',
                   lineHeight: useDisplayTitle ? 1.65 : useDottedTitle ? (compactLayout ? 1.45 : 1.55) : 1.5,
                   textWrap: 'pretty',
                   fontFamily: useMonoSubtitle
@@ -378,6 +386,7 @@ export function CollectionHeader({
           {!minimalLayout && editorialTech && !compactLayout && (
             <Box
               data-part="editorial-tech-rule"
+              aria-hidden="true"
               style={{
                 marginTop: 'var(--ds-spacing-3, 12px)',
                 height: 1,

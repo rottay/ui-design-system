@@ -21,10 +21,14 @@ describe('BulkSelectToggle stable motion contract', () => {
     expect(BULK_SELECT_CSS).not.toMatch(/transition:\s*all\b/);
     expect(BULK_SELECT_CSS).not.toMatch(/\b0\.2s\b/);
     expect(BULK_SELECT_CSS).toContain(
-      'background-color var(--ds-duration-normal) ease',
+      'background-color var(--ds-motion-normal) var(--ds-motion-ease-move, ease)',
     );
     expect(BULK_SELECT_CSS).toContain(
-      'box-shadow var(--ds-duration-normal) ease',
+      'box-shadow var(--ds-motion-normal) var(--ds-motion-ease-move, ease)',
+    );
+    expect(BULK_SELECT_CSS).not.toContain('--ds-duration-normal');
+    expect(BULK_SELECT_CSS).toMatch(
+      /@media \(prefers-reduced-motion: reduce\)[\s\S]*transition: none;[\s\S]*animation: none;/,
     );
   });
 });

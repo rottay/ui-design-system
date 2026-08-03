@@ -1,7 +1,10 @@
 /**
- * DetailHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * DetailHeader skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/detail-header.css — DetailHeader renders one DOM
  * tree under every engine (no engines/ split), so it has a single skin.
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` into `layer(rottay-components)`
+ * (the old "DELIBERATELY UNLAYERED (P-47)" note predates the wiring).
  *
  * SCOPE ROOT carries `ds-structure ds-detail-header` + `data-part='root'` and
  * now also stamps `data-archetype`, so every archetype-selected value (hero
@@ -11,10 +14,12 @@
  * (0,3,1); a border-COLOR rule buys (0,4,0) from the two root classes + the target
  * `data-part` repeated (or the target `data-part` + a real contract attribute like
  * `data-active`/`data-variant`). Non-border paint wins unlayered at (0,3,0). A
- * `color` on a composed `Text` must exceed the typography skin's (0,4,0)
- * `[data-color='…']` rule, so it buys (0,5,0) from the two root classes + the
- * target `data-part` ×3. The `Box as="h1"` title and the icons are NOT typography,
- * so their color wins at (0,3,0).
+ * `color` on a composed `Text` can never win from this layer — the typography
+ * skin lives in the LATER `rottay-engines` layer — so Text ink rides the Text
+ * `color` prop (`secondary`/`subtle`) and the color rules below remain as the
+ * declared intent (they still paint wherever the typography skin is absent).
+ * The `Box as="h1"` title and the icons are NOT typography, so their color
+ * wins at (0,3,0).
  *
  * GEOMETRY: all static geometry (paddings, sizes, trackings) lives here behind
  * `--ds-detail-header-*` channels; the engine stamps parts and state only.
@@ -148,10 +153,9 @@
   block-size: 14px;
   color: var(--ds-color-text-secondary);
 }
-/* the back glyph points in the reading-backward direction — flip it under RTL */
-[dir='rtl'] .ds-structure.ds-detail-header [data-part='back-icon'] {
-  transform: scaleX(-1);
-}
+/* the back glyph is the governed `navigation.back` icon with autoMirror —
+   it flips itself under RTL; the old manual scaleX(-1) rule is retired (it
+   double-flipped the governed icon) */
 .ds-structure.ds-detail-header [data-part='back-label'][data-part='back-label'][data-part='back-label'] {
   color: var(--ds-color-text-secondary);
 }
@@ -161,10 +165,10 @@
   background: var(--ds-color-border-secondary);
 }
 
-.ds-structure.ds-detail-header [data-part='back-button']:hover {
+/* touch feedback twin: the hover lift lives under (hover: hover) below */
+.ds-structure.ds-detail-header [data-part='back-button']:active {
   background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
   border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
-  transform: translateY(-1px);
 }
 
 /* keyboard focus: the back button is a Flex inside an <a>, so the ring lands
@@ -250,7 +254,7 @@
   padding: var(--ds-detail-header-hero-panel-padding, 28px);
 }
 
-.ds-structure.ds-detail-header[data-part='root']:hover [data-part='avatar'] {
+.ds-structure.ds-detail-header[data-part='root']:active [data-part='avatar'] {
   transform: translateY(-2px) scale(1.015);
 }
 
@@ -316,7 +320,8 @@
   word-break: break-all;
 }
 
-.ds-structure.ds-detail-header [data-part='metadata-chip']:hover {
+/* touch feedback twin: the hover treatment lives under (hover: hover) below */
+.ds-structure.ds-detail-header [data-part='metadata-chip']:active {
   transform: translateY(-1px);
   border-color: color-mix(in srgb, var(--ds-color-primary) 20%, var(--ds-color-border-secondary));
   box-shadow: var(--ds-elevation-1);
@@ -384,10 +389,36 @@
   border-bottom: none;
 }
 
-.ds-structure.ds-detail-header [data-part='tab'][data-active='false']:hover {
+/* touch feedback twin: the hover treatment lives under (hover: hover) below */
+.ds-structure.ds-detail-header [data-part='tab'][data-active='false']:active {
   background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
   border-color: color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
-  transform: translateY(-1px);
+}
+
+/* ---- hover is pointer-fine only; every treatment keeps an unguarded
+        `:active` twin at its original cascade position above. ---- */
+@media (hover: hover) {
+  .ds-structure.ds-detail-header [data-part='back-button']:hover {
+    background: color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card));
+    border-color: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
+    transform: translateY(-1px);
+  }
+
+  .ds-structure.ds-detail-header[data-part='root']:hover [data-part='avatar'] {
+    transform: translateY(-2px) scale(1.015);
+  }
+
+  .ds-structure.ds-detail-header [data-part='metadata-chip']:hover {
+    transform: translateY(-1px);
+    border-color: color-mix(in srgb, var(--ds-color-primary) 20%, var(--ds-color-border-secondary));
+    box-shadow: var(--ds-elevation-1);
+  }
+
+  .ds-structure.ds-detail-header [data-part='tab'][data-active='false']:hover {
+    background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
+    border-color: color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+    transform: translateY(-1px);
+  }
 }
 
 /* APG tab keyboard focus — the tab is focusable (tabIndex), so the ring must

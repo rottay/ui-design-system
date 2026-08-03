@@ -71,6 +71,15 @@
  * Theme/density channel switches transition on the fast motion token and are
  * silenced under prefers-reduced-motion.
  *
+ * ENTRANCE (premium wave): the dock mounts with one governed rise/fade keyed
+ * on placement — a bottom dock rises from below, a top dock descends — via
+ * `--_ds-action-dock-enter-offset` (the keyframes read the private custom
+ * property, so one vocabulary serves both edges) and the `--ds-motion-normal`
+ * channel.
+ * Purely additive paint: the transform never alters layout, so the
+ * reservation hooks and the coarse-pointer floor are unaffected, and the
+ * reduced-motion block silences it alongside the surface transition.
+ *
  * RTL: every rule is logical (inset-inline, padding-inline, margin-inline,
  * gap), so the row, the safe areas, and the priority grammar all mirror.
  */
@@ -90,6 +99,9 @@
     background-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
     border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out),
     box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, ease-out);
+  animation: ds-action-dock-enter
+    var(--ds-motion-normal, 200ms)
+    var(--ds-motion-ease-out, ease-out) both;
 }
 
 .rottay-action-dock[data-part='root'][data-mode='fixed'] {
@@ -110,6 +122,8 @@
   --ds-action-dock-reserved-block-end: calc(
     60px + var(--ds-action-dock-safe-area-bottom, var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px)))
   );
+  /* Entrance: a bottom dock rises from below the edge. */
+  --_ds-action-dock-enter-offset: 8px;
 
   padding-block-start: var(--ds-action-dock-padding-block, var(--ds-spacing-3, 0.75rem));
   padding-block-end: max(
@@ -146,6 +160,8 @@
   --ds-action-dock-reserved-block-start: calc(
     60px + var(--ds-action-dock-safe-area-top, var(--ds-safe-area-top, env(safe-area-inset-top, 0px)))
   );
+  /* Entrance: a top dock descends from above the edge. */
+  --_ds-action-dock-enter-offset: -8px;
 
   inset-block-start: 0;
   padding-block-start: max(
@@ -198,10 +214,24 @@
   }
 }
 
+/* Entrance vocabulary: one rise/fade; the placement rules above sign the
+ * offset through the custom property (resolved per animating element). */
+@keyframes ds-action-dock-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--_ds-action-dock-enter-offset, 6px));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Reduced motion: the surface transition (theme/density channel switches)
- * is silenced; layout and the coarse floor are unaffected. */
+ * and the entrance are silenced; layout and the coarse floor are unaffected. */
 @media (prefers-reduced-motion: reduce) {
   .rottay-action-dock[data-part='root'][data-placement][data-mode] {
     transition: none;
+    animation: none;
   }
 }

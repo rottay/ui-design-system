@@ -30,10 +30,19 @@
 .rt-ascii-diagram__grid {
   margin: 0;
   overflow-x: auto;
+  /* Logical-axis scroll for RTL surfaces; engines without `overflow-inline` keep the
+     physical `overflow-x` declaration above (identical axis under horizontal writing). */
+  overflow-inline: auto;
   font-family: var(--ds-commercial-font-mono);
-  font-size: 0.8125rem;
+  /* Glyph size is private to this diagram grammar: 13px has no exact semantic
+     typography rung and must not create a second public type scale. */
+  font-size: var(--_ds-ascii-diagram-grid-size, 0.8125rem);
   line-height: 1.25;
   white-space: pre;
+  /* Thin monochrome scrollbar for wide diagrams (spec section 11.0 micro-brand); paint comes
+     from the ramp and degrades to the platform default where unsupported. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-commercial-hairline-strong) transparent;
 }
 
 /*

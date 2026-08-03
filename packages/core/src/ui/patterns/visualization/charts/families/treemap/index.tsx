@@ -56,10 +56,13 @@ function normalizeTreeNode(node: TreeMapNode): SvgTreeMapNode | null {
   };
 }
 
-function treeLeaves(nodes: readonly SvgTreeMapNode[]): SvgTreeMapNode[] {
-  return nodes.flatMap((node) => node.children?.length
-    ? treeLeaves(node.children)
-    : [node]);
+function treeLeaves(
+  nodes: readonly SvgTreeMapNode[],
+  group: string | null = null,
+): { name: string; value: number; group: string | null }[] {
+  return nodes.flatMap((node) => (node.children?.length
+    ? treeLeaves(node.children, node.name)
+    : [{ name: node.name, value: node.value, group }]));
 }
 
 /**
@@ -112,10 +115,16 @@ export const TreeMap = memo(function TreeMap({
     }),
     [height, normalizedData, padding, palette],
   );
+  // Hierarchical context reaches the accessible summary: when the data has
+  // nested groups, each leaf row carries its parent group so the textual
+  // alternative preserves the grouping the tiles encode spatially.
+  const hasHierarchy = leavesForSummary.some((leaf) => leaf.group !== null);
   const summary = {
     caption: title ? `${title} data summary` : 'Treemap data summary',
-    headers: ['Name', 'Value'],
-    rows: leavesForSummary.map((item) => [item.name, item.value]),
+    headers: hasHierarchy ? ['Group', 'Name', 'Value'] : ['Name', 'Value'],
+    rows: leavesForSummary.map((leaf) => (hasHierarchy
+      ? [leaf.group ?? '', leaf.name, leaf.value]
+      : [leaf.name, leaf.value])),
   };
   const legendNode = legend ? (
     <div data-part="legend" style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>

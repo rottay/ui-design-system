@@ -296,10 +296,15 @@ export function DetailSurface<TRaw, TView>({
       {detailPanel}
     </PageShellSurface>
   ) : (
+    /* No page chrome: the surface frames the panel itself. The margin is a
+       skin-owned logical property (RTL-safe); only the config-driven
+       max-width stays inline (dynamic geometry, not paint). */
     <Box
+      className="ds-detail-surface__frame"
+      data-part="detail-frame"
+      data-framed={config.presentation.chrome?.maxWidth ? "true" : "false"}
       style={{
         maxWidth: config.presentation.chrome?.maxWidth,
-        margin: config.presentation.chrome?.maxWidth ? "0 auto" : undefined,
       }}
     >
       {detailPanel}

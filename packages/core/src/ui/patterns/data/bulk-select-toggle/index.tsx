@@ -17,6 +17,7 @@ import {
 } from '../../../../graphics/icons';
 
 import { Badge, Button, Flex, Text } from '../../../primitives';
+import { useOptionalTranslation } from '../../../../infrastructure/runtime/i18n';
 
 export interface BulkSelectToggleProps {
   /** Whether bulk selection mode is active */
@@ -35,6 +36,14 @@ export function BulkSelectToggle({
   selectedCount = 0,
   size = 'sm',
 }: BulkSelectToggleProps) {
+  /* Localized chrome (components catalog, English floor): the three labels
+     below resolve through `bulkSelectToggle.*` when the coordinator lands the
+     keys, and render byte-identical English until then. */
+  const translation = useOptionalTranslation('components');
+  const selectLabel = translation?.tOr('bulkSelectToggle.select', 'Select') ?? 'Select';
+  const doneLabel = translation?.tOr('bulkSelectToggle.done', 'Done') ?? 'Done';
+  const selectedLabel = translation?.tOr('bulkSelectToggle.selected', 'selected') ?? 'selected';
+
   return (
     <Flex
       className="ds-pattern-bulk-select-toggle"
@@ -49,34 +58,22 @@ export function BulkSelectToggle({
         variant={active ? 'primary' : 'ghost'}
         size={size}
         onClick={onToggle}
-        style={{
-          gap: 6,
-        }}
+        aria-pressed={active}
       >
         {active ? (
-          <XIcon
-            data-part="icon"
-            style={{
-              width: 14,
-              height: 14,
-            }}
-          />
+          <XIcon data-part="icon" />
         ) : (
-          <CheckSquareIcon data-part="icon" style={{ width: 14, height: 14 }} />
+          <CheckSquareIcon data-part="icon" />
         )}
-        <Text data-part="label" size="sm">{active ? 'Done' : 'Select'}</Text>
+        <Text data-part="label" size="sm">{active ? doneLabel : selectLabel}</Text>
       </Button>
 
       {active && selectedCount > 0 && (
         <Badge
           className="ds-bulk-select-toggle__count"
           variant="primary"
-          style={{
-            fontFamily: 'monospace',
-            fontSize: 12,
-          }}
         >
-          {selectedCount} selected
+          {selectedCount} {selectedLabel}
         </Badge>
       )}
     </Flex>

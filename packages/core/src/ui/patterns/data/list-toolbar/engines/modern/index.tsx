@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 /**
  * @fileoverview ListToolbar -- Modern (Hermes) engine implementation.
@@ -24,7 +24,7 @@
  * Zero DaisyUI classes.
  */
 
-import { useState, useCallback, useEffect, useMemo, useRef } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import {
   Box,
@@ -39,7 +39,7 @@ import {
   Tabs,
   Tag,
   Tooltip,
-} from "../../../../../primitives";
+} from '../../../../../primitives';
 import {
   SearchIcon as Search,
   ListIcon as List,
@@ -55,16 +55,16 @@ import {
   ChevronDownIcon as ChevronDown,
   MoreHorizontalIcon as MoreHorizontal,
   CheckIcon as Check,
-} from "../../../../../../graphics/icons";
+} from '../../../../../../graphics/icons';
 
 import type {
   ListToolbarProps,
   ListToolbarMessages,
   FilterPillConfig,
   DensityKey,
-} from "../../contracts";
-import { useBreakpoints } from "@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state";
-import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
+} from '../../contracts';
+import { useBreakpoints } from '@/infrastructure/runtime/responsive/composition/react/provider/breakpoint-state';
+import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
 // ============================================================================
 // DESIGN TOKENS (local aliases for readability)
@@ -73,25 +73,25 @@ import { useOptionalTranslation } from "@/infrastructure/runtime/i18n";
 const COMPACT_CONTAINER_MAX = 1080;
 
 const DEFAULT_MESSAGES: ListToolbarMessages = {
-  compact: "Compact",
-  comfortable: "Comfortable",
-  spacious: "Spacious",
-  densitySuffix: "density",
-  rowDensity: "Row density",
-  viewMode: "View mode",
-  listView: "List view",
-  cardView: "Card view",
-  columns: "Columns",
-  density: "Density",
-  views: "Views",
-  noColumnSettings: "No column settings available.",
-  noSavedViews: "No saved views available.",
-  columnSettings: "Column settings",
-  settings: "Settings",
-  moreOptions: "More options",
-  export: "Export",
-  active: "active",
-  clearAll: "Clear all",
+  compact: 'Compact',
+  comfortable: 'Comfortable',
+  spacious: 'Spacious',
+  densitySuffix: 'density',
+  rowDensity: 'Row density',
+  viewMode: 'View mode',
+  listView: 'List view',
+  cardView: 'Card view',
+  columns: 'Columns',
+  density: 'Density',
+  views: 'Views',
+  noColumnSettings: 'No column settings available.',
+  noSavedViews: 'No saved views available.',
+  columnSettings: 'Column settings',
+  settings: 'Settings',
+  moreOptions: 'More options',
+  export: 'Export',
+  active: 'active',
+  clearAll: 'Clear all',
 };
 
 /**
@@ -101,25 +101,25 @@ const DEFAULT_MESSAGES: ListToolbarMessages = {
  * descriptions stay prop-only and are intentionally NOT catalog keys.
  */
 const CATALOG_MESSAGE_KEYS = [
-  "compact",
-  "comfortable",
-  "spacious",
-  "densitySuffix",
-  "rowDensity",
-  "viewMode",
-  "listView",
-  "cardView",
-  "columns",
-  "density",
-  "views",
-  "noColumnSettings",
-  "noSavedViews",
-  "columnSettings",
-  "settings",
-  "moreOptions",
-  "export",
-  "active",
-  "clearAll",
+  'compact',
+  'comfortable',
+  'spacious',
+  'densitySuffix',
+  'rowDensity',
+  'viewMode',
+  'listView',
+  'cardView',
+  'columns',
+  'density',
+  'views',
+  'noColumnSettings',
+  'noSavedViews',
+  'columnSettings',
+  'settings',
+  'moreOptions',
+  'export',
+  'active',
+  'clearAll',
 ] as const satisfies readonly (keyof ListToolbarMessages)[];
 
 /**
@@ -138,7 +138,7 @@ function useContainerCompact(fallbackCompact: boolean) {
 
   useEffect(() => {
     const node = containerRef.current;
-    if (!node || typeof ResizeObserver === "undefined") {
+    if (!node || typeof ResizeObserver === 'undefined') {
       setCompact(fallbackCompact);
       return undefined;
     }
@@ -170,15 +170,15 @@ function useContainerCompact(fallbackCompact: boolean) {
 const DENSITY_OPTIONS: {
   key: DensityKey;
   icon: React.ReactNode;
-  labelKey: "compact" | "comfortable" | "spacious";
+  labelKey: 'compact' | 'comfortable' | 'spacious';
 }[] = [
-  { key: "compact", icon: <AlignJustify size={14} />, labelKey: "compact" },
+  { key: 'compact', icon: <AlignJustify size={14} />, labelKey: 'compact' },
   {
-    key: "comfortable",
+    key: 'comfortable',
     icon: <AlignCenter size={14} />,
-    labelKey: "comfortable",
+    labelKey: 'comfortable',
   },
-  { key: "spacious", icon: <AlignLeft size={14} />, labelKey: "spacious" },
+  { key: 'spacious', icon: <AlignLeft size={14} />, labelKey: 'spacious' },
 ];
 
 // ============================================================================
@@ -216,11 +216,11 @@ function IconButton({
 
   const btn = (
     <Button
-      variant="ghost"
-      size="sm"
+      variant='ghost'
+      size='sm'
       icon={children}
-      data-part="icon-button"
-      className="ds-list-toolbar__icon-button"
+      data-part='icon-button'
+      className='ds-list-toolbar__icon-button'
       onClick={onClick}
       aria-label={ariaLabel}
       {...forwarded}
@@ -229,7 +229,7 @@ function IconButton({
 
   if (tooltipText) {
     return (
-      <Tooltip content={tooltipText} placement="bottom">
+      <Tooltip content={tooltipText} placement='bottom'>
         {btn}
       </Tooltip>
     );
@@ -244,8 +244,8 @@ function IconButton({
 function ToolbarDivider() {
   return (
     <Box
-      data-part="divider"
-      className="ds-list-toolbar__divider"
+      data-part='divider'
+      className='ds-list-toolbar__divider'
     />
   );
 }
@@ -260,21 +260,21 @@ function FilterButton({
   onFilterChange?: (key: string, value: unknown) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const isActive = pill.value && pill.value !== "" && pill.value !== "all";
+  const isActive = pill.value && pill.value !== '' && pill.value !== 'all';
   const activeLabel = pill.options.find((o) => o.value === pill.value)?.label;
 
   return (
     <Popover
-      trigger="click"
-      placement="bottomLeft"
+      trigger='click'
+      placement='bottomLeft'
       open={open}
       onOpenChange={setOpen}
       arrow={false}
       content={
         <Box
-          className="ds-list-toolbar__filter-menu"
-          data-part="filter-menu"
-          role="listbox"
+          className='ds-list-toolbar__filter-menu'
+          data-part='filter-menu'
+          role='listbox'
           aria-label={pill.label}
         >
           {pill.options.map((option) => {
@@ -295,26 +295,26 @@ function FilterButton({
       }
     >
       <Button
-        variant="ghost"
-        size="sm"
-        data-part="filter-trigger"
-        className="ds-list-toolbar__filter-trigger"
+        variant='ghost'
+        size='sm'
+        data-part='filter-trigger'
+        className='ds-list-toolbar__filter-trigger'
         data-active={!!isActive}
         data-open={open}
         aria-expanded={open}
-        aria-haspopup="listbox"
+        aria-haspopup='listbox'
         aria-label={activeLabel ? `${pill.label}: ${activeLabel}` : pill.label}
-        suffix={<ChevronDown size={12} aria-hidden="true" />}
+        suffix={<ChevronDown size={12} aria-hidden='true' />}
       >
         {pill.label}
         {isActive && activeLabel && (
           <Badge
-            tone="primary"
-            badgeStyle="soft"
-            size="xs"
+            tone='primary'
+            badgeStyle='soft'
+            size='xs'
             content={1}
-            data-part="filter-badge"
-            className="ds-list-toolbar__filter-badge"
+            data-part='filter-badge'
+            className='ds-list-toolbar__filter-badge'
           />
         )}
       </Button>
@@ -336,16 +336,16 @@ function FilterDropdownItem({
 }) {
   return (
     <Button
-      variant="ghost"
-      size="sm"
+      variant='ghost'
+      size='sm'
       fullWidth
-      data-part="filter-dropdown-item"
-      className="ds-list-toolbar__filter-dropdown-item"
+      data-part='filter-dropdown-item'
+      className='ds-list-toolbar__filter-dropdown-item'
       data-selected={selected}
       onClick={onClick}
-      role="option"
+      role='option'
       aria-selected={selected}
-      suffix={selected ? <Box as="span" data-part="filter-checkmark"><Check size={13} aria-hidden="true" /></Box> : undefined}
+      suffix={selected ? <Box as='span' data-part='filter-checkmark'><Check size={13} aria-hidden='true' /></Box> : undefined}
     >
       {label}
     </Button>
@@ -359,30 +359,30 @@ function ViewSwitch({
   onViewModeChange,
   messages,
 }: {
-  viewMode: "list" | "cards";
-  onViewModeChange: (mode: "list" | "cards") => void;
+  viewMode: 'list' | 'cards';
+  onViewModeChange: (mode: 'list' | 'cards') => void;
   messages: ListToolbarMessages;
 }) {
   const modes: {
-    key: "list" | "cards";
+    key: 'list' | 'cards';
     icon: React.ReactNode;
     label: string;
   }[] = [
-    { key: "list", icon: <List size={15} />, label: messages.listView },
-    { key: "cards", icon: <LayoutGrid size={15} />, label: messages.cardView },
+    { key: 'list', icon: <List size={15} />, label: messages.listView },
+    { key: 'cards', icon: <LayoutGrid size={15} />, label: messages.cardView },
   ];
 
   return (
-    <Tooltip content={messages.viewMode} placement="bottom">
+    <Tooltip content={messages.viewMode} placement='bottom'>
       <Segmented
         ariaLabel={messages.viewMode}
-        className="ds-list-toolbar__segmented-control"
-        size="small"
+        className='ds-list-toolbar__segmented-control'
+        size='small'
         value={viewMode}
-        onChange={(value) => onViewModeChange(value as "list" | "cards")}
+        onChange={(value) => onViewModeChange(value as 'list' | 'cards')}
         options={modes.map((mode) => ({
           value: mode.key,
-          label: <span className="ds-sr-only">{mode.label}</span>,
+          label: <span className='ds-sr-only'>{mode.label}</span>,
           ariaLabel: mode.label,
           icon: mode.icon,
         }))}
@@ -403,18 +403,18 @@ function DensitySwitch({
   messages: ListToolbarMessages;
 }) {
   return (
-    <Tooltip content={messages.rowDensity} placement="bottom">
+    <Tooltip content={messages.rowDensity} placement='bottom'>
       <Segmented
         ariaLabel={messages.rowDensity}
-        className="ds-list-toolbar__segmented-control"
-        size="small"
+        className='ds-list-toolbar__segmented-control'
+        size='small'
         value={density}
         onChange={(value) => onDensityChange(value as DensityKey)}
         options={DENSITY_OPTIONS.map((opt) => {
           const label = `${messages[opt.labelKey]} ${messages.densitySuffix}`;
           return {
             value: opt.key,
-            label: <span className="ds-sr-only">{label}</span>,
+            label: <span className='ds-sr-only'>{label}</span>,
             ariaLabel: label,
             icon: opt.icon,
           };
@@ -445,39 +445,39 @@ function SettingsDropdown({
 }) {
   return (
     <Popover
-      trigger="click"
-      placement="bottomRight"
+      trigger='click'
+      placement='bottomRight'
       open={open}
       onOpenChange={onOpenChange}
       arrow={false}
       content={
         <Box
-          className="ds-list-toolbar__settings-panel"
-          data-part="settings-panel"
+          className='ds-list-toolbar__settings-panel'
+          data-part='settings-panel'
         >
           <Tabs
-            defaultActiveKey="columns"
-            size="sm"
+            defaultActiveKey='columns'
+            size='sm'
             items={[
               {
-                key: "columns",
+                key: 'columns',
                 label: messages.columns,
                 children: columnSettingsContent ?? (
                   <Text
-                    data-part="settings-empty"
-                    className="ds-list-toolbar__settings-empty"
+                    data-part='settings-empty'
+                    className='ds-list-toolbar__settings-empty'
                   >
                     {messages.noColumnSettings}
                   </Text>
                 ),
               },
               {
-                key: "density",
+                key: 'density',
                 label: messages.density,
                 children: (
                   <Stack
-                    spacing="sm"
-                    className="ds-list-toolbar__density-options"
+                    spacing='sm'
+                    className='ds-list-toolbar__density-options'
                   >
                     {DENSITY_OPTIONS.map((opt) => {
                       const isActive = density === opt.key;
@@ -495,12 +495,12 @@ function SettingsDropdown({
                 ),
               },
               {
-                key: "views",
+                key: 'views',
                 label: messages.views,
                 children: savedViewsContent ?? (
                   <Text
-                    data-part="settings-empty"
-                    className="ds-list-toolbar__settings-empty"
+                    data-part='settings-empty'
+                    className='ds-list-toolbar__settings-empty'
                   >
                     {messages.noSavedViews}
                   </Text>
@@ -538,16 +538,16 @@ function DensityOptionRow({
 }) {
   return (
     <Button
-      variant="ghost"
-      size="sm"
+      variant='ghost'
+      size='sm'
       fullWidth
-      data-part="density-option"
-      className="ds-list-toolbar__density-option"
+      data-part='density-option'
+      className='ds-list-toolbar__density-option'
       data-active={active}
       onClick={onClick}
       aria-pressed={active}
       icon={icon}
-      suffix={active ? <Check size={13} aria-hidden="true" /> : undefined}
+      suffix={active ? <Check size={13} aria-hidden='true' /> : undefined}
     >
       {label}
     </Button>
@@ -566,8 +566,8 @@ function MobileOverflow({
 }: {
   density: DensityKey;
   onDensityChange: (d: DensityKey) => void;
-  viewMode: "list" | "cards";
-  onViewModeChange: (mode: "list" | "cards") => void;
+  viewMode: 'list' | 'cards';
+  onViewModeChange: (mode: 'list' | 'cards') => void;
   onExport?: () => void;
   messages: ListToolbarMessages;
 }) {
@@ -575,22 +575,22 @@ function MobileOverflow({
 
   return (
     <Popover
-      trigger="click"
-      placement="bottomRight"
+      trigger='click'
+      placement='bottomRight'
       open={open}
       onOpenChange={setOpen}
       arrow={false}
       content={
         <Stack
-          spacing="sm"
-          className="ds-list-toolbar__mobile-overflow-panel"
-          data-part="mobile-overflow-panel"
+          spacing='sm'
+          className='ds-list-toolbar__mobile-overflow-panel'
+          data-part='mobile-overflow-panel'
         >
           {/* View mode */}
-          <Box className="ds-list-toolbar__mobile-overflow-group">
+          <Box className='ds-list-toolbar__mobile-overflow-group'>
             <Text
-              data-part="mobile-overflow-label"
-              className="ds-list-toolbar__mobile-overflow-label"
+              data-part='mobile-overflow-label'
+              className='ds-list-toolbar__mobile-overflow-label'
             >
               {messages.viewMode}
             </Text>
@@ -602,10 +602,10 @@ function MobileOverflow({
           </Box>
 
           {/* Density */}
-          <Box className="ds-list-toolbar__mobile-overflow-group">
+          <Box className='ds-list-toolbar__mobile-overflow-group'>
             <Text
-              data-part="mobile-overflow-label"
-              className="ds-list-toolbar__mobile-overflow-label"
+              data-part='mobile-overflow-label'
+              className='ds-list-toolbar__mobile-overflow-label'
             >
               {messages.density}
             </Text>
@@ -619,8 +619,8 @@ function MobileOverflow({
           {/* Divider */}
           {onExport && (
             <Box
-              data-part="divider"
-              className="ds-list-toolbar__divider ds-list-toolbar__divider--horizontal"
+              data-part='divider'
+              className='ds-list-toolbar__divider ds-list-toolbar__divider--horizontal'
             />
           )}
 
@@ -662,11 +662,11 @@ function MobileOverflowItem({
 }) {
   return (
     <Button
-      variant="ghost"
-      size="sm"
+      variant='ghost'
+      size='sm'
       fullWidth
-      data-part="mobile-overflow-item"
-      className="ds-list-toolbar__mobile-overflow-item"
+      data-part='mobile-overflow-item'
+      className='ds-list-toolbar__mobile-overflow-item'
       onClick={onClick}
       icon={icon}
     >
@@ -692,7 +692,7 @@ function MobileOverflowItem({
  * Conditional second row:
  *   Active filter chips strip with dismiss buttons.
  *
- * On mobile, secondary controls collapse into a "More" dropdown.
+ * On mobile, secondary controls collapse into a 'More' dropdown.
  */
 export default function ModernListToolbar({
   title,
@@ -722,13 +722,13 @@ export default function ModernListToolbar({
   const [settingsOpen, setSettingsOpen] = useState(false);
   const { isMobile } = useBreakpoints();
   const { containerRef, compact: isCompact } = useContainerCompact(isMobile);
-  const i18n = useOptionalTranslation("components");
+  const i18n = useOptionalTranslation('components');
   /**
    * Catalog lookup with an honest English floor: when the provider is absent
    * or echoes the raw key (missing entry), the historical default wins.
    * Unlike the Rate guard, an empty catalog string IS honored — es/ar land
-   * `densitySuffix` as "" because their density adjectives already agree
-   * with "densidad"/"كثافة" and need no suffix.
+   * `densitySuffix` as '' because their density adjectives already agree
+   * with 'densidad'/'كثافة' and need no suffix.
    */
   const tOr = (key: string, fallback: string): string => {
     const resolved = i18n?.t(key);
@@ -750,7 +750,7 @@ export default function ModernListToolbar({
     [messageOverrides, i18n?.t]
   );
   const searchPlaceholder =
-    searchPlaceholderProp ?? tOr("listToolbar.searchPlaceholder", "Search...");
+    searchPlaceholderProp ?? tOr('listToolbar.searchPlaceholder', 'Search...');
 
   const handleSearchChange = useCallback(
     (value: string) => {
@@ -765,7 +765,7 @@ export default function ModernListToolbar({
     const chips: { key: string; label: string; value: string }[] = [];
     for (const pill of filterPills) {
       const active = activeFilters[pill.key];
-      if (active && active !== "" && active !== "all") {
+      if (active && active !== '' && active !== 'all') {
         const option = pill.options.find((o) => o.value === String(active));
         chips.push({
           key: pill.key,
@@ -788,13 +788,13 @@ export default function ModernListToolbar({
   return (
     <Box
       ref={containerRef}
-      data-part="root"
+      data-part='root'
       data-mobile={isCompact}
-      data-container-layout={isCompact ? "compact" : "full"}
+      data-container-layout={isCompact ? 'compact' : 'full'}
       data-has-active-filters={hasActiveFilters}
       data-has-title={showTitleCluster}
       data-has-primary-action={!!primaryAction}
-      className={`ds-pattern-list-toolbar ds-engine-modern ${className ?? ""}`}
+      className={`ds-pattern-list-toolbar ds-engine-modern ${className ?? ''}`}
       style={{
         ...style,
       }}
@@ -804,48 +804,48 @@ export default function ModernListToolbar({
         /* MOBILE LAYOUT                                                    */
         /* ================================================================ */
         <Stack
-          data-part="mobile-layout"
-          className="ds-list-toolbar__mobile-layout"
-          spacing="sm"
+          data-part='mobile-layout'
+          className='ds-list-toolbar__mobile-layout'
+          spacing='sm'
         >
           {/* Row 1: Title + actions */}
           <Flex
-            data-part="mobile-header"
-            className="ds-list-toolbar__mobile-header"
-            align="center"
-            justify="between"
+            data-part='mobile-header'
+            className='ds-list-toolbar__mobile-header'
+            align='center'
+            justify='between'
           >
             <Flex
-              data-part="title-section"
-              className="ds-list-toolbar__title-section"
-              align="center"
+              data-part='title-section'
+              className='ds-list-toolbar__title-section'
+              align='center'
             >
               {showTitleCluster && (
                 <>
                   {icon && (
                     <Box
-                      data-part="title-icon"
-                      className="ds-list-toolbar__title-icon"
+                      data-part='title-icon'
+                      className='ds-list-toolbar__title-icon'
                     >
                       {icon}
                     </Box>
                   )}
                   <Text
-                    data-part="title"
-                    className="ds-list-toolbar__title"
+                    data-part='title'
+                    className='ds-list-toolbar__title'
                   >
                     {title}
                   </Text>
-                  <Badge variant="secondary">
+                  <Badge variant='secondary'>
                     {totalCount.toLocaleString()}
                   </Badge>
                 </>
               )}
             </Flex>
             <Flex
-              data-part="mobile-actions"
-              className="ds-list-toolbar__mobile-actions"
-              align="center"
+              data-part='mobile-actions'
+              className='ds-list-toolbar__mobile-actions'
+              align='center'
             >
               <MobileOverflow
                 density={density}
@@ -858,17 +858,17 @@ export default function ModernListToolbar({
               {primaryAction && (
                 <Button
                   aria-label={primaryAction.label}
-                  className="ds-list-toolbar__primary-action-mobile"
-                  data-part="primary-action-mobile"
-                  variant="primary"
-                  size="sm"
+                  className='ds-list-toolbar__primary-action-mobile'
+                  data-part='primary-action-mobile'
+                  variant='primary'
+                  size='sm'
                   onClick={primaryAction.onClick}
                   icon={primaryAction.icon ?? <Plus size={15} />}
                 >
                   <Box
-                    as="span"
-                    className="ds-list-toolbar__primary-action-mobile-label"
-                    data-part="primary-action-mobile-label"
+                    as='span'
+                    className='ds-list-toolbar__primary-action-mobile-label'
+                    data-part='primary-action-mobile-label'
                   >
                     {primaryAction.label}
                   </Box>
@@ -879,11 +879,11 @@ export default function ModernListToolbar({
 
           {/* Row 2: Search */}
           <Box
-            data-part="search-section"
-            className="ds-list-toolbar__search-section"
+            data-part='search-section'
+            className='ds-list-toolbar__search-section'
           >
             <Input
-              size="sm"
+              size='sm'
               aria-label={searchAriaLabel}
               placeholder={searchPlaceholder}
               value={search}
@@ -891,8 +891,8 @@ export default function ModernListToolbar({
               clearable
               prefix={
                 <Search
-                  data-part="search-icon"
-                  className="ds-list-toolbar__search-icon"
+                  data-part='search-icon'
+                  className='ds-list-toolbar__search-icon'
                   size={14}
                 />
               }
@@ -907,12 +907,12 @@ export default function ModernListToolbar({
           {/* Row 3: Filter pills (horizontal scroll) */}
           {filterPills && filterPills.length > 0 && (
             <Box
-              data-part="filter-rail"
-              className="ds-list-toolbar__filter-rail"
+              data-part='filter-rail'
+              className='ds-list-toolbar__filter-rail'
             >
               <Flex
-                align="center"
-                className="ds-list-toolbar__filter-rail-track"
+                align='center'
+                className='ds-list-toolbar__filter-rail-track'
               >
                 {filterPills.map((pill) => (
                   <FilterButton
@@ -930,33 +930,33 @@ export default function ModernListToolbar({
         /* DESKTOP LAYOUT                                                   */
         /* ================================================================ */
         <Flex
-          data-part="main-row"
-          className="ds-list-toolbar__main-row"
-          align="center"
+          data-part='main-row'
+          className='ds-list-toolbar__main-row'
+          align='center'
         >
           {/* ── Left section: Title + Count ────────────────────────── */}
           {showTitleCluster && (
             <>
               <Flex
-                data-part="title-section"
-                className="ds-list-toolbar__title-section"
-                align="center"
+                data-part='title-section'
+                className='ds-list-toolbar__title-section'
+                align='center'
               >
                 {icon && (
                   <Box
-                    data-part="title-icon"
-                    className="ds-list-toolbar__title-icon"
+                    data-part='title-icon'
+                    className='ds-list-toolbar__title-icon'
                   >
                     {icon}
                   </Box>
                 )}
                 <Text
-                  data-part="title"
-                  className="ds-list-toolbar__title"
+                  data-part='title'
+                  className='ds-list-toolbar__title'
                 >
                   {title}
                 </Text>
-                <Badge variant="secondary">{totalCount.toLocaleString()}</Badge>
+                <Badge variant='secondary'>{totalCount.toLocaleString()}</Badge>
               </Flex>
 
               <ToolbarDivider />
@@ -965,11 +965,11 @@ export default function ModernListToolbar({
 
           {/* ── Search input ───────────────────────────────────────── */}
           <Box
-            data-part="search-section"
-            className="ds-list-toolbar__search-section"
+            data-part='search-section'
+            className='ds-list-toolbar__search-section'
           >
             <Input
-              size="sm"
+              size='sm'
               aria-label={searchAriaLabel}
               placeholder={searchPlaceholder}
               value={search}
@@ -977,8 +977,8 @@ export default function ModernListToolbar({
               clearable
               prefix={
                 <Search
-                  data-part="search-icon"
-                  className="ds-list-toolbar__search-icon"
+                  data-part='search-icon'
+                  className='ds-list-toolbar__search-icon'
                   size={14}
                 />
               }
@@ -995,9 +995,9 @@ export default function ModernListToolbar({
             <>
               <ToolbarDivider />
               <Flex
-                data-part="filter-rail"
-                className="ds-list-toolbar__filter-rail"
-                align="center"
+                data-part='filter-rail'
+                className='ds-list-toolbar__filter-rail'
+                align='center'
               >
                 {filterPills.map((pill) => (
                   <FilterButton
@@ -1015,8 +1015,8 @@ export default function ModernListToolbar({
             <>
               <ToolbarDivider />
               <Box
-                data-part="saved-views"
-                className="ds-list-toolbar__saved-views"
+                data-part='saved-views'
+                className='ds-list-toolbar__saved-views'
               >
                 {savedViewsContent}
               </Box>
@@ -1025,14 +1025,14 @@ export default function ModernListToolbar({
 
           {/* ── Spacer (pushes right section to end) ──────────────── */}
           {!savedViewsContent && (
-            <Box className="ds-list-toolbar__flex-spacer" aria-hidden="true" />
+            <Box className='ds-list-toolbar__flex-spacer' aria-hidden='true' />
           )}
 
           {/* ── Right section: Controls ────────────────────────────── */}
           <Flex
-            data-part="controls"
-            className="ds-list-toolbar__controls"
-            align="center"
+            data-part='controls'
+            className='ds-list-toolbar__controls'
+            align='center'
           >
             {/* Density toggle */}
             <DensitySwitch
@@ -1075,10 +1075,10 @@ export default function ModernListToolbar({
               <>
                 <ToolbarDivider />
                 <Button
-                  variant="primary"
-                  size="sm"
-                  className="ds-list-toolbar__primary-action"
-                  data-part="primary-action"
+                  variant='primary'
+                  size='sm'
+                  className='ds-list-toolbar__primary-action'
+                  data-part='primary-action'
                   onClick={primaryAction.onClick}
                   icon={primaryAction.icon ?? <Plus size={15} />}
                 >
@@ -1095,56 +1095,56 @@ export default function ModernListToolbar({
       {/* ================================================================ */}
       {hasActiveFilters && (
         <Flex
-          data-part="filter-chips-strip"
-          className="ds-list-toolbar__filter-chips-strip"
-          align="center"
-          wrap="wrap"
-          role="region"
-          aria-live="polite"
+          data-part='filter-chips-strip'
+          className='ds-list-toolbar__filter-chips-strip'
+          align='center'
+          wrap='wrap'
+          role='region'
+          aria-live='polite'
           aria-label={`${activeFilterChips.length} ${messages.active}`}
         >
           <Flex
-            align="center"
-            className="ds-list-toolbar__filter-chips-summary"
+            align='center'
+            className='ds-list-toolbar__filter-chips-summary'
           >
             <Filter
-              data-part="filter-chips-icon"
-              className="ds-list-toolbar__filter-chips-icon"
+              data-part='filter-chips-icon'
+              className='ds-list-toolbar__filter-chips-icon'
               size={12}
             />
             <Text
-              data-part="filter-chips-count"
-              className="ds-list-toolbar__filter-chips-count"
+              data-part='filter-chips-count'
+              className='ds-list-toolbar__filter-chips-count'
             >
               {activeFilterChips.length} {messages.active}
             </Text>
           </Flex>
 
           <Box
-            data-part="divider"
-            className="ds-list-toolbar__divider ds-list-toolbar__divider--compact"
+            data-part='divider'
+            className='ds-list-toolbar__divider ds-list-toolbar__divider--compact'
           />
 
           {activeFilterChips.map((chip) => (
             <Tag
               key={chip.key}
-              data-part="filter-chip"
-              className="ds-list-toolbar__filter-chip"
+              data-part='filter-chip'
+              className='ds-list-toolbar__filter-chip'
               closable
-              onClose={() => onFilterChange?.(chip.key, "")}
-              size="sm"
+              onClose={() => onFilterChange?.(chip.key, '')}
+              size='sm'
             >
               <Text
-                data-part="filter-chip-label"
-                className="ds-list-toolbar__filter-chip-label"
-                as="span"
+                data-part='filter-chip-label'
+                className='ds-list-toolbar__filter-chip-label'
+                as='span'
               >
                 {chip.label}:
-              </Text>{" "}
+              </Text>{' '}
               <Text
-                data-part="filter-chip-value"
-                className="ds-list-toolbar__filter-chip-value"
-                as="span"
+                data-part='filter-chip-value'
+                className='ds-list-toolbar__filter-chip-value'
+                as='span'
               >
                 {chip.value}
               </Text>
@@ -1153,14 +1153,14 @@ export default function ModernListToolbar({
 
           {activeFilterCount > 0 && onClearFilters && (
             <>
-              <Box className="ds-list-toolbar__flex-spacer" aria-hidden="true" />
+              <Box className='ds-list-toolbar__flex-spacer' aria-hidden='true' />
               <Button
-                variant="ghost"
-                size="xs"
-                data-part="clear-all"
-                className="ds-list-toolbar__clear-all"
+                variant='ghost'
+                size='xs'
+                data-part='clear-all'
+                className='ds-list-toolbar__clear-all'
                 onClick={onClearFilters}
-                icon={<X size={12} aria-hidden="true" />}
+                icon={<X size={12} aria-hidden='true' />}
               >
                 {messages.clearAll}
               </Button>
@@ -1185,12 +1185,12 @@ function FilterCountBadge({ count }: { count: number }) {
 
   return (
     <Badge
-      tone="primary"
-      badgeStyle="solid"
-      size="xs"
+      tone='primary'
+      badgeStyle='solid'
+      size='xs'
       count={count}
-      data-part="count-badge"
-      className="ds-list-toolbar__count-badge"
+      data-part='count-badge'
+      className='ds-list-toolbar__count-badge'
     />
   );
 }

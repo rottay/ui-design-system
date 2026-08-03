@@ -1,5 +1,70 @@
-/** SidebarSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+/**
+ * SidebarSurface skin (WO-SKIN-06 / CK-I; premium deep pass 2026-08-02).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
+ *
+ * SCOPE: this file owns the surface's LAYOUT GEOMETRY, drained from the
+ * root's retired inline `style` (display/grid tracks/flex direction/gap/
+ * align-items) and the panel's inline `minHeight`:
+ *   1. the desktop grid — sidebar track + `minmax(0, 1fr)` main track (the
+ *      minmax floor keeps main content from overflowing into the sidebar)
+ *      + optional aside track, keyed on the always-stamped `data-aside`;
+ *   2. the stacked posture — flex column, keyed on `data-stacked`;
+ *   3. the region gap, riding the tenant spacing ramp scaled by the rhythm
+ *      channel (page-shell.css idiom) instead of the retired `24` literal;
+ *   4. the panel's full-row block size (`min-block-size`, logical).
+ * The config-resolved track sizes arrive on the registered private channels
+ * `--_ds-sidebar-inline-size` / `--_ds-sidebar-aside-inline-size`
+ * (geometry data, not paint; TSX resolves the contract's `number | string`
+ * widths). The composed Card/Button/action bar own their own chrome, states
+ * and forced-colors treatment.
+ *
+ * SPECIFICITY: anatomy class + at most one always-stamped attribute; no
+ * repetition, no `!important`. Logical properties only, so RTL mirrors.
+ *
+ * KNOWN DEBT (pre-existing): the `data-bordered='false'` rule below intends
+ * to drop the sidebar|content separator (the panel's inline-end edge), but
+ * it loses the cascade to card.css's engines-layer `border` shorthand
+ * (`rottay-engines` sorts after `rottay-components`), so the separator is
+ * never actually removed today. Making it effective needs either a Card-side
+ * inline-end border channel or a facade layer change — both outside this
+ * surface's write set. The rule stays (fixed to the logical longhand) so the
+ * intent and the hook survive; the previous doubled-class selector and the
+ * physical `border-right` were the bugs this pass could fix in place.
+ *
+ * FORCED-COLORS: no surface-owned color to re-key (geometry only; the
+ * bordered rule carries no color), so no FC block.
+ */
 
-.ds-surface.ds-sidebar[data-bordered='false'] > .ds-sidebar__panel.ds-sidebar__panel[data-part='root'] {
-  border-right: none;
+.ds-surface.ds-sidebar[data-part='root'] {
+  display: grid;
+  grid-template-columns:
+    var(--_ds-sidebar-inline-size, 280px)
+    minmax(0, 1fr);
+  gap: calc(var(--ds-spacing-6, 24px) * var(--ds-rhythm-effective-scale, 1));
+  align-items: start;
+}
+
+.ds-surface.ds-sidebar[data-part='root'][data-aside='true'] {
+  grid-template-columns:
+    var(--_ds-sidebar-inline-size, 280px)
+    minmax(0, 1fr)
+    var(--_ds-sidebar-aside-inline-size, 320px);
+}
+
+.ds-surface.ds-sidebar[data-part='root'][data-stacked='true'] {
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-surface.ds-sidebar[data-part='root'] > .ds-sidebar__panel[data-part='root'] {
+  min-block-size: 100%;
+}
+
+/* See KNOWN DEBT above: intent is separator removal, cascade currently wins
+   over it; kept logical so RTL mirrors the day the channel lands. */
+.ds-surface.ds-sidebar[data-bordered='false'] > .ds-sidebar__panel[data-part='root'] {
+  border-inline-end: none;
 }

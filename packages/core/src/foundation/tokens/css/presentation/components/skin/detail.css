@@ -15,3 +15,11 @@
 .ds-surface.ds-detail-surface[data-part="root"][data-state="loading"] {
   display: contents;
 }
+
+/* ---- no-chrome frame: horizontal centering is a logical property so the
+        framed panel stays centered in RTL as well; the config-driven
+        max-width stays inline (dynamic geometry, not paint). ---- */
+.ds-surface.ds-detail-surface
+  .ds-detail-surface__frame[data-part="detail-frame"][data-framed="true"] {
+  margin-inline: auto;
+}

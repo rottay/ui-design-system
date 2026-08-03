@@ -131,6 +131,63 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
   // State for the "Add Filter" field selector dropdown.
   const [addFilterOpen, setAddFilterOpen] = React.useState(false);
 
+  // Keyboard governance for the add-filter dropdown (pattern chrome, not a
+  // primitive — the skin file registers the composition gap): Escape closes
+  // and returns focus to the trigger, Arrow keys roam between options, and
+  // ArrowDown on the trigger opens straight into the list.
+  const addFilterTriggerRef = React.useRef<HTMLButtonElement | HTMLAnchorElement | null>(null);
+  const addFilterDropdownRef = React.useRef<HTMLDivElement | null>(null);
+  const focusFirstOptionRef = React.useRef(false);
+
+  React.useEffect(() => {
+    if (!addFilterOpen || !focusFirstOptionRef.current) return;
+    focusFirstOptionRef.current = false;
+    addFilterDropdownRef.current
+      ?.querySelector<HTMLElement>("[data-part='add-filter-option']")
+      ?.focus();
+  }, [addFilterOpen]);
+
+  const closeAddFilter = React.useCallback((restoreFocus: boolean) => {
+    setAddFilterOpen(false);
+    if (restoreFocus) {
+      (addFilterTriggerRef.current as HTMLButtonElement | null)?.focus();
+    }
+  }, []);
+
+  const handleAddFilterTriggerKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'ArrowDown' && !addFilterOpen) {
+      event.preventDefault();
+      focusFirstOptionRef.current = true;
+      setAddFilterOpen(true);
+    }
+  };
+
+  const handleAddFilterDropdownKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeAddFilter(true);
+      return;
+    }
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      const options = Array.from(
+        addFilterDropdownRef.current?.querySelectorAll<HTMLElement>(
+          "[data-part='add-filter-option']"
+        ) ?? []
+      );
+      if (options.length === 0) return;
+      const currentIndex = options.indexOf(document.activeElement as HTMLElement);
+      const delta = event.key === 'ArrowDown' ? 1 : -1;
+      const nextIndex =
+        currentIndex < 0
+          ? delta === 1
+            ? 0
+            : options.length - 1
+          : (currentIndex + delta + options.length) % options.length;
+      options[nextIndex]?.focus();
+    }
+  };
+
   // Immutable recursive tree update: walks from root to find the target group,
   // spreading at every level so React's reconciler detects the change.
   const updateGroup = useCallback(
@@ -567,29 +624,35 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
           {showAddFilter && isRoot && (
             <div data-part="add-filter">
               <ModernButton
+                ref={addFilterTriggerRef}
                 data-part="add-filter-trigger"
                 data-open={addFilterOpen ? "true" : "false"}
                 icon={<ActionAddIcon decorative size={14} />}
                 variant="outline"
                 size={buttonSize}
                 onClick={() => setAddFilterOpen((prev) => !prev)}
+                onKeyDown={handleAddFilterTriggerKeyDown}
                 data-testid="add-filter-button"
                 aria-expanded={addFilterOpen}
+                aria-haspopup="listbox"
               >
                 {addFilterLabel}
               </ModernButton>
               {addFilterOpen && (
                 <div
+                  ref={addFilterDropdownRef}
                   data-testid="add-filter-dropdown"
                   data-part="add-filter-dropdown"
                   data-open="true"
                   role="listbox"
                   aria-label={addFilterLabel}
+                  onKeyDown={handleAddFilterDropdownKeyDown}
                 >
                   {fields.map((f) => (
                     /* role=option keeps the listbox semantics valid (the
                        composed Button forwards the role to its native
-                       element); single-shot pick closes the dropdown. */
+                       element); single-shot pick closes the dropdown and
+                       returns focus to the trigger. */
                     <ModernButton
                       key={f.key}
                       data-part="add-filter-option"
@@ -600,7 +663,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
                       icon={f.icon ? <span data-part="add-filter-option-icon">{f.icon}</span> : undefined}
                       onClick={() => {
                         handleAddRule(group.id, f.key);
-                        setAddFilterOpen(false);
+                        closeAddFilter(true);
                       }}
                       data-testid={`add-filter-field-${f.key}`}
                     >

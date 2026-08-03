@@ -32,8 +32,13 @@ import type {
 } from '../../contracts';
 import { useChartDimensions, useChartPersonality, useChartCompact } from '../../runtime';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
+import { TooltipValue } from '../../presentation/tooltip';
+import type { ChartInteraction } from '../../runtime/chart-engine/foundation/interaction';
 import { buildSvgHistogramGeometry } from '../../runtime/chart-engine/foundation/renderers/geometry';
-import { SvgHistogramRenderer } from '../../runtime/chart-engine/presentation/react/renderers/histogram';
+import {
+  SvgHistogramRenderer,
+  type SvgHistogramBinDatum,
+} from '../../runtime/chart-engine/presentation/react/renderers/histogram';
 
 /** Own props for the {@link Histogram} component (state copy is composed below). */
 interface HistogramOwnProps
@@ -63,6 +68,8 @@ interface HistogramOwnProps
   formatValue?: (value: number) => string;
   /** Density mode (normalize to 0-1). Default: false */
   density?: boolean;
+  /** Render the loading state as a structural placeholder instead of a centered label. */
+  skeleton?: boolean;
 }
 
 /** Props for the {@link Histogram} component. */
@@ -90,6 +97,7 @@ export const Histogram = memo(function Histogram({
   cumulativeColor = 'var(--ds-color-info)',
   formatValue,
   density = false,
+  skeleton,
   width,
   height = 400,
   className,
@@ -143,6 +151,22 @@ export const Histogram = memo(function Histogram({
     ] as Array<string | number>),
   };
   const finiteCount = values.filter(Number.isFinite).length;
+
+  // The family declares the explore interaction only while the tooltip
+  // personality is active; the renderer's shared controller owns hover, focus,
+  // and keyboard cycling across bins.
+  const interaction: ChartInteraction<SvgHistogramBinDatum> | undefined = chartPersonality.tooltip
+    ? {
+      mode: 'explore',
+      renderTooltip: (active) => (
+        <TooltipValue
+          label={`${fmtVal(active.datum.x0)} - ${fmtVal(active.datum.x1)}`}
+          value={density ? active.datum.densityValue.toFixed(4) : active.datum.count}
+          color={color}
+        />
+      ),
+    }
+    : undefined;
 
   const legendNode = legend ? (
     <div data-part="legend" data-variant={density ? 'density' : 'frequency'} style={{ display: 'flex', gap: 'var(--ds-chart-legend-gap, 16px)', flexWrap: 'wrap', marginTop: 'var(--ds-chart-legend-margin-top, 8px)', justifyContent: 'center' }}>
@@ -206,6 +230,7 @@ export const Histogram = memo(function Histogram({
       style={style}
       {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
+      skeleton={skeleton}
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Histogram'}
@@ -232,6 +257,7 @@ export const Histogram = memo(function Histogram({
           formatValue={formatValue}
           xLabel={xLabel}
           yLabel={yLabel}
+          {...(interaction === undefined ? {} : { interaction })}
         />
       )}
     />

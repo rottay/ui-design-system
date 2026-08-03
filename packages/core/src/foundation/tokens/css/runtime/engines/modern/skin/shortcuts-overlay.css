@@ -40,23 +40,33 @@
   container-type: inline-size;
 }
 
+/* backdrop: scrim + sanctioned glass layer, at parity with the command
+   palette's overlay material (glass is sanctioned on overlay backdrops
+   only; tint + blur scale with --ds-effect-intensity, collapsing to a plain
+   scrim at 0). */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='backdrop'] {
   position: absolute;
   inset: 0;
-  background: var(--ds-overlay-scrim, var(--ds-color-bg-overlay));
+  background-color: var(--ds-overlay-scrim, var(--ds-color-bg-overlay));
+  background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
+  backdrop-filter: var(--ds-glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
 }
 
 /* ---- dialog card (was `relative rounded-xl w-full max-w-lg
-        overflow-hidden`) ---- */
+        overflow-hidden`). Widened to 40rem so the intrinsic two-column list
+        fits; the narrow container query below re-collapses it. Entrance
+        rides the canonical keyframes on the motion channel. ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
   position: relative;
   inline-size: 100%;
-  max-inline-size: 32rem;
+  max-inline-size: 40rem;
   overflow: hidden;
   border-radius: var(--ds-radius-xl);
   background: var(--ds-surface-card);
   box-shadow: var(--ds-elevation-3);
   color: var(--ds-color-text-primary);
+  animation: ds-foundation-fade-in-down var(--ds-motion-normal) var(--ds-motion-ease-enter, ease-out);
 }
 
 /* ---- header: title + composed close Button over a quiet hairline ---- */
@@ -83,14 +93,21 @@
   border-bottom: 1px solid var(--ds-color-border);
 }
 
-/* ---- list rhythm (the certified ScrollArea owns the scroll frame) ---- */
+/* ---- list rhythm (the certified ScrollArea owns the scroll frame). The
+        list lays out in intrinsic columns (column-width driven): wide
+        dialogs read as a two-column reference sheet, narrow sheets collapse
+        to a single column without a breakpoint fork; groups never split
+        across columns. ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='list'] {
   padding-block: var(--ds-spacing-2, 8px);
+  column-width: 16rem;
+  column-gap: var(--ds-spacing-4, 16px);
 }
 
 /* ---- category groups: quiet uppercase label, hairline-free ---- */
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='group'] {
   padding-block: var(--ds-spacing-1, 4px);
+  break-inside: avoid;
 }
 .ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-row'] {
   padding-block: var(--ds-spacing-1, 4px);

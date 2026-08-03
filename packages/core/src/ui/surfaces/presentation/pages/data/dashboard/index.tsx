@@ -53,6 +53,21 @@ import {
 } from "../../../../runtime/helpers/states";
 import { useMotionPolicy } from "@/infrastructure/runtime/motion";
 
+type SurfaceCardVariant = "outlined" | "elevated" | "filled" | "ghost";
+
+/** StatsGrid has its own material vocabulary; map the profile card variant
+ *  onto the closest stats material so the KPI row and the surrounding panels
+ *  share one tenant surface language (report/visualization precedent). This
+ *  also keeps page-level stats off `glass`, which the Modern spec reserves
+ *  for overlay backdrops. */
+function resolveStatsGridVariant(
+  cardVariant: SurfaceCardVariant
+): "default" | "outlined" | "filled" {
+  if (cardVariant === "outlined") return "outlined";
+  if (cardVariant === "filled") return "filled";
+  return "default";
+}
+
 /** Loading placeholder that mirrors the board's exact geometry.
  *  The stats row keeps the resolved column count; every section keeps its own
  *  span inside the same grid, so the swap to real content is a pure paint
@@ -363,7 +378,7 @@ export function DashboardSurface({
             <PatternStatsGrid
               stats={stats}
               columns={statsColumns}
-              variant="glass"
+              variant={resolveStatsGridVariant(profileDefaults.cardVariant)}
               onStatClick={config.behavior.onStatClick}
             />
           )}

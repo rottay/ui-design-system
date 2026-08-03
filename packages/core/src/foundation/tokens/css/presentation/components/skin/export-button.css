@@ -20,7 +20,10 @@
  * the retired `#16a34a` / `#fff` / `#e2e2e2` / `#1a1a1a` / `#666` literals
  * violated the zero-literals law.
  *
- * RTL: the end-aligned panel flip is mirrored via :dir(rtl).
+ * RTL: the end-aligned panel flip is mirrored via :dir(rtl) on the
+ * `translate` property (kept separate from `transform` so the panel's
+ * governed entrance rise — `--ds-motion-normal` channel, silenced under
+ * reduced-motion — never fights the alignment).
  */
 
 /* ---- root: the trigger's anchor (geometry drained from inline) ---- */
@@ -35,10 +38,10 @@
   position: absolute;
   inset-block-start: -32px;
   inset-inline-start: 50%;
-  z-index: var(--ds-export-button-toast-z, 9999);
-  padding-block: 4px;
-  padding-inline: 10px;
-  border-radius: 6px;
+  z-index: var(--ds-export-button-toast-z, var(--ds-z-index-tooltip, 1700));
+  padding-block: var(--ds-spacing-1, 4px);
+  padding-inline: var(--ds-spacing-2, 8px);
+  border-radius: var(--ds-radius-md, 6px);
   background: var(--ds-color-success-bg);
   color: var(--ds-color-success-ink);
   font-size: var(--ds-font-size-xs);
@@ -55,19 +58,36 @@
   font-weight: 600;
 }
 
-/* ---- standalone portaled dropdown (measured top/left stay inline) ---- */
+/* ---- standalone portaled dropdown (measured top/left stay inline). The
+        end-alignment rides the `translate` property (mirrored under
+        :dir(rtl)) so `transform` stays free for the entrance rise. ---- */
 
 .ds-structure.ds-export-button-panel[data-part='panel'] {
-  z-index: var(--ds-export-button-panel-z, 9998);
+  z-index: var(--ds-export-button-panel-z, var(--ds-z-index-popover, 1600));
   min-inline-size: var(--ds-export-button-panel-min-width, 200px);
-  padding: 4px;
-  border-radius: 8px;
+  max-inline-size: calc(100vw - 16px);
+  padding: var(--ds-spacing-1, 4px);
+  border-radius: var(--ds-radius-lg, 8px);
   background: var(--ds-color-bg-elevated);
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), 0 1px 3px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
-  transform: translateX(-100%);
+  box-shadow: var(--ds-elevation-2);
+  translate: -100% 0;
+  animation: ds-export-button-panel-enter
+    var(--ds-motion-normal, 200ms)
+    var(--ds-motion-ease-out, ease-out) both;
 }
 .ds-structure.ds-export-button-panel[data-part='panel']:dir(rtl) {
-  transform: translateX(100%);
+  translate: 100% 0;
+}
+
+@keyframes ds-export-button-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .ds-structure.ds-export-button-panel[data-part='panel'][data-open='true'] {
@@ -88,9 +108,13 @@
   100% { opacity: 0; transform: translateX(-50%) translateY(-4px); }
 }
 
-/* Reduced motion: the toast appears/disappears instantly. */
+/* Reduced motion: the toast appears/disappears instantly and the panel
+ * entrance is silenced. */
 @media (prefers-reduced-motion: reduce) {
   .ds-structure.ds-export-button[data-part='root'] [data-part='toast'] {
+    animation: none;
+  }
+  .ds-structure.ds-export-button-panel[data-part='panel'] {
     animation: none;
   }
 }

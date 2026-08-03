@@ -11,12 +11,12 @@
  *
  * SINGLE PAINT OWNER PER CONTROL (Lote 2 law): the pattern COMPOSES public
  * primitives -- Avatar (author/composer), Textarea (composer/reply/edit),
- * Button (submit/save/cancel/reply/edit/delete/reaction pills), Spinner
- * (loading) and the EmptyState pattern (empty kit). This file paints NO
- * control chrome: no button fills, no textarea borders, no avatar frame --
- * each primitive's own skin owns that, including focus rings, disabled
- * states and coarse floors. What this file owns is exactly what the pattern
- * owns:
+ * Button (submit/save/cancel/reply/edit/delete/reaction pills), Skeleton
+ * (loading placeholders mirroring the comment-row footprint) and the
+ * EmptyState pattern (empty kit). This file paints NO control chrome: no
+ * button fills, no textarea borders, no avatar frame -- each primitive's own
+ * skin owns that, including focus rings, disabled states and coarse floors.
+ * What this file owns is exactly what the pattern owns:
  *   - the layout anatomy (comment rows, head row, forms, action rows,
  *     threading rail) -- the engine stamps only `data-part` wrappers;
  *   - the typographic treatment of the NON-control text parts (author,
@@ -42,14 +42,18 @@
   color: var(--ds-color-text-primary);
 }
 
-/* ---- loading: quiet centered Spinner (the engine stamps only data-loading;
-        the old `flex justify-center items-center py-12` utility chain drains
-        here -- padding keeps the token's density scaling). ---- */
+/* ---- loading: composed Skeleton primitives mirror the comment-row
+        footprint (avatar + head + body line, one per would-be comment) so
+        the swap to real content never reflows; the primitives own the bar
+        paint, this frame owns only the list rhythm (the old centered-Spinner
+        frame drained away with the Spinner). ---- */
 .ds-pattern-comment-thread.ds-engine-modern[data-part='root'][data-loading='true'] {
+  padding-block: var(--ds-spacing-4, 16px);
+}
+.ds-pattern-comment-thread.ds-engine-modern [data-part='skeleton-list'] {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-block: var(--ds-spacing-12, 48px);
+  flex-direction: column;
+  gap: var(--ds-comment-thread-comment-gap, var(--ds-spacing-3, 12px));
 }
 
 /* ---- comment structure: row + main column ---- */
@@ -83,6 +87,14 @@
   margin-block-end: var(--ds-spacing-1, 4px);
 }
 .ds-pattern-comment-thread.ds-engine-modern [data-part='author'] {
+  /* Truncation strategy: a long author name yields with ellipsis inside the
+     wrapping head row (the engine mirrors the full name on `title`); the
+     timestamp/edited mark never get pushed off-row. */
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: var(--ds-font-size-sm, 14px);
   font-weight: var(--ds-font-weight-semibold, 600);
   line-height: var(--ds-line-height-snug, 1.375);

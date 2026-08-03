@@ -18,11 +18,12 @@
  * SPECIFICITY (P-48): the tenant `html[data-tenant]…*` border-color floor sits at
  * (0,3,1); border-COLOR paint reaches (0,4,0) through the always-stamped root
  * `data-part` ancestor — repeating a class or attribute is forbidden. A `color`
- * on a composed `Text` (eyebrow, subtitle) must exceed the typography skin's
- * (0,4,0) `[data-color='…']` rule, so it adds the always-stamped
- * `data-embedded` / contract `data-variant` for (0,5,0). The `Box as="h2"`
- * title and the Box chips are NOT typography, so their color wins at (0,3,0)
- * and their text children inherit it.
+ * on a composed `Text` (eyebrow, subtitle) can never win: the typography skin
+ * lives in the LATER `rottay-engines` layer, so the ink rides the Text `color`
+ * prop (`subtle`/`secondary`) and the rules below stay as the declared intent
+ * (and as the paint for any context where the typography skin is absent). The
+ * `Box as="h1"` title and the Box chips are NOT typography, so their color wins
+ * at (0,3,0) and their text children inherit it.
  *
  * GLASS: `backdrop-filter` is opt-in through the
  * `--ds-collection-header-actions-backdrop` channel (default `none`) — a

@@ -20,8 +20,13 @@ import type {
 } from '../../contracts';
 import { DEFAULT_MARGIN } from '../../foundation/geometry';
 import { ChartScaffold, describeChart, resolveChartScaffoldState } from '../../presentation/scaffold';
+import { TooltipValue } from '../../presentation/tooltip';
 import { useChartPersonality } from '../../runtime';
-import { buildSvgFunnelGeometry } from '../../runtime/chart-engine/foundation/renderers/geometry';
+import type { ChartInteraction } from '../../runtime/chart-engine/foundation/interaction';
+import {
+  buildSvgFunnelGeometry,
+  type SvgFunnelDatum,
+} from '../../runtime/chart-engine/foundation/renderers/geometry';
 import { SvgFunnelRenderer } from '../../runtime/chart-engine/presentation/react/renderers/funnel';
 
 /** Own props for the {@link FunnelChart} component (state copy is composed below). */
@@ -31,6 +36,8 @@ interface FunnelChartOwnProps
   showPercentage?: boolean;
   showConversion?: boolean;
   orientation?: 'vertical' | 'horizontal';
+  /** Render the loading state as a structural placeholder instead of a centered label. */
+  skeleton?: boolean;
 }
 
 /** Props for the backward-compatible {@link FunnelChart} family adapter. */
@@ -65,6 +72,7 @@ export const FunnelChart = memo(function FunnelChart({
   colors,
   tooltip,
   margin = DEFAULT_MARGIN,
+  skeleton,
 }: FunnelChartProps) {
   const scaffoldRef = useRef<HTMLDivElement>(null);
   const legacySvgRef = useRef<SVGSVGElement>(null);
@@ -103,6 +111,25 @@ export const FunnelChart = memo(function FunnelChart({
       .filter(Boolean)
       .join(' '),
   );
+  // The family declares the explore interaction only while the tooltip
+  // personality is active; the renderer's shared controller owns hover, focus,
+  // and keyboard cycling across stages.
+  const interaction: ChartInteraction<SvgFunnelDatum> | undefined = chartPersonality.tooltip && canRender
+    ? {
+      mode: 'explore',
+      renderTooltip: (active) => (
+        <TooltipValue
+          label={active.datum.label}
+          value={
+            showPercentage && model.maxValue > 0
+              ? `${active.datum.value} (${((active.datum.value / model.maxValue) * 100).toFixed(1)}%)`
+              : active.datum.value
+          }
+          color={active.datum.color}
+        />
+      ),
+    }
+    : undefined;
   const legendNode = legend && canRender ? (
     <div
       data-part="legend"
@@ -181,6 +208,7 @@ export const FunnelChart = memo(function FunnelChart({
       style={style}
       {...stateProps}
       loadingLabel={chartPersonality.loadingLabel}
+      skeleton={skeleton}
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Funnel chart'}
@@ -188,20 +216,7 @@ export const FunnelChart = memo(function FunnelChart({
       summary={summary}
       legend={legendNode}
       overlay={fallbackMessage ? (
-        <div
-          data-part="data-fallback"
-          role="status"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 24,
-            textAlign: 'center',
-            pointerEvents: 'none',
-          }}
-        >
+        <div data-part="data-fallback" role="status">
           {fallbackMessage}
         </div>
       ) : null}
@@ -219,7 +234,8 @@ export const FunnelChart = memo(function FunnelChart({
           showConversion={showConversion}
           colors={palette}
           margin={margin}
-          showSegmentTitles={chartPersonality.tooltip}
+          showSegmentTitles={chartPersonality.tooltip && interaction === undefined}
+          {...(interaction === undefined ? {} : { interaction })}
         />
       )}
     />

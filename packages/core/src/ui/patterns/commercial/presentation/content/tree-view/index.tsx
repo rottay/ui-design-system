@@ -31,17 +31,17 @@ function TreeItem({ node, guides, isLast, showConnector }: TreeItemProps): React
   const childGuides = showConnector ? [...guides, isLast] : guides;
 
   return (
-    <li className="rt-tree-view__item" role="listitem">
-      <span className="rt-tree-view__row">
+    <li className="rt-tree-view__item" data-part="item" role="listitem">
+      <span className="rt-tree-view__row" data-part="row">
         {showConnector && (
-          <span className="rt-tree-view__connector" aria-hidden="true">
+          <span className="rt-tree-view__connector" data-part="connector" aria-hidden="true">
             {prefix}
             {isLast ? CONNECTOR_LAST : CONNECTOR_MID}
           </span>
         )}
-        <span className="rt-tree-view__label">
+        <span className="rt-tree-view__label" data-part="label">
           {node.href ? (
-            <a className="rt-tree-view__link" href={node.href}>
+            <a className="rt-tree-view__link" data-part="link" href={node.href}>
               {node.label}
             </a>
           ) : (
@@ -50,7 +50,7 @@ function TreeItem({ node, guides, isLast, showConnector }: TreeItemProps): React
         </span>
       </span>
       {hasChildren && (
-        <ul className="rt-tree-view__group" role="list">
+        <ul className="rt-tree-view__group" data-part="group" role="list">
           {children.map((child, index) => (
             <TreeItem
               key={index}
@@ -84,7 +84,7 @@ export function TreeView({ data, className, "aria-label": ariaLabel }: TreeViewP
   const classes = ["rt-tree-view", className].filter(Boolean).join(" ");
 
   return (
-    <ul className={classes} role="list" aria-label={ariaLabel}>
+    <ul className={classes} data-part="root" role="list" aria-label={ariaLabel}>
       {roots.map((node, index) => (
         <TreeItem
           key={index}

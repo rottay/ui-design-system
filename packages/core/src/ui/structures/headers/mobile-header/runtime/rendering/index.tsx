@@ -5,10 +5,13 @@
  *
  * @description
  * A 56px-tall header bar with three slots: left action (back button or custom),
- * center title (truncated), and right actions. Supports sticky positioning with
- * safe area insets for notched devices.
+ * center title (a real `h1`, truncated), and right actions. The side slots
+ * share the leftover width equally, so the title sits on the bar's true
+ * centerline. Supports sticky positioning with safe area insets for notched
+ * devices (top + inline) and a governed stuck shadow that appears once
+ * content scrolls under the bar (`data-stuck`, via a sentinel probe).
  *
- * Engine-agnostic: composes DS primitives (Box, Flex, Text) which resolve
+ * Engine-agnostic: composes DS primitives (Box, Flex) which resolve
  * through the engine system themselves.
  *
  * @example
@@ -26,11 +29,10 @@
  * @package @rottay/design-system
  */
 
-import type { CSSProperties } from 'react';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 
 import { Box } from '@/ui/primitives/layout/Box';
 import { Flex } from '@/ui/primitives/layout/Flex';
-import { Text } from '@/ui/primitives/display/Typography';
 import { NavigationBackIcon } from '@/graphics/icons/presentation/semantic/generated/roles/navigation-back';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
@@ -60,6 +62,37 @@ export function MobileHeader({
   const i18n = useOptionalTranslation('common');
   const backAriaLabel = i18n?.tOr('go_back', 'Go back') ?? 'Go back';
 
+  // Stuck evidence for the sticky posture: a 1px sentinel sits immediately
+  // before the bar; the bar sticks exactly when the sentinel leaves the
+  // viewport, so `data-stuck` tracks "scrolled under the bar" without a
+  // scroll listener. The skin keeps the sentinel OUT OF FLOW (absolute +
+  // visibility:hidden + pointer-events:none, 1px box), so it never becomes a
+  // spurious item in the consumer's grid/flex while staying measurable for
+  // the observer (display:none/contents would dissolve the box and kill IO).
+  //
+  // The observer stays rooted at the VIEWPORT on purpose: MobileHeaderProps
+  // exposes no scroll root/container, so the component must not fake
+  // knowledge of arbitrary scroll ancestors. Inside a nested scroller the
+  // sticky posture still sticks, but the probe fails closed — `data-stuck`
+  // stays false and the governed shadow simply never appears; the behavior
+  // is deterministic instead of accidentally right.
+  // BLOCKED(owner: Codex/contracts): no scrollRoot on MobileHeaderProps.
+  // jsdom ships no IntersectionObserver — the guard fails closed (no shadow)
+  // and the contract tests stay green.
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [stuck, setStuck] = useState(false);
+  useEffect(() => {
+    if (!sticky) return undefined;
+    const sentinel = sentinelRef.current;
+    if (!sentinel || typeof IntersectionObserver === 'undefined') return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => setStuck(entry ? !entry.isIntersecting : false),
+      { threshold: [0] },
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [sticky]);
+
   // Determine the left slot content
   const leftSlot = leftAction ?? (
     onBack ? (
@@ -68,15 +101,6 @@ export function MobileHeader({
         type="button"
         onClick={onBack}
         className="rottay-mobile-header__back"
-        style={{
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minWidth: 44,
-          minHeight: 44,
-          padding: 0,
-        } as CSSProperties}
         aria-label={backAriaLabel}
         data-testid="mobile-header-back"
         data-part="trigger"
@@ -88,25 +112,26 @@ export function MobileHeader({
     ) : null
   );
 
+  /* All paint geometry lives in the mobile-header skin (56px bar, safe-area
+     insets, slot flex shares, touch floors, sticky offset and stacking).
+     Only `position: sticky` itself travels inline: the engine contract test
+     pins `root.style.position`. The consumer `style` prop keeps last-word
+     precedence over the skin, as before. */
   const containerStyle: CSSProperties = {
-    width: '100%',
-    height: 56,
-    minHeight: 56,
-    paddingTop: 'env(safe-area-inset-top, 0px)',
-    ...(sticky
-      ? {
-          position: 'sticky',
-          top: 0,
-          /* The sticky stack rides a family channel (the inline position is
-             pinned by the engine contract test, so the token travels
-             inline with it); the fallback preserves the historical 40. */
-          zIndex: 'var(--ds-mobile-header-sticky-z, 40)',
-        }
-      : {}),
+    ...(sticky ? { position: 'sticky' } : {}),
     ...style,
   };
 
   return (
+    <>
+      {sticky ? (
+        <div
+          ref={sentinelRef}
+          aria-hidden="true"
+          className="rottay-mobile-header__sticky-sentinel"
+          data-part="sticky-sentinel"
+        />
+      ) : null}
     <Box
       as="header"
       className="rottay-mobile-header"
@@ -115,25 +140,18 @@ export function MobileHeader({
       role="banner"
       data-part="root"
       data-sticky={sticky}
+      data-stuck={sticky && stuck}
     >
       <Flex
         align="center"
         justify="between"
-        style={{
-          height: '100%',
-          paddingInlineStart: 4,
-          paddingInlineEnd: 4,
-          position: 'relative',
-        }}
+        className="rottay-mobile-header__bar"
+        data-part="bar"
       >
-        {/* Left slot */}
+        {/* Slot geometry (equal side shares, true-centerline title, touch
+            floors, safe-area padding) lives in the skin. */}
         <Box
-          style={{
-            flexShrink: 0,
-            minWidth: 44,
-            display: 'flex',
-            alignItems: 'center',
-          }}
+          className="rottay-mobile-header__left"
           data-testid="mobile-header-left"
           data-part="left"
         >
@@ -141,44 +159,23 @@ export function MobileHeader({
         </Box>
 
         {/* Center title */}
-        <Box
-          style={{
-            flex: 1,
-            overflow: 'hidden',
-            textAlign: 'center',
-            paddingInlineStart: 8,
-            paddingInlineEnd: 8,
-          }}
-        >
+        <Box className="rottay-mobile-header__center" data-part="center">
           {title && (
-            <Text
+            <Box
+              as="h1"
               className="rottay-mobile-header__title"
               title={title}
-              style={{
-                fontSize: 17,
-                fontWeight: 600,
-                lineHeight: '22px',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-              }}
               data-testid="mobile-header-title"
               data-part="label"
             >
               {title}
-            </Text>
+            </Box>
           )}
         </Box>
 
         {/* Right slot */}
         <Box
-          style={{
-            flexShrink: 0,
-            minWidth: 44,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-          }}
+          className="rottay-mobile-header__right"
           data-testid="mobile-header-right"
           data-part="right"
         >
@@ -186,9 +183,11 @@ export function MobileHeader({
         </Box>
       </Flex>
 
-      {/* Optional children below the header bar (subtitle, search, etc.) */}
-      {children}
+      {/* Optional children below the header bar (subtitle, search, etc.);
+          the part is a pure anatomy hook — the skin paints no chrome on it. */}
+      {children ? <Box data-part="body">{children}</Box> : null}
     </Box>
+    </>
   );
 }
 

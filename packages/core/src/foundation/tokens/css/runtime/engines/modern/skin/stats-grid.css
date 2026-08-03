@@ -6,11 +6,38 @@
  * and the `--ds-stats-grid-value-*` metric channels forwarded to the composed
  * Statistic primitive. The rest of the `--ds-stats-grid-*` vocabulary remains
  * rustic-only exactly as before this extraction.
+ *
+ * Second premium pass (roadmap 6.10): the sparkline's stroke and gradient
+ * stops are painted here through the per-stat `--ds-stats-grid-accent`
+ * channel (an SVG presentation attribute cannot resolve `var()`, so the
+ * engine's former attribute-based fallback painted an ungoverned black
+ * whenever a stat had no `color`); the sparkline geometry goes fluid at a
+ * fixed block size; the card/skeleton padding fallback rides the tenant
+ * density plane (`--ds-density-effective-scale`, Button-skin idiom); and the
+ * root gains a quiet `error` part mirroring the `empty` block. The private
+ * `--_ds-stats-grid-sparkline-fill-opacity` channel governs area-fill
+ * strength, exact 0.2 fallback).
  */
 
 .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card {
-  transition: box-shadow var(--ds-motion-normal) ease,
-    transform var(--ds-motion-fast) ease;
+  transition: box-shadow var(--ds-motion-normal)
+      var(--ds-motion-ease-move, ease),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-move, ease);
+}
+
+/* Interactive cards (role=button) earn a governed lift on hover-capable
+   pointers; the press state stays available on every pointer. */
+@media (hover: hover) {
+  .ds-pattern-stats-grid.ds-engine-modern
+    .ds-stats-grid__card[data-interactive="true"]:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--ds-elevation-2);
+  }
+}
+
+.ds-pattern-stats-grid.ds-engine-modern
+  .ds-stats-grid__card[data-interactive="true"]:active {
+  transform: translateY(0);
 }
 
 .ds-pattern-stats-grid.ds-engine-modern
@@ -50,7 +77,10 @@
   border-radius: var(--ds-radius-lg);
 }
 
-/* ---- card geometry drained from the engine's inline styles ---- */
+/* ---- card geometry drained from the engine's inline styles. The padding
+        fallback rides the tenant density plane (Button-skin
+        `--ds-density-effective-scale` idiom); an explicit
+        `--ds-stats-grid-card-padding` always wins raw. ---- */
 .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card {
   position: relative;
   display: flex;
@@ -58,7 +88,11 @@
   gap: var(--ds-spacing-1, 0.25rem);
   min-width: 0;
   overflow: hidden;
-  padding: var(--ds-stats-grid-card-padding, 1.25rem 1.5rem);
+  padding: var(
+    --ds-stats-grid-card-padding,
+    calc(1.25rem * var(--ds-density-effective-scale))
+      calc(1.5rem * var(--ds-density-effective-scale))
+  );
 }
 .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card[data-interactive="true"] {
   cursor: pointer;
@@ -90,6 +124,9 @@
   margin-block-start: calc(var(--ds-spacing-1, 0.25rem) / 2);
   font-size: var(--ds-font-size-xs, 0.75rem);
   line-height: 1.4;
+  /* Long locale strings wrap inside the minmax(0, 1fr) track instead of
+     overflowing the card. */
+  overflow-wrap: anywhere;
 }
 
 /* Pattern-owned trend pill: geometry drained from the engine's inline
@@ -101,19 +138,32 @@
   align-self: flex-start;
   gap: 2px;
   margin-block-start: var(--ds-spacing-1, 0.25rem);
-  padding: 2px 6px;
+  padding-block: 2px;
+  padding-inline: 6px;
   font-size: var(--ds-font-size-xs, 0.75rem);
   font-variant-numeric: tabular-nums;
   font-weight: 500;
   line-height: 1;
 }
 
-/* ---- empty state (same quiet block the family's loading mirrors) ---- */
-.ds-pattern-stats-grid.ds-engine-modern [data-part="empty"] {
+/* ---- empty + error states (one quiet block frame on the same root; the
+        error adds the governed status icon and the error ink, so the state
+        never rides color alone) ---- */
+.ds-pattern-stats-grid.ds-engine-modern [data-part="empty"],
+.ds-pattern-stats-grid.ds-engine-modern [data-part="error"] {
   padding: var(--ds-spacing-6, 1.5rem);
-  color: var(--ds-color-text-secondary);
   font-size: var(--ds-font-size-sm, 0.875rem);
   text-align: center;
+}
+.ds-pattern-stats-grid.ds-engine-modern [data-part="empty"] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-stats-grid.ds-engine-modern [data-part="error"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-2, 0.5rem);
+  color: var(--ds-color-error);
 }
 
 /* ---- skeleton geometry drained from the engine's inline styles (it mirrors
@@ -122,7 +172,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--ds-spacing-3, 0.75rem);
-  padding: var(--ds-stats-grid-card-padding, 1.25rem 1.5rem);
+  padding: var(
+    --ds-stats-grid-card-padding,
+    calc(1.25rem * var(--ds-density-effective-scale))
+      calc(1.5rem * var(--ds-density-effective-scale))
+  );
 }
 .ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"][data-kind="label"] {
   inline-size: 40%;
@@ -137,11 +191,32 @@
   block-size: 16px;
 }
 
-/* ---- sparkline layout (the path data itself stays engine-computed) ---- */
+/* ---- sparkline: the skin owns paint (stroke + gradient stops) through the
+        per-stat accent channel, and the geometry goes fluid -- the svg fills
+        the card's inline size at a fixed block size while the engine's
+        `vector-effect="non-scaling-stroke"` keeps the 1.5px stroke honest.
+        `margin-block-start: auto` pins the chart to the card floor so
+        sparklines align across a stretched row; the block-start padding
+        keeps a minimum separation from the content above (identical 2.25rem
+        total footprint to the former fixed 80x28 + margin geometry). ---- */
 .ds-pattern-stats-grid.ds-engine-modern [data-part="sparkline"] {
   display: block;
-  margin-block-start: var(--ds-spacing-2, 0.5rem);
+  inline-size: 100%;
+  block-size: 1.75rem;
+  margin-block-start: auto;
+  padding-block-start: var(--ds-spacing-2, 0.5rem);
   overflow: visible;
+}
+.ds-pattern-stats-grid.ds-engine-modern [data-part="sparkline-line"] {
+  stroke: var(--ds-stats-grid-accent, var(--ds-color-primary-500));
+}
+.ds-pattern-stats-grid.ds-engine-modern [data-part="sparkline-stop"][data-kind="head"] {
+  stop-color: var(--ds-stats-grid-accent, var(--ds-color-primary-500));
+  stop-opacity: var(--_ds-stats-grid-sparkline-fill-opacity, 0.2);
+}
+.ds-pattern-stats-grid.ds-engine-modern [data-part="sparkline-stop"][data-kind="tail"] {
+  stop-color: var(--ds-stats-grid-accent, var(--ds-color-primary-500));
+  stop-opacity: 0;
 }
 
 .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__icon {
@@ -202,11 +277,28 @@
   border-radius: var(--ds-radius-sm);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card {
+    transition: none;
+  }
+  .ds-pattern-stats-grid.ds-engine-modern
+    .ds-stats-grid__card[data-interactive="true"]:hover,
+  .ds-pattern-stats-grid.ds-engine-modern
+    .ds-stats-grid__card[data-interactive="true"]:active {
+    transform: none;
+  }
+  .ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"] {
+    animation: none;
+  }
+}
+
 /* forced-colors: surfaces, shadows and state tints are forced away, so the
    cards, the icon and the trend pill re-assert a system-color boundary. The
    trend state still reads through the governed icon shape (never color
-   alone); plain text auto-maps to CanvasText. The sparkline is aria-hidden
-   decorative data-viz and degrades neutral with no opt-out. */
+   alone); plain text auto-maps to CanvasText. The error part is text plus a
+   currentColor status icon, so it auto-forces. The sparkline (aria-hidden
+   decorative data-viz) degrades to a single neutral stroke -- the gradient
+   area would otherwise force into a solid blob. */
 @media (forced-colors: active) {
   .ds-pattern-stats-grid.ds-engine-modern .ds-stats-grid__card {
     border: 1px solid ButtonText;
@@ -234,5 +326,11 @@
   }
   .ds-pattern-stats-grid.ds-engine-modern [data-part="skeleton-bar"] {
     background: GrayText;
+  }
+  .ds-pattern-stats-grid.ds-engine-modern [data-part="sparkline-area"] {
+    fill: none;
+  }
+  .ds-pattern-stats-grid.ds-engine-modern [data-part="sparkline-line"] {
+    stroke: CanvasText;
   }
 }

@@ -20,6 +20,15 @@
  *     token. It lands wherever the resolved tenant variant paints a border,
  *     the same reach the legacy `border-color` rule had.
  *
+ *   - Sticky aside (`ds-wizard__aside-card`, deep pass 2026-08-02): in the
+ *     split layout the step-aware aside (contextual help, progress summary)
+ *     follows scroll on long steps, matching the checkout-style posture the
+ *     form/detail-form asides already have. Keyed on the surface-stamped
+ *     `data-stacked` landing hook (added this pass, family idiom); stacked
+ *     layouts stay static. Logical `inset-block-start`, spacing token with
+ *     literal fallback — posture only, zero paint, so no forced-colors
+ *     re-keying is needed.
+ *
  *   Description ink moved to the Typography `color="subtle"` prop (the exact
  *   `--ds-color-text-muted` value the dead rule intended) — engine-owned and
  *   tenant-remappable, no skin rule needed.
@@ -37,4 +46,11 @@
 
 .ds-surface.ds-wizard .ds-wizard__error-card {
   --ds-card-bordered-border-color: var(--ds-color-error);
+}
+
+/* Split layout: the step-aware aside follows scroll on long steps
+   (form-surface.css / detail-form-surface.css idiom); stacked stays static. */
+.ds-surface.ds-wizard[data-stacked='false'] .ds-wizard__aside-card {
+  position: sticky;
+  inset-block-start: var(--ds-spacing-4, 1rem);
 }

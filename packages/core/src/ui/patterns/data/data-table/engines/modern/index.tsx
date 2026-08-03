@@ -503,6 +503,53 @@ export default function ModernDataTable<T extends object>(
       (virtualScroll.endIndex - virtualScroll.startIndex) * virtualRowHeight
     : 0;
 
+  // Scroll-governed sticky chrome: the sticky header shadow is painted only
+  // once content actually scrolls beneath it (data-scrolled), so a table at
+  // rest does not carry a floating elevation cue it has not earned yet. Two
+  // scroll paths engage the state: the region itself scrolling (bounded via
+  // maxHeight / virtualization) and the header row sticking against the
+  // region's visible top edge while the page scrolls.
+  const scrollRegionRef = useRef<HTMLDivElement | null>(null);
+  const [scrollRegionScrolled, setScrollRegionScrolled] = useState(false);
+  const setScrollRegionNode = useCallback(
+    (node: HTMLDivElement | null) => {
+      scrollRegionRef.current = node;
+      if (virtualized) {
+        (
+          virtualScroll.scrollRef as React.MutableRefObject<HTMLDivElement | null>
+        ).current = node;
+      }
+    },
+    [virtualized, virtualScroll.scrollRef]
+  );
+  const measureStickyHeaderGovernance = useCallback(() => {
+    const region = scrollRegionRef.current;
+    if (!region) return;
+    let next = region.scrollTop > 0;
+    if (!next && stickyHeader && headerRowRef.current) {
+      next =
+        headerRowRef.current.getBoundingClientRect().top >
+        region.getBoundingClientRect().top + 1;
+    }
+    setScrollRegionScrolled((prev) => (prev === next ? prev : next));
+  }, [stickyHeader]);
+  const handleScrollRegionScroll = useCallback(
+    (event: React.UIEvent<HTMLDivElement>) => {
+      if (virtualized) virtualScroll.onScroll(event);
+      measureStickyHeaderGovernance();
+    },
+    [virtualized, virtualScroll.onScroll, measureStickyHeaderGovernance]
+  );
+  useEffect(() => {
+    if (!stickyHeader) return;
+    measureStickyHeaderGovernance();
+    window.addEventListener("scroll", measureStickyHeaderGovernance, {
+      passive: true,
+    });
+    return () =>
+      window.removeEventListener("scroll", measureStickyHeaderGovernance);
+  }, [stickyHeader, measureStickyHeaderGovernance]);
+
   // ---------------------------------------------------------------------------
   // Resize handlers
   // ---------------------------------------------------------------------------
@@ -1160,11 +1207,12 @@ export default function ModernDataTable<T extends object>(
       >
         {/* Scroll container */}
         <div
-          ref={virtualized ? virtualScroll.scrollRef : undefined}
-          onScroll={virtualized ? virtualScroll.onScroll : undefined}
+          ref={setScrollRegionNode}
+          onScroll={handleScrollRegionScroll}
           data-ds-table-scroll="true"
           data-bounded={maxHeight ? "true" : "false"}
           data-part="scroll"
+          data-scrolled={scrollRegionScrolled ? "true" : "false"}
           data-state={error ? "error" : loading ? "loading" : data.length === 0 ? "empty" : "ready"}
           style={maxHeight ? { maxHeight } : undefined}
         >
@@ -1852,6 +1900,10 @@ export default function ModernDataTable<T extends object>(
                                           value={cellValue}
                                           row={row}
                                           columnKey={col.key}
+                                          columnLabel={resolveColumnLabel(
+                                            col.header,
+                                            col.key
+                                          )}
                                           config={editableCfg}
                                           onSave={(newValue) =>
                                             handleCellSave(
@@ -2263,6 +2315,10 @@ export default function ModernDataTable<T extends object>(
                                       value={cellValue}
                                       row={row}
                                       columnKey={col.key}
+                                      columnLabel={resolveColumnLabel(
+                                        col.header,
+                                        col.key
+                                      )}
                                       config={editableCfg}
                                       onSave={(newValue) =>
                                         handleCellSave(

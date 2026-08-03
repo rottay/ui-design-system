@@ -27,15 +27,41 @@
  * a family channel — the old `--ds-motion-duration-slow` name was a ghost
  * (no definition anywhere in the token pipeline). Reduced motion stills the
  * shimmer below; forced colors re-express the skeleton in system ink.
+ *
+ * WAVE p612b:
+ * - Box geometry speaks logical properties throughout (inline-size /
+ *   block-size), so RTL tenants get the same frame without overrides.
+ * - The inline gutter is safe-area aware: one private computed gutter
+ *   (`--_ds-feature-workspace-gutter`, max of the authored channel and the
+ *   physical notch insets — notches are physical, so `env()` is read
+ *   directly, direction-neutrally). `env()` resolves to 0 where there is no
+ *   notch, so the default geometry is byte-identical off-device. The compact
+ *   and mobile container breakpoints re-declare the same computed gutter so
+ *   the floor survives their overrides.
+ * - A sticky navigation lane paints the panel surface behind its content;
+ *   without it the lane overlaid scrolling content transparently (the lane
+ *   was only ever transparent because nothing had scrolled under it yet).
  */
 
 .ds-pattern-feature-workspace-frame {
   --_ds-feature-workspace-max-width: 100%;
+  /* One computed inline gutter: the authored channel, floored by the physical
+     safe-area insets (notches are physical, so env() is direction-neutral
+     here). env() is 0 where there is no notch. Container breakpoints below
+     re-declare this same computed gutter with their own tier. */
+  --_ds-feature-workspace-gutter: max(
+    var(
+      --ds-feature-workspace-gutter-inline,
+      clamp(var(--ds-spacing-3), 2.25vw, var(--ds-spacing-6))
+    ),
+    env(safe-area-inset-left, 0px),
+    env(safe-area-inset-right, 0px)
+  );
 
   display: block;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
   box-sizing: border-box;
   container: ds-feature-workspace / inline-size;
   isolation: isolate;
@@ -59,35 +85,36 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--ds-feature-workspace-section-gap, var(--ds-spacing-3));
-  width: 100%;
-  max-width: var(--_ds-feature-workspace-max-width);
-  min-width: 0;
+  inline-size: 100%;
+  max-inline-size: var(--_ds-feature-workspace-max-width);
+  min-inline-size: 0;
   box-sizing: border-box;
   margin-inline: auto;
-  padding: var(--ds-feature-workspace-gutter-block-start, var(--ds-spacing-3))
-    var(
-      --ds-feature-workspace-gutter-inline,
-      clamp(var(--ds-spacing-3), 2.25vw, var(--ds-spacing-6))
-    )
+  padding-block: var(--ds-feature-workspace-gutter-block-start, var(--ds-spacing-3))
     var(--ds-feature-workspace-gutter-block-end, var(--ds-spacing-6));
+  padding-inline: var(--_ds-feature-workspace-gutter);
 }
 
 .ds-feature-workspace-frame__navigation {
   position: relative;
   z-index: var(--ds-feature-workspace-navigation-z-index, 2);
-  width: 100%;
-  min-width: 0;
+  inline-size: 100%;
+  min-inline-size: 0;
   padding: 0;
 }
 
 .ds-feature-workspace-frame__navigation[data-sticky="true"] {
   position: sticky;
   top: var(--ds-feature-workspace-sticky-offset, 0px);
+  /* A stuck lane overlays scrolling content: it must be opaque. Surface and
+     shape come from their existing canonical authorities. */
+  background: var(--ds-surface-panel, var(--ds-color-bg-secondary));
+  border-radius: var(--ds-radius-lg, 12px);
 }
 
 .ds-feature-workspace-frame__navigation-viewport {
-  width: 100%;
-  min-width: 0;
+  inline-size: 100%;
+  min-inline-size: 0;
   /* Reserve breathing room for tab focus rings and tray shadow. Horizontal
      scrolling still owns clipping; the content can no longer visually fuse
      with the first workspace panel. */
@@ -105,32 +132,32 @@
 }
 
 .ds-feature-workspace-frame__navigation-viewport > * {
-  min-width: 100%;
+  min-inline-size: 100%;
 }
 
 .ds-feature-workspace-frame__content {
   display: block;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
   box-sizing: border-box;
 }
 
 .ds-feature-workspace-frame__content > * {
-  max-width: 100%;
+  max-inline-size: 100%;
 }
 
 .ds-feature-workspace-frame__skeleton {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: var(--ds-spacing-3);
-  width: 100%;
-  min-height: var(--ds-feature-workspace-skeleton-min-height, 24rem);
+  inline-size: 100%;
+  min-block-size: var(--ds-feature-workspace-skeleton-min-height, 24rem);
 }
 
 .ds-feature-workspace-frame__skeleton > span {
   grid-column: span 4;
-  min-height: var(--ds-feature-workspace-skeleton-card-height, 9rem);
+  min-block-size: var(--ds-feature-workspace-skeleton-card-height, 9rem);
   border: 1px solid
     var(--ds-surface-card-border, var(--ds-color-border-secondary));
   border-radius: var(--ds-surface-card-radius, var(--ds-radius-xl));
@@ -160,9 +187,12 @@
 @container ds-feature-workspace (max-width: 50rem) {
   .ds-feature-workspace-frame__frame {
     gap: var(--ds-feature-workspace-section-gap-compact, var(--ds-spacing-2));
-    padding-inline: var(
-      --ds-feature-workspace-gutter-inline-compact,
-      var(--ds-spacing-3)
+    /* Re-declare the computed gutter so the safe-area floor survives the
+       compact tier (the floor never shrinks below the notch). */
+    --_ds-feature-workspace-gutter: max(
+      var(--ds-feature-workspace-gutter-inline-compact, var(--ds-spacing-3)),
+      env(safe-area-inset-left, 0px),
+      env(safe-area-inset-right, 0px)
     );
   }
 
@@ -177,9 +207,10 @@
       --ds-feature-workspace-gutter-block-start-mobile,
       var(--ds-spacing-2)
     );
-    padding-inline: var(
-      --ds-feature-workspace-gutter-inline-mobile,
-      var(--ds-spacing-2)
+    --_ds-feature-workspace-gutter: max(
+      var(--ds-feature-workspace-gutter-inline-mobile, var(--ds-spacing-2)),
+      env(safe-area-inset-left, 0px),
+      env(safe-area-inset-right, 0px)
     );
   }
 
@@ -202,5 +233,12 @@
   .ds-feature-workspace-frame__skeleton > span {
     border-color: ButtonText;
     background: Canvas;
+  }
+
+  /* The stuck lane's surface is forced away with every background; re-express
+     the separation as a system-color outline (no layout shift). */
+  .ds-feature-workspace-frame__navigation[data-sticky="true"] {
+    outline: 1px solid ButtonText;
+    outline-offset: -1px;
   }
 }

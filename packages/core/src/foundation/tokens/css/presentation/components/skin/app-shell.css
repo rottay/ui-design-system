@@ -351,6 +351,26 @@
   box-shadow: var(--ds-shell-footer-shadow, none);
 }
 
+/* Direction-aware safe-area consumption (RTL). The physical `env()` readings
+   are bridged into named channels by the engine's rootStyle; the LOGICAL
+   paddings below must consume the physical reading of the edge they actually
+   land on. Under RTL the inline-start edge is the physical RIGHT, so the
+   consumption flips. The published `--ds-shell-inline-start-inset` calc keeps
+   its LTR reading on desktop (safe-area insets are 0px there in practice);
+   the residual desktop-RTL notch asymmetry in that calc is registered debt. */
+[dir='rtl'] .rottay-app-shell__navigation-sidebar {
+  padding-inline-start: var(--ds-shell-safe-area-right);
+}
+[dir='rtl'] .rottay-app-shell__main {
+  padding-inline-end: var(--ds-shell-main-padding-inline-end, var(--ds-shell-safe-area-left));
+}
+[dir='rtl'] .rottay-app-shell__main[data-compact='true'] {
+  padding-inline-start: var(--ds-shell-main-padding-inline-start, var(--ds-shell-safe-area-right));
+}
+[dir='rtl'] .rottay-app-shell__navigation-drawer.rottay-app-shell__navigation-drawer[data-part='surface'] {
+  padding-inline-start: env(safe-area-inset-right, 0px);
+}
+
 /* Interaction and accessibility states. */
 
 :is(.rottay-app-shell, .rottay-app-shell__navigation-drawer)
@@ -415,5 +435,24 @@
     border: 1px solid ButtonText;
     color: ButtonText;
     forced-color-adjust: auto;
+  }
+
+  /* The chrome hairlines (sidebar edge, header rule, drawer edge, footer
+     frame) re-key to a system color so the region separation survives when
+     the tenant palette is forced away. */
+  .rottay-app-shell__navigation-sidebar,
+  .rottay-app-shell__navigation-drawer.rottay-app-shell__navigation-drawer[data-part='surface'],
+  .rottay-app-shell__header,
+  .rottay-app-shell__navigation-logo,
+  .rottay-app-shell__navigation-drawer-header,
+  .rottay-app-shell__navigation-footer {
+    border-color: CanvasText;
+  }
+
+  /* The skip link keeps a real frame and readable system ink. */
+  .rottay-app-shell__skip-link:focus {
+    border: 1px solid ButtonText;
+    background: Canvas;
+    color: ButtonText;
   }
 }

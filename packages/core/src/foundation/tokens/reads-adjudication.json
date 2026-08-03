@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "FASE K (Codex update 2026-08-02) \u2014 4 slices adjudicated per-name by catalog-executor (1-2) and touch-executor (3-4); merged and decided by lead",
-  "basedOnManifestDigest": "966385d00a22eee1b62841b771acb5af447d44c8dd425f7347caf59fa480cbdf",
+  "basedOnManifestDigest": "0bdbb5b9120f3b336bb0c4c06d811e44caeff2367f11c82dd90eb0d88bfc11c7",
   "laws": [
     "a read without an owner classification cannot ship: every name in hooks-manifest.unadjudicatedReads has exactly one row here",
     "MODERN_PRIVATE includes engine-agnostic private channels (fallback-governed, single owning reader) \u2014 the non-modern-reader:foundation-tokens flag preserves the distinction without widening the closed vocabulary",
@@ -19,9 +19,9 @@
     "remediationRederiveFix": "v2: density\u00d731 re-aplicado (v1 los pis\u00f3 al reconstruir de slices \u2014 ley: overlays del lead se re-aplican tras todo rebuild), fase4 destinos\u00d746, fase3b\u00d72."
   },
   "counts": {
-    "total": 2697,
+    "total": 2696,
     "byClass": {
-      "MODERN_PRIVATE": 2053,
+      "MODERN_PRIVATE": 2052,
       "FROZEN_ENGINE_SCOPED": 525,
       "TENANT_FACING_CANDIDATE": 77,
       "FOUNDATION_SHARED": 40,
@@ -27006,16 +27006,6 @@
         "foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css"
       ],
       "evidence": "undeclared internal channel; 2 read(s) in modern, 2 with a governing fallback"
-    },
-    {
-      "name": "--ds-pricing-table-spinner-duration",
-      "family": "pricing",
-      "class": "MODERN_PRIVATE",
-      "owner": "foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
-      "readSites": [
-        "foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css"
-      ],
-      "evidence": "undeclared internal channel; 1 read(s) in modern, 1 with a governing fallback"
     },
     {
       "name": "--ds-pricing-table-sticky-bg",

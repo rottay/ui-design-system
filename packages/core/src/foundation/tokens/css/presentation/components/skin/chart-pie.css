@@ -1,10 +1,97 @@
 /** PieChart skin (WO-SKIN-06 CK-E), deliberately unlayered. */
 
+/* Slice paint, centre and value labels are governed by the shared chart
+ * foundation skin through the `--ds-chart-*` channels on the engine's
+ * renderer surface; this family skin owns only what the foundation cannot
+ * see: legend markers, the invalid-data fallback, the loading skeleton, and
+ * the mount reveal. */
+
+/* Legend -------------------------------------------------------------------
+ * Round marker echoes the slice geometry; the radius is a private family
+ * detail rather than a tenant-facing theme channel. */
+
 .ds-chart-pie [data-part='legend-swatch'] {
-  border-radius: 50%;
+  border-radius: var(--_ds-pie-marker-radius, 50%);
 }
 
 .ds-chart-pie [data-part='legend-label'] {
   color: var(--ds-color-text-secondary);
 }
 
+/* Invalid-data fallback ------------------------------------------------------
+ * The family-computed INVALID-DATA overlay owns no inline paint; keep its
+ * copy on the metadata role so it reads as feedback, not data. */
+
+.ds-chart-pie [data-part='data-fallback'] {
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm);
+}
+
+/* Entrance reveal ---------------------------------------------------------- */
+
+@keyframes ds-chart-pie-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ds-chart-pie [data-part='chart-svg'] {
+  animation: ds-chart-pie-reveal var(--ds-motion-reveal, var(--ds-motion-calm))
+    var(--ds-motion-ease-enter, ease-out) both;
+}
+
+/* Loading skeleton -----------------------------------------------------------
+ * The bar placeholders bow out for a donut ring that keeps the chart
+ * footprint: same box, recognizably radial. The scaffold container keeps its
+ * inline flex posture, so the ring centers itself as a flex item with auto
+ * margins instead of fighting the inline layout. */
+
+@keyframes ds-chart-pie-skeleton-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.55;
+  }
+}
+
+.ds-chart-pie [data-part='skeleton-bar'] {
+  display: none;
+}
+
+.ds-chart-pie [data-part='skeleton']::before {
+  content: '';
+  margin: auto;
+  inline-size: min(52%, 12rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    transparent 52%,
+    color-mix(in srgb, var(--ds-chart-mark-color, var(--ds-color-primary)) 18%, var(--ds-color-bg-secondary)) 54%
+  );
+  animation: ds-chart-pie-skeleton-pulse
+    var(--ds-motion-glacial, var(--ds-motion-calm))
+    var(--ds-motion-ease-move, ease-in-out) infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-chart-pie [data-part='chart-svg'],
+  .ds-chart-pie [data-part='skeleton']::before {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-chart-pie [data-part='skeleton']::before {
+    forced-color-adjust: none;
+    background: radial-gradient(circle, transparent 52%, Canvas 54%);
+    outline: 1px solid GrayText;
+    outline-offset: -1px;
+  }
+}

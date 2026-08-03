@@ -21,6 +21,14 @@
  * The family stays domain-agnostic. The optional `filterVisuals` map lets
  * each consumer keep platform-specific narrative (e.g. tenant or role copy)
  * inside its own workspace-config file rather than baking it into the DS.
+ *
+ * COMPOSITION LAW (premium wave): the quick-slice preset chip is the Button
+ * primitive (ghost variant, round shape; engine resolved by the
+ * DesignSystemProvider) painted through the
+ * `--ds-button-ghost-*` channels in the skin — the hand-rolled Box-as-button
+ * chip (and its physical `marginRight` icon spacing, an RTL leak) is
+ * retired. Every inline style is drained to the skin; geometry keys on the
+ * stable data-part hooks. The root is a labelled region.
  */
 
 import type { ReactNode } from 'react';
@@ -33,7 +41,7 @@ import {
 } from '@/graphics/icons/presentation/semantic/generated/roles/ai-sparkles';
 
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
-import { Box, Flex, Input, Select, Text } from '../../../primitives';
+import { Box, Button, Flex, Input, Select, Text } from '../../../primitives';
 
 export interface FieldFilterDefinition {
   key: string;
@@ -92,31 +100,25 @@ export function FieldFiltersPanel({
   if (!filters.length) return null;
 
   const activeCount = Object.values(values).filter((value) => value && value !== 'all').length;
+  const panelLabel = tOr('fieldFiltersPanel.title', 'Advanced filters');
 
   return (
     <Box
       className="ds-structure ds-field-filters-panel"
       data-part="root"
       data-active-count={activeCount}
-      style={{
-        padding: '12px 16px 14px',
-      }}
+      role="region"
+      aria-label={panelLabel}
     >
-      <Flex align="center" justify="between" gap={12} wrap="wrap" style={{ marginBottom: 12 }}>
-        <Box style={{ minWidth: 0, flex: '1 1 540px' }}>
+      <Flex align="center" justify="between" gap={12} wrap="wrap" data-part="header">
+        <Box data-part="header-copy">
           <Flex align="center" gap={8} wrap="wrap">
             <Text
               data-part="title-pill"
               size="xs"
               color="subtle"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                minHeight: 22,
-                padding: '0 8px',
-              }}
             >
-              {tOr('fieldFiltersPanel.title', 'Advanced filters')}
+              {panelLabel}
             </Text>
             <Text
               data-part="subtitle"
@@ -127,25 +129,19 @@ export function FieldFiltersPanel({
             </Text>
           </Flex>
         </Box>
-        <Box style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', alignSelf: 'flex-start' }}>
+        <Box data-part="signals">
           <InlineSignal label={`${activeCount} ${tOr('fieldFiltersPanel.activeSuffix', 'active')}`} tone={activeCount > 0 ? 'primary' : 'neutral'} />
           <InlineSignal label={tOr('fieldFiltersPanel.appliesLive', 'Applies live')} tone="neutral" />
         </Box>
       </Flex>
 
       {presets && presets.length > 0 && (
-        <Box style={{ marginBottom: 12 }}>
+        <Box data-part="presets-region">
           <Flex align="center" gap={10} wrap="wrap">
             <Text
               data-part="presets-pill"
               size="xs"
               color="subtle"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                minHeight: 20,
-                padding: '0 8px',
-              }}
             >
               {tOr('fieldFiltersPanel.quickSlices', 'Quick slices')}
             </Text>
@@ -164,14 +160,7 @@ export function FieldFiltersPanel({
         </Box>
       )}
 
-      <Box
-        data-part="grid"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
-          gap: 10,
-        }}
-      >
+      <Box data-part="grid">
         {filters.map((filter) => {
           const value = values[filter.key] ?? '';
           const visual = filterVisuals?.[filter.key] ?? defaultFilterVisual(filter.label, tOr('fieldFiltersPanel.refineBy', 'Refine by'));
@@ -179,7 +168,6 @@ export function FieldFiltersPanel({
             filter.type === 'date-range'
               ? filter.placeholder ?? `${tOr('fieldFiltersPanel.anyPrefix', 'Any')} ${filter.label}`
               : filter.placeholder ?? `${tOr('fieldFiltersPanel.allPrefix', 'All')} ${filter.label}`;
-          const controlStyle = { width: '100%', minHeight: 40 } as const;
 
           if (filter.type === 'select' || filter.type === 'enum') {
             return (
@@ -200,7 +188,6 @@ export function FieldFiltersPanel({
                     { value: 'all', label: inputLabel },
                     ...(filter.options ?? []),
                   ]}
-                  style={controlStyle}
                 />
               </FilterCard>
             );
@@ -224,7 +211,6 @@ export function FieldFiltersPanel({
                     { value: 'all', label: inputLabel },
                     ...(filter.options ?? []),
                   ]}
-                  style={controlStyle}
                 />
               </FilterCard>
             );
@@ -242,7 +228,6 @@ export function FieldFiltersPanel({
                 value={value}
                 onChange={(next) => onChange(filter.key, next)}
                 placeholder={filter.placeholder}
-                style={controlStyle}
               />
             </FilterCard>
           );
@@ -260,34 +245,20 @@ function PresetChip({
   onClick: () => void;
 }) {
   return (
-    <Box
-      as="button"
+    <Button
+      variant="ghost"
+      size="xs"
+      shape="round"
       data-part="preset-chip"
       onClick={onClick}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        minHeight: 30,
-        padding: '0 10px',
-        cursor: 'pointer',
-      }}
+      icon={
+        <Box as="span" data-part="preset-chip-icon">
+          <AiSparklesIcon size={10} decorative />
+        </Box>
+      }
     >
-      <Box
-        data-part="preset-chip-icon"
-        style={{
-          width: 16,
-          height: 16,
-          marginRight: 7,
-          flexShrink: 0,
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <AiSparklesIcon size={10} decorative />
-      </Box>
       {label}
-    </Box>
+    </Button>
   );
 }
 
@@ -302,21 +273,11 @@ function InlineSignal({
     <Box
       data-part="signal"
       data-tone={tone}
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 6,
-        minHeight: 24,
-        padding: '0 9px',
-      }}
     >
       <Text
         data-part="signal-label"
         size="xs"
         color="inherit"
-        style={{
-          lineHeight: 1,
-        }}
       >
         {label}
       </Text>
@@ -336,37 +297,16 @@ function FilterCard({
   children: ReactNode;
 }) {
   return (
-    <Box
-      data-part="filter-card"
-      style={{
-        padding: 12,
-        minHeight: 118,
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <Flex align="start" gap={10} style={{ marginBottom: 8 }}>
-        <Box
-          data-part="filter-card-icon"
-          style={{
-            width: 30,
-            height: 30,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-          }}
-        >
+    <Box data-part="filter-card">
+      <Flex align="start" gap={10} data-part="filter-card-head">
+        <Box data-part="filter-card-icon">
           {icon}
         </Box>
-        <Box style={{ minWidth: 0, flex: 1 }}>
+        <Box data-part="filter-card-copy">
           <Text
             data-part="filter-card-label"
             size="xs"
             color="subtle"
-            style={{
-              display: 'block',
-            }}
           >
             {label}
           </Text>
@@ -374,16 +314,12 @@ function FilterCard({
             data-part="filter-card-description"
             size="xs"
             color="secondary"
-            style={{
-              display: 'block',
-              marginTop: 3,
-            }}
           >
             {description}
           </Text>
         </Box>
       </Flex>
-      <Box data-part="control-slot" style={{ marginTop: 'auto' }}>{children}</Box>
+      <Box data-part="control-slot">{children}</Box>
     </Box>
   );
 }

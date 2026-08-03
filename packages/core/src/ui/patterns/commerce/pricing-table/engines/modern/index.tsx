@@ -132,7 +132,13 @@ export default function ModernPricingTable(props: PricingTableProps) {
   const rootClass = `ds-pattern-pricing-table ds-engine-modern ${className ?? ''}`;
   const cycle = billingCycle ?? 'monthly';
 
-  /* Loading: shaped placeholder, status role is a test pin. */
+  /* Loading: shaped skeleton mirror that conserves the loaded footprint
+     (contract: "displays a loading skeleton instead of content") -- the
+     opt-in toggle pill, one card per plan column and one line per feature
+     row, so the swap to real content never reflows the page. The `spinner`
+     part stays as the accessible status announcement (its presence is a
+     test pin); the skin hides it visually while the skeleton carries the
+     loading cue. Skeleton geometry is chrome, so it is `aria-hidden`. */
   if (loading) {
     return (
       <div
@@ -148,6 +154,39 @@ export default function ModernPricingTable(props: PricingTableProps) {
           role="status"
           aria-label={labels.loading}
         />
+        {onBillingCycleChange && (
+          <div
+            data-part="skeleton-toggle"
+            className="ds-pricing-table__skeleton-toggle"
+            aria-hidden="true"
+          />
+        )}
+        <div
+          data-part="skeleton-plans"
+          className="ds-pricing-table__skeleton-plans"
+          aria-hidden="true"
+        >
+          {plans.map((plan) => (
+            <div
+              key={plan.id}
+              data-part="skeleton-plan"
+              className="ds-pricing-table__skeleton-plan"
+            />
+          ))}
+        </div>
+        <div
+          data-part="skeleton-rows"
+          className="ds-pricing-table__skeleton-rows"
+          aria-hidden="true"
+        >
+          {features.map((feature) => (
+            <div
+              key={feature.key}
+              data-part="skeleton-row"
+              className="ds-pricing-table__skeleton-row"
+            />
+          ))}
+        </div>
       </div>
     );
   }

@@ -51,6 +51,21 @@
   max-block-size: 520px;
 }
 
+/* Where small-viewport units are supported (modern sheet.css @supports
+   precedent) the cap also yields to 62% of the guaranteed-visible
+   viewport, so on short screens (mobile chrome with the URL bar
+   expanded, low-height laptops) the composer and page chrome stay
+   reachable instead of being pushed below the fold. `svh` is the STABLE
+   small-viewport unit, so the transcript height never jitters while the
+   URL bar collapses mid-scroll; engines without `svh` keep the plain
+   520px cap. A contract `transcriptHeight` still wins through the
+   sanctioned inline instance channel (inline style beats both rules). */
+@supports (height: 100svh) {
+  .ds-surface.ds-chat .ds-chat__transcript[data-part='transcript'] {
+    max-block-size: min(520px, 62svh);
+  }
+}
+
 /* ---- composer: send action placement ----
    The send action sits at the composer's inline end (flex-end flips
    with direction, so RTL mirrors it for free) and stretches full width

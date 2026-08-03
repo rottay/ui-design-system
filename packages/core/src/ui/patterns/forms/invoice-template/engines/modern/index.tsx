@@ -227,13 +227,16 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
             keeps horizontal scroll on narrow compositions. */}
         <div data-part="items-table-wrapper">
           <table data-part="items-table">
+            {/* The table's accessible name: the localized document label,
+                one string — never a concatenation of translated fragments. */}
+            <caption className="ds-visually-hidden">{copy.watermark}</caption>
             <thead>
               <tr data-part="items-header-row">
-                <th data-part="items-header-cell" data-col="index">#</th>
-                <th data-part="items-header-cell" data-col="description">{copy.colDescription}</th>
-                <th data-part="items-header-cell" data-col="quantity">{copy.colQuantity}</th>
-                <th data-part="items-header-cell" data-col="unit-price">{copy.colUnitPrice}</th>
-                <th data-part="items-header-cell" data-col="total">{copy.colTotal}</th>
+                <th scope="col" data-part="items-header-cell" data-col="index">#</th>
+                <th scope="col" data-part="items-header-cell" data-col="description">{copy.colDescription}</th>
+                <th scope="col" data-part="items-header-cell" data-col="quantity">{copy.colQuantity}</th>
+                <th scope="col" data-part="items-header-cell" data-col="unit-price">{copy.colUnitPrice}</th>
+                <th scope="col" data-part="items-header-cell" data-col="total">{copy.colTotal}</th>
               </tr>
             </thead>
             <tbody>

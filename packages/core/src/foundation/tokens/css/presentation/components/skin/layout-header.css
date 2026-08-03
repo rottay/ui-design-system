@@ -1,15 +1,36 @@
-/** HeaderSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
-
-.ds-surface.ds-header .ds-header__muted-text[data-part='root'][data-part='root'] {
-  color: var(--ds-color-text-muted);
-}
+/**
+ * HeaderSurface skin (WO-SKIN-06 / CK-I; premium deep pass 2026-08-02).
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` and
+ * `facade/entrypoints/styles.css` into `layer(rottay-components)` (the old
+ * "deliberately unlayered" note predates the wiring).
+ *
+ * SCOPE: the surface composes PageShellSurface, Tabs, Stack and Typography —
+ * each owns its chrome, states and forced-colors treatment. The two rules
+ * this file used to carry were DEAD paint and are removed, not re-keyed:
+ *   - the muted ink of `ds-header__muted-text` lost by layer order to
+ *     typography.css (`rottay-engines` sorts after `rottay-components` and
+ *     paints `color` on every Modern Text root), and its selector relied on
+ *     a doubled `[data-part='root'][data-part='root']` (repetition is
+ *     forbidden in Modern selectors, 4th-tanda owner directive). The ink now
+ *     rides the Typography `color="muted"` channel in index.tsx (SU01/SU06
+ *     idiom); the class stays as a pure landing hook.
+ *   - the mobile-compact `font-size`/`line-height` override lost twice: by
+ *     the same layer order and by the Typography engine's inline size map.
+ *     The compact size now rides the Typography `size` channel
+ *     (`size={mobileCompact ? 'sm' : undefined}`).
+ * What remains is the ONE piece of living surface-owned geometry: letting
+ * the root shrink below content width while the compact mobile posture is
+ * active (the `min-inline-size: 0` flex/grid resilience rule — layout, not
+ * paint, so layer order does not contest it).
+ *
+ * SPECIFICITY: anatomy class + one always-stamped attribute; no repetition,
+ * no `!important`, logical properties only.
+ *
+ * FORCED-COLORS: no surface-owned color to re-key (the one remaining rule is
+ * geometry), so no FC block — same documented omission as skin/profile.css.
+ */
 
 .ds-surface.ds-header[data-mobile-compact='true'] {
   min-inline-size: 0;
-}
-
-.ds-surface.ds-header[data-mobile-compact='true']
-  .ds-header__muted-text[data-part='root'][data-part='root'] {
-  font-size: var(--ds-font-size-sm);
-  line-height: var(--ds-line-height-snug);
 }

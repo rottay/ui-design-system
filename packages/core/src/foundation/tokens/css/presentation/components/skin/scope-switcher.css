@@ -22,12 +22,19 @@
 
 /* ---- root: quiet hairline strip (padding drained from the engine's inline
         styles, keyed on the inline variant; scroll region for narrow
-        compositions) ---- */
+        compositions). Paddings ride the density-scaled spacing rungs so the
+        strip breathes per tenant density profile; scroll-padding keeps a
+        keyboard-focused option off the scrollport edge. ---- */
 .ds-structure.ds-scope-switcher[data-part='root'] {
-  padding-block: 8px;
-  padding-inline: 16px;
+  padding-block: var(--ds-spacing-2, 8px);
+  padding-inline: var(--ds-spacing-4, 16px);
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  scroll-padding-inline: var(--ds-spacing-4, 16px);
+  /* Family-private opt-in mask: fades the strip's inline edges when options
+     overflow, signalling scrollability without a scrollbar. Suggested value:
+     linear-gradient(90deg, transparent, black 24px, black calc(100% - 24px), transparent). */
+  mask-image: var(--_ds-scope-switcher-overflow-fade, none);
 }
 .ds-structure.ds-scope-switcher[data-part='root'][data-inline='false'] {
   border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
@@ -58,10 +65,21 @@
   font-weight: 700;
   line-height: 1;
   font-variant-numeric: tabular-nums;
+  /* the active tint cross-fades on the shared fast channel instead of
+     snapping when the scope changes */
+  transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out),
+    color var(--ds-motion-fast) var(--ds-motion-ease-out, ease-out);
 }
 .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'][data-active='true'] {
   background: color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
   color: var(--ds-color-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'] {
+    transition: none;
+  }
 }
 
 /* forced-colors: the root's gradient hairline is forced away, so the strip

@@ -2,11 +2,64 @@
  * GridView wrapper skin (WO-SKIN-06 CK-I).
  * The consumer-owned renderCard subtree is never targeted; only the wrapper's
  * selection shell, checkbox landing hook and empty state receive paint.
+ *
+ * Premium channel sockets (KIMI visual worklist, schemaVersion 3): every
+ * --ds-collection-card-* channel consumed here is UNDECLARED in all shipped
+ * bundles, so the fallback arm -- exactly what the region paints today --
+ * governs until a brand authors the slot (zero-delta by construction). The
+ * renderCard subtree is consumer-owned, so the content slots (action-*,
+ * footer-*, icon-*, meter-*, number-*, value-color-hover) have no honest host
+ * in this file and stay unwired pending a CONSUMER_APPLIED contract.
  */
 
 .ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell'] {
+  /* Positioning host for the ::before/::after motif layers and the checkbox
+     overlay (was an engine inline style; drained, channels untouched). */
+  position: relative;
   border-radius: var(--ds-collection-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)));
-  transition: box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+  background: var(--ds-collection-card-glass-bg, transparent);
+  min-block-size: var(--ds-collection-card-min-height, auto);
+  transition: var(--ds-collection-card-transition, box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)));
+}
+
+/* checkbox overlay: logical insets — mirrors to the inline-start corner under
+   RTL with zero overrides (was physical top/left in the engine). */
+
+.ds-pattern-grid-view [data-part='checkbox-overlay'] {
+  position: absolute;
+  inset-block-start: 8px;
+  inset-inline-start: 8px;
+  z-index: 2;
+}
+
+/* grid motif layer (shell ::before; invisible while grid-bg/grid-line unset) */
+
+.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: var(
+    --ds-collection-card-grid-bg,
+    linear-gradient(var(--ds-collection-card-grid-line, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ds-collection-card-grid-line, transparent) 1px, transparent 1px)
+  );
+  background-size: var(--ds-collection-card-grid-size, var(--ds-surface-card-grid-size, 22px))
+    var(--ds-collection-card-grid-size, var(--ds-surface-card-grid-size, 22px));
+}
+
+/* overlay + sheen wash layers (shell ::after, above content; invisible while unset) */
+
+.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    var(--ds-collection-card-overlay, none),
+    var(--ds-collection-card-sheen, none);
 }
 
 .ds-pattern-grid-view [data-part='card-shell'][data-selected='true'] {
@@ -14,16 +67,28 @@
 }
 
 .ds-pattern-grid-view [data-part='card-shell'][data-selected='false'] {
-  box-shadow: none;
+  box-shadow: var(--ds-collection-card-depth, none);
+}
+
+/* hover transform socket: hover-capable only, and gated on no reduced-motion
+   preference because a lit slot is a brand-literal transform (motion). Unset
+   it computes `none`, the value the shell paints today. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell']:hover {
+    transform: var(--ds-collection-card-hover-transform, none);
+  }
 }
 
 .ds-pattern-grid-view .ds-grid-view__checkbox-control.ds-grid-view__checkbox-control.ds-grid-view__checkbox-control {
+  padding: 2px;
   background: var(--ds-color-bg-primary, #fff);
   border-radius: var(--ds-radius-sm, 6px);
-  box-shadow: var(--ds-elevation-1, 0 1px 3px rgba(0,0,0,0.12));
+  box-shadow: var(--ds-elevation-1, 0 1px 3px rgba(0, 0, 0, 0.12));
 }
 
 .ds-pattern-grid-view[data-part='root'][data-part='root'][data-empty='true'] {
+  padding: var(--ds-spacing-8, 32px) var(--ds-spacing-5, 20px);
+  text-align: center;
   border-radius: var(--ds-radius-lg, 12px);
   border: 1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)));
   background: var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-color-bg-primary, #fff)));
@@ -31,4 +96,13 @@
 
 .ds-pattern-grid-view [data-part='empty-state'][data-part='empty-state'][data-part='empty-state'][data-part='empty-state'] {
   color: var(--ds-color-text-muted);
+}
+
+/* forced colors: the selected ring is a box-shadow and is stripped, so the
+   selected shell re-expresses through the system highlight outline. */
+@media (forced-colors: active) {
+  .ds-pattern-grid-view [data-part='card-shell'][data-selected='true'] {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+  }
 }

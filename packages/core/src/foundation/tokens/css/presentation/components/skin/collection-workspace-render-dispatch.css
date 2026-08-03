@@ -237,7 +237,8 @@
 }
 
 /* Fallback "Open details" affordance: skinned identically whether it renders
-   as the native anchor or as the DS Button replacement. */.ds-surface.ds-collection-render-dispatch
+   as the native anchor or as the DS Button replacement. */
+.ds-surface.ds-collection-render-dispatch
   .ds-collection-render-dispatch__fallback-open-link[data-part="fallback-open-link"] {
   display: inline-flex;
   align-items: center;
@@ -334,7 +335,7 @@
 
 .ds-surface.ds-collection-render-dispatch.ds-collection-render-dispatch__incremental-footer[data-part="incremental-footer"]
   .ds-collection-render-dispatch__load-more[data-part="load-more"] {
-  border-radius: 999px;
+  border-radius: var(--ds-radius-full, 9999px);
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-secondary));
   background: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg, var(--ds-surface-card)));
   color: var(--ds-color-primary);

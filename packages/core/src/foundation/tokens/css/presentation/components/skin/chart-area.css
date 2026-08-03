@@ -1,22 +1,117 @@
 /** AreaChart skin (WO-SKIN-06 CK-E), deliberately unlayered. */
 
+/* Cartesian chrome (grid, baseline, tick labels) is governed by the shared
+ * chart foundation skin through the `--ds-chart-*` channels on the engine's
+ * renderer surface; this family skin owns only what the foundation cannot
+ * see: legend markers, the per-series dash cadence, series point strokes, the
+ * invalid-data fallback, the loading skeleton, and the mount reveal. */
+
+/* Legend -------------------------------------------------------------------
+ * The marker keeps the translucent fill of its area (the adapter carries the
+ * opacity inline); the radius is a private family detail rather than a
+ * tenant-facing theme channel. */
+
 .ds-chart-area [data-part='legend-swatch'] {
-  border-radius: 2px;
+  border-radius: var(--_ds-area-marker-radius, 2px);
 }
 
 .ds-chart-area [data-part='legend-label'] {
   color: var(--ds-color-text-secondary);
 }
 
-.ds-chart-area [data-part='axis-tick-label'],
-.ds-chart-area [data-part='axis-label'] {
-  fill: var(--ds-color-text-secondary);
+/* Series cadence -----------------------------------------------------------
+ * The renderer cycles `data-series-index` 0..4 on each `area-series`; the
+ * series outline receives a governed dash for indexes 1..4 so stacked series
+ * separate by stroke rhythm as well as paint. The cadence remains an
+ * implementation detail of this family. */
+
+.ds-chart-area [data-part='area-series'][data-series-index='1'] [data-part='series-line'] {
+  stroke-dasharray: var(--_ds-area-series-dash-2, 6 4);
 }
 
-.ds-chart-area [data-part='grid-line'] {
-  stroke: var(--ds-color-border-secondary);
+.ds-chart-area [data-part='area-series'][data-series-index='2'] [data-part='series-line'] {
+  stroke-dasharray: var(--_ds-area-series-dash-3, 2 3);
 }
 
-.ds-chart-area [data-part='grid-line'] {
-  stroke: var(--ds-color-border-primary);
+.ds-chart-area [data-part='area-series'][data-series-index='3'] [data-part='series-line'] {
+  stroke-dasharray: var(--_ds-area-series-dash-4, 8 3 2 3);
+}
+
+.ds-chart-area [data-part='area-series'][data-series-index='4'] [data-part='series-line'] {
+  stroke-dasharray: var(--_ds-area-series-dash-5, 12 4);
+}
+
+/* Series points --------------------------------------------------------------
+ * The area family root carries no engine foundation paint for its point
+ * marks, so the plot-background ring that separates a point from its fill is
+ * owned here. */
+
+.ds-chart-area [data-part='series-point'] {
+  stroke: var(--ds-chart-plot-bg, var(--ds-color-bg-primary));
+}
+
+/* Invalid-data fallback ------------------------------------------------------
+ * The family-computed NUMERIC_OVERFLOW overlay owns no inline paint; keep its
+ * copy on the metadata role so it reads as feedback, not data. */
+
+.ds-chart-area [data-part='data-fallback'] {
+  color: var(--ds-color-text-secondary);
+  font-size: var(--ds-font-size-sm);
+}
+
+/* Entrance reveal ---------------------------------------------------------- */
+
+@keyframes ds-chart-area-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ds-chart-area [data-part='chart-svg'] {
+  animation: ds-chart-area-reveal var(--ds-motion-reveal, var(--ds-motion-calm))
+    var(--ds-motion-ease-enter, ease-out) both;
+}
+
+/* Loading skeleton -----------------------------------------------------------
+ * Bottom-anchored bars fade upward like an area silhouette. */
+
+@keyframes ds-chart-area-skeleton-pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.55;
+  }
+}
+
+.ds-chart-area [data-part='skeleton-bar'] {
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--ds-chart-mark-color, var(--ds-color-primary)) 22%, var(--ds-color-bg-secondary)),
+    color-mix(in srgb, var(--ds-chart-mark-color, var(--ds-color-primary)) 6%, var(--ds-color-bg-secondary))
+  );
+  animation: ds-chart-area-skeleton-pulse
+    var(--ds-motion-glacial, var(--ds-motion-calm))
+    var(--ds-motion-ease-move, ease-in-out) infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-chart-area [data-part='chart-svg'],
+  .ds-chart-area [data-part='skeleton-bar'] {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-chart-area [data-part='skeleton-bar'] {
+    forced-color-adjust: none;
+    background: Canvas;
+    outline: 1px solid GrayText;
+  }
 }

@@ -245,7 +245,10 @@ export function VisualizationSurface({
       <Grid.Item span={useAsideColumns ? 8 : undefined}>{mainColumn}</Grid.Item>
 
       {hasAside && (
-        <Grid.Item span={useAsideColumns ? 4 : undefined}>
+        <Grid.Item
+          span={useAsideColumns ? 4 : undefined}
+          data-part="visualization-aside"
+        >
           {loading ? (
             <Card variant={cardVariant}>
               <Card.Body>

@@ -127,6 +127,7 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
     strokeColor,
     className = '',
     style,
+    'aria-label': ariaLabel,
   } = props;
 
   // `tone` takes precedence over `status`'s color implication when both are given.
@@ -215,12 +216,12 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={100}
-        aria-label={
+        aria-label={ariaLabel ?? (
           indeterminate
             ? i18n?.tOr('progress.indeterminate', 'In progress') ?? 'In progress'
             : i18n?.tOr('progress.percent_complete', `${clampedPercent}% complete`, { percent: clampedPercent }) ??
               `${clampedPercent}% complete`
-        }
+        )}
         {...(indeterminate ? {} : { 'aria-valuenow': clampedPercent })}
       >
         {showInfo && !indeterminate && (
@@ -255,6 +256,7 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
           child <progress> would never reach that resolution. */}
       <progress
         data-part="fill"
+        aria-label={ariaLabel}
         {...(indeterminate ? {} : { value: clampedPercent })}
         max="100"
       />

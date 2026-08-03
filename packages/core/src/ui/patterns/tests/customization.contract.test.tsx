@@ -153,37 +153,52 @@ describe.each([
 });
 
 describe('BrandingPreviewSandbox CK-H1 createElement anatomy', () => {
-  it('preserves instance scoping while exposing the full and compact state trees', () => {
-    const { container, rerender, unmount } = render(<BrandingPreviewSandbox appearance={SANDBOX_APPEARANCE} />);
+  it('preserves instance scoping while exposing the full and compact state trees', async () => {
+    const { container, rerender, unmount } = render(
+      <StudioHarness engine="modern">
+        <BrandingPreviewSandbox appearance={SANDBOX_APPEARANCE} />
+      </StudioHarness>,
+    );
 
     const root = container.querySelector('.ds-pattern-branding-preview-sandbox[data-part="root"]') as HTMLElement;
     expect(root).toHaveAttribute('data-state', 'full');
+    // The root is synchronous so a lazy primitive facade can never blank the
+    // whole preview; nested engine facades may settle on the next task.
+    await waitFor(() => {
+      expect(queryAll(root, '.rottay-button--modern')).toHaveLength(4);
+    });
     const scopeAttribute = root.getAttributeNames().find((attribute) => attribute.startsWith('data-preview-'));
     expect(scopeAttribute).toBeDefined();
     expect(container.querySelector('style')?.textContent).toContain(`[${scopeAttribute}]`);
     expect(container.querySelector('style')?.textContent).toContain('--ds-color-primary: #4f46e5;');
 
     for (const variant of ['primary', 'secondary', 'default', 'ghost']) {
-      expect(queryAll(root, `[data-part="button"][data-variant="${variant}"]`)).toHaveLength(1);
+      expect(queryAll(root, `.rottay-button--modern[data-variant="${variant}"]`)).toHaveLength(1);
     }
-    for (const state of ['default', 'error']) {
-      expect(queryAll(root, `[data-part="input"][data-state="${state}"]`)).toHaveLength(1);
+    expect(queryAll(root, '.rottay-input--modern[data-part="input"]')).toHaveLength(2);
+    expect(queryAll(root, '.rottay-input--modern[data-part="input"][data-invalid="true"]')).toHaveLength(1);
+    for (const variant of ['outlined', 'elevated']) {
+      expect(queryAll(root, `.ds-card--modern[data-variant="${variant}"]`)).toHaveLength(1);
     }
-    for (const state of ['default', 'elevated']) {
-      expect(queryAll(root, `[data-part="card"][data-state="${state}"]`)).toHaveLength(1);
-    }
-    for (const state of ['active', 'warning', 'error', 'info']) {
-      expect(queryAll(root, `[data-part="badge"][data-state="${state}"]`).length).toBeGreaterThan(0);
+    for (const label of ['Active', 'Warning', 'Error', 'Info']) {
+      expect(screen.getAllByText(label).length).toBeGreaterThan(0);
     }
     expect(queryAll(root, '[data-part="table"]')).toHaveLength(1);
     expect(queryAll(root, '[data-part="table-head"]')).toHaveLength(1);
     expect(queryAll(root, '[data-part="title"]')).toHaveLength(1);
     expect(queryAll(root, '[data-part="subtitle"]')).toHaveLength(3);
 
-    rerender(<BrandingPreviewSandbox appearance={SANDBOX_APPEARANCE} compact />);
+    rerender(
+      <StudioHarness engine="modern">
+        <BrandingPreviewSandbox appearance={SANDBOX_APPEARANCE} compact />
+      </StudioHarness>,
+    );
     const compactRoot = container.querySelector('.ds-pattern-branding-preview-sandbox') as HTMLElement;
     expect(compactRoot).toHaveAttribute('data-state', 'compact');
-    expect(queryAll(compactRoot, '[data-part="card"][data-state="elevated"]')).toHaveLength(0);
+    await waitFor(() => {
+      expect(queryAll(compactRoot, '.rottay-button--modern')).toHaveLength(4);
+    });
+    expect(queryAll(compactRoot, '.ds-card--modern[data-variant="elevated"]')).toHaveLength(0);
     expect(queryAll(compactRoot, '[data-part="table"]')).toHaveLength(0);
     expect(queryAll(compactRoot, '[data-part="title"]')).toHaveLength(0);
 

@@ -194,6 +194,12 @@ export function SelectionPreviewRail<T extends object>({
     yes: tOr('selectionPreviewRail.yes', 'Yes'),
     no: tOr('selectionPreviewRail.no', 'No'),
   };
+  /**
+   * Complementary landmark name for the rail itself. Both mutually-exclusive
+   * roots render as `aside` so assistive technology can jump to (or past)
+   * the preview region; the floor is domain-neutral.
+   */
+  const landmarkLabel = tOr('selectionPreviewRail.landmarkLabel', 'Record preview');
 
   const identity = useMemo(() => {
     // The identity card only auto-extracts domain-agnostic fields: a title
@@ -253,22 +259,18 @@ export function SelectionPreviewRail<T extends object>({
   if (customPreview) {
     return (
       <Box
+        as="aside"
         className="ds-structure ds-selection-preview-rail"
         data-part="root"
         data-preview="custom"
+        aria-label={landmarkLabel}
         style={{
           flex: '0 1 clamp(320px, 29vw, 380px)',
           width: 'min(100%, 380px)',
           minWidth: 'min(100%, 320px)',
-          padding: '14px 16px 14px 14px',
         }}
       >
-        <Box
-          style={{
-            position: 'sticky',
-            top: 16,
-          }}
-        >
+        <Box data-part="sticky">
           <Box
             data-part="custom-sticky-card"
             style={{
@@ -292,14 +294,12 @@ export function SelectionPreviewRail<T extends object>({
                 onClick={onClose}
                 className="ds-selection-preview-rail__close"
                 style={{
-                  width: 34,
-                  minWidth: 34,
                   padding: 0,
                 }}
               />
             </Box>
 
-            <Box style={{ padding: '16px' }}>
+            <Box data-part="custom-content">
               {customPreview}
             </Box>
           </Box>
@@ -310,25 +310,18 @@ export function SelectionPreviewRail<T extends object>({
 
   return (
     <Box
+      as="aside"
       className="ds-structure ds-selection-preview-rail"
       data-part="root"
       data-preview="default"
+      aria-label={landmarkLabel}
       style={{
         flex: '0 1 clamp(320px, 29vw, 380px)',
         width: 'min(100%, 380px)',
         minWidth: 'min(100%, 320px)',
-        padding: '18px 18px 18px 16px',
       }}
     >
-      <Box
-        style={{
-          position: 'sticky',
-          top: 16,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 14,
-        }}
-      >
+      <Box data-part="sticky">
         <Box
           data-part="identity-card"
           style={{
@@ -343,7 +336,7 @@ export function SelectionPreviewRail<T extends object>({
             }}
           />
 
-          <Box style={{ padding: '18px 18px 16px' }}>
+          <Box data-part="identity-card-body">
             <Flex align="center" justify="between" gap={12}>
               <Badge variant={mode === 'selection' ? 'primary' : 'secondary'} size="sm">
                 {mode === 'selection'
@@ -353,10 +346,10 @@ export function SelectionPreviewRail<T extends object>({
               <Button
                 variant="ghost"
                 size="sm"
+                data-part="close"
                 icon={<ActionCloseIcon size={16} decorative />}
                 aria-label={tOr('selectionPreviewRail.closePreview', 'Close preview')}
                 onClick={onClose}
-                style={{ width: 34, minWidth: 34, padding: 0 }}
               />
             </Flex>
 
@@ -389,10 +382,6 @@ export function SelectionPreviewRail<T extends object>({
             {matchReason && (
               <Box
                 data-part="match-reason-panel"
-                style={{
-                  marginTop: 16,
-                  padding: '14px 14px 14px 16px',
-                }}
               >
                 <Flex align="start" gap={10}>
                   <span
@@ -496,9 +485,6 @@ export function SelectionPreviewRail<T extends object>({
         >
           <Box
             data-part="snapshot-header"
-            style={{
-              padding: '14px 18px',
-            }}
           >
             <Text
               size="sm"
@@ -523,7 +509,7 @@ export function SelectionPreviewRail<T extends object>({
             </Text>
           </Box>
 
-          <Box style={{ padding: '6px 0' }}>
+          <Box data-part="snapshot-body">
             {snapshotColumns.map((column) => {
               const rawValue = resolveColumnValue(column, item);
               const content = column.render
@@ -534,9 +520,6 @@ export function SelectionPreviewRail<T extends object>({
                 <Box
                   key={column.key}
                   data-part="snapshot-row"
-                  style={{
-                    padding: '12px 18px',
-                  }}
                 >
                   <Text
                     size="xs"
@@ -556,7 +539,7 @@ export function SelectionPreviewRail<T extends object>({
             })}
 
             {snapshotColumns.length === 0 && (
-              <Box style={{ padding: '18px' }}>
+              <Box data-part="snapshot-empty-frame">
                 <Text
                   size="sm"
                   color="subtle"

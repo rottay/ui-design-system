@@ -299,6 +299,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
       {showBanner && !isProduction && activeEnv && (
         <div
           data-part="banner"
+          role="status"
           style={{
             '--ds-envtoggle-accent': activeEnv.color,
           } as React.CSSProperties}

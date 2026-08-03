@@ -5,7 +5,7 @@
  * `facade/entrypoints/styles.css` into `layer(rottay-components)`.
  *
  * SCOPE: paints ONLY what the surface owns — the queue header spacing, the
- * selection (batch) bar accent, the drained skeleton geometry, the
+ * selection (batch) bar accent, the heading rhythm neutralization, the drained skeleton geometry, the
  * content/rail layout switch (mobile column vs desktop row + sticky review
  * card), the reason-field geometry and the divider hairlines. Composed
  * primitives/patterns (PatternDataTable, PatternFilterPanel, Card, Button,
@@ -33,6 +33,13 @@
 .ds-surface.ds-decision-inbox .ds-decision-inbox__subtitle[data-part='root'] {
   display: block;
   margin-block-start: var(--ds-spacing-xs, 4px);
+}
+
+/* UA heading margins are neutralized; the surface stack owns the rhythm
+   (same idiom as command-center.css). */
+.ds-surface.ds-decision-inbox .ds-decision-inbox__title[data-part='title'],
+.ds-surface.ds-decision-inbox .ds-decision-inbox__review-title[data-part='review-title'] {
+  margin-block: 0;
 }
 
 /* -------------------------------------------------------------------------- */

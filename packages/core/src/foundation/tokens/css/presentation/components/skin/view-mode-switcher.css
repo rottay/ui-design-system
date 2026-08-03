@@ -6,35 +6,33 @@
  * The retired hand-rolled icon-buttons took with them every segment rule
  * (resting/hover/focus/selected/disabled paints) and the repeated-selector
  * budget; `segmented.css` owns option chrome, the selected state and its
- * own forced-colors contract. What this file owns: the root's recessed
- * frame (geometry drained from the engine's inline styles) and the
- * forced-colors boundary for it.
+ * own forced-colors contract.
  *
- * SPECIFICITY (P-48): the root's border reaches the tenant floor (0,3,1)
- * from the two scope classes + two DISTINCT attributes (the engine stamps
- * `data-structure` for exactly this budget, headers/form S10 idiom) —
- * never a repeated `[data-part]` (4th-tanda law; the former
- * `[data-part='root']×2` is retired).
+ * FRAME RETIRE (S617B, merge note): this file used to paint a SECOND recessed
+ * frame around the composed Segmented (2px padding + 8px radius + bg-primary
+ * fill + 1px border) — geometry drained from the engine's inline styles back
+ * when the children were frameless hand-rolled buttons. The certified
+ * Segmented root now paints its own governed track (radius, gradient fill,
+ * border, keyline shadow, hover lift, scroll affordance), so the wrapper
+ * frame read as a cramped double hairline: border-around-border with 6px of
+ * compounded track padding. The wrapper's frame is retired; the root keeps
+ * only layout (inline-flex + the 100% scroll cap that lets the primitive's
+ * own overflow affordance engage). No capability is lost: every visual
+ * channel the wrapper carried exists on the primitive's root, governed.
+ *
+ * SPECIFICITY (P-48): no painting border remains in this file, so the
+ * (0,3,1) tenant floor is moot here; the two scope classes + the root's own
+ * `data-part` stay as the anatomy hook (the engine also stamps
+ * `data-structure='view-mode-switcher'` for tenants that want the budget).
  */
 
-/* ---- root: recessed strip frame (padding/gap drained from inline) ---- */
+/* ---- root: layout-only pass-through (the primitive owns the track frame) ---- */
 .ds-structure.ds-view-mode-switcher[data-part='root'] {
   display: inline-flex;
   align-items: center;
-  padding: 2px;
-  border-radius: 8px;
-  background: var(--ds-color-bg-primary);
-}
-.ds-structure.ds-view-mode-switcher[data-part='root'][data-structure='view-mode-switcher'] {
-  border: 1px solid var(--ds-color-border-secondary);
+  max-inline-size: 100%;
 }
 
-/* forced-colors: the recessed fill is forced away, so the strip keeps a
-   system boundary; the composed Segmented owns the selected segment's
-   forced-colors state. */
-@media (forced-colors: active) {
-  .ds-structure.ds-view-mode-switcher[data-part='root'] {
-    border-color: ButtonText;
-    background: Canvas;
-  }
-}
+/* forced-colors: nothing in this file paints any more; the composed
+   Segmented owns the track's and the selected segment's forced-colors
+   contract. */

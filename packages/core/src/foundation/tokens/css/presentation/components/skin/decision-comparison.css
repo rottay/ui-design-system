@@ -257,8 +257,11 @@
   animation: ds-decision-comparison-subject-enter
     var(--ds-decision-comparison-motion-duration)
     var(--ds-decision-comparison-motion-easing) both;
+  /* Stagger cadence derives from the fast motion rung (fast/3 ≈ 40ms) so the
+     sequence slows down proportionally when a tenant scales motion down. */
   animation-delay: calc(
-    var(--ds-decision-comparison-subject-index, 0) * 44ms
+    var(--ds-decision-comparison-subject-index, 0) *
+      (var(--ds-motion-fast, 120ms) / 3)
   );
 }
 
@@ -621,13 +624,19 @@
     --ds-decision-comparison-visual-min-height: 12rem;
   }
 
+  /* The snap axis belongs on the SCROLL CONTAINER (the viewport owns
+     `overflow-x: auto`); stamping it on the grid — a non-scroller — left the
+     mandatory snap inert. */
+  .ds-pattern-decision-comparison .ds-decision-comparison__viewport {
+    scroll-snap-type: inline mandatory;
+  }
+
   .ds-pattern-decision-comparison .ds-decision-comparison__grid {
     grid-template-columns: repeat(
       var(--ds-decision-comparison-columns, 2),
       minmax(82cqi, 1fr)
     );
     min-width: calc(var(--ds-decision-comparison-columns, 2) * 82cqi);
-    scroll-snap-type: x mandatory;
   }
 
   .ds-pattern-decision-comparison .ds-decision-comparison__subject {
@@ -669,6 +678,15 @@
   .ds-decision-comparison__fact-value {
   justify-items: start;
   text-align: start;
+}
+
+/* Joining-script guard (Typography lane precedent): the tight display
+   tracking breaks contextual joining in Arabic-script copy, so textual
+   tracking collapses to `normal` under a joining-script lang. The score
+   keeps its tracking: it sets numerals, not joining script. */
+.ds-pattern-decision-comparison .ds-decision-comparison__title:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks),
+.ds-pattern-decision-comparison .ds-decision-comparison__context-primary:lang(ar, fa, ur, ps, sd, ug, ku, ckb, dv, ks) {
+  letter-spacing: normal;
 }
 
 @keyframes ds-decision-comparison-enter {
@@ -720,5 +738,51 @@
     .ds-decision-comparison__subject[data-leading="true"] {
     outline: 2px solid Highlight;
     outline-offset: -2px;
+  }
+}
+
+/* ===========================================================================
+ * Modern engine refinements. The modern wrapper stamps `ds-engine-modern` on
+ * the root; classic/rustic render the same foundation engine WITHOUT the
+ * scope class, so every rule below is modern-only paint layered over the
+ * shared chrome above (never a fork: geometry, tokens and anatomy stay
+ * shared). The leading sweep stays a TOP emphasis — no side rail, per the
+ * family contract.
+ * ======================================================================== */
+
+/* The leading subject's top accent sweeps in once on mount (governed by the
+   reveal rung), a motion cue the classic/rustic engines deliberately skip. */
+.ds-pattern-decision-comparison.ds-engine-modern
+  .ds-decision-comparison__subject[data-leading="true"]::before {
+  animation: ds-decision-comparison-leading-sweep
+    var(--ds-decision-comparison-motion-duration)
+    var(--ds-decision-comparison-motion-easing) both;
+}
+
+/* The score tile reads as an instrument on modern: a soft drop under the
+   shared inset highlight lifts it off the identity row. */
+.ds-pattern-decision-comparison.ds-engine-modern
+  .ds-decision-comparison__score {
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-color-bg-elevated) 84%, transparent),
+    0 0.625rem 1.5rem -1.125rem
+      color-mix(in srgb, var(--ds-color-primary) 42%, transparent);
+}
+
+@keyframes ds-decision-comparison-leading-sweep {
+  from {
+    opacity: 0.35;
+    transform: scaleX(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pattern-decision-comparison.ds-engine-modern
+    .ds-decision-comparison__subject[data-leading="true"]::before {
+    animation: none;
   }
 }

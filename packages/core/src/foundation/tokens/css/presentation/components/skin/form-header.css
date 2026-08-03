@@ -1,16 +1,24 @@
 /**
- * FormHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * FormHeader skin — engine-agnostic.
  * Home: foundation/tokens/css/presentation/components/skin/form-header.css — FormHeader renders one DOM
  * tree under every engine (no engines/ split), so it has a single skin.
+ *
+ * LAYER: imported by `facade/entrypoints/base.css` into `layer(rottay-components)`
+ * (the old "DELIBERATELY UNLAYERED (P-47)" note predates the wiring).
  *
  * SCOPE ROOT carries `ds-structure ds-form-header` + `data-part='root'`.
  *
  * SPECIFICITY (P-48): the tenant `html[data-tenant]…*` border-color floor sits at
  * (0,3,1); a border-COLOR rule reaches (0,4,0) from the two root classes + the
  * root's own `data-part` + the target's `data-part` in the descendant chain.
- * A `color` on a composed `Text` reaches (0,5,0) by adding the `hero-panel`
- * part to the chain — never by repeating an identical class or attribute
- * (4th-tanda law; the former `[data-part]×2/×3` selectors are retired).
+ * A `color` on a composed `Text` can never win from this layer — the
+ * typography skin lives in the LATER `rottay-engines` layer — so Text ink
+ * rides the Text `color` prop (`secondary`/`subtle`) and the color rules
+ * below remain as the declared intent (they still paint wherever the
+ * typography skin is absent). The title is a `Box as="h1"` (DetailHeader
+ * precedent): NOT typography, so its display type is fully skin-owned
+ * (until the swap, a composed Text resolved its size inline and the
+ * `--ds-form-header-title-font-size` rule below was dead paint).
  *
  * SHARED WITH EditHeader: the archetype hero-panel gradient (`buildPatternStyle`)
  * and the icon-badge tone (`getVariantTone`) are proven byte-identical to
@@ -126,6 +134,10 @@
   text-transform: uppercase;
 }
 .ds-structure.ds-form-header[data-part='root'] [data-part='hero-panel'] [data-part='title'] {
+  /* the title is a Box as="h1" (not typography) — this display type finally
+     paints: a composed Text resolved its size inline and left this rule dead */
+  margin: 0;
+  color: var(--ds-color-text-primary);
   font-size: var(--ds-form-header-title-font-size, 28px);
   font-weight: var(--ds-font-weight-bold, 700);
   letter-spacing: -0.03em;

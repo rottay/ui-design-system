@@ -17,7 +17,11 @@
  * change indicator's tint channels, the insight line, the responsive frame
  * (container queries — the engine publishes the wide-column count on the
  * `--ds-stats-header-columns` channel), the interactive card state triad and
- * the forced-colors contract.
+ * the forced-colors contract. The composed metric's value scale is drained
+ * here from the retired inline `valueStyle` (identical values, same
+ * `--ds-stats-header-value-*` channels), and each spark dot's opacity is a
+ * private runtime instance channel (`--_ds-stats-header-spark-dot-opacity`)
+ * published by the engine and declared here.
  *
  * STATE:
  *  - `data-accent` (5-value AccentColor) selects the sparkline dot and the
@@ -52,7 +56,9 @@
   min-block-size: var(--ds-stats-header-card-min-height, 140px);
   overflow: hidden;
   padding: var(--ds-stats-header-card-padding, 20px 24px);
-  border-radius: 12px;
+  /* edge posture derives from the tenant radius scale (canonical channel;
+     the 12px fallback is the exact former hardcoded value) */
+  border-radius: var(--ds-radius-lg, 12px);
   background: var(--ds-color-bg-primary);
   transition:
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
@@ -94,6 +100,18 @@
 .ds-stats-header[data-part='root'] [data-part='statistic'] {
   flex: 1 1 auto;
   min-inline-size: 0;
+}
+/* ---- composed metric: the pattern owns the value's editorial scale.
+        Drained from the retired inline `valueStyle` (identical values and
+        channels). The `[data-part='stat-card']` link buys one attribute of
+        specificity over the Statistic engine skins, whose own value
+        typography must yield here — the pattern overrides the primitive,
+        never the other way around. ---- */
+.ds-stats-header[data-part='root'] [data-part='stat-card'] [data-part='statistic'] [data-part='value'] {
+  font-size: var(--ds-stats-header-value-font-size, 2.25rem);
+  font-weight: var(--ds-stats-header-value-font-weight, 800);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='stat-icon'] {
   display: flex;
@@ -144,6 +162,10 @@
   inline-size: 4px;
   block-size: 4px;
   border-radius: 50%;
+  /* per-dot opacity is a runtime instance channel published by the engine
+     (`--_ds-stats-header-spark-dot-opacity`); the declaration lives
+     here. Unset ⇒ fully opaque, matching a flat series. */
+  opacity: var(--_ds-stats-header-spark-dot-opacity, 1);
   transition:
     transform var(--ds-motion-fast) var(--ds-motion-ease-out, ease),
     opacity var(--ds-motion-fast) var(--ds-motion-ease-out, ease);
@@ -200,7 +222,8 @@
   min-inline-size: 0;
   min-block-size: var(--ds-stats-header-card-min-height, 140px);
   padding: var(--ds-stats-header-card-padding, 20px 24px);
-  border-radius: 12px;
+  /* mirrors the stat card's edge posture (same canonical channel) */
+  border-radius: var(--ds-radius-lg, 12px);
   background: var(--ds-color-bg-primary);
 }
 .ds-stats-header[data-part='root'][data-loading='true'] [data-part='skeleton-card'] {

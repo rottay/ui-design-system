@@ -4,8 +4,9 @@
  * @fileoverview Modern engine for the CommentThread pattern (Lote 2 rebuild).
  * The pattern COMPOSES public primitives -- it never recreates controls:
  * Avatar (author/currentUser), Textarea (composer / reply / edit), Button
- * (submit / save / cancel / reply / edit / delete / reaction pills), Spinner
- * (loading) and the EmptyState pattern (canonical empty kit). Each primitive
+ * (submit / save / cancel / reply / edit / delete / reaction pills), Skeleton
+ * (loading placeholders mirroring the comment-row footprint) and the
+ * EmptyState pattern (canonical empty kit). Each primitive
  * is the single paint owner of its own chrome; this file owns semantics,
  * recursion and the layout anatomy (`data-part` wrappers) only. All layout
  * geometry lives in the `comment-thread.css` modern skin.
@@ -23,8 +24,9 @@ import React, { useState, useCallback } from 'react';
 import type { CommentThreadProps, Comment } from '../../contracts';
 import ModernAvatar from '../../../../../primitives/display/Avatar/engines/modern';
 import ModernButton from '../../../../../primitives/inputs/Button/engines/modern';
-import ModernSpinner from '../../../../../primitives/feedback/Spinner/engines/modern';
+import ModernSkeleton from '../../../../../primitives/feedback/Skeleton/engines/modern';
 import ModernTextarea from '../../../../../primitives/inputs/Textarea/engines/modern';
+import { VisuallyHidden } from '../../../../../primitives/foundation';
 import { ModernEmptyState } from '../../../../facade';
 import { useOptionalTranslation } from '@/infrastructure/runtime/i18n';
 
@@ -119,8 +121,12 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
         </div>
         <div data-part="comment-main">
           <div data-part="comment-head">
-            <span data-part="author">{comment.author.name}</span>
-            <span data-part="timestamp">{formatTimestamp(comment.timestamp, tOr, locale)}</span>
+            {/* title mirrors the full name: the skin truncates long author
+                names with ellipsis (truncation never eats content silently). */}
+            <span data-part="author" title={comment.author.name}>{comment.author.name}</span>
+            {/* Relative label with the absolute timestamp on title -- the
+                metadata keeps its own style AND its full precision. */}
+            <span data-part="timestamp" title={new Date(comment.timestamp).toLocaleString(locale, { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}>{formatTimestamp(comment.timestamp, tOr, locale)}</span>
             {comment.edited && (
               <span data-part="edited-mark">{tOr('comment_thread.edited', '(edited)')}</span>
             )}
@@ -159,10 +165,13 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
           {comment.reactions && comment.reactions.length > 0 && (
             <div data-part="reactions">
               {comment.reactions.map(r => (
+                /* aria-pressed carries the active state to AT -- the
+                   primary/ghost variant tint is never the only channel. */
                 <ModernButton
                   key={r.emoji}
                   data-part="reaction"
                   data-active={r.active ? "true" : "false"}
+                  aria-pressed={r.active}
                   variant={r.active ? 'primary' : 'ghost'}
                   size="xs"
                   onClick={() => onReaction?.(comment.id, r.emoji)}
@@ -240,7 +249,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
 
 /**
  * Modern comment thread: recursive nesting, reactions and CRUD composed
- * entirely from DS primitives (Avatar, Textarea, Button, Spinner) plus the
+ * entirely from DS primitives (Avatar, Textarea, Button, Skeleton) plus the
  * canonical EmptyState kit for the empty list.
  * @param props - CommentThreadProps controlling the comment list, user identity,
  *   CRUD callbacks, nesting depth, and display options.
@@ -281,9 +290,27 @@ export default function ModernCommentThread(props: CommentThreadProps) {
   if (loading) {
     return (
       <div data-part="root" data-loading="true" className={`ds-pattern-comment-thread ds-engine-modern ${className ?? ''}`} style={style}>
-        {/* Spinner primitive owns its paint and the status role/name
-            ("Loading" floor) the tests assert. */}
-        <ModernSpinner data-part="spinner" size="md" />
+        {/* Composed Skeleton primitives mirror the comment-row footprint
+            (avatar + head line + body line) so the swap to real content never
+            reflows -- a centered spinner would not hold the thread's shape.
+            The polite status keeps the "Loading" announcement (i18n floor)
+            the retired Spinner used to own. */}
+        <div
+          data-part="skeleton-list"
+          role="status"
+          aria-label={tOr('comment_thread.loading', 'Loading')}
+        >
+          <VisuallyHidden>{tOr('comment_thread.loading', 'Loading')}</VisuallyHidden>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <ModernSkeleton
+              key={i}
+              data-part="skeleton"
+              avatar
+              title
+              paragraph={{ rows: 1 }}
+            />
+          ))}
+        </div>
       </div>
     );
   }

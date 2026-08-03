@@ -68,8 +68,10 @@ interface SparklineOwnProps {
 
 /**
  * Props for the {@link Sparkline} component. Sparkline has no scaffold chrome
- * to host loading/empty/error copy, so a non-ready `state` renders nothing
- * (see the component body) instead of displaying the typed-required labels.
+ * to host loading/empty/error copy, so a non-ready `state` renders a
+ * same-footprint inline placeholder (see the component body) instead of the
+ * typed-required labels: the copy still reaches assistive technology through
+ * the placeholder's `<title>`.
  */
 export type SparklineProps = SparklineOwnProps & ChartStateProps;
 
@@ -97,6 +99,7 @@ export const Sparkline = memo(function Sparkline({
   animate,
   state,
   emptyLabel,
+  errorLabel,
   className,
   style,
   colorScheme,
@@ -117,11 +120,55 @@ export const Sparkline = memo(function Sparkline({
     emptyLabel,
   });
   // Sparkline is a chrome-less inline mark with no surface to host loading,
-  // empty, or error copy: a non-ready state renders nothing rather than
-  // reserving space for unstyled text (mirrors the renderer's own
-  // no-finite-datum null return below).
+  // empty, or error copy: a non-ready state renders a same-footprint inline
+  // placeholder instead of reserving space for unstyled text or collapsing to
+  // `null` (which would shift surrounding inline content). The mark language
+  // stays color-independent by construction: loading is a neutral track bar,
+  // empty a dashed midline, error a dotted midline, all painted by the
+  // `.ds-chart-sparkline` skin section, and the app-supplied copy reaches
+  // assistive technology through the SVG `<title>`.
   if (resolvedState !== 'ready') {
-    return null;
+    const numericWidth = typeof width === 'number' ? width : 100;
+    const stateCopy =
+      resolvedState === 'loading'
+        ? chartPersonality.loadingLabel
+        : resolvedState === 'error'
+          ? errorLabel
+          : emptyLabel;
+    const midY = height / 2;
+    return (
+      <svg
+        width={width}
+        height={height}
+        viewBox={`0 0 ${numericWidth} ${height}`}
+        className={['ds-chart-sparkline', className].filter(Boolean).join(' ')}
+        data-part="sparkline"
+        data-state={resolvedState}
+        role="img"
+        style={style}
+      >
+        <title>{stateCopy}</title>
+        {resolvedState === 'loading' ? (
+          <rect
+            data-part="state-track"
+            x={0}
+            y={midY - 2}
+            width={numericWidth}
+            height={4}
+            rx={2}
+          />
+        ) : (
+          <line
+            data-part="state-baseline"
+            x1={1}
+            y1={midY}
+            x2={numericWidth - 1}
+            y2={midY}
+            strokeWidth={1.5}
+          />
+        )}
+      </svg>
+    );
   }
 
   return (

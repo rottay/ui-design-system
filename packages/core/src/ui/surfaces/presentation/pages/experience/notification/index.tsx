@@ -255,9 +255,12 @@ function NotificationList({
 function PreferencesPanel({
   preferences,
   onPreferenceChange,
+  categoryHeadingLevel,
 }: {
   preferences: NotificationPreference[];
   onPreferenceChange?: (id: string, enabled: boolean) => void;
+  /** Semantic level for the category labels: h3 under the sections-layout h2, h2 inside the tab panel (no intermediate heading exists there). */
+  categoryHeadingLevel: 'h2' | 'h3';
 }): React.ReactElement {
   const { tSurfaceOr } = useSurfaceTranslations();
 
@@ -297,9 +300,15 @@ function PreferencesPanel({
         >
           <Card.Body>
             <Stack spacing="md">
-              <Text size="lg" weight="semibold">
+              {/* The category label heads its switch group: it renders as a
+                  real heading so screen-reader users can navigate preference
+                  groups by heading, while the visual size/weight keep the
+                  previous Text treatment. The level follows the layout: h3
+                  under the sections-layout h2, h2 inside the tab panel (which
+                  carries no intermediate heading). */}
+              <Heading level={categoryHeadingLevel} size="lg" weight="semibold">
                 {category}
-              </Text>
+              </Heading>
               {prefs.map((pref) => {
                 // Native label association gives the Switch its accessible
                 // name (the primitive forwards `id` to the input) and makes
@@ -427,6 +436,7 @@ export function NotificationSurface({
     <PreferencesPanel
       preferences={config.behavior.preferences}
       onPreferenceChange={config.behavior.onPreferenceChange}
+      categoryHeadingLevel={useTabs ? 'h2' : 'h3'}
     />
   );
 

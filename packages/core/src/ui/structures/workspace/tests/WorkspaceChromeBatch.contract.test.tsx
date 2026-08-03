@@ -266,8 +266,17 @@ describe("saved-views -- data-part contract (CK-C)", () => {
         q(container, `[data-part="${pillPart}"][data-active="false"]`)
       ).toHaveLength(1);
       expect(q(container, `.ds-saved-views__${pillPart}`)).toHaveLength(2);
+      // Modern's marker is now the governed status.featured icon. The view
+      // state belongs to the pill; the semantic icon deliberately forwards
+      // only its caller-owned part/class hooks. Rustic keeps its frozen local
+      // marker contract.
       expect(
-        q(container, '[data-part="default-star"][data-default="true"]')
+        q(
+          container,
+          engine === "modern"
+            ? '[data-part="pill"][data-active="true"] [data-part="default-star"]'
+            : '[data-part="default-star"][data-default="true"]'
+        )
       ).toHaveLength(1);
       expect(q(container, '[data-part="create-button"]')).toHaveLength(1);
 

@@ -239,10 +239,10 @@ export function AdaptiveOverlay({
         'rottay-adaptive-overlay-footer',
         footerClassName,
       ].filter(Boolean).join(' ')}
-      footerStyle={{
-        padding: 'var(--ds-spacing-4, 16px)',
-        ...footerStyle,
-      }}
+      // Footer geometry (padding, hairline, action alignment) is owned by the
+      // selected engine's Sheet skin — see presentation/components/skin/
+      // adaptive-overlay.css. A caller's footerStyle still wins inline.
+      footerStyle={footerStyle}
       id={id}
       data-testid={testId}
       aria-label={ariaLabel}

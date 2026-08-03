@@ -36,28 +36,30 @@
  * DataTableMobileCards.tsx and PatternDataTable.tsx.
  */
 
-/* ---- inline cell editor input: rest + error border, plus the shared chrome --- */
+/* ---- inline cell editor input: rest + error border, plus the shared chrome ---
+   No hex fallbacks (ley anti-pintura-rígida): the semantic roles ARE the
+   contract; a broken token cascade must never resurrect hardcoded brand paint. */
 .ds-pattern-data-table [data-part="editor-input"] {
   border-radius: var(--ds-radius-sm, 6px);
-  background: var(--ds-surface-card, #fff);
-  color: var(--ds-color-text-primary, #1a1a1a);
+  background: var(--ds-surface-card);
+  color: var(--ds-color-text-primary);
   outline: none;
 }
 .ds-pattern-data-table
   [data-part="editor-input"][data-part="editor-input"][data-part="editor-input"] {
-  border: 1.5px solid var(--ds-color-primary, #3b82f6);
+  border: 1.5px solid var(--ds-color-primary);
 }
 .ds-pattern-data-table
   [data-part="editor-input"][data-part="editor-input"][data-invalid="true"] {
-  border: 1.5px solid var(--ds-color-error, #e53e3e);
+  border: 1.5px solid var(--ds-color-error);
 }
 
 /* ---- checkbox editor + error message ---- */
 .ds-pattern-data-table [data-part="editor-checkbox"] {
-  accent-color: var(--ds-color-primary, #3b82f6);
+  accent-color: var(--ds-color-primary);
 }
 .ds-pattern-data-table [data-part="editor-error"] {
-  color: var(--ds-color-error, #e53e3e);
+  color: var(--ds-color-error);
 }
 
 /* ---- mobile card chrome (FFP suppression: beats card.css MAX = 9) ---- */
@@ -164,8 +166,17 @@
   outline-offset: var(--ds-table-mobile-selected-outline-offset, 2px);
 }
 
-.ds-pattern-data-table.ds-data-table--mobile
-  .ds-data-table__mobile-card:hover,
+@media (hover: hover) {
+  .ds-pattern-data-table.ds-data-table--mobile
+    .ds-data-table__mobile-card:hover {
+    transform: translateY(var(--ds-table-mobile-card-hover-lift, -1px));
+    box-shadow: var(
+      --ds-collection-card-shadow-hover,
+      var(--ds-premium-card-shadow-hover, var(--ds-elevation-2))
+    );
+  }
+}
+
 .ds-pattern-data-table.ds-data-table--mobile
   .ds-data-table__mobile-card:focus-within {
   transform: translateY(var(--ds-table-mobile-card-hover-lift, -1px));

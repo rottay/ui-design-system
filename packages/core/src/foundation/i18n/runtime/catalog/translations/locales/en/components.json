@@ -281,7 +281,10 @@
     "pinLeft": "Pin left",
     "pinRight": "Pin right",
     "unpin": "Unpin",
-    "visibleSuffix": "visible"
+    "visibleSuffix": "visible",
+    "toggleVisibility": "Toggle visibility",
+    "pinSideLeft": "L",
+    "pinSideRight": "R"
   },
   "pricingTable": {
     "monthly": "Monthly",
@@ -446,7 +449,8 @@
     "region_label": "Description list"
   },
   "chart": {
-    "loading": "Loading chart..."
+    "loading": "Loading chart...",
+    "sankey_empty": "No flow data to display."
   },
   "surfaces": {
     "states": {
@@ -514,7 +518,8 @@
       "empty_description": "Populate the scheduler with events to render the calendar.",
       "all_day": "All day",
       "invalid_time": "Time unavailable",
-      "invalid_events": "Events with an invalid start time: {count}"
+      "invalid_events": "Events with an invalid start time: {count}",
+      "agenda_aria": "Scheduled events"
     },
     "kanban": {
       "previous": "Previous",
@@ -868,7 +873,8 @@
     "just_now": "just now",
     "minutes_ago": "{count}m ago",
     "hours_ago": "{count}h ago",
-    "days_ago": "{count}d ago"
+    "days_ago": "{count}d ago",
+    "loading": "Loading"
   },
   "confirmDialog": {
     "confirm": "Confirm",
@@ -892,7 +898,11 @@
   },
   "kanbanBoard": {
     "add_item": "Add item",
-    "empty_board": "No columns"
+    "empty_board": "No columns",
+    "card_role": "Movable card",
+    "move_column": "Moved to {column}, position {position}",
+    "move_reorder": "Moved to position {position} in {column}",
+    "move_edge": "Cannot move further in that direction"
   },
   "map_view": {
     "placeholder": "Map placeholder",
@@ -901,7 +911,8 @@
     "zoom": "Zoom: {zoom}",
     "marker_count_one": "{count} marker",
     "marker_count_other": "{count} markers",
-    "empty": "No markers"
+    "empty": "No markers",
+    "viewport": "Map viewport"
   },
   "treeView": {
     "search_placeholder": "Search...",
@@ -924,7 +935,8 @@
     "columnName": "Name",
     "columnSize": "Size",
     "columnModified": "Modified",
-    "columnActions": "Actions"
+    "columnActions": "Actions",
+    "columnSelect": "Select"
   },
   "filterPanel": {
     "apply": "Apply",
@@ -962,7 +974,8 @@
     "previous": "Previous",
     "next": "Next",
     "step_counter": "Step {current} of {total}",
-    "empty": "No fields to display"
+    "empty": "No fields to display",
+    "loading": "Loading form…"
   },
   "invoice_template": {
     "print": "Print",
@@ -1050,7 +1063,8 @@
     "skip": "Skip",
     "progress": "Step {current} of {total}: {title}",
     "validation_default": "Please complete this step before continuing.",
-    "actions": "Wizard actions"
+    "actions": "Wizard actions",
+    "loading": "Loading wizard…"
   },
   "taginput": {
     "placeholder": "Type and press Enter",
@@ -1171,7 +1185,9 @@
     "active_count": "{count} active",
     "remove_filter_named": "Remove filter {field}",
     "clearAll": "Clear all",
-    "addFilter": "Add filter"
+    "addFilter": "Add filter",
+    "more_count": "+{count} more",
+    "show_less": "Show less"
   },
   "columnMenu": {
     "alwaysVisible": "Always visible in the table",
@@ -1253,7 +1269,8 @@
     "snapshotEmpty": "No preview fields are available for this record.",
     "snapshotTitle": "Snapshot",
     "whyThisRow": "Why this row?",
-    "yes": "Yes"
+    "yes": "Yes",
+    "landmarkLabel": "Record preview"
   },
   "savedViewsMenu": {
     "columnsSuffix": "columns",
@@ -1317,7 +1334,8 @@
   "statistic": {
     "trendPositive": "Increasing",
     "trendNegative": "Decreasing",
-    "trendWarning": "Warning"
+    "trendWarning": "Warning",
+    "trendNeutral": "No change"
   },
   "passwordInput": {
     "strength_weak": "Weak",
@@ -1331,5 +1349,103 @@
       "suboptimal": "suboptimal range",
       "critical": "critical range"
     }
+  },
+  "empty_state": {
+    "loading": "Loading…"
+  },
+  "filter_panel": {
+    "apply": "Apply",
+    "clear_all": "Clear all",
+    "collapse": "Collapse filters",
+    "expand": "Expand filters",
+    "range_to": "to",
+    "min": "Min",
+    "max": "Max",
+    "select_placeholder": "Select…"
+  },
+  "workbenchHeader": {
+    "exceptions": "{count} exceptions"
+  },
+  "command_center": {
+    "loading_label": "Loading…",
+    "insights_aria": "Insights"
+  },
+  "tableToolbar": {
+    "searchPlaceholder": "Search...",
+    "clearFilters": "Clear filters"
+  },
+  "brandStudio": {
+    "tenantReport": {
+      "documentInvalid": "Document not valid",
+      "issueOne": "issue",
+      "issueOther": "issues",
+      "contrastAutocorrections": "Contrast autocorrections",
+      "changeOne": "change",
+      "changeOther": "changes",
+      "adjustment": "{label} adjusted {from} → {to} to reach Lc {lc}",
+      "adjustmentDetail": "on {pairedWith} · was Lc {lc}",
+      "fontPacksNotLoaded": "Font packs not loaded",
+      "packOne": "pack",
+      "packOther": "packs",
+      "packMissing": "{variable} is referenced but not loaded",
+      "packMissingDetail": "{referencedBy} falls through to its authored fallback fonts"
+    }
+  },
+  "brandingPreview": {
+    "table": {
+      "sampleNameA": "John Doe",
+      "sampleDateA": "Apr 17, 2026",
+      "sampleNameB": "Jane Smith",
+      "sampleDateB": "Apr 16, 2026"
+    }
+  },
+  "tokenInspector": {
+    "hint": "Ctrl+Shift+T or Esc to close | Click to pin"
+  },
+  "presence": {
+    "barLabel": "People present",
+    "overflowLabel": "{count} more people"
+  },
+  "bulkSelectToggle": {
+    "select": "Select",
+    "done": "Done",
+    "selected": "selected"
+  },
+  "galleryView": {
+    "empty": "No items",
+    "selectItem": "Select item {item}"
+  },
+  "gridView": {
+    "empty": "No data",
+    "selectItem": "Select item {item}"
+  },
+  "statsGrid": {
+    "error": {
+      "description": "Unable to load data"
+    }
+  },
+  "metrics": {
+    "panelTitle": "Key Metrics",
+    "live": "LIVE",
+    "realtimeData": "REAL-TIME DATA",
+    "chartTitle": "Performance",
+    "progressLabel": "Progress"
+  },
+  "activity": {
+    "timelineTitle": "Activity",
+    "compactTitle": "Recent Activity",
+    "cardsTitle": "Activity",
+    "tickerTitle": "Live Updates",
+    "streaming": "STREAMING",
+    "updatesCount": "{count} UPDATES",
+    "timeAgo": "{time} ago",
+    "viewAll": "View all",
+    "tickerPrevious": "Previous update",
+    "tickerNext": "Next update",
+    "tickerGoTo": "Go to update {index}"
+  },
+  "bottomTabBar": {
+    "itemWithBadge": "{label}, {count}",
+    "navigation": "Bottom navigation"
   }
 }

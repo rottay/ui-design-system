@@ -417,23 +417,26 @@
   flex-direction: column;
 }
 
+/* Entry stagger cadence derives from the fast motion rung (fast × 0.3 ≈ 36ms
+   per step, matching the legacy 35ms cadence) so a tenant's motion scale
+   slows the whole sequence proportionally — no raw millisecond literals. */
 .ds-pattern-widget-board .ds-widget-board__cell:nth-child(2) {
-  animation-delay: 35ms;
+  animation-delay: calc(var(--ds-motion-fast) * 0.3);
 }
 .ds-pattern-widget-board .ds-widget-board__cell:nth-child(3) {
-  animation-delay: 70ms;
+  animation-delay: calc(var(--ds-motion-fast) * 0.6);
 }
 .ds-pattern-widget-board .ds-widget-board__cell:nth-child(4) {
-  animation-delay: 105ms;
+  animation-delay: calc(var(--ds-motion-fast) * 0.9);
 }
 .ds-pattern-widget-board .ds-widget-board__cell:nth-child(5) {
-  animation-delay: 140ms;
+  animation-delay: calc(var(--ds-motion-fast) * 1.2);
 }
 .ds-pattern-widget-board .ds-widget-board__cell:nth-child(6) {
-  animation-delay: 175ms;
+  animation-delay: calc(var(--ds-motion-fast) * 1.5);
 }
 .ds-pattern-widget-board .ds-widget-board__cell:nth-child(n + 7) {
-  animation-delay: 210ms;
+  animation-delay: calc(var(--ds-motion-fast) * 1.8);
 }
 
 .ds-pattern-widget-board .ds-widget-board__cell:active {
@@ -602,6 +605,26 @@
     .ds-widget-board__catalog-item,
   :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
     .ds-widget-board__catalog-empty {
+    border-color: ButtonText;
+  }
+
+  /* Secondary frames (icon wells, chips, readouts, the resize indicator and
+     the edit-header separator) keep a system-colored edge so the chrome
+     structure survives the forced palette. */
+  .ds-pattern-widget-board .ds-widget-board__toolbar-icon,
+  .ds-pattern-widget-board .ds-widget-board__item-icon,
+  .ds-pattern-widget-board .ds-widget-board__cell-controls,
+  .ds-pattern-widget-board .ds-widget-board__item-header,
+  .ds-pattern-widget-board .ds-widget-board__size-readout,
+  .ds-pattern-widget-board .ds-widget-board__resize-indicator,
+  :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
+    .ds-widget-board__catalog-icon,
+  :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
+    .ds-widget-board__catalog-recommended,
+  :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
+    .ds-widget-board__catalog-size,
+  :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
+    .ds-widget-board__catalog-preview {
     border-color: ButtonText;
   }
 
@@ -864,6 +887,9 @@
   white-space: nowrap;
 }
 
+/* RETIRE CANDIDATE (wave law 11 — kept, not deleted): no engine stamps
+   `ds-widget-board__drag` today; the grab cursor lives on the cell-controls
+   bar and the move Button. Codex adjudicates removal. */
 .ds-pattern-widget-board .ds-widget-board__drag {
   cursor: grab;
 }
@@ -1378,7 +1404,12 @@
   .ds-pattern-widget-board .ds-widget-board__toolbar,
   .ds-pattern-widget-board .ds-widget-board__toolbar-icon,
   .ds-pattern-widget-board .ds-widget-board__item-header,
-  .ds-pattern-widget-board .ds-widget-board__item-icon {
+  .ds-pattern-widget-board .ds-widget-board__item-icon,
+  .ds-pattern-widget-board .ds-widget-board__resize-handle,
+  .ds-pattern-widget-board .ds-widget-board__resize-rail,
+  .ds-pattern-widget-board .ds-widget-board__resize-indicator,
+  :is(.ds-pattern-widget-board, .ds-widget-board__catalog-surface)
+    .ds-widget-board__catalog-item {
     animation: none;
     transition: none;
   }

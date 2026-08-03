@@ -29,7 +29,12 @@ export function AsciiFrame({
   const classes = ["rt-ascii-frame", className].filter(Boolean).join(" ");
 
   return (
-    <As className={classes} data-variant={variant} aria-label={ariaLabel}>
+    <As
+      className={classes}
+      data-variant={variant}
+      aria-label={ariaLabel}
+      role={ariaLabel != null ? "region" : undefined}
+    >
       <span className="rt-ascii-frame__corner rt-ascii-frame__corner--tl" aria-hidden="true">
         {corners.tl}
       </span>

@@ -6,7 +6,7 @@
  *
  * SCOPE: paints ONLY what the surface owns — the status badge, the tab-strip
  * chrome (list hairline, the active-tab indicator element, the count badge),
- * the sidebar hairline + geometry, the drained inline geometry, the loading
+ * the sidebar hairline + geometry, the heading rhythm + definition-list UA neutralization, the drained inline geometry, the loading
  * label and the mobile/desktop layout switch. Composed primitives (Button
  * tabs/actions, Text, Skeleton) and the SurfaceErrorState/SurfaceEmptyState
  * kits keep their own chrome and their own interaction states (the ghost-tab
@@ -62,6 +62,12 @@
 .ds-surface.ds-record-workbench .ds-record-workbench__skeleton-subtitle {
   display: block;
   margin-block-start: var(--ds-spacing-2, 8px);
+}
+
+/* UA heading margins are neutralized; the surface stack owns the rhythm
+   (same idiom as command-center.css). */
+.ds-surface.ds-record-workbench .ds-record-workbench__title[data-part='title'] {
+  margin-block: 0;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -202,11 +208,19 @@
 
 .ds-surface.ds-record-workbench .ds-record-workbench__sidebar-title[data-part='sidebar-title'] {
   display: block;
-  margin-block-end: var(--ds-spacing-md, 16px);
+  margin-block: 0 var(--ds-spacing-md, 16px);
+}
+
+/* Definition-list UA margins (dl block margins) are neutralized; the Stack
+   gap owns the rhythm. */
+.ds-surface.ds-record-workbench .ds-record-workbench__metadata-list[data-part='metadata-list'] {
+  margin-block: 0;
 }
 
 .ds-surface.ds-record-workbench .ds-record-workbench__field-value {
   margin-block-start: var(--ds-spacing-1, 4px);
+  /* dd UA inline indent (40px) is neutralized; the field column owns it. */
+  margin-inline-start: 0;
 }
 
 /* -------------------------------------------------------------------------- */
