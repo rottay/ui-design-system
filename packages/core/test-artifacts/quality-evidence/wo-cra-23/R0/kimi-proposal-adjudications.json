@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 2,
+  "roundId": "R0",
+  "purpose": "Adjudication ledger for every creative proposal created in this round, and the state of the temporary advisory boundary.",
+  "canonClosure": {
+    "formula": "adjudicatedProposals / createdProposals",
+    "created": 0,
+    "adjudicated": 0,
+    "value": 1,
+    "basis": "No proposal was created. The tenant art-direction reconciliation concluded that all twelve required groups are expressible today by composing existing recipe and expressive selections, Standard dials, anatomy variants and Advanced allowlist entries."
+  },
+  "rejectedBeforeBecomingProposals": [
+    {
+      "candidate": "network-node motif for BitHire",
+      "outcome": "REJECTED_UNDER_EXISTING_AXES_FIRST",
+      "reason": "the contour radial wash is a direction-sanctioned alternative, and three motif values are already declared but unreached — those must get expansion rows before any new motif value is considered"
+    },
+    {
+      "candidate": "snap easing keyword for The Management motion",
+      "outcome": "REJECTED_UNDER_EXISTING_AXES_FIRST",
+      "reason": "the motion intensity and durationScale dials are not exhausted; no easing vocabulary may be proposed until they are"
+    },
+    {
+      "candidate": "registration-marks / dossier motif",
+      "outcome": "REJECTED_UNDER_EXISTING_AXES_FIRST",
+      "reason": "micro-grid plus paper already express the posture"
+    }
+  ],
+  "declaredButUnreachedCapacity": {
+    "law": "A declared-but-unreached value is capacity to spend, not dead vocabulary. It must be used or given expansion rows before an equivalent new concept is proposed.",
+    "motifs": ["dots", "deco-fan", "ambient-orbs"],
+    "authority": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/index.ts:75-84",
+    "finding": "these three sit in the closed vocabulary but have no v1 expansion rows and resolve to nothing",
+    "edgeValuesConsumableButUnselected": ["borderless-shadow", "outlined", "inset-double"]
+  },
+  "advisoryBoundary": {
+    "law": "Kimi is an advisor, not an authority. Claude never reads the raw inbox and never edits it. Codex reproduces useful observations, folds accepted ones into the owning canonical contract, and deletes the raw submission before Claude receives the program.",
+    "path": "packages/core/scripts/quality-evidence/programs/modern-rescue/KIMI-ANNOTATIONS/",
+    "claudeReadAnyRawAnnotation": false,
+    "claudeEditedTheInbox": false,
+    "rawAnnotationsTreatedAsImplementationAuthority": 0,
+    "observedState": {
+      "entriesPresent": 2,
+      "detail": "KIMI-ANNOTATIONS/README.md and KIMI-ANNOTATIONS/inbox/README.md. Only directory entries were listed; no file content was opened.",
+      "assessment": "These are the boundary's own README scaffolding rather than submissions. R0 cannot distinguish further without reading them, which is forbidden."
+    },
+    "openForCodex": "The R0 objective 'all temporary advisory input has been deleted' is a Codex action, not a Claude one. Codex must confirm the inbox holds no un-reconciled submission and delete anything that remains. Claude's obligation — treat zero raw annotations as authority — is met."
+  }
+}

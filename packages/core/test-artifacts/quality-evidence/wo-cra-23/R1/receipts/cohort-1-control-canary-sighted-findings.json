@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-control-canary-sighted-findings",
+  "canary": "Button-and-action-cluster",
+  "claimLevel": "Claude PROPOSES. These are coordinator observations from real captures, NOT a sighted pass. Codex is the independent auditor and sole sighted approver.",
+
+  "canvas": {
+    "lab": "/probe/ds-reference — self-contained, zero imports from src/components/torture-*",
+    "routes": [
+      "/probe/ds-reference/bithire/control",
+      "/probe/ds-reference/the-management/control"
+    ],
+    "captures": "test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/control/ — 2 tenants x 4 widths (320, 390, 768, 1440), full page, real viewports, plain-URL provenance",
+    "groundProof": {
+      "bithire": "root attributes only; artifact CSS bundled and selected by the stamped scope; tenantConfig carries the code-owned BrandTheme",
+      "themanagement": "published document hydrated and compiled server-side, artifact inlined first-in-body at digest sha256-eed44124..., tenantConfig derived FROM the artifact, visualAuthority=compiled-artifact so the provider emits no competing layer",
+      "verified": "--ds-color-primary resolves rgb(58,111,176) vs rgb(26,26,24); --ds-font-family-heading resolves Space Grotesk vs Fraunces; 26 modern-engine buttons render under both grounds"
+    }
+  },
+
+  "labDefectFoundAndFixedBeforeAnyClaim": {
+    "what": "The lab's first ground shipped the root-attribute stamp and the artifact CSS but NO DesignSystemProvider.",
+    "symptom": "Both tenants rendered identical blue buttons, differing only in background colour — visually indistinguishable from the exact defect this round exists to eliminate.",
+    "diagnosis": "Token values were already correct under both grounds (measured: primary #1A1A18, radius-md 0px, Fraunces for the DB tenant). Tokens do not select an ENGINE. Engine resolution is a React context decision, so with no provider every family fell back to a default engine that paints its own chrome and never reads the --ds-button-* channels the artifact authors.",
+    "secondFault": "Adding the provider without a tenantConfig made it resolve the DEFAULT tenant. The DS then correctly REFUSED to render, raising 'the provider still carries uncompiled tokenOverrides under compiled-artifact' — the two-authority guard doing its job.",
+    "whyThisIsRecorded": "The pre-fix captures look exactly like a damning DS finding and are not one. Stating it prevents a false claim later, and it is a point in the DS's favour: the two-authority guard fired instead of silently painting a second layer."
+  },
+
+  "sightedFindings": [
+    {
+      "id": "CTRL-01",
+      "severity": "dominant defect for this canary",
+      "title": "Segmented is PIXEL-IDENTICAL across the two tenants.",
+      "observation": "In both captures the segmented track carries the same pale blue ground and the same blue active item. The Management — a monochrome ledger whose brand chrome must carry no decorative hue — renders BitHire's blue segmented control.",
+      "predictedBy": "cohort-1-group-axis-census.json recorded segmented as reading ZERO expressive axis channels; the control group scored coherence 0.000.",
+      "mechanism": "Segmented reads only its own --ds-segmented-* family channels, and no segmented token is in TENANT_THEME_OVERRIDE_TOKENS. A tenant cannot reach this family at all.",
+      "consequence": "Button and Segmented are two styled families rather than one control grammar. The active segment is the group's primary treatment at small scale, so this is the most visible failure of group coherence in the cohort."
+    },
+    {
+      "id": "CTRL-02",
+      "severity": "high",
+      "title": "Secondary, ghost and quiet variants keep a blue tint under the monochrome tenant.",
+      "observation": "'Assign', 'Rest' and 'Focused' render with a pale blue wash and blue-tinted keyline under BOTH grounds.",
+      "mechanism": "Same root cause as CTRL-01: --ds-button-secondary-* and --ds-button-ghost-* are not tenant-writable. Only the compiler-derived --ds-button-primary-* family follows the palette.",
+      "artDirectionConflict": "The Management's palette rule is explicit — 'no decorative brand hue', brand chrome monochrome with governed semantic exceptions. A blue quiet-variant wash is not a semantic exception."
+    },
+    {
+      "id": "CTRL-03",
+      "severity": "high",
+      "title": "Control radius does not follow the tenant.",
+      "observation": "The Management's buttons render at ~8px radius — visibly rounded rectangles — under a direction that specifies 'square and architectural', 0-4px, 'hard rectangles'.",
+      "measured": "--ds-radius-md resolves to 0px on the root under this tenant, and the document authors --ds-radius-sm/md 0px and lg/xl 1px/2px through the allowlisted exact-value route. The button still paints 8px, so it is not consuming the tenant's radius ramp for its resting geometry.",
+      "note": "This is the axis the earlier profile work already fought once: editorial-round@1 hard-routed buttons to --ds-radius-full. The pill route was removed, but the family still is not reading the tenant ramp."
+    },
+    {
+      "id": "CTRL-04",
+      "severity": "medium",
+      "title": "Depth is identical across tenants and blue-tinted under both.",
+      "observation": "Computed box-shadow is rgba(20, 40, 59, 0.1) 0px 1px 2px under BOTH grounds — a cool blue-tinted soft ambient shadow.",
+      "artDirectionConflict": "The Management authored hard offset shadows (1px 1px 0 0 ink, zero blur) through the allowlisted --ds-shadow-* route, and 'soft floating-card soup' is one of its named forbiddenOutcomes. The authored values are not reaching the control family.",
+      "relatedTo": "DEF-01 in cohort-1-progress-and-disclosures.json — the inverted elevation finding — and to the role-adoption work, since all 32 --ds-material-{role}-shadow* channels ARE tenant-writable while --ds-button-*-shadow is not."
+    },
+    {
+      "id": "CTRL-05",
+      "severity": "medium",
+      "title": "Busy controls collapse and truncate their own label.",
+      "observation": "The loading button renders as a bare spinner with no label, and the pending button truncates 'Submitting' to 'Su...' at 1440px — a desktop width with abundant free space.",
+      "whyItMatters": "R1 requires proving no clipping and no accidental desktop compression. A control that truncates its own state label at full desktop width fails that objective outright, and it fails identically under both tenants, so it is a grammar defect rather than a tenant defect.",
+      "suspect": "the widthStable / resolveButtonBusyState path is not reserving the label's intrinsic width when the busy label differs in length from the rest label."
+    },
+    {
+      "id": "CTRL-06",
+      "severity": "positive — record so it is not regressed",
+      "title": "Content integrity holds after the provider fix.",
+      "observation": "All four torture strings — long English, Spanish, Arabic RTL and the unbroken 60-character token — ellipsize cleanly inside their bounds under both tenants at 1440. No overlap, no escape, no per-character wrap.",
+      "note": "Before the provider fix these strings escaped their containers and overlapped each other. That was the fallback engine, not the modern skin."
+    },
+    {
+      "id": "CTRL-07",
+      "severity": "positive",
+      "title": "The type axis is the strongest working divergence.",
+      "observation": "'Quarterly review' renders in Fraunces serif under the DB tenant and Public Sans under the static tenant, at the same size and in the same layout. It is the one axis that reads instantly and survives a grayscale conversion.",
+      "note": "This is what the other axes should feel like once they reach the families."
+    }
+  ],
+
+  "whatThisConfirms": "The measured thesis, now visible: the tenant reaches ground, primary action colour and type, and reaches essentially nothing else. Segmented, the quiet button variants, resting geometry and depth all stay on DS defaults that no tenant can write, because the families read --ds-button-*/--ds-segmented-* channels that are absent from the 294-entry allowlist while the 144-channel surface-role vocabulary they could read is fully writable and largely unconsumed.",
+
+  "notYetDone": [
+    "field, overlay and feedback scenes in the lab (only control exists)",
+    "the ?judge=grayscale and ?judge=hue-neutral recognition captures",
+    "role adoption for the control group — pending the sighted decision on resting depth, since --ds-material-control-shadow defaults to none and would change paint in every theme",
+    "recipe-enum leg for shape/emphasis/size/joinery/focusTreatment",
+    "proposed 100-point craft scores"
+  ]
+}

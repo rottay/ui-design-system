@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "roundId": "R1",
+  "roundName": "Cohort 1 canaries: adoption, isolation and observable contracts",
+  "workOrderId": "WO-CRA-23",
+  "program": "modern-rescue",
+  "statusAuthority": "roadmap/registry.json",
+  "maximumClaim": "IMPLEMENTED_PENDING_CODEX_AUDIT",
+  "sightedAuthority": "Codex",
+  "executor": "claude-modern-rescue",
+  "evidenceOwner": "R1-quality-integrator (machine-admitted singleton; the coordinator is a non-writer in this tree except where the owner directed a bounded act)",
+  "frozenAt": "freeze performed before manifest and SHA256SUMS generation, per the sequence freeze -> manifest -> SHA256SUMS -> shasum -c -> round-evidence",
+  "artifactCount": 103,
+  "layoutNote": "packets/ and tools/ were forward-migrated into receipts/ without deleting material; provenance is recorded in cohort-1-outside-layout-migration.json and the originalPath/originalDirectory/originalInstrumentPath fields are deliberately preserved.",
+  "liveBindingIntegrity": "All live location bindings resolve. 522 referenced paths resolvable; the sole non-resolving entry is packages/showroom/cap-tmp.mjs inside a NEVER-STAGE prohibition list, where the file's absence is consistent with the record rather than a defect in it.",
+  "frozenInstrument": {
+    "path": "receipts/overlay-causality-probe.mjs",
+    "sha256": "f2091b2e92f10298c14b7d42b3680ac0c3afa979d15ce2672048609598c63aec",
+    "note": "Content SHA verified unchanged across the forward migration: moving a file does not alter its bytes, so the identity binding survived while the location changed."
+  },
+  "notAClaim": "This manifest records what evidence exists and that it is internally consistent. It is NOT a GO, NOT a sighted approval, and NOT a claim that any canary passed. round-evidence validity is a structural property of the tree, not a verdict on the work it describes."
+}

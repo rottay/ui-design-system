@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 2,
+  "roundId": "R0",
+  "familyId": "program/r0-quality-tooling",
+  "scenarioId": "quality-evidence-v2-and-inventory-correspondence",
+  "evidenceKind": "tooling-contract",
+  "verdict": "CLOSED",
+  "v1VerificationFacts": {
+    "purpose": "the R0 claims about v1 were verified rather than assumed, because 'v1 is historical baseline' is only honest if the reasons are measured",
+    "primitiveCount": {
+      "claimed": 89,
+      "live": 89,
+      "authority": "registry.mjs PRIMITIVE_DEFINITIONS; schema.mjs hard-asserts a length of 89; an executable test proves it",
+      "contrast": "a separate hand-maintained ledger scopes itself to 94 using the same DS-Pxxx id space — 89 != 94 and neither equals the 252-family denominator"
+    },
+    "scoringComposition": {
+      "pass1Weight": 70,
+      "pass1Kind": "entirely automated-contract, binary pass/fail/N-A",
+      "pass2Weight": 30,
+      "pass2Breakdown": { "defaultVisualQuality": 15, "tokenWhitelabelCraft": 7, "motionQuality": 5, "documentationVisual": 3 },
+      "defect": "no per-dimension floor exists anywhere — only the summed total is compared against the threshold",
+      "workedExample": "for a standard component at threshold 90: a perfect Pass 1 scores 70 with zero sighted input. Craft then needs only 20 of 30. Maxing the three minor craft dimensions (7+5+3=15) and scoring defaultVisualQuality at 5 of 15 — visually ordinary by any normal reading — reaches exactly 90 and is dispositioned 'accepted'. The one dimension that asks whether it looks good is 15% of the total, while the fully automated pass is 70%.",
+      "reviewGate": "review status/reviewer/timestamp/notes are checked only as non-empty strings, with no linkage to the numeric scores"
+    },
+    "freshness": {
+      "sourceDigest": "absent",
+      "artifactSha256": "absent",
+      "receiptValidation": "absent",
+      "searchResult": "zero hits for sourceDigest / artifactSha256 / sha256 / digest across the v1 modules",
+      "liveProofOfDrift": "the repository's own shipped scorecard.example.json FAILS its own validator today — it is missing a required evidence key that registry.mjs demands. Nothing catches it, because the wired command only runs validate-manifest and never validate-scorecard.",
+      "wiring": "quality-evidence:check appears in package.json but in no CI workflow, no gates:ci, no pretest and no lint — it is genuinely advisory, exactly as the R0 defect list claimed"
+    }
+  },
+  "v2Design": {
+    "separationLaw": "binary eligibility and the 100-point sighted craft score are computed by SEPARATE modules. craft-score.mjs never receives a contract result, so a green gate cannot raise a sighted score; eligibility.mjs consumes the score only to compare it against the family's layer threshold.",
+    "modules": [
+      "contracts.mjs — loads and resolves the nine-file contract pack",
+      "craft-score.mjs — weighted sighted score with evidence-required and applicable-weight renormalization",
+      "eligibility.mjs — binary verdict: contracts, vetoes, taxonomy, stress floor, divergence, restore, receipts, completion contract",
+      "receipts.mjs — freshness by artifact sha256 and source digest, non-vacuity, producer-is-not-approver",
+      "admission.mjs — work-order admission enforced before write, plus conflict-graph safety",
+      "round-evidence.mjs — per-round minimum evidence policy, roundLayout allowlist, status-key law, SHA256SUMS freshness",
+      "inventory-correspondence.mjs — 252-family resolution and check",
+      "seal-round.mjs — generated-only SUMMARY.json and the SHA256SUMS seal",
+      "cli.mjs — one entry point"
+    ],
+    "drills": 29,
+    "drillResult": "29 of 29 pass"
+  },
+  "gateReachability": {
+    "trapFound": "`node --test scripts/*.test.mjs` is a NON-RECURSIVE shell glob, so a drill file placed inside scripts/quality-evidence/v2/ would never run under the umbrella suite",
+    "whyItMatters": "a gate nobody runs is not a gate. The round's own exit criterion is that the evidence policy is enforced rather than advisory — shipping 29 drills that the umbrella cannot reach would have reproduced the exact v1 defect being fixed.",
+    "resolution": [
+      "added a named script `quality-evidence:v2:drills`, matching the existing per-gate precedent in this package",
+      "extended `test:scripts` with an explicit second glob so the drills run under the umbrella too"
+    ],
+    "verified": "both paths execute 29 of 29",
+    "creditedTo": "the read-only tooling scout, which found the trap empirically rather than assuming the glob was recursive"
+  },
+  "inventoryCorrespondenceFindings": {
+    "startingState": "all 252 rows carried sourceResolution R0_REQUIRED — 0% resolved. sourceRoot was a shared category directory (only 12 distinct values for 252 rows), never a per-family owner path.",
+    "endState": "252 of 252 resolved to a real source owner and a public-export chain, each with a layer profile, threshold and divergence minimum",
+    "resolutionMethod": "folder-first, then component-symbol fallback, then a documented group-prefix normalization — never a naming-convention guess. Candidates are ranked so a compound child (Card/compound/Image) can never outrank a family root (display/Image).",
+    "declaredComponentsThatDoNotExistInSource": [
+      "structure/record/record-content declares RecordContent; the real owner is structures/record/content and exports RecordSummaryStrip, RecordFieldGrid, RecordField, RecordActionBar, RecordPanel",
+      "structure/dashboard/dashboard-insights declares DashboardInsights; the real owner is structures/dashboard/insights",
+      "pattern/identity/user-profile-card declares UserProfileCard; the real export is PatternUserProfileCard"
+    ],
+    "locationDisagreements": [
+      "structure/workspace/search-command-bar is nested three deep inside the ConnectedCommandPalette family folder",
+      "surface-composition/composition/header-surface is nested inside the PageShellSurface family folder",
+      "structure/shell/app-shell has no folder at all — AppShell is defined directly in the category barrel",
+      "surface/experience/o-auth-transition is cosmetic id-generator drift for the oauth-transition folder"
+    ],
+    "layerProfileGapClosed": {
+      "before": "0 of 252 rows carried any layer-profile field; the coarse `layer` string mapped cleanly for only 116 rows. 100 primitives were ambiguous between the two primitive thresholds, and all 36 page surfaces had NO corresponding layerThresholds key at all — no defined craft floor.",
+      "after": "every row carries a resolved layerProfile and divergenceProfile with the deciding signal recorded, so the assignment is auditable and falsifiable rather than asserted",
+      "primitiveSplit": { "primitive-static-layout": 30, "primitive-interactive-control-data-overlay": 70 },
+      "surfaceResolution": "the 36 page surfaces and the 4 compositions both resolve to the surface-composition threshold, which is the only surface-tier key the rubric declares"
+    },
+    "showroomRegistryDrift": {
+      "note": "the showroom registry is a PROJECTION of the inventory, not an authority. Its drift is recorded for Codex, not fixed in this round.",
+      "layersWithNoRegistryFileAtAll": ["surface-composition (4 families)", "commercial (11 families)"],
+      "missingRows": {
+        "primitive": ["CodeBlock", "IconFrame", "LoadingIndicator", "MarkdownView", "Meter", "ResizeHandle", "SemanticSurface", "VisuallyHidden"],
+        "pattern": ["DecisionComparison", "DecisionPanorama", "RecordFacts", "TableCheckboxStyles", "VirtualList", "WidgetBoard", "PatternBrandStudio", "FeatureWorkspaceFrame"],
+        "structure": ["AppShell", "ConnectedCommandPalette"],
+        "surface": ["OAuthTransitionScreen"]
+      },
+      "onboardingSwapConfirmed": "the registry lists OnboardingSurface as an experience surface. OnboardingSurface is real but is a sub-component inside the forms/wizard family, so the registry displays a non-family sub-component in place of the genuine ninth experience family, which is entirely absent.",
+      "coverage": {
+        "denominator": 237,
+        "denominatorBasis": "the five layers the registry covers at all — primitive 100 + pattern 56 + chart 18 + structure 27 + surface 36. surface-composition (4) and commercial (11) have no registry file and are excluded from this ratio rather than counted as misses.",
+        "rawRows": 220,
+        "distinctCanonicalFamiliesCovered": 216,
+        "missing": 21,
+        "countingRule": "each registry row's `name` is resolved against family-inventory.json by family name, then by membership in a family's `components` array. A row that resolves to no family covers nothing; two rows resolving to the same family cover one.",
+        "reproduction": "node -e with family-inventory.json indexed by family name and by component, parsing `slug`/`name` pairs out of the five registry files; prints rawRows, distinct covered, double-coverage pairs and unmatched rows",
+        "correctionOfAnEarlierNumber": "an earlier draft of this receipt claimed 218 of 237. That number came from subtracting two known-bad rows from the raw count under an UNSTATED rule, which is precisely the failure this program names: a number is not evidence until its scope is stated. The verified figure is 216, because there are FOUR defective rows, not two."
+      },
+      "fourDefectiveRows": [
+        { "row": "primitives overlay-modal:Modal", "defect": "DOUBLE_COVERAGE", "detail": "resolves to primitive/feedback/modal, which primitives modal:Modal already covers — the registry reintroduces OverlayModal-as-its-own-family without spelling the name" },
+        { "row": "surfaces onboarding:OnboardingSurface", "defect": "DOUBLE_COVERAGE", "detail": "OnboardingSurface is a component INSIDE surface/forms/wizard, which surfaces wizard:WizardSurface already covers. It is additionally filed under the wrong group (experience rather than forms), which is why the genuine ninth experience family reads as present when it is absent." },
+        { "row": "patterns page-shell:PageShell", "defect": "NAMES_NO_EXPORT", "detail": "no `PageShell` export exists. The canonical pattern family is PatternPageShell; PageShellSurface is a different layer (surface-composition) and is outside this denominator." },
+        { "row": "structures record:Record", "defect": "NAMES_NO_EXPORT", "detail": "no `Record` export exists. The real owner structures/record/content exports RecordSummaryStrip, RecordFieldGrid, RecordField, RecordActionBar and RecordPanel." }
+      ],
+      "arithmetic": "220 raw − 2 rows naming no export = 218 rows that resolve; − 2 double-coverage collapses = 216 distinct families.",
+      "misnamingIsWhyTwoFamiliesReadAsMissing": "PatternPageShell and RecordContent appear in the missing list precisely BECAUSE their registry rows are misnamed. The showroom still generates a page from each slug, so those two families are reachable but mislabelled — not invisible. Stated so nobody reads the 21 as 21 absent pages.",
+      "missingByLayer": {
+        "primitive": ["CodeBlock", "MarkdownView", "SemanticSurface", "IconFrame", "Meter", "ResizeHandle", "VisuallyHidden", "LoadingIndicator"],
+        "pattern": ["VirtualList", "TableCheckboxStyles", "DecisionComparison", "DecisionPanorama", "RecordFacts", "WidgetBoard", "PatternBrandStudio", "FeatureWorkspaceFrame", "PatternPageShell"],
+        "structure": ["ConnectedCommandPalette", "RecordContent", "AppShell"],
+        "surface": ["OAuthTransitionScreen"]
+      }
+    },
+    "deadCodeFoundEnRoute": "primitives/overlay/Modal/{compound,engines,contracts} is a complete second implementation tree that is entirely unreferenced — the deprecated alias file pulls only from the facade. Recorded, not removed: dead census is never deletion permission."
+  },
+  "producer": "claude-modern-rescue",
+  "negativeDrill": {
+    "violation": "a scored dimension without observable evidence, an omitted failure-taxonomy category, a dropped stressMatrix floor case, a stale artifact hash or source digest, a self-approved receipt, an R0 capture, or two lanes writing one file",
+    "failsClosed": true,
+    "proof": "packages/core/scripts/quality-evidence/v2/drills.test.mjs — 29 executable drills, reachable from both `pnpm test:scripts` and `pnpm quality-evidence:v2:drills`"
+  },
+  "sightedApproval": "NOT_CLAIMED — Codex is the sighted authority"
+}

@@ -1,0 +1,326 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-segmented-reveal",
+  "disposition": "IMPLEMENTED_PENDING_CODEX_AUDIT — with one HARD VETO OPEN (see hardVetoOpen_segmentedHoverKeyline). The reveal, ref-composition and reading-direction work is pending audit; the hover keyline change is vetoed and not certifiable.",
+  "notAClaimOf": "This is not a claim that the Segmented family is done, scored, or approved. Three items below are BLOCKED and one is AWAITING FABLE. No browser evidence exists for any of it.",
+  "originalDefect": {
+    "measuredAt": "280px viewport, hydrated BitHire",
+    "symptom": "Arrow navigation moved the selection Review -> Offer -> Closed and correctly set aria-checked, tabIndex and :focus-visible, but the scrollport stayed at scrollLeft 0 of a possible 54. 'Closed' sat at 254..318 while the visible root was 12..268 — keyboard could focus and SELECT an option the user could not see.",
+    "foundBy": "independent audit (product veto), not by me"
+  },
+  "correctionsToMyOwnFirstFix": [
+    {
+      "defect": "Called selected.scrollIntoView({ block: 'nearest', inline: 'nearest' }).",
+      "whyWrong": "'nearest' minimises each individual scroll but does NOT confine the operation to one element: scrollIntoView walks the whole ancestor chain and may scroll any scrollable ancestor and the document. A leaf control that yanks the page on selection is a worse defect than the one being fixed. Whether it happens depends on the CONSUMING PAGE, so no amount of care in the component file would have surfaced it.",
+      "fix": "Scrollport-local delta applied only to the root's own scrollLeft. Structural, not best-effort: no other element is written to, so no other element can move."
+    },
+    {
+      "defect": "Wrote scrollTop as well as scrollLeft, 'for symmetry'.",
+      "whyWrong": "The skin declares overflow-x:auto / overflow-y:hidden (segmented.css:56-57), verified directly. A hidden overflow is still PROGRAMMATICALLY scrollable, so writing scrollTop really shifts content — and the user has no scrollbar, no wheel target and no keyboard affordance to shift it back. On a hidden-overflow box that symmetry is a one-way trip.",
+      "fix": "Inline axis only. scrollTop is never read and never written."
+    },
+    {
+      "defect": "Effect depended on currentValue alone.",
+      "whyWrong": "Selection is not the only thing that can clip an option. A container shrink, a label growth, or an option-list change re-clips the selection with nothing to reveal it.",
+      "fix": "Deps include the option identity list, plus a ResizeObserver."
+    },
+    {
+      "defect": "ResizeObserver watched only the root and the selected option.",
+      "whyWrong": "A resize observer reports SIZE, never POSITION. When a PRECEDING SIBLING grows it pushes the selected option along the inline axis: the selection is re-clipped while neither observed border box changes size, so nothing fires.",
+      "fix": "Observes the scrollport and EVERY option."
+    },
+    {
+      "defect": "Ran in useEffect, i.e. after paint.",
+      "whyWrong": "The reveal was a visible jump.",
+      "fix": "Layout effect, SSR-safe."
+    },
+    {
+      "defect": "optionIds.join('\\u0000') — a LITERAL NUL byte in a .tsx source file.",
+      "whyWrong": "Two failures at once. The stated premise ('NUL cannot occur inside a value') is false — JS strings may contain NUL, so the collision it was meant to prevent was still open. And the byte made the source file BINARY, so every ugrep/grep -I search silently skipped it. I briefly misdiagnosed that as a broken search instrument before finding my own byte was the cause; recording that here because the false alarm was mine.",
+      "fix": "JSON.stringify(optionIds). Collision-safe, no control byte."
+    },
+    {
+      "defect": "The ref wrapper ALWAYS returned a cleanup function.",
+      "whyWrong": "The peer range is react ^18 || ^19. React 19 treats a returned function as the detach cleanup; React 18.3.1 CONSOLE.ERRORS on any returned function. So every Segmented under the supported React 18 peer logged an error — including with no forwarded ref at all. Confirmed from React's own commit path by the auditor, not theoretical. The earlier version also discarded a forwarded callback ref's own cleanup, leaking a detached node.",
+      "fix": "Composition extracted to runtime/root-ref. The composed callback returns NOTHING on either major; detach runs through the null-call path both majors support; a forwarded React 19 cleanup is held and invoked on detach in place of the null call."
+    },
+    {
+      "defect": "computeRevealDelta aligned the item's PHYSICAL LEFT edge when the option was wider than the scrollport.",
+      "whyWrong": "In RTL the logical start is the physical RIGHT, so an RTL reader was shown the TAIL of an over-wide label. The doc comment claimed 'leading edge wins', which was false in RTL — the comment was wrong even where the behaviour was arguable.",
+      "fix": "logicalStart is direction-aware, resolved from semantic markup first (matching the Tabs family's precedent) and computed style as fallback."
+    },
+    {
+      "defect": "The reveal effect was keyed on [currentValue, optionsKey], so a live direction flip did not re-reveal.",
+      "whyWrong": "An ancestor toggling dir on a locale change re-renders with an identical value and identical options, yet the scroll origin and every physical placement have inverted. Nothing resizes, so the observer never fires either. A dependency list can only name things observable during render, and this is not one of them.",
+      "fix": "Split into two effects: the reveal runs on every committed render (cannot loop — a scroll write schedules no React render), the observer stays keyed so subscriptions are not rebuilt per commit."
+    }
+  ],
+  "tests": {
+    "total": "5 files / 63 tests, all passing",
+    "preExisting": "3 files / 33 tests, unchanged",
+    "new": {
+      "runtime/reveal/tests/reveal-geometry.test.ts": 10,
+      "engines/modern/tests/reveal.test.tsx": 19
+    },
+    "coverage": [
+      "initial mount reveal",
+      "already-visible no-op",
+      "no-selection no-op",
+      "uncontrolled arrow navigation",
+      "controlled value change with no focus movement",
+      "RTL",
+      "oversized option logical-start alignment in BOTH directions",
+      "live dir flip on a mounted tree",
+      "content-box vs border-box measurement",
+      "observation set covers every option",
+      "preceding-sibling growth",
+      "scrollport shrink",
+      "repeat-fire settles without oscillation",
+      "absent ResizeObserver",
+      "React 19 returned-cleanup",
+      "void-callback null detach",
+      "object ref clearing",
+      "reveal through a forwarded ref",
+      "ancestor and document scroll invariance",
+      "scrollIntoView never called"
+    ]
+  },
+  "mutationProof": {
+    "why": "A test that passes both before and after a fix proves nothing. Each mutation reverts one specific defect and must turn the corresponding assertion red.",
+    "results": [
+      {
+        "mutation": "observe only root + selected",
+        "expectedRed": "observation-set AND preceding-sibling",
+        "observed": "2 failed / 57 passed"
+      },
+      {
+        "mutation": "discard the React 19 callback-ref cleanup",
+        "expectedRed": "cleanup test",
+        "observed": "1 failed / 58 passed"
+      },
+      {
+        "mutation": "drop the effect deps",
+        "expectedRed": "arrow navigation AND controlled change",
+        "observed": "2 failed / 57 passed"
+      }
+    ],
+    "instrumentDefectFoundInMyOwnTests": "The first run of mutation 1 reddened only the STRUCTURAL assertion; the behavioural preceding-sibling test still passed, because my stub ResizeObserver fired unconditionally regardless of what it observed. That made 'which elements are observed' non-load-bearing in exactly the test written to prove it. The stub now gates on its observed set, and the mutation reddens both.",
+    "restoreVerified": "engine restored byte-identical after each mutation; 63/63 green after."
+  },
+  "scopeLimits": {
+    "jsdom": "jsdom has no layout engine, so this suite SUPPLIES one — a declared model of option widths and a scrollport, with rects computed as live functions of the current scroll offset. That makes the assertions real tests of the reveal's ARITHMETIC, TRIGGERS and BLAST RADIUS. It does NOT make them evidence about real browser layout, RTL scroll origin, or fractional device pixels. That evidence belongs to the capture harness and is NOT claimed.",
+    "noBrowserEvidence": "All runtime capture is frozen. The lab lane was stopped and retired after repeated stale recaptures; runs 1-3 are INVALID_FOR_CERTIFICATION and are preserved, not cited. The served bundle does not contain this fix."
+  },
+  "blocked": [
+    {
+      "item": "Relocate the ref composition to ONE shared DS utility in the ui foundation.",
+      "requiredBy": "Fable ruling; a repo search found no existing compose/merge-ref utility to extend.",
+      "blocker": "The move is NOT covered by the sealed architecture-integrator writeSet, which lists barrels/contracts, not ui/primitives/runtime/**. Ownership must be transparently amended/superseded/resealed and real admission run first. Keeping the Segmented-local unit purely to fit existing ownership is explicitly not acceptable either, so it stays local and DECLARED BLOCKED rather than quietly justified."
+    },
+    {
+      "item": "Real React 18.3.1 render/unmount lane proving zero console ref warnings.",
+      "blocker": "Requires adding a React 18.3 test dependency. package.json is already inherited-modified and I have no authorization to change dependencies. The invariant that prevents the warning — the composed callback returns nothing — was made directly assertable instead by extracting it, which is a mitigation and NOT a substitute for the lane."
+    },
+    {
+      "item": "segmented.css:101-105 list-splice defect.",
+      "detail": "box-shadow composes `inset <keyline>, var(--ds-material-control-shadow-hover, var(--ds-elevation-1))` inside the fallback of --ds-segmented-shadow-hover, which I verified has NO declaration anywhere in the repo. The TMM fixture authors --ds-material-control-shadow-hover: 'none' (line 373), so the composed value is `inset <keyline>, none` — invalid — and the whole declaration dies, taking the keyline with it. Corroborated live by the auditor: BitHire hover computes keyline + 2 authored layers; the same DOM on TMM computes boxShadow: none.",
+      "blocker": "Awaiting Fable. Whole-value isolation does not transplant cleanly from the overlay families: Segmented has no decorative pseudo, its root is a role=radiogroup scrollport containing focusable buttons, and the amputated sibling here is the keyline rather than the depth. Not implemented in any form."
+    },
+    {
+      "item": "Direction contract for the reveal.",
+      "blocker": "Implemented as direction-aware and tested in both directions, but routed to Fable for the normative ruling. If Fable rules physical-left is intended, the tests assert the wrong thing and will be inverted."
+    }
+  ],
+  "filesTouched": {
+    "modified": [
+      "src/ui/primitives/navigation/Segmented/engines/modern/index.tsx"
+    ],
+    "created": [
+      "src/ui/primitives/navigation/Segmented/runtime/reveal/index.ts",
+      "src/ui/primitives/navigation/Segmented/runtime/reveal/tests/reveal-geometry.test.ts",
+      "src/ui/primitives/navigation/Segmented/runtime/root-ref/index.ts",
+      "src/ui/primitives/navigation/Segmented/engines/modern/tests/reveal.test.tsx"
+    ],
+    "noOtherLaneTouched": "Verified by scoped git status. No skin CSS, no tenant fixture, no test-artifacts tooling, no showroom file, no pin re-anchored."
+  },
+  "gates": {
+    "typecheck": "0 errors",
+    "segmentedSuite": "5 files / 63 tests passed",
+    "navigationRegression": "50 files / 578 tests, 1 failed — Menu.modern-engine 62/45 level geometry, classified INHERITED in cohort-1-failure-attribution.json (menu.css is in the round-start porcelain and was never touched by this lane)",
+    "structureCheck": "passed, findings=0, no new structural debt",
+    "typecheckAfterSharedWork": "0 errors",
+    "navigationRuntimeFoundation": "62 files / 714 tests, 1 failed — Menu.modern-engine 62/45 level geometry, classified INHERITED (menu.css is in the round-start porcelain and untouched by this lane)",
+    "admissionAfterSupersession": "admitted=true, blockers=[], analyzer conflictFree=true, drills 85/85, seal verifies 18/18"
+  },
+  "sharedContractWork": {
+    "authority": "ADJ-R1-shared-react-kernels in R0/receipts/r1-canary-ownership-proposal.json. ONE transparent supersession adding exactly two paths. Prior seal digest aa96dea8...823d verified independently by both auditor and coordinator; post-amendment admission exit 0, admitted=true, blockers=[]; ownership analyzer conflictFree=true, 0 collisions, 0 expansion violations; drills 85/85; SHA256SUMS re-sealed and `shasum -c` verifies all 18 entries.",
+    "sealFileFinding": "R0/SHA256SUMS was ALREADY STALE by one supersession before this amendment — recorded in the adjudication rather than quietly repaired.",
+    "myOwnReceiptDefectCorrected": "An earlier version of this work wrote `admissionRerun: 'Result recorded below'` into the R1 lane packet with no result beneath it, and amended a LANE DECLARATION rather than the authority the gate consumes. Both are corrected: the packet now points at the adjudication, and the adjudication carries the actual command, exit code and blocker list.",
+    "composeRefs": {
+      "path": "src/ui/primitives/foundation/compose-refs/index.ts",
+      "why": "Fable fixed this as the canonical home and forbade a family-local fork. The Segmented-local runtime/root-ref was DELETED, not left as a compatibility shim.",
+      "invariant": "The composed callback returns undefined on every React major. That is what prevents React 18.3.1's console.error on a returned callback-ref cleanup, and it is only observable by calling the function directly — React owns the call site and discards the return value."
+    },
+    "rovingFocusKernel": {
+      "path": "src/ui/primitives/runtime/collection/roving-focus/index.ts",
+      "correction": "The READING-DIRECTION LAW captured direction once per instance and cached it. Now resolved at the start of EVERY interaction. The pure resolver was always correct; only the caching was wrong.",
+      "preventScroll": "Opt-in `ownsReveal` + `preventScroll` contract. Default remains preventScroll:false so existing consumers keep native focus-scroll. Dev warning on mismatch.",
+      "warningPlacement": "The warning runs in an EFFECT, not render, and is latched with a ref that resets when the pair becomes valid. Render must be pure, and StrictMode runs effect setup twice — an unguarded effect would double-print and train readers to discount it.",
+      "staleDocsCorrected": "Two comments still claimed capture-once after the code changed; both corrected. The only remaining mentions describe the previous law in past tense."
+    },
+    "segmentedSkin": {
+      "path": "src/foundation/tokens/css/runtime/engines/modern/skin/segmented.css",
+      "ruling": "Fable 16:56 classified Segmented's keyline ENGINE-LITERAL: keyline to a top-line background layer, depth as the sole box-shadow.",
+      "hover": "Was `inset <keyline>, var(--ds-material-control-shadow-hover, ...)` inside a fallback that ALWAYS applies (--ds-segmented-shadow-hover is declared nowhere). TMM validly authors that channel to `none`, making the value `inset <keyline>, none` — invalid — so the whole declaration died. Live-proven: BitHire hover computed keyline + 2 layers, the same DOM under TMM computed box-shadow:none. Keyline is now a background top-line layer; depth is the sole box-shadow.",
+      "whyBackgroundNotPseudo": "This root IS a scrollport (overflow-x:auto). An absolutely-positioned pseudo is scroll CONTENT and slides off the edge; a background layer paints against the element's own box under the default `scroll` attachment. Codex proved the pseudo failure mode with a Chromium repro on the Alert/Confirm annex.",
+      "baseRuleKeylineDeleted": "DELETED, not relocated. CORRECTED CLAIM: an earlier version of this receipt and of the source comment said the keyline 'never painted', which over-claimed. --ds-segmented-shadow IS declared at default.css:1953 and in the BitHire and Rottay artifacts, so on every SHIPPED ground the fallback is unreachable and the deletion is paint-identical there. It is NOT structurally dead: with the family var neutralized, the old fallback painted `inset <keyline>, var(--ds-shadow-xs)` and the new one paints depth alone. That delta must surface in the family-neutralized mode of the three-mode matrix. Whether byte-identical is accepted at shipped-ground scope or the fallback semantics must be preserved is REFERRED, not decided.",
+      "thirdSiteNotTouched": "segmented.css:272-276 (selected option) also splices two items, but with a GENERIC token (--ds-shadow-xs), not a none-capable role channel — so it is not a live trap. Its family var is declared only in the BitHire artifact, so a conversion changes paint for every other ground. Referred to Fable; NOT implemented.",
+      "hoverBackgroundCompositionDefect": "A defect I introduced and then corrected. The first version of the relocated keyline wrote a bare `background-image`, which CLOBBERS any --ds-segmented-bg resolving to a gradient, image, or full background shorthand — silently inverting the family seniority this cohort exists to protect. That every shipped fixture authors a plain colour is luck, not a contract. The keyline is now the FIRST layer of a two-layer `background` shorthand with the family ground LAST — the only position the shorthand accepts a bare colour — so colour, gradient and full-shorthand family values all survive.",
+      "cornerDeltaDeclared": "The relocated hover keyline is NOT byte-identical to the inset shadow it replaces on a ROUNDED box, and this root is rounded. Chromium repro (auditor): 100x50 at radius 12, same colour at 1px -> 78 pixels differ, max channel delta 228; the inset follows the INTERIOR CURVE while a gradient is a flat strip clipped only by the outer radius. HELD RATHER THAN REVERTED because reverting restores a live defect: the monochrome tenant's valid `none` authoring collapsed the entire hover declaration, amputating the keyline it never addressed. A declared corner delta beats an amputated hover state. The mechanism is under re-adjudication and a curve-preserving form may supersede it. NO EQUIVALENCE IS CLAIMED for this change.",
+      "mechanismLesson": "Two mechanisms have now failed on a property nobody checked. The pseudo failed on 'does the surface scroll'; the background layer failed on 'is the surface rounded'. Any successor ruling should name the property its correctness depends on, so the next counter-example costs one repro instead of one round."
+    },
+    "scaffoldingRemoved": "The locale-flip suite briefly carried an `it.fails` plus a pin on the WRONG behaviour while the shared fix was adjudicated. Both were deleted in the SAME change that corrected the kernel, per Fable. A pin on wrong behaviour that outlives its defect becomes a test defending the bug.",
+    "stillOpen": [
+      "Real React 18.3.1 lane with the resolved version printed — delegated; may require a dependency change I am not authorized to make.",
+      "Direct composeRefs matrix and kernel focus/warning tests — delegated, not yet on disk.",
+      "Fable: is Popover's keyline literal or channel-read (16:56 contradicts 16:35/16:41), the Segmented third site, and whether the preventScroll shape matches intent.",
+      "All browser evidence remains frozen. dist/served are stale; no capture, score or seal."
+    ],
+    "crossMajorReactLane": {
+      "disposition": "CLOSED at source-contract level. This was the last open item on the callback-ref canon.",
+      "executedBy": "the independent auditor, read-only. Not by me and not by my delegate — an advisor claim would not have counted here.",
+      "sourceUnderTest": "src/ui/primitives/foundation/compose-refs/index.ts",
+      "sourceSha256Tested": "f8474db808988d665fe61e91c3452d7b6efa3fa63e90251bfd47fc7c06afdc2c",
+      "sourceSha256OnDiskNow": "f8474db808988d665fe61e91c3452d7b6efa3fa63e90251bfd47fc7c06afdc2c",
+      "shaMatches": true,
+      "method": "The exact TypeScript source transpiled IN MEMORY, then real createRoot + React.act under happy-dom. No stubbing, no simulated React major.",
+      "react18_3_1": {
+        "sameInstance": true,
+        "attach": 1,
+        "cleanup": 1,
+        "forwardedNull": 0,
+        "consoleError": 0,
+        "exit": 0
+      },
+      "react19_2_5": {
+        "sameInstance": true,
+        "attach": 1,
+        "cleanup": 1,
+        "forwardedNull": 0,
+        "consoleError": 0,
+        "exit": 0
+      },
+      "whyConsoleErrorZeroIsTheWholePoint": "React 18.3.1 console.errors on any callback ref that returns a function. Zero errors under a REAL 18.3.1 is the direct falsification of the defect that shipped in the first version of this wrapper. It could not be proven from a React 19 test at all, because React owns the call site and discards the return value.",
+      "noDependencyChange": "No package.json, no lockfile, no file in the tree was modified. My delegate concluded no lane was possible without a dependency change; that was correct for hosting it INSIDE this package's resolution, and wrong for a standalone harness addressing a cached 18.3.1 pair by absolute path. Recording both halves because the delegate's in-package analysis was sound and its conclusion was overturned by a mechanism it had not considered.",
+      "stillHardHold": "dist, served and capture remain HARD HOLD. Required before any of them: freeze -> core rebuild -> showroom restart -> hash/PID/start/boot binding -> real-browser focus-scroll. Source-contract evidence does not discharge runtime evidence.",
+      "provenanceCorrection": "CORRECTION TO MY OWN FRAMING. I recorded and reported this lane as an INDEPENDENT run by the auditor, and treated it as corroboration of the delegate's separate work. The delegate has since reported that the auditor's run matches its own dual-version harness BYTE-FOR-BYTE IN METHOD AND RESULT — same source SHA, same transpile-in-memory approach, same real createRoot/act under happy-dom, same absolute paths to the cached 18.3.1 pair, same attach=1/cleanup=1/null=0/console.error=0 on both majors. It may be two independent convergences on the same design, or it may be ONE RUN REPORTED TWICE. I cannot currently distinguish them, and the difference matters: two independent confirmations and one confirmation counted twice are different evidence. Recording the ambiguity rather than resolving it in my own favour. The RESULT is not in doubt — the numbers agree and the source SHA was verified by me against disk — but the INDEPENDENCE claim is withdrawn until the provenance is established. The delegate raised this itself, as a provenance note rather than a dispute, having no incentive to volunteer that its own contribution might be the one being double-counted.",
+      "fab15Classification": "CONVERGENT-BUT-UNATTRIBUTED. Counts ONCE. No load-bearing provenance difference has been established between the two reported runs — same source SHA, same method, same numbers. The RESULT stands; the MULTIPLICITY does not."
+    }
+  },
+  "correctionsToMyOwnClaims": [
+    "I stated the TMM fixture authors FIVE `--ds-material-*: none` values. It authors SEVEN: card-shadow, card-shadow-hover, control-shadow, control-shadow-active, control-shadow-hover, control-shadow-selected, overlay-texture. The probe lane flagged the discrepancy rather than matching my number; it was right. The wrong figure had already been propagated to the adjudicator and is corrected there.",
+    "I tried to resolve the FAB-01 none-reachability gate myself. The instrument was unreliable: it extracted 71 allowlist entries and reported `--ds-material-control-shadow-hover` as absent, which cannot be true since the TMM fixture authors it and that authoring was ruled valid. The allowlist is composed from multiple sources my check did not follow. The verdict is routed to the census resolver, which the adjudicator named as the authority.",
+    "FAB-02 ratified my base-rule deletion using the evidence line 'keyline never painted'. That carries forward my own over-claim: it is paint-identical on SHIPPED grounds only. With the family var neutralized the old fallback painted `inset <keyline>` plus depth and the new one paints depth alone."
+  ],
+  "hardVetoOpen_segmentedHoverKeyline": {
+    "supersededBy": "FAB-06. The veto is DISCHARGED BY MECHANISM, not by the comment I first wrote — that distinction was the auditor's and it was right.",
+    "cell": "S AND NOT-W. The Segmented root IS a scroll container (overflow-x: auto) and has NO tight non-scrolling wrapper of equal rect and radius. Both properties are now censused columns rather than assumptions.",
+    "whyNoStructuralMechanismExists": "A pseudo scrolls with the content. The surface's single box-shadow is taken by depth. There is no wrapper to pin geometry against. Every host is ruled out by a named property.",
+    "ruling": "DECLARED-AND-SIGHTED DELTA, formally adjudicated. The landed background top-line STAYS. Reverting is FORBIDDEN because it restores the live none-collapse defect — my no-revert reasoning was ratified rather than merely tolerated.",
+    "exactScope": "hover state, 1px, top corners of a control. Nothing outside that is claimed or affected.",
+    "whatDischargesIt": "The sighted lane chooses between ACCEPTING the delta and DROPPING the hover keyline outright. Both are declared deltas; NEITHER is claimed equivalent. The discharge is sighted before/after at every radius, ground and state FOR THIS CELL ONLY — a comment discharges nothing.",
+    "stillNotCertifiable": "Until that sighted pass exists this cell is not scored, captured or sealed."
+  },
+  "openFindingNotMine": {
+    "finding": "tsconfig.tests.json typecheck reports 1 error: src/ui/patterns/commercial/tests/commercial-motion.test.tsx:103, TS2352 — the IntersectionObserver mock lacks `scrollMargin` and no longer sufficiently overlaps the DOM type.",
+    "whyItMatters": "tsconfig.tests.baseline.json is a DECREASE-ONLY ratchet whose recorded ceiling is 0 errors. One error against a zero ceiling is a ratchet violation.",
+    "attribution": "NOT this lane and NOT the delegate who found it. Verified: the file is absent from R0/receipts/round-start-porcelain.txt (so not inherited-dirty) and `git status` shows it clean (so not edited this round). The error therefore comes from a type definition changing underneath it — a lib/DOM typing shift or another lane's concurrent edit to something it depends on.",
+    "actionTaken": "REPORTED, not fixed. The baseline was NOT touched — raising a decrease-only ratchet to green a new error is exactly what its own note forbids.",
+    "foundBy": "the shared-contract test delegate, unprompted, while checking whether the plain tsconfig run actually covered its own new files. It does not: tsconfig.json excludes **/*.test.ts(x), so a 0-error result there says nothing about test files. That is a useful correction to how this program has been reading its own typecheck gate."
+  },
+  "equivalenceClaimVocabulary": {
+    "law": "FAB-08. SHIPPED-GROUNDS-IDENTICAL and STRUCTURALLY-IDENTICAL are two DIFFERENT claims. Every equivalence receipt must name which one it makes. Adopted permanently into the probe vocabulary.",
+    "whyItExists": "I claimed the base-rule keyline 'never painted'. The adjudicator ratified that claim without re-deriving it. The auditor's Chromium repro corrected us both — which is the argument for the vocabulary rather than for more care.",
+    "thisReceiptsClaims": {
+      "baseRuleKeylineDeletion": "SHIPPED-GROUNDS-IDENTICAL. NOT structurally identical: under `--ds-segmented-shadow: initial` the pre-change rule painted a keyline the post-change rule does not, and the family-neutralized matrix mode must show that delta.",
+      "hoverKeylineRelocation": "NEITHER. It is a declared delta with sighted discharge pending."
+    }
+  },
+  "rulingLedgerHeld": {
+    "FAB-01": "At the resolver. Segmented third site does not convert this round unless the resolver finds a none-reachable rung.",
+    "FAB-02": "Ratified; evidence line corrected by FAB-08.",
+    "FAB-03": "Withdrawn. Its host (a dedicated surface pseudo) is REINSTATED for NOT-S surfaces by FAB-06 — from true premises this time. All four conditions reattach, including the linear-intensity probe.",
+    "FAB-04": "Ratified as implemented, amended by FAB-07.",
+    "FAB-05": "Stands except the keyline expression, superseded by FAB-06. Literal classification, channel-read removals and zero highlight consumers all survive.",
+    "FAB-06": "Keyline/depth hosting decision table on two named properties S and W. My dispatch for the five NOT-S families is ratified as being exactly this ruling.",
+    "FAB-07": "ownsReveal flag ACCEPTED; callback-taking kernel API REJECTED. The undeclared-consumer hole closes with a STATIC CENSUS CHECK, not an API change.",
+    "FAB-08": "Equivalence claim vocabulary, above.",
+    "FAB-09": "RESOLVED BY CODEX COUNTERSIGNATURE: (b') REJECTED, (c) APPLIED. Deleting the AlertDialog/ConfirmDialog keylines is NOT authorized without before/after sighted proof and an explicit contract — they are annex, outside feature scope, and the authorization on record was byte-identical, which deletion does not satisfy either.",
+    "FAB-10": "Instrument-verdict contract: no artifact, no verdict. Green and red both write a machine-readable artifact; any exit without one is a NON-VERDICT and is never authority in either direction. Self-test gains an end-to-end leg spawning the real CLI against green/red/crash fixtures. PENDING — the E2E leg does not exist yet.",
+    "FAB-11": "No ruling may ASSERT byte-identity, or shipped-grounds-identity. An equivalence claim of any grade is admissible only with an attached reference-render diff at real geometries (border, radius, asymmetric radius, two device scale factors) run BEFORE the ruling issues. My amendment, adopted verbatim and generalized; the adjudicator retracted its own S-AND-W 'by construction' claim under it.",
+    "FAB-12": "The CONDITION re-adjudicated: byte-identical keyline relocation off a bordered, radiused box is NOT ACHIEVABLE — an inset shadow paints inside the border edge, shaped by corner radii reduced by border widths, a surface only the element itself owns. The search for a fifth mechanism WAS the error. Every keyline treatment becomes an in-scope adjudicated VISUAL DELTA, sighted per family/state/radius/ground. The S/W table survives, reinterpreted: it selects DELTA SHAPE, not mechanism, because anchoring is still real (a pseudo that slides on scroll is a defect, not a delta).",
+    "FAB-13": "Branch exclusivity adopted as the resolver spec amendment, my rule verbatim plus a fourth clause: PER-GROUND ATTRIBUTION. Which branch is live depends on which declarations exist in the ground under analysis, so every RED must NAME THE GROUND(S) in which the poisoned list is actually reachable. The adjudicator's own diagnosis of the spec's blind spot: normal-form expansion modelled fallback commas as list STRUCTURE but not as CONDITIONAL structure — the resolver implemented the spec it was given.",
+    "FAB-14": "Instrument pinning. Every verdict artifact records the instrument's content SHA and the corpus SHAs it read; a countersignature binds to the (artifact, instrument SHA) pair; a verdict whose instrument SHA differs from the countersigned one is VOID. Re-running after any instrument edit is mandatory before any claim cites it. Finding that produced it: three mid-audit SHA moves meant today's outputs could not have been countersigned even if they had been sound.",
+    "FAB-15": "EVIDENCE INDEPENDENCE IS A PROVENANCE CLAIM. Like counts (FAB-10) and equivalence (FAB-11) it may not be ASSERTED, only SHOWN. Two runs count as independent confirmations ONLY if the receipt records at least one LOAD-BEARING PROVENANCE DIFFERENCE — different harness authorship, different instrument SHA lineage, or different method — and NAMES which. Where provenance cannot be established, the receipt records CONVERGENT-BUT-UNATTRIBUTED and the result COUNTS ONCE. Produced by my own withdrawal of the independence claim on the cross-major React lane."
+  },
+  "standingLawAdopted": "EVERY MECHANISM RULING MUST NAME THE SURFACE PROPERTIES ITS CORRECTNESS DEPENDS ON, and each named property gets a census column and a probe. Derived from three failures in a row: the splice failed on unchecked none-capability, the pseudo on unchecked S (scrolls), the background on unchecked R (radiused). Radius joins the census alongside S and W.",
+  "fab09Disposition": {
+    "decision": "(c) — the fallback, selected by the sighted approver rather than by me or the adjudicator.",
+    "bothSitesPreserved": "AlertDialog 128-130 and ConfirmDialog 136-138 keep their splices, untouched.",
+    "whyThatIsSafe": "An UN-DELEGATED --ds-modal-shadow is not none-reachable, so the two dormant splices are COMPLIANT under FAB-01's letter, not defective. (c) leaves no live trap — only deferred causality and two idiom-divergent sites for the census inventory.",
+    "struckHonestly": [
+      "modal-shadow delegation DEFERRED",
+      "Modal's shadow causal cell STRUCK for this round"
+    ],
+    "stillReachable": "Dropdown-shadow delegation and modal-BACKGROUND delegation survive (background positions tolerate per-layer `none` by grammar, so a bg var carries no shadow-splice hazard) — but ONLY after the instrument is resolved. Nothing lands on a resolver that cannot fail.",
+    "endStateDeferred": "A tight wrapper for the dialogs, landing in the round that owns those families, with the keyline returning ON the wrapper."
+  },
+  "mechanismStatus_allFamilies": {
+    "finding": "FOUR mechanisms measured, FOUR failed the byte-identical condition.",
+    "measured": [
+      "splice in a comma list — correct until a tenant authors `none`",
+      "pseudo (absolute) — correct until the surface scrolls",
+      "background top-line — correct until the box is rounded: 78 px differ at radius 12",
+      "pseudo inset — correct until the box has a border: 96 px at radius12+border1, 256 px at radius24+border2, up to 589 px at dsf 2; radius compensation reduces but does not eliminate (66/169/45 px)"
+    ],
+    "consequenceRuledByCodex": "For the four C1 families the pseudo CANNOT be presented as mechanical isolation. Any adoption is an IN-SCOPE VISUAL DELTA — adjudicated by Fable, then inspected by Codex per family, state, radius and ground.",
+    "theMetaFailure": "Each mechanism was sound inside the frame its author was reasoning in. The standing law was applied to the mechanism's INPUTS (S, W were censused) and not to its CLAIM: the byte-identity assertion itself was never probed before the ruling issued. Proposed amendment now with the adjudicator: no ruling may ASSERT byte-identity; the claim is admissible only as a reference-render diff at real geometries (border, radius, asymmetric radius, two device scale factors) run BEFORE the ruling.",
+    "depthHalfUnaffected": "Depth as the sole whole-value box-shadow of the surface is what actually closes the `none` defect, and it is independent of where the keyline lives. That half stands."
+  },
+  "fab01Status": {
+    "disposition": "STILL OPEN. NOT answered by the gate, contrary to the adjudicator's reading of the resolver output.",
+    "whatTheResolverClaimed": "RED on segmented.css:310-314 via --ds-material-control-shadow-selected -> --ds-segmented-item-shadow-selected (bithire artifact:708) -> a 2-layer box-shadow. On that basis the adjudicator ruled CONVERT NOW.",
+    "whyItIsFalse": "Verified in source directly. The site is `box-shadow: var(--ds-segmented-item-shadow-selected, <multi-item fallback>)`, and the BitHire artifact declares that family var as `var(--ds-material-control-shadow-selected, <2-item literal>)`. Trace both real contexts: in BITHIRE the family var IS declared, so the outer var takes its RESOLVED branch and the multi-item fallback never evaluates — the role occupies the WHOLE value, so an authored `none` yields a valid `box-shadow: none`. In TMM the family var is ABSENT, so the fallback list DOES run — but it contains no material role. NO CONTEXT puts `none` inside a list at this site.",
+    "theResolverBug": "It reaches the role through one branch and attributes it to a list from the other. Those branches are MUTUALLY EXCLUSIVE.",
+    "uncomfortableNote": "FAB-01 routed this question to the gate precisely to escape the adjudicator's judgement and mine — both of which had said 'probably compliant'. We were right and the gate was wrong. The correct response is not to return to judgement: it is that this gate cannot yet answer, and FAB-01 stays open until it can. I am not pre-judging the corrected resolver's verdict; if it still reds, I convert.",
+    "noConversionMade": "segmented.css:310-314 is UNTOUCHED.",
+    "retraction": "The adjudicator RETRACTED its own 'answered by the gate — convert now'. Its stated reason is worth preserving because it is the sharper version of the lesson: the red was false, AND it was declared authoritative from a provisional unsealed output in the same message whose FAB-10 clause said that output was provisional. The provisionality rule was violated one paragraph after being written."
+  },
+  "fieldGroupFinding": {
+    "disposition": "REAL, verified by me in source, and treated as a live Cohort-1 blocker independent of the resolver's state.",
+    "site": "input.css:57 -> `box-shadow: var(--ds-input-shadow-rest), var(--ds-input-inset-shadow, none);`",
+    "chain": "bithire artifact:482 -> `--ds-input-shadow-rest: var(--ds-material-inset-shadow, 0 1px 2px rgba(...))`",
+    "whyItIsReal": "The comma is in the AUTHORED DECLARATION, not in a fallback, so both items ALWAYS coexist. An authored `--ds-material-inset-shadow: none` makes the first item `none`, producing `none, var(...)` — invalid, and the whole declaration dies.",
+    "whyTheSweepMissedIt": "It rides an ARTIFACT DELEGATION rather than a skin-local chain. This is the indirection-aware census design doing exactly what the popover forwarding incident demanded — the same run produced this true positive and the Segmented false positive.",
+    "alsoReported": "input-compounds.css:238/:315, password-input.css:90, rustic input.css:165, list-toolbar.css:106 (already adjudicated as LST-SPLICE-01). Not independently verified by me yet."
+  },
+  "branchExclusivityRule": "Offered to both the adjudicator and the probe lane as the executable form: a comma inside a `var()` FALLBACK is MUTUALLY EXCLUSIVE with that same var's resolved value, so a role reached through the RESOLVED branch can never be an item of that FALLBACK's list; a comma in the DECLARATION VALUE is UNCONDITIONAL. RED iff the role reaches an item of an unconditional list, or of a fallback list that itself contains the role. Acceptance fixtures: Segmented GREEN, input RED, fallback-list-containing-the-role RED. A rule that cannot produce all three verdicts is not the rule.",
+  "conductWorthRecording": {
+    "who": "the shared-contract test delegate",
+    "what": "It volunteered that the auditor's cross-major React run matched its own harness byte-for-byte in method and result, raising the possibility that what I had recorded as two independent confirmations was one run counted twice.",
+    "whyItCounts": "The double-count FLATTERED ITS OWN CONTRIBUTION. Hiding it cost nothing and disclosing it reduced the apparent weight of its work. It disclosed anyway, framed as a provenance note rather than a dispute, and that disclosure is what produced FAB-15.",
+    "recordedAsConduct": "Deliberately logged as conduct and not merely as a correction. A program that depends on instruments capable of turning red also depends on agents who volunteer exactly this, and it should be visible that doing so is credited rather than merely absorbed."
+  },
+  "annexBackoutVerification": {
+    "disposition": "VERIFIED by the coordinator directly, not accepted on report.",
+    "what": "The unauthorized MAKE-SAFE ANNEX work has been removed from alert-dialog.css and confirm-dialog.css.",
+    "evidence": [
+      "Zero occurrences of ANNEX, zero `isolation: isolate`, zero `[data-part='surface']::before` in either file.",
+      "DECISIVE SIGNAL: the live splice declarations now sit at alert-dialog 128-130 and confirm-dialog 136-138 — the EXACT line numbers the auditor cited as the pre-existing splice sites before any annex work existed. Line-number correspondence with the original citation shows the file is back where it started, which marker-absence alone does not.",
+      "Diff sizes fell from 71+/4- and 74+/8- to 39+/4- and 41+/8-."
+    ],
+    "restoredState": "Two-item lists: `inset 0 1px 0 color-mix(...), var(--ds-modal-shadow, var(--ds-elevation-4))`. This is CORRECT under FAB-09(c), which preserves the splices deliberately. They are COMPLIANT-DORMANT: an un-delegated --ds-modal-shadow is not none-reachable, so no live trap exists there — only deferred causality.",
+    "residualUncertaintyIcannotClose": "There is NO pre-annex CONTENT SNAPSHOT to diff against — the round-start porcelain records STATUS, not content, and both files were already dirty at round start. So I can confirm the annex work is gone; I CANNOT byte-prove that every inherited hunk survived untouched. Recorded as residual uncertainty rather than resolved in my own favour. The implementer has been asked whether it retained a pre-edit record that would close the gap.",
+    "methodNote": "The backout was performed as FORWARD EDITS. No git restore, checkout or reset was used on files carrying inherited work — using git to 'restore' a file that is inherited-dirty would have destroyed another lane's uncommitted changes."
+  }
+}

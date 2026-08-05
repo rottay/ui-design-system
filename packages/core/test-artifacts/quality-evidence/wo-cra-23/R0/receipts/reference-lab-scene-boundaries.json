@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 2,
+  "roundId": "R0",
+  "familyId": "program/r0-reference-lab",
+  "scenarioId": "scene-owned-import-boundaries",
+  "evidenceKind": "structural-measurement",
+  "objective": "split the 5796-line whitelabel-torture monolith behind scene-owned import boundaries so selecting one lab scene does not import, render or SSR unrelated scene bodies",
+  "exitCriterion": "each reference scene is an independent import and render boundary with no all-family DOM or monolithic cold-compile dependency",
+  "mechanismDecision": {
+    "chosen": "static per-scene App Router route entries",
+    "rejected": [
+      {
+        "mechanism": "next/dynamic inside the query dispatcher",
+        "reason": "under Next 16.2.4 with --webpack and no lazyCompilation, the async chunks stay in the route entry's build graph, so cold compile remains monolithic. It defers load and render, not compilation, and therefore cannot satisfy the exit criterion on its own."
+      },
+      {
+        "mechanism": "next/dynamic with ssr:false",
+        "reason": "would break the server-first-paint contract that the same round must satisfy"
+      },
+      {
+        "mechanism": "React.lazy",
+        "reason": "SSR-safe but has the same cold-compile property as next/dynamic"
+      }
+    ],
+    "additive": "the legacy /probe/whitelabel-torture?<flags> route is preserved byte-compatibly as a thin static dispatcher, because 36 Playwright specs are hard-keyed to it and their snapshots are pixel-keyed"
+  },
+  "measurement": {
+    "method": "per-scene tsconfig with files: [<scene page>], then tsc --listFilesOnly, filtered to torture-sections/*",
+    "denominator": "transitive torture-sections modules, excluding the shared frame and the flag registry",
+    "whyTransitive": "a direct-import count cannot see an indirect pull-in — one section importing another, or a shared helper re-exporting siblings. The transitive closure can.",
+    "control": {
+      "entry": "legacy query dispatcher",
+      "sections": 28,
+      "role": "the control is the load-bearing part: the same method reports 28 for the dispatcher, so a scene's low count is a measured exclusion rather than a vacuous result"
+    },
+    "perScene": {
+      "all": 0,
+      "dashboard": 2,
+      "workflow": 4,
+      "surfaces": 4,
+      "forms": 5,
+      "shell": 6,
+      "data": 7,
+      "primitives": 11
+    },
+    "surfacesNote": "surfaces additionally pulls surfaces-long-tail-fixture, which lives outside torture-sections/ and was verified present in that scene's graph, so it genuinely renders 5 sections",
+    "crossCheck": {
+      "method": "coordinator counted direct import statements including the frame",
+      "result": "consistently the transitive figure plus one, which reconciles exactly; the two are the same result under different denominators and only the transitive figure is published here"
+    },
+    "scopeStatedPlainly": "This measures the static TypeScript module graph. For static ESM imports the webpack entry graph follows the module graph, but this is NOT a bundler chunk-name inspection. `next build` was deliberately not run: a build is a singleton and several lanes were active concurrently. Chunk-level evidence remains available to Codex if it wants it.",
+    "interpretation": "Each App Router page is its own webpack entry, so a scene route's graph contains only its own sections. The `all` scene pulls zero section modules — the coverage atlas deliberately does not mount the 252-family universe in one DOM, which is what made the lab non-iterable in the first place."
+  },
+  "monolithReduction": {
+    "beforeLines": 5805,
+    "afterLines": 118,
+    "extractedModules": 28,
+    "sharedFrameModules": 1,
+    "flagRegistryModules": 1,
+    "duplicationLaw": "the split moves code; it does not copy it. The 28 sections are a verified disjoint partition with zero shared symbols, so no fixture or dataset needed duplicating.",
+    "sceneOverlapIsNotDuplication": "11 flags appear in two or more scenes by design. Two scene routes statically importing the same section module is a shared import, not a duplicated tree."
+  },
+  "publicInterfacePreserved": {
+    "route": "/probe/whitelabel-torture",
+    "gates": 29,
+    "queryFlags": ["interactive", "tablestates", "fieldfilters", "filterpanel", "rail", "detailpanel", "datatable", "fields", "dropdowns", "pickers", "statusfb", "overlayfb", "overlay", "nav", "display1", "display2", "layout", "forms", "record", "headers", "headers-patterns", "navigation", "dashboard", "communication", "workspace", "miscH2", "ckH1", "ckE", "longTail"],
+    "chromeParams": ["fixture", "rtl", "tenantSource", "engine", "w", "slug"],
+    "dependentSpecFiles": 36,
+    "multiFlagComposition": "preserved — ds-reference composes up to 11 flags in one URL, while no e2e spec ever combines two section flags (mechanically verified across all 36 files)"
+  },
+  "coordinatorApprovedWidening": {
+    "change": "detailpanel added to the data scene",
+    "arithmetic": "29 gates versus 28 flags in the union of the eight scenes — detailpanel belonged to no scene",
+    "consequence": "without it, detail-panel would stay live in the pixel baselines while being absent from the lab and never receiving an independent import boundary",
+    "contractSafety": "the eight scene NAMES are fixed by program.json and asserted by program-check.mjs; a scene's flag composition is showroom source, so this widening changes no contract",
+    "recordedAsDeliberate": true
+  },
+  "findingsForCodexNotFixedInThisRound": [
+    {
+      "finding": "the section-flag vocabulary existed in three unlinked copies",
+      "closure": "partially closed — page.tsx and ds-reference now bind one exported registry; e2e/diagnostics/skin-rule-coverage.spec.ts was deliberately NOT edited",
+      "drift": "TORTURE_SECTIONS has 20 entries, wrongly includes the chrome flag rtl, and omits headers, headersPatterns, navigation, dashboard, communication, workspace, miscH2, ckH1, ckE and longTail"
+    },
+    {
+      "finding": "e2e/diagnostics/skin-rule-coverage.spec.ts swallows navigation failures via try { goto } catch { continue }",
+      "consequence": "a section that stops rendering does not fail the spec; it silently drops out of the coverage count",
+      "ruling": "it must NOT be cited as evidence that the split preserved coverage. Left unmodified — changing what a test proves is a separate, owner-level decision."
+    }
+  ],
+  "producer": "claude-modern-rescue",
+  "negativeDrill": null,
+  "sightedApproval": "NOT_CLAIMED — Codex is the sighted authority"
+}

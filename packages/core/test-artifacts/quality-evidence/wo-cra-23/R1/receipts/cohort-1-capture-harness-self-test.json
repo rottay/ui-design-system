@@ -1,0 +1,860 @@
+{
+  "schemaVersion": 2,
+  "receiptId": "wo-cra-23-R1-C1-capture-harness-self-test",
+  "law": "Every capture asserts a per-scene readiness contract against VISIBLE elements before the shutter, plus an overflow gate, a real-focus gate and a dev-chrome-exclusion gate. A scene that does not paint (or does not fit, or cannot prove its claimed focus/state) throws instead of producing a plausible-looking file. The run is source-bound: any drift in the dev-server identity or in the source it served invalidates the whole run, not just one capture.",
+  "whyItExists": "Codex found feedback-bithire-320, feedback-bithire-1440 and the grayscale 1440 variant missing their alerts and spinners while the live DOM showed them present with correct bounds and opacity — a capture race that produced evidence looking like a clean pass. A later audit found a coarse-pointer proof that read touch-action instead of dispatching touch, a readiness check whose min:1 let a whole component go missing, a resize stub that fired regardless of what was observed, and a forced-colors check aimed at the wrong element — the assertions below are written to be falsifiable against those exact failure modes.",
+  "runMode": "self-test (reduced matrix; mechanics verification only — NOT a certification run)",
+  "startedAt": "2026-08-05T19:13:06.860Z",
+  "finishedAt": "2026-08-05T19:13:44.332Z",
+  "outDir": "/private/tmp/claude-502/-Users-daniel-Developer-Rottay-ui-design-system/ca2650ff-2bca-4c00-aa3b-c142a47af2d9/scratchpad/capture-lab-self-test",
+  "baseUrl": "http://localhost:7001/probe/ds-reference",
+  "port": 7001,
+  "repoRoot": "<repo-root>",
+  "playwrightResolvedFrom": "<repo-root>/node_modules/.pnpm/@playwright+test@1.61.1/node_modules/@playwright/test/index.mjs",
+  "harnessSelfHash": {
+    "combinedSha256": "bd830a985e36b6e8b551193a893a59d131aa0444ca08e791436e951f4c15ce70",
+    "entries": [
+      {
+        "path": "<repo-root>/packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/capture-lab.mjs",
+        "sha256": "995a2a2bdb467e2d638e7d6aeba5378d2c45e150cc422755e0bb719cbed1fd76"
+      },
+      {
+        "path": "<repo-root>/packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/receipt-io.mjs",
+        "sha256": "d5960ca87658ac92b8600b568e550f9afac227225b77e417f0dd5ebb9085bc3c"
+      }
+    ]
+  },
+  "selfProcess": {
+    "pid": 47937,
+    "lstart": "Wed Aug  5 15:13:06 2026",
+    "nodeVersion": "v22.17.0",
+    "cwd": "<repo-root>/packages/core"
+  },
+  "sourceBinding": {
+    "before": {
+      "dsReferenceTree": {
+        "rootDir": "<repo-root>/packages/showroom/src/app/probe/ds-reference",
+        "exists": true,
+        "fileCount": 31,
+        "combinedSha256": "610f3971e2653a2f5290d7503e3875ccfe09293ad7e0e60898041590a60b6bb4",
+        "entries": [
+          {
+            "path": "bithire-ar/control/page.tsx",
+            "sha256": "0e4246e0a0261778b689ebe9fe5490a5e27162ee2fb7451c3fa07321d8e0b0d8",
+            "bytes": 349
+          },
+          {
+            "path": "bithire-ar/feedback/page.tsx",
+            "sha256": "ef0db0f7cc3910a731dd7ce02596250591e68728662317233e82fa9276c9e338",
+            "bytes": 353
+          },
+          {
+            "path": "bithire-ar/field/page.tsx",
+            "sha256": "b9132d02bd251e24c133c51b9387a1b24971d3686a723c02af2ceacc5ce9772f",
+            "bytes": 341
+          },
+          {
+            "path": "bithire-ar/layout.tsx",
+            "sha256": "f5a8f827582e8c6c6ed830eb99b419d91430e8f23d3afe0b812a2b90ba2a6770",
+            "bytes": 1159
+          },
+          {
+            "path": "bithire-es/control/page.tsx",
+            "sha256": "0e4246e0a0261778b689ebe9fe5490a5e27162ee2fb7451c3fa07321d8e0b0d8",
+            "bytes": 349
+          },
+          {
+            "path": "bithire-es/feedback/page.tsx",
+            "sha256": "ef0db0f7cc3910a731dd7ce02596250591e68728662317233e82fa9276c9e338",
+            "bytes": 353
+          },
+          {
+            "path": "bithire-es/field/page.tsx",
+            "sha256": "b9132d02bd251e24c133c51b9387a1b24971d3686a723c02af2ceacc5ce9772f",
+            "bytes": 341
+          },
+          {
+            "path": "bithire-es/layout.tsx",
+            "sha256": "84dfedf2739bcd286022531467fced355ffc55b6d9a0b8681d3d0858fb8f9729",
+            "bytes": 829
+          },
+          {
+            "path": "bithire/control/page.tsx",
+            "sha256": "0e4246e0a0261778b689ebe9fe5490a5e27162ee2fb7451c3fa07321d8e0b0d8",
+            "bytes": 349
+          },
+          {
+            "path": "bithire/feedback/page.tsx",
+            "sha256": "ef0db0f7cc3910a731dd7ce02596250591e68728662317233e82fa9276c9e338",
+            "bytes": 353
+          },
+          {
+            "path": "bithire/field/page.tsx",
+            "sha256": "b9132d02bd251e24c133c51b9387a1b24971d3686a723c02af2ceacc5ce9772f",
+            "bytes": 341
+          },
+          {
+            "path": "bithire/layout.tsx",
+            "sha256": "f1b5eab3a1ffe04816f25b12f95dc865d5a3ac55c1e335ab8fa0a1189b613a88",
+            "bytes": 876
+          },
+          {
+            "path": "bithire/overlay-blocking/page.tsx",
+            "sha256": "7418a08d9f95ddc00565e3aa717d0a475826c7b653de30aaf72ccd4c10b257b7",
+            "bytes": 374
+          },
+          {
+            "path": "bithire/overlay-drawer/page.tsx",
+            "sha256": "8fb8181a7b0c2e77a93f1658aef19052cc378bebde2e87ac70266d92c1a77328",
+            "bytes": 766
+          },
+          {
+            "path": "bithire/overlay/page.tsx",
+            "sha256": "0904a6382644ea9e8187f016be33c800fc42b9ffe915baebcc1951c732c4fd7f",
+            "bytes": 349
+          },
+          {
+            "path": "chrome/index.tsx",
+            "sha256": "f1480d5d285d03d2f1283b896db41eea247f39e0d359064793dbab0f372dc62d",
+            "bytes": 3662
+          },
+          {
+            "path": "ground/index.tsx",
+            "sha256": "f418555041ee6b87fea0e087c31fdf113a433834d7c7040997440815c4cc4066",
+            "bytes": 9337
+          },
+          {
+            "path": "ground/stamp.ts",
+            "sha256": "7b7256b6224034f2323e419e76c6683e90b876f4bbc2cb4eb6bd9fc3549e4973",
+            "bytes": 2550
+          },
+          {
+            "path": "judge/index.tsx",
+            "sha256": "3ad71b9d46a6c551563b3f2510577be6c6b81387b1de8b1a5ce9f1dc9f8e010e",
+            "bytes": 1026
+          },
+          {
+            "path": "page.tsx",
+            "sha256": "02d14081033c086802fcf36afdd3740ff59ebf3860d70dccae1b2a61cd513a79",
+            "bytes": 5587
+          },
+          {
+            "path": "sections/control/index.tsx",
+            "sha256": "00a6a6f82e9363d1f65d25f508fd9af4b529af4ceda5b982cdb213c0bc49db1c",
+            "bytes": 7915
+          },
+          {
+            "path": "sections/feedback/index.tsx",
+            "sha256": "fe38716c0bc2d0ac7e20d949a62b2bac6c378bb79cba6554fd0ed7fb0be0458e",
+            "bytes": 4051
+          },
+          {
+            "path": "sections/field/index.tsx",
+            "sha256": "a7d246bfec58b8b04a7f056dc56d09e4b9ef064bcbb8e8dcd1b0055a18ad9071",
+            "bytes": 7351
+          },
+          {
+            "path": "sections/overlay/index.tsx",
+            "sha256": "ecd598d805c6ff036f373660e2d3a4f96ce3691157e5f5c646c8b7a3437e6a84",
+            "bytes": 6943
+          },
+          {
+            "path": "the-management/control/page.tsx",
+            "sha256": "0e4246e0a0261778b689ebe9fe5490a5e27162ee2fb7451c3fa07321d8e0b0d8",
+            "bytes": 349
+          },
+          {
+            "path": "the-management/feedback/page.tsx",
+            "sha256": "ef0db0f7cc3910a731dd7ce02596250591e68728662317233e82fa9276c9e338",
+            "bytes": 353
+          },
+          {
+            "path": "the-management/field/page.tsx",
+            "sha256": "b9132d02bd251e24c133c51b9387a1b24971d3686a723c02af2ceacc5ce9772f",
+            "bytes": 341
+          },
+          {
+            "path": "the-management/layout.tsx",
+            "sha256": "7bce7cb602def628c38c5f0c3102f4169ae152f04ba1e35ce6a940814bd3d76e",
+            "bytes": 750
+          },
+          {
+            "path": "the-management/overlay-blocking/page.tsx",
+            "sha256": "7418a08d9f95ddc00565e3aa717d0a475826c7b653de30aaf72ccd4c10b257b7",
+            "bytes": 374
+          },
+          {
+            "path": "the-management/overlay-drawer/page.tsx",
+            "sha256": "8fb8181a7b0c2e77a93f1658aef19052cc378bebde2e87ac70266d92c1a77328",
+            "bytes": 766
+          },
+          {
+            "path": "the-management/overlay/page.tsx",
+            "sha256": "0904a6382644ea9e8187f016be33c800fc42b9ffe915baebcc1951c732c4fd7f",
+            "bytes": 349
+          }
+        ]
+      },
+      "wideSurface": {
+        "fileCount": 3009,
+        "combinedFingerprint": "2ccdf38df73e5979f9c9d74b91846d54a6d31208dd81ac72232aa7991c86b6c9",
+        "perRoot": [
+          {
+            "rootDir": "<repo-root>/packages/core/src/foundation/tokens",
+            "exists": true,
+            "fileCount": 561
+          },
+          {
+            "rootDir": "<repo-root>/packages/core/src/ui",
+            "exists": true,
+            "fileCount": 2018
+          },
+          {
+            "rootDir": "<repo-root>/packages/core/src/graphics",
+            "exists": true,
+            "fileCount": 430
+          }
+        ]
+      }
+    },
+    "after": {
+      "dsReferenceTree": {
+        "rootDir": "<repo-root>/packages/showroom/src/app/probe/ds-reference",
+        "exists": true,
+        "fileCount": 31,
+        "combinedSha256": "610f3971e2653a2f5290d7503e3875ccfe09293ad7e0e60898041590a60b6bb4",
+        "entries": [
+          {
+            "path": "bithire-ar/control/page.tsx",
+            "sha256": "0e4246e0a0261778b689ebe9fe5490a5e27162ee2fb7451c3fa07321d8e0b0d8",
+            "bytes": 349
+          },
+          {
+            "path": "bithire-ar/feedback/page.tsx",
+            "sha256": "ef0db0f7cc3910a731dd7ce02596250591e68728662317233e82fa9276c9e338",
+            "bytes": 353
+          },
+          {
+            "path": "bithire-ar/field/page.tsx",
+            "sha256": "b9132d02bd251e24c133c51b9387a1b24971d3686a723c02af2ceacc5ce9772f",
+            "bytes": 341
+          },
+          {
+            "path": "bithire-ar/layout.tsx",
+            "sha256": "f5a8f827582e8c6c6ed830eb99b419d91430e8f23d3afe0b812a2b90ba2a6770",
+            "bytes": 1159
+          },
+          {
+            "path": "bithire-es/control/page.tsx",
+            "sha256": "0e4246e0a0261778b689ebe9fe5490a5e27162ee2fb7451c3fa07321d8e0b0d8",
+            "bytes": 349
+          },
+          {
+            "path": "bithire-es/feedback/page.tsx",
+            "sha256": "ef0db0f7cc3910a731dd7ce02596250591e68728662317233e82fa9276c9e338",
+            "bytes": 353
+          },
+          {
+            "path": "bithire-es/field/page.tsx",
+            "sha256": "b9132d02bd251e24c133c51b9387a1b24971d3686a723c02af2ceacc5ce9772f",
+            "bytes": 341
+          },
+          {
+            "path": "bithire-es/layout.tsx",
+            "sha256": "84dfedf2739bcd286022531467fced355ffc55b6d9a0b8681d3d0858fb8f9729",
+            "bytes": 829
+          },
+          {
+            "path": "bithire/control/page.tsx",
+            "sha256": "0e4246e0a0261778b689ebe9fe5490a5e27162ee2fb7451c3fa07321d8e0b0d8",
+            "bytes": 349
+          },
+          {
+            "path": "bithire/feedback/page.tsx",
+            "sha256": "ef0db0f7cc3910a731dd7ce02596250591e68728662317233e82fa9276c9e338",
+            "bytes": 353
+          },
+          {
+            "path": "bithire/field/page.tsx",
+            "sha256": "b9132d02bd251e24c133c51b9387a1b24971d3686a723c02af2ceacc5ce9772f",
+            "bytes": 341
+          },
+          {
+            "path": "bithire/layout.tsx",
+            "sha256": "f1b5eab3a1ffe04816f25b12f95dc865d5a3ac55c1e335ab8fa0a1189b613a88",
+            "bytes": 876
+          },
+          {
+            "path": "bithire/overlay-blocking/page.tsx",
+            "sha256": "7418a08d9f95ddc00565e3aa717d0a475826c7b653de30aaf72ccd4c10b257b7",
+            "bytes": 374
+          },
+          {
+            "path": "bithire/overlay-drawer/page.tsx",
+            "sha256": "8fb8181a7b0c2e77a93f1658aef19052cc378bebde2e87ac70266d92c1a77328",
+            "bytes": 766
+          },
+          {
+            "path": "bithire/overlay/page.tsx",
+            "sha256": "0904a6382644ea9e8187f016be33c800fc42b9ffe915baebcc1951c732c4fd7f",
+            "bytes": 349
+          },
+          {
+            "path": "chrome/index.tsx",
+            "sha256": "f1480d5d285d03d2f1283b896db41eea247f39e0d359064793dbab0f372dc62d",
+            "bytes": 3662
+          },
+          {
+            "path": "ground/index.tsx",
+            "sha256": "f418555041ee6b87fea0e087c31fdf113a433834d7c7040997440815c4cc4066",
+            "bytes": 9337
+          },
+          {
+            "path": "ground/stamp.ts",
+            "sha256": "7b7256b6224034f2323e419e76c6683e90b876f4bbc2cb4eb6bd9fc3549e4973",
+            "bytes": 2550
+          },
+          {
+            "path": "judge/index.tsx",
+            "sha256": "3ad71b9d46a6c551563b3f2510577be6c6b81387b1de8b1a5ce9f1dc9f8e010e",
+            "bytes": 1026
+          },
+          {
+            "path": "page.tsx",
+            "sha256": "02d14081033c086802fcf36afdd3740ff59ebf3860d70dccae1b2a61cd513a79",
+            "bytes": 5587
+          },
+          {
+            "path": "sections/control/index.tsx",
+            "sha256": "00a6a6f82e9363d1f65d25f508fd9af4b529af4ceda5b982cdb213c0bc49db1c",
+            "bytes": 7915
+          },
+          {
+            "path": "sections/feedback/index.tsx",
+            "sha256": "fe38716c0bc2d0ac7e20d949a62b2bac6c378bb79cba6554fd0ed7fb0be0458e",
+            "bytes": 4051
+          },
+          {
+            "path": "sections/field/index.tsx",
+            "sha256": "a7d246bfec58b8b04a7f056dc56d09e4b9ef064bcbb8e8dcd1b0055a18ad9071",
+            "bytes": 7351
+          },
+          {
+            "path": "sections/overlay/index.tsx",
+            "sha256": "ecd598d805c6ff036f373660e2d3a4f96ce3691157e5f5c646c8b7a3437e6a84",
+            "bytes": 6943
+          },
+          {
+            "path": "the-management/control/page.tsx",
+            "sha256": "0e4246e0a0261778b689ebe9fe5490a5e27162ee2fb7451c3fa07321d8e0b0d8",
+            "bytes": 349
+          },
+          {
+            "path": "the-management/feedback/page.tsx",
+            "sha256": "ef0db0f7cc3910a731dd7ce02596250591e68728662317233e82fa9276c9e338",
+            "bytes": 353
+          },
+          {
+            "path": "the-management/field/page.tsx",
+            "sha256": "b9132d02bd251e24c133c51b9387a1b24971d3686a723c02af2ceacc5ce9772f",
+            "bytes": 341
+          },
+          {
+            "path": "the-management/layout.tsx",
+            "sha256": "7bce7cb602def628c38c5f0c3102f4169ae152f04ba1e35ce6a940814bd3d76e",
+            "bytes": 750
+          },
+          {
+            "path": "the-management/overlay-blocking/page.tsx",
+            "sha256": "7418a08d9f95ddc00565e3aa717d0a475826c7b653de30aaf72ccd4c10b257b7",
+            "bytes": 374
+          },
+          {
+            "path": "the-management/overlay-drawer/page.tsx",
+            "sha256": "8fb8181a7b0c2e77a93f1658aef19052cc378bebde2e87ac70266d92c1a77328",
+            "bytes": 766
+          },
+          {
+            "path": "the-management/overlay/page.tsx",
+            "sha256": "0904a6382644ea9e8187f016be33c800fc42b9ffe915baebcc1951c732c4fd7f",
+            "bytes": 349
+          }
+        ]
+      },
+      "wideSurface": {
+        "fileCount": 3009,
+        "combinedFingerprint": "2ccdf38df73e5979f9c9d74b91846d54a6d31208dd81ac72232aa7991c86b6c9",
+        "perRoot": [
+          {
+            "rootDir": "<repo-root>/packages/core/src/foundation/tokens",
+            "exists": true,
+            "fileCount": 561
+          },
+          {
+            "rootDir": "<repo-root>/packages/core/src/ui",
+            "exists": true,
+            "fileCount": 2018
+          },
+          {
+            "rootDir": "<repo-root>/packages/core/src/graphics",
+            "exists": true,
+            "fileCount": 430
+          }
+        ]
+      }
+    },
+    "note": "dsReferenceTree is a full sha256 CONTENT hash of every file under packages/showroom/src/app/probe/ds-reference (what this lane directly authors and what the capture claims are about). wideSurface is a COARSE (path,size,mtime) fingerprint over foundation/tokens + ui + graphics — it proves absence of drift in the wider design-system surface a capture's pixels transitively depend on, not identity of that surface's content."
+  },
+  "serverIdentity": {
+    "before": {
+      "found": true,
+      "pid": "37896",
+      "allListeningPids": [
+        "37896"
+      ],
+      "port": 7001,
+      "lstart": "Wed Aug  5 15:04:45 2026",
+      "lstartEpochMs": 1785956685000,
+      "command": "next-server (v16.2.4)"
+    },
+    "after": {
+      "found": true,
+      "pid": "37896",
+      "allListeningPids": [
+        "37896"
+      ],
+      "port": 7001,
+      "lstart": "Wed Aug  5 15:04:45 2026",
+      "lstartEpochMs": 1785956685000,
+      "command": "next-server (v16.2.4)"
+    }
+  },
+  "drift": {
+    "stable": true,
+    "reasons": []
+  },
+  "outputHygiene": {
+    "quarantined": [],
+    "preRemovedExpected": [],
+    "quarantineDir": null
+  },
+  "feedbackContract": "seven role=alert elements and four role=status indicators, exact and visible",
+  "segmentedOverflowAffordance": {
+    "proven": true,
+    "mechanism": "Arrow-key roving focus (APG radiogroup, orientation \"both\") walks past the viewport edge; the option receives real document.activeElement, :focus-visible and aria-checked. Coarse-pointer scroll is enabled by the same overflow-x:auto + touch-action:auto contract that lets the option overflow in the first place — standard browser behaviour, not a lab-side claim.",
+    "keyboardPath": [
+      "Review",
+      "Offer",
+      "Closed"
+    ],
+    "finalState": {
+      "text": "Closed",
+      "focusVisible": true,
+      "ariaChecked": "true"
+    },
+    "coarsePointer": {
+      "overflowX": "auto",
+      "touchAction": "auto"
+    }
+  },
+  "devChromeExclusion": "The Next.js dev-tools indicator (<nextjs-portal> shadow root, #devtools-indicator) is excluded via a harness-injected style inside its own open shadow root before every shutter, and a zero-visible-dev-overlay assertion runs immediately before the shutter. Production CSS is never touched.",
+  "focusContract": "Every capture whose scene has a FOCUS entry takes real focus on a deterministic target after readiness+overflow and asserts document.activeElement identity, :focus-visible, and a computed border/box-shadow delta against an unfocused sibling (or, for feedback, against its own pre-focus style).",
+  "drawerContract": "overlay-blocking asserts the modal panel and the drawer panel as two independent exact:1 contracts instead of one combined min:1; overlay-drawer is an isolated chamber (Drawer only, no Modal) so the drawer is actually unoccluded in at least one captured image.",
+  "matrixAxes": {
+    "viewportWidth": {
+      "widths": [
+        320,
+        390,
+        768,
+        1440
+      ],
+      "note": "browser VIEWPORT resize — kept as its own axis, not conflated with the container axis below"
+    },
+    "containerWidthIndependentOfViewport": {
+      "mechanism": "two same-viewport (1440px), different-inline-size (400px / 220px) ancestors around the real @container (inline-size < 18rem) affix min-inline-size rule already authored in input.css",
+      "falsifiable": "throws if the affix min-inline-size resolves identically for both boxes",
+      "note": "--_ds-input-resolved-gap (the same @container block’s other property) was tried first and found permanently shadowed by a higher-specificity [data-size=\"md\"] rule elsewhere in input.css for any sized Input — a real product-CSS finding, see proveContainerAxis doc comment"
+    },
+    "locale": {
+      "locales": [
+        "en (default ground)",
+        "es",
+        "ar"
+      ],
+      "rtlComplete": "ar stamps dir=\"rtl\" on documentElement via resolveDocumentRootAttributes, before hydration — a full document, not a local wrapper",
+      "scenesWired": [
+        "control",
+        "field",
+        "feedback"
+      ]
+    },
+    "contentLength": {
+      "disposition": "always-on",
+      "note": "TORTURE_CONTENT (long/es/ar/unbroken) is present in every capture already taken; not an independent toggle — see deferredAxes for the pseudo-loc gap"
+    },
+    "density": {
+      "modes": [
+        "compact",
+        "spacious"
+      ],
+      "mechanism": "data-density attribute cascade authored in foundation/base/density.css",
+      "falsifiable": "throws if --ds-density-effective-scale resolves identically for both modes"
+    },
+    "inputModality": {
+      "modes": [
+        "pointer",
+        "keyboard",
+        "touch"
+      ],
+      "mechanism": "real CDP dispatch (page.mouse.click / page.keyboard.press / page.touchscreen.tap with hasTouch:true) against the same 3-option Segmented, same positive control (Week -> Month)",
+      "falsifiable": "throws if the selection does not move, or if the modality-specific event (pointerType, touchstart, ArrowRight keydown) was not observed"
+    },
+    "reducedMotion": {
+      "mechanism": "Playwright reducedMotion:\"reduce\" context option against feedback scene",
+      "falsifiable": "throws if spinner.css animation-name is not \"none\" under the setting"
+    },
+    "reducedTransparency": {
+      "mechanism": "real CDP Emulation.setEmulatedMedia against the isolated overlay-drawer scene",
+      "falsifiable": "throws if matchMedia does not confirm engagement, or if the drawer backdrop-filter (drawer.css, unconditional — not the modal, whose backdrop is blur-opt-in and false in this lab) does not change"
+    },
+    "forcedColors": {
+      "mechanism": "Playwright page.emulateMedia({forcedColors:\"active\"}) against feedback scene",
+      "falsifiable": "throws if matchMedia does not confirm engagement, or if the alert root background/border/shadow (alert.css) does not change"
+    },
+    "lifecycleStates": {
+      "axis": "lifecycle-states (loading / empty / error / stale / offline, as a surface family)",
+      "disposition": "deferred",
+      "reason": "SurfaceLoadingSkeleton, SurfaceEmptyStateCard, SurfaceErrorStateCard, SurfaceStaleBanner and SurfaceOfflineBanner exist (packages/core/src/ui/surfaces/runtime/helpers/states/i18n/components/index.tsx) but are not exported from the public @rottay/design-system entrypoint, and this lane's write domain does not include packages/core/src/entrypoints/** — adding that export is not this tool's call to make. The shared task tracker also lists \"Cohort 1 canary: lifecycle-feedback-family\" as a separate, not-yet-started item, which reads as that scene's intended owner. The EXISTING `feedback` scene already exercises a PARTIAL lifecycle signal this harness DOES capture and gate on: loading (4 spinners + skeleton lines) and error (7 role=\"alert\", severities included) are part of the feedbackContract readiness check below. Once the public export lands, wiring a dedicated `lifecycle` scene into this matrix is a data change to the PLAN builder, not a rewrite of this harness."
+    }
+  },
+  "deferredAxes": [
+    {
+      "axis": "lifecycle-states (loading / empty / error / stale / offline, as a surface family)",
+      "disposition": "deferred",
+      "reason": "SurfaceLoadingSkeleton, SurfaceEmptyStateCard, SurfaceErrorStateCard, SurfaceStaleBanner and SurfaceOfflineBanner exist (packages/core/src/ui/surfaces/runtime/helpers/states/i18n/components/index.tsx) but are not exported from the public @rottay/design-system entrypoint, and this lane's write domain does not include packages/core/src/entrypoints/** — adding that export is not this tool's call to make. The shared task tracker also lists \"Cohort 1 canary: lifecycle-feedback-family\" as a separate, not-yet-started item, which reads as that scene's intended owner. The EXISTING `feedback` scene already exercises a PARTIAL lifecycle signal this harness DOES capture and gate on: loading (4 spinners + skeleton lines) and error (7 role=\"alert\", severities included) are part of the feedbackContract readiness check below. Once the public export lands, wiring a dedicated `lifecycle` scene into this matrix is a data change to the PLAN builder, not a rewrite of this harness."
+    },
+    {
+      "axis": "pseudo-localization (systematic string expansion / accenting across all copy)",
+      "disposition": "partially-implemented",
+      "reason": "Long/pseudo-long content is REAL and ALREADY PRESENT in every capture: every scene's \"content\" SpecimenRow renders TORTURE_CONTENT.longLabel / .spanish / .arabic / .unbroken (chrome/index.tsx) inside every viewport, locale and judge capture this harness takes — it is not a toggle because it is never absent. What is NOT implemented is a systematic pseudo-loc PASS (expanding every string in the scene by ~30-50% with accented characters) as an independently selectable mode; that would need either a global text-transform across scene copy or product-level pseudo-loc infrastructure, which is out of a harness-only pass's scope."
+    }
+  ],
+  "infraRetries": [],
+  "captured": 14,
+  "failed": 1,
+  "failures": [
+    "[reduced-transparency] REDUCED-TRANSPARENCY GATE FAILED — the emulation engaged (matchMedia confirmed via real CDP) but the drawer backdrop's computed backdrop-filter did not change (before=\"blur(4px)\", after=\"blur(4px)\"). DISCLOSED, REPRODUCIBLE FINDING (see this function’s doc comment): CDP Emulation.setEmulatedMedia flips matchMedia() for prefers-reduced-transparency but does not drive actual @media style resolution for it in this Chromium build, before or after navigation. drawer.css itself was verified correct by direct read. This is an environment/tooling limitation, not a product defect or a harness selector mistake — reported as a failure because the gate did not prove what it set out to prove, not left as a silent or downgraded pass."
+  ],
+  "manifest": [
+    {
+      "kind": "viewport",
+      "label": "control/bithire/390",
+      "out": "control-bithire-390.png",
+      "readiness": {
+        "buttons": 26,
+        "segmented tracks": 4
+      },
+      "overflow": {
+        "scrollWidth": 390,
+        "viewport": 390
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focused-control"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "kind": "viewport",
+      "label": "control/bithire/1440",
+      "out": "control-bithire-1440.png",
+      "readiness": {
+        "buttons": 26,
+        "segmented tracks": 4
+      },
+      "overflow": {
+        "scrollWidth": 1440,
+        "viewport": 1440
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focused-control"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "kind": "viewport",
+      "label": "feedback/bithire/390",
+      "out": "feedback-bithire-390.png",
+      "readiness": {
+        "alerts (4 severities + dismissable + no-icon + RTL error)": 7,
+        "spinners": 4,
+        "skeleton lines": 8
+      },
+      "overflow": {
+        "scrollWidth": 390,
+        "viewport": 390
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "self-before-after",
+        "activeTag": "BUTTON",
+        "activeTestId": null
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "kind": "viewport",
+      "label": "feedback/bithire/1440",
+      "out": "feedback-bithire-1440.png",
+      "readiness": {
+        "alerts (4 severities + dismissable + no-icon + RTL error)": 7,
+        "spinners": 4,
+        "skeleton lines": 8
+      },
+      "overflow": {
+        "scrollWidth": 1440,
+        "viewport": 1440
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "self-before-after",
+        "activeTag": "BUTTON",
+        "activeTestId": null
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "kind": "judge",
+      "judge": "grayscale",
+      "label": "control/bithire/1440/grayscale",
+      "out": "judge-grayscale-control-bithire.png",
+      "readiness": {
+        "buttons": 26,
+        "segmented tracks": 4
+      },
+      "overflow": {
+        "scrollWidth": 1440,
+        "viewport": 1440
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focused-control"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "kind": "reduced-motion",
+      "label": "feedback/bithire/1440",
+      "out": "reduced-motion-feedback-bithire.png",
+      "readiness": {
+        "alerts (4 severities + dismissable + no-icon + RTL error)": 7,
+        "spinners": 4,
+        "skeleton lines": 8
+      },
+      "overflow": {
+        "scrollWidth": 1440,
+        "viewport": 1440
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "self-before-after",
+        "activeTag": "BUTTON",
+        "activeTestId": null
+      },
+      "devChromeExcluded": true,
+      "reducedMotionAssertion": {
+        "found": true,
+        "animationName": "none",
+        "animationDuration": "1e-05s"
+      }
+    },
+    {
+      "kind": "narrow-280",
+      "label": "control/bithire/280",
+      "out": "narrow-280-control-bithire.png",
+      "readiness": {
+        "buttons": 26,
+        "segmented tracks": 4
+      },
+      "overflow": {
+        "scrollWidth": 280,
+        "viewport": 280
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focused-control"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "kind": "locale",
+      "locale": "ar",
+      "label": "control/bithire-ar/1440",
+      "out": "locale-ar-control-bithire-1440.png",
+      "readiness": {
+        "buttons": 26,
+        "segmented tracks": 4
+      },
+      "overflow": {
+        "scrollWidth": 1440,
+        "viewport": 1440
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focused-control"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "kind": "container",
+      "label": "container/field/bithire/1440",
+      "viewportHeldConstantAt": 1440,
+      "wide": {
+        "found": true,
+        "boxWidthPx": 400,
+        "affixMinInlineSize": "19.8px",
+        "affixRenderedWidthPx": 19.796875
+      },
+      "narrow": {
+        "found": true,
+        "boxWidthPx": 220,
+        "affixMinInlineSize": "16.2px",
+        "affixRenderedWidthPx": 16.1875
+      },
+      "verdict": "the container query (input.css affix min-inline-size rule) engaged differently for two same-viewport, different-inline-size ancestors"
+    },
+    {
+      "kind": "input-modality",
+      "label": "input-pointer/control/bithire/1440",
+      "modality": "pointer",
+      "before": "Week",
+      "after": "Month",
+      "modalityEvidence": {
+        "pointerTypes": [
+          "mouse"
+        ]
+      }
+    },
+    {
+      "kind": "input-modality",
+      "label": "input-keyboard/control/bithire/1440",
+      "modality": "keyboard",
+      "before": "Week",
+      "after": "Month",
+      "modalityEvidence": {
+        "keydownKeys": [
+          "ArrowRight"
+        ]
+      }
+    },
+    {
+      "kind": "input-modality",
+      "label": "input-touch/control/bithire/390",
+      "modality": "touch",
+      "before": "Week",
+      "after": "Month",
+      "modalityEvidence": {
+        "pointerTypes": [
+          "touch"
+        ],
+        "touchEventTypes": [
+          "touchstart",
+          "touchend"
+        ]
+      }
+    },
+    {
+      "kind": "density",
+      "label": "density/control/bithire/1440",
+      "results": {
+        "compact": {
+          "effectiveScale": "clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(0.9 * 1),\n    3\n  ) *\n      0.85\n    ),\n    3\n  )",
+          "spacing4": "calc(1rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(0.9 * 1),\n    3\n  ) *\n      0.85\n    ),\n    3\n  ))"
+        },
+        "spacious": {
+          "effectiveScale": "clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(0.9 * 1),\n    3\n  ) *\n      1.15\n    ),\n    3\n  )",
+          "spacing4": "calc(1rem * clamp(\n    0.5,\n    calc(\n      clamp(\n    0.5,\n    calc(0.9 * 1),\n    3\n  ) *\n      1.15\n    ),\n    3\n  ))"
+        }
+      },
+      "verdict": "data-density=compact vs spacious resolved distinct --ds-density-effective-scale / --ds-spacing-4 at the same scene root"
+    },
+    {
+      "kind": "forced-colors",
+      "label": "forced-colors/feedback/bithire/1440",
+      "before": {
+        "background": "color(srgb 0.945922 0.960471 0.978314)",
+        "borderColor": "color(srgb 0.650196 0.74549 0.849412)",
+        "boxShadow": "color(srgb 1 1 1 / 0.203) 0px 1px 0px 0px inset, rgba(20, 40, 59, 0.08) 0px 1px 2px 0px, rgba(20, 40, 59, 0.024) 0px 0px 0px 1px"
+      },
+      "after": {
+        "background": "rgb(255, 255, 255)",
+        "borderColor": "rgb(0, 0, 0)",
+        "boxShadow": "none"
+      },
+      "matchMediaEngaged": true,
+      "positiveControl": "alert.css @media (forced-colors: active) root border/background"
+    }
+  ],
+  "crashed": false,
+  "crashMessage": null,
+  "pass": false,
+  "POST_MIGRATION_LOCATION": {
+    "migratedOn": "2026-08-05",
+    "ruling": "R1 outside-layout adjudication: bounded forward migration of R1/tools and R1/packets into the allowlisted R1/receipts, without deleting material.",
+    "whyFlat": "The move was FLAT, not into a receipts/tools/ subfolder. R1/receipts sits at the IDENTICAL depth to the old R1/tools, so every instrument's fixed path.resolve(HERE, '..', ...) walk still resolves to packages/core with no edit. A nested move would have added one level and forced an edit to overlay-causality-probe.mjs, which is FROZEN — that would have destroyed its FINAL_SHA.",
+    "attestedValuesAboveAreUNMODIFIED": "The path and sha256 values recorded above are the machine's original self-attestation and have deliberately NOT been rewritten. Rewriting a self-attestation by hand would stop it being one. This block records the current location alongside it so no reference dangles.",
+    "originalDirectory": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/tools/",
+    "currentDirectory": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/",
+    "entries": [
+      {
+        "originalPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/tools/capture-lab.mjs",
+        "currentPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/capture-lab.mjs",
+        "attestedSha256": "995a2a2bdb467e2d638e7d6aeba5378d2c45e150cc422755e0bb719cbed1fd76",
+        "currentSha256": "995a2a2bdb467e2d638e7d6aeba5378d2c45e150cc422755e0bb719cbed1fd76",
+        "hashVerdict": "UNCHANGED — attestation still verifies at the new path"
+      },
+      {
+        "originalPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/tools/receipt-io.mjs",
+        "currentPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/receipt-io.mjs",
+        "attestedSha256": "d5960ca87658ac92b8600b568e550f9afac227225b77e417f0dd5ebb9085bc3c",
+        "currentSha256": "3d972fcf8bce8e0a7541b021fea71fa3e644e48c610ebf5ca9d28331e955035d",
+        "hashVerdict": "CHANGED — DISCLOSED. This file carries the deriveRepoRoot ancestor guard, whose EXPECTED_ANCESTORS[0] was the literal string \"tools\". It is fail-closed, so the migration could not proceed without changing index 0 to \"receipts\". That one-line change plus its explanatory comment is the ONLY source edit the whole migration required, and it is why this hash moved. The attested value above remains the correct record of what was hashed at self-test time."
+      }
+    ]
+  }
+}

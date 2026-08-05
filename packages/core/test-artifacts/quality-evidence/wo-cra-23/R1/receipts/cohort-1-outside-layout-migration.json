@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-outside-layout-migration",
+  "disposition": "IMPLEMENTED_PENDING_AUDIT. The two outside-layout directories were migrated into the allowlisted receipts/ owner. Nothing was deleted. manifest.json and SHA256SUMS were deliberately NOT generated — the freeze is a separate, later act.",
+  "recordedOn": "2026-08-05",
+  "recordedBy": "R1-quality-integrator",
+  "ruling": "Coordinator adjudication 2026-08-05: BOUNDED FORWARD MIGRATION of R1/packets and R1/tools, without deleting material. Options (b) preserved-invalid and (c) contract amendment were not taken.",
+  "supersedes": "cohort-1-outside-layout-adjudication-evidence.json (analysis; its pre-migration paths are left unrewritten on purpose)",
+
+  "THE_MEASUREMENT_THAT_SHAPED_THE_MIGRATION": {
+    "finding1_checkerIsTopLevelOnly": "round-evidence.mjs:67 reads the round root with a NON-RECURSIVE readdirSync and tests each top-level entry name against roundLayout. Anything nested under receipts/ therefore clears the allowlist, which is what made a nested destination available for packets.",
+    "finding2_frozenInstrumentCarriesADepthConstant": "overlay-causality-probe.mjs:92 computes CORE as a fixed five-level walk. Nesting the instruments into receipts/tools/ would have added one level and forced an edit to that file — destroying the FINAL_SHA of an artifact that is FROZEN, writer-retired, and independently corroborated 3/3 by the auditor.",
+    "consequence": "The destination was chosen by COUPLING, not preference. Instruments moved FLAT into receipts/ because R1/receipts sits at the identical depth to the old R1/tools, preserving all eight five-up constants and the nested fixture's six-up constant. Packets, which have zero executable coupling, moved into receipts/packets/ where the extra level costs nothing and provenance is preserved exactly."
+  },
+
+  "whatMoved": {
+    "packets": {
+      "from": "R1/packets/",
+      "to": "R1/receipts/packets/",
+      "shape": "nested — zero executable coupling, so the extra level is free",
+      "fileCount": 4,
+      "files": ["architecture-integrator.json", "button-family.json", "quality-integrator.json", "reference-lab.json"]
+    },
+    "tools": {
+      "from": "R1/tools/",
+      "to": "R1/receipts/",
+      "shape": "FLAT — depth-preserving, so no instrument's root-resolution constant needed changing",
+      "fileCount": 12,
+      "files": [
+        "apply-ctrl04-preservation-pins.mjs", "button-shadow-preservation-probe.mjs", "capture-lab.mjs",
+        "emit-i18n-gate-receipt.mjs", "fab17-anchor-fixture/run.mjs", "group-axis-census.mjs",
+        "locale-parity-check.mjs", "overlay-causality-probe.mjs", "receipt-io.mjs",
+        "role-adoptability-map.mjs", "schema-digest-independent-proof.mjs", "tenant-divergence-measure.mjs"
+      ]
+    },
+    "method": "mv within one filesystem, which preserves mtime and inode. Nothing copied, nothing deleted, nothing renamed."
+  },
+
+  "integrityVerification": {
+    "contentHashes": "All 16 moved files were sha256'd before and after. The two sorted hash sets are IDENTICAL, and the basename set is identical — nothing lost, nothing altered by the move itself.",
+    "frozenInstrument": {
+      "file": "overlay-causality-probe.mjs",
+      "FINAL_SHA": "f2091b2e92f10298c14b7d42b3680ac0c3afa979d15ce2672048609598c63aec — IDENTICAL after the move",
+      "mtimeEpoch": "1785951047 — IDENTICAL",
+      "sizeBytes": "159415 — IDENTICAL",
+      "verdictState": "Three of the four freeze bindings re-verified unchanged. Only the recorded PATH moved, and that is repaired by annotation in cohort-1-instrument-freeze-handoff.json rather than by touching the frozen bytes."
+    },
+    "liveInstrumentSmokeTest": "deriveRepoRoot() was invoked from the relocated receipt-io.mjs and resolved correctly to the workspace root. The fail-closed guard passes at the new location rather than merely being assumed to."
+  },
+
+  "theOneSourceEdit": {
+    "file": "R1/receipts/receipt-io.mjs",
+    "change": "EXPECTED_ANCESTORS[0] changed from the literal 'tools' to 'receipts', plus an explanatory comment recording why the move was flat.",
+    "whyUnavoidable": "deriveRepoRoot() verifies each ancestor NAME as it climbs and throws otherwise — deliberately fail-closed, with an error message that instructs exactly this edit. Three files depend on it. No migration into a differently-named directory was possible without it.",
+    "hashConsequence": "receipt-io.mjs sha256 moved d5960ca87658ac92... -> 3d972fcf8bce8e0a.... This is the ONLY hash in the entire migration that changed, and it is disclosed in both receipts that attested the old value.",
+    "notHidden": "capture-lab.mjs, emit-i18n-gate-receipt.mjs and the frozen overlay-causality-probe.mjs are all bit-identical to their attested values."
+  },
+
+  "referenceUpdates": {
+    "totalStaleCitationsFound": 180,
+    "updatedMechanically": {
+      "count": 172,
+      "files": ["cohort-1-blocked-residuals.json", "cohort-1-locale-parity.json", "cohort-1-stressmatrix-completion-map.json", "cohort-1-progress-and-disclosures.json", "inherited-entry-ledger-v3.json", "inherited-entry-ledger-v2.json"],
+      "rationale": "Narrative citations and hash-free provenance pointers. These assert WHERE something lives, so updating them restores truth. Each file was re-parsed as JSON after rewriting and confirmed to retain zero stale references.",
+      "lineNumberCitationsChecked": "inherited-entry-ledger-v3.json cites capture-lab.mjs:24, overlay-causality-probe.mjs:88 and receipt-io.mjs:42 with excerpts. All three were re-read after the migration and still match — the receipt-io.mjs edit inserted lines below line 43, leaving the cited line unmoved."
+    },
+    "annotatedNotRewritten": {
+      "count": 5,
+      "files": ["cohort-1-capture-harness-self-test.json", "cohort-1-i18n-gate.json", "cohort-1-instrument-freeze-handoff.json"],
+      "rationale": "These are MACHINE SELF-ATTESTATIONS (a tool hashing itself at a path) and one FROZEN binding. Hand-rewriting an attested value would stop it being an attestation. Each now carries a POST_MIGRATION_LOCATION block giving the current path and current hash alongside the untouched original, so nothing dangles and nothing is falsified."
+    },
+    "deliberatelyLeftUNCHANGED": [
+      {
+        "file": "R0/receipts/r1-canary-ownership-proposal.json",
+        "reference": "a recorded CLI command citing R1/packets/architecture-integrator.json",
+        "why": "R0 IS SEALED. It carries manifest.json and SHA256SUMS, and this file's current hash 21df43fe1b36196f... matches its sealed value exactly. Editing it would break a valid seal on a completed round. Leaving it is also independently correct: it is a transcript of a command AS RUN, and a transcript that is edited after the fact is no longer a transcript.",
+        "residual": "This is a KNOWN, DELIBERATE stale reference and the one thing this migration could not repair. It is invisible to round-evidence R1 because it lives in R0. Flagged for the adjudicator: the options are to leave it as a historical record, or to re-seal R0 — a much larger act that should not be taken as a side effect of an R1 layout fix."
+      },
+      {
+        "file": "cohort-1-outside-layout-adjudication-evidence.json",
+        "why": "It analyses the pre-migration layout. Rewriting its paths would make it describe a layout that never posed the problem it analyses. Annotated as superseded instead."
+      }
+    ]
+  },
+
+  "roundEvidenceResult": {
+    "before": "55 blockers, then 4 after the reserved-key window",
+    "after": "2 blockers",
+    "cleared": ["evidence artifact R1/packets is outside the declared roundLayout allowlist", "evidence artifact R1/tools is outside the declared roundLayout allowlist"],
+    "remaining": ["R1 evidence is missing manifest.json", "R1 evidence is missing SHA256SUMS"],
+    "valid": false
+  },
+
+  "STOPPED_DELIBERATELY": {
+    "notGenerated": ["manifest.json", "SHA256SUMS"],
+    "why": "The sequence is freeze -> manifest -> SHA256SUMS -> valid:true, and the freeze must be a deliberate act taken after contents settle. Generating them now would seal a tree that was being repaired minutes earlier, which is how a seal comes to certify the wrong state.",
+    "handoffNote": "The tree is now structurally clean and the only remaining blockers are the two seal artifacts. Whoever opens the freeze window should re-verify the 16 migrated hashes and the frozen instrument's four bindings first."
+  },
+
+  "whatThisDoesAndDoesNotEstablish": {
+    "establishes": [
+      "Both outside-layout directories now sit under an allowlisted owner; the layout blockers are cleared.",
+      "All 16 migrated files are byte-identical to their pre-move content, and the frozen instrument's SHA, mtime and size all survive.",
+      "Exactly one source edit was required, and its hash consequence is disclosed in both places that attested the old value.",
+      "The relocated guard was executed, not assumed, and resolves the correct root."
+    ],
+    "doesNotEstablish": [
+      "Nothing here is a seal, and no manifest or checksum file was produced.",
+      "No verdict on the work order. roadmap/registry.json remains the sole authority for work-order state.",
+      "R0 remains sealed and untouched; its one stale citation is recorded above as an open item, not as something this receipt resolved."
+    ]
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 2,
+  "roundId": "R0",
+  "purpose": "Honest control-impact baseline. This is a starting evidence deficit, not a quality score and not a target denominator.",
+  "authority": {
+    "generator": "packages/core/scripts/tokens-catalog.mjs",
+    "regenerate": "pnpm -C packages/core tokens:catalog:write",
+    "verify": "pnpm -C packages/core tokens:catalog:check",
+    "census": "packages/core/customization-surface-report.json",
+    "publishedViews": "docs-engineering/engineering/design-system/tokens/"
+  },
+  "threeValuedImpact": {
+    "law": "EXACT = the name is a capability-declared derivedChannel present in the census. INFERRED = reachable from an EXACT seed across authored var() edges. UNKNOWN = neither.",
+    "classifierSource": "packages/core/scripts/tokens-catalog.mjs#impactOf",
+    "computedOver": "the operational corpus only (status active | app-slot | adjudicated-live), never the full 7470-name universe",
+    "operationalTokens": 4398,
+    "exact": 38,
+    "inferred": 836,
+    "unknown": 3524,
+    "driftCheck": {
+      "programJsonClaim": { "operationalTokens": 4398, "exact": 38, "inferred": 836, "unknown": 3524 },
+      "liveResult": "identical",
+      "verifiedBy": "node scripts/tokens-catalog.mjs --check",
+      "note": "customization-surface-report.json currently reports a STALE input digest because 161 files are uncommitted in the inherited worktree. A read-only rebuild produced identical aggregate counts (universe 7470, writers 4811, publicHooks 93, deadWriters 270, unclassified 0), so the classification numbers are live-true; only the byte digest has drifted. Re-check once the concurrent lanes commit."
+    }
+  },
+  "layoutReachDefectClosedInR0": {
+    "defect": "The impact map's Layout/measure impact column mischaracterized layout-affecting reach.",
+    "rootCause": "The column was a regular expression matched against the CONTROL ID string (/density|typography\\.scale|shape\\.radius|responsive/), not an analysis of the properties its channels actually reach. Every control whose id missed those four substrings was reported paint-only.",
+    "fix": "The column is now derived from the authored-CSS walk: each --ds-* name records the non-custom CSS properties that read it, and a control is layout-affecting when any of its EXACT or INFERRED channels is read by a box-model, track or text-measurement property. The published column now names the properties, so the claim is falsifiable.",
+    "substantiatedMischaracterizations": [
+      {
+        "control": "spacing.rhythm",
+        "channel": "--ds-rhythm-effective-scale",
+        "before": "paint-only",
+        "after": "YES — reads block-size, column-gap, gap, margin-block-end (+9)",
+        "evidence": "card.css:368,374,377; page-shell.css:118-126,349; form-field.css:38,232; list-toolbar.css:682; detail-panel.css:82-85; cockpit-header.css:51",
+        "corroboration": "the control's own compat text states it scales the LAYOUT RELATIONSHIPS between controls (gap, layout padding)"
+      },
+      {
+        "control": "experience.profile",
+        "channels": ["--ds-letter-spacing-heading", "--ds-edge-standard-width"],
+        "before": "paint-only",
+        "after": "YES — reads border, border-width, letter-spacing, margin-block-start (+1)",
+        "evidence": "letter-spacing: result.css:112,136; alert.css:129; overlay-modal.css:319; card.css:514. border-width: alert.css:40, card.css:161, table.css:118, default.css:716,721,723,724"
+      },
+      {
+        "control": "profiles.expressive",
+        "channel": "--ds-edge-emphasis-width",
+        "before": "paint-only",
+        "after": "YES — reads border-bottom, border-top",
+        "evidence": "table.css:144, default.css:722"
+      }
+    ]
+  },
+  "controlCatalogDriftCheck": {
+    "standard": { "claimed": 13, "live": 13, "authority": "TENANT_STANDARD_MANIFEST, capabilities/index.ts:645-649" },
+    "proCapabilities": { "claimed": 7, "live": 7, "authority": "TENANT_PRO_MANIFEST, capabilities/index.ts:651-655" },
+    "internal": { "live": 1, "id": "palette.dark-mode", "authority": "capabilities/index.ts:658-662" },
+    "frontierNotActive": { "live": 1, "id": "palette.status-seeds", "authority": "capabilities/index.ts:501" },
+    "expertAllowlistVocabulary": { "claimed": 294, "live": 294, "authority": "TENANT_THEME_OVERRIDE_TOKENS, tenant-theme/index.ts:119-193" },
+    "expertPerDocumentBudget": { "claimed": 200, "live": 200, "authority": "schemas/tenant-theme/index.ts:1511" },
+    "vocabularyVersusBudgetLaw": "294 is the vocabulary size and 200 is the per-document budget. They are structurally distinct mechanisms (allowlist membership versus entry count) and must never be reconciled by widening the cap.",
+    "appPublicHooks": { "claimed": 93, "live": 93, "authority": "packages/core/hooks-manifest.json" },
+    "fencedUnadjudicatedReads": 2691,
+    "drift": "none"
+  },
+  "adjacentReadMetricDenominators": {
+    "defect": "Two read counts printed two lines apart with unexplained, different denominators.",
+    "closedInR0": true,
+    "tsClassificationReads": { "value": 2649, "denominator": "the TS-AST classification population, narrower than the 7470-name universe" },
+    "fencedUnadjudicatedReads": { "value": 2691, "denominator": "the hooks-manifest.json population — a third scope, neither subset nor superset of the TS-classification reads" },
+    "generatorFix": "packages/core/scripts/tokens-catalog.mjs now emits the denominator alongside each metric"
+  },
+  "unknownTargetedImpact": {
+    "roundScope": "R0 targets no family styling, so no family/control triple was targeted.",
+    "value": 0
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-button-shadow-state-census",
+  "purpose": "The census that GENERATES the CTRL-04 pin list. Never hand-typed. Required by the advisor before any engine-tier deletion.",
+  "method": "regex over presentation/components/button.css for --ds-button-{variant}-shadow{,-hover,-active,-selected}",
+  "engineDeclarations": {
+    "primary": {
+      "rest": "var(--ds-shadow-button-rest)",
+      "hover": "var(--ds-shadow-button-hover)",
+      "active": "var(--ds-shadow-button-rest)"
+    },
+    "secondary": {
+      "rest": "var(--ds-shadow-button-rest)",
+      "hover": "var(--ds-shadow-button-hover)",
+      "active": "var(--ds-shadow-button-rest)"
+    },
+    "default": {
+      "rest": "var(--ds-shadow-button-rest)",
+      "hover": "var(--ds-shadow-button-hover)",
+      "active": "var(--ds-shadow-button-rest)"
+    },
+    "ghost": {
+      "rest": "none",
+      "hover": "var(--ds-button-ghost-shadow)",
+      "active": "var(--ds-button-ghost-shadow)"
+    },
+    "dashed": {
+      "rest": "none",
+      "hover": "var(--ds-button-dashed-shadow)",
+      "active": "var(--ds-button-dashed-shadow)"
+    },
+    "text": {
+      "rest": "none",
+      "hover": "var(--ds-button-text-shadow)",
+      "active": "var(--ds-button-text-shadow)"
+    },
+    "link": {
+      "rest": "none",
+      "hover": "var(--ds-button-link-shadow)",
+      "active": "var(--ds-button-link-shadow)"
+    },
+    "success": {
+      "rest": "var(--ds-shadow-success-sm)",
+      "hover": "var(--ds-button-success-shadow)",
+      "active": "var(--ds-button-success-shadow)"
+    },
+    "warning": {
+      "rest": "var(--ds-shadow-warning-sm)",
+      "hover": "var(--ds-button-warning-shadow)",
+      "active": "var(--ds-button-warning-shadow)"
+    },
+    "error": {
+      "rest": "var(--ds-shadow-error-sm)",
+      "hover": "var(--ds-shadow-error-sm)",
+      "active": "var(--ds-shadow-error-sm)"
+    },
+    "info": {
+      "rest": "var(--ds-shadow-button-rest)",
+      "hover": "var(--ds-button-info-shadow)",
+      "active": "var(--ds-button-info-shadow)"
+    },
+    "ai": {
+      "rest": "var(--ds-shadow-button-rest)",
+      "hover": "var(--ds-shadow-button-hover)",
+      "active": "var(--ds-shadow-button-rest)"
+    },
+    "disabled": {
+      "rest": "none"
+    },
+    "elevated": {
+      "rest": "var(--ds-elevation-1)",
+      "hover": "var(--ds-elevation-2)"
+    }
+  },
+  "advisorClaimsVerified": {
+    "stateChannelsExist": "CONFIRMED. The engine declares rest AND hover AND active per variant, so a rest-only pin would have flattened hover in all three verticals.",
+    "rottayPathCorrection": "CONFIRMED. There is no brand-themes/rottay/ directory; the rottay fixture maps to vertical platform, so the file is brand-themes/platform/index.ts."
+  },
+  "advisorClaimRefuted": {
+    "claim": "Deleting an engine --ds-button-ghost-shadow-hover: none FLIPS ghost hover to a soft shadow, because the role floor hover is var(--ds-shadow-sm).",
+    "measured": "FALSE for this tree. ghost/dashed/text/link declare hover and active as var(--ds-button-{variant}-shadow) — a SELF-REFERENCE to their own rest value — not as none. Zero flip hazards found across all variants.",
+    "consequence": "Those four stay internally consistent when their rest falls to the role floor: rest none implies hover none and active none by the self-reference. Their state siblings therefore need no extension.css pin, which makes the pin list materially smaller than the advisor specified."
+  },
+  "pinList": {
+    "restPinsRequired": [
+      {
+        "variant": "primary",
+        "value": "var(--ds-shadow-button-rest)"
+      },
+      {
+        "variant": "secondary",
+        "value": "var(--ds-shadow-button-rest)"
+      },
+      {
+        "variant": "default",
+        "value": "var(--ds-shadow-button-rest)"
+      },
+      {
+        "variant": "success",
+        "value": "var(--ds-shadow-success-sm)"
+      },
+      {
+        "variant": "warning",
+        "value": "var(--ds-shadow-warning-sm)"
+      },
+      {
+        "variant": "error",
+        "value": "var(--ds-shadow-error-sm)"
+      },
+      {
+        "variant": "info",
+        "value": "var(--ds-shadow-button-rest)"
+      },
+      {
+        "variant": "ai",
+        "value": "var(--ds-shadow-button-rest)"
+      }
+    ],
+    "restAlreadyNone_deleteIsProvablySafe": [
+      "ghost",
+      "dashed",
+      "text",
+      "link"
+    ],
+    "note": "ai carries var(--ds-shadow-button-rest) and was absent from the advisor six-variant list; it is included here because the census found it."
+  },
+  "statesNeedingSeparatePins": "Only the variants whose hover/active do NOT self-reference their own rest: primary, secondary, default and ai use var(--ds-shadow-button-hover) at hover; error pins its own value at all three states.",
+  "disposition": "CENSUS COMPLETE. The pin-and-delete sequence is NOT executed: it edits two out-of-round verticals and its safety rests on a ten-variant x four-state x two-colour-mode computed probe that has not been built."
+}

@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "roundId": "R1",
+  "cohort": 1,
+  "lane": "R1-reference-lab",
+  "laneClass": "lab-writer",
+
+  "ownedFamilies": ["reference-lab"],
+
+  "ownedFiles": [
+    "packages/showroom/src/app/probe/ds-reference/page.tsx",
+    "packages/showroom/src/app/probe/ds-reference/ground/index.tsx",
+    "packages/showroom/src/app/probe/ds-reference/ground/stamp.ts",
+    "packages/showroom/src/app/probe/ds-reference/chrome/index.tsx",
+    "packages/showroom/src/app/probe/ds-reference/sections/control/index.tsx",
+    "packages/showroom/src/app/probe/ds-reference/bithire/layout.tsx",
+    "packages/showroom/src/app/probe/ds-reference/bithire/control/page.tsx",
+    "packages/showroom/src/app/probe/ds-reference/the-management/layout.tsx",
+    "packages/showroom/src/app/probe/ds-reference/the-management/control/page.tsx"
+  ],
+
+  "observableDefect": {
+    "title": "The lab was not the canvas. It iframed a different probe, so no R1 evidence came from the declared canvas, and its furniture named the tenant on screen.",
+    "findings": [
+      "page.tsx imported @/components/torture-sections/registry and embedded /probe/whitelabel-torture/scenes/* — a consumption edge into a tree no R1 lane owns and this round may not change.",
+      "The torture furniture heading reads 'Whitelabel torture — bithire'. Any capture containing that string cannot serve as evidence for the three-second RECOGNITION test, which is exactly what R1 asks the lab to prove.",
+      "The torture sections are a paint-channel probe built for pixel regression. A reference lab needs a judgement instrument: grammar strip, state row, composition vignette, content torture."
+    ],
+    "consequence": "R1 exit requires the lab to render both tenant sources from canonical authorities with zero product application dependency. Neither the provenance nor the furniture met that."
+  },
+
+  "applicableRubricDimensions": [
+    "customization-tenant-divergence",
+    "responsive-mobile",
+    "typography-content",
+    "interaction-states-motion"
+  ],
+
+  "standardControlsUsed": [
+    "@rottay/design-system public component entrypoints",
+    "@rottay/design-system/server for the first-paint seam and the tenant compile",
+    "@rottay/design-system/tenant-theme-canary-fixtures for the published DB specimen"
+  ],
+
+  "proControlsAndRecipesUsed": [
+    "Two EXPLICIT tenant route segments, each with its own layout mounting its own ground, rather than one segment with a tenant parameter. A layout may own the ground because the tenant is static per segment, so no searchParams plumbing is needed — and two ~20-line layouts with zero conditionals make 'no tenant conditional TSX' visible in review instead of argued.",
+    "visualAuthority='compiled-artifact' for the DB ground so the server embed stays the single authority and the provider emits no competing layer.",
+    "Tenant-blind furniture: no chrome component accepts a tenant prop, so the recognition test cannot be contaminated by a caption."
+  ],
+
+  "expertChannelsUsed": [],
+  "privateChannelsUsed": [],
+  "creativeProposalIds": ["R1-C1-PROP-04-self-contained-reference-lab"],
+
+  "responsiveStrategy": "Captures are taken from plain URLs at real 320/390/768/1440 viewports so fixed, dvh and media-query behaviour is measured against the true viewport rather than an iframe's box, and so capture provenance is a URL rather than a parent page's layout.",
+
+  "mobileSimplification": "The scene sections use flex-wrap and intrinsic sizing only; the lab imposes no layout of its own that could mask a family's responsive behaviour.",
+
+  "statesAndMotion": "The state row focuses a control programmatically on mount so the real focus-visible ring is photographed rather than a faked class. Hover and press are deliberately NOT faked with forced props; they belong in the recordings the evidence contract requires.",
+
+  "i18nRtlA11y": "Content torture carries real Spanish and Arabic strings, with the Arabic specimen wrapped dir='rtl' to exercise mirroring, plus an unbroken 60-character token as the per-character-wrap trap.",
+
+  "expectedTenantDivergence": {
+    "law": "the lab does not author divergence; it renders the two canonical authorities and lets the captures show what is there",
+    "verified": "under the two grounds --ds-color-primary resolves rgb(58,111,176) vs rgb(26,26,24), --ds-font-family-heading resolves Space Grotesk vs Fraunces, and 26 modern-engine buttons render on both"
+  },
+
+  "filesActuallyChanged": [
+    "packages/showroom/src/app/probe/ds-reference/page.tsx",
+    "packages/showroom/src/app/probe/ds-reference/ground/index.tsx",
+    "packages/showroom/src/app/probe/ds-reference/ground/stamp.ts",
+    "packages/showroom/src/app/probe/ds-reference/chrome/index.tsx",
+    "packages/showroom/src/app/probe/ds-reference/sections/control/index.tsx",
+    "packages/showroom/src/app/probe/ds-reference/bithire/layout.tsx",
+    "packages/showroom/src/app/probe/ds-reference/bithire/control/page.tsx",
+    "packages/showroom/src/app/probe/ds-reference/the-management/layout.tsx",
+    "packages/showroom/src/app/probe/ds-reference/the-management/control/page.tsx"
+  ],
+
+  "integratorRequests": [
+    {
+      "requestId": "REQ-R1-reference-lab-captures",
+      "targetLane": "R1-quality-integrator",
+      "paths": ["packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/**"],
+      "change": "create",
+      "reason": "the lab renders the canvas but every evidence artifact produced from it is owned by the quality integrator",
+      "disposition": "fulfilled for the control scene: 8 captures banked under captures/cohort-1/control/"
+    }
+  ],
+
+  "honestStatus": "IN_PROGRESS. The lab is self-contained and both grounds render correctly and distinctly, verified by computed-style measurement rather than by eye. ONE of four scenes exists (control); field, overlay and feedback are not built. The ?judge=grayscale and ?judge=hue-neutral overlays are implemented in the ground but no judged captures have been taken. The torture harness was left completely untouched — this lab simply stopped pointing at it."
+}

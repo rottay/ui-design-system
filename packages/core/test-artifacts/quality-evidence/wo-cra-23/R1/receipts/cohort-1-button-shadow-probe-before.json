@@ -1,0 +1,903 @@
+{
+  "schemaVersion": 1,
+  "probeId": "wo-cra-23-R1-C1-button-shadow-preservation",
+  "law": "platform and evnto must resolve byte-identical values before and after the engine-tier deletion. bithire may move: its deltas are in-round and go to sighted review as declared deltas.",
+  "comparisonRule": "Reference strings are compared verbatim. Terminal token values are NOT resolved, because the pins are by reference and those tokens are dark-aware — comparing resolved colour would fail on a legitimate dark-mode difference and would be testing the wrong property.",
+  "variantsCovered": [
+    "primary",
+    "secondary",
+    "default",
+    "ghost",
+    "dashed",
+    "text",
+    "link",
+    "success",
+    "warning",
+    "error",
+    "info",
+    "ai"
+  ],
+  "statesCovered": [
+    "rest",
+    "hover",
+    "active",
+    "selected"
+  ],
+  "modesCovered": [
+    "light",
+    "dark"
+  ],
+  "cellsPerVertical": 72,
+  "verticals": {
+    "rottay": {
+      "primary.rest.light": {
+        "value": "0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.06)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.rest.dark": {
+        "value": "0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.06)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.hover.light": {
+        "value": "0 2px 8px rgba(0, 0, 0, 0.12)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.hover.dark": {
+        "value": "0 2px 8px rgba(0, 0, 0, 0.12)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "primary.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "default.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "default.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "default.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "default.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "default.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "default.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.rest.light": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.hover.light": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.hover.dark": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.active.light": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.active.dark": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.rest.light": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.hover.light": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.hover.dark": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.active.light": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.active.dark": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "text.rest.light": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "text.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "text.hover.light": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "text.hover.dark": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "text.active.light": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "text.active.dark": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "link.rest.light": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "link.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "link.hover.light": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "link.hover.dark": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "link.active.light": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "link.active.dark": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "success.rest.light": {
+        "value": "var(--ds-shadow-success-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "success.rest.dark": {
+        "value": "var(--ds-shadow-success-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "success.hover.light": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "success.hover.dark": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "success.active.light": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "success.active.dark": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.rest.light": {
+        "value": "var(--ds-shadow-warning-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.rest.dark": {
+        "value": "var(--ds-shadow-warning-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.hover.light": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.hover.dark": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.active.light": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.active.dark": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "error.rest.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.rest.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.hover.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.hover.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.active.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.active.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "info.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "info.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "info.hover.light": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "info.hover.dark": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "info.active.light": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "info.active.dark": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      }
+    },
+    "evnto": {
+      "primary.rest.light": {
+        "value": "0 1px 2px rgba(0, 0, 0, 0.08)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.rest.dark": {
+        "value": "0 1px 2px rgba(0, 0, 0, 0.08)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "primary.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "primary.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "primary.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "default.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "default.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "default.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "default.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "default.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "default.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.rest.light": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.hover.light": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.hover.dark": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.active.light": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.active.dark": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.rest.light": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.hover.light": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.hover.dark": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.active.light": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.active.dark": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "text.rest.light": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "text.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "text.hover.light": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "text.hover.dark": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "text.active.light": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "text.active.dark": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "link.rest.light": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "link.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "link.hover.light": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "link.hover.dark": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "link.active.light": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "link.active.dark": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "success.rest.light": {
+        "value": "var(--ds-shadow-success-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "success.rest.dark": {
+        "value": "var(--ds-shadow-success-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "success.hover.light": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "success.hover.dark": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "success.active.light": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "success.active.dark": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.rest.light": {
+        "value": "var(--ds-shadow-warning-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.rest.dark": {
+        "value": "var(--ds-shadow-warning-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.hover.light": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.hover.dark": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.active.light": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.active.dark": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "error.rest.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.rest.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.hover.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.hover.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.active.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.active.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "info.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "info.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "info.hover.light": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "info.hover.dark": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "info.active.light": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "info.active.dark": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      }
+    },
+    "bithire": {
+      "primary.rest.light": {
+        "value": "0 1px 2px rgba(20, 40, 59, 0.1)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.rest.dark": {
+        "value": "0 1px 2px rgba(20, 40, 59, 0.1)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "primary.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "primary.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "primary.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "secondary.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "default.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "default.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "default.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "default.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "default.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "default.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.rest.light": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.hover.light": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.hover.dark": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.active.light": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "ghost.active.dark": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.rest.light": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.hover.light": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.hover.dark": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.active.light": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "dashed.active.dark": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "text.rest.light": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "text.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "text.hover.light": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "text.hover.dark": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "text.active.light": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "text.active.dark": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "link.rest.light": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "link.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "engine default"
+      },
+      "link.hover.light": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "link.hover.dark": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "link.active.light": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "link.active.dark": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "success.rest.light": {
+        "value": "var(--ds-shadow-success-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "success.rest.dark": {
+        "value": "var(--ds-shadow-success-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "success.hover.light": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "success.hover.dark": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "success.active.light": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "success.active.dark": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.rest.light": {
+        "value": "var(--ds-shadow-warning-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.rest.dark": {
+        "value": "var(--ds-shadow-warning-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.hover.light": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.hover.dark": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.active.light": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "warning.active.dark": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "error.rest.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.rest.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.hover.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.hover.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.active.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "error.active.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "engine default"
+      },
+      "info.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "info.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "info.hover.light": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "info.hover.dark": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "info.active.light": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "info.active.dark": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      },
+      "ai.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "engine default"
+      }
+    }
+  }
+}

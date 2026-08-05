@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 2,
+  "generatedBy": "packages/core/scripts/quality-evidence/v2/seal-round.mjs",
+  "roundId": "R0",
+  "roundName": "Truth, instrumentation and baseline",
+  "workOrderId": "WO-CRA-23",
+  "statusAuthority": "roadmap/registry.json",
+  "maximumClaim": "IMPLEMENTED_PENDING_CODEX_AUDIT",
+  "sightedAuthority": "Codex",
+  "minimumReliableEvidence": "manifests, source/public-export inventory, impact baseline and new negative drills; no captures or recordings",
+  "denominators": {
+    "visibleFamilies": 252,
+    "rootUiFamilies": 237,
+    "primitives": 100,
+    "patternsExcludingCharts": 56,
+    "charts": 18,
+    "structures": 27,
+    "pageSurfaces": 36,
+    "surfaceCompositions": 4,
+    "commercialKit": 11
+  },
+  "inventoryCorrespondence": {
+    "valid": true,
+    "denominator": 252,
+    "resolvedFamilies": 252,
+    "resolvedWithPublicExport": 252,
+    "layerProfileCounts": {
+      "primitive-static-layout": 30,
+      "primitive-interactive-control-data-overlay": 70,
+      "pattern": 56,
+      "chart": 18,
+      "structure": 27,
+      "surface-composition": 40,
+      "commercial": 11
+    },
+    "blockers": []
+  },
+  "familyOutcomes": {
+    "assessed": 0,
+    "materiallyElevatedPendingAudit": 0,
+    "alreadyReferencePendingAudit": 0,
+    "partial": 0,
+    "blocked": 0,
+    "codexAccepted": 0,
+    "note": "R0 writes quality tooling and contracts only. No family carries a craft score and no family status is claimed."
+  },
+  "kpis": {
+    "canonClosure": 1,
+    "unknownTargetedImpact": 0,
+    "pathParity": null,
+    "pathParityNote": "not assertable — the R0 baseline proves static/DB equivalence is not yet provable per capability"
+  },
+  "capturesInThisRound": 0,
+  "recordingsInThisRound": 0
+}

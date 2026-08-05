@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 2,
+  "roundId": "R0",
+  "roundName": "Truth, instrumentation and baseline",
+  "workOrderId": "WO-CRA-23",
+  "program": "modern-rescue",
+  "statusAuthority": "roadmap/registry.json",
+  "maximumClaim": "IMPLEMENTED_PENDING_CODEX_AUDIT",
+  "sightedAuthority": "Codex",
+  "executor": "claude-modern-rescue",
+  "minimumReliableEvidenceForThisRound": "manifests, source/public-export inventory, impact baseline and new negative drills; no captures or recordings",
+  "capturesInThisRound": 0,
+  "recordingsInThisRound": 0,
+  "worktreeFreeze": {
+    "startHead": "a97ddd7361d0a6bade35b47e30a62ed85d5dda40",
+    "branch": "main",
+    "startPorcelainEntries": 161,
+    "startPorcelainSha256": "b8f2f21de181575ebc7555e37e40356dcdb23e40b55682ccf95d55ec8468bf71",
+    "stashesObserved": 1,
+    "startPorcelainComposition": "148 modified files plus 13 untracked paths = the 161 entries above",
+    "startPorcelainArtifact": "receipts/round-start-porcelain.txt — the captured round-start `git status --porcelain`, sealed in this directory. Its sha256 is the startPorcelainSha256 above, so the entry count, the composition and the round-close loss-set comm are all reproducible from this evidence directory alone rather than resting on a coordinator-held record.",
+    "law": "The inherited worktree carries 161 porcelain entries — 148 modified files and 13 untracked paths — and one stash from a prior session. No reset, restore, checkout, clean, stash mutation, commit, push, tag or publish was performed at any point in this round.",
+    "foreignWipPreserved": true
+  },
+  "initialChecks": [
+    {
+      "check": "modern-rescue program-check",
+      "cwd": "<repo-root>",
+      "command": "node packages/core/scripts/quality-evidence/programs/modern-rescue/program-check.mjs",
+      "result": "PASS"
+    },
+    {
+      "check": "program-check tests",
+      "cwd": "<repo-root>",
+      "command": "node --test packages/core/scripts/quality-evidence/programs/modern-rescue/program-check.test.mjs",
+      "result": "11/11 PASS"
+    },
+    {
+      "check": "quality-evidence v1 manifest",
+      "cwd": "<repo-root>",
+      "command": "node packages/core/scripts/quality-evidence/cli.mjs validate-manifest",
+      "result": "valid"
+    },
+    {
+      "check": "roadmap consistency",
+      "cwd": "<repo-root>",
+      "command": "node scripts/roadmap-status.mjs check",
+      "result": "PASS — 100 WOs consistent across registry and 6 lane files"
+    },
+    {
+      "check": "core structure audit",
+      "cwd": "<repo-root>/packages/core",
+      "command": "node scripts/core-structure-audit.mjs --check",
+      "equivalentFromRepoRoot": "pnpm --filter @rottay/design-system exec node scripts/core-structure-audit.mjs --check",
+      "result": "PASS — 3530 files, 0 findings",
+      "note": "this script resolves its source root relative to the package, so it is not runnable from the repository root without the cwd or the pnpm --filter form"
+    },
+    {
+      "check": "core typecheck",
+      "cwd": "<repo-root>",
+      "command": "pnpm --filter @rottay/design-system exec tsc --noEmit",
+      "result": "0 errors"
+    },
+    {
+      "check": "showroom typecheck",
+      "cwd": "<repo-root>",
+      "command": "pnpm --filter @rottay/showroom typecheck",
+      "result": "0 errors, pinned compiler 5.9.3"
+    },
+    {
+      "check": "core script tests",
+      "cwd": "<repo-root>/packages/core",
+      "command": "node --test scripts/*.test.mjs",
+      "result": "825 tests / 804 pass / 21 fail",
+      "note": "the 21 failures are PRE-EXISTING, caused by the inherited worktree (161 porcelain entries: 148 modified files plus 13 untracked paths), and are recorded as the baseline this round must not worsen. Re-verified unchanged after the contract amendment."
+    },
+    {
+      "check": "quality-evidence v2 drills",
+      "cwd": "<repo-root>/packages/core",
+      "command": "node --test scripts/quality-evidence/v2/drills.test.mjs",
+      "result": "85/85 PASS in 8s cold",
+      "note": "29 first pass; 6 write-set ownership; 1 reserved-matcher globstar; 3 barrel adjudication; 3 consumer parity; 4 predicate and regression; 5 real admission CLI; 1 integrator lane-binding; 5 post-dictamen gaps; 8 R1 executable-plan; 9 adversarial drills for the sixth denial plus cache safety; 7 pinning the seventh-denial reproductions; 4 pinning singleton lane-class cardinality (split shared authority, duplicate quality integrator, contract-derived classes, family partition unaffected) (wrong owner class per unit, invented request domain, non-authoritative request target, incomplete request schema, reversed edge cycle, edge without derived counterpart, acyclicity proven) (self-import edges, junk readSet, mis-targeted request, single unowned canary root, showroom write outside the lab, unsequenced intra-cohort edge, unsupported matcher) (lab owner, evidence owner, missing readSet, computed anatomy edges, shared-authority sequencing, prospective path clash, no-write trespass)"
+    },
+    {
+      "check": "R1 ownership proposal is conflict-free",
+      "cwd": "<repo-root>",
+      "command": "node packages/core/scripts/quality-evidence/v2/cli.mjs ownership packages/core/test-artifacts/quality-evidence/wo-cra-23/R0/receipts/r1-canary-ownership-proposal.json",
+      "result": "conflictFree true — 15 lanes; 0 findings across TEN blocking categories: real-file collisions, prospective conflicts, domain coverage, domain UNIT coverage incl. owner class, no-write exceptions, shared requests (closed schema), readSets, unsequenced intra-cohort edges, declared-edge validity incl. proven acyclicity, and singleton lane-class cardinality; exit 0",
+      "note": "conflictFree now governs on all of it. Hardening the gate first produced 186 request findings, 37 unsequenced edges and 1 readSet finding against the previously sealed plan — that is the measure of how far the prior seal was from true."
+    },
+    {
+      "check": "umbrella suite reaches the drills",
+      "cwd": "<repo-root>/packages/core",
+      "command": "pnpm run test:scripts",
+      "result": "the drills are the FIRST block — 85 tests / 85 pass / 0 fail — followed by the historical block at 825 tests / 804 pass / 21 fail (inherited). Cold wall clock 181s. Overall exit 1 because of the inherited failures.",
+      "note": "re-measured after the gate performance work: the focal v2 suite fell from over seven minutes to 5s and the umbrella completes in 179s, dominated by the historical block. The inherited block is byte-for-byte the recorded baseline."
+    },
+    {
+      "check": "admission CLI binds lane ownership",
+      "cwd": "<repo-root>",
+      "command": "node packages/core/scripts/quality-evidence/v2/cli.mjs admission <lane-packet.json> <ownership-proposal.json>",
+      "result": "own entrypoint exit 0 (admitted, resolvedLane bound, owningLane and proposalSha256 recorded); a lane claiming another lane entrypoint exit 1; the proposal omitted exit 1; an unknown laneClass exit 1; laneClass spoofing exit 1. Swept all 14 real proposal lanes: 14 own-file admissions, 0 cross-lane leaks in 14 foreign-claim attempts.",
+      "note": "the authorized ownership proposal is an explicit second positional argument. It is never resolved from the evidence root nor inferred from the packet, so there is no hidden assumption. A missing proposal is an evaluation blocker rather than a usage error, which keeps the refusal machine-readable."
+    },
+    {
+      "check": "gate performance",
+      "cwd": "<repo-root>/packages/core",
+      "command": "node --test scripts/quality-evidence/v2/drills.test.mjs",
+      "result": "8s cold for the focal suite at 85 drills; analyzeOwnershipProposal ~500ms (from 44754ms); umbrella 181s",
+      "note": "pure memoization plus removing a duplicated computation. Results proven identical before and after; caching is scoped to the immutable repository tree and temporary roots bypass it."
+    }
+  ],
+  "commandReproducibilityLaw": "Every command above states the cwd it must run from. A command recorded without its working directory is not reproducible evidence.",
+  "compilerScopeNote": "npx tsc resolves 6.0.3 in this repository while the pinned compiler is 5.9.3. Every typecheck figure above comes from the pinned compiler through pnpm.",
+  "lanes": {
+    "scouts": 10,
+    "writers": 4,
+    "integrators": {
+      "architecture": 1,
+      "quality": 1
+    },
+    "conflictGraph": "conflict-graph.json",
+    "conflictGraphVerdict": "safe — validated by node packages/core/scripts/quality-evidence/v2/cli.mjs conflict-graph",
+    "modelRouting": {
+      "coordinatorAndArchitecture": "fable and the coordinating Opus — conflict graph, mechanism rulings, canon adjudication, diff acceptance",
+      "creativeAndDelicate": "opus — the verbatim lab extraction, where zero rendered-output delta was the bar",
+      "mechanicalAndCensus": "sonnet — the six census scouts",
+      "reason": "recorded once per cohort rather than narrated per family"
+    }
+  },
+  "artifacts": [
+    {
+      "file": "conflict-graph.json",
+      "purpose": "lane ownership, edges, cohorts and the safety verdict"
+    },
+    {
+      "file": "family-quality-matrix.json",
+      "purpose": "generated 252-family matrix with resolved layer profiles, thresholds, divergence minimums, source owners and public exports"
+    },
+    {
+      "file": "control-propagation.json",
+      "purpose": "EXACT/INFERRED/UNKNOWN impact baseline and the layout-reach defect closed in this round"
+    },
+    {
+      "file": "static-db-parity.json",
+      "purpose": "honest per-capability parity baseline and the envelope-versus-Advanced route proof"
+    },
+    {
+      "file": "tenant-art-direction-compliance.json",
+      "purpose": "closed versioned migration plan for both tenant directions, plus the vocabulary reach-test"
+    },
+    {
+      "file": "kimi-proposal-adjudications.json",
+      "purpose": "canon closure and the advisory-boundary state"
+    },
+    {
+      "file": "prototype-decisions.json",
+      "purpose": "prototype ledger truth and the three compatibility consumer censuses"
+    },
+    {
+      "file": "receipts/",
+      "purpose": "hashed source-bound receipts"
+    },
+    {
+      "file": "SHA256SUMS",
+      "purpose": "digest of every artifact in this round"
+    },
+    {
+      "file": "SUMMARY.json",
+      "purpose": "machine summary"
+    },
+    {
+      "file": "SUMMARY.md",
+      "purpose": "human summary"
+    }
+  ],
+  "notAClaim": [
+    "No family carries a craft score in this round.",
+    "No family status is claimed. R0 writes quality tooling and contracts only.",
+    "Nothing in this round is a premium claim, and no sighted approval is recorded.",
+    "This evidence describes results; only roadmap/registry.json owns work-order status."
+  ]
+}

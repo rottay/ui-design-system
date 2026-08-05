@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "roundId": "R1",
+  "cohort": 1,
+  "lane": "R1-quality-integrator",
+  "laneClass": "quality-integrator",
+
+  "ownedFamilies": ["observable-tests", "round-evidence", "i18n-catalog"],
+
+  "ownedFiles": [
+    "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/packets/architecture-integrator.json",
+    "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/packets/quality-integrator.json",
+    "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-group-axis-census.json",
+    "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-step-0-baseline.json"
+  ],
+
+  "observableDefect": {
+    "title": "Cohort 1 has no executable observable contract for semantic-group coherence, so 'the group follows the tenant' is unverifiable and could regress silently.",
+    "measurement": "No test in the tree asserts that the members of a semantic group read the same expressive axis channels. The census script that produced the defect evidence is ad hoc and not a gate.",
+    "consequence": "Without a gate, a later family edit can drop a group channel and nothing fails. The R1 objective 'extract reusable semantic group recipes instead of copying styles' would be provable once and then decay."
+  },
+
+  "applicableRubricDimensions": [
+    "customization-tenant-divergence",
+    "material-background-depth",
+    "adaptive-layout-density-rhythm",
+    "typography-content",
+    "interaction-states-motion",
+    "responsive-mobile"
+  ],
+
+  "standardControlsUsed": [
+    "vitest for source-level group-coherence assertions",
+    "existing playwright visual probe harness for captures at 320/390/768/1440"
+  ],
+
+  "proControlsAndRecipesUsed": [
+    "A group-coherence assertion that reads the group membership from the group stylesheets themselves and fails when a declared member stops reading a declared group channel — so the gate is derived from the contract, never from a hand-listed snapshot."
+  ],
+
+  "expertChannelsUsed": [],
+  "privateChannelsUsed": [],
+  "creativeProposalIds": ["R1-C1-PROP-03-group-coherence-gate"],
+
+  "responsiveStrategy": "Captures are taken at the four mandated widths for both tenants on every Cohort 1 scene; the taxonomy records overlap, clipping, per-character wrap and desktop compression as binary findings rather than as impressions.",
+
+  "mobileSimplification": "The 320 and 390 captures are judged against the mobile law for each tenant direction (BitHire: simplified destinations, no squeezed desktop sidebar; The Management: single-column working dossier, square sheets, no miniature desktop grid).",
+
+  "statesAndMotion": "State coverage is asserted per group member: rest, hover, focus-visible, press, disabled, loading. Reduced-motion is asserted to reach the settled state with no interpolation.",
+
+  "i18nRtlA11y": "RTL is captured for at least one scene per group using real Arabic strings; contrast floors are asserted for ink-on-ground pairs in both tenants; forced-colors fallback is asserted to reach a solid ground.",
+
+  "expectedTenantDivergence": {
+    "law": "evidence lane does not author divergence; it measures it",
+    "requirement": ">=8 axes with >=6 non-colour, measured from the compiled artifacts of both tenants rather than asserted in prose",
+    "recognitionProof": "grayscale and primary-hue-neutralised captures must remain tenant-identifiable"
+  },
+
+  "filesActuallyChanged": [],
+  "integratorRequests": [],
+
+  "honestStatus": "IN_PROGRESS — packet submitted for admission before any evidence write. The defect census exists as data; the gate that keeps it true does not exist yet."
+}

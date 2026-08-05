@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-overlay-family-inventory",
+  "disposition": "INVENTORY ONLY. Not a verdict, not a score, not clearance for anything.",
+  "provenance": "BUILT BY THE COORDINATOR FROM THE DIFFS AND SOURCE DIRECTLY. The implementing lane was asked twice for this inventory and went idle both times without delivering it. Rather than ask a third time, I derived it — verification is the coordinator's job regardless, and an advisor claim would not have been evidence here even if it had arrived.",
+  "censusColumns": "S (surface is itself a scroll container), R (radius), and RADIUS SHAPE are permanent census columns under FAB-12 and select the DELTA SHAPE. Recorded here per family.",
+  "families": {
+    "overlay-modal": {
+      "diff": "+225/-9",
+      "S": 0,
+      "evidenceForS": "Surface carries `overflow: hidden`; the BODY carries `overflow-y: auto`. The scrollport is a child.",
+      "R": 1,
+      "radiusShape": "symmetric — `var(--ds-overlay-modal-radius)`",
+      "pseudoAdded": "[data-part='surface'][data-shadow='true']:not([data-adaptive-fullscreen='true'])::before",
+      "forcedColorsBlocks": 1
+    },
+    "drawer": {
+      "diff": "+158/-47",
+      "S": 0,
+      "evidenceForS": "Traced the selector owning `overflow-y: auto` by walking back to its rule: it belongs to `.rottay-drawer--modern > [data-part='body']`, NOT the surface. Verified rather than assumed, because a mis-assignment here would have put drawer in the wrong FAB-12 cell.",
+      "R": 1,
+      "radiusShape": "ASYMMETRIC — `var(--ds-radius-lg) 0 0 var(--ds-radius-lg)` and its mirrored right-placement form.",
+      "WHY_ASYMMETRY_MATTERS": "The corner repro measured ASYMMETRIC + border as a worst case: 76 differing pixels at dsf 1 and 208 at dsf 2. Drawer will therefore carry the LARGEST declared delta of the four, and its sighted inspection should be scheduled first rather than last — if any family's delta is going to be rejected, it is most likely this one.",
+      "pseudosAdded": 2,
+      "forcedColorsBlocks": 1,
+      "depthHalf": "`box-shadow: var(--ds-material-overlay-shadow, var(--ds-elevation-4, var(--ds-elevation-3)))` — SOLE whole-value chain, none-safe at every rung. The role sits outermost here, which is NOT a seniority inversion: the senior-var survey independently found drawer.css references no `--ds-drawer-shadow` at all, so the role was already outermost before this round."
+    },
+    "dropdown": {
+      "diff": "+171/-22",
+      "S": 0,
+      "evidenceForS": "Surface `overflow: visible`; the LIST is the scrollport (`overflow-y: auto`). The submenu deliberately hangs outside the list box, which is why the surface cannot clip.",
+      "R": 1,
+      "radiusShape": "symmetric — `var(--ds-dropdown-radius, var(--ds-radius-xl))`",
+      "pseudosAdded": "panel + submenu (the submenu is a DISTINCT surface per ruling and consumes its own channels)",
+      "forcedColorsBlocks": 2,
+      "framingAlreadyCorrected": "Source comment now reads `IN-SCOPE VISUAL DELTA awaiting adjudication, NOT mechanical isolation` — the FAB-12 reframing landed in the file rather than only in a report."
+    },
+    "popover": {
+      "diff": "+134/-49",
+      "S": 0,
+      "evidenceForS": "Surface `overflow: visible`; the BODY carries `overflow: auto`.",
+      "R": 1,
+      "radiusShape": "symmetric — `var(--ds-popover-radius-current)`",
+      "pseudoAdded": "`::after` — matches the host reinstated by FAB-06 after FAB-03's withdrawal, and keeps the intensity-squaring separation intact",
+      "forcedColorsBlocks": 2
+    }
+  },
+  "theSplitThatMatters": {
+    "depthHalf": "Depth as the SOLE whole-value box-shadow of the surface. This is what actually closes the `none` defect, carries NO equivalence claim, and is delta-free. It can proceed.",
+    "keylineHalf": "Relocation onto a pseudo. Under FAB-12 this is an IN-SCOPE ADJUDICATED VISUAL DELTA, never mechanical isolation, and requires sighted inspection per family, state, radius and ground.",
+    "whyTheSplitDecidesEverything": "The two halves have entirely different evidentiary futures. Anything reported as one undifferentiated change cannot be advanced, because the delta-free half would inherit the sighted-inspection requirement of the other."
+  },
+  "notVerifiedByMe": [
+    "Whether every forced-colors reset governing a surface shadow was MIRRORED onto its pseudo. I counted the blocks per file; I did not confirm each reset's coverage.",
+    "The consumer enumeration lists. Still owed by the implementing lane.",
+    "Whether the pseudo z-index and stacking were measured rather than assumed. Previously flagged, never answered."
+  ],
+  "noChangeMade": "I changed nothing in any of these four files. This is a read-only derivation.",
+  "forcedColorsMirroringCheck": {
+    "myOriginalCheckWasWrong": "I asked whether a forced-colors block resets the SURFACE box-shadow without touching a pseudo. That is the wrong question. The keyline now lives ON the pseudo, so the question is whether the PSEUDO's keyline is stripped in forced colors. My check returned 'nothing to mirror' for overlay-modal and dropdown purely because their surfaces carry no shadow reset — which says nothing about the pseudo. This is precisely the instrument failure I have been cataloguing in other lanes all round: my instrument answered a cheaper question than the real one and returned a confident green.",
+    "correctedFindings": {
+      "drawer": "PASS. Keyline pseudo at 149-156; forced-colors reset at 410-412 explicitly resets the slot. Correct, and NECESSARY.",
+      "popover": "PASS. Keyline ::after at 273-281; reset at 864-867. Correct and necessary.",
+      "overlay-modal": "Keyline ::before at 313-321 is NOT stripped by the forced-colors block at 744-778.",
+      "dropdown": "Surface keyline ::before at 227-234 is NOT stripped by the forced-colors block at 675-686, which handles only item outlines."
+    },
+    "butTheClassIFICATIONdiffers": {
+      "evidence": "I checked HEAD directly for all four. At HEAD, drawer's forced-colors block reset box-shadow (twice) and popover's reset it once. overlay-modal's and dropdown's DID NOT reset box-shadow at all.",
+      "thereforeDrawerAndPopover": "Relocation WOULD have created a real regression — their surfaces stripped the keyline in forced colors and the pseudo would have escaped that. Both lanes correctly added the pseudo reset. Risk created by this work, correctly mitigated by this work.",
+      "thereforeModalAndDropdown": "NO REGRESSION WAS INTRODUCED. Their keyline painted in forced colors BEFORE relocation (as part of an unreset surface shadow) and paints now (on an unreset pseudo). Behaviour is unchanged.",
+      "whatItActuallyIs": "A PRE-EXISTING DIVERGENCE from the forced-colors contract that drawer and popover implement: decorative keylines are stripped in the forced palette. Modal and dropdown never stripped theirs. The relocation did not cause it; it made it visible.",
+      "whyThatDistinctionMatters": "Fixing modal and dropdown would STRIP A KEYLINE THAT CURRENTLY PAINTS — a paint change, and under FAB-12 an adjudicated visual delta requiring sighted inspection. It is NOT a forward-edit restoration and I will not make it unilaterally. Treating a pre-existing divergence as a regression would have let a real paint change land under a repair label."
+    },
+    "routedToAdjudication": "The modal/dropdown forced-colors divergence is referred to the adjudicator as a paint change, with the HEAD evidence attached. No edit made.",
+    "containingBlocksSourceBacked": "Confirmed source-backed by the auditor: Modal surface relative/fixed inline, Drawer fixed, Dropdown absolute, Popover fixed; isolation present in all four.",
+    "stillUnverified": "Paint order at z-index -1 requires BROWSER evidence and cannot be declared measured from CSS. Flagged repeatedly, still unanswered, still blocking any capture claim."
+  },
+  "staleReferenceFound": "reads-adjudication.json cites semantic-surface.css line 227 for the highlight channel; the live read is at line 237. The overlay four now have ZERO highlight reads, but the channel remains live in semantic-surface.css. The stale line number is a separate finding, not fixed here.",
+  "SUPERSEDED": "THIS RECEIPT'S forcedColorsMirroringCheck IS FALSE AND IS WITHDRAWN. Per CSS Color Adjustment 3.1, box-shadow and text-shadow COMPUTE TO none under forced-colors. No keyline ever painted in the forced palette on any of the four families — not before relocation, not after. My 'no regression / pre-existing divergence' classification for Modal and Dropdown rests entirely on the false premise that their keyline painted there, and is void. It also follows that Drawer's and Popover's explicit `box-shadow: none` resets are REDUNDANT rather than load-bearing, so crediting them as necessary mitigations was also wrong. Direction and contract are referred to the adjudicator and must be settled with a REAL EMULATED CAPTURE, not from the spec text — reading 3.1 and concluding is the same 'by construction' move FAB-11 forbids, which is how I produced the error in the first place.",
+  "containingBlockHazard": {
+    "disposition": "CONFIRMED BY ME IN SOURCE, independently of the auditor's report. Line numbers match theirs exactly.",
+    "hazard": "The relocated keyline pseudos are `position: absolute` and need a positioned ancestor. Three families spread a PUBLIC style prop AFTER the engine sets position, so a caller passing `position: static` re-anchors the pseudo to a different ancestor. The previous INSET shadow painted on the element itself and did not depend on this at all — the hazard is NEW, created by the relocation.",
+    "verified": {
+      "Modal": "EXPOSED. feedback/Modal/engines/modern/index.tsx: `position` at 459, `...style` at 481.",
+      "Drawer": "EXPOSED. getPositionStyles sets `position: 'fixed'` at the head of `base`, `...style` spreads last in the same object literal.",
+      "Dropdown": "EXPOSED. overlay/Dropdown/engines/modern/index.tsx: `position: 'absolute'` at 557, `...overlayStyle` at 579.",
+      "Popover": "PROTECTED. `...overlayStyle` then `...positionStyle` LAST — the engine wins. Useful as a negative control.",
+      "DropdownSubmenu": "PROTECTED. Second negative control."
+    },
+    "reachabilityIsPublic": "BaseComponentProps.style is unrestricted CSSProperties; Modal and Drawer extend it; Dropdown's overlayStyle is unrestricted. This is a public API hatch, not an internal one.",
+    "containerTypeDoesNotHelp": "`container-type: inline-size` on the Dropdown surface does NOT create a containing block for absolute positioning, so it provides no protection.",
+    "notFixed": "No guard implemented. Referred to the adjudicator with options: narrow the public style type to forbid `position`; merge engine position AFTER the caller's style; give the pseudo a containing block no caller can reach; or declare the hatch out of contract. Requires a Chromium fixture with position:static plus animation:none/reduced-motion, with the two protected branches as controls."
+  }
+}

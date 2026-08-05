@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 2,
+  "roundId": "R0",
+  "familyId": "program/r0-reference-lab",
+  "scenarioId": "server-first-paint-matches-tenant",
+  "evidenceKind": "served-html-assertion",
+  "binaryContract": "server-first-paint-matches-tenant-no-default-theme-flash",
+  "hardVeto": "incorrect-default-theme-visible-before-tenant-hydration",
+  "exitCriterion": "BitHire and The Management server-first paint already matches the settled tenant render with no dark or neutral flash",
+  "verdict": "CLOSED for both binding tenant paths",
+  "theDefectHadThreeLinks": [
+    "the DS default on bare :root is DARK — --ds-color-bg-primary #0A0A0C / --ds-color-bg-secondary #0F0F12 in foundation/themes/default.css; light and tenant values only activate through html-anchored selectors",
+    "the showroom's globals.css paints html background from --ds-color-bg-secondary, so the first frame resolved to #0F0F12",
+    "the probe route was a client page calling useSearchParams with no dynamic server API, so Next statically prerendered it and the whole subtree bailed out — the SERVED BODY WAS EMPTY, and the root element carried no data-* attributes at all"
+  ],
+  "whyTheOldEvidencePathWasMisleading": "the lab ran the real validator and compiler but inside a client component, kept only the normalized appearance, and mounted the provider with no visualAuthority — so the artifact's css was never embedded and the production compiled-artifact SSR path was bypassed entirely",
+  "theSeam": {
+    "constraint": "a page cannot own <html> and a layout cannot read searchParams, so the tenant can never reach the root element through JSX",
+    "chosen": "a first-in-body inline script stamping the resolved root attributes, plus an SSR-embedded <style> carrying the compiled artifact. Head stylesheets are render-blocking, so no paint can precede the stamp.",
+    "whyNoSecondAuthority": "the client providers CLAIM data-theme / data-tenant / data-engine (replace, restore on cleanup) rather than owning them, and the compiled-DB path declares compiled-artifact authority so the provider silences the channels the embedded artifact covers",
+    "rootCause": "awaiting searchParams on the server also removes the static-prerender bailout that was serving an empty body — the conversion is the cure, not a workaround"
+  },
+  "servedBytes": {
+    "before": {
+      "artifact": "prerendered .next/server/app/probe/whitelabel-torture.html — ONE static file for every fixture",
+      "html": "<html lang=\"en\" class=\"…\"> with no data-*",
+      "body": "<template data-dgst=\"BAILOUT_TO_CLIENT_SIDE_RENDERING\">",
+      "probeGround": false,
+      "dataTenant": null
+    },
+    "afterBithire": {
+      "url": "?fixture=bithire&engine=modern",
+      "firstBodyChild": "<script data-testid=\"probe-first-paint-stamp\"> stamping data-theme=light, data-tenant=bithire, data-engine=modern, data-vertical=bithire, lang=en, dir=ltr",
+      "thenHeading": "Whitelabel torture — bithire"
+    },
+    "afterTheManagement": {
+      "url": "?fixture=themanagementmiami&engine=modern&tenantSource=canonical-db",
+      "stamp": "data-tenant=themanagement, data-theme=light",
+      "embeddedArtifact": "<style id=\"rottay-runtime-tenant-theme\" data-digest=\"sha256-01534f7b5ca811ffa1f573e40547a3f80457b275eed2e9138f5626f613f8a741\" data-compiler=\"tenant-theme-compiler@4\">",
+      "specimenUniqueGround": "--ds-color-bg-primary: #FBF8F3",
+      "ordering": "style at byte 7030, probe-ground at byte 10939 — the ground arrives before the content it grounds"
+    },
+    "buildOutput": "the dispatcher and all 8 scene routes flipped from ○ (Static) to ƒ (Dynamic)"
+  },
+  "assertion": {
+    "command": "pnpm --filter @rottay/showroom test:first-paint",
+    "result": "27 of 27",
+    "unitLayer": "pnpm --filter @rottay/showroom test:first-paint -- --unit → 10 of 10, no build required",
+    "layers": "8 resolver assertions, 2 authority assertions, 17 fetched-HTML assertions against a real production build (next build + next start)",
+    "noCapturesUsed": "R0 permits no browser captures; this asserts over the raw HTML string, which is the correct instrument — the veto is about bytes arriving without the tenant's ground, and a settled screenshot cannot see that frame"
+  },
+  "harnessProvenFalsifiable": {
+    "law": "a green assertion that cannot fail is not evidence",
+    "evidence": "the lane's FIRST run failed 3 of 25 on a real bug of its own — the stamp was sliced starting after the JSON payload, so data-tenant was never inside the slice",
+    "vacuityFound": "during that failure the 'no dark stamp' negative passed VACUOUSLY",
+    "fix": "both negatives now assert the stamp exists and declares a theme BEFORE asserting it is not dark",
+    "drills": [
+      "a rogue fixture stamps nothing",
+      "two compiles of the same specimen yield one digest",
+      "dropping the compiled-artifact declaration falls back to provider authority with zero suppression — so the positive authority assertion is not vacuous"
+    ]
+  },
+  "sceneRoutesCovered": "all 8 stamp and server-render; scenes/primitives under the canonical-db tenant is inside the assertion and scenes/all was verified by hand",
+  "deliberateNonCoverage": {
+    "fixtures": ["torture-dark", "torture-light", "themanagementmiami without tenantSource"],
+    "reason": "their CSS is compiled inside the provider at render time, so there is no ground to activate early. Stamping a scope would match nothing (torture-*) or newly activate the bithire vertical baseline (legacy management) and move that fixture's live snapshot baselines.",
+    "consequence": "?fixture=torture-light still shows the DS default ground pre-hydration — unchanged from before this round, outside R0's binding objective, and not a regression",
+    "reproduction": "curl '/probe/whitelabel-torture?fixture=torture-light' → no probe-first-paint-stamp"
+  },
+  "settledStateDomDelta": {
+    "newRootAttributes": ["data-tenant-theme-mode", "data-ds-root", "data-vertical"],
+    "analysis": "every bundle rule keyed on them was checked. The tenant artifacts' :where([data-ds-root][data-vertical='x']) arm is the same rule the html[data-tenant='x'] arm already matched, so :is() still resolves at (0,1,1); and :where([data-ds-root]) sets color, font-family and text-rendering at (0,0,0) on <html>, which body.showroom-site-body already overrides with the same three values.",
+    "conclusion": "visually inert. The only other new DOM is one script and one style tag.",
+    "rtl": "?rtl=1 stamps lang=ar and dir=rtl, matching what the i18n provider settles to"
+  },
+  "openItemsNotBlocking": [
+    "the frame still recompiles the specimen client-side rather than receiving the server's artifact by prop, because torture-sections/ was owned by another lane during this round. Both sides run the same pure function over the same frozen JSON and the assertion pins digest equality, so they cannot disagree — but the compile happens twice per request. The artifact prop already exists; threading it is a small change.",
+    "packages/core/dist/commercial.css was MISSING, which failed EVERY showroom build at probe/kit-inventory. It was regenerated with the core package's own build script — no source touched. Worth flagging: whoever last built core skipped build:commercial-css."
+  ],
+  "gates": {
+    "showroomTypecheck": "0 errors, pinned TypeScript 5.9.3",
+    "showroomLint": "0 warnings with --max-warnings=0",
+    "sceneRegistryDriftGate": "7 of 7",
+    "skinRuleCoverageUnit": "2 of 2"
+  },
+  "producer": "claude-modern-rescue",
+  "negativeDrill": {
+    "violation": "a served document whose first frame carries no tenant authority, or carries the DS default dark ground",
+    "failsClosed": true,
+    "proof": "packages/showroom/scripts/assert-first-paint-authority.mjs — the stamp must appear before probe-ground, must declare a theme, and must not be dark; the authority drill inverts the declaration and requires the fallback"
+  },
+  "sightedApproval": "NOT_CLAIMED — Codex is the sighted authority"
+}

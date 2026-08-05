@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-instrument-freeze-handoff",
+  "disposition": "FROZEN. Writer retired. No write window open. Ready for FAB-14 audit.",
+  "FINAL_SHA": "f2091b2e92f10298c14b7d42b3680ac0c3afa979d15ce2672048609598c63aec",
+  "instrument": "test-artifacts/quality-evidence/wo-cra-23/R1/receipts/overlay-causality-probe.mjs",
+  "mtimeEpoch": 1785951047,
+  "sizeBytes": 159415,
+  "stabilityProof": "Three spaced samples taken by the coordinator after the writer was stopped: identical SHA, identical mtime, identical size on all three. Independently corroborated by the auditor, also 3/3 at the same SHA.",
+  "writerRetired": true,
+  "howTheWriterWasStopped": "The lane was TERMINATED, not asked again. It had been sent an explicit freeze protocol and continued writing through it — the file moved bfee249 -> 71b9d765 -> 9cee8b77 -> f2091b2e within roughly a minute, with one move landing 24 seconds after the freeze instruction. A second instruction would have been written straight through, so the correct action was to remove the writer rather than repeat the request.",
+  "voidedVerdicts": "Every verdict against bfee249, 71b9d765 and 9cee8b77 is VOID under FAB-14. None may be cited. Three separate audits were spent on versions that no longer existed.",
+  "noConcurrentReceipts": {
+    "check": "The lane's two owned receipt paths were inspected after the stop.",
+    "cohort-1-overlay-causality.json": "mtime 13:28 — PREDATES the frozen instrument (13:30:47). Under FAB-14 it therefore describes a run of an instrument that no longer exists and CANNOT be cited as a verdict for the frozen SHA. It is preserved, not deleted, and is not evidence.",
+    "cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json": "mtime 12:30 — already labelled INVALID. Preserved as history, cited nowhere."
+  },
+  "nextWindow": "NOT OPEN. No write window may be opened during the FAB-14 audit. The candidate correction set has been sent to the lane and the lane was asked, before termination, whether it is deliverable in one pass; that question is now unanswered and will be re-put to whoever takes the next window.",
+  "openCorrectionSet": [
+    "Branch exclusivity with per-ground attribution (FAB-13), with acceptance fixtures: Segmented GREEN, input RED, fallback-list-containing-the-role RED",
+    "Cycles and depth exhaustion as ONE indeterminacy state that returns RED, never an empty list read as safe",
+    "Per-path `visited`, not a global set — the shared set drops real paths as well as failing open",
+    "Selector coexistence, at-rule, layer and cascade context: two declarations compose only if some element can match both",
+    "none-capability per resolved item",
+    "FAB-10 end-to-end leg spawning the real CLI against green/red/crash fixtures",
+    "Artifact written AFTER the verdict, atomically, recording instrument SHA and corpus SHAs (FAB-14)",
+    "Runtime exit gates: third-ground UNCOVERED, cellPasses, typed, submenu, collision, scroll, linear-alpha",
+    "The missing `testDepthLimitFailsClosed` — write it or delete the comment naming it"
+  ],
+  "POST_MIGRATION_LOCATION": {
+    "migratedOn": "2026-08-05",
+    "ruling": "R1 outside-layout adjudication: bounded forward migration of R1/tools and R1/packets into the allowlisted R1/receipts, without deleting material.",
+    "whyFlat": "The move was FLAT, not into a receipts/tools/ subfolder. R1/receipts sits at the IDENTICAL depth to the old R1/tools, so every instrument's fixed path.resolve(HERE, '..', ...) walk still resolves to packages/core with no edit. A nested move would have added one level and forced an edit to overlay-causality-probe.mjs, which is FROZEN — that would have destroyed its FINAL_SHA.",
+    "attestedValuesAboveAreUNMODIFIED": "The path and sha256 values recorded above are the machine's original self-attestation and have deliberately NOT been rewritten. Rewriting a self-attestation by hand would stop it being one. This block records the current location alongside it so no reference dangles.",
+    "originalInstrumentPath": "test-artifacts/quality-evidence/wo-cra-23/R1/tools/overlay-causality-probe.mjs",
+    "currentInstrumentPath": "test-artifacts/quality-evidence/wo-cra-23/R1/receipts/overlay-causality-probe.mjs",
+    "freezeBindingsReverifiedAfterMove": {
+      "FINAL_SHA": "f2091b2e92f10298c14b7d42b3680ac0c3afa979d15ce2672048609598c63aec",
+      "sha256Verdict": "IDENTICAL",
+      "mtimeEpoch": 1785951047,
+      "mtimeVerdict": "IDENTICAL (mv preserves mtime on one filesystem)",
+      "sizeBytes": 159415,
+      "sizeVerdict": "IDENTICAL"
+    },
+    "whatChanged": "ONLY the path. Three of the four freeze bindings — content SHA, mtime and size — were re-verified after the move and are byte-for-byte identical. The instrument was NOT opened, edited or re-run; its writer remains retired. Describing this as an invalidated freeze would overclaim: the identity survived, the location record did not, and this block repairs the location record without touching the frozen bytes."
+  }
+}

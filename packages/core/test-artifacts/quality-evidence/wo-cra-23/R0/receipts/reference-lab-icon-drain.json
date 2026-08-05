@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 2,
+  "roundId": "R0",
+  "familyId": "program/r0-reference-lab",
+  "scenarioId": "semantic-icon-drain",
+  "evidenceKind": "census-and-drain",
+  "exitCriterion": "the reference lab has zero generic icon placeholders or functional unicode glyphs and proves meaningful semantic role mapping",
+  "verdict": "CLOSED — the lab holds zero placeholder icons and zero functional unicode glyphs",
+  "before": {
+    "tagIconCallSites": 33,
+    "tagIconTokensIncludingImports": 39,
+    "functionalUnicodeOrSpanGlyphs": 5,
+    "note": "3 span-wrapped '+' glyphs in Button.Icon, plus 2 HTML-entity glyphs (&#8709; and &#8635;) that a raw non-ASCII grep does not match — the entity encoding is why the initial census undercounted"
+  },
+  "after": {
+    "tagIconCallSites": 0,
+    "tagIconTokensIncludingImports": 0,
+    "functionalUnicodeOrSpanGlyphs": 0,
+    "semanticIconElements": 29,
+    "distinctRolesUsed": 17,
+    "verticalPackRolesUsed": 0,
+    "notInCorpusRolesUsed": 0,
+    "censusCommands": [
+      "grep -rn 'TagIcon' . | wc -l  -> 0",
+      "grep -rn 'aria-hidden' . | wc -l  -> 0",
+      "grep -rnE '&#[0-9]+;' . | wc -l  -> 0   (entity form; a raw unicode grep misses these)",
+      "grep -rn '<svg' . | wc -l  -> 1   (the allowlisted chart brush)",
+      "grep -rn '<Icon name=' . | wc -l  -> 29"
+    ]
+  },
+  "rolesApplied": [
+    "navigation.home", "navigation.profile", "navigation.more",
+    "layout.list", "layout.cards",
+    "content.document",
+    "action.search", "action.add", "action.filter", "action.refresh",
+    "communication.notification",
+    "analytics.kpi", "analytics.dashboard",
+    "data.table",
+    "entity.tag",
+    "entity.organization",
+    "feedback.empty"
+  ],
+  "verification": "every role checked against packages/core/src/graphics/icons/foundation/semantic/corpus/manifest.json (282 entries, keyed by `id`) and against the presence of a generated role module, so each resolves to a distinct real glyph rather than a fallback",
+  "canonDecisionsApplied": [
+    {
+      "decision": "the metric-tile cluster drains to analytics.kpi uniformly",
+      "reason": "no per-metric corpus concept exists and inventing one per tile would recreate the placeholder problem in a new form"
+    },
+    {
+      "decision": "zero bithire.* vertical-pack roles",
+      "reason": "this fixture also renders under The Management, so a vertical-pack glyph would leak a vertical identity into a tenant-neutral lab"
+    }
+  ],
+  "workspaceRoleAdjudication": {
+    "sequence": [
+      "the writer lane read all 282 corpus entries, found no workspace concept, listed entity.organization among the candidates it REJECTED (the fixture's workspace is a sub-unit of an organization, eyebrow 'Workspace', id ws_9f8e7d6c5b4a), and stopped rather than force a role",
+      "the coordinator overrode that rejection: the header title already carries the specific noun while the icon carries entity identity, so entity.organization is defensible at the granularity the corpus offers",
+      "the lane implemented the ruling and recorded the caveat"
+    ],
+    "outcome": "APPLIED — both sites render entity.organization; the lab holds zero placeholders",
+    "dissentPreserved": "the lane's original objection is recorded above rather than erased. It concerned corpus precision, not whether the glyph misleads a viewer.",
+    "vocabularyGapStillOpen": true
+  },
+  "namedGap": {
+    "resolution": "the two workspace sites now render entity.organization (foundation pack, intent 'Represent an organization or company'), so the lab holds zero placeholders. The gap in the VOCABULARY remains open and is recorded here so Codex can close it without rediscovering it.",
+    "explicitCaveat": "entity.organization here is a coordinator decision at the corpus's available granularity, NOT a discovered exact match. The writer lane first argued against it on the evidence that the fixture's workspace is a sub-unit of an organization; that objection is recorded rather than erased.",
+    "sites": [
+      "packages/showroom/src/components/torture-sections/headers/index.tsx — EditHeader, 'Edit workspace'",
+      "packages/showroom/src/components/torture-sections/headers/index.tsx — FormHeader, 'Create workspace'"
+    ],
+    "concept": "a workspace entity",
+    "corpusResult": "all 282 entries read; no workspace, project or team-space concept exists. The entity.* family is exactly person, group, organization, task, tag, education, persona.",
+    "candidatesConsideredAndRejected": {
+      "content.folder": "a container of files or resources; a workspace is not a file container",
+      "entity.organization": "an organization; here the workspace is a sub-unit of one",
+      "entity.group": "a generic group of people",
+      "identity.organization-switch": "the switch action, not the entity",
+      "layout.columns / layout.grid / operations.dashboard": "layout or operations concepts, not an entity"
+    },
+    "recommendation": "add a governed entity.workspace to the corpus manifest and pinned adapter, then run `pnpm -C packages/core icons:generate`, extend the corpus tests and update provenance. This is a corpus work order, not a lab fix, and is deliberately out of R0 scope.",
+    "blocker": false,
+    "blockerNote": "not a blocker for the R0 exit — the lab holds zero placeholders — but an open vocabulary gap Codex should close so the mapping stops being a granularity compromise"
+  },
+  "attribution": {
+    "sevenLabModulesDrained": "the icon writer lane",
+    "miscH2EntityGlyphs": "the coordinator, acting as quality integrator — misc-h2 sat outside the writer lane's scope, and the writer lane's census is what surfaced the defect",
+    "note": "the writer lane initially attributed the misc-h2 drain to a peer lane and corrected itself; recorded here so the round report attributes both halves correctly"
+  },
+  "r2ToR4DrainBaseline": {
+    "purpose": "R0 objective — baseline every Modern-reachable historical icon-catalog import, functional local SVG, unicode glyph and universal icon well for per-family drain in R2-R4 and full closure in R5. This is a census, not a fix.",
+    "designSystemSurface": {
+      "scope": "production .ts/.tsx under packages/core/src/ui/, excluding rustic and classic engines, tests, stories",
+      "files": 927,
+      "filesImportingHistoricalCatalog": 26,
+      "distinctCatalogNames": 75,
+      "catalogOccurrences": 197,
+      "filesWithInlineSvg": 22,
+      "svgOccurrences": 31,
+      "semanticFacadeSites": 6,
+      "adoptionNote": "facade adoption inside the DS itself is effectively zero — 6 semantic sites against 197 catalog occurrences",
+      "clustering": "the 26 files cluster tightly and are cheap to sequence: 9 in structures/dashboard, 5 in structures/{headers,record,workspace}, 7 in patterns, 4 in primitives, 1 surface"
+    },
+    "universalIconWell": {
+      "site": "packages/core/src/ui/patterns/foundation/header-actions/index.ts:80",
+      "symbol": "ACTION_ICON_MAP",
+      "shape": "Record<SharedHeaderActionKind, ComponentType<any>> mapping ~16 action kinds to supplier-shaped catalog aliases",
+      "whyHighestLeverage": "it is already keyed by semantic kind, so it is a near-mechanical drain to governed roles and it moves every consumer of resolveSharedHeaderActionIcon() at once",
+      "defectPresent": "assign collides onto the same glyph as create, and clone onto copy — one placeholder standing in for distinct concepts, which is precisely the defect the icon law names"
+    },
+    "inlineSvgClassification": {
+      "legitimateGeometryNotIcons": 13,
+      "genuineHandDrawnGlyphsToDrain": 7,
+      "wrongAssetClass": 1,
+      "wrongAssetClassDetail": "the oauth-transition provider-icons module draws provider brand marks as inline SVG; per the ownership rules those belong to BrandMark / CloudServiceMark, not the icon system"
+    },
+    "showroomOutsideTheLab": {
+      "filesImportingHistoricalCatalog": 26,
+      "distinctNames": 41,
+      "occurrences": 177,
+      "semanticFacadeSites": 30
+    },
+    "supplierBoundary": {
+      "result": "CLEAN — zero direct lucide-react, @phosphor-icons or @ant-design/icons imports anywhere in packages/showroom/src",
+      "staleDocumentation": "CLAUDE.md still documents the marketing landing page as a lucide-react exception; it now imports from @rottay/design-system/icons, so that exception is stale and should be corrected before someone reopens it"
+    }
+  },
+  "dsContractHoleFound": {
+    "symbols": ["KeyMetric.icon", "DataTerminalCard.icon", "EditHeader.icon", "FormHeader.icon", "HeaderActionIcon"],
+    "declaredAs": "ComponentType<any>",
+    "defect": "the owners render the icon with neither `label` nor `decorative`, so a governed semantic Icon passed into the slot renders null and the glyph silently disappears, while any ungoverned component is accepted",
+    "localAdaptation": "the dashboard module binds the role once at module scope in a small wrapper that forwards className, style and data-part, so `.metric-icon` and the data-part probe anchors survive byte-identically",
+    "recommendation": "these structures should take `icon: IconName`, the way IconFrame already does, instead of an unconstrained ComponentType that defeats the governed accessibility discriminant",
+    "blocker": false,
+    "worthItsOwnWorkOrder": true
+  },
+  "allowlistedNonSemanticVectorsRetained": [
+    "the ck-e inline <svg aria-label=\"Deterministic chart brush\"> — chart geometry",
+    "⌘K inside shortcut label strings — a text convention, not an icon slot",
+    "👍 and 👀 in comment-reaction fixture data — the emoji is the content",
+    "Arabic RTL strings in the frame's stress band",
+    "a masked value rendered with bullet characters"
+  ],
+  "expectedBaselineDelta": {
+    "law": "replacing a placeholder glyph with the correct semantic one legitimately changes pixels — that is the defect being fixed, not a regression",
+    "actionTaken": "none. No spec was modified and no snapshot was regenerated or deleted. Regeneration is an owner decision.",
+    "affectedSpecs": {
+      "packages/showroom/e2e/visual/navigation-batch.spec.ts": 14,
+      "packages/showroom/e2e/visual/dashboard-widgets-batch.spec.ts": 12,
+      "packages/showroom/e2e/visual/headers-structures-batch.spec.ts": 10,
+      "packages/showroom/e2e/visual/display1-batch.spec.ts": 10,
+      "packages/showroom/e2e/visual/fields-batch.spec.ts": 11,
+      "packages/showroom/e2e/visual/field-filters.spec.ts": 8,
+      "packages/showroom/e2e/visual/workspace-chrome-batch.spec.ts": 7
+    },
+    "totalBaselines": 72,
+    "provenNotAffected": "headers-patterns-batch.spec.ts reaches a different module, and navigation-patterns-batch.spec.ts mentions the nav flag in a comment only and never renders the section. No flagship, whitelabel, k-lane, axe or skin-coverage spec opens any of the affected flags.",
+    "geometryNote": "compat `md` was a literal 20px; semantic `md` resolves to var(--ds-icon-md-size, 1.25rem) = the same 20px when unset, so the delta is glyph shape rather than box size"
+  },
+  "gates": {
+    "typecheck": "0 errors, pinned TypeScript 5.9.3",
+    "eslint": "0 errors, 0 warnings with --max-warnings=0"
+  },
+  "producer": "claude-modern-rescue",
+  "negativeDrill": null,
+  "sightedApproval": "NOT_CLAIMED — Codex is the sighted authority"
+}

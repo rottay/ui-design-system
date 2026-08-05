@@ -1,0 +1,199 @@
+{
+  "schemaVersion": 2,
+  "roundId": "R0",
+  "familyId": "program/r0-coordination",
+  "scenarioId": "coordinator-directed-revert-of-inherited-worktree-state",
+  "evidenceKind": "incident",
+  "severity": "HIGH while open, inside a closed mid-round window; CLOSED at round close",
+  "finalState": "RESOLVED. All three inherited `--ds-motion-ambient` hunks were reinstated before round close. Zero inherited worktree entries were lost. No owner choice is required to preserve the inherited state.",
+  "readingOrder": "`finalStateAtRoundClose` is the present tense of the working tree and is reproducible from this directory. `historicalIncident` describes a window that is now closed: its `*DuringTheIncident` and `*AtTheTime` fields are false of the tree at round close BY DESIGN, while its narrative and outcome fields — `summary`, `howTheErrorHappened`, `whatWasDoneCorrectly`, the `inheritedState` descriptions, `contractViolated`, and every `outcomeAtRoundClose` — remain true. `historicalIncident.howToReadThisSection` states exactly which are which. Neither section may be read as the other, and no field in either may be quoted without its tense.",
+  "correctionNotice": {
+    "why": "the first version of this receipt carried a FULLY RECOVERED header and the matching blob hashes, but several of its sections were written during the incident and were never re-tensed afterwards. Read literally, it asserted at the same time that the files were recovered and that they were identical to HEAD, that the loss set was empty and that two files had been fully returned to HEAD, that the tree was coherent and that it was internally inconsistent, and that Codex still had to decide whether to reinstate a state that had already been reinstated.",
+    "whatChanged": "the mid-round facts were preserved verbatim and re-keyed under `historicalIncident`; the verified present-tense facts were moved into `finalStateAtRoundClose`; the recovery decision offered to Codex was withdrawn because no recovery decision remains. No fact was deleted and no claim was strengthened.",
+    "whatDidNotChange": "no productive source, test, doc, contract, package script, baseline or pin was touched by this correction. The correction is evidence-only.",
+    "collateralReconciliations": [
+      "SUMMARY.md item 12 said the ambient removal was authored by the architecture lane and that the revert stood. Both halves were false at round close and item 12 contradicted item 15 in the same document. It now records the change as inherited, points at item 15 for the incident, and keeps only its still-true content: the mechanical digest signal and that no digest was re-anchored.",
+      "SUMMARY.md item 15 said 'three files lost uncommitted prior-session content' with no temporal scope, which contradicted the report's own closing line that zero pre-existing worktree entries were lost, and led with 'byte-exactness proven' which over-claims for the third file. Both are now scoped, and the breach of the preservation contract is stated explicitly rather than left to be inferred from the recovery.",
+      "manifest.json#worktreeFreeze.law called all 161 round-start porcelain entries 'modified files'. The recorded start porcelain is 148 modified files plus 13 untracked paths. The law now states the composition, and startPorcelainComposition records it as a field. The entry count, digest and every other manifest claim are unchanged."
+    ],
+    "secondCorrectionPass": {
+      "why": "an advisory review after the first corrected seal found a FACTUAL ERROR that the first correction had introduced and sealed: the receipt described TWO `expect(vars['--ds-motion-ambient']).toBeUndefined()` assertions as restored inherited content. Only ONE is. The assertion at line 164 sits inside the URL-injection sanitization test, is absent from the diff against HEAD, and is therefore pre-existing HEAD content that the inherited change never touched.",
+      "howItWasCaught": "by enumerating every hunk of `git diff -U0 HEAD -- <file>` instead of grepping for the token. The grep matched a line the inherited change did not author.",
+      "whatElseWasHardened": "per-file `byteExactProven` booleans replaced a mixed boolean/prose field; the proof vocabulary gained an explicit unused floor (`prose-attestation`) so the two live levels can be calibrated; the provenance of the two recorded pre-revert blob hashes is now stated per file rather than as a blanket method that would have implied a third hash exists; every cross-reference between the two file arrays now names a path instead of an index, because the arrays are ordered differently; and the `git show` redirection is explicitly counted inside the violation.",
+      "consequence": "this receipt's digest changed AFTER the auditor verified the previous seal. The auditor must re-verify this artifact at the new digest rather than carry the previous verification forward. Correcting a sealed factual error is preferred over preserving a verified-but-wrong artifact.",
+      "digestVerifiedByAuditorBeforeThisPass": "de69f13d7efc910f76722196fe66a8a888f7b6abc70b0ea2dc1c754852429bd8"
+    },
+    "whatWasCheckedAndLeftAlone": "SUMMARY.json is generated by seal-round.mjs from the program contracts and carries no incident wording. SUMMARY.md section 8 keeps its statements that the 3 canonical-digest failures are inherited pins disagreeing with the worktree, that no digest was re-anchored, that HEAD and the single stash are unchanged, that zero pre-existing worktree entries were lost, and that the ambient question remains open and un-censused — all four were re-verified as TRUE at round close and were deliberately not touched.",
+    "correctedDuring": "the authorized R0 close-out, at owner instruction, after this receipt was named the outstanding audit blocker",
+    "noAuditorVerificationIsRecordedHere": "the sighted auditor's own checks are deliberately NOT cited in this receipt as corroboration. Every hash and count below is coordinator-side and self-verifiable from the repository; the auditor attests in its own audit, not through this artifact.",
+    "priorSealedVersions": {
+      "note": "the digests this receipt and its siblings carried in the immediately preceding seal, recorded so a post-seal correction is content-addressed rather than indistinguishable from tampering",
+      "sha256sumsDigestBefore": "2862126ae599c9cf3e11929a89ca3ff28d1d60053fd53575f2c46dc89f39cb2d",
+      "receipts/incident-inherited-worktree-revert.json": "47a3fa1a31c5f2c2ec62b7655299dc89cd74adc2cd88ee6c69fc51ce758e19b2",
+      "SUMMARY.md": "4c061d5442d553ebf1290fef4a8c34c9829fcd38d7be24c5fa5632ccdfe2d03c",
+      "manifest.json": "7cc204801132e3915db7fee2cf85ef3e86fe9c4b61ae47399ed592202ae5d6ea",
+      "everyOtherArtifactDigestIsUnchanged": true
+    }
+  },
+  "finalStateAtRoundClose": {
+    "claim": "the inherited ambient-removal state is PRESENT in the working tree. It was restored before the round closed and has not been disturbed since.",
+    "headUnchanged": "a97ddd7361d0a6bade35b47e30a62ed85d5dda40",
+    "stashCountUnchanged": 1,
+    "whereTheRecordedPreRevertBlobsCameFrom": "for the two blob-identity files, the executing lane captured the file's full `git diff` before reverting, and a diff's `index <old>..<new>` line carries the pre-revert blob hash — so the recovery target came from recorded content rather than prose memory. This is stated per file, not as a blanket method: for kernel/runtime/appearance/tests/appearance.test.ts the capture is a verbatim read of the affected region only, so no pre-revert whole-file hash exists for it and none is implied.",
+    "proofStrengthVocabulary": {
+      "blob-identity": "the file's content at round close hashes to the recorded pre-revert blob AND differs from its HEAD blob. Decisive: it proves both that the inherited content is back and that the file is not merely sitting at HEAD.",
+      "verbatim-region-reproduction": "the region the revert touched reproduces the recorded pre-revert capture character-for-character, and every remaining hunk of divergence from HEAD is enumerated and attributed. Whole-file identity is inferred from capture fidelity plus that enumeration, not content-addressed.",
+      "prose-attestation": "only a prose description of the change exists and the reconstruction matches it. This is the floor of the vocabulary and NO file in this incident rests on it at round close — it is declared so the two levels above can be calibrated against something."
+    },
+    "files": [
+      {
+        "file": "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
+        "proofStrength": "blob-identity",
+        "byteExactProven": true,
+        "blobAtRoundClose": "fcf4584fa01bc1e7967298916c20dd355fa5c751",
+        "recordedPreRevertBlob": "fcf4584fa01bc1e7967298916c20dd355fa5c751",
+        "headBlob": "603b7e237588b7db2b094489c2a5c5517cbe5670",
+        "matchesRecordedPreRevertBlob": true,
+        "differsFromHead": true,
+        "whatIsPresent": "the `--ds-motion-ambient` emission is absent and the inherited comment explaining that ambient is a behavioral policy consumed by MotionProvider is present",
+        "reproduction": "git hash-object <file> → fcf4584fa…; git rev-parse HEAD:<file> → 603b7e237…"
+      },
+      {
+        "file": "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/tenant-theme-artifact-stability.test.ts",
+        "proofStrength": "blob-identity",
+        "byteExactProven": true,
+        "blobAtRoundClose": "4214ed0ef6e0fec0f701eda5962cba139cd16189",
+        "recordedPreRevertBlob": "4214ed0ef6e0fec0f701eda5962cba139cd16189",
+        "headBlob": "288f8614d1351d1c95ed6d6fee6957b4fe493d78",
+        "matchesRecordedPreRevertBlob": true,
+        "differsFromHead": true,
+        "whatIsPresent": "BEHAVIOR_ONLY_AMBIENT_TOKEN and the withoutBehaviorOnlyAmbient filter, i.e. the behavior-only ambient filtering the inherited change introduced",
+        "reproduction": "git hash-object <file> → 4214ed0ef…; git rev-parse HEAD:<file> → 288f8614d…"
+      },
+      {
+        "file": "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/tests/appearance.test.ts",
+        "proofStrength": "verbatim-region-reproduction",
+        "byteExactProven": false,
+        "blobAtRoundClose": "1042ba1067123d977ac88b155f7f96257a53e32c",
+        "recordedPreRevertBlob": null,
+        "headBlob": "cbf815c5ed42cc8c7442becbf94b80ad9678c772",
+        "differsFromHead": true,
+        "whyNoBlobTarget": "this file mixes the inherited ambient hunk with this round's own tokenOverrides work, so it was modified during the round and was never hashed in its pre-revert state. There is no byte-exact target to compare against, and none is manufactured here. Recording blobAtRoundClose freezes the exact audit target instead.",
+        "whatIsProven": "`git diff -U0 HEAD -- <file>` at round close yields exactly SIX hunks in two clusters and no third cluster. Cluster A is the reinstated inherited change at lines 122-137: the test renamed from 'emits the bounded motion dial for CSS-only pre-hydration seams' to 'emits numeric motion dials while keeping ambient in the policy layer'; `'--ds-motion-ambient': 'subtle'` removed from the expected-vars object; and `expect(vars['--ds-motion-ambient']).toBeUndefined();` added. Cluster B is this round's own tokenOverrides work at lines 350-394: a test renamed 'caps raw' to 'rejects raw', the truncation assertion replaced by a throw assertion, and 27 lines of new boundary tests.",
+        "whatIsInferred": "whole-file identity with the pre-revert state. The enumeration above proves no unattributed hunk exists, but it cannot content-address the file against a pre-revert hash that was never taken.",
+        "restsOn": "the fidelity of the verbatim capture of the one region the revert touched. The revert edited only cluster A, so content elsewhere in the file survived it untouched and is covered by the no-third-cluster enumeration. The residual risk is therefore not 'the whole file is unverified' — it narrows to 'the transcript of cluster A is faithful'.",
+        "falsifiableBy": "enumerating every hunk of `git diff -U0 HEAD -- <file>`: any hunk that is neither a cluster-A inherited hunk nor a cluster-B tokenOverrides hunk, or any character deviation inside cluster A, breaks this claim.",
+        "doNotMiscount": "the file also carries `expect(vars['--ds-motion-ambient']).toBeUndefined();` at line 164, inside the URL-injection sanitization test. That assertion is PRE-EXISTING HEAD CONTENT — it is absent from the diff — and is not part of the inherited restoration. The inherited change contributed exactly one such assertion, at line 136.",
+        "reproduction": "git diff -U0 HEAD -- <file> | grep '^@@' → 6 hunks; git show HEAD:<file> | grep -n 'ds-motion-ambient' → lines 135 and 164, showing that line 164 predates the inherited change"
+      }
+    ],
+    "lossSet": {
+      "method": "comm -23 of the round-start porcelain path set against the round-close porcelain path set — inherited entries that are no longer present",
+      "roundStartPorcelain": "161 entries (148 modified + 13 untracked), sha256 b8f2f21de181575ebc7555e37e40356dcdb23e40b55682ccf95d55ec8468bf71, as recorded in manifest.json#worktreeFreeze",
+      "roundStartPorcelainArtifact": "receipts/round-start-porcelain.txt — the capture itself is sealed in this directory and hashes to the digest above, so this comm is re-runnable from the evidence alone and does not rest on a coordinator-held file",
+      "result": "EMPTY",
+      "interpretation": "every one of the 161 round-start porcelain entries is still present at round close. No inherited worktree entry was lost.",
+      "reproducedBy": "coordinator re-run of the comm at round close, against the sealed round-start capture. No auditor's verification is recorded here as corroboration."
+    },
+    "censusCoherence": {
+      "claim": "the generated census and the source AGREE",
+      "customizationSurfaceReport": "packages/core/customization-surface-report.json contains ZERO occurrences of `--ds-motion-ambient`, which matches an emitter that does not write it",
+      "customizationReconciliation": "packages/core/customization-reconciliation.json carries drainSnapshots['270'] = 'post Kimi C1 visual elevation + Codex C1 reconciliation (ambient policy removed from CSS emission)', a prior-session note that predates this round and describes exactly the state now on disk",
+      "consequence": "no regeneration of either census artifact is owed on account of this incident, and none was performed"
+    },
+    "noOwnerChoiceRemainsForRecovery": "the inherited state is preserved. There is nothing for the owner or for Codex to choose in order to keep it. The only remaining question about ambient is architectural, not recuperative — see `openArchitecturalQuestion`."
+  },
+  "historicalIncident": {
+    "window": "a closed interval inside R0, opened when the coordinator ordered the revert and closed when the executing lane reinstated the inherited hunks.",
+    "howToReadThisSection": "the fields named `stateDuringTheIncident`, `noteAtTheTime`, `lossSetDuringTheIncident`, `conditionAtTheTime` and `detailAtTheTime` describe the window and are FALSE of the working tree at round close — that is what makes them historical. The narrative fields (`summary`, `howTheErrorHappened`, `whatWasDoneCorrectly`, the `inheritedState` descriptions, and the `mitigating`/`aggravating` notes) are statements about what happened and remain true. No field in this section should be quoted as a description of the present tree.",
+    "summary": "The coordinator misattributed an inherited working-tree change to an active lane and ordered it reverted. The change was not authored in this round; it came in with the 161 inherited porcelain entries and carried a ledger note describing it as a previously reconciled decision.",
+    "whatWasReverted": [
+      {
+        "file": "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
+        "inheritedState": "the `--ds-motion-ambient` emission removed, replaced by a comment explaining that ambient is a behavioral policy consumed by MotionProvider rather than a CSS value",
+        "stateDuringTheIncident": "identical to HEAD — the emission was restored and the inherited comment was gone",
+        "wasReconstructable": true,
+        "reconstructionSource": "the coordinator captured the complete verbatim diff of this file before ordering the revert",
+        "outcomeAtRoundClose": "REINSTATED, proven by blob-identity — see the finalStateAtRoundClose.files entry whose file is kernel/foundation/css/appearance-posture/index.ts"
+      },
+      {
+        "file": "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/tests/appearance.test.ts",
+        "inheritedState": "the motion-dial test renamed to 'emits numeric motion dials while keeping ambient in the policy layer', asserting --ds-motion-ambient is undefined",
+        "stateDuringTheIncident": "restored to HEAD text for that block; the round's own tokenOverrides additions in the same file stayed intact",
+        "wasReconstructable": "only from the executing lane's transcript",
+        "noteAtTheTime": "prose description was known; byte-exact content was not held by the coordinator",
+        "outcomeAtRoundClose": "REINSTATED from the verbatim pre-revert read, proof strength verbatim-region-reproduction — see the finalStateAtRoundClose.files entry whose file is kernel/runtime/appearance/tests/appearance.test.ts"
+      },
+      {
+        "file": "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/tenant-theme-artifact-stability.test.ts",
+        "inheritedState": "gained BEHAVIOR_ONLY_AMBIENT_TOKEN and a withoutBehaviorOnlyAmbient filter",
+        "stateDuringTheIncident": "identical to HEAD",
+        "wasReconstructable": "only from the executing lane's transcript",
+        "noteAtTheTime": "prose description was known; byte-exact content was not held by the coordinator",
+        "outcomeAtRoundClose": "REINSTATED, proven by blob-identity — see the finalStateAtRoundClose.files entry whose file is composition/tenant-theme/tests/tenant-theme-artifact-stability.test.ts",
+        "ordinalWarning": "this array and finalStateAtRoundClose.files list the three files in DIFFERENT orders. That mismatch is what made the original receipt's ordinal cross-references ambiguous, so every cross-reference here names a path and never an index."
+      }
+    ],
+    "howTheErrorHappened": {
+      "trigger": "a scoped `git diff --stat` showed the appearance-posture change inside the set of files the architecture lane was working in",
+      "wrongInference": "the coordinator concluded the lane had authored it and treated it as scope creep",
+      "whatWasNotDone": "the coordinator did not check whether the change predated the round. The evidence was available: `packages/core/customization-reconciliation.json` carries the drainSnapshots note 'post Kimi C1 visual elevation + Codex C1 reconciliation (ambient policy removed from CSS emission)', dated before this round, and `customization-surface-report.json` already recorded the writer as removed.",
+      "compoundingError": "the coordinator's second argument — that the removal broke the R1 tenant plan's `ambient: 'off'` — was overstated. That plan item authors ambient in the DOCUMENT, and the ledger note says the policy moved to the layer MotionProvider consumes. The capability survived; only the CSS custom property was withdrawn. That is materially different from a capability removed without a successor, which is what the coordinator asserted."
+    },
+    "lossSetDuringTheIncident": {
+      "method": "comm -23 of the round-start porcelain against the mid-incident porcelain — inherited entries that were no longer modified at that moment",
+      "filesThenFullyReturnedToHead": [
+        "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/tenant-theme-artifact-stability.test.ts",
+        "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts"
+      ],
+      "filesThenPartiallyOverwritten": [
+        "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/tests/appearance.test.ts — still showed as modified because the round's own tokenOverrides work was in it, but its inherited ambient block had been overwritten"
+      ],
+      "everyOtherInheritedEntryWasIntactThroughout": true,
+      "supersededBy": "finalStateAtRoundClose.lossSet, which is EMPTY. This block is the transient loss set, not the round's loss set."
+    },
+    "contractViolated": {
+      "binding": "preserve every existing working-tree change; no destructive operation on inherited work",
+      "result": "VIOLATED, inside the closed mid-round window described above, and repaired within the same round. For that window three files carrying uncommitted prior-session work stood at HEAD text. This is recorded as a real breach and is not downgraded by the repair: the preservation contract binds continuously, not only at round close.",
+      "atRoundClose": "IN COMPLIANCE — no ongoing breach. All three files carry their inherited content again and the round-close loss set is empty.",
+      "whyBothStatementsAreTrue": "a contract that binds continuously can be broken and then honoured again. The breach is a fact about a window; the compliance is a fact about the close. Reporting only the second would hide a real failure of coordination discipline; reporting only the first would tell an auditor to go looking for damage that is not there.",
+      "mitigating": "no git reset, restore, checkout, clean or stash mutation was used at any point; the reverts were hand-edits and one `git show HEAD:path > path`. The single stash is untouched and HEAD is unchanged. Every other one of the 161 inherited porcelain entries was intact throughout.",
+      "mechanismHonesty": "the `git show HEAD:path > path` redirection is functionally a content restore and is COUNTED AS PART OF THE VIOLATION here. manifest.json#worktreeFreeze.law is an inventory of git subcommands that were not run; it is not read as exempting a redirection that achieved the same effect. The outcome prong of the contract (preserve inherited content) was breached; the mechanism prong (no destructive git subcommand) held. Both are stated so neither is used to excuse the other.",
+      "exposureBound": "while the tree held the reverted text, no commit, push, tag, publish, stash mutation or digest re-anchor occurred. The breach could therefore not propagate beyond the working tree, and nothing downstream consumed the reverted state.",
+      "aggravating": "the misattribution was avoidable. The ledger note that disproved it was already in the repository and was not consulted before the revert was ordered."
+    },
+    "residualInconsistencyDuringTheIncident": {
+      "conditionAtTheTime": "the working tree was internally inconsistent",
+      "detailAtTheTime": "the emitter stood at HEAD behaviour while `customization-surface-report.json` contained zero occurrences of `--ds-motion-ambient` and `customization-reconciliation.json` still narrated the removal. The generated census and the source disagreed.",
+      "resolution": "CLOSED by reinstating the inherited hunks. The census was already correct; restoring the source removed the disagreement without regenerating anything.",
+      "atRoundClose": "no residual inconsistency. See finalStateAtRoundClose.censusCoherence."
+    },
+    "whatWasDoneCorrectly": [
+      "no digest was re-anchored at any point — the three canonical-digest assertions returned to green on their own during the incident and returned to red on their own after the reinstatement, which is the correct behaviour for pins that are not being moved",
+      "the executing lane reported the misattribution rather than accepting blame, with the ledger citation that proved it",
+      "the lane stopped a singleton test suite mid-run rather than publish results mixing pre- and post-restoration state",
+      "the coordinator did not fold the episode away once the correction arrived"
+    ]
+  },
+  "consequenceForTestAttribution": "canonical-digest-identity.test.ts carries 3 failures at round close. These are correctly classified as HEAD-pinned digests disagreeing with inherited adjudicated worktree state — the same category as the 21 inherited script-test failures and the sidebar-group-channels failure. They are prior-session state, not a defect this round introduced, and their presence is the expected consequence of the inherited state being preserved rather than reverted. Whether those pins get re-anchored is an owner decision that R0 does not take; no pin was moved.",
+  "openArchitecturalQuestion": {
+    "question": "whether `--ds-motion-ambient` — a keyword custom property with no productive CSS reader, which the inherited change argued invites accidental use in a <time> position — should ever return to CSS emission",
+    "peopleMayDisagree": "the inherited change decided it should not. That decision was made in a prior session and is the state now on disk. It was never censused in this round.",
+    "isThisARecoveryBlocker": false,
+    "whyNot": "the inherited state is already preserved and coherent with the census. Nothing has to be decided for it to stay that way. Answering this question would change the design going forward; leaving it open changes nothing.",
+    "properVenue": "a later governed census with successor and death proof, on the program's normal terms. It is not R0 work and it is not an audit blocker for R0."
+  },
+  "forCodex": {
+    "noRecoveryDecisionRemains": "the earlier version of this receipt asked Codex to choose between reinstating the inherited removal and keeping the restored emission plus regenerating the census. That choice is withdrawn: the inherited removal is already reinstated and the census already agrees with it. Neither branch of that choice is available or needed.",
+    "whatIsWorthAuditing": [
+      "the two blob-identity proofs, which are re-runnable from the repository alone with git hash-object and git rev-parse",
+      "the third file's weaker proof, which is stated as weaker and should be calibrated as such rather than read as byte-exact",
+      "the round-close loss set, which reproduces as EMPTY against the recorded round-start porcelain",
+      "the honesty of the two-tense split in this receipt — whether the historical section over- or under-states the breach"
+    ],
+    "whatIsNotClaimed": "no sighted approval, no GO, and no assertion that the coordination failure was harmless. The maximum claim carried by this round is IMPLEMENTED_PENDING_CODEX_AUDIT."
+  },
+  "producer": "claude-modern-rescue",
+  "negativeDrill": null,
+  "sightedApproval": "NOT_CLAIMED — Codex is the sighted authority"
+}

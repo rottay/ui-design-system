@@ -1,0 +1,405 @@
+{
+  "schemaVersion": 1,
+  "censusId": "wo-cra-23-R1-C1-group-axis-census",
+  "skinRoot": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin",
+  "axesConsidered": [
+    "edge",
+    "material",
+    "elevation",
+    "divider",
+    "motif",
+    "shadowStrength",
+    "motionRecipe",
+    "typePosture",
+    "density"
+  ],
+  "groups": [
+    {
+      "group": "control",
+      "memberCount": 2,
+      "applicability": {
+        "button": {
+          "notApplicable": []
+        },
+        "segmented": {
+          "notApplicable": []
+        }
+      },
+      "surfaceAdjustedCoherence": 0.4,
+      "surfaceAdjustedShared": [
+        "edge",
+        "material"
+      ],
+      "members": [
+        {
+          "family": "button",
+          "missingStylesheet": false,
+          "axes": {
+            "edge": [
+              "--ds-edge-standard-style"
+            ],
+            "material": [
+              "--ds-material-control-",
+              "--ds-material-control-shadow",
+              "--ds-material-control-shadow-active",
+              "--ds-material-control-shadow-hover"
+            ],
+            "motionRecipe": [
+              "--ds-recipe-curve",
+              "--ds-recipe-enter"
+            ],
+            "typePosture": [
+              "--ds-button-text-transform",
+              "--ds-type-numeric-font-variant-numeric"
+            ],
+            "density": [
+              "--ds-density-effective-scale"
+            ]
+          }
+        },
+        {
+          "family": "segmented",
+          "missingStylesheet": false,
+          "axes": {
+            "edge": [
+              "--ds-edge-standard-style",
+              "--ds-edge-standard-width"
+            ],
+            "material": [
+              "--ds-material-control-",
+              "--ds-material-control-background",
+              "--ds-material-control-border",
+              "--ds-material-control-border-hover",
+              "--ds-material-control-shadow-hover"
+            ]
+          }
+        }
+      ],
+      "sharedAxes": [
+        "edge",
+        "material"
+      ],
+      "unsharedAxes": [
+        "density",
+        "motionRecipe",
+        "typePosture"
+      ],
+      "coherence": 0.4,
+      "membersReadingNoAxis": []
+    },
+    {
+      "group": "field",
+      "memberCount": 3,
+      "applicability": {
+        "input": {
+          "notApplicable": []
+        },
+        "select": {
+          "notApplicable": []
+        },
+        "form-field": {
+          "notApplicable": [
+            "edge",
+            "material",
+            "elevation",
+            "divider",
+            "shadowStrength",
+            "motif"
+          ]
+        }
+      },
+      "surfaceAdjustedCoherence": 0.75,
+      "surfaceAdjustedShared": [
+        "density",
+        "edge",
+        "material"
+      ],
+      "members": [
+        {
+          "family": "input",
+          "missingStylesheet": false,
+          "axes": {
+            "edge": [
+              "--ds-edge-standard-style",
+              "--ds-edge-standard-width"
+            ],
+            "material": [
+              "--ds-material-control-background",
+              "--ds-material-control-border"
+            ],
+            "density": [
+              "--ds-density-effective-scale"
+            ]
+          }
+        },
+        {
+          "family": "select",
+          "missingStylesheet": false,
+          "axes": {
+            "edge": [
+              "--ds-edge-standard-style",
+              "--ds-edge-standard-width"
+            ],
+            "material": [
+              "--ds-material-control-background",
+              "--ds-material-control-background-active",
+              "--ds-material-control-background-hover",
+              "--ds-material-control-border",
+              "--ds-material-inset-background"
+            ],
+            "typePosture": [
+              "--ds-letter-spacing-wide",
+              "--ds-select-group-text-transform"
+            ],
+            "density": [
+              "--ds-density-effective-scale"
+            ]
+          }
+        },
+        {
+          "family": "form-field",
+          "missingStylesheet": false,
+          "axes": {
+            "typePosture": [
+              "--ds-type-label-text-transform"
+            ],
+            "density": [
+              "--ds-density-effective-scale"
+            ]
+          }
+        }
+      ],
+      "sharedAxes": [
+        "density"
+      ],
+      "unsharedAxes": [
+        "edge",
+        "material",
+        "typePosture"
+      ],
+      "coherence": 0.25,
+      "membersReadingNoAxis": []
+    },
+    {
+      "group": "overlay",
+      "memberCount": 4,
+      "applicability": {
+        "overlay-modal": {
+          "notApplicable": []
+        },
+        "drawer": {
+          "notApplicable": []
+        },
+        "popover": {
+          "notApplicable": []
+        },
+        "dropdown": {
+          "notApplicable": []
+        }
+      },
+      "surfaceAdjustedCoherence": 0.5,
+      "surfaceAdjustedShared": [
+        "elevation",
+        "material",
+        "typePosture"
+      ],
+      "members": [
+        {
+          "family": "overlay-modal",
+          "missingStylesheet": false,
+          "axes": {
+            "edge": [
+              "--ds-edge-standard-style",
+              "--ds-edge-standard-width"
+            ],
+            "material": [
+              "--ds-material-card-background",
+              "--ds-material-overlay-border",
+              "--ds-material-overlay-highlight",
+              "--ds-material-overlay-shadow"
+            ],
+            "elevation": [
+              "--ds-elevation-surface-"
+            ],
+            "motionRecipe": [
+              "--ds-recipe-scale-from",
+              "--ds-recipe-y"
+            ],
+            "typePosture": [
+              "--ds-letter-spacing-heading"
+            ],
+            "density": [
+              "--ds-density-effective-scale"
+            ]
+          }
+        },
+        {
+          "family": "drawer",
+          "missingStylesheet": false,
+          "axes": {
+            "edge": [
+              "--ds-edge-standard-style"
+            ],
+            "material": [
+              "--ds-material-overlay-border",
+              "--ds-material-overlay-highlight",
+              "--ds-material-overlay-shadow",
+              "--ds-material-overlay-texture"
+            ],
+            "elevation": [
+              "--ds-elevation-lift-strength",
+              "--ds-elevation-surface-"
+            ],
+            "typePosture": [
+              "--ds-letter-spacing-tight"
+            ],
+            "density": [
+              "--ds-density-effective-scale"
+            ]
+          }
+        },
+        {
+          "family": "popover",
+          "missingStylesheet": false,
+          "axes": {
+            "material": [
+              "--ds-material-overlay-background",
+              "--ds-material-overlay-border",
+              "--ds-material-overlay-foreground",
+              "--ds-material-overlay-opaque",
+              "--ds-material-overlay-shadow",
+              "--ds-material-overlay-texture",
+              "--ds-material-raised-background",
+              "--ds-material-raised-border",
+              "--ds-material-raised-shadow",
+              "--ds-material-raised-texture"
+            ],
+            "elevation": [
+              "--ds-elevation-lift-strength",
+              "--ds-elevation-surface-"
+            ],
+            "typePosture": [
+              "--ds-letter-spacing-heading",
+              "--ds-type-body-sm",
+              "--ds-type-label"
+            ]
+          }
+        },
+        {
+          "family": "dropdown",
+          "missingStylesheet": false,
+          "axes": {
+            "edge": [
+              "--ds-edge-standard-style",
+              "--ds-edge-standard-width"
+            ],
+            "material": [
+              "--ds-material-overlay-highlight",
+              "--ds-material-overlay-shadow",
+              "--ds-material-overlay-texture"
+            ],
+            "elevation": [
+              "--ds-elevation-lift-strength",
+              "--ds-elevation-surface-"
+            ],
+            "typePosture": [
+              "--ds-letter-spacing-wide"
+            ]
+          }
+        }
+      ],
+      "sharedAxes": [
+        "elevation",
+        "material",
+        "typePosture"
+      ],
+      "unsharedAxes": [
+        "density",
+        "edge",
+        "motionRecipe"
+      ],
+      "coherence": 0.5,
+      "membersReadingNoAxis": []
+    },
+    {
+      "group": "feedback",
+      "memberCount": 3,
+      "applicability": {
+        "alert": {
+          "notApplicable": []
+        },
+        "skeleton": {
+          "notApplicable": [
+            "elevation",
+            "shadowStrength"
+          ]
+        },
+        "spinner": {
+          "notApplicable": [
+            "material",
+            "elevation",
+            "shadowStrength",
+            "motif"
+          ]
+        }
+      },
+      "surfaceAdjustedCoherence": 0,
+      "surfaceAdjustedShared": [],
+      "members": [
+        {
+          "family": "alert",
+          "missingStylesheet": false,
+          "axes": {
+            "edge": [
+              "--ds-edge-hairline-width",
+              "--ds-edge-standard-style",
+              "--ds-edge-standard-width"
+            ],
+            "typePosture": [
+              "--ds-letter-spacing-heading"
+            ]
+          }
+        },
+        {
+          "family": "skeleton",
+          "missingStylesheet": false,
+          "axes": {
+            "material": [
+              "--ds-material-card-background",
+              "--ds-material-panel-background"
+            ]
+          }
+        },
+        {
+          "family": "spinner",
+          "missingStylesheet": false,
+          "axes": {
+            "material": [
+              "--ds-material-control-border"
+            ],
+            "typePosture": [
+              "--ds-type-caption-font-family",
+              "--ds-type-caption-font-size",
+              "--ds-type-caption-letter-spacing",
+              "--ds-type-caption-line-height"
+            ]
+          }
+        }
+      ],
+      "sharedAxes": [],
+      "unsharedAxes": [
+        "edge",
+        "material",
+        "typePosture"
+      ],
+      "coherence": 0,
+      "membersReadingNoAxis": []
+    }
+  ],
+  "summary": {
+    "groupsMeasured": 4,
+    "groupsFullyCoherent": 0,
+    "familiesReadingNoAxis": [],
+    "worstGroup": "feedback"
+  }
+}

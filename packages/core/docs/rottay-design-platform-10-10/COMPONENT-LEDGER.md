@@ -1,5 +1,22 @@
 # Modern Component Upgrade Ledger
 
+> **HISTORICAL BASELINE — NOT CURRENT-WAVE EVIDENCE.**
+>
+> The `accepted` dispositions and 90–97 scores below were **hand-authored**.
+> They were never produced by `scoreQualityEvidence()`: no non-example
+> scorecard has ever been persisted, and the only scorecard in the repository
+> (`scripts/quality-evidence/scorecard.example.json`) is deliberately pending.
+> This ledger therefore borrows the v1 tool's ID space and P1/P2 vocabulary
+> without carrying its output.
+>
+> Under `WO-CRA-23`, quality-evidence v1 is a historical baseline and may not
+> be cited as coverage, quality or premium status. The current wave evaluates
+> 252 families through `scripts/quality-evidence/v2/`, where binary eligibility
+> and the sighted craft score are computed separately, every scored dimension
+> requires observable evidence, and only Codex may accept sighted quality.
+>
+> Read the rows below as a record of intent, not as certification.
+
 This is the one-by-one certification ledger for 94 public primitive families:
 89 engine-backed primitives plus the specialized public `CodeBlock`,
 `MarkdownView`, and `VoiceInputButton` families plus the public CSS-first

@@ -1,9 +1,61 @@
-# Wave 0 quality evidence
+# Quality evidence
 
-This directory is an executable skeleton for the two-pass component quality
-program. It is tooling-only and does not ship in `@rottay/design-system`.
+This directory contains executable component-quality contracts. It is
+tooling-only and does not ship in `@rottay/design-system`.
 
-## Ownership
+Two generations live here and they are not interchangeable.
+
+## v1 — HISTORICAL BASELINE ONLY
+
+The Wave 0 implementation (`registry.mjs`, `pairwise.mjs`, `schema.mjs`,
+`scorer.mjs`, `cli.mjs`, `quality-evidence.schema.json`) is **v1**. It covers a
+public **primitive subset** and is retained as a historical baseline. It is
+**not current-wave evidence** and may not be cited as coverage, quality or
+premium status for the design system.
+
+Specifically, v1:
+
+- does not reach the 252-family denominator;
+- composes its score in a way that lets contract/binary checks carry weight that
+  the current rubric reserves for sighted craft;
+- proves no receipt freshness against source digests.
+
+Any v1 output quoted in a report must be labelled historical baseline.
+
+## v2 — the current wave
+
+`v2/` implements the governed evaluation for `WO-CRA-23`
+(`programs/modern-rescue/README.md`). Its defining rule is that **binary
+eligibility and the 100-point sighted craft score are computed by separate
+modules**: `craft-score.mjs` never sees a contract result, so a green gate can
+never raise a sighted score, and `eligibility.mjs` consumes the score only to
+compare it against the family's layer threshold.
+
+It adds, as executable checks rather than prose:
+
+- observable evidence required per scored dimension (a claim without evidence
+  scores zero);
+- the applicable `stressMatrix` floor inside every resilience declaration;
+- hard-veto, freshness, non-vacuity and self-approval drills;
+- work-order admission enforced before a lane writes;
+- conflict-graph safety (one writer per file, singleton integrators, reviewers
+  never write);
+- the per-round minimum reliable evidence policy, including R0 being
+  capture-free;
+- 252-of-252 inventory correspondence against real source and public exports.
+
+```sh
+node packages/core/scripts/quality-evidence/v2/cli.mjs inventory
+node packages/core/scripts/quality-evidence/v2/cli.mjs eligibility <family-receipt.json>
+node packages/core/scripts/quality-evidence/v2/cli.mjs conflict-graph <conflict-graph.json>
+node packages/core/scripts/quality-evidence/v2/cli.mjs round-evidence R0
+node --test packages/core/scripts/quality-evidence/v2/drills.test.mjs
+```
+
+Neither generation can approve sighted quality. The executor maximum claim is
+`IMPLEMENTED_PENDING_CODEX_AUDIT`; Codex is the sighted authority.
+
+## v1 ownership
 
 - `registry.mjs` expands 89 public primitive contracts.
 - `pairwise.mjs` builds a bounded, deterministic evidence matrix.

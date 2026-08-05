@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-fab17-mutation-transcript",
+  "disposition": "IMPLEMENTED_PENDING_AUDIT",
+  "subject": "Falsifiability of the FAB-17 suites: do the assertions actually redden when the engine's placement coordinates are removed?",
+  "recordedOn": "2026-08-05",
+
+  "provenance": {
+    "runBy": "R1-quality-integrator",
+    "firstHand": true,
+    "note": "Every count in this receipt was observed directly by the recording agent. The coordinator independently ran the same two mutants and reported matching counts; those are recorded under crossCheck as corroboration, NOT as the source of this receipt. A prover that binds counts it did not observe has proved nothing about its own instrument.",
+    "reservedKeyLaw": "This receipt carries no work-order status key. roadmap/registry.json remains the single authority for work-order state; the fields here describe results only."
+  },
+
+  "sourceBinding": {
+    "note": "SHA-256 of the exact bytes under test. Recorded before the isolation copy was made and re-verified after both mutants were run.",
+    "engines": {
+      "src/ui/primitives/overlay/Dropdown/engines/modern/index.tsx": "b6dd75190eeeb638b58f13764e42f986395d043067fffe4e005367c383b5c8fc",
+      "src/ui/primitives/feedback/Modal/engines/modern/index.tsx": "619022165f5fde40f69b8b878bf68e7c3df4604d58539a829d1434281863066f",
+      "src/ui/primitives/feedback/Drawer/engines/modern/index.tsx": "ae41365214318f0ee7b347955dbafb75cdf71950724afba61bb8f7af8db38bed"
+    },
+    "chromiumFixture": {
+      "src/ui/primitives/overlay/Dropdown/tests/fixtures/fab17-static-hatch-scene/index.tsx": "8ed465882de8d8f0",
+      "src/ui/primitives/overlay/Dropdown/tests/fixtures/fab17-static-hatch-scene/runner/index.mjs": "fdddcc0c80e60b66",
+      "hashForm": "sha256, first 16 hex characters"
+    },
+    "postRunVerification": "shasum -a 256 of all three engine files after both mutant runs was byte-identical to the pre-run values. The governed tree was never perturbed."
+  },
+
+  "isolationMethod": {
+    "technique": "non-git full-working-tree copy",
+    "gitWorktreeUsed": false,
+    "why": "`git worktree add` materialises a checkout, and `checkout` is a standing prohibition in this repository. No git state-changing command was used at any point.",
+    "steps": [
+      "shasum -a 256 the three engine files",
+      "T=$(mktemp -d /tmp/fab17-iso-XXXXXX)",
+      "rsync -a --exclude node_modules --exclude .git --exclude test-artifacts --exclude .next ./ \"$T/core/\"",
+      "ln -sfn \"$(pwd)/node_modules\" \"$T/core/node_modules\"",
+      "baseline the four suites inside the copy",
+      "mutate only the copy; run; observe",
+      "restore the copy's engine file from source between mutants",
+      "re-verify source SHAs; rm -rf \"$T\""
+    ],
+    "whyFullCopyNotSubtree": "The suites import the engine by RELATIVE path (`../engines/modern`), so no alias can redirect them across a partial copy's boundary and module resolution fails. A full working-tree copy makes every relative path resolve natively and needs no alias configuration.",
+    "temporaryDirectory": "/tmp/fab17-iso-61U9d0",
+    "temporaryDirectoryDestroyed": true,
+    "debrisCheck": "no .bak / .orig / .mutant / fab17-iso artifacts remain in the repository"
+  },
+
+  "suitesUnderTest": [
+    "src/ui/primitives/overlay/Dropdown/tests/Dropdown.fab17-positioning-authority.test.tsx",
+    "src/ui/primitives/feedback/Modal/tests/Modal.fab17-positioning-authority.test.tsx",
+    "src/ui/primitives/feedback/Drawer/tests/Drawer.fab17-positioning-authority.test.tsx",
+    "src/ui/primitives/overlay/Popover/tests/Popover.fab17-protected-control.test.tsx"
+  ],
+
+  "baseline": {
+    "context": "inside the isolation copy, unmutated",
+    "testFiles": "4 passed (4)",
+    "tests": "52 passed (52)",
+    "verdictState": "GREEN — the copy reproduces the source baseline, so any red observed below is attributable to the mutation and not to the harness."
+  },
+
+  "mutants": [
+    {
+      "id": "mutant-1-block-axis",
+      "axis": "block",
+      "site": "inTreePlacementStyle, src/ui/primitives/overlay/Dropdown/engines/modern/index.tsx:60-69",
+      "mutation": "deleted the entire block-axis spread: `...(isTop ? { bottom: `calc(100% + ${SURFACE_GAP}px)` } : { top: `calc(100% + ${SURFACE_GAP}px)` }),`",
+      "predictedBeforeRunning": {
+        "failures": 7,
+        "reasoning": "1 in-tree-branch coordinate assertion, plus the 6 parameterised block-axis assertions (one per placement). The 6 OPPOSITE-axis assertions were predicted to stay green: they assert that the end the engine does not compute stays with the caller, and deleting the engine's emission leaves the caller's value in place, which is what they already expect."
+      },
+      "observed": {
+        "tests": "7 failed | 45 passed (52)",
+        "testFiles": "1 failed | 3 passed (4)",
+        "reddened": [
+          "engine positioning block wins over caller style > in-tree branch: engine `position`, owned zIndex and placement coordinates win",
+          "BOTH placement axes are engine-owned > 'bottomLeft': engine wins the block axis ('top') over the caller",
+          "BOTH placement axes are engine-owned > 'bottomRight': engine wins the block axis ('top') over the caller",
+          "BOTH placement axes are engine-owned > 'bottom': engine wins the block axis ('top') over the caller",
+          "BOTH placement axes are engine-owned > 'topLeft': engine wins the block axis ('bottom') over the caller",
+          "BOTH placement axes are engine-owned > 'topRight': engine wins the block axis ('bottom') over the caller",
+          "BOTH placement axes are engine-owned > 'top': engine wins the block axis ('bottom') over the caller"
+        ]
+      },
+      "predictionMatchedObservation": true,
+      "verdictState": "The block axis is load-bearing: removing it reddens the suite."
+    },
+    {
+      "id": "mutant-2-inline-axis",
+      "axis": "inline",
+      "site": "inTreePlacementStyle, src/ui/primitives/overlay/Dropdown/engines/modern/index.tsx:60-69",
+      "mutation": "replaced `{ insetInlineEnd: 0 }` and `{ insetInlineStart: 0 }` with `{}`, leaving the centred branch's `{ left: '50%', translate: '-50% 0' }` intact",
+      "predictedBeforeRunning": {
+        "failures": 4,
+        "reasoning": "Only the four *Left / *Right placements emit a logical inset. The 'top' and 'bottom' placements centre via `left: 50%` + `translate`, which is a different property and was deliberately left in place, so they were predicted to stay green."
+      },
+      "observed": {
+        "tests": "4 failed | 48 passed (52)",
+        "testFiles": "1 failed | 3 passed (4)",
+        "reddened": [
+          "BOTH placement axes are engine-owned > 'bottomLeft': engine wins the inline axis ('inset-inline-start') over the caller",
+          "BOTH placement axes are engine-owned > 'bottomRight': engine wins the inline axis ('inset-inline-end') over the caller",
+          "BOTH placement axes are engine-owned > 'topLeft': engine wins the inline axis ('inset-inline-start') over the caller",
+          "BOTH placement axes are engine-owned > 'topRight': engine wins the inline axis ('inset-inline-end') over the caller"
+        ]
+      },
+      "predictionMatchedObservation": true,
+      "verdictState": "The inline axis is independently load-bearing: it reddens a disjoint set of assertions from the block axis."
+    }
+  ],
+
+  "crossCheck": {
+    "note": "Corroboration only. The coordinator ran the same two mutants independently in their own temporary copy.",
+    "coordinatorReported": { "baseline": "52/52", "blockAxis": "7 failed / 45 passed", "inlineAxis": "4 failed / 48 passed" },
+    "integratorObserved": { "baseline": "52/52", "blockAxis": "7 failed / 45 passed", "inlineAxis": "4 failed / 48 passed" },
+    "agreement": "exact on all three figures, and on the identity of every reddened assertion",
+    "priorDiscrepancyResolved": "An earlier coordinator message reported the inline mutant as '4 failed / 22 passed'. That was a 26-test base (the Dropdown suite alone); the 52-test base is the full four-suite set. The failure count of 4 was consistent throughout; only the denominator differed."
+  },
+
+  "chromiumRunner": {
+    "artifact": "src/ui/primitives/overlay/Dropdown/tests/fixtures/fab17-static-hatch-scene/",
+    "invocation": "node src/ui/primitives/overlay/Dropdown/tests/fixtures/fab17-static-hatch-scene/runner/index.mjs [--self-check]",
+    "environment": "Chromium via Playwright, viewport 1280x1200, reducedMotion=reduce, animations and transitions forced off",
+    "lastObserved": {
+      "exitCode": 0,
+      "gates": "2/2",
+      "assertions": "8/8",
+      "selfCheck": "4/4",
+      "submenuOpenedBy": "pointer-hover (mouseenter), aria-expanded=true, submenu count=1"
+    },
+    "selfCheckMeaning": "`--self-check` injects `position: static !important` onto the three SUBJECT markers and re-runs phase 1. All three subjects must go RED and the Popover negative control must stay GREEN. It is a stylesheet injection into a throwaway page and mutates no source file.",
+    "SCOPE_CAVEAT_READ_BEFORE_INTERPRETING": "The two mutants above target `inTreePlacementStyle`, which governs the IN-TREE dropdown path. The Chromium fixture's primary dropdown subject deliberately uses the PORTALLED path (`getPopupContainer`), whose coordinates come from the measured `popupPosition`, not from `inTreePlacementStyle`. The fixture is therefore EXPECTED to stay green under both mutants. That is not a gap in the fixture and must not be read as one: the two instruments cover different code paths by design. The fixture's own falsifiability is evidenced by its `--self-check`, not by these mutants."
+  },
+
+  "whatThisDoesAndDoesNotEstablish": {
+    "establishes": [
+      "The FAB-17 unit suites are capable of failing: both placement axes redden a disjoint, named set of assertions when removed.",
+      "The Chromium fixture is capable of failing: its own self-check forces the hostile value and confirms each subject reddens while the negative control holds.",
+      "The governed tree was never mutated at any point."
+    ],
+    "doesNotEstablish": [
+      "Nothing here is a verdict on the work order. This receipt describes results only.",
+      "No claim of coverage beyond the four named suites and the one Chromium scene."
+    ]
+  }
+}

@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-button-shadow-baseline",
+  "purpose": "BEFORE-state for the preservation-safe control-depth change. Any edit to the engine-tier --ds-button-{variant}-shadow defaults must leave rottay and evnto resolving these exact values. Captured BEFORE the edit so byte-identical is provable rather than asserted.",
+  "engineTierDefaults": {
+    "primary": "var(--ds-shadow-button-rest)",
+    "secondary": "var(--ds-shadow-button-rest)",
+    "default": "var(--ds-shadow-button-rest)",
+    "ghost": "none",
+    "dashed": "none",
+    "text": "none",
+    "link": "none",
+    "success": "var(--ds-shadow-success-sm)",
+    "warning": "var(--ds-shadow-warning-sm)",
+    "error": "var(--ds-shadow-error-sm)",
+    "info": "var(--ds-shadow-button-rest)",
+    "ai": "var(--ds-shadow-button-rest)",
+    "disabled": "none",
+    "elevated": "var(--ds-elevation-1)"
+  },
+  "perVertical": {
+    "bithire": {
+      "authoredCount": 1,
+      "effective": {
+        "primary": {
+          "authored": "0 1px 2px rgba(20, 40, 59, 0.1)",
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "vertical artifact"
+        },
+        "secondary": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "engine default"
+        },
+        "default": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "engine default"
+        },
+        "ghost": {
+          "authored": null,
+          "engineDefault": "none",
+          "resolvesFrom": "engine default"
+        },
+        "text": {
+          "authored": null,
+          "engineDefault": "none",
+          "resolvesFrom": "engine default"
+        },
+        "dashed": {
+          "authored": null,
+          "engineDefault": "none",
+          "resolvesFrom": "engine default"
+        },
+        "error": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-error-sm)",
+          "resolvesFrom": "engine default"
+        },
+        "success": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-success-sm)",
+          "resolvesFrom": "engine default"
+        },
+        "warning": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-warning-sm)",
+          "resolvesFrom": "engine default"
+        },
+        "info": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "engine default"
+        },
+        "link": {
+          "authored": null,
+          "engineDefault": "none",
+          "resolvesFrom": "engine default"
+        },
+        "ai": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "engine default"
+        }
+      }
+    },
+    "evnto": {
+      "authoredCount": 1,
+      "effective": {
+        "primary": {
+          "authored": "0 1px 2px rgba(0, 0, 0, 0.08)",
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "vertical artifact"
+        },
+        "secondary": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "engine default"
+        },
+        "default": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "engine default"
+        },
+        "ghost": {
+          "authored": null,
+          "engineDefault": "none",
+          "resolvesFrom": "engine default"
+        },
+        "text": {
+          "authored": null,
+          "engineDefault": "none",
+          "resolvesFrom": "engine default"
+        },
+        "dashed": {
+          "authored": null,
+          "engineDefault": "none",
+          "resolvesFrom": "engine default"
+        },
+        "error": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-error-sm)",
+          "resolvesFrom": "engine default"
+        },
+        "success": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-success-sm)",
+          "resolvesFrom": "engine default"
+        },
+        "warning": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-warning-sm)",
+          "resolvesFrom": "engine default"
+        },
+        "info": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "engine default"
+        },
+        "link": {
+          "authored": null,
+          "engineDefault": "none",
+          "resolvesFrom": "engine default"
+        },
+        "ai": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "engine default"
+        }
+      }
+    },
+    "rottay": {
+      "authoredCount": 1,
+      "effective": {
+        "primary": {
+          "authored": "0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.06)",
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "vertical artifact"
+        },
+        "secondary": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "engine default"
+        },
+        "default": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "engine default"
+        },
+        "ghost": {
+          "authored": null,
+          "engineDefault": "none",
+          "resolvesFrom": "engine default"
+        },
+        "text": {
+          "authored": null,
+          "engineDefault": "none",
+          "resolvesFrom": "engine default"
+        },
+        "dashed": {
+          "authored": null,
+          "engineDefault": "none",
+          "resolvesFrom": "engine default"
+        },
+        "error": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-error-sm)",
+          "resolvesFrom": "engine default"
+        },
+        "success": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-success-sm)",
+          "resolvesFrom": "engine default"
+        },
+        "warning": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-warning-sm)",
+          "resolvesFrom": "engine default"
+        },
+        "info": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "engine default"
+        },
+        "link": {
+          "authored": null,
+          "engineDefault": "none",
+          "resolvesFrom": "engine default"
+        },
+        "ai": {
+          "authored": null,
+          "engineDefault": "var(--ds-shadow-button-rest)",
+          "resolvesFrom": "engine default"
+        }
+      }
+    }
+  },
+  "summary": {
+    "authoredPerVertical": {
+      "bithire": 1,
+      "evnto": 1,
+      "rottay": 1
+    },
+    "finding": "All three verticals author exactly ONE variant (primary). Every other variant resolves from the engine default, so deleting those defaults changes rottay and evnto. This is the fact that forces the explicit-authoring step before any deletion."
+  }
+}

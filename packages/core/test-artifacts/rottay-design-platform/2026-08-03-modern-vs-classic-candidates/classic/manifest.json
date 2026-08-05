@@ -1,0 +1,32 @@
+[
+  {
+    "name": "candidates-list",
+    "url": "http://localhost:3002/candidates",
+    "engine": "classic",
+    "scrollWidth": 1637,
+    "tenant": "bithire",
+    "theme": "base",
+    "width": 1637,
+    "path": "/Users/daniel/Developer/Rottay/ui-design-system/packages/core/test-artifacts/rottay-design-platform/2026-08-03-modern-vs-classic-candidates/classic/candidates-list.png"
+  },
+  {
+    "name": "candidates-overview",
+    "url": "http://localhost:3002/candidates/overview",
+    "engine": "classic",
+    "scrollWidth": 1637,
+    "tenant": "bithire",
+    "theme": "base",
+    "width": 1637,
+    "path": "/Users/daniel/Developer/Rottay/ui-design-system/packages/core/test-artifacts/rottay-design-platform/2026-08-03-modern-vs-classic-candidates/classic/candidates-overview.png"
+  },
+  {
+    "name": "candidate-detail",
+    "url": "http://localhost:3002/candidates/bc1c7322-e75e-45c1-898d-4d75c86e625d?mode=workspace&tab=overview",
+    "engine": "classic",
+    "scrollWidth": 1637,
+    "tenant": "bithire",
+    "theme": "base",
+    "width": 1637,
+    "path": "/Users/daniel/Developer/Rottay/ui-design-system/packages/core/test-artifacts/rottay-design-platform/2026-08-03-modern-vs-classic-candidates/classic/candidate-detail.png"
+  }
+]

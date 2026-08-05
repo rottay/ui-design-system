@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-blocked-residuals",
+  "claimLevel": "SUPERSEDED. Codex ruled that BLOCKED is not an acceptable resting state for a non-destructive in-scope decision. This receipt is retained as the EVIDENCE that produced the architecture, not as a blocker.",
+  "blocked": [
+    {
+      "id": "CTRL-04",
+      "title": "Control depth cannot be made tenant-causal in Cohort 1 without changing rottay and evnto.",
+      "advisorRuling": "Fable ruled option (a): delete the engine-tier --ds-button-{variant}-shadow defaults so the role floor shows through, on the stated premise that rottay/evnto 'AUTHOR their chrome shadows, chrome stays senior, so their computed values are untouched'. It attached one verification: census those artifacts for full 10-variant shadow coverage.",
+      "censusRun": {
+        "method": "grep of --ds-button-{variant}-shadow declarations in each shipped vertical artifact",
+        "result": {
+          "rottay": "1 of 10 (primary only)",
+          "evnto": "1 of 10 (primary only)",
+          "bithire": "1 of 10 (primary only)"
+        },
+        "verdict": "THE PREMISE IS FALSE. No vertical authors more than the primary variant."
+      },
+      "engineDefaultsThatWouldStopSpeaking": {
+        "alreadyNone_noOpToDelete": [
+          "dashed",
+          "ghost",
+          "link",
+          "text"
+        ],
+        "carryRealValues_wouldFlatten": {
+          "default": "var(--ds-shadow-button-rest)",
+          "secondary": "var(--ds-shadow-button-rest)",
+          "info": "var(--ds-shadow-button-rest)",
+          "error": "var(--ds-shadow-error-sm)",
+          "success": "var(--ds-shadow-success-sm)",
+          "warning": "var(--ds-shadow-warning-sm)"
+        }
+      },
+      "consequence": "Deleting the engine defaults flattens SIX variants in ALL THREE verticals, including rottay and evnto which are outside this round. That is not a declared delta on an unauthored variant; it is a visual change to two products this cohort has no mandate to touch.",
+      "whyTheAlternativesAlsoFail": "Rebasing the engine default onto the role channel does not help either, and for a mechanical reason: --ds-material-control-shadow and all three of its state channels are DECLARED on :root as `none`, so any var() chain that reaches them resolves to none rather than falling through. Role-senior and role-as-fallback both flatten. The pattern that worked six times elsewhere in this cohort (rebase the default onto a tenant-reachable authority) works precisely because those authorities were NOT :root-declared.",
+      "proposal": "Two admissible routes, both needing adjudication because both reach outside Cohort 1: (1) change the :root default of --ds-material-control-shadow so it is not a hard `none`, which is a foundation change affecting every consumer; or (2) have each vertical AUTHOR its control shadow posture before the engine defaults are deleted, which is a rottay/evnto work item. Claude did not pick one: either would change verticals this round does not own.",
+      "disposition": "BLOCKED pending adjudication. No edit was made."
+    },
+    {
+      "id": "SPINNER-PIN",
+      "title": "The inherited Spinner pin is SUPERSEDED, and the tenant-posture connection it blocks is already implemented.",
+      "sequencingLaw": "The advisor required the pin be reproduced and classified BEFORE touching the P-48 selector arms, because a careless edit converts an inherited red into a fresh one.",
+      "reproduced": "Spinner.modern-engine.test.tsx expects the skin to contain 'var(--ds-spinner-duration, calc(var(--ds-motion-slow) * 2))'.",
+      "actualSource": "spinner.css reads 'var(--ds-spinner-duration, calc(var(--ds-motion-attention, var(--ds-motion-slow)) * 2))'.",
+      "classification": "SUPERSEDED, not still-valid. The change is an INHERITED worktree edit dated 2026-08-03, two days before this session, and this round never touched the file. Its own comment states the intent: the attention rung 'already carries the tenant duration-scale dial (scale 1 = the historical slow-rung pair)' while reduced-motion zeroing still propagates.",
+      "consequenceForRuling5": "The advisor's ruling 5(ii) — rebase the cadence default onto the governed duration scale — is ALREADY SATISFIED by that inherited change. Implementing it again would be a no-op at best and a revert of inherited work at worst.",
+      "whatWasNotDone": "Ruling 5(i), rebasing the track fallback onto --ds-material-control-border, was NOT applied. The file header carries the P-48 specificity contract whose (0,3,1) border-color arms clear the tenant `* { border-color }` floor, and this cohort has no capture that would prove the arms still clear after a colour re-base.",
+      "whatMustNotHappen": "The pin must not be fixed to (which reverts inherited work) and must not be deleted in passing. Per the sequencing law it changes only through the quality-integrator with a receipt naming the superseding adjudication. No such adjudication exists yet.",
+      "disposition": "UNBLOCKED by the superseded classification. Codex authorized: add a scene/measurement that proves P-48, then rebase ONLY the track fallback onto the material channel, preserving specificity and reduced-motion. The pin is NOT re-anchored.",
+      "remaining": "The P-48 proof scene and the track re-base are not yet implemented."
+    }
+  ],
+  "landedInsteadThisPass": [
+    "The Management now authors --ds-material-overlay-border (#2A2824), --ds-material-overlay-border-strong (#141412) and --ds-material-raised-border (#2A2824). The overlay skins had adopted the edge-axis chain but every member still measured a byte-identical border, because a chain only diverges once the tenant authors its end — the same lesson the segmented group taught."
+  ],
+  "methodNote": "Both blocks were found by running the prescribed verification first. In one case the verification disproved the advisor's stated premise outright. Recorded because the alternative — making the edit and discovering the regression in rottay and evnto later — is exactly the failure mode this program's sighted-approval law exists to prevent.",
+  "supersededBy": {
+    "ruling": "Codex, 2026-08-05. The owner autonomy law requires adjudicating non-destructive in-scope decisions rather than parking them.",
+    "architecture": "Preservation-safe ordering: make the six current values EXPLICIT for rottay and evnto FIRST, then open a tenant-senior channel for TMM. Equivalent alternatives are admissible only if they PROVE computed-style byte-identical outside BitHire and TMM.",
+    "whyTheCensusStillMatters": "The census is what makes the ordering necessary. Had the premise held (verticals authoring their own shadows) the deletion would have been safe immediately. Because all three author only 1 of 10, the explicit-authoring step is the thing that keeps rottay and evnto byte-identical.",
+    "disposition": "RECONSULTED with the advisor, carrying the real 1-of-10 census and the :root-declaration mechanism. Awaiting the concrete chrome.controls key shape before editing, because the edit is only preservation-safe if the six are pinned at their CURRENT resolved values and I will not guess those key names.",
+    "verificationPlanned": "Computed-style probe of all ten variants under rottay and evnto before and after, asserting byte-identical; the same probe under BitHire and TMM asserting the intended divergence appears.",
+    "probeBuiltAndProven": {
+      "tool": "test-artifacts/quality-evidence/wo-cra-23/R1/receipts/button-shadow-preservation-probe.mjs",
+      "coverage": "72 cells per vertical — 12 variants x 4 states (rest/hover/active/selected) x 2 colour modes, for rottay, evnto and bithire",
+      "beforeSnapshot": "cohort-1-button-shadow-probe-before.json — captured BEFORE any edit",
+      "comparisonRule": "Reference strings compared verbatim; terminal --ds-shadow-* values deliberately NOT resolved, because the pins are by reference and those tokens are dark-aware. Resolving them would fail on a legitimate dark-mode difference and would test the wrong property.",
+      "negativeDrill": "Simulating the naive deletion by flipping three engine-resolved cells to the role floor produces 3 regressions and the verdict \"the deletion is NOT safe as sequenced\". An unchanged snapshot returns PRESERVED. The probe is therefore not fail-open.",
+      "pathTrapFound": "The mapping INVERTS between the two halves: the theme source for rottay is brand-themes/platform/ while its artifact is artifacts/rottay/. The first probe run failed on exactly this. Any code touching both halves must carry both keys."
+    },
+    "advisorClaimRefutedOnSecondPass": "The advisor warned that deleting an engine --ds-button-ghost-shadow-hover: none would flip ghost hover to a soft shadow. Measured false: ghost, dashed, text and link declare hover and active as a SELF-REFERENCE to their own rest value, not none. Zero flip hazards across all variants, so those four need no state pins and the pin list is smaller than specified. The census also found the ai variant carrying a real value, which the advisor six-variant list omitted — eight rest pins are required, not six.",
+    "readyForExecution": "The sequence is now fully specified by evidence rather than by prose: pin the eight rests BY REFERENCE in brand-themes/platform and brand-themes/evnto, pin the non-self-referencing states in each _source/extension.css, regenerate with build:vertical-css, add the skin role fallbacks, then delete the engine declarations — running the probe between steps and requiring PRESERVED before the deletion lands."
+  }
+}

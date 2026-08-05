@@ -1,0 +1,959 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-inherited-entry-ledger-v3",
+  "generatedAt": "2026-08-05T19:16:29Z",
+  "scope": "PII_AND_MACHINE_LOCAL_SCAN_ONLY",
+  "scopeNote": "This receipt covers EXACTLY ONE of six certification dimensions requested for the v3 inherited-entry ledger: the PII / machine-local absolute-path scan. It does NOT cover, and makes NO claims about: (1) grouping / single-policy regroup, (2) the app-ds-hook-contract-gate.test.mjs gate result, (3) per-group direct-test coverage, (4) staleness of generated artifacts, (5) final per-group RECOMMEND_COMMIT/RECOMMEND_HOLD/NEEDS_ADJUDICATION verdicts, or (6) a certifiable-group pathspec recommendation. Those five dimensions were scoped OUT of this pass by the requester and are expected in separate, later passes. This receipt supersedes nothing about inherited-entry-ledger.json or inherited-entry-ledger-v2.json, which remain the audited structural baseline (161/161 coverage, 42-group partition, 0 status drift) and are untouched by this pass.",
+  "targetSet": "The exact 161 paths listed in packages/core/test-artifacts/quality-evidence/wo-cra-23/R0/receipts/round-start-porcelain.txt, at that file's own line granularity (151 plain files + 10 directories, independently reconfirmed this pass by filesystem check).",
+  "entriesScanned": 161,
+  "physicalFileScan": {
+    "note": "The 161 porcelain entries expand to 371 physical files once the 10 directory entries are recursively enumerated (151 direct plain files + 220 files found under the 10 directories).",
+    "totalPhysicalFiles": 371,
+    "textFilesScanned": 270,
+    "unsightedBinaryFiles": 101,
+    "unreadableFiles": 0
+  },
+  "method": {
+    "contentScan": "Every text file's CURRENT full working-tree content (not just its diff) was read and scanned line-by-line with targeted regexes for: absolute /Users/... paths, absolute /home/... paths, Windows drive-letter paths (X:\\...), literal $HOME, ~/-prefixed home-relative paths, Claude-agent sandbox paths (/private/tmp/claude-<pid>/... and the -Users-<name>- mangled form used inside sandbox paths), standalone hardcoded username occurrences not already captured by the path patterns, hostname-shaped strings (*.local, MacBook-*, Daniels-*), and email addresses.",
+    "binaryHandling": "Files were classified binary either by extension (png/jpg/jpeg/gif/webp/ico/pdf/woff/woff2/ttf/otf/eot/zip/gz/tar/mp4/mov/avi/bmp/tiff/psd/sqlite/db/exe/dll/so/dylib/class/jar/wasm) or by a null-byte / high-byte-ratio sniff on content. Binary files were NEVER decoded and grepped as text; they are recorded in unsightedBinaries and are NOT claimed clean. This is a content-blind census of their existence and size only -- no binary's actual image/asset content was viewed.",
+    "falsePositiveReview": "14 raw regex hits under a 'windows-abs-path' pattern were manually reviewed and excluded: all 14 were confirmed to be regex-escape sequences (\\s, \\n, \\d) or JSON-escaped CSS declarations (e.g. 'box-shadow:\\\\s*var(...)') coincidentally matching an `[A-Za-z]:\\` shape, not genuine Windows filesystem paths. Zero genuine Windows-style absolute paths were found anywhere in the 161-entry set. Full list preserved in reviewedFalsePositives below for audit trail.",
+    "gitOperations": "read-only only (git status, git diff -- for spot verification, no other git commands). No file in the repository was written, staged, or modified. The only write performed by this task is this single receipt file."
+  },
+  "hits": [
+    {
+      "path": "packages/core/package.json",
+      "line": 579,
+      "kind": "email-address",
+      "excerpt": "\"author\": \"Daniel Avila <daniel.avila@rottay.com>\","
+    },
+    {
+      "path": "packages/core/package.json",
+      "line": 579,
+      "kind": "hardcoded-username-attribution",
+      "excerpt": "\"author\": \"Daniel Avila <daniel.avila@rottay.co"
+    },
+    {
+      "path": "packages/core/scripts/quality-evidence/programs/modern-rescue/CLAUDE-PROMPT.md",
+      "line": 12,
+      "kind": "abs-path-users",
+      "excerpt": "/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-capture-harness-self-test.json",
+      "line": 9,
+      "kind": "claude-sandbox-path",
+      "excerpt": "\"outDir\": \"/private/tmp/claude-502/-Users-daniel-Developer-Rottay-ui-design-system/ca2650ff-2bca-4c00-aa3b-c142a47af2d9/scratchpad/capture-lab-self-test\","
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 11,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 17,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 23,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 29,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 35,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 41,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 48,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 54,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 64,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 70,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 76,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 82,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 88,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 94,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 101,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 107,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.INVALID-pre-veto-runs-1-2-3.json",
+      "line": 175,
+      "kind": "abs-path-users",
+      "excerpt": "\"bundlePath\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 11,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 17,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 23,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 29,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 35,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 41,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 48,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 54,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 64,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 70,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 76,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 82,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 88,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 94,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 101,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 107,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-overlay-causality.json",
+      "line": 175,
+      "kind": "abs-path-users",
+      "excerpt": "\"bundlePath\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/capture-lab.mjs",
+      "line": 24,
+      "kind": "abs-path-users",
+      "excerpt": "*   `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/overlay-causality-probe.mjs",
+      "line": 88,
+      "kind": "abs-path-users",
+      "excerpt": "path.join('/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/receipt-io.mjs",
+      "line": 42,
+      "kind": "abs-path-users",
+      "excerpt": "e previous harness hardcoded `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-modern-vs-classic-candidates/classic/manifest.json",
+      "line": 10,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-modern-vs-classic-candidates/classic/manifest.json",
+      "line": 20,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-modern-vs-classic-candidates/classic/manifest.json",
+      "line": 30,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 41,
+      "kind": "abs-path-users",
+      "excerpt": "- Repo: `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 93,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 109,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 126,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 145,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 162,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 196,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 215,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 231,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 248,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 265,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 598,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 609,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 620,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 631,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/craft.md",
+      "line": 642,
+      "kind": "abs-path-users",
+      "excerpt": "- **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-sy"
+    },
+    {
+      "path": "roadmap/registry.json",
+      "line": 826,
+      "kind": "hardcoded-username-attribution",
+      "excerpt": "\"claimedBy\": \"daniel\","
+    },
+    {
+      "path": "roadmap/registry.json",
+      "line": 851,
+      "kind": "hardcoded-username-attribution",
+      "excerpt": "\"by\": \"daniel\","
+    },
+    {
+      "path": "roadmap/registry.json",
+      "line": 3804,
+      "kind": "abs-path-users",
+      "excerpt": "\"roadmap\": \"/Users/daniel/Developer/Rottay/docs-enginee"
+    },
+    {
+      "path": "roadmap/registry.json",
+      "line": 3805,
+      "kind": "abs-path-users",
+      "excerpt": "\"adjudication\": \"/Users/daniel/Developer/Rottay/docs-enginee"
+    },
+    {
+      "path": "roadmap/registry.json",
+      "line": 5923,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/docs-enginee"
+    },
+    {
+      "path": "roadmap/registry.json",
+      "line": 5938,
+      "kind": "abs-path-users",
+      "excerpt": "\"path\": \"/Users/daniel/Developer/Rottay/docs-enginee"
+    },
+    {
+      "path": "roadmap/registry.json",
+      "line": 5979,
+      "kind": "abs-path-users",
+      "excerpt": "\"source\": \"/Users/daniel/Developer/Rottay/docs-enginee"
+    }
+  ],
+  "hitCounts": {
+    "email-address": 1,
+    "hardcoded-username-attribution": 3,
+    "abs-path-users": 62,
+    "claude-sandbox-path": 1
+  },
+  "reviewedFalsePositives": [
+    {
+      "path": "packages/core/scripts/app-ds-hook-contract-gate.test.mjs",
+      "line": 930,
+      "kind": "windows-abs-path-false-positive",
+      "excerpt": "tch = /readonly\\s+schemaVersion:\\s*(\\d+)\\s*;/u.exec(declaration);",
+      "reason": "regex-escape or JSON-escaped CSS declaration, not a genuine drive-letter path"
+    },
+    {
+      "path": "packages/core/src/ui/patterns/data/data-table/tests/DataTable.modern-w7.test.tsx",
+      "line": 146,
+      "kind": "windows-abs-path-false-positive",
+      "excerpt": "=\"true\"\\]\\s*\\{[^}]*table-layout:\\s*fixed/",
+      "reason": "regex-escape or JSON-escaped CSS declaration, not a genuine drive-letter path"
+    },
+    {
+      "path": "packages/showroom/e2e/whitelabel/k4-lane-a.spec.ts",
+      "line": 192,
+      "kind": "windows-abs-path-false-positive",
+      "excerpt": "serious/critical axe violations:\\n${formatViolations(blocking)}`,",
+      "reason": "regex-escape or JSON-escaped CSS declaration, not a genuine drive-letter path"
+    },
+    {
+      "path": "packages/showroom/e2e/whitelabel/k4-lane-b.spec.ts",
+      "line": 192,
+      "kind": "windows-abs-path-false-positive",
+      "excerpt": "serious/critical axe violations:\\n${formatViolations(blocking)}`,",
+      "reason": "regex-escape or JSON-escaped CSS declaration, not a genuine drive-letter path"
+    },
+    {
+      "path": "packages/showroom/e2e/whitelabel/k4-lane-c.spec.ts",
+      "line": 192,
+      "kind": "windows-abs-path-false-positive",
+      "excerpt": "serious/critical axe violations:\\n${formatViolations(blocking)}`,",
+      "reason": "regex-escape or JSON-escaped CSS declaration, not a genuine drive-letter path"
+    },
+    {
+      "path": "packages/core/scripts/quality-evidence/programs/modern-rescue/program-check.mjs",
+      "line": 695,
+      "kind": "windows-abs-path-false-positive",
+      "excerpt": "-rescue program contract failed:\\n- ${errors.join(\"\\n- \")}`",
+      "reason": "regex-escape or JSON-escaped CSS declaration, not a genuine drive-letter path"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-canary-scores.json",
+      "line": 358,
+      "kind": "windows-abs-path-false-positive",
+      "excerpt": "e calling scrollIntoView({block:\\\"nearest\\\", inline:\\\"nearest\\\"",
+      "reason": "regex-escape or JSON-escaped CSS declaration, not a genuine drive-letter path"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-canary-scores.json",
+      "line": 358,
+      "kind": "windows-abs-path-false-positive",
+      "excerpt": "View({block:\\\"nearest\\\", inline:\\\"nearest\\\"}) on the selected o",
+      "reason": "regex-escape or JSON-escaped CSS declaration, not a genuine drive-letter path"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-capture-harness-self-test.json",
+      "line": 515,
+      "kind": "windows-abs-path-false-positive",
+      "excerpt": "ism\": \"Playwright reducedMotion:\\\"reduce\\\" context option again",
+      "reason": "regex-escape or JSON-escaped CSS declaration, not a genuine drive-letter path"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-capture-harness-self-test.json",
+      "line": 523,
+      "kind": "windows-abs-path-false-positive",
+      "excerpt": "page.emulateMedia({forcedColors:\\\"active\\\"}) against feedback s",
+      "reason": "regex-escape or JSON-escaped CSS declaration, not a genuine drive-letter path"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-premium-regression-pin-proposal.json",
+      "line": 17,
+      "kind": "windows-abs-path-false-positive",
+      "excerpt": "hireCss).toMatch(/--ds-input-bg:\\\\s*var\\\\(--ds-surface-inset,\\\\s*#ffffff\\\\)/);\",",
+      "reason": "regex-escape or JSON-escaped CSS declaration, not a genuine drive-letter path"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-premium-regression-pin-proposal.json",
+      "line": 23,
+      "kind": "windows-abs-path-false-positive",
+      "excerpt": "oMatch(/--ds-input-border-focus:\\\\s*var\\\\(--ds-material-control-border-active,\\\\s*#3A6FB0\\\\)/);\",",
+      "reason": "regex-escape or JSON-escaped CSS declaration, not a genuine drive-letter path"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-premium-regression-pin-proposal.json",
+      "line": 29,
+      "kind": "windows-abs-path-false-positive",
+      "excerpt": "oMatch(/--ds-input-shadow-focus:\\\\s*var\\\\(--ds-material-control-focus-ring,\\\\s*0 0 0 3px rgba\\\\(58, 111, 176,",
+      "reason": "regex-escape or JSON-escaped CSS declaration, not a genuine drive-letter path"
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/overlay-causality-probe.mjs",
+      "line": 2539,
+      "kind": "windows-abs-path-false-positive",
+      "excerpt": "segmentedCss.match(/box-shadow:\\s*var\\(\\s*\\n\\s*--ds-segmented-shadow-hover,\\s*\\n\\s*var\\(--ds-material-control-shadow-hover, var\\(--ds-elevation-1\\)\\)\\s*\\",
+      "reason": "regex-escape or JSON-escaped CSS declaration, not a genuine drive-letter path"
+    }
+  ],
+  "unsightedBinaries": [
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/control-bithire-1440.png",
+      "bytes": 88980
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/control-bithire-320.png",
+      "bytes": 86035
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/control-bithire-390.png",
+      "bytes": 87127
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/control-bithire-768.png",
+      "bytes": 84921
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/control-the-management-1440.png",
+      "bytes": 76753
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/control-the-management-320.png",
+      "bytes": 71793
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/control-the-management-390.png",
+      "bytes": 72595
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/control-the-management-768.png",
+      "bytes": 72654
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/feedback-bithire-1440.png",
+      "bytes": 215446
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/feedback-bithire-320.png",
+      "bytes": 180065
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/feedback-bithire-390.png",
+      "bytes": 188528
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/feedback-bithire-768.png",
+      "bytes": 201235
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/feedback-the-management-1440.png",
+      "bytes": 100843
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/feedback-the-management-320.png",
+      "bytes": 88293
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/feedback-the-management-390.png",
+      "bytes": 91121
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/feedback-the-management-768.png",
+      "bytes": 95180
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/field-bithire-1440.png",
+      "bytes": 89418
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/field-bithire-320.png",
+      "bytes": 85032
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/field-bithire-390.png",
+      "bytes": 85715
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/field-bithire-768.png",
+      "bytes": 86415
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/field-the-management-1440.png",
+      "bytes": 81899
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/field-the-management-320.png",
+      "bytes": 78163
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/field-the-management-390.png",
+      "bytes": 78547
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/field-the-management-768.png",
+      "bytes": 80411
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/judge-grayscale-control-bithire.png",
+      "bytes": 76601
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/judge-grayscale-control-the-management.png",
+      "bytes": 67217
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/judge-grayscale-feedback-bithire.png",
+      "bytes": 122559
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/judge-grayscale-feedback-the-management.png",
+      "bytes": 75250
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/judge-hue-neutral-control-bithire.png",
+      "bytes": 88725
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/judge-hue-neutral-control-the-management.png",
+      "bytes": 76089
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/judge-hue-neutral-feedback-bithire.png",
+      "bytes": 216421
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/judge-hue-neutral-feedback-the-management.png",
+      "bytes": 105978
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/narrow-280-control-bithire.png",
+      "bytes": 85193
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/narrow-280-control-the-management.png",
+      "bytes": 71075
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-bithire-1440.png",
+      "bytes": 71063
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-bithire-320.png",
+      "bytes": 61916
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-bithire-390.png",
+      "bytes": 62594
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-bithire-768.png",
+      "bytes": 67727
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-blocking-bithire-1440.png",
+      "bytes": 129395
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-blocking-bithire-320.png",
+      "bytes": 92207
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-blocking-bithire-390.png",
+      "bytes": 107502
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-blocking-bithire-768.png",
+      "bytes": 121023
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-blocking-the-management-1440.png",
+      "bytes": 93201
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-blocking-the-management-320.png",
+      "bytes": 25535
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-blocking-the-management-390.png",
+      "bytes": 22617
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-blocking-the-management-768.png",
+      "bytes": 62124
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-the-management-1440.png",
+      "bytes": 55690
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-the-management-320.png",
+      "bytes": 49486
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-the-management-390.png",
+      "bytes": 49097
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/overlay-the-management-768.png",
+      "bytes": 54836
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/reduced-motion-feedback-bithire.png",
+      "bytes": 204703
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/captures/cohort-1/reduced-motion-feedback-the-management.png",
+      "bytes": 103618
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/reference-lab/initial/primitives-bithire-static.png",
+      "bytes": 55872
+    },
+    {
+      "path": "packages/core/test-artifacts/quality-evidence/wo-cra-23/reference-lab/initial/primitives-themanagement-db.png",
+      "bytes": 55092
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-hydration-row-fix/candidates-list-bithire-fixed.png",
+      "bytes": 162657
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-c1-visual-audit/captures/bithire-desktop-en-balanced.png",
+      "bytes": 122835
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-c1-visual-audit/captures/bithire-mobile-390-en-balanced.png",
+      "bytes": 16265
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-c1-visual-audit/captures/bithire-mobile-390-viewport.png",
+      "bytes": 37672
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-c1-visual-audit/captures/themanagement-desktop-en-balanced.png",
+      "bytes": 150635
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-c1-visual-audit/captures/themanagement-desktop-fixed-stable.png",
+      "bytes": 143489
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-c1-visual-audit/captures/themanagement-desktop-fixed.png",
+      "bytes": 25693
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-c1-visual-audit/captures/themanagement-mobile-390-en-balanced.png",
+      "bytes": 16257
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-c1-visual-audit/captures/themanagement-mobile-390-fixed-stable.png",
+      "bytes": 38036
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-c1-visual-audit/captures/themanagement-mobile-390-fixed.png",
+      "bytes": 15776
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-c1-visual-audit/captures/themanagement-mobile-390-viewport-stable.png",
+      "bytes": 38183
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-c1-visual-audit/captures/themanagement-mobile-390-viewport.png",
+      "bytes": 15715
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-candidates-full-feature-progress/overview-bithire-static-1280x720.jpg",
+      "bytes": 84747
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-candidates-full-feature-progress/overview-bithire-static-current.jpg",
+      "bytes": 94540
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-candidates-full-feature-progress/overview-themanagement-db-1280x720-paired.jpg",
+      "bytes": 86875
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-candidates-full-feature-progress/overview-themanagement-db-after-hot-reload.png",
+      "bytes": 128733
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-candidates-full-feature-progress/overview-themanagement-db-current.png",
+      "bytes": 84160
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-candidates-product-rescue/detail-bithire-1637.png",
+      "bytes": 118477
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-candidates-product-rescue/listing-bithire-1637.png",
+      "bytes": 158197
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-candidates-product-rescue/overview-bithire-1637.png",
+      "bytes": 133612
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-collection-workspace-audit/captures/bithire-desktop.png",
+      "bytes": 115793
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-collection-workspace-audit/captures/bithire-mobile-390.png",
+      "bytes": 77152
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-collection-workspace-audit/captures/themanagement-desktop.png",
+      "bytes": 115559
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-kimi-collection-workspace-audit/captures/themanagement-mobile-390.png",
+      "bytes": 148954
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-modern-vs-classic-candidates/classic/candidate-detail.png",
+      "bytes": 51597
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-modern-vs-classic-candidates/classic/candidates-compare.png",
+      "bytes": 104071
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-modern-vs-classic-candidates/classic/candidates-list.png",
+      "bytes": 143436
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-modern-vs-classic-candidates/classic/candidates-overview.png",
+      "bytes": 123262
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-modern-vs-classic-candidates/modern/candidates-overview.png",
+      "bytes": 153842
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/detail-bithire-static-1440x1000.png",
+      "bytes": 106706
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/detail-bithire-static-390x844.png",
+      "bytes": 34165
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/detail-bithire-static-768x1024.png",
+      "bytes": 65949
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/detail-themanagement-db-1440x1000.png",
+      "bytes": 114108
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/detail-themanagement-db-390x844.png",
+      "bytes": 35841
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/detail-themanagement-db-768x1024.png",
+      "bytes": 66141
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/listing-bithire-1440x1000.png",
+      "bytes": 146640
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/listing-bithire-static-390x844.png",
+      "bytes": 38567
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/listing-bithire-static-768x1024.png",
+      "bytes": 87532
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/listing-themanagement-1440x1000.png",
+      "bytes": 151277
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/listing-themanagement-db-390x844.png",
+      "bytes": 41546
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/listing-themanagement-db-768x1024.png",
+      "bytes": 89842
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/overview-bithire-static-1440x1000.png",
+      "bytes": 125821
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/overview-bithire-static-390x844.png",
+      "bytes": 36223
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/overview-bithire-static-768x1024.png",
+      "bytes": 44146
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/overview-themanagement-db-1440x1000.png",
+      "bytes": 132063
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/overview-themanagement-db-390x844.png",
+      "bytes": 41433
+    },
+    {
+      "path": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-tenant-capability-canary/overview-themanagement-db-768x1024.png",
+      "bytes": 50367
+    }
+  ],
+  "unsightedBinariesSummary": {
+    "totalAcrossAll10Directories": 101,
+    "kimiC1SevenBundleSubtotal": 47,
+    "otherThreeDirectoriesSubtotal": 54
+  },
+  "filesUnreadable": [],
+  "knownHitsFound": {
+    "classicManifest": true,
+    "classicManifestDetail": "packages/core/test-artifacts/rottay-design-platform/2026-08-03-modern-vs-classic-candidates/classic/manifest.json contains exactly 3 absolute paths of the form /Users/daniel/Developer/Rottay/ui-design-system/... at lines 10, 20, 30 (each a \"path\" field pointing at a PNG in the same classic/ folder). Confirms the known-hit correctness check.",
+    "screenshotBundle": true,
+    "screenshotBundleDetail": "The 7 dated 2026-08-03 'kimi-c1' screenshot-evidence directories under packages/core/test-artifacts/rottay-design-platform/ contain exactly 47 unsighted binary files in total (per-directory: hydration-row-fix=1, kimi-c1-visual-audit=11, kimi-candidates-full-feature-progress=5, kimi-candidates-product-rescue=3, kimi-collection-workspace-audit=4, modern-vs-classic-candidates=5, tenant-capability-canary=18). Confirms the known-hit correctness check exactly (47/47)."
+  },
+  "additionalFindingsBeyondKnownHits": {
+    "claudeSandboxPathLeak": "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-capture-harness-self-test.json:9 has an \"outDir\" field containing a full Claude-agent session sandbox path (/private/tmp/claude-502/-Users-daniel-Developer-Rottay-ui-design-system/<session-uuid>/scratchpad/capture-lab-self-test) -- session-ephemeral, will never resolve again on any machine, strictly more disqualifying than a plain home-directory path. Not part of the two known hits; found by a supplementary sweep.",
+    "otherDirectoryUnsightedBinaries": "Beyond the 47 in the known screenshot bundle, 54 more unsighted binaries exist inside packages/core/test-artifacts/quality-evidence/ (the live round evidence tree) -- these are additional PNG captures from the current round's own cohort-1 evidence, not from the 'kimi-c1' bundle the known hit refers to.",
+    "hardcodedUsernameAttributionFields": "3 non-path 'hardcoded username' occurrences found: packages/core/package.json:579 (\"author\": \"Daniel Avila <daniel.avila@rottay.com>\") and roadmap/registry.json:826 + :851 (\"claimedBy\"/\"by\": \"daniel\" work-order attribution fields). These are standard authorship/attribution metadata, not stray machine-local paths -- flagged for completeness under the 'hardcoded usernames' category as instructed, but they are qualitatively different from the abs-path-users hits (portable across machines, standard project convention) and a certifier may reasonably treat them as non-disqualifying. Included rather than silently excluded so that judgement stays with the reader."
+  },
+  "coverageCheck": {
+    "porcelainEntriesAccountedFor": "161/161 -- 151 plain-file entries scanned directly, 10 directory entries expanded via recursive find (contributing 220 physical files), matching this task's own independent recount of round-start-porcelain.txt (151 files + 10 directories, not 152+9).",
+    "zeroFilesUnreadable": true
+  }
+}

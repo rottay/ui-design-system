@@ -1,0 +1,798 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-capture-readiness",
+  "law": "Every capture asserts a per-scene readiness contract against VISIBLE elements before the shutter. A scene that does not paint throws instead of producing a plausible-looking file.",
+  "whyItExists": "Codex found feedback-bithire-320, feedback-bithire-1440 and the grayscale 1440 variant missing their alerts and spinners while the live DOM showed them present with correct bounds and opacity — a capture race that produced evidence looking like a clean pass.",
+  "feedbackContract": "seven role=alert elements and four role=status indicators, exact and visible",
+  "segmentedOverflowAffordance": {
+    "proven": true,
+    "mechanism": "Arrow-key roving focus (APG radiogroup, orientation \"both\") walks past the viewport edge; the option receives real document.activeElement, :focus-visible and aria-checked. Coarse-pointer scroll is enabled by the same overflow-x:auto + touch-action:auto contract that lets the option overflow in the first place — standard browser behaviour, not a lab-side claim.",
+    "keyboardPath": [
+      "Review",
+      "Offer",
+      "Closed"
+    ],
+    "finalState": {
+      "text": "Closed",
+      "focusVisible": true,
+      "ariaChecked": "true"
+    },
+    "coarsePointer": {
+      "overflowX": "auto",
+      "touchAction": "auto"
+    }
+  },
+  "devChromeExclusion": "The Next.js dev-tools indicator (<nextjs-portal> shadow root, #devtools-indicator) is excluded via a harness-injected style inside its own open shadow root before every shutter, and a zero-visible-dev-overlay assertion runs immediately before the shutter. Production CSS is never touched.",
+  "focusContract": "Every capture whose scene has a FOCUS entry takes real focus on a deterministic target after readiness+overflow and asserts document.activeElement identity, :focus-visible, and a computed border/box-shadow delta against an unfocused sibling (or, for feedback, against its own pre-focus style) — see the FOCUS contract doc in this file.",
+  "drawerContract": "overlay-blocking now asserts the modal panel and the drawer panel as two independent exact:1 contracts instead of one combined min:1; overlay-drawer is a new isolated chamber (Drawer only, no Modal) so the drawer is actually unoccluded in at least one captured image.",
+  "captured": 36,
+  "failed": 24,
+  "failures": [
+    "page.waitForTimeout: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed",
+    "browser.newPage: Target page, context or browser has been closed"
+  ],
+  "manifest": [
+    {
+      "label": "control/bithire/320",
+      "out": "control-bithire-320.png",
+      "readiness": {
+        "buttons": 26,
+        "segmented tracks": 4
+      },
+      "overflow": {
+        "scrollWidth": 320,
+        "viewport": 320
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focused-control"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "control/bithire/390",
+      "out": "control-bithire-390.png",
+      "readiness": {
+        "buttons": 26,
+        "segmented tracks": 4
+      },
+      "overflow": {
+        "scrollWidth": 390,
+        "viewport": 390
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focused-control"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "control/bithire/768",
+      "out": "control-bithire-768.png",
+      "readiness": {
+        "buttons": 26,
+        "segmented tracks": 4
+      },
+      "overflow": {
+        "scrollWidth": 768,
+        "viewport": 768
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focused-control"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "control/bithire/1440",
+      "out": "control-bithire-1440.png",
+      "readiness": {
+        "buttons": 26,
+        "segmented tracks": 4
+      },
+      "overflow": {
+        "scrollWidth": 1440,
+        "viewport": 1440
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focused-control"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "control/the-management/320",
+      "out": "control-the-management-320.png",
+      "readiness": {
+        "buttons": 26,
+        "segmented tracks": 4
+      },
+      "overflow": {
+        "scrollWidth": 320,
+        "viewport": 320
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focused-control"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "control/the-management/390",
+      "out": "control-the-management-390.png",
+      "readiness": {
+        "buttons": 26,
+        "segmented tracks": 4
+      },
+      "overflow": {
+        "scrollWidth": 390,
+        "viewport": 390
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focused-control"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "control/the-management/768",
+      "out": "control-the-management-768.png",
+      "readiness": {
+        "buttons": 26,
+        "segmented tracks": 4
+      },
+      "overflow": {
+        "scrollWidth": 768,
+        "viewport": 768
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focused-control"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "control/the-management/1440",
+      "out": "control-the-management-1440.png",
+      "readiness": {
+        "buttons": 26,
+        "segmented tracks": 4
+      },
+      "overflow": {
+        "scrollWidth": 1440,
+        "viewport": 1440
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focused-control"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "field/bithire/320",
+      "out": "field-bithire-320.png",
+      "readiness": {
+        "inputs": 17
+      },
+      "overflow": {
+        "scrollWidth": 320,
+        "viewport": 320
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "INPUT",
+        "activeTestId": "lab-focused-field"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "field/bithire/390",
+      "out": "field-bithire-390.png",
+      "readiness": {
+        "inputs": 16
+      },
+      "overflow": {
+        "scrollWidth": 390,
+        "viewport": 390
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "INPUT",
+        "activeTestId": "lab-focused-field"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "field/bithire/768",
+      "out": "field-bithire-768.png",
+      "readiness": {
+        "inputs": 17
+      },
+      "overflow": {
+        "scrollWidth": 768,
+        "viewport": 768
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "INPUT",
+        "activeTestId": "lab-focused-field"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "field/bithire/1440",
+      "out": "field-bithire-1440.png",
+      "readiness": {
+        "inputs": 17
+      },
+      "overflow": {
+        "scrollWidth": 1440,
+        "viewport": 1440
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "INPUT",
+        "activeTestId": "lab-focused-field"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "field/the-management/320",
+      "out": "field-the-management-320.png",
+      "readiness": {
+        "inputs": 17
+      },
+      "overflow": {
+        "scrollWidth": 320,
+        "viewport": 320
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "INPUT",
+        "activeTestId": "lab-focused-field"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "field/the-management/390",
+      "out": "field-the-management-390.png",
+      "readiness": {
+        "inputs": 17
+      },
+      "overflow": {
+        "scrollWidth": 390,
+        "viewport": 390
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "INPUT",
+        "activeTestId": "lab-focused-field"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "field/the-management/768",
+      "out": "field-the-management-768.png",
+      "readiness": {
+        "inputs": 17
+      },
+      "overflow": {
+        "scrollWidth": 768,
+        "viewport": 768
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "INPUT",
+        "activeTestId": "lab-focused-field"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "field/the-management/1440",
+      "out": "field-the-management-1440.png",
+      "readiness": {
+        "inputs": 17
+      },
+      "overflow": {
+        "scrollWidth": 1440,
+        "viewport": 1440
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "INPUT",
+        "activeTestId": "lab-focused-field"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay/bithire/320",
+      "out": "overlay-bithire-320.png",
+      "readiness": {
+        "contextual panels": 3
+      },
+      "overflow": {
+        "scrollWidth": 320,
+        "viewport": 320
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay/bithire/390",
+      "out": "overlay-bithire-390.png",
+      "readiness": {
+        "contextual panels": 3
+      },
+      "overflow": {
+        "scrollWidth": 390,
+        "viewport": 390
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay/bithire/768",
+      "out": "overlay-bithire-768.png",
+      "readiness": {
+        "contextual panels": 3
+      },
+      "overflow": {
+        "scrollWidth": 768,
+        "viewport": 768
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay/bithire/1440",
+      "out": "overlay-bithire-1440.png",
+      "readiness": {
+        "contextual panels": 3
+      },
+      "overflow": {
+        "scrollWidth": 1440,
+        "viewport": 1440
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay/the-management/320",
+      "out": "overlay-the-management-320.png",
+      "readiness": {
+        "contextual panels": 3
+      },
+      "overflow": {
+        "scrollWidth": 320,
+        "viewport": 320
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay/the-management/390",
+      "out": "overlay-the-management-390.png",
+      "readiness": {
+        "contextual panels": 3
+      },
+      "overflow": {
+        "scrollWidth": 390,
+        "viewport": 390
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay/the-management/768",
+      "out": "overlay-the-management-768.png",
+      "readiness": {
+        "contextual panels": 3
+      },
+      "overflow": {
+        "scrollWidth": 768,
+        "viewport": 768
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay/the-management/1440",
+      "out": "overlay-the-management-1440.png",
+      "readiness": {
+        "contextual panels": 3
+      },
+      "overflow": {
+        "scrollWidth": 1440,
+        "viewport": 1440
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay-blocking/bithire/320",
+      "out": "overlay-blocking-bithire-320.png",
+      "readiness": {
+        "modal panel": 1,
+        "drawer panel": 1
+      },
+      "overflow": {
+        "scrollWidth": 320,
+        "viewport": 320
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay-blocking/bithire/390",
+      "out": "overlay-blocking-bithire-390.png",
+      "readiness": {
+        "modal panel": 1,
+        "drawer panel": 1
+      },
+      "overflow": {
+        "scrollWidth": 390,
+        "viewport": 390
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay-blocking/bithire/768",
+      "out": "overlay-blocking-bithire-768.png",
+      "readiness": {
+        "modal panel": 1,
+        "drawer panel": 1
+      },
+      "overflow": {
+        "scrollWidth": 768,
+        "viewport": 768
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay-blocking/bithire/1440",
+      "out": "overlay-blocking-bithire-1440.png",
+      "readiness": {
+        "modal panel": 1,
+        "drawer panel": 1
+      },
+      "overflow": {
+        "scrollWidth": 1440,
+        "viewport": 1440
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay-blocking/the-management/320",
+      "out": "overlay-blocking-the-management-320.png",
+      "readiness": {
+        "modal panel": 1,
+        "drawer panel": 1
+      },
+      "overflow": {
+        "scrollWidth": 320,
+        "viewport": 320
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay-blocking/the-management/390",
+      "out": "overlay-blocking-the-management-390.png",
+      "readiness": {
+        "modal panel": 1,
+        "drawer panel": 1
+      },
+      "overflow": {
+        "scrollWidth": 390,
+        "viewport": 390
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay-blocking/the-management/768",
+      "out": "overlay-blocking-the-management-768.png",
+      "readiness": {
+        "modal panel": 1,
+        "drawer panel": 1
+      },
+      "overflow": {
+        "scrollWidth": 768,
+        "viewport": 768
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay-blocking/the-management/1440",
+      "out": "overlay-blocking-the-management-1440.png",
+      "readiness": {
+        "modal panel": 1,
+        "drawer panel": 1
+      },
+      "overflow": {
+        "scrollWidth": 1440,
+        "viewport": 1440
+      },
+      "focus": {
+        "ok": true,
+        "isActive": true,
+        "focusVisible": true,
+        "differs": true,
+        "mode": "rest-sibling",
+        "activeTag": "BUTTON",
+        "activeTestId": "lab-focus-target"
+      },
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay-drawer/bithire/320",
+      "out": "overlay-drawer-bithire-320.png",
+      "readiness": {
+        "drawer panel": 1
+      },
+      "overflow": {
+        "scrollWidth": 320,
+        "viewport": 320
+      },
+      "focus": null,
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay-drawer/bithire/390",
+      "out": "overlay-drawer-bithire-390.png",
+      "readiness": {
+        "drawer panel": 1
+      },
+      "overflow": {
+        "scrollWidth": 390,
+        "viewport": 390
+      },
+      "focus": null,
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay-drawer/bithire/768",
+      "out": "overlay-drawer-bithire-768.png",
+      "readiness": {
+        "drawer panel": 1
+      },
+      "overflow": {
+        "scrollWidth": 768,
+        "viewport": 768
+      },
+      "focus": null,
+      "devChromeExcluded": true
+    },
+    {
+      "label": "overlay-drawer/bithire/1440",
+      "out": "overlay-drawer-bithire-1440.png",
+      "readiness": {
+        "drawer panel": 1
+      },
+      "overflow": {
+        "scrollWidth": 1440,
+        "viewport": 1440
+      },
+      "focus": null,
+      "devChromeExcluded": true
+    }
+  ]
+}

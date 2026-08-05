@@ -1,0 +1,267 @@
+{
+  "schemaVersion": 1,
+  "measurementId": "wo-cra-23-R1-C1-tenant-divergence",
+  "sources": {
+    "bithire": "src/foundation/tokens/css/facade/artifacts/bithire/index.css (shipped artifact)",
+    "themanagement": "compileTenantThemeConfig(published canary document) via dist/index.cjs",
+    "channelsSeen": 1301
+  },
+  "requirement": {
+    "minAxes": 8,
+    "minNonColourAxes": 6,
+    "silentAxesAllowed": 0
+  },
+  "results": [
+    {
+      "axis": "palette",
+      "colour": true,
+      "channelsInAxis": 137,
+      "channelsComparable": 47,
+      "channelsDiffering": 46,
+      "channelsAsymmetric": 90,
+      "divergent": true,
+      "silent": false,
+      "samples": [
+        {
+          "channel": "--ds-color-accent",
+          "bithire": "#86A6C2",
+          "themanagement": "#2E2C28"
+        },
+        {
+          "channel": "--ds-color-accent-100",
+          "bithire": "#C8DCEE",
+          "themanagement": "#D7D6D2"
+        },
+        {
+          "channel": "--ds-color-accent-200",
+          "bithire": "#A6C0D7",
+          "themanagement": "#BBB9B5"
+        },
+        {
+          "channel": "--ds-color-accent-300",
+          "bithire": "#86A4BE",
+          "themanagement": "#9F9D98"
+        }
+      ]
+    },
+    {
+      "axis": "type",
+      "colour": false,
+      "channelsInAxis": 101,
+      "channelsComparable": 4,
+      "channelsDiffering": 4,
+      "channelsAsymmetric": 97,
+      "divergent": true,
+      "silent": false,
+      "samples": [
+        {
+          "channel": "--ds-font-family-base",
+          "bithire": "var(--ds-font-pack-humanist-text, 'Public Sans', ui-sans-serif, system-ui, -apple-system, sans-serif), \"Noto Sans Arabic\", sans-serif",
+          "themanagement": "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', \"Noto Sans Arabic\", sans-serif"
+        },
+        {
+          "channel": "--ds-font-family-heading",
+          "bithire": "var(--ds-font-pack-grotesk-display, 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif), \"Noto Sans Arabic\", sans-serif",
+          "themanagement": "'Fraunces', Georgia, 'Times New Roman', \"Noto Sans Arabic\", serif"
+        },
+        {
+          "channel": "--ds-letter-spacing-heading",
+          "bithire": "-0.01em",
+          "themanagement": "0"
+        },
+        {
+          "channel": "--ds-type-scale",
+          "bithire": "1",
+          "themanagement": "1.04"
+        }
+      ]
+    },
+    {
+      "axis": "geometry",
+      "colour": false,
+      "channelsInAxis": 8,
+      "channelsComparable": 6,
+      "channelsDiffering": 6,
+      "channelsAsymmetric": 2,
+      "divergent": true,
+      "silent": false,
+      "samples": [
+        {
+          "channel": "--ds-radius-button",
+          "bithire": "9px",
+          "themanagement": "2px"
+        },
+        {
+          "channel": "--ds-radius-lg",
+          "bithire": "14px",
+          "themanagement": "1px"
+        },
+        {
+          "channel": "--ds-radius-md",
+          "bithire": "10px",
+          "themanagement": "0px"
+        },
+        {
+          "channel": "--ds-radius-scale",
+          "bithire": "1.25",
+          "themanagement": "0.8"
+        }
+      ]
+    },
+    {
+      "axis": "edge",
+      "colour": false,
+      "channelsInAxis": 3,
+      "channelsComparable": 3,
+      "channelsDiffering": 1,
+      "channelsAsymmetric": 0,
+      "divergent": true,
+      "silent": false,
+      "samples": [
+        {
+          "channel": "--ds-edge-emphasis-width",
+          "bithire": "1px",
+          "themanagement": "2px"
+        }
+      ]
+    },
+    {
+      "axis": "material",
+      "colour": false,
+      "channelsInAxis": 81,
+      "channelsComparable": 22,
+      "channelsDiffering": 22,
+      "channelsAsymmetric": 59,
+      "divergent": true,
+      "silent": false,
+      "samples": [
+        {
+          "channel": "--ds-glass-bg",
+          "bithire": "rgba(255, 255, 255, 0.84)",
+          "themanagement": "rgba(246, 243, 236, 0.97)"
+        },
+        {
+          "channel": "--ds-glass-blur",
+          "bithire": "12px",
+          "themanagement": "0px"
+        },
+        {
+          "channel": "--ds-glass-border",
+          "bithire": "rgba(196, 210, 222, 0.86)",
+          "themanagement": "rgba(42, 40, 36, 0.28)"
+        },
+        {
+          "channel": "--ds-material-card-highlight",
+          "bithire": "inset 0 1px 0 rgba(255, 255, 255, 0.9)",
+          "themanagement": "color-mix(in srgb, var(--ds-color-primary) calc(4% * var(--ds-effect-intensity, 1)), transparent)"
+        }
+      ]
+    },
+    {
+      "axis": "elevation",
+      "colour": false,
+      "channelsInAxis": 12,
+      "channelsComparable": 7,
+      "channelsDiffering": 7,
+      "channelsAsymmetric": 5,
+      "divergent": true,
+      "silent": false,
+      "samples": [
+        {
+          "channel": "--ds-elevation-1",
+          "bithire": "none",
+          "themanagement": "0 2px 4px rgba(0,0,0,0.08)"
+        },
+        {
+          "channel": "--ds-elevation-2",
+          "bithire": "none",
+          "themanagement": "0 4px 8px rgba(0,0,0,0.1)"
+        },
+        {
+          "channel": "--ds-elevation-3",
+          "bithire": "0 1px 2px rgba(0,0,0,0.05)",
+          "themanagement": "0 8px 16px rgba(0,0,0,0.12)"
+        },
+        {
+          "channel": "--ds-shadow-lg",
+          "bithire": "0 8px 24px rgba(20, 40, 59, 0.1)",
+          "themanagement": "3px 3px 0 0 rgba(20, 20, 18, 0.22)"
+        }
+      ]
+    },
+    {
+      "axis": "density",
+      "colour": false,
+      "channelsInAxis": 2,
+      "channelsComparable": 1,
+      "channelsDiffering": 1,
+      "channelsAsymmetric": 1,
+      "divergent": true,
+      "silent": false,
+      "samples": [
+        {
+          "channel": "--ds-density-mode-factor",
+          "bithire": "1",
+          "themanagement": "1.15"
+        }
+      ]
+    },
+    {
+      "axis": "recipe-profile",
+      "colour": false,
+      "channelsInAxis": 1,
+      "channelsComparable": 1,
+      "channelsDiffering": 1,
+      "channelsAsymmetric": 0,
+      "divergent": true,
+      "silent": false,
+      "samples": [
+        {
+          "channel": "--ds-recipe-profile",
+          "bithire": "\"rottay/network-professional@1\"",
+          "themanagement": "\"rottay/technical-sharp@1\""
+        }
+      ]
+    },
+    {
+      "axis": "anatomy",
+      "colour": false,
+      "channelsInAxis": 4,
+      "channelsComparable": 4,
+      "channelsDiffering": 4,
+      "channelsAsymmetric": 0,
+      "divergent": true,
+      "silent": false,
+      "samples": [
+        {
+          "channel": "data-anatomy-card",
+          "bithire": "default",
+          "themanagement": "underline"
+        },
+        {
+          "channel": "data-anatomy-layout",
+          "bithire": "default",
+          "themanagement": "floating"
+        },
+        {
+          "channel": "data-anatomy-sidebar",
+          "bithire": "default",
+          "themanagement": "panel"
+        },
+        {
+          "channel": "data-anatomy-table",
+          "bithire": "default",
+          "themanagement": "open"
+        }
+      ]
+    }
+  ],
+  "verdict": {
+    "divergentAxes": 9,
+    "nonColourDivergentAxes": 8,
+    "silentAxes": [],
+    "meetsAxisFloor": true,
+    "meetsNonColourFloor": true,
+    "hasNoSilentAxis": true
+  }
+}

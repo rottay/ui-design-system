@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 2,
+  "roundId": "R0",
+  "familyId": "program/r0-appearance-compiler",
+  "scenarioId": "advanced-token-overrides-cap-fails-closed",
+  "evidenceKind": "compiler-contract-fix",
+  "exitCriterion": "existing documents above the Expert cap are zero or explicitly migrated, and 201 tokenOverrides produce one named fail-closed result",
+  "verdict": "CLOSED",
+  "censusRanFirst": {
+    "law": "the contract requires the census BEFORE the fix — a fail-closed gate landed without knowing what it would reject is a blind change",
+    "result": "no document in the repository exceeds the cap",
+    "largestObserved": 36,
+    "documents": [
+      { "path": "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts", "document": "EDITORIAL_FLAT_DOCUMENT", "overrides": 35 },
+      { "path": "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts", "document": "TECHNICAL_DARK_DOCUMENT", "overrides": 36 },
+      { "path": "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts", "document": "HUMANIST_SOFT_DOCUMENT", "overrides": 35 },
+      { "path": "packages/core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/divergence-editorial/index.ts", "overrides": 1 },
+      { "path": "packages/core/src/foundation/tokens/ts/presentation/brand-themes/fixtures/divergence-sober/index.ts", "overrides": 1 },
+      { "path": "packages/showroom/src/components/divergence-surface/fixtures/index.ts", "document": "sober", "overrides": 1 },
+      { "path": "packages/showroom/src/components/divergence-surface/fixtures/index.ts", "document": "editorial", "overrides": 1 }
+    ],
+    "rulingOut": "the torture and themanagementmiami brand themes use the fully typed BrandTheme shape and carry no raw tokenOverrides; the brand-studio file export emits a fixed ~20-25 token set and is structurally incapable of approaching the cap"
+  },
+  "theDefect": {
+    "site": "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts, inside appearanceAdvancedToVariables",
+    "before": "if (count >= MAX_TOKEN_OVERRIDES) break; — entries past the bound were dropped in enumeration order with no error, no log and no return signal, and the function returned normally as if nothing had happened",
+    "siblingThatAlreadyFailedClosed": "the skin-pack path throws a plain Error naming both the actual count and the bound, and is called at the start of register/apply/acquire so nothing is stored when it throws"
+  },
+  "theArchitecturalFactBehindIt": {
+    "vocabularySize": 294,
+    "vocabularyAuthority": "TENANT_THEME_OVERRIDE_TOKENS, tenant-theme/index.ts:119-193 (71 literals + 8x20 semantic-surface + 9x7 semantic-typography)",
+    "perDocumentBudget": 200,
+    "budgetAuthority": "schemas/tenant-theme/index.ts:1511, inside a frozen limits object whose own comment states that a second literal 200 anywhere is a cascade-integrity defect",
+    "consequence": "a fully schema-legal document authoring more than 200 of its 294 legally allowlisted tokens passed validateTenantThemeDocument cleanly and was then silently truncated by the compiler. This is reachable by an in-spec author, not an abuse case.",
+    "reconciliationLaw": "NOT by widening the cap. 294 is the vocabulary and 200 is the budget — structurally distinct mechanisms, allowlist membership versus entry count. The cap was not moved and remains declared in exactly one place.",
+    "alsoOnTheCanonicalPath": "compileTenantThemeConfig passes its schema-validated normalizedAppearance into the same truncating function, so this was never confined to a legacy compatibility path"
+  },
+  "theFix": {
+    "documentValidation": {
+      "site": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts, validateEnvelopeShape",
+      "change": "emits one named issue at $.visualFoundation.advanced.tokenOverrides whose message names both the bound and the actual count",
+      "whyThere": "validateEnvelopeShape already enforced every OTHER member of the same frozen limits object — maxDepth, maxObjectFields, maxDocumentBytes. maxTokenOverrides was the only limit never checked there; that absence was the root."
+    },
+    "compiler": {
+      "site": "appearanceAdvancedToVariables",
+      "change": "rejects over-budget input with a named error quoting the actual count and the bound, matching the skin-pack house pattern, instead of breaking out of the loop"
+    }
+  },
+  "testsRespecifiedNotDeleted": {
+    "obsolete": "appearance.test.ts asserted the truncation as CORRECT — it built cap+25 entries and asserted exactly 200 survived. That test encoded the defect being fixed, so it was respecified rather than removed.",
+    "coverageGapClosed": "the canonical compileTenantThemeConfig path had no test building a >200 tokenOverrides document. It now has a 201 rejection test and a 200 boundary test, mirroring the three-part shape the skin-pack tests already use: over-cap rejects with a named error, the exact boundary does not, and the bound is read from the schema authority rather than hardcoded."
+  },
+  "digestSentinels": {
+    "law": "a silent re-baseline is forbidden; a moved digest must be reported before it is re-anchored",
+    "result": "unchanged — TENANT_THEME_DOCUMENT_SCHEMA_DIGEST and TENANT_THEME_CONFIG_SCHEMA_DIGEST were not re-anchored, because adding a check does not alter the schema shape"
+  },
+  "outOfScopeFlagRaisedAndWithdrawn": {
+    "correctionNotice": "this block was written mid-round, while the coordinator still believed the ambient removal was authored by this lane. Every claim in it was reconciled during the R0 close-out. It is kept, corrected, rather than deleted, because the flag and its withdrawal are both part of the record. The authority on this episode is receipts/incident-inherited-worktree-revert.json.",
+    "whatWasFlagged": "the removal of the --ds-motion-ambient emission from appearancePostureToVariables, reasoning that a keyword custom property had no productive CSS reader",
+    "whoAuthoredIt": "NOT this lane, and no lane in this round. The change was INHERITED from a prior session and arrived with the 161 inherited porcelain entries, carrying a ledger note describing it as a previously reconciled decision. The original text of this block attributing it to the lane was a misattribution.",
+    "whyEachRejectionReasonDidNotHold": [
+      "'it sat outside the lane's writeSet' — moot: the lane did not make the change, so there was no scope breach to judge",
+      "'it removed a capability without census, successor and death proof' — overstated. Per the incident receipt's howTheErrorHappened.compoundingError, the capability survived; only the CSS custom property was withdrawn, with the policy moving to the layer MotionProvider consumes. That is materially different from a capability removed without a successor",
+      "'the R1 tenant migration plan has The Management authoring ambient: off' — true that the plan item exists, but it does not support the revert: the plan authors ambient in the DOCUMENT layer, not through the CSS emission that was withdrawn"
+    ],
+    "howItWasDetected": "it changed the compiled artifact CSS relative to the HEAD-pinned digests, which is why three assertions in canonical-digest-identity.test.ts fail against the inherited state",
+    "resolutionAtRoundClose": "the revert was itself undone before round close and the inherited state is present in the working tree. The three canonical-digest assertions therefore stand at RED — that is the expected consequence of preserving inherited work that is ahead of the HEAD pins, and no digest was re-anchored in either direction. The earlier claim in this block that the assertions 'returned to green' described the transient reverted state and is false at round close.",
+    "theDesignIsEncodedInTheTree": "the earlier claim that 'the rejected design is not encoded anywhere' is false at round close. appearance.test.ts carries the inherited assertion that --ds-motion-ambient is undefined, and appearance-posture/index.ts carries the inherited comment instead of the emission. That is the preserved inherited state, not a landed decision by this round.",
+    "findingPreserved": "the underlying observation — that a keyword custom property can be misused in a <time> position — remains an open, un-censused architectural question, recorded for Codex as needing a consumer census rather than settled here"
+  },
+  "gates": {
+    "typecheck": "0 errors",
+    "compilerUnitTests": "972 tests, 968 pass, 4 fail — 45 files, 2 failing",
+    "compilerUnitTestsNote": "an earlier version of this field recorded 971 pass / 1 fail. That was the transient reverted state, when the three canonical-digest assertions were green. The total of 972 is unchanged, confirming the same scope; only the split moved once the inherited state was reinstated.",
+    "theFourFailures": [
+      {
+        "test": "brand-theme/tests/sidebar-group-channels.test.ts > groupPaddingTop reaches --ds-sidebar-group-padding-top and the skin reads it with the pre-wiring default",
+        "count": 1,
+        "attribution": "PRE-EXISTING — packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/ carries no modification from any lane in this round; the inherited worktree rewrites the menu.css it reads",
+        "notThisRound": true
+      },
+      {
+        "test": "composition/tenant-theme/tests/canonical-digest-identity.test.ts",
+        "count": 3,
+        "attribution": "PRE-EXISTING category — HEAD-pinned digests disagreeing with the inherited adjudicated worktree state. These are red BECAUSE the inherited ambient removal is preserved; they were green only during the transient revert",
+        "notThisRound": true
+      }
+    ],
+    "appearanceSuite": "77 of 77 pass"
+  },
+  "producer": "claude-modern-rescue",
+  "negativeDrill": {
+    "violation": "an Advanced document authoring more than 200 tokenOverrides",
+    "failsClosed": true,
+    "proof": "the 201-entry rejection test on the canonical compileTenantThemeConfig path, paired with the 200-entry boundary test that must NOT throw"
+  },
+  "sightedApproval": "NOT_CLAIMED — Codex is the sighted authority"
+}

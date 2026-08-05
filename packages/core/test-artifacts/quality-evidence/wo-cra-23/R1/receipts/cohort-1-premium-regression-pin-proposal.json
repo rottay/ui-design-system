@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-premium-regression-pin-proposal",
+  "disposition": "PROPOSAL ONLY. The test file was NOT edited. There is no owner authorization to re-anchor this pin and none was assumed.",
+  "theConflict": {
+    "assertion": "premium-regression.test.ts:338 — expect(bithireCss).toContain('--ds-input-bg: #ffffff')",
+    "whatTheAssertionProtects": "That the shared chrome pipeline actually GENERATES input variables for BitHire, with real values, rather than silently emitting nothing. The surrounding block is titled 'shared pipeline: chrome vars NOW generated (G1)', so its purpose is generation-and-correctness, not the literal #ffffff specifically.",
+    "whatR1Changed": "BitHire's chrome.controls.input.bg moved from the literal \"#ffffff\" to \"var(--ds-surface-inset, #ffffff)\", so the artifact now emits the var() chain.",
+    "whyTheChangeIsCorrect": "It is what made field chrome tenant-reachable. Before it, --ds-input-border and --ds-input-border-focus were BYTE-IDENTICAL across both tenants while the grounds already diverged; after it they diverge (rgb(215,226,234) cool vs rgb(201,195,182) warm). The literal was a vertical-scope leak of the same class fixed seven other times this round.",
+    "whyThePinIsAlsoCorrect": "It was protecting a real contract and it caught a real change. This is not a bad pin."
+  },
+  "proposedReplacement": {
+    "principle": "Keep or INCREASE pin strength. Each replacement pins THREE facts where the original pinned one: the channel is emitted, it resolves through the governed authority, and the vertical own value survives as the fallback so nothing moves for a tenant that authors nothing.",
+    "assertion1": {
+      "line": 337,
+      "current": "expect(bithireCss).toContain('--ds-input-bg: #ffffff');",
+      "proposed": "expect(bithireCss).toMatch(/--ds-input-bg:\\s*var\\(--ds-surface-inset,\\s*#ffffff\\)/);",
+      "authority": "--ds-surface-inset"
+    },
+    "assertion2": {
+      "line": 338,
+      "current": "expect(bithireCss).toContain('--ds-input-border-focus: #3A6FB0');",
+      "proposed": "expect(bithireCss).toMatch(/--ds-input-border-focus:\\s*var\\(--ds-material-control-border-active,\\s*#3A6FB0\\)/);",
+      "authority": "--ds-material-control-border-active"
+    },
+    "assertion3": {
+      "lines": "339-341 (wrapped toContain)",
+      "current": "expect(bithireCss).toContain('--ds-input-shadow-focus: 0 0 0 3px rgba(58, 111, 176, 0.16), 0 2px 8px rgba(20, 40, 59, 0.08)');",
+      "proposed": "expect(bithireCss).toMatch(/--ds-input-shadow-focus:\\s*var\\(--ds-material-control-focus-ring,\\s*0 0 0 3px rgba\\(58, 111, 176, 0\\.16\\), 0 2px 8px rgba\\(20, 40, 59, 0\\.08\\)\\)/);",
+      "authority": "--ds-material-control-focus-ring",
+      "note": "The fallback is a two-layer shadow containing commas and parentheses, so the regex must escape them. This is the one most likely to be got wrong by hand, which is why it is written out in full rather than described."
+    },
+    "negativeAssertion": {
+      "proposed": "expect(bithireCss).not.toMatch(/--ds-input-(bg|border-focus|shadow-focus):\\s*(#[0-9a-fA-F]{3,8}|rgba?\\()/);",
+      "why": "Asserts the channels are no longer bare literals. That is the actual regression this round fought across eight instances, and no existing pin expresses it. Covers all three channels in one assertion."
+    },
+    "linesNotTouched": "344-348 (rottay --ds-layout-* pins) are untouched by R1 and must stay exactly as they are."
+  },
+  "whatIAmNotProposing": [
+    "Deleting the assertion. It would remove coverage the round has no mandate to remove.",
+    "Loosening it to a bare toContain('--ds-input-bg'). That would pass on an empty or wrong value and is weaker than what exists.",
+    "Re-anchoring it silently as part of another change."
+  ],
+  "requiredBeforeAnyEdit": "Explicit owner authorization naming this file and this assertion, in the same shape as the compilers carve-out Codex granted for the schema and geometry sentinels. That carve-out does NOT cover this file: it is an artifact-content pin, not a drift sentinel.",
+  "correction": "My proposal covered TWO assertions. Codex found THREE. The third (--ds-input-shadow-focus, spanning lines 340-342 as a wrapped toContain) was missed because I read the grep output rather than the full block. Corrected below; all three are in the same it() and all three break for the identical cause."
+}

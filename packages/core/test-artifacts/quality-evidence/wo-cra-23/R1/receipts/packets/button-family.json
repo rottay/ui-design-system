@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "roundId": "R1",
+  "cohort": 1,
+  "lane": "R1-Button-and-action-cluster",
+  "laneClass": "family-writer",
+  "ownedFamilies": [
+    "primitive/inputs/button",
+    "primitive/navigation/segmented"
+  ],
+  "ownedFiles": [
+    "packages/core/src/ui/primitives/inputs/Button/engines/modern/index.tsx"
+  ],
+  "observableDefect": {
+    "title": "The busy width reservation sizes to the RESTING content only, so a longer busy label truncates.",
+    "evidence": "Captured at 1440 with abundant free space: pendingLabel \"Submitting\" renders as \"Su...\". Confirmed sighted by Codex.",
+    "mechanism": "widthStable renders a hidden reserve layer containing restingContentNode alone. When the busy label is longer than the resting label the frame is undersized and the busy content ellipsizes.",
+    "consequence": "R1 requires proving no clipping and no accidental desktop compression. A control that truncates its own state label at full desktop width fails that objective outright, identically under both tenants."
+  },
+  "applicableRubricDimensions": [
+    "interaction-states-motion",
+    "typography-content",
+    "responsive-mobile"
+  ],
+  "standardControlsUsed": [
+    "existing widthStable reserve-layer mechanism",
+    "resolveButtonBusyState precedence resolution"
+  ],
+  "proControlsAndRecipesUsed": [
+    "The reserve layer sizes to the WIDEST of resting and busy content by rendering both in the hidden reserve, so the frame cannot be undersized in either direction. Swapping the label on busy stays correct; truncating a state label never is."
+  ],
+  "expertChannelsUsed": [],
+  "privateChannelsUsed": [],
+  "creativeProposalIds": [
+    "R1-C1-PROP-05-busy-width-reservation"
+  ],
+  "responsiveStrategy": "The reserve is intrinsic, so the fix holds at every width rather than being tuned per breakpoint.",
+  "mobileSimplification": "No mobile branch is introduced; the widest-content reserve is the same rule at 320 and 1440.",
+  "statesAndMotion": "Only the busy state geometry changes. Rest, hover, focus-visible, press and disabled are untouched, and the interaction-state contract remains the single authority.",
+  "i18nRtlA11y": "aria-live on the busy content and the visually hidden accessible label are preserved unchanged; the reserve stays aria-hidden so the widest-content measurement is never announced.",
+  "expectedTenantDivergence": {
+    "law": "this is a geometry-integrity fix, not a divergence axis",
+    "note": "the defect reproduced identically under both tenants, which is what identifies it as grammar rather than tenant"
+  },
+  "filesActuallyChanged": [
+    "packages/core/src/ui/primitives/inputs/Button/engines/modern/index.tsx"
+  ],
+  "integratorRequests": [],
+  "honestStatus": "IN_PROGRESS — fixing CTRL-05, the busy-label truncation Codex confirmed sighted."
+}

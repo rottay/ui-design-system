@@ -1,0 +1,623 @@
+{
+  "schemaVersion": 1,
+  "probeId": "wo-cra-23-R1-C1-button-shadow-preservation",
+  "law": "platform and evnto must resolve byte-identical values before and after the engine-tier deletion. bithire may move: its deltas are in-round and go to sighted review as declared deltas.",
+  "comparisonRule": "Reference strings are compared verbatim. Terminal token values are NOT resolved, because the pins are by reference and those tokens are dark-aware — comparing resolved colour would fail on a legitimate dark-mode difference and would be testing the wrong property.",
+  "variantsCovered": [
+    "primary",
+    "secondary",
+    "default",
+    "ghost",
+    "text",
+    "dashed",
+    "link",
+    "success",
+    "warning",
+    "error",
+    "info",
+    "ai"
+  ],
+  "statesCovered": [
+    "rest",
+    "hover",
+    "active",
+    "selected"
+  ],
+  "modesCovered": [
+    "light",
+    "dark"
+  ],
+  "cellsPerVertical": 72,
+  "verticals": {
+    "rottay": {
+      "primary.rest.light": {
+        "value": "0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.06)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.rest.dark": {
+        "value": "0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.06)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.hover.light": {
+        "value": "0 2px 8px rgba(0, 0, 0, 0.12)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.hover.dark": {
+        "value": "0 2px 8px rgba(0, 0, 0, 0.12)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "secondary.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "secondary.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "secondary.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "secondary.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "secondary.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "secondary.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "default.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "default.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "default.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "default.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "default.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "default.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ghost.rest.light": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ghost.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ghost.hover.light": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ghost.hover.dark": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ghost.active.light": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ghost.active.dark": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "text.rest.light": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "text.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "text.hover.light": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "text.hover.dark": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "text.active.light": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "text.active.dark": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "dashed.rest.light": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "dashed.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "dashed.hover.light": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "dashed.hover.dark": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "dashed.active.light": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "dashed.active.dark": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "link.rest.light": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "link.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "link.hover.light": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "link.hover.dark": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "link.active.light": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "link.active.dark": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "success.rest.light": {
+        "value": "var(--ds-shadow-success-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "success.rest.dark": {
+        "value": "var(--ds-shadow-success-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "success.hover.light": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "success.hover.dark": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "success.active.light": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "success.active.dark": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "warning.rest.light": {
+        "value": "var(--ds-shadow-warning-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "warning.rest.dark": {
+        "value": "var(--ds-shadow-warning-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "warning.hover.light": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "warning.hover.dark": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "warning.active.light": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "warning.active.dark": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "error.rest.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "error.rest.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "error.hover.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "error.hover.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "error.active.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "error.active.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "info.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "info.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "info.hover.light": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "info.hover.dark": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "info.active.light": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "info.active.dark": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ai.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ai.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ai.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ai.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ai.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ai.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      }
+    },
+    "evnto": {
+      "primary.rest.light": {
+        "value": "0 1px 2px rgba(0, 0, 0, 0.08)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.rest.dark": {
+        "value": "0 1px 2px rgba(0, 0, 0, 0.08)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "secondary.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "secondary.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "secondary.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "secondary.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "secondary.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "secondary.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "default.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "default.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "default.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "default.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "default.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "default.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ghost.rest.light": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ghost.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ghost.hover.light": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ghost.hover.dark": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ghost.active.light": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ghost.active.dark": {
+        "value": "var(--ds-button-ghost-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "text.rest.light": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "text.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "text.hover.light": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "text.hover.dark": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "text.active.light": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "text.active.dark": {
+        "value": "var(--ds-button-text-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "dashed.rest.light": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "dashed.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "dashed.hover.light": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "dashed.hover.dark": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "dashed.active.light": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "dashed.active.dark": {
+        "value": "var(--ds-button-dashed-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "link.rest.light": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "link.rest.dark": {
+        "value": "none",
+        "resolvesFrom": "vertical artifact"
+      },
+      "link.hover.light": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "link.hover.dark": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "link.active.light": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "link.active.dark": {
+        "value": "var(--ds-button-link-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "success.rest.light": {
+        "value": "var(--ds-shadow-success-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "success.rest.dark": {
+        "value": "var(--ds-shadow-success-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "success.hover.light": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "success.hover.dark": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "success.active.light": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "success.active.dark": {
+        "value": "var(--ds-button-success-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "warning.rest.light": {
+        "value": "var(--ds-shadow-warning-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "warning.rest.dark": {
+        "value": "var(--ds-shadow-warning-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "warning.hover.light": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "warning.hover.dark": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "warning.active.light": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "warning.active.dark": {
+        "value": "var(--ds-button-warning-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "error.rest.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "error.rest.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "error.hover.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "error.hover.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "error.active.light": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "error.active.dark": {
+        "value": "var(--ds-shadow-error-sm)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "info.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "info.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "info.hover.light": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "info.hover.dark": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "info.active.light": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "info.active.dark": {
+        "value": "var(--ds-button-info-shadow)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ai.rest.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ai.rest.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ai.hover.light": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ai.hover.dark": {
+        "value": "var(--ds-shadow-button-hover)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ai.active.light": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      },
+      "ai.active.dark": {
+        "value": "var(--ds-shadow-button-rest)",
+        "resolvesFrom": "vertical artifact"
+      }
+    },
+    "bithire": {
+      "primary.rest.light": {
+        "value": "var(--ds-material-control-shadow, 0 1px 2px rgba(20, 40, 59, 0.1))",
+        "resolvesFrom": "vertical artifact"
+      },
+      "primary.rest.dark": {
+        "value": "var(--ds-material-control-shadow, 0 1px 2px rgba(20, 40, 59, 0.1))",
+        "resolvesFrom": "vertical artifact"
+      }
+    }
+  }
+}

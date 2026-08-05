@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-round2-corrections",
+  "claimLevel": "NOT COMPLETE and NOT SEALED. Codex returned NO GO; this records the second correction pass. Claude proposes; Codex is the sole sighted approver.",
+
+  "thresholdAuthorityCorrected": {
+    "defect": "The first score receipt judged every canary against 92, taken from the ownership proposal's per-family field.",
+    "governing": "rounds.json R1.exit — each canary >=95 and each critical dimension >=4/5.",
+    "effect": "Against the correct bar ALL FOUR canaries fail, not three. Nothing was rounded up."
+  },
+
+  "def04Retracted": {
+    "myClaim": "TENANT_THEME_OVERRIDE_TOKENS and the intake schema disagree on --ds-material-{role}-background.",
+    "truth": "FALSE. That channel is not in the allowlist at all; the facet list deliberately excludes the base ground. All eight --ds-surface-{role} tokens ARE allowlisted and schema-accepted.",
+    "myError": "I asserted allowlist membership from my own earlier summary instead of re-querying, then blamed the schema for a rejection that was correct. Codex verified directly against the compiler.",
+    "consequence": "cohort-1-role-adoptability.json overstates tenant reach by one channel per role, because it derives writability from the allowlist alone. Corrected in the record."
+  },
+
+  "groundVsFacetLaw": "The resting GROUND of a surface role is authored through --ds-surface-{role}. The --ds-material-{role}-* family carries STATES and FACETS and has no base -background by design, since the role derives it from the seed. Authoring both would be two authorities for one value.",
+
+  "defectsResolvedThisPass": [
+    {
+      "id": "CTRL-05",
+      "title": "Busy label truncation",
+      "fix": "The width-stable reserve rendered only the RESTING content, so a longer busy label ellipsized against overflow:clip. The reserve now renders both resting and busy rows in a single-cell grid (grid-template-areas: 'state'), so the frame takes the MAX of the two widths rather than the sum.",
+      "verified": "busyClipped=false under both tenants; 'Submitting' renders in full at 1440."
+    },
+    {
+      "id": "CTRL-02",
+      "title": "Quiet variants blue-washed under the monochrome tenant",
+      "fix": "The Management now authors --ds-surface-{control,inset,panel,card}. Verified in the compiled artifact: control #F6F3EC, panel #F1EDE4, card/inset #FFFFFF.",
+      "verified": "Secondary button resolves srgb(0.910, 0.910, 0.909) neutral grey under TMM against srgb(0.923, 0.944, 0.969) blue under BitHire."
+    },
+    {
+      "id": "CTRL-01",
+      "title": "Segmented pixel-identical and blue under the monochrome tenant",
+      "rootCause": "THIRD instance of one defect class. packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts emitted the whole segmented group as hardcoded blue literals. Those compile into the vertical artifact, whose selector's second arm :where([data-ds-root][data-vertical='bithire']) matches EVERY tenant in the vertical — so they were the whole vertical's paint, unreachable by any tenant because no --ds-segmented-* token is allowlisted.",
+      "fix": "Rebased at SOURCE, never by hand-editing the generated artifact. bg -> var(--ds-surface-control, <BitHire literal>); border/shadow/itemBgHover/itemBgSelected/itemColor/itemColorHover/itemShadowSelected/focusRing -> the matching --ds-material-control-* channel with the previous BitHire literal as fallback. All siblings audited in the same pass; itemBg stays transparent because the track ground already shows through.",
+      "verified": "Generated artifact now carries --ds-segmented-bg: var(--ds-surface-control, color-mix(...)). Computed: track bg rgb(255,255,255) BitHire vs rgb(246,243,236) paper TMM; border rgb(199,214,226) vs rgb(42,40,36) graphite."
+    },
+    {
+      "id": "FIELD-radius",
+      "title": "Input rounded while Select was square under the same tenant",
+      "fix": "Same literal-leak class. Input read --ds-input-{size}-radius literals; re-based onto var(--ds-radius-{step}, <literal>).",
+      "verified": "Both 0px under TMM."
+    }
+  ],
+
+  "defectIntroducedAndWithdrawn": {
+    "id": "DEF-06",
+    "what": "Authoring --ds-material-control-background-selected: #141412 delivered the black selected fill the direction wants, and made the selected segment labels INVISIBLE — black ink on a black fill.",
+    "why": "The role matrix has no foreground-selected channel, so the selected label keeps resolving through --ds-material-control-foreground, which for a monochrome tenant is also ink.",
+    "decision": "WITHDRAWN. Shipping an illegible selected state to gain a divergence axis is strictly worse than missing the axis. Verified legible again in capture.",
+    "blockedOn": "Per the advisor the white-ink half of the inversion belongs to the emphasis leg (chrome controls / the component's selected part), NOT to a newly minted role channel. So this is blocked on that leg, not on a token request.",
+    "note": "Recorded rather than quietly reverted, because the fill half DOES work and the next attempt should not rediscover the same trap."
+  },
+
+  "verification": {
+    "typecheck": "clean, both packages",
+    "tests": "191 passed — Button + Segmented families",
+    "builder": "sanctioned chain only: tsc, vite build, build:modern-css, build:vertical-css, build:fonts, build:stamp. The generated artifact was never hand-edited.",
+    "divergence": "9 axes, 8 non-colour, zero silent",
+    "captures": "44 banked — 32 responsive (4 scenes x 2 tenants x 4 widths), 8 judged (grayscale + hue-neutral), 4 reduced-motion, 4 narrow-container 280px"
+  },
+
+  "digestPosture": {
+    "state": "The compiler suite sits above the inherited 4-failure baseline because the role and surface authoring legitimately changes the compiled artifact.",
+    "action": "NO pin was re-anchored and NO customization was reverted to preserve old hashes. These stand as audited planned deltas, causally bound to named source edits in this receipt.",
+    "notDone": "The per-delta causality enumeration Codex asked for is not yet written up channel-by-channel."
+  },
+
+  "stillOpen": [
+    "CTRL-04 depth still identical across tenants on controls",
+    "field inset/edge role adoption not landed",
+    "overlay visual separation — the modal scrim hides the contextual overlays in one frame (scene composition)",
+    "ledger flat material — gradient washes persist on Modal and the loading Card",
+    "skeleton/spinner expressive adoption",
+    "DEF-06 selected-state inversion",
+    "all four canaries remain below the >=95 bar"
+  ]
+}

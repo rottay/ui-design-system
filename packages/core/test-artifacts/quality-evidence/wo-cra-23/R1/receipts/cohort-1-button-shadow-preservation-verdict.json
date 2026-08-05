@@ -1,0 +1,513 @@
+{
+  "preserved": true,
+  "regressions": [],
+  "intendedMoves": [
+    {
+      "vertical": "bithire",
+      "cell": "primary.rest.light",
+      "before": "0 1px 2px rgba(20, 40, 59, 0.1)",
+      "after": "var(--ds-material-control-shadow, 0 1px 2px rgba(20, 40, 59, 0.1))",
+      "resolvedFromBefore": "vertical artifact",
+      "resolvedFromAfter": "vertical artifact"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "primary.rest.dark",
+      "before": "0 1px 2px rgba(20, 40, 59, 0.1)",
+      "after": "var(--ds-material-control-shadow, 0 1px 2px rgba(20, 40, 59, 0.1))",
+      "resolvedFromBefore": "vertical artifact",
+      "resolvedFromAfter": "vertical artifact"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "primary.hover.light",
+      "before": "var(--ds-shadow-button-hover)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "primary.hover.dark",
+      "before": "var(--ds-shadow-button-hover)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "primary.active.light",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "primary.active.dark",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "secondary.rest.light",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "secondary.rest.dark",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "secondary.hover.light",
+      "before": "var(--ds-shadow-button-hover)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "secondary.hover.dark",
+      "before": "var(--ds-shadow-button-hover)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "secondary.active.light",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "secondary.active.dark",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "default.rest.light",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "default.rest.dark",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "default.hover.light",
+      "before": "var(--ds-shadow-button-hover)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "default.hover.dark",
+      "before": "var(--ds-shadow-button-hover)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "default.active.light",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "default.active.dark",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "ghost.rest.light",
+      "before": "none",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "ghost.rest.dark",
+      "before": "none",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "ghost.hover.light",
+      "before": "var(--ds-button-ghost-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "ghost.hover.dark",
+      "before": "var(--ds-button-ghost-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "ghost.active.light",
+      "before": "var(--ds-button-ghost-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "ghost.active.dark",
+      "before": "var(--ds-button-ghost-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "dashed.rest.light",
+      "before": "none",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "dashed.rest.dark",
+      "before": "none",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "dashed.hover.light",
+      "before": "var(--ds-button-dashed-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "dashed.hover.dark",
+      "before": "var(--ds-button-dashed-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "dashed.active.light",
+      "before": "var(--ds-button-dashed-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "dashed.active.dark",
+      "before": "var(--ds-button-dashed-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "text.rest.light",
+      "before": "none",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "text.rest.dark",
+      "before": "none",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "text.hover.light",
+      "before": "var(--ds-button-text-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "text.hover.dark",
+      "before": "var(--ds-button-text-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "text.active.light",
+      "before": "var(--ds-button-text-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "text.active.dark",
+      "before": "var(--ds-button-text-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "link.rest.light",
+      "before": "none",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "link.rest.dark",
+      "before": "none",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "link.hover.light",
+      "before": "var(--ds-button-link-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "link.hover.dark",
+      "before": "var(--ds-button-link-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "link.active.light",
+      "before": "var(--ds-button-link-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "link.active.dark",
+      "before": "var(--ds-button-link-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "success.rest.light",
+      "before": "var(--ds-shadow-success-sm)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "success.rest.dark",
+      "before": "var(--ds-shadow-success-sm)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "success.hover.light",
+      "before": "var(--ds-button-success-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "success.hover.dark",
+      "before": "var(--ds-button-success-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "success.active.light",
+      "before": "var(--ds-button-success-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "success.active.dark",
+      "before": "var(--ds-button-success-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "warning.rest.light",
+      "before": "var(--ds-shadow-warning-sm)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "warning.rest.dark",
+      "before": "var(--ds-shadow-warning-sm)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "warning.hover.light",
+      "before": "var(--ds-button-warning-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "warning.hover.dark",
+      "before": "var(--ds-button-warning-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "warning.active.light",
+      "before": "var(--ds-button-warning-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "warning.active.dark",
+      "before": "var(--ds-button-warning-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "error.rest.light",
+      "before": "var(--ds-shadow-error-sm)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "error.rest.dark",
+      "before": "var(--ds-shadow-error-sm)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "error.hover.light",
+      "before": "var(--ds-shadow-error-sm)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "error.hover.dark",
+      "before": "var(--ds-shadow-error-sm)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "error.active.light",
+      "before": "var(--ds-shadow-error-sm)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "error.active.dark",
+      "before": "var(--ds-shadow-error-sm)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "info.rest.light",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "info.rest.dark",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "info.hover.light",
+      "before": "var(--ds-button-info-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "info.hover.dark",
+      "before": "var(--ds-button-info-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "info.active.light",
+      "before": "var(--ds-button-info-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "info.active.dark",
+      "before": "var(--ds-button-info-shadow)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "ai.rest.light",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "ai.rest.dark",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "ai.hover.light",
+      "before": "var(--ds-shadow-button-hover)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "ai.hover.dark",
+      "before": "var(--ds-shadow-button-hover)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "ai.active.light",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    },
+    {
+      "vertical": "bithire",
+      "cell": "ai.active.dark",
+      "before": "var(--ds-shadow-button-rest)",
+      "after": "(absent)",
+      "resolvedFromBefore": "engine default"
+    }
+  ],
+  "verdict": "PRESERVED — every out-of-round vertical resolves identically."
+}

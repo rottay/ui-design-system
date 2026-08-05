@@ -640,3 +640,987 @@ mount/unmount/context lifecycle, keyboard/AT equivalence and long-task/frame/mem
 - **Do NOT** — Do not weaken a floor or baseline to pass the gate; do not add product/domain semantics to the DS; edit-only, no commits, never git-restore directories.
 - **Size** — M.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, migrate the ~30 root-reachable ui files onto the semantic supplier facade (support milestone for DS-IMP-060), adding a root-entry guard. Gate: zero root-reachable catalog-name imports, guard green, build green. Fences: edit-only, no commits, never git-restore directories.
+
+### WO-CRA-23 Claude multi-agent DS normalization and world-class family elevation
+- **Source IDs / phase** — Owner-authorized standalone `modern-rescue` program; not a shadow status for the locked DS-improvements phases.
+- **Depends on** — WO-GAT-05, WO-GAT-06.
+- **Outcome** — Elevate the complete 252-family visible UI universe through one governed composition system so BitHire becomes a BitHire-original Professional Network Hiring OS and The Management becomes a monochrome, square, editorial/rustic Executive Ledger on the same component tree, without creating a second DS.
+- **Steps** — Execute R0–R6 from the governed Modern-rescue pack one owner-authorized round at a time: truth/instrumentation and profile migration plan; twelve reference canaries against the binding tenant art direction in the isolated hardcoded `/probe/ds-reference` showroom lab; primitives; patterns/charts; structures/surfaces/commercial; canon closure; independent Codex certification. The lab renders the same DS tree under BitHire's static BrandTheme and The Management's published DB document, with zero product-app imports, styles, routes, APIs or fixtures; Candidates is a later adoption consumer, never the R1 visual authority. Every round includes dynamic conflict-graph delegation, implementation, canon reconciliation, tests, i18n, documentation, hashed evidence and a Codex stop/go boundary. Kimi may add temporary proposal-only files under `KIMI-ANNOTATIONS/inbox`; Codex reproduces useful observations, incorporates accepted amendments into the canon and deletes the raw submission before Claude receives the reconciled program.
+- **Acceptance gate** — 252 families classified with fresh evidence; all applicable binary contracts green; zero hard vetoes; every family above its layer threshold (90–95) and every critical dimension at least 4/5; resilient viewport/container/density/rhythm/type-scale behavior; same-tree BitHire/TMM divergence in at least eight observable axes and six non-color axes, recognizable within three seconds in grayscale and after primary-hue neutralization; coverage/resilience/canonClosure/pathParity equal 1 in round scope; zero targeted unknown impacts, parallel authorities, raw advisory implementations or unadjudicated capacity; Codex serial and sighted matrix green.
+- **Execution control** — Rollback: revert only the exact family lane or integrator batch that violates the reference grammar. Disable: keep a family on its pre-wave implementation until its disjoint replacement passes Codex review. Telemetry: family-status denominator, prototype ledger decisions, tenant divergence axes, responsive defects, gate counters and source/artifact freshness. Stop if ownership cannot be proven, shared-file writers overlap, static/DB parity would be broken, or an existing Kimi capability lacks successor/death proof.
+- **Do NOT** — Do not treat file visitation as quality; do not add public `--ds-*` from visual lanes; do not create tenant selectors, product branches, a second icon provider or a parallel theming/compiler path; do not edit app-bithire, Classic/Rustic, tests, baselines, generated styles/dist or shared contracts outside the integrator; edit-only, no commits, never mutate stashes or use destructive git.
+- **Size** — XL, multi-wave.
+- **Delegation prompt** — Use `packages/core/scripts/quality-evidence/programs/modern-rescue/CLAUDE-PROMPT.md`. The binding tenant direction is `tenant-art-direction.json`; no Kimi audit is active after final reconciliation. Claude top-tier is coordinator and calculates the safe agent count from a file/conflict graph; only writers in the current independent set edit. Claude never reads the Kimi inbox. Codex owns any future advisory reconciliation and deletion, every round gate, final validation, screenshots, commit and push.
+
+#### 0. Authority and relationship to existing documentation
+
+This is an **execution work order**, not a new architectural authority.
+
+Architectural law remains in the active documentation:
+
+1. `docs-engineering/engineering/design-system/architecture/README.md`
+2. `docs-engineering/engineering/design-system/catalog/decision-matrix/README.md`
+3. `docs-engineering/engineering/design-system/capability-map/README.md`
+4. `docs-engineering/engineering/design-system/runtime/engines/modern/README.md`
+5. `docs-engineering/engineering/design-system/tokens/README.md`
+6. `docs-engineering/engineering/design-system/tokens/authoring-guide.md`
+7. `docs-engineering/engineering/design-system/tokens/app-customization.md`
+
+Operational status and prior adjudications remain in:
+
+1. `docs-engineering/archive/audits/2026-07-26-ds-modern-whitelabel-independent-audit-davila.md`
+2. `docs-engineering/archive/audits/2026-07-31-kimi-phase-b-premium-execution-roadmap.md`
+3. `ui-design-system/packages/core/KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json`
+4. `ui-design-system/packages/core/KIMI-VISUAL-WORKLIST.json`
+5. `ui-design-system/packages/core/CANARY-MANIFEST.json`
+6. `ui-design-system/packages/core/customization-surface-report.json`
+7. `ui-design-system/packages/core/hooks-manifest.json`
+
+The archived audit is the central **program ledger**, but it does not override active architectural documentation. If this roadmap discovers a real architectural decision, the lead must update the owning active document and append only a status pointer to the audit ledger.
+
+No agent may create another competing roadmap, token catalog, design doctrine, or status dashboard.
+
+Execution spends premium-model context on judgment instead of deterministic
+repetition. The preferred adaptive route is Fable/strongest Claude for
+coordination and architecture, Opus/strongest product-design model for creative
+family elevation, and Sonnet/efficient reliable model for censuses, wiring,
+i18n and evidence. Availability and measured output may change the route; the
+conflict graph and exact ownership remain authoritative. Per-agent narratives
+are rejected in favor of bounded family packets and structured receipts.
+
+The execution pack at
+`packages/core/scripts/quality-evidence/programs/modern-rescue/` is a
+machine-readable specification subordinate to this WO. It contains no mutable
+status; `roadmap/registry.json` remains the sole status authority.
+
+The product-art-direction contract in that pack is binding implementation
+input, not another theme engine. Raw files under `KIMI-ANNOTATIONS/inbox/` are
+temporary, non-canonical creative proposals. Claude never reads them; Codex
+incorporates accepted observations into the owning canonical contract and
+deletes the raw submission before delegation.
+
+#### 1. Why this wave exists
+
+The architecture is materially stronger than the visual output:
+
+- static `BrandTheme` and DB `TenantThemeDocument` are legitimate ingress paths to the same compiler and semantic channels;
+- Standard/Pro/Expert exposure is governed;
+- profiles, recipes, floors, compiler parity, hydration ownership and CI gates exist;
+- BitHire and The Management already diverge causally;
+- Kimi introduced and preserved useful craft, responsive behavior, icons, accessibility and private proposals.
+
+But the visible product is still not acceptable:
+
+- families were often marked complete after shallow or one-line changes;
+- headings and cells can wrap per-character or collide;
+- DataTable and workspace composition can compress a desktop model instead of adapting it;
+- density/type/radius changes do not always cause intelligent reflow;
+- the tenants can still read as the same mediocre system painted differently;
+- visual hierarchy, materials, edge grammar, motion and responsive composition are inconsistent across layers;
+- catalog coverage is not the same thing as reference-grade craft.
+
+The objective is not to touch every file. The objective is to make every public family either:
+
+1. reference-grade and demonstrably coherent with the system;
+2. intentionally unchanged with concrete evidence;
+3. blocked by a named architectural or product decision.
+
+#### 2. Binding outcome
+
+At the end of the program:
+
+- the same component tree can look and feel materially different under BitHire and The Management;
+- Standard controls produce broad coherent changes with few decisions;
+- Pro controls expose curated family/profile depth;
+- Expert remains a bounded raw allowlist, never arbitrary access to internal `--ds-*`;
+- family-private implementation stays private;
+- Kimi's useful visual capacity is preserved, connected or explicitly adjudicated;
+- primitives, patterns, charts, structures, compositions and page surfaces share one grammar;
+- mobile is a deliberate simplified product posture, not a squeezed desktop layout;
+- large type, density, rhythm, radius and responsive changes cause resilient reflow rather than overlap, clipping or dead space;
+- there is no new tenant selector, engine branch, parallel token compiler, app-owned DS clone or second icon system;
+- no family is called premium merely because it was visited.
+
+The two visual north stars are deliberately asymmetric:
+
+- BitHire: cool professional-network canvas, white work surfaces, confident
+  blue action grammar, people-first hierarchy, approachable medium geometry,
+  calm material and mobile task priority. It may evoke a mature professional
+  network but must not copy LinkedIn assets, marks, copy or exact trade dress.
+- The Management: paper white, black and grayscale, square geometry, strong
+  rules, dossier/ledger composition, restrained depth, content-safe texture
+  and crisp mechanical motion. Accessible semantic statuses remain governed
+  exceptions to monochrome brand chrome.
+
+The current selections are known migration inputs, not the target: BitHire is
+`technical-sharp`/`bithire-technical`; The Management is
+`editorial-round`/`management-editorial` with warm Art Deco authorship. R0
+must resolve this through versioned entries in the existing closed profile and
+recipe registries; changing a published profile's meaning in place is a veto.
+
+
+Final status vocabulary is closed:
+
+- per family: `ELEVATED_PENDING_CODEX_AUDIT`,
+  `ALREADY_REFERENCE_GRADE_PENDING_CODEX_AUDIT`,
+  `ASSESSED_NOT_ELEVATED` or `BLOCKED_OWNER_DECISION`;
+- per round: `IMPLEMENTED_PENDING_CODEX_AUDIT` or an honest blocked handoff.
+
+Architecture/product ownership and untouched/partial reasons are mandatory
+receipt fields, not alternate completion statuses. No pending family is
+accepted progress until Codex independently certifies it.
+
+Claude must never claim `ACCEPTED`, `VERIFIED_VISUAL`, `10/10` or `PRODUCTION_READY`. Those verdicts belong to Codex after machine and sighted review.
+
+#### 3. Frozen starting state and preservation law
+
+Observed before authoring this roadmap:
+
+- DS HEAD: `a97ddd7361d0` with a large uncommitted visual/architecture tree and one DataTable stash;
+- app-bithire HEAD: `bd1142d3a589` with large foreign WIP and four stashes;
+- docs HEAD: `04431ba9824c` with concurrent generated-token and audit changes;
+- generated `packages/core/styles/*.css` are present in the dirty tree;
+- recent Candidates work and the hydration correction are uncommitted.
+
+The executor must reproduce the exact HEADs, porcelain, stashes and per-file hashes at start. Differences are not permission to clean, restore or overwrite anything.
+
+Forbidden operations:
+
+- `git reset`, `git restore`, `git checkout --`, cleaning untracked files, applying/dropping stashes;
+- mass rewrites, mass formatters or broad scripted substitutions across family files;
+- editing apps, Classic or Rustic unless the lead records a specific cross-engine defect and obtains owner permission;
+- editing generated `dist/**` or `packages/core/styles/*.css` from a family lane;
+- commits, pushes, PRs, publishes, tags or version bumps;
+- deleting a Kimi capability because a census calls a writer dead;
+- changing tests to preserve obsolete anatomy or to make a failing contract green.
+
+Every writer must declare its exact file ownership before editing. One file has one writer for the whole batch. If two lanes need the same file, the integrator owns it and both lanes submit a change request.
+
+#### 4. Real inventory and denominators
+
+##### 4.1 Visible UI universe
+
+The source/barrel audit on 2026-08-04 found:
+
+| Layer | Public families | Notes |
+|---|---:|---|
+| Primitives | 100 | 93 in Showroom registry; 7 public omissions |
+| Patterns, excluding charts | 56 | 48 in Showroom registry; 8 public omissions |
+| Charts | 18 | exact 18/18 registry correspondence |
+| Structures | 27 | 25 in Showroom registry; AppShell and ConnectedCommandPalette omitted |
+| Page surfaces | 36 | registry count complete; Onboarding category/path drift |
+| Surface composition | 4 | separate composition layer |
+| Commercial kit | 11 | separate entrypoint and CSS; not part of the root patterns barrel |
+| **Visible total** | **252** | 237 root UI families + 4 composition + 11 commercial |
+
+Showroom's 220 entries are a projection, not the family authority. The source tree and public barrels win.
+
+Source volume for planning: primitives 1,143 files; patterns 618; structures 94; surfaces 152. UI tests: 672 files. Stories: 126. These are coverage surfaces, not automatic quality proof.
+
+##### 4.2 Primitives — exact 100
+
+Display (21): Avatar, Badge, Calendar, Callout, Card, Carousel, CodeBlock, Descriptions, Empty, Image, Kbd, List, MarkdownView, QRCode, Statistic, Table, Tag, Timeline, Tooltip, Tree, Typography.
+
+Inputs (25): AutoComplete, Button, Cascader, Checkbox, ColorPicker, DatePicker, Form, FormField, Input, InputNumber, Mentions, OTPInput, PasswordInput, Radio, Select, Slider, Switch, TagInput, Textarea, TimePicker, Toggle, Transfer, TreeSelect, Upload, VoiceInputButton.
+
+Feedback (11): Alert, Drawer, Message, Modal, Notification, Progress, Rate, Result, Skeleton, Spinner, Toast.
+
+Layout and responsive (16): AspectRatio, Box, Collapse, Container, Divider, Flex, Grid, Layout, ScrollArea, SemanticSurface, Space, Splitter, Stack, Show, Hide, ResponsiveSlot.
+
+Navigation (12): Affix, Anchor, BackTop, Breadcrumb, FloatButton, Link, Menu, Pagination, Segmented, Stepper, Steps, Tabs.
+
+Overlay (10): AlertDialog, ConfirmDialog, ContextMenu, Dropdown, HoverCard, Popconfirm, Popover, Sheet, Tour, Watermark.
+
+
+Foundation visual (5): IconFrame, Meter, ResizeHandle, VisuallyHidden, LoadingIndicator.
+
+SemanticSurface is a canonical public primitive exported from the layout barrel. It occupies the former deprecated `OverlayModal`-alias row, keeping the denominator at 100. `OverlayModal` is only a compatibility alias of canonical feedback `Modal`; R0 counts its consumers and R5 may retire the alias only with death proof.
+
+##### 4.3 Patterns — exact 56 plus 18 charts
+
+Data (18): PatternDataTable, VirtualList, PatternGridView, PatternGalleryView, DetailPanel, FileManager, ListToolbar, ColumnSettings, SavedViews, PatternStatsGrid, BulkSelectToggle, StatusFilterPills, TableCheckboxStyles, DecisionComparison, DecisionPanorama, RecordFacts, WidgetBoard, CellRenderers.
+
+Forms (5): PatternFormBuilder, FilterBuilder, FilterPanel, StepWizard, InvoiceTemplate.
+
+Visualization non-chart (5): PatternCalendarView, PatternMapView, PatternTimeline, PatternTreeView, PatternKanbanBoard.
+
+Communication (6): Assistant, CommentThread, NotificationCenter, LiveFeed, ActivityLog, Presence.
+
+Workflow (5): ApprovalInbox, ApprovalWorkflow, OperationalLedger, ModerationGallery, ShiftMatrix.
+
+Navigation (5): CommandPalette, ShortcutsOverlay, EnvironmentToggle, WorkspaceSwitcher, PatternLocaleSwitcher.
+
+Commerce (1): PricingTable.
+
+Customization (4): TenantPreview, TokenInspector, BrandingPreviewSandbox, PatternBrandStudio.
+
+Feedback (2): EmptyState, AdaptiveOverlay.
+
+Identity (1): UserProfileCard.
+
+Shell (4): CockpitHeader, FeatureWorkspaceFrame, PatternPageShell, WorkbenchHeader.
+
+Charts (18): AreaChart, BarChart, BulletChart, CalendarHeatMap, FunnelChart, GanttChart, GaugeChart, HeatMap, Histogram, LineChart, NetworkGraph, PieChart, RadarChart, SankeyChart, ScatterChart, Sparkline, TreeMap, WaterfallChart.
+
+##### 4.4 Structures — exact 27
+
+Headers (6): CollectionHeader, DashboardHeader, DetailHeader, EditHeader, FormHeader, MobileHeader.
+
+Workspace (12): ActionDock, ActiveFiltersBar, ColumnMenu, ConnectedCommandPalette, SearchCommandBar, ExportButton, FieldFiltersPanel, SavedViewsMenu, ScopeSwitcher, SelectionPreviewRail, TableToolbar, ViewModeSwitcher.
+
+Record (3 family roots): Record content family, FormSections, EditFields.
+
+Dashboard (3): StatsHeader, DataTerminalCard, DashboardInsights.
+
+Feedback (1): LoadingOverlay.
+
+Shell (2): AppShell, BottomTabBar.
+
+##### 4.5 Page surfaces — exact 36, plus 4 compositions
+
+Admin (8): AuditSurface, BillingSurface, FileBrowserSurface, ImportExportSurface, IntegrationSurface, ProfileSurface, SettingsSurface, TeamSurface.
+
+Data (7): CompareSurface, DashboardSurface, DetailSurface, ListSurface, ReportSurface, SearchSurface, VisualizationSurface.
+
+Experience (9): AuthSurface, ChatSurface, EditorSurface, EmptyStateSurface, MarketingSurface, MediaSurface, NotificationSurface, OAuthTransitionSurface, PricingSurface.
+
+Forms (4 roots, 5 public surfaces): DetailFormSurface, FormSurface, GuidedDraftFormSurface, WizardSurface, OnboardingSurface. Onboarding lives under forms/wizard but is cataloged as experience; do not silently move it.
+
+Operations (4): ActivitySurface, KanbanSurface, OperationalSurface, SchedulerSurface.
+
+Workspace (4): CollectionWorkspaceSurface, CommandCenterSurface, DecisionInboxSurface, RecordWorkbenchSurface.
+
+Composition (4): PageShellSurface, HeaderSurface, WorkspaceShell, SidebarSurface.
+
+##### 4.6 Commercial kit — separate 11
+
+AsciiFrame, CropMarks, InvertSection, SectionFrame, TextureBackdrop, AsciiDiagram, TerminalBlock, commercial TreeView, Typewriter, MonoStat, ProductWindow.
+
+The commercial entrypoint is legitimate and deliberately separate. Do not let it become a second general product engine or leak hardcoded commercial identity into Modern families.
+
+##### 4.7 Known layer ambiguities that must not be multiplied
+
+- feedback Modal is canonical; overlay `OverlayModal` is a deprecated adapter;
+
+- PatternPageShell, FeatureWorkspaceFrame, AppShell, PageShellSurface and WorkspaceShell have distinct contracts but overlapping names;
+- Table vs PatternDataTable vs ListSurface;
+- Empty vs EmptyState vs EmptyStateSurface;
+- Calendar vs CalendarView vs CalendarHeatMap vs SchedulerSurface;
+- Tree vs PatternTreeView vs commercial TreeView;
+- engine-locked facades are internal seams, not permission to create a second Modern implementation;
+- tooling/runtime/foundation folders are infrastructure, not additional families.
+- `BrandTheme.engineBridge` is an unbounded, dormant Daisy-era escape hatch: freeze it, forbid new Modern writes and let only the architecture integrator retire it after a consumer census;
+- deprecated `ComponentExtensions` / `EngineAwareProps.extensions` is an inert second API shape: no lane may build on it; retire it only after proving external imports are zero;
+- the 93 manifest-declared public hooks and app-owned `--rt-*` are the only application styling boundary; fenced reads are debt, not public API.
+
+Any new component proposal must prove it cannot be expressed honestly by one of these existing owners.
+
+#### 5. Token, control and customization inventory
+
+##### 5.1 Product-facing control model
+
+Claude must treat controls, recipes, channels and component-private values as different levels.
+
+| Tier | Count | Purpose |
+|---|---:|---|
+| Standard / base | 13 | Few high-impact inputs suitable for ordinary tenant customization |
+| Pro / premium | 7 | Curated family/profile/anatomy control |
+| Expert | 294 | Closed, typed raw override allowlist; maximum 200 entries per tenant document |
+| Internal active | 1 | dark-mode compatibility; tenant palette remains authoritative |
+| Frontier | 1 | status palette seeds; not exposed until formally opened |
+
+Standard 13:
+
+1. `palette.seeds`
+2. `typography.pairing`
+3. `typography.families`
+4. `typography.scale`
+5. `shape.radius-scale`
+6. `shape.button-style`
+7. `density.mode`
+8. `spacing.rhythm`
+9. `motion.dial`
+10. `surfaces.elevation-posture`
+11. `surfaces.effect-intensity`
+12. `navigation.sidebar-tone`
+13. `experience.profile`
+
+Pro 7:
+
+1. `chrome.families`
+2. `chrome.anatomy`
+3. `token-overrides`
+4. `recipe-profile`
+5. `profiles.expressive`
+6. `profiles.icon`
+7. `responsive.posture`
+
+Expert is the exact allowlist generated at `docs-engineering/engineering/design-system/tokens/exposure-tiers.md`; never paste or maintain a second list here.
+
+##### 5.2 Live internal corpus
+
+Generated census snapshot:
+
+- 7,470 `--ds-*` names in the productive corpus;
+- 4,811 writers;
+- 3,367 foundation writers;
+- 550 component writers;
+- 1,544 tenant-channel writers;
+- 93 application public hooks;
+- 2,691 fenced reads that are debt, not an API;
+- 270 dead writers, all classified but not automatically deletable;
+- 20 frontier names;
+- 3 legacy alias families;
+- 0 unclassified rows;
+- 274 live family-private `--_ds-*` names;
+- 0 productive `--_ds-proto-*` names.
+
+
+The 80 names in the prototype ledger are historical rows already adjudicated/retired: 59 private, 11 derived, 4 promoted to foundation, 3 merged, 1 recipe, 1 runtime bridge and 1 retired. They are not 80 live prototypes.
+
+Kimi preservation classification currently includes 183 premium dead-writer candidates. They must be reconnected or promoted when useful; the preservation gate forbids automatic retirement. A `dead-writer` census is never deletion authorization.
+
+##### 5.3 Existing composition depth
+
+- 2 experience profiles: BitHire technical and The Management editorial;
+- expressive profiles across type, geometry, edge, material, elevation, motif and icon;
+- density and motion participate in the composed experience profile;
+- 3 responsive postures;
+- 2 recipe profiles across 6 recipe families;
+- 16 motion recipes and 3 motion profiles;
+- family emphasis: card, toolbar, metric-card and panel, each with quantized intensity;
+- 3 static BrandTheme sources: BitHire, Evnto, Platform;
+- DB simple/advanced appearance contracts, with BitHire/Evnto envelopes and fail-closed Platform behavior.
+
+The goal is to increase **downstream coverage and composition quality**, not multiply top-level knobs.
+
+#### 6. Canonical authoring law
+
+For every visual decision, use this search order:
+
+1. existing semantic channel;
+2. existing Standard control and its derivations;
+3. existing Pro profile/recipe/anatomy/family control;
+4. existing family emphasis mechanism;
+5. existing Expert allowlisted channel;
+6. existing app public hook, only when the concern genuinely belongs to the app;
+7. existing family-private `--_ds-*` implementation value;
+8. new temporary `--_ds-proto-<family>-<axis>` only when a real observable capability is missing.
+
+Family agents may not add new public `--ds-*` names.
+
+A new prototype is valid only when all are true:
+
+- it moves an observable rendered property;
+- two plausible profiles need different values;
+- no existing control/channel/recipe/emphasis can express it;
+- it is family-scoped;
+- it has an exact fallback preserving the current default;
+- its type, range, owner, consumer and proposed destination are recorded;
+- it does not require the app or component to know the tenant.
+
+Only the architecture integrator may adjudicate a prototype as:
+
+- `DERIVE_FROM_EXISTING`
+- `KEEP_COMPONENT_PRIVATE`
+- `RECIPE_AXIS`
+- `PROMOTE_STANDARD`
+- `PROMOTE_PRO`
+- `ADD_TO_EXPERT_ALLOWLIST`
+- `PUBLIC_APP_HOOK`
+- `MERGE_ALIAS`
+- `RETIRE_WITH_DEATH_PROOF`
+
+Promotion requires parity through both static BrandTheme and DB TenantThemeDocument paths, a real consumer, bounded validation and restore-to-default evidence. No promotion may exist only in CSS.
+
+##### 6.1 Productive CSS ownership law
+
+Every visible selector, declaration and custom-property edge in accepted round
+scope has exactly one canonical family or named foundation/runtime owner. A
+tenant-variable rendered decision must be reachable from both static
+`BrandTheme` and DB `TenantThemeDocument` through the same compiler model:
+directly for bounded brand/Advanced authorship, or indirectly through
+capability → profile → semantic channel → group recipe/anatomy/emphasis →
+family-private value. Indirect propagation is the expected way a small number
+of tenant decisions changes many families coherently.
+
+This does not require moving structural component CSS into BrandTheme. A local
+literal may remain only as an explicit non-tenant structural invariant. It may
+not silently encode identity or be sold as configurable.
+
+Accepted scope has zero unimported sheets, unreachable selectors/states,
+writers without readers, reads without canonical emitter/fallback/owner, rules
+always superseded, mirrors without consumers or generated rules without live
+source. Every retirement needs attribution, reachability/consumer proof,
+successor adjudication when visual capacity exists and source/artifact
+reconciliation. R5/R6 apply this census to the complete productive Modern CSS,
+not merely the files touched by the program.
+
+#### 7. Universal 10/10 product-quality contract
+
+Every family must be evaluated across the following dimensions. A one-line token read, new border or generic gradient does not satisfy a dimension.
+
+The binding quantitative contract is
+`packages/core/scripts/quality-evidence/programs/modern-rescue/quality-rubric.json`.
+Binary contracts award no craft points. Craft is scored over 100 weighted
+points; a family must clear its own layer threshold, keep every critical
+dimension at 4/5 or above, and have zero hard vetoes. Claude may propose scores;
+only Codex can approve them.
+
+Family completion is governed by
+`quality-rubric.json#familyCompletionContract`, not by file visitation. Every
+family needs a paired before/after scorecard for all applicable dimensions, a
+material-delta table tied to productive source and rendered properties, full
+applicable state/stress coverage, tenant causality/restore and proof for every
+dimension left unchanged. The normal breadth floor is 6 improved dimensions
+for reference canaries, 4 for primitives, 5 for patterns/charts, 6 for
+structures, 7 for surfaces/compositions and 5 for commercial. Fewer changes
+close a family only when every unchanged applicable dimension is independently
+proven at 4/5 or above and no P0/P1 defect remains. Otherwise its status is
+`ASSESSED_NOT_ELEVATED`, it remains in the current round and it does not count
+as progress. `ALREADY_REFERENCE_GRADE_PENDING_CODEX_AUDIT` requires zero
+make-work source edits and the same evidence packet. Only Codex acceptance
+increments the completed-family numerator.
+
+##### 7.0 Integrated craft and anti-ordinary floor
+
+The binding detail lives in `visual-craft-contract.json` and
+`VISUAL-CRAFT-CONTRACT.md`. Twelve reproduced incident classes are now hard
+inputs: Steps connectors crossing content; miniature generic Badge/Tag;
+Transfer peers that look like unrelated boxes; accidental native desktop
+Select chrome; undersized Toggle/Switch with paint-only states; and compound
+fields with one rounded full border inside another; semantic icon bypass and
+placeholder reuse; raw chart geometry without an editorial scaffold; outline-
+only surfaces without anatomy; indiscriminate micro-pills; strip-built headers;
+and adaptive regions collapsed below a readable measure. Claude must eliminate
+each general failure class, not patch only the photographed selector.
+
+The exhaustive review is the closed twenty-category, 120-check taxonomy in the
+JSON contract. Every family returns `PASS`, `FAIL` or
+`NOT_APPLICABLE_WITH_REASON` for every row. Any applicable failure keeps the
+family `ASSESSED_NOT_ELEVATED`; no screenshot-specific patch or false N/A can
+advance the cohort.
+
+One semantic region has one dominant boundary. Lines, rules and motifs never
+cross content-safe zones. Peer panels align unless priority explicitly differs.
+Focus, error, selected and hover do not stack unrelated outlines. Whitespace
+has an intrinsic or task reason. Native desktop chrome, random pills, tiny
+control type and gradients/shadows/saturation used as a premium shortcut are
+hard vetoes.
+
+Optional DS icons support none/leading/trailing/assistive modes and collapse
+their slot/gap completely when absent. An AI signifier is allowed only for real
+suggested, generated, automated or confidence-bearing behavior; decorative
+sparkle inflation is forbidden. Removing it must preserve balance, accessible
+name and task priority.
+
+Importing from `@rottay/design-system/icons` is not itself proof of compliance:
+the historical named catalog is compatibility-only. R0 must replace generic
+`TagIcon` reuse and functional unicode/span stand-ins in the reference lab with
+the supplier-independent semantic `Icon` facade or a focused generated semantic
+pack. R2–R4 repeat that drain per family and R5/R6 close the full Modern-
+reachable corpus. A universal square icon well, arbitrary local SVG, emoji,
+external provider or hardcoded optical treatment is a veto; allowed vector
+geometry is limited to charts/data, QR/barcode/progress/rating, governed marks,
+user media and proven non-functional structure. In charts this exception covers
+encoded marks, axes and structural drawing only; toolbar actions, interactive
+legend controls, statuses, annotations and navigation still use semantic
+`Icon` roles.
+
+Premium does not require a border or shadow on every region. Borderless, ruled
+and elevated compositions are all valid, but each visible footprint needs
+purposeful grouping, anatomy and hierarchy. A rounded outline around loose text
+or a colored rectangle masquerading as a completed chart remains a failure.
+
+The current BitHire and The Management palettes are rejected as targets.
+BitHire is rebuilt as a restrained cool-neutral professional workspace with
+clean surfaces, deep ink and one disciplined action-blue hierarchy. The
+Management is rebuilt as an independently desirable paper/near-white,
+near-black, grayscale and rule-led ledger with accessible semantic exceptions.
+Both travel through the existing static/DB tenant authority.
+
+##### 7.1 Anatomy and composition
+
+- one clear root and stable semantic parts;
+- header/body/footer/action anatomy where applicable;
+- no invalid HTML, wrapper pollution or hydration mismatch;
+- no reconstructed Button/Input/Card/Table behavior inside higher layers;
+- nested components preserve ownership and do not fight specificity;
+- primitives compose into patterns, patterns into structures, structures into surfaces.
+
+
+##### 7.2 Typography
+
+- deliberate display/page-title/section/body/supporting/label/caption/code/numeric roles;
+- stable line-height, letter-spacing, weight and optical alignment;
+- tabular numerals where data comparison matters;
+- long EN/ES/AR content and high type-scale without collision;
+- never wrap a word per character merely to preserve a fixed column;
+- truncation only when the full value remains available through a deliberate interaction.
+
+##### 7.3 Geometry, edge and shape
+
+- nested radius grammar;
+- button/control silhouette coherence;
+- contextual hairlines, seams, dividers, inset rules and selected/current posture;
+- border widths remain within expressive and accessibility floors;
+- no random pill proliferation;
+- editorial and technical profiles differ structurally, not just by color.
+
+##### 7.4 Material, background and depth
+
+- coherent canvas/shell/panel/card/inset/control/raised/overlay model;
+- one light/elevation logic per profile;
+- backgrounds may use restrained gradients, tint, highlights, ruled grids, dots, paper/noise or texture only through protected content zones;
+- text and data contrast must not depend on decorative imagery;
+- no blanket glass, glow or gradient as a shortcut for premium.
+
+##### 7.5 Spacing, density and adaptive size
+
+- rhythm and density affect composition rather than scaling isolated pixels;
+- controls and text retain usable proportions;
+- grids use intrinsic sizing, `minmax`, `clamp`, auto-fit, container queries and explicit priority;
+- resizing cards/widgets redistributes tracks and spans without dead gaps;
+- token changes cannot create overlap, orphan whitespace or broken pagination.
+
+##### 7.6 Responsive and mobile product posture
+
+- validate 320, 390, 768 and 1,440px plus narrow containers inside wide pages;
+- mobile is simplified by priority, disclosure and stacking;
+- data tables use column priority, frozen identity, card/row projection or detail disclosure; never squeeze six desktop columns into 390px;
+- touch targets, safe areas, keyboards, coarse pointers and thumb reach are deliberate;
+- sticky elements know their actual scroll container or remain deterministic.
+
+##### 7.7 Interaction and motion
+
+- rest, hover, pressed, focus-visible, current, selected, disabled, read-only, loading, success, warning, error and destructive states;
+- drag, resize, reorder, disclosure, optimistic actions and progress completion where relevant;
+- motion uses semantic recipes and communicates continuity;
+- reduced motion, reduced transparency and forced colors preserve meaning;
+- no perpetual decorative animation;
+- haptic intent belongs behind an app bridge, never direct device APIs in core.
+
+##### 7.8 Icons and multimodal meaning
+
+- only the DS semantic icon system;
+- no downloaded SVGs, emoji substitutes or a second icon provider;
+- role/state/size/weight follow icon policy and profile;
+- status meaning uses color plus icon/shape/label;
+- icon wells and alignment are purposeful, not universal decoration.
+
+##### 7.9 Accessibility and localization
+
+- semantic names and relationships;
+- complete keyboard flow and focus return;
+- no color-only state;
+- EN/ES/AR RTL as first-class layouts; FR/PT catalog parity preserved;
+- zoom and type-scale resilience;
+- overlay focus, Escape, top layer and background inertness are correct.
+
+##### 7.10 Lifecycle and data states
+
+
+- loading reserves final footprint;
+- empty state explains the condition and recovery;
+- partial/error/retry states do not destroy surrounding layout;
+- late data does not cause avoidable layout shift;
+- streaming/AI surfaces expose provenance, confidence, cancel and retry without decorative AI glow.
+
+##### 7.11 White-label divergence
+
+The same tree must diverge across at least six independent axes when the family supports them:
+
+1. typography;
+2. geometry/radius;
+3. edge/divider grammar;
+4. material/elevation;
+5. density/rhythm;
+6. icon treatment;
+7. motion;
+8. motif/background;
+9. responsive composition;
+10. family anatomy/recipe.
+
+No tenant selectors, conditional TSX, duplicated markup or separate CSS systems are allowed.
+
+#### 8. Parallel execution architecture
+
+##### 8.1 Agent count is computed, never fixed
+
+“Twenty agents” expresses desired scale, not a role topology. Before every
+cohort Claude builds the conflict graph defined in
+`agent-orchestration.json`: nodes are family lanes with exact read/write sets;
+edges represent shared files, authorities, parent/child anatomy, i18n, tests,
+generated outputs or shared channels/recipes. Claude executes the largest safe
+independent set permitted by available slots. The result may be 3, 8, 20 or
+another useful number.
+
+Architecture integration and quality/test/i18n/documentation integration are
+singleton serial owners. Reviewers run after writers and never edit the files
+they review. Throughput is measured in families clearing their own rubric, not
+in active agents, token count or files touched.
+
+##### 8.2 Reserved files — integrator only
+
+Family writers may not edit:
+
+- `package.json` or exports;
+- public barrels and registries;
+- BrandTheme/TenantTheme contracts and compilers;
+- capability registries and bounds;
+- hooks manifest;
+- prototype/preservation ledgers;
+- customization census/reconciliation;
+- shared i18n catalogs;
+- gates, baselines, snapshots and tests;
+- generated token documentation;
+- generated artifacts, `styles/*.css` and `dist/**`;
+- the official audit ledger.
+
+Writers submit concise change requests for those files. The integrator applies approved shared changes once per batch.
+
+##### 8.3 Per-agent efficiency rules
+
+- read the assigned family, immediate composition parents and current tokens;
+- do not read the whole repository;
+- do not run builds, full typecheck, lint, suites, gates or browser matrices;
+- do not write long narrative reports;
+- do not touch a family solely to create a diff;
+- use one compact handoff: files, observable changes, reused controls, prototype requests, expected deltas, blockers;
+- return immediately when the assigned family is already reference-grade, with concrete evidence;
+
+- the coordinator runs at most one cheap scoped check per batch and leaves certification to Codex.
+
+#### 9. Round R0 — dynamic read-only census and instrumentation
+
+Before family writes, cover these inspection domains with as many disjoint
+scouts as are useful; one scout may own multiple related domains and no fixed
+count is required:
+
+1. worktree/HEAD/stash/foreign-WIP preservation;
+2. static BrandTheme authority;
+3. DB TenantThemeDocument authority;
+4. compiler/profile/recipe parity;
+5. token tiers, hooks and prototype state;
+6. typography and type-scale propagation;
+7. color/material/elevation propagation;
+8. geometry/radius/edge propagation;
+9. spacing/density/rhythm propagation;
+10. motion/icon/responsive propagation;
+11. display primitives;
+12. input primitives;
+13. feedback/overlay primitives;
+14. layout/navigation/foundation primitives;
+15. data/forms patterns;
+16. communication/workflow/navigation patterns;
+17. charts and visualization;
+18. structures;
+19. surfaces/composition/commercial;
+20. same-tree BitHire/TMM canary and current visual failures.
+
+The lead produces one ownership/conflict manifest from these reports. Scouts do
+not edit family code. R0 also upgrades quality evidence from the existing
+primitive subset to the 252-family v2 contracts and establishes an honest
+baseline with zero premium claim.
+
+R0 must additionally: resolve all 252 source/public-export chains before lane
+assignment; census `OverlayModal`, `BrandTheme.engineBridge` and
+`ComponentExtensions`/`EngineAwareProps.extensions`; prove that a document
+with 201 Advanced token overrides fails with one named error rather than being
+silently truncated; label quality-evidence v1 historical; reconcile stale icon
+profile comments and generated lifecycle/read-count wording; and measure the
+reach of the existing edge/material/motif/icon/motion vocabulary before any
+new public concept can be proposed. The current registry explicitly records
+WO-CRA-23 as an owner-authorized standalone program, so this gated R0-R6
+program is the narrow authorized exception to the earlier inventory-wide
+freeze; normal roadmap claim semantics still apply.
+
+#### 10. Round R1 — reference grammar before broad propagation
+
+R1 runs exclusively in the showroom-owned `/probe/ds-reference` laboratory.
+The lab reuses one deterministic hardcoded DS catalog across eight scenes
+(`primitives`, `forms`, `data`, `workflow`, `dashboard`, `shell`, `surfaces`,
+`all` coverage atlas) and renders BitHire static versus The Management DB in separate document
+roots. It must not import or depend on app-bithire, Candidates, product APIs,
+product fixtures or app CSS. Product screens become downstream integration
+checks only after their DS layers have passed the relevant round. Complete
+coverage is the union of the focused scenes; mounting all 252 families in one
+DOM is explicitly rejected as a non-iterable evidence strategy.
+
+El bootstrap inicial ya reprodujo dos defectos R0: el substrate sigue siendo
+un módulo monolítico de 5.796 líneas con cold compile de minutos, y el primer
+frame SSR pinta el ground dark/default antes de hidratar BitHire o The
+Management light. R0 debe separar imports/render por escena sin duplicar el
+árbol y debe hacer que first paint y settled tenant paint sean idénticos.
+
+Do not spread styling across 252 families until these twelve canaries establish reusable grammar. Attack Button, then PatternDataTable, then AppShell first; they are the first-failing grammars consumed by the remaining canaries:
+
+1. Button + action cluster;
+2. Input/Select/FormField compound field;
+3. Card + SemanticSurface;
+4. Modal/Drawer + Popover/Dropdown;
+5. ListToolbar + SavedViews + filters;
+6. PatternDataTable + mobile projection;
+7. CollectionHeader + PageShell;
+8. Dashboard + MetricCard + WidgetBoard;
+9. Chart frame + line/bar + tooltip/legend;
+10. lifecycle feedback family;
+11. AppShell + sidebar + BottomTabBar;
+12. record/detail composition.
+
+Each canary must eliminate its dominant product defect, prove responsive resilience and demonstrate material BitHire/TMM divergence. The lead then extracts reusable recipes and assigns their downstream families. No propagation occurs from a canary that still overlaps, clips, wraps per-character or reads as recoloring only.
+
+#### 11. Round R2 — primitives batch
+
+Use these disjoint ownership bundles. The lead may split a bundle only when files remain disjoint.
+
+| Lane | Families |
+|---|---|
+| P01 | Typography, Badge, Tag, Kbd, Callout |
+| P02 | Avatar, Image, QRCode, CodeBlock, MarkdownView |
+| P03 | Table, List, Tree, Descriptions, Statistic |
+| P04 | Calendar, Carousel, Timeline, Tooltip, Empty |
+| P05 | Button, Toggle, Checkbox, Radio, Switch |
+| P06 | Input, Textarea, PasswordInput, OTPInput, Mentions, TagInput |
+| P07 | Select, AutoComplete, Cascader, TreeSelect, Transfer |
+| P08 | InputNumber, Slider, ColorPicker, DatePicker, TimePicker |
+| P09 | Form, FormField, Upload, VoiceInputButton |
+| P10 | Alert, Message, Notification, Toast, Result |
+| P11 | Progress, Rate, Skeleton, Spinner |
+| P12 | canonical Modal, Drawer, Sheet |
+| P13 | Popover, Dropdown, ContextMenu, HoverCard, Popconfirm |
+| P14 | AlertDialog, ConfirmDialog, Tour, Watermark |
+| P15 | Box, Stack, Flex, Grid, Space, Divider |
+| P16 | Container, AspectRatio, Collapse, ScrollArea, Splitter, Layout, Show, Hide, ResponsiveSlot |
+
+| P17 | Link, Anchor, Breadcrumb, Pagination, Tabs, Segmented |
+| P18 | Menu, Stepper, Steps, Affix, BackTop, FloatButton |
+| P19 | IconFrame, Meter, ResizeHandle, VisuallyHidden, LoadingIndicator, SemanticSurface |
+| P20 | read-only cross-family reviewer: icon policy, focus, RTL, touch, invalid DOM and recipe coherence |
+
+Exit: 100 canonical public primitives classified, compatibility aliases separately censused, zero accidental public token names and no family closed by token substitution alone.
+
+#### 12. Round R3 — patterns and charts batch
+
+| Lane | Families |
+|---|---|
+| Q01 | PricingTable |
+| Q02 | ActivityLog, LiveFeed, Presence kit (`PresenceBar`, `PresenceTypingIndicator`, `LiveCursor`) |
+| Q03 | Assistant kit (`AssistantStatusBadge`, `AssistantStatusIndicator`, `StreamingText`, `TypingIndicator`, `ToolCallCard`, `PreviewDiffCard`, `ConfirmActionCard`, `MessageBubble`), CommentThread, NotificationCenter |
+| Q04 | TenantPreview, TokenInspector, BrandingPreviewSandbox, PatternBrandStudio |
+| Q05 | PatternDataTable, TableCheckboxStyles, CellRenderers |
+| Q06 | PatternGridView, PatternGalleryView, VirtualList |
+| Q07 | ListToolbar, ColumnSettings, SavedViews, StatusFilterPills, BulkSelectToggle |
+| Q08 | DecisionComparison, DecisionPanorama, DetailPanel, RecordFacts |
+| Q09 | FileManager, WidgetBoard, PatternStatsGrid |
+| Q10 | PatternFormBuilder, FilterBuilder, FilterPanel |
+| Q11 | StepWizard, InvoiceTemplate, EmptyState (compose canonical primitive `Empty`, never rebuild it), AdaptiveOverlay |
+| Q12 | CommandPalette, ShortcutsOverlay, EnvironmentToggle, PatternLocaleSwitcher, WorkspaceSwitcher |
+| Q13 | UserProfileCard, CockpitHeader, FeatureWorkspaceFrame, PatternPageShell, WorkbenchHeader |
+| Q14 | PatternCalendarView, PatternMapView, PatternTimeline, PatternTreeView, PatternKanbanBoard |
+| Q15 | shared chart scaffold, AreaChart, BarChart, LineChart |
+| Q16 | PieChart, ScatterChart, RadarChart |
+| Q17 | GaugeChart, Histogram, FunnelChart, WaterfallChart |
+| Q18 | SankeyChart, GanttChart, NetworkGraph |
+| Q19 | Sparkline, CalendarHeatMap, HeatMap, TreeMap, BulletChart |
+| Q20 | ApprovalInbox, ApprovalWorkflow, OperationalLedger, ModerationGallery, ShiftMatrix |
+
+Patterns must compose primitives rather than rebuild them. Charts must diverge through plot surface, grid, axes, markers, labels, legend, tooltip and annotation — not merely series color.
+
+#### 13. Round R4 — structures, surfaces and composition batch
+
+| Lane | Families |
+|---|---|
+| R01 | CollectionHeader, DashboardHeader, DetailHeader, EditHeader, FormHeader, MobileHeader |
+| R02 | ActionDock, ActiveFiltersBar, FieldFiltersPanel, ExportButton |
+| R03 | ConnectedCommandPalette, SearchCommandBar, SavedViewsMenu, ScopeSwitcher |
+| R04 | SelectionPreviewRail, TableToolbar, ViewModeSwitcher, ColumnMenu |
+| R05 | Record content, FormSections, EditFields |
+| R06 | StatsHeader, DataTerminalCard |
+| R07 | DashboardInsights, LoadingOverlay |
+| R08 | AppShell, BottomTabBar |
+| R09 | PageShellSurface, HeaderSurface, WorkspaceShell, SidebarSurface |
+| R10 | AuditSurface, BillingSurface, SettingsSurface, ProfileSurface |
+| R11 | FileBrowserSurface, ImportExportSurface, IntegrationSurface, TeamSurface |
+| R12 | ListSurface, SearchSurface |
+| R13 | DetailSurface, CompareSurface |
+| R14 | DashboardSurface, ReportSurface, VisualizationSurface |
+| R15 | AuthSurface, OAuthTransitionSurface, EmptyStateSurface |
+| R16 | ChatSurface, EditorSurface, MediaSurface, NotificationSurface, MarketingSurface, PricingSurface |
+| R17 | DetailFormSurface, FormSurface, GuidedDraftFormSurface, WizardSurface, OnboardingSurface |
+| R18 | ActivitySurface, KanbanSurface, OperationalSurface, SchedulerSurface |
+| R19 | CollectionWorkspaceSurface, CommandCenterSurface, DecisionInboxSurface, RecordWorkbenchSurface |
+| R20 | 11 commercial-kit components, preserving their separate entrypoint and preventing a second general product engine |
+
+Structures organize page chrome; surfaces compose full screens; neither may absorb product-domain logic. Apps retain data, routes, permissions, product copy and entity mapping.
+
+#### 14. Round R5 — canon reconciliation
+
+After all family batches, the architecture integrator must process every proposal exactly once:
+
+1. diff all new names and synonyms against the generated token catalog;
+2. reject duplicate public authority;
+3. reconcile prototypes using the vocabulary in section 6;
+4. preserve Kimi capabilities or record successor/death proof;
+5. update static and DB contracts together for approved promotions;
+
+6. ensure Standard remains small and high-impact;
+7. ensure Pro remains curated by family/profile, not hundreds of raw fields;
+8. add Expert entries only when a bounded advanced override is genuinely needed;
+9. regenerate manifests/catalogs once after source is frozen;
+10. do not regenerate dist/styles repeatedly while writers are active.
+
+Required resulting documentation truths:
+
+- no active prototype is described as retired and no retired row is presented as active;
+- Expert is 294 unless the canonical allowlist intentionally changes;
+- current hook/read counts are generated, not hand-copied into guides;
+- manual authoring/app guides must stop publishing the stale 2,706-read and 71/color-only Expert claims;
+- lifecycle documentation must say that the 80 prototype-ledger rows are retired historical decisions, not 80 live prototypes;
+- the active docs describe architecture; the audit ledger describes execution state;
+- the Showroom registry drift is either fixed or explicitly retained with owner and reason.
+
+#### 15. Family work-order template
+
+The lead gives every writer this exact compact contract:
+
+```text
+LANE:
+OWNED FAMILIES:
+OWNED FILES/GLOBS:
+READ-ONLY DEPENDENCIES:
+DOM/ANATOMY DEFECTS BY SEVERITY:
+VISUAL/UX DEFECTS BY SEVERITY:
+DOMINANT PRODUCT DEFECT:
+BEFORE SCORE + RECEIPT FOR ALL APPLICABLE DIMENSIONS:
+APPLICABLE STATES/STRESS MATRIX FLOOR:
+STANDARD CONTROLS USED:
+PRO CONTROLS/RECIPES USED:
+EXPERT CHANNELS USED:
+PRIVATE CHANNELS USED:
+NEW PROTOTYPE REQUESTS:
+RESPONSIVE STRATEGY:
+MOBILE SIMPLIFICATION:
+INTERACTION/MOTION STATES:
+RTL/A11Y/FORCED-COLORS:
+EXPECTED BITHIRE/TMM DIVERGENCE:
+PRODUCTIVE SOURCE DELTAS BY DEFECT/PART/PROPERTY:
+AFTER SCORE + RECEIPT FOR ALL APPLICABLE DIMENSIONS:
+UNCHANGED-DIMENSION 4/5 PROOF:
+STATIC/DB CAUSAL MUTATION + EXACT RESTORE:
+REMAINING P0/P1 DEFECTS:
+FILES ACTUALLY CHANGED:
+BLOCKERS/INTEGRATOR REQUESTS:
+STATUS:
+```
+
+If a lane cannot fill the defect ledger, before score, responsive strategy,
+stress floor and divergence fields, it is not ready to edit. If it cannot fill
+the material-delta and after-proof fields, it is not elevated regardless of
+how many files it touched.
+
+#### 16. Coordinator validation policy
+
+Claude coordinates and develops; Codex certifies.
+
+Claude must:
+
+- inspect every agent diff against declared ownership;
+- reject undeclared shared-file edits;
+- reject shallow “visited” changes;
+- run `git diff --check` centrally after each batch;
+- run at most targeted syntax/type checks needed to avoid handing off broken code;
+- keep a running list of expected visual deltas and owner decisions;
+- stop a lane that starts writing tests, generated artifacts or app overrides to conceal a DS defect.
+- implement only three representative families when calibrating a new layer or
+  shared grammar, then stop for explicit Codex GO;
+- stop after every closed cohort in `visual-craft-contract.json`, never more
+  than twenty-five families between Codex checkpoints;
+- invalidate and repeat dependent checkpoints when a shared palette, recipe,
+  anatomy or composition grammar changes after calibration.
+
+Family writers must not spend each lane on full builds, suites, gates or
+screenshots, and they never edit shared tests. At the end of every round, the
+singleton quality integrator must update observable contracts, negative drills,
+i18n catalogs/parity and active/generated documentation for the completed
+scope. A test is respecified only when it pins obsolete private anatomy; it is
+never weakened to preserve a regression.
+
+Claude runs bounded round-level source checks and produces hashed evidence. The
+full serial, bundle regeneration, app build, browser matrix, screenshots,
+acceptance, commit and push belong to Codex at every stop/go boundary.
+
+#### 17. Round R6 — Codex audit matrix
+
+Claude's handoff must leave enough evidence for Codex to run:
+
+- DS typecheck, lint, gates and full suite in memory-safe chunks;
+- a single source→artifact rebuild and stale check;
+- app-bithire typecheck/build and focused contracts;
+- DOM validity and hydration checks;
+- BitHire/TMM same-tree captures at 320, 390, 768 and 1,440px;
+- Standard: compact/balanced/expansive, tight/normal/airy, type-scale bounds;
+- Pro: expressive profiles, anatomy, recipe and responsive posture;
+- Expert: selected override propagation and invalid-name rejection;
+
+- EN, ES, AR RTL, large text, coarse pointer, reduced motion, reduced transparency and forced colors;
+- loading, empty, partial, error, success, drag and resize states;
+- grayscale three-second differentiation test;
+- no per-character headers, overlap, clipping, inaccessible truncation or dead grid space.
+
+#### 18. Required round and final handoffs from Claude
+
+One consolidated coordinator report is required per round; raw agent narratives
+are not copied into the roadmap. The report uses
+`ROUND-REPORT-TEMPLATE.md`, is stored under the hashed evidence root and is
+referenced by one `roadmap:status progress` entry. The final handoff
+accumulates the accepted round evidence. Every report must contain:
+
+1. verdict `IMPLEMENTED_PENDING_CODEX_AUDIT` or honest blocked status;
+2. start/end HEAD, porcelain and stash counts;
+3. exact families by final status;
+4. exact files by lane;
+5. canary reference grammar extracted;
+6. Standard/Pro/Expert usage by family;
+7. every prototype proposal and adjudication;
+8. every Kimi capability preserved, connected, merged or blocked;
+9. every public API/contract change;
+10. responsive/mobile strategies by family;
+11. state/motion/accessibility work;
+12. expected BitHire/TMM deltas;
+13. shared-file changes applied only by integrator;
+14. registry/documentation drift fixed or retained;
+15. unresolved architecture and product decisions;
+16. declared non-goals and untouched areas;
+17. scoped checks actually run with real exits;
+18. explicit confirmation: no commit, push, publish, tag, stash mutation or destructive git operation.
+
+#### 19. Stop conditions
+
+Stop and report rather than improvise when:
+
+- HEAD or worktree ownership cannot be reconciled;
+- two writers touched the same file;
+- a change requires app-domain knowledge;
+- a public control would need to be added without static/DB parity;
+- a tenant-specific selector or TSX branch appears necessary;
+- a family requires restoring Daisy/Ant CSS or external icon providers;
+- a generated artifact must be edited by hand;
+- an existing Kimi capability seems removable but lacks successor/death proof;
+- the family cannot meet responsive requirements without a product-level decision.
+
+Do not stop for ordinary type errors, hard implementation work or the size of the inventory. Repair in scope, reassign a failed lane and continue through the current batch.
+
+#### 20. Launch prompt for the Claude coordinator
+
+The canonical bootstrap prompt is:
+
+`packages/core/scripts/quality-evidence/programs/modern-rescue/CLAUDE-PROMPT.md`
+
+The prompt, `program.json`, `family-inventory.json`,
+`quality-rubric.json`, `customization-model.json`, `rounds.json`,
+`agent-orchestration.json` and `evidence-contract.json` are one binding
+execution packet. Claude must run the program contract and its negative drills,
+claim WO-CRA-23, and execute only the owner-authorized round. The initial
+authorized round is R0. No coordinator may cross a round boundary without the
+preceding Codex audit and explicit owner GO.

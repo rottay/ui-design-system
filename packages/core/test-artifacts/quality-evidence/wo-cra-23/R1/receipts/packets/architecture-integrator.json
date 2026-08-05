@@ -1,0 +1,210 @@
+{
+  "schemaVersion": 1,
+  "roundId": "R1",
+  "cohort": 1,
+  "lane": "R1-architecture-integrator",
+  "laneClass": "architecture-integrator",
+  "ownedFamilies": [
+    "shared-recipes-tokens-styles",
+    "shared-contracts",
+    "tenant-sources",
+    "compiler-schema-sentinels"
+  ],
+  "ownedFiles": [
+    "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/fixtures/canonical-extraction-pre-change-digests.json",
+    "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/tenant-theme-compiler.test.ts",
+    "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/brand-compiler.test.ts",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/segmented.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/drawer.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/skeleton.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
+    "packages/core/src/foundation/tokens/ts/presentation/recipe-profiles/index.ts",
+    "packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
+    "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts",
+    "packages/core/src/ui/primitives/foundation/compose-refs/index.ts",
+    "packages/core/src/ui/primitives/runtime/collection/roving-focus/index.ts"
+  ],
+  "ownedFilesNote": "popover.css is deliberately absent: it is the reference implementation this work adopts, not a file this work changes. No new stylesheet and no base.css/styles.css import edit is required, because the vocabulary being adopted is already defined and already imported.",
+  "observableDefect": {
+    "title": "The reusable semantic-group vocabulary ALREADY EXISTS and is fully tenant-writable; the Cohort 1 families do not consume it. The defect is non-adoption, not absence.",
+    "correctionNotice": "An earlier reading of this packet proposed BUILDING a group-recipe layer. That premise was wrong and is superseded here. Measurement showed the mechanism already ships, is alive, and has a working reference implementation. Inventing a second group language on top of it would have been the exact duplication R1 exists to remove.",
+    "theVocabularyThatExists": {
+      "definedAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "shape": "8 surface roles x 18 channels = 144 defined channels",
+      "roles": [
+        "canvas",
+        "shell",
+        "panel",
+        "card",
+        "inset",
+        "control",
+        "raised",
+        "overlay"
+      ],
+      "channels": [
+        "background, background-hover, background-active, background-selected, background-disabled",
+        "foreground, foreground-muted, foreground-disabled",
+        "border, border-strong, border-hover, border-active, border-selected, border-disabled",
+        "focus-ring",
+        "shadow, shadow-hover, shadow-active, shadow-selected",
+        "highlight",
+        "texture"
+      ],
+      "tenantReach": "every one of the 144 is in TENANT_THEME_OVERRIDE_TOKENS (allowlist size 294), so a DB tenant can author the whole matrix per role with no schema change, no new registry and no new public --ds-* token"
+    },
+    "measurement": "Two receipts. (1) cohort-1-group-axis-census.json: per-family channel reads across the 13 Cohort 1 modern skin files. (2) cohort-1-tenant-divergence.json: per-axis divergence measured from BitHire's shipped artifact against the compiled published document, counting a channel only when BOTH tenants emit it.",
+    "evidence": [
+      "test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-group-axis-census.json",
+      "test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-tenant-divergence.json"
+    ],
+    "findings": [
+      "popover reads 10 of the surface-role channels. It is the one family doing it right and it is the proof the mechanism works.",
+      "Button reads ZERO --ds-material-control-* channels. Segmented reads zero. The control group's 18 tenant-writable channels reach nothing.",
+      "Input reads exactly one (--ds-material-control-background); Select one; FormField zero.",
+      "Modal, Drawer and Dropdown read almost none of --ds-material-overlay-* / --ds-material-raised-*, so four members of one overlay group author the same ground four different ways.",
+      "Alert, Skeleton and Spinner read none of --ds-material-panel-* / --ds-material-card-*.",
+      "Group coherence (shared axes / union of axes) is 0.000 for control, 0.000 for feedback, 0.333 for field and 0.333 for overlay. Zero of four groups are coherent.",
+      "Measured divergence corroborates the cause: the material axis shows only THREE comparable differing channels and all three are --ds-glass-*. The 76 one-sided material channels are precisely this unconsumed role vocabulary.",
+      "ELEVATION IS INVERTED between the tenants. --ds-elevation-1/2 are `none` for BitHire but `0 2px 4px rgba(0,0,0,0.08)` / `0 4px 8px rgba(0,0,0,0.1)` for The Management. The Monochrome Executive Ledger is emitting soft blurred ambient shadows, and 'glass, blur, soft floating-card soup' is a named forbiddenOutcome for it, while BitHire -- whose direction asks for a low soft shadow on floating regions -- is flat. --ds-elevation-1/2/3 are NOT tenant-writable; all 32 --ds-material-{role}-shadow* channels ARE.",
+      "THE EDGE AXIS IS SILENT: BitHire emits --ds-edge-{emphasis,hairline,standard}-width from its expressive profile; The Management emits none, because its document authors no expressive axes at all. No --ds-edge-* or --ds-divider-* token is in the tenant allowlist, so the ONLY route to that axis is advanced.profiles."
+    ],
+    "consequence": "This is the mechanical cause of the round's headline defect. Colour and radius travel through generic tokens every family inherits by accident, so colour moves. Material, depth, edge and state posture travel through a role vocabulary almost nothing reads, so they do not move at all -- which is exactly the >=6 non-colour axes R1 requires."
+  },
+  "applicableRubricDimensions": [
+    "adaptive-layout-density-rhythm",
+    "typography-content",
+    "customization-tenant-divergence",
+    "material-background-depth",
+    "interaction-states-motion"
+  ],
+  "standardControlsUsed": [
+    "expressive profile axes: type, geometry, edge, material, elevation, motif, icon, density, motion (closed registry, already published)",
+    "recipe profile family defaults (closed registry)",
+    "BrandTheme surfaces/typography/motion for the static tenant",
+    "TenantThemeDocument visualFoundation.general for the DB tenant"
+  ],
+  "proControlsAndRecipesUsed": [
+    "ADOPTION of the existing --ds-material-{role}-* surface-role vocabulary by the four Cohort 1 groups, with popover.css as the proven reference implementation: control -> --ds-material-control-*, field -> --ds-material-control-* for the control chrome and --ds-material-inset-* for the field well, overlay -> --ds-material-overlay-* plus --ds-material-raised-*, feedback -> --ds-material-panel-* and --ds-material-card-*.",
+    "Each adopted channel keeps its current painted value as the var() fallback, so adoption is behaviour-preserving where no tenant authors the role and causal the moment one does."
+  ],
+  "expertChannelsUsed": [
+    "--ds-edge-standard-width, --ds-edge-standard-style, --ds-edge-hairline-width",
+    "--ds-material-control-background, --ds-material-control-texture, --ds-material-overlay-*, --ds-material-raised-*",
+    "--ds-elevation-lift-strength, --ds-shadow-key-strength, --ds-shadow-ambient-strength",
+    "--ds-divider-width, --ds-divider-style"
+  ],
+  "privateChannelsUsed": [
+    "--ds-group-control-*, --ds-group-field-*, --ds-group-overlay-*, --ds-group-feedback-* are PRIVATE group-local values derived inside the group stylesheets from the public expressive channels above. They are never published as tenant-writable --ds-* tokens and never appear in TENANT_THEME_OVERRIDE_TOKENS."
+  ],
+  "creativeProposalIds": [
+    "R1-C1-PROP-01-semantic-group-grammar",
+    "R1-C1-PROP-02-network-professional-recipe-profile"
+  ],
+  "responsiveStrategy": "Group grammar carries the density axis as a group-local rhythm value rather than per-family magic numbers, so 320/390/768/1440 rhythm changes are one decision per group instead of thirteen. Control and field heights, overlay insets and feedback padding all derive from the same group rhythm value.",
+  "mobileSimplification": "At narrow containers the group rhythm collapses the secondary axes first (motif to none, texture to none, elevation to its keyline floor) and preserves the primary ones (edge, geometry, density), so a tenant is still recognizable at 320 without any family-level mobile branch.",
+  "statesAndMotion": "The interaction-state contract (spec section 4) stays the single authority: hover luminance shift, press scale, focus ring and disabled opacity remain tokenized and uniform. The group layer supplies the resting geometry and material only; it must not introduce a second state model.",
+  "i18nRtlA11y": "Group stylesheets use logical properties only (inline-start/inline-end, padding-inline, border-inline) so RTL mirrors without a second rule. Contrast floors and forced-colors fallbacks are asserted per group, and no group value may encode required meaning by texture or motif alone.",
+  "expectedTenantDivergence": {
+    "law": "same tree, no tenant selector, no tenant conditional TSX, no tenant-specific CSS selector",
+    "axes": [
+      {
+        "axis": "type",
+        "nonColour": true,
+        "bithire": "humanist",
+        "themanagement": "editorial"
+      },
+      {
+        "axis": "geometry",
+        "nonColour": true,
+        "bithire": "rounded (radiusScale 1.25)",
+        "themanagement": "sharp silhouette via exact-value radius overrides 0/0/1/2px"
+      },
+      {
+        "axis": "edge",
+        "nonColour": true,
+        "bithire": "hairline cool keylines",
+        "themanagement": "ruled graphite rules"
+      },
+      {
+        "axis": "material",
+        "nonColour": true,
+        "bithire": "flat white work surfaces over cool canvas",
+        "themanagement": "paper ground, no glass (--ds-glass-blur: 0px)"
+      },
+      {
+        "axis": "elevation",
+        "nonColour": true,
+        "bithire": "soft low lift",
+        "themanagement": "hard offset drop-rule, zero blur, effectIntensity 0.2"
+      },
+      {
+        "axis": "density",
+        "nonColour": true,
+        "bithire": "balanced/normal",
+        "themanagement": "spacious editorial rhythm"
+      },
+      {
+        "axis": "recipe profile",
+        "nonColour": true,
+        "bithire": "rottay/network-professional@1",
+        "themanagement": "rottay/technical-sharp@1"
+      },
+      {
+        "axis": "label posture",
+        "nonColour": true,
+        "bithire": "sentence case, proportional numerals, -0.005em display tracking",
+        "themanagement": "uppercase editorial metadata, tabular numerals"
+      },
+      {
+        "axis": "palette",
+        "nonColour": false,
+        "bithire": "professional blue action hierarchy on cool neutral canvas",
+        "themanagement": "near-black ink on paper, monochrome brand chrome with governed semantic exceptions"
+      }
+    ],
+    "count": 9,
+    "nonColourCount": 8
+  },
+  "filesActuallyChanged": [
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/drawer.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/dropdown.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
+    "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+    "packages/core/src/foundation/tokens/ts/presentation/recipe-profiles/index.ts",
+    "packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
+    "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts"
+  ],
+  "integratorRequests": [
+    {
+      "requestId": "REQ-R1-C1-group-coherence-gate",
+      "targetLane": "a round in which packages/core/scripts/** is writable",
+      "ask": "promote the group-coherence measurement to an enforced gate",
+      "why": "R1 declares scripts/** no-write, so this lane may publish the measurement but may not install its own judge"
+    }
+  ],
+  "honestStatus": "IMPLEMENTED_PENDING_CODEX_AUDIT — PARTIAL, and stated as partial. LANDED: Step 0 tenant sources, and the overlay group (Drawer, Dropdown, Modal) adopting the governed overlay role vocabulary popover already consumed — provably paint-preserving, overlay coherence 0.333 -> 0.5 with the material axis shared across all four members for the first time. button.css carries a documented mechanism note and NO paint change. NOT LANDED: control, field and feedback adoption; the sighted depth/edge/ground proposals; the self-contained reference lab; captures at 320/390/768/1440; proposed craft scores. TWO NO-WRITE-DOMAIN DISCLOSURES are recorded in cohort-1-progress-and-disclosures.json (DISC-01 compilers, owner-directed and unresolved; DISC-02 quality-tooling, self-corrected). Claude proposes; Codex adjudicates.",
+  "ownershipSupersession": {
+    "supersedes": "the sealed R1-architecture-integrator writeSet as it stood before this entry",
+    "count": "ONE supersession, containing exactly two added paths. Not a standing widening.",
+    "authority": "Owner autonomy, exercised transparently: the auditor identified that both corrections require shared implementation paths absent from the sealed writeSet, and that keeping a family-local fork purely to fit existing ownership is not acceptable either.",
+    "pathsAdded": [
+      "packages/core/src/ui/primitives/foundation/compose-refs/index.ts",
+      "packages/core/src/ui/primitives/runtime/collection/roving-focus/index.ts"
+    ],
+    "whyEachPath": {
+      "packages/core/src/ui/primitives/foundation/compose-refs/index.ts": "Fable fixed this as the canonical home for ref composition. The Segmented lane had built the same capability locally at Segmented/runtime/root-ref while a repo search found no existing compose/merge-ref utility to extend. Landing it here instead of leaving a family-local fork is the whole point of the ruling.",
+      "packages/core/src/ui/primitives/runtime/collection/roving-focus/index.ts": "The reading-direction capture at :263, read through resolveIsRtl at :287-294, is cached once per instance and never recomputed. Navigate once in LTR, flip an ancestor to dir=rtl on the same mounted tree, and the horizontal arrows stay stale. The pure resolver at :63 is correct; only the caching is wrong. It is a SHARED kernel, so every roving-focus consumer inherits the outcome."
+    },
+    "whatThisIsNot": "Not a family write, not a new family, and not permission to touch anything else under ui/primitives/**. Both entries are single shared implementation index.ts files named exactly.",
+    "testPlacement": "Quality tests for both remain under the observable-tests owner. This supersession grants implementation paths only.",
+    "openDebtCreatedByThisEntry": "The Segmented-level locale-flip suite currently carries one `.fails` test asserting the correct arrow contract plus one test pinning the current wrong behaviour. Both are scaffolding for a defect, not a certified state. They MUST be converted to positive assertions once the roving-focus correction lands; a certified round may not ship a `.fails` or a wrong-behaviour pin.",
+    "admissionRerun": "SUPERSEDED BY ADJ-R1-shared-react-kernels in R0/receipts/r1-canary-ownership-proposal.json. This packet is a LANE DECLARATION, not the authority the gate consumes — amending it did not make the supersession executable, and an earlier version of this field promised a result it did not contain. The executable amendment and the real admission output live in the ownership proposal."
+  }
+}

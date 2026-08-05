@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-failure-attribution",
+  "correctionToMyOwnReport": "I previously described 'three unattributed failures'. That was wrong and understated the surface. The full run is 6 failing FILES / 9 failing TESTS / 6333 passed / 16 skipped. All nine are classified below individually, with the evidence that decided each.",
+  "suiteScope": "src/ui/primitives + src/infrastructure/compilers (463 files)",
+  "method": "Each failing test is attributed by asking two questions with reproducible answers: (1) is the stylesheet or source it pins listed in R0/receipts/round-start-porcelain.txt, i.e. already dirty before this round; (2) is that path in the set R1 actually edited. A failure is MINE only when R1 edited the thing the assertion reads.",
+  "attributions": [
+    {
+      "test": "EmbeddedCssRecovery.contract.test.ts > pins every DataTable interaction selector and animation body",
+      "verdict": "INHERITED",
+      "evidence": "The pin covers seven stylesheets: data-table-interactions, form-placeholders, navigation-static, primitive-motion, scroll-area, tabs, toast-animation-keyframes. R1 edited NONE of them. data-table-interactions.css is listed in the round-start porcelain, so it was already modified before this round."
+    },
+    {
+      "test": "EmbeddedCssRecovery.contract.test.ts > pins all six audited stylesheets byte-for-byte",
+      "verdict": "INHERITED",
+      "evidence": "Same seven-stylesheet set, same disjointness from the R1 edit set."
+    },
+    {
+      "test": "Menu.modern-engine.test.tsx > owns the 62/45 level geometry against the legacy sidebar bridge",
+      "verdict": "INHERITED",
+      "evidence": "menu.css is listed in the round-start porcelain and R1 never edited it. It appears in `git status` only because it was already dirty."
+    },
+    {
+      "test": "Spinner.modern-engine.test.tsx > keeps ring geometry, cadence and the reduced-motion guard in the skin",
+      "verdict": "INHERITED",
+      "evidence": "spinner.css IS in the round-start porcelain at line 73 (an earlier check of mine reported it clean; that check was malformed and the porcelain is authoritative). The failing assertion is the --ds-motion-slow duration pin, which the 2026-08-03 inherited change superseded. R1 edits to this file were the track-colour rebase and the :root token rebase, neither of which touches the duration expression. Count held at 1 failed / 22 passed before and after both edits."
+    },
+    {
+      "test": "sidebar-group-channels.test.ts > groupPaddingTop reaches --ds-sidebar-group-padding-top",
+      "verdict": "INHERITED",
+      "evidence": "Present in the original four-failure compiler baseline captured before any Cohort 1 write."
+    },
+    {
+      "test": "premium-regression.test.ts > bithire generates input vars with correct values",
+      "verdict": "MINE — caused by R1",
+      "evidence": "The assertion is `expect(css).toContain('--ds-input-bg: #ffffff')`. R1 rebased BitHire's chrome.controls.input.bg from the literal \"#ffffff\" to \"var(--ds-surface-inset, #ffffff)\", so the generated artifact now emits the var() chain instead of the literal. This is the one failure in the run attributable to this round.",
+      "isTheChangeCorrect": "Yes. It is what made field chrome tenant-reachable: --ds-input-border and --ds-input-border-focus were byte-identical across both tenants before it, and now diverge (rgb(215,226,234) cool vs rgb(201,195,182) warm). The pin is also correct — it was protecting a real contract. Both are right, which is why this needs adjudication rather than a unilateral edit."
+    },
+    {
+      "test": "canonical-digest-identity.test.ts > produces one digest for a document authored in any key order",
+      "verdict": "INHERITED (purely)",
+      "evidence": "Corrected by independent audit. R0 records exactly these three reds, caused by the INHERITED removal of --ds-motion-ambient. My own cohort-1-schema-digest-proof.json independently confirms artifactDigestsUntouched, and R1 moved none of the six artifact pins. My earlier \"compounded by R1\" framing was wrong in the cautious direction — I hedged toward claiming more responsibility than the evidence supports, which is still a misattribution."
+    },
+    {
+      "test": "canonical-digest-identity.test.ts > keeps the populated simple artifact digest byte-identical",
+      "verdict": "INHERITED (purely)",
+      "evidence": "Corrected by independent audit. R0 records exactly these three reds, caused by the INHERITED removal of --ds-motion-ambient. My own cohort-1-schema-digest-proof.json independently confirms artifactDigestsUntouched, and R1 moved none of the six artifact pins. My earlier \"compounded by R1\" framing was wrong in the cautious direction — I hedged toward claiming more responsibility than the evidence supports, which is still a misattribution."
+    },
+    {
+      "test": "canonical-digest-identity.test.ts > keeps the W4-absent advanced artifact digest byte-identical",
+      "verdict": "INHERITED (purely)",
+      "evidence": "Corrected by independent audit. R0 records exactly these three reds, caused by the INHERITED removal of --ds-motion-ambient. My own cohort-1-schema-digest-proof.json independently confirms artifactDigestsUntouched, and R1 moved none of the six artifact pins. My earlier \"compounded by R1\" framing was wrong in the cautious direction — I hedged toward claiming more responsibility than the evidence supports, which is still a misattribution."
+    }
+  ],
+  "summary": {
+    "totalFailingTests": 9,
+    "attributableToR1": 1,
+    "inherited": 8,
+    "theOneThatIsMine": "premium-regression.test.ts > bithire generates input vars with correct values",
+    "reproducedBy": "independent audit; final classification 8 inherited (EmbeddedCssRecovery x2, Menu x1, Spinner x1, sidebar-group x1, canonical-digest x3) + 1 R1 (premium-regression x1)"
+  },
+  "noPinReanchored": "No pin was re-anchored for any of the nine. There is no owner authorization for premium-regression.test.ts or for the Spinner duration pin, and none was assumed.",
+  "shellExitCodeWarning": "A chained shell command returning exit 0 does NOT mean the suite is green. final.log is authoritative and records 6 failing files / 9 failing tests / 6333 passed / 16 skipped. Any future claim must read the log, not the exit status."
+}

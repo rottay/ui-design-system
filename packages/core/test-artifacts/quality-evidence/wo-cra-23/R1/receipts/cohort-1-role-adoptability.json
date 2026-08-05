@@ -1,0 +1,445 @@
+{
+  "schemaVersion": 1,
+  "mapId": "wo-cra-23-R1-C1-role-adoptability",
+  "law": "A tenant-writable role channel that is NOT declared on :root can be adopted with a var() fallback that preserves current paint exactly and becomes causal on first tenant write. A channel DECLARED on :root cannot: its default silently replaces the family value, so adopting it is a visual decision for the sighted approver.",
+  "rootDeclaredCount": 67,
+  "tenantWritableCount": 160,
+  "roles": {
+    "canvas": {
+      "safeToAdoptNow": [
+        "background-hover",
+        "background-active",
+        "background-selected",
+        "background-disabled",
+        "foreground-muted",
+        "foreground-disabled",
+        "border",
+        "border-strong",
+        "border-hover",
+        "border-active",
+        "border-selected",
+        "border-disabled",
+        "focus-ring",
+        "shadow",
+        "shadow-hover",
+        "shadow-active",
+        "shadow-selected",
+        "highlight",
+        "texture"
+      ],
+      "needsSightedAdjudication": [
+        "foreground"
+      ],
+      "notTenantWritable": [
+        "background"
+      ]
+    },
+    "shell": {
+      "safeToAdoptNow": [
+        "background-hover",
+        "background-active",
+        "background-selected",
+        "background-disabled",
+        "foreground-muted",
+        "foreground-disabled",
+        "border",
+        "border-strong",
+        "border-hover",
+        "border-active",
+        "border-selected",
+        "border-disabled",
+        "focus-ring",
+        "shadow",
+        "shadow-hover",
+        "shadow-active",
+        "shadow-selected",
+        "highlight",
+        "texture"
+      ],
+      "needsSightedAdjudication": [
+        "foreground"
+      ],
+      "notTenantWritable": [
+        "background"
+      ]
+    },
+    "panel": {
+      "safeToAdoptNow": [
+        "highlight",
+        "texture"
+      ],
+      "needsSightedAdjudication": [
+        "background-hover",
+        "background-active",
+        "background-selected",
+        "background-disabled",
+        "foreground",
+        "foreground-muted",
+        "foreground-disabled",
+        "border",
+        "border-strong",
+        "border-hover",
+        "border-active",
+        "border-selected",
+        "border-disabled",
+        "focus-ring",
+        "shadow",
+        "shadow-hover",
+        "shadow-active",
+        "shadow-selected"
+      ],
+      "notTenantWritable": [
+        "background"
+      ]
+    },
+    "card": {
+      "safeToAdoptNow": [
+        "highlight",
+        "texture"
+      ],
+      "needsSightedAdjudication": [
+        "background-hover",
+        "background-active",
+        "background-selected",
+        "background-disabled",
+        "foreground",
+        "foreground-muted",
+        "foreground-disabled",
+        "border",
+        "border-strong",
+        "border-hover",
+        "border-active",
+        "border-selected",
+        "border-disabled",
+        "focus-ring",
+        "shadow",
+        "shadow-hover",
+        "shadow-active",
+        "shadow-selected"
+      ],
+      "notTenantWritable": [
+        "background"
+      ]
+    },
+    "inset": {
+      "safeToAdoptNow": [
+        "background-hover",
+        "background-active",
+        "background-selected",
+        "background-disabled",
+        "foreground-muted",
+        "foreground-disabled",
+        "border",
+        "border-strong",
+        "border-hover",
+        "border-active",
+        "border-selected",
+        "border-disabled",
+        "focus-ring",
+        "shadow",
+        "shadow-hover",
+        "shadow-active",
+        "shadow-selected",
+        "highlight",
+        "texture"
+      ],
+      "needsSightedAdjudication": [
+        "foreground"
+      ],
+      "notTenantWritable": [
+        "background"
+      ]
+    },
+    "control": {
+      "safeToAdoptNow": [
+        "highlight",
+        "texture"
+      ],
+      "needsSightedAdjudication": [
+        "background-hover",
+        "background-active",
+        "background-selected",
+        "background-disabled",
+        "foreground",
+        "foreground-muted",
+        "foreground-disabled",
+        "border",
+        "border-strong",
+        "border-hover",
+        "border-active",
+        "border-selected",
+        "border-disabled",
+        "focus-ring",
+        "shadow",
+        "shadow-hover",
+        "shadow-active",
+        "shadow-selected"
+      ],
+      "notTenantWritable": [
+        "background"
+      ]
+    },
+    "raised": {
+      "safeToAdoptNow": [
+        "background-hover",
+        "background-active",
+        "background-selected",
+        "background-disabled",
+        "foreground-muted",
+        "foreground-disabled",
+        "border",
+        "border-strong",
+        "border-hover",
+        "border-active",
+        "border-selected",
+        "border-disabled",
+        "focus-ring",
+        "shadow",
+        "shadow-hover",
+        "shadow-active",
+        "shadow-selected",
+        "highlight",
+        "texture"
+      ],
+      "needsSightedAdjudication": [
+        "foreground"
+      ],
+      "notTenantWritable": [
+        "background"
+      ]
+    },
+    "overlay": {
+      "safeToAdoptNow": [
+        "background-hover",
+        "background-active",
+        "background-selected",
+        "background-disabled",
+        "foreground",
+        "foreground-muted",
+        "foreground-disabled",
+        "border",
+        "border-strong",
+        "border-hover",
+        "border-active",
+        "border-selected",
+        "border-disabled",
+        "focus-ring",
+        "shadow",
+        "shadow-hover",
+        "shadow-active",
+        "shadow-selected",
+        "highlight",
+        "texture"
+      ],
+      "needsSightedAdjudication": [],
+      "notTenantWritable": [
+        "background"
+      ]
+    }
+  },
+  "groups": {
+    "control": {
+      "members": [
+        "button",
+        "segmented"
+      ],
+      "roles": [
+        "control"
+      ],
+      "why": "a button and a segmented control are controls",
+      "safeToAdoptNow": [
+        "control.highlight",
+        "control.texture"
+      ],
+      "needsSightedAdjudication": [
+        "control.background-hover",
+        "control.background-active",
+        "control.background-selected",
+        "control.background-disabled",
+        "control.foreground",
+        "control.foreground-muted",
+        "control.foreground-disabled",
+        "control.border",
+        "control.border-strong",
+        "control.border-hover",
+        "control.border-active",
+        "control.border-selected",
+        "control.border-disabled",
+        "control.focus-ring",
+        "control.shadow",
+        "control.shadow-hover",
+        "control.shadow-active",
+        "control.shadow-selected"
+      ]
+    },
+    "field": {
+      "members": [
+        "input",
+        "select",
+        "form-field"
+      ],
+      "roles": [
+        "control",
+        "inset"
+      ],
+      "why": "a field is a control whose WELL is an inset surface; the chrome takes control, the well takes inset",
+      "safeToAdoptNow": [
+        "control.highlight",
+        "control.texture",
+        "inset.background-hover",
+        "inset.background-active",
+        "inset.background-selected",
+        "inset.background-disabled",
+        "inset.foreground-muted",
+        "inset.foreground-disabled",
+        "inset.border",
+        "inset.border-strong",
+        "inset.border-hover",
+        "inset.border-active",
+        "inset.border-selected",
+        "inset.border-disabled",
+        "inset.focus-ring",
+        "inset.shadow",
+        "inset.shadow-hover",
+        "inset.shadow-active",
+        "inset.shadow-selected",
+        "inset.highlight",
+        "inset.texture"
+      ],
+      "needsSightedAdjudication": [
+        "control.background-hover",
+        "control.background-active",
+        "control.background-selected",
+        "control.background-disabled",
+        "control.foreground",
+        "control.foreground-muted",
+        "control.foreground-disabled",
+        "control.border",
+        "control.border-strong",
+        "control.border-hover",
+        "control.border-active",
+        "control.border-selected",
+        "control.border-disabled",
+        "control.focus-ring",
+        "control.shadow",
+        "control.shadow-hover",
+        "control.shadow-active",
+        "control.shadow-selected",
+        "inset.foreground"
+      ]
+    },
+    "overlay": {
+      "members": [
+        "overlay-modal",
+        "drawer",
+        "popover",
+        "dropdown"
+      ],
+      "roles": [
+        "overlay",
+        "raised"
+      ],
+      "why": "popover already proves this pair; modal, drawer and dropdown are the same ground",
+      "safeToAdoptNow": [
+        "overlay.background-hover",
+        "overlay.background-active",
+        "overlay.background-selected",
+        "overlay.background-disabled",
+        "overlay.foreground",
+        "overlay.foreground-muted",
+        "overlay.foreground-disabled",
+        "overlay.border",
+        "overlay.border-strong",
+        "overlay.border-hover",
+        "overlay.border-active",
+        "overlay.border-selected",
+        "overlay.border-disabled",
+        "overlay.focus-ring",
+        "overlay.shadow",
+        "overlay.shadow-hover",
+        "overlay.shadow-active",
+        "overlay.shadow-selected",
+        "overlay.highlight",
+        "overlay.texture",
+        "raised.background-hover",
+        "raised.background-active",
+        "raised.background-selected",
+        "raised.background-disabled",
+        "raised.foreground-muted",
+        "raised.foreground-disabled",
+        "raised.border",
+        "raised.border-strong",
+        "raised.border-hover",
+        "raised.border-active",
+        "raised.border-selected",
+        "raised.border-disabled",
+        "raised.focus-ring",
+        "raised.shadow",
+        "raised.shadow-hover",
+        "raised.shadow-active",
+        "raised.shadow-selected",
+        "raised.highlight",
+        "raised.texture"
+      ],
+      "needsSightedAdjudication": [
+        "raised.foreground"
+      ]
+    },
+    "feedback": {
+      "members": [
+        "alert",
+        "skeleton",
+        "spinner"
+      ],
+      "roles": [
+        "panel",
+        "card"
+      ],
+      "why": "lifecycle feedback sits on panel and card grounds, not on its own surface",
+      "safeToAdoptNow": [
+        "panel.highlight",
+        "panel.texture",
+        "card.highlight",
+        "card.texture"
+      ],
+      "needsSightedAdjudication": [
+        "panel.background-hover",
+        "panel.background-active",
+        "panel.background-selected",
+        "panel.background-disabled",
+        "panel.foreground",
+        "panel.foreground-muted",
+        "panel.foreground-disabled",
+        "panel.border",
+        "panel.border-strong",
+        "panel.border-hover",
+        "panel.border-active",
+        "panel.border-selected",
+        "panel.border-disabled",
+        "panel.focus-ring",
+        "panel.shadow",
+        "panel.shadow-hover",
+        "panel.shadow-active",
+        "panel.shadow-selected",
+        "card.background-hover",
+        "card.background-active",
+        "card.background-selected",
+        "card.background-disabled",
+        "card.foreground",
+        "card.foreground-muted",
+        "card.foreground-disabled",
+        "card.border",
+        "card.border-strong",
+        "card.border-hover",
+        "card.border-active",
+        "card.border-selected",
+        "card.border-disabled",
+        "card.focus-ring",
+        "card.shadow",
+        "card.shadow-hover",
+        "card.shadow-active",
+        "card.shadow-selected"
+      ]
+    }
+  }
+}

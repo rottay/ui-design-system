@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 2,
+  "roundId": "R0",
+  "purpose": "Honest per-capability static-versus-DB parity baseline. R0 measures the gap; it does not close it.",
+  "verdict": "NOT_PROVEN_CONTROL_BY_CONTROL",
+  "claimUnderTest": "static/DB mutation equivalence is not yet proven control-by-control for every active capability",
+  "result": "The claim remains accurate today. Three layers of machinery exist; none of them proves per-capability VALUE equivalence across the two paths.",
+  "activeCapabilities": {
+    "total": 21,
+    "authority": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
+    "standard": [
+      { "id": "palette.seeds", "line": 81 },
+      { "id": "typography.pairing", "line": 128 },
+      { "id": "typography.families", "line": 148 },
+      { "id": "typography.scale", "line": 167 },
+      { "id": "shape.radius-scale", "line": 187 },
+      { "id": "shape.button-style", "line": 207 },
+      { "id": "density.mode", "line": 227 },
+      { "id": "spacing.rhythm", "line": 248 },
+      { "id": "motion.dial", "line": 273 },
+      { "id": "surfaces.elevation-posture", "line": 292 },
+      { "id": "surfaces.effect-intensity", "line": 312 },
+      { "id": "navigation.sidebar-tone", "line": 332 },
+      { "id": "experience.profile", "line": 352 }
+    ],
+    "pro": [
+      { "id": "chrome.families", "line": 380 },
+      { "id": "chrome.anatomy", "line": 400 },
+      { "id": "token-overrides", "line": 426 },
+      { "id": "recipe-profile", "line": 446 },
+      { "id": "profiles.expressive", "line": 466 },
+      { "id": "profiles.icon", "line": 521 },
+      { "id": "responsive.posture", "line": 544 }
+    ],
+    "internal": [{ "id": "palette.dark-mode", "line": 106 }],
+    "frontierNotActive": [{ "id": "palette.status-seeds", "line": 501 }]
+  },
+  "existingMachinery": [
+    {
+      "layer": "reachability",
+      "file": "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/capability-reachability.test.ts",
+      "proves": "one document exercises every active documentPath and one hand-picked assertion per capability against the compiled DB artifact",
+      "doesNotProve": "the DB result is never cross-checked against a static compile of the same authored intent"
+    },
+    {
+      "layer": "vocabulary containment",
+      "file": "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/static-db-channel-vocabulary.test.ts",
+      "proves": "every channel NAME the DB path can emit is also nameable by the static BrandTheme contract (dbOnlyAgainst is empty)",
+      "doesNotProve": "value equivalence — the file states in its own header that the value math behind each dial belongs to its own compiler and its own tests"
+    },
+    {
+      "layer": "propagation",
+      "file": "packages/core/src/tooling/testing/integration/capability-propagation/tests/index.test.ts",
+      "proves": "each active capability's dial movement reaches some channel, attribute or consumer on each path",
+      "doesNotProve": "the two paths are compared — the DB and static assertions live in separate describe blocks and are never cross-compared"
+    }
+  ],
+  "missingForAPerCapabilityBaseline": [
+    "no test authors the SAME semantic value through compileBrandTheme and compileTenantThemeConfig and asserts the resolved CSS values converge",
+    "only static-db-channel-vocabulary.test.ts imports both compilers, and it compares names rather than values",
+    "consequently pathParity cannot yet be asserted as 1 for any capability"
+  ],
+  "envelopeVersusAdvancedRoute": {
+    "law": "The six Standard dials are bounded by the vertical envelope. The allowlisted Advanced exact values follow their own route and are NOT clamped to those dial bounds. Confusing the two layers is a contract violation.",
+    "sixStandardRanges": {
+      "authority": "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:479-486",
+      "perVerticalBounds": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts:83-122",
+      "bithire": {
+        "densityScale": [0.85, 1.15],
+        "effectIntensity": [0, 0.65],
+        "motionIntensity": [0, 0.8],
+        "motionDurationScale": [0.75, 1.35],
+        "typeScale": [0.92, 1.08],
+        "radiusScale": [0.8, 1.2]
+      },
+      "evnto": {
+        "densityScale": [0.85, 1.15],
+        "effectIntensity": [0, 0.75],
+        "motionIntensity": [0, 0.8],
+        "motionDurationScale": [0.75, 1.35],
+        "typeScale": [0.92, 1.08],
+        "radiusScale": [0.8, 1.2]
+      },
+      "note": "The Management reuses the bithire envelope; there is no separate vertical row for it, and R0 opens none.",
+      "absoluteOuterCeiling": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts:1011-1018"
+    },
+    "advancedRouteIsDistinct": {
+      "allowlist": "TENANT_THEME_OVERRIDE_TOKENS, 294 names, tenant-theme/index.ts:119-193",
+      "bound": "allowlist membership plus a 200-entry per-document budget only",
+      "documentPath": "visualFoundation.advanced.tokenOverrides — structurally different from the appearance.general.* scale fields the six ranges bound",
+      "onlyTwoOverrideKeysAreRangeChecked": ["--ds-density-scale", "--ds-effect-intensity"],
+      "rangeCheckSite": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts:1136-1160",
+      "positiveProof": "tenant-theme-compiler.test.ts:75-76 compiles an exact --ds-radius-sm: 4px while the same artifact's radius dial sits floored at 1.0 (capability-reachability.test.ts:129-133)",
+      "consequence": "The discarded blocker is confirmed discarded: exact premium radii and semantic status tones need no envelope widening and no new vertical."
+    }
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "wo-cra-23-R1-C1-spinner-p48",
+  "purpose": "P-48 border-color specificity preservation proof for the spinner track-color material-role-channel rebase (the one authorized change on this file this round), plus the exact diff and before/after test-count evidence.",
+  "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
+  "ownership": "exclusively owned by this task; no other writer touched this file this round",
+
+  "establishedContextNotRelitigated": {
+    "inheritedSupersededDurationPin": {
+      "testFile": "packages/core/src/ui/primitives/feedback/Spinner/tests/Spinner.modern-engine.test.tsx",
+      "assertionLine": 63,
+      "pinnedExpectation": "var(--ds-spinner-duration, calc(var(--ds-motion-slow) * 2))",
+      "actualSkinValue": "var(--ds-spinner-duration, calc(var(--ds-motion-attention, var(--ds-motion-slow)) * 2))",
+      "classification": "SUPERSEDED, inherited -- this hunk was already in the working tree before this session (file section last modified 2026-08-03)",
+      "actionTakenThisTask": "none -- test file not opened for edit; the duration/comment hunk was not touched, re-anchored, edited, or deleted by this task"
+    }
+  },
+
+  "p48SpecificityArithmetic": {
+    "selector": ".rottay-spinner.rottay-spinner--modern [data-part='indicator'][data-part='indicator']",
+    "selectorLineNumber": 52,
+    "arithmetic": [
+      "'.rottay-spinner'                -> class selector       -> +1 to B (classes/attrs/pseudo-classes)",
+      "'.rottay-spinner--modern'        -> class selector       -> +1 to B",
+      "' ' (descendant combinator)      -> no specificity contribution",
+      "\"[data-part='indicator']\"        -> attribute selector   -> +1 to B",
+      "\"[data-part='indicator']\" (repeated) -> attribute selector -> +1 to B",
+      "No ID selectors present -> A = 0",
+      "No type/pseudo-element selectors present -> C = 0",
+      "Total B = 1 + 1 + 1 + 1 = 4"
+    ],
+    "specificityTuple": "(0, 4, 0)",
+    "matchesHeaderCommentClaim": "yes -- header comment (lines 18-21) states the rule 'reaches (0,4,0) via the two root classes + the repeated [data-part=\"indicator\"]', which is exactly this arithmetic",
+    "borderColorArms": [
+      {
+        "arm": "track (base ring color, all 4 sides before overrides)",
+        "declarationLine": 54,
+        "declaration": "border: var(--_ds-spinner-ring-width, 2px) solid var(--ds-spinner-track-color, ...);",
+        "propertyContributingColor": "border-color (shorthand component of `border`)"
+      },
+      {
+        "arm": "head (top side override, the moving accent)",
+        "declarationLine": 56,
+        "declaration": "border-top-color: var(--ds-spinner-color, var(--ds-color-primary));",
+        "propertyContributingColor": "border-top-color"
+      },
+      {
+        "arm": "segment (inline-end side override, soft second sweep)",
+        "declarationLine": 59,
+        "declaration": "border-inline-end-color: var(--ds-spinner-segment-color, color-mix(in srgb, var(--ds-spinner-color, var(--ds-color-primary)) 45%, var(--ds-spinner-track-color, ...)));",
+        "propertyContributingColor": "border-inline-end-color",
+        "note": "also re-reads the track color as the 55% ingredient of its color-mix fallback"
+      }
+    ],
+    "allThreeArmsShareOneSelector": true,
+    "allThreeArmsShareSpecificity": "(0, 4, 0) -- same rule block, so identical specificity for all three declarations",
+    "tenantFloor": {
+      "statedTuple": "(0, 3, 1)",
+      "statedAs": "the tenant `* { border-color }` floor",
+      "provenance": "spinner.css's own header comment (P-48 block, lines 18-21) and the task briefing; taken as established context, NOT independently re-derived here",
+      "independentCorroborationAttempted": "grep for a literal '* { border-color' pattern under packages/core/src/foundation/tokens/css found no direct textual match -- the tenant rule is either expressed as a different/compound selector, or lives outside that subtree. Out of scope for this task to chase further; flagged rather than silently assumed verified."
+    },
+    "clearanceComparison": "(0,4,0) vs (0,3,1): compare the B component first (specificity tuples compare left-to-right): 4 > 3, so (0,4,0) > (0,3,1) regardless of the C component. The P-48 rule clears the tenant floor.",
+    "postEditReExtraction": {
+      "method": "Read the file again after applying the authorized edit and compared selector text byte-for-byte against the pre-edit read.",
+      "selectorAtLine52": ".rottay-spinner.rottay-spinner--modern [data-part='indicator'][data-part='indicator'] -- UNCHANGED",
+      "reducedMotionSelectorAtLine116": ".rottay-spinner.rottay-spinner--modern [data-part='indicator'][role='status'] (inside @media (prefers-reduced-motion: reduce)) -- UNCHANGED, block untouched",
+      "forcedColorsBlockLines125to131": "UNCHANGED, untouched",
+      "specificityAfterEdit": "(0, 4, 0) -- identical to before",
+      "whyThisWasGuaranteed": "The edit only changed a `var(...)` fallback value nested inside two existing declarations; it did not add, remove, or reorder any selector, combinator, or rule block. CSS specificity is a pure function of the selector, so a value-only edit inside an unchanged selector cannot change specificity. This re-extraction is the empirical proof, not just the logical guarantee."
+    }
+  },
+
+  "authorizedEdit": {
+    "description": "Rebase ONLY the spinner TRACK colour fallback onto the material role channel: --ds-spinner-track-color now falls back to var(--ds-material-control-border, var(--ds-color-border)) instead of var(--ds-color-border) directly.",
+    "tokenFallbackBefore": "var(--ds-spinner-track-color, var(--ds-color-border))",
+    "tokenFallbackAfter": "var(--ds-spinner-track-color, var(--ds-material-control-border, var(--ds-color-border)))",
+    "occurrencesChanged": 2,
+    "occurrenceDetail": [
+      {
+        "location": "line 55, inside the `border` shorthand (base track color for all 4 sides)",
+        "before": "    var(--ds-spinner-track-color, var(--ds-color-border));",
+        "after": "    var(--ds-spinner-track-color, var(--ds-material-control-border, var(--ds-color-border)));"
+      },
+      {
+        "location": "line 64, nested inside the segment arm's color-mix() fallback (the 55% track ingredient of the blended segment color)",
+        "before": "      var(--ds-spinner-track-color, var(--ds-color-border))",
+        "after": "      var(--ds-spinner-track-color, var(--ds-material-control-border, var(--ds-color-border)))"
+      }
+    ],
+    "whyBothOccurrences": "Both are the same conceptual token (--ds-spinner-track-color) and the same fallback rule ('track colour fallback onto the material role channel'); the string appears twice only because the segment arm's color-mix blends the head color at 45% with the track color at 55%. Updating only one occurrence would leave the ring's plain border-color and the blended segment color disagreeing about which channel resolves the track when --ds-material-control-border is tenant-overridden -- a half-applied, inconsistent fix. Both instances were changed identically.",
+    "explicitlyNotTouched": {
+      "headAccentColor": "var(--ds-spinner-color, var(--ds-color-primary)) -- present unchanged at line 56 (border-top-color) and line 63 (45% color-mix ingredient). Left alone per instruction: a muted working indicator reads as broken, and --ds-color-primary is already tenant-correct."
+    },
+    "precedentInCodebase": {
+      "note": "The exact fallback shape var(--ds-X, var(--ds-material-control-border, var(--ds-color-border))) already exists elsewhere in the modern engine skin, confirming --ds-material-control-border is an established channel, not a new/invented token.",
+      "examples": [
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input.css:55 -- var(--ds-input-border, var(--ds-material-control-border, var(--ds-color-border)))",
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/select.css:142 -- var(--ds-select-border-color, var(--ds-material-control-border, var(--ds-color-border)))"
+      ]
+    },
+    "exactDiff": "diff --git a/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css b/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css\n--- a/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css\n+++ b/packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css\n@@ -52,7 +52,7 @@\n .rottay-spinner.rottay-spinner--modern [data-part='indicator'][data-part='indicator'] {\n   display: inline-block;\n   border: var(--_ds-spinner-ring-width, 2px) solid\n-    var(--ds-spinner-track-color, var(--ds-color-border));\n+    var(--ds-spinner-track-color, var(--ds-material-control-border, var(--ds-color-border)));\n   border-top-color: var(--ds-spinner-color, var(--ds-color-primary));\n   /* A soft second segment gives the sweep premium depth instead of a flat\n      single-pixel head. Logical, so the resting arc mirrors under RTL. */\n@@ -61,7 +61,7 @@\n     color-mix(\n       in srgb,\n       var(--ds-spinner-color, var(--ds-color-primary)) 45%,\n-      var(--ds-spinner-track-color, var(--ds-color-border))\n+      var(--ds-spinner-track-color, var(--ds-material-control-border, var(--ds-color-border)))\n     )\n   );",
+    "noteOnFullGitDiff": "`git diff` against HEAD for this file also shows a third, adjacent hunk (the inherited --ds-motion-attention duration rebase and its comment, lines ~68-76) because that hunk was already uncommitted before this session. That hunk is NOT part of this edit -- it is reproduced verbatim above only in the sense that this task did not touch it. See the savepoint manifest (cohort-1-savepoint-manifest.json) for why this makes the whole file AMBIGUOUS for staging purposes despite this edit being clean."
+  },
+
+  "testResults": {
+    "command": "npx vitest run --reporter=dot src/ui/primitives/feedback/Spinner",
+    "commandUsedForDetailBreakdown": "npx vitest run --reporter=verbose src/ui/primitives/feedback/Spinner",
+    "before": {
+      "failed": 1,
+      "passed": 22,
+      "total": 23,
+      "source": "Established as context in the task briefing ('the pre-existing count is 1 failing test'). Independently corroborated by construction rather than by re-running against a reverted file: the single failing assertion (Spinner.modern-engine.test.tsx line 63, the duration pin) targets CSS text this edit never touches (the `animation:`/`--ds-spinner-duration` declaration), so its pass/fail state is provably unaffected by this edit -- a revert-and-rerun cycle was judged unnecessary and was not performed."
+    },
+    "after": {
+      "testFiles": "1 failed | 1 passed (2)",
+      "tests": "1 failed | 22 passed (23)",
+      "failingTest": "Spinner modern engine > keeps ring geometry, cadence and the reduced-motion guard in the skin",
+      "failingAssertionLine": 63,
+      "failingAssertionIsTheSamePreexistingOne": true,
+      "allOtherAssertionsInThatSameTestPassIfReached": "the substring checks for --ds-spinner-track-color, --ds-spinner-segment-color, border-inline-end-color and the reduced-motion media query are all still present verbatim in the file and are unaffected by this edit -- the test only stops at the first failing expect() (line 63) so they are not separately re-executed, but the strings they check for were not touched",
+      "source": "empirically measured via `npx vitest run --reporter=verbose src/ui/primitives/feedback/Spinner`"
+    },
+    "inheritedPinCountChanged": false,
+    "newFailuresIntroduced": false,
+    "revertPerformed": false,
+    "revertReason": "not needed -- the failing count held at exactly 1 (the same pre-existing test), so the revert-on-regression condition in the task instructions was never triggered"
+  },
+
+  "verdict": "P-48 selectors and specificity are unchanged (byte-identical selector text, (0,4,0) before and after, still clearing the stated (0,3,1) tenant floor). Reduced-motion and forced-colors behavior are untouched. The authorized track-color-only edit was applied at both of its occurrences (base border shorthand and the segment color-mix fallback), the head/accent color was left alone, and the inherited superseded duration pin was neither re-anchored nor edited. Spinner test suite: 1 failing / 22 passing before and after -- the inherited failure count is unchanged, no new failure was introduced, so no revert was required.",
+
+  "followUpBySeparateOwner": {
+    "addedAt": "2026-08-05, after this receipt's original filing, appended without altering any field above",
+    "reportedByTeamLead": "The fallback wiring in this file (both var(--ds-spinner-track-color, ...) occurrences edited by this task, and the pre-existing var(--ds-spinner-color, ...) head reference) was structurally correct but inert: --ds-spinner-color and --ds-spinner-track-color were HARD LITERALS on :root (e.g. --ds-spinner-color: #171717), so the var() fallback branch could never activate -- CSS var() only falls back when the referenced custom property is unset/invalid, not when it holds any literal value. The team lead rebased both token DEFINITIONS (a separate :root theme file this task does not own and did not touch) onto the tenant authorities -- --ds-color-primary for the head, --ds-material-control-border for the track -- which is what actually made the ring tenant-aware (head now resolves to rgb(58,111,176) under BitHire vs rgb(26,26,24) under The Management, per the team lead's report).",
+    "impactOnThisReceiptsContent": "None of the arithmetic, selectors, diff, or test counts recorded above changed or need correction -- they document this task's edit to spinner.css, which is unchanged and was confirmed still intact at the time this addendum was written. This section exists only so a future reader of this receipt understands why the fallback appeared to have no visible effect until the separate :root fix landed, and does not imply this task's edit was reverted or was wrong.",
+    "spinnerTestsAfterTeamLeadsFollowUp": "reported by the team lead as still 1 failed / 22 passed, unchanged -- not independently re-verified by this task since the touched file is outside this task's ownership"
+  }
+}

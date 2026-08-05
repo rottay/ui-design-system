@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 2,
+  "roundId": "R0",
+  "purpose": "Closed versioned profile/recipe migration plan for both tenant directions. R0 plans; R1 implements and proves.",
+  "law": "Published profile ids keep their meaning. Recipe profiles and expressive experience profiles are two independent registries and are never unified. Composition is exhausted before any new versioned entry is considered.",
+  "currentSelectionsContradictTheDirection": true,
+  "currentSelections": {
+    "bithire-static": {
+      "authority": "packages/core/src/foundation/tokens/ts/presentation/brand-themes/bithire/index.ts",
+      "recipeProfile": { "value": "rottay/technical-sharp@1", "line": 287 },
+      "expressiveProfile": { "value": "rottay/bithire-technical@1", "line": "299-302", "perAxisOverrides": "none" },
+      "engine": "modern via vertical preset (foundation/presets/verticals/index.ts:115-122); engine is not tenant-representable",
+      "density": "surfaces.densityScale 0.9 (line 360)",
+      "radius": "exact authored sm 7 / md 10 / lg 14 / xl 18 px (line 361)",
+      "motion": "intensity 0.55, entrance fade 200ms, no spring (lines 496-512)",
+      "type": "Public Sans base / Space Grotesk display / IBM Plex mono (lines 330-337), labelStyle sentence (line 340)",
+      "effect": "effectIntensity 0.58 (line 488), authored 4-level shadows (lines 364-369)",
+      "palette": "cool blues #3A6FB0 family (lines 304-327)"
+    },
+    "themanagement-db": {
+      "authority": "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts",
+      "worktreeNote": "the working tree carries an uncommitted advanced.chrome anatomy block (lines 123-130) and THEMANAGEMENT_TENANT_THEME_EXPECTED_ANATOMY (lines 161-166) that HEAD does not have",
+      "recipeProfile": { "value": "rottay/editorial-round@1", "line": 142 },
+      "expressiveProfile": {
+        "value": "NONE SELECTED",
+        "finding": "the document has neither experienceProfile nor advanced.profiles. rottay/management-editorial@1 exists only in the registry and in test payloads. The plan therefore makes the selection explicit rather than assuming it."
+      },
+      "verticalKey": "bithire (line 156), rowVersion 8 (line 157)",
+      "density": "spacious (line 108), no rhythm authored",
+      "radius": "shape.radiusScale 0.8 + buttonStyle sharp (lines 105-106)",
+      "type": "typePairing editorial + Fraunces heading / Inter base + scale 1.04 (lines 79-88)",
+      "effect": "elevation elevated + effectIntensity 0.65 at the envelope ceiling (lines 109-114)",
+      "palette": "teal #1F6F6B / sandstone #B08D57 / terracotta #C4633F on #FBF8F3 (lines 61-78)"
+    }
+  },
+  "registryIndependenceProof": {
+    "recipeRegistry": "packages/core/src/foundation/tokens/ts/presentation/recipe-profiles/index.ts — two entries, technical-sharp@1 (76-88) and editorial-round@1 (90-102); moves component prop DEFAULTS only, explicit call-site props stay sovereign",
+    "expressiveRegistry": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/index.ts — seven axis vocabularies (29-92) plus density/motion dials (109-114); two entries (146-186)",
+    "separateBy": [
+      "separate files",
+      "separate schema version constants",
+      "separate validators",
+      "separate selection fields (static recipes.profile versus expressive.*; DB visualFoundation.recipeProfile versus general.experienceProfile plus advanced.profiles)",
+      "separate emitted markers (--ds-recipe-profile versus --ds-experience-profile)",
+      "separate consumers"
+    ],
+    "conclusion": "nothing unifies them; the plan keeps them independent"
+  },
+  "migrationPlan": {
+    "bithire": {
+      "target": "Professional Network Hiring OS",
+      "path": "static BrandTheme; regenerate the CSS artifact with pnpm -C packages/core build:vertical-css after edits",
+      "items": [
+        { "id": "B1", "action": "KEEP recipe rottay/technical-sharp@1", "routing": "DERIVED", "rationale": "button default/sm/outline + card outlined + tabs underline + dataTable compact is a disciplined keyline-led posture; explicit variant=primary at call sites carries the single action-blue hierarchy", "openFriction": "tag radius default none versus pill filters/status — mitigated by call-site prop sovereignty and authored badge chrome; R1 sighted-adjudicates" },
+        { "id": "B2", "action": "KEEP expressive rottay/bithire-technical@1 and ADD static per-axis overrides { type: humanist, material: soft-depth, elevation: soft-depth, motif: contour }", "routing": "DERIVED", "legality": "BrandExpressiveSelection.profiles is contracted; the static compiler consumes overrides and per-axis override beats profile axis (resolveExpressiveAxes)", "envelope": "motion 0.55 is within the bithire-technical cap of 0.6" },
+        { "id": "B3", "action": "Rebuild palette and surfaceRoles to cool near-neutral canvas, white work surfaces, deep ink, one professional blue", "routing": "DIRECT", "note": "R1 sighted authoring over the same bounded fields; the current palette is rejected as a target" },
+        { "id": "B4", "action": "Optional expressive.profiles.icon = linear", "routing": "DERIVED" },
+        { "id": "B5", "action": "Mobile task ordering and bottom navigation", "routing": "APP_OWNED", "note": "DS structures exist; the ordering itself is product composition and is not a tenant-document item" }
+      ]
+    },
+    "themanagement": {
+      "target": "Monochrome Executive Ledger",
+      "path": "DB TenantThemeDocument; rowVersion bump per edit, digest is provenance",
+      "items": [
+        { "id": "T1", "action": "recipeProfile editorial-round@1 -> rottay/technical-sharp@1", "routing": "DERIVED", "law": "a selection swap, not a redefinition. technical-sharp's published meaning (square geometry, outlined containers, ruled data surfaces) IS the ledger posture; editorial-round@1 stays published and meaningful, The Management simply stops selecting it" },
+        { "id": "T2", "action": "leave experienceProfile unset and author advanced.profiles = { type: editorial|geometric, geometry: sharp, edge: ruled (escalation inset-double), material: paper, elevation: flat, motif: micro-grid, icon: linear }", "routing": "DERIVED", "alternativeRecorded": "selecting management-editorial@1 and overriding every contradicting axis floors radiusScale at 1.0 and restricts density; harmless only because radii go Advanced-exact, so it buys provenance at the cost of a floored dial. Not preferred." },
+        { "id": "T3", "action": "paper/near-white plus near-black grayscale seeds; neutral ink/border via hex overrides; semantic exceptions via Advanced --ds-color-success/warning/error/info", "routing": "DIRECT", "constraint": "the compiler's chart-category gate requires unique categories at 3:1 against surfaces, so grayscale charts must diverge by dash/marker/hatch — chart anatomy craft, not tenant vocabulary" },
+        { "id": "T4", "action": "keep buttonStyle sharp and radiusScale 0.8, add Advanced exact --ds-radius-sm 0px / md 2px / lg 4px / xl 4px", "routing": "DIRECT" },
+        { "id": "T5", "action": "density spacious -> normal; ADD rhythm airy", "routing": "DIRECT", "note": "rhythm is orthogonal to density; compact data rows come from technical-sharp's dataTable density" },
+        { "id": "T6", "action": "elevation elevated -> flat; effectIntensity 0.65 -> ~0.35-0.45; Advanced --ds-shadow-* to none or hard-minimal", "routing": "DIRECT", "note": "paper-grain alpha scales with effect-intensity, so the value must stay high enough to keep the texture visible; R1 sights it" },
+        { "id": "T7", "action": "ADD general.motion { intensity ~0.3, durationScale ~0.8, ambient off }", "routing": "DIRECT" },
+        { "id": "T8", "action": "table open -> ruled; layout floating -> flat; KEEP card underline; sidebar panel (R1 may sight rail)", "routing": "DERIVED" },
+        { "id": "T9", "action": "KEEP sidebarTone inverse; author chrome.sidebar near-black/white fields", "routing": "DIRECT" },
+        { "id": "T10", "action": "keep explicit families or sight a sharp grotesk heading; scale within 0.92-1.08; optional --ds-type-* role tokens", "routing": "DIRECT" },
+        { "id": "T11", "action": "optional advanced.responsivePosture from the real registry ids compact|balanced|expansive", "routing": "DERIVED", "note": "single-column dossier ORDER is app-owned" }
+      ]
+    },
+    "contingentVersionedEntries": {
+      "law": "These are named landing points gated on an R1 canary proving the override composition cannot express a reusable cross-family posture. They are NOT R0 proposals and none is created in this round.",
+      "candidates": [
+        { "registry": "expressive", "id": "rottay/bithire-network@1", "composesExistingAxisValuesOnly": true },
+        { "registry": "expressive", "id": "rottay/management-ledger@1", "composesExistingAxisValuesOnly": true },
+        { "registry": "recipe", "id": "rottay/professional-medium@1", "onlyIf": "BitHire's tag/pill friction proves systemic" }
+      ],
+      "publishedIdsUnchanged": ["rottay/technical-sharp@1", "rottay/editorial-round@1", "rottay/bithire-technical@1", "rottay/management-editorial@1"]
+    }
+  },
+  "vocabularyReachTest": {
+    "law": "Existing edge, material, motif, icon and motion vocabulary must be reach-tested before any new public vocabulary is considered.",
+    "edge": { "values": ["borderless-shadow", "hairline", "outlined", "ruled", "inset-double"], "reached": "all", "unselectedButConsumable": ["borderless-shadow", "outlined", "inset-double"] },
+    "material": { "values": ["flat", "paper", "soft-depth", "frosted", "luminous"], "reached": "all" },
+    "motif": {
+      "reached": ["none", "micro-grid", "pinstripe", "contour"],
+      "declaredButUnreached": ["dots", "deco-fan", "ambient-orbs"],
+      "finding": "these three are in the closed vocabulary but have no v1 expansion rows and resolve to nothing. They are the first candidates to implement or use before ANY new motif value may be proposed."
+    },
+    "icon": { "values": ["linear", "strong-outline", "duotone", "solid-active"], "reached": true, "note": "profiles.icon is an ACTIVE Pro capability; the stale source comment calling it frontier was corrected in R0" },
+    "motion": { "values": ["intensity", "durationScale", "ambient off|subtle"], "reached": true, "note": "no snap/easing keyword exists; the dials must be exhausted before any easing vocabulary is proposed" }
+  },
+  "proposals": {
+    "created": 0,
+    "adjudicated": 0,
+    "canonClosure": 1,
+    "statement": "Zero proposals. All twelve artDirectionProjection required groups are expressible today for both tenants by composing existing recipe and expressive selections, Standard dials, anatomy variants and Advanced allowlist entries.",
+    "rejectedUnderExistingAxesFirst": [
+      "network-node motif — contour radial wash is a sanctioned alternative, and the three empty motifs must get expansion rows first regardless",
+      "snap easing — the motion dials are not exhausted",
+      "registration-marks/dossier motif — micro-grid plus paper suffice"
+    ]
+  },
+  "residualDocDrift": [
+    "BrandResponsiveSelection's doc comment shows a namespaced example id rottay/dense-posture@1 while the actual registry ids are plain compact|balanced|expansive"
+  ],
+  "r1ProofObligations": [
+    "at least eight observable divergence axes, at least six non-color",
+    "three-second grayscale recognition and recognition after temporary primary-hue neutralization",
+    "every scene at 320 / 390 / 768 / 1440 across en / es / ar and three density postures",
+    "each chosen expansion value actually reaches its named skin consumer",
+    "APCA over final dispatched values",
+    "chart grayscale 3:1 gate",
+    "static and DB path parity for every moved control"
+  ]
+}
