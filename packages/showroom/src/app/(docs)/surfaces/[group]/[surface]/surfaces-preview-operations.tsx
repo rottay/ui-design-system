@@ -18,6 +18,8 @@ import { noop } from './surfaces-preview-shared';
 
 // --- activity --------------------------------------------------------------
 
+const ACTIVITY_PREVIEW_REFERENCE_MS = Date.UTC(2026, 7, 3, 12, 0, 0);
+
 function ActivitySurfacePreview() {
   const config: ActivitySurfaceConfig = {
     visual: { maxWidth: 880 },
@@ -31,11 +33,11 @@ function ActivitySurfacePreview() {
     behavior: {
       activities: [
         { id: 'act-1', user: { name: 'Ana Reyes' }, action: 'published a report',
-          timestamp: new Date(Date.now() - 1000 * 60 * 6).toISOString(), entityType: 'report', entityId: 'rpt-4821' },
+          timestamp: new Date(ACTIVITY_PREVIEW_REFERENCE_MS - 1000 * 60 * 6).toISOString(), entityType: 'report', entityId: 'rpt-4821' },
         { id: 'act-2', user: { name: 'Marco Lin' }, action: 'updated a record',
-          timestamp: new Date(Date.now() - 1000 * 60 * 42).toISOString(), entityType: 'record', entityId: 'rec-1180' },
+          timestamp: new Date(ACTIVITY_PREVIEW_REFERENCE_MS - 1000 * 60 * 42).toISOString(), entityType: 'record', entityId: 'rec-1180' },
         { id: 'act-3', user: { name: 'Jules Park' }, action: 'archived a document',
-          timestamp: new Date(Date.now() - 1000 * 60 * 90).toISOString(), entityType: 'document', entityId: 'doc-77' },
+          timestamp: new Date(ACTIVITY_PREVIEW_REFERENCE_MS - 1000 * 60 * 90).toISOString(), entityType: 'document', entityId: 'doc-77' },
       ],
       pagination: { current: 1, pageSize: 20, total: 128, onChange: noop },
       actions: [{ id: 'export', label: 'Export', variant: 'secondary', onClick: noop }],

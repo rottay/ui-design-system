@@ -25,7 +25,6 @@ import { TortureSurface, type TortureFixture, type ProbeEngine } from '@/compone
 // ---------------------------------------------------------------------------
 
 const ENGINES: ProbeEngine[] = ['modern', 'rustic'];
-const FIXTURES: TortureFixture[] = ['rottay', 'bithire'];
 
 function sanitizeEngine(raw: string | null): ProbeEngine {
   return raw && (ENGINES as string[]).includes(raw) ? (raw as ProbeEngine) : 'modern';

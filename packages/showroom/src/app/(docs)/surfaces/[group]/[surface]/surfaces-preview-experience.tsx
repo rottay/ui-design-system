@@ -13,7 +13,6 @@ import {
   PricingSurface,
   createAuthSurfaceConfig,
   createMarketingSurfaceConfig,
-  Badge,
   Box,
   Button,
   Card,

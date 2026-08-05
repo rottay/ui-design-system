@@ -28,7 +28,6 @@ type State = 'rest' | 'loading' | 'error';
 
 const ROUTE = '/probe/k4-lane-a';
 const WITNESS = 'k4a-toast';
-const ROOT_TESTID = 'k4a-root';
 
 const SOURCES: readonly Source[] = ['bithire-static', 'themanagement-db'];
 const LOCALES: readonly Locale[] = ['en', 'es', 'ar'];

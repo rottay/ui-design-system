@@ -730,7 +730,7 @@ function OverlaysSection({
 // wc-widgets — WidgetBoard (first showroom specimen for the family)
 // ---------------------------------------------------------------------------
 
-function buildWidgetItems(copy: CanaryCopy): WidgetBoardItem[] {
+function buildWidgetItems(): WidgetBoardItem[] {
   return [
     {
       id: "w-pipeline",
@@ -806,7 +806,7 @@ function buildWidgetItems(copy: CanaryCopy): WidgetBoardItem[] {
 }
 
 function WidgetsSection({ copy }: { copy: CanaryCopy }) {
-  const [items, setItems] = useState<WidgetBoardItem[]>(() => buildWidgetItems(copy));
+  const [items, setItems] = useState<WidgetBoardItem[]>(() => buildWidgetItems());
   return (
     <Box data-testid="wc-widgets">
       <WidgetBoard
@@ -814,7 +814,7 @@ function WidgetsSection({ copy }: { copy: CanaryCopy }) {
         labels={copy.widgetLabels}
         editable
         onItemsChange={setItems}
-        onReset={() => buildWidgetItems(copy)}
+        onReset={buildWidgetItems}
       />
     </Box>
   );
@@ -932,7 +932,17 @@ function ProbeContent() {
           padding: 24,
         }}
       >
-        <Box style={{ maxInlineSize: 1280, marginInline: "auto", display: "grid", gap: 24 }}>
+        <Box
+          style={{
+            inlineSize: "100%",
+            maxInlineSize: 1280,
+            minInlineSize: 0,
+            marginInline: "auto",
+            display: "grid",
+            gridTemplateColumns: "minmax(0, 1fr)",
+            gap: 24,
+          }}
+        >
           <HeaderSection copy={copy} />
           {/* Main grid: 1fr / 340px, collapses to one column under ~900px
               (flex-wrap: 560 + 24 gap + 320 basis ≈ 904px breakpoint). */}

@@ -28,7 +28,6 @@ type State = 'rest' | 'stress';
 
 const ROUTE = '/probe/k4-lane-b';
 const WITNESS = 'k4b-codeblock';
-const ROOT_TESTID = 'k4b-root';
 
 const SOURCES: readonly Source[] = ['bithire-static', 'themanagement-db'];
 const LOCALES: readonly Locale[] = ['en', 'es', 'ar'];

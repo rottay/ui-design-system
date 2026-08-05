@@ -28,7 +28,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    // Probe routes stamp the tenant's governed root attributes from a
+    // first-in-body script, so `<html>` legitimately differs from this static
+    // element by the time React hydrates. `suppressHydrationWarning` is a
+    // React-only prop and is never serialized, so the served HTML is unchanged.
+    <html
+      lang="en"
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      suppressHydrationWarning
+    >
       <body className="showroom-site-body">{children}</body>
     </html>
   );

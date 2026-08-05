@@ -1,0 +1,226 @@
+'use client';
+
+import { Suspense, createContext, useContext, useMemo, type ReactNode } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Box, Stack, Text, Button, Badge, Input, Card, Table, Toast } from '@rottay/design-system';
+import { StateGallery, FLAGSHIP_SLUGS } from '@/components/state-gallery';
+import { TortureSurface, TORTURE_FIXTURES, type TortureFixture, type ProbeEngine } from '@/components/torture-surface';
+
+const CAPTURE_WIDTHS: Record<string, number> = {
+  '360': 360,
+  '768': 768,
+  '1280': 1280,
+};
+
+// Real Arabic strings used to prove RTL mirroring and overflow handling.
+// long label -> Button content + Badge content (neither has its own named field)
+// long value -> Input defaultValue
+// long title -> Card title
+const ARABIC_LONG_LABEL = 'إدارة المستأجرين والأذونات على مستوى المنصة بالكامل';
+const ARABIC_LONG_VALUE = 'قيمة طويلة جدًا للتحقق من عدم اقتطاع النص في الواجهة العربية';
+const ARABIC_LONG_TITLE = 'لوحة تحكم المشرف العام لإدارة الحسابات';
+
+const EXTRAS_ROWS = [{ key: 'op-14', name: 'Operations', owner: 'Daniel' }];
+const EXTRAS_COLUMNS = [
+  { key: 'name', title: 'Workspace', dataIndex: 'name' },
+  { key: 'owner', title: 'Owner', dataIndex: 'owner' },
+];
+
+// Chrome the WO-ENG-02 flagship galleries never reach, rendered so the probe
+// can prove those tenant channels too:
+//   - Badge via `content` (its standalone branch). The gallery's
+//     `<Badge>{label}</Badge>` form takes Badge's hidden-badge branch and paints
+//     no chrome at all, so it cannot answer "does the badge follow the tenant?".
+//   - Table with `bordered`, the only mode in which the primitive paints
+//     --ds-table-border on its root and header cells.
+//   - Card with `variant="outlined"`, the only variant whose border-width is
+//     non-zero and therefore the only one where --ds-card-border is observable.
+function ChromeExtras() {
+  return (
+    <Stack spacing="md" fullWidth>
+      {/* Boxed so the stack's stretch alignment cannot widen the badge past its
+          intrinsic size — a full-bleed badge would misread as a broken capture. */}
+      {/* Explicitly solid: the derivation probe asserts this background equals
+          the tenant's primary. The soft default paints a 10% tint of it, which
+          is a different assertion and would silence this one. */}
+      <Box>
+        <Badge variant="primary" badgeStyle="solid" content="Beta" />
+      </Box>
+      <Table rowKey="key" bordered pagination={false} dataSource={EXTRAS_ROWS} columns={EXTRAS_COLUMNS} />
+      <Card variant="outlined" title="Outlined" style={{ width: 240 }} />
+      {/* duration=0 keeps this mounted for the probe read; the default variant
+          is the only one with no --ds-toast-* channel of its own (WO-ENG-21). */}
+      <Toast variant="default" title="Default" description="Neutral toast surface" duration={0} />
+    </Stack>
+  );
+}
+
+export function sanitizeFixture(raw: string | null): TortureFixture {
+  return raw && (TORTURE_FIXTURES as string[]).includes(raw) ? (raw as TortureFixture) : 'torture-dark';
+}
+
+export interface TortureFrameContextValue {
+  fixture: TortureFixture;
+  engine: ProbeEngine;
+}
+
+export const TortureFrameContext = createContext<TortureFrameContextValue | null>(null);
+
+export function useTortureFrame(): TortureFrameContextValue {
+  const value = useContext(TortureFrameContext);
+  if (!value) {
+    throw new Error('useTortureFrame must be called inside <TortureFrame>');
+  }
+  return value;
+}
+
+export interface TortureFrameProps {
+  children?: ReactNode;
+}
+
+function TortureFrameContent({ children }: TortureFrameProps) {
+  const searchParams = useSearchParams();
+
+  const fixture = useMemo(() => sanitizeFixture(searchParams.get('fixture')), [searchParams]);
+  const rtl = useMemo(() => searchParams.get('rtl') === '1', [searchParams]);
+  const canonicalManagement = useMemo(
+    () => searchParams.get('tenantSource') === 'canonical-db',
+    [searchParams],
+  );
+
+  // WO-ENG-11 compares engines on an otherwise identical surface.
+  const engine = useMemo<ProbeEngine>(() => {
+    const raw = searchParams.get('engine');
+    return raw === 'rustic' || raw === 'classic' ? raw : 'modern';
+  }, [searchParams]);
+
+  const contentWidth = useMemo(() => {
+    const raw = searchParams.get('w');
+    return raw && CAPTURE_WIDTHS[raw] ? CAPTURE_WIDTHS[raw] : undefined;
+  }, [searchParams]);
+
+  const slugs = useMemo(() => {
+    const only = searchParams.get('slug');
+    return only && FLAGSHIP_SLUGS.includes(only) ? [only] : FLAGSHIP_SLUGS;
+  }, [searchParams]);
+
+  const frame = useMemo(() => ({ fixture, engine }), [fixture, engine]);
+
+  return (
+    <TortureSurface
+      fixture={fixture}
+      rtl={rtl}
+      engine={engine}
+      managementSource={canonicalManagement ? 'canonical-db' : 'legacy-brand-fixture'}
+    >
+      <Box
+        data-testid="probe-ground"
+        style={{
+          minHeight: '100vh',
+          padding: 24,
+          background: 'var(--ds-color-bg-primary)',
+        }}
+      >
+        <Box style={{ maxWidth: contentWidth ?? 1360, margin: '0 auto' }}>
+          <Stack spacing="lg" fullWidth>
+            <Box>
+              <Text
+                as={'h1' as never}
+                size="lg"
+                weight="bold"
+                style={{
+                  display: 'block',
+                  color: 'var(--ds-color-text-primary)',
+                }}
+              >
+                Whitelabel torture — {fixture}
+              </Text>
+              <Text
+                size="sm"
+                style={{
+                  display: 'block',
+                  marginTop: 4,
+                  color: 'var(--ds-color-text-secondary)',
+                }}
+              >
+                Hostile-tenant proof: every color, font, and radius below derives from the {fixture} fixture, never
+                hardcoded. Load ?fixture=rottay for the reference comparison.
+              </Text>
+            </Box>
+
+            <TortureFrameContext.Provider value={frame}>{children}</TortureFrameContext.Provider>
+
+            <Box
+              data-testid="probe-extras"
+              style={{
+                borderRadius: 16,
+                border: '1px solid var(--ds-color-border)',
+                background: 'var(--ds-color-bg-elevated)',
+                padding: 16,
+              }}
+            >
+              <ChromeExtras />
+            </Box>
+
+            {rtl && (
+              <Box
+                data-testid="probe-rtl"
+                style={{
+                  maxWidth: 480,
+                  borderRadius: 16,
+                  border: '1px solid var(--ds-color-border)',
+                  background: 'var(--ds-color-bg-elevated)',
+                  padding: 16,
+                }}
+              >
+                <Stack spacing="md" fullWidth>
+                  <Button variant="primary">{ARABIC_LONG_LABEL}</Button>
+                  <Box>
+                    <Badge variant="primary" content={ARABIC_LONG_LABEL} />
+                  </Box>
+                  <Input defaultValue={ARABIC_LONG_VALUE} />
+                  <Card title={ARABIC_LONG_TITLE} />
+                </Stack>
+              </Box>
+            )}
+
+            {slugs.map((slug) => (
+              <Stack key={slug} spacing="sm">
+                <Text
+                  size="sm"
+                  weight="semibold"
+                  style={{
+                    display: 'block',
+                    color: 'var(--ds-color-text-secondary)',
+                    textTransform: 'capitalize',
+                  }}
+                >
+                  {slug}
+                </Text>
+                <Box
+                  data-testid={`probe-${slug}`}
+                  style={{
+                    borderRadius: 16,
+                    border: '1px solid var(--ds-color-border)',
+                    background: 'var(--ds-color-bg-elevated)',
+                    padding: 16,
+                  }}
+                >
+                  <StateGallery slug={slug} />
+                </Box>
+              </Stack>
+            ))}
+          </Stack>
+        </Box>
+      </Box>
+    </TortureSurface>
+  );
+}
+
+export function TortureFrame({ children }: TortureFrameProps) {
+  return (
+    <Suspense fallback={null}>
+      <TortureFrameContent>{children}</TortureFrameContent>
+    </Suspense>
+  );
+}

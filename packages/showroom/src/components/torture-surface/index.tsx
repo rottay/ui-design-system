@@ -7,6 +7,17 @@ import {
   type BrandTheme,
   type TenantConfig,
 } from '@rottay/design-system';
+import type { TenantThemeArtifact } from '@rottay/design-system/server';
+
+import {
+  compileCanonicalManagementArtifact,
+  KNOWN_TENANT_FIXTURES,
+  surfaceGroundFor,
+  type ManagementFixtureSource,
+  type ProbeEngine,
+  type TortureFixture,
+} from '@/components/torture-tenant';
+import { publishedManagementSpecimen } from '@/components/torture-tenant/specimen';
 
 import {
   themanagementmiamiBrandTheme,
@@ -41,22 +52,18 @@ import {
 // driven by the ?fixture= query param on the probe page.
 // ---------------------------------------------------------------------------
 
-export type TortureFixture = 'torture-dark' | 'torture-light' | 'rottay' | 'bithire' | 'evnto' | 'themanagementmiami';
-
-export const TORTURE_FIXTURES: TortureFixture[] = [
-  'torture-dark',
-  'torture-light',
-  'rottay',
-  'bithire',
-  'evnto',
-  'themanagementmiami',
-];
-
-/** Vertical baselines that resolve through the known-tenant registry. */
-const KNOWN_TENANT_FIXTURES: ReadonlySet<TortureFixture> = new Set(['rottay', 'bithire', 'evnto']);
-
-/** Fixtures that render clear-mode (light) rather than the torture fixtures' dark/light pairing. */
-const LIGHT_FORCED_FIXTURES: ReadonlySet<TortureFixture> = new Set(['torture-light', 'bithire', 'themanagementmiami']);
+// The fixture vocabulary, the ground map and the DB compile all moved to
+// `@/components/torture-tenant`, which is pure and server-safe: the server
+// resolves the same facts to stamp the tenant before the first paint, and a
+// second copy here would be a second answer to the same question. Re-exported
+// so every existing importer keeps its import path.
+export {
+  TORTURE_FIXTURES,
+  surfaceGroundFor,
+  type ManagementFixtureSource,
+  type ProbeEngine,
+  type TortureFixture,
+} from '@/components/torture-tenant';
 
 function tortureTenantConfig(fixture: TortureFixture): TenantConfig | undefined {
   if (KNOWN_TENANT_FIXTURES.has(fixture)) {
@@ -102,28 +109,41 @@ function tortureTenantConfig(fixture: TortureFixture): TenantConfig | undefined 
   };
 }
 
-/**
- * Ground the differential probe should wait for before capturing: torture-dark
- * and rottay both paint dark; torture-light, bithire, and themanagementmiami
- * all paint a light/clear-mode ground.
- */
-export function surfaceGroundFor(fixture: TortureFixture): 'dark' | 'light' {
-  return LIGHT_FORCED_FIXTURES.has(fixture) ? 'light' : 'dark';
-}
-
 /** The window key the whitelabel probe reads the active fixture's BrandTheme from. */
 export const PROBE_BRAND_THEME_KEY = '__probeBrandTheme';
 
 type ProbeWindow = Window & { [PROBE_BRAND_THEME_KEY]?: BrandTheme };
 
-/** Engines the probe may render. The spec's own test compares modern against rustic. */
-export type ProbeEngine = 'modern' | 'rustic' | 'classic';
+/**
+ * The tenant the published DB specimen describes, projected from the artifact
+ * the server already compiled and embedded.
+ *
+ * `appearance` is retained deliberately: the runtime still READS it for
+ * density, the motion dial, `backgroundMode` and the recipe profile. It is the
+ * artifact's own compiled source echoed back, not a second authority, and the
+ * visual-authority resolver recognises that structurally.
+ */
+function canonicalManagementTenantConfig(artifact: TenantThemeArtifact): TenantConfig {
+  return {
+    slug: artifact.slug,
+    name: 'The Management',
+    vertical: artifact.verticalKey,
+    engine: 'modern',
+    theme: 'light',
+    plan: 'enterprise',
+    features: ['*'],
+    branding: { companyName: 'The Management' },
+    appearance: artifact.normalizedAppearance as TenantConfig['appearance'],
+  };
+}
 
 export function TortureSurface({
   fixture,
   rtl,
   engine = 'modern',
   ground,
+  managementSource = 'legacy-brand-fixture',
+  artifact,
   children,
 }: {
   fixture: TortureFixture;
@@ -141,9 +161,27 @@ export function TortureSurface({
    * presentation so probes can audit both modes without inventing a tenant.
    */
   ground?: 'dark' | 'light';
+  /**
+   * The governed DS reference lab uses the published DB document. Existing
+   * historical screenshot suites stay on their former fixture until migrated.
+   */
+  managementSource?: ManagementFixtureSource;
+  /**
+   * The artifact the server already compiled and embedded for this request.
+   * Omitted, the compiled-DB path recompiles the same published specimen: the
+   * compile is a pure function of a frozen document, so both sides reach the
+   * same digest and neither becomes a second source of truth.
+   */
+  artifact?: TenantThemeArtifact;
   children: ReactNode;
 }) {
-  const tenantConfig = tortureTenantConfig(fixture);
+  const compiledArtifact =
+    fixture === 'themanagementmiami' && managementSource === 'canonical-db'
+      ? (artifact ?? compileCanonicalManagementArtifact(publishedManagementSpecimen()))
+      : undefined;
+  const tenantConfig = compiledArtifact
+    ? canonicalManagementTenantConfig(compiledArtifact)
+    : tortureTenantConfig(fixture);
   const brandTheme = tenantConfig?.brandTheme;
 
   // The probe's derivation check needs the value the tenant's theme ASKED for,
@@ -169,6 +207,13 @@ export function TortureSurface({
       forceTheme={ground ?? surfaceGroundFor(fixture)}
       tenantConfig={tenantConfig}
       locale={rtl ? 'ar' : 'en'}
+      // The server already embedded this artifact's CSS, so declaring it
+      // silences exactly the four channels it covers. Without the declaration
+      // the resolver reads `origin: 'db-tenant'` and the provider paints a
+      // second visual layer over ground that is already correct.
+      visualAuthority={
+        compiledArtifact ? { authority: 'compiled-artifact', artifact: compiledArtifact } : undefined
+      }
       // No `vertical` prop for ANY fixture, including rottay: a vertical
       // baseline would layer extra tokens under the BrandTheme and muddy the
       // proof -- the probe must attribute every value to the tenant theme
