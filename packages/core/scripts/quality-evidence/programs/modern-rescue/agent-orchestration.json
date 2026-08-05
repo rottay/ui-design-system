@@ -1,0 +1,242 @@
+{
+  "schemaVersion": 2,
+  "principle": "Parallelize independent ownership, not the number twenty.",
+  "coordinator": {
+    "model": "most-capable-Claude-available",
+    "responsibilities": [
+      "read selected round and current worktree",
+      "construct conflict graph",
+      "select safe independent set",
+      "delegate exact ownership",
+      "inspect every diff",
+      "reject shallow or undeclared changes",
+      "coordinate one architecture and one quality integration pass",
+      "emit one consolidated report"
+    ]
+  },
+  "modelRouting": {
+    "law": "Route by cognitive need, actual availability and measured output quality. Model names are preferred roles, not a reason to wait, duplicate work or force a weak topology.",
+    "programCoordinatorAndArchitectureControl": {
+      "preferred": "Fable or the strongest coordinator-capable Claude available",
+      "work": [
+        "round control and conflict graph",
+        "architecture and single-authority decisions",
+        "cross-family composition review",
+        "proposal adjudication and final diff rejection"
+      ]
+    },
+    "creativePremiumFamilyWork": {
+      "preferred": "Opus or the strongest product-design and design-engineering model available",
+      "work": [
+        "dominant visual and UX defect diagnosis",
+        "reference-grade family composition",
+        "responsive and mobile posture",
+        "tenant art-direction expression",
+        "interaction, motion and material craft"
+      ]
+    },
+    "mechanicalDeterministicWork": {
+      "preferred": "Sonnet or the most efficient reliable implementation model available",
+      "work": [
+        "censuses and ownership manifests",
+        "exact wiring and repetitive migrations",
+        "i18n parity and barrel synchronization",
+        "focused contract updates",
+        "structured evidence assembly"
+      ]
+    },
+    "promotionLaw": "Escalate a mechanical lane to the creative model when product judgment appears; escalate any authority conflict to the coordinator. Do not let a cheaper lane invent architecture or let the coordinator spend context on deterministic repetition.",
+    "reportingLaw": "Record the chosen route and reason once per cohort in structured fields; do not narrate model deliberation per family."
+  },
+  "graph": {
+    "node": "family lane with exact owned files",
+    "edgeWhen": [
+      "lanes share a writable file",
+      "lanes require the same reserved authority",
+      "one lane consumes anatomy concurrently changed by another",
+      "both lanes require the same generated or i18n artifact"
+    ],
+    "schedule": "maximum safe independent set, recalculated after every integration batch",
+    "integratorBatchRecalculationRequired": true,
+    "regenerationChangesOwnershipDigest": true,
+    "agentCount": "dynamic; use as many agents as safe and useful, not a fixed role count",
+    "edgeComputationLaw": "a conflict graph must compute an edge for EVERY edgeWhen condition, not only shared writable files. Condition 3 (one lane consumes anatomy concurrently changed by another) is computed from real imports resolving into another lane scope; conditions 2 and 4 are computed from declared shared authority and generated/i18n domain ownership. A condition that is asserted rather than computed is not satisfied.",
+    "readSetRequired": "every writing node must declare an exact readSet. Without it condition 3 cannot be computed and the graph silently degrades to write/write only, which is what made an incomplete plan read as conflict-free."
+  },
+  "workOrderAdmission": {
+    "requiredBeforeWrite": true,
+    "requiredFieldsSource": "writerHandoffRequiredFields",
+    "missingObservableDefectResponsiveStrategyOrTenantDivergenceBlocksLane": true,
+    "reviewerRequiresOneFreshScopedCheck": true
+  },
+  "laneTypes": {
+    "scout": {
+      "writes": false,
+      "output": "defects, applicable rubric dimensions, exact files and dependencies"
+    },
+    "family-writer": {
+      "writes": true,
+      "mayEdit": "declared family-owned source only",
+      "mayNotEdit": [
+        "tests",
+        "shared-i18n",
+        "contracts",
+        "compilers",
+        "manifests",
+        "barrels",
+        "generated-docs",
+        "styles",
+        "dist",
+        "roadmap",
+        "audit-ledger"
+      ]
+    },
+    "architecture-integrator": {
+      "writes": true,
+      "singleton": true,
+      "responsibilities": [
+        "token and proposal reconciliation",
+        "static-db parity changes",
+        "capability and recipe contracts",
+        "shared barrels and manifests",
+        "Kimi preservation decisions"
+      ]
+    },
+    "quality-integrator": {
+      "writes": true,
+      "singleton": true,
+      "runsAfterFamilyWriters": true,
+      "responsibilities": [
+        "observable test contracts",
+        "negative drills",
+        "i18n catalog merge and parity",
+        "evidence receipts",
+        "generated docs and round summary"
+      ]
+    },
+    "reviewer": {
+      "writes": false,
+      "runsAfterWriters": true,
+      "specialties": [
+        "anatomy-and-composition",
+        "responsive-mobile-and-i18n",
+        "accessibility-state-motion",
+        "preservation-and-diff-accounting"
+      ]
+    },
+    "lab-writer": {
+      "writes": true,
+      "mayEdit": "the isolated DS reference lab only",
+      "mayNotEdit": [
+        "family source",
+        "contracts",
+        "compilers",
+        "manifests",
+        "barrels",
+        "i18n",
+        "dist",
+        "roadmap"
+      ],
+      "law": "the reference lab is the only canvas and evidence source for a canary round. It was already used as a lane class by the R0 conflict graph before being declared here; declaring it closes that gap and lets admission resolve a lab packet instead of failing it as an unknown class."
+    }
+  },
+  "reservedPaths": [
+    "package.json",
+    "packages/core/src/foundation/contracts/**",
+    "packages/core/src/foundation/tokens/**/brand-themes/**",
+    "packages/core/src/infrastructure/compilers/**",
+    "packages/core/hooks-manifest.json",
+    "packages/core/KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json",
+    "packages/core/customization-surface-report.json",
+    "packages/core/src/**/index.ts",
+    "packages/core/src/infrastructure/i18n/**",
+    "packages/core/scripts/**",
+    "packages/core/tests/**",
+    "packages/core/styles/**",
+    "packages/core/dist/**",
+    "roadmap/**",
+    "../docs-engineering/**"
+  ],
+  "barrelOwnership": {
+    "why": "reservedPaths protects SHARED BARRELS, and family-writer.mayNotEdit names `barrels` for the same reason. But this package's structure law makes every authored production unit a `folder/index.ts`, so the literal glob `packages/core/src/**/index.ts` also matches each family's own implementation entrypoint. Classifying by FILENAME would neutralise a binding rule wholesale; classifying by POSITION adjudicates it. This block is the canonical adjudication — a checker must read the rule from here rather than hardcode one.",
+    "appliesToReservedPattern": "packages/core/src/**/index.ts",
+    "rule": "position-relative-to-declared-family-root",
+    "familyRootAuthority": "the writeSet roots declared by the family-writer lanes of the round's ownership proposal. If those roots are not supplied, the rule cannot classify and the fail-closed disposition applies.",
+    "classes": {
+      "shared-barrel": "an index file whose directory either (i) lies OUTSIDE every declared family root, or (ii) is a STRICT ANCESTOR of any declared family root. Either way it sits above peer owners and aggregates them. Condition (ii) is what stops a lane from laundering a category barrel into its own source merely by declaring the category as its root.",
+      "implementation-entrypoint": "an index file whose directory is AT or INSIDE a declared family root AND is not a strict ancestor of any declared family root. It is that family's own authored source.",
+      "unclassified": "the hit directory lies inside family roots of MORE THAN ONE lane, or familyRoots is empty or unavailable, or any case the predicate does not decide. Owned by nobody; blocking."
+    },
+    "sharedBarrelOwner": "architecture-integrator",
+    "implementationEntrypointOwner": "the family-writer whose declared family root contains it",
+    "familyWriterOwningASharedBarrelIsBlocking": true,
+    "unclassifiedDisposition": "FAIL_CLOSED",
+    "reservedHitsOnOtherPatternsRemainBlocking": true,
+    "note": "the reserved pattern ends in `.ts` and therefore does not match `.tsx`. That asymmetry is not relied upon by this rule: classification is positional and applies to whatever the reserved pattern matched.",
+    "ruleId": "shared-barrel-vs-implementation-entrypoint@1",
+    "familyRootDerivation": {
+      "derive": "every family-writer lane writeSet entry of the round proposal with the trailing /** removed, plus every families[].sourceOwner in the proposal that lies STRICTLY inside one of that same lane's writeSet roots (nested family markers, attributed to that lane)",
+      "law": "sourceOwner is a resolution pointer, never a write boundary; it may enter familyRoots only through the strictly-inside filter above",
+      "containment": "per path segment: A is inside B iff A equals B or A starts with B plus a slash; strict containment excludes equality"
+    },
+    "extensionLaw": "a shared barrel is a pure re-export module and is therefore index.ts; index.tsx is an authored component entrypoint and is never a shared barrel. The .ts spelling of appliesToReservedPattern is deliberate, not an accident of extension — structures/shell/index.tsx being unreserved is CORRECT because it is the AppShell component.",
+    "failClosed": [
+      "a hit on any reserved pattern other than appliesToReservedPattern is outside this adjudication and blocks unconditionally",
+      "an absent barrelOwnership rule blocks every hit of the adjudicated pattern",
+      "a classification never excuses an ownership collision; collisions are computed independently and stay blocking"
+    ],
+    "bindsMayNotEditCategory": "barrels",
+    "bindsMayNotEditCategoryWhy": "laneTypes[family-writer].mayNotEdit lists \"barrels\", but it is enforced by a substring test for a directory named barrels/ which exists nowhere in this tree — the category has been vacuous since inception. Binding it to the classifier makes the word enforceable without touching laneTypes.",
+    "consumers": [
+      "packages/core/scripts/quality-evidence/v2/ownership-overlap.mjs#findExpansionViolations",
+      "packages/core/scripts/quality-evidence/v2/admission.mjs#admitWriterLane"
+    ],
+    "consumerParityLaw": "both consumers MUST route through the single exported classifier. A second, checker-local semantics is void: one code path neutralising the contract the other enforces is the defect this block exists to prevent.",
+    "localOwnershipLaw": "classification answers what KIND of file a reserved hit is; it never grants a lane the right to write it. Both consumers call the one shared classifier. Inside the proposal analyzer, owning-lane agreement is a STRUCTURAL invariant: a family-writer expansion derives from its own writeSet, every writeSet entry is a derived family root, so a permitted verdict cannot name a foreign lane, and a file inside two lanes roots fails closed as unclassified. A lane PACKET has no such guarantee — it is a runtime claim constructed outside the proposal — so admission must additionally resolve packet.lane to exactly one proposal lane and require owningLane equality on every adjudicated hit. Same classifier, same law, two subjects. A consumer may consume MORE of the shared verdict than the other surfaces; it may never contradict it. Discarding owningLane was the parity defect this law closes. The analyzer ASSERTS its invariant executably rather than assuming it: a permitted entry whose owningLane differs from the lane it was found under is reclassified blocking.",
+    "admissionRequiresProposal": "a packet of ANY writing lane class (family-writer, architecture-integrator, quality-integrator) cannot be admitted without the authorized ownership proposal supplied explicitly by the caller. It is never inferred from the evidence root or from the packet itself. Absent proposal is an evaluation blocker, not a usage error, so the refusal is machine-readable. Reviewers are exempt because they may own no files at all, which is enforced separately.",
+    "laneBindingScope": "lane resolution and effective-write-set containment bind every writing lane class, not only family-writer. Scoping them to family-writer would leave an integrator packet free to claim a family entrypoint with no ownership check, since the reserved-path loop is itself family-writer scoped.",
+    "newFileAdmissibilityLaw": "workOrderAdmission.requiredBeforeWrite means admission runs BEFORE the lane writes, so a file the lane is about to create does not exist. An existing owned file is judged against effectiveFiles, the exported authority the closure names. A NOT-YET-EXISTING owned file is judged against the same lane writeSet minus writeSetExcludes over patterns (laneScopeContains), which is no weaker — the path must still fall inside the lane declared authority — and without it the gate would be unsatisfiable for exactly the work it authorizes, deadlocking the quality-integrator whose charter is writing new tests. The two are required to agree on every file that exists, and that agreement is drilled over the whole R0 proposal rather than argued."
+  },
+  "writerHandoffRequiredFields": [
+    "lane",
+    "ownedFamilies",
+    "ownedFiles",
+    "observableDefect",
+    "applicableRubricDimensions",
+    "standardControlsUsed",
+    "proControlsAndRecipesUsed",
+    "expertChannelsUsed",
+    "privateChannelsUsed",
+    "creativeProposalIds",
+    "responsiveStrategy",
+    "mobileSimplification",
+    "statesAndMotion",
+    "i18nRtlA11y",
+    "expectedTenantDivergence",
+    "filesActuallyChanged",
+    "integratorRequests",
+    "honestStatus"
+  ],
+  "efficiency": [
+    "read assigned family and immediate composition dependencies, not the whole repository",
+    "do not run full builds suites gates or browser matrices per writer",
+    "do not write narrative essays",
+    "write concise code comments only for non-obvious invariants decisions accessibility constraints algorithms or retirement conditions",
+    "never add comments that restate code narrate the migration praise quality or preserve agent reasoning",
+    "return the structured family receipt rather than a prose progress diary",
+    "reuse one source-bound census and one integrator summary instead of asking every lane to rediscover shared facts",
+    "do not edit a family merely to create a diff",
+    "return already-reference-grade only with concrete evidence",
+    "replace a failed agent with the same ownership instead of abandoning the round"
+  ],
+  "stopConditions": [
+    "head-or-worktree-ownership-cannot-be-reconciled",
+    "two-writers-touched-the-same-file",
+    "product-domain-decision-is-required",
+    "public-control-would-lack-static-db-parity",
+    "tenant-specific-selector-or-component-branch-seems-required",
+    "generated-artifact-would-need-manual-edit",
+    "kimi-capacity-removal-lacks-successor-or-death-proof",
+    "next-round-boundary-has-not-been-opened"
+  ]
+}

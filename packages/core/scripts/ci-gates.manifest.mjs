@@ -31,6 +31,11 @@ export const CI_GATES = Object.freeze([
   { id: 'effects:provenance', run: ['pnpm', 'run', 'effects:provenance'], blocking: true },
   { id: 'contract:check', run: ['pnpm', 'run', 'contract:check'], blocking: true },
   { id: 'daisy-projection-contract', run: ['node', '--test', 'scripts/daisy-projection-contract.test.mjs'], blocking: true },
+  // WO-CRA-23 quality tooling. These live under `scripts/quality-evidence/v2/`,
+  // which the `scripts/*.test.mjs` glob cannot reach -- a non-recursive glob is
+  // exactly how a gate ends up looking enforced without ever running.
+  { id: 'modern-rescue-program-contract', run: ['node', 'scripts/quality-evidence/programs/modern-rescue/program-check.mjs'], blocking: true },
+  { id: 'quality-evidence-v2-drills', run: ['node', '--test', 'scripts/quality-evidence/v2/drills.test.mjs'], blocking: true },
 
   // --- artifact freshness: a stale artifact invalidates every census below ---
   { id: 'build-vertical-artifacts', run: ['node', 'scripts/build-vertical-artifacts.mjs', '--check'], blocking: true },

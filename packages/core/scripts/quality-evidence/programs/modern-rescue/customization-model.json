@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "principle": "Few governed product inputs compose many semantic, recipe and family-private outputs.",
+  "resolutionOrder": [
+    "accessibility-and-resilience-floors",
+    "explicit-pro-and-expert-authorship",
+    "standard-experience-composition",
+    "vertical-brand-baseline",
+    "modern-default",
+    "caller-instance-props-where-contract-allows"
+  ],
+  "pipeline": [
+    "tenant-input",
+    "capability-validation",
+    "experience-and-profile-resolution",
+    "semantic-foundation-channels",
+    "group-recipe-anatomy-emphasis",
+    "family-private-values",
+    "stable-dom-part",
+    "observable-property"
+  ],
+  "artDirectionProjection": {
+    "contract": "tenant-art-direction.json",
+    "law": "Art direction is expressed through the existing pipeline; it is not a new tier, compiler, CSS authority or tenant branch.",
+    "requiredGroups": [
+      "palette-and-ink",
+      "typography",
+      "geometry-and-silhouette",
+      "edge-and-divider",
+      "material-and-depth",
+      "density-and-rhythm",
+      "icon-posture",
+      "motion-cadence",
+      "background-motif",
+      "navigation-chrome",
+      "responsive-composition",
+      "recipe-and-anatomy"
+    ],
+    "migrationLaw": "Published profile ids keep their meaning. A new art direction either composes existing axes without semantic mutation or adds a reviewed versioned registry entry through the same static and DB lowering path.",
+    "advisorLaw": "Kimi may propose in KIMI-ANNOTATIONS; only Codex-adjudicated ideas enter this model or an owning canonical contract."
+  },
+  "standard": {
+    "maximumActiveControlsWithoutOwnerDecision": 15,
+    "current": [
+      "palette.seeds",
+      "typography.pairing",
+      "typography.families",
+      "typography.scale",
+      "shape.radius-scale",
+      "shape.button-style",
+      "density.mode",
+      "spacing.rhythm",
+      "motion.dial",
+      "surfaces.elevation-posture",
+      "surfaces.effect-intensity",
+      "navigation.sidebar-tone",
+      "experience.profile"
+    ],
+    "frontierCandidate": {
+      "id": "palette.status-seeds",
+      "mayOpenOnlyWhen": [
+        "typed-schema-and-bounds",
+        "static-brandtheme-input",
+        "db-tenanttheme-input",
+        "shared-compiler-lowering",
+        "contrast-apca-over-final-dispatched-values",
+        "consumer-propagation-and-exact-restore",
+        "negative-drill-and-editor-i18n"
+      ]
+    },
+    "productEditorIntent": [
+      "experience-preset",
+      "palette-seed-group",
+      "typography-pairing",
+      "safe-font-pack",
+      "type-scale",
+      "shape-character",
+      "density",
+      "rhythm",
+      "elevation-posture",
+      "decoration-intensity",
+      "motion-intensity",
+      "sidebar-tone",
+      "status-palette-when-open"
+    ]
+  },
+  "pro": {
+    "maximumCapabilityIdsWithoutOwnerDecision": 12,
+    "capabilities": [
+      "chrome.families",
+      "chrome.anatomy",
+      "token-overrides",
+      "recipe-profile",
+      "profiles.expressive",
+      "profiles.icon",
+      "responsive.posture"
+    ],
+    "productEditorFieldTarget": {
+      "minimum": 20,
+      "maximum": 30,
+      "note": "Fields are grouped projections of seven capabilities, not new capability IDs."
+    },
+    "expressiveAxes": [
+      "type",
+      "geometry",
+      "edge",
+      "material",
+      "elevation",
+      "motif",
+      "icon"
+    ],
+    "groupEmphasis": {
+      "scale": ["quiet", "balanced", "assertive", "hero"],
+      "numericEquivalent": [0, 1, 2, 3],
+      "law": "Extend chrome.families/family emphasis; never create a second global intensity system."
+    }
+  },
+  "expert": {
+    "exactAllowlistBaseline": 294,
+    "maximumOverridesPerDocument": 200,
+    "presentation": "Searchable domain browser with preview, not 294 sliders.",
+    "newEntryRequirements": [
+      "productive-reader",
+      "stable-owner-and-dom-part",
+      "declared-type",
+      "bounded-range-or-enum",
+      "invalid-value-rejection",
+      "static-db-path-parity",
+      "exact-default-restore",
+      "documentation-and-i18n"
+    ]
+  },
+  "recipeGroupExpansion": {
+    "currentFamilies": [
+      "button",
+      "card",
+      "tabs",
+      "tag",
+      "sectionCard",
+      "dataTable"
+    ],
+    "targetSemanticGroups": [
+      "control",
+      "field",
+      "choice",
+      "card",
+      "sectionCard",
+      "metric",
+      "dataTable",
+      "chart",
+      "navigation",
+      "overlay",
+      "feedback",
+      "form",
+      "collection",
+      "shell"
+    ],
+    "sampleClosedAxes": {
+      "dataTable": ["ruled", "zebra", "open"],
+      "feedback": ["quiet", "tinted", "solid"],
+      "chart": ["analytical", "editorial", "expressive"],
+      "overlay": ["flat", "layered", "frosted"],
+      "shell": ["neutral", "technical-grid", "editorial-paper"]
+    },
+    "admissionRule": "Add a group only when at least two productive families share it and two plausible tenant postures require it."
+  },
+  "controlImpactContract": {
+    "requiredFields": [
+      "controlId",
+      "tier",
+      "scope",
+      "domain",
+      "emittedChannels",
+      "familyGroups",
+      "families",
+      "parts",
+      "propertyGroups",
+      "staticPath",
+      "dbPath",
+      "restoreDigest",
+      "causalProbes",
+      "editorMetadata"
+    ],
+    "editorMetadata": [
+      "group",
+      "order",
+      "labelKey",
+      "helpKey",
+      "controlKind",
+      "plan",
+      "previewFixtures"
+    ],
+    "standardGlobalRequirements": [
+      "moves-more-than-one-property-group",
+      "moves-at-least-three-ui-layers",
+      "does-not-require-component-to-read-tenant-or-profile"
+    ],
+    "standardScopedRequirements": [
+      "moves-100-percent-of-declared-scope",
+      "scope-is-product-comprehensible"
+    ],
+    "proRequirements": [
+      "at-least-two-plausible-postures",
+      "coherent-family-or-group",
+      "bounded-domain",
+      "no-duplicate-authority"
+    ]
+  },
+  "kpis": {
+    "coverage": {
+      "formula": "observedExpectedFamilyPartPropertyTriples / declaredExpectedTriples",
+      "roundExit": 1
+    },
+    "leverage": {
+      "formula": "uniqueProductiveTriplesMoved / productEditorFields",
+      "roundExit": "non-decreasing; Standard controls must remain high leverage"
+    },
+    "depth": {
+      "formula": "provenIndependentAxes / eligibleAxes",
+      "minimumAxes": {
+        "primitive": 3,
+        "pattern-chart": 4,
+        "structure": 5,
+        "surface-composition-canary": 6
+      }
+    },
+    "resilience": {
+      "formula": "passedGeometryContentStateCases / declaredCases",
+      "roundExit": 1
+    },
+    "canonClosure": {
+      "formula": "adjudicatedProposals / createdProposals",
+      "roundExit": 1
+    },
+    "pathParity": {
+      "formula": "equivalentNormalizedOutputs / activeControlsInScope",
+      "roundExit": 1
+    },
+    "unknownTargetedImpact": {
+      "formula": "targetedFamilyControlTriplesWithoutObservedImpact",
+      "roundExit": 0
+    }
+  },
+  "orthogonality": {
+    "requirements": [
+      "density-moves-component-size-not-arbitrary-gaps",
+      "rhythm-moves-layout-gaps-not-control-height",
+      "type-scale-moves-type-with-resilient-reflow",
+      "radius-does-not-move-density",
+      "effect-intensity-does-not-change-semantic-status-or-contrast",
+      "cross-product-density-rhythm-type-scale-remains-valid"
+    ],
+    "duplicateControlRule": "If consumer/property-group Jaccard similarity exceeds 0.80, derive or merge unless an owner records an independent semantic invariant."
+  },
+  "creativeProposal": {
+    "required": [
+      "observableProblem",
+      "threeAlternatives",
+      "failedCanonSearches",
+      "proposedDestination",
+      "twoTenantValues",
+      "responsiveConsequence",
+      "mobileConsequence",
+      "i18nRtlConsequence",
+      "a11yConsequence",
+      "motionConsequence",
+      "exactFallback",
+      "consumer",
+      "stablePart",
+      "promotionCriteria",
+      "retirementCriteria"
+    ],
+    "allowedInitialDestinations": [
+      "existing-semantic-channel",
+      "existing-recipe-or-profile",
+      "existing-family-emphasis",
+      "existing-expert-channel",
+      "component-private",
+      "temporary-family-prototype"
+    ],
+    "forbiddenInitialDestinations": [
+      "new-public-token",
+      "engineBridge",
+      "ComponentExtensions",
+      "tenant-selector",
+      "conditional-tenant-tsx",
+      "application-anatomy-patch"
+    ]
+  }
+}

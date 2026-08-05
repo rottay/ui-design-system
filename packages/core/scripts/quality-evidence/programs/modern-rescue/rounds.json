@@ -1,0 +1,427 @@
+{
+  "schemaVersion": 1,
+  "roundBoundary": {
+    "default": "stop-after-each-round",
+    "checkpointPolicyAuthority": "visual-craft-contract.json#checkpointPolicy",
+    "internalCheckpointLaw": "first three families calibrate each new layer or grammar; every named cohort contains at most twenty-five families and requires explicit Codex GO before further writes",
+    "nextRoundRequires": [
+      "consolidated-round-report",
+      "all-round-proposals-adjudicated",
+      "focused-tests-and-drills-updated",
+      "i18n-and-docs-updated",
+      "fresh-hashed-evidence",
+      "codex-audit",
+      "explicit-owner-go"
+    ],
+    "maximumExecutorClaim": "IMPLEMENTED_PENDING_CODEX_AUDIT"
+  },
+  "rounds": [
+    {
+      "id": "R0",
+      "name": "Truth, instrumentation and baseline",
+      "scope": {
+        "families": 252,
+        "writes": "quality tooling and contracts only; no broad family styling"
+      },
+      "objectives": [
+        "source-and-barrel inventory equals 252-family contract",
+        "every family has layer profile and applicable rubric dimensions",
+        "quality-evidence v2 separates binary eligibility from 100-point sighted craft",
+        "hard-veto, freshness and non-vacuity drills are executable",
+        "control impact baseline distinguishes EXACT, INFERRED and UNKNOWN",
+        "static-vs-db parity baseline is honest per capability",
+        "the 100-primitive denominator counts canonical SemanticSurface and treats deprecated OverlayModal as a compatibility alias of feedback Modal rather than a separate family",
+        "consumer censuses are complete for OverlayModal, BrandTheme.engineBridge and ComponentExtensions or EngineAwareProps.extensions before any retirement decision",
+        "documents above the 200 Advanced tokenOverrides cap fail closed with one named error instead of truncating silently, after a census of existing documents",
+        "every scored dimension requires observable evidence and every resilience declaration includes the applicable stressMatrix floor",
+        "quality-evidence v1 is labelled historical baseline rather than current-wave evidence",
+        "stale profiles.icon comments, prototype lifecycle wording and adjacent read metrics are reconciled from their owning sources or generators",
+        "census and drain the reference-lab TagIcon placeholders unicode span glyphs and accidental compatibility-catalog roles into meaningful semantic Icon roles before R1 visual evidence",
+        "baseline every Modern-reachable historical icon-catalog import functional local SVG unicode glyph and universal icon well for per-family drain in R2-R4 and full closure in R5",
+        "the existing edge material motif icon and motion vocabulary is reach-tested before any new public vocabulary is considered",
+        "the six vertical or profile envelope ranges are recorded while exact allowlisted Advanced values remain outside the Standard dial bounds",
+        "current BitHire and The Management recipe and expressive selections are reconciled against tenant-art-direction.json without mutating published profile meanings",
+        "all temporary advisory input has been deleted and every accepted observation already lives in an owning canonical contract before execution",
+        "split the 5796-line whitelabel-torture monolith behind scene-owned import boundaries so selecting one lab scene does not import render or SSR unrelated scene bodies",
+        "measure and eliminate the incorrect default-theme first paint before tenant hydration in both static and DB reference paths",
+        "current worktree ownership and foreign WIP are frozen"
+      ],
+      "exit": [
+        "252-of-252 inventory correspondence",
+        "zero unknown family owner or layer profile",
+        "canonical primitive inventory is 100 including SemanticSurface, with OverlayModal tracked only as a compatibility migration",
+        "existing documents above the Expert cap are zero or explicitly migrated, and 201 tokenOverrides produce one named fail-closed result",
+        "minimum reliable evidence policy and work-order admission are enforced rather than advisory",
+        "roadmap registry confirms WO-CRA-23 as the owner-authorized standalone authority before claim",
+        "rubric and evidence schemas validate",
+        "baseline contains no premium claim",
+        "versioned profile recipe and migration plan is closed for both tenant directions",
+        "zero raw Kimi annotations are treated as implementation authority",
+        "each reference scene is an independent import and render boundary with no all-family DOM or monolithic cold-compile dependency",
+        "BitHire and The Management server-first paint already matches the settled tenant render with no dark or neutral flash",
+        "the reference lab has zero generic icon placeholders or functional unicode glyphs and proves meaningful semantic role mapping",
+        "R1 canary files have conflict-free ownership proposal"
+      ]
+    },
+    {
+      "id": "R1",
+      "name": "Reference grammar and causal customization canaries",
+      "scope": {
+        "referenceLab": "/probe/ds-reference",
+        "referenceLabLaw": "same hardcoded DS tree under BitHire static BrandTheme and The Management published DB document; zero app-bithire imports, styles, routes, APIs or product fixtures",
+        "families": [
+          "Button-and-action-cluster",
+          "Input-Select-FormField",
+          "Card-SemanticSurface",
+          "Modal-Drawer-Popover-Dropdown",
+          "ListToolbar-SavedViews-filters",
+          "PatternDataTable-mobile-projection",
+          "CollectionHeader-PageShell",
+          "Dashboard-MetricCard-WidgetBoard",
+          "Chart-frame-Line-Bar-tooltip-legend",
+          "lifecycle-feedback-family",
+          "AppShell-sidebar-BottomTabBar",
+          "record-detail-composition"
+        ]
+      },
+      "priorityDimensions": [
+        "adaptive-layout-density-rhythm",
+        "responsive-mobile",
+        "typography-content",
+        "customization-tenant-divergence",
+        "material-background-depth",
+        "interaction-states-motion"
+      ],
+      "objectives": [
+        "execute and capture every canary only in the isolated DS reference lab; Candidates and every other product feature are post-DS integration consumers",
+        "map the twelve canaries into the primitives forms data workflow dashboard shell surfaces and full-inventory scenes without duplicating the underlying component tree",
+        "eliminate the dominant product defect in each canary",
+        "prove no overlap clipping per-character wrap or accidental desktop compression",
+        "prove each canary at 320 390 768 1440 and narrow containers",
+        "implement Professional Network Hiring OS for BitHire and Monochrome Executive Ledger for The Management from tenant-art-direction.json",
+        "prove same-tree BitHire-TMM divergence across at least eight axes including at least six non-color axes",
+        "prove three-second tenant recognition in grayscale and after temporary primary-hue neutralization",
+        "extract reusable semantic group recipes instead of copying styles",
+        "attack Button then PatternDataTable then AppShell as the first-failing grammar sequence before the remaining canaries",
+        "close the twelve reproduced visual-craft incidents and every generalized hardVisualVeto rather than copying their current appearance"
+      ],
+      "exit": [
+        "reference lab renders both tenant sources from canonical authorities with identical hardcoded content and zero product application dependency",
+        "all eight reference scenes load, and their union exposes primitives patterns charts structures surfaces compositions and commercial coverage without mounting the 252-family universe in one DOM",
+        "all canaries pass binary contracts",
+        "each canary proposed craft score at least 95",
+        "each critical dimension at least 4-of-5",
+        "art-direction contract passes all required scenes at 320 390 768 and 1440",
+        "zero hard vetoes",
+        "all R1 proposals adjudicated",
+        "all three R1 cohort checkpoints have explicit Codex GO receipts",
+        "Codex accepts grammar before propagation"
+      ],
+      "writeDomains": {
+        "law": "every domain below must have EXACTLY ONE owning lane in the round ownership proposal. A domain that must not be written in the round is declared no-write WITH A REASON; leaving it implicit is the defect this registry exists to prevent. The checker reads this list from the contract, never from the proposal, so a proposal cannot self-certify by omitting a domain.",
+        "required": [
+          {
+            "domainId": "reference-lab",
+            "globs": [
+              "packages/showroom/src/app/probe/ds-reference/**"
+            ],
+            "ownerLaneClass": "lab-writer",
+            "why": "rounds.json R1 scope.referenceLab makes /probe/ds-reference the only canvas and evidence source for the canaries",
+            "units": [
+              "packages/showroom/src/app/probe/ds-reference"
+            ]
+          },
+          {
+            "domainId": "family-source",
+            "globs": [
+              "packages/core/src/ui/**"
+            ],
+            "ownerLaneClass": "family-writer",
+            "why": "the twelve canaries are family source work; each family folder is owned by exactly one family-writer lane",
+            "units": [
+              "packages/core/src/ui/primitives/inputs/Button",
+              "packages/core/src/ui/primitives/navigation/Segmented",
+              "packages/core/src/ui/primitives/inputs/Input",
+              "packages/core/src/ui/primitives/inputs/Select",
+              "packages/core/src/ui/primitives/inputs/FormField",
+              "packages/core/src/ui/primitives/display/Card",
+              "packages/core/src/ui/primitives/layout/SemanticSurface",
+              "packages/core/src/ui/primitives/feedback/Modal",
+              "packages/core/src/ui/primitives/feedback/Drawer",
+              "packages/core/src/ui/primitives/overlay/Popover",
+              "packages/core/src/ui/primitives/overlay/Dropdown",
+              "packages/core/src/ui/patterns/data/list-toolbar",
+              "packages/core/src/ui/patterns/data/saved-views",
+              "packages/core/src/ui/patterns/forms/filter-panel",
+              "packages/core/src/ui/patterns/data/data-table",
+              "packages/core/src/ui/structures/headers/collection",
+              "packages/core/src/ui/patterns/shell/page-shell",
+              "packages/core/src/ui/structures/dashboard/insights",
+              "packages/core/src/ui/patterns/data/widget-board",
+              "packages/core/src/ui/patterns/visualization/charts/families/line-chart",
+              "packages/core/src/ui/patterns/visualization/charts/families/bar-chart",
+              "packages/core/src/ui/patterns/visualization/charts/presentation/family-frame",
+              "packages/core/src/ui/patterns/visualization/charts/presentation/tooltip",
+              "packages/core/src/ui/patterns/visualization/charts/presentation/scaffold",
+              "packages/core/src/ui/patterns/visualization/charts/runtime/interaction/tooltip-state",
+              "packages/core/src/ui/primitives/feedback/Alert",
+              "packages/core/src/ui/primitives/feedback/Skeleton",
+              "packages/core/src/ui/primitives/feedback/Spinner",
+              "packages/core/src/ui/structures/shell",
+              "packages/core/src/ui/structures/record/content",
+              "packages/core/src/ui/patterns/data/detail-panel"
+            ],
+            "unitLaw": "each canary root is a UNIT and must have exactly one owner. An existential check over the category glob would stay green after losing eleven of the twelve."
+          },
+          {
+            "domainId": "shared-contracts",
+            "globs": [
+              "packages/core/src/ui/**/contracts/**"
+            ],
+            "ownerLaneClass": "architecture-integrator",
+            "why": "family-writer.mayNotEdit lists contracts"
+          },
+          {
+            "domainId": "shared-barrels",
+            "globs": [
+              "packages/core/src/ui/**/index.ts"
+            ],
+            "ownerLaneClass": "architecture-integrator",
+            "why": "barrelOwnership classifies shared barrels to the architecture-integrator"
+          },
+          {
+            "domainId": "shared-recipes-tokens-styles",
+            "globs": [
+              "packages/core/src/foundation/tokens/**",
+              "packages/core/src/ui/**/styles/**"
+            ],
+            "ownerLaneClass": "architecture-integrator",
+            "why": "R1 objective extract reusable semantic group recipes instead of copying styles makes this expected write work"
+          },
+          {
+            "domainId": "manifests",
+            "globs": [
+              "packages/core/hooks-manifest.json",
+              "packages/core/customization-surface-report.json",
+              "packages/core/KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json"
+            ],
+            "ownerLaneClass": "architecture-integrator",
+            "why": "laneTypes architecture-integrator responsibilities name shared barrels and manifests"
+          },
+          {
+            "domainId": "observable-tests",
+            "globs": [
+              "packages/core/src/ui/**/tests/**"
+            ],
+            "ownerLaneClass": "quality-integrator",
+            "why": "quality-integrator responsibilities name observable test contracts"
+          },
+          {
+            "domainId": "i18n-catalogs",
+            "globs": [
+              "packages/core/src/foundation/i18n/runtime/catalog/translations/locales/**"
+            ],
+            "ownerLaneClass": "quality-integrator",
+            "why": "quality-integrator responsibilities name i18n catalog merge and parity, and edgeWhen condition 4 makes i18n a shared authority"
+          },
+          {
+            "domainId": "round-evidence",
+            "globs": [
+              "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/**"
+            ],
+            "ownerLaneClass": "quality-integrator",
+            "why": "evidence-contract roundLayout requires the full evidence surface including checkpoint.json, scorecards/, receipts/, captures/, recordings/, SHA256SUMS and both summaries",
+            "units": [
+              "packages/core/test-artifacts/quality-evidence/wo-cra-23/R1"
+            ]
+          },
+          {
+            "domainId": "tenant-sources",
+            "globs": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/**"
+            ],
+            "units": [
+              "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row"
+            ],
+            "ownerLaneClass": "architecture-integrator",
+            "why": "R1 must implement Professional Network Hiring OS on the BitHire static BrandTheme and Monochrome Executive Ledger on The Management published document. Both tenant SOURCES are therefore write targets, and neither was covered by any domain — the gap that blocked Cohort 1.",
+            "ownerAdjudication": "assigned to the architecture-integrator by explicit owner adjudication after the gate proved the path had no owner and no no-write rule. Recorded rather than resolved by silently widening a lane.",
+            "note": "the BitHire BrandTheme is already covered by the shared-recipes-tokens-styles domain (foundation/tokens/**); only the TMM document fixture under foundation/contracts/** needed an owner."
+          }
+        ],
+        "noWrite": [
+          {
+            "domainId": "roadmap",
+            "globs": [
+              "roadmap/**"
+            ],
+            "why": "reserved; work-order state changes only through scripts/roadmap-status.mjs, never as lane write work"
+          },
+          {
+            "domainId": "docs-engineering",
+            "globs": [
+              "../docs-engineering/**"
+            ],
+            "why": "reserved and outside this package; documentation updates are a separate governed step"
+          },
+          {
+            "domainId": "quality-tooling",
+            "globs": [
+              "packages/core/scripts/**"
+            ],
+            "why": "reserved; the round is judged BY this tooling, so a canary lane may not edit its own judge"
+          }
+        ],
+        "noWriteExcept": [
+          {
+            "domainId": "product-applications",
+            "root": "packages/showroom/src/app",
+            "allowedRoots": [
+              "packages/showroom/src/app/probe/ds-reference"
+            ],
+            "why": "the reference-lab law forbids product-application dependencies: every showroom surface except the DS reference lab is a post-DS integration consumer, not R1 canvas. Expressed as a supported root/allowed rule because the previous negative-lookahead glob was silently dropped by the matcher and therefore always passed."
+          },
+          {
+            "domainId": "compilers",
+            "root": "packages/core/src/infrastructure/compilers",
+            "allowedRoots": [
+              "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/fixtures/canonical-extraction-pre-change-digests.json",
+              "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/tenant-theme-compiler.test.ts",
+              "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/tests/brand-compiler.test.ts"
+            ],
+            "ownerLaneClass": "architecture-integrator",
+            "scope": "ONLY the exact schema-drift and geometry sentinels inside these three files. NOT the inherited artifact digests, NOT assertion strength, NOT any other compiler source or test.",
+            "why": "Codex adjudication, 2026-08-05. The domain stays reserved for the reason originally given: the inherited worktree carries adjudicated prior-session compiler state that R1 must not disturb. Exactly three files are carved out because their pins are MECHANICAL CONSEQUENCES of writes in domains the architecture-integrator already owns. The recipe-profile registry lives in foundation/tokens/** and gained rottay/network-professional@1; the tenant-theme document schema PUBLISHES that registry as a closed enum, so both schema sentinels necessarily move. BitHire's expressive geometry moved sharp->rounded, so --ds-radius-scale necessarily moves 0.85 -> 1.25 in two brand-compiler pins. Leaving them red was unreachable against the owner instruction to return the Step 0 delta to the inherited failure baseline with no additional failures.",
+            "whyThisMechanism": "Expressed through noWriteExcept rather than by deleting the no-write domain. noWrite fires when ANY lane claims the domain and therefore cannot express 'these three files and nothing else'; noWriteExcept fires per writeSet entry that falls outside the allowed roots. Because the root covers every compiler path, coverage is identical and any OTHER write under packages/core/src/infrastructure/compilers still blocks. No change was made to the checker itself.",
+            "authorityOrder": "owner instruction -> DISC-01 raised as unresolved and NOT self-authorized -> Codex adjudication -> this executable amendment -> admission re-validation. The coordinator did not amend the contract to legalize its own write; it reported the conflict and the adjudicator resolved it.",
+            "verificationRequired": "schema digests recomputed with an independent hasher, mutation and drift drills proven still failing, registry id proven permanent. Receipt: packages/core/test-artifacts/quality-evidence/wo-cra-23/R1/receipts/cohort-1-schema-digest-proof.json",
+            "priorSealDigest": "8096df8c7ab671ed3e459c1d9a544a7582bb5af304a0102f03accdf5fd268f10"
+          }
+        ]
+      }
+    },
+    {
+      "id": "R2",
+      "name": "Primitive depth and resilience",
+      "scope": {
+        "primitives": 100
+      },
+      "objectives": [
+        "apply accepted R1 grammar without shallow file visitation",
+        "complete states motion icons i18n a11y and lifecycle per applicable family",
+        "map each primitive to at least three eligible customization axes or record a predeclared contract-only profile",
+        "propagate accepted tenant grammar without flattening family-specific behavior or adding tenant branches",
+        "update observable contracts and negative drills once through the round integrator"
+      ],
+      "exit": [
+        "100-of-100 primitives have fresh scorecards",
+        "static-layout primitives at least 90",
+        "interactive-control-data-overlay primitives at least 92",
+        "critical dimensions at least 4-of-5",
+        "all R2 calibration and cohort checkpoints from visual-craft-contract have explicit Codex GO receipts",
+        "zero hard vetoes and zero round prototypes pending"
+      ]
+    },
+    {
+      "id": "R3",
+      "name": "Patterns and chart grammar",
+      "scope": {
+        "patterns": 56,
+        "charts": 18
+      },
+      "objectives": [
+        "compose primitives without rebuilding them",
+        "prove adaptive data and workflow layouts",
+        "make charts diverge through plot grid axes markers labels legend tooltip and annotation rather than series color",
+        "preserve the professional-network versus monochrome-ledger identity in workflows data and charts",
+        "prove at least four independent customization axes per pattern or chart"
+      ],
+      "exit": [
+        "74-of-74 families have fresh scorecards",
+        "every family at least 92",
+        "all R3 calibration and cohort checkpoints from visual-craft-contract have explicit Codex GO receipts",
+        "zero lower-layer reconstruction",
+        "zero hard vetoes and zero round prototypes pending"
+      ]
+    },
+    {
+      "id": "R4",
+      "name": "Structures, surfaces, composition and commercial",
+      "scope": {
+        "structures": 27,
+        "pageSurfaces": 36,
+        "surfaceCompositions": 4,
+        "commercialKit": 11
+      },
+      "objectives": [
+        "compose complete resilient screens without product-domain leakage",
+        "make mobile a priority-reduced composition",
+        "prove adaptive solver behavior without unjustified internal holes",
+        "prove five axes for structures and six for surfaces and compositions",
+        "make each complete screen recognizable by tenant in grayscale through chrome type geometry material rhythm and responsive composition",
+        "keep commercial kit a separate product expression not a second engine"
+      ],
+      "exit": [
+        "78-of-78 families have fresh scorecards",
+        "structures at least 93",
+        "surfaces and compositions at least 94",
+        "commercial at least 92",
+        "all R4 calibration and cohort checkpoints from visual-craft-contract have explicit Codex GO receipts",
+        "zero hard vetoes and zero round prototypes pending"
+      ]
+    },
+    {
+      "id": "R5",
+      "name": "Cross-system canon and propagation closure",
+      "scope": {
+        "families": 252,
+        "controls": "all active Standard and Pro plus Expert entries changed by R1-R4"
+      },
+      "objectives": [
+        "control-to-family-part-property graph complete for touched scope",
+        "static and DB paths prove equivalent normalized outputs",
+        "useful Kimi capacity preserved connected derived or promoted",
+        "deprecated OverlayModal alias, BrandTheme.engineBridge and ComponentExtensions or EngineAwareProps.extensions retire only when the R0 consumer census has exact death proof",
+        "legacy aliases and dead writers change only with successor or death proof",
+        "generated lifecycle documentation identifies all 80 prototype-ledger rows as retired historical decisions and adjacent read metrics explain their distinct denominators",
+        "active docs generated catalogs hooks and editor metadata agree",
+        "art-direction mappings and all accepted creative capabilities have one canonical owner and static-DB parity",
+        "no earlier accepted family score regresses"
+      ],
+      "exit": [
+        "canonClosure equals 1",
+        "pathParity equals 1",
+        "unknownTargetedImpact equals 0",
+        "productive prototypes pending equals 0",
+        "duplicate concept authorities equals 0",
+        "public tokens created by visual lanes equals 0"
+      ]
+    },
+    {
+      "id": "R6",
+      "name": "Independent Codex certification",
+      "scope": {
+        "families": 252,
+        "tenants": [
+          "bithire-static",
+          "themanagement-db"
+        ]
+      },
+      "objectives": [
+        "machine serial on frozen tree",
+        "single source-to-artifact regeneration",
+        "sighted contact sheets and recordings",
+        "tenant-art-direction scene matrix and three-second grayscale review",
+        "stress matrices for controls locales input preferences and lifecycle",
+        "requirement-by-requirement completion audit"
+      ],
+      "exit": [
+        "all applicable binary contracts pass",
+        "all family layer thresholds pass",
+        "zero hard vetoes",
+        "Codex sighted approval",
+        "commit and push only after acceptance"
+      ]
+    }
+  ]
+}

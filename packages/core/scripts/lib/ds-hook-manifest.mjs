@@ -811,6 +811,13 @@ export const ANCHORS = Object.freeze({
     describes:
       'canonical DB appearance compiler (tenant-authored runtime root channels)',
   }),
+  appearancePostureEmitter: Object.freeze({
+    id: 'appearance-posture-emitter',
+    path: 'src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts',
+    kind: 'file',
+    describes:
+      'shared static/DB posture lowering (density, radius, typography and motion root channels)',
+  }),
   themeContracts: Object.freeze({
     id: 'theme-contracts',
     path: 'src/foundation/contracts',
@@ -1308,6 +1315,10 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
   const chromePath = assertAnchorExists(coreRoot, ANCHORS.tenantChannel);
   const brandThemeEmitterPath = assertAnchorExists(coreRoot, ANCHORS.brandThemeEmitter);
   const appearanceEmitterPath = assertAnchorExists(coreRoot, ANCHORS.appearanceEmitter);
+  const appearancePostureEmitterPath = assertAnchorExists(
+    coreRoot,
+    ANCHORS.appearancePostureEmitter,
+  );
   const themeContractsRoot = assertAnchorExists(coreRoot, ANCHORS.themeContracts);
   const stylesRoot = assertAnchorExists(coreRoot, ANCHORS.styleRoots);
   const componentRoot = assertAnchorExists(coreRoot, ANCHORS.componentReads);
@@ -1346,9 +1357,18 @@ export function deriveHookManifest({ coreRoot, postcss, promotions = PROMOTIONS 
     text: readFileSync(file, 'utf8'),
   }));
   const { registry, ambiguous } = parseTypeRegistry(contractSources);
-  const compilerSources = [chromePath, brandThemeEmitterPath, appearanceEmitterPath].map(
-    (file) => ({ file, text: readFileSync(file, 'utf8') }),
-  );
+  // Imported lowering helpers are compiler authors too. The TypeScript graph
+  // parser intentionally does not execute/follow imports, so omitting this
+  // shared helper made real outputs such as --ds-motion-intensity appear
+  // unowned the first time a production stylesheet consumed them. Anchor the
+  // helper explicitly: ownership must follow the emitted channel, not the
+  // physical file that happens to contain its assignment.
+  const compilerSources = [
+    chromePath,
+    brandThemeEmitterPath,
+    appearanceEmitterPath,
+    appearancePostureEmitterPath,
+  ].map((file) => ({ file, text: readFileSync(file, 'utf8') }));
   const compilerGraph = parseEmitterMappings(compilerSources, registry);
   const compilerPatterns = new Set();
   for (const emission of compilerGraph.emissions) {

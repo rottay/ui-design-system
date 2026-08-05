@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "programId": "modern-rescue",
+  "workOrderId": "WO-CRA-23",
+  "statusAuthority": "roadmap/registry.json",
+  "workOrderAuthority": "roadmap/craft.md#wo-cra-23-claude-multi-agent-ds-normalization-and-world-class-family-elevation",
+  "qualityTooling": "packages/core/scripts/quality-evidence",
+  "evidenceRoot": "packages/core/test-artifacts/quality-evidence/wo-cra-23",
+  "artDirectionContract": "packages/core/scripts/quality-evidence/programs/modern-rescue/tenant-art-direction.json",
+  "visualCraftContract": "packages/core/scripts/quality-evidence/programs/modern-rescue/visual-craft-contract.json",
+  "creativeProposalInbox": "packages/core/scripts/quality-evidence/programs/modern-rescue/KIMI-ANNOTATIONS/inbox",
+  "referenceLab": {
+    "route": "/probe/ds-reference",
+    "page": "packages/showroom/src/app/probe/ds-reference/page.tsx",
+    "sceneRegistry": "packages/showroom/src/components/torture-sections/registry/index.ts",
+    "sceneRoutes": "packages/showroom/src/app/probe/whitelabel-torture/scenes",
+    "substrate": "packages/showroom/src/app/probe/whitelabel-torture/page.tsx",
+    "sameTree": true,
+    "hardcodedDataOnly": true,
+    "applicationImportsAllowed": false,
+    "tenantSources": {
+      "bithire-static": "canonical static BrandTheme",
+      "themanagement-db": "published tenant-theme-canary-fixtures document resolved through the production compiler"
+    },
+    "scenes": [
+      "primitives",
+      "forms",
+      "data",
+      "workflow",
+      "dashboard",
+      "shell",
+      "surfaces",
+      "all"
+    ],
+    "captureLaw": "capture each tenant in its own html-root iframe or single-tenant load; compare identical scene, viewport, locale and content",
+    "authorityLaw": "this lab decides DS grammar and tenant divergence; product applications are later integration consumers and cannot certify or reject DS craft",
+    "modularizationOwner": "R0 must split the existing monolithic torture route behind scene-owned import boundaries without duplicating trees fixtures or data"
+  },
+  "inventoryAuthorities": {
+    "controls": "packages/core/tokens/controls/README.md",
+    "tokenCensus": "packages/core/customization-surface-report.json",
+    "appHooks": "packages/core/hooks-manifest.json",
+    "capabilities": "packages/core/src/foundation/contracts/composition/tenants/capabilities",
+    "themeContracts": "packages/core/src/foundation/contracts/composition/tenants/themes",
+    "staticBrandThemes": "packages/core/src/foundation/tokens/ts/presentation/brand-themes",
+    "dbFixtures": "packages/core/src/tooling/testing/fixtures/tenants",
+    "prototypeLedger": "packages/core/src/foundation/tokens/prototype-ledger.json",
+    "kimiPreservation": "packages/core/KIMI-CUSTOMIZATION-PRESERVATION-MANIFEST.json"
+  },
+  "denominators": {
+    "visibleFamilies": 252,
+    "rootUiFamilies": 237,
+    "primitives": 100,
+    "patternsExcludingCharts": 56,
+    "charts": 18,
+    "structures": 27,
+    "pageSurfaces": 36,
+    "surfaceCompositions": 4,
+    "commercialKit": 11
+  },
+  "controlBaselines": {
+    "standard": 13,
+    "proCapabilities": 7,
+    "expertExactAllowlist": 294,
+    "expertMaximumOverridesPerDocument": 200,
+    "appPublicHooks": 93,
+    "productivePrototypes": 0
+  },
+  "currentImpactTruth": {
+    "operationalTokens": 4398,
+    "exact": 38,
+    "inferred": 836,
+    "unknown": 3524,
+    "purpose": "Starting evidence deficit; not a quality score or target denominator."
+  },
+  "invariants": [
+    "one status authority",
+    "one static and DB normalization model",
+    "one semantic icon supplier",
+    "no tenant selectors or tenant conditional component trees",
+    "BitHire and The Management comply with the binding tenant art direction on the same tree",
+    "R1 visual evidence comes only from the hardcoded DS reference lab with zero product application CSS routes APIs or domain fixtures",
+    "raw Kimi annotations are temporary non-canonical input and are deleted after Codex incorporates accepted observations",
+    "no public token creation by family writers",
+    "every productive CSS rule has one family or foundation-runtime owner",
+    "zero dead orphaned or causally disconnected CSS at accepted round scope and full Modern corpus closure in R5/R6",
+    "every tenant-variable CSS decision resolves directly or derivationally through the canonical static BrandTheme and DB TenantTheme chain",
+    "all creative proposals adjudicated within their round",
+    "tests do not award visual quality points",
+    "only Codex may accept sighted quality",
+    "new layer grammars stop after three calibration families and every cohort stops after at most twenty-five families for Codex review",
+    "each round stops before the next owner-authorized round",
+    "no commit or push before Codex acceptance"
+  ]
+}

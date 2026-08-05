@@ -51,6 +51,7 @@ const postcss = postcssModule.default ?? postcssModule;
 const CHROME_ANCHOR = ANCHORS.tenantChannel.path;
 const BRAND_THEME_EMITTER_ANCHOR = ANCHORS.brandThemeEmitter.path;
 const APPEARANCE_EMITTER_ANCHOR = ANCHORS.appearanceEmitter.path;
+const APPEARANCE_POSTURE_EMITTER_ANCHOR = ANCHORS.appearancePostureEmitter.path;
 const THEME_CONTRACTS_ANCHOR = ANCHORS.themeContracts.path;
 const STYLE_ANCHOR = ANCHORS.styleRoots.path;
 const COMPONENT_ANCHOR = ANCHORS.componentReads.path;
@@ -385,6 +386,15 @@ function coreFixture() {
       `  vars["--ds-db-generated"] = appearance.primaryColor;\n` +
       `}\n`,
   );
+  write(
+    root,
+    APPEARANCE_POSTURE_EMITTER_ANCHOR,
+    `export function appearancePostureToVariables(posture) {\n` +
+      `  const vars = {};\n` +
+      `  if (posture.motion) vars["--ds-posture-generated"] = posture.motion;\n` +
+      `  return vars;\n` +
+      `}\n`,
+  );
 
   for (let index = 0; index < 120; index += 1) {
     write(
@@ -412,6 +422,7 @@ test('the manifest derives tenant, foundation, internal, explicit-hook and unadj
   assert.equal(manifest.tenantChannel.has('--ds-chrome-7'), true);
   assert.equal(manifest.tenantChannel.has('--ds-brand-generated'), true);
   assert.equal(manifest.tenantChannel.has('--ds-db-generated'), true);
+  assert.equal(manifest.tenantChannel.has('--ds-posture-generated'), true);
   assert.equal(manifest.foundationTokens.has('--ds-foundation-7'), true);
   assert.equal(manifest.hookSet.has('--ds-hook-7'), false, 'an unowned read is not public API');
   assert.equal(manifest.hookSet.has('--ds-uihook-7'), false, 'component reads are not implicit API');
@@ -521,6 +532,17 @@ test('ANCHOR DRIFT: an emptied anchor fails rather than yielding a short allowli
   const root = coreFixture();
   write(root, CHROME_ANCHOR, 'export function chromeVariables() { return {}; }\n');
   assert.throws(() => deriveHookManifest({ coreRoot: root, postcss, promotions: [] }), /ANCHOR DRIFT/);
+});
+
+test('ANCHOR DRIFT: the imported posture emitter cannot disappear silently', () => {
+  const root = coreFixture();
+  rmSync(join(root, APPEARANCE_POSTURE_EMITTER_ANCHOR), { force: true });
+  assert.throws(
+    () => deriveHookManifest({ coreRoot: root, postcss, promotions: [] }),
+    (error) =>
+      /anchor MISSING/.test(error.message) &&
+      /appearance-posture-emitter/.test(error.message),
+  );
 });
 
 test('ANCHOR DRIFT: a relocated style root fails loudly', () => {

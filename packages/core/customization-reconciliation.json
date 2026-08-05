@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "generatedBy": "Codex reconciliation after Kimi premium wave; re-derived 2026-08-02 from the current census, dispositions unchanged",
-  "basedOnReportDigest": "c74a2299981feebab729e08d43ea61d9eaf4e50857b528a087f09bef5633d45b",
+  "generatedBy": "Codex reconciliation after Kimi C1 visual elevation; re-derived 2026-08-03 from the current census, dispositions unchanged",
+  "basedOnReportDigest": "4c9c722efbc282cc9d984401de1ba392a7581b04b9da3fbadb44606fdb1fa18d",
   "normative": {
-    "writers": 4810,
-    "deadWriters": 275,
+    "writers": 4811,
+    "deadWriters": 270,
     "definition": "customization-surface-census.mjs header — writer = manifest sets ∪ authored-CSS decls ∪ AST TS write-sites ∪ artifact emissions; productive read = PostCSS var() ∪ AST-classified TS read; metadata never counts"
   },
   "figures": {
-    "censusDeadFinal": 275,
+    "censusDeadFinal": 270,
     "tenantChannelGate": {
       "live": 232,
       "baseline": 236,
@@ -32,7 +32,8 @@
       "321": "post FASE-B+lote-2 execution (183 registry rows: 174 decls + 3 emitters + 10 fence-opened) + census v4 adjudication-as-authority + JS-consumer helpers — 2026-08-02",
       "498": "C2c+D0 remediation final (v1 of this projection)",
       "315": "post FASE-B/H registry execution before the Kimi premium wave",
-      "275": "post Kimi premium wave + Codex canon reconciliation"
+      "275": "post Kimi premium wave + Codex canon reconciliation",
+      "270": "post Kimi C1 visual elevation + Codex C1 reconciliation (ambient policy removed from CSS emission)"
     }
   },
   "familyAdjudication": [
@@ -132,8 +133,8 @@
     {
       "family": "remainder (per-name adjudication in D1)",
       "disposition": "KEEP-INTERNAL",
-      "count": 81,
-      "previousCount": 82
+      "count": 76,
+      "previousCount": 81
     }
   ],
   "note": "Family counts recompute MECHANICALLY from the final deadWriters set; dispositions are the adjudication SEED — owner sign-off required for RETIRE, nothing auto-approved. Name-level set algebra: scratchpad evidence superseded by this versioned projection.",

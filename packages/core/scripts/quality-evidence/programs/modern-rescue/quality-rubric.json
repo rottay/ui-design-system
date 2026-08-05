@@ -1,0 +1,371 @@
+{
+  "schemaVersion": 3,
+  "ratingScale": {
+    "minimum": 0,
+    "maximum": 5,
+    "anchors": {
+      "0": "Absent, unusable or contradicted by evidence.",
+      "1": "Damaging, incoherent or structurally broken.",
+      "2": "Partial, fragile, generic or ordinary.",
+      "3": "Competent commercial baseline but not premium.",
+      "4": "Premium and coherent across all declared stresses.",
+      "5": "Reference-grade, distinctive, causal and resilient."
+    }
+  },
+  "eligibility": {
+    "formula": "binaryContractsPass && hardVetoCount===0 && craftScore>=layerThreshold && criticalDimensionsMin>=4 && resilience===1 && canonClosure===1 && evidenceFresh && codexSightedApproved",
+    "dimensionEvidenceLaw": "Every scored dimension requires one concrete observable selector, rule, behavior or sighted observation. Missing evidence scores zero until Codex review.",
+    "resilienceCaseFloor": "Declared cases must include every applicable case from stressMatrix for the family's critical dimensions; a lane may add cases but never remove the floor.",
+    "testsAwardCraftPoints": false,
+    "writerMayApproveSightedScore": false,
+    "coordinatorMayApproveSightedScore": false,
+    "finalSightedAuthority": "Codex"
+  },
+  "familyCompletionContract": {
+    "progressUnit": "A family accepted by Codex after source-bound before/after evidence; files visited, files changed, lines, comments, tests, generated output and agent reports never count as progress.",
+    "writerMaximumStatus": "ELEVATED_PENDING_CODEX_AUDIT",
+    "statuses": [
+      "ELEVATED_PENDING_CODEX_AUDIT",
+      "ALREADY_REFERENCE_GRADE_PENDING_CODEX_AUDIT",
+      "ASSESSED_NOT_ELEVATED",
+      "BLOCKED_OWNER_DECISION"
+    ],
+    "countingLaw": "No Claude status increments completed-family progress. Only Codex may turn a pending family into ACCEPTED after independent machine and sighted review.",
+    "sourceChangeLaw": "ELEVATED requires a material productive source change that closes named observable defects. Tests, docs, comments, snapshots, stories, generated CSS/dist and token declarations without a causal live consumer cannot make a family ELEVATED.",
+    "partialLaw": "A shallow or partial improvement remains ASSESSED_NOT_ELEVATED and stays in the current round. The coordinator may not move on merely because every file or family was visited.",
+    "twoChangeLaw": "One or two source changes may close a family only when they close every named deficit and the unchanged applicable dimensions are independently evidenced at 4/5 or above; otherwise the family remains ASSESSED_NOT_ELEVATED.",
+    "elevatedRequires": [
+      "before defect ledger covers every applicable rubric dimension and names the dominant product defect",
+      "paired before/after evidence uses the same tree, content, viewport, container, locale, density, rhythm, state and tenant path",
+      "all applicable rubric dimensions have source-bound evidence and a before and after score",
+      "every applicable critical dimension is at least 4/5 after the change",
+      "weighted craft score clears the layer threshold after the change",
+      "zero applicable P0 or P1 product defects remain",
+      "all applicable binary contracts pass and hard veto count is zero",
+      "the applicable stressMatrix floor is exercised without lane-selected omission",
+      "tenant controls mutate the rendered family causally and restore the exact default through static and DB paths",
+      "the minimum non-color tenant-divergence axes for the family layer are observable on the same React tree",
+      "material improvement breadth is met unless every unchanged applicable dimension already proved the premium floor",
+      "all new prototype requests are adjudicated and canonClosure, resilience and pathParity equal 1"
+    ],
+    "alreadyReferenceGradeRequires": [
+      "no productive source edit is made merely to manufacture progress",
+      "fresh before evidence alone clears the layer threshold",
+      "every applicable critical dimension is already at least 4/5",
+      "all applicable binary contracts, stress cases and tenant-divergence axes pass",
+      "hard veto count and unresolved applicable P0/P1 defect count are zero",
+      "Codex independently confirms the sighted claim"
+    ],
+    "materialImprovement": {
+      "premiumDimensionFloor": 4,
+      "minimumImprovedDimensionsUnlessEveryOtherApplicableDimensionAlreadyMeetsFloor": {
+        "reference-canary": 6,
+        "primitive-static-layout": 4,
+        "primitive-interactive-control-data-overlay": 4,
+        "pattern": 5,
+        "chart": 5,
+        "structure": 6,
+        "surface-composition": 7,
+        "commercial": 5
+      },
+      "scoreIncreaseWithoutObservableDeltaAllowed": false,
+      "testsDocsCommentsGeneratedOutputAwardCraft": false
+    },
+    "requiredFamilyReceiptFields": [
+      "familyId",
+      "layer",
+      "finalPendingStatus",
+      "dominantDefect",
+      "beforeDimensionScores",
+      "afterDimensionScores",
+      "materialDeltaTable",
+      "unchangedDimensionPremiumProof",
+      "applicableStressCases",
+      "applicableStates",
+      "tenantDivergenceAxes",
+      "staticDbCausalityAndRestore",
+      "sourceFilesChanged",
+      "sourceDigest",
+      "evidenceReceipts",
+      "remainingP0P1Defects",
+      "vetoes",
+      "blockers"
+    ],
+    "materialDeltaTableFields": [
+      "defectId",
+      "beforeObservation",
+      "productiveSourceChange",
+      "canonicalControlRecipeOrPrivateValue",
+      "stablePartAndRenderedProperty",
+      "afterObservation",
+      "dimensionsImproved",
+      "statesAndStressCases",
+      "tenantPaths",
+      "evidenceReceipt"
+    ]
+  },
+  "cssOwnershipContract": {
+    "roundScopeExit": "Every CSS rule, custom-property writer and custom-property read changed or owned by the round is classified; zero dead, orphaned, unowned or causally disconnected CSS may be handed off as complete.",
+    "fullProgramExit": "R5/R6 repeat the classification over the productive Modern corpus, not only touched files.",
+    "allowedClassifications": [
+      "FAMILY_STRUCTURAL_INVARIANT",
+      "FOUNDATION_OR_RUNTIME_INVARIANT",
+      "TENANT_DIRECT_CANONICAL",
+      "TENANT_DERIVED_CANONICAL",
+      "STATE_PREFERENCE_ACCESSIBILITY",
+      "RETIRE_WITH_DEATH_PROOF"
+    ],
+    "familyOwnershipLaw": "Visible component CSS maps to one canonical family, stable part and reachable state or recipe. Shared CSS has one named foundation/runtime owner and may not become a shadow family skin.",
+    "tenantAuthorityLaw": "Every tenant-variable rendered decision is reachable through the one canonical static BrandTheme and DB TenantTheme chain. Direct authoring is reserved for bounded brand/Advanced values; broad behavior normally derives through capability, profile, semantic channel, group recipe/anatomy/emphasis and family-private values.",
+    "structuralInvariantLaw": "A legitimate non-customizable structural literal is allowed only when named as a family or foundation invariant and proven not to encode tenant identity. It must not be mislabeled as customizable.",
+    "deadCssDefinition": [
+      "stylesheet not imported into the productive source graph",
+      "selector that cannot match canonical anatomy or any reachable applicable state",
+      "custom-property writer with no productive reader and no declared external contract",
+      "custom-property read with no canonical emitter, typed fallback or explicit external owner",
+      "rule superseded at equal or higher cascade in every reachable state",
+      "engine or compatibility mirror with no reachable consumer",
+      "generated output whose source owner no longer emits the rule"
+    ],
+    "retirementLaw": "Delete dead CSS only with family/owner attribution, consumer census, successor where visual capacity exists and source-to-generated reconciliation. Dead census is evidence, never deletion permission by itself.",
+    "requiredReceipts": [
+      "family-or-foundation-owner",
+      "source-import-and-bundle-reachability",
+      "selector-to-stable-part-and-state",
+      "writer-reader-custom-property-graph",
+      "direct-or-derived-tenant-authority-path",
+      "static-db-parity-for-tenant-variable-values",
+      "dead-css-retirement-proof-or-zero-count"
+    ]
+  },
+  "dimensions": [
+    {
+      "id": "anatomy-composition",
+      "weight": 9,
+      "critical": true,
+      "evidenceRequired": true,
+      "question": "Does the family have valid stable anatomy and compose lower layers without rebuilding them?"
+    },
+    {
+      "id": "typography-content",
+      "weight": 9,
+      "critical": true,
+      "evidenceRequired": true,
+      "question": "Are title, subtitle, body, label, support, code and numeric roles deliberate and resilient?"
+    },
+    {
+      "id": "geometry-edge-shape",
+      "weight": 7,
+      "critical": false,
+      "evidenceRequired": true,
+      "question": "Do radius, silhouette, seams, dividers and current/selected posture form one grammar?"
+    },
+    {
+      "id": "material-background-depth",
+      "weight": 8,
+      "critical": false,
+      "evidenceRequired": true,
+      "question": "Do grounds, gradients, motifs, elevation and protected content zones express a coherent material model?"
+    },
+    {
+      "id": "adaptive-layout-density-rhythm",
+      "weight": 12,
+      "critical": true,
+      "evidenceRequired": true,
+      "question": "Do intrinsic layout, containers, density, rhythm and type scale reflow without collisions or unjustified holes?"
+    },
+    {
+      "id": "responsive-mobile",
+      "weight": 11,
+      "critical": true,
+      "evidenceRequired": true,
+      "question": "Does the family provide an intentional simplified mobile posture and narrow-container behavior?"
+    },
+    {
+      "id": "interaction-states-motion",
+      "weight": 9,
+      "critical": true,
+      "evidenceRequired": true,
+      "question": "Are applicable states complete, meaningful and driven by semantic motion recipes?"
+    },
+    {
+      "id": "icons-multimodal",
+      "weight": 4,
+      "critical": false,
+      "evidenceRequired": true,
+      "question": "Are all icons semantic DS icons with role, weight, size and non-color meaning?"
+    },
+    {
+      "id": "accessibility-input",
+      "weight": 8,
+      "critical": true,
+      "evidenceRequired": true,
+      "question": "Are names, relations, keyboard, focus, contrast, forced colors and pointer modalities correct?"
+    },
+    {
+      "id": "i18n-content-rtl",
+      "weight": 6,
+      "critical": true,
+      "evidenceRequired": true,
+      "question": "Do EN, ES, AR/RTL and long content work while FR/PT key parity stays intact?"
+    },
+    {
+      "id": "lifecycle-data-resilience",
+      "weight": 5,
+      "critical": false,
+      "evidenceRequired": true,
+      "question": "Do loading, empty, partial, error, retry, success and late-data states preserve layout and recovery?"
+    },
+    {
+      "id": "customization-tenant-divergence",
+      "weight": 12,
+      "critical": true,
+      "evidenceRequired": true,
+      "question": "Do governed controls cause meaningful same-tree tenant divergence and exact restore?"
+    }
+  ],
+  "layerThresholds": {
+    "primitive-static-layout": 90,
+    "primitive-interactive-control-data-overlay": 92,
+    "pattern": 92,
+    "chart": 92,
+    "structure": 93,
+    "surface-composition": 94,
+    "commercial": 92,
+    "reference-canary": 95
+  },
+  "binaryContracts": [
+    "inventory-export-owner-unique",
+    "valid-dom-anatomy-no-hydration-error",
+    "server-first-paint-matches-tenant-no-default-theme-flash",
+    "public-variants-recipes-complete",
+    "applicable-states-lifecycle-complete",
+    "token-consumer-causality-and-exact-restore",
+    "static-db-parity-for-controls-in-scope",
+    "zero-unintended-overlap-clipping-overflow",
+    "viewport-container-density-rhythm-type-scale-response",
+    "intentional-mobile-priority-and-actions",
+    "en-es-ar-rtl-pseudolong-and-fr-pt-parity",
+    "keyboard-focus-names-relations-and-axe",
+    "normal-reduced-motion-and-reduced-transparency",
+    "forced-colors-and-canonical-contrast",
+    "semantic-ds-icon-provenance",
+    "composition-without-lower-layer-reconstruction",
+    "same-tree-tenant-divergence",
+    "binding-tenant-art-direction-compliance",
+    "motif-texture-never-crosses-text-or-controls",
+    "fresh-hashed-source-bound-evidence",
+    "zero-unadjudicated-round-proposals",
+    "zero-dead-or-unowned-css-in-round-scope",
+    "customizable-css-has-static-db-canonical-authority",
+    "visual-craft-contract-mechanical-floors",
+    "codex-calibration-and-cohort-checkpoints",
+    "semantic-role-icon-facade-without-compatibility-placeholders"
+  ],
+  "hardVetoes": [
+    "invalid-dom-or-hydration-mismatch",
+    "incorrect-default-theme-visible-before-tenant-hydration",
+    "overlap-clipping-or-accidental-scroll",
+    "per-character-wrap-or-critical-inaccessible-truncation",
+    "essential-action-hidden-or-unreachable",
+    "keyboard-focus-trap-or-focus-return-failure",
+    "axe-serious-critical-contrast-or-color-only-state",
+    "touch-target-below-floor",
+    "unlocalized-copy-key-drift-or-broken-rtl",
+    "non-ds-icon-svg-provider-or-emoji-substitute",
+    "tenant-selector-conditional-tsx-or-second-authority",
+    "inert-sold-control-or-static-db-divergence",
+    "tenant-divergence-only-by-color",
+    "tenant-art-direction-reduced-to-palette-radius-or-isolated-selector-tweaks",
+    "published-profile-meaning-mutated-in-place",
+    "raw-kimi-annotation-implemented-without-codex-adjudication",
+    "broken-reduced-motion-forced-colors-or-reduced-transparency",
+    "required-state-or-lifecycle-absent",
+    "app-repairs-private-ds-anatomy",
+    "kimi-capacity-removed-without-successor-death-proof",
+    "unadjudicated-prototype-at-round-exit",
+    "stale-vacuous-circular-missing-or-self-approved-evidence",
+    "test-or-baseline-weakened-to-pass",
+    "higher-layer-rebuilds-lower-layer-component",
+    "file-edited-outside-ownership-manifest",
+    "orphan-selector-unowned-sheet-dead-rule-or-disconnected-custom-property",
+    "customizable-css-bypasses-the-canonical-static-db-chain",
+    "line-or-connector-intersects-content-safe-zone",
+    "multiple-dominant-boundaries-for-one-semantic-region",
+    "unintentional-native-desktop-control-chrome",
+    "tiny-or-optically-unbalanced-control-typography",
+    "state-expressed-by-abrupt-color-or-outline-alone",
+    "peer-panel-misalignment-without-declared-priority",
+    "unjustified-dead-space-or-empty-track",
+    "optional-icon-leaves-empty-slot-or-breaks-alignment",
+    "decorative-ai-icon-without-semantic-behavior",
+    "default-component-inside-unintegrated-box-stack",
+    "focus-ring-border-error-and-selection-compete-simultaneously",
+    "random-pill-proliferation",
+    "gradient-shadow-or-saturation-used-as-premium-shortcut",
+    "desktop-composition-compressed-into-mobile",
+    "current-tenant-palette-retained-without-r1-sighted-readjudication",
+    "same-placeholder-icon-used-across-unrelated-semantic-roles",
+    "functional-unicode-emoji-inline-svg-or-legacy-catalog-bypasses-semantic-facade",
+    "universal-icon-well-without-semantic-role-or-profile",
+    "raw-geometric-chart-presented-without-editorial-or-interaction-scaffold",
+    "chart-label-collision-or-unjustified-empty-plot-region",
+    "outline-only-surface-without-anatomy-hierarchy-or-task-value",
+    "micro-pill-used-as-heading-explanation-or-universal-action",
+    "major-region-collapses-below-readable-measure-without-recomposition",
+    "content-overlap-clipping-or-per-character-wrap-in-supported-stress",
+    "stacked-header-strips-without-one-dominant-information-hierarchy"
+  ],
+  "stressMatrix": {
+    "viewportsPx": [320, 390, 768, 1440],
+    "containersPx": [280, 320, 360, 480, 640, 960],
+    "localesRuntime": ["en", "es", "ar"],
+    "localeParity": ["fr", "pt"],
+    "directions": ["ltr", "rtl"],
+    "content": ["short", "long", "pseudo-long", "pathological-unbroken"],
+    "density": ["compact", "balanced", "expansive"],
+    "rhythm": ["tight", "normal", "airy"],
+    "input": ["fine", "coarse", "keyboard"],
+    "preferences": ["normal", "reduced-motion", "reduced-transparency", "forced-colors"],
+    "lifecycle": ["loading", "empty", "partial", "restricted", "redacted", "error", "retry", "ready", "success"]
+  },
+  "sightedCriteria": [
+    "optical alignment between sibling regions, metric baselines and label-value tracks",
+    "overlay entry and exit preserve a perceptible spatial relationship with the anchor",
+    "secondary actions remain quiet by default and reveal through intent without becoming unreachable"
+  ],
+  "mechanicalFloors": {
+    "unintendedOverflowTolerancePx": 1,
+    "nonOverlapIntersectionPx": 0,
+    "coarsePointerTargetPx": 44,
+    "finePointerTargetPx": 24,
+    "axeSeriousCritical": 0,
+    "skeletonFinalFootprintDeltaPx": 8,
+    "skeletonFinalFootprintDeltaPercent": 5,
+    "familySceneClsMaximum": 0.05,
+    "reducedMotionSpatialOrRecurrentAnimations": 0,
+    "reducedMotionFunctionalOpacityMaximumMs": 100,
+    "adaptiveGridUnexpectedInternalHoles": 0
+  },
+  "tenantDivergenceAxes": [
+    "color",
+    "typography",
+    "geometry",
+    "edge",
+    "material",
+    "density-rhythm",
+    "icon",
+    "motion",
+    "motif",
+    "responsive-composition",
+    "recipe-anatomy"
+  ],
+  "tenantDivergenceMinimumByProfile": {
+    "contract-only": 0,
+    "atomic-static": 2,
+    "interactive-control-layout": 3,
+    "pattern-chart": 4,
+    "structure": 5,
+    "surface-composition-canary": 6
+  }
+}

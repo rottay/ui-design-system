@@ -225,7 +225,11 @@
       "import": "./dist/fonts/plex-mono.css",
       "default": "./dist/fonts/plex-mono.css"
     },
-    "./dist/*.css": "./dist/*.css"
+    "./dist/*.css": "./dist/*.css",
+    "./tenant-theme-canary-fixtures": {
+      "types": "./tenant-theme-canary-fixtures.d.ts",
+      "default": "./tenant-theme-canary-fixtures.json"
+    }
   },
   "files": [
     "dist/**/*.js",
@@ -241,6 +245,8 @@
     "supplier-contract.json",
     "hooks-manifest.json",
     "hooks-manifest.d.ts",
+    "tenant-theme-canary-fixtures.json",
+    "tenant-theme-canary-fixtures.d.ts",
     "consumer/ds-supplier-honesty.mjs",
     "THIRD_PARTY_NOTICES.md",
     "provenance/graphics/**",
@@ -251,7 +257,7 @@
     "dev": "node scripts/dev.mjs",
     "icons:generate": "node scripts/generate-semantic-icons.mjs",
     "icons:check": "node scripts/generate-semantic-icons.mjs --check",
-    "prebuild": "pnpm run cra17:licenses && pnpm run icons:check && pnpm run contract:check && pnpm run hooks:check && pnpm run csssource:check",
+    "prebuild": "pnpm run cra17:licenses && pnpm run icons:check && pnpm run contract:check && pnpm run hooks:check && pnpm run tenant-theme-fixtures:check && pnpm run csssource:check",
     "prepack": "pnpm run distfresh:check && pnpm run cra15:gate && pnpm run cra17:licenses && pnpm run cra17:declarations",
     "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:commercial-css && pnpm run build:vertical-css && pnpm run build:fonts && pnpm run build:stamp",
     "postbuild": "pnpm run cra14:check",
@@ -278,7 +284,7 @@
     "gat07:write": "node scripts/gat-07-exact-proof.mjs --write",
     "gat09:structural": "node scripts/gat-09-full-claim-integrity.mjs --structural",
     "gat09:gate": "node scripts/gat-09-full-claim-integrity.mjs",
-    "test:scripts": "node --test scripts/*.test.mjs && node --test ../../scripts/effect-registry-audit.test.mjs && vitest run --config scripts/vitest.scripts.config.ts",
+    "test:scripts": "node --test scripts/quality-evidence/v2/*.test.mjs && node --test scripts/*.test.mjs && node --test ../../scripts/effect-registry-audit.test.mjs && vitest run --config scripts/vitest.scripts.config.ts",
     "pretest": "pnpm run gates:ci",
     "build:vertical-artifacts": "node scripts/build-vertical-artifacts.mjs",
     "build:vertical-css": "node scripts/build-vertical-artifacts.mjs && node scripts/build-vertical-css.mjs",
@@ -295,6 +301,9 @@
     "ownership:patterns:check": "node scripts/pattern-surface-ownership-gate.mjs --check",
     "theme-parity:check": "node scripts/theme-channel-parity-gate.mjs --check",
     "quality-evidence:check": "node scripts/quality-evidence/cli.mjs validate-manifest",
+    "quality-evidence:v2:inventory": "node scripts/quality-evidence/v2/cli.mjs inventory",
+    "quality-evidence:v2:drills": "node --test scripts/quality-evidence/v2/drills.test.mjs",
+    "quality-evidence:v2:round": "node scripts/quality-evidence/v2/cli.mjs round-evidence",
     "size-axis:check": "node scripts/size-axis-law-gate.mjs --check",
     "gate:styles-css": "node --test scripts/vertical-css-staleness.gate.mjs",
     "packinv:check": "node scripts/pack-inventory-gate.mjs --check",
@@ -332,7 +341,9 @@
     "appboundary:check": "node scripts/app-ds-boundary-gate.mjs --check",
     "wiring:check": "node scripts/workflow-script-wiring-gate.mjs",
     "tokens:catalog:write": "node scripts/tokens-catalog.mjs --write",
-    "tokens:catalog:check": "node scripts/tokens-catalog.mjs --check"
+    "tokens:catalog:check": "node scripts/tokens-catalog.mjs --check",
+    "tenant-theme-fixtures:generate": "node scripts/tenant-theme-canary-fixtures.mjs --write",
+    "tenant-theme-fixtures:check": "node scripts/tenant-theme-canary-fixtures.mjs --check"
   },
   "releaseSync": {
     "sourceEntrypoints": {

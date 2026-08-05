@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "scripts/kimi-preservation-manifest.mjs --write",
-  "basedOnReportDigest": "c74a2299981feebab729e08d43ea61d9eaf4e50857b528a087f09bef5633d45b",
+  "basedOnReportDigest": "4c9c722efbc282cc9d984401de1ba392a7581b04b9da3fbadb44606fdb1fa18d",
   "laws": [
     "preserve 100% of useful premium visual capability; connect it to the canon",
     "a census dead-writer verdict is never a deletion license",
@@ -2153,13 +2153,12 @@
     ]
   },
   "deadWriters": {
-    "total": 275,
+    "total": 270,
     "byProvenance": {
       "E-reserved-frontier": 3,
-      "B-modern-current": 71,
-      "D-compiler-generated": 16,
-      "A-kimi-premium": 183,
-      "C-legacy-mirror": 2
+      "B-modern-current": 69,
+      "D-compiler-generated": 15,
+      "A-kimi-premium": 183
     },
     "entries": [
       {
@@ -2269,13 +2268,6 @@
       },
       {
         "name": "--ds-cell-pill-shadow",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-chart-accent",
         "provenance": "B-modern-current",
         "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
         "owner": "design-system/D1-modern",
@@ -2849,13 +2841,6 @@
         "status": "dead-writer"
       },
       {
-        "name": "--ds-density-card-padding",
-        "provenance": "B-modern-current",
-        "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
-        "owner": "design-system/D1-modern",
-        "status": "dead-writer"
-      },
-      {
         "name": "--ds-duration-gentle",
         "provenance": "B-modern-current",
         "decision": "PRIVATE_CHANNEL_OR_DERIVE_PER_NAME",
@@ -3270,13 +3255,6 @@
       },
       {
         "name": "--ds-shell-shimmer-strong",
-        "provenance": "D-compiler-generated",
-        "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
-        "owner": "design-system/D1-compilers",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-sidebar-text-muted",
         "provenance": "D-compiler-generated",
         "decision": "CONNECT_CONSUMER_OR_RETIRE_EMITTER",
         "owner": "design-system/D1-compilers",
@@ -3917,20 +3895,6 @@
         "provenance": "A-kimi-premium",
         "decision": "RECONNECT_OR_PROMOTE",
         "owner": "kimi+design-system/D1-premium",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-toast-enter-duration",
-        "provenance": "C-legacy-mirror",
-        "decision": "MIGRATE_USEFUL_THEN_RETIRE_MIRROR",
-        "owner": "design-system/D1-legacy",
-        "status": "dead-writer"
-      },
-      {
-        "name": "--ds-toast-enter-easing",
-        "provenance": "C-legacy-mirror",
-        "decision": "MIGRATE_USEFUL_THEN_RETIRE_MIRROR",
-        "owner": "design-system/D1-legacy",
         "status": "dead-writer"
       },
       {

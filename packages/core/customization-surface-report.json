@@ -3,7 +3,7 @@
   "generatedBy": "scripts/customization-surface-census.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "b2132923cd2274e9d910571bac4fc0794ccabd2e5e1186ade3094f4cbabd8a65",
+    "inputsDigest": "14fc6d25b039bbf4ad228a927fa326bd9c8bbbce0cf7b4de9ecccc19de3ce78e",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 466,
@@ -13,18 +13,18 @@
     }
   },
   "counts": {
-    "universe": 7473,
-    "writers": 4810,
+    "universe": 7470,
+    "writers": 4811,
     "foundationTokens": 3367,
-    "componentTokens": 545,
-    "tenantChannels": 1542,
+    "componentTokens": 550,
+    "tenantChannels": 1544,
     "publicHooks": 93,
-    "unadjudicatedReads": 2696,
-    "deadWriters": 275,
+    "unadjudicatedReads": 2691,
+    "deadWriters": 270,
     "frontierReserved": 20,
-    "modernConsumedUnique": 3621,
-    "tsReadNames": 2641,
-    "tsWriteNames": 960,
+    "modernConsumedUnique": 3656,
+    "tsReadNames": 2649,
+    "tsWriteNames": 959,
     "tsMetadataNames": 591,
     "unclassified": 0,
     "prototypeLedgerRows": 80
@@ -37,10 +37,10 @@
     }
   ],
   "deadByClass": {
-    "foundation": 132,
+    "foundation": 128,
     "component": 0,
-    "tenantChannel": 193,
-    "authoredCssLocal": 12
+    "tenantChannel": 192,
+    "authoredCssLocal": 11
   },
   "controls": {
     "tenantBasic": [
@@ -208,7 +208,6 @@
     "--ds-cell-pill-color",
     "--ds-cell-pill-dot-current",
     "--ds-cell-pill-shadow",
-    "--ds-chart-accent",
     "--ds-chart-card-bg",
     "--ds-collection-card-action-bg",
     "--ds-collection-card-action-border",
@@ -290,7 +289,6 @@
     "--ds-compact-card-transition",
     "--ds-compact-card-value-color",
     "--ds-compact-card-value-color-hover",
-    "--ds-density-card-padding",
     "--ds-duration-gentle",
     "--ds-duration-instant",
     "--ds-duration-slow",
@@ -351,7 +349,6 @@
     "--ds-shell-shimmer-medium",
     "--ds-shell-shimmer-soft",
     "--ds-shell-shimmer-strong",
-    "--ds-sidebar-text-muted",
     "--ds-signal-card-action-bg",
     "--ds-signal-card-action-border",
     "--ds-signal-card-action-color",
@@ -443,8 +440,6 @@
     "--ds-tall-card-transition",
     "--ds-tall-card-value-color",
     "--ds-tall-card-value-color-hover",
-    "--ds-toast-enter-duration",
-    "--ds-toast-enter-easing",
     "--ds-typography-body-letter-spacing",
     "--ds-typography-display-letter-spacing",
     "--ds-workflow-gap",
@@ -1585,7 +1580,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 12,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -10057,7 +10052,7 @@
       "writer": true,
       "reads": {
         "css": 0,
-        "ts": 6,
+        "ts": 8,
         "tests": true,
         "modern": false,
         "artifact": true
@@ -10311,7 +10306,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -10326,7 +10321,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 6,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -10641,7 +10636,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -10671,7 +10666,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 7,
         "ts": 3,
         "tests": false,
         "modern": true,
@@ -10971,7 +10966,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 6,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -11016,7 +11011,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 5,
         "ts": 3,
         "tests": false,
         "modern": true,
@@ -11031,7 +11026,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -11046,7 +11041,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -11181,7 +11176,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -11496,7 +11491,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 1,
         "tests": false,
         "modern": false,
@@ -12921,7 +12916,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 7,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -15576,7 +15571,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 70,
+        "css": 72,
         "ts": 5,
         "tests": true,
         "modern": true,
@@ -15771,7 +15766,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 21,
+        "css": 22,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -17016,7 +17011,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 9,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -18051,7 +18046,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 16,
+        "css": 17,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -20043,10 +20038,10 @@
     "--ds-chart-accent": {
       "category": "canonical-authority",
       "tier": "internal",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -20226,7 +20221,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -20646,7 +20641,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -21231,7 +21226,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 8,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -21411,7 +21406,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -21426,7 +21421,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 6,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -25491,7 +25486,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 9,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -25536,7 +25531,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 9,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -25896,7 +25891,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 8,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -26601,7 +26596,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 6,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -27246,7 +27241,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 309,
+        "css": 327,
         "ts": 6,
         "tests": true,
         "modern": true,
@@ -27291,7 +27286,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 18,
+        "css": 16,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -27351,7 +27346,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 220,
+        "css": 218,
         "ts": 25,
         "tests": true,
         "modern": true,
@@ -27366,7 +27361,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 195,
+        "css": 204,
         "ts": 43,
         "tests": true,
         "modern": true,
@@ -27441,10 +27436,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 2,
         "ts": 3,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -27456,7 +27451,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 459,
+        "css": 467,
         "ts": 58,
         "tests": true,
         "modern": true,
@@ -27471,7 +27466,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 8,
+        "css": 11,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -27516,7 +27511,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 189,
+        "css": 192,
         "ts": 9,
         "tests": true,
         "modern": true,
@@ -27531,7 +27526,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 228,
+        "css": 239,
         "ts": 25,
         "tests": true,
         "modern": true,
@@ -27546,7 +27541,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 261,
+        "css": 269,
         "ts": 14,
         "tests": true,
         "modern": true,
@@ -27651,7 +27646,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 340,
+        "css": 369,
         "ts": 46,
         "tests": true,
         "modern": true,
@@ -27861,7 +27856,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 7,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -28086,7 +28081,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 5,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -28236,7 +28231,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 77,
+        "css": 78,
         "ts": 7,
         "tests": true,
         "modern": true,
@@ -28476,7 +28471,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1319,
+        "css": 1344,
         "ts": 114,
         "tests": true,
         "modern": true,
@@ -28686,7 +28681,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 9,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -28986,7 +28981,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 241,
+        "css": 243,
         "ts": 38,
         "tests": true,
         "modern": true,
@@ -29181,7 +29176,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 8,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -29196,7 +29191,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 23,
+        "css": 22,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -29286,7 +29281,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 47,
+        "css": 50,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -29316,7 +29311,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 432,
+        "css": 436,
         "ts": 52,
         "tests": true,
         "modern": true,
@@ -29361,7 +29356,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 142,
+        "css": 144,
         "ts": 14,
         "tests": true,
         "modern": true,
@@ -29391,7 +29386,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 763,
+        "css": 773,
         "ts": 86,
         "tests": true,
         "modern": true,
@@ -29406,7 +29401,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 468,
+        "css": 471,
         "ts": 67,
         "tests": true,
         "modern": true,
@@ -29451,7 +29446,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 184,
+        "css": 188,
         "ts": 34,
         "tests": true,
         "modern": true,
@@ -29646,7 +29641,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 8,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -33876,7 +33871,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 10,
+        "css": 9,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -35626,12 +35621,12 @@
       "tsMetadataMentions": 0
     },
     "--ds-density-card-padding": {
-      "category": "authored-css-local",
+      "category": "component-channel",
       "tier": "internal",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -35736,8 +35731,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 252,
-        "ts": 5,
+        "css": 320,
+        "ts": 7,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -35766,10 +35761,10 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 5,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -35781,10 +35776,10 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 5,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -35796,7 +35791,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 10,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -35811,7 +35806,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 6,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -37720,7 +37715,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -37735,7 +37730,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -37795,7 +37790,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -37825,7 +37820,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -38395,10 +38390,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 15,
         "ts": 2,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 3,
@@ -38530,10 +38525,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 19,
         "ts": 1,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 1,
@@ -39439,21 +39434,6 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 0
     },
-    "--ds-dropdown-item-shadow-hover": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
-      "reads": {
-        "css": 2,
-        "ts": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
     "--ds-dropdown-max-height": {
       "category": "unadjudicated-read",
       "tier": "application-unadjudicated",
@@ -39910,7 +39890,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 11,
+        "css": 21,
         "ts": 10,
         "tests": true,
         "modern": true,
@@ -39925,7 +39905,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 12,
+        "css": 18,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -39940,7 +39920,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 13,
+        "css": 30,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -40060,7 +40040,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 35,
+        "css": 48,
         "ts": 15,
         "tests": true,
         "modern": true,
@@ -40105,7 +40085,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 72,
+        "css": 70,
         "ts": 12,
         "tests": true,
         "modern": true,
@@ -40120,7 +40100,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 58,
+        "css": 59,
         "ts": 10,
         "tests": true,
         "modern": true,
@@ -40150,7 +40130,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 9,
+        "css": 14,
         "ts": 3,
         "tests": false,
         "modern": true,
@@ -40165,7 +40145,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 8,
         "ts": 2,
         "tests": false,
         "modern": true,
@@ -40285,7 +40265,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 10,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -40660,7 +40640,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -42385,7 +42365,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 11,
+        "css": 12,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -43240,7 +43220,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 98,
+        "css": 99,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -43270,7 +43250,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 104,
+        "css": 105,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -43300,7 +43280,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 101,
+        "css": 107,
         "ts": 54,
         "tests": true,
         "modern": true,
@@ -43345,7 +43325,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 47,
+        "css": 51,
         "ts": 10,
         "tests": true,
         "modern": true,
@@ -43361,7 +43341,7 @@
       "writer": true,
       "reads": {
         "css": 88,
-        "ts": 22,
+        "ts": 23,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -43825,7 +43805,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -44035,7 +44015,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 33,
+        "css": 34,
         "ts": 9,
         "tests": true,
         "modern": true,
@@ -44065,7 +44045,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 10,
+        "css": 11,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -44095,7 +44075,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 206,
+        "css": 214,
         "ts": 117,
         "tests": true,
         "modern": true,
@@ -44155,7 +44135,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 268,
+        "css": 273,
         "ts": 72,
         "tests": true,
         "modern": true,
@@ -44215,7 +44195,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 43,
+        "css": 48,
         "ts": 3,
         "tests": false,
         "modern": true,
@@ -44275,7 +44255,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 8,
         "ts": 1,
         "tests": false,
         "modern": false,
@@ -44305,7 +44285,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 73,
+        "css": 76,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -44320,7 +44300,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 16,
+        "css": 20,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -44350,7 +44330,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 159,
+        "css": 160,
         "ts": 4,
         "tests": true,
         "modern": true,
@@ -44830,7 +44810,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -44890,7 +44870,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -45610,7 +45590,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 22,
+        "css": 24,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -46270,7 +46250,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 8,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -47095,10 +47075,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 1,
@@ -47125,10 +47105,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 5,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 1,
@@ -47170,7 +47150,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 7,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -47305,7 +47285,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 55,
+        "css": 73,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -47320,7 +47300,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 12,
+        "css": 15,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -47350,7 +47330,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 7,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -47365,7 +47345,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 19,
+        "css": 23,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -47440,7 +47420,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 10,
+        "css": 13,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -47455,7 +47435,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 28,
+        "css": 32,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -47470,7 +47450,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 12,
+        "css": 17,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -47485,7 +47465,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 10,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -47500,7 +47480,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 13,
+        "css": 16,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -47605,7 +47585,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 7,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -47620,7 +47600,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 11,
+        "css": 13,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -47665,7 +47645,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 21,
+        "css": 23,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -47680,7 +47660,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 11,
+        "css": 15,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -47695,7 +47675,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 14,
+        "css": 15,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -47815,7 +47795,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 11,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -47830,7 +47810,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 12,
+        "css": 19,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -47995,7 +47975,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 6,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -48070,7 +48050,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 9,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -48085,7 +48065,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 5,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -48100,7 +48080,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -48265,7 +48245,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 11,
+        "css": 12,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -48355,7 +48335,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -48385,7 +48365,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -48400,7 +48380,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 4,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -48430,7 +48410,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -48490,7 +48470,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 6,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -48505,7 +48485,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 4,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -48520,7 +48500,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 11,
+        "css": 13,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -48550,8 +48530,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 12,
-        "ts": 3,
+        "css": 15,
+        "ts": 2,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -48580,7 +48560,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -48595,7 +48575,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 9,
+        "css": 11,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -48610,10 +48590,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
-        "ts": 1,
+        "css": 2,
+        "ts": 2,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -48625,7 +48605,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -48685,7 +48665,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -48700,7 +48680,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 4,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -48715,7 +48695,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 16,
+        "css": 18,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -48745,8 +48725,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 17,
-        "ts": 3,
+        "css": 20,
+        "ts": 2,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -48775,7 +48755,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 5,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -48790,7 +48770,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 16,
+        "css": 18,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -48805,8 +48785,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
-        "ts": 1,
+        "css": 5,
+        "ts": 2,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -48820,7 +48800,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -49255,7 +49235,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 9,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -49495,7 +49475,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 21,
+        "css": 25,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -49540,7 +49520,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 4,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -49555,7 +49535,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 24,
+        "css": 26,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -49585,8 +49565,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 21,
-        "ts": 3,
+        "css": 24,
+        "ts": 2,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -49615,7 +49595,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -49630,7 +49610,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 15,
+        "css": 17,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -49645,10 +49625,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
-        "ts": 1,
+        "css": 2,
+        "ts": 2,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -49660,7 +49640,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -49675,7 +49655,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -49690,7 +49670,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 9,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -49855,7 +49835,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 37,
+        "css": 45,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -49870,7 +49850,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 70,
+        "css": 78,
         "ts": 11,
         "tests": false,
         "modern": true,
@@ -49885,7 +49865,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 9,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -49900,7 +49880,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 12,
+        "css": 19,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -49975,7 +49955,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -49990,7 +49970,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 5,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -50020,7 +50000,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 5,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -50050,7 +50030,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -50065,7 +50045,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -50095,7 +50075,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -50110,7 +50090,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -50125,7 +50105,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 5,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -50155,7 +50135,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 5,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -50185,7 +50165,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -50200,7 +50180,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -50230,7 +50210,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -51415,7 +51395,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -51700,7 +51680,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 6,
         "tests": true,
         "modern": true,
@@ -51805,7 +51785,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 19,
+        "css": 24,
         "ts": 4,
         "tests": true,
         "modern": true,
@@ -51985,7 +51965,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 18,
+        "css": 21,
         "ts": 6,
         "tests": false,
         "modern": true,
@@ -52000,7 +51980,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -52015,7 +51995,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 9,
+        "css": 10,
         "ts": 2,
         "tests": false,
         "modern": true,
@@ -52045,7 +52025,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 5,
         "ts": 2,
         "tests": false,
         "modern": false,
@@ -52105,7 +52085,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 62,
+        "css": 63,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -55480,10 +55460,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 5,
         "ts": 0,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 2,
@@ -55495,7 +55475,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 6,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -56365,7 +56345,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -56755,10 +56735,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 2,
@@ -57880,7 +57860,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -58090,7 +58070,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -58285,7 +58265,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 5,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -58615,7 +58595,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -58645,7 +58625,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 13,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -58720,10 +58700,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 1,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 2,
@@ -58735,10 +58715,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 1,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 2,
@@ -58795,10 +58775,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 1,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 2,
@@ -58810,10 +58790,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 1,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 2,
@@ -60340,7 +60320,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 9,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -61930,7 +61910,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 10,
         "ts": 2,
         "tests": false,
         "modern": true,
@@ -62035,7 +62015,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 7,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -62290,7 +62270,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 9,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -63034,28 +63014,13 @@
       "tsWriteSites": 0,
       "tsMetadataMentions": 1
     },
-    "--ds-motion-ambient": {
-      "category": "test-only",
-      "tier": "test-corpus",
-      "status": "test-only",
-      "writer": true,
-      "reads": {
-        "css": 0,
-        "ts": 0,
-        "tests": true,
-        "modern": false,
-        "artifact": false
-      },
-      "tsWriteSites": 1,
-      "tsMetadataMentions": 0
-    },
     "--ds-motion-attention": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 35,
+        "css": 39,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -63085,7 +63050,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 11,
+        "css": 12,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -63100,7 +63065,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 7,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -63110,15 +63075,15 @@
       "tsMetadataMentions": 0
     },
     "--ds-motion-duration-scale": {
-      "category": "canonical-authority",
-      "tier": "internal",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 10,
         "ts": 6,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 2,
@@ -63130,7 +63095,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 103,
+        "css": 109,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -63145,7 +63110,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 7,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -63160,7 +63125,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 60,
+        "css": 61,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -63190,7 +63155,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 783,
+        "css": 801,
         "ts": 33,
         "tests": true,
         "modern": true,
@@ -63220,7 +63185,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -63235,7 +63200,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 743,
+        "css": 753,
         "ts": 15,
         "tests": true,
         "modern": true,
@@ -63250,7 +63215,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 153,
+        "css": 169,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -63310,7 +63275,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 21,
+        "css": 23,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -63320,15 +63285,15 @@
       "tsMetadataMentions": 0
     },
     "--ds-motion-intensity": {
-      "category": "generated-artifact-only",
-      "tier": "generated",
-      "status": "generated",
+      "category": "compiler-derived-channel",
+      "tier": "tenant-bounded",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 27,
         "ts": 0,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 1,
@@ -63340,7 +63305,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 165,
+        "css": 176,
         "ts": 13,
         "tests": true,
         "modern": true,
@@ -63415,7 +63380,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 21,
+        "css": 34,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -63490,7 +63455,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 12,
+        "css": 17,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -63745,10 +63710,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 1,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 2,
@@ -63760,10 +63725,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 1,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 2,
@@ -63790,10 +63755,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 1,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 2,
@@ -63805,10 +63770,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 1,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 2,
@@ -64585,8 +64550,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
-        "ts": 0,
+        "css": 9,
+        "ts": 2,
         "tests": false,
         "modern": true,
         "artifact": true
@@ -64601,7 +64566,7 @@
       "writer": false,
       "reads": {
         "css": 1,
-        "ts": 0,
+        "ts": 1,
         "tests": false,
         "modern": true,
         "artifact": false
@@ -64616,21 +64581,6 @@
       "writer": false,
       "reads": {
         "css": 1,
-        "ts": 0,
-        "tests": false,
-        "modern": true,
-        "artifact": false
-      },
-      "tsWriteSites": 0,
-      "tsMetadataMentions": 0
-    },
-    "--ds-page-header-icon-size": {
-      "category": "component-channel",
-      "tier": "internal",
-      "status": "active",
-      "writer": true,
-      "reads": {
-        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -64795,7 +64745,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -65620,7 +65570,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 6,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -68740,7 +68690,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 12,
+        "css": 13,
         "ts": 1,
         "tests": false,
         "modern": false,
@@ -71665,8 +71615,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 122,
-        "ts": 9,
+        "css": 125,
+        "ts": 10,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -71680,7 +71630,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 26,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -71695,7 +71645,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 241,
+        "css": 251,
         "ts": 16,
         "tests": true,
         "modern": true,
@@ -71725,7 +71675,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 356,
+        "css": 371,
         "ts": 24,
         "tests": true,
         "modern": true,
@@ -71770,10 +71720,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -71815,7 +71765,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 12,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -71830,7 +71780,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 197,
+        "css": 202,
         "ts": 17,
         "tests": true,
         "modern": true,
@@ -71860,7 +71810,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 48,
+        "css": 56,
         "ts": 5,
         "tests": true,
         "modern": true,
@@ -73405,10 +73355,10 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 0,
@@ -75445,7 +75395,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 10,
+        "css": 13,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -75550,7 +75500,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -76075,7 +76025,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -76090,7 +76040,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -76525,7 +76475,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -77245,7 +77195,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -77260,7 +77210,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -78070,7 +78020,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -78085,7 +78035,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -78730,7 +78680,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 30,
+        "css": 31,
         "ts": 5,
         "tests": true,
         "modern": true,
@@ -79090,7 +79040,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 20,
+        "css": 17,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -79255,7 +79205,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -79405,7 +79355,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -79645,7 +79595,7 @@
       "status": "app-slot",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -79865,10 +79815,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-shell-main-padding-block-end": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "component-channel",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -80755,7 +80705,7 @@
       "status": "generated",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -81010,7 +80960,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -81170,9 +81120,9 @@
       "tsMetadataMentions": 0
     },
     "--ds-sidebar-shell-padding-inline": {
-      "category": "generated-artifact-only",
-      "tier": "generated",
-      "status": "generated",
+      "category": "component-channel",
+      "tier": "internal",
+      "status": "active",
       "writer": true,
       "reads": {
         "css": 5,
@@ -81202,13 +81152,13 @@
     "--ds-sidebar-text-muted": {
       "category": "compiler-derived-channel",
       "tier": "tenant-bounded",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 4,
@@ -82225,7 +82175,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 7,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -82990,8 +82940,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 261,
-        "ts": 18,
+        "css": 276,
+        "ts": 19,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -83095,8 +83045,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 468,
-        "ts": 33,
+        "css": 484,
+        "ts": 34,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -83200,8 +83150,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 319,
-        "ts": 20,
+        "css": 335,
+        "ts": 21,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -83260,8 +83210,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 250,
-        "ts": 22,
+        "css": 258,
+        "ts": 23,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -83335,8 +83285,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 66,
-        "ts": 12,
+        "css": 69,
+        "ts": 15,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -83395,7 +83345,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 80,
+        "css": 93,
         "ts": 11,
         "tests": true,
         "modern": true,
@@ -83470,7 +83420,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 46,
+        "css": 47,
         "ts": 7,
         "tests": true,
         "modern": true,
@@ -84640,7 +84590,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 27,
+        "css": 26,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -88135,7 +88085,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 23,
+        "css": 28,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -88150,7 +88100,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 342,
+        "css": 352,
         "ts": 10,
         "tests": true,
         "modern": true,
@@ -88165,7 +88115,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 166,
+        "css": 168,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -88180,7 +88130,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 66,
+        "css": 68,
         "ts": 0,
         "tests": true,
         "modern": false,
@@ -88255,7 +88205,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 7,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -88420,7 +88370,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 57,
+        "css": 75,
         "ts": 2,
         "tests": true,
         "modern": true,
@@ -88510,7 +88460,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 7,
+        "css": 10,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -88660,7 +88610,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 121,
+        "css": 119,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -88705,7 +88655,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 66,
+        "css": 69,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -88810,7 +88760,7 @@
       "status": "generated",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 1,
         "ts": 0,
         "tests": false,
         "modern": false,
@@ -88900,7 +88850,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 9,
+        "css": 13,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -89845,7 +89795,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 17,
+        "css": 20,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -89860,7 +89810,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 32,
+        "css": 38,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -89885,10 +89835,10 @@
       "tsMetadataMentions": 1
     },
     "--ds-table-bulk-bar-min-height": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "component-channel",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -89965,7 +89915,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 6,
         "ts": 2,
         "tests": false,
         "modern": true,
@@ -89980,7 +89930,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -90055,7 +90005,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 6,
+        "css": 8,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -90595,7 +90545,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 16,
+        "css": 15,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -90610,7 +90560,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 4,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -90700,7 +90650,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -90730,7 +90680,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 7,
         "ts": 3,
         "tests": false,
         "modern": true,
@@ -90790,7 +90740,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 4,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -91250,10 +91200,10 @@
       "tsMetadataMentions": 0
     },
     "--ds-table-pagination-min-height": {
-      "category": "unadjudicated-read",
-      "tier": "application-unadjudicated",
-      "status": "unwritten-hook",
-      "writer": false,
+      "category": "component-channel",
+      "tier": "internal",
+      "status": "active",
+      "writer": true,
       "reads": {
         "css": 1,
         "ts": 0,
@@ -91600,7 +91550,7 @@
       "status": "generated",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -91615,7 +91565,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -91630,7 +91580,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -91795,7 +91745,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -91915,7 +91865,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -92545,7 +92495,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 5,
+        "css": 6,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -93040,7 +92990,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 5,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -93235,7 +93185,7 @@
       "status": "app-slot",
       "writer": true,
       "reads": {
-        "css": 4,
+        "css": 5,
         "ts": 1,
         "tests": true,
         "modern": true,
@@ -100221,7 +100171,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 11,
+        "css": 15,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -100413,13 +100363,13 @@
     "--ds-toast-enter-duration": {
       "category": "canonical-authority",
       "tier": "internal",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 2,
@@ -100428,13 +100378,13 @@
     "--ds-toast-enter-easing": {
       "category": "canonical-authority",
       "tier": "internal",
-      "status": "dead-writer",
+      "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 0,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 2,
@@ -100506,10 +100456,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 2,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 2,
@@ -100521,10 +100471,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 0,
+        "css": 1,
         "ts": 2,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 2,
@@ -102906,7 +102856,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 16,
+        "css": 17,
         "ts": 4,
         "tests": false,
         "modern": true,
@@ -102966,7 +102916,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 8,
+        "css": 7,
         "ts": 1,
         "tests": false,
         "modern": true,
@@ -102981,7 +102931,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 11,
+        "css": 12,
         "ts": 3,
         "tests": true,
         "modern": true,
@@ -103191,7 +103141,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 2,
         "tests": false,
         "modern": true,
@@ -103206,7 +103156,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -103611,7 +103561,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 7,
+        "css": 6,
         "ts": 2,
         "tests": false,
         "modern": true,
@@ -103626,7 +103576,7 @@
       "status": "unwritten-hook",
       "writer": false,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -105876,8 +105826,8 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 149,
-        "ts": 0,
+        "css": 151,
+        "ts": 1,
         "tests": true,
         "modern": true,
         "artifact": false
@@ -108501,7 +108451,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -108516,7 +108466,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 18,
+        "css": 19,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -108531,7 +108481,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -108546,10 +108496,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -108561,7 +108511,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -108576,7 +108526,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -108591,7 +108541,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -108907,7 +108857,7 @@
       "writer": true,
       "reads": {
         "css": 1,
-        "ts": 0,
+        "ts": 1,
         "tests": true,
         "modern": false,
         "artifact": true
@@ -108952,7 +108902,7 @@
       "writer": true,
       "reads": {
         "css": 1,
-        "ts": 0,
+        "ts": 1,
         "tests": false,
         "modern": false,
         "artifact": true
@@ -108967,7 +108917,7 @@
       "writer": true,
       "reads": {
         "css": 1,
-        "ts": 0,
+        "ts": 1,
         "tests": true,
         "modern": true,
         "artifact": true
@@ -108982,7 +108932,7 @@
       "writer": true,
       "reads": {
         "css": 1,
-        "ts": 0,
+        "ts": 1,
         "tests": false,
         "modern": false,
         "artifact": true
@@ -109116,7 +109066,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 5,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -109146,7 +109096,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 5,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -109282,7 +109232,7 @@
       "writer": true,
       "reads": {
         "css": 1,
-        "ts": 0,
+        "ts": 1,
         "tests": true,
         "modern": false,
         "artifact": true
@@ -109311,7 +109261,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 6,
         "ts": 0,
         "tests": true,
         "modern": true,
@@ -109416,10 +109366,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 0,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -109431,10 +109381,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 0,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -109446,7 +109396,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -109461,10 +109411,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 0,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -109476,7 +109426,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -109491,10 +109441,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 3,
         "ts": 0,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -109506,7 +109456,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -109551,10 +109501,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 34,
+        "css": 39,
         "ts": 10,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 1,
@@ -109581,10 +109531,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -109641,7 +109591,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -109731,7 +109681,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -109746,7 +109696,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 3,
+        "css": 4,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -109776,10 +109726,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 1,
+        "css": 2,
         "ts": 0,
         "tests": false,
-        "modern": false,
+        "modern": true,
         "artifact": true
       },
       "tsWriteSites": 0,
@@ -109791,7 +109741,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -109806,7 +109756,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 3,
         "ts": 0,
         "tests": false,
         "modern": true,
@@ -109926,7 +109876,7 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 2,
+        "css": 4,
         "ts": 9,
         "tests": true,
         "modern": false,
@@ -109986,10 +109936,10 @@
       "status": "active",
       "writer": true,
       "reads": {
-        "css": 5,
-        "ts": 3,
+        "css": 21,
+        "ts": 4,
         "tests": true,
-        "modern": false,
+        "modern": true,
         "artifact": false
       },
       "tsWriteSites": 2,

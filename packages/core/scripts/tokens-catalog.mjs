@@ -297,6 +297,7 @@ function scanAuthoredCss() {
   const declaredIn = new Map(); // name -> rel[]  (first entry = first declaration site)
   const consumerFiles = new Map(); // name -> Set(rel)
   const corpusEdges = new Map(); // from -> Set(to)
+  const readProperties = new Map(); // name -> Set(css property that reads it)
 
   for (const rel of files) {
     let root;
@@ -321,10 +322,35 @@ function scanAuthoredCss() {
         const name = ref.replace(/var\(\s*/, '');
         if (!consumerFiles.has(name)) consumerFiles.set(name, new Set());
         consumerFiles.get(name).add(rel);
+        if (!decl.prop.startsWith('--')) {
+          if (!readProperties.has(name)) readProperties.set(name, new Set());
+          readProperties.get(name).add(decl.prop);
+        }
       }
     });
   }
-  return { files, declaredIn, consumerFiles, corpusEdges };
+  return { files, declaredIn, consumerFiles, corpusEdges, readProperties };
+}
+
+/**
+ * A control affects layout when one of its channels is read by a property that
+ * participates in box-model, track or text measurement. Matching the control's ID
+ * string instead reports `spacing.rhythm` as paint-only while its effective scale
+ * multiplies padding and gap across fifteen skins.
+ */
+const LAYOUT_AFFECTING_PROPERTY =
+  /^(width|height|min-|max-|padding|margin|gap|row-gap|column-gap|inset|top|right|bottom|left|border(-(top|right|bottom|left|block|inline)(-(start|end))?)?-width|border-width|border|font-size|font|line-height|letter-spacing|word-spacing|flex|flex-basis|grid|grid-template|grid-auto|columns|column-width|column-gap|aspect-ratio|block-size|inline-size|translate|scale)/;
+
+function layoutReadProperties(channels, readProperties) {
+  const hits = new Map();
+  for (const channel of channels) {
+    for (const property of readProperties.get(channel) ?? []) {
+      if (!LAYOUT_AFFECTING_PROPERTY.test(property)) continue;
+      if (!hits.has(property)) hits.set(property, new Set());
+      hits.get(property).add(channel);
+    }
+  }
+  return hits;
 }
 
 // ---------------------------------------------------------------------------
@@ -741,9 +767,9 @@ name inside the operational tree fails the check.
 - Universe of \`--ds-*\` names in the productive corpus: **${counts.universe}** (authored CSS ${report.meta.corpus.authoredCssFiles} files + production TS ${report.meta.corpus.productionTsFiles} files; tests/stories excluded and counted separately; generated artifacts measured apart).
 - Operational **${opRowCount}** · governance **${govRowCount}** — every name lands in exactly one tree and exactly one family page.
 - Writers **${counts.writers}** (foundation ${counts.foundationTokens} · component ${counts.componentTokens} · tenant channels ${counts.tenantChannels}, sets overlap).
-- TS classification (AST-contextual): reads ${counts.tsReadNames} names · write-sites ${counts.tsWriteNames} · metadata-only ${counts.tsMetadataNames} (metadata NEVER counts as consumption).
+- TS classification (AST-contextual): reads ${counts.tsReadNames} names · write-sites ${counts.tsWriteNames} · metadata-only ${counts.tsMetadataNames} (metadata NEVER counts as consumption). Denominator: the TS-AST classification population, which is narrower than the ${counts.universe}-name universe above.
 - Dead writers **${counts.deadWriters}** (decrease-only gate; drainage program D1).
-- Application: **${counts.publicHooks} public hooks** vs **${counts.unadjudicatedReads} fenced unadjudicated reads** (drainage program D2 — not a menu).
+- Application: **${counts.publicHooks} public hooks** vs **${counts.unadjudicatedReads} fenced unadjudicated reads** (drainage program D2 — not a menu). Denominator: the \`hooks-manifest.json\` population, which is a third scope again — it is neither a subset nor a superset of the TS-classification reads on the line above, so the two read counts must not be compared directly.
 - Unclassified rows: **${counts.unclassified}** (gate-enforced zero).
 - Values resolved from the shipped BitHire bundle: **${context.values.size}** of ${counts.universe}; the remainder is not declared in that bundle and its type reads \`unknown\`.
 
@@ -910,10 +936,10 @@ ${registry.filter((r) => r.status === 'frontier').map((r) => `- \`${r.id}\` — 
   // ---- impact-map.md (three-valued, nothing hidden) ----
   const impactRows = registry.filter((r) => r.status === 'active').map((r) => {
     const downstream = transitiveDownstream(r.derivedChannels, edges);
-    const layoutImpact = /density|typography\.scale|shape\.radius|responsive/.test(r.id);
     const exact = r.derivedChannels.filter((c) => rows[c]);
     const unknownSeeds = r.derivedChannels.filter((c) => !rows[c]);
     const inferred = [...reachable(exact, context.corpusEdges)].filter((n) => !r.derivedChannels.includes(n));
+    const layoutHits = layoutReadProperties([...exact, ...inferred], context.readProperties);
     return {
       id: r.id,
       tier: r.tier,
@@ -922,7 +948,8 @@ ${registry.filter((r) => r.status === 'frontier').map((r) => `- \`${r.id}\` — 
       unknownSeeds,
       inferred,
       transitive: downstream.size,
-      layoutImpact,
+      layoutImpact: layoutHits.size > 0,
+      layoutProperties: [...layoutHits.keys()].sort(),
       compat: r.compat,
     };
   });
@@ -955,7 +982,7 @@ BOUNDS, not totals.
 ${impactRows
   .map(
     (r) =>
-      `| \`${r.id}\` | ${r.tier} | ${r.direct} | ${r.exact.length} | ${r.unknownSeeds.length} | ${r.inferred.length} | ${r.transitive} | ${r.layoutImpact ? 'YES — adaptive runtime re-measures (epoch)' : 'paint-only'} | ${r.compat.split(';')[0]} |`
+      `| \`${r.id}\` | ${r.tier} | ${r.direct} | ${r.exact.length} | ${r.unknownSeeds.length} | ${r.inferred.length} | ${r.transitive} | ${r.layoutImpact ? `YES — reads \`${r.layoutProperties.slice(0, 4).join('`, `')}\`${r.layoutProperties.length > 4 ? ` +${r.layoutProperties.length - 4}` : ''}` : 'paint-only (no channel reaches a measured property)'} | ${r.compat.split(';')[0]} |`
   )
   .join('\n')}
 
@@ -1039,7 +1066,10 @@ The live surface is **[catalog.md](./catalog.md)**.
   const topDead = [...deadByFamily.entries()]
     .sort((a, b) => (b[1] - a[1]) || a[0].localeCompare(b[0]))
     .slice(0, 25);
-  const ledgerEntries = Array.isArray(ledger) ? ledger.length : (ledger.entries?.length ?? 0);
+  const ledgerRows = Array.isArray(ledger) ? ledger : (ledger.entries ?? []);
+  const ledgerEntries = ledgerRows.length;
+  // The raw count alone reads as live prototype debt; every row is a historical decision.
+  const ledgerRetired = ledgerRows.filter((entry) => entry.status === 'retired').length;
   const statusCount = (status) => Object.values(rows).filter((r) => r.status === status).length;
   views['governance/lifecycle-and-deprecations.md'] = `${GEN_HEADER('census report + prototype-ledger + adjudicated dual-authority list')}# Lifecycle — Active, Dead, Prototype, Alias, Frontier
 
@@ -1055,7 +1085,7 @@ The live surface is **[catalog.md](./catalog.md)**.
 | generated-unread | ${statusCount('generated-unread')} | governance | emitter batch, never the D1 baseline |
 | test-only | ${statusCount('test-only')} | governance | test corpus |
 | frontier | ${statusCount('frontier')} names + ${registry.filter((r) => r.status === 'frontier').length} capabilities | governance | registry opening conditions |
-| prototype | ${ledgerEntries} ledger entries | (ledger) | prototype-ledger gate |
+| prototype | ${ledgerEntries} ledger entries (${ledgerRetired} retired, ${ledgerEntries - ledgerRetired} live) | (ledger) | prototype-ledger gate |
 
 Per-name rows for every governance status: **[README.md](./README.md)** →
 \`families/\`. Per-name rows for the live surface: **[../catalog.md](../catalog.md)**.
@@ -1278,6 +1308,7 @@ async function buildContext(inputs, edges) {
     declaredIn: css.declaredIn,
     consumerFiles: css.consumerFiles,
     corpusEdges: css.corpusEdges,
+    readProperties: css.readProperties,
     cssFiles: css.files,
     exactChannels,
     inferredChannels,

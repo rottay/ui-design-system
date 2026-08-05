@@ -1,0 +1,460 @@
+{
+  "schemaVersion": 1,
+  "contractId": "wo-cra-23-visual-craft",
+  "purpose": "Prevent ordinary, harsh, disconnected or superficially retouched families from propagating through Modern.",
+  "authority": {
+    "executorMaximumClaim": "IMPLEMENTED_PENDING_CODEX_AUDIT",
+    "sightedAdjudicator": "Codex",
+    "sameTreeTenantComparison": true,
+    "productApplicationMayCertifyCraft": false
+  },
+  "referenceIncidents": [
+    {
+      "id": "CRAFT-INCIDENT-STEPS-001",
+      "family": "Steps/Stepper",
+      "observedDefects": [
+        "connector intersects the label content zone and reads as struck text",
+        "completed and current markers use abrupt unrelated treatments",
+        "typography and spacing do not form one progress composition",
+        "large unused region is not justified by content"
+      ],
+      "requiredOutcome": "Connectors terminate outside marker and text safe zones; state, label, support text and spacing read as one deliberate progress grammar at every density and width."
+    },
+    {
+      "id": "CRAFT-INCIDENT-BADGE-001",
+      "family": "Badge/Tag",
+      "observedDefects": [
+        "tiny default-looking pill has weak typography and optical padding",
+        "isolated saturated paint substitutes for component craft",
+        "compactness destroys presence and legibility"
+      ],
+      "requiredOutcome": "A compact semantic marker with deliberate type, optical padding, state meaning and profile-dependent silhouette; it remains legible without becoming a random pill."
+    },
+    {
+      "id": "CRAFT-INCIDENT-TRANSFER-001",
+      "family": "Transfer",
+      "observedDefects": [
+        "peer panels have accidental height and alignment differences",
+        "search, counts, rows and transfer actions look like unrelated boxes",
+        "large dead space and weak action affordance make the composition feel unfinished",
+        "the desktop arrangement has no intentional narrow-container posture"
+      ],
+      "requiredOutcome": "One integrated transfer workspace with aligned peer anatomy, clear selection/action hierarchy, meaningful empty space and an intentional stacked mobile posture."
+    },
+    {
+      "id": "CRAFT-INCIDENT-SELECT-001",
+      "family": "Select/AutoComplete/TreeSelect",
+      "observedDefects": [
+        "desktop control exposes unintentional native-browser dropdown chrome",
+        "focus, error, selected and option states use unrelated visual systems",
+        "popup geometry, typography and elevation do not belong to the field"
+      ],
+      "requiredOutcome": "Field and overlay share anatomy, type, state, edge and elevation grammar with complete keyboard semantics; native platform presentation is allowed only as an explicit mobile posture."
+    },
+    {
+      "id": "CRAFT-INCIDENT-TOGGLE-001",
+      "family": "Switch/Toggle",
+      "observedDefects": [
+        "track, thumb, label and state glyph are optically undersized and disconnected",
+        "error is communicated as abrupt red copy instead of a composed field state",
+        "disabled and off postures become washed-out rather than intentional",
+        "the interaction target and visible control do not express one hierarchy"
+      ],
+      "requiredOutcome": "A balanced choice control with coherent track/thumb ratios, optional icon semantics, label/support anatomy, non-color state meaning and a 44px coarse-pointer target without visual bloat."
+    },
+    {
+      "id": "CRAFT-INCIDENT-NESTED-BORDER-001",
+      "family": "Joined filter/compound field",
+      "observedDefects": [
+        "a fully bordered control is nested inside another rounded bordered frame",
+        "multiple outlines compete for the same semantic boundary",
+        "icons and copy are cramped into leftover space",
+        "dotted and solid edge treatments have no hierarchy"
+      ],
+      "requiredOutcome": "Exactly one dominant boundary per semantic region; internal children use seams, inset grounds or boundary sharing, with nested radii and focus treatment owned by one layer."
+    },
+    {
+      "id": "CRAFT-INCIDENT-ICON-PLACEHOLDER-001",
+      "family": "Iconography across primitives, patterns, structures and surfaces",
+      "observedDefects": [
+        "one generic TagIcon is reused for unrelated metrics, entities, actions and statuses",
+        "unicode or span glyphs bypass the semantic icon facade",
+        "identical square wells flatten every icon into the same visual role",
+        "optical size, stroke, tone and alignment do not respond to semantic role or tenant profile"
+      ],
+      "requiredOutcome": "Every functional glyph resolves through the DS semantic role facade or an explicitly allowed focused asset class; role, optical treatment and tenant profile are causal, while optional icons disappear without residue."
+    },
+    {
+      "id": "CRAFT-INCIDENT-CHART-SCAFFOLD-001",
+      "family": "Charts and data visualization",
+      "observedDefects": [
+        "raw rectangles, arcs and grid cells are presented as finished charts without an editorial scaffold",
+        "titles, axes, labels, legends, tooltips and annotations have inconsistent hierarchy",
+        "plots leave large accidental cavities or allocate too little space to the data",
+        "color is the only series distinction and tenant paint is the only visible customization"
+      ],
+      "requiredOutcome": "Each chart is an interpretable product composition with deliberate plot allocation, information hierarchy, direct or accessible labels, interaction/recovery states and non-color series distinction; decorative depth never obscures the data."
+    },
+    {
+      "id": "CRAFT-INCIDENT-OUTLINE-ONLY-SURFACE-001",
+      "family": "Cards, detail panels and semantic surfaces",
+      "observedDefects": [
+        "a rounded outline around loose text is treated as a completed surface",
+        "header, identity, metadata, actions and body do not form a hierarchy",
+        "flat empty acreage remains while important content is visually weak",
+        "a generic glyph well or tiny chip substitutes for meaningful posture"
+      ],
+      "requiredOutcome": "A surface earns its footprint through explicit anatomy, grouping, priority and a coherent material or rule-led model. Borderless, ruled and elevated treatments are all valid only when the hierarchy remains unmistakable."
+    },
+    {
+      "id": "CRAFT-INCIDENT-MICRO-PILL-001",
+      "family": "Badges, labels, filters and compact actions",
+      "observedDefects": [
+        "tiny capsules are used indiscriminately for headings, explanations and actions",
+        "weak contrast and cramped type make the pill read as debug chrome",
+        "the capsule has no relationship to surrounding baseline, grouping or interaction priority",
+        "changing only fill color is presented as tenant personality"
+      ],
+      "requiredOutcome": "Capsules are reserved for the bounded roles named by the grammar, have deliberate optical padding and typography, and never replace a proper heading, action, field or explanatory region."
+    },
+    {
+      "id": "CRAFT-INCIDENT-HEADER-STRIP-001",
+      "family": "Page headers, toolbars and collection headers",
+      "observedDefects": [
+        "multiple full-width strips, rules, chips and oversized casing compete without one dominant hierarchy",
+        "title, scope, counts, shortcuts and actions appear as disconnected debug rows",
+        "decorative rails consume height without improving orientation",
+        "long labels and actions collide or wrap into visually accidental tracks"
+      ],
+      "requiredOutcome": "The header establishes identity, context and action priority in one composition, uses a bounded number of visual bands and recomposes under content, type-scale and container stress."
+    },
+    {
+      "id": "CRAFT-INCIDENT-INTRINSIC-COLLAPSE-001",
+      "family": "Shells, workspaces and adaptive compositions",
+      "observedDefects": [
+        "a major content region collapses into a character-wide column inside an otherwise empty canvas",
+        "content clips, overlaps or becomes unreachable while neighboring tracks retain unused space",
+        "fixed or percentage tracks defeat intrinsic minimums and container-aware reflow",
+        "the narrow posture is an accidental squeeze rather than a priority-based composition"
+      ],
+      "requiredOutcome": "Major regions preserve a readable intrinsic measure, redistribute available space and switch to an intentional compact composition before text, controls or charts collide, clip or wrap per character."
+    }
+  ],
+  "bindingCraftLaws": [
+    "Every family must read as one composition, never an assembly of default controls inside unrelated boxes.",
+    "Typography, edge, material, icon, state, motion and spacing form one profile-consistent grammar.",
+    "Decorative lines, connectors, motifs and rules never intersect text, icons or control content-safe zones.",
+    "One semantic region has one dominant boundary owner; nested full frames require a distinct named region and evidence.",
+    "Ordinary controls do not use saturation, gradients, pills, thick borders or shadows as a substitute for hierarchy.",
+    "Native browser chrome is never the accidental desktop result; an intentional platform-native mobile posture is documented and tested.",
+    "Peer panels, rows, fields and action clusters align optically and share deliberate proportions unless priority explicitly differs.",
+    "Whitespace is allocated to hierarchy, future content or touch behavior; unexplained dead tracks and cavities are defects.",
+    "Error, success, warning, selected, disabled and loading states use anatomy plus type/icon/shape where needed, never abrupt paint alone.",
+    "Optional icons collapse to zero residual slot/gap when absent and never become required for comprehension.",
+    "AI or assistive signifiers appear only for real suggested, generated, automated or confidence-bearing behavior; decorative sparkle inflation is forbidden.",
+    "Removing an optional AI/icon affordance preserves balance, alignment, accessible name and action priority.",
+    "Mobile is recomposed by priority and disclosure; desktop components are not merely narrowed.",
+    "Density and type changes alter rhythm and track allocation without collision, per-character wrapping, inaccessible truncation or unjustified holes.",
+    "Both tenant targets must be independently desirable; neither is a deliberately degraded contrast case for the other.",
+    "A border, radius, shadow or background does not make a surface complete; every visible region must earn its footprint through anatomy, hierarchy, grouping or task value.",
+    "Borderless, ruled and elevated compositions are equally legal, but absence of a visible border must still preserve grouping and presence through material, spacing or typography.",
+    "A data visualization is a semantic editorial composition, not raw geometry with a title; plot allocation, labels, legend, interaction and states are first-class anatomy.",
+    "Micro-pills and icon wells are bounded roles rather than universal decoration and never substitute for headings, actions or information architecture.",
+    "Major adaptive regions establish intrinsic readable minimums and recompose before overlap, clipping, character wrapping or empty-canvas imbalance occurs."
+  ],
+  "failureTaxonomy": {
+    "reviewLaw": "Every family receipt evaluates every check in every category as PASS, FAIL or NOT_APPLICABLE_WITH_REASON. An omitted category or unexplained N/A blocks elevation.",
+    "elevationLaw": "Every applicable check must be PASS before a family can claim ELEVATED_PENDING_CODEX_AUDIT; any FAIL keeps it ASSESSED_NOT_ELEVATED.",
+    "notApplicableLaw": "NOT_APPLICABLE_WITH_REASON names the absent capability or anatomy and is rejected when the family actually renders or owns that concern.",
+    "outcomes": ["PASS", "FAIL", "NOT_APPLICABLE_WITH_REASON"],
+    "categories": {
+      "anatomy-and-composition": [
+        "one canonical root and stable semantic parts",
+        "no wrapper soup or presentational nodes that fight layout ownership",
+        "header body footer actions and support regions are connected rather than floating fragments",
+        "higher layers compose lower families instead of rebuilding them",
+        "sibling regions align optically and express deliberate priority",
+        "empty regions exist only for named content lifecycle or responsive reasons"
+      ],
+      "typography-and-content-hierarchy": [
+        "title subtitle body support label caption code and numeric roles are visibly distinct",
+        "control text and micro labels meet size and line-height floors",
+        "weight tracking casing and line-height are coherent with the active profile",
+        "long words never wrap per character and critical values remain accessible",
+        "tabular comparison data aligns and prose does not inherit numeric treatment",
+        "placeholders disabled copy and secondary text remain readable rather than washed out"
+      ],
+      "spacing-rhythm-and-density": [
+        "padding and gaps follow one rhythm instead of local arbitrary values",
+        "compact balanced and expansive modes remain complete and legible",
+        "density changes composition and track allocation rather than shrinking everything",
+        "label control help and error gaps preserve field grouping",
+        "adjacent controls share optical height and baseline where intended",
+        "no unexplained cavity orphan gap or giant empty track remains"
+      ],
+      "geometry-boundaries-and-shape": [
+        "one semantic region owns one dominant boundary",
+        "nested radii and seams have a coherent parent-child relationship",
+        "pills are limited to statuses filters compact identity and explicit capsule actions",
+        "connectors dividers rails and keylines terminate outside content-safe zones",
+        "focus error selection hover and pressed edges do not stack competing outlines",
+        "joined controls share boundaries without double borders clipped corners or doubled seams"
+      ],
+      "color-ink-and-contrast": [
+        "brand accent is disciplined and not sprayed across every boundary",
+        "primary secondary muted inverse and disabled ink form a readable hierarchy",
+        "semantic states remain accessible and do not collapse into brand color",
+        "state meaning never depends on hue alone",
+        "light dark-on-light inverse and forced-color contexts retain intended contrast",
+        "neither tenant palette is a recolor of the other or a deliberately degraded comparison"
+      ],
+      "material-depth-and-background": [
+        "canvas shell panel card inset control raised and overlay grounds form one material model",
+        "one coherent shadow or rule-led depth model operates per composition",
+        "gradients blur glass glow and saturation are not generic premium shortcuts",
+        "motif texture grain and decoration disappear behind content-safe zones",
+        "floating surfaces have a reason and anchored surfaces do not look accidentally detached",
+        "reduced transparency forced colors and print-like contexts receive solid fallbacks"
+      ],
+      "fields-and-form-controls": [
+        "label control help validation counter prefix suffix and actions form one field anatomy",
+        "desktop controls do not leak accidental native browser chrome",
+        "placeholder value selected value and read-only value have intentional distinct roles",
+        "autofill focus invalid disabled and loading states preserve geometry",
+        "prefix suffix clear reveal increment and picker affordances remain reachable without crowding",
+        "compound fields have one boundary model and logical keyboard order"
+      ],
+      "choice-selection-and-transfer": [
+        "checkbox radio switch toggle segmented and selection indicators use coherent proportions",
+        "visible controls and coarse-pointer targets are both adequate",
+        "off on mixed selected disabled error and read-only states have non-color meaning",
+        "peer source and target panels align unless priority is declared",
+        "selection counts bulk actions and transfer actions remain connected to the chosen items",
+        "narrow containers stack or disclose rather than compress peer panels"
+      ],
+      "overlays-and-floating-ui": [
+        "trigger and overlay share geometry type edge and state grammar",
+        "placement collision flipping and viewport edges never clip required content",
+        "modal drawer popover menu tooltip and sheet use the correct top-layer and focus behavior",
+        "scrim elevation and boundary do not create multiple unrelated depth systems",
+        "entry exit and focus return preserve a perceptible relation with the trigger",
+        "mobile posture becomes a deliberate sheet picker or full-screen flow where appropriate"
+      ],
+      "tables-lists-and-data-density": [
+        "identity status value action and secondary columns have explicit priority",
+        "headers never wrap per character or become narrower than their content role",
+        "rows cells sticky regions separators and hover selection share one grid grammar",
+        "numeric data aligns and long text discloses reflows or truncates accessibly",
+        "mobile uses card row priority projection or detail disclosure instead of squeezed desktop",
+        "loading empty partial error pagination and virtualization preserve the table footprint"
+      ],
+      "charts-and-data-visualization": [
+        "plot axes grid labels legend tooltip annotation and controls form one composition",
+        "series remain distinguishable without color through marker dash hatch or direct label",
+        "labels do not collide clip or disappear at narrow containers and large type",
+        "zero negative missing extreme and dense data states remain interpretable",
+        "animation explains change and stops under reduced motion",
+        "chart chrome follows tenant grammar without changing the encoded data meaning"
+      ],
+      "navigation-and-shell": [
+        "current destination hierarchy grouping and available actions are immediately legible",
+        "tabs breadcrumbs menus sidebars rails and bottom navigation share one current-state grammar",
+        "overflow collapse disclosure and scrolling preserve every destination",
+        "desktop shell and mobile destination model are intentional distinct compositions",
+        "search account workspace and primary action do not compete at the same emphasis",
+        "sticky shell regions do not overlap content keyboard or safe areas"
+      ],
+      "responsive-and-container-behavior": [
+        "layout responds to the actual container rather than viewport assumptions alone",
+        "intrinsic tracks minmax clamp fit-content and priority prevent brittle fixed widths",
+        "type scale density radius and content mutations trigger reflow without collisions",
+        "no accidental horizontal scroll clipping character wrapping or dead grid holes",
+        "sibling cards and panels redistribute space while preserving meaningful alignment",
+        "320 390 768 and 1440 viewports plus governed narrow containers are intentional"
+      ],
+      "mobile-touch-and-device-posture": [
+        "mobile orders identity state next action and recovery before secondary metadata",
+        "coarse-pointer targets meet the floor without making visual controls clumsy",
+        "safe areas virtual keyboards orientation and browser chrome do not cover actions",
+        "hover-only disclosure has a touch and keyboard equivalent",
+        "drag resize reorder and context actions have non-drag alternatives",
+        "desktop chrome is removed or transformed rather than simply stacked indefinitely"
+      ],
+      "states-lifecycle-and-recovery": [
+        "rest hover active focus-visible current selected disabled and read-only are complete when applicable",
+        "loading skeleton pending progress empty partial restricted redacted error retry success and ready are complete when applicable",
+        "loading reserves the final footprint and late data avoids preventable layout shift",
+        "errors explain recovery instead of using a red outline as the entire state",
+        "disabled content remains intentional readable and distinguishable from unavailable loading",
+        "optimistic undo retry cancel and destructive confirmation preserve task continuity"
+      ],
+      "motion-transition-and-feedback": [
+        "motion uses semantic recipes rather than transition-all or arbitrary durations",
+        "entry exit reorder resize selection and disclosure preserve spatial causality",
+        "no perpetual decorative shimmer bounce pulse or ambient distraction remains",
+        "reduced motion reaches the same final state without recurrent or spatial animation",
+        "feedback is timely but does not cause layout jumps or steal focus",
+        "tenant motion cadence differs causally without compromising comprehension"
+      ],
+      "icons-imagery-and-assistive-ai": [
+        "all functional icons come from the DS semantic supplier",
+        "size optical weight alignment and well treatment follow role and tenant profile",
+        "icon-only actions have accessible names and state meaning",
+        "optional icons collapse slot background and gap completely when absent",
+        "AI marks appear only for genuine suggested generated automated or confidence-bearing behavior",
+        "AI output exposes provenance confidence progress cancel retry or confirmation as applicable"
+      ],
+      "accessibility-and-input-modalities": [
+        "names descriptions errors groups and relationships are programmatically correct",
+        "keyboard order roving behavior shortcuts Escape focus trap and focus return are correct",
+        "focus visible remains obvious without colliding with borders and state rings",
+        "contrast forced colors reduced transparency zoom and large text preserve meaning",
+        "fine coarse touch keyboard switch and screen-reader use remain equivalent",
+        "invalid DOM hydration mismatch and nested interactive controls are absent"
+      ],
+      "internationalization-and-content-stress": [
+        "all visible strings use governed i18n and EN ES AR render at runtime",
+        "FR PT retain key parity and fallback never exposes raw dotted keys",
+        "RTL uses logical anatomy order spacing icons and directional motion",
+        "Arabic font fallback shaping numerals and line height remain intentional",
+        "short long pseudo-long empty and pathological-unbroken content are exercised",
+        "date number currency plural and locale-sensitive ordering are not hardcoded"
+      ],
+      "theming-customization-and-css-governance": [
+        "every tenant-variable rendered property has static BrandTheme and DB TenantTheme reachability",
+        "direct authored values are bounded and broad changes derive through canonical profiles recipes and semantic channels",
+        "family structural invariants do not encode hidden tenant identity",
+        "no tenant selector conditional tenant TSX second compiler or parallel skin exists",
+        "every stylesheet selector writer read and generated rule has a live family or foundation owner",
+        "dead CSS prototypes aliases and Kimi capacity retire only with census successor or death proof"
+      ]
+    }
+  },
+  "hardVisualVetoes": [
+    "line-or-connector-intersects-content-safe-zone",
+    "multiple-dominant-boundaries-for-one-semantic-region",
+    "unintentional-native-desktop-control-chrome",
+    "tiny-or-optically-unbalanced-control-typography",
+    "state-expressed-by-abrupt-color-or-outline-alone",
+    "peer-panel-misalignment-without-declared-priority",
+    "unjustified-dead-space-or-empty-track",
+    "optional-icon-leaves-empty-slot-or-breaks-alignment",
+    "decorative-ai-icon-without-semantic-behavior",
+    "default-component-inside-unintegrated-box-stack",
+    "focus-ring-border-error-and-selection-compete-simultaneously",
+    "random-pill-proliferation",
+    "gradient-shadow-or-saturation-used-as-premium-shortcut",
+    "desktop-composition-compressed-into-mobile",
+    "current-tenant-palette-retained-without-r1-sighted-readjudication",
+    "same-placeholder-icon-used-across-unrelated-semantic-roles",
+    "functional-unicode-emoji-inline-svg-or-legacy-catalog-bypasses-semantic-facade",
+    "universal-icon-well-without-semantic-role-or-profile",
+    "raw-geometric-chart-presented-without-editorial-or-interaction-scaffold",
+    "chart-label-collision-or-unjustified-empty-plot-region",
+    "outline-only-surface-without-anatomy-hierarchy-or-task-value",
+    "micro-pill-used-as-heading-explanation-or-universal-action",
+    "major-region-collapses-below-readable-measure-without-recomposition",
+    "content-overlap-clipping-or-per-character-wrap-in-supported-stress",
+    "stacked-header-strips-without-one-dominant-information-hierarchy"
+  ],
+  "mechanicalFloors": {
+    "contentBoundaryIntersectionPx": 0,
+    "connectorContentIntersectionPx": 0,
+    "dominantBoundariesPerSemanticRegion": 1,
+    "emptyOptionalIconSlotPx": 0,
+    "unexpectedPeerPanelEdgeDeltaPx": 1,
+    "unintentionalNativeDesktopControls": 0,
+    "unjustifiedAdaptiveGridHoles": 0,
+    "criticalPerCharacterWrap": 0,
+    "supportedStressContentOverlaps": 0,
+    "supportedStressClippedRequiredContent": 0,
+    "unexplainedEmptyPlotRegions": 0,
+    "rawGeometryOnlyChartsClaimedComplete": 0,
+    "coarsePointerTargetPx": 44,
+    "balancedControlVisibleHeightPx": 36,
+    "compactControlVisibleHeightPx": 32,
+    "expansiveControlVisibleHeightPx": 44,
+    "defaultControlTextMinimumPx": 13,
+    "microLabelTextMinimumPx": 11,
+    "competingEmphasizedEdgeTreatmentsPerControl": 1,
+    "simultaneousUnrelatedShadowModelsPerComposition": 1
+  },
+  "optionalIconAndAssistiveContract": {
+    "modes": ["none", "semantic-leading", "semantic-trailing", "assistive-ai"],
+    "defaultLaw": "No family receives an AI icon by default unless the rendered behavior is actually assistive or generative.",
+    "absenceLaw": "When icon mode is none, slot, padding and decorative background collapse without a visual hole.",
+    "supplierLaw": "All icons resolve through the DS semantic icon supplier and carry non-color meaning where required.",
+    "customizationLaw": "Profiles or component composition may select a governed icon posture; tenant code never branches component markup."
+  },
+  "iconGovernanceContract": {
+    "finding": "The semantic corpus exists, but the reference lab and productive UI still contain compatibility-catalog and placeholder paths. The torture probe currently reuses TagIcon for dozens of unrelated concepts and contains unicode/span stand-ins, while the generated semantic corpus contains hundreds of role-specific icons.",
+    "canonicalFacade": "Use the supplier-independent semantic Icon role facade or focused generated semantic packs; the historical named catalog is compatibility-only and cannot certify accepted Modern craft.",
+    "roleLaw": "Every functional glyph maps to the semantic intent it communicates. One placeholder icon may not stand in for unrelated metrics, actions, navigation destinations or statuses.",
+    "profileLaw": "The same semantic role may resolve different governed optical weight, fill posture, well and active treatment through profiles without changing component markup.",
+    "exceptionBoundaryLaw": "Chart and data geometry exceptions cover encoded marks, axes and structural drawing only; chart toolbar actions, legend controls, statuses, annotations and navigation glyphs remain functional icons and must use the semantic facade.",
+    "allowedNonSemanticVectorClasses": [
+      "data-visualization marks and chart geometry",
+      "QR barcode progress and rating geometry that is the component itself",
+      "brand provider and service marks through their dedicated governed facade",
+      "user-authored media content",
+      "pure structural geometry proven not to be a functional glyph"
+    ],
+    "forbidden": [
+      "historical named catalog component used as a new semantic role",
+      "one TagIcon or other placeholder reused for unrelated concepts",
+      "functional unicode emoji text glyph or local inline SVG",
+      "external icon provider imported outside the governed adapter",
+      "unknown semantic role silently falling back to a generic glyph",
+      "every icon wrapped in the same colored square or circle regardless of role",
+      "icon size stroke fill or alignment hardcoded outside role and profile contracts"
+    ],
+    "r0LabExit": "The canonical reference lab contains zero generic TagIcon placeholders, zero functional unicode/emoji/span glyphs and zero accidental compatibility-catalog roles; every fixture uses a meaningful semantic role or an explicitly allowlisted non-semantic vector class.",
+    "familyRoundExit": "Every accepted family has zero new compatibility-catalog imports, functional local SVGs or unicode glyphs and proves semantic role, optional absence, accessible name and both tenant profile treatments.",
+    "fullProgramExit": "R5/R6 census the full Modern-reachable productive UI plus active reference fixtures/stories and drive unowned compatibility paths to zero or an itemized time-bounded external compatibility exception."
+  },
+  "checkpointPolicy": {
+    "calibrationFamilyCount": 3,
+    "maximumFamiliesBetweenCodexCheckpoints": 25,
+    "calibrationLaw": "For every new layer or shared grammar, Claude implements only the first three representative families, submits complete before/after receipts, and waits for an explicit Codex GO before wider propagation.",
+    "restartLaw": "Changing a shared recipe, anatomy, palette direction or composition law after calibration invalidates dependent visual receipts and restarts that cohort checkpoint.",
+    "cohortLaw": "Every named cohort stops for Codex machine and sighted review. Claude may prepare the next conflict graph read-only but may not write the next cohort.",
+    "checkpointArtifacts": [
+      "three representative paired before-after captures per tenant",
+      "one narrow-container or mobile capture per representative family",
+      "family completion receipts and score deltas",
+      "hard-veto and mechanical-floor report",
+      "tenant grayscale and neutralized-primary comparison when grammar changes",
+      "CSS ownership and static-DB causality receipt",
+      "explicit Codex GO or correction list"
+    ],
+    "roundCohorts": {
+      "R1": [
+        ["Button-and-action-cluster", "Input-Select-FormField", "lifecycle-feedback-family", "Modal-Drawer-Popover-Dropdown"],
+        ["Card-SemanticSurface", "ListToolbar-SavedViews-filters", "PatternDataTable-mobile-projection", "CollectionHeader-PageShell"],
+        ["Dashboard-MetricCard-WidgetBoard", "Chart-frame-Line-Bar-tooltip-legend", "AppShell-sidebar-BottomTabBar", "record-detail-composition"]
+      ],
+      "R2": [
+        ["foundation-visual-5", "primitive-layout-responsive-16"],
+        ["primitive-display-21"],
+        ["primitive-inputs-25"],
+        ["primitive-navigation-12"],
+        ["primitive-feedback-11", "primitive-overlay-10"]
+      ],
+      "R3": [
+        ["pattern-data-18"],
+        ["pattern-forms-5", "pattern-visualization-non-chart-5", "pattern-commerce-1", "pattern-feedback-2", "pattern-identity-1"],
+        ["pattern-communication-6", "pattern-workflow-5", "pattern-navigation-5"],
+        ["pattern-customization-4", "pattern-shell-4"],
+        ["charts-18"]
+      ],
+      "R4": [
+        ["structure-headers-6", "structure-workspace-12"],
+        ["structure-record-3", "structure-dashboard-3", "structure-feedback-1", "structure-shell-2"],
+        ["surface-admin-8", "surface-data-7"],
+        ["surface-experience-9", "surface-forms-4"],
+        ["surface-operations-4", "surface-workspace-4", "surface-composition-4"],
+        ["commercial-11"]
+      ]
+    }
+  }
+}
